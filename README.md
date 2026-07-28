@@ -66,6 +66,18 @@ In VS Code you can instead press **F5** and pick **"app (web · Edge)"** or
 
 > `env.local.json` is git-ignored; `env.example.json` is the committed template.
 
+## Seed sample recipes (Discover page)
+
+To populate Discover with curated public recipes, run [supabase/seed.sql](supabase/seed.sql):
+
+- **Hosted project:** open the Supabase dashboard → SQL Editor → paste the contents of
+  `supabase/seed.sql` → Run. It creates a dedicated **"Secret Sauce Kitchen"** system account,
+  owns the recipes with it, and is safe to re-run (idempotent by title).
+- **Local CLI:** `supabase db reset` runs `supabase/seed.sql` automatically after migrations.
+
+> The seed creates its own system user, so it needs no existing account and won't touch any real
+> user's "My Recipes".
+
 ## Quality gates
 
 ```powershell

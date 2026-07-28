@@ -10,6 +10,7 @@ Status: `open` \| `in-progress` \| `fixed` \| `wontfix`
 | ---- | ---------- | -------- | ------------- | ---------------------------------------------------------------------------- | ------ | --------------------------------------------------------------------------------- |
 | B001 | 2026-07-28 | low      | design_system | `RecipeCard` `RenderFlex` overflow when given unbounded height (test only).  | fixed  | Test constrains card to a 320px-wide box, matching real grid usage.               |
 | B002 | 2026-07-28 | low      | home          | Feature-card grid overflowed inside the 900px content column (fixed aspect). | fixed  | Switched grid to `mainAxisExtent: 132` and clamped card text (maxLines/ellipsis). |
+| B003 | 2026-07-28 | medium   | recipe_editor | New/Edit recipe screen had no back or cancel affordance (reached via `go`).  | fixed  | Added a Cancel (×) `leading` button with a discard-confirmation dialog.           |
 
 ---
 

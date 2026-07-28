@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:app/features/recipe_editor/edit_models.dart';
+import 'package:app/routing/app_router.dart';
 
 /// Create or edit a recipe. When [recipeId] is null, creates a new recipe;
 /// otherwise loads and edits the existing one. Saving an edit appends a new
@@ -114,6 +115,37 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
 
   int _parseInt(TextEditingController c) => int.tryParse(c.text.trim()) ?? 0;
 
+  /// Navigate back to a sensible location, confirming first so in-progress
+  /// edits aren't lost by accident. The editor is reached via `go`, so there is
+  /// no back stack to pop.
+  Future<void> _cancel() async {
+    final discard = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Discard changes?'),
+        content: const Text('Any unsaved changes will be lost.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Keep editing'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Discard'),
+          ),
+        ],
+      ),
+    );
+    if (discard != true || !mounted) return;
+    if (context.canPop()) {
+      context.pop();
+    } else if (widget.isEditing) {
+      context.go('/recipe/${widget.recipeId}');
+    } else {
+      context.go(Routes.myRecipes);
+    }
+  }
+
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
@@ -173,6 +205,11 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
     }
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          tooltip: 'Cancel',
+          onPressed: _saving ? null : _cancel,
+        ),
         title: Text(widget.isEditing ? 'Edit recipe' : 'New recipe'),
         actions: [
           Padding(
