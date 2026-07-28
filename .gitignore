@@ -1,0 +1,31 @@
+# Dart / Flutter
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+pubspec.lock
+**/doc/api/
+
+# Generated
+*.g.dart
+*.freezed.dart
+*.config.dart
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/launch.json
+*.iml
+
+# Melos
+.melos_tool/
+
+# Env / secrets
+*.env
+.env*
+supabase/.env
+# Local dart-define env files (keep the committed example only)
+env.local.json
+**/env.local.json
+**/env.*.local.json

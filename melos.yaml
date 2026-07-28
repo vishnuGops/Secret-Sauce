@@ -1,0 +1,36 @@
+name: secret_sauce_workspace
+
+packages:
+  - packages/**
+  - apps/**
+
+command:
+  bootstrap:
+    runPubGetInParallel: true
+
+scripts:
+  analyze:
+    description: Run flutter analyze across all packages.
+    run: flutter analyze
+    exec:
+      concurrency: 4
+
+  test:
+    description: Run tests in packages that have them.
+    run: flutter test
+    exec:
+      concurrency: 4
+    packageFilters:
+      dirExists: test
+
+  build_runner:
+    description: Run code generation (freezed / json_serializable / riverpod).
+    run: dart run build_runner build --delete-conflicting-outputs
+    exec:
+      concurrency: 1
+    packageFilters:
+      dependsOn: build_runner
+
+  format:
+    description: Format all Dart code.
+    run: dart format .

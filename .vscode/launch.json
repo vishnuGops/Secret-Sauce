@@ -1,0 +1,29 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "app (web · Edge)",
+      "request": "launch",
+      "type": "dart",
+      "program": "apps/app/lib/main.dart",
+      "cwd": "apps/app",
+      "args": ["-d", "edge", "--dart-define-from-file=env.local.json"]
+    },
+    {
+      "name": "app (Windows desktop)",
+      "request": "launch",
+      "type": "dart",
+      "program": "apps/app/lib/main.dart",
+      "cwd": "apps/app",
+      "args": ["-d", "windows", "--dart-define-from-file=env.local.json"]
+    },
+    {
+      "name": "app (device/emulator)",
+      "request": "launch",
+      "type": "dart",
+      "program": "apps/app/lib/main.dart",
+      "cwd": "apps/app",
+      "args": ["--dart-define-from-file=env.local.json"]
+    }
+  ]
+}
