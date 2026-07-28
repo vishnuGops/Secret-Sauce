@@ -93,9 +93,12 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       _stepGroups
         ..clear()
         ..addAll(recipe.stepGroups.map(EditStepGroup.fromModel));
-      if (_ingredientGroups.isEmpty)
+      if (_ingredientGroups.isEmpty) {
         _ingredientGroups.add(EditIngredientGroup());
-      if (_stepGroups.isEmpty) _stepGroups.add(EditStepGroup());
+      }
+      if (_stepGroups.isEmpty) {
+        _stepGroups.add(EditStepGroup());
+      }
     } finally {
       if (mounted) setState(() => _loading = false);
     }

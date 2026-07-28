@@ -19,7 +19,11 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppTheme.light(),
-        home: const Scaffold(body: RecipeCard(recipe: recipe)),
+        home: const Scaffold(
+          body: Center(
+            child: SizedBox(width: 320, child: RecipeCard(recipe: recipe)),
+          ),
+        ),
       ),
     );
 

@@ -109,7 +109,7 @@ class HomeScreen extends ConsumerWidget {
                           physics: const NeverScrollableScrollPhysics(),
                           mainAxisSpacing: AppSpacing.md,
                           crossAxisSpacing: AppSpacing.md,
-                          childAspectRatio: 3.4,
+                          mainAxisExtent: 132,
                           children: [
                             for (final f in _features) _FeatureCard(feature: f),
                           ],
@@ -155,19 +155,25 @@ class _FeatureCard extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.max,
                 children: [
                   Text(feature.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium
                           ?.copyWith(fontWeight: FontWeight.w600)),
                   const SizedBox(height: 2),
-                  Text(feature.body,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall
-                          ?.copyWith(color: scheme.onSurfaceVariant)),
+                  Expanded(
+                    child: Text(feature.body,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(color: scheme.onSurfaceVariant)),
+                  ),
                 ],
               ),
             ),
