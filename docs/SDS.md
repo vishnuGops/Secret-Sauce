@@ -140,6 +140,9 @@ erDiagram
 
 ## 6. Discovery & ranking
 
+- **Access**: Discover, search, and public recipe detail are open to anonymous (signed-out)
+  visitors — RLS `recipes SELECT` already permits reading `public` recipes without auth. Sign-in
+  is only required for creating/editing, My Recipes, Profile, and owner actions (share, fork).
 - **Recent**: `ORDER BY created_at DESC` over public recipes.
 - **Popular**: all-time `save_count + like_count`.
 - **Trending**: recency-weighted score, e.g.
@@ -148,15 +151,15 @@ erDiagram
 
 ## 7. Screens
 
-| Screen         | Route                             | Notes                                            |
-| -------------- | --------------------------------- | ------------------------------------------------ |
-| Home / landing | `/`                               | Intro, feature highlights, sign in/up            |
-| Sign in / up   | `/auth`                           | Supabase auth                                    |
-| Discover       | `/discover`                       | Popular / Trending / Recent tabs + search        |
-| My Recipes     | `/my`                             | Tabs: My / Shared-with-me; `RecipeCard` grid     |
-| Recipe detail  | `/recipe/:id`                     | Structured view, servings scaler, fork, versions |
-| Recipe editor  | `/recipe/new`, `/recipe/:id/edit` | Structured create/edit                           |
-| Profile        | `/profile`                        | Current user                                     |
+| Screen         | Route                             | Notes                                                                                 |
+| -------------- | --------------------------------- | ------------------------------------------------------------------------------------- |
+| Home / landing | `/`                               | Intro, feature highlights, sign in/up                                                 |
+| Sign in / up   | `/auth`                           | Supabase auth                                                                         |
+| Discover       | `/discover`                       | Popular / Trending / Recent tabs + search (public, no sign-in)                        |
+| My Recipes     | `/my`                             | Tabs: My / Shared-with-me; `RecipeCard` grid                                          |
+| Recipe detail  | `/recipe/:id`                     | Structured view, servings scaler, fork, versions (public recipes viewable signed-out) |
+| Recipe editor  | `/recipe/new`, `/recipe/:id/edit` | Structured create/edit                                                                |
+| Profile        | `/profile`                        | Current user                                                                          |
 
 ### Adaptive behavior
 

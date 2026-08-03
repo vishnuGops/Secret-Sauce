@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Required for release builds to reach Supabase over the network. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="app"
+        android:label="Secret-Sauce"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

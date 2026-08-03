@@ -7,10 +7,10 @@ Severity: `blocker` \| `high` \| `medium` \| `low`
 Status: `open` \| `in-progress` \| `fixed` \| `wontfix`
 
 | ID   | Date       | Severity | Area          | Description                                                                  | Status | Fix / Commit                                                                      |
-| ---- | ---------- | -------- | ------------- | ---------------------------------------------------------------------------- | ------ | --------------------------------------------------------------------------------- |
+| ---- | ---------- | -------- | ------------- | ---------------------------------------------------------------------------- | ------ | --------------------------------------------------------------------------------- | --- | ---- | ---------- | ---- | ------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- | ----------------------------------------------------------------------------------------------------------------------- |
 | B001 | 2026-07-28 | low      | design_system | `RecipeCard` `RenderFlex` overflow when given unbounded height (test only).  | fixed  | Test constrains card to a 320px-wide box, matching real grid usage.               |
 | B002 | 2026-07-28 | low      | home          | Feature-card grid overflowed inside the 900px content column (fixed aspect). | fixed  | Switched grid to `mainAxisExtent: 132` and clamped card text (maxLines/ellipsis). |
-| B003 | 2026-07-28 | medium   | recipe_editor | New/Edit recipe screen had no back or cancel affordance (reached via `go`).  | fixed  | Added a Cancel (×) `leading` button with a discard-confirmation dialog.           |
+| B003 | 2026-07-28 | medium   | recipe_editor | New/Edit recipe screen had no back or cancel affordance (reached via `go`).  | fixed  | Added a Cancel (×) `leading` button with a discard-confirmation dialog.           |     | B004 | 2026-07-28 | high | android build | Release APK build failed: `path_provider_android` 2.3.x pulls a JNI/CMake native build; Android CMake download was blocked. | fixed | Pinned `path_provider_android` to `>=2.2.0 <2.3.0` (pre-JNI) via `pubspec_overrides.yaml`; added `INTERNET` permission. |
 
 ---
 

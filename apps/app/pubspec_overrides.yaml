@@ -4,3 +4,6 @@ dependency_overrides:
     path: ..\\..\\packages\\core
   design_system:
     path: ..\\..\\packages\\design_system
+  # Pin to the last pre-JNI release to avoid the native CMake/NDK build.
+  # NOTE: re-add this after `melos bootstrap` if it gets regenerated.
+  path_provider_android: ">=2.2.0 <2.3.0"

@@ -109,12 +109,33 @@ likes/views; popular uses all-time saves/likes.
 **Acceptance:** `melos run analyze` clean; widget + repository tests pass; manual pass on web +
 mobile; empty/loading/error states verified.
 
+## Build, run & release (ops)
+
+Task runner is **melos** (`melos.yaml`); Gradle only builds Android. See `README.md` for full
+detail. Key facts to keep in sync:
+
+- **Run (dev):** web-server is the most reliable device here —
+  `flutter run -d web-server --web-port 8080 --dart-define-from-file=env.local.json` (open
+  `http://localhost:8080`). Chrome is not installed; Edge auto-launch is flaky; `-d windows` works.
+- **Build tasks:** `melos run build:apk | build:apk:split | build:appbundle | build:ios | build:ipa`
+  (all run in `apps/app` with `--dart-define-from-file=env.local.json`). APK output:
+  `apps/app/build/app/outputs/flutter-apk/app-release.apk`.
+- **Android release requirements:** `INTERNET` permission in `AndroidManifest.xml`;
+  `path_provider_android` pinned `>=2.2.0 <2.3.0` in `apps/app/pubspec_overrides.yaml` (2.3.x pulls
+  a JNI/CMake native build). Install to device: `flutter install --release --dart-define-from-file=env.local.json`.
+- **App name:** Android `android:label`, iOS `CFBundleDisplayName` = `Secret-Sauce`.
+- **Launcher icon:** `flutter_launcher_icons` config in `apps/app/pubspec.yaml`; source at
+  `apps/app/assets/icon/app_icon.png`; generate with `melos run gen:icons`.
+- **DB tasks:** `melos run db:create | db:seed | db:clean | db:drop | db:reset` via `tool/db.dart`
+  (needs `psql` + `SUPABASE_DB_URL`). Scripts in `supabase/scripts/`.
+
 ---
 
 ### Environment prerequisites (developer runs these)
 
 1. Install Flutter SDK; `dart pub global activate melos`.
 2. `melos bootstrap` then `melos run build_runner` (codegen).
-3. Create Supabase project; `supabase db reset` to apply migrations.
-4. Provide `SUPABASE_URL` / `SUPABASE_ANON_KEY` via `--dart-define`.
-5. `flutter run -d chrome` and on a mobile emulator.
+3. Generate platform runners once: `cd apps/app && flutter create . --platforms=web,android,ios,windows`.
+4. Create Supabase project; apply `supabase/migrations/0001_init.sql`; optionally run `supabase/seed.sql`.
+5. Copy `apps/app/env.example.json` → `env.local.json` with `SUPABASE_URL` / `SUPABASE_ANON_KEY`.
+6. Run: `flutter run -d web-server --web-port 8080 --dart-define-from-file=env.local.json`.

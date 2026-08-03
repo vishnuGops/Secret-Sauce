@@ -34,3 +34,85 @@ scripts:
   format:
     description: Format all Dart code.
     run: dart format .
+
+  # ---------------------------------------------------------------------------
+  # Build tasks (run inside apps/app). Supabase creds come from env.local.json.
+  # ---------------------------------------------------------------------------
+  build:apk:
+    description: Build a release Android APK (universal).
+    run: flutter build apk --release --dart-define-from-file=env.local.json
+    exec:
+      concurrency: 1
+    packageFilters:
+      scope: app
+
+  build:apk:split:
+    description: Build release APKs split per ABI (smaller downloads).
+    run: flutter build apk --release --split-per-abi --dart-define-from-file=env.local.json
+    exec:
+      concurrency: 1
+    packageFilters:
+      scope: app
+
+  build:appbundle:
+    description: Build a release Android App Bundle (.aab) for Play Store.
+    run: flutter build appbundle --release --dart-define-from-file=env.local.json
+    exec:
+      concurrency: 1
+    packageFilters:
+      scope: app
+
+  build:ios:
+    description: Build a release iOS app (macOS only; unsigned archive).
+    run: flutter build ios --release --no-codesign --dart-define-from-file=env.local.json
+    exec:
+      concurrency: 1
+    packageFilters:
+      scope: app
+
+  build:ipa:
+    description: Build a release iOS .ipa (macOS + signing required).
+    run: flutter build ipa --release --dart-define-from-file=env.local.json
+    exec:
+      concurrency: 1
+    packageFilters:
+      scope: app
+
+  # ---------------------------------------------------------------------------
+  # App launcher icons — reads the `flutter_launcher_icons` config in
+  # apps/app/pubspec.yaml. Drop your 1024x1024 PNG at apps/app/assets/icon/.
+  # ---------------------------------------------------------------------------
+  gen:icons:
+    description: Generate Android/iOS launcher icons from the source PNG.
+    run: dart run flutter_launcher_icons
+    exec:
+      concurrency: 1
+    packageFilters:
+      scope: app
+
+  # ---------------------------------------------------------------------------
+  # Database tasks. Require `psql` on PATH and a SUPABASE_DB_URL env var
+  # (Supabase dashboard -> Project Settings -> Database -> Connection string).
+  #   db:create  apply the schema      db:seed   load curated recipes
+  #   db:drop    drop all app objects  db:clean  truncate data (keep schema)
+  #   db:reset   drop -> create -> seed
+  # ---------------------------------------------------------------------------
+  db:create:
+    description: Apply the schema (supabase/migrations/0001_init.sql).
+    run: dart run tool/db.dart create
+
+  db:seed:
+    description: Load curated public recipes (supabase/seed.sql).
+    run: dart run tool/db.dart seed
+
+  db:drop:
+    description: Drop all app tables, types, and functions.
+    run: dart run tool/db.dart drop
+
+  db:clean:
+    description: Truncate all recipe data but keep the schema.
+    run: dart run tool/db.dart clean
+
+  db:reset:
+    description: Drop, re-create, and seed the database.
+    run: dart run tool/db.dart reset

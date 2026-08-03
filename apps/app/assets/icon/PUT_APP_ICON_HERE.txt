@@ -1,0 +1,9 @@
+Place your app launcher icon here as:  app_icon.png  (1024 x 1024 px, PNG)
+
+Then generate platform icons with:
+  melos run gen:icons
+  # or, from apps/app:  dart run flutter_launcher_icons
+
+Config lives in apps/app/pubspec.yaml under `flutter_launcher_icons`.
+For an Android adaptive icon, also add app_icon_foreground.png and uncomment
+the adaptive_icon_* lines in that config.

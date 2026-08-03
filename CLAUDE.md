@@ -89,8 +89,20 @@ melos bootstrap                     # resolve + link all packages
 melos run analyze                   # flutter analyze across all packages
 melos run test                      # run all tests
 melos run build_runner              # codegen (freezed/json/riverpod)
-flutter run -d chrome               # run the app on web
-flutter run                         # run on connected mobile device/emulator
+
+# Run the app (env creds are wired in). Web-server is the most reliable device here;
+# Chrome isn't installed and Edge's debug auto-launch is flaky.
+cd apps/app
+flutter run -d web-server --web-port 8080 --dart-define-from-file=env.local.json  # open http://localhost:8080
+flutter run -d windows --dart-define-from-file=env.local.json                     # native desktop
+```
+
+Build, database, and icon tasks are melos scripts (see `melos.yaml` and `README.md`):
+
+```powershell
+melos run build:apk                 # release APK (also: build:apk:split, build:appbundle, build:ipa)
+melos run gen:icons                 # regenerate launcher icons from assets/icon/app_icon.png
+melos run db:reset                  # drop -> create -> seed (needs psql + SUPABASE_DB_URL)
 ```
 
 > Supabase credentials are read from `apps/app/env.local.json` (git-ignored) via
@@ -118,14 +130,23 @@ supabase db reset                   # apply migrations in supabase/migrations
 
 ## Docs–code sync (MANDATORY)
 
-Documentation and code must always be in sync. For **every** change:
+Documentation and code must always be in sync. **The docs that must be kept current are:**
+`README.md`, `CLAUDE.md`, and everything under `docs/` (`ROADMAP.md`, `EXECUTION-PLAN.md`,
+`SDS.md`, `BUG-TRACKER.md`).
+
+For **every** change, before it is considered done:
 
 1. Update `docs/ROADMAP.md` task status (`[ ]` → `[x]`, or add new tasks).
 2. If behavior/architecture/schema changed, update `docs/SDS.md`.
 3. If you implemented a roadmap task, ensure `docs/EXECUTION-PLAN.md` reflects reality.
 4. Any bug found or fixed goes into `docs/BUG-TRACKER.md`.
+5. **If you changed how the project is run, built, released, configured, or set up** (commands,
+   flags, devices, env vars, tasks, app name/icon, platform config), update `README.md` **and**
+   the "Common commands" section of this `CLAUDE.md`. Keep example commands copy-paste accurate
+   for this environment (e.g. web runs via `-d web-server`, not `-d chrome`).
 
-A change is **not complete** until the relevant docs are updated in the same commit/change set.
+A change is **not complete** until the relevant docs above are updated in the same commit/change
+set. When in doubt, re-read the affected doc and confirm every command/flag still matches reality.
 
 ## Recipe data model (the crucial part)
 

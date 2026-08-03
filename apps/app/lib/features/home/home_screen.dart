@@ -82,8 +82,7 @@ class HomeScreen extends ConsumerWidget {
                       runSpacing: AppSpacing.md,
                       children: [
                         FilledButton.icon(
-                          onPressed: () => context
-                              .go(signedIn ? Routes.discover : Routes.auth),
+                          onPressed: () => context.go(Routes.discover),
                           icon: const Icon(Icons.explore),
                           label: const Text('Explore recipes'),
                         ),

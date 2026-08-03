@@ -73,6 +73,7 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [x] Home / landing (intro, feature highlights, sign in/up)
 - [x] Discover screen (Popular / Trending / Recent tabs)
 - [x] Search bar + results
+- [x] Public browsing: Discover + public recipe detail accessible without sign-in
 
 ## Phase 7 — My Recipes + sharing
 
