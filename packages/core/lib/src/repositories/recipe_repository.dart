@@ -44,6 +44,28 @@ abstract interface class RecipeRepository {
   Future<void> setLiked(String recipeId, {required bool liked});
   Future<void> setSaved(String recipeId, {required bool saved});
   Future<void> logView(String recipeId);
+
+  /// The current user's star rating for [recipeId], or null if unrated
+  /// (also null when signed out).
+  Future<double?> myRating(String recipeId);
+
+  /// Rate a recipe from 0.5 to 5.0 in half-star steps. Re-rating overwrites.
+  /// RLS rejects rating your own recipe.
+  Future<void> setRating(String recipeId, double rating);
+
+  /// Remove the current user's rating.
+  Future<void> clearRating(String recipeId);
+}
+
+/// Star ratings are stored in half-star steps between 0.5 and 5.0.
+const double kMinRating = 0.5;
+const double kMaxRating = 5.0;
+const double kRatingStep = 0.5;
+
+/// Snaps [rating] to the nearest half star inside [kMinRating]..[kMaxRating].
+double snapRating(double rating) {
+  final snapped = (rating / kRatingStep).round() * kRatingStep;
+  return snapped.clamp(kMinRating, kMaxRating).toDouble();
 }
 
 class SupabaseRecipeRepository implements RecipeRepository {
@@ -212,6 +234,38 @@ class SupabaseRecipeRepository implements RecipeRepository {
       'recipe_id': recipeId,
       'user_id': _client.auth.currentUser?.id,
     });
+  }
+
+  @override
+  Future<double?> myRating(String recipeId) async {
+    final uid = _client.auth.currentUser?.id;
+    if (uid == null) return null;
+    final row = await _client
+        .from('recipe_ratings')
+        .select('rating')
+        .eq('recipe_id', recipeId)
+        .eq('user_id', uid)
+        .maybeSingle();
+    final value = row?['rating'];
+    return value == null ? null : (value as num).toDouble();
+  }
+
+  @override
+  Future<void> setRating(String recipeId, double rating) async {
+    await _client.from('recipe_ratings').upsert({
+      'user_id': _uid,
+      'recipe_id': recipeId,
+      'rating': snapRating(rating),
+    });
+  }
+
+  @override
+  Future<void> clearRating(String recipeId) async {
+    await _client
+        .from('recipe_ratings')
+        .delete()
+        .eq('user_id', _uid)
+        .eq('recipe_id', recipeId);
   }
 
   // ---------- helpers ----------

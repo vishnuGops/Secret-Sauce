@@ -12,21 +12,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Pinned, NOT `channel: stable`. Flutter >= 3.47 ships Dart 3.13, which the
+      # analyzer 7.x behind freezed 2.x cannot parse -> build_runner crashes.
+      # See docs/BUG-TRACKER.md B005 and README.md#toolchain-versions.
       - uses: subosito/flutter-action@v2
         with:
-          channel: stable
+          flutter-version: 3.44.8
 
+      # Pin to the 6.x line the workspace declares (root pubspec: melos ^6.1.0).
       - name: Activate melos
-        run: dart pub global activate melos
+        run: dart pub global activate melos 6.3.3
 
       - name: Bootstrap
         run: melos bootstrap
 
+      # `--no-select` on every script that declares packageFilters: without a TTY the
+      # package picker aborts with "StdinException: Error getting terminal echo mode".
+      # See docs/BUG-TRACKER.md B006.
       - name: Codegen
-        run: melos run build_runner
+        run: melos run build_runner --no-select
 
       - name: Analyze
         run: melos run analyze
 
       - name: Test
-        run: melos run test
+        run: melos run test --no-select

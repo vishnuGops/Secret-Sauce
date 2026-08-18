@@ -11,10 +11,14 @@ class RecipeGrid extends StatelessWidget {
     super.key,
     required this.recipes,
     this.padding = const EdgeInsets.all(AppSpacing.md),
+    this.showVisibility = false,
   });
 
   final List<Recipe> recipes;
   final EdgeInsets padding;
+
+  /// Overlay a public/private badge on each card — for surfaces that mix both.
+  final bool showVisibility;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +36,7 @@ class RecipeGrid extends StatelessWidget {
         final recipe = recipes[i];
         return RecipeCard(
           recipe: recipe,
+          showVisibility: showVisibility,
           onTap: () => context.push(Routes.recipe(recipe.id)),
         );
       },

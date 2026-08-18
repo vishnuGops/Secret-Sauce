@@ -37,6 +37,7 @@ class MyRecipesScreen extends ConsumerWidget {
           children: [
             _Tab(
               provider: myRecipesProvider,
+              showVisibility: true,
               empty: EmptyView(
                 title: 'No recipes yet',
                 message: 'Create your first recipe to start your vault.',
@@ -64,10 +65,15 @@ class MyRecipesScreen extends ConsumerWidget {
 }
 
 class _Tab extends ConsumerWidget {
-  const _Tab({required this.provider, required this.empty});
+  const _Tab({
+    required this.provider,
+    required this.empty,
+    this.showVisibility = false,
+  });
 
   final ProviderListenable<AsyncValue<List<Recipe>>> provider;
   final Widget empty;
+  final bool showVisibility;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -75,7 +81,9 @@ class _Tab extends ConsumerWidget {
     return async.when(
       loading: () => const LoadingView(),
       error: (e, _) => ErrorView(message: e.toString()),
-      data: (recipes) => recipes.isEmpty ? empty : RecipeGrid(recipes: recipes),
+      data: (recipes) => recipes.isEmpty
+          ? empty
+          : RecipeGrid(recipes: recipes, showVisibility: showVisibility),
     );
   }
 }

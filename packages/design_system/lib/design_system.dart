@@ -5,4 +5,5 @@ export 'src/theme/app_theme.dart';
 export 'src/layout/adaptive.dart';
 export 'src/widgets/recipe_card.dart';
 export 'src/widgets/difficulty_badge.dart';
+export 'src/widgets/star_rating.dart';
 export 'src/widgets/state_views.dart';

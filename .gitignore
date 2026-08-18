@@ -25,7 +25,14 @@ pubspec.lock
 *.env
 .env*
 supabase/.env
-# Local dart-define env files (keep the committed example only)
-env.local.json
-**/env.local.json
-**/env.*.local.json
+# Supabase CLI local state. `.temp` gains project-ref / pooler-url after
+# `supabase link`, so it must never be committed.
+supabase/.branches/
+supabase/.temp/
+# Local dart-define env files (keep the committed example only).
+# Extension-less globs on purpose: a file saved as `env.local` (no .json) holds the
+# same live credentials but was NOT matched by `**/env.local.json` alone.
+env.local*
+**/env.local*
+**/env.*.local*
+!**/env.example.json

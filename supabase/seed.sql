@@ -7,8 +7,50 @@
 
 create extension if not exists "pgcrypto";   -- crypt(), gen_salt() for the system user
 
--- Helper: insert a fully-structured recipe from JSON arrays. No-op if a recipe
--- with the same title already exists for the owner.
+-- The pool of dummy "taster" accounts that supply star ratings on curated
+-- recipes. Fixed ids so re-running the seed updates rather than duplicates.
+create or replace function seed_taster_ids()
+returns uuid[]
+language sql
+immutable
+as $$
+  select array[
+    '00000000-0000-0000-0000-0000000000c1',
+    '00000000-0000-0000-0000-0000000000c2',
+    '00000000-0000-0000-0000-0000000000c3',
+    '00000000-0000-0000-0000-0000000000c4',
+    '00000000-0000-0000-0000-0000000000c5',
+    '00000000-0000-0000-0000-0000000000c6',
+    '00000000-0000-0000-0000-0000000000c7',
+    '00000000-0000-0000-0000-0000000000c8'
+  ]::uuid[];
+$$;
+
+-- Helper: apply one rating per taster (in pool order) to a recipe. Idempotent —
+-- re-running updates the existing rows. The recipe_ratings trigger recomputes
+-- recipes.rating_avg / rating_count from these rows.
+create or replace function seed_ratings(p_recipe uuid, p_ratings jsonb)
+returns void
+language plpgsql
+as $$
+declare
+  v_tasters uuid[] := seed_taster_ids();
+  v_item    jsonb;
+  v_idx     int := 0;
+begin
+  for v_item in select * from jsonb_array_elements(coalesce(p_ratings, '[]'::jsonb)) loop
+    exit when v_idx >= array_length(v_tasters, 1);
+    v_idx := v_idx + 1;
+    insert into recipe_ratings (user_id, recipe_id, rating)
+    values (v_tasters[v_idx], p_recipe, (v_item #>> '{}')::numeric)
+    on conflict (user_id, recipe_id) do update set rating = excluded.rating;
+  end loop;
+end;
+$$;
+
+-- Helper: insert a fully-structured recipe from JSON arrays. If a recipe with
+-- the same title already exists for the owner, the content is left alone but
+-- ratings are still (re)applied, so re-running the seed backfills them.
 create or replace function seed_recipe(
   p_owner       uuid,
   p_title       text,
@@ -24,7 +66,8 @@ create or replace function seed_recipe(
   p_steps       jsonb,   -- [{ "text": "...", "duration": "10" }, ...]
   p_likes       int default 0,
   p_saves       int default 0,
-  p_views       int default 0
+  p_views       int default 0,
+  p_ratings     jsonb default '[]'::jsonb   -- [4.5, 5, 4] — one per taster, in order
 )
 returns void
 language plpgsql
@@ -37,8 +80,10 @@ declare
   v_idx     int;
   v_version uuid;
 begin
-  if exists (select 1 from recipes where owner_id = p_owner and title = p_title) then
-    return; -- already seeded
+  select id into v_recipe from recipes where owner_id = p_owner and title = p_title;
+  if v_recipe is not null then
+    perform seed_ratings(v_recipe, p_ratings);   -- backfill on an already-seeded DB
+    return;
   end if;
 
   insert into recipes (
@@ -83,6 +128,8 @@ begin
     v_idx := v_idx + 1;
   end loop;
 
+  perform seed_ratings(v_recipe, p_ratings);
+
   insert into recipe_versions (recipe_id, version_number, author_id, change_summary, content_snapshot)
   values (v_recipe, 1, p_owner, 'Seeded recipe', '{}'::jsonb)
   returning id into v_version;
@@ -90,6 +137,42 @@ begin
   update recipes set current_version_id = v_version where id = v_recipe;
 end;
 $$;
+
+-- Create the taster accounts (auth user + profile) before any recipe is seeded.
+do $$
+declare
+  v_id uuid;
+  v_i  int := 0;
+begin
+  foreach v_id in array seed_taster_ids() loop
+    v_i := v_i + 1;
+    insert into auth.users (
+      instance_id, id, aud, role, email,
+      encrypted_password, email_confirmed_at, created_at, updated_at,
+      raw_app_meta_data, raw_user_meta_data,
+      confirmation_token, recovery_token, email_change_token_new, email_change
+    ) values (
+      '00000000-0000-0000-0000-000000000000', v_id, 'authenticated', 'authenticated',
+      'taster' || v_i || '@secretsauce.local',
+      -- Unguessable, never recorded: these accounts exist only to own rows in
+      -- recipe_ratings (profiles.id is an FK to auth.users, so a rating needs a
+      -- real auth user). Nobody signs in as a taster, and the seed is documented
+      -- as safe to run against the hosted project — a literal password here
+      -- would be a live, publicly-known credential on production.
+      crypt(gen_random_uuid()::text, gen_salt('bf')),
+      now(), now(), now(),
+      '{"provider":"email","providers":["email"]}',
+      format('{"display_name":"Taster %s"}', v_i)::jsonb,
+      '', '', '', ''
+    ) on conflict (id) do nothing;
+
+    -- Explicit upsert: after a `db:drop` the auth user survives, so the
+    -- on_auth_user_created trigger will not re-create the profile row.
+    insert into profiles (id, display_name)
+    values (v_id, 'Taster ' || v_i)
+    on conflict (id) do update set display_name = excluded.display_name;
+  end loop;
+end $$;
 
 -- Curated recipes are owned by a dedicated "Secret Sauce Kitchen" system account
 -- so they don't clutter any real user's "My Recipes".
@@ -106,7 +189,9 @@ begin
     confirmation_token, recovery_token, email_change_token_new, email_change
   ) values (
     '00000000-0000-0000-0000-000000000000', v_owner, 'authenticated', 'authenticated',
-    'kitchen@secretsauce.local', crypt('secret-sauce-kitchen', gen_salt('bf')),
+    -- Random password, as for the tasters above: this account owns the curated
+    -- recipes but is never signed into.
+    'kitchen@secretsauce.local', crypt(gen_random_uuid()::text, gen_salt('bf')),
     now(), now(), now(),
     '{"provider":"email","providers":["email"]}',
     '{"display_name":"Secret Sauce Kitchen"}',
@@ -147,7 +232,8 @@ begin
       {"text":"Bake in the hottest possible oven until the crust is charred and bubbling.","duration":"10"},
       {"text":"Finish with fresh basil and a drizzle of olive oil."}
     ]'::jsonb,
-    128, 74, 940
+    128, 74, 940,
+    '[5, 4.5, 5, 4.5, 5, 4, 4.5, 5]'::jsonb
   );
 
   -- 2) Spaghetti Aglio e Olio
@@ -172,7 +258,8 @@ begin
       {"text":"Toss the drained pasta in the oil, adding pasta water until glossy."},
       {"text":"Finish with parsley and serve immediately."}
     ]'::jsonb,
-    203, 156, 1520
+    203, 156, 1520,
+    '[5, 5, 4.5, 5, 4.5, 5, 5, 4.5]'::jsonb
   );
 
   -- 3) Chicken Tikka Masala
@@ -201,7 +288,8 @@ begin
       {"text":"Stir in the cream and return the chicken to warm through.","duration":"8"},
       {"text":"Serve with basmati rice or naan."}
     ]'::jsonb,
-    311, 240, 2100
+    311, 240, 2100,
+    '[4.5, 4, 4.5, 5, 4, 4.5, 4, 4]'::jsonb
   );
 
   -- 4) Fluffy Buttermilk Pancakes
@@ -229,7 +317,8 @@ begin
       {"text":"Cook ladlefuls on a medium griddle until bubbles form, then flip until golden.","duration":"4"},
       {"text":"Serve stacked with butter and maple syrup."}
     ]'::jsonb,
-    98, 61, 780
+    98, 61, 780,
+    '[4, 3.5, 4, 4.5, 3.5, 4]'::jsonb
   );
 
   -- 5) Fresh Guacamole
@@ -253,7 +342,8 @@ begin
       {"text":"Fold in lime juice, onion, jalapeño, and coriander."},
       {"text":"Season with salt and serve right away with tortilla chips."}
     ]'::jsonb,
-    76, 52, 610
+    76, 52, 610,
+    '[5, 4.5, 4]'::jsonb
   );
 
   -- 6) Chocolate Chip Cookies
@@ -282,7 +372,8 @@ begin
       {"text":"Scoop onto trays and bake until the edges set but centres look underdone.","duration":"11"},
       {"text":"Cool on the tray so they finish setting."}
     ]'::jsonb,
-    412, 358, 3050
+    412, 358, 3050,
+    '[5, 5, 5, 4.5, 5, 5, 4.5, 5]'::jsonb
   );
 
   raise notice 'Seed complete for owner %', v_owner;

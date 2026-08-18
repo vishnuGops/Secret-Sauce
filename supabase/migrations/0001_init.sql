@@ -65,9 +65,17 @@ create table if not exists recipes (
   created_at             timestamptz not null default now(),
   updated_at             timestamptz not null default now()
 );
+
+-- Denormalized rating aggregates, maintained by the recipe_ratings trigger.
+-- Added via `alter` so an already-deployed 0001 picks them up on re-run.
+alter table recipes add column if not exists rating_sum   numeric      not null default 0;
+alter table recipes add column if not exists rating_count int          not null default 0;
+alter table recipes add column if not exists rating_avg   numeric(3,2) not null default 0;
+
 create index if not exists recipes_owner_idx on recipes (owner_id);
 create index if not exists recipes_visibility_idx on recipes (visibility);
 create index if not exists recipes_forked_from_idx on recipes (forked_from_recipe_id);
+create index if not exists recipes_rating_idx on recipes (rating_avg desc, rating_count desc);
 
 -- recipe_versions (git-like snapshots)
 create table if not exists recipe_versions (
@@ -182,6 +190,18 @@ create table if not exists recipe_views (
 );
 create index if not exists recipe_views_recipe_idx on recipe_views (recipe_id);
 
+-- ratings: one row per (user, recipe); 0.5 .. 5.0 in half-star steps.
+create table if not exists recipe_ratings (
+  user_id    uuid not null references profiles (id) on delete cascade,
+  recipe_id  uuid not null references recipes (id) on delete cascade,
+  rating     numeric(2,1) not null
+             check (rating >= 0.5 and rating <= 5.0 and (rating * 2) = floor(rating * 2)),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  primary key (user_id, recipe_id)
+);
+create index if not exists recipe_ratings_recipe_idx on recipe_ratings (recipe_id);
+
 -- recipe_suggestions (RESERVED stub for future PR-like flow)
 create table if not exists recipe_suggestions (
   id            uuid primary key default gen_random_uuid(),
@@ -207,7 +227,8 @@ set search_path = public
 as $$
 begin
   insert into public.profiles (id, display_name)
-  values (new.id, coalesce(new.raw_user_meta_data ->> 'display_name', ''));
+  values (new.id, coalesce(new.raw_user_meta_data ->> 'display_name', ''))
+  on conflict (id) do nothing;   -- never block a signup on an existing profile
   return new;
 end;
 $$;
@@ -217,7 +238,24 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function handle_new_user();
 
+-- Backfill profiles for auth users that predate the trigger (or that lost their
+-- row to a `db:drop`, which drops `profiles` while auth.users survives). Without
+-- this, such a user is signed in but has no profile, and every FK to profiles
+-- fails: rating, saving, and even logging a view (B015).
+insert into public.profiles (id, display_name)
+select u.id, coalesce(u.raw_user_meta_data ->> 'display_name', '')
+from auth.users u
+left join public.profiles p on p.id = u.id
+where p.id is null;
+
 -- Denormalized counters.
+--
+-- The counter/aggregate trigger functions are `security definer`: they update a
+-- recipe row the acting user does *not* own, and `recipes_update` (RLS) only
+-- allows the owner. Without definer rights the UPDATE silently matches 0 rows,
+-- so liking/saving/rating someone else's recipe would never move the counter.
+-- Helpers (`bump_count`, `recompute_recipe_rating`) stay invoker-rights and have
+-- EXECUTE revoked below, so they are not reachable as PostgREST RPCs.
 create or replace function bump_count(p_recipe uuid, p_col text, p_delta int)
 returns void language plpgsql as $$
 begin
@@ -227,7 +265,10 @@ end;
 $$;
 
 create or replace function on_like_change()
-returns trigger language plpgsql as $$
+returns trigger language plpgsql
+security definer
+set search_path = public
+as $$
 begin
   if tg_op = 'INSERT' then perform bump_count(new.recipe_id, 'like_count', 1);
   elsif tg_op = 'DELETE' then perform bump_count(old.recipe_id, 'like_count', -1);
@@ -241,7 +282,10 @@ create trigger recipe_likes_count
   for each row execute function on_like_change();
 
 create or replace function on_save_change()
-returns trigger language plpgsql as $$
+returns trigger language plpgsql
+security definer
+set search_path = public
+as $$
 begin
   if tg_op = 'INSERT' then perform bump_count(new.recipe_id, 'save_count', 1);
   elsif tg_op = 'DELETE' then perform bump_count(old.recipe_id, 'save_count', -1);
@@ -253,6 +297,43 @@ drop trigger if exists recipe_saves_count on recipe_saves;
 create trigger recipe_saves_count
   after insert or delete on recipe_saves
   for each row execute function on_save_change();
+
+-- Rating aggregates. Recomputed from recipe_ratings (exact — never drifts).
+create or replace function recompute_recipe_rating(p_recipe uuid)
+returns void language sql as $$
+  update recipes r
+  set rating_count = s.cnt,
+      rating_sum   = s.total,
+      rating_avg   = case when s.cnt = 0 then 0 else round(s.total / s.cnt, 2) end
+  from (
+    select count(*)::int as cnt, coalesce(sum(rating), 0) as total
+    from recipe_ratings where recipe_id = p_recipe
+  ) s
+  where r.id = p_recipe;
+$$;
+
+create or replace function on_rating_change()
+returns trigger language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if tg_op = 'DELETE' then
+    perform recompute_recipe_rating(old.recipe_id);
+  else
+    perform recompute_recipe_rating(new.recipe_id);
+    -- a moved rating (rare) has to fix up the old recipe too
+    if tg_op = 'UPDATE' and old.recipe_id <> new.recipe_id then
+      perform recompute_recipe_rating(old.recipe_id);
+    end if;
+  end if;
+  return null;
+end;
+$$;
+drop trigger if exists recipe_ratings_agg on recipe_ratings;
+create trigger recipe_ratings_agg
+  after insert or update or delete on recipe_ratings
+  for each row execute function on_rating_change();
 
 -- updated_at maintenance.
 create or replace function touch_updated_at()
@@ -266,6 +347,24 @@ drop trigger if exists recipes_touch on recipes;
 create trigger recipes_touch
   before update on recipes
   for each row execute function touch_updated_at();
+
+drop trigger if exists recipe_ratings_touch on recipe_ratings;
+create trigger recipe_ratings_touch
+  before update on recipe_ratings
+  for each row execute function touch_updated_at();
+
+-- Counter helpers are trigger-internal. PostgREST exposes every function in
+-- `public` as an RPC, so drop EXECUTE for the API roles — otherwise any client
+-- could call bump_count() directly and forge like/save counts.
+do $$
+begin
+  execute 'revoke execute on function bump_count(uuid, text, int) from public';
+  execute 'revoke execute on function recompute_recipe_rating(uuid) from public';
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'revoke execute on function bump_count(uuid, text, int) from anon, authenticated';
+    execute 'revoke execute on function recompute_recipe_rating(uuid) from anon, authenticated';
+  end if;
+end $$;
 
 -- Full-text search document for a recipe (title/description/ingredients/tags).
 create or replace function recipe_search_document(p_recipe uuid)
@@ -335,6 +434,7 @@ alter table recipe_shares       enable row level security;
 alter table recipe_likes        enable row level security;
 alter table recipe_saves        enable row level security;
 alter table recipe_views        enable row level security;
+alter table recipe_ratings      enable row level security;
 alter table recipe_suggestions  enable row level security;
 
 -- profiles: world-readable, self-writable
@@ -423,6 +523,19 @@ drop policy if exists saves_write on recipe_saves;
 create policy saves_write on recipe_saves for all
   using (user_id = auth.uid()) with check (user_id = auth.uid());
 
+-- ratings: readable with the recipe; a user writes only their own row, only for a
+-- recipe they can read, and never for their own recipe (no self-rating).
+drop policy if exists ratings_select on recipe_ratings;
+create policy ratings_select on recipe_ratings for select using (can_read_recipe(recipe_id));
+drop policy if exists ratings_write on recipe_ratings;
+create policy ratings_write on recipe_ratings for all
+  using (user_id = auth.uid())
+  with check (
+    user_id = auth.uid()
+    and can_read_recipe(recipe_id)
+    and not owns_recipe(recipe_id)
+  );
+
 -- views: anyone who can read the recipe may log a view
 drop policy if exists views_insert on recipe_views;
 create policy views_insert on recipe_views for insert with check (can_read_recipe(recipe_id));
@@ -439,6 +552,33 @@ create policy suggestions_insert on recipe_suggestions for insert
 drop policy if exists suggestions_update on recipe_suggestions;
 create policy suggestions_update on recipe_suggestions for update
   using (owns_recipe(recipe_id));
+
+-- ============================================================================
+-- Table grants for the PostgREST roles
+--
+-- RLS decides *which rows* a request may touch; GRANTs decide whether the role
+-- may touch the table at all — both are required. Current Supabase images no
+-- longer hand new tables blanket DML defaults, so a fresh project without this
+-- block answers every API call with `permission denied for table ...` (B013).
+-- Every table here has RLS enabled above, so the grants stay row-filtered.
+-- ============================================================================
+do $$
+begin
+  if not exists (select 1 from pg_roles where rolname = 'anon') then
+    return;   -- plain Postgres (no Supabase API roles) — nothing to grant
+  end if;
+
+  grant usage on schema public to anon, authenticated;
+
+  -- Reads: RLS narrows anon to public recipes and their children.
+  grant select on all tables in schema public to anon, authenticated;
+
+  -- Writes: only signed-in users, still row-filtered by RLS.
+  grant insert, update, delete on all tables in schema public to authenticated;
+
+  -- Signed-out visitors may log a view of a recipe they can read.
+  grant insert on recipe_views to anon;
+end $$;
 
 -- ============================================================================
 -- Storage buckets + policies
@@ -522,16 +662,32 @@ as $$
   limit p_limit;
 $$;
 
--- Popular: all-time saves + likes over public recipes.
+-- Popular: highest rated public recipes.
+--
+-- Straight AVG(rating) would put a single 5-star recipe above a 4.8 with 300
+-- ratings, so the score is a Bayesian (weighted) average: each recipe starts
+-- with `m` phantom ratings at the site-wide mean, and real ratings pull the
+-- score away from that prior. Ties fall back to saves + likes, then recency.
 create or replace function recipes_popular(p_limit int default 20)
 returns setof recipes
 language sql
 stable
 as $$
+  with prior as (
+    select
+      5::numeric as m,                                        -- prior weight (ratings)
+      coalesce(sum(rating_sum) / nullif(sum(rating_count), 0), 3.5) as mean
+    from recipes
+    where visibility = 'public'
+  )
   select r.*
-  from recipes r
+  from recipes r cross join prior p
   where r.visibility = 'public'
-  order by (r.save_count + r.like_count) desc, r.created_at desc
+  order by
+    ((r.rating_sum + p.m * p.mean) / (r.rating_count + p.m)) desc,
+    r.rating_count desc,
+    (r.save_count + r.like_count) desc,
+    r.created_at desc
   limit p_limit;
 $$;
 

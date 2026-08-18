@@ -7,6 +7,9 @@ class AppTheme {
   /// Warm, kitchen-inspired seed color.
   static const Color seed = Color(0xFFD2492A); // paprika red
 
+  /// Star color used by rating widgets (same in light and dark).
+  static const Color rating = Color(0xFFF2A93B); // saffron
+
   static ThemeData light() => _base(Brightness.light);
   static ThemeData dark() => _base(Brightness.dark);
 

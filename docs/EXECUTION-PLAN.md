@@ -47,7 +47,7 @@ visibility.
 
 - `AuthRepository`: `signIn`, `signUp`, `signOut`, `currentUser`, `authStateChanges`.
 - `RecipeRepository`: `getById`, `create`, `update` (→ new version), `delete`, `fork`,
-  `listMine`, `listSharedWithMe`, `versions`, `share`.
+  `listMine`, `listSharedWithMe`, `versions`, `share`, `myRating`, `setRating`, `clearRating`.
 - `DiscoverRepository`: `popular`, `trending`, `recent`, `search`.
 - `StorageService`: `uploadRecipeImage`, `uploadAvatar`.
   **Acceptance:** compiles after codegen; repositories are mockable.
@@ -57,7 +57,8 @@ visibility.
 **Approach:** Central theme + reusable adaptive widgets so features stay thin.
 **Files:** `packages/design_system/lib/theme/*`, `.../widgets/recipe_card.dart`,
 `.../widgets/difficulty_badge.dart`, `.../layout/adaptive.dart`, barrel `design_system.dart`.
-**Acceptance:** `RecipeCard` shows image, name, short description, cook time, difficulty badge.
+**Acceptance:** `RecipeCard` shows image, name, short description, cook time, average star rating
+(when rated), difficulty badge, and an optional Public/Private pill.
 
 ## Phase 5 — app shell + auth
 
@@ -101,13 +102,71 @@ creates a new `recipe_version`.
 
 **Files:** `DiscoverRepository` impl + discover UI.
 **Acceptance:** search matches title/ingredient/tag; trending uses recency-weighted
-likes/views; popular uses all-time saves/likes.
+likes/views; popular ranks by the Bayesian rating score (see Phase 14), with saves/likes
+only as a tie-breaker.
 
 ## Phase 12 — Polish, tests, verification
 
 **Files:** `packages/*/test/*`, `apps/app/test/*`.
 **Acceptance:** `melos run analyze` clean; widget + repository tests pass; manual pass on web +
 mobile; empty/loading/error states verified.
+
+## Phase 14 — Ratings
+
+**Approach:** Ratings live in their own table (`recipe_ratings`, PK `user_id + recipe_id`) so a
+user has exactly one rating per recipe and re-rating is an upsert. The client never writes the
+aggregate: an `after insert/update/delete` trigger calls `recompute_recipe_rating()`, which
+recomputes `rating_sum` / `rating_count` / `rating_avg` from the rating rows — exact by
+construction, so the denormalized values cannot drift the way an incremental `+1` can.
+
+**Files:** `supabase/migrations/0001_init.sql` (table, constraint, trigger, RLS, `recipes_popular`),
+`supabase/seed.sql` + `supabase/scripts/drop.sql`, `packages/core/lib/src/models/recipe.dart`,
+`packages/core/lib/src/repositories/recipe_repository.dart`,
+`packages/design_system/lib/src/widgets/star_rating.dart` (+ `recipe_card.dart`),
+`apps/app/lib/features/recipe_detail/*`.
+
+**Rules:**
+
+- Range 0.5 … 5.0 in half-star steps, enforced by a SQL check constraint _and_ snapped
+  client-side by `snapRating()` in `core`.
+- No self-rating: the RLS `with check` clause rejects `owns_recipe(recipe_id)`. The detail screen
+  explains this instead of showing a disabled control.
+- Signed-out visitors see the average and a "Sign in to rate" prompt.
+- `Popular` = Bayesian weighted average (`m = 5` prior ratings at the site mean) so a lone 5-star
+  recipe cannot outrank a well-rated one. Formula in [SDS.md](./SDS.md#6-discovery--ranking).
+
+**Seed:** `seed_taster_ids()` defines 8 fixed dummy accounts; `seed_recipe(..., p_ratings jsonb)`
+delegates to `seed_ratings()` so Discover → Popular has a meaningful order out of the box.
+`seed_ratings()` is also called on the "recipe already exists" path — re-running `seed.sql` on a
+live database backfills ratings without recreating content (B014).
+
+**Acceptance:** rating a recipe from the detail screen updates the average and rating count;
+re-rating overwrites; "Remove" deletes the row and the aggregate drops; Popular is ordered by the
+weighted score; `melos run analyze` and `melos run test --no-select` are clean.
+**Status:** done. Code, tests, and SQL all verified — the schema and seed were applied to a local
+Supabase stack (`supabase start` + `supabase db reset`) and the RLS/aggregate/ranking behavior was
+exercised there; results table in [BUG-TRACKER.md](./BUG-TRACKER.md). Two pre-existing schema bugs
+surfaced and were fixed on the way (B011 invoker-rights counter triggers, B013 missing PostgREST
+grants). The **hosted** project still needs the updated `0001_init.sql` re-applied — it is
+idempotent, so `melos run db:create` or a dashboard paste is enough.
+
+**Local verification loop** (no `psql` needed — the CLI's DB container has one):
+
+```powershell
+supabase start                     # local stack (config in supabase/config.toml)
+supabase db reset                  # applies supabase/migrations/* then seed.sql
+docker exec supabase_db_secret-sauce psql -U postgres -d postgres -c "select title, rating_avg from recipes_popular(6);"
+supabase stop                      # when done
+```
+
+## Phase 15 — Visibility polish
+
+**Approach:** Public/private was already complete end-to-end (editor toggle → `recipes.visibility`
+→ RLS `can_read_recipe()`); the gap was that a card gave no hint which it was.
+**Files:** `packages/design_system/lib/src/widgets/recipe_card.dart` (`showVisibility`),
+`apps/app/lib/widgets/recipe_grid.dart`, `apps/app/lib/features/my_recipes/my_recipes_screen.dart`.
+**Acceptance:** cards in the "My Recipes" tab carry a Public/Private pill; Discover cards do not
+(everything there is public by definition).
 
 ## Build, run & release (ops)
 
@@ -133,9 +192,11 @@ detail. Key facts to keep in sync:
 
 ### Environment prerequisites (developer runs these)
 
-1. Install Flutter SDK; `dart pub global activate melos`.
-2. `melos bootstrap` then `melos run build_runner` (codegen).
-3. Generate platform runners once: `cd apps/app && flutter create . --platforms=web,android,ios,windows`.
+1. Install Flutter SDK **3.44.8** (not latest — see [README](../README.md#toolchain-versions));
+   `dart pub global activate melos 6.3.3`.
+2. `melos bootstrap` then `melos run build_runner --no-select` (codegen).
+3. ~~Generate platform runners~~ — web, android, ios, and windows runners are already committed
+   under `apps/app/`. Only run `flutter create . --platforms=<missing>` to add a new platform.
 4. Create Supabase project; apply `supabase/migrations/0001_init.sql`; optionally run `supabase/seed.sql`.
 5. Copy `apps/app/env.example.json` → `env.local.json` with `SUPABASE_URL` / `SUPABASE_ANON_KEY`.
 6. Run: `flutter run -d web-server --web-port 8080 --dart-define-from-file=env.local.json`.

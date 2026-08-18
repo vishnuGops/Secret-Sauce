@@ -81,17 +81,21 @@ UI (features/*, design_system)
 
 ## Common commands
 
-> Requires the Flutter SDK (with Dart) and the `melos` global package. Install Flutter first.
+> **Pinned toolchain: Flutter 3.44.8 (Dart 3.12.2) + melos 6.x.** The Flutter pin is load-bearing:
+> newer Flutter breaks `build_runner` (the `analyzer` 7.x that `freezed` 2.x pulls in cannot parse
+> Dart 3.13 sources). The melos pin just matches the root `pubspec.yaml` (`^6.1.0`).
+> Full rationale and Windows install steps: [README.md](./README.md#toolchain-versions).
+> Note `pubspec.lock` is git-ignored, so resolution is not reproducible across machines.
 
 > If `melos` is not on `PATH` (pub global bin dir missing), prefix commands with
 > `dart pub global run melos:` — e.g. `dart pub global run melos:melos bootstrap`.
 
 ```powershell
-dart pub global activate melos      # once
+dart pub global activate melos 6.3.3  # once — matches root pubspec (`melos: ^6.1.0`)
 melos bootstrap                     # resolve + link all packages
 melos run analyze                   # flutter analyze across all packages
-melos run test                      # run all tests
-melos run build_runner              # codegen (freezed/json/riverpod)
+melos run test --no-select          # run all tests
+melos run build_runner --no-select  # codegen (freezed/json/riverpod)
 
 # Run the app (env creds are wired in). Web-server is the most reliable device here;
 # Chrome isn't installed and Edge's debug auto-launch is flaky.
@@ -103,21 +107,31 @@ flutter run -d windows --dart-define-from-file=env.local.json                   
 Build, database, and icon tasks are melos scripts (see `melos.yaml` and `README.md`):
 
 ```powershell
-melos run build:apk                 # release APK (also: build:apk:split, build:appbundle, build:ipa)
-melos run gen:icons                 # regenerate launcher icons from assets/icon/app_icon.png
+melos run build:apk --no-select     # release APK (also: build:apk:split, build:appbundle, build:ipa)
+melos run gen:icons --no-select     # regenerate launcher icons from assets/icon/app_icon.png
 melos run db:reset                  # drop -> create -> seed (needs psql + SUPABASE_DB_URL)
 ```
+
+> `--no-select` is required for every script that declares `packageFilters` in `melos.yaml`
+> (`test`, `build_runner`, `build:*`, `gen:icons`). Without a TTY the package picker aborts with
+> `StdinException: Error getting terminal echo mode` — and `melos.bat` still exits 0, so a
+> scripted run fails silently. `analyze`, `format`, and `db:*` have no filters and never prompt.
 
 > Supabase credentials are read from `apps/app/env.local.json` (git-ignored) via
 > `--dart-define-from-file=env.local.json`. Copy `apps/app/env.example.json` to start. The
 > VS Code launch configs already wire this file.
 
-Supabase (local dev):
+Supabase (local dev — needs Docker; the DB container ships `psql`, so no local install needed):
 
 ```powershell
-supabase start                      # local stack
-supabase db reset                   # apply migrations in supabase/migrations
+supabase start                      # local stack (prints API_URL / ANON_KEY)
+supabase db reset                   # apply supabase/migrations/* then supabase/seed.sql
+docker exec supabase_db_secret-sauce psql -U postgres -d postgres -c "<query>"   # inspect
+supabase stop                       # tear down
 ```
+
+> Verify every schema change here before touching the hosted project. RLS behavior can be
+> exercised with `begin; set local role authenticated; set local request.jwt.claims = '{"sub":"<uuid>"}'; ...`.
 
 ## Conventions
 
@@ -157,3 +171,8 @@ See `docs/SDS.md` for the full spec. Summary: a `recipe` has grouped `ingredient
 ordered `steps`; each edit produces a `recipe_version` snapshot (git-like); forking copies a
 recipe and records `forked_from_recipe_id` + `forked_from_version_id`. A `recipe_suggestions`
 table is reserved (stub) for a future "suggest changes upstream" (PR-like) flow.
+
+**Ratings**: `recipe_ratings` holds one row per (user, recipe), `0.5`–`5.0` in half-star steps.
+A trigger recomputes `recipes.rating_sum / rating_count / rating_avg` — clients read those and
+never write them. RLS forbids rating your own recipe. Discover's **Popular** tab ranks by a
+Bayesian weighted average of the rating (not raw likes/saves).

@@ -64,6 +64,10 @@ flowchart TD
 
 **profiles** — 1:1 with `auth.users`
 `id (uuid, PK, = auth.uid)`, `display_name`, `avatar_url`, `bio`, `created_at`.
+Created by the `on_auth_user_created` trigger. Every other table's `user_id` is an FK to
+**profiles**, not `auth.users`, so a missing profile row breaks rating/saving/view logging for
+that account — `0001_init.sql` therefore backfills profiles from `auth.users` on every apply
+(the trigger only fires on insert, so it cannot repair users that predate it; see B015).
 
 **recipes**
 `id`, `owner_id → profiles`, `title`, `description`, `cover_image_url`, `cuisine`,
@@ -71,7 +75,11 @@ flowchart TD
 `visibility`, `attribution` (legacy: original creator/story),
 `forked_from_recipe_id → recipes` (nullable), `forked_from_version_id → recipe_versions` (nullable),
 `current_version_id → recipe_versions` (nullable), `like_count`, `save_count`, `view_count`,
+`rating_sum (numeric)`, `rating_count (int)`, `rating_avg (numeric(3,2))`,
 `created_at`, `updated_at`.
+
+The three `rating_*` columns are **denormalized aggregates** — never written by the client;
+the `recipe_ratings` trigger recomputes them from scratch so they cannot drift.
 
 **recipe_versions** — git-like immutable snapshots
 `id`, `recipe_id → recipes`, `version_number (int)`, `parent_version_id → recipe_versions` (nullable),
@@ -94,6 +102,12 @@ flowchart TD
 **recipe_likes** / **recipe_saves**: `user_id`, `recipe_id`, `created_at` (PK pair).
 **recipe_views**: `id`, `recipe_id`, `user_id (nullable)`, `viewed_at` (feeds trending).
 
+**recipe_ratings**: `user_id`, `recipe_id` (PK pair), `rating (numeric(2,1))`, `created_at`,
+`updated_at`. One row per user per recipe — re-rating overwrites. `rating` is constrained to
+**0.5 … 5.0 in half-star steps** (`rating * 2 = floor(rating * 2)`). An `after insert/update/delete`
+trigger calls `recompute_recipe_rating(recipe_id)`, which rewrites `recipes.rating_sum`,
+`rating_count`, and `rating_avg`.
+
 **recipe_suggestions** _(reserved stub — not wired to UI)_
 `id`, `recipe_id (target)`, `from_recipe_id (fork source)`, `author_id`, `status (suggestion_status)`,
 `summary`, `payload (jsonb)`, `created_at`.
@@ -114,6 +128,8 @@ erDiagram
   recipes ||--o{ recipe_likes : liked
   recipes ||--o{ recipe_saves : saved
   recipes ||--o{ recipe_views : viewed
+  recipes ||--o{ recipe_ratings : rated
+  profiles ||--o{ recipe_ratings : rates
   recipes ||--o| recipes : "forked_from"
   recipes ||--o{ recipe_suggestions : suggests
 ```
@@ -126,7 +142,19 @@ erDiagram
 - Child tables (ingredients/steps/versions/…): access derived from parent recipe visibility.
 - **recipe_shares**: recipe owner manages; shared user can read own rows.
 - **likes/saves**: user manages own rows; counts denormalized on `recipes` via triggers.
+- **counter/aggregate triggers** (`on_like_change`, `on_save_change`, `on_rating_change`) are
+  `security definer`: they write a `recipes` row the acting user does not own, which plain
+  invoker rights would let RLS drop silently (see B011). Their helpers (`bump_count`,
+  `recompute_recipe_rating`) have EXECUTE revoked from `public` / `anon` / `authenticated`, so
+  PostgREST cannot expose them as RPCs.
+- **ratings**: readable by anyone who can read the recipe; a user may write only their own row
+  (`user_id = auth.uid()`), only for a recipe they can read, and **never for a recipe they own** —
+  self-rating is rejected by the `with check` clause, not just hidden in the UI.
 - **profiles**: readable by all; writable only by self.
+- **grants**: RLS chooses rows, `GRANT` chooses tables — both are required. The schema grants
+  `select` on all public tables to `anon` + `authenticated`, DML to `authenticated`, and
+  `insert on recipe_views` to `anon`. Without this a fresh Supabase project returns
+  `permission denied for table ...` for every request (B013).
 
 ## 5. Forking & versioning
 
@@ -144,7 +172,16 @@ erDiagram
   visitors — RLS `recipes SELECT` already permits reading `public` recipes without auth. Sign-in
   is only required for creating/editing, My Recipes, Profile, and owner actions (share, fork).
 - **Recent**: `ORDER BY created_at DESC` over public recipes.
-- **Popular**: all-time `save_count + like_count`.
+- **Popular**: ranked by **star rating**, using a Bayesian (weighted) average so a single 5-star
+  recipe does not outrank a 4.8 with hundreds of ratings:
+
+  ```text
+  score = (rating_sum + m * C) / (rating_count + m)     m = 5, C = site-wide mean rating
+  ```
+
+  `m` phantom ratings sit at the site mean `C` (`sum(rating_sum) / sum(rating_count)` over public
+  recipes, defaulting to 3.5 when nothing is rated yet); real ratings pull the score away from that
+  prior. Ties break on `rating_count`, then `save_count + like_count`, then `created_at`.
 - **Trending**: recency-weighted score, e.g.
   `score = (like_count + view_count) / pow(hours_since_created + 2, 1.5)`.
 - **Search**: Postgres full-text over title + description + ingredient names + tags.
@@ -155,9 +192,9 @@ erDiagram
 | -------------- | --------------------------------- | ------------------------------------------------------------------------------------- |
 | Home / landing | `/`                               | Intro, feature highlights, sign in/up                                                 |
 | Sign in / up   | `/auth`                           | Supabase auth                                                                         |
-| Discover       | `/discover`                       | Popular / Trending / Recent tabs + search (public, no sign-in)                        |
-| My Recipes     | `/my`                             | Tabs: My / Shared-with-me; `RecipeCard` grid                                          |
-| Recipe detail  | `/recipe/:id`                     | Structured view, servings scaler, fork, versions (public recipes viewable signed-out) |
+| Discover       | `/discover`                       | Popular (rating-ranked) / Trending / Recent tabs + search (public, no sign-in)         |
+| My Recipes     | `/my`                             | Tabs: My / Shared-with-me; `RecipeCard` grid with Public/Private badges                |
+| Recipe detail  | `/recipe/:id`                     | Structured view, servings scaler, rating, fork, versions (public recipes viewable signed-out) |
 | Recipe editor  | `/recipe/new`, `/recipe/:id/edit` | Structured create/edit                                                                |
 | Profile        | `/profile`                        | Current user                                                                          |
 
@@ -169,8 +206,28 @@ erDiagram
 
 ## 8. RecipeCard contract
 
-Inputs: cover image, name, short description, cook time (prep+cook), difficulty badge.
+Inputs: cover image, name, short description, cook time (prep+cook), average star rating
+(hidden until the recipe has at least one rating), difficulty badge. `showVisibility: true`
+overlays a Public/Private pill on the cover — used on My Recipes, where both kinds are listed.
 Used across Discover and My Recipes.
+
+### Rating widgets (`design_system`)
+
+| Widget            | Use                                                                 |
+| ----------------- | ------------------------------------------------------------------- |
+| `StarRating`      | Read-only 5-star display with half stars, value, and rating count   |
+| `RatingPill`      | Compact single star + value, for dense surfaces (`RecipeCard`)      |
+| `StarRatingInput` | Interactive half-star input; `onChangeEnd` fires when a gesture ends |
+
+`StarRatingInput` maps the left half of star _n_ to `n - 0.5` and the right half to `n`, and
+previews during a drag; the caller persists on `onChangeEnd` so a drag writes once, not per frame.
+If the gesture is **cancelled** — an ancestor scroll view claims it after a press-and-hold — the
+preview is dropped and `onChangeEnd` never fires, so the stars never show an unsaved value (B017).
+
+The `RecipeCard` metadata row (time · rating · difficulty) is width-adaptive: the time label,
+both `RatingPill` texts, and the `DifficultyBadge` label are `Flexible` and ellipsize in that
+order. A fixed-aspect grid tile cannot grow, so the row degrades instead of overflowing at narrow
+widths or large text scale (B016).
 
 ## 9. Security notes
 

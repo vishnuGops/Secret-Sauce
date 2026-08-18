@@ -31,6 +31,9 @@ class Recipe with _$Recipe {
     @JsonKey(name: 'like_count') @Default(0) int likeCount,
     @JsonKey(name: 'save_count') @Default(0) int saveCount,
     @JsonKey(name: 'view_count') @Default(0) int viewCount,
+    // Denormalized rating aggregates, maintained server-side by trigger.
+    @JsonKey(name: 'rating_avg') @Default(0) double ratingAvg,
+    @JsonKey(name: 'rating_count') @Default(0) int ratingCount,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
     // Populated when a full recipe is loaded (not part of the base row).
@@ -48,4 +51,10 @@ class Recipe with _$Recipe {
   int get totalMinutes => prepMinutes + cookMinutes;
 
   bool get isFork => forkedFromRecipeId != null;
+
+  /// Whether anyone has rated this recipe yet.
+  bool get hasRatings => ratingCount > 0;
+
+  /// Average rating rounded to one decimal, e.g. `4.5`.
+  String get ratingLabel => ratingAvg.toStringAsFixed(1);
 }

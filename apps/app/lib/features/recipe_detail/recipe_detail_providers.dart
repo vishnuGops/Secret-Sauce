@@ -19,6 +19,13 @@ final recipeVersionsProvider =
   return ref.watch(recipeRepositoryProvider).versions(id);
 });
 
+/// The signed-in user's own star rating for a recipe (null = not rated / signed out).
+final myRatingProvider =
+    FutureProvider.autoDispose.family<double?, String>((ref, id) {
+  ref.watch(currentUserIdProvider);
+  return ref.watch(recipeRepositoryProvider).myRating(id);
+});
+
 /// Selected servings for the detail screen's scaler (defaults to recipe servings).
 final selectedServingsProvider =
     StateProvider.autoDispose.family<int?, String>((ref, id) => null);
