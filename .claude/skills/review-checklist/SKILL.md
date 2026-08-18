@@ -58,10 +58,20 @@ default-denies — reads return empty, not an error); or adds an FK to `profiles
 considering B015 (an `auth.users` row can exist with no `profiles` row; the backfill at
 `0001_init.sql:245-249` is what repairs it — keep it after any `profiles` change).
 
-Known-live gap (**B012, open by decision**): nothing rolls `recipe_views` up into
-`recipes.view_count`, so `recipes_trending`'s `like_count + view_count` score
-(`0001_init.sql:660`) is likes-only outside seeded rows. Treat any diff that reads or reweights
-`view_count` as operating on an always-zero column, and say so — do not file it as a new bug.
+**View counting (B012, fixed).** `on_view_insert` rolls `recipe_views` into `recipes.view_count`,
+but counts **distinct signed-in viewers**, not visits: it skips rows with a null `user_id` and
+skips a user's second-and-later row for the same recipe. Two properties keep
+`recipes_trending`'s `like_count + view_count` score honest, and a diff must not break either —
+`anon` holds `insert` on `recipe_views`, so counting anonymous rows would make trending
+inflatable without an account, and `views_insert` pins `user_id` to `auth.uid()` or null, so
+views cannot be attributed to another user. Flag any diff that adds a unique constraint on
+`recipe_views` (PostgREST cannot express `on conflict` against a partial index — `logView()` is
+deliberately a plain insert), counts anonymous views, relaxes that policy, or removes the
+`pg_advisory_xact_lock` guarding the read-then-write dedup probe. `view_count` is **monotonic and
+an upper bound**, not an exact distinct count — nothing decrements it and `user_id` is
+`on delete set null`; flag any diff that treats it as equal to a `count(distinct …)` over the log.
+Note when reviewing seeded data that `seed.sql` writes `view_count` directly and never inserts
+`recipe_views` rows, so seeded counters intentionally do not match their log.
 
 ## 3. Client writes that cannot see an RLS rejection — High
 
@@ -109,7 +119,7 @@ The Flutter pin is load-bearing, not hygiene (B005): Flutter ≥ 3.47 ships Dart
 `Missing implementation of visitDotShorthandPropertyAccess`.
 
 Flag when a diff: changes `flutter-version: 3.44.8` (`.github/workflows/ci.yml:20`) or swaps it
-for `channel: stable`; bumps `freezed`/`riverpod_generator`/`analyzer` constraints with no
+for `channel: stable`; bumps `freezed`/`json_serializable`/`analyzer` constraints with no
 matching note in `README.md#toolchain-versions`; drops `--no-select` from a `melos run` of a
 `packageFilters` script — `test`, `build_runner`, `build:*`, `gen:icons` (B006: picker aborts with
 `StdinException: Error getting terminal echo mode` in any non-TTY). On dependency changes, note
@@ -140,7 +150,7 @@ drifted once. Prefer naming the pattern or symbol over the line.
 
 ## 7. Flutter layout and adaptive rendering — Medium
 
-Four logged bugs are `RenderFlex` overflows: B001 (card in unbounded height), B002 (grid with
+Three logged bugs are `RenderFlex` overflows: B001 (card in unbounded height), B002 (grid with
 fixed aspect ratio), B016 (rating pill added to a row with no flexible child). Flag when a diff:
 adds a `Text` inside a `Row`/grid cell with no `maxLines` + `overflow`; adds a child to a
 **fixed-aspect grid tile's** row where every child is intrinsically sized — `Spacer` absorbs
@@ -189,9 +199,10 @@ same change set. Report misses as `⚠️ Potential issue`.
 
 ## Companion handoffs
 
-- Diff touches any `@freezed` / `@JsonSerializable` / riverpod-annotated file →
-  `melos run build_runner --no-select` must have been run; codegen output is not in the diff, so
-  say so rather than looking for it.
+- Diff touches any `@freezed` / `@JsonSerializable` file (all of them live in `packages/core` —
+  the only package with `build_runner`) → `melos run build_runner --no-select` must have been run;
+  codegen output is not in the diff, so say so rather than looking for it. Providers are
+  hand-written: a diff adding a `@riverpod` annotation is itself a finding.
 - Diff touches Dart under `packages/` or `apps/` → `melos run analyze` (no filters, never prompts)
   and `melos run test --no-select`.
 - **Skip both** on a docs-only or SQL-only diff; state the skip in one line.

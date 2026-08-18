@@ -29,6 +29,7 @@ drop function if exists handle_new_user() cascade;
 drop function if exists bump_count(uuid, text, int) cascade;
 drop function if exists on_like_change() cascade;
 drop function if exists on_save_change() cascade;
+drop function if exists on_view_insert() cascade;
 drop function if exists on_rating_change() cascade;
 drop function if exists recompute_recipe_rating(uuid) cascade;
 drop function if exists touch_updated_at() cascade;

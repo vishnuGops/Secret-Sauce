@@ -41,8 +41,9 @@ visibility.
 ## Phase 3 — core package
 
 **Approach:** Immutable freezed models mirroring the schema; abstract repositories + Supabase impls.
-**Files:** `packages/core/lib/models/*`, `packages/core/lib/repositories/*`,
-`packages/core/lib/services/*`, `packages/core/lib/core.dart` (barrel).
+**Files:** `packages/core/lib/src/models/*`, `packages/core/lib/src/repositories/*`,
+`packages/core/lib/src/services/*`, `packages/core/lib/src/providers.dart`,
+`packages/core/lib/core.dart` (barrel — the only public surface).
 **Key contracts:**
 
 - `AuthRepository`: `signIn`, `signUp`, `signOut`, `currentUser`, `authStateChanges`.
@@ -55,8 +56,9 @@ visibility.
 ## Phase 4 — design_system
 
 **Approach:** Central theme + reusable adaptive widgets so features stay thin.
-**Files:** `packages/design_system/lib/theme/*`, `.../widgets/recipe_card.dart`,
-`.../widgets/difficulty_badge.dart`, `.../layout/adaptive.dart`, barrel `design_system.dart`.
+**Files:** `packages/design_system/lib/src/theme/*`, `.../src/widgets/recipe_card.dart`,
+`.../src/widgets/difficulty_badge.dart`, `.../src/widgets/state_views.dart`,
+`.../src/layout/adaptive.dart`, barrel `design_system.dart`.
 **Acceptance:** `RecipeCard` shows image, name, short description, cook time, average star rating
 (when rated), difficulty badge, and an optional Public/Private pill.
 
@@ -100,10 +102,23 @@ creates a new `recipe_version`.
 
 ## Phase 11 — Search + ranking
 
-**Files:** `DiscoverRepository` impl + discover UI.
+**Files:** `DiscoverRepository` impl + discover UI, `supabase/migrations/0001_init.sql`
+(`recipes_trending`, `recipes_popular`, `recipes_search`, `on_view_insert`).
 **Acceptance:** search matches title/ingredient/tag; trending uses recency-weighted
 likes/views; popular ranks by the Bayesian rating score (see Phase 14), with saves/likes
 only as a tie-breaker.
+**Trending inputs are one-per-user (B012):** `like_count` by the `recipe_likes` PK, and
+`view_count` by `on_view_insert`, which bumps only on a user's first `recipe_views` row for a
+recipe and never for anonymous rows. That asymmetry is deliberate — `anon` holds `insert` on
+`recipe_views`, so counting anonymous views would make trending inflatable with no account. No
+unique constraint was added: PostgREST cannot express `on conflict` inference against a partial
+index, so `logView()` stays a plain insert and the append-only log survives for analytics.
+`views_insert` additionally pins `user_id` to `auth.uid()` (or null), and the dedup probe takes a
+per-(recipe, user) advisory lock so two concurrent first-views cannot both bump. `view_count` is
+monotonic — nothing decrements it and `user_id` is `on delete set null`, so it is an **upper
+bound** on distinct viewers. Seeded recipes keep synthetic `view_count` values written directly by
+`seed.sql`, so their counter and log differ by design. Verified on the local stack — table in
+[BUG-TRACKER.md](./BUG-TRACKER.md).
 
 ## Phase 12 — Polish, tests, verification
 

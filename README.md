@@ -68,8 +68,9 @@ dart pub global activate melos 6.3.3
 # 2. Resolve + link all packages
 melos bootstrap
 
-# 3. Generate freezed / json / riverpod code
-#    (--no-select skips the package picker; required in any non-interactive shell)
+# 3. Generate freezed / json_serializable code (runs in packages/core — the only
+#    package with build_runner). --no-select skips the package picker; required
+#    in any non-interactive shell.
 melos run build_runner --no-select
 
 # 4. Supply Supabase credentials (see "Running" below)

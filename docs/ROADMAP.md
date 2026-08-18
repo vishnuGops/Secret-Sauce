@@ -109,6 +109,12 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [x] Full-text search (title/ingredient/tag)
 - [x] Trending ranking (recency-weighted likes/views)
 - [x] Popular ranking — **now rating-based** (Bayesian weighted average; saves/likes only break ties)
+- [x] `view_count` rollup trigger — counts distinct signed-in viewers, ignores anonymous and
+      repeat views (advisory-locked against concurrent first-views), so trending is not
+      inflatable (B012)
+- [ ] SQL regression harness — the B012 trigger, RLS policies, and rank RPCs are verified only by
+      a manual local-stack run recorded in `docs/BUG-TRACKER.md`; CI has no database job, so a
+      silent regression would pass
 
 ## Phase 12 — Polish, tests, verification
 
@@ -158,13 +164,27 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
       longer grant DML on new tables by default)
 - [x] Verified on a local Supabase stack: schema + seed apply clean, aggregates/ranking correct,
       RLS rejects self-rating, anon rating, and bad values — see `docs/BUG-TRACKER.md`
-- [ ] Re-apply the updated `0001_init.sql` to the **hosted** project (idempotent)
+- [ ] Re-apply the updated `0001_init.sql` to the **hosted** project (idempotent) — now also
+      carries the B012 view-count trigger and the tightened `views_insert` policy
 
 ## Phase 15 — Visibility polish
 
 - [x] Public/Private badge on `RecipeCard` (`showVisibility`), enabled on the My Recipes tab
 - [x] Confirmed end-to-end: editor toggle → `recipes.visibility` → RLS `can_read_recipe()` →
       Discover only lists `public`; private recipes reach only the owner + `recipe_shares` users
+
+## Phase 16 — Agent-context accuracy
+
+- [x] Audit `CLAUDE.md` against the code; correct the repository tree (`src/` layer), the import
+      rule (`always_use_package_imports`), the enum list, and the Riverpod codegen claim
+      (B019–B021)
+- [x] Add a "Gotchas & invariants" section to `CLAUDE.md` citing B005–B018, plus a routes/feature
+      map and a real-vs-cosmetic enforcement table
+- [x] Fix the pre-`src/` paths in `docs/EXECUTION-PLAN.md` Phases 3–4 _(B020)_
+- [x] Drop the unused `riverpod_annotation` / `riverpod_generator` deps from `core` + `app`, and
+      `build_runner` from `app` (no annotated sources there) _(B021)_
+- [x] Document the `packages/core` test-coverage hole in `CLAUDE.md` (repositories, `snapRating`,
+      and JSON decoding are untested; `melos run test` says nothing about `core`)
 
 ---
 

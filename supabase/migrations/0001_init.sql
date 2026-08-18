@@ -188,7 +188,12 @@ create table if not exists recipe_views (
   user_id   uuid references profiles (id) on delete set null,
   viewed_at timestamptz not null default now()
 );
-create index if not exists recipe_views_recipe_idx on recipe_views (recipe_id);
+-- Backs the "has this user already viewed this recipe?" probe in on_view_insert().
+-- (recipe_id) alone is a leftmost prefix of this, so the older recipe_views_recipe_idx
+-- is redundant — dropped below to save a write per view on the busiest table here.
+create index if not exists recipe_views_recipe_user_idx
+  on recipe_views (recipe_id, user_id);
+drop index if exists recipe_views_recipe_idx;
 
 -- ratings: one row per (user, recipe); 0.5 .. 5.0 in half-star steps.
 create table if not exists recipe_ratings (
@@ -297,6 +302,67 @@ drop trigger if exists recipe_saves_count on recipe_saves;
 create trigger recipe_saves_count
   after insert or delete on recipe_saves
   for each row execute function on_save_change();
+
+-- View counts (B012). `recipe_views` stays an append-only log — every visit
+-- inserts a row — but `recipes.view_count` counts *distinct signed-in viewers*:
+--
+--   * Anonymous views are logged and never counted. `anon` holds `insert` on this
+--     table, so counting them would let an unauthenticated loop inflate
+--     `recipes_trending` (which scores like_count + view_count) for free.
+--   * Only the first row for a (recipe, user) pair bumps the counter, so a
+--     refresh loop cannot inflate it either.
+--
+-- The counter is monotonic: nothing decrements it. `recipe_views.user_id` is
+-- `on delete set null` (unlike recipe_likes/saves, which cascade and fire their
+-- DELETE branch), so a deleted account leaves its contribution behind. Treat
+-- `view_count` as an upper bound on distinct viewers, not an exact count.
+--
+-- Deliberately no unique index: PostgREST cannot express `on conflict` inference
+-- against a *partial* index, so a duplicate would surface to the client as a
+-- 23505 instead of being ignored. Deduping in the trigger keeps `logView()` a
+-- plain insert and keeps the full view log for future analytics. The cost is
+-- that the probe below is a read-then-write, so it takes a per-(recipe, user)
+-- advisory lock — without it, two concurrent first-views from the same account
+-- (two tabs, a double-tap) each miss the other's uncommitted row and both bump.
+--
+-- `security definer` is required for TWO independent reasons, and dropping it
+-- fails silently on both counts:
+--   1. B011: the trigger updates a `recipes` row the viewer does not own, and
+--      `recipes_update` (RLS) only allows the owner — the UPDATE would match 0
+--      rows with no error.
+--   2. The dedup probe reads `recipe_views`, which `views_select` restricts to
+--      `owns_recipe(recipe_id)`. Under invoker rights that probe returns 0 rows
+--      for every non-owner, so `not exists` is always true and *every* view
+--      would count.
+create or replace function on_view_insert()
+returns trigger language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if new.user_id is null then
+    return null;
+  end if;
+
+  perform pg_advisory_xact_lock(
+    hashtextextended(new.recipe_id::text || new.user_id::text, 0)
+  );
+
+  if not exists (
+    select 1 from recipe_views
+    where recipe_id = new.recipe_id
+      and user_id = new.user_id
+      and id <> new.id
+  ) then
+    perform bump_count(new.recipe_id, 'view_count', 1);
+  end if;
+  return null;
+end;
+$$;
+drop trigger if exists recipe_views_count on recipe_views;
+create trigger recipe_views_count
+  after insert on recipe_views
+  for each row execute function on_view_insert();
 
 -- Rating aggregates. Recomputed from recipe_ratings (exact — never drifts).
 create or replace function recompute_recipe_rating(p_recipe uuid)
@@ -537,8 +603,15 @@ create policy ratings_write on recipe_ratings for all
   );
 
 -- views: anyone who can read the recipe may log a view
+-- A visitor may log a view of a recipe they can read, but only as themselves.
+-- Without the user_id clause any client could attribute views to another user —
+-- which now moves `recipes.view_count` via on_view_insert().
 drop policy if exists views_insert on recipe_views;
-create policy views_insert on recipe_views for insert with check (can_read_recipe(recipe_id));
+create policy views_insert on recipe_views for insert
+  with check (
+    can_read_recipe(recipe_id)
+    and (user_id is null or user_id = auth.uid())
+  );
 drop policy if exists views_select on recipe_views;
 create policy views_select on recipe_views for select using (owns_recipe(recipe_id));
 

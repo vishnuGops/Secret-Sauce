@@ -100,7 +100,19 @@ the `recipe_ratings` trigger recomputes them from scratch so they cannot drift.
 `created_at` (PK: recipe_id + user).
 
 **recipe_likes** / **recipe_saves**: `user_id`, `recipe_id`, `created_at` (PK pair).
-**recipe_views**: `id`, `recipe_id`, `user_id (nullable)`, `viewed_at` (feeds trending).
+**recipe_views**: `id`, `recipe_id`, `user_id (nullable)`, `viewed_at`. An append-only log — every
+visit inserts a row. The `on_view_insert` trigger rolls it into `recipes.view_count`, counting
+**distinct signed-in viewers**: a user's second-and-later row for the same recipe is ignored, and
+anonymous rows (`user_id is null`) never count at all. The probe is a read-then-write, so it takes
+a per-(recipe, user) `pg_advisory_xact_lock` — without it two concurrent first-views from one
+account both bump. Deliberately has no unique constraint, so `logView()` stays a plain insert
+(PostgREST cannot express `on conflict` inference against a partial index) and the full log
+survives for later analytics.
+
+`view_count` is **monotonic and therefore an upper bound**, not an exact distinct count: nothing
+decrements it, and `user_id` is `on delete set null` (unlike `recipe_likes`/`recipe_saves`, which
+cascade and fire their DELETE branch), so a deleted account's contribution stays and a
+re-registered user counts again.
 
 **recipe_ratings**: `user_id`, `recipe_id` (PK pair), `rating (numeric(2,1))`, `created_at`,
 `updated_at`. One row per user per recipe — re-rating overwrites. `rating` is constrained to
@@ -142,7 +154,13 @@ erDiagram
 - Child tables (ingredients/steps/versions/…): access derived from parent recipe visibility.
 - **recipe_shares**: recipe owner manages; shared user can read own rows.
 - **likes/saves**: user manages own rows; counts denormalized on `recipes` via triggers.
-- **counter/aggregate triggers** (`on_like_change`, `on_save_change`, `on_rating_change`) are
+- **views**: anyone who can read a recipe may log a view, including anonymous visitors — but only
+  as themselves: `views_insert`'s `with check` requires `user_id is null or user_id = auth.uid()`,
+  so a view cannot be attributed to another user. Only the recipe owner can read the log.
+  Anonymous rows never move `view_count`, because `anon` holds `insert` on the table and counting
+  them would make `recipes_trending` inflatable without an account.
+- **counter/aggregate triggers** (`on_like_change`, `on_save_change`, `on_view_insert`,
+  `on_rating_change`) are
   `security definer`: they write a `recipes` row the acting user does not own, which plain
   invoker rights would let RLS drop silently (see B011). Their helpers (`bump_count`,
   `recompute_recipe_rating`) have EXECUTE revoked from `public` / `anon` / `authenticated`, so
@@ -183,7 +201,9 @@ erDiagram
   recipes, defaulting to 3.5 when nothing is rated yet); real ratings pull the score away from that
   prior. Ties break on `rating_count`, then `save_count + like_count`, then `created_at`.
 - **Trending**: recency-weighted score, e.g.
-  `score = (like_count + view_count) / pow(hours_since_created + 2, 1.5)`.
+  `score = (like_count + view_count) / pow(hours_since_created + 2, 1.5)`. Both inputs are
+  one-per-user by construction (`recipe_likes` PK, `on_view_insert` dedup), so the score cannot be
+  driven up by repeat traffic from one account or by anonymous visitors.
 - **Search**: Postgres full-text over title + description + ingredient names + tags.
 
 ## 7. Screens
