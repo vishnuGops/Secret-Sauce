@@ -186,6 +186,80 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [x] Document the `packages/core` test-coverage hole in `CLAUDE.md` (repositories, `snapRating`,
       and JSON decoding are untested; `melos run test` says nothing about `core`)
 
+## Phase 17 — Fix B022: nested content order reversed
+
+- [x] Add `ascending: true` to the four nested-content `.order()` calls in
+      `SupabaseRecipeRepository._fetchIngredientGroups` / `_fetchStepGroups`
+      (postgrest-dart defaults to descending — B022)
+- [x] Audit stored order of any recipe **edited through the app**: each save round-trip flipped
+      the persisted `sort_order`/`step_order` (odd number of edits ⇒ reversed in storage); repair
+      manually — parity is unknowable, so no auto-fix.
+      **Result: nothing to repair.** All 6 recipes on the hosted project carry exactly one
+      `recipe_versions` row (`version_number = 1`, `'Seeded recipe'`), so none was ever saved
+      through the editor. Caveat recorded in `BUG-TRACKER.md`: the one real account's *private*
+      recipes are not anon-readable and could not be inspected.
+- [x] Verify on the local Supabase stack (core has no tests — a green `melos run test` proves
+      nothing here): recipe with 5+ steps, 2+ groups displays 1→N; edit + save twice; re-check
+- [x] Close B022 in `docs/BUG-TRACKER.md`
+
+## Phase 18 — Chefs, tiers & leaderboard
+
+Design: [SDS.md §10](./SDS.md#10-chefs-tiers--leaderboard--design-phase-18-not-yet-implemented) ·
+Execution: [EXECUTION-PLAN.md Phase 18](./EXECUTION-PLAN.md#phase-18--chefs-tiers--leaderboard)
+
+### Schema (`0001_init.sql`, idempotent)
+
+- [ ] `chef_tier` enum (guarded) — five tiers `home_cook … master_chef`
+- [ ] `profiles.chef_score / chef_tier / public_recipe_count` via `add column if not exists`
+- [ ] `chef_score()` + `chef_tier_for()` immutable functions (single source of truth)
+- [ ] `recompute_chef_stats(uuid)` — invoker-rights, EXECUTE revoked from API roles
+- [ ] `on_recipe_stats_change` trigger on `recipes` — **`security definer set search_path =
+      public`** (writes other users' `profiles` rows; B011 class), handles insert/delete/update
+      incl. `visibility` and `owner_id` changes
+- [ ] Idempotent backfill recomputing all profiles on every apply
+- [ ] `chefs_leaderboard(p_limit, p_offset)` RPC — dense_rank, deterministic tie-breaks,
+      excludes `public_recipe_count = 0`, explicit `visibility = 'public'` filter
+- [ ] `drop.sql`: new functions/trigger/type + the old `seed_recipe` signature
+- [ ] Grants check: new function EXECUTE for `anon`/`authenticated` on `chefs_leaderboard` only
+      (B013 class — the blanket grant block runs before these objects exist on first apply)
+
+### core
+
+- [ ] `ChefTier` Dart enum (5 values, `unknownEnumValue` fallback) — updates the "four enums"
+      note in `CLAUDE.md`
+- [ ] `Profile` + `chefScore` / `chefTier` / `publicRecipeCount`; `Recipe` + embedded
+      `Profile? owner`; codegen re-run
+- [ ] `owner:profiles(…)` embedding added to recipe list/detail/RPC queries
+- [ ] `ChefStanding` model + `ChefRepository` (abstract + Supabase impl, provider wiring)
+
+### design_system
+
+- [ ] `TierChip` (theme-aware tier colors, light + dark)
+- [ ] `ChefBadge` (avatar + name + tier **under** the name; `compact` variant)
+- [ ] Barrel exports for both (Gotcha 13)
+- [ ] `RecipeCard`: chef badge as **cover overlay, bottom-left** — never a new column row
+      (B001/B002/B016); envelope tests at 276 px / 2.0× text scale
+
+### app
+
+- [ ] `/chefs` route in the `ShellRoute` + `AppShell` destination (signed-out safe — no redirect
+      change)
+- [ ] `features/chefs/`: leaderboard screen + providers (loading/empty/error states)
+- [ ] Recipe detail: full `ChefBadge` under the title
+
+### Seed + verification
+
+- [ ] Seed chefs d1–d7 (fixed UUIDs, randomized passwords — B018): one per tier, exact-threshold
+      boundary, zero-engagement, private-only, tied-score pair
+- [ ] `seed_recipe()` + `p_visibility` param (old signature → `drop.sql`)
+- [ ] Local-stack verification run recorded in `BUG-TRACKER.md`: idempotent double-apply, tier
+      boundaries, trigger fires for non-owner engagement (definer check), leaderboard
+      exclusions/ties, anon RPC call
+- [ ] Widget tests: `TierChip`, `ChefBadge`, card overlay envelope; `melos run analyze` + `test
+      --no-select` clean
+- [ ] Docs sync: SDS §3/§6/§7/§8 fold-in, `CLAUDE.md` feature map + enum count + server-owned
+      columns list, `README.md` if commands change
+
 ---
 
 ### Outstanding (environment-dependent)

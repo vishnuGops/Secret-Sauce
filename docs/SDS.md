@@ -94,6 +94,14 @@ the `recipe_ratings` trigger recomputes them from scratch so they cannot drift.
 **steps**: `id`, `group_id → step_groups`, `step_order (int)`, `text`, `image_url`,
 `duration_minutes`, `temperature`, `tip`, `sort_order`.
 
+**Ordering contract.** Groups and their children are stored and presented in **ascending**
+`sort_order` (`step_order` for steps), assigned `0..n-1` by `RecipeRepository._persistContent` in
+list order. Reads must ask for ascending **explicitly** — postgrest-dart's `.order(column)`
+defaults to `ascending: false`, and omitting the flag reversed every recipe's steps and
+ingredients (B022). The invariant is load-bearing beyond display: `update()` re-persists the list
+it just read, so a reversed read writes a reversed order back, and `recipe_versions.content_snapshot`
+inherits whatever order the read produced.
+
 **tags**: `id`, `name (unique)`. **recipe_tags**: `recipe_id`, `tag_id` (PK pair).
 
 **recipe_shares**: `recipe_id`, `shared_with_user_id → profiles`, `permission (share_permission)`,
@@ -254,3 +262,164 @@ widths or large text scale (B016).
 - No secrets in source; Supabase keys via `--dart-define` / env.
 - All authorization via RLS; never rely on client filtering for privacy.
 - Storage buckets scoped; signed/public URLs per bucket policy.
+
+## 10. Chefs, tiers & leaderboard — DESIGN (Phase 18, not yet implemented)
+
+> Status: **approved design, implementation pending.** Sections §3, §6, §7, and §8 describe the
+> code as it exists today; this section is the spec the Phase 18 work is built against and is
+> folded into those sections when it ships. Execution detail:
+> [EXECUTION-PLAN.md Phase 18](./EXECUTION-PLAN.md#phase-18--chefs-tiers--leaderboard).
+
+### 10.1 Concept
+
+Every user **is** a chef — "chef" is a presentation of `profiles`, not a new table or role. A
+chef has a **tier**, derived from a **chef score** computed over the engagement counters
+(`like_count`, `save_count`, `view_count`) of the **public** recipes they own. Recipes already
+have exactly one chef: `recipes.owner_id → profiles` is non-null, and a fork produces a *new*
+recipe owned by the forker (lineage tracked separately via `forked_from_*`) — no schema change
+is needed for the "one recipe : one chef" rule; it holds by construction.
+
+### 10.2 Score & tiers (server-owned, tunable in one place)
+
+New Postgres enum `chef_tier` (mirrored in `enums.dart` — this makes **five** mirrored enums;
+update `CLAUDE.md` when it lands):
+
+```
+chef_tier: home_cook | line_cook | sous_chef | head_chef | master_chef
+```
+
+Two immutable SQL functions are the single source of truth — changing the formula or the
+thresholds is a one-function edit plus the idempotent backfill that already runs on every apply:
+
+```text
+chef_score(likes, saves, views) = 3·likes + 5·saves + 0.2·views      -- over PUBLIC recipes only
+chef_tier_for(score):  ≥ 20000 → master_chef
+                       ≥  5000 → head_chef
+                       ≥  1000 → sous_chef
+                       ≥   100 → line_cook
+                       else    → home_cook
+```
+
+Rationale: a save is the strongest intent signal, a like weaker, a view weakest (and `view_count`
+is a deduped, anon-excluded upper bound — see §3.2 / B012 — so it is safe to include at low
+weight). Ratings are deliberately **not** in v1 of the formula (the request scopes ranking to
+popularity/likes/saves); a Bayesian rating term is the obvious v2 refinement. Thresholds are
+inclusive (`>=`) and the seed pins a boundary case to prove it.
+
+**Only public recipes count.** Private-recipe engagement (possible via `recipe_shares`) must not
+leak into a world-readable number. Flipping a recipe private drops its contribution on the next
+recompute; deleting it likewise.
+
+### 10.3 Storage: denormalized onto `profiles`, recomputed from scratch
+
+Follows the `recipes.rating_*` precedent exactly — denormalized aggregates, recompute-from-scratch
+(never incremental), trigger-maintained, **server-owned** (client never writes them):
+
+- `profiles.chef_score numeric not null default 0`
+- `profiles.chef_tier chef_tier not null default 'home_cook'`
+- `profiles.public_recipe_count int not null default 0`
+
+(added via `alter table … add column if not exists`, per the idempotency rule).
+
+- `recompute_chef_stats(p_chef uuid)` — one set-based UPDATE aggregating that chef's public
+  recipes. Invoker-rights, EXECUTE **revoked** from `public`/`anon`/`authenticated` (the
+  `bump_count` rule — every `public` function is otherwise a PostgREST RPC).
+- Trigger `on_recipe_stats_change` on `recipes`: `after insert or delete or update of like_count,
+  save_count, view_count, rating_sum, rating_count, visibility, owner_id`, recomputing
+  `new.owner_id` (and `old.owner_id` when it differs, and on delete). **Must be
+  `security definer set search_path = public`** — it updates a `profiles` row the acting user
+  (liker/viewer) does not own, and `profiles_update` RLS is self-only; invoker rights would
+  silently update 0 rows (B011 class). No recursion: it writes `profiles`, never `recipes`.
+- Idempotent backfill in `0001_init.sql` (B015 precedent): one set-based UPDATE recomputing all
+  profiles on every apply — this is also how a formula/threshold change reaches existing rows.
+- `supabase/scripts/drop.sql` gains: the trigger's function, `recompute_chef_stats(uuid)`,
+  `chef_score(...)`, `chef_tier_for(numeric)`, `chefs_leaderboard(int, int)`, and
+  `drop type if exists chef_tier`.
+
+Why denormalize instead of computing at read time: the chef badge renders on **every recipe
+card**, so tier must arrive with the recipe list in one query (PostgREST embedding, §10.5) —
+a per-card RPC would be an N+1, and a batched "tiers for these owners" RPC pushes orchestration
+into every list provider. Cost: one extra single-row `profiles` write when a recipe's counters
+move. Acceptable at this scale.
+
+### 10.4 Leaderboard RPC
+
+```sql
+chefs_leaderboard(p_limit int default 50, p_offset int default 0)
+  returns table (chef_rank bigint, id uuid, display_name text, avatar_url text,
+                 chef_tier chef_tier, chef_score numeric, public_recipe_count int,
+                 total_likes bigint, total_saves bigint, total_views bigint)
+```
+
+- `stable`, invoker-rights, **callable by `anon`** — the leaderboard page is signed-out safe,
+  like Discover. `profiles` is already world-readable; the recipe sums filter
+  `visibility = 'public'` **explicitly** (not via RLS) so every viewer sees identical numbers —
+  under invoker RLS a signed-in chef would otherwise see their own private recipes folded in.
+- `chef_rank` = `dense_rank() over (order by chef_score desc)` — tied scores share a rank.
+  Deterministic full ordering: `chef_score desc, public_recipe_count desc, display_name asc,
+  id asc`.
+- **Excludes chefs with `public_recipe_count = 0`** (tasters, private-only chefs, brand-new
+  accounts). They still *have* a tier (`home_cook`) for badge purposes; they just don't occupy
+  leaderboard rows.
+
+### 10.5 Client data path
+
+- `Profile` model gains `chefScore`, `chefTier`, `publicRecipeCount` (JSON keys = column names).
+  `ChefTier` enum decodes with `unknownEnumValue: ChefTier.homeCook` so an older client survives
+  a future tier addition.
+- `Recipe` model gains an optional embedded `Profile? owner` (`@JsonKey(name: 'owner')`),
+  populated by adding `owner:profiles(id, display_name, avatar_url, chef_tier)` to the `select()`
+  of every recipe-list/detail query — including the Discover RPCs (PostgREST supports `.select()`
+  embedding on functions returning `setof recipes`). Null-safe: surfaces that don't embed simply
+  render no badge.
+- New `ChefRepository` (abstract + `SupabaseChefRepository`, same file, wired in
+  `core/src/providers.dart`): `leaderboard({int limit, int offset})` → `List<ChefStanding>`.
+  `ChefStanding` is a new freezed model mirroring the RPC row. Signed-out safe by construction
+  (no `_uid` use).
+
+### 10.6 UI
+
+- **`TierChip`** (`design_system`, exported from the barrel): compact pill with tier icon +
+  label. Fixed English labels ("Home Cook" … "Master Chef"); per-tier accent colors defined as
+  theme-aware tokens (must pass light + dark).
+- **`ChefBadge`** (`design_system`, exported): avatar + display name with the `TierChip` **under
+  the name** (per the product requirement), plus a `compact` variant.
+- **`RecipeCard`**: the badge **overlays the cover image, bottom-left** (a `Positioned` in the
+  existing `Stack`, opposite the top-right visibility pill), on a scrim, name ellipsized. It must
+  NOT be a new row in the text column: the card is a fixed-aspect tile (`childAspectRatio: 0.82`)
+  and three prior overflow bugs (B001/B002/B016) all came from adding intrinsic children.
+  Renders only when `recipe.owner != null`. Regression tests at the standard envelope: 276 px
+  wide, longest tier label, 2.0× text scale.
+- **Recipe detail**: full-size `ChefBadge` under the title (tap target reserved for a future
+  chef-profile page).
+- **Leaderboard screen** `features/chefs/` at **`/chefs`**, inside the `ShellRoute`, added to
+  `AppShell._destinations` (trophy icon, "Chefs") — signed-out safe, so **no** change to the
+  router's `needsAuth` list. Rows: rank, `ChefBadge`, score, recipe/like/save counts; standard
+  loading/empty/error states; `limit 50` initially (pagination deferred).
+
+### 10.7 Seed & edge cases
+
+New fixed-UUID chef accounts (`…00d1`–`…00d7`), passwords randomized exactly like the tasters
+(B018 — `seed.sql` runs on production by documented procedure). `seed_recipe()` gains a
+`p_visibility` parameter defaulting to `'public'` — a **signature change**, so the old signature
+goes into `drop.sql` (Gotcha 5). Coverage:
+
+| Chef | Purpose |
+| ---- | ------- |
+| d1–d3 | One chef landing in each of `master_chef`, `head_chef` (natural check: the existing Kitchen account's curated counters already score ≈ 10.2k → `head_chef`), `sous_chef` |
+| d4 | Score of **exactly 100** — proves thresholds are inclusive (`>=` → `line_cook`) |
+| d5 | Public recipes, zero engagement — score 0, `home_cook`, ranked last by the deterministic tie-break |
+| d6 | **Private-only** chef — has a tier, absent from the leaderboard |
+| d7 | Score exactly equal to d3 — proves `dense_rank` ties share a rank |
+| tasters | No recipes — absent from the leaderboard (regression guard for the `public_recipe_count > 0` filter) |
+
+### 10.8 Known limits (accepted for v1)
+
+- **Self-engagement counts.** Unlike ratings (RLS-blocked), a chef may like/save their own
+  recipes, and sock-puppet accounts can inflate any input. `view_count` is already
+  anon-proof/dedup'd (B012); likes and saves are one-per-account but account creation is free.
+  Score is not money — deferred, noted here so it isn't rediscovered as a "bug".
+- Tier thresholds are provisional product numbers; expect retuning once real data exists (the
+  backfill-on-apply makes retuning a one-line change).
+- No chef-profile page yet; the badge is not tappable-to-navigate in v1.
+- Rank is recomputed per request (no caching); fine at current scale.

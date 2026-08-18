@@ -183,6 +183,115 @@ supabase stop                      # when done
 **Acceptance:** cards in the "My Recipes" tab carry a Public/Private pill; Discover cards do not
 (everything there is public by definition).
 
+## Phase 17 — Fix B022: nested content order reversed
+
+**Status: done.** Fix applied and verified against a local Supabase stack in both directions
+(with and without the fix); `melos run analyze` clean in all three packages. Verification table in
+[BUG-TRACKER.md](./BUG-TRACKER.md#b022-verification-run-2026-08-18-local-supabase-stack).
+
+**Root cause:** postgrest-dart's `.order(column)` defaults to `ascending: false`. The four
+nested-content fetches in `SupabaseRecipeRepository` (`_fetchIngredientGroups` /
+`_fetchStepGroups`, `packages/core/lib/src/repositories/recipe_repository.dart:273-315`) omit
+the flag, so `ingredient_groups`, `ingredients`, `step_groups`, and `steps` all arrive
+descending — steps render last-first. Every other `.order()` call in the repo passes
+`ascending: false` explicitly (verified by grep), so the fix surface is exactly these four sites.
+
+**The subtle part — stored-order corruption:** `update()` loads via `getById()` (reversed),
+and `_persistContent` re-indexes the list `0..n` on save. Each app-edit therefore **flips the
+persisted order**; a recipe edited an odd number of times is reversed in storage and currently
+*displays* correctly (double reversal) — it will display wrong once the read is fixed.
+`_appendVersion`'s `content_snapshot` inherits the same unreliability. Seeded recipes are clean
+(SQL writes ascending; never edited). Parity of past edits is unknowable ⇒ **no auto-repair**;
+audit and hand-fix any app-edited recipes (dev-stage data, expected to be a handful at most).
+
+**Fix:** add `ascending: true` to the four calls. Nothing else changes; SQL is correct.
+
+**Acceptance:** on the local stack (core has **no** tests — Gotcha 14 — so a green test run is
+no evidence): a recipe with ≥2 groups and ≥5 steps displays groups and steps 1→N; edit + save
+**twice** and re-verify after each save (catches the flip-flop); `melos run analyze` clean.
+Close B022. — **met.**
+
+**How it was verified** (Chrome is not installed, so the browser eyeball-check in the acceptance
+criteria was replaced with something stronger — it drives the real repository code rather than the
+rendered widget):
+
+1. A fixture recipe was written straight into the local stack in known-ascending order — 2
+   ingredient groups (`IG-A`/`IG-B`, 5 ingredients) and 2 step groups (`SG-A`/`SG-B`, 6 steps) —
+   plus a local-only account owning it, so `update()` was reachable.
+2. A throwaway harness under `apps/app/test/` (deleted afterwards — it needs a live database, and
+   CI has no DB job) constructed `SupabaseRecipeRepository` against that stack and asserted
+   `getById()` order, then `update()`d **twice**, re-asserting both the returned model and the
+   stored `sort_order`/`step_order` read back independently after each save.
+3. The same harness was re-run with the four `ascending: true` flags removed. It fails on the
+   first assertion (`['SG-B', 'SG-A']` instead of `['SG-A', 'SG-B']`), so the check genuinely
+   discriminates rather than passing vacuously.
+
+That harness is not committed. Repository tests remain blocked on mocking `SupabaseClient`
+(ROADMAP Phase 3); this was a one-off verification, not new coverage.
+
+## Phase 18 — Chefs, tiers & leaderboard
+
+**Status: planned.** Full design in [SDS.md §10](./SDS.md#10-chefs-tiers--leaderboard--design-phase-18-not-yet-implemented);
+this section is the build order. Do Phase 17 first — leaderboard verification opens recipes, and
+reversed steps would poison every eyeball check.
+
+**Approach:** "Chef" is a presentation of `profiles` — no new principal table. Score/tier are
+denormalized onto `profiles` (`chef_score`, `chef_tier`, `public_recipe_count`), maintained by a
+recompute-from-scratch trigger, exactly the `recipes.rating_*` pattern. Tier ships with every
+recipe via PostgREST embedding (`owner:profiles(…)`), so cards render badges with zero extra
+round-trips. The leaderboard is an RPC over the denormalized columns. Recipe→chef is 1:1 already
+(`owner_id` non-null; forks create new owned recipes) — no schema change for that requirement.
+
+**Files:** `supabase/migrations/0001_init.sql`, `supabase/seed.sql`, `supabase/scripts/drop.sql`,
+`packages/core/lib/src/models/{enums,profile,recipe,chef_standing}.dart`,
+`packages/core/lib/src/repositories/{chef_repository,recipe_repository,discover_repository}.dart`,
+`packages/core/lib/src/providers.dart`,
+`packages/design_system/lib/src/widgets/{tier_chip,chef_badge,recipe_card}.dart` + barrel,
+`apps/app/lib/features/chefs/*`, `apps/app/lib/routing/{app_router,app_shell}.dart`,
+`apps/app/lib/features/recipe_detail/recipe_detail_screen.dart`.
+
+**Build order (each step leaves the tree green):**
+
+1. **SQL first, verified on the local stack before any Dart** (the project's standing rule).
+   Enum, columns, `chef_score()`/`chef_tier_for()`, `recompute_chef_stats()`,
+   `on_recipe_stats_change`, backfill, `chefs_leaderboard()`, `drop.sql` entries.
+   Traps, each a past bug class: trigger **must** be `security definer set search_path = public`
+   (it updates a `profiles` row the liker/viewer does not own — invoker rights would silently
+   match 0 rows, B011); `recompute_chef_stats` gets EXECUTE revoked (PostgREST exposes every
+   `public` function, B-series `bump_count` rule); the blanket grant block predates these
+   objects on a fresh apply, so grant EXECUTE on `chefs_leaderboard` explicitly (B013);
+   everything guarded/`or replace` for idempotent re-runs (double-apply is part of acceptance).
+2. **Seed**: chefs d1–d7 per the SDS table (tier ladder, exact-100 boundary, zero-engagement,
+   private-only, tied pair), randomized passwords (B018), `seed_recipe(p_visibility)` with the
+   old signature added to `drop.sql`. Re-run must be a no-op-plus-backfill (B014 pattern).
+3. **core**: `ChefTier` (+`unknownEnumValue`), `Profile`/`Recipe` fields, `ChefStanding`,
+   `ChefRepository`, embedding added to `getById`/`listMine`/`listSharedWithMe`/Discover
+   (RPCs take `.select()` embedding for `setof recipes`). `melos run build_runner --no-select`,
+   then decode-check against live rows: `chef_score` is Postgres `numeric` ⇒ `(v as num)
+   .toDouble()` (Gotcha 11).
+4. **design_system**: `TierChip`, `ChefBadge` (+`compact`), barrel exports (Gotcha 13), card
+   overlay bottom-left on the cover `Stack` — **not** a new column row; the tile is fixed-aspect
+   and B001/B002/B016 all came from intrinsic children. Widget tests at 276 px / 2.0×.
+5. **app**: `/chefs` in the `ShellRoute` (signed-out safe ⇒ `redirect` untouched), `AppShell`
+   destination, leaderboard screen + providers, detail-screen badge.
+6. **Docs fold-in**: SDS §3.2/§6/§7/§8 updated to describe reality, §10 trimmed to a pointer;
+   `CLAUDE.md` enum count (4→5), feature map `/chefs` row, server-owned columns list +=
+   `profiles.chef_score/chef_tier/public_recipe_count`; BUG-TRACKER verification table.
+
+**Acceptance:**
+
+- Local stack: double-apply of `0001_init.sql` is clean and stable; seed lands d1–d7 on their
+  exact tiers (incl. score-100 ⇒ `line_cook`); liking/saving/viewing a chef's recipe **as
+  another user** moves the owner's score (the definer check); flipping a recipe
+  private/deleting it drops its contribution; `select * from chefs_leaderboard(50, 0)` as
+  `anon` returns ranked rows, ties share a `dense_rank`, no `public_recipe_count = 0` chefs,
+  Kitchen ≈ 10.2k ⇒ `head_chef`.
+- App: every recipe card and the detail screen show the owner's badge with the tier under the
+  name; `/chefs` renders signed-out; `melos run analyze` and `melos run test --no-select`
+  clean; card envelope tests pass at 276 px / 2.0×.
+- Hosted rollout is one idempotent re-apply of `0001_init.sql` + `seed.sql` (both already safe
+  by rule).
+
 ## Build, run & release (ops)
 
 Task runner is **melos** (`melos.yaml`); Gradle only builds Android. See `README.md` for full

@@ -270,19 +270,21 @@ class SupabaseRecipeRepository implements RecipeRepository {
 
   // ---------- helpers ----------
 
+  // postgrest-dart's `.order()` defaults to `ascending: false`, so nested
+  // content must ask for ascending explicitly or it renders last-first (B022).
   Future<List<IngredientGroup>> _fetchIngredientGroups(String recipeId) async {
     final groups = await _client
         .from('ingredient_groups')
         .select()
         .eq('recipe_id', recipeId)
-        .order('sort_order');
+        .order('sort_order', ascending: true);
     final result = <IngredientGroup>[];
     for (final g in groups) {
       final items = await _client
           .from('ingredients')
           .select()
           .eq('group_id', g['id'] as String)
-          .order('sort_order');
+          .order('sort_order', ascending: true);
       result.add(
         IngredientGroup.fromJson(g).copyWith(
           ingredients: items.map<Ingredient>(Ingredient.fromJson).toList(),
@@ -297,14 +299,14 @@ class SupabaseRecipeRepository implements RecipeRepository {
         .from('step_groups')
         .select()
         .eq('recipe_id', recipeId)
-        .order('sort_order');
+        .order('sort_order', ascending: true);
     final result = <StepGroup>[];
     for (final g in groups) {
       final items = await _client
           .from('steps')
           .select()
           .eq('group_id', g['id'] as String)
-          .order('step_order');
+          .order('step_order', ascending: true);
       result.add(
         StepGroup.fromJson(g).copyWith(
           steps: items.map<RecipeStep>(RecipeStep.fromJson).toList(),

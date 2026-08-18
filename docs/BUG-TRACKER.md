@@ -41,6 +41,12 @@ Status: `open` \| `in-progress` \| `fixed` \| `wontfix`
 | B018 | 2026-08-18 | high     | seed / security | `seed.sql` created the 8 "taster" accounts and the "Secret Sauce Kitchen" account with **literal passwords written into the file** (`crypt('<literal>', gen_salt('bf'))`, redacted here — the kitchen one is recoverable from history before this fix) and `email_confirmed_at` pre-set. `README.md` documents pasting `seed.sql` into the **hosted** dashboard SQL Editor, so following the project's own instructions created 9 confirmed, log-in-able production accounts whose credentials were committed to the repo. `authenticated`-tier access: rate recipes, create spam recipes, like/save. `drop.sql` spares `auth.users`, so `db:reset` could not remove them. | fixed  | Both now use `crypt(gen_random_uuid()::text, gen_salt('bf'))` — nothing ever signs in as them; they exist only because `profiles.id` FKs `auth.users`. Verified on the local stack: seed applies, 6 recipes / 41 ratings / 9 users, both old passwords authenticate 0 rows, re-run still idempotent. **Any already-seeded database keeps the old hashes** (`on conflict (id) do nothing`) — rotate or delete those 9 accounts manually. |
 | B017 | 2026-08-18 | medium   | design_system | `StarRatingInput` kept a stale preview after a cancelled gesture: press a star, hold past the tap deadline, then scroll — the enclosing `ListView` claims the gesture, `onTapUp`/`onHorizontalDragEnd` never fire, so `onChangeEnd` never fires but `_preview` stays set. The stars then show an unsaved rating that `didUpdateWidget` cannot clear, because `value` never changed. | fixed  | Added `onTapCancel` / `onHorizontalDragCancel` → `_cancel()`, which drops `_preview` and re-emits `value`. Regression test drives press-hold-scroll inside a `ListView`.                                                                 |
 
+### Data-ordering bugs (found planning the chefs/leaderboard feature, 2026-08-18)
+
+| ID   | Date       | Severity | Area | Description | Status | Fix / Commit |
+| ---- | ---------- | -------- | ---- | ----------- | ------ | ------------ |
+| B022 | 2026-08-18 | high     | core | Recipe steps (and ingredients, and both group lists) render in **reverse order** — the last step shows first. Root cause: postgrest-dart's `.order(column)` defaults to `ascending: false`, and the four nested-content fetches in `SupabaseRecipeRepository._fetchIngredientGroups` / `_fetchStepGroups` ([recipe_repository.dart:273-315](../packages/core/lib/src/repositories/recipe_repository.dart)) omit `ascending: true` — so `ingredient_groups`, `ingredients`, `step_groups`, and `steps` all come back descending. Every other `.order()` in the repo passes `ascending: false` explicitly and is correct. **Secondary damage:** `update()` round-trips through `getById()` — the editor loads the reversed list, and `_persistContent` re-indexes it `0..n` on save, so the **stored** order flips on every edit. A recipe edited an odd number of times has reversed rows in the DB (and then *displays* correctly under the current bug — double reversal). `_appendVersion` snapshots via `getById()` too, so `content_snapshot` list order is also unreliable for edited recipes. Seeded recipes are unaffected in storage (`seed.sql` writes ascending SQL directly and they are never edited). | fixed | `ascending: true` added to all four call sites in `_fetchIngredientGroups` / `_fetchStepGroups`, with a comment naming the postgrest-dart default so it is not "cleaned up" later. Verified on the local stack in both directions — see the B022 verification run below. **Stored-order audit: nothing to repair.** All 6 recipes on the hosted project have exactly one `recipe_versions` row (`version_number = 1`, `'Seeded recipe'`), so no recipe has ever been saved through the editor and no persisted order was ever flipped. (`updated_at` on those rows has moved, but that is `recipes_touch` firing for the rating/counter triggers, not an edit.) **Residual gap:** the project's one real account (`Vishnu`, created 2026-08-18) may own private recipes, which are not readable with the anon key — if any were created *and* edited before this fix, check them by hand. |
+
 ### Documentation bugs (found auditing `CLAUDE.md` against the code, 2026-08-18)
 
 | ID   | Date       | Severity | Area | Description                                                                                                                                                                                                                                                                                                                                                                                                       | Status | Fix / Commit                                                                                                                                                                                                                                                                                       |
@@ -92,6 +98,27 @@ The hosted project still needs the updated `0001_init.sql` re-applied (idempoten
 | **Two concurrent first-views, one account** (overlapping transactions) | pass — 2100 → 2101, 2 log rows, 1 bump |
 | Same race with `pg_advisory_xact_lock` removed (control)     | 940 → **942** — confirms the race is real and the lock is what prevents it |
 | `recipe_views` index topology after re-apply                 | `recipe_views_pkey`, `recipe_views_recipe_user_idx` (redundant `recipe_views_recipe_idx` dropped) |
+
+### B022 verification run (2026-08-18, local Supabase stack)
+
+`supabase start`, then a fixture recipe written directly into the DB in known-ascending order
+(2 ingredient groups / 5 ingredients, 2 step groups / 6 steps) and a local-only account owning it
+so `update()` was reachable. A throwaway harness under `apps/app/test/` (**not committed** — it
+needs a live database and CI has no DB job) drove the real `SupabaseRecipeRepository`.
+
+Chrome is not installed on this machine, so the browser eyeball-check was replaced by this
+harness, which exercises the same code path the screen does and asserts stored order too.
+
+| Check                                                                        | Result                                          |
+| ---------------------------------------------------------------------------- | ----------------------------------------------- |
+| `.order()` default in postgrest 2.9.1 (`postgrest_transform_builder.dart`)   | `bool ascending = false` — root cause confirmed  |
+| Raw PostgREST `order=sort_order.desc` vs `.asc` on the fixture               | `SG-B, SG-A` / `step-b3…` vs `SG-A, SG-B` / `step-a1…` |
+| `getById()` group + step + ingredient order, with the fix                    | pass — `SG-A, SG-B`, steps `a1→b3`, ingredients `a1→b2` |
+| `update()` ×1 — returned model **and** stored `sort_order`/`step_order`      | pass — unchanged                                |
+| `update()` ×2 — same checks again (catches the flip-flop)                    | pass — unchanged                                |
+| **Control:** same harness with the four `ascending: true` flags removed      | **fails** — `['SG-B', 'SG-A']`; the check is not vacuous |
+| `melos run analyze` (core, design_system, app)                               | clean ×3                                        |
+| Hosted audit: `recipe_versions` per recipe                                   | 6 recipes, all `v1 'Seeded recipe'` — never app-edited |
 
 ## Known environment limitations (not bugs)
 
