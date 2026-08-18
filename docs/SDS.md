@@ -164,7 +164,7 @@ erDiagram
 ### Adaptive behavior
 
 - Narrow (< 600): bottom navigation, single-column lists.
-- Wide (≥ 1000): nav rail, multi-column grids, side-by-side detail.
+- Wide (≥ 1000): fixed top navigation bar (brand + destinations + "New recipe"), multi-column grids, side-by-side detail.
 - Breakpoints centralized in `design_system/layout/adaptive.dart`.
 
 ## 8. RecipeCard contract

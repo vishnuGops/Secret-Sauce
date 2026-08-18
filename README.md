@@ -23,6 +23,10 @@ docs/                   # ROADMAP · EXECUTION-PLAN · SDS · BUG-TRACKER
 - `dart pub global activate melos`
 - [Supabase CLI](https://supabase.com/docs/guides/cli) (for local DB) or a hosted Supabase project.
 
+> If `melos` isn't recognized as a command, the pub global bin dir isn't on your `PATH`. Either add
+> `%LOCALAPPDATA%\Pub\Cache\bin` to `PATH`, or prefix every `melos ...` command below with
+> `dart pub global run melos:` (e.g. `dart pub global run melos:melos bootstrap`).
+
 ## First-time setup
 
 ```powershell

@@ -22,8 +22,8 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [x] `packages/design_system` package skeleton + `pubspec.yaml`
 - [x] `apps/app` application skeleton + `pubspec.yaml`
 - [x] `analysis_options.yaml` (shared lints)
-- [ ] `melos bootstrap` resolves cleanly _(needs Flutter SDK)_
-- [ ] CI workflow (analyze + test)
+- [x] `melos bootstrap` resolves cleanly
+- [x] CI workflow (analyze + test) — `.github/workflows/ci.yml`
 
 ## Phase 2 — Supabase schema + RLS
 
@@ -50,7 +50,7 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [x] `RecipeRepository` (CRUD, fork, versioning) contract + Supabase impl
 - [x] `DiscoverRepository` (popular/trending/recent/search) contract + impl
 - [x] `StorageService` (image upload)
-- [ ] Unit tests for repositories _(needs SDK)_
+- [ ] Unit tests for repositories _(needs Supabase client mocking)_
 
 ## Phase 4 — design_system
 
@@ -63,7 +63,7 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 ## Phase 5 — app shell + auth
 
 - [x] `main.dart` bootstrap (Supabase init, ProviderScope)
-- [x] `go_router` config + responsive `AppShell` (nav rail / bottom nav)
+- [x] `go_router` config + responsive `AppShell` (top nav bar / bottom nav)
 - [x] Auth controller (Riverpod)
 - [x] Sign in / Sign up screens
 - [x] Auth guard / redirect

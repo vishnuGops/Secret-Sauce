@@ -83,6 +83,9 @@ UI (features/*, design_system)
 
 > Requires the Flutter SDK (with Dart) and the `melos` global package. Install Flutter first.
 
+> If `melos` is not on `PATH` (pub global bin dir missing), prefix commands with
+> `dart pub global run melos:` — e.g. `dart pub global run melos:melos bootstrap`.
+
 ```powershell
 dart pub global activate melos      # once
 melos bootstrap                     # resolve + link all packages

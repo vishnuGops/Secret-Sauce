@@ -62,7 +62,7 @@ visibility.
 ## Phase 5 — app shell + auth
 
 **Approach:** `ProviderScope` root; `go_router` with a `ShellRoute` that swaps bottom-nav (narrow)
-for a nav-rail (wide). Auth state drives redirects.
+for a fixed top navigation bar (wide). Auth state drives redirects.
 **Files:** `apps/app/lib/main.dart`, `.../routing/app_router.dart`, `.../routing/app_shell.dart`,
 `.../features/auth/*`.
 **Acceptance:** unauthenticated users land on Home/auth; authenticated users reach app shell.
