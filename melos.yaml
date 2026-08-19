@@ -92,19 +92,42 @@ scripts:
       scope: app
 
   # ---------------------------------------------------------------------------
+  # Authored recipes. recipeData/recipes/*.json is the source of truth for the
+  # Secret Sauce Kitchen's own recipes; supabase/seed_recipes.sql is generated
+  # from it and committed. No database or credentials needed — these are pure
+  # file operations, unlike the db:* scripts below.
+  # ---------------------------------------------------------------------------
+  recipes:validate:
+    description: Parse and lint recipeData/recipes/*.json. Writes nothing.
+    run: dart run tool/recipes.dart validate
+
+  recipes:gen:
+    description: Regenerate supabase/seed_recipes.sql from recipeData/recipes/.
+    run: dart run tool/recipes.dart gen
+
+  recipes:check:
+    description: Fail if supabase/seed_recipes.sql is stale (used by CI).
+    run: dart run tool/recipes.dart check
+
+  # ---------------------------------------------------------------------------
   # Database tasks. Require `psql` on PATH and a SUPABASE_DB_URL env var
   # (Supabase dashboard -> Project Settings -> Database -> Connection string).
-  #   db:create  apply the schema      db:seed   load curated recipes
-  #   db:drop    drop all app objects  db:clean  truncate data (keep schema)
-  #   db:reset   drop -> create -> seed
+  #   db:create  apply the schema      db:seed     load demo data
+  #   db:recipes load authored recipes db:clean    truncate data (keep schema)
+  #   db:drop    drop all app objects  db:reset    drop -> create -> seed ->
+  #                                                recipes
   # ---------------------------------------------------------------------------
   db:create:
     description: Apply the schema (supabase/migrations/0001_init.sql).
     run: dart run tool/db.dart create
 
   db:seed:
-    description: Load curated public recipes (supabase/seed.sql).
+    description: Load demo chefs, tasters, and ratings (supabase/seed.sql).
     run: dart run tool/db.dart seed
+
+  db:recipes:
+    description: Load the authored recipes (supabase/seed_recipes.sql).
+    run: dart run tool/db.dart recipes
 
   db:drop:
     description: Drop all app tables, types, and functions.
@@ -115,5 +138,5 @@ scripts:
     run: dart run tool/db.dart clean
 
   db:reset:
-    description: Drop, re-create, and seed the database.
+    description: Drop, re-create, seed, and load the authored recipes.
     run: dart run tool/db.dart reset

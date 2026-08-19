@@ -1,6 +1,7 @@
 // tool/db.dart — thin cross-platform wrapper around `psql` for DB tasks.
 //
-// Usage (via melos): melos run db:create | db:seed | db:drop | db:clean | db:reset
+// Usage (via melos):
+//   melos run db:create | db:seed | db:recipes | db:drop | db:clean | db:reset
 // Requires:
 //   * `psql` on PATH (PostgreSQL client).
 //   * SUPABASE_DB_URL env var — the connection string from the Supabase
@@ -15,6 +16,10 @@ import 'dart:io';
 const _files = <String, String>{
   'create': 'supabase/migrations/0001_init.sql',
   'seed': 'supabase/seed.sql',
+  // Generated from recipeData/recipes/*.json by tool/recipes.dart. Standalone
+  // and order-independent with respect to `seed`: both bootstrap the same
+  // Secret Sauce Kitchen account with conflict guards.
+  'recipes': 'supabase/seed_recipes.sql',
   'drop': 'supabase/scripts/drop.sql',
   'clean': 'supabase/scripts/clean.sql',
 };
@@ -47,14 +52,15 @@ Future<void> main(List<String> args) async {
 
   final action = args.isEmpty ? 'help' : args.first;
   final order = switch (action) {
-    'reset' => ['drop', 'create', 'seed'],
-    'create' || 'seed' || 'drop' || 'clean' => [action],
+    'reset' => ['drop', 'create', 'seed', 'recipes'],
+    'create' || 'seed' || 'recipes' || 'drop' || 'clean' => [action],
     _ => <String>[],
   };
 
   if (order.isEmpty) {
-    stdout
-        .writeln('usage: dart run tool/db.dart <create|seed|drop|clean|reset>');
+    stdout.writeln(
+      'usage: dart run tool/db.dart <create|seed|recipes|drop|clean|reset>',
+    );
     exit(action == 'help' ? 0 : 64);
   }
 

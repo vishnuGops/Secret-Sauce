@@ -1,0 +1,107 @@
+{
+  "slug": "spring-vegetable-tart",
+  "title": "Spring Vegetable Tart",
+  "description": "A flaky all-butter crust filled with sweet leeks, crisp prosciutto, peas, and three cheeses, finished with a fan of asparagus. Makes one 9-inch tart.",
+  "cuisine": "French",
+  "category": "Main",
+  "difficulty": "medium",
+  "prep_minutes": 30,
+  "cook_minutes": 55,
+  "servings": 8,
+  "visibility": "public",
+  "attribution": "Secret Sauce Kitchen",
+  "notes": null,
+  "ingredient_groups": [
+    {
+      "name": "Crust",
+      "ingredients": [
+        { "quantity": 1.25, "unit": "cup", "name": "organic unbleached wheat flour" },
+        { "quantity": 0.5, "unit": "tsp", "name": "kosher salt" },
+        { "quantity": 6, "unit": "Tbsp", "name": "butter", "note": "cold, cut into 1/2-inch cubes" },
+        { "quantity": 3, "unit": "Tbsp", "name": "ice water", "note": "start with 2 Tbsp and add as needed" }
+      ]
+    },
+    {
+      "name": "Filling",
+      "ingredients": [
+        { "quantity": 2, "unit": "Tbsp", "name": "butter" },
+        { "quantity": 1, "unit": null, "name": "yellow onion", "note": "chopped" },
+        { "quantity": 1, "unit": null, "name": "leek", "note": "large, thinly sliced, tough leaves removed" },
+        { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "smashed and minced" },
+        { "quantity": 1, "unit": "pkg", "name": "prosciutto", "note": "thinly sliced" },
+        { "quantity": 0.5, "unit": "cup", "name": "peas" },
+        { "quantity": 0.5, "unit": "cup", "name": "parmesan", "note": "shredded" },
+        { "quantity": 0.5, "unit": "cup", "name": "Gruyère", "note": "shredded" },
+        { "quantity": 0.25, "unit": "cup", "name": "smoked Gouda", "note": "shredded" },
+        { "quantity": 1, "unit": "tsp", "name": "poultry seasoning" },
+        { "quantity": null, "unit": null, "name": "salt and pepper", "note": "to taste" },
+        { "quantity": 2, "unit": null, "name": "eggs" },
+        { "quantity": 0.5, "unit": "cup", "name": "whole milk" }
+      ]
+    },
+    {
+      "name": "To assemble",
+      "ingredients": [
+        { "quantity": 1, "unit": "Tbsp", "name": "Dijon mustard" },
+        { "quantity": 0.5, "unit": "bunch", "name": "asparagus", "note": "trimmed" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Crust",
+      "steps": [
+        {
+          "text": "Mix the flour and kosher salt. Using a pastry cutter, blend in the cold butter until the dough gathers into small pea-sized clumps. Add the ice water 1 or 2 tablespoons at a time until the dough forms a ball, then gently form it into a thick, even disk.",
+          "tip": "Stop as soon as it holds together — worked dough turns tough."
+        },
+        {
+          "text": "Wrap the disk in plastic wrap and refrigerate.",
+          "duration_minutes": 60,
+          "tip": "Overnight is better if you have the time."
+        },
+        {
+          "text": "Preheat the oven to 350°F. Roll out the crust and gently fit it into the tart pan. Roll over the top with a rolling pin to trim the edges, then dock the crust all over with a fork.",
+          "temperature": "350°F"
+        },
+        {
+          "text": "Blind-bake the crust until set and lightly coloured.",
+          "duration_minutes": 20,
+          "temperature": "350°F"
+        }
+      ]
+    },
+    {
+      "name": "Filling",
+      "steps": [
+        {
+          "text": "In a large skillet, heat 2 Tbsp butter over medium heat. Fry the onion until translucent and beginning to soften, about 5 minutes. Add the leek and garlic and continue cooking until the leek is tender, another 5-7 minutes. Remove to a medium bowl.",
+          "duration_minutes": 12,
+          "temperature": "medium"
+        },
+        {
+          "text": "In the same skillet, fry the prosciutto over medium heat until brown and crisp, then mix it into the leek mixture.",
+          "duration_minutes": 2,
+          "temperature": "medium"
+        },
+        {
+          "text": "Add the peas, parmesan, Gruyère, Gouda, poultry seasoning, salt, and pepper to the vegetables. Whisk the eggs and milk together and stir those in as well."
+        }
+      ]
+    },
+    {
+      "name": "Assemble and bake",
+      "steps": [
+        {
+          "text": "Brush the bottom and sides of the pre-baked crust with Dijon mustard, add the filling, and top with the asparagus.",
+          "tip": "The mustard layer keeps the crust from going soggy under the custard."
+        },
+        {
+          "text": "Bake until the filling is set and the crust is golden. Serve warm.",
+          "duration_minutes": 35,
+          "temperature": "350°F"
+        }
+      ]
+    }
+  ]
+}

@@ -320,6 +320,51 @@ surfaces — plus that `anon` cannot call `recompute_chef_stats`. Deleted after 
 database job). The committed `chefs_screen_test.dart` covers the screen's
 loading/empty/error/tie-render states with a fake `ChefRepository`, no database needed.
 
+## Phase 19 — Authored recipe content, split from the demo seed
+
+Roadmap: [ROADMAP.md Phase 19](./ROADMAP.md#phase-19--authored-recipe-content-split-from-the-demo-seed) ·
+Design: [SDS.md §11](./SDS.md#11-recipe-content-vs-demo-data)
+
+**Problem.** The Kitchen's recipes were staged as one flat `recipeData/data.json`: a single array
+with a byte-identical duplicate, nine content defects (B025), and a shape the app cannot consume —
+`servings` as free text, `amount` as one opaque string, no groups, no times.
+
+**Order of work.** Two commits, deliberately separate. Data corrections first, against the old
+shape, so the content diff is reviewable on its own; the structural change second, where every
+line moves anyway.
+
+**What shipped.**
+
+1. `recipeData/recipes/<slug>.json`, one file per recipe. The filename is the identity, so the
+   filesystem makes a duplicate slug impossible — which is the actual fix for B025's duplicate,
+   not the deletion of the second copy.
+2. `recipeData/schema.json` + `recipeData/README.md`. The schema is documentation, not a runtime
+   dependency (no JSON Schema package in the toolchain), so its rules are restated in
+   `tool/recipes.dart` and the two must be changed together — noted in both files.
+3. `tool/recipes.dart` (`validate` / `gen` / `check`) → `supabase/seed_recipes.sql`, committed and
+   CI-checked. `melos run recipes:*`, `db:recipes`, and `db:reset` extended.
+4. `seed_recipe_v2`: group-aware, new name (so it cannot overload `seed_recipe`), B024 drop block
+   in the file that recreates it, `execute` revoked (B026), and demo ratings reached through a
+   `to_regprocedure` guard so the file outlives `seed.sql`.
+
+**How the SQL was verified.** Docker was already serving an unrelated project's Supabase stack on
+port 54322 — the port this project's `config.toml` claims — so rather than stop it, the SQL ran in
+a throwaway database inside that same cluster, with the `auth` and `storage` schemas stubbed to
+the columns `0001_init.sql` touches. Postgres 17.6, not the configured 15. That is enough to prove
+the schema applies, the seed applies twice without duplication, both interleavings with `seed.sql`
+are clean (24 recipes / 24 distinct titles / one overload each), grouping and per-group
+`step_order` are right, `numeric` quantities and `null`-quantity "to taste" rows land correctly,
+and `proacl` is `postgres=X/postgres` on all six seed helpers. It proves **nothing** about real
+auth, Storage, or PostgREST — those still need the project's own stack.
+
+**Content coverage** was checked mechanically rather than by eye: 9 titles in and 9 out, 109
+ingredients in and 109 out, every old ingredient's distinctive words present in the new file.
+Step count rose 35 → 41 (splits, no drops). `data.json` was deleted only after that passed.
+
+**Gaps left open**, all recorded in the roadmap: no `recipes.notes` column (notes are appended to
+`description`), no reverse-direction lint for a step naming an unlisted ingredient, and no SQL
+execution in CI.
+
 ## Build, run & release (ops)
 
 Task runner is **melos** (`melos.yaml`); Gradle only builds Android. See `README.md` for full

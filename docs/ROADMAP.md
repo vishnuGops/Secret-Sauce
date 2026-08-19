@@ -323,6 +323,88 @@ none blocks the feature, all are real regression surface.
 
 ---
 
+## Phase 19 — Authored recipe content, split from the demo seed
+
+Separates the Secret Sauce Kitchen's **content** from the **demo fixtures** it was tangled with,
+so the fake chefs, taster accounts, and invented engagement numbers in `supabase/seed.sql` can be
+deleted later without taking the real recipes with them.
+
+The staged recipes arrived as one flat `recipeData/data.json` with a duplicate entry and nine
+content defects (B025) in a shape the app cannot use: `servings` as free text, `amount` as one
+opaque string (`"1 1/4 cup"` — the servings scaler multiplies a `numeric`, so it cannot scale a
+string), no ingredient/step groups, and every time field null.
+
+### Authoring format
+
+- [x] `recipeData/recipes/<slug>.json`, one recipe per file — the filename **is** the identity,
+      so a duplicate slug is impossible by construction. Readable diffs; no merge conflicts when
+      two branches each add a recipe.
+- [x] `recipeData/schema.json` — every field documented against the column it maps to.
+      Deliberately **not** loaded at runtime (no JSON Schema dependency in the toolchain), so the
+      rules are duplicated in `tool/recipes.dart` and both must change together.
+- [x] `recipeData/README.md` — workflow, and the three things that are easy to get wrong
+      (decimal quantities, integer servings, unattended time as `duration_minutes`).
+- [x] All 9 recipes restructured: grouped ingredients and steps, decimal `quantity` + `unit` +
+      `note` + `is_optional`, integer `servings`, real `prep_minutes` / `cook_minutes`, and per-step
+      `duration_minutes` / `temperature` / `tip`. Verified no content lost — 109 ingredients in,
+      109 out, every title matched.
+- [x] `recipeData/data.json` deleted; it is fully superseded and still in git history.
+
+### Tooling
+
+- [x] `tool/recipes.dart` — `validate` / `gen` / `check`. Generates
+      `supabase/seed_recipes.sql`, which is committed.
+- [x] `melos run recipes:validate | recipes:gen | recipes:check`; `melos run db:recipes`;
+      `db:reset` extended to `drop → create → seed → recipes`.
+- [x] CI runs `recipes:check`. Nothing reads the JSON at runtime, so without it a stale generated
+      `.sql` would be applied to a database and nobody would notice.
+- [x] Unused-ingredient lint (the margarita's orphaned orange liqueur, B025), suppressed on
+      recipes with a catch-all step. Confirmed non-vacuous by re-introducing the defect.
+
+### `seed_recipe_v2`
+
+- [x] Group-aware helper, distinct name from `seed_recipe` so the two never overload each other.
+      Numbers `step_order` **from 0 within each group**, matching
+      `SupabaseRecipeRepository._persistContent` — continuous numbering would have been silently
+      renumbered by the first edit.
+- [x] B024 guard: the drop block for historical signatures lives in the file that recreates the
+      function, with the rule stated for the next signature change.
+- [x] `execute` revoked from `public` / `anon` / `authenticated` on both new helpers (B026).
+- [x] Demo ratings applied through `seed.sql`'s tasters via a `to_regprocedure` guard, so this file
+      keeps working after that file is deleted.
+
+### Verification (local Postgres, 2026-08-18)
+
+Ran in a throwaway database rather than the project's own stack — Docker was already serving an
+unrelated project on port 54322. Postgres 17.6 vs the config's 15; the `auth` and `storage` schemas
+were stubbed to the columns `0001_init.sql` touches. So this proves the SQL applies and the data
+lands; it does **not** exercise real auth, real Storage, or PostgREST.
+
+- [x] `0001_init.sql` → `seed_recipes.sql` applies clean; **twice** with no duplication
+      (9 recipes / 109 ingredients / 41 steps either way)
+- [x] Both interleavings with `seed.sql` — 24 recipes, 24 distinct titles, both function overloads
+      present exactly once, no error in either order
+- [x] Grouping and per-group `step_order` correct (teriyaki: sauce 0-1, skewers 0-3)
+- [x] `numeric` quantities, `note`, and `is_optional` all land correctly; `null` quantity for
+      "to taste" survives
+- [x] `notes` appended to `description` as a trailing paragraph
+- [x] `proacl` on both helpers is `postgres=X/postgres` — PUBLIC/anon/authenticated revoked
+- [x] Kitchen `chef_score` unchanged at 10189 / `head_chef` (`public_recipe_count` 6 → 15), so the
+      authored recipes add no phantom engagement
+
+### Deferred
+
+- [ ] **`recipes.notes` column.** There is nowhere to put a recipe-level note, so `tool/recipes.dart`
+      appends it to `description`. Lossless, but it lands in the card summary.
+- [ ] **Reverse-direction lint** — a step calling for an ingredient the list never mentions. Three
+      of B025's nine defects were exactly that; it needs a lexicon and is still a manual read.
+- [ ] **No SQL test in CI**, as with every other `.sql` in this repo — `recipes:check` compares
+      text, it never runs the generated SQL.
+- [ ] Retire `supabase/seed.sql`'s six curated kitchen recipes once the authored copies are the
+      only ones applied; the demo chefs/tasters go with it.
+
+---
+
 ### Outstanding (environment-dependent)
 
 Toolchain is set up and verified (bootstrap, codegen, analyze, test, `flutter build web --release`),

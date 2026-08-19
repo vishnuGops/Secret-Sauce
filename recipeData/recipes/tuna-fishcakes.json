@@ -1,0 +1,61 @@
+{
+  "slug": "tuna-fishcakes",
+  "title": "Tuna Fishcakes",
+  "description": "Pantry fishcakes that come together in under half an hour — panko and parmesan for structure, lemon and smoked paprika for lift. Makes 6 cakes.",
+  "cuisine": "American",
+  "category": "Main",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 10,
+  "servings": 2,
+  "visibility": "public",
+  "attribution": "Secret Sauce Kitchen",
+  "notes": "Form larger patties instead of six small ones and serve them on buns as fish burgers.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 1, "unit": "pouch", "name": "tuna", "note": "3 oz pouch or 5 oz can, drained" },
+        { "quantity": 1, "unit": "Tbsp", "name": "butter" },
+        { "quantity": 0.5, "unit": "cup", "name": "yellow onion", "note": "minced" },
+        { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "minced" },
+        { "quantity": 0.5, "unit": "cup", "name": "panko bread crumbs" },
+        { "quantity": 0.25, "unit": "cup", "name": "parmesan", "note": "grated" },
+        { "quantity": 2, "unit": null, "name": "mini sweet peppers", "note": "1/4-inch dice" },
+        { "quantity": 2, "unit": null, "name": "green onions", "note": "minced" },
+        { "quantity": 1, "unit": null, "name": "egg" },
+        { "quantity": 1, "unit": "Tbsp", "name": "lemon juice" },
+        { "quantity": 1, "unit": null, "name": "lemon", "note": "zest only" },
+        { "quantity": 0.5, "unit": "tsp", "name": "kosher salt" },
+        { "quantity": 0.25, "unit": "tsp", "name": "black pepper" },
+        { "quantity": 0.5, "unit": "tsp", "name": "smoked paprika" },
+        { "quantity": 0.25, "unit": "tsp", "name": "garlic powder" },
+        { "quantity": null, "unit": null, "name": "oil", "note": "for frying" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "In a small skillet, heat the butter over medium heat. Cook the yellow onion and garlic until translucent and fragrant.",
+          "duration_minutes": 5,
+          "temperature": "medium"
+        },
+        {
+          "text": "Add every remaining ingredient except the frying oil to a large bowl, including the cooked onion and garlic. Mix well."
+        },
+        {
+          "text": "Using a 1/4 cup measuring cup, scoop up the mixture and form it into patties about 1/2-inch thick.",
+          "tip": "Press firmly — loosely packed cakes fall apart in the pan."
+        },
+        {
+          "text": "Heat oil in a cast iron skillet over medium heat and cook the fishcakes until golden, 1-2 minutes per side. Sprinkle with salt and serve hot with your favourite dipping sauce.",
+          "duration_minutes": 4,
+          "temperature": "medium"
+        }
+      ]
+    }
+  ]
+}

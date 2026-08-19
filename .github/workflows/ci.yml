@@ -37,3 +37,10 @@ jobs:
 
       - name: Test
         run: melos run test --no-select
+
+      # Lints recipeData/recipes/*.json and fails if supabase/seed_recipes.sql
+      # was not regenerated after a recipe changed. Nothing reads the JSON at
+      # runtime, so without this a stale .sql would be applied to a database
+      # and nobody would notice. Needs no database — it is a file comparison.
+      - name: Recipe data
+        run: melos run recipes:check

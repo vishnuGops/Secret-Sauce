@@ -41,7 +41,12 @@ secret-sauce/
 ├── .claude/skills/            # code-review + review-checklist (repo's own review criteria)
 ├── .github/workflows/ci.yml   # analyze + test, pinned Flutter 3.44.8 / melos 6.3.3
 ├── docs/                      # ROADMAP · EXECUTION-PLAN · SDS · BUG-TRACKER (see "Docs–code sync")
+├── recipeData/                # THE Secret Sauce Kitchen's own recipes (content)
+│   ├── recipes/<slug>.json    #   one per file — the filename IS the identity
+│   ├── schema.json            #   the format, field by field, mapped to columns
+│   └── README.md              #   authoring workflow
 ├── tool/db.dart               # psql wrapper behind the melos db:* scripts
+├── tool/recipes.dart          # validates recipeData/ -> generates seed_recipes.sql
 ├── packages/
 │   ├── core/lib/
 │   │   ├── core.dart              # BARREL — the only public surface of `core`
@@ -63,9 +68,14 @@ secret-sauce/
 │   └── android/ ios/ web/ windows/   # platform runners are committed — no `flutter create`
 └── supabase/
     ├── migrations/0001_init.sql  # THE schema: tables, triggers, RLS, grants, storage, RPCs
-    ├── seed.sql                  # curated public recipes + rating data (idempotent)
+    ├── seed.sql                  # DEMO fixtures: chefs, tasters, ratings (idempotent)
+    ├── seed_recipes.sql          # GENERATED from recipeData/ — never hand-edit
     └── scripts/{drop,clean}.sql
 ```
+
+`seed.sql` and `seed_recipes.sql` are split on purpose: the first is **demo data** with a
+deletion date, the second is **content** that outlives it. Both bootstrap the same Secret Sauce
+Kitchen account with conflict guards, so either may be applied first.
 
 Note the `src/` layer: model files live at `packages/core/lib/src/models/`, **not**
 `packages/core/lib/models/`. Nothing outside a package imports below its barrel.
@@ -136,12 +146,18 @@ melos run build:apk --no-select        # release APK (also: build:apk:split, bui
 melos run build:ios --no-select        # macOS only (also: build:ipa — needs signing)
 melos run gen:icons --no-select        # launcher icons from apps/app/assets/icon/app_icon.png
 
+# Recipe content — pure file operations, no database or credentials needed.
+melos run recipes:validate  # parse + lint recipeData/recipes/*.json
+melos run recipes:gen       # regenerate supabase/seed_recipes.sql (commit both)
+melos run recipes:check     # fail if that .sql is stale — CI runs this
+
 # DB tasks — need `psql` on PATH and $env:SUPABASE_DB_URL. See the warning under Gotchas.
 melos run db:create   # apply supabase/migrations/0001_init.sql (idempotent)
 melos run db:seed     # load supabase/seed.sql (idempotent; also backfills ratings — B014)
+melos run db:recipes  # load supabase/seed_recipes.sql (idempotent; run recipes:gen first)
 melos run db:clean    # truncate recipe data, keep schema + users
 melos run db:drop     # drop all app tables/types/functions (spares auth.users)
-melos run db:reset    # drop -> create -> seed
+melos run db:reset    # drop -> create -> seed -> recipes
 ```
 
 > `--no-select` is required for every script that declares `packageFilters` in `melos.yaml`
@@ -330,7 +346,16 @@ the `code-review` skill). The ones you need while *writing* code:
     since CI has no database job.
     **Nothing in CI tests SQL at all** — the formula/threshold functions, the triggers, RLS, and
     the ranking RPCs are covered only by manual local-stack runs recorded in `BUG-TRACKER.md`.
-16. **Embedding `profiles` into a recipe query needs the FK hint.** `recipes` and `profiles` are
+16. **`supabase/seed_recipes.sql` is generated — edit `recipeData/recipes/*.json` instead.**
+    `melos run recipes:gen` rewrites it; commit both. CI's `recipes:check` catches a stale file,
+    which matters because **nothing reads the JSON at runtime** — drift is invisible until the
+    wrong SQL is applied to a database. Three rules the format exists to enforce: `quantity` is a
+    decimal (`1.25`, not `"1 1/4"`) because the servings scaler multiplies a `numeric`; `servings`
+    is an integer, so pan sizes and piece counts go in `description`; unattended time (chilling,
+    rising, marinating) is a step's `duration_minutes`, not `prep_minutes`. `seed_recipe_v2` is
+    **not an upsert** — it returns early on an existing `(owner_id, title)`, so re-applying never
+    pushes a content edit to a database that already has the recipe.
+17. **Embedding `profiles` into a recipe query needs the FK hint.** `recipes` and `profiles` are
     related five ways (`owner_id`, plus many-to-many through likes/ratings/saves/shares), so the
     obvious `owner:profiles(...)` fails with `PGRST201: Could not embed because more than one
     relationship was found`. Use the shared `kRecipeSelect` constant in

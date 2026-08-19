@@ -1,0 +1,45 @@
+{
+  "slug": "shirazi-salad",
+  "title": "Shirazi Salad",
+  "description": "The Persian table salad — cucumber, tomato, and onion in a fine dice, brightened with lemon and dill. No cooking, and better after an hour in the fridge.",
+  "cuisine": "Persian",
+  "category": "Salad",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 0,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": "Secret Sauce Kitchen",
+  "notes": null,
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 4, "unit": null, "name": "Persian cucumbers", "note": "1/2-inch dice; or 2 green cucumbers, peeled and seeded" },
+        { "quantity": 1, "unit": "pint", "name": "cherry tomatoes", "note": "quartered" },
+        { "quantity": 0.5, "unit": "cup", "name": "red onion", "note": "chopped" },
+        { "quantity": 2, "unit": "Tbsp", "name": "fresh dill", "note": "chopped; cilantro, parsley, mint, or basil all work" },
+        { "quantity": 1, "unit": "Tbsp", "name": "olive oil" },
+        { "quantity": 1, "unit": "Tbsp", "name": "golden balsamic vinegar", "is_optional": true },
+        { "quantity": 1, "unit": null, "name": "lemon", "note": "zest and juice" },
+        { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "large, smashed and minced" },
+        { "quantity": null, "unit": null, "name": "salt and pepper", "note": "to taste" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Toss all of the ingredients together in a large bowl. Taste and adjust the seasoning.",
+          "tip": "Dice everything to roughly the same size — that is what makes this salad read as one thing rather than a bowl of parts."
+        },
+        {
+          "text": "Cover and refrigerate to let the flavours get to know each other.",
+          "duration_minutes": 60
+        }
+      ]
+    }
+  ]
+}

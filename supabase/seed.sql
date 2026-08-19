@@ -186,6 +186,25 @@ begin
 end;
 $$;
 
+-- PostgREST exposes every function in `public` as an RPC, so these seed helpers
+-- were callable over the API by `anon` — `seed_recipe` and `seed_ratings` both
+-- write rows (B026). They stay invoker-rights, so RLS still applies to whoever
+-- calls them, but nothing outside a seed run has any business calling them at
+-- all. Same rule as the trigger helpers in 0001_init.sql.
+do $$
+begin
+  execute 'revoke execute on function seed_taster_ids() from public';
+  execute 'revoke execute on function seed_chef_ids() from public';
+  execute 'revoke execute on function seed_ratings(uuid, jsonb) from public';
+  execute 'revoke execute on function seed_recipe(uuid, text, text, text, text, difficulty, int, int, int, text, jsonb, jsonb, int, int, int, jsonb, recipe_visibility) from public';
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'revoke execute on function seed_taster_ids() from anon, authenticated';
+    execute 'revoke execute on function seed_chef_ids() from anon, authenticated';
+    execute 'revoke execute on function seed_ratings(uuid, jsonb) from anon, authenticated';
+    execute 'revoke execute on function seed_recipe(uuid, text, text, text, text, difficulty, int, int, int, text, jsonb, jsonb, int, int, int, jsonb, recipe_visibility) from anon, authenticated';
+  end if;
+end $$;
+
 -- Create the taster accounts (auth user + profile) before any recipe is seeded.
 do $$
 declare

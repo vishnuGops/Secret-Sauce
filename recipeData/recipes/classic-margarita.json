@@ -1,0 +1,50 @@
+{
+  "slug": "classic-margarita",
+  "title": "Classic Margarita",
+  "description": "Fresh lime, a little orange, and a simple syrup you make yourself so you can dial the sweetness to the fruit. Shaken, served over ice.",
+  "cuisine": "Mexican",
+  "category": "Drink",
+  "difficulty": "easy",
+  "prep_minutes": 5,
+  "cook_minutes": 12,
+  "servings": 2,
+  "visibility": "public",
+  "attribution": "Secret Sauce Kitchen",
+  "notes": "Mocktail: replace the tequila and orange liqueur with 6 oz lime sparkling water and a squeeze of lemon.",
+  "ingredient_groups": [
+    {
+      "name": "Simple syrup",
+      "ingredients": [
+        { "quantity": 0.5, "unit": "cup", "name": "organic granulated cane sugar" },
+        { "quantity": 0.5, "unit": "cup", "name": "filtered water" }
+      ]
+    },
+    {
+      "name": "Margarita",
+      "ingredients": [
+        { "quantity": 4, "unit": null, "name": "limes", "note": "juiced, about 4 oz" },
+        { "quantity": 1, "unit": null, "name": "orange", "note": "juiced, about 2 oz" },
+        { "quantity": 4, "unit": "oz", "name": "tequila blanco" },
+        { "quantity": 2, "unit": "oz", "name": "orange liqueur" },
+        { "quantity": null, "unit": null, "name": "ice" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "In a small saucepan, stir the sugar and water together over medium-high heat. Bring to a low boil, reduce to medium-low, and simmer until the syrup is slightly thickened. Let it cool and store it sealed in the fridge until you need it.",
+          "duration_minutes": 12,
+          "temperature": "medium-low",
+          "tip": "Makes more than this recipe uses; it keeps for a month."
+        },
+        {
+          "text": "Pour the lime juice, orange juice, simple syrup to taste, tequila, and orange liqueur into a shaker with ice. Shake until the outside frosts, then divide between two 12 oz glasses over fresh ice.",
+          "tip": "Sweeten last — how much syrup it takes depends entirely on the limes."
+        }
+      ]
+    }
+  ]
+}

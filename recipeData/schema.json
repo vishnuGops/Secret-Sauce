@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://secret-sauce.local/schema/recipe.json",
+  "title": "Secret Sauce curated recipe",
+  "description": "One authored recipe, in the shape the app's own model uses. Fields map 1:1 onto `recipes` / `ingredient_groups` / `ingredients` / `step_groups` / `steps` in supabase/migrations/0001_init.sql — see docs/SDS.md §3-§6. `tool/recipes.dart` validates against these rules and generates supabase/seed_recipes.sql; it does NOT read this file (no JSON Schema dependency in the toolchain), so a rule added here must be added there too.",
+  "type": "object",
+  "required": [
+    "slug",
+    "title",
+    "description",
+    "difficulty",
+    "prep_minutes",
+    "cook_minutes",
+    "servings",
+    "ingredient_groups",
+    "step_groups"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Repo-level identity. MUST equal the filename without .json — that is what makes duplicates impossible by construction. Not a database column: `recipes` has no slug, and seed_recipe_v2 still dedupes on (owner_id, title), so renaming `title` creates a second row even if the slug is unchanged.",
+      "examples": ["spring-vegetable-tart"]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "description": "recipes.title. The de-facto import key — see `slug`."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "description": "recipes.description. Shown truncated on recipe cards, so lead with the dish. Yield that does not fit an integer `servings` (pan size, tart diameter, piece count) belongs here."
+    },
+    "cuisine": {
+      "type": ["string", "null"],
+      "description": "recipes.cuisine. Free text in Postgres; keep it to a recognisable cuisine name so Discover's filters stay coherent."
+    },
+    "category": {
+      "type": ["string", "null"],
+      "description": "recipes.category. Free text in Postgres; this enum is a repo convention only, to stop 'Mains'/'Main'/'main' drift.",
+      "enum": [
+        "Appetizer",
+        "Breakfast",
+        "Main",
+        "Side",
+        "Salad",
+        "Soup",
+        "Dessert",
+        "Drink",
+        "Snack",
+        "Sauce",
+        null
+      ]
+    },
+    "difficulty": {
+      "enum": ["easy", "medium", "hard"],
+      "description": "recipes.difficulty — the Postgres `difficulty` enum, mirrored in packages/core/lib/src/models/enums.dart. Wire values are lowercase."
+    },
+    "prep_minutes": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1440,
+      "description": "recipes.prep_minutes — hands-on time only. Unattended time (chilling, rising, marinating) goes on the step that waits, as duration_minutes, so the detail screen can show it as a timer instead of inflating the headline time."
+    },
+    "cook_minutes": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1440,
+      "description": "recipes.cook_minutes. 0 for no-cook recipes."
+    },
+    "servings": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "recipes.servings — an integer because the recipe detail screen scales every ingredient quantity by target/servings. Free text here is what made the old flat data unusable."
+    },
+    "visibility": {
+      "enum": ["public", "private"],
+      "default": "public",
+      "description": "recipes.visibility — the Postgres `recipe_visibility` enum. Curated kitchen recipes are public; RLS is what actually enforces this."
+    },
+    "attribution": {
+      "type": ["string", "null"],
+      "description": "recipes.attribution — where the recipe came from, if not original."
+    },
+    "notes": {
+      "type": ["string", "null"],
+      "description": "Recipe-level note (variation, substitution, make-ahead). `recipes` has NO notes column, so tool/recipes.dart appends this to `description` as a trailing paragraph. Lossless but not ideal — a real `notes` column is the proper fix (docs/ROADMAP.md)."
+    },
+    "ingredient_groups": {
+      "type": "array",
+      "minItems": 1,
+      "description": "ingredient_groups rows, in array order (sort_order 0..n). Use one group with an empty name for a simple recipe; use named groups whenever the same ingredient appears at two amounts in two components (marinade vs sauce), because a flat list makes that read like a duplicate.",
+      "items": {
+        "type": "object",
+        "required": ["name", "ingredients"],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "ingredient_groups.name. Empty string for the single unnamed group."
+          },
+          "ingredients": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/ingredient" }
+          }
+        }
+      }
+    },
+    "step_groups": {
+      "type": "array",
+      "minItems": 1,
+      "description": "step_groups rows, in array order (sort_order 0..n). step_order restarts at 0 in each group, matching SupabaseRecipeRepository._persistContent — numbering continuously across groups would silently renumber every step the first time a user edited the recipe.",
+      "items": {
+        "type": "object",
+        "required": ["name", "steps"],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "step_groups.name. Empty string for the single unnamed group."
+          },
+          "steps": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/step" }
+          }
+        }
+      }
+    },
+    "demo": {
+      "$ref": "#/$defs/demo",
+      "description": "DEMO FIXTURES, NOT CONTENT. Fake engagement so a curated recipe ranks plausibly on Discover and the chef leaderboard. Delete this block (and the fixture accounts in supabase/seed.sql) when the demo data is retired — the recipe itself survives without it."
+    }
+  },
+  "$defs": {
+    "ingredient": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "quantity": {
+          "type": ["number", "null"],
+          "exclusiveMinimum": 0,
+          "description": "ingredients.quantity (Postgres numeric). Decimal, never a fraction string — '1 1/4 cup' cannot be scaled, 1.25 can. Null for 'to taste' / 'for frying' style entries; put the qualifier in `note`. For a range, use the amount you would actually reach for and describe the range in `note`."
+        },
+        "unit": {
+          "type": ["string", "null"],
+          "description": "ingredients.unit. Null for countable items ('2 eggs'). Keep spelling consistent across files: cup, tsp, Tbsp, oz, lb, g, ml, cloves, pinch, bunch, pkg, pint."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "ingredients.name — the ingredient alone, lowercase unless it is a proper noun (Dijon, Gruyère, Gouda). Preparation goes in `note`, not here."
+        },
+        "note": {
+          "type": ["string", "null"],
+          "description": "ingredients.note — preparation or qualifier ('finely chopped', 'to taste', 'divided')."
+        },
+        "is_optional": {
+          "type": "boolean",
+          "default": false,
+          "description": "ingredients.is_optional. Use this instead of writing '(optional)' into the name."
+        }
+      }
+    },
+    "step": {
+      "type": "object",
+      "required": ["text"],
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "description": "steps.text — one action per step. Every ingredient a step names must exist in ingredient_groups; every ingredient must be used by some step. tool/recipes.dart warns on both (that mismatch was the whole of B025)."
+        },
+        "duration_minutes": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "maximum": 2880,
+          "description": "steps.duration_minutes — drives the in-step timer. Set it for waits too (chill, rise, marinate); those are deliberately excluded from prep_minutes."
+        },
+        "temperature": {
+          "type": ["string", "null"],
+          "description": "steps.temperature, as written to the cook, e.g. '350°F' or 'medium-low'."
+        },
+        "tip": {
+          "type": ["string", "null"],
+          "description": "steps.tip — the doneness cue or the thing that goes wrong. Rendered as an aside, so it must not carry an instruction the step needs."
+        }
+      }
+    },
+    "demo": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "like_count": { "type": "integer", "minimum": 0 },
+        "save_count": { "type": "integer", "minimum": 0 },
+        "view_count": { "type": "integer", "minimum": 0 },
+        "ratings": {
+          "type": "array",
+          "maxItems": 8,
+          "description": "One rating per seeded taster account, in pool order (seed_taster_ids() in supabase/seed.sql, 8 accounts — extras are ignored). Half-star steps only; the same 0.5-5.0 check constraint applies as to a real rating.",
+          "items": {
+            "type": "number",
+            "minimum": 0.5,
+            "maximum": 5.0,
+            "multipleOf": 0.5
+          }
+        }
+      }
+    }
+  }
+}

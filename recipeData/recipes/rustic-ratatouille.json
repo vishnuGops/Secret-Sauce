@@ -1,0 +1,68 @@
+{
+  "slug": "rustic-ratatouille",
+  "title": "Rustic Ratatouille",
+  "description": "Not the layered kind — the vegetables are roasted hard first, then baked together so they collapse into each other. Serve over pasta or polenta.",
+  "cuisine": "French",
+  "category": "Main",
+  "difficulty": "easy",
+  "prep_minutes": 20,
+  "cook_minutes": 55,
+  "servings": 3,
+  "visibility": "public",
+  "attribution": "Secret Sauce Kitchen",
+  "notes": null,
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 2, "unit": "Tbsp", "name": "olive oil", "note": "divided" },
+        { "quantity": 1, "unit": null, "name": "eggplant" },
+        { "quantity": 2, "unit": null, "name": "zucchini", "note": "small" },
+        { "quantity": 1, "unit": null, "name": "red bell pepper" },
+        { "quantity": 1, "unit": "pint", "name": "cherry tomatoes" },
+        { "quantity": 0.5, "unit": "tsp", "name": "kosher salt" },
+        { "quantity": 0.25, "unit": "tsp", "name": "black pepper" },
+        { "quantity": 1, "unit": null, "name": "yellow onion", "note": "chopped" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "minced" },
+        { "quantity": 0.5, "unit": "bunch", "name": "basil", "note": "chopped" },
+        { "quantity": null, "unit": null, "name": "salt and pepper", "note": "to taste" },
+        { "quantity": null, "unit": null, "name": "hot cooked pasta, polenta, or crusty bread", "note": "for serving" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Roast",
+      "steps": [
+        {
+          "text": "Preheat the oven to 425°F and line a large rimmed baking sheet with foil or a silicone mat.",
+          "temperature": "425°F"
+        },
+        {
+          "text": "Cut the eggplant, zucchini, and bell pepper into chunks and put them in a bowl with the whole cherry tomatoes. Toss with 1 1/2 Tbsp of the olive oil, the kosher salt, and the black pepper, then spread out in a single layer on the prepared sheet."
+        },
+        {
+          "text": "Roast until the vegetables are tender and browning at the edges.",
+          "duration_minutes": 20,
+          "temperature": "425°F",
+          "tip": "A single layer with room between the pieces is the difference between roasting and steaming."
+        }
+      ]
+    },
+    {
+      "name": "Bake",
+      "steps": [
+        {
+          "text": "Heat the remaining 1/2 Tbsp olive oil in a heavy-bottomed, oven-going pot over medium heat. Cook the onion until softened and translucent, about 5 minutes, then add the garlic and cook one minute more. Add the roasted vegetables and mix everything together, gently smashing the tomatoes with the back of a spoon to release their juices.",
+          "duration_minutes": 6,
+          "temperature": "medium"
+        },
+        {
+          "text": "Reduce the oven to 375°F and bake the ratatouille. Stir in the chopped basil, season to taste, and serve over hot pasta or polenta, or with crusty bread.",
+          "duration_minutes": 30,
+          "temperature": "375°F"
+        }
+      ]
+    }
+  ]
+}

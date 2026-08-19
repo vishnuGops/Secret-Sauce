@@ -175,16 +175,27 @@ In VS Code you can instead press **F5** and pick **"app (web · Edge)"** or
 
 > `env.local.json` is git-ignored; `env.example.json` is the committed template.
 
-## Seed sample recipes (Discover page)
+## Load recipes (Discover page)
 
-To populate Discover with curated public recipes, run [supabase/seed.sql](supabase/seed.sql):
+Two SQL files, split on purpose:
 
-- **Hosted project:** open the Supabase dashboard → SQL Editor → paste the contents of
-  `supabase/seed.sql` → Run. It creates a dedicated **"Secret Sauce Kitchen"** system account,
-  owns the recipes with it, and is safe to re-run (idempotent by title). Re-running on an
-  already-seeded database leaves recipe content alone but **does** (re)apply the star ratings, so
+| File | What it is | Lifespan |
+| --- | --- | --- |
+| [`supabase/seed_recipes.sql`](supabase/seed_recipes.sql) | The Secret Sauce Kitchen's own recipes. **Generated** from [`recipeData/recipes/*.json`](recipeData/) — see [recipeData/README.md](recipeData/README.md) | permanent |
+| [`supabase/seed.sql`](supabase/seed.sql) | Demo fixtures: fake chefs, 8 taster accounts, invented engagement so Discover and the leaderboard have a plausible order | delete when there is real traffic |
+
+Both bootstrap the same "Secret Sauce Kitchen" system account with conflict guards, so **either
+may run first**, and either can run without the other.
+
+- **Hosted project:** Supabase dashboard → SQL Editor → paste each file → Run. Both are
+  idempotent. Re-running leaves recipe content alone but **does** (re)apply the star ratings, so
   it is also the way to backfill ratings after upgrading the schema.
-- **Local CLI:** `supabase db reset` runs `supabase/seed.sql` automatically after migrations.
+- **Local CLI:** `supabase db reset` runs `supabase/seed.sql` automatically after migrations;
+  follow it with `melos run db:recipes` (or paste `seed_recipes.sql`) for the authored recipes.
+
+> Editing a recipe that a database already has does **not** work by re-applying:
+> `seed_recipe_v2` returns early when `(owner_id, title)` exists — it is not an upsert. Delete
+> that recipe there first.
 
 > The seed creates its own system user, so it needs no existing account and won't touch any real
 > user's "My Recipes". It also creates 8 dummy **"Taster"** accounts
@@ -234,10 +245,19 @@ Project Settings → Database → Connection string → URI):
 ```powershell
 $env:SUPABASE_DB_URL = "postgresql://postgres:<pwd>@db.<ref>.supabase.co:5432/postgres"
 melos run db:create   # apply schema (supabase/migrations/0001_init.sql)
-melos run db:seed     # load curated recipes (supabase/seed.sql)
+melos run db:seed     # load demo chefs/tasters/ratings (supabase/seed.sql)
+melos run db:recipes  # load authored recipes (supabase/seed_recipes.sql)
 melos run db:clean    # truncate recipe data, keep schema + users
 melos run db:drop     # drop all app tables/types/functions
-melos run db:reset    # drop -> create -> seed
+melos run db:reset    # drop -> create -> seed -> recipes
+```
+
+Recipe content (no database or credentials needed — these only touch files):
+
+```powershell
+melos run recipes:validate  # parse + lint recipeData/recipes/*.json
+melos run recipes:gen       # regenerate supabase/seed_recipes.sql — commit both
+melos run recipes:check     # fail if that .sql is stale (CI runs this)
 ```
 
 No `psql` installed? Use the Supabase CLI's local stack instead — its DB container ships one, and

@@ -1,0 +1,55 @@
+{
+  "slug": "raspberry-brownies",
+  "title": "Raspberry Brownies",
+  "description": "Deep cocoa brownies with whole raspberries folded through, so they collapse into jammy pockets as they bake. Makes 16 from an 8-inch square pan.",
+  "cuisine": "American",
+  "category": "Dessert",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 35,
+  "servings": 16,
+  "visibility": "public",
+  "attribution": "Secret Sauce Kitchen",
+  "notes": null,
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 0.5, "unit": "cup", "name": "butter", "note": "plus more for the pan" },
+        { "quantity": 0.75, "unit": "cup", "name": "unsweetened cocoa powder" },
+        { "quantity": 0.5, "unit": "cup", "name": "granulated cane sugar" },
+        { "quantity": 0.5, "unit": "cup", "name": "brown sugar" },
+        { "quantity": 2, "unit": null, "name": "eggs", "note": "beaten" },
+        { "quantity": 1, "unit": "tsp", "name": "vanilla" },
+        { "quantity": 0.75, "unit": "cup", "name": "unbleached wheat flour" },
+        { "quantity": 6, "unit": "oz", "name": "fresh raspberries" },
+        { "quantity": 0.5, "unit": "cup", "name": "chocolate chips", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Preheat the oven to 350°F and grease an 8-inch square baking dish with butter or cooking spray.",
+          "temperature": "350°F"
+        },
+        {
+          "text": "In a 2-quart pot, melt the butter over medium heat and whisk in the cocoa powder until smooth. Remove from the heat and let it cool slightly.",
+          "temperature": "medium",
+          "tip": "Cool it before the eggs go in, or they scramble."
+        },
+        {
+          "text": "In a bowl, mix the cocoa and butter mixture with both sugars, the eggs, and the vanilla until smooth. Stir in the flour until just combined, then fold in the raspberries and chocolate chips."
+        },
+        {
+          "text": "Scrape the batter into the prepared dish and bake until a tester comes out with fudgy crumbs.",
+          "duration_minutes": 35,
+          "temperature": "350°F",
+          "tip": "A clean tester means you have gone too far — pull them while the centre still looks underdone."
+        }
+      ]
+    }
+  ]
+}

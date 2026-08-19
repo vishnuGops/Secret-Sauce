@@ -467,6 +467,11 @@ signature is in `drop.sql` (Gotcha 5). Actual seeded standings:
 | d7 | Greta Lindqvist | 100 | 180 | 0 | **1200** | `sous_chef` | ties d3 via a different mix — proves `dense_rank` shares a rank |
 | — | tasters ×8 | — | — | — | 0 | `home_cook` | no recipes — guard for the `public_recipe_count > 0` filter |
 
+> **Since Phase 19 this table describes `seed.sql` only.** The Kitchen's own recipes moved to
+> `recipeData/` → `seed_recipes.sql` and carry **no** engagement, so they contribute 0 to
+> `chef_score`. The 10189 above still comes from `seed.sql`'s six copies; `public_recipe_count`
+> rises to 15 once both files are applied. See §11.
+
 ### 10.8 Known limits (accepted for v1)
 
 - **Self-engagement counts.** Unlike ratings (RLS-blocked), a chef may like/save their own
@@ -477,3 +482,56 @@ signature is in `drop.sql` (Gotcha 5). Actual seeded standings:
   backfill-on-apply makes retuning a one-line change).
 - No chef-profile page yet; the badge is not tappable-to-navigate in v1.
 - Rank is recomputed per request (no caching); fine at current scale.
+
+## 11. Recipe content vs. demo data
+
+Two seed files, split because they have different lifespans.
+
+| | `supabase/seed.sql` | `supabase/seed_recipes.sql` |
+| --- | --- | --- |
+| What | Demo fixtures: 7 chef accounts, 8 tasters, their recipes, invented likes/saves/views/ratings | The Secret Sauce Kitchen's own recipes |
+| Authored in | the file itself | `recipeData/recipes/<slug>.json` |
+| Generated | no | **yes** — `tool/recipes.dart`, committed |
+| Lifespan | deleted once there is real traffic | permanent |
+| Helper | `seed_recipe` (flat, one unnamed group) | `seed_recipe_v2` (group-aware) |
+
+Both bootstrap the same Kitchen account (`…00aa`) with conflict guards, so either may be applied
+first and either works without the other. `seed_recipes.sql` reaches `seed.sql`'s taster pool for
+demo ratings through a `to_regprocedure('seed_ratings(uuid, jsonb)')` guard rather than a hard
+dependency, so it keeps working after that file is deleted.
+
+### 11.1 Why the authoring format is not the scrape format
+
+The recipes arrived as one flat array of `{"amount": "1 1/4 cup", "item": "flour"}` with free-text
+`servings` and null times. That shape cannot drive this product:
+
+- **The servings scaler multiplies `ingredients.quantity`, a Postgres `numeric`.** `"1 1/4 cup"`
+  is not a number. `quantity` is authored as a decimal (`1.25`) with `unit` beside it.
+- **`recipes.servings` is an `int`.** `"Makes 9-in Tart"` is not. Yield that is not a serving
+  count goes in `description`.
+- **`ingredient_groups` / `step_groups` exist** and a flat list wastes them. The teriyaki recipe
+  is the proof: `tamari` appears at 2 tsp in the marinade and 1/4 cup in the sauce, which reads as
+  a duplicate until the groups are named.
+- **Unattended time is not prep time.** Chilling, rising, and marinating are a step's
+  `duration_minutes`, so the detail screen shows a timer instead of the headline time inflating.
+
+### 11.2 Identity and ordering
+
+`slug` is the filename and a **repo-level** identity only — `recipes` has no slug column, and
+`seed_recipe_v2` still dedupes on `(owner_id, title)`. So renaming `title` creates a second row,
+and `seed_recipe_v2` is **not an upsert**: it returns early when the title already exists, leaving
+content alone (it does still re-apply demo ratings — B014).
+
+Groups are `sort_order` 0..n in array order; `step_order` restarts at 0 **within each group**,
+matching `SupabaseRecipeRepository._persistContent`. Numbering steps continuously across groups
+would look right until the first edit re-persisted them per-group and silently renumbered
+everything (the B022 failure mode).
+
+### 11.3 Gaps
+
+- `recipes` has no `notes` column, so a recipe-level note (a variation, a make-ahead) is appended
+  to `description` by the generator. Lossless, but it lands in the card summary.
+- The validator warns about an ingredient no step mentions. It cannot check the reverse — a step
+  calling for salt the list never mentions — without a lexicon; that stays a manual read, and it
+  was three of B025's nine defects.
+- Nothing runs the generated SQL in CI. `recipes:check` compares text only.
