@@ -210,7 +210,7 @@ end $grants$;
 
 
 -- ---------------------------------------------------------------------------
--- The recipes. 9 of them, ordered by slug.
+-- The recipes. 15 of them, ordered by slug.
 -- ---------------------------------------------------------------------------
 do $seed$
 declare
@@ -231,6 +231,34 @@ begin
     $sr$[]$sr$::jsonb
   );
 
+  -- brown-butter-chocolate-chip-cookies.json
+  perform seed_recipe_v2(
+    v_owner,
+    $sr$Brown Butter Chocolate Chip Cookies$sr$,
+    $sr$Crisp edges, chewy centres, and pools of dark chocolate, deepened with nutty brown butter.$sr$,
+    $sr$American$sr$, $sr$Dessert$sr$, 'easy',
+    20, 11, 24, 'public',
+    $sr$A tweaked take on the classic Toll House cookie.$sr$,
+    $sr$[{"name":"","ingredients":[{"quantity":170,"unit":"g","name":"butter","note":null,"is_optional":false},{"quantity":150,"unit":"g","name":"brown sugar","note":null,"is_optional":false},{"quantity":100,"unit":"g","name":"white sugar","note":null,"is_optional":false},{"quantity":1,"unit":null,"name":"egg","note":null,"is_optional":false},{"quantity":1,"unit":null,"name":"egg yolk","note":null,"is_optional":false},{"quantity":1,"unit":"tsp","name":"vanilla extract","note":null,"is_optional":false},{"quantity":250,"unit":"g","name":"all-purpose flour","note":null,"is_optional":false},{"quantity":0.5,"unit":"tsp","name":"baking soda","note":null,"is_optional":false},{"quantity":200,"unit":"g","name":"dark chocolate","note":"chopped","is_optional":false}]}]$sr$::jsonb,
+    $sr$[{"name":"","steps":[{"text":"Brown the butter until it smells nutty, then let it cool slightly.","duration_minutes":6,"temperature":"medium","tip":"Watch the milk solids, not the clock — they go from golden to burnt in seconds."},{"text":"Whisk in both sugars, the egg, the yolk, and the vanilla until smooth.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Fold in the flour and baking soda, then the chopped chocolate.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Chill the dough for deeper flavour.","duration_minutes":30,"temperature":null,"tip":null},{"text":"Scoop onto trays and bake until the edges set but the centres still look underdone.","duration_minutes":11,"temperature":"350°F","tip":null},{"text":"Cool on the tray so they finish setting.","duration_minutes":null,"temperature":null,"tip":null}]}]$sr$::jsonb,
+    412, 358, 3050,
+    $sr$[5,5,5,4.5,5,5,4.5,5]$sr$::jsonb
+  );
+
+  -- chicken-tikka-masala.json
+  perform seed_recipe_v2(
+    v_owner,
+    $sr$Chicken Tikka Masala$sr$,
+    $sr$Charred marinated chicken simmered in a creamy, spiced tomato gravy. A crowd favourite.$sr$,
+    $sr$Indian$sr$, $sr$Main$sr$, 'medium',
+    30, 40, 4, 'public',
+    NULL,
+    $sr$[{"name":"Marinade","ingredients":[{"quantity":600,"unit":"g","name":"boneless chicken thigh","note":"cubed","is_optional":false},{"quantity":150,"unit":"g","name":"plain yoghurt","note":null,"is_optional":false},{"quantity":1,"unit":"Tbsp","name":"tikka spice blend","note":"half of the 2 Tbsp total","is_optional":false}]},{"name":"Gravy","ingredients":[{"quantity":2,"unit":"Tbsp","name":"butter","note":null,"is_optional":false},{"quantity":1,"unit":null,"name":"onion","note":"finely diced","is_optional":false},{"quantity":3,"unit":"cloves","name":"garlic","note":"minced","is_optional":false},{"quantity":1,"unit":"Tbsp","name":"ginger","note":"grated","is_optional":false},{"quantity":1,"unit":"Tbsp","name":"tikka spice blend","note":"the other half","is_optional":false},{"quantity":400,"unit":"g","name":"tomato passata","note":null,"is_optional":false},{"quantity":120,"unit":"ml","name":"heavy cream","note":null,"is_optional":false}]}]$sr$::jsonb,
+    $sr$[{"name":"","steps":[{"text":"Marinate the chicken in the yoghurt and half the spice blend.","duration_minutes":30,"temperature":null,"tip":"Longer is better — overnight if you can."},{"text":"Sear or grill the chicken until charred at the edges, then set it aside.","duration_minutes":8,"temperature":"high","tip":"It does not need to cook through here; it finishes in the gravy."},{"text":"Soften the onion in the butter, then add the garlic, ginger, and the rest of the spice blend.","duration_minutes":6,"temperature":"medium","tip":null},{"text":"Pour in the passata and simmer until it deepens in colour.","duration_minutes":15,"temperature":"low","tip":null},{"text":"Stir in the cream and return the chicken to warm through.","duration_minutes":8,"temperature":null,"tip":null},{"text":"Serve with basmati rice or naan.","duration_minutes":null,"temperature":null,"tip":null}]}]$sr$::jsonb,
+    311, 240, 2100,
+    $sr$[4.5,4,4.5,5,4,4.5,4,4]$sr$::jsonb
+  );
+
   -- classic-margarita.json
   perform seed_recipe_v2(
     v_owner,
@@ -247,6 +275,20 @@ Mocktail: replace the tequila and orange liqueur with 6 oz lime sparkling water 
     $sr$[]$sr$::jsonb
   );
 
+  -- classic-margherita-pizza.json
+  perform seed_recipe_v2(
+    v_owner,
+    $sr$Classic Margherita Pizza$sr$,
+    $sr$A blistered, chewy Neapolitan-style pizza with San Marzano tomato, fresh mozzarella, and basil.$sr$,
+    $sr$Italian$sr$, $sr$Main$sr$, 'medium',
+    30, 12, 2, 'public',
+    $sr$Traditional Naples pizzeria style.$sr$,
+    $sr$[{"name":"Dough","ingredients":[{"quantity":250,"unit":"g","name":"00 pizza flour","note":null,"is_optional":false},{"quantity":160,"unit":"ml","name":"water","note":"warm","is_optional":false},{"quantity":3,"unit":"g","name":"active dry yeast","note":null,"is_optional":false},{"quantity":5,"unit":"g","name":"salt","note":null,"is_optional":false}]},{"name":"Topping","ingredients":[{"quantity":150,"unit":"g","name":"San Marzano tomatoes","note":"crushed","is_optional":false},{"quantity":125,"unit":"g","name":"fresh mozzarella","note":"torn","is_optional":false},{"quantity":null,"unit":null,"name":"fresh basil leaves","note":null,"is_optional":false},{"quantity":1,"unit":"Tbsp","name":"extra-virgin olive oil","note":null,"is_optional":false}]}]$sr$::jsonb,
+    $sr$[{"name":"Dough","steps":[{"text":"Dissolve the yeast in the warm water and let it sit until foamy.","duration_minutes":10,"temperature":null,"tip":"No foam means dead yeast — start again rather than pressing on."},{"text":"Mix the flour and salt, add the yeast water, and knead into a smooth dough.","duration_minutes":10,"temperature":null,"tip":null},{"text":"Cover and let rise until doubled.","duration_minutes":90,"temperature":null,"tip":null}]},{"name":"Shape and bake","steps":[{"text":"Stretch the dough by hand into a thin round and top with the crushed tomato and torn mozzarella.","duration_minutes":null,"temperature":null,"tip":"Hands, not a rolling pin — a pin crushes out the gas that makes the rim puff."},{"text":"Bake in the hottest possible oven until the crust is charred and bubbling.","duration_minutes":10,"temperature":"as hot as the oven goes","tip":null},{"text":"Finish with the fresh basil and a drizzle of olive oil.","duration_minutes":null,"temperature":null,"tip":null}]}]$sr$::jsonb,
+    128, 74, 940,
+    $sr$[5,4.5,5,4.5,5,4,4.5,5]$sr$::jsonb
+  );
+
   -- easy-guacamole.json
   perform seed_recipe_v2(
     v_owner,
@@ -259,6 +301,34 @@ Mocktail: replace the tequila and orange liqueur with 6 oz lime sparkling water 
     $sr$[{"name":"","steps":[{"text":"Scoop the avocado into a medium bowl and mash with a fork to the consistency you want.","duration_minutes":null,"temperature":null,"tip":"Stop while there are still lumps — this is not a dip you want smooth."},{"text":"Fold in the remaining ingredients until combined, then taste and adjust the salt and lime. Serve with tortilla chips.","duration_minutes":null,"temperature":null,"tip":null}]}]$sr$::jsonb,
     0, 0, 0,
     $sr$[]$sr$::jsonb
+  );
+
+  -- fluffy-buttermilk-pancakes.json
+  perform seed_recipe_v2(
+    v_owner,
+    $sr$Fluffy Buttermilk Pancakes$sr$,
+    $sr$Tall, tender pancakes with a golden crust — a weekend breakfast staple.$sr$,
+    $sr$American$sr$, $sr$Breakfast$sr$, 'easy',
+    10, 15, 4, 'public',
+    NULL,
+    $sr$[{"name":"Dry","ingredients":[{"quantity":200,"unit":"g","name":"all-purpose flour","note":null,"is_optional":false},{"quantity":2,"unit":"Tbsp","name":"sugar","note":null,"is_optional":false},{"quantity":1,"unit":"tsp","name":"baking powder","note":null,"is_optional":false},{"quantity":0.5,"unit":"tsp","name":"baking soda","note":null,"is_optional":false},{"quantity":0.5,"unit":"tsp","name":"salt","note":null,"is_optional":false}]},{"name":"Wet","ingredients":[{"quantity":300,"unit":"ml","name":"buttermilk","note":null,"is_optional":false},{"quantity":1,"unit":null,"name":"egg","note":null,"is_optional":false},{"quantity":40,"unit":"g","name":"butter","note":"melted","is_optional":false}]}]$sr$::jsonb,
+    $sr$[{"name":"","steps":[{"text":"Whisk the dry ingredients together in a bowl.","duration_minutes":null,"temperature":null,"tip":null},{"text":"In another bowl, whisk the buttermilk, egg, and melted butter.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Fold the wet into the dry until just combined.","duration_minutes":null,"temperature":null,"tip":"Lumps are fine. Overmixing develops gluten and gives you flat, rubbery pancakes."},{"text":"Rest the batter so the leavening activates.","duration_minutes":5,"temperature":null,"tip":null},{"text":"Cook ladlefuls on a medium griddle until bubbles form on the surface, then flip and cook until golden.","duration_minutes":4,"temperature":"medium","tip":null},{"text":"Serve stacked with butter and maple syrup.","duration_minutes":null,"temperature":null,"tip":null}]}]$sr$::jsonb,
+    98, 61, 780,
+    $sr$[4,3.5,4,4.5,3.5,4]$sr$::jsonb
+  );
+
+  -- fresh-guacamole.json
+  perform seed_recipe_v2(
+    v_owner,
+    $sr$Fresh Guacamole$sr$,
+    $sr$Bright, chunky avocado dip with lime, coriander, and a little heat. Ready in minutes.$sr$,
+    $sr$Mexican$sr$, $sr$Appetizer$sr$, 'easy',
+    15, 0, 4, 'public',
+    NULL,
+    $sr$[{"name":"","ingredients":[{"quantity":3,"unit":null,"name":"ripe avocados","note":null,"is_optional":false},{"quantity":1,"unit":null,"name":"lime","note":"juiced","is_optional":false},{"quantity":0.5,"unit":null,"name":"red onion","note":"finely diced","is_optional":false},{"quantity":1,"unit":null,"name":"jalapeño","note":"minced","is_optional":false},{"quantity":null,"unit":null,"name":"fresh coriander","note":"chopped","is_optional":false},{"quantity":null,"unit":null,"name":"salt","note":"to taste","is_optional":false}]}]$sr$::jsonb,
+    $sr$[{"name":"","steps":[{"text":"Halve the avocados and scoop the flesh into a bowl.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Mash to your preferred texture — leave it chunky.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Fold in the lime juice, red onion, jalapeño, and coriander.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Season with salt and serve right away with tortilla chips.","duration_minutes":null,"temperature":null,"tip":"It browns fast. Press cling film onto the surface if it has to wait."}]}]$sr$::jsonb,
+    76, 52, 610,
+    $sr$[5,4.5,4]$sr$::jsonb
   );
 
   -- raspberry-brownies.json
@@ -301,6 +371,20 @@ Mocktail: replace the tequila and orange liqueur with 6 oz lime sparkling water 
     $sr$[{"name":"","steps":[{"text":"Toss all of the ingredients together in a large bowl. Taste and adjust the seasoning.","duration_minutes":null,"temperature":null,"tip":"Dice everything to roughly the same size — that is what makes this salad read as one thing rather than a bowl of parts."},{"text":"Cover and refrigerate to let the flavours get to know each other.","duration_minutes":60,"temperature":null,"tip":null}]}]$sr$::jsonb,
     0, 0, 0,
     $sr$[]$sr$::jsonb
+  );
+
+  -- spaghetti-aglio-e-olio.json
+  perform seed_recipe_v2(
+    v_owner,
+    $sr$Spaghetti Aglio e Olio$sr$,
+    $sr$A five-ingredient Roman classic: garlic and chilli sizzled in good olive oil, tossed with spaghetti.$sr$,
+    $sr$Italian$sr$, $sr$Main$sr$, 'easy',
+    5, 15, 2, 'public',
+    $sr$Late-night Roman comfort food.$sr$,
+    $sr$[{"name":"","ingredients":[{"quantity":200,"unit":"g","name":"spaghetti","note":null,"is_optional":false},{"quantity":4,"unit":"cloves","name":"garlic","note":"thinly sliced","is_optional":false},{"quantity":60,"unit":"ml","name":"extra-virgin olive oil","note":null,"is_optional":false},{"quantity":1,"unit":"tsp","name":"red chilli flakes","note":null,"is_optional":false},{"quantity":null,"unit":null,"name":"flat-leaf parsley","note":"chopped","is_optional":false},{"quantity":null,"unit":null,"name":"salt","note":"for the pasta water, and to taste","is_optional":false}]}]$sr$::jsonb,
+    $sr$[{"name":"","steps":[{"text":"Boil the spaghetti in water seasoned generously with salt until al dente, then reserve a cup of the pasta water before draining.","duration_minutes":9,"temperature":null,"tip":"The starchy water is the sauce — reserve it before you drain, not after."},{"text":"Gently warm the olive oil and sliced garlic until the garlic is pale gold.","duration_minutes":4,"temperature":"low","tip":"Do not let it brown. Browned garlic turns the whole dish bitter and there is no recovering it."},{"text":"Add the chilli flakes and a splash of the pasta water to emulsify.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Toss the drained pasta in the oil, adding more pasta water until it turns glossy.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Finish with the chopped parsley and serve immediately.","duration_minutes":null,"temperature":null,"tip":null}]}]$sr$::jsonb,
+    203, 156, 1520,
+    $sr$[5,5,4.5,5,4.5,5,5,4.5]$sr$::jsonb
   );
 
   -- spring-vegetable-tart.json
@@ -346,6 +430,6 @@ Form larger patties instead of six small ones and serve them on buns as fish bur
     0, 0, 0,
     $sr$[]$sr$::jsonb
   );
-  raise notice 'Recipe seed complete (% authored recipes)', 9;
+  raise notice 'Recipe seed complete (% authored recipes)', 15;
 end $seed$;
 

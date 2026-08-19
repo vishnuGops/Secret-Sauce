@@ -1,0 +1,77 @@
+{
+  "slug": "classic-margherita-pizza",
+  "title": "Classic Margherita Pizza",
+  "description": "A blistered, chewy Neapolitan-style pizza with San Marzano tomato, fresh mozzarella, and basil.",
+  "cuisine": "Italian",
+  "category": "Main",
+  "difficulty": "medium",
+  "prep_minutes": 30,
+  "cook_minutes": 12,
+  "servings": 2,
+  "visibility": "public",
+  "attribution": "Traditional Naples pizzeria style.",
+  "notes": null,
+  "ingredient_groups": [
+    {
+      "name": "Dough",
+      "ingredients": [
+        { "quantity": 250, "unit": "g", "name": "00 pizza flour" },
+        { "quantity": 160, "unit": "ml", "name": "water", "note": "warm" },
+        { "quantity": 3, "unit": "g", "name": "active dry yeast" },
+        { "quantity": 5, "unit": "g", "name": "salt" }
+      ]
+    },
+    {
+      "name": "Topping",
+      "ingredients": [
+        { "quantity": 150, "unit": "g", "name": "San Marzano tomatoes", "note": "crushed" },
+        { "quantity": 125, "unit": "g", "name": "fresh mozzarella", "note": "torn" },
+        { "quantity": null, "unit": null, "name": "fresh basil leaves" },
+        { "quantity": 1, "unit": "Tbsp", "name": "extra-virgin olive oil" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Dough",
+      "steps": [
+        {
+          "text": "Dissolve the yeast in the warm water and let it sit until foamy.",
+          "duration_minutes": 10,
+          "tip": "No foam means dead yeast — start again rather than pressing on."
+        },
+        {
+          "text": "Mix the flour and salt, add the yeast water, and knead into a smooth dough.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Cover and let rise until doubled.",
+          "duration_minutes": 90
+        }
+      ]
+    },
+    {
+      "name": "Shape and bake",
+      "steps": [
+        {
+          "text": "Stretch the dough by hand into a thin round and top with the crushed tomato and torn mozzarella.",
+          "tip": "Hands, not a rolling pin — a pin crushes out the gas that makes the rim puff."
+        },
+        {
+          "text": "Bake in the hottest possible oven until the crust is charred and bubbling.",
+          "duration_minutes": 10,
+          "temperature": "as hot as the oven goes"
+        },
+        {
+          "text": "Finish with the fresh basil and a drizzle of olive oil."
+        }
+      ]
+    }
+  ],
+  "demo": {
+    "like_count": 128,
+    "save_count": 74,
+    "view_count": 940,
+    "ratings": [5, 4.5, 5, 4.5, 5, 4, 4.5, 5]
+  }
+}

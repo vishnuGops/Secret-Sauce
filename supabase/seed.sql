@@ -274,174 +274,19 @@ begin
   on conflict (id) do update
     set display_name = excluded.display_name, bio = excluded.bio;
 
-  -- 1) Margherita Pizza
-  perform seed_recipe(
-    v_owner,
-    'Classic Margherita Pizza',
-    'A blistered, chewy Neapolitan-style pizza with San Marzano tomato, fresh mozzarella, and basil.',
-    'Italian', 'Main', 'medium', 30, 12, 2,
-    'Traditional Naples pizzeria style.',
-    '[
-      {"qty":"250","unit":"g","name":"00 pizza flour"},
-      {"qty":"160","unit":"ml","name":"warm water"},
-      {"qty":"3","unit":"g","name":"active dry yeast"},
-      {"qty":"5","unit":"g","name":"salt"},
-      {"qty":"150","unit":"g","name":"San Marzano tomatoes, crushed"},
-      {"qty":"125","unit":"g","name":"fresh mozzarella, torn"},
-      {"qty":"","unit":"","name":"fresh basil leaves"},
-      {"qty":"1","unit":"tbsp","name":"extra-virgin olive oil"}
-    ]'::jsonb,
-    '[
-      {"text":"Dissolve the yeast in warm water and let it sit until foamy.","duration":"10"},
-      {"text":"Mix flour and salt, add the yeast water, and knead into a smooth dough.","duration":"10"},
-      {"text":"Cover and let rise until doubled.","duration":"90"},
-      {"text":"Stretch the dough by hand into a thin round; top with crushed tomato and mozzarella."},
-      {"text":"Bake in the hottest possible oven until the crust is charred and bubbling.","duration":"10"},
-      {"text":"Finish with fresh basil and a drizzle of olive oil."}
-    ]'::jsonb,
-    128, 74, 940,
-    '[5, 4.5, 5, 4.5, 5, 4, 4.5, 5]'::jsonb
-  );
-
-  -- 2) Spaghetti Aglio e Olio
-  perform seed_recipe(
-    v_owner,
-    'Spaghetti Aglio e Olio',
-    'A five-ingredient Roman classic: garlic and chilli sizzled in good olive oil, tossed with spaghetti.',
-    'Italian', 'Main', 'easy', 5, 15, 2,
-    'Late-night Roman comfort food.',
-    '[
-      {"qty":"200","unit":"g","name":"spaghetti"},
-      {"qty":"4","unit":"cloves","name":"garlic, thinly sliced"},
-      {"qty":"60","unit":"ml","name":"extra-virgin olive oil"},
-      {"qty":"1","unit":"tsp","name":"red chilli flakes"},
-      {"qty":"","unit":"","name":"flat-leaf parsley, chopped"},
-      {"qty":"","unit":"","name":"salt"}
-    ]'::jsonb,
-    '[
-      {"text":"Boil the spaghetti in well-salted water until al dente; reserve a cup of pasta water.","duration":"9"},
-      {"text":"Gently warm the olive oil and garlic until the garlic is pale gold — do not brown it.","duration":"4"},
-      {"text":"Add chilli flakes and a splash of pasta water to emulsify."},
-      {"text":"Toss the drained pasta in the oil, adding pasta water until glossy."},
-      {"text":"Finish with parsley and serve immediately."}
-    ]'::jsonb,
-    203, 156, 1520,
-    '[5, 5, 4.5, 5, 4.5, 5, 5, 4.5]'::jsonb
-  );
-
-  -- 3) Chicken Tikka Masala
-  perform seed_recipe(
-    v_owner,
-    'Chicken Tikka Masala',
-    'Charred marinated chicken simmered in a creamy, spiced tomato gravy. A crowd favourite.',
-    'Indian', 'Main', 'medium', 30, 40, 4,
-    NULL,
-    '[
-      {"qty":"600","unit":"g","name":"boneless chicken thigh, cubed"},
-      {"qty":"150","unit":"g","name":"plain yoghurt"},
-      {"qty":"2","unit":"tbsp","name":"tikka spice blend"},
-      {"qty":"1","unit":"","name":"onion, finely diced"},
-      {"qty":"3","unit":"cloves","name":"garlic, minced"},
-      {"qty":"1","unit":"tbsp","name":"ginger, grated"},
-      {"qty":"400","unit":"g","name":"tomato passata"},
-      {"qty":"120","unit":"ml","name":"heavy cream"},
-      {"qty":"2","unit":"tbsp","name":"butter"}
-    ]'::jsonb,
-    '[
-      {"text":"Marinate the chicken in yoghurt and half the spice blend.","duration":"30"},
-      {"text":"Sear or grill the chicken until charred at the edges; set aside.","duration":"8"},
-      {"text":"Soften the onion in butter, then add garlic, ginger, and the rest of the spice.","duration":"6"},
-      {"text":"Pour in the passata and simmer until deepened in colour.","duration":"15"},
-      {"text":"Stir in the cream and return the chicken to warm through.","duration":"8"},
-      {"text":"Serve with basmati rice or naan."}
-    ]'::jsonb,
-    311, 240, 2100,
-    '[4.5, 4, 4.5, 5, 4, 4.5, 4, 4]'::jsonb
-  );
-
-  -- 4) Fluffy Buttermilk Pancakes
-  perform seed_recipe(
-    v_owner,
-    'Fluffy Buttermilk Pancakes',
-    'Tall, tender pancakes with a golden crust — a weekend breakfast staple.',
-    'American', 'Breakfast', 'easy', 10, 15, 4,
-    NULL,
-    '[
-      {"qty":"200","unit":"g","name":"all-purpose flour"},
-      {"qty":"2","unit":"tbsp","name":"sugar"},
-      {"qty":"1","unit":"tsp","name":"baking powder"},
-      {"qty":"0.5","unit":"tsp","name":"baking soda"},
-      {"qty":"0.5","unit":"tsp","name":"salt"},
-      {"qty":"300","unit":"ml","name":"buttermilk"},
-      {"qty":"1","unit":"","name":"egg"},
-      {"qty":"40","unit":"g","name":"butter, melted"}
-    ]'::jsonb,
-    '[
-      {"text":"Whisk the dry ingredients together in a bowl."},
-      {"text":"In another bowl whisk buttermilk, egg, and melted butter."},
-      {"text":"Fold wet into dry until just combined — lumps are fine; do not overmix."},
-      {"text":"Rest the batter so the leavening activates.","duration":"5"},
-      {"text":"Cook ladlefuls on a medium griddle until bubbles form, then flip until golden.","duration":"4"},
-      {"text":"Serve stacked with butter and maple syrup."}
-    ]'::jsonb,
-    98, 61, 780,
-    '[4, 3.5, 4, 4.5, 3.5, 4]'::jsonb
-  );
-
-  -- 5) Fresh Guacamole
-  perform seed_recipe(
-    v_owner,
-    'Fresh Guacamole',
-    'Bright, chunky avocado dip with lime, coriander, and a little heat. Ready in minutes.',
-    'Mexican', 'Appetizer', 'easy', 15, 0, 4,
-    NULL,
-    '[
-      {"qty":"3","unit":"","name":"ripe avocados"},
-      {"qty":"1","unit":"","name":"lime, juiced"},
-      {"qty":"0.5","unit":"","name":"red onion, finely diced"},
-      {"qty":"1","unit":"","name":"jalapeño, minced"},
-      {"qty":"","unit":"","name":"fresh coriander, chopped"},
-      {"qty":"","unit":"","name":"salt to taste"}
-    ]'::jsonb,
-    '[
-      {"text":"Halve the avocados and scoop the flesh into a bowl."},
-      {"text":"Mash to your preferred texture — leave it chunky."},
-      {"text":"Fold in lime juice, onion, jalapeño, and coriander."},
-      {"text":"Season with salt and serve right away with tortilla chips."}
-    ]'::jsonb,
-    76, 52, 610,
-    '[5, 4.5, 4]'::jsonb
-  );
-
-  -- 6) Chocolate Chip Cookies
-  perform seed_recipe(
-    v_owner,
-    'Brown Butter Chocolate Chip Cookies',
-    'Crisp edges, chewy centres, and pools of dark chocolate, deepened with nutty brown butter.',
-    'American', 'Dessert', 'easy', 20, 11, 24,
-    'A tweaked take on the classic Toll House cookie.',
-    '[
-      {"qty":"170","unit":"g","name":"butter"},
-      {"qty":"150","unit":"g","name":"brown sugar"},
-      {"qty":"100","unit":"g","name":"white sugar"},
-      {"qty":"1","unit":"","name":"egg"},
-      {"qty":"1","unit":"","name":"egg yolk"},
-      {"qty":"1","unit":"tsp","name":"vanilla extract"},
-      {"qty":"250","unit":"g","name":"all-purpose flour"},
-      {"qty":"0.5","unit":"tsp","name":"baking soda"},
-      {"qty":"200","unit":"g","name":"dark chocolate, chopped"}
-    ]'::jsonb,
-    '[
-      {"text":"Brown the butter until it smells nutty, then cool slightly.","duration":"6"},
-      {"text":"Whisk in both sugars, the egg, yolk, and vanilla until smooth."},
-      {"text":"Fold in the flour and baking soda, then the chopped chocolate."},
-      {"text":"Chill the dough for deeper flavour.","duration":"30"},
-      {"text":"Scoop onto trays and bake until the edges set but centres look underdone.","duration":"11"},
-      {"text":"Cool on the tray so they finish setting."}
-    ]'::jsonb,
-    412, 358, 3050,
-    '[5, 5, 5, 4.5, 5, 5, 4.5, 5]'::jsonb
-  );
+  -- The Kitchen's recipes are NOT seeded here any more. They live in
+  -- recipeData/recipes/*.json and are applied by supabase/seed_recipes.sql
+  -- (generated by tool/recipes.dart, `melos run db:recipes`). Only the demo
+  -- accounts and the rating machinery remain in this file, so it can be
+  -- deleted wholesale once there is real traffic without taking the
+  -- recipes with it. See docs/SDS.md §11.
+  --
+  -- Order matters for the DEMO RATINGS only: seed_recipes.sql reaches the
+  -- taster pool created above through a to_regprocedure('seed_ratings') guard,
+  -- so applying it BEFORE this file creates the recipes but skips their
+  -- ratings (with a notice). Re-running seed_recipes.sql afterwards backfills
+  -- them — that is the B014 early-return path. `melos run db:reset` and
+  -- config.toml's db.seed.sql_paths both already order them seed -> recipes.
 
   raise notice 'Seed complete for owner %', v_owner;
 end $$;

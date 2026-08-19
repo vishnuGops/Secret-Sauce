@@ -393,13 +393,17 @@ void _validateDemo(String file, Map<String, dynamic> r) {
   }
 }
 
-/// A step that sweeps up the rest of the list ("add all remaining ingredients").
-/// Legitimate recipe writing, and it makes the unused-ingredient lint useless —
-/// nearly everything is then "unmentioned".
-final _catchAllStep = RegExp(
-  r'\b(all|every|the rest of the|remaining)\b[^.]{0,40}\bingredients?\b',
-  caseSensitive: false,
-);
+/// A step that refers to the list collectively rather than naming things —
+/// "add all the remaining ingredients", "whisk the dry ingredients together".
+/// Legitimate recipe writing, and it makes the unused-ingredient lint useless,
+/// because nearly everything is then "unmentioned".
+///
+/// Deliberately just the noun, either number ("every remaining ingredient"):
+/// trying to enumerate the qualifiers (all / remaining / dry / wet / …) only
+/// produced false positives. The cost is that one collective step suppresses
+/// the lint for the whole recipe — this is a warning, not a gate, and the
+/// reverse direction was never checkable anyway.
+final _catchAllStep = RegExp(r'\bingredients?\b', caseSensitive: false);
 
 /// Warns about an ingredient no step mentions — the margarita's unused orange
 /// liqueur (B025). The reverse direction (a step naming an ingredient nobody

@@ -41,7 +41,7 @@ secret-sauce/
 ├── .claude/skills/            # code-review + review-checklist (repo's own review criteria)
 ├── .github/workflows/ci.yml   # analyze + test, pinned Flutter 3.44.8 / melos 6.3.3
 ├── docs/                      # ROADMAP · EXECUTION-PLAN · SDS · BUG-TRACKER (see "Docs–code sync")
-├── recipeData/                # THE Secret Sauce Kitchen's own recipes (content)
+├── recipeData/                # THE Secret Sauce Kitchen's 15 recipes (content)
 │   ├── recipes/<slug>.json    #   one per file — the filename IS the identity
 │   ├── schema.json            #   the format, field by field, mapped to columns
 │   └── README.md              #   authoring workflow
@@ -68,14 +68,17 @@ secret-sauce/
 │   └── android/ ios/ web/ windows/   # platform runners are committed — no `flutter create`
 └── supabase/
     ├── migrations/0001_init.sql  # THE schema: tables, triggers, RLS, grants, storage, RPCs
-    ├── seed.sql                  # DEMO fixtures: chefs, tasters, ratings (idempotent)
+    ├── seed.sql                  # DEMO fixtures: accounts, demo chefs, ratings (idempotent)
     ├── seed_recipes.sql          # GENERATED from recipeData/ — never hand-edit
     └── scripts/{drop,clean}.sql
 ```
 
 `seed.sql` and `seed_recipes.sql` are split on purpose: the first is **demo data** with a
-deletion date, the second is **content** that outlives it. Both bootstrap the same Secret Sauce
-Kitchen account with conflict guards, so either may be applied first.
+deletion date, the second is **content** that outlives it. No recipe is defined in both.
+Both bootstrap the same Secret Sauce Kitchen account with conflict guards, so recipe content is
+order-independent — but **apply `seed.sql` first**: `seed_recipes.sql` borrows its taster
+accounts for the demo ratings and silently (well, with a notice) skips them otherwise.
+`melos run db:reset` and `config.toml`'s `db.seed.sql_paths` both order it correctly.
 
 Note the `src/` layer: model files live at `packages/core/lib/src/models/`, **not**
 `packages/core/lib/models/`. Nothing outside a package imports below its barrel.

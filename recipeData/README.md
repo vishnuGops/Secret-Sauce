@@ -1,9 +1,9 @@
 # recipeData — the Secret Sauce Kitchen's own recipes
 
-Source of truth for every recipe the kitchen publishes. **Content**, deliberately
+Source of truth for all 15 recipes the kitchen publishes. **Content**, deliberately
 separate from the **demo fixtures** in [`supabase/seed.sql`](../supabase/seed.sql)
 (fake chefs, taster accounts, engagement numbers) — those get deleted eventually,
-these do not.
+these do not. Every recipe is defined exactly once, here.
 
 ```
 recipeData/
@@ -58,6 +58,19 @@ database that already has that recipe. Delete the recipe there first.
 
 Renaming `title` creates a *second* row rather than renaming the first, because
 the slug is a repo-level identity that `recipes` does not store.
+
+## The `demo` block
+
+Six recipes carry a `demo` block — likes, saves, views, and one rating per seeded taster. That is
+**fixture data, not content**: it exists so Discover and the chef leaderboard have a plausible
+order before there are real users, and it is what keeps the Kitchen's `chef_score` at 10189 now
+that these recipes no longer live in `seed.sql`. Delete those blocks along with `seed.sql` when
+there is real traffic; the recipes are unaffected.
+
+Ratings are applied through `seed.sql`'s taster accounts, so **`seed.sql` has to be applied
+first** — `melos run db:reset` and `config.toml` both order it that way. Applied the other way
+round, the recipes are created and the ratings skipped, with a notice; re-run `db:recipes` after
+`db:seed` to backfill.
 
 ## What the linter cannot check
 

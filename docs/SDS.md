@@ -467,10 +467,11 @@ signature is in `drop.sql` (Gotcha 5). Actual seeded standings:
 | d7 | Greta Lindqvist | 100 | 180 | 0 | **1200** | `sous_chef` | ties d3 via a different mix — proves `dense_rank` shares a rank |
 | — | tasters ×8 | — | — | — | 0 | `home_cook` | no recipes — guard for the `public_recipe_count > 0` filter |
 
-> **Since Phase 19 this table describes `seed.sql` only.** The Kitchen's own recipes moved to
-> `recipeData/` → `seed_recipes.sql` and carry **no** engagement, so they contribute 0 to
-> `chef_score`. The 10189 above still comes from `seed.sql`'s six copies; `public_recipe_count`
-> rises to 15 once both files are applied. See §11.
+> **Since Phase 19, only the `d1`–`d7` rows come from `seed.sql`.** The Kitchen's recipes moved to
+> `recipeData/` → `seed_recipes.sql`, taking their engagement counters and ratings with them as
+> `demo` blocks. The 10189 / `head_chef` standing is unchanged and now comes from that file;
+> `public_recipe_count` is 15, because the nine newly authored recipes carry no engagement and
+> contribute 0 to the score. Verified after the move — see §11.
 
 ### 10.8 Known limits (accepted for v1)
 
@@ -489,16 +490,25 @@ Two seed files, split because they have different lifespans.
 
 | | `supabase/seed.sql` | `supabase/seed_recipes.sql` |
 | --- | --- | --- |
-| What | Demo fixtures: 7 chef accounts, 8 tasters, their recipes, invented likes/saves/views/ratings | The Secret Sauce Kitchen's own recipes |
+| What | Demo fixtures: the Kitchen + taster + chef **accounts**, the `d1`–`d7` demo recipes, and the rating machinery | All 15 of the Secret Sauce Kitchen's recipes |
 | Authored in | the file itself | `recipeData/recipes/<slug>.json` |
 | Generated | no | **yes** — `tool/recipes.dart`, committed |
 | Lifespan | deleted once there is real traffic | permanent |
 | Helper | `seed_recipe` (flat, one unnamed group) | `seed_recipe_v2` (group-aware) |
 
-Both bootstrap the same Kitchen account (`…00aa`) with conflict guards, so either may be applied
-first and either works without the other. `seed_recipes.sql` reaches `seed.sql`'s taster pool for
-demo ratings through a `to_regprocedure('seed_ratings(uuid, jsonb)')` guard rather than a hard
-dependency, so it keeps working after that file is deleted.
+The Kitchen's six original recipes used to live in `seed.sql` as well; Phase 19 moved them out, so
+each recipe now has exactly one definition. Their engagement counters and taster ratings came with
+them as a `demo` block per recipe, and the resulting `chef_score` is byte-identical (10189,
+`head_chef`).
+
+Both files bootstrap the same Kitchen account (`…00aa`) with conflict guards.
+
+**Content is order-independent; demo ratings are not.** `seed_recipes.sql` reaches `seed.sql`'s
+taster pool through a `to_regprocedure('seed_ratings(uuid, jsonb)')` guard rather than a hard
+dependency, so it keeps working after that file is deleted — but applied *first*, on a database
+that has no tasters yet, it creates every recipe and skips every rating with a notice. Re-running
+it after `seed.sql` backfills them via the early-return path (B014). `melos run db:reset` and
+`config.toml`'s `db.seed.sql_paths` both order them `seed` → `recipes`.
 
 ### 11.1 Why the authoring format is not the scrape format
 

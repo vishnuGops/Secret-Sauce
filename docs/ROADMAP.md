@@ -392,6 +392,32 @@ lands; it does **not** exercise real auth, real Storage, or PostgREST.
 - [x] Kitchen `chef_score` unchanged at 10189 / `head_chef` (`public_recipe_count` 6 → 15), so the
       authored recipes add no phantom engagement
 
+### Migrating the six recipes already in the database
+
+- [x] `Classic Margherita Pizza`, `Spaghetti Aglio e Olio`, `Chicken Tikka Masala`,
+      `Fluffy Buttermilk Pancakes`, `Fresh Guacamole`, `Brown Butter Chocolate Chip Cookies`
+      authored into `recipeData/recipes/`. Source was `seed.sql`, which is what the hosted
+      database contains — B022's audit established that all six still have exactly one
+      `recipe_versions` row, so none has ever been edited through the editor.
+- [x] Titles kept byte-identical (the `(owner_id, title)` dedupe key), so re-applying against the
+      hosted project is a no-op rather than a second copy.
+- [x] Engagement counters and taster ratings carried over as per-recipe `demo` blocks.
+- [x] The six `perform seed_recipe(...)` calls **removed from `seed.sql`** — one definition per
+      recipe. `seed.sql` keeps the accounts, the `d1`–`d7` demo recipes, and the rating machinery.
+- [x] `config.toml` gained `db.seed.sql_paths = ["./seed.sql", "./seed_recipes.sql"]`, so
+      `supabase db reset` still populates Discover in one command.
+- [x] Verified: 24 recipes / 64 ratings / 16 profiles and the **identical** leaderboard —
+      Kitchen 10189 `head_chef` with `public_recipe_count` 15, Amara 21000 `master_chef`, the
+      Chen Wei / Greta Lindqvist `dense_rank` tie, Dara at exactly 100 `line_cook`.
+- [x] Verified the bad order too: recipes-first gives 15 recipes / **0** ratings with an explicit
+      notice, and `seed.sql` → re-run `seed_recipes.sql` backfills to the identical 64 / 10189.
+
+> **Two guacamoles.** `Fresh Guacamole` (from the database) and `Easy Guacamole` (from the staged
+> file) are genuinely different recipes — 3 avocados with coriander versus 2 with cherry tomatoes,
+> jalapeño, and garlic — so both were kept rather than one being silently dropped. Two guacamoles
+> from one kitchen on Discover is a product call, not a data problem; delete
+> `recipeData/recipes/easy-guacamole.json` if that is the answer.
+
 ### Deferred
 
 - [ ] **`recipes.notes` column.** There is nowhere to put a recipe-level note, so `tool/recipes.dart`
@@ -400,8 +426,9 @@ lands; it does **not** exercise real auth, real Storage, or PostgREST.
       of B025's nine defects were exactly that; it needs a lexicon and is still a manual read.
 - [ ] **No SQL test in CI**, as with every other `.sql` in this repo — `recipes:check` compares
       text, it never runs the generated SQL.
-- [ ] Retire `supabase/seed.sql`'s six curated kitchen recipes once the authored copies are the
-      only ones applied; the demo chefs/tasters go with it.
+- [ ] Retire `supabase/seed.sql` entirely once there is real traffic — the accounts, the `d1`–`d7`
+      demo recipes, and the rating machinery. Recipes already survive without it; the only loss is
+      the demo ratings, which is the point.
 
 ---
 

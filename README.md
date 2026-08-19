@@ -78,7 +78,7 @@ Copy-Item apps/app/env.example.json apps/app/env.local.json
 
 # 5. Apply the database schema
 supabase start          # or point at a hosted project
-supabase db reset       # applies supabase/migrations
+supabase db reset       # applies supabase/migrations, then seed.sql + seed_recipes.sql
 ```
 
 Verify the setup:
@@ -181,24 +181,31 @@ Two SQL files, split on purpose:
 
 | File | What it is | Lifespan |
 | --- | --- | --- |
-| [`supabase/seed_recipes.sql`](supabase/seed_recipes.sql) | The Secret Sauce Kitchen's own recipes. **Generated** from [`recipeData/recipes/*.json`](recipeData/) — see [recipeData/README.md](recipeData/README.md) | permanent |
-| [`supabase/seed.sql`](supabase/seed.sql) | Demo fixtures: fake chefs, 8 taster accounts, invented engagement so Discover and the leaderboard have a plausible order | delete when there is real traffic |
+| [`supabase/seed_recipes.sql`](supabase/seed_recipes.sql) | All 15 of the Secret Sauce Kitchen's recipes. **Generated** from [`recipeData/recipes/*.json`](recipeData/) — see [recipeData/README.md](recipeData/README.md) | permanent |
+| [`supabase/seed.sql`](supabase/seed.sql) | Demo fixtures: the system accounts, 8 tasters, 7 demo chefs and their recipes, and invented engagement so Discover and the leaderboard have a plausible order | delete when there is real traffic |
 
-Both bootstrap the same "Secret Sauce Kitchen" system account with conflict guards, so **either
-may run first**, and either can run without the other.
+Both bootstrap the same "Secret Sauce Kitchen" system account with conflict guards, and both are
+idempotent.
 
-- **Hosted project:** Supabase dashboard → SQL Editor → paste each file → Run. Both are
-  idempotent. Re-running leaves recipe content alone but **does** (re)apply the star ratings, so
-  it is also the way to backfill ratings after upgrading the schema.
-- **Local CLI:** `supabase db reset` runs `supabase/seed.sql` automatically after migrations;
-  follow it with `melos run db:recipes` (or paste `seed_recipes.sql`) for the authored recipes.
+> **Apply `seed.sql` first.** Recipe *content* does not care about the order, but the demo star
+> ratings do: `seed_recipes.sql` borrows `seed.sql`'s taster accounts, so run the other way round
+> it creates every recipe and skips every rating (it says so, with a notice). Fix by re-running
+> `seed_recipes.sql` afterwards — re-running never touches existing recipe content, but it *does*
+> re-apply ratings, which is also how you backfill them after a schema upgrade.
+
+- **Hosted project:** Supabase dashboard → SQL Editor → paste `seed.sql`, Run, then
+  `seed_recipes.sql`, Run.
+- **Local CLI:** `supabase db reset` applies both in order — `config.toml` lists them under
+  `db.seed.sql_paths`.
+- **`psql`:** `melos run db:seed` then `melos run db:recipes`, or `melos run db:reset` for
+  everything.
 
 > Editing a recipe that a database already has does **not** work by re-applying:
 > `seed_recipe_v2` returns early when `(owner_id, title)` exists — it is not an upsert. Delete
 > that recipe there first.
 
-> The seed creates its own system user, so it needs no existing account and won't touch any real
-> user's "My Recipes". It also creates 8 dummy **"Taster"** accounts
+> Both files create their own system user, so they need no existing account and won't touch any
+> real user's "My Recipes". `seed.sql` also creates 8 dummy **"Taster"** accounts
 > (`taster1..8@secretsauce.local`) that supply the star ratings on the curated recipes, so the
 > Discover → **Popular** tab (ranked by rating) has a meaningful order from the start.
 >
@@ -265,7 +272,7 @@ it is the fastest way to test schema changes without touching the hosted project
 
 ```powershell
 supabase start        # local stack; prints API_URL / ANON_KEY for env.local.json
-supabase db reset     # applies supabase/migrations/* then supabase/seed.sql
+supabase db reset     # applies supabase/migrations/*, then seed.sql + seed_recipes.sql
 docker exec supabase_db_secret-sauce psql -U postgres -d postgres -c "select title, rating_avg from recipes_popular(6);"
 supabase stop         # tear the containers down
 ```

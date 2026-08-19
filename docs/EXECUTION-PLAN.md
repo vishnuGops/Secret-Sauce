@@ -361,9 +361,29 @@ auth, Storage, or PostgREST — those still need the project's own stack.
 ingredients in and 109 out, every old ingredient's distinctive words present in the new file.
 Step count rose 35 → 41 (splits, no drops). `data.json` was deleted only after that passed.
 
+**Then the six recipes already in the database.** Source was `seed.sql` rather than a dump of the
+hosted project: B022's audit had already established that all six still carry exactly one
+`recipe_versions` row, so none has been edited through the editor and the file is what the database
+holds. Titles kept byte-identical — that is the dedupe key, so re-applying against the hosted
+project is a no-op, not a second copy — and their engagement counters and taster ratings came
+across as per-recipe `demo` blocks.
+
+Their `perform seed_recipe(...)` calls were then **deleted from `seed.sql`**, which is the point of
+the exercise: one definition per recipe. `seed.sql` keeps the accounts, the `d1`–`d7` demo recipes,
+and the rating machinery, and `config.toml` gained `db.seed.sql_paths` so `supabase db reset` still
+does everything in one command.
+
+The move had to be provably neutral, since the leaderboard numbers in SDS §10.7 are derived from
+those counters. After it: 24 recipes / 64 ratings / 16 profiles and an identical board — Kitchen
+10189 `head_chef` at `public_recipe_count` 15, Amara 21000 `master_chef`, the Chen Wei / Greta
+Lindqvist `dense_rank` tie intact, Dara still at exactly 100. The wrong order was tested too:
+recipes-first yields 15 recipes and **zero** ratings with an explicit notice, and the documented
+recovery (`seed.sql`, then re-run) restores the identical 64 / 10189.
+
 **Gaps left open**, all recorded in the roadmap: no `recipes.notes` column (notes are appended to
-`description`), no reverse-direction lint for a step naming an unlisted ingredient, and no SQL
-execution in CI.
+`description`), no reverse-direction lint for a step naming an unlisted ingredient, no SQL
+execution in CI, and two guacamoles — `Fresh Guacamole` and `Easy Guacamole` are different recipes,
+kept rather than silently merged, but whether one kitchen should publish both is a product call.
 
 ## Build, run & release (ops)
 

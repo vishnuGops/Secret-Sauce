@@ -1,0 +1,69 @@
+{
+  "slug": "fluffy-buttermilk-pancakes",
+  "title": "Fluffy Buttermilk Pancakes",
+  "description": "Tall, tender pancakes with a golden crust — a weekend breakfast staple.",
+  "cuisine": "American",
+  "category": "Breakfast",
+  "difficulty": "easy",
+  "prep_minutes": 10,
+  "cook_minutes": 15,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": null,
+  "ingredient_groups": [
+    {
+      "name": "Dry",
+      "ingredients": [
+        { "quantity": 200, "unit": "g", "name": "all-purpose flour" },
+        { "quantity": 2, "unit": "Tbsp", "name": "sugar" },
+        { "quantity": 1, "unit": "tsp", "name": "baking powder" },
+        { "quantity": 0.5, "unit": "tsp", "name": "baking soda" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt" }
+      ]
+    },
+    {
+      "name": "Wet",
+      "ingredients": [
+        { "quantity": 300, "unit": "ml", "name": "buttermilk" },
+        { "quantity": 1, "unit": null, "name": "egg" },
+        { "quantity": 40, "unit": "g", "name": "butter", "note": "melted" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Whisk the dry ingredients together in a bowl."
+        },
+        {
+          "text": "In another bowl, whisk the buttermilk, egg, and melted butter."
+        },
+        {
+          "text": "Fold the wet into the dry until just combined.",
+          "tip": "Lumps are fine. Overmixing develops gluten and gives you flat, rubbery pancakes."
+        },
+        {
+          "text": "Rest the batter so the leavening activates.",
+          "duration_minutes": 5
+        },
+        {
+          "text": "Cook ladlefuls on a medium griddle until bubbles form on the surface, then flip and cook until golden.",
+          "duration_minutes": 4,
+          "temperature": "medium"
+        },
+        {
+          "text": "Serve stacked with butter and maple syrup."
+        }
+      ]
+    }
+  ],
+  "demo": {
+    "like_count": 98,
+    "save_count": 61,
+    "view_count": 780,
+    "ratings": [4, 3.5, 4, 4.5, 3.5, 4]
+  }
+}

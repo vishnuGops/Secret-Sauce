@@ -1,0 +1,53 @@
+{
+  "slug": "fresh-guacamole",
+  "title": "Fresh Guacamole",
+  "description": "Bright, chunky avocado dip with lime, coriander, and a little heat. Ready in minutes.",
+  "cuisine": "Mexican",
+  "category": "Appetizer",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 0,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": null,
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 3, "unit": null, "name": "ripe avocados" },
+        { "quantity": 1, "unit": null, "name": "lime", "note": "juiced" },
+        { "quantity": 0.5, "unit": null, "name": "red onion", "note": "finely diced" },
+        { "quantity": 1, "unit": null, "name": "jalapeño", "note": "minced" },
+        { "quantity": null, "unit": null, "name": "fresh coriander", "note": "chopped" },
+        { "quantity": null, "unit": null, "name": "salt", "note": "to taste" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Halve the avocados and scoop the flesh into a bowl."
+        },
+        {
+          "text": "Mash to your preferred texture — leave it chunky."
+        },
+        {
+          "text": "Fold in the lime juice, red onion, jalapeño, and coriander."
+        },
+        {
+          "text": "Season with salt and serve right away with tortilla chips.",
+          "tip": "It browns fast. Press cling film onto the surface if it has to wait."
+        }
+      ]
+    }
+  ],
+  "demo": {
+    "like_count": 76,
+    "save_count": 52,
+    "view_count": 610,
+    "ratings": [5, 4.5, 4]
+  }
+}

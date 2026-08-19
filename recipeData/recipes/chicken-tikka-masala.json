@@ -1,0 +1,77 @@
+{
+  "slug": "chicken-tikka-masala",
+  "title": "Chicken Tikka Masala",
+  "description": "Charred marinated chicken simmered in a creamy, spiced tomato gravy. A crowd favourite.",
+  "cuisine": "Indian",
+  "category": "Main",
+  "difficulty": "medium",
+  "prep_minutes": 30,
+  "cook_minutes": 40,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": null,
+  "ingredient_groups": [
+    {
+      "name": "Marinade",
+      "ingredients": [
+        { "quantity": 600, "unit": "g", "name": "boneless chicken thigh", "note": "cubed" },
+        { "quantity": 150, "unit": "g", "name": "plain yoghurt" },
+        { "quantity": 1, "unit": "Tbsp", "name": "tikka spice blend", "note": "half of the 2 Tbsp total" }
+      ]
+    },
+    {
+      "name": "Gravy",
+      "ingredients": [
+        { "quantity": 2, "unit": "Tbsp", "name": "butter" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "finely diced" },
+        { "quantity": 3, "unit": "cloves", "name": "garlic", "note": "minced" },
+        { "quantity": 1, "unit": "Tbsp", "name": "ginger", "note": "grated" },
+        { "quantity": 1, "unit": "Tbsp", "name": "tikka spice blend", "note": "the other half" },
+        { "quantity": 400, "unit": "g", "name": "tomato passata" },
+        { "quantity": 120, "unit": "ml", "name": "heavy cream" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Marinate the chicken in the yoghurt and half the spice blend.",
+          "duration_minutes": 30,
+          "tip": "Longer is better — overnight if you can."
+        },
+        {
+          "text": "Sear or grill the chicken until charred at the edges, then set it aside.",
+          "duration_minutes": 8,
+          "temperature": "high",
+          "tip": "It does not need to cook through here; it finishes in the gravy."
+        },
+        {
+          "text": "Soften the onion in the butter, then add the garlic, ginger, and the rest of the spice blend.",
+          "duration_minutes": 6,
+          "temperature": "medium"
+        },
+        {
+          "text": "Pour in the passata and simmer until it deepens in colour.",
+          "duration_minutes": 15,
+          "temperature": "low"
+        },
+        {
+          "text": "Stir in the cream and return the chicken to warm through.",
+          "duration_minutes": 8
+        },
+        {
+          "text": "Serve with basmati rice or naan."
+        }
+      ]
+    }
+  ],
+  "demo": {
+    "like_count": 311,
+    "save_count": 240,
+    "view_count": 2100,
+    "ratings": [4.5, 4, 4.5, 5, 4, 4.5, 4, 4]
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "slug": "brown-butter-chocolate-chip-cookies",
+  "title": "Brown Butter Chocolate Chip Cookies",
+  "description": "Crisp edges, chewy centres, and pools of dark chocolate, deepened with nutty brown butter.",
+  "cuisine": "American",
+  "category": "Dessert",
+  "difficulty": "easy",
+  "prep_minutes": 20,
+  "cook_minutes": 11,
+  "servings": 24,
+  "visibility": "public",
+  "attribution": "A tweaked take on the classic Toll House cookie.",
+  "notes": null,
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 170, "unit": "g", "name": "butter" },
+        { "quantity": 150, "unit": "g", "name": "brown sugar" },
+        { "quantity": 100, "unit": "g", "name": "white sugar" },
+        { "quantity": 1, "unit": null, "name": "egg" },
+        { "quantity": 1, "unit": null, "name": "egg yolk" },
+        { "quantity": 1, "unit": "tsp", "name": "vanilla extract" },
+        { "quantity": 250, "unit": "g", "name": "all-purpose flour" },
+        { "quantity": 0.5, "unit": "tsp", "name": "baking soda" },
+        { "quantity": 200, "unit": "g", "name": "dark chocolate", "note": "chopped" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Brown the butter until it smells nutty, then let it cool slightly.",
+          "duration_minutes": 6,
+          "temperature": "medium",
+          "tip": "Watch the milk solids, not the clock — they go from golden to burnt in seconds."
+        },
+        {
+          "text": "Whisk in both sugars, the egg, the yolk, and the vanilla until smooth."
+        },
+        {
+          "text": "Fold in the flour and baking soda, then the chopped chocolate."
+        },
+        {
+          "text": "Chill the dough for deeper flavour.",
+          "duration_minutes": 30
+        },
+        {
+          "text": "Scoop onto trays and bake until the edges set but the centres still look underdone.",
+          "duration_minutes": 11,
+          "temperature": "350°F"
+        },
+        {
+          "text": "Cool on the tray so they finish setting."
+        }
+      ]
+    }
+  ],
+  "demo": {
+    "like_count": 412,
+    "save_count": 358,
+    "view_count": 3050,
+    "ratings": [5, 5, 5, 4.5, 5, 5, 4.5, 5]
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "slug": "spaghetti-aglio-e-olio",
+  "title": "Spaghetti Aglio e Olio",
+  "description": "A five-ingredient Roman classic: garlic and chilli sizzled in good olive oil, tossed with spaghetti.",
+  "cuisine": "Italian",
+  "category": "Main",
+  "difficulty": "easy",
+  "prep_minutes": 5,
+  "cook_minutes": 15,
+  "servings": 2,
+  "visibility": "public",
+  "attribution": "Late-night Roman comfort food.",
+  "notes": null,
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 200, "unit": "g", "name": "spaghetti" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "thinly sliced" },
+        { "quantity": 60, "unit": "ml", "name": "extra-virgin olive oil" },
+        { "quantity": 1, "unit": "tsp", "name": "red chilli flakes" },
+        { "quantity": null, "unit": null, "name": "flat-leaf parsley", "note": "chopped" },
+        { "quantity": null, "unit": null, "name": "salt", "note": "for the pasta water, and to taste" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Boil the spaghetti in water seasoned generously with salt until al dente, then reserve a cup of the pasta water before draining.",
+          "duration_minutes": 9,
+          "tip": "The starchy water is the sauce — reserve it before you drain, not after."
+        },
+        {
+          "text": "Gently warm the olive oil and sliced garlic until the garlic is pale gold.",
+          "duration_minutes": 4,
+          "temperature": "low",
+          "tip": "Do not let it brown. Browned garlic turns the whole dish bitter and there is no recovering it."
+        },
+        {
+          "text": "Add the chilli flakes and a splash of the pasta water to emulsify."
+        },
+        {
+          "text": "Toss the drained pasta in the oil, adding more pasta water until it turns glossy."
+        },
+        {
+          "text": "Finish with the chopped parsley and serve immediately."
+        }
+      ]
+    }
+  ],
+  "demo": {
+    "like_count": 203,
+    "save_count": 156,
+    "view_count": 1520,
+    "ratings": [5, 5, 4.5, 5, 4.5, 5, 5, 4.5]
+  }
+}
