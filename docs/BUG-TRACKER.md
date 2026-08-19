@@ -59,6 +59,18 @@ Status: `open` \| `in-progress` \| `fixed` \| `wontfix`
 | ---- | ---------- | -------- | ---- | ----------- | ------ | ------------ |
 | B024 | 2026-08-18 | high     | seed | Re-seeding an **already-seeded** database failed outright: `ERROR 42725: function seed_recipe(uuid, unknown, …) is not unique / Could not choose a best candidate function`. Adding `p_visibility` took `seed_recipe` from 16 arguments to 17-with-a-default, and `create or replace function` **cannot change a function's argument list** — so the old 16-arg overload survived alongside the new one, and every 16-argument call in `seed.sql` then matched both (the old exactly, the new via the default). `drop.sql` did carry the old signature, but `drop.sql` is a separate destructive script that a plain re-seed never runs. Hit on the hosted project, which had been seeded before the signature changed. | fixed | `seed.sql` now drops **every historical `seed_recipe` signature itself**, immediately before `create or replace`, instead of relying on `drop.sql`. Same guard shape belongs on any future seed-helper signature change. |
 
+### Recipe-content bugs (found auditing `recipeData/data.json`, 2026-08-18)
+
+| ID   | Date       | Severity | Area        | Description | Status | Fix / Commit |
+| ---- | ---------- | -------- | ----------- | ----------- | ------ | ------------ |
+| B025 | 2026-08-18 | medium   | recipe data | `recipeData/data.json` (the curated Secret Sauce Kitchen recipes, staged for import) carried one **exact duplicate** — `Spring Vegetable Tart` appeared twice, byte-identical — plus nine content defects that would have shipped as visible recipe text: `"1 ts"` for `1 tsp` (Teriyaki paprika); the galette's egg wash stored with `amount`/`item` **inverted** (`{"amount":"1 egg plus 1 Tbsp water","item":"beaten"}`); Teriyaki seasoning with salt that was never listed; the margarita listing `2 oz orange liqueur` that **no step uses**, listing `Simple syrup` as an ingredient while step 1 also *makes* it from the sugar + water already listed, and saying "tequila (if using)" for a required ingredient; `Raspberry Brownies` claiming 4 servings from an 8×8 pan and a step calling for a "chocolate and butter mixture" when the ingredient is cocoa powder; ratatouille saying "bell peppers" for one pepper and serving with crusty bread that was never listed. The duplicate would not have surfaced on import — `seed_recipe` dedupes on `(owner_id, title)`, so the second copy is silently swallowed rather than raising. | fixed | Deduped to 9 recipes and all nine defects corrected in place; item casing normalised to lowercase and `1 tbsp` → `1 Tbsp`. Structural causes (free-text `servings`, `amount` as one opaque string, no groups, no times) are **not** data bugs — addressed by the per-recipe schema in the same change set. |
+
+**Why the defects clustered where they did.** Every one of them is an ingredient the *prose*
+knows about but the *list* does not, or vice versa. The flat `{"amount","item"}` shape gives
+nothing to cross-check against: an ingredient that no step mentions and a step that names an
+ingredient nobody listed are both well-formed JSON. The per-recipe schema does not fix this by
+itself either — `tool/recipes.dart` is where a lint for it belongs.
+
 **Why the Phase 18 verification missed it — a gap in the method, not just the code.** Every SQL
 check that day ran one of two paths: `supabase db reset` (builds from scratch — the stale overload
 cannot exist) or `drop.sql → create → seed` (drops both overloads first). Neither is the path a
