@@ -60,10 +60,11 @@ void main() {
   });
 
   // Regression: the rating pill pushed the metadata row past the card width on
-  // a rated recipe with a long time label. 276px is the narrowest card the grid
-  // produces (2 columns at the 600px medium breakpoint). The 2.0 text scale
-  // case is the real-world trigger — at default scale the margin is thin but
-  // positive, and accessibility scaling eats it.
+  // a rated recipe with a long time label. 264px (`kRecipeCardMinWidth`) is the
+  // narrowest card the grid produces — it packs columns down to that width
+  // before wrapping. The 2.0 text scale case is the real-world trigger — at
+  // default scale the margin is thin but positive, and accessibility scaling
+  // eats it.
   const longMeta = Recipe(
     id: '1',
     ownerId: 'u1',
@@ -77,13 +78,14 @@ void main() {
   );
 
   for (final (width, scale) in <(double, double)>[
+    (kRecipeCardMinWidth, 1.0),
     (276, 1.0),
-    (320, 1.0),
+    (kRecipeCardMaxWidth, 1.0),
+    (kRecipeCardMinWidth, 2.0),
     (276, 2.0),
-    (320, 2.0),
+    (kRecipeCardMaxWidth, 2.0),
   ]) {
-    testWidgets(
-        'RecipeCard metadata row fits at ${width}px, textScale $scale',
+    testWidgets('RecipeCard metadata row fits at ${width}px, textScale $scale',
         (tester) async {
       await tester.pumpWidget(
         MaterialApp(
@@ -127,6 +129,34 @@ void main() {
       ),
     );
 
-    expect(find.text('Private'), findsOneWidget);
+    // v2: the chip is icon-only in the title banner; the label is the tooltip.
+    expect(find.byTooltip('Private'), findsOneWidget);
+    expect(find.byIcon(Icons.lock_outline), findsOneWidget);
+  });
+
+  // v2 is a fixed-height tile (the grid passes kRecipeCardHeight as
+  // mainAxisExtent). The card owns that height itself so an unbounded-height
+  // parent — a Center, a Column — cannot leave the cover's Expanded unbounded
+  // (B001).
+  testWidgets('RecipeCard is kRecipeCardHeight tall in an unbounded parent',
+      (tester) async {
+    const recipe = Recipe(id: '1', ownerId: 'u1', title: 'Secret Sauce');
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.light(),
+        home: const Scaffold(
+          body: Center(
+            child: SizedBox(width: 276, child: RecipeCard(recipe: recipe)),
+          ),
+        ),
+      ),
+    );
+
+    expect(tester.takeException(), isNull);
+    expect(
+      tester.getSize(find.byType(RecipeCard)).height,
+      kRecipeCardHeight,
+    );
   });
 }

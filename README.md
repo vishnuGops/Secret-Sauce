@@ -221,8 +221,14 @@ idempotent.
 ```powershell
 melos run analyze   # flutter analyze across all packages
 melos run test      # run tests
-melos run format    # format code
+melos run format    # format code — see the warning below
 ```
+
+> **Don't run `melos run format` casually — it breaks `melos run analyze` (B027).** `dart format`
+> chooses its style from the package's language version; all four pubspecs declare
+> `sdk: ">=3.4.0 <4.0.0"`, which is below the 3.7 cutoff, so the formatter rewrites the tree into
+> the legacy short style and strips the trailing commas that `require_trailing_commas` requires.
+> Fix is to raise the `sdk:` lower bound to `>=3.7.0` (one repo-wide reformat) or drop the lint.
 
 ## Tasks (melos)
 

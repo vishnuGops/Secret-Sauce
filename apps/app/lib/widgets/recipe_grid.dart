@@ -6,6 +6,14 @@ import 'package:go_router/go_router.dart';
 import 'package:app/routing/app_router.dart';
 
 /// A responsive grid of [RecipeCard]s that navigates to detail on tap.
+///
+/// The column count comes from the width actually available, not from a
+/// breakpoint: as many columns as can each hold `kRecipeCardMinWidth`, with
+/// every card capped at `kRecipeCardMaxWidth` and the row centred once they
+/// are. Widening the window therefore adds a column instead of stretching the
+/// cards, and because the rule is a pure function of width
+/// ([FlowGridMetrics.fit], recomputed on every layout) a drag-resize reflows
+/// continuously rather than jumping at 600 and 1000.
 class RecipeGrid extends StatelessWidget {
   const RecipeGrid({
     super.key,
@@ -27,23 +35,41 @@ class RecipeGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cols = responsiveColumns(context);
-    return GridView.builder(
-      padding: padding,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: cols,
-        mainAxisSpacing: AppSpacing.md,
-        crossAxisSpacing: AppSpacing.md,
-        childAspectRatio: 0.82,
-      ),
-      itemCount: recipes.length,
-      itemBuilder: (context, i) {
-        final recipe = recipes[i];
-        return RecipeCard(
-          recipe: recipe,
-          showVisibility: showVisibility,
-          showChef: showChef,
-          onTap: () => context.push(Routes.recipe(recipe.id)),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final metrics = FlowGridMetrics.fit(
+          available: constraints.maxWidth - padding.horizontal,
+          minTileWidth: kRecipeCardMinWidth,
+          maxTileWidth: kRecipeCardMaxWidth,
+          spacing: AppSpacing.md,
+        );
+        return GridView.builder(
+          // The gutter is what keeps the cards at their maximum width: the
+          // delegate always divides the full cross-axis extent between the
+          // columns, so the only way to cap a tile is to hand the grid less
+          // width to divide.
+          padding: padding.copyWith(
+            left: padding.left + metrics.gutter,
+            right: padding.right + metrics.gutter,
+          ),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: metrics.columns,
+            mainAxisSpacing: AppSpacing.md,
+            crossAxisSpacing: AppSpacing.md,
+            // Fixed height, not a fixed aspect: the card is a fixed-height
+            // tile, so a wide window no longer leaves dead space under it.
+            mainAxisExtent: kRecipeCardHeight,
+          ),
+          itemCount: recipes.length,
+          itemBuilder: (context, i) {
+            final recipe = recipes[i];
+            return RecipeCard(
+              recipe: recipe,
+              showVisibility: showVisibility,
+              showChef: showChef,
+              onTap: () => context.push(Routes.recipe(recipe.id)),
+            );
+          },
         );
       },
     );

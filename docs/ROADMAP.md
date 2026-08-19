@@ -262,7 +262,8 @@ Execution: [EXECUTION-PLAN.md Phase 18](./EXECUTION-PLAN.md#phase-18--chefs-tier
 - [x] `ChefBadge` (avatar + name + tier **under** the name; `compact` variant)
 - [x] Barrel exports for both (Gotcha 13)
 - [x] `RecipeCard`: chef badge as **cover overlay, bottom-left** — never a new column row
-      (B001/B002/B016); envelope tests at 276 px / 2.0× text scale
+      (B001/B002/B016); envelope tests at 276 px / 2.0× text scale _(v2 moved it to
+      bottom-**right** — Phase 20)_
 
 ### app
 
@@ -318,8 +319,8 @@ none blocks the feature, all are real regression surface.
 - [ ] My Recipes passes `showChef: false` _(cheap; the widget flag is tested, the screen wiring
       is not)_
 - [ ] `ChefBadge` `onTap` / `onSurfaceImage` / avatar-URL branches
-- [ ] `RecipeCard` chef overlay is positioned **bottom-left** _(currently only asserted to render
-      and not overflow)_
+- [x] `RecipeCard` chef overlay position is asserted, not just "it renders" — Phase 20 pins it to
+      the cover's **bottom-right** (v2 moved it there)
 
 ---
 
@@ -434,6 +435,73 @@ lands; it does **not** exercise real auth, real Storage, or PostgREST.
 - [ ] Retire `supabase/seed.sql` entirely once there is real traffic — the accounts, the `d1`–`d7`
       demo recipes, and the rating machinery. Recipes already survive without it; the only loss is
       the demo ratings, which is the point.
+
+---
+
+## Phase 20 — RecipeCard v2
+
+The card was redrawn in Claude Design ("RecipeCard v2", Secret Sauce project → `Design System.dc.html`)
+and ported as-is. Same inputs, same data, new anatomy: the **name leads the card as a banner** on
+`colorScheme.primary` instead of sitting under the photo, so it never competes with the cover and
+stays legible over a dark or busy image.
+
+- [x] Title banner (`primary` / `onPrimary`, 14 × 10 padding, `titleMedium` w700, **max 2 lines**
+      then ellipsis) as the first child of the card
+- [x] Cover moved below the banner and made the only **flexible** child — a two-line title eats
+      cover height, never card height
+- [x] Chef overlay moved **bottom-left → bottom-right** of the cover (same scrim, same
+      `ChefBadge(compact: true, onSurfaceImage: true)`)
+- [x] Visibility chip moved into the banner and reduced to **icon-only** with the label as a
+      `Tooltip` — a "Private" label is the first thing to overflow at 2.0× text scale
+- [x] Footer: description (2 lines) + a `outlineVariant` rule above the
+      time / rating / difficulty row
+- [x] Fix B026 in that row: the difficulty badge had a flex of its own, so it reserved half the
+      row whatever its label said — `4.9 (8)` truncated to `4…` at one-column widths. It is now
+      the only non-flex child, capped at half the row (`LayoutBuilder` + `ConstrainedBox`; a bare
+      intrinsic badge overflows by 1px at 276 / 2.0×), and sits flush right as the mockup has it
+- [x] **Fixed height, not fixed aspect**: `kRecipeCardHeight = 352` exported from `design_system`;
+      `recipe_grid.dart` passes it as `mainAxisExtent` instead of `childAspectRatio: 0.82`, which
+      is what left dead space under every card on a wide window
+- [x] The card owns its own height (`SizedBox`), so an unbounded-height parent can never leave the
+      cover's `Expanded` unbounded (the original B001 shape)
+- [x] Tests: envelope suites (276 / 320 px × 1.0 / 2.0×) still green, `find.text('Private')` →
+      `find.byTooltip('Private')`, plus new fixed-height and **overlay-is-bottom-right** assertions
+- [x] `melos run analyze` + `melos run test --no-select` clean (67 tests)
+
+One thing from the mockup was **not** ported: the banner's serif (`Newsreader`) title. That is the
+design's separate open question — "typography is the one upgrade", a `google_fonts` dependency plus
+a `textTheme` in `app_theme.dart` — and it applies to every title in the app, not just this card.
+The banner uses the theme's `titleMedium`, so it follows whatever that decision lands on.
+
+### Flowing grid (the design retired the old card and gave the new one a max width)
+
+Claude Design deleted the previous card and added `.rcard { width: 100%; max-width: 340px }` —
+"width is fluid between **264px** and **340px**, so a wide grid adds a column instead of stretching
+three cards across 1400px".
+
+- [x] `FlowGridMetrics.fit` in [adaptive.dart](packages/design_system/lib/src/layout/adaptive.dart):
+      pure function of the available width → column count, tile width, and the gutter that keeps a
+      capped row centred. No breakpoint involved, so a drag-resize reflows continuously
+- [x] `kRecipeCardMinWidth` (264) / `kRecipeCardMaxWidth` (340) alongside `kRecipeCardHeight`
+- [x] `RecipeGrid` wraps its `GridView` in a `LayoutBuilder` and feeds the metrics in as
+      `crossAxisCount` + extra horizontal padding — the delegate always divides the full extent
+      between its columns, so **less width to divide** is the only way to cap a tile
+- [x] `responsiveColumns` stays for navigation chrome and non-card grids; the recipe grid no
+      longer uses it (its doc comment now says so)
+- [x] Tests: `flow_grid_test.dart` sweeps every width from 264 to 2400 asserting the tile stays
+      inside its bounds, the columns never decrease as the window widens, row + gutters account
+      for every pixel, and no wider column count would have fit;
+      `apps/app/test/recipe_grid_test.dart` pumps the real grid at 390 / 700 / 1000 / 1440 / 2000,
+      checks centring at a capped width, and resizes 400 → 1000 → 640 to prove it reflows
+- [x] Card envelope suites re-pinned from 276/320 to **264/340** — the grid's real extremes
+- [x] `melos run analyze` clean, 82 tests pass
+
+### Deferred
+
+- [ ] Typography upgrade (Newsreader + Manrope via `google_fonts`) — app-wide, needs a yes/no
+- [ ] Cover photography is still placeholder in the design; real shots may change the 352 px height
+- [ ] Nothing caps the grid's overall width, so a 4K window gets ~13 columns. If that reads as too
+      many, the fix is a max content width on the screens, not on the card
 
 ---
 

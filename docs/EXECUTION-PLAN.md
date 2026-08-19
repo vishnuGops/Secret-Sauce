@@ -270,8 +270,11 @@ round-trips. The leaderboard is an RPC over the denormalized columns. Recipe→c
    then decode-check against live rows: `chef_score` is Postgres `numeric` ⇒ `(v as num)
    .toDouble()` (Gotcha 11).
 4. **design_system**: `TierChip`, `ChefBadge` (+`compact`), barrel exports (Gotcha 13), card
-   overlay bottom-left on the cover `Stack` — **not** a new column row; the tile is fixed-aspect
-   and B001/B002/B016 all came from intrinsic children. Widget tests at 276 px / 2.0×.
+   overlay on the cover `Stack` — **not** a new column row; the tile cannot grow and
+   B001/B002/B016 all came from intrinsic children. Widget tests at the card envelope / 2.0×.
+   _(The card was later redrawn — ROADMAP Phase 20: the overlay moved bottom-left → bottom-right,
+   the tile became fixed-**height** rather than fixed-aspect, and the envelope is now
+   `kRecipeCardMinWidth` 264 to `kRecipeCardMaxWidth` 340, not 276/320.)_
 5. **app**: `/chefs` in the `ShellRoute` (signed-out safe ⇒ `redirect` untouched), `AppShell`
    destination, leaderboard screen + providers, detail-screen badge.
 6. **Docs fold-in**: SDS §3.2/§6/§7/§8 updated to describe reality, §10 trimmed to a pointer;
@@ -288,7 +291,8 @@ round-trips. The leaderboard is an RPC over the denormalized columns. Recipe→c
   Kitchen ≈ 10.2k ⇒ `head_chef`.
 - App: every recipe card and the detail screen show the owner's badge with the tier under the
   name; `/chefs` renders signed-out; `melos run analyze` and `melos run test --no-select`
-  clean; card envelope tests pass at 276 px / 2.0×.
+  clean; card envelope tests pass at the card's min and max width / 2.0× (264 and 340 today —
+  they were 276/320 when this phase shipped; see Phase 20).
 - Hosted rollout is one idempotent re-apply of `0001_init.sql` + `seed.sql` (both already safe
   by rule).
 

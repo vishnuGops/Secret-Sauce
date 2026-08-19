@@ -133,7 +133,7 @@ melos bootstrap                     # resolve + link all packages
 melos run build_runner --no-select  # codegen (freezed/json) — REQUIRED before first analyze/run
 melos run analyze                   # flutter analyze across all packages
 melos run test --no-select          # tests (any package with a test/ dir — currently all three)
-melos run format                    # dart format .
+melos run format                    # dart format . — see the B027 warning below before running
 
 # Run the app (env creds are wired in). Web-server is the most reliable device here;
 # Chrome isn't installed and Edge's debug auto-launch is flaky.
@@ -141,6 +141,13 @@ cd apps/app
 flutter run -d web-server --web-port 8080 --dart-define-from-file=env.local.json  # open http://localhost:8080
 flutter run -d windows --dart-define-from-file=env.local.json                     # native desktop
 ```
+
+> **`melos run format` currently breaks `melos run analyze` (B027).** `dart format` picks its
+> style from the *package's* language version, and all four pubspecs declare `sdk: ">=3.4.0"` —
+> under 3.7, so the formatter emits the legacy short style with no trailing commas, and
+> `require_trailing_commas` then flags every one it removed. The committed tree is in the newer
+> tall style. Until the `sdk:` bound is raised (or the lint dropped), leave formatting alone; if
+> you run it by accident, `git checkout --` the files it touched outside your change.
 
 Build, database, and icon tasks are melos scripts (all defined in `melos.yaml`):
 
@@ -332,10 +339,23 @@ the `code-review` skill). The ones you need while *writing* code:
     lengthen that window.
 12. **Postgres `numeric` arrives as a JSON number that may be int or double** — decode with
     `(value as num).toDouble()`, never a bare `as double`.
-13. **Fixed-aspect cards cannot grow, so their rows must degrade.** Three logged `RenderFlex`
+13. **Fixed-size cards cannot grow, so their rows must degrade.** Three logged `RenderFlex`
     overflows (B001, B002, B016) came from adding an intrinsically-sized child to a
-    `RecipeCard`/grid row. Test the real envelope: **276px** wide (2 columns at the 600px
-    breakpoint), longest labels, **2.0× text scale**.
+    `RecipeCard`/grid row. Test the real envelope: **264px** wide (`kRecipeCardMinWidth`, the
+    narrowest column the grid packs to), longest labels, **2.0× text scale**. `RecipeCard` is a
+    **fixed-height** tile — `kRecipeCardHeight` (352), passed by `recipe_grid.dart` as
+    `mainAxisExtent` — with exactly one flexible band, the cover. The title banner and the footer
+    are intrinsic: whatever you add there comes out of a fixed budget, and a longer title eats
+    cover height rather than growing the card.
+    **The card grid flows; it does not switch at breakpoints.** `FlowGridMetrics.fit`
+    (`adaptive.dart`) fits as many columns as can each hold `kRecipeCardMinWidth` (264), caps every
+    tile at `kRecipeCardMaxWidth` (340), and returns the gutter that centres a capped row;
+    `RecipeGrid` feeds that into a `LayoutBuilder` + `SliverGridDelegateWithFixedCrossAxisCount`.
+    The delegate always divides the **whole** cross-axis extent between its columns, so a tile can
+    only be capped by handing the grid less width — that is what the gutter padding is for; a
+    `ConstrainedBox` inside the card is ignored under the cell's tight constraints.
+    `responsiveColumns` still exists for navigation chrome and non-card grids — don't wire it back
+    into a card grid.
 14. **New `design_system` widget → export it from `design_system.dart`**, or `apps/app` cannot
     import it.
 15. **`packages/core` is only *partly* tested, and the untested half is the risky half.**

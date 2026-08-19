@@ -126,10 +126,10 @@ void main() {
 
   group('RecipeCard chef overlay', () {
     // The owner badge is an overlay on the cover Stack, never a new row in the
-    // text column — the tile is fixed-aspect and cannot grow (B001/B002/B016).
-    // Worst realistic envelope: 276px (2 columns at the 600px breakpoint), the
-    // longest tier label, the longest time label, a 4-digit rating count, and
-    // 2.0x accessibility text scale.
+    // footer column — the tile is fixed-height and cannot grow
+    // (B001/B002/B016). Worst realistic envelope: `kRecipeCardMinWidth` (the
+    // narrowest column the grid packs to), the longest tier label, the longest
+    // time label, a 4-digit rating count, and 2.0x accessibility text scale.
     const worstCase = Recipe(
       id: '1',
       ownerId: 'd1',
@@ -148,14 +148,18 @@ void main() {
     );
 
     for (final (width, scale) in <(double, double)>[
-      (276, 1.0),
-      (320, 1.0),
-      (276, 2.0),
-      (320, 2.0),
+      (kRecipeCardMinWidth, 1.0),
+      (kRecipeCardMaxWidth, 1.0),
+      (kRecipeCardMinWidth, 2.0),
+      (kRecipeCardMaxWidth, 2.0),
     ]) {
       testWidgets('fits at ${width}px, textScale $scale', (tester) async {
         await tester.pumpWidget(
-          _wrap(const RecipeCard(recipe: worstCase), width: width, scale: scale),
+          _wrap(
+            const RecipeCard(recipe: worstCase),
+            width: width,
+            scale: scale,
+          ),
         );
         expect(
           tester.takeException(),
@@ -199,7 +203,25 @@ void main() {
         ),
       );
       expect(tester.takeException(), isNull);
-      expect(find.text('Private'), findsOneWidget);
+      // v2 puts the visibility chip in the title banner, icon-only.
+      expect(find.byTooltip('Private'), findsOneWidget);
+    });
+
+    // v2 moved the overlay to the bottom-right of the cover, inset by
+    // AppSpacing.sm. Asserted, not just "it renders somewhere" — the position
+    // is the contract the design pins down.
+    testWidgets('overlay sits bottom-right of the cover', (tester) async {
+      await tester.pumpWidget(
+        _wrap(const RecipeCard(recipe: worstCase), width: 276),
+      );
+
+      final card = tester.getRect(find.byType(RecipeCard));
+      final badge = tester.getRect(find.byType(ChefBadge));
+
+      // Right-aligned against the card's right edge (scrim padding + inset).
+      expect(card.right - badge.right, lessThan(24));
+      // In the lower half of the card, above the footer.
+      expect(badge.center.dy, greaterThan(card.center.dy));
     });
   });
 }

@@ -153,16 +153,24 @@ drifted once. Prefer naming the pattern or symbol over the line.
 Three logged bugs are `RenderFlex` overflows: B001 (card in unbounded height), B002 (grid with
 fixed aspect ratio), B016 (rating pill added to a row with no flexible child). Flag when a diff:
 adds a `Text` inside a `Row`/grid cell with no `maxLines` + `overflow`; adds a child to a
-**fixed-aspect grid tile's** row where every child is intrinsically sized — `Spacer` absorbs
+**fixed-height grid tile's** row where every child is intrinsically sized — `Spacer` absorbs
 slack but cannot shrink anything, so the row has no capacity to degrade (B016); or changes
-`childAspectRatio` in `recipe_grid.dart` without checking the narrow breakpoint.
+`kRecipeCardHeight` / `kRecipeCardMinWidth` / `kRecipeCardMaxWidth` / the grid delegate in
+`recipe_grid.dart` without checking the narrow end. `RecipeCard` has exactly one flexible band
+(the cover); anything added to the banner or the footer comes out of a fixed budget.
+
+**Card grid sizing.** The recipe grid flows from the available width (`FlowGridMetrics.fit`), not
+from a breakpoint. Flag a diff that: reintroduces `responsiveColumns` or `childAspectRatio` into
+`recipe_grid.dart`; adds a `ConstrainedBox`/`SizedBox` width cap inside `RecipeCard` (a grid
+cell's tight constraints override it — the cap has to come from the grid's padding); or lowers
+`kRecipeCardMinWidth` without re-pinning the card envelope tests to the new minimum.
 
 **Test the real envelope, not a convenient one.** The card cannot grow, so the row must degrade.
 The three axes that actually break it:
 
 | Axis | Worst realistic value | Why |
 | --- | --- | --- |
-| Card width | **276px** | 2 columns at the 600px medium breakpoint (`responsiveColumns`, `adaptive.dart`) — narrower than the 1-column compact case |
+| Card width | **264px** | `kRecipeCardMinWidth` — the narrowest column `FlowGridMetrics.fit` packs to before wrapping (`adaptive.dart`); narrower than the 1-column compact case, which is capped at `kRecipeCardMaxWidth` 340 |
 | Content | longest label per field | `_timeLabel` reaches `"12h 45m"`; `ratingCount` reaches 4 digits |
 | Text scale | **2.0×** | accessibility scaling; the default-scale margin is thin but positive |
 

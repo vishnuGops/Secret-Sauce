@@ -244,19 +244,64 @@ erDiagram
 - Wide (≥ 1000): fixed top navigation bar (brand + destinations + "New recipe"), multi-column grids, side-by-side detail.
 - Breakpoints centralized in `design_system/layout/adaptive.dart`.
 
+**Two different rules, on purpose.** Navigation chrome switches at the breakpoints
+(`responsiveColumns`, `AdaptiveLayout`, `context.isCompact`) — it is a different layout on each
+side. The **recipe grid does not**: it flows. `FlowGridMetrics.fit` takes the width actually
+available and fits as many columns as can each hold `kRecipeCardMinWidth` (264), caps every tile
+at `kRecipeCardMaxWidth` (340), and splits whatever is left over into an equal gutter on each
+side so a capped row stays centred. A window drag therefore adds a column at the width where one
+genuinely fits, instead of stretching three cards across 1400px and then jumping at 1000.
+
+| Available width | Columns | Card width | Gutter |
+| --------------- | ------- | ---------- | ------ |
+| 358 (phone)     | 1       | 340 (capped) | 9    |
+| 768             | 2       | 340 (capped) | 36   |
+| 968             | 3       | 312        | 0      |
+| 1408            | 5       | 268.8      | 0      |
+
+The cap belongs to the **grid**, not the card: a grid cell hands its child tight constraints,
+which win over any `ConstrainedBox` inside `RecipeCard`, so the only way to hold a tile at 340 is
+to hand the delegate less width to divide (that is what the gutter is). `FlowGridMetrics` is pure,
+so it is unit-tested directly across a continuous 264→2400 sweep rather than at sampled widths.
+
 ## 8. RecipeCard contract
 
 Inputs: cover image, name, short description, cook time (prep+cook), average star rating
 (hidden until the recipe has at least one rating), difficulty badge. `showVisibility: true`
-overlays a Public/Private pill on the cover — used on My Recipes, where both kinds are listed.
-`showChef` (default true) overlays the owning chef on the cover, bottom-left, whenever
+adds a public/private chip to the title banner — used on My Recipes, where both kinds are listed.
+`showChef` (default true) overlays the owning chef on the cover, bottom-right, whenever
 `recipe.owner` is embedded; My Recipes turns it off, since every card there has the same owner.
 Used across Discover and My Recipes.
 
-**Both overlays live on the cover `Stack`, never in the text column.** The tile is fixed-aspect
-(`childAspectRatio: 0.82` in `recipe_grid.dart`) so the column cannot grow, and all three logged
-overflow bugs (B001/B002/B016) came from adding an intrinsically-sized child to it. The cover has
-slack; the column does not.
+**Anatomy (v2 — the name leads the card).** Top to bottom:
+
+| Band       | Content                                                                                                    | Sizing                          |
+| ---------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| **Banner** | Recipe name on `colorScheme.primary` / `onPrimary`, `titleMedium` w700, **max 2 lines** then ellipsis; the icon-only visibility chip sits at its end | intrinsic                       |
+| **Cover**  | Cover image (or the `surfaceContainerHighest` + menu-glyph fallback), chef overlay bottom-right on a scrim   | **flexible — absorbs the slack** |
+| **Footer** | Description (2 lines, ellipsized), an `outlineVariant` rule, then the time · rating · difficulty row         | intrinsic                       |
+
+The name is first so it never competes with the photo for the top of the card and stays legible
+over a dark or busy cover. A two-line title takes its height **from the cover**, not from the card.
+
+**The card is a fixed-height, bounded-width tile**: `kRecipeCardHeight` (352), passed by
+`recipe_grid.dart` as the grid's `mainAxisExtent`, and `kRecipeCardMinWidth` (264) /
+`kRecipeCardMaxWidth` (340), which the grid turns into a column count (see §7 *Adaptive
+behavior*). It is not a fixed *aspect* — that was the retired card's `childAspectRatio: 0.82`,
+which left dead space under every card once the window got wide. `RecipeCard` applies the height
+itself, so an unbounded-height parent cannot leave the cover's `Expanded` unbounded (the original
+B001 shape); it does **not** apply the width cap, because a grid cell's tight constraints would
+override it.
+
+**Both overlays live on the cover `Stack` or in the banner, never in the footer column.** The tile
+cannot grow, and all three logged overflow bugs (B001/B002/B016) came from adding an
+intrinsically-sized child to a band that had no slack. The cover has slack; the banner and footer
+do not — which is also why the visibility chip is **icon-only with the label as a `Tooltip`**: a
+"Private" label next to a two-line title is the first thing to overflow at 2.0× text scale.
+
+The banner is drawn in the theme's `titleMedium`. The Claude Design mockup sets it in Newsreader;
+shipping that is the app-wide typography decision (`google_fonts` + a `textTheme` in
+`app_theme.dart`), not a card-level choice — see ROADMAP Phase 20.
 
 ### Rating widgets (`design_system`)
 
@@ -281,10 +326,13 @@ previews during a drag; the caller persists on `onChangeEnd` so a drag writes on
 If the gesture is **cancelled** — an ancestor scroll view claims it after a press-and-hold — the
 preview is dropped and `onChangeEnd` never fires, so the stars never show an unsaved value (B017).
 
-The `RecipeCard` metadata row (time · rating · difficulty) is width-adaptive: the time label,
-both `RatingPill` texts, and the `DifficultyBadge` label are `Flexible` and ellipsize in that
-order. A fixed-aspect grid tile cannot grow, so the row degrades instead of overflowing at narrow
-widths or large text scale (B016).
+The `RecipeCard` metadata row (time · rating · difficulty) is width-adaptive: the time label and
+both `RatingPill` texts are `Flexible` and ellipsize in that order, inside an `Expanded` group.
+A fixed-height grid tile cannot grow, so the row degrades instead of overflowing at narrow widths
+or large text scale (B016). The `DifficultyBadge` is the row's **only non-flex child** — it takes
+its intrinsic width, sits flush right, and is capped at half the row by a `LayoutBuilder` +
+`ConstrainedBox`. Giving it a flex instead makes `RenderFlex` reserve half the row for it whatever
+its label says (B026); giving it no cap overflows by 1px at 276px / 2.0×.
 
 ## 9. Security notes
 
@@ -427,13 +475,15 @@ chefs_leaderboard(p_limit int default 50, p_offset int default 0)
   the name** (per the product requirement), plus a `compact` variant and an `onSurfaceImage` flag
   for the cover overlay. Falls back to initials without an avatar, and to "Unnamed chef" on an
   empty display name.
-- **`RecipeCard`**: the badge **overlays the cover image, bottom-left** (a `Positioned` in the
-  existing `Stack`, opposite the top-right visibility pill), on a scrim, name ellipsized. It must
-  NOT be a new row in the text column: the card is a fixed-aspect tile (`childAspectRatio: 0.82`)
-  and three prior overflow bugs (B001/B002/B016) all came from adding intrinsic children.
+- **`RecipeCard`**: the badge **overlays the cover image, bottom-right** (a `Positioned` in the
+  existing `Stack`, diagonally opposite the banner's visibility chip), on a scrim, name ellipsized.
+  It must NOT be a new row in the footer column: the card is a fixed-height tile
+  (`kRecipeCardHeight`) and three prior overflow bugs (B001/B002/B016) all came from adding
+  intrinsic children to a band with no slack.
   Renders only when `recipe.owner != null` and `showChef` is true (My Recipes turns it off —
-  every card there has the same owner). Regression tests at the standard envelope: 276 px wide,
-  longest tier label, 2.0× text scale.
+  every card there has the same owner). Regression tests at the standard envelope: both ends of
+  the card's width range (`kRecipeCardMinWidth` 264 and `kRecipeCardMaxWidth` 340), longest tier
+  label, 2.0× text scale.
 - **Recipe detail**: full-size `ChefBadge` under the title (tap target reserved for a future
   chef-profile page).
 - **Leaderboard screen** `features/chefs/` at **`/chefs`**, inside the `ShellRoute`, added to

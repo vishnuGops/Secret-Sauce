@@ -7,18 +7,45 @@ import 'package:design_system/src/widgets/chef_badge.dart';
 import 'package:design_system/src/widgets/difficulty_badge.dart';
 import 'package:design_system/src/widgets/star_rating.dart';
 
-/// The primary recipe tile used on Discover and My Recipes.
+/// Height of every [RecipeCard], in logical pixels.
 ///
-/// Shows cover image, name, short description, total cook time, average star
-/// rating, and a difficulty badge. Set [showVisibility] on surfaces that mix
-/// private and public recipes (My Recipes) to overlay a public/private badge.
+/// The card is a **fixed-height** tile rather than a fixed-aspect one: the grid
+/// passes this as `mainAxisExtent`, so a wide window no longer leaves dead
+/// space under each card. The banner takes one or two lines and the cover gives
+/// up the difference — the footer never moves.
+const double kRecipeCardHeight = 352;
+
+/// Narrowest width the card is designed for, and the width its layout tests
+/// use as the worst realistic envelope.
 ///
-/// When [Recipe.owner] is embedded, the owning chef is drawn as an overlay on
-/// the **cover image**, bottom-left. That placement is deliberate: the tile is
-/// fixed-aspect (`childAspectRatio` in `recipe_grid.dart`) so its text column
-/// cannot grow, and all three logged overflow bugs (B001/B002/B016) came from
-/// adding an intrinsically-sized child to that column. The cover `Stack` has
-/// slack; the column does not.
+/// A grid packs as many columns as can each hold this much (see
+/// `FlowGridMetrics`). Nothing enforces it below one column — a phone narrower
+/// than this gets a single card that degrades rather than overflows.
+const double kRecipeCardMinWidth = 264;
+
+/// Widest the card is ever laid out at.
+///
+/// The card does **not** clamp itself: a grid cell hands it tight constraints,
+/// which win over any `ConstrainedBox` inside. The grid owns the cap — it turns
+/// spare width into another column, and centres the row once the tiles are at
+/// their maximum.
+const double kRecipeCardMaxWidth = 340;
+
+/// The primary recipe tile used on Discover and My Recipes (v2 layout).
+///
+/// Top to bottom: a **title banner** on `colorScheme.primary`, the cover image,
+/// then a footer with the truncated description and the time / rating /
+/// difficulty row. The name leads the card, so it never competes with the photo
+/// and stays legible over a dark or busy cover.
+///
+/// Set [showVisibility] on surfaces that mix private and public recipes (My
+/// Recipes) to add a lock/globe chip to the banner. When [Recipe.owner] is
+/// embedded and [showChef] is true, the owning chef is drawn as an overlay on
+/// the **cover image**, bottom-right.
+///
+/// The banner and footer are intrinsically sized and the cover is the only
+/// flexible child, so text-scale growth eats cover height instead of
+/// overflowing (B001/B002/B016 all came from a card row that could not shrink).
 class RecipeCard extends StatelessWidget {
   const RecipeCard({
     super.key,
@@ -50,114 +77,174 @@ class RecipeCard extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final scheme = Theme.of(context).colorScheme;
 
-    return Card(
-      child: InkWell(
-        onTap: onTap,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            AspectRatio(
-              aspectRatio: 16 / 10,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  _CoverImage(url: recipe.coverImageUrl, scheme: scheme),
-                  if (showVisibility)
-                    Positioned(
-                      top: AppSpacing.sm,
-                      right: AppSpacing.sm,
-                      child: _VisibilityBadge(
-                        visibility: recipe.visibility,
-                        scheme: scheme,
-                      ),
-                    ),
-                  if (showChef && recipe.owner != null)
-                    Positioned(
-                      left: AppSpacing.sm,
-                      right: AppSpacing.sm,
-                      bottom: AppSpacing.sm,
-                      child: _ChefOverlay(owner: recipe.owner!),
-                    ),
-                ],
+    return SizedBox(
+      // Tight height so the cover's Expanded always has a bound, including in
+      // tests and any caller that lays the card out with unbounded height.
+      height: kRecipeCardHeight,
+      child: Card(
+        child: InkWell(
+          onTap: onTap,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _TitleBanner(
+                title: recipe.title,
+                visibility: showVisibility ? recipe.visibility : null,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    recipe.title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: textTheme.titleMedium
-                        ?.copyWith(fontWeight: FontWeight.w700),
-                  ),
-                  const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    recipe.description,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: textTheme.bodySmall
-                        ?.copyWith(color: scheme.onSurfaceVariant),
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  // The badge keeps its intrinsic width; the time + rating group
-                  // takes what's left and ellipsizes. Without this the row
-                  // overflows on a rated recipe with a long time label (e.g.
-                  // "12h 45m" + "4.5 (1250)") at the 2-column grid width.
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Row(
+              Expanded(
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    _CoverImage(url: recipe.coverImageUrl, scheme: scheme),
+                    if (showChef && recipe.owner != null)
+                      Positioned(
+                        left: AppSpacing.sm,
+                        right: AppSpacing.sm,
+                        bottom: AppSpacing.sm,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: _ChefOverlay(owner: recipe.owner!),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(AppSpacing.md),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      recipe.description,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: textTheme.bodySmall
+                          ?.copyWith(color: scheme.onSurfaceVariant),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 6),
+                      padding: const EdgeInsets.only(top: 10),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          top: BorderSide(color: scheme.outlineVariant),
+                        ),
+                      ),
+                      // The badge takes its intrinsic width, capped at half the
+                      // row; the time + rating group takes everything left over
+                      // and ellipsizes inside it. Two flex children instead
+                      // (what this was) split the row 50/50 whatever the
+                      // content, which truncated "4.9 (8)" to "4…" at
+                      // one-column widths; a bare intrinsic badge overflows by
+                      // 1px at 276 / 2.0x. The cap is what degrades in the
+                      // right order and still fits "12h 45m" + "4.5 (1250)"
+                      // there (B016).
+                      child: LayoutBuilder(
+                        builder: (context, constraints) => Row(
                           children: [
-                            Icon(
-                              Icons.schedule,
-                              size: 15,
-                              color: scheme.onSurfaceVariant,
-                            ),
-                            const SizedBox(width: 4),
-                            Flexible(
-                              child: Text(
-                                _timeLabel,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: textTheme.labelMedium,
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.schedule,
+                                    size: 15,
+                                    color: scheme.onSurfaceVariant,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Flexible(
+                                    child: Text(
+                                      _timeLabel,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: textTheme.labelMedium,
+                                    ),
+                                  ),
+                                  if (recipe.hasRatings) ...[
+                                    const SizedBox(width: AppSpacing.sm),
+                                    Flexible(
+                                      child: RatingPill(
+                                        rating: recipe.ratingAvg,
+                                        count: recipe.ratingCount,
+                                      ),
+                                    ),
+                                  ],
+                                ],
                               ),
                             ),
-                            if (recipe.hasRatings) ...[
-                              const SizedBox(width: AppSpacing.sm),
-                              Flexible(
-                                child: RatingPill(
-                                  rating: recipe.ratingAvg,
-                                  count: recipe.ratingCount,
-                                ),
+                            const SizedBox(width: AppSpacing.sm),
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth: constraints.maxWidth / 2,
                               ),
-                            ],
+                              child: DifficultyBadge(
+                                difficulty: recipe.difficulty,
+                              ),
+                            ),
                           ],
                         ),
                       ),
-                      const SizedBox(width: AppSpacing.sm),
-                      Flexible(
-                        child: DifficultyBadge(difficulty: recipe.difficulty),
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-/// The owning chef, drawn over the bottom of the cover image on a scrim.
+/// The recipe name as a banner across the top of the card.
+///
+/// Two lines maximum, then an ellipsis — a longer name eats cover height, it
+/// never grows the card. [visibility] is null on surfaces that do not mix
+/// private and public recipes.
+class _TitleBanner extends StatelessWidget {
+  const _TitleBanner({required this.title, this.visibility});
+
+  final String title;
+  final RecipeVisibility? visibility;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+
+    return Container(
+      color: scheme.primary,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: scheme.onPrimary,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.16,
+              ),
+            ),
+          ),
+          if (visibility != null) ...[
+            const SizedBox(width: AppSpacing.sm),
+            _VisibilityBadge(visibility: visibility!, scheme: scheme),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// The owning chef, drawn over the bottom-right of the cover image on a scrim.
 ///
 /// `Positioned` with both `left` and `right` set gives this a bounded width, so
 /// the badge's name and tier chip ellipsize instead of overflowing at the 276px
-/// two-column width or at 2.0x text scale.
+/// two-column width or at 2.0x text scale; the `Align` pulls it to the right
+/// edge once it is narrower than that bound.
 class _ChefOverlay extends StatelessWidget {
   const _ChefOverlay({required this.owner});
 
@@ -181,7 +268,11 @@ class _ChefOverlay extends StatelessWidget {
   }
 }
 
-/// Small "Public"/"Private" pill overlaid on the cover image.
+/// Icon-only public/private chip, at the end of the title banner.
+///
+/// Icon-only on purpose: the banner already spends its width on the name, and a
+/// "Private" label would be the first thing to overflow at large text scale.
+/// The label survives as the tooltip, which is also what screen readers read.
 class _VisibilityBadge extends StatelessWidget {
   const _VisibilityBadge({required this.visibility, required this.scheme});
 
@@ -191,27 +282,20 @@ class _VisibilityBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isPublic = visibility.isPublic;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 3),
-      decoration: BoxDecoration(
-        color: scheme.surface.withValues(alpha: 0.92),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: scheme.outlineVariant),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            isPublic ? Icons.public : Icons.lock_outline,
-            size: 12,
-            color: scheme.onSurfaceVariant,
-          ),
-          const SizedBox(width: 4),
-          Text(
-            isPublic ? 'Public' : 'Private',
-            style: Theme.of(context).textTheme.labelSmall,
-          ),
-        ],
+    return Tooltip(
+      message: isPublic ? 'Public' : 'Private',
+      child: Container(
+        padding: const EdgeInsets.all(AppSpacing.xs),
+        decoration: BoxDecoration(
+          color: scheme.surface.withValues(alpha: 0.92),
+          borderRadius: BorderRadius.circular(999),
+          border: Border.all(color: scheme.outlineVariant),
+        ),
+        child: Icon(
+          isPublic ? Icons.public : Icons.lock_outline,
+          size: 14,
+          color: scheme.onSurfaceVariant,
+        ),
       ),
     );
   }
