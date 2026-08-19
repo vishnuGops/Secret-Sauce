@@ -1,6 +1,6 @@
 # recipeData — the Secret Sauce Kitchen's own recipes
 
-Source of truth for all 15 recipes the kitchen publishes. **Content**, deliberately
+Source of truth for all 14 recipes the kitchen publishes. **Content**, deliberately
 separate from the **demo fixtures** in [`supabase/seed.sql`](../supabase/seed.sql)
 (fake chefs, taster accounts, engagement numbers) — those get deleted eventually,
 these do not. Every recipe is defined exactly once, here.
@@ -58,6 +58,16 @@ database that already has that recipe. Delete the recipe there first.
 
 Renaming `title` creates a *second* row rather than renaming the first, because
 the slug is a repo-level identity that `recipes` does not store.
+
+## Two recipes for the same dish
+
+Fine, as long as the **titles differ**. Similar or even overlapping content is a
+product judgement, not a data problem — the kitchen can publish a quick version
+and a long version of the same thing.
+
+What is not fine is two files with the same `title`. `(owner_id, title)` is the
+import key, so a collision silently collapses to one row rather than failing;
+the validator rejects it as an error for exactly that reason.
 
 ## The `demo` block
 

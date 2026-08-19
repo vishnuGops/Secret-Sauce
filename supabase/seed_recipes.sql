@@ -210,7 +210,7 @@ end $grants$;
 
 
 -- ---------------------------------------------------------------------------
--- The recipes. 15 of them, ordered by slug.
+-- The recipes. 14 of them, ordered by slug.
 -- ---------------------------------------------------------------------------
 do $seed$
 declare
@@ -287,20 +287,6 @@ Mocktail: replace the tequila and orange liqueur with 6 oz lime sparkling water 
     $sr$[{"name":"Dough","steps":[{"text":"Dissolve the yeast in the warm water and let it sit until foamy.","duration_minutes":10,"temperature":null,"tip":"No foam means dead yeast — start again rather than pressing on."},{"text":"Mix the flour and salt, add the yeast water, and knead into a smooth dough.","duration_minutes":10,"temperature":null,"tip":null},{"text":"Cover and let rise until doubled.","duration_minutes":90,"temperature":null,"tip":null}]},{"name":"Shape and bake","steps":[{"text":"Stretch the dough by hand into a thin round and top with the crushed tomato and torn mozzarella.","duration_minutes":null,"temperature":null,"tip":"Hands, not a rolling pin — a pin crushes out the gas that makes the rim puff."},{"text":"Bake in the hottest possible oven until the crust is charred and bubbling.","duration_minutes":10,"temperature":"as hot as the oven goes","tip":null},{"text":"Finish with the fresh basil and a drizzle of olive oil.","duration_minutes":null,"temperature":null,"tip":null}]}]$sr$::jsonb,
     128, 74, 940,
     $sr$[5,4.5,5,4.5,5,4,4.5,5]$sr$::jsonb
-  );
-
-  -- easy-guacamole.json
-  perform seed_recipe_v2(
-    v_owner,
-    $sr$Easy Guacamole$sr$,
-    $sr$Chunky guacamole with cherry tomatoes and a whole jalapeño — mashed to whatever texture you like and on the table in ten minutes.$sr$,
-    $sr$Mexican$sr$, $sr$Appetizer$sr$, 'easy',
-    10, 0, 4, 'public',
-    $sr$Secret Sauce Kitchen$sr$,
-    $sr$[{"name":"","ingredients":[{"quantity":2,"unit":null,"name":"ripe avocados","note":"halved and pitted","is_optional":false},{"quantity":0.25,"unit":"cup","name":"red onion","note":"finely chopped","is_optional":false},{"quantity":1,"unit":"cup","name":"cherry tomatoes","note":"quartered","is_optional":false},{"quantity":2,"unit":"Tbsp","name":"cilantro","note":"chopped","is_optional":false},{"quantity":1,"unit":null,"name":"jalapeño","note":"finely chopped","is_optional":false},{"quantity":3,"unit":"cloves","name":"garlic","note":"minced","is_optional":false},{"quantity":2,"unit":"Tbsp","name":"fresh lime juice","note":null,"is_optional":false},{"quantity":0.5,"unit":"tsp","name":"salt","note":null,"is_optional":false},{"quantity":0.5,"unit":"tsp","name":"pepper","note":null,"is_optional":false}]}]$sr$::jsonb,
-    $sr$[{"name":"","steps":[{"text":"Scoop the avocado into a medium bowl and mash with a fork to the consistency you want.","duration_minutes":null,"temperature":null,"tip":"Stop while there are still lumps — this is not a dip you want smooth."},{"text":"Fold in the remaining ingredients until combined, then taste and adjust the salt and lime. Serve with tortilla chips.","duration_minutes":null,"temperature":null,"tip":null}]}]$sr$::jsonb,
-    0, 0, 0,
-    $sr$[]$sr$::jsonb
   );
 
   -- fluffy-buttermilk-pancakes.json
@@ -430,6 +416,6 @@ Form larger patties instead of six small ones and serve them on buns as fish bur
     0, 0, 0,
     $sr$[]$sr$::jsonb
   );
-  raise notice 'Recipe seed complete (% authored recipes)', 15;
+  raise notice 'Recipe seed complete (% authored recipes)', 14;
 end $seed$;
 

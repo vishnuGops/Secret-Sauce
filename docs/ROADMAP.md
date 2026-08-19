@@ -406,17 +406,22 @@ lands; it does **not** exercise real auth, real Storage, or PostgREST.
       recipe. `seed.sql` keeps the accounts, the `d1`–`d7` demo recipes, and the rating machinery.
 - [x] `config.toml` gained `db.seed.sql_paths = ["./seed.sql", "./seed_recipes.sql"]`, so
       `supabase db reset` still populates Discover in one command.
-- [x] Verified: 24 recipes / 64 ratings / 16 profiles and the **identical** leaderboard —
-      Kitchen 10189 `head_chef` with `public_recipe_count` 15, Amara 21000 `master_chef`, the
-      Chen Wei / Greta Lindqvist `dense_rank` tie, Dara at exactly 100 `line_cook`.
-- [x] Verified the bad order too: recipes-first gives 15 recipes / **0** ratings with an explicit
-      notice, and `seed.sql` → re-run `seed_recipes.sql` backfills to the identical 64 / 10189.
+- [x] Verified (re-run after `Easy Guacamole` was dropped): 23 recipes / 64 ratings / 16 profiles,
+      both files applied twice, and the **identical** leaderboard — Kitchen 10189 `head_chef` with
+      `public_recipe_count` 14, Amara 21000 `master_chef`, the Chen Wei / Greta Lindqvist
+      `dense_rank` tie, Dara at exactly 100 `line_cook`.
+- [x] Verified the bad order too: recipes-first creates every recipe with **0** ratings and an
+      explicit notice, and `seed.sql` → re-run `seed_recipes.sql` backfills to the identical
+      64 / 10189.
 
-> **Two guacamoles.** `Fresh Guacamole` (from the database) and `Easy Guacamole` (from the staged
-> file) are genuinely different recipes — 3 avocados with coriander versus 2 with cherry tomatoes,
-> jalapeño, and garlic — so both were kept rather than one being silently dropped. Two guacamoles
-> from one kitchen on Discover is a product call, not a data problem; delete
-> `recipeData/recipes/easy-guacamole.json` if that is the answer.
+> **Two guacamoles, resolved.** `Fresh Guacamole` (from the database) and `Easy Guacamole` (from
+> the staged file) were different recipes — 3 avocados with coriander versus 2 with cherry
+> tomatoes, jalapeño, and garlic. `Easy Guacamole` was dropped; `Fresh Guacamole` is the one that
+> was already live. **Product rule confirmed in the process:** a chef may publish two recipes for
+> the same dish, however similar, *provided the titles differ*. Duplicate content is allowed;
+> duplicate titles are not, because `(owner_id, title)` is the import key — a second file with the
+> same title silently collapses into one row rather than erroring, which is why
+> `tool/recipes.dart` rejects it outright.
 
 ### Deferred
 

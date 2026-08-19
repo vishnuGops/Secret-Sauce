@@ -181,7 +181,7 @@ Two SQL files, split on purpose:
 
 | File | What it is | Lifespan |
 | --- | --- | --- |
-| [`supabase/seed_recipes.sql`](supabase/seed_recipes.sql) | All 15 of the Secret Sauce Kitchen's recipes. **Generated** from [`recipeData/recipes/*.json`](recipeData/) — see [recipeData/README.md](recipeData/README.md) | permanent |
+| [`supabase/seed_recipes.sql`](supabase/seed_recipes.sql) | All 14 of the Secret Sauce Kitchen's recipes. **Generated** from [`recipeData/recipes/*.json`](recipeData/) — see [recipeData/README.md](recipeData/README.md) | permanent |
 | [`supabase/seed.sql`](supabase/seed.sql) | Demo fixtures: the system accounts, 8 tasters, 7 demo chefs and their recipes, and invented engagement so Discover and the leaderboard have a plausible order | delete when there is real traffic |
 
 Both bootstrap the same "Secret Sauce Kitchen" system account with conflict guards, and both are

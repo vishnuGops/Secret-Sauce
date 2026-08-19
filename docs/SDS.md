@@ -490,7 +490,7 @@ Two seed files, split because they have different lifespans.
 
 | | `supabase/seed.sql` | `supabase/seed_recipes.sql` |
 | --- | --- | --- |
-| What | Demo fixtures: the Kitchen + taster + chef **accounts**, the `d1`–`d7` demo recipes, and the rating machinery | All 15 of the Secret Sauce Kitchen's recipes |
+| What | Demo fixtures: the Kitchen + taster + chef **accounts**, the `d1`–`d7` demo recipes, and the rating machinery | All 14 of the Secret Sauce Kitchen's recipes |
 | Authored in | the file itself | `recipeData/recipes/<slug>.json` |
 | Generated | no | **yes** — `tool/recipes.dart`, committed |
 | Lifespan | deleted once there is real traffic | permanent |
@@ -531,6 +531,12 @@ The recipes arrived as one flat array of `{"amount": "1 1/4 cup", "item": "flour
 `seed_recipe_v2` still dedupes on `(owner_id, title)`. So renaming `title` creates a second row,
 and `seed_recipe_v2` is **not an upsert**: it returns early when the title already exists, leaving
 content alone (it does still re-apply demo ratings — B014).
+
+**Title is the uniqueness rule; content is not.** One chef may publish two recipes for the same
+dish, however similar, provided the titles differ — that is a legitimate thing to do, and nothing
+in the schema or the tooling discourages it. What is not allowed is two recipes with the *same*
+title under one owner: the import silently collapses them into a single row instead of failing,
+so `tool/recipes.dart` rejects a repeated title as an error before it can get that far.
 
 Groups are `sort_order` 0..n in array order; `step_order` restarts at 0 **within each group**,
 matching `SupabaseRecipeRepository._persistContent`. Numbering steps continuously across groups

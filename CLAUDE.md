@@ -41,7 +41,7 @@ secret-sauce/
 ├── .claude/skills/            # code-review + review-checklist (repo's own review criteria)
 ├── .github/workflows/ci.yml   # analyze + test, pinned Flutter 3.44.8 / melos 6.3.3
 ├── docs/                      # ROADMAP · EXECUTION-PLAN · SDS · BUG-TRACKER (see "Docs–code sync")
-├── recipeData/                # THE Secret Sauce Kitchen's 15 recipes (content)
+├── recipeData/                # THE Secret Sauce Kitchen's 14 recipes (content)
 │   ├── recipes/<slug>.json    #   one per file — the filename IS the identity
 │   ├── schema.json            #   the format, field by field, mapped to columns
 │   └── README.md              #   authoring workflow

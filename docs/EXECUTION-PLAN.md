@@ -374,16 +374,24 @@ and the rating machinery, and `config.toml` gained `db.seed.sql_paths` so `supab
 does everything in one command.
 
 The move had to be provably neutral, since the leaderboard numbers in SDS §10.7 are derived from
-those counters. After it: 24 recipes / 64 ratings / 16 profiles and an identical board — Kitchen
-10189 `head_chef` at `public_recipe_count` 15, Amara 21000 `master_chef`, the Chen Wei / Greta
-Lindqvist `dense_rank` tie intact, Dara still at exactly 100. The wrong order was tested too:
-recipes-first yields 15 recipes and **zero** ratings with an explicit notice, and the documented
-recovery (`seed.sql`, then re-run) restores the identical 64 / 10189.
+those counters. Final run, after `Easy Guacamole` was dropped: 23 recipes / 64 ratings / 16
+profiles with both files applied twice, and an identical board — Kitchen 10189 `head_chef` at
+`public_recipe_count` 14, Amara 21000 `master_chef`, the Chen Wei / Greta Lindqvist `dense_rank`
+tie intact, Dara still at exactly 100. The wrong order was tested too: recipes-first creates every
+recipe with **zero** ratings and an explicit notice, and the documented recovery (`seed.sql`, then
+re-run) restores the identical 64 / 10189.
+
+**One content decision fell out of the merge.** The staged file and the database each had a
+guacamole under a different name. `Easy Guacamole` was dropped in favour of `Fresh Guacamole`, the
+one already live. The general rule that settled it: a chef may publish two recipes for the same
+dish, however similar, as long as the **titles** differ — duplicate content is a product question,
+duplicate titles are a correctness one, because `(owner_id, title)` is the import key and a
+collision silently collapses to a single row. `tool/recipes.dart` therefore treats a repeated title
+as an error, not a warning.
 
 **Gaps left open**, all recorded in the roadmap: no `recipes.notes` column (notes are appended to
-`description`), no reverse-direction lint for a step naming an unlisted ingredient, no SQL
-execution in CI, and two guacamoles — `Fresh Guacamole` and `Easy Guacamole` are different recipes,
-kept rather than silently merged, but whether one kitchen should publish both is a product call.
+`description`), no reverse-direction lint for a step naming an unlisted ingredient, and no SQL
+execution in CI.
 
 ## Build, run & release (ops)
 
