@@ -40,7 +40,8 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [x] `recipe_suggestions` (reserved stub for future PR flow)
 - [x] RLS policies (public/private/shared)
 - [x] Storage buckets (recipe images, avatars)
-- [ ] Apply migrations to a Supabase project _(needs Supabase project)_
+- [x] Apply migrations to a Supabase project — the hosted project carries the current
+      `0001_init.sql` in full (re-applied during the Phase 18 rollout)
 
 ## Phase 3 — core package
 
@@ -114,9 +115,23 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [x] `view_count` rollup trigger — counts distinct signed-in viewers, ignores anonymous and
       repeat views (advisory-locked against concurrent first-views), so trending is not
       inflatable (B012)
-- [ ] SQL regression harness — the B012 trigger, RLS policies, and rank RPCs are verified only by
-      a manual local-stack run recorded in `docs/BUG-TRACKER.md`; CI has no database job, so a
-      silent regression would pass
+- [ ] **SQL regression harness — the largest untested surface in the project.** The B012 view
+      trigger, every RLS policy, the rank RPCs, and (as of Phase 18) the whole chef score/tier/
+      leaderboard layer are verified only by manual local-stack runs recorded in
+      `docs/BUG-TRACKER.md`. CI has no database job, so any of it can regress and ship green —
+      and the failure mode for the trigger/RLS bugs is *silence*, not an error (B011, B012).
+
+      Two shapes, deliberately different in value:
+
+      1. `supabase/tests/*.sql` + a `melos run test:sql` script, run against `supabase start`.
+         Cheap and repeatable, but opt-in — an opt-in suite for a schema this trigger-heavy goes
+         stale.
+      2. The above **plus a CI job**. Actually catches regressions. Costs ~2–3 min of Docker
+         startup per run, and must be the full Supabase stack rather than a plain Postgres
+         service: `profiles.id` references `auth.users`, so a bare Postgres cannot apply
+         `0001_init.sql` at all.
+
+      Recommended: (2). Deferred by decision, not oversight.
 
 ## Phase 12 — Polish, tests, verification
 
@@ -159,15 +174,19 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [x] Fix B018: seed accounts no longer carry literal passwords — randomized, since `seed.sql` is
       documented as safe to run against the hosted project
 - [ ] Rotate/delete the 9 seed accounts on any **already-seeded** database _(B018 — the seed's
-      `on conflict do nothing` leaves existing password hashes in place)_
+      `on conflict do nothing` leaves existing password hashes in place)_. **Now more pressing:**
+      the hosted project is live and those 9 rows predate the fix, so if they were created from
+      the pre-B018 seed they still carry the committed literal passwords. The 7 Phase 18 chef
+      accounts are **not** affected — they were randomized from their first insert.
 - [x] Fix B011: counter/aggregate triggers made `security definer` (RLS was silently dropping
       like/save updates on recipes the acting user doesn't own)
 - [x] Fix B013: explicit table grants for `anon` / `authenticated` (current Supabase images no
       longer grant DML on new tables by default)
 - [x] Verified on a local Supabase stack: schema + seed apply clean, aggregates/ranking correct,
       RLS rejects self-rating, anon rating, and bad values — see `docs/BUG-TRACKER.md`
-- [ ] Re-apply the updated `0001_init.sql` to the **hosted** project (idempotent) — now also
-      carries the B012 view-count trigger and the tightened `views_insert` policy
+- [x] Re-apply the updated `0001_init.sql` to the **hosted** project (idempotent) — done during
+      the Phase 18 rollout, so the hosted project now carries the B012 view-count trigger and the
+      tightened `views_insert` policy as well as the chef objects
 
 ## Phase 15 — Visibility polish
 
@@ -277,7 +296,30 @@ Execution: [EXECUTION-PLAN.md Phase 18](./EXECUTION-PLAN.md#phase-18--chefs-tier
 - [x] Fix B024: `seed.sql` failed on any **already-seeded** database — the `seed_recipe` signature
       change left two overloads and every call matched both. Drops now live in `seed.sql` itself,
       not only `drop.sql`
-- [ ] Re-run the fixed `seed.sql` on the **hosted** project (chefs d1–d7 + their recipes)
+- [x] Re-run the fixed `seed.sql` on the **hosted** project — done. Verified over the anon API:
+      7 leaderboard rows, all five tiers, Chen Wei / Greta Lindqvist share rank 4, Kitchen at
+      10197 (8 above the local 10189 — the hosted DB carries one extra like and save from the
+      B011 verification run, which is exactly `3+5`)
+
+### Test coverage — remaining gaps (deferred)
+
+Widget + model coverage landed with the feature (65 tests). These are what is still uncovered;
+none blocks the feature, all are real regression surface.
+
+- [ ] **SQL regression harness for the chef objects** — see Phase 11's entry, which this folds
+      into: `chef_score()` / `chef_tier_for()` thresholds (incl. the inclusive-at-100 boundary),
+      `recompute_chef_stats` and its `is distinct from` guard, `on_recipe_stats_change`
+      (**`security definer`** — drop it and non-owner engagement silently stops counting, B011
+      again), public-only filtering, `dense_rank` ties, the `public_recipe_count = 0` exclusion,
+      and `anon` being able to call `chefs_leaderboard` but **not** `recompute_chef_stats`.
+      Verified by hand once (BUG-TRACKER); nothing re-verifies it.
+- [ ] `ChefRepository.leaderboard` unit test _(blocked with the other repositories — Phase 3)_
+- [ ] Recipe detail renders the owner badge _(needs a `RecipeRepository` fake — 15 methods)_
+- [ ] My Recipes passes `showChef: false` _(cheap; the widget flag is tested, the screen wiring
+      is not)_
+- [ ] `ChefBadge` `onTap` / `onSurfaceImage` / avatar-URL branches
+- [ ] `RecipeCard` chef overlay is positioned **bottom-left** _(currently only asserted to render
+      and not overflow)_
 
 ---
 
