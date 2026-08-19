@@ -53,6 +53,22 @@ Status: `open` \| `in-progress` \| `fixed` \| `wontfix`
 | ---- | ---------- | -------- | ---- | ----------- | ------ | ------------ |
 | B023 | 2026-08-18 | medium   | chefs | Two `RenderFlex` overflows in a leaderboard row, same class as B001/B002/B016 — found by the new 320px / 2.0×-text-scale envelope test **before merge**, not in review. (a) `_Stats` builds each stat as a `Row` of icon + `Text`; a `Wrap` constrains each child to the wrap width, but an intrinsically-sized `Text` in a `Row` has no way to degrade, so large counts overflowed by 17px and then 85px. (b) The trailing score `Column` was unconstrained, so it took its intrinsic width; at 2.0× scale on a 320px phone that starved the `Expanded` chef badge beside it until `ChefBadge`'s own row — whose fixed floor is avatar + gap — overflowed by 8.8px. The second is the more instructive one: the widget that overflowed was not the widget at fault. | fixed | Stat labels wrapped in `Flexible` + ellipsis; the score column bounded by `ConstrainedBox(maxWidth: 96)` with both texts `maxLines: 1` + ellipsis. Regression tests pump a worst-case row (38-char name, `Master Chef`, six-figure counts, score `987654.5`) at 320/360/600px @ 2.0×. |
 
+### Seed bugs (found applying Phase 18 to the hosted project, 2026-08-18)
+
+| ID   | Date       | Severity | Area | Description | Status | Fix / Commit |
+| ---- | ---------- | -------- | ---- | ----------- | ------ | ------------ |
+| B024 | 2026-08-18 | high     | seed | Re-seeding an **already-seeded** database failed outright: `ERROR 42725: function seed_recipe(uuid, unknown, …) is not unique / Could not choose a best candidate function`. Adding `p_visibility` took `seed_recipe` from 16 arguments to 17-with-a-default, and `create or replace function` **cannot change a function's argument list** — so the old 16-arg overload survived alongside the new one, and every 16-argument call in `seed.sql` then matched both (the old exactly, the new via the default). `drop.sql` did carry the old signature, but `drop.sql` is a separate destructive script that a plain re-seed never runs. Hit on the hosted project, which had been seeded before the signature changed. | fixed | `seed.sql` now drops **every historical `seed_recipe` signature itself**, immediately before `create or replace`, instead of relying on `drop.sql`. Same guard shape belongs on any future seed-helper signature change. |
+
+**Why the Phase 18 verification missed it — a gap in the method, not just the code.** Every SQL
+check that day ran one of two paths: `supabase db reset` (builds from scratch — the stale overload
+cannot exist) or `drop.sql → create → seed` (drops both overloads first). Neither is the path a
+deployed database actually takes. **Upgrade-in-place on an already-seeded database was never
+exercised**, and that is the only path where this bug is reachable. Re-verified afterwards by
+reconstructing the pre-Phase-18 world from git (`git show 2f2e6e0:supabase/…`), applying the new
+migration on top, and confirming the committed seed fails (`exit 3`) while the fixed one succeeds
+and stays idempotent across three consecutive runs. **Any change to `0001_init.sql` or `seed.sql`
+should be tested on the upgrade path, not only on a fresh `db reset`.**
+
 ### Documentation bugs (found auditing `CLAUDE.md` against the code, 2026-08-18)
 
 | ID   | Date       | Severity | Area | Description                                                                                                                                                                                                                                                                                                                                                                                                       | Status | Fix / Commit                                                                                                                                                                                                                                                                                       |
@@ -151,6 +167,7 @@ side driven by a throwaway harness under `apps/app/test/` (deleted after — CI 
 | `anon` calls `recompute_chef_stats`                                         | `permission denied for function` ✔ |
 | **Double-apply** of `0001_init.sql` + `seed.sql` on top                     | pass — no errors, byte-identical chef stats, no duplicate rows |
 | `drop.sql` → re-create → re-seed                                            | pass — no leftover functions or types; exactly **one** `seed_recipe` overload (old 16-arg signature dropped) |
+| **Upgrade in place** — pre-Phase-18 DB (old migration + old seed from `2f2e6e0`), then new migration, then new seed | **initially failed — B024.** After the fix: new seed exits 0, leaderboard identical to the from-scratch result, and two further re-runs stay stable at 15 recipes / 16 profiles / 64 ratings / 1 overload. Control (seed as committed in `a330370`) still exits 3, so the check is not vacuous |
 | Owner embedding, bare `owner:profiles(...)`                                 | **PGRST201** — ambiguous, five relationships; the FK hint is mandatory (see B-note in SDS §10.5) |
 | Owner embedding, `owner:profiles!recipes_owner_id_fkey(...)`                | pass on the `recipes` table, `recipes_popular` / `_trending` / `_search`, and nested in `recipe_shares` |
 | Dart decode, signed out — leaderboard order, tiers, ranks, exclusions       | pass |

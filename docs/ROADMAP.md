@@ -264,7 +264,12 @@ Execution: [EXECUTION-PLAN.md Phase 18](./EXECUTION-PLAN.md#phase-18--chefs-tier
       320 px / 2.0× envelope test before merge
 - [x] Docs sync: SDS §3/§4/§7/§8/§10 fold-in, `CLAUDE.md` feature map + enum count +
       server-owned columns list + FK-hint gotcha (`README.md` unchanged — no command changes)
-- [ ] Re-apply `0001_init.sql` + `seed.sql` to the **hosted** project (both idempotent)
+- [x] Re-apply `0001_init.sql` to the **hosted** project — applied; backfill scored all 10
+      existing profiles, Kitchen lands `head_chef` at 10197
+- [x] Fix B024: `seed.sql` failed on any **already-seeded** database — the `seed_recipe` signature
+      change left two overloads and every call matched both. Drops now live in `seed.sql` itself,
+      not only `drop.sql`
+- [ ] Re-run the fixed `seed.sql` on the **hosted** project (chefs d1–d7 + their recipes)
 
 ---
 

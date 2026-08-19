@@ -67,13 +67,37 @@ as $$
   ]::uuid[];
 $$;
 
+-- Drop every historical seed_recipe signature before (re)creating it.
+--
+-- `create or replace function` cannot change a function's argument list, so a
+-- signature change leaves the OLD overload in place next to the new one. Adding
+-- p_visibility took seed_recipe from 16 arguments to 17-with-a-default, which
+-- makes every 16-argument call below ambiguous — it matches the old overload
+-- exactly, and the new one via the default:
+--
+--   ERROR 42725: function seed_recipe(uuid, unknown, ...) is not unique
+--   HINT: Could not choose a best candidate function.
+--
+-- drop.sql carries these same drops, but that is a separate destructive script
+-- that a plain re-seed never runs — and `supabase db reset` builds from scratch,
+-- so the stale overload cannot exist there either. The only place this bites is
+-- re-seeding a database that was seeded before the signature changed, which is
+-- exactly what the hosted project is. So the drops have to live here (B024).
+--
+-- Every historical signature must stay listed: Postgres keys drops by argument
+-- list, so a missed one survives and re-introduces the ambiguity.
+drop function if exists seed_recipe(
+  uuid, text, text, text, text, difficulty, int, int, int, text,
+  jsonb, jsonb, int, int, int
+);
+drop function if exists seed_recipe(
+  uuid, text, text, text, text, difficulty, int, int, int, text,
+  jsonb, jsonb, int, int, int, jsonb
+);
+
 -- Helper: insert a fully-structured recipe from JSON arrays. If a recipe with
 -- the same title already exists for the owner, the content is left alone but
 -- ratings are still (re)applied, so re-running the seed backfills them.
---
--- NOTE: adding p_visibility changed this function's signature. The previous
--- 16-argument overload is listed in supabase/scripts/drop.sql so `db:drop`
--- removes it instead of leaving two overloads behind.
 create or replace function seed_recipe(
   p_owner       uuid,
   p_title       text,

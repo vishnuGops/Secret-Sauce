@@ -273,48 +273,58 @@ the `code-review` skill). The ones you need while *writing* code:
 5. **`0001_init.sql` is one idempotent file, re-applied in place** (`db:create`, `supabase db
    reset`, hosted paste). Every statement must be guarded: `if not exists`,
    `drop policy if exists`, `create or replace`, `alter table … add column if not exists`.
-   Change a function signature → add the exact old signature to `supabase/scripts/drop.sql`.
+   **Changing a function's argument list is not something `create or replace` can do** — the old
+   overload survives beside the new one, and any call matching both fails with
+   `42725 … is not unique`. Drop every historical signature **in the file that recreates the
+   function**, not only in `drop.sql`: `drop.sql` is a separate destructive script that a plain
+   re-apply or re-seed never runs (B024).
+6. **Test SQL on the upgrade path, not only on a fresh `db reset`.** `supabase db reset` builds
+   from scratch and `drop.sql → create → seed` drops everything first, so neither can surface a
+   stale-object bug — and those are the only two paths that are convenient to run. A deployed
+   database takes a third path nobody tests: *old schema + old seed already applied, new files
+   layered on top*. Reconstruct it with `git show <last-release>:supabase/…` before believing a
+   schema change is safe. B024 shipped through a green run of both easy paths.
 6. **`db:*` scripts fire at whatever `SUPABASE_DB_URL` points at — no confirmation, no prod
    guard** ([tool/db.dart](tool/db.dart)). `db:reset` is `drop → create → seed`. `README.md`
    documents pasting `seed.sql` into the **hosted** dashboard, so anything in that file runs on
    production by documented procedure — never put a literal credential there (B018: nine
    log-in-able production accounts). `drop.sql` spares `auth.users`, so seeded accounts are
    permanent.
-7. **`SupabaseService.init()` guards missing credentials with `assert`** — stripped in release
+8. **`SupabaseService.init()` guards missing credentials with `assert`** — stripped in release
    builds. A release built without `--dart-define-from-file` initializes Supabase with empty
    strings and fails at request time, not startup. Don't guard new required config with `assert`.
-8. **Signed-out paths.** `SupabaseRecipeRepository._uid` throws `StateError`. Any repository call
+9. **Signed-out paths.** `SupabaseRecipeRepository._uid` throws `StateError`. Any repository call
    reachable from Home / Discover / recipe detail must use `currentUser?.id` the way `logView`
    and `myRating` do.
-9. **`view_count` is an upper bound on distinct signed-in viewers, not a visit count** (B012).
-   `recipe_views` stays an append-only log; `on_view_insert` bumps `recipes.view_count` only on a
-   user's **first** row for that recipe, and **never** for anonymous rows — `anon` holds `insert`
-   there, so counting them would let an unauthenticated loop inflate `recipes_trending`.
-   `views_insert` also pins `user_id` to `auth.uid()` (or null), so views cannot be attributed to
-   someone else. The counter is **monotonic** — nothing decrements it, and `user_id` is
-   `on delete set null`, so a deleted account leaves its contribution behind. Seeded recipes carry
-   synthetic `view_count` values written directly by `seed.sql`, so their counter and their log
-   disagree by design. Don't write code that assumes `view_count` equals a `count(distinct …)`
-   over the log.
-10. **`RecipeRepository.update()` is not atomic**: it deletes all `ingredient_groups` /
+10. **`view_count` is an upper bound on distinct signed-in viewers, not a visit count** (B012).
+    `recipe_views` stays an append-only log; `on_view_insert` bumps `recipes.view_count` only on a
+    user's **first** row for that recipe, and **never** for anonymous rows — `anon` holds `insert`
+    there, so counting them would let an unauthenticated loop inflate `recipes_trending`.
+    `views_insert` also pins `user_id` to `auth.uid()` (or null), so views cannot be attributed to
+    someone else. The counter is **monotonic** — nothing decrements it, and `user_id` is
+    `on delete set null`, so a deleted account leaves its contribution behind. Seeded recipes carry
+    synthetic `view_count` values written directly by `seed.sql`, so their counter and their log
+    disagree by design. Don't write code that assumes `view_count` equals a `count(distinct …)`
+    over the log.
+11. **`RecipeRepository.update()` is not atomic**: it deletes all `ingredient_groups` /
     `step_groups` then re-inserts. A failure between the two loses the recipe's content. Don't
     lengthen that window.
-11. **Postgres `numeric` arrives as a JSON number that may be int or double** — decode with
+12. **Postgres `numeric` arrives as a JSON number that may be int or double** — decode with
     `(value as num).toDouble()`, never a bare `as double`.
-12. **Fixed-aspect cards cannot grow, so their rows must degrade.** Three logged `RenderFlex`
+13. **Fixed-aspect cards cannot grow, so their rows must degrade.** Three logged `RenderFlex`
     overflows (B001, B002, B016) came from adding an intrinsically-sized child to a
     `RecipeCard`/grid row. Test the real envelope: **276px** wide (2 columns at the 600px
     breakpoint), longest labels, **2.0× text scale**.
-13. **New `design_system` widget → export it from `design_system.dart`**, or `apps/app` cannot
+14. **New `design_system` widget → export it from `design_system.dart`**, or `apps/app` cannot
     import it.
-14. **`packages/core` has no `test/` directory**, so every repository, `snapRating`, and all JSON
+15. **`packages/core` has no `test/` directory**, so every repository, `snapRating`, and all JSON
     decoding are untested — `melos run test --no-select` only covers `apps/app` and
     `design_system`. Repository tests are blocked on mocking `SupabaseClient` (ROADMAP Phase 3).
     Treat a green test run as *no evidence at all* about `core`; verify core changes against a
     local Supabase stack instead. A throwaway harness under `apps/app/test/` pointed at
     `http://127.0.0.1:54321` is the practical way to exercise real repository code — delete it
     after, since CI has no database job.
-15. **Embedding `profiles` into a recipe query needs the FK hint.** `recipes` and `profiles` are
+16. **Embedding `profiles` into a recipe query needs the FK hint.** `recipes` and `profiles` are
     related five ways (`owner_id`, plus many-to-many through likes/ratings/saves/shares), so the
     obvious `owner:profiles(...)` fails with `PGRST201: Could not embed because more than one
     relationship was found`. Use the shared `kRecipeSelect` constant in
