@@ -59,15 +59,21 @@ flowchart TD
 - `recipe_visibility`: `private` \| `public`
 - `share_permission`: `view` (reserved: `edit`)
 - `suggestion_status`: `open` \| `accepted` \| `rejected` (reserved for future PR flow)
+- `chef_tier`: `home_cook` \| `line_cook` \| `sous_chef` \| `head_chef` \| `master_chef`
 
 ### 3.2 Tables
 
 **profiles** — 1:1 with `auth.users`
-`id (uuid, PK, = auth.uid)`, `display_name`, `avatar_url`, `bio`, `created_at`.
+`id (uuid, PK, = auth.uid)`, `display_name`, `avatar_url`, `bio`, `created_at`,
+`chef_score (numeric)`, `chef_tier (chef_tier)`, `public_recipe_count (int)`.
 Created by the `on_auth_user_created` trigger. Every other table's `user_id` is an FK to
 **profiles**, not `auth.users`, so a missing profile row breaks rating/saving/view logging for
 that account — `0001_init.sql` therefore backfills profiles from `auth.users` on every apply
 (the trigger only fires on insert, so it cannot repair users that predate it; see B015).
+
+The three `chef_*` columns are **denormalized aggregates** over the engagement counters of the
+profile's *public* recipes — never written by the client; the `on_recipe_stats_change` trigger
+recomputes them from scratch. See §10.
 
 **recipes**
 `id`, `owner_id → profiles`, `title`, `description`, `cover_image_url`, `cuisine`,
@@ -176,7 +182,12 @@ erDiagram
 - **ratings**: readable by anyone who can read the recipe; a user may write only their own row
   (`user_id = auth.uid()`), only for a recipe they can read, and **never for a recipe they own** —
   self-rating is rejected by the `with check` clause, not just hidden in the UI.
-- **profiles**: readable by all; writable only by self.
+- **profiles**: readable by all; writable only by self. The `chef_*` columns are therefore
+  world-readable, which is why the chef score counts **public recipes only** — private-recipe
+  engagement (reachable through `recipe_shares`) must not leak into a public number.
+  `on_recipe_stats_change` is `security definer` for the same reason `on_like_change` is: the
+  acting user is the liker/viewer, not the recipe owner, and `profiles_update` is self-only
+  (B011). `recompute_chef_stats` has EXECUTE revoked from `public`/`anon`/`authenticated`.
 - **grants**: RLS chooses rows, `GRANT` chooses tables — both are required. The schema grants
   `select` on all public tables to `anon` + `authenticated`, DML to `authenticated`, and
   `insert on recipe_views` to `anon`. Without this a fresh Supabase project returns
@@ -221,6 +232,7 @@ erDiagram
 | Home / landing | `/`                               | Intro, feature highlights, sign in/up                                                 |
 | Sign in / up   | `/auth`                           | Supabase auth                                                                         |
 | Discover       | `/discover`                       | Popular (rating-ranked) / Trending / Recent tabs + search (public, no sign-in)         |
+| Chefs          | `/chefs`                          | Leaderboard ranked by chef score (public, no sign-in)                                 |
 | My Recipes     | `/my`                             | Tabs: My / Shared-with-me; `RecipeCard` grid with Public/Private badges                |
 | Recipe detail  | `/recipe/:id`                     | Structured view, servings scaler, rating, fork, versions (public recipes viewable signed-out) |
 | Recipe editor  | `/recipe/new`, `/recipe/:id/edit` | Structured create/edit                                                                |
@@ -237,7 +249,14 @@ erDiagram
 Inputs: cover image, name, short description, cook time (prep+cook), average star rating
 (hidden until the recipe has at least one rating), difficulty badge. `showVisibility: true`
 overlays a Public/Private pill on the cover — used on My Recipes, where both kinds are listed.
+`showChef` (default true) overlays the owning chef on the cover, bottom-left, whenever
+`recipe.owner` is embedded; My Recipes turns it off, since every card there has the same owner.
 Used across Discover and My Recipes.
+
+**Both overlays live on the cover `Stack`, never in the text column.** The tile is fixed-aspect
+(`childAspectRatio: 0.82` in `recipe_grid.dart`) so the column cannot grow, and all three logged
+overflow bugs (B001/B002/B016) came from adding an intrinsically-sized child to it. The cover has
+slack; the column does not.
 
 ### Rating widgets (`design_system`)
 
@@ -246,6 +265,16 @@ Used across Discover and My Recipes.
 | `StarRating`      | Read-only 5-star display with half stars, value, and rating count   |
 | `RatingPill`      | Compact single star + value, for dense surfaces (`RecipeCard`)      |
 | `StarRatingInput` | Interactive half-star input; `onChangeEnd` fires when a gesture ends |
+
+### Chef widgets (`design_system`)
+
+| Widget      | Use                                                                                    |
+| ----------- | -------------------------------------------------------------------------------------- |
+| `TierChip`  | Tier pill (icon + label); `dense` drops the icon. `colorFor(tier, brightness)` is the shared accent, also used by the leaderboard rank medallion |
+| `ChefBadge` | Avatar + name with the `TierChip` **under** the name; `compact` for dense surfaces, `onSurfaceImage` for the card's cover overlay. `ChefBadge.fromProfile(recipe.owner!)` is the usual call |
+
+Per-tier colors are defined as a light/dark pair — the light shades are unreadable on dark
+surfaces and vice versa, so `colorFor` resolves against `Theme.of(context).brightness`.
 
 `StarRatingInput` maps the left half of star _n_ to `n - 0.5` and the right half to `n`, and
 previews during a drag; the caller persists on `onChangeEnd` so a drag writes once, not per frame.
@@ -263,11 +292,10 @@ widths or large text scale (B016).
 - All authorization via RLS; never rely on client filtering for privacy.
 - Storage buckets scoped; signed/public URLs per bucket policy.
 
-## 10. Chefs, tiers & leaderboard — DESIGN (Phase 18, not yet implemented)
+## 10. Chefs, tiers & leaderboard
 
-> Status: **approved design, implementation pending.** Sections §3, §6, §7, and §8 describe the
-> code as it exists today; this section is the spec the Phase 18 work is built against and is
-> folded into those sections when it ships. Execution detail:
+> Status: **implemented (Phase 18).** The schema, columns, and screens described here exist;
+> §3, §4, §7, and §8 carry the summary and this section is the detail. Execution detail:
 > [EXECUTION-PLAN.md Phase 18](./EXECUTION-PLAN.md#phase-18--chefs-tiers--leaderboard).
 
 ### 10.1 Concept
@@ -281,8 +309,7 @@ is needed for the "one recipe : one chef" rule; it holds by construction.
 
 ### 10.2 Score & tiers (server-owned, tunable in one place)
 
-New Postgres enum `chef_tier` (mirrored in `enums.dart` — this makes **five** mirrored enums;
-update `CLAUDE.md` when it lands):
+Postgres enum `chef_tier`, mirrored in `enums.dart` — this makes **five** mirrored enums:
 
 ```
 chef_tier: home_cook | line_cook | sous_chef | head_chef | master_chef
@@ -367,15 +394,29 @@ chefs_leaderboard(p_limit int default 50, p_offset int default 0)
 - `Profile` model gains `chefScore`, `chefTier`, `publicRecipeCount` (JSON keys = column names).
   `ChefTier` enum decodes with `unknownEnumValue: ChefTier.homeCook` so an older client survives
   a future tier addition.
-- `Recipe` model gains an optional embedded `Profile? owner` (`@JsonKey(name: 'owner')`),
-  populated by adding `owner:profiles(id, display_name, avatar_url, chef_tier)` to the `select()`
-  of every recipe-list/detail query — including the Discover RPCs (PostgREST supports `.select()`
-  embedding on functions returning `setof recipes`). Null-safe: surfaces that don't embed simply
-  render no badge.
-- New `ChefRepository` (abstract + `SupabaseChefRepository`, same file, wired in
+- `Recipe` model gains an optional embedded `Profile? owner`, populated by the `kRecipeSelect`
+  fragment in `core/src/repositories/recipe_queries.dart`, which is used by `getById`,
+  `listMine`, `listSharedWithMe`, and all four Discover queries (PostgREST accepts `.select()`
+  embedding on the RPCs too, since they return `setof recipes`). Null-safe: surfaces that don't
+  embed simply render no badge.
+
+  **The FK hint is mandatory.** The obvious `owner:profiles(...)` does **not** work — `recipes`
+  and `profiles` are related five ways (`owner_id`, plus many-to-many through `recipe_likes`,
+  `recipe_ratings`, `recipe_saves`, `recipe_shares`), so PostgREST rejects the ambiguous form
+  with `PGRST201: Could not embed because more than one relationship was found`. The working
+  fragment is:
+
+  ```text
+  *,owner:profiles!recipes_owner_id_fkey(id,display_name,avatar_url,chef_tier)
+  ```
+
+  Dropping the hint breaks every recipe query at once, which is why the fragment is a single
+  shared constant rather than repeated per call site.
+- `ChefRepository` (abstract + `SupabaseChefRepository`, same file, wired in
   `core/src/providers.dart`): `leaderboard({int limit, int offset})` → `List<ChefStanding>`.
-  `ChefStanding` is a new freezed model mirroring the RPC row. Signed-out safe by construction
-  (no `_uid` use).
+  `ChefStanding` is a freezed model mirroring the RPC row. Signed-out safe by construction
+  (no `_uid` use). `chef_score` is Postgres `numeric`, so it decodes through
+  `(v as num).toDouble()` — a bare `as double` would throw on a whole-number score.
 
 ### 10.6 UI
 
@@ -383,35 +424,48 @@ chefs_leaderboard(p_limit int default 50, p_offset int default 0)
   label. Fixed English labels ("Home Cook" … "Master Chef"); per-tier accent colors defined as
   theme-aware tokens (must pass light + dark).
 - **`ChefBadge`** (`design_system`, exported): avatar + display name with the `TierChip` **under
-  the name** (per the product requirement), plus a `compact` variant.
+  the name** (per the product requirement), plus a `compact` variant and an `onSurfaceImage` flag
+  for the cover overlay. Falls back to initials without an avatar, and to "Unnamed chef" on an
+  empty display name.
 - **`RecipeCard`**: the badge **overlays the cover image, bottom-left** (a `Positioned` in the
   existing `Stack`, opposite the top-right visibility pill), on a scrim, name ellipsized. It must
   NOT be a new row in the text column: the card is a fixed-aspect tile (`childAspectRatio: 0.82`)
   and three prior overflow bugs (B001/B002/B016) all came from adding intrinsic children.
-  Renders only when `recipe.owner != null`. Regression tests at the standard envelope: 276 px
-  wide, longest tier label, 2.0× text scale.
+  Renders only when `recipe.owner != null` and `showChef` is true (My Recipes turns it off —
+  every card there has the same owner). Regression tests at the standard envelope: 276 px wide,
+  longest tier label, 2.0× text scale.
 - **Recipe detail**: full-size `ChefBadge` under the title (tap target reserved for a future
   chef-profile page).
 - **Leaderboard screen** `features/chefs/` at **`/chefs`**, inside the `ShellRoute`, added to
   `AppShell._destinations` (trophy icon, "Chefs") — signed-out safe, so **no** change to the
-  router's `needsAuth` list. Rows: rank, `ChefBadge`, score, recipe/like/save counts; standard
-  loading/empty/error states; `limit 50` initially (pagination deferred).
+  router's `needsAuth` list. Rows: rank medallion, `ChefBadge`, score, recipe/like/save/view
+  counts; standard loading/empty/error states; `limit 50` (pagination deferred, though the RPC
+  already takes an offset).
+
+  Two layout rules that row learned the hard way (B023): the trailing score column is
+  **width-bounded** — an unconstrained `Column` takes its intrinsic width and at 2.0× scale on a
+  320 px phone it starved the badge beside it until the badge's own row overflowed — and the stat
+  labels are `Flexible`, since a `Wrap` constrains each child to the wrap width and an
+  intrinsically-sized `Text` in a `Row` has no way to degrade.
 
 ### 10.7 Seed & edge cases
 
-New fixed-UUID chef accounts (`…00d1`–`…00d7`), passwords randomized exactly like the tasters
-(B018 — `seed.sql` runs on production by documented procedure). `seed_recipe()` gains a
-`p_visibility` parameter defaulting to `'public'` — a **signature change**, so the old signature
-goes into `drop.sql` (Gotcha 5). Coverage:
+Fixed-UUID chef accounts (`…00d1`–`…00d7`), passwords randomized exactly like the tasters
+(B018 — `seed.sql` runs on production by documented procedure). `seed_recipe()` gained a
+`p_visibility` parameter defaulting to `'public'` — a **signature change**, so the old 16-argument
+signature is in `drop.sql` (Gotcha 5). Actual seeded standings:
 
-| Chef | Purpose |
-| ---- | ------- |
-| d1–d3 | One chef landing in each of `master_chef`, `head_chef` (natural check: the existing Kitchen account's curated counters already score ≈ 10.2k → `head_chef`), `sous_chef` |
-| d4 | Score of **exactly 100** — proves thresholds are inclusive (`>=` → `line_cook`) |
-| d5 | Public recipes, zero engagement — score 0, `home_cook`, ranked last by the deterministic tie-break |
-| d6 | **Private-only** chef — has a tier, absent from the leaderboard |
-| d7 | Score exactly equal to d3 — proves `dense_rank` ties share a rank |
-| tasters | No recipes — absent from the leaderboard (regression guard for the `public_recipe_count > 0` filter) |
+| Chef | Name | Likes | Saves | Views | Score | Tier | Pins |
+| ---- | ---- | ----- | ----- | ----- | ----- | ---- | ---- |
+| d1 | Amara Okonkwo | 4000 | 1600 | 5000 | 21000 | `master_chef` | ≥ 20000, **summed across two recipes** |
+| — | Secret Sauce Kitchen | 1228 | 941 | 9000 | 10189 | `head_chef` | lands there unassisted from the curated recipes |
+| d2 | Bruno Castellani | 1000 | 400 | 2500 | 5500 | `head_chef` | ≥ 5000 |
+| d3 | Chen Wei | 200 | 100 | 500 | 1200 | `sous_chef` | ≥ 1000 |
+| d4 | Dara Nilsson | 20 | 8 | 0 | **100** | `line_cook` | exactly the threshold — proves `>=` is inclusive |
+| d5 | Elif Yilmaz | 0 | 0 | 0 | 0 | `home_cook` | public recipes, zero engagement — ranked last |
+| d6 | Farid Haddad | 5000 | 2000 | 10000 | **0** | `home_cook` | **private-only**: would score 27000 if private counted; absent from the board |
+| d7 | Greta Lindqvist | 100 | 180 | 0 | **1200** | `sous_chef` | ties d3 via a different mix — proves `dense_rank` shares a rank |
+| — | tasters ×8 | — | — | — | 0 | `home_cook` | no recipes — guard for the `public_recipe_count > 0` filter |
 
 ### 10.8 Known limits (accepted for v1)
 

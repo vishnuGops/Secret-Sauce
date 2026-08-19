@@ -49,13 +49,14 @@ secret-sauce/
 │   └── design_system/lib/
 │       ├── design_system.dart     # BARREL — export new widgets here or app can't import them
 │       ├── src/{theme,layout,widgets}/
-│       └── ../test/               # recipe_card_test.dart, star_rating_test.dart
+│       └── ../test/               # recipe_card_test.dart, star_rating_test.dart,
+│                                  # chef_badge_test.dart
 ├── apps/app/
-│   ├── lib/features/          # auth, home, discover, my_recipes, recipe_detail,
+│   ├── lib/features/          # auth, home, discover, chefs, my_recipes, recipe_detail,
 │   │                          # recipe_editor, profile — screen + *_providers.dart per feature
 │   ├── lib/routing/           # app_router.dart (routes + redirect), app_shell.dart (nav)
 │   ├── lib/widgets/           # app-level shared widgets (recipe_grid.dart)
-│   ├── lib/main.dart · test/widget_test.dart
+│   ├── lib/main.dart · test/{widget_test,chefs_screen_test}.dart
 │   ├── env.example.json       # template; env.local.json (git-ignored) holds real creds
 │   └── android/ ios/ web/ windows/   # platform runners are committed — no `flutter create`
 └── supabase/
@@ -180,8 +181,16 @@ See [docs/SDS.md §3–§6](./docs/SDS.md) for the full spec. Summary: a `recipe
 changes upstream" (PR-like) flow.
 
 Server-owned columns the client must **never** write (trigger-maintained; omitted from
-`_writablePayload` in `recipe_repository.dart`): `like_count`, `save_count`, `view_count`,
-`rating_sum`, `rating_count`, `rating_avg`, `current_version_id`, `created_at`, `updated_at`.
+`_writablePayload` in `recipe_repository.dart`): on `recipes` — `like_count`, `save_count`,
+`view_count`, `rating_sum`, `rating_count`, `rating_avg`, `current_version_id`, `created_at`,
+`updated_at`; on `profiles` — `chef_score`, `chef_tier`, `public_recipe_count` (omitted from
+`ProfileRepository.updateMine`).
+
+**Nested content order (B022).** Ingredient/step groups and their children are stored and read in
+**ascending** `sort_order` (`step_order` for steps). postgrest-dart's `.order(column)` defaults to
+`ascending: false`, so every nested read passes `ascending: true` explicitly. This is not
+cosmetic: `update()` re-persists the list it just read, so a reversed read writes a reversed
+order back.
 
 **Ratings**: `recipe_ratings` holds one row per (user, recipe), `0.5`–`5.0` in half-star steps
 (SQL check constraint _and_ `snapRating()` in core). A trigger recomputes
@@ -190,8 +199,18 @@ write them. RLS forbids rating your own recipe (`with check`, not just a hidden 
 Discover's **Popular** tab ranks by a Bayesian weighted average of the rating (m = 5 phantom
 ratings at the site mean), not raw likes/saves.
 
-Four Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/models/enums.dart):
-`difficulty`, `recipe_visibility`, `share_permission` (`edit` reserved, unused), `suggestion_status`.
+**Chefs & tiers**: "chef" is a presentation of `profiles`, not a second principal table.
+`profiles.chef_score / chef_tier / public_recipe_count` are denormalized aggregates over the
+engagement counters of that user's **public** recipes, recomputed from scratch by the
+`on_recipe_stats_change` trigger — same pattern as `recipes.rating_*`. `chef_score()` and
+`chef_tier_for()` in `0001_init.sql` are the single source of truth for the formula and the
+thresholds; an idempotent backfill on every apply is how a change reaches existing rows.
+`chefs_leaderboard(limit, offset)` is the `anon`-callable RPC behind `/chefs`. Details:
+[SDS §10](./docs/SDS.md#10-chefs-tiers--leaderboard).
+
+Five Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/models/enums.dart):
+`difficulty`, `recipe_visibility`, `share_permission` (`edit` reserved, unused),
+`suggestion_status`, `chef_tier`.
 
 ## Feature map
 
@@ -200,13 +219,14 @@ Four Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/m
 | `/`                               | `features/home`          | Landing; signed-out safe                                  |
 | `/auth`                           | `features/auth`          | `authControllerProvider` (AsyncNotifier); redirects to `/discover` when signed in |
 | `/discover`                       | `features/discover`      | Popular / Trending / Recent + search; all four via `DiscoverRepository`; signed-out safe |
+| `/chefs`                          | `features/chefs`         | Leaderboard via `chefs_leaderboard` RPC; signed-out safe   |
 | `/my`                             | `features/my_recipes`    | My / Shared-with-me tabs; `share_dialog.dart` writes `recipe_shares` |
 | `/recipe/:id`                     | `features/recipe_detail` | Servings scaler, rating, like/save, fork, `version_history_sheet.dart`; signed-out safe |
 | `/recipe/new`, `/recipe/:id/edit` | `features/recipe_editor` | `edit_models.dart` holds mutable draft types; save appends a version |
 | `/profile`                        | `features/profile`       | Current user                                              |
 
-Only `/discover`, `/my`, `/profile` sit inside the `ShellRoute` (nav chrome); detail and editor
-are pushed on the root navigator.
+Only `/discover`, `/chefs`, `/my`, `/profile` sit inside the `ShellRoute` (nav chrome); detail and
+editor are pushed on the root navigator.
 
 ## Conventions
 
@@ -291,7 +311,16 @@ the `code-review` skill). The ones you need while *writing* code:
     decoding are untested — `melos run test --no-select` only covers `apps/app` and
     `design_system`. Repository tests are blocked on mocking `SupabaseClient` (ROADMAP Phase 3).
     Treat a green test run as *no evidence at all* about `core`; verify core changes against a
-    local Supabase stack instead.
+    local Supabase stack instead. A throwaway harness under `apps/app/test/` pointed at
+    `http://127.0.0.1:54321` is the practical way to exercise real repository code — delete it
+    after, since CI has no database job.
+15. **Embedding `profiles` into a recipe query needs the FK hint.** `recipes` and `profiles` are
+    related five ways (`owner_id`, plus many-to-many through likes/ratings/saves/shares), so the
+    obvious `owner:profiles(...)` fails with `PGRST201: Could not embed because more than one
+    relationship was found`. Use the shared `kRecipeSelect` constant in
+    [recipe_queries.dart](packages/core/lib/src/repositories/recipe_queries.dart) — it carries
+    `owner:profiles!recipes_owner_id_fkey(...)`. Dropping the hint breaks every recipe query at
+    once, including the Discover RPCs.
 
 ## Docs–code sync (MANDATORY)
 

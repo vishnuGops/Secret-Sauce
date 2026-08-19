@@ -26,6 +26,10 @@ do $$ begin
   if not exists (select 1 from pg_type where typname = 'suggestion_status') then
     create type suggestion_status as enum ('open', 'accepted', 'rejected');
   end if;
+  if not exists (select 1 from pg_type where typname = 'chef_tier') then
+    create type chef_tier as enum
+      ('home_cook', 'line_cook', 'sous_chef', 'head_chef', 'master_chef');
+  end if;
 end $$;
 
 -- ============================================================================
@@ -40,6 +44,16 @@ create table if not exists profiles (
   bio          text,
   created_at   timestamptz not null default now()
 );
+
+-- Denormalized "chef" standing, maintained by on_recipe_stats_change over the
+-- owner's *public* recipes. Server-owned — the client never writes these.
+-- Added via `alter` so an already-deployed 0001 picks them up on re-run.
+alter table profiles add column if not exists chef_score          numeric   not null default 0;
+alter table profiles add column if not exists chef_tier           chef_tier not null default 'home_cook';
+alter table profiles add column if not exists public_recipe_count int       not null default 0;
+
+create index if not exists profiles_chef_score_idx
+  on profiles (chef_score desc, public_recipe_count desc);
 
 -- recipes
 create table if not exists recipes (
@@ -401,6 +415,136 @@ create trigger recipe_ratings_agg
   after insert or update or delete on recipe_ratings
   for each row execute function on_rating_change();
 
+-- ----------------------------------------------------------------------------
+-- Chef score & tier (Phase 18)
+--
+-- "Chef" is a presentation of `profiles`, not a second principal table. The two
+-- functions below are the single source of truth for the formula and the
+-- thresholds: changing either is a one-function edit plus the idempotent
+-- backfill further down, which runs on every apply.
+--
+-- Only PUBLIC recipes count. Private-recipe engagement (reachable through
+-- recipe_shares) must never leak into a world-readable number, so flipping a
+-- recipe private or deleting it drops its contribution on the next recompute.
+--
+-- Sums are bigint: view_count in particular is unbounded, and int would
+-- overflow long before numeric does.
+-- ----------------------------------------------------------------------------
+create or replace function chef_score(p_likes bigint, p_saves bigint, p_views bigint)
+returns numeric language sql immutable as $$
+  -- A save is the strongest intent signal, a like weaker, a view weakest (and
+  -- view_count is already deduped + anon-excluded — B012 — so it is safe to
+  -- include at a low weight). Ratings are deliberately out of the v1 formula.
+  select 3 * coalesce(p_likes, 0)
+       + 5 * coalesce(p_saves, 0)
+       + 0.2 * coalesce(p_views, 0);
+$$;
+
+create or replace function chef_tier_for(p_score numeric)
+returns chef_tier language sql immutable as $$
+  select case
+    when coalesce(p_score, 0) >= 20000 then 'master_chef'
+    when coalesce(p_score, 0) >=  5000 then 'head_chef'
+    when coalesce(p_score, 0) >=  1000 then 'sous_chef'
+    when coalesce(p_score, 0) >=   100 then 'line_cook'
+    else 'home_cook'
+  end::chef_tier;
+$$;
+
+-- Recompute one chef's standing from scratch (never incremental), exactly the
+-- recompute_recipe_rating pattern — the denormalized values cannot drift.
+-- Invoker-rights with EXECUTE revoked below: PostgREST exposes every function in
+-- `public` as an RPC, and this one writes other users' profile rows.
+--
+-- The `is distinct from` guard is load-bearing, not tidiness: the trigger also
+-- watches rating_sum/rating_count (so a future rating term needs no trigger
+-- change), but the v1 formula ignores them — so every rating anyone writes
+-- would otherwise rewrite the owner's profile row with byte-identical values
+-- and leave a dead tuple behind, on a table read by every leaderboard query
+-- and every recipe embed.
+create or replace function recompute_chef_stats(p_chef uuid)
+returns void language sql as $$
+  update profiles p
+  set public_recipe_count = s.cnt,
+      chef_score          = s.score,
+      chef_tier           = chef_tier_for(s.score)
+  from (
+    select
+      count(*)::int as cnt,
+      chef_score(
+        coalesce(sum(like_count), 0),
+        coalesce(sum(save_count), 0),
+        coalesce(sum(view_count), 0)
+      ) as score
+    from recipes
+    where owner_id = p_chef and visibility = 'public'
+  ) s
+  where p.id = p_chef
+    and (p.public_recipe_count, p.chef_score, p.chef_tier)
+        is distinct from (s.cnt, s.score, chef_tier_for(s.score));
+$$;
+
+-- `security definer set search_path = public` is mandatory (B011 class): the
+-- acting user is whoever liked/saved/viewed the recipe, and `profiles_update`
+-- (RLS) is self-only — under invoker rights this UPDATE would match 0 rows for
+-- every non-owner, silently, with no error.
+--
+-- No recursion: it writes `profiles`, never `recipes`.
+--
+-- rating_sum/rating_count are watched even though the v1 formula ignores them,
+-- so adding a rating term later needs no trigger change.
+create or replace function on_recipe_stats_change()
+returns trigger language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if tg_op = 'DELETE' then
+    perform recompute_chef_stats(old.owner_id);
+  elsif tg_op = 'INSERT' then
+    perform recompute_chef_stats(new.owner_id);
+  else
+    perform recompute_chef_stats(new.owner_id);
+    if old.owner_id <> new.owner_id then
+      perform recompute_chef_stats(old.owner_id);   -- recipe changed hands
+    end if;
+  end if;
+  return null;
+end;
+$$;
+
+drop trigger if exists recipes_chef_stats on recipes;
+create trigger recipes_chef_stats
+  after insert or delete or update of
+    like_count, save_count, view_count, rating_sum, rating_count,
+    visibility, owner_id
+  on recipes
+  for each row execute function on_recipe_stats_change();
+
+-- Idempotent backfill (B015 precedent): recompute every profile on every apply.
+-- This is also how a formula or threshold change reaches existing rows.
+update profiles p
+set public_recipe_count = s.cnt,
+    chef_score          = s.score,
+    chef_tier           = chef_tier_for(s.score)
+from (
+  select
+    pr.id,
+    count(r.id)::int as cnt,
+    chef_score(
+      coalesce(sum(r.like_count), 0),
+      coalesce(sum(r.save_count), 0),
+      coalesce(sum(r.view_count), 0)
+    ) as score
+  from profiles pr
+  left join recipes r
+    on r.owner_id = pr.id and r.visibility = 'public'
+  group by pr.id
+) s
+where p.id = s.id
+  and (p.public_recipe_count, p.chef_score, p.chef_tier)
+      is distinct from (s.cnt, s.score, chef_tier_for(s.score));
+
 -- updated_at maintenance.
 create or replace function touch_updated_at()
 returns trigger language plpgsql as $$
@@ -426,9 +570,11 @@ do $$
 begin
   execute 'revoke execute on function bump_count(uuid, text, int) from public';
   execute 'revoke execute on function recompute_recipe_rating(uuid) from public';
+  execute 'revoke execute on function recompute_chef_stats(uuid) from public';
   if exists (select 1 from pg_roles where rolname = 'anon') then
     execute 'revoke execute on function bump_count(uuid, text, int) from anon, authenticated';
     execute 'revoke execute on function recompute_recipe_rating(uuid) from anon, authenticated';
+    execute 'revoke execute on function recompute_chef_stats(uuid) from anon, authenticated';
   end if;
 end $$;
 
@@ -777,6 +923,81 @@ as $$
   order by ts_rank(recipe_search_document(r.id), websearch_to_tsquery('english', p_query)) desc
   limit p_limit;
 $$;
+
+-- Chefs leaderboard. Ranked by the denormalized profiles.chef_score, with the
+-- engagement totals recomputed alongside so the page needs one round-trip.
+--
+-- `stable`, invoker-rights, and callable by `anon` — the leaderboard is
+-- signed-out safe like Discover. The recipe sums filter `visibility = 'public'`
+-- **explicitly** rather than leaning on RLS: under invoker rights a signed-in
+-- chef would otherwise see their own private recipes folded into their totals
+-- and read different numbers than everyone else.
+--
+-- Internal aliases deliberately avoid the RETURNS TABLE column names — in a
+-- `language sql` function those names are in scope and would make `chef_score`
+-- / `display_name` / `id` ambiguous against the tables being read.
+create or replace function chefs_leaderboard(p_limit int default 50, p_offset int default 0)
+returns table (
+  chef_rank           bigint,
+  id                  uuid,
+  display_name        text,
+  avatar_url          text,
+  chef_tier           chef_tier,
+  chef_score          numeric,
+  public_recipe_count int,
+  total_likes         bigint,
+  total_saves         bigint,
+  total_views         bigint
+)
+language sql
+stable
+as $$
+  with sums as (
+    select
+      r.owner_id                            as oid,
+      coalesce(sum(r.like_count), 0)::bigint as likes,
+      coalesce(sum(r.save_count), 0)::bigint as saves,
+      coalesce(sum(r.view_count), 0)::bigint as views
+    from recipes r
+    where r.visibility = 'public'
+    group by r.owner_id
+  ),
+  ranked as (
+    select
+      dense_rank() over (order by p.chef_score desc) as rnk,
+      p.id                  as pid,
+      p.display_name        as pname,
+      p.avatar_url          as pavatar,
+      p.chef_tier           as ptier,
+      p.chef_score          as pscore,
+      p.public_recipe_count as pcount,
+      coalesce(s.likes, 0)  as plikes,
+      coalesce(s.saves, 0)  as psaves,
+      coalesce(s.views, 0)  as pviews
+    from profiles p
+    left join sums s on s.oid = p.id
+    -- Chefs with no public recipes (tasters, private-only accounts, brand-new
+    -- signups) still *have* a tier for badge purposes; they just don't occupy
+    -- leaderboard rows.
+    where p.public_recipe_count > 0
+  )
+  select
+    x.rnk, x.pid, x.pname, x.pavatar, x.ptier, x.pscore, x.pcount,
+    x.plikes, x.psaves, x.pviews
+  from ranked x
+  -- Deterministic full ordering; dense_rank above lets tied scores share a rank.
+  order by x.pscore desc, x.pcount desc, x.pname asc, x.pid asc
+  limit p_limit offset p_offset;
+$$;
+
+-- The blanket grant block above runs before this function exists on a first
+-- apply, and it only covers tables anyway — grant EXECUTE explicitly (B013).
+do $$
+begin
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'grant execute on function chefs_leaderboard(int, int) to anon, authenticated';
+  end if;
+end $$;
 
 -- Atomic deep-copy fork. Returns the new recipe id.
 create or replace function fork_recipe(p_source uuid)

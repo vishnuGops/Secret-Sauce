@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:app/features/auth/auth_screen.dart';
+import 'package:app/features/chefs/chefs_screen.dart';
 import 'package:app/features/discover/discover_screen.dart';
 import 'package:app/features/home/home_screen.dart';
 import 'package:app/features/my_recipes/my_recipes_screen.dart';
@@ -20,6 +21,7 @@ class Routes {
   static const home = '/';
   static const auth = '/auth';
   static const discover = '/discover';
+  static const chefs = '/chefs';
   static const myRecipes = '/my';
   static const profile = '/profile';
   static const newRecipe = '/recipe/new';
@@ -84,6 +86,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: Routes.discover,
             builder: (context, state) => const DiscoverScreen(),
+          ),
+          // Signed-out safe, like Discover — deliberately absent from the
+          // `needsAuth` list above.
+          GoRoute(
+            path: Routes.chefs,
+            builder: (context, state) => const ChefsScreen(),
           ),
           GoRoute(
             path: Routes.myRecipes,

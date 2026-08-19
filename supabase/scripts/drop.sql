@@ -40,9 +40,19 @@ drop function if exists recipes_trending(int) cascade;
 drop function if exists recipes_popular(int) cascade;
 drop function if exists recipes_search(text, int) cascade;
 drop function if exists fork_recipe(uuid) cascade;
+-- Chefs / leaderboard (Phase 18).
+drop function if exists on_recipe_stats_change() cascade;
+drop function if exists recompute_chef_stats(uuid) cascade;
+drop function if exists chef_score(bigint, bigint, bigint) cascade;
+drop function if exists chef_tier_for(numeric) cascade;
+drop function if exists chefs_leaderboard(int, int) cascade;
+-- seed_recipe signatures, oldest first. Each parameter-list change leaves the
+-- previous overload behind, so every historical signature stays listed here.
 drop function if exists seed_recipe(uuid, text, text, text, text, difficulty, int, int, int, text, jsonb, jsonb, int, int, int) cascade;
 drop function if exists seed_recipe(uuid, text, text, text, text, difficulty, int, int, int, text, jsonb, jsonb, int, int, int, jsonb) cascade;
+drop function if exists seed_recipe(uuid, text, text, text, text, difficulty, int, int, int, text, jsonb, jsonb, int, int, int, jsonb, recipe_visibility) cascade;
 drop function if exists seed_taster_ids() cascade;
+drop function if exists seed_chef_ids() cascade;
 drop function if exists seed_ratings(uuid, jsonb) cascade;
 
 -- Enums.
@@ -50,3 +60,4 @@ drop type if exists difficulty cascade;
 drop type if exists recipe_visibility cascade;
 drop type if exists share_permission cascade;
 drop type if exists suggestion_status cascade;
+drop type if exists chef_tier cascade;

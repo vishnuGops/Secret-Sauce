@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:core/src/repositories/auth_repository.dart';
+import 'package:core/src/repositories/chef_repository.dart';
 import 'package:core/src/repositories/discover_repository.dart';
 import 'package:core/src/repositories/profile_repository.dart';
 import 'package:core/src/repositories/recipe_repository.dart';
@@ -27,6 +28,10 @@ final discoverRepositoryProvider = Provider<DiscoverRepository>((ref) {
 
 final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
   return SupabaseProfileRepository(ref.watch(supabaseClientProvider));
+});
+
+final chefRepositoryProvider = Provider<ChefRepository>((ref) {
+  return SupabaseChefRepository(ref.watch(supabaseClientProvider));
 });
 
 final storageServiceProvider = Provider<StorageService>((ref) {

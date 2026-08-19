@@ -204,61 +204,67 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 
 ## Phase 18 — Chefs, tiers & leaderboard
 
-Design: [SDS.md §10](./SDS.md#10-chefs-tiers--leaderboard--design-phase-18-not-yet-implemented) ·
+Design: [SDS.md §10](./SDS.md#10-chefs-tiers--leaderboard) ·
 Execution: [EXECUTION-PLAN.md Phase 18](./EXECUTION-PLAN.md#phase-18--chefs-tiers--leaderboard)
 
 ### Schema (`0001_init.sql`, idempotent)
 
-- [ ] `chef_tier` enum (guarded) — five tiers `home_cook … master_chef`
-- [ ] `profiles.chef_score / chef_tier / public_recipe_count` via `add column if not exists`
-- [ ] `chef_score()` + `chef_tier_for()` immutable functions (single source of truth)
-- [ ] `recompute_chef_stats(uuid)` — invoker-rights, EXECUTE revoked from API roles
-- [ ] `on_recipe_stats_change` trigger on `recipes` — **`security definer set search_path =
+- [x] `chef_tier` enum (guarded) — five tiers `home_cook … master_chef`
+- [x] `profiles.chef_score / chef_tier / public_recipe_count` via `add column if not exists`
+- [x] `chef_score()` + `chef_tier_for()` immutable functions (single source of truth)
+- [x] `recompute_chef_stats(uuid)` — invoker-rights, EXECUTE revoked from API roles
+- [x] `on_recipe_stats_change` trigger on `recipes` — **`security definer set search_path =
       public`** (writes other users' `profiles` rows; B011 class), handles insert/delete/update
       incl. `visibility` and `owner_id` changes
-- [ ] Idempotent backfill recomputing all profiles on every apply
-- [ ] `chefs_leaderboard(p_limit, p_offset)` RPC — dense_rank, deterministic tie-breaks,
+- [x] Idempotent backfill recomputing all profiles on every apply
+- [x] `chefs_leaderboard(p_limit, p_offset)` RPC — dense_rank, deterministic tie-breaks,
       excludes `public_recipe_count = 0`, explicit `visibility = 'public'` filter
-- [ ] `drop.sql`: new functions/trigger/type + the old `seed_recipe` signature
-- [ ] Grants check: new function EXECUTE for `anon`/`authenticated` on `chefs_leaderboard` only
+- [x] `drop.sql`: new functions/trigger/type + the old `seed_recipe` signature
+- [x] Grants check: new function EXECUTE for `anon`/`authenticated` on `chefs_leaderboard` only
       (B013 class — the blanket grant block runs before these objects exist on first apply)
 
 ### core
 
-- [ ] `ChefTier` Dart enum (5 values, `unknownEnumValue` fallback) — updates the "four enums"
+- [x] `ChefTier` Dart enum (5 values, `unknownEnumValue` fallback) — updates the "four enums"
       note in `CLAUDE.md`
-- [ ] `Profile` + `chefScore` / `chefTier` / `publicRecipeCount`; `Recipe` + embedded
+- [x] `Profile` + `chefScore` / `chefTier` / `publicRecipeCount`; `Recipe` + embedded
       `Profile? owner`; codegen re-run
-- [ ] `owner:profiles(…)` embedding added to recipe list/detail/RPC queries
-- [ ] `ChefStanding` model + `ChefRepository` (abstract + Supabase impl, provider wiring)
+- [x] Owner embedding added to recipe list/detail/RPC queries — as the shared `kRecipeSelect`
+      constant in `recipe_queries.dart`. **The plain `owner:profiles(…)` form does not work**:
+      `recipes` and `profiles` are related five ways, so PostgREST answers `PGRST201` unless the
+      FK is named (`owner:profiles!recipes_owner_id_fkey(…)`)
+- [x] `ChefStanding` model + `ChefRepository` (abstract + Supabase impl, provider wiring)
 
 ### design_system
 
-- [ ] `TierChip` (theme-aware tier colors, light + dark)
-- [ ] `ChefBadge` (avatar + name + tier **under** the name; `compact` variant)
-- [ ] Barrel exports for both (Gotcha 13)
-- [ ] `RecipeCard`: chef badge as **cover overlay, bottom-left** — never a new column row
+- [x] `TierChip` (theme-aware tier colors, light + dark)
+- [x] `ChefBadge` (avatar + name + tier **under** the name; `compact` variant)
+- [x] Barrel exports for both (Gotcha 13)
+- [x] `RecipeCard`: chef badge as **cover overlay, bottom-left** — never a new column row
       (B001/B002/B016); envelope tests at 276 px / 2.0× text scale
 
 ### app
 
-- [ ] `/chefs` route in the `ShellRoute` + `AppShell` destination (signed-out safe — no redirect
+- [x] `/chefs` route in the `ShellRoute` + `AppShell` destination (signed-out safe — no redirect
       change)
-- [ ] `features/chefs/`: leaderboard screen + providers (loading/empty/error states)
-- [ ] Recipe detail: full `ChefBadge` under the title
+- [x] `features/chefs/`: leaderboard screen + providers (loading/empty/error states)
+- [x] Recipe detail: full `ChefBadge` under the title
 
 ### Seed + verification
 
-- [ ] Seed chefs d1–d7 (fixed UUIDs, randomized passwords — B018): one per tier, exact-threshold
+- [x] Seed chefs d1–d7 (fixed UUIDs, randomized passwords — B018): one per tier, exact-threshold
       boundary, zero-engagement, private-only, tied-score pair
-- [ ] `seed_recipe()` + `p_visibility` param (old signature → `drop.sql`)
-- [ ] Local-stack verification run recorded in `BUG-TRACKER.md`: idempotent double-apply, tier
+- [x] `seed_recipe()` + `p_visibility` param (old signature → `drop.sql`)
+- [x] Local-stack verification run recorded in `BUG-TRACKER.md`: idempotent double-apply, tier
       boundaries, trigger fires for non-owner engagement (definer check), leaderboard
       exclusions/ties, anon RPC call
-- [ ] Widget tests: `TierChip`, `ChefBadge`, card overlay envelope; `melos run analyze` + `test
-      --no-select` clean
-- [ ] Docs sync: SDS §3/§6/§7/§8 fold-in, `CLAUDE.md` feature map + enum count + server-owned
-      columns list, `README.md` if commands change
+- [x] Widget tests: `TierChip`, `ChefBadge`, card overlay envelope, leaderboard screen states;
+      `melos run analyze` + `test --no-select` clean (35 tests)
+- [x] Fix B023: two `RenderFlex` overflows in the leaderboard row, found by the new
+      320 px / 2.0× envelope test before merge
+- [x] Docs sync: SDS §3/§4/§7/§8/§10 fold-in, `CLAUDE.md` feature map + enum count +
+      server-owned columns list + FK-hint gotcha (`README.md` unchanged — no command changes)
+- [ ] Re-apply `0001_init.sql` + `seed.sql` to the **hosted** project (both idempotent)
 
 ---
 

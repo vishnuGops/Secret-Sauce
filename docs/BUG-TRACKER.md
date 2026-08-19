@@ -47,6 +47,12 @@ Status: `open` \| `in-progress` \| `fixed` \| `wontfix`
 | ---- | ---------- | -------- | ---- | ----------- | ------ | ------------ |
 | B022 | 2026-08-18 | high     | core | Recipe steps (and ingredients, and both group lists) render in **reverse order** — the last step shows first. Root cause: postgrest-dart's `.order(column)` defaults to `ascending: false`, and the four nested-content fetches in `SupabaseRecipeRepository._fetchIngredientGroups` / `_fetchStepGroups` ([recipe_repository.dart:273-315](../packages/core/lib/src/repositories/recipe_repository.dart)) omit `ascending: true` — so `ingredient_groups`, `ingredients`, `step_groups`, and `steps` all come back descending. Every other `.order()` in the repo passes `ascending: false` explicitly and is correct. **Secondary damage:** `update()` round-trips through `getById()` — the editor loads the reversed list, and `_persistContent` re-indexes it `0..n` on save, so the **stored** order flips on every edit. A recipe edited an odd number of times has reversed rows in the DB (and then *displays* correctly under the current bug — double reversal). `_appendVersion` snapshots via `getById()` too, so `content_snapshot` list order is also unreliable for edited recipes. Seeded recipes are unaffected in storage (`seed.sql` writes ascending SQL directly and they are never edited). | fixed | `ascending: true` added to all four call sites in `_fetchIngredientGroups` / `_fetchStepGroups`, with a comment naming the postgrest-dart default so it is not "cleaned up" later. Verified on the local stack in both directions — see the B022 verification run below. **Stored-order audit: nothing to repair.** All 6 recipes on the hosted project have exactly one `recipe_versions` row (`version_number = 1`, `'Seeded recipe'`), so no recipe has ever been saved through the editor and no persisted order was ever flipped. (`updated_at` on those rows has moved, but that is `recipes_touch` firing for the rating/counter triggers, not an edit.) **Residual gap:** the project's one real account (`Vishnu`, created 2026-08-18) may own private recipes, which are not readable with the anon key — if any were created *and* edited before this fix, check them by hand. |
 
+### UI bugs (found building the chefs leaderboard, 2026-08-18)
+
+| ID   | Date       | Severity | Area | Description | Status | Fix / Commit |
+| ---- | ---------- | -------- | ---- | ----------- | ------ | ------------ |
+| B023 | 2026-08-18 | medium   | chefs | Two `RenderFlex` overflows in a leaderboard row, same class as B001/B002/B016 — found by the new 320px / 2.0×-text-scale envelope test **before merge**, not in review. (a) `_Stats` builds each stat as a `Row` of icon + `Text`; a `Wrap` constrains each child to the wrap width, but an intrinsically-sized `Text` in a `Row` has no way to degrade, so large counts overflowed by 17px and then 85px. (b) The trailing score `Column` was unconstrained, so it took its intrinsic width; at 2.0× scale on a 320px phone that starved the `Expanded` chef badge beside it until `ChefBadge`'s own row — whose fixed floor is avatar + gap — overflowed by 8.8px. The second is the more instructive one: the widget that overflowed was not the widget at fault. | fixed | Stat labels wrapped in `Flexible` + ellipsis; the score column bounded by `ConstrainedBox(maxWidth: 96)` with both texts `maxLines: 1` + ellipsis. Regression tests pump a worst-case row (38-char name, `Master Chef`, six-figure counts, score `987654.5`) at 320/360/600px @ 2.0×. |
+
 ### Documentation bugs (found auditing `CLAUDE.md` against the code, 2026-08-18)
 
 | ID   | Date       | Severity | Area | Description                                                                                                                                                                                                                                                                                                                                                                                                       | Status | Fix / Commit                                                                                                                                                                                                                                                                                       |
@@ -119,6 +125,41 @@ harness, which exercises the same code path the screen does and asserts stored o
 | **Control:** same harness with the four `ascending: true` flags removed      | **fails** — `['SG-B', 'SG-A']`; the check is not vacuous |
 | `melos run analyze` (core, design_system, app)                               | clean ×3                                        |
 | Hosted audit: `recipe_versions` per recipe                                   | 6 recipes, all `v1 'Seeded recipe'` — never app-edited |
+
+### Chefs / leaderboard verification run (2026-08-18, local Supabase stack)
+
+`supabase db reset` (migrations + seed), then the trigger and RLS behavior exercised with
+`set local role` / `request.jwt.claims`, the RPC called over PostgREST as `anon`, and the Dart
+side driven by a throwaway harness under `apps/app/test/` (deleted after — CI has no DB job).
+
+| Check                                                                       | Result |
+| --------------------------------------------------------------------------- | ------ |
+| `0001_init.sql` + `seed.sql` apply cleanly on a fresh DB                     | pass — 15 recipes, 16 profiles |
+| Seeded tier ladder                                                          | pass — d1 21000 `master_chef`, Kitchen 10189 `head_chef` (unassisted), d2 5500 `head_chef`, d3/d7 1200 `sous_chef`, d4 100 `line_cook`, d5 0 `home_cook` |
+| Score of **exactly 100** (d4)                                               | `line_cook` ✔ — thresholds are inclusive |
+| Multi-recipe chef (d1, two recipes)                                         | pass — 21000 = sum of both, not either alone |
+| `dense_rank` tie (d3 vs d7, 1200 each via different mixes)                  | pass — both rank 4, next rank is 5, no gap |
+| **Private-only chef (d6)**                                                  | pass — 5000/2000/10000 on a private recipe would score 27000; actual `chef_score` 0, `home_cook`, absent from the board |
+| Tasters (no recipes)                                                        | absent from the board ✔ (`public_recipe_count > 0` filter) |
+| **B011 definer check:** non-owner likes a chef's recipe                     | pass — owner score 100 → 103 |
+| Non-owner save + view                                                       | pass — 103 → 108.2 |
+| Unlike returns the score                                                    | pass — 108.2 → 105.2 |
+| Recipe flipped `private`                                                    | pass — 5500 → 0, `home_cook`, drops off the board; flipping back restores 5500 / `head_chef` |
+| Recipe deleted                                                              | pass — 21000 → 13100 (the deleted recipe was worth 7900) |
+| Recipe changes owner                                                        | pass — both old and new owner recomputed |
+| `anon` calls `chefs_leaderboard` (psql role **and** PostgREST `/rpc/`)      | pass — 7 ranked rows |
+| `anon` calls `recompute_chef_stats`                                         | `permission denied for function` ✔ |
+| **Double-apply** of `0001_init.sql` + `seed.sql` on top                     | pass — no errors, byte-identical chef stats, no duplicate rows |
+| `drop.sql` → re-create → re-seed                                            | pass — no leftover functions or types; exactly **one** `seed_recipe` overload (old 16-arg signature dropped) |
+| Owner embedding, bare `owner:profiles(...)`                                 | **PGRST201** — ambiguous, five relationships; the FK hint is mandatory (see B-note in SDS §10.5) |
+| Owner embedding, `owner:profiles!recipes_owner_id_fkey(...)`                | pass on the `recipes` table, `recipes_popular` / `_trending` / `_search`, and nested in `recipe_shares` |
+| Dart decode, signed out — leaderboard order, tiers, ranks, exclusions       | pass |
+| Dart decode — `chef_score` (Postgres `numeric`) as `double` (Gotcha 11)     | pass — generated as `(json['chef_score'] as num?)?.toDouble()` |
+| Rating write does **not** rewrite the owner's `profiles` row (`is distinct from` guard) | pass — `xmin` unchanged across a rating insert; a like still moves 100 → 103 |
+| `melos run analyze` / `melos run test --no-select`                          | clean ×3 / 35 passing |
+
+The hosted project still needs `0001_init.sql` + `seed.sql` re-applied (both idempotent) to pick
+up the chef columns, trigger, and leaderboard RPC.
 
 ## Known environment limitations (not bugs)
 

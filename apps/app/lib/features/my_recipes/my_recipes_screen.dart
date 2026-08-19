@@ -38,6 +38,9 @@ class MyRecipesScreen extends ConsumerWidget {
             _Tab(
               provider: myRecipesProvider,
               showVisibility: true,
+              // Every card here is mine — a repeated chef badge is noise, and
+              // it would fight the public/private pill for cover space.
+              showChef: false,
               empty: EmptyView(
                 title: 'No recipes yet',
                 message: 'Create your first recipe to start your vault.',
@@ -69,11 +72,13 @@ class _Tab extends ConsumerWidget {
     required this.provider,
     required this.empty,
     this.showVisibility = false,
+    this.showChef = true,
   });
 
   final ProviderListenable<AsyncValue<List<Recipe>>> provider;
   final Widget empty;
   final bool showVisibility;
+  final bool showChef;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -83,7 +88,11 @@ class _Tab extends ConsumerWidget {
       error: (e, _) => ErrorView(message: e.toString()),
       data: (recipes) => recipes.isEmpty
           ? empty
-          : RecipeGrid(recipes: recipes, showVisibility: showVisibility),
+          : RecipeGrid(
+              recipes: recipes,
+              showVisibility: showVisibility,
+              showChef: showChef,
+            ),
     );
   }
 }

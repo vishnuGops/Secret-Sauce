@@ -129,6 +129,14 @@ class _Body extends ConsumerWidget {
                 ],
               ),
             ),
+          // The owning chef, directly under the title in the collapsing app
+          // bar. Null whenever the recipe was loaded without the owner
+          // embedding — render nothing rather than an empty badge.
+          if (recipe.owner != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: AppSpacing.md),
+              child: ChefBadge.fromProfile(recipe.owner!),
+            ),
           Padding(
             padding: const EdgeInsets.only(bottom: AppSpacing.sm),
             child: StarRating(

@@ -10,6 +10,7 @@ export 'src/models/recipe_step.dart';
 export 'src/models/step_group.dart';
 export 'src/models/recipe_version.dart';
 export 'src/models/recipe.dart';
+export 'src/models/chef_standing.dart';
 
 // Services
 export 'src/services/supabase_service.dart';
@@ -20,6 +21,7 @@ export 'src/repositories/auth_repository.dart';
 export 'src/repositories/recipe_repository.dart';
 export 'src/repositories/discover_repository.dart';
 export 'src/repositories/profile_repository.dart';
+export 'src/repositories/chef_repository.dart';
 
 // Providers
 export 'src/providers.dart';

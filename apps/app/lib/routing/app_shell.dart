@@ -16,6 +16,8 @@ class AppShell extends ConsumerWidget {
 
   static const _destinations = [
     _Dest(Routes.discover, Icons.explore_outlined, Icons.explore, 'Discover'),
+    _Dest(Routes.chefs, Icons.emoji_events_outlined, Icons.emoji_events,
+        'Chefs'),
     _Dest(Routes.myRecipes, Icons.menu_book_outlined, Icons.menu_book,
         'My Recipes'),
     _Dest(Routes.profile, Icons.person_outline, Icons.person, 'Profile'),

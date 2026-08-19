@@ -3,6 +3,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:design_system/src/theme/app_theme.dart';
+import 'package:design_system/src/widgets/chef_badge.dart';
 import 'package:design_system/src/widgets/difficulty_badge.dart';
 import 'package:design_system/src/widgets/star_rating.dart';
 
@@ -11,17 +12,29 @@ import 'package:design_system/src/widgets/star_rating.dart';
 /// Shows cover image, name, short description, total cook time, average star
 /// rating, and a difficulty badge. Set [showVisibility] on surfaces that mix
 /// private and public recipes (My Recipes) to overlay a public/private badge.
+///
+/// When [Recipe.owner] is embedded, the owning chef is drawn as an overlay on
+/// the **cover image**, bottom-left. That placement is deliberate: the tile is
+/// fixed-aspect (`childAspectRatio` in `recipe_grid.dart`) so its text column
+/// cannot grow, and all three logged overflow bugs (B001/B002/B016) came from
+/// adding an intrinsically-sized child to that column. The cover `Stack` has
+/// slack; the column does not.
 class RecipeCard extends StatelessWidget {
   const RecipeCard({
     super.key,
     required this.recipe,
     this.onTap,
     this.showVisibility = false,
+    this.showChef = true,
   });
 
   final Recipe recipe;
   final VoidCallback? onTap;
   final bool showVisibility;
+
+  /// Set false on surfaces where every card has the same owner (My Recipes),
+  /// so the badge is not repeated on every tile.
+  final bool showChef;
 
   String get _timeLabel {
     final total = recipe.totalMinutes;
@@ -57,6 +70,13 @@ class RecipeCard extends StatelessWidget {
                         visibility: recipe.visibility,
                         scheme: scheme,
                       ),
+                    ),
+                  if (showChef && recipe.owner != null)
+                    Positioned(
+                      left: AppSpacing.sm,
+                      right: AppSpacing.sm,
+                      bottom: AppSpacing.sm,
+                      child: _ChefOverlay(owner: recipe.owner!),
                     ),
                 ],
               ),
@@ -129,6 +149,34 @@ class RecipeCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// The owning chef, drawn over the bottom of the cover image on a scrim.
+///
+/// `Positioned` with both `left` and `right` set gives this a bounded width, so
+/// the badge's name and tier chip ellipsize instead of overflowing at the 276px
+/// two-column width or at 2.0x text scale.
+class _ChefOverlay extends StatelessWidget {
+  const _ChefOverlay({required this.owner});
+
+  final Profile owner;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: AppSpacing.xs,
+      ),
+      decoration: BoxDecoration(
+        // Scrim: cover photos are arbitrary, so the badge carries its own
+        // contrast rather than relying on the image being dark.
+        color: Colors.black.withValues(alpha: 0.55),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: ChefBadge.fromProfile(owner, compact: true, onSurfaceImage: true),
     );
   }
 }

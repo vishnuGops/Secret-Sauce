@@ -231,9 +231,9 @@ That harness is not committed. Repository tests remain blocked on mocking `Supab
 
 ## Phase 18 — Chefs, tiers & leaderboard
 
-**Status: planned.** Full design in [SDS.md §10](./SDS.md#10-chefs-tiers--leaderboard--design-phase-18-not-yet-implemented);
-this section is the build order. Do Phase 17 first — leaderboard verification opens recipes, and
-reversed steps would poison every eyeball check.
+**Status: done.** Full design in [SDS.md §10](./SDS.md#10-chefs-tiers--leaderboard); this section
+is the build order that was followed. Phase 17 landed first (commit `2f2e6e0`) — leaderboard
+verification opens recipes, and reversed steps would have poisoned every eyeball check.
 
 **Approach:** "Chef" is a presentation of `profiles` — no new principal table. Score/tier are
 denormalized onto `profiles` (`chef_score`, `chef_tier`, `public_recipe_count`), maintained by a
@@ -291,6 +291,34 @@ round-trips. The leaderboard is an RPC over the denormalized columns. Recipe→c
   clean; card envelope tests pass at 276 px / 2.0×.
 - Hosted rollout is one idempotent re-apply of `0001_init.sql` + `seed.sql` (both already safe
   by rule).
+
+**Outcome — all of the above met.** Results table in
+[BUG-TRACKER.md](./BUG-TRACKER.md#chefs--leaderboard-verification-run-2026-08-18-local-supabase-stack).
+`melos run analyze` clean ×3; `melos run test --no-select` 35 passing. The hosted re-apply is the
+one remaining item.
+
+**Two things the plan got wrong, corrected in the build:**
+
+1. **The owner embedding needs an explicit FK hint.** §10.5 specified
+   `owner:profiles(id, display_name, avatar_url, chef_tier)`. That form is rejected outright —
+   `recipes` and `profiles` are related five ways (`owner_id`, plus many-to-many through
+   `recipe_likes`, `recipe_ratings`, `recipe_saves`, `recipe_shares`), so PostgREST answers
+   `PGRST201: Could not embed because more than one relationship was found`. The working form
+   names the constraint: `owner:profiles!recipes_owner_id_fkey(...)`. It is now a single shared
+   constant (`kRecipeSelect` in `core/src/repositories/recipe_queries.dart`) because dropping the
+   hint breaks `getById`, both list queries, and all four Discover queries simultaneously.
+2. **The leaderboard row overflowed** at the accessibility envelope (B023) — caught by the new
+   320 px / 2.0× test before merge, not in review. See the tracker entry.
+
+**How the Dart side was verified** (Chrome is not installed, so no browser pass; `packages/core`
+has no test dir, so `melos run test` says nothing about repositories — Gotcha 14): a throwaway
+harness under `apps/app/test/` ran `SupabaseChefRepository`, `SupabaseDiscoverRepository`,
+`SupabaseRecipeRepository`, and `SupabaseProfileRepository` against the local stack **signed
+out**, asserting the seeded tier ladder, the `dense_rank` tie, the exact-100 boundary, both
+exclusions, `chef_score` decoding as a `double`, and the owner embedding on all five recipe
+surfaces — plus that `anon` cannot call `recompute_chef_stats`. Deleted after the run (CI has no
+database job). The committed `chefs_screen_test.dart` covers the screen's
+loading/empty/error/tie-render states with a fake `ChefRepository`, no database needed.
 
 ## Build, run & release (ops)
 

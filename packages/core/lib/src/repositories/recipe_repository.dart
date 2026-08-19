@@ -7,6 +7,7 @@ import 'package:core/src/models/recipe.dart';
 import 'package:core/src/models/recipe_step.dart';
 import 'package:core/src/models/recipe_version.dart';
 import 'package:core/src/models/step_group.dart';
+import 'package:core/src/repositories/recipe_queries.dart';
 
 /// Recipe CRUD, forking, versioning, sharing, and social actions.
 abstract interface class RecipeRepository {
@@ -81,7 +82,8 @@ class SupabaseRecipeRepository implements RecipeRepository {
 
   @override
   Future<Recipe> getById(String id) async {
-    final row = await _client.from('recipes').select().eq('id', id).single();
+    final row =
+        await _client.from('recipes').select(kRecipeSelect).eq('id', id).single();
     final recipe = Recipe.fromJson(row);
     return recipe.copyWith(
       ingredientGroups: await _fetchIngredientGroups(id),
@@ -93,7 +95,7 @@ class SupabaseRecipeRepository implements RecipeRepository {
   Future<List<Recipe>> listMine() async {
     final rows = await _client
         .from('recipes')
-        .select()
+        .select(kRecipeSelect)
         .eq('owner_id', _uid)
         .order('updated_at', ascending: false);
     return rows.map<Recipe>(Recipe.fromJson).toList();
@@ -103,7 +105,7 @@ class SupabaseRecipeRepository implements RecipeRepository {
   Future<List<Recipe>> listSharedWithMe() async {
     final rows = await _client
         .from('recipe_shares')
-        .select('recipes(*)')
+        .select('recipes($kRecipeSelect)')
         .eq('shared_with_user_id', _uid);
     return rows
         .map<Recipe>((r) => Recipe.fromJson(r['recipes'] as Map<String, dynamic>))

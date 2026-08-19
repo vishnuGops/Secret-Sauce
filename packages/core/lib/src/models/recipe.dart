@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:core/src/models/enums.dart';
 import 'package:core/src/models/ingredient_group.dart';
+import 'package:core/src/models/profile.dart';
 import 'package:core/src/models/step_group.dart';
 
 part 'recipe.freezed.dart';
@@ -43,6 +44,10 @@ class Recipe with _$Recipe {
     @JsonKey(includeToJson: false)
     @Default(<StepGroup>[])
     List<StepGroup> stepGroups,
+    // The owning chef, embedded by PostgREST via kRecipeSelect. Null on any
+    // query that does not ask for the embedding — surfaces render no badge
+    // rather than failing.
+    @JsonKey(includeToJson: false) Profile? owner,
   }) = _Recipe;
 
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
