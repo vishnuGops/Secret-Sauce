@@ -45,7 +45,9 @@ secret-sauce/
 ├── packages/
 │   ├── core/lib/
 │   │   ├── core.dart              # BARREL — the only public surface of `core`
-│   │   └── src/{models,repositories,services}/ + providers.dart
+│   │   ├── src/{models,repositories,services}/ + providers.dart
+│   │   └── ../test/               # chef_models_test.dart (model decoding only —
+│   │                              # repositories are still untested)
 │   └── design_system/lib/
 │       ├── design_system.dart     # BARREL — export new widgets here or app can't import them
 │       ├── src/{theme,layout,widgets}/
@@ -56,7 +58,7 @@ secret-sauce/
 │   │                          # recipe_editor, profile — screen + *_providers.dart per feature
 │   ├── lib/routing/           # app_router.dart (routes + redirect), app_shell.dart (nav)
 │   ├── lib/widgets/           # app-level shared widgets (recipe_grid.dart)
-│   ├── lib/main.dart · test/{widget_test,chefs_screen_test}.dart
+│   ├── lib/main.dart · test/{widget_test,chefs_screen_test,chefs_routing_test}.dart
 │   ├── env.example.json       # template; env.local.json (git-ignored) holds real creds
 │   └── android/ ios/ web/ windows/   # platform runners are committed — no `flutter create`
 └── supabase/
@@ -117,7 +119,7 @@ dart pub global activate melos 6.3.3  # once — matches root pubspec (`melos: ^
 melos bootstrap                     # resolve + link all packages
 melos run build_runner --no-select  # codegen (freezed/json) — REQUIRED before first analyze/run
 melos run analyze                   # flutter analyze across all packages
-melos run test --no-select          # tests (apps/app + design_system; core has no test dir)
+melos run test --no-select          # tests (any package with a test/ dir — currently all three)
 melos run format                    # dart format .
 
 # Run the app (env creds are wired in). Web-server is the most reliable device here;
@@ -317,13 +319,17 @@ the `code-review` skill). The ones you need while *writing* code:
     breakpoint), longest labels, **2.0× text scale**.
 14. **New `design_system` widget → export it from `design_system.dart`**, or `apps/app` cannot
     import it.
-15. **`packages/core` has no `test/` directory**, so every repository, `snapRating`, and all JSON
-    decoding are untested — `melos run test --no-select` only covers `apps/app` and
-    `design_system`. Repository tests are blocked on mocking `SupabaseClient` (ROADMAP Phase 3).
-    Treat a green test run as *no evidence at all* about `core`; verify core changes against a
-    local Supabase stack instead. A throwaway harness under `apps/app/test/` pointed at
-    `http://127.0.0.1:54321` is the practical way to exercise real repository code — delete it
-    after, since CI has no database job.
+15. **`packages/core` is only *partly* tested, and the untested half is the risky half.**
+    `packages/core/test/` covers pure JSON→model decoding (enum wire values, column-name
+    mappings, `numeric` handling) — no `SupabaseClient` needed, so that blocker never applied
+    there. Still untested: **every repository method**, `snapRating`, and anything that issues a
+    query. Those remain blocked on mocking `SupabaseClient` (ROADMAP Phase 3). A green run proves
+    your models decode; it proves nothing about what the database actually returns. For that,
+    verify against a local stack — a throwaway harness under `apps/app/test/` pointed at
+    `http://127.0.0.1:54321` is the practical way to drive real repository code; delete it after,
+    since CI has no database job.
+    **Nothing in CI tests SQL at all** — the formula/threshold functions, the triggers, RLS, and
+    the ranking RPCs are covered only by manual local-stack runs recorded in `BUG-TRACKER.md`.
 16. **Embedding `profiles` into a recipe query needs the FK hint.** `recipes` and `profiles` are
     related five ways (`owner_id`, plus many-to-many through likes/ratings/saves/shares), so the
     obvious `owner:profiles(...)` fails with `PGRST201: Could not embed because more than one

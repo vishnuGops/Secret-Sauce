@@ -51,7 +51,9 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [x] `RecipeRepository` (CRUD, fork, versioning) contract + Supabase impl
 - [x] `DiscoverRepository` (popular/trending/recent/search) contract + impl
 - [x] `StorageService` (image upload)
-- [ ] Unit tests for repositories _(needs Supabase client mocking)_
+- [x] `packages/core/test/` exists — model/enum JSON decoding is covered (pure functions; no
+      client needed)
+- [ ] Unit tests for **repositories** _(still blocked — needs Supabase client mocking)_
 
 ## Phase 4 — design_system
 
@@ -264,6 +266,12 @@ Execution: [EXECUTION-PLAN.md Phase 18](./EXECUTION-PLAN.md#phase-18--chefs-tier
       320 px / 2.0× envelope test before merge
 - [x] Docs sync: SDS §3/§4/§7/§8/§10 fold-in, `CLAUDE.md` feature map + enum count +
       server-owned columns list + FK-hint gotcha (`README.md` unchanged — no command changes)
+- [x] Coverage audit + gap fill: added `packages/core/test/` (**first tests in `core`** — model
+      decoding is pure, so the `SupabaseClient`-mocking blocker never applied to it) covering the
+      `ChefTier` wire format, the `unknownEnumValue` fallback, `ChefStanding` / `Profile` /
+      `Recipe.owner` decoding, `numeric`-as-int-or-double, and a `kRecipeSelect` FK-hint guard;
+      plus `chefs_routing_test.dart` pinning `/chefs` as signed-out safe while the guarded routes
+      stay guarded. 35 → 65 tests
 - [x] Re-apply `0001_init.sql` to the **hosted** project — applied; backfill scored all 10
       existing profiles, Kitchen lands `head_chef` at 10197
 - [x] Fix B024: `seed.sql` failed on any **already-seeded** database — the `seed_recipe` signature

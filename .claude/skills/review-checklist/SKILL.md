@@ -182,6 +182,10 @@ measurement. New `design_system` widgets must be added to the `design_system.dar
   affect `0001_init.sql`/`drop.sql`, High otherwise. §3 and §5 are High. §7 is Medium.
 - Generated `*.g.dart` / `*.freezed.dart` are git-ignored (`.gitignore:11-13`) — their absence
   from a diff is never a finding; the missing `melos run build_runner` is (see below).
+- **`packages/core` now has a `test/` dir, but it covers model decoding only.** Every repository
+  method is still untested and still blocked on mocking `SupabaseClient`, and **no SQL is tested
+  anywhere** — CI has no database job. A green `melos run test --no-select` says nothing about a
+  repository or schema change; require local-stack evidence for those.
 
 ## Doc-sync obligations
 
