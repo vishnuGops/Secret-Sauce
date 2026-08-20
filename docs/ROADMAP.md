@@ -503,6 +503,67 @@ three cards across 1400px".
 - [ ] Nothing caps the grid's overall width, so a 4K window gets ~13 columns. If that reads as too
       many, the fix is a max content width on the screens, not on the card
 
+## Phase 21 — Top navigation v2 (web only)
+
+Redrawn in Claude Design (`Design System.dc.html` → "Chrome & states") and ported. The old bar put
+brand, four destinations, and a `New recipe` button in one row and needed ~700px; it overlapped at
+medium. The design's fix is three changes, all implemented in
+[top_nav_bar.dart](apps/app/lib/routing/top_nav_bar.dart) — the row now needs ~470px.
+
+- [x] **Profile leaves the destination list** and becomes the avatar at the far right, where it
+      also reads as *account*. `PopupMenuButton` behind it: name + `TierChip` header, Profile,
+      Sign out. Nothing selected in the pill on `/profile` — the old shell highlighted Discover
+      there, because `indexWhere` returning `-1` fell back to 0
+- [x] **Destinations sit in a centred segmented pill** (`surfaceContainerHigh` track, active chip
+      lifted back to `surfaceContainerLowest` with the design's `0 1px 2px` shadow, `primary` w800
+      label + filled icon)
+- [x] **`New recipe` left the bar** for the page it belongs to: the My Recipes header (labelled
+      `FilledButton` on web, the existing icon on compact, where the shell's FAB is the labelled
+      call to action). Search already lives in Discover's search bar
+- [x] Signed out: `Sign in` + `Sign up` (`/auth?mode=signup` opens the screen on its sign-up
+      side), collapsing to one filled `login` button at medium. My Recipes is not offered signed
+      out — it could only bounce to `/auth`
+- [x] `ChefAvatar` in `design_system` (exported): initials fallback, optional `primary` ring and
+      tier dot, so rank is readable at 34px. `ChefBadge`'s private `_Avatar` was folded into it
+- [x] `myProfileProvider` in `core/src/providers.dart` — the bar's avatar and the profile screen
+      read one cached profile instead of two. `valueOrNull`, so a slow or failed read still leaves
+      a usable account button rather than a spinner in the chrome
+- [x] `NavDestination` + the two lists in [nav_destinations.dart](apps/app/lib/routing/nav_destinations.dart):
+      mobile keeps four slots including Profile (a phone has no room for an account menu, and a
+      fixed four does not reflow on sign-in); web has Discover / Chefs / My Recipes-when-signed-in
+- [x] **Labels never wrap.** The pill measures its labels with a `TextPainter` at the live text
+      scale and picks the most generous mode that fits: all labels (expanded), active label only
+      (medium, and expanded when the measurement says so), icons only. The bar height itself
+      scales with the text scaler, capped at 1.6×
+- [x] The pill is centred **on the bar**, not between the clusters — `CustomMultiChildLayout`
+      reserves `max(brand, actions)` on both sides, so the brand's width does not push it right
+- [x] Tests: `apps/app/test/top_nav_bar_test.dart` — destinations per auth state, no Profile and
+      no `New recipe` in the bar, the account menu opens, medium collapses to `login`, label
+      degradation, **the pill is centred on the bar** (the one contract `_BarLayout` exists for),
+      both auth doors, and a 600/760/1000/1400 × 1.0/2.0× no-overflow envelope;
+      `apps/app/test/my_recipes_header_test.dart` covers the header's new labelled button
+- [x] `melos run analyze` clean; `melos run test --no-select` green (105 tests)
+
+**Review pass** (`/code-review`, same change set). Fixed: the `TextPainter` in `_fit` ran inside
+`LayoutBuilder` and was never disposed — a paragraph leak per layout pass, i.e. per frame of a
+drag-resize; `TopNavBar.height` defaulted to `kTopNavHeight`, silently opting a caller out of the
+text scaling `heightFor` exists to provide, so it is now required; `_fit`'s fall-through to
+icons-only now asserts that icons-only actually fits, since below that the pill has nothing left
+to degrade; `ChefAvatar` added to SDS §8. **Refuted by measurement:** the labelled `New recipe`
+button was flagged as a B016-shaped overflow (it wants ~68px in a 56px toolbar at 2.0×) — probing
+it with the guard removed showed the toolbar clamps it with no `RenderFlex` error, so the label
+stays at every scale and the envelope test now pins that instead of a fix that was not needed.
+
+Compact is untouched: the design is web-only, so `NavigationBar` + FAB still ship as they were.
+
+### Deferred
+
+- [ ] Every shell screen still draws **its own `AppBar`** under the new bar (Discover, Chefs, My
+      Recipes), so web shows two stacked bars. The design's screen mockups have one; folding the
+      page title into the content is a per-screen change, not a nav change
+- [ ] The design's avatar is a real photo when the profile has one — `ChefAvatar` supports it, but
+      no seeded profile carries an `avatar_url`, so initials are what actually render
+
 ---
 
 ### Outstanding (environment-dependent)

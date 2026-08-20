@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'package:core/src/models/profile.dart';
 import 'package:core/src/repositories/auth_repository.dart';
 import 'package:core/src/repositories/chef_repository.dart';
 import 'package:core/src/repositories/discover_repository.dart';
@@ -47,4 +48,15 @@ final authStateProvider = StreamProvider<AuthState>((ref) {
 final currentUserIdProvider = Provider<String?>((ref) {
   ref.watch(authStateProvider);
   return ref.watch(authRepositoryProvider).currentUserId;
+});
+
+/// The signed-in user's own profile, or null when signed out.
+///
+/// Cross-cutting: the web top navigation's account avatar and the profile
+/// screen both read it, and it re-resolves on every auth change because it
+/// watches [currentUserIdProvider].
+final myProfileProvider = FutureProvider.autoDispose<Profile?>((ref) {
+  final id = ref.watch(currentUserIdProvider);
+  if (id == null) return Future.value(null);
+  return ref.watch(profileRepositoryProvider).getById(id);
 });

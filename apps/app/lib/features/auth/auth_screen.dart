@@ -8,7 +8,11 @@ import 'package:app/routing/app_router.dart';
 
 /// Combined sign-in / sign-up screen with a mode toggle.
 class AuthScreen extends ConsumerStatefulWidget {
-  const AuthScreen({super.key});
+  const AuthScreen({super.key, this.startOnSignUp = false});
+
+  /// Which door the visitor came through: `/auth` is sign in, `/auth?mode=signup`
+  /// is sign up. Only the initial mode — the toggle still owns it after that.
+  final bool startOnSignUp;
 
   @override
   ConsumerState<AuthScreen> createState() => _AuthScreenState();
@@ -19,7 +23,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   final _email = TextEditingController();
   final _password = TextEditingController();
   final _name = TextEditingController();
-  bool _isSignUp = false;
+  late bool _isSignUp = widget.startOnSignUp;
 
   @override
   void dispose() {

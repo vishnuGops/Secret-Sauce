@@ -26,10 +26,29 @@ class MyRecipesScreen extends ConsumerWidget {
             ],
           ),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.add),
-              tooltip: 'New recipe',
-              onPressed: () => context.go(Routes.newRecipe),
+            // `New recipe` left the web top navigation and lives on the page it
+            // belongs to; compact keeps the icon because the shell's FAB is
+            // already the labelled call to action there. The labelled button is
+            // taller than `kToolbarHeight` at 2.0x text scale, but the toolbar
+            // clamps it without a `RenderFlex` overflow — measured, not assumed
+            // (`my_recipes_header_test.dart` pins 600–1400px at up to 2.0x).
+            Padding(
+              padding: const EdgeInsets.only(right: AppSpacing.sm),
+              child: context.isCompact
+                  ? IconButton(
+                      icon: const Icon(Icons.add),
+                      tooltip: 'New recipe',
+                      onPressed: () => context.go(Routes.newRecipe),
+                    )
+                  : FilledButton.icon(
+                      onPressed: () => context.go(Routes.newRecipe),
+                      icon: const Icon(Icons.add),
+                      label: const Text(
+                        'New recipe',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
             ),
           ],
         ),

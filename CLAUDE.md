@@ -61,7 +61,8 @@ secret-sauce/
 ├── apps/app/
 │   ├── lib/features/          # auth, home, discover, chefs, my_recipes, recipe_detail,
 │   │                          # recipe_editor, profile — screen + *_providers.dart per feature
-│   ├── lib/routing/           # app_router.dart (routes + redirect), app_shell.dart (nav)
+│   ├── lib/routing/           # app_router.dart (routes + redirect), app_shell.dart (picks the
+│   │                          #   chrome), top_nav_bar.dart (web), nav_destinations.dart (lists)
 │   ├── lib/widgets/           # app-level shared widgets (recipe_grid.dart)
 │   ├── lib/main.dart · test/{widget_test,chefs_screen_test,chefs_routing_test}.dart
 │   ├── env.example.json       # template; env.local.json (git-ignored) holds real creds
@@ -140,6 +141,11 @@ melos run format                    # dart format . — see the B027 warning bel
 cd apps/app
 flutter run -d web-server --web-port 8080 --dart-define-from-file=env.local.json  # open http://localhost:8080
 flutter run -d windows --dart-define-from-file=env.local.json                     # native desktop
+
+# Screenshots / any automated browser: the debug web server renders for ONE client only, so a
+# second page load is blank (B028). Build and serve statically instead. Deep links are hashed.
+flutter build web --release --dart-define-from-file=env.local.json
+npx serve -l 8099 build/web            # http://localhost:8099/#/discover
 ```
 
 > **`melos run format` currently breaks `melos run analyze` (B027).** `dart format` picks its
@@ -245,16 +251,17 @@ Five Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/m
 | Route                             | Feature dir              | Notes                                                     |
 | --------------------------------- | ------------------------ | --------------------------------------------------------- |
 | `/`                               | `features/home`          | Landing; signed-out safe                                  |
-| `/auth`                           | `features/auth`          | `authControllerProvider` (AsyncNotifier); redirects to `/discover` when signed in |
+| `/auth`                           | `features/auth`          | `authControllerProvider` (AsyncNotifier); redirects to `/discover` when signed in; `?mode=signup` opens the sign-up side |
 | `/discover`                       | `features/discover`      | Popular / Trending / Recent + search; all four via `DiscoverRepository`; signed-out safe |
 | `/chefs`                          | `features/chefs`         | Leaderboard via `chefs_leaderboard` RPC; signed-out safe   |
 | `/my`                             | `features/my_recipes`    | My / Shared-with-me tabs; `share_dialog.dart` writes `recipe_shares` |
 | `/recipe/:id`                     | `features/recipe_detail` | Servings scaler, rating, like/save, fork, `version_history_sheet.dart`; signed-out safe |
 | `/recipe/new`, `/recipe/:id/edit` | `features/recipe_editor` | `edit_models.dart` holds mutable draft types; save appends a version |
-| `/profile`                        | `features/profile`       | Current user                                              |
+| `/profile`                        | `features/profile`       | Current user; reached from the bottom bar on mobile and the avatar menu on web (`myProfileProvider`) |
 
 Only `/discover`, `/chefs`, `/my`, `/profile` sit inside the `ShellRoute` (nav chrome); detail and
-editor are pushed on the root navigator.
+editor are pushed on the root navigator. `/profile` is in the shell but is **not** a web
+destination, so the top bar's pill highlights nothing there — see Gotcha 18.
 
 ## Conventions
 
@@ -385,6 +392,15 @@ the `code-review` skill). The ones you need while *writing* code:
     [recipe_queries.dart](packages/core/lib/src/repositories/recipe_queries.dart) — it carries
     `owner:profiles!recipes_owner_id_fkey(...)`. Dropping the hint breaks every recipe query at
     once, including the Discover RPCs.
+18. **Navigation chrome is two bars with two destination lists**, both in
+    [nav_destinations.dart](apps/app/lib/routing/nav_destinations.dart): compact keeps four slots
+    *including Profile*; the web bar ([top_nav_bar.dart](apps/app/lib/routing/top_nav_bar.dart))
+    drops Profile for the avatar account menu and hides My Recipes when signed out. A new
+    destination has to pick a list. The web bar carries **destinations and identity only** — `New
+    recipe` lives on the My Recipes header and search in Discover's search bar; putting either
+    back is what crowded the row at medium. Its pill measures label widths with a `TextPainter`
+    and drops labels to icons rather than wrapping, so a longer destination costs the others their
+    labels — check any change at 600px and 2.0× text scale, the same envelope as the card (#13).
 
 ## Docs–code sync (MANDATORY)
 

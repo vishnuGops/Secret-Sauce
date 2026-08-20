@@ -139,6 +139,16 @@ transparently falls back to the x64 build, which works.
 | `Building with plugins requires symlink support` on `melos bootstrap`      | Enable Windows Developer Mode: `start ms-settings:developers`. Not needed on 3.44.8, but some versions require it. |
 | `flutter` not found after install                                          | PATH only applies to **new** terminals. Open a fresh one.                                                   |
 | `flutter run` starts, serves, then exits on its own (code 255)             | It is interactive (`r`/`R`/`q`) and quits on stdin EOF. Run it in a real terminal, not a backgrounded or piped one. For unattended use build instead: `flutter build web --release --dart-define-from-file=env.local.json`. |
+| `-d web-server` serves a **blank white page** on the second browser session (no console error) | The debug web server renders for one client; a later load gets the bootstrap scripts and nothing else (B028). For screenshots or any automated browser, build a release bundle and serve it statically instead — see below. |
+| A deep link like `http://localhost:8080/discover` lands on the landing page | The web build uses the **hash** URL strategy. Use `http://localhost:8080/#/discover`.                      |
+
+For screenshots, automated browsers, or anything that opens the app more than once:
+
+```powershell
+cd apps/app
+flutter build web --release --dart-define-from-file=env.local.json
+npx serve -l 8099 build/web    # then open http://localhost:8099/#/discover
+```
 
 ## Running
 

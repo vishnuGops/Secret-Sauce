@@ -241,8 +241,34 @@ erDiagram
 ### Adaptive behavior
 
 - Narrow (< 600): bottom navigation, single-column lists.
-- Wide (≥ 1000): fixed top navigation bar (brand + destinations + "New recipe"), multi-column grids, side-by-side detail.
+- Wide (≥ 600): fixed top navigation bar, multi-column grids, side-by-side detail.
 - Breakpoints centralized in `design_system/layout/adaptive.dart`.
+
+#### Navigation chrome (the one place the platforms diverge)
+
+The bottom bar is mobile, the top bar is web; everything under the chrome is shared. Both read
+their destinations from `apps/app/lib/routing/nav_destinations.dart`, and the two lists differ:
+
+| | Destinations | Identity | New recipe |
+| --- | --- | --- | --- |
+| Compact (< 600), `NavigationBar` | Discover, Chefs, My Recipes, **Profile** | — | extended FAB |
+| Web (≥ 600), `TopNavBar` | Discover, Chefs, My Recipes *(signed in only)* | avatar → account menu | on the page (My Recipes header) |
+
+`TopNavBar` (`apps/app/lib/routing/top_nav_bar.dart`) is brand · centred destination pill ·
+identity, and nothing else — that is what takes the row from ~700px to ~470px, which is what it
+has to fit at 600.
+
+- The pill is centred **on the bar**, not between the clusters: a `CustomMultiChildLayout`
+  measures both side clusters and reserves `max(brand, actions)` on each side.
+- **Labels never wrap.** The pill measures its labels with a `TextPainter` at the live text scale
+  and takes the widest mode that fits — all labels (expanded), active label only (medium, or
+  expanded when the measurement says so), icons only with the label as a tooltip. The bar's own
+  height scales with the text scaler up to 1.6×.
+- Signed out, the actions are `Sign in` + `Sign up` (`/auth?mode=signup`), collapsing to a single
+  filled `login` button at medium; My Recipes is not offered, since it could only redirect.
+- Signed in, the avatar is the account control: `ChefAvatar` with a `primary` ring and a tier dot,
+  fed by `myProfileProvider`, opening a menu of Profile / Sign out. `/profile` is therefore a
+  shell route with **no** selected destination — the pill highlights nothing there.
 
 **Two different rules, on purpose.** Navigation chrome switches at the breakpoints
 (`responsiveColumns`, `AdaptiveLayout`, `context.isCompact`) — it is a different layout on each
@@ -316,7 +342,8 @@ shipping that is the app-wide typography decision (`google_fonts` + a `textTheme
 | Widget      | Use                                                                                    |
 | ----------- | -------------------------------------------------------------------------------------- |
 | `TierChip`  | Tier pill (icon + label); `dense` drops the icon. `colorFor(tier, brightness)` is the shared accent, also used by the leaderboard rank medallion |
-| `ChefBadge` | Avatar + name with the `TierChip` **under** the name; `compact` for dense surfaces, `onSurfaceImage` for the card's cover overlay. `ChefBadge.fromProfile(recipe.owner!)` is the usual call |
+| `ChefAvatar` | The circle alone: photo when there is one, `initialsFor(name)` when there is not. Optional `ringColor` (a `surfaceColor` gap then a ring) and `tier` (rank dot, bottom-right) — both used by the web top navigation, where the avatar *is* the account control and has to carry rank at 34px. Ring and dot are drawn **outside** the circle, so a ringed avatar is wider than `radius * 2` |
+| `ChefBadge` | `ChefAvatar` + name with the `TierChip` **under** the name; `compact` for dense surfaces, `onSurfaceImage` for the card's cover overlay. `ChefBadge.fromProfile(recipe.owner!)` is the usual call |
 
 Per-tier colors are defined as a light/dark pair — the light shades are unreadable on dark
 surfaces and vice versa, so `colorFor` resolves against `Theme.of(context).brightness`.

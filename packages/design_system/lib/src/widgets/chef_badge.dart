@@ -1,8 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:design_system/src/theme/app_theme.dart';
+import 'package:design_system/src/widgets/chef_avatar.dart';
 import 'package:design_system/src/widgets/tier_chip.dart';
 
 /// Avatar + chef name with the [TierChip] **under** the name.
@@ -68,7 +68,7 @@ class ChefBadge extends StatelessWidget {
     final content = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _Avatar(url: avatarUrl, name: name, radius: radius, scheme: scheme),
+        ChefAvatar(name: name, avatarUrl: avatarUrl, radius: radius),
         SizedBox(width: compact ? AppSpacing.sm : AppSpacing.md),
         Flexible(
           child: Column(
@@ -98,64 +98,6 @@ class ChefBadge extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(AppRadii.button),
       child: content,
-    );
-  }
-}
-
-class _Avatar extends StatelessWidget {
-  const _Avatar({
-    required this.url,
-    required this.name,
-    required this.radius,
-    required this.scheme,
-  });
-
-  final String? url;
-  final String name;
-  final double radius;
-  final ColorScheme scheme;
-
-  String get _initials {
-    final parts =
-        name.trim().split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
-    if (parts.isEmpty) return '?';
-    if (parts.length == 1) return parts.first.characters.first.toUpperCase();
-    return (parts.first.characters.first + parts.last.characters.first)
-        .toUpperCase();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (url == null || url!.isEmpty) {
-      return CircleAvatar(
-        radius: radius,
-        backgroundColor: scheme.surfaceContainerHighest,
-        child: Text(
-          _initials,
-          style: TextStyle(
-            fontSize: radius * 0.8,
-            fontWeight: FontWeight.w700,
-            color: scheme.onSurfaceVariant,
-          ),
-        ),
-      );
-    }
-    return ClipOval(
-      child: CachedNetworkImage(
-        imageUrl: url!,
-        width: radius * 2,
-        height: radius * 2,
-        fit: BoxFit.cover,
-        placeholder: (_, __) => CircleAvatar(
-          radius: radius,
-          backgroundColor: scheme.surfaceContainerHighest,
-        ),
-        errorWidget: (_, __, ___) => CircleAvatar(
-          radius: radius,
-          backgroundColor: scheme.surfaceContainerHighest,
-          child: Icon(Icons.person_outline, color: scheme.onSurfaceVariant),
-        ),
-      ),
     );
   }
 }

@@ -8,4 +8,5 @@ export 'src/widgets/difficulty_badge.dart';
 export 'src/widgets/star_rating.dart';
 export 'src/widgets/state_views.dart';
 export 'src/widgets/tier_chip.dart';
+export 'src/widgets/chef_avatar.dart';
 export 'src/widgets/chef_badge.dart';

@@ -7,18 +7,13 @@ import 'package:go_router/go_router.dart';
 import 'package:app/features/auth/auth_controller.dart';
 import 'package:app/routing/app_router.dart';
 
-final _myProfileProvider = FutureProvider.autoDispose<Profile?>((ref) {
-  final id = ref.watch(currentUserIdProvider);
-  if (id == null) return Future.value(null);
-  return ref.watch(profileRepositoryProvider).getById(id);
-});
-
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final async = ref.watch(_myProfileProvider);
+    // Shared with the top navigation's account avatar — one read, one cache.
+    final async = ref.watch(myProfileProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Profile')),

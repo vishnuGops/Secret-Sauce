@@ -20,6 +20,10 @@ class Routes {
   Routes._();
   static const home = '/';
   static const auth = '/auth';
+
+  /// Same screen as [auth], opened on its sign-up tab — the top navigation
+  /// offers both doors and they must not land on the same one.
+  static const signUp = '/auth?mode=signup';
   static const discover = '/discover';
   static const chefs = '/chefs';
   static const myRecipes = '/my';
@@ -59,7 +63,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: Routes.auth,
-        builder: (context, state) => const AuthScreen(),
+        builder: (context, state) => AuthScreen(
+          startOnSignUp: state.uri.queryParameters['mode'] == 'signup',
+        ),
       ),
       GoRoute(
         path: '/recipe/new',
