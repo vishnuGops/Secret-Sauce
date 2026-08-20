@@ -1,0 +1,82 @@
+{
+  "slug": "portuguese-pastel-de-nata",
+  "title": "Pastéis de Nata",
+  "description": "Custard tarts baked in the hottest oven you have, so the tops blister black while the centre stays loose. The pastry is rolled into a log and cut, not lined.",
+  "cuisine": "Portuguese",
+  "category": "Dessert",
+  "difficulty": "hard",
+  "prep_minutes": 45,
+  "cook_minutes": 15,
+  "servings": 12,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Makes 12. Domestic ovens rarely reach the 300°C these want; go as hot as yours goes and put the tray on the floor of the oven.",
+  "ingredient_groups": [
+    {
+      "name": "Custard",
+      "ingredients": [
+        { "quantity": 250, "unit": "g", "name": "sugar" },
+        { "quantity": 120, "unit": "ml", "name": "water" },
+        { "quantity": 1, "unit": "stick", "name": "cinnamon" },
+        { "quantity": 1, "unit": null, "name": "lemon", "note": "peel in strips, no pith" },
+        { "quantity": 500, "unit": "ml", "name": "milk" },
+        { "quantity": 40, "unit": "g", "name": "all-purpose flour" },
+        { "quantity": 6, "unit": null, "name": "egg yolks" }
+      ]
+    },
+    {
+      "name": "Pastry",
+      "ingredients": [
+        { "quantity": 400, "unit": "g", "name": "puff pastry", "note": "all butter, at room temperature" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Custard",
+      "steps": [
+        {
+          "text": "Boil the sugar and water with the cinnamon stick and lemon peel to a thin syrup, then set it aside to infuse.",
+          "duration_minutes": 5,
+          "temperature": "220°F"
+        },
+        {
+          "text": "Whisk the flour into a little of the cold milk to a smooth slurry, then stir in the rest of the milk and cook until thickened.",
+          "duration_minutes": 6,
+          "tip": "Lumps here cannot be fixed later. Slurry first, always."
+        },
+        {
+          "text": "Strain the warm syrup into the hot milk mixture in a steady stream, whisking."
+        },
+        {
+          "text": "Let it cool below blood heat, then whisk in the egg yolks and strain the custard.",
+          "duration_minutes": 15,
+          "tip": "Yolks into anything hotter than this scramble instantly."
+        }
+      ]
+    },
+    {
+      "name": "Shaping and baking",
+      "steps": [
+        {
+          "text": "Roll the puff pastry into a tight log, cut it into 12 discs, and press each cut-side-down into a muffin tin, thumbing it up the sides.",
+          "tip": "Cut side down is what gives the layered spiral on the base."
+        },
+        {
+          "text": "Chill the cases while the oven heats as high as it will go.",
+          "duration_minutes": 20
+        },
+        {
+          "text": "Fill each case three-quarters full and bake until the tops are blistered and blackened in patches.",
+          "duration_minutes": 15,
+          "temperature": "as hot as the oven goes",
+          "tip": "The black spots are correct. Pale tarts are underbaked."
+        },
+        {
+          "text": "Cool briefly and eat warm, dusted with cinnamon."
+        }
+      ]
+    }
+  ],
+  "sim": { "weight": 0.7, "variant_titles": ["{title}, Shortcut Pastry"] }
+}

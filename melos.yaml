@@ -110,6 +110,25 @@ scripts:
     run: dart run tool/recipes.dart check
 
   # ---------------------------------------------------------------------------
+  # Simulation dish library. simData/dishes/*.json is an owner-agnostic LIBRARY —
+  # nothing in it is a recipe until supabase/sim/2_sim_generate.sql draws from it,
+  # assigns an owner and dates it. Same format and same validator as recipeData
+  # (tool/recipe_format.dart), so a dish can be promoted to curated content by
+  # moving the file. Pure file operations, like recipes:* above.
+  # ---------------------------------------------------------------------------
+  sim:validate:
+    description: Parse, lint, and coverage-check simData/dishes/*.json.
+    run: dart run tool/sim.dart validate
+
+  sim:gen:
+    description: Regenerate supabase/sim/1_sim_dishes.sql from simData/dishes/.
+    run: dart run tool/sim.dart gen
+
+  sim:check:
+    description: Fail if supabase/sim/1_sim_dishes.sql is stale (used by CI).
+    run: dart run tool/sim.dart check
+
+  # ---------------------------------------------------------------------------
   # Database tasks. Require `psql` on PATH and a SUPABASE_DB_URL env var
   # (Supabase dashboard -> Project Settings -> Database -> Connection string).
   #   db:create  apply the schema      db:seed     load demo data
@@ -138,5 +157,24 @@ scripts:
     run: dart run tool/db.dart clean
 
   db:reset:
-    description: Drop, re-create, seed, and load the authored recipes.
+    description: Drop, re-create, seed, load the authored recipes, and rebuild the
+      simulated population. Safe for the pinned standings in docs/SDS.md §10.7 —
+      sim.config.engage_existing is false, so only the ranks move.
     run: dart run tool/db.dart reset
+
+  # ---------------------------------------------------------------------------
+  # Simulated population (docs/ROADMAP.md Phase 24). db:sim is additive and
+  # idempotent; db:sim:clean is destructive and deletes auth.users rows.
+  #   melos run db:sim -- --preset=small --seed=7
+  # ---------------------------------------------------------------------------
+  db:sim:
+    description: Build the simulated population (schema, dishes, generate, verify).
+    run: dart run tool/db.dart sim
+
+  db:sim:verify:
+    description: Re-run the sim assertion suite. Read-only.
+    run: dart run tool/db.dart sim:verify
+
+  db:sim:clean:
+    description: Remove every simulated account and recipe. DESTRUCTIVE — needs --yes.
+    run: dart run tool/db.dart sim:clean

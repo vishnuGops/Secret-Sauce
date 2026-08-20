@@ -23,6 +23,27 @@ void main() {
       'master_chef': ChefTier.masterChef,
     };
 
+    // `wireValue` restates these labels by hand, because json_serializable
+    // keeps its own mapping private and a `.eq('chef_tier', …)` filter needs
+    // the string without a decode. `tierCounts()` counts zero chefs on every
+    // rung if the two ever disagree, which no other test would notice.
+    test('wireValue is the same label the decoder accepts', () {
+      for (final tier in ChefTier.values) {
+        expect(
+          Profile.fromJson({'id': 'x', 'chef_tier': tier.wireValue}).chefTier,
+          tier,
+          reason: '${tier.name} -> ${tier.wireValue}',
+        );
+      }
+      // And every label really is distinct — a copy-paste slip that made two
+      // tiers share a wire value would pass the round-trip above for one of
+      // them and silently merge their counts.
+      expect(
+        ChefTier.values.map((t) => t.wireValue).toSet(),
+        hasLength(ChefTier.values.length),
+      );
+    });
+
     test('every SQL enum label decodes to its Dart value', () {
       for (final entry in wire.entries) {
         final p = Profile.fromJson({'id': 'x', 'chef_tier': entry.key});
@@ -128,8 +149,8 @@ void main() {
   group('ChefStanding', () {
     // Keys are the `chefs_leaderboard` RETURNS TABLE column names. A rename on
     // either side silently zeroes the affected field.
-    Map<String, dynamic> row({Object score = 21000.0}) => {
-          'chef_rank': 1,
+    Map<String, dynamic> row({Object score = 21000.0, int rank = 1}) => {
+          'chef_rank': rank,
           'id': '00000000-0000-0000-0000-0000000000d1',
           'display_name': 'Amara Okonkwo',
           'avatar_url': null,
@@ -171,9 +192,12 @@ void main() {
       expect(s.totalViews, 0);
     });
 
+    // Grouped since Phase 22 — the board and the expanded card both print
+    // thousands separators, and `scoreLabel` delegates to `ChefScoring.label`
+    // so there is one implementation rather than two.
     group('scoreLabel', () {
       test('drops the trailing .0 on whole scores', () {
-        expect(ChefStanding.fromJson(row(score: 21000.0)).scoreLabel, '21000');
+        expect(ChefStanding.fromJson(row(score: 21000.0)).scoreLabel, '21,000');
         expect(ChefStanding.fromJson(row(score: 0)).scoreLabel, '0');
         expect(ChefStanding.fromJson(row(score: 100)).scoreLabel, '100');
       });
@@ -182,7 +206,31 @@ void main() {
       // for any chef with a view count that is not a multiple of five.
       test('keeps one decimal otherwise', () {
         expect(ChefStanding.fromJson(row(score: 105.2)).scoreLabel, '105.2');
-        expect(ChefStanding.fromJson(row(score: 10189.4)).scoreLabel, '10189.4');
+        expect(
+          ChefStanding.fromJson(row(score: 10189.4)).scoreLabel,
+          '10,189.4',
+        );
+      });
+    });
+
+    group('derived board fields', () {
+      test('podium covers exactly the top three ranks', () {
+        expect(ChefStanding.fromJson(row(rank: 3)).isPodium, isTrue);
+        expect(ChefStanding.fromJson(row(rank: 4)).isPodium, isFalse);
+      });
+
+      test('reports the gap to the next tier', () {
+        final kitchen = ChefStanding.fromJson(row(score: 10189));
+        expect(kitchen.nextTier, ChefTier.masterChef);
+        expect(kitchen.nextTierLabel, '34% to Master');
+        expect(kitchen.pointsToNextLabel, '9,811');
+      });
+
+      test('has no next tier at the top', () {
+        final top = ChefStanding.fromJson(row(score: 21000));
+        expect(top.nextTier, isNull);
+        expect(top.nextTierLabel, isNull);
+        expect(top.pointsToNextLabel, isNull);
       });
     });
   });

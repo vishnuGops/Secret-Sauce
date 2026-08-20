@@ -1,0 +1,76 @@
+{
+  "slug": "jamaican-jerk-chicken",
+  "title": "Jerk Chicken",
+  "description": "Chicken marinated overnight in scotch bonnet, allspice, and thyme, then cooked slowly over indirect heat. The pimento wood is the traditional smoke; a covered grill gets close.",
+  "cuisine": "Jamaican",
+  "category": "Main",
+  "difficulty": "medium",
+  "prep_minutes": 25,
+  "cook_minutes": 75,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Allspice — pimento — is doing more work here than the chilli. Buy it whole and grind it.",
+  "ingredient_groups": [
+    {
+      "name": "Jerk marinade",
+      "ingredients": [
+        { "quantity": 4, "unit": null, "name": "scotch bonnet peppers", "note": "seeded for less heat" },
+        { "quantity": 6, "unit": null, "name": "spring onions" },
+        { "quantity": 2, "unit": "Tbsp", "name": "allspice berries", "note": "freshly ground" },
+        { "quantity": 2, "unit": "Tbsp", "name": "thyme", "note": "leaves picked" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic" },
+        { "quantity": 3, "unit": "cm", "name": "ginger" },
+        { "quantity": 3, "unit": "Tbsp", "name": "soy sauce" },
+        { "quantity": 2, "unit": "Tbsp", "name": "brown sugar" },
+        { "quantity": 2, "unit": "Tbsp", "name": "lime juice" },
+        { "quantity": 1, "unit": "tsp", "name": "nutmeg", "note": "grated" },
+        { "quantity": 1, "unit": "tsp", "name": "cinnamon", "note": "ground" }
+      ]
+    },
+    {
+      "name": "Chicken",
+      "ingredients": [
+        { "quantity": 1.8, "unit": "kg", "name": "chicken thighs and drumsticks", "note": "bone in, skin on, slashed to the bone" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "The day before",
+      "steps": [
+        {
+          "text": "Blend the scotch bonnet peppers, spring onions, allspice berries, thyme, garlic, ginger, soy sauce, brown sugar, lime juice, nutmeg, and cinnamon into a coarse marinade."
+        },
+        {
+          "text": "Work it into the slashed chicken thighs and drumsticks, getting into every cut.",
+          "tip": "Wear gloves. Scotch bonnet oil stays on your hands for hours."
+        },
+        {
+          "text": "Cover and refrigerate.",
+          "duration_minutes": 720
+        }
+      ]
+    },
+    {
+      "name": "Cooking",
+      "steps": [
+        {
+          "text": "Set the grill up for indirect heat — coals banked to one side, chicken on the other — and cook with the lid on.",
+          "duration_minutes": 60,
+          "temperature": "medium-low",
+          "tip": "Direct heat burns the sugar in the marinade long before the thigh is cooked through."
+        },
+        {
+          "text": "Move the pieces over the coals for the last stretch to char the skin, turning often.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Rest, then chop through the bone into pieces to serve.",
+          "duration_minutes": 10
+        }
+      ]
+    }
+  ],
+  "sim": { "weight": 1.1, "variant_titles": ["Oven {title}", "{title}, Mild"] }
+}

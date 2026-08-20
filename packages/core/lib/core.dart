@@ -12,6 +12,10 @@ export 'src/models/recipe_version.dart';
 export 'src/models/recipe.dart';
 export 'src/models/chef_standing.dart';
 
+// Domain helpers
+export 'src/chef_scoring.dart';
+export 'src/formatting.dart';
+
 // Services
 export 'src/services/supabase_service.dart';
 export 'src/services/storage_service.dart';

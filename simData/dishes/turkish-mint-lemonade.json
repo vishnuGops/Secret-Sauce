@@ -1,0 +1,53 @@
+{
+  "slug": "turkish-mint-lemonade",
+  "title": "Mint Lemonade",
+  "description": "Whole lemons blitzed with mint and ice — peel included, which is where the perfume is. Strained once so it stays sharp rather than bitter.",
+  "cuisine": "Turkish",
+  "category": "Drink",
+  "difficulty": "easy",
+  "prep_minutes": 10,
+  "cook_minutes": 0,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Use unwaxed lemons. If you can only get waxed ones, peel them and add a strip of zest back instead.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 3, "unit": null, "name": "lemons", "note": "unwaxed, quartered, seeds removed" },
+        { "quantity": 1, "unit": "cup", "name": "mint", "note": "leaves picked" },
+        { "quantity": 0.5, "unit": "cup", "name": "sugar", "note": "adjust to the fruit" },
+        { "quantity": 750, "unit": "ml", "name": "cold water" },
+        { "quantity": 2, "unit": "cups", "name": "ice" },
+        { "quantity": 1, "unit": "pinch", "name": "salt" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Remove every seed from the quartered lemons.",
+          "tip": "One missed seed makes the whole jug bitter. This is the only fiddly part."
+        },
+        {
+          "text": "Blitz the lemons with the sugar, salt, mint, ice, and half the cold water in short bursts.",
+          "duration_minutes": 1,
+          "tip": "Short bursts only. Long blending pulls bitterness out of the pith."
+        },
+        {
+          "text": "Strain through a coarse sieve, pressing lightly, and top up with the remaining cold water."
+        },
+        {
+          "text": "Taste and adjust with more sugar or lemon, then serve over ice."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1,
+    "variant_titles": ["Frozen {title}", "{title} with Cucumber"]
+  }
+}

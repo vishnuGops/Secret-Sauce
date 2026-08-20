@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://secret-sauce.local/schema/sim-dish.json",
+  "title": "Secret Sauce simulation dish",
+  "description": "One authored dish in the simulation LIBRARY. Identical to recipeData/schema.json except for two keys: `demo` is rejected (engagement is generated from a modelled history, never authored) and `sim` is allowed (generation hints). Every other field means exactly what it means there, and both directories are validated by the same code — tool/recipe_format.dart — so a dish can be promoted into the curated set by moving the file and deleting its `sim` block. Neither schema file is read at runtime (no JSON Schema dependency in the toolchain), so a rule added here must be added to tool/recipe_format.dart or tool/sim.dart as well. Directory-level rules (category/cuisine coverage) are not expressible in JSON Schema at all and live in tool/sim.dart — see simData/README.md.",
+  "$ref": "../recipeData/schema.json",
+  "type": "object",
+  "unevaluatedProperties": false,
+  "properties": {
+    "demo": {
+      "not": {},
+      "description": "REJECTED here. A hand-typed like_count is the exact practice Phase 24 replaces: supabase/sim/2_sim_generate.sql writes the engagement ROWS and lets the same arithmetic the triggers use derive the counters. Put a dish's expected popularity in `sim.weight` instead."
+    },
+    "sim": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Generation hints. Optional, and so are both of its fields.",
+      "properties": {
+        "weight": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "default": 1,
+          "description": "Relative likelihood the generator draws this dish. Raise it for everyday food, lower it for a project bake — a library where a three-hour paella is as common as a weeknight curry does not produce a Discover page that looks real."
+        },
+        "variant_titles": {
+          "type": "array",
+          "description": "Title templates, used so one dish can become several recipes without colliding. `(owner_id, title)` is the import key and a collision silently collapses two recipes into one row (SDS §11.2), so the generator needs distinct titles per owner. Generic fallbacks apply when a dish supplies none.",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\{title\\}",
+            "description": "Must contain the literal `{title}` — it is a template, not a title.",
+            "examples": ["Weeknight {title}", "{title} with Spinach"]
+          }
+        }
+      }
+    }
+  }
+}

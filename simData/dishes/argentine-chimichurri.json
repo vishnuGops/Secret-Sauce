@@ -1,0 +1,56 @@
+{
+  "slug": "argentine-chimichurri",
+  "title": "Chimichurri",
+  "description": "Raw parsley, oregano, garlic, and vinegar loosened with oil. Chopped by hand, never blended — a food processor turns it into green paste.",
+  "cuisine": "Argentine",
+  "category": "Sauce",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 0,
+  "servings": 8,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Makes about a cup. Keeps a week refrigerated, though the parsley darkens after day two.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 1, "unit": "cup", "name": "flat-leaf parsley", "note": "packed, chopped fine by hand" },
+        { "quantity": 2, "unit": "Tbsp", "name": "dried oregano" },
+        { "quantity": 6, "unit": "cloves", "name": "garlic", "note": "minced" },
+        { "quantity": 1, "unit": null, "name": "red chilli", "note": "minced; or 1 tsp chilli flakes" },
+        { "quantity": 0.5, "unit": "cup", "name": "olive oil" },
+        { "quantity": 3, "unit": "Tbsp", "name": "red wine vinegar" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" },
+        { "quantity": 2, "unit": "Tbsp", "name": "warm water" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Dissolve the salt in the warm water and add the dried oregano to rehydrate it.",
+          "duration_minutes": 5,
+          "tip": "Dried oregano straight into oil stays woody. Water first."
+        },
+        {
+          "text": "Chop the parsley, garlic, and red chilli finely by hand and combine them in a bowl."
+        },
+        {
+          "text": "Stir in the oregano mixture and the red wine vinegar, then pour in the olive oil and stir once — it should stay loose and separated, not emulsified."
+        },
+        {
+          "text": "Leave to sit before using.",
+          "duration_minutes": 30,
+          "tip": "It tastes harsh for the first half hour and then settles."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.2,
+    "variant_titles": ["{title} Rojo", "{title} for Steak"]
+  }
+}

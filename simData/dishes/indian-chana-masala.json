@@ -1,0 +1,70 @@
+{
+  "slug": "indian-chana-masala",
+  "title": "Chana Masala",
+  "description": "Chickpeas in a dark onion-tomato masala finished with amchur for sourness rather than lemon. Entirely pantry-based and better on the second day.",
+  "cuisine": "Indian",
+  "category": "Main",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 40,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Tinned chickpeas are fine. If cooking dried, save the cooking liquid — it thickens the gravy better than water.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 800, "unit": "g", "name": "chickpeas", "note": "cooked, drained; two tins" },
+        { "quantity": 2, "unit": null, "name": "onions", "note": "diced fine" },
+        { "quantity": 3, "unit": null, "name": "tomatoes", "note": "chopped" },
+        { "quantity": 1, "unit": "Tbsp", "name": "ginger", "note": "grated" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "minced" },
+        { "quantity": 2, "unit": "tsp", "name": "cumin", "note": "ground" },
+        { "quantity": 2, "unit": "tsp", "name": "coriander", "note": "ground" },
+        { "quantity": 1, "unit": "tsp", "name": "garam masala" },
+        { "quantity": 0.5, "unit": "tsp", "name": "turmeric" },
+        { "quantity": 1, "unit": "tsp", "name": "amchur", "note": "dried mango powder; or the juice of half a lemon" },
+        { "quantity": 3, "unit": "Tbsp", "name": "neutral oil" },
+        { "quantity": 1, "unit": "handful", "name": "cilantro", "note": "chopped, to finish" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Fry the onions in the neutral oil until well past golden — properly brown at the edges.",
+          "duration_minutes": 15,
+          "temperature": "medium",
+          "tip": "Most of the colour of the finished dish comes from here. Stopping at soft and translucent gives a pale, thin curry."
+        },
+        {
+          "text": "Add the ginger and garlic and cook until the raw smell goes.",
+          "duration_minutes": 2
+        },
+        {
+          "text": "Add the cumin, coriander, and turmeric and stir for thirty seconds before the tomatoes go in.",
+          "duration_minutes": 1
+        },
+        {
+          "text": "Add the tomatoes and cook down until the oil separates out at the edges.",
+          "duration_minutes": 12,
+          "tip": "Oil pooling around the masala is the signal it is ready. It is not a timing question."
+        },
+        {
+          "text": "Stir in the chickpeas with a splash of water and simmer so they take on the gravy.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Crush a few chickpeas against the side of the pan to thicken, then finish with garam masala, amchur, and cilantro."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.6,
+    "variant_titles": ["Weeknight {title}", "{title} with Spinach", "Pantry {title}"]
+  }
+}

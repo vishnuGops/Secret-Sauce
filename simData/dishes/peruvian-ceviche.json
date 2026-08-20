@@ -1,0 +1,61 @@
+{
+  "slug": "peruvian-ceviche",
+  "title": "Peruvian Ceviche",
+  "description": "White fish cured in lime juice for minutes, not hours, with chilli, red onion, and the cloudy leftover marinade poured back over. Nothing is cooked with heat.",
+  "cuisine": "Peruvian",
+  "category": "Appetizer",
+  "difficulty": "easy",
+  "prep_minutes": 25,
+  "cook_minutes": 0,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Buy the fish the same day and keep everything cold. This is the one recipe where ingredient quality is the entire technique.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "sea bass", "note": "skinless, boneless, cut into 2cm cubes; any firm white fish works" },
+        { "quantity": 10, "unit": null, "name": "limes", "note": "juiced, about 250ml" },
+        { "quantity": 1, "unit": null, "name": "red onion", "note": "sliced paper thin" },
+        { "quantity": 1, "unit": null, "name": "aji amarillo", "note": "seeded and sliced; substitute a mild yellow chilli" },
+        { "quantity": 1, "unit": "clove", "name": "garlic", "note": "grated fine" },
+        { "quantity": 1, "unit": "small piece", "name": "ginger", "note": "grated fine" },
+        { "quantity": 1, "unit": "bunch", "name": "cilantro", "note": "chopped" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" },
+        { "quantity": 1, "unit": null, "name": "sweet potato", "note": "boiled and sliced, to serve", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Soak the sliced red onion in ice water to take the harsh edge off, then drain it well.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Whisk the lime juice with the grated garlic, ginger, and salt to make the leche de tigre."
+        },
+        {
+          "text": "Toss the sea bass with the salt and let it sit briefly before the acid goes anywhere near it.",
+          "duration_minutes": 2,
+          "tip": "Salting first firms the surface so the fish cures evenly instead of going chalky outside and raw inside."
+        },
+        {
+          "text": "Pour the leche de tigre over the fish and stir once.",
+          "duration_minutes": 3,
+          "tip": "Three minutes. The cubes should turn opaque at the edge and stay translucent at the centre."
+        },
+        {
+          "text": "Fold through the drained onion, aji amarillo, and cilantro, and serve immediately with sliced sweet potato."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.9,
+    "variant_titles": ["{title} with Mango"]
+  }
+}

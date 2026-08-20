@@ -1,0 +1,79 @@
+{
+  "slug": "south-african-malva-pudding",
+  "title": "Malva Pudding",
+  "description": "A sticky apricot jam sponge that has hot cream sauce poured over it straight from the oven and drinks all of it. Served warm, never cold.",
+  "cuisine": "South African",
+  "category": "Dessert",
+  "difficulty": "medium",
+  "prep_minutes": 20,
+  "cook_minutes": 45,
+  "servings": 8,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The sauce must go on while both the pudding and the sauce are hot. Cold sauce sits on top instead of soaking in.",
+  "ingredient_groups": [
+    {
+      "name": "Pudding",
+      "ingredients": [
+        { "quantity": 200, "unit": "g", "name": "sugar" },
+        { "quantity": 2, "unit": null, "name": "eggs" },
+        { "quantity": 2, "unit": "Tbsp", "name": "apricot jam" },
+        { "quantity": 220, "unit": "g", "name": "all-purpose flour" },
+        { "quantity": 1, "unit": "tsp", "name": "baking soda" },
+        { "quantity": 200, "unit": "ml", "name": "milk" },
+        { "quantity": 1, "unit": "Tbsp", "name": "white vinegar" },
+        { "quantity": 30, "unit": "g", "name": "butter", "note": "melted" }
+      ]
+    },
+    {
+      "name": "Sauce",
+      "ingredients": [
+        { "quantity": 200, "unit": "ml", "name": "heavy cream" },
+        { "quantity": 100, "unit": "g", "name": "butter" },
+        { "quantity": 100, "unit": "g", "name": "sugar" },
+        { "quantity": 100, "unit": "ml", "name": "hot water" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Pudding",
+      "steps": [
+        {
+          "text": "Beat the sugar and eggs until thick and pale, then beat in the apricot jam and melted butter.",
+          "duration_minutes": 5
+        },
+        {
+          "text": "Stir the baking soda into the milk with the white vinegar — it will froth — and fold it into the batter with the flour.",
+          "tip": "Work quickly once the soda and vinegar meet. The lift starts immediately."
+        },
+        {
+          "text": "Pour into a buttered dish and bake until risen and deep brown.",
+          "duration_minutes": 45,
+          "temperature": "350°F"
+        }
+      ]
+    },
+    {
+      "name": "Sauce",
+      "steps": [
+        {
+          "text": "Warm the heavy cream, butter, sugar, and hot water together until the sugar dissolves.",
+          "duration_minutes": 5
+        },
+        {
+          "text": "Prick the hot pudding all over and pour the hot sauce over it in stages, letting each addition disappear.",
+          "tip": "It will look like far too much liquid. It is not."
+        },
+        {
+          "text": "Stand before serving so the sponge finishes absorbing.",
+          "duration_minutes": 10
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1,
+    "variant_titles": ["{title} for a Crowd"]
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "slug": "chinese-ginger-congee",
+  "title": "Ginger Congee",
+  "description": "Rice cooked far past the point most recipes stop, until the grains dissolve into something between soup and porridge. Plain on purpose — the toppings do the talking.",
+  "cuisine": "Chinese",
+  "category": "Breakfast",
+  "difficulty": "easy",
+  "prep_minutes": 5,
+  "cook_minutes": 90,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Freezing the rinsed rice overnight breaks the grains and cuts the cooking time by about a third.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 150, "unit": "g", "name": "jasmine rice", "note": "rinsed until the water runs clear" },
+        { "quantity": 2, "unit": "L", "name": "chicken stock", "note": "or water for a plainer bowl" },
+        { "quantity": 1, "unit": "large piece", "name": "ginger", "note": "half sliced, half julienned" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" },
+        { "quantity": 2, "unit": null, "name": "spring onions", "note": "sliced, to serve" },
+        { "quantity": 2, "unit": "Tbsp", "name": "soy sauce", "note": "to serve" },
+        { "quantity": 1, "unit": "tsp", "name": "sesame oil", "note": "to serve" },
+        { "quantity": 4, "unit": null, "name": "eggs", "note": "soft boiled, to serve", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Bring the jasmine rice, chicken stock, sliced ginger, and salt to a boil in a large pot.",
+          "duration_minutes": 8
+        },
+        {
+          "text": "Drop to the lowest possible heat and cook uncovered, stirring every fifteen minutes or so.",
+          "duration_minutes": 80,
+          "temperature": "low",
+          "tip": "Stir along the bottom each time — congee catches and scorches without warning."
+        },
+        {
+          "text": "Stop when the grains have broken down and the congee coats the back of a spoon. Loosen with hot water if it has gone too far."
+        },
+        {
+          "text": "Serve topped with the julienned ginger, spring onions, soy sauce, sesame oil, and a soft boiled egg."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1,
+    "variant_titles": ["{title} with Century Egg", "Sick-Day {title}"]
+  }
+}

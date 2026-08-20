@@ -70,6 +70,20 @@ enum ChefTier {
         ChefTier.masterChef => 'Master Chef',
       };
 
+  /// The Postgres enum label — the same string as the `@JsonValue` above.
+  ///
+  /// Restated rather than derived because `json_serializable` keeps its mapping
+  /// private to the generated code, and a `.eq('chef_tier', …)` filter needs the
+  /// wire string without going through a full decode. The two must move
+  /// together; `chef_models_test.dart` pins every pair.
+  String get wireValue => switch (this) {
+        ChefTier.homeCook => 'home_cook',
+        ChefTier.lineCook => 'line_cook',
+        ChefTier.sousChef => 'sous_chef',
+        ChefTier.headChef => 'head_chef',
+        ChefTier.masterChef => 'master_chef',
+      };
+
   /// Rung index, 0 (lowest) .. 4 (highest). Handy for styling ramps.
   int get rank => index;
 }

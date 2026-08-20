@@ -1,0 +1,86 @@
+{
+  "slug": "egyptian-koshari",
+  "title": "Koshari",
+  "description": "Rice, lentils, and pasta layered under a sharp tomato sauce, cumin vinegar, and a heap of fried onions. Egypt's national dish and the best argument for carbohydrate on carbohydrate.",
+  "cuisine": "Egyptian",
+  "category": "Main",
+  "difficulty": "medium",
+  "prep_minutes": 25,
+  "cook_minutes": 60,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Every component can be made ahead. Assemble only at the table — the fried onions go soft within minutes of meeting the sauce.",
+  "ingredient_groups": [
+    {
+      "name": "Base",
+      "ingredients": [
+        { "quantity": 200, "unit": "g", "name": "brown lentils", "note": "rinsed" },
+        { "quantity": 200, "unit": "g", "name": "rice" },
+        { "quantity": 150, "unit": "g", "name": "small pasta", "note": "elbows or ditalini" },
+        { "quantity": 400, "unit": "g", "name": "chickpeas", "note": "cooked and drained" }
+      ]
+    },
+    {
+      "name": "Tomato sauce",
+      "ingredients": [
+        { "quantity": 700, "unit": "g", "name": "tomato passata" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "minced" },
+        { "quantity": 2, "unit": "Tbsp", "name": "white vinegar" },
+        { "quantity": 1, "unit": "tsp", "name": "cumin", "note": "ground" },
+        { "quantity": 0.5, "unit": "tsp", "name": "chilli flakes" }
+      ]
+    },
+    {
+      "name": "Crispy onions",
+      "ingredients": [
+        { "quantity": 3, "unit": null, "name": "onions", "note": "sliced very thin" },
+        { "quantity": 250, "unit": "ml", "name": "neutral oil", "note": "for frying" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Crispy onions",
+      "steps": [
+        {
+          "text": "Fry the sliced onions in the neutral oil over a steady medium heat until deep brown and crisp, then drain on paper.",
+          "duration_minutes": 25,
+          "tip": "They go from brown to burnt fast at the end. Pull them a shade early — they darken on the paper."
+        },
+        {
+          "text": "Keep a few spoonfuls of the onion oil back for the lentils."
+        }
+      ]
+    },
+    {
+      "name": "Base",
+      "steps": [
+        {
+          "text": "Simmer the brown lentils in plenty of water until tender but still holding shape, then drain.",
+          "duration_minutes": 20
+        },
+        {
+          "text": "Cook the rice in the reserved onion oil and water until done, and boil the pasta separately.",
+          "duration_minutes": 18
+        }
+      ]
+    },
+    {
+      "name": "Sauce and assembly",
+      "steps": [
+        {
+          "text": "Fry the garlic briefly, add the tomato passata, cumin, chilli flakes, and white vinegar, and simmer until thickened.",
+          "duration_minutes": 15
+        },
+        {
+          "text": "Layer rice, lentils, pasta, and chickpeas in a wide dish."
+        },
+        {
+          "text": "Pour the hot sauce over and finish with a generous pile of crispy onions."
+        }
+      ]
+    }
+  ],
+  "sim": { "weight": 1.2, "variant_titles": ["Street-Style {title}", "{title} for a Crowd"] }
+}

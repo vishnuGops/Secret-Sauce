@@ -174,6 +174,25 @@ The three axes that actually break it:
 | Content | longest label per field | `_timeLabel` reaches `"12h 45m"`; `ratingCount` reaches 4 digits |
 | Text scale | **2.0×** | accessibility scaling; the default-scale margin is thin but positive |
 
+**Two flex children in one row split it 50/50 (B038, B026).** `RenderFlex` divides free space by
+flex factor, so `Expanded` beside `Flexible` reserves half for each whatever the content is — the
+short child leaves dead space, the long child truncates beside it, and nothing overflows, so no
+envelope test fails. Flag a row where one child must win and both carry a flex; the accepted shape
+is the loser **non-flex inside a `ConstrainedBox`** cap (`LayoutBuilder` → `maxWidth / 2` or `/ 3`),
+`FittedBox` if it is a number — `RecipeCard`'s `DifficultyBadge`, `ChefSpotlightCard`'s score and
+points. The converse is also a finding: a **non-flex child of a `Row` is laid out unbounded**, so
+one added without a cap overflows instead of shrinking (B039, the spotlight rank pill at 3.0×).
+
+**Height budgets, not just width (B037).** `Column(header, Expanded(body))` gives the header its
+intrinsic height first; a header taller than the viewport leaves `Expanded` nothing and the column
+overflows regardless of what is flexible below. Flag a new fixed-height page region — a
+non-scrolling hero, a row of fixed-height columns — that is not bounded against **text scale**.
+`context.textScale` (`adaptive.dart`) is the shared measurement; `/chefs` uses it to stack the hero
+below `900 × textScale` px and to drop the whole page to one scroll above
+`ChefsScreen.maxTwoColumnTextScale`. `ChefSpotlightCard` is the other pattern: a fixed-size tile
+whose intrinsic bands exceed its budget before 2.0×, so the tile grows with the text
+(`spotlightCardHeight`) rather than dropping bands.
+
 A test at one comfortable width with short content proves nothing — B016 shipped past exactly such
 a test (`ratingCount: 12`, `totalMinutes: 0`, 320px). **When quoting overflow figures:**
 `flutter test` uses a fixed-width font much wider than Roboto, so "overflowed by N pixels"

@@ -1,0 +1,86 @@
+{
+  "slug": "greek-lamb-souvlaki",
+  "title": "Lamb Souvlaki with Tzatziki",
+  "description": "Lamb shoulder marinated overnight in lemon, oregano, and garlic, then grilled hard and fast. The tzatziki is drained twice so it stays thick instead of sliding off.",
+  "cuisine": "Greek",
+  "category": "Main",
+  "difficulty": "medium",
+  "prep_minutes": 30,
+  "cook_minutes": 12,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": null,
+  "ingredient_groups": [
+    {
+      "name": "Lamb and marinade",
+      "ingredients": [
+        { "quantity": 800, "unit": "g", "name": "lamb shoulder", "note": "cut into 3cm cubes" },
+        { "quantity": 3, "unit": "Tbsp", "name": "olive oil" },
+        { "quantity": 1, "unit": null, "name": "lemon", "note": "zest and juice" },
+        { "quantity": 1, "unit": "Tbsp", "name": "dried oregano" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "crushed" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" }
+      ]
+    },
+    {
+      "name": "Tzatziki",
+      "ingredients": [
+        { "quantity": 300, "unit": "g", "name": "Greek yogurt", "note": "full fat" },
+        { "quantity": 1, "unit": null, "name": "cucumber", "note": "coarsely grated" },
+        { "quantity": 1, "unit": "clove", "name": "garlic", "note": "grated fine" },
+        { "quantity": 1, "unit": "Tbsp", "name": "red wine vinegar" },
+        { "quantity": 1, "unit": "Tbsp", "name": "dill", "note": "chopped" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "The day before",
+      "steps": [
+        {
+          "text": "Toss the lamb shoulder with the olive oil, lemon zest and juice, oregano, crushed garlic, and salt.",
+          "tip": "Salt in the marinade is doing double duty — it seasons and it keeps the meat juicy."
+        },
+        {
+          "text": "Cover and refrigerate.",
+          "duration_minutes": 720
+        }
+      ]
+    },
+    {
+      "name": "Tzatziki",
+      "steps": [
+        {
+          "text": "Salt the grated cucumber and leave it in a sieve, then squeeze it dry in a cloth.",
+          "duration_minutes": 20,
+          "tip": "Squeeze harder than feels reasonable. Watery tzatziki starts here."
+        },
+        {
+          "text": "Stir the cucumber into the Greek yogurt with the grated garlic, red wine vinegar, and dill."
+        }
+      ]
+    },
+    {
+      "name": "Grilling",
+      "steps": [
+        {
+          "text": "Thread the lamb onto skewers, leaving a little space between the pieces so they colour rather than steam."
+        },
+        {
+          "text": "Grill over the highest heat you have, turning every couple of minutes.",
+          "duration_minutes": 12,
+          "temperature": "high"
+        },
+        {
+          "text": "Rest the skewers before serving with the tzatziki.",
+          "duration_minutes": 5
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.1,
+    "variant_titles": ["{title}, Family Style"]
+  }
+}

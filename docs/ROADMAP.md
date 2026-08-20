@@ -74,8 +74,10 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 
 ## Phase 6 — Home + Discover
 
-- [x] Home / landing (intro, feature highlights, sign in/up)
-- [x] Discover screen (Popular / Trending / Recent tabs)
+- [x] ~~Home / landing (intro, feature highlights, sign in/up)~~ — **retired 2026-08-20**. No
+      navigation chrome ever linked it (the web brand mark goes to Discover), so a cold start was
+      the only way in. `/` is now a redirect-only route onto `/discover`.
+- [x] Discover screen (Popular / Trending / Recent tabs) — the front door on both platforms
 - [x] Search bar + results
 - [x] Public browsing: Discover + public recipe detail accessible without sign-in
 
@@ -98,7 +100,10 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [x] Create/edit form (metadata)
 - [x] Ingredient-group + ingredient editor
 - [x] Step-group + step editor
+- [x] Per-step time / temperature / tip and per-ingredient note / optional inputs (B035)
 - [x] Cover image upload
+- [ ] Per-step image upload — the column is carried through a save untouched, but there is no
+      picker for it yet (B035)
 - [x] Save → creates new `recipe_version`
 
 ## Phase 10 — Fork + version history
@@ -135,7 +140,8 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 
 ## Phase 12 — Polish, tests, verification
 
-- [x] Widget tests (`RecipeCard`, Home landing) — passing
+- [x] Widget tests (`RecipeCard`, root `/` → `/discover` redirect) — passing. The Home landing
+      test was replaced by the redirect test when that screen was retired.
 - [ ] Repository unit tests _(deferred — need Supabase client mocking)_
 - [x] `melos run analyze` clean (core, design_system, app)
 - [x] Manual verification on web (`web-server` @ :8080) — sign-up works
@@ -563,6 +569,411 @@ Compact is untouched: the design is web-only, so `NavigationBar` + FAB still shi
       page title into the content is a per-screen change, not a nav change
 - [ ] The design's avatar is a real photo when the profile has one — `ChefAvatar` supports it, but
       no seeded profile carries an `avatar_url`, so initials are what actually render
+
+## Phase 22 — Chefs v2: podium board + expanded chef card
+
+Redrawn in Claude Design (`Chefs.dc.html`, drafts `1b` collapsed / `1c` desktop expanded / `1d`
+mobile expanded). The board today lists four icon chips and a score; a chef cannot tell **why**
+they are where they are, and a row goes nowhere when tapped. Phase 22 makes the score legible and
+the row an entry point.
+
+Four choices settled with the user before any code (the design left all four open):
+
+| Question                | Decision                                                                                |
+| ----------------------- | ----------------------------------------------------------------------------------------- |
+| Collapsed card          | **1b "podium"** — tier spine, medal glyph for the top 3, `% to next tier` under the score |
+| Score breakdown         | **Show the multipliers** (`likes × 3`, `saves × 5`, `views × 0.2`) — the reason to open it |
+| Primary action          | **None.** Follow does not exist; the top-recipe rows tap through to `/recipe/:id`        |
+| "Top recipes" ordering  | **New `chef_top_recipes` RPC** — exact, reuses `chef_score()` as the source of truth      |
+
+### Schema (`0001_init.sql`, idempotent)
+
+- [x] `chef_top_recipes(p_chef uuid, p_limit int default 3)` → `setof recipes`, `stable`,
+      invoker-rights, ordered by `chef_score(like_count, save_count, view_count) desc` with
+      deterministic tiebreakers. Filters `visibility = 'public'` **explicitly** (same reason as
+      `chefs_leaderboard`: under invoker rights a chef would otherwise see their own private
+      recipes in their own dialog and read different numbers than everyone else)
+- [x] `grant execute … to anon, authenticated` in the existing `pg_roles` guard block (B013) —
+      the dialog is signed-out safe like the board
+- [x] B024 drop block for the signature, in the file that recreates it, and the matching line in
+      `scripts/drop.sql`
+
+### core
+
+- [x] `ChefScoring` (`core/src/chef_scoring.dart`, plain Dart — no codegen): the **mirror** of
+      `chef_score()` and `chef_tier_for()`. Weights 3 / 5 / 0.2, thresholds 100 / 1000 / 5000 /
+      20000, plus `pointsToNext` / `progressToNext` / `nextTier` / `unitsToNext` / `breakdown`.
+      Exported from `core.dart`
+- [x] `core/src/formatting.dart` — `groupedCount` / `groupedScore`. Hand-rolled rather than adding
+      `intl`: the only need is thousands separators and the product has no localization story.
+      `ChefStanding.scoreLabel` now delegates here, so the board reads `21,000`, not `21000`
+- [x] `ChefStanding` gained `isPodium`, `tierProgress`, `nextTier`, `nextTierLabel`,
+      `pointsToNextLabel` — all derived from the **score**, so a card cannot show "0 to go" beside
+      the lower tier
+- [x] `ChefRepository.topRecipes(chefId, limit)` — `.rpc(...).select(kRecipeSelect)`, same shape as
+      the Discover RPC calls
+- [x] `ChefRepository.chefCount()` — exact `count` over `profiles` where `public_recipe_count > 0`,
+      for the dialog's "Rank 2 of 148". `limit(1)` keeps the body one row; `count` respects filters
+      but ignores `limit`
+
+### design_system
+
+- [x] `ChefStandingCard` — draft 1b. 6px tier spine, `workspace_premium` / `military_tech` medal
+      for ranks 1–3 (numeral + `rank` below that), `ChefAvatar` tinted to the tier, dense
+      `TierChip`, the four icon-chip stats, score, and `34% to Master` / `top tier reached`.
+      `onTap` required — an inert row is what this design answers. Compact drops the stat labels
+- [x] The spine is a `Positioned` child of a `Stack`, **not** a stretched `Row` child: the card
+      lives in a `ListView`, so its height is unbounded at layout time and
+      `CrossAxisAlignment.stretch` hands the spine `h=Infinity`. Caught by the envelope tests on
+      the first run; `IntrinsicHeight` would have worked but costs a pass on all 50 rows
+- [x] The score is a `FittedBox`, not an ellipsis — a truncated number is worse than a small one
+- [x] `TierLadder` — the four thresholds as **evenly spaced anchors** (0 / ⅓ / ⅔ / 1) with the fill
+      interpolating between them, `Line / Sous / Head / Master` beneath, current rung highlighted.
+      A linear points axis would squash the bottom two tiers into the first 5% of the bar
+- [x] `ScoreContributionBar` — one labelled input row (`1,980 likes × 3` … `5,940`) plus its bar
+- [x] All three exported from `design_system.dart` (gotcha 14)
+
+### app
+
+- [x] `chefDetailProvider(chefId)` family + `chefCountProvider` in `chefs_providers.dart`. The
+      recipe read is caught and flagged, not thrown: a database without the new RPC loses one
+      section instead of the whole dialog
+- [x] `chef_detail_sheet.dart` — one content widget, two presentations: `showDialog` capped at
+      1152 × 720 on ≥600px, `showModalBottomSheet` (`isScrollControlled`, drag handle, fixed
+      header, scrolling body) at 94% height on compact — the default 9/16 cap cuts the ladder off.
+      Two columns on desktop, stacked on mobile
+- [x] `chefs_screen.dart` — board rebuilt on `ChefStandingCard`, row taps open the detail
+- [x] No footer action bar on mobile (1d draws Follow + Recipes there; both were cut)
+- [x] 1c's "Rank recomputes nightly. Last updated 4 hours ago" is **wrong about this build** —
+      `on_recipe_stats_change` fires on every like, save, view and visibility flip — so the card
+      says that instead of shipping the mockup's copy
+
+### Tests
+
+- [x] `packages/core/test/chef_scoring_test.dart` — weights and every threshold boundary, pinned
+      against the SQL values so the mirror cannot drift silently
+- [x] `packages/core/test/chef_models_test.dart` — grouped `scoreLabel` and the new derived fields
+- [x] `packages/design_system/test/chef_standing_card_test.dart` — medal vs numeral, tier spine,
+      dense labels, top-tier copy, tap target, and a 320 / 360 / 600 / 760 × 1.0 / 2.0× envelope
+- [x] `packages/design_system/test/tier_ladder_test.dart` — the anchor mapping, pinned
+- [x] `apps/app/test/chefs_screen_test.dart` — extended: the multipliers render, the rank line uses
+      the count, a tap opens a `Dialog` on desktop and a `BottomSheet` on a phone, the card
+      survives a database with no `chef_top_recipes`, and no `Follow` / `View all` leaks in
+
+### Verified
+
+- [x] `melos run analyze` — **No issues found!** in all three packages
+- [x] `flutter test` per package — core 39, design_system 58, app 49 passed (146 total, all green)
+- [x] **SQL on a real Postgres.** `0001_init.sql` re-applied in place to the running local stack
+      (`supabase_db_secret-sauce`) with `ON_ERROR_STOP=1`: no errors, `chef_top_recipes` created
+      with `anon=X/postgres,authenticated=X/postgres`. As `anon` the RPC returns the Kitchen's
+      three highest-contributing recipes in the right order (3,636 / 2,553 / 1,693 points). As the
+      **private-only** chef `d6`, their own `chef_top_recipes` returns **0 rows** while they own a
+      private recipe with 5,000 likes — the explicit `visibility` filter holds under invoker RLS
+- [x] **Screenshots of a release build** (`flutter build web --release` + static serve, per B028)
+      at 1440×900 and 390×844, board and expanded card. Four bugs came out of them —
+      **B029–B032** — none of which the widget tests could see: the tests never pump the shell, and
+      an ellipsised name is not an overflow
+
+- [x] **Applied to the hosted project** (2026-08-19, no production yet). `0001_init.sql` piped in
+      with `ON_ERROR_STOP=1`, exit 0. `chef_top_recipes` and `chefs_leaderboard` both carry
+      `anon=X,authenticated=X,service_role=X`; as `anon` the RPC returns the Kitchen's top three
+      (3,636.2 / 2,553 / 1,693). Re-screenshotted against it: Top recipes populates with rating
+      pills, likes · saves, and contributed points on both desktop and mobile
+- [x] Getting there needed a workaround, recorded as **B033**: `psql` is not installed on this
+      machine and the direct `db.<ref>.supabase.co` host is IPv6-only, which the Supabase Docker
+      container cannot route. The Session pooler host (IPv4) through the container's `psql` works
+
+### Not verified
+
+- [ ] Nothing here was exercised on a real phone; compact was checked at 390×844 in a browser
+
+### Deferred
+
+- [ ] No public chef page. "View all N recipes" was cut with the Follow button — there is still no
+      route that lists one chef's public recipes
+- [ ] Pagination: the board is still one `limit: 50` page, though the RPC takes an offset
+- [ ] "Joined <month year>" comes from `profiles.created_at`, which is the **profile** row's age,
+      not the account's
+
+## Phase 23 — Chefs page v3 (web): hero, spotlight card, rails
+
+**Status: done, web only.** Build order, traps and the full account in
+[EXECUTION-PLAN.md Phase 23](./EXECUTION-PLAN.md#phase-23--chefs-page-v3-web-hero-spotlight-card-rails).
+Redrawn in Claude Design: `Chefs Page.dc.html` (page, expanded 1440 × 900) plus `Chefs.dc.html`
+drafts `1e` (spotlight card, desktop 400 × 560) and `1f` (mobile sheet — deferred).
+
+`/chefs` was one 760px column. It answered who is ahead, and since Phase 22 why — but only one chef
+at a time, only on tap, only by all-time score. Nothing stated the population, nothing showed who is
+*moving*, and there was nothing on the page a visitor would look at for pleasure. **Scope is
+web/expanded only; compact is byte-identical to Phase 22.**
+
+Eight decisions taken before code; the four marked **owner** were the owner's call on the plan:
+
+| Mockup draws | Decision |
+| --- | --- |
+| 4:3 portrait window | **owner:** leave it empty with the default avatar — `avatar_url`, else the monogram `ChefAvatar`. No chef portrait asset exists |
+| `SEASON 1` / `S1 · 004/148` | Drop the season — the serial is `004 / 148` |
+| `RECOMPUTED 4H AGO` | Wrong about this build, like 1c's "nightly" in Phase 22. Reads `LIVE · UPDATES ON EVERY LIKE, SAVE AND VIEW` |
+| Time windows + Momentum tab | **owner:** not now. Controls render **disabled with a tooltip**, not hidden |
+| — | Recorded for whoever builds them: windowed views must exclude anonymous rows or B012's inflation vector reopens |
+| Full rails | **owner:** placeholder cards + TODO. Empty against today's seed; **do not** seed dated rows — the counter triggers would move every `chef_score` |
+| Newsreader + mono | **owner:** keep the existing font; `TODO(fonts)` at each site |
+| `Follow` / `Share card` | Cut, same as Phase 22 |
+
+### Schema
+
+- [x] **None.** The plan called for four RPCs and needed zero, which is the phase's most useful
+      finding. The hero's tier tiles are five bounded exact counts over `profiles` (PostgREST cannot
+      `group by`, and tallying client-side downloads a row per chef); the spotlight card's "move"
+      row is the chef's strongest stat, already in the leaderboard payload via
+      `ChefScoring.breakdown()`, so a ten-card rail costs **no** extra requests. Nothing to deploy —
+      the page works against the hosted database as it stands
+
+### core
+
+- [x] `ChefRepository.tierCounts()` → `Map<ChefTier, int>`, five parallel `count(exact)` reads
+      filtered `public_recipe_count > 0` so they sum to `chefCount()`
+- [x] `ChefTier.wireValue` — the Postgres enum label, restated because `json_serializable` keeps its
+      mapping private and a `.eq('chef_tier', …)` filter needs the string without a decode. Pinned
+      by a round-trip test, plus a distinctness check so two rungs cannot silently share a label
+- [x] `pluralNoun` / `countOf` in `formatting.dart`, hoisted out of the closure inside
+      `ChefStandingCard._Stats` — B031 now has one place to be got wrong instead of four
+- [x] No `@freezed` field added, so no `build_runner` run was needed
+
+### design_system
+
+- [x] **`ChefSpotlightCard`** — built and reviewed first, standalone against draft `1e`. Tier drives
+      foil, rarity band, accent and glyph; the score sits where a trading card puts HP; the driver
+      row names the input doing the most work with the arithmetic behind it; the footer is the
+      tier-ladder bar. Portrait window per D1
+- [x] `spotlightCardHeight(context)` — the tile is fixed-size, so text growth has nowhere to go, and
+      the intrinsic bands exceed the 356px budget well before 2.0×. Height is
+      `356 + (textScale − 1) × 168`; past 2.5× the growth clamps and the portrait absorbs the rest
+- [x] `SpotlightCardPlaceholder` — same frame and geometry, neutral bands, for the D6 shelves
+- [x] `CardRail` — icon tile, title/sub, `1–3 / 10`, arrows dimming at the ends. A horizontal
+      `ListView` + `animateTo`, not a translated transform: a web rail must answer drag and trackpad
+- [x] `ChefCardVariant.board` on `ChefStandingCard` — rank pill instead of a medal, no stat chips, a
+      3px tier progress bar on the bottom edge. A variant, not a second widget
+- [x] `context.textScale` in `adaptive.dart`, the one measurement three layouts now size from
+- [x] All exported from `design_system.dart` (Gotcha 14)
+
+### app
+
+- [x] `chefs_hero.dart` — dark brand gradient (literal colours in both themes, tier accents resolved
+      at `Brightness.dark`), population pill, ranking rule, five tier tiles, window control
+- [x] `chefs_screen.dart` — **three** layouts: the untouched compact board; a single-scroll stacked
+      page; and the two-column page (`Column(hero, Expanded(Row(panel 404, rails)))`) when the
+      window is expanded **and** the text scale is at or below `maxTwoColumnTextScale`
+- [x] Deviates from the draft's page-scroll + `position: sticky` on purpose — the panel already owns
+      a scroll container there, and nested pinned slivers are the fragile way to the same picture
+- [x] Board panel: `Score / Momentum / New`, and `Show all 148` wired to a wider first page —
+      closing Phase 22's pagination item above
+- [x] Three rails; a spotlight card taps through to the existing expanded chef dialog
+- [x] `notYetTooltip` — explains a deliberately inert control and gets out of the way of a working
+      one
+
+### Tests — 198 green, up from 146
+
+- [x] `chef_scoring_test.dart` / `chef_models_test.dart` — `pluralNoun` / `countOf`, and
+      `wireValue` round-tripping through the decoder (core **42**)
+- [x] `chef_spotlight_card_test.dart` — score/rank/serial/tier/totals, the driver row picking the
+      real top contribution, `1 recipe` singular, top-tier copy, foil ramp, monogram fallback, the
+      name-versus-score width ratio, and the tile envelope at 1.0 / 1.3 / 1.6 / 2.0 / **3.0**×
+- [x] `card_rail_test.dart` — arrows dim at both ends, position label arithmetic, no controls when
+      the shelf fits, footnote
+- [x] `chef_standing_card_test.dart` — board variant: rank pill, no medal, progress value, `1
+      recipe`, tap target, 404px envelope at 1.0 / 1.5 / 2.0× (design_system **88**)
+- [x] `chefs_screen_test.dart` — hero counts, three rails, placeholder footnotes, disabled controls
+      staying inert, `Show all` widening the RPC's limit, an empty board showing **no** Popular
+      shelf, spotlight → dialog, and the page envelope at 320 / 360 / 600 / 1000 / 1440 × 2.0×,
+      which sweeps all three layouts (app **68**)
+
+### Verified
+
+- [x] `melos run analyze` — **No issues found!** ×3, `SUCCESS` read from the output rather than the
+      exit code (B006/B007)
+- [x] `flutter test` per package — 42 / 88 / 68, all green
+- [x] `/code-review` against `CLAUDE.md` + the repo review checklist. Five findings, all fixed and
+      pinned by tests in the same pass — **B037–B041**. Two of them (B038's 50/50 flex split,
+      B041's empty tooltips) were review finds no test could make: neither overflows
+- [x] No SQL in the diff, so no local-stack run applies and nothing needs applying to the hosted
+      project
+
+### Not verified
+
+- [ ] **No screenshots.** The B028 procedure needs a browser and Playwright reports `Chromium
+      distribution 'chrome' is not found`. Phase 22 found four bugs that way that no test could see,
+      and two of this phase's five were the same kind. Outstanding, not unnecessary —
+      `npx playwright install chrome` unblocks it
+- [ ] Nothing exercised on a real phone; compact is unchanged from Phase 22 either way
+
+### Deferred
+
+- [ ] The windowed half: `chef_window_stats(p_since)`, `chefs_leaderboard_windowed(p_days, …)`, the
+      Trending and month rails, `Momentum`, and the hero's Month/Week. Wiring points carry
+      `TODO(rails)` / `TODO(board)` / `TODO(hero)`; read the anonymous-views trap first
+- [ ] Draft `1f` — spotlight card as a mobile sheet, with swipe and the Share/Recipes actions
+- [ ] The `large` 400 × 560 spotlight size — nothing consumes it, and an unused variant is a second
+      layout to keep correct for free
+- [ ] The `New` sort would work today (`profiles.created_at` exists) but needs a column
+      `chefs_leaderboard` does not return, so it moves with the rest of the windowed work
+- [ ] Display/mono fonts — an app-wide decision, not a `/chefs` one
+- [ ] Still no public chef page, so a spotlight card's only destination is the expanded dialog
+
+## Phase 24 — Simulated population: a realistic user + engagement dataset
+
+**Status: in progress.** Tooling and the first dish batch are built; the `sim` schema, the
+generator, and verification are not. Full design, distribution model, and the edge-case catalogue in
+[EXECUTION-PLAN.md Phase 24](./EXECUTION-PLAN.md#phase-24--simulated-population-a-realistic-user--engagement-dataset).
+
+Every feature built since Phase 18 is a *ranking* of a population that does not exist. The database
+holds 21 accounts and 23 recipes, all of whose engagement counters were typed by hand into
+`seed.sql` / a `demo` block. Consequences, all of them already recorded elsewhere as limits:
+
+- The leaderboard is 8 rows, so pagination, `dense_rank` at scale, and the hero's `004 / 148` serial
+  are untested against real cardinality.
+- `recipe_likes` / `recipe_saves` / `recipe_views` / `recipe_ratings` are **nearly empty** — the
+  counters were written directly. Every windowed or dated query (the Trending rail, `Momentum`, the
+  hero's Month/Week — Phase 23's whole deferred half) has nothing to read, which SDS §10.8 calls out
+  as needing "its own answer before the rails do". This is that answer.
+- Discover's Popular tab is a Bayesian average over ≤ 8 ratings per recipe; nothing proves the prior
+  actually suppresses a one-rating recipe.
+- No account in the database is a **non-creator**. The product's most common real user — someone who
+  only ever reads recipes — has never been rendered.
+
+The deliverable is a deterministic, idempotent, scale-parameterized generator that builds a
+plausible population *and its history*, with the engagement log as the source of truth and the
+denormalized counters derived from it (the reverse of how `seed.sql` works).
+
+### Content — the dish library
+
+- [~] `simData/dishes/<slug>.json` — **25 of 120** authored dishes, same format as
+      `recipeData/recipes/*.json` so a dish can be promoted into the curated set by moving the file.
+      Written fresh, not copied (ingredient lists are not copyrightable; step prose is). Batch 1 was
+      sequenced for **coverage before count** — all 7 targets below already pass at 25, so the
+      remaining 95 add variety to an already-valid library rather than being load-bearing
+- [x] Coverage targets, asserted by `tool/sim.dart` over the whole directory: all 10 `category`
+      values, ≥ 24 cuisines (25 dishes, 25 distinct cuisines), the full `difficulty` spread, a
+      no-cook dish (`cook_minutes` 0), an overnight step (`duration_minutes` > 480), a multi-group
+      dish (SDS §11.1), and a dish serving ≥ 8. Warnings below 100 dishes, errors at or above it —
+      a partial batch legitimately misses a category, a finished library does not
+- [ ] `simData/people.json` — given/family name pools across ~15 locales, bio templates
+- [ ] `simData/vocab.json` — the tag vocabulary (Zipf-weighted), title-variant templates
+- [x] `simData/README.md` + `simData/schema.json` — authoring workflow and the format delta from
+      `recipeData` (no `demo` block; an optional `sim` block of `weight` + `variant_titles`)
+
+### Tooling
+
+- [x] Extract the validator out of `tool/recipes.dart` into **`tool/recipe_format.dart`** (a sibling,
+      not `tool/lib/` — `tool/` is loose scripts, and a root `lib/` would have made the workspace
+      package own it) so `recipeData` and `simData` cannot drift into two different definitions of a
+      valid recipe. Proof the refactor is neutral: `recipes:check` still passes **byte-for-byte**
+- [x] `tool/sim.dart` (`validate` / `gen` / `check`) → `supabase/sim/1_sim_dishes.sql`, committed
+      and CI-gated exactly like `seed_recipes.sql`. Creates its own schema and table so it is
+      standalone; **upserts** by slug (a library should push content edits, unlike `seed_recipe_v2`)
+      and deletes rows whose source file is gone
+- [x] `melos run sim:validate` / `sim:gen` / `sim:check`
+- [x] `tool/db.dart`: `db:sim`, `db:sim:verify`, `db:sim:clean`. `--preset` / `--seed` are written
+      into `sim.config` before the generator reads them rather than passed as psql `-v` vars, so a
+      hand-run file behaves identically to the wrapper. `db:sim:clean` deletes `auth.users` rows and
+      requires an explicit `--yes`; every action prints the target host first (Gotcha 7)
+- [x] **`db:reset` DOES run the sim** — reversing the original plan, at the owner's request. Safe
+      because `engage_existing` is false: the Kitchen and `d1`–`d7` counters stay byte-identical and
+      every standing pinned in SDS §10.7 survives. Only the **ranks** move. Full reset from an empty
+      database, sim included, is ~15s
+- [x] CI: `sim:check` added beside `recipes:check`
+
+### The `sim` schema (never `public`)
+
+- [x] `supabase/sim/0_sim_schema.sql` — `create schema if not exists sim`. Every helper function and
+      registry table lives here, so PostgREST (which exposes `public` only) cannot reach them. This
+      is B026's lesson applied by construction rather than by a `revoke` block
+- [x] `sim.rand(key, stream)` and the derived draws — `rand_normal` (Box-Muller), `rand_lognormal`,
+      `rand_int`, `rand_bool`, `rand_ts`. All pure functions of
+      `hashtextextended(key || stream, seed)`, **not** `setseed()` + `random()`: a hash is
+      order-independent, so the same seed yields the same database regardless of plan or parallelism
+- [x] `sim.uid(kind, n)` — deterministic ids, so a re-run updates rather than duplicates. **bigint**,
+      because at the `large` preset the composed `n * 10000 + …` overflows a 32-bit int (B044)
+- [x] `sim.epoch_end()` — the time anchor, **pinned into `sim.config`** on first generate rather than
+      read from `now()`. Determinism depends on it and the failure is silent; see B044
+- [x] `sim.actor` / `sim.recipe` registries — teardown deletes exactly what is listed here, never by
+      an email or id pattern. The registry *is* the safety mechanism
+- [x] `sim.persona`, `sim.preset`, `sim.config`, `sim.title_variant` — the distribution is data, so
+      retuning a share is a one-row edit, not a rewrite
+- [x] `sim.counter_baseline` — only used when `engage_existing` is on
+- [ ] `sim.rand_zipf` — the tag vocabulary it was for is not built yet
+
+### Generation
+
+- [x] `supabase/sim/2_sim_generate.sql` — set-based, idempotent, one transaction, ~10s at `medium`
+- [x] **Personas**: ghost 22% / lurker 43% / collector 14% / casual 11% / regular 6% / power 2.5% /
+      vault 1.5%. Measured at `medium`: 21.3 / 45.5 / 14.0 / 9.9 / 5.1 / 2.6 / 1.6, and **95%** of
+      simulated accounts own no public recipe
+- [x] **Signups** on a compounding growth curve over 24 months
+- [x] **Recipes**: per-persona log-normal count; a dish from the library plus a deterministic variant.
+      1,671 recipes from 1,000 users at `medium`. Title uniqueness within an owner is guaranteed by a
+      merged, **deduplicated** template sequence per dish — treating the dish's own variants and the
+      generic pool as disjoint produced a real `(owner_id, title)` collision (caught by check D4)
+- [x] **Versions**: geometric edit count, 4,196 rows, `current_version_id` on the last
+- [x] **Forks**: ~4% of recipes, always from an older public recipe of a different owner
+- [x] **Engagement** as a funnel over a *view*, never independent: view → like → save → rate. At
+      `medium`: 97,926 signed-in views, 19,930 anonymous, 6,483 likes, 4,898 saves, 1,839 ratings
+- [x] **Ratings** J-shaped, shifted per recipe by a latent quality term, plus a polarized set
+- [x] **Private recipes** receive engagement only from their `recipe_shares` rows (902 shares)
+- [x] Counters are **derived, not authored**: triggers disabled for the load, counters and
+      `chef_score` / `chef_tier` recomputed set-based through the real `chef_score()` and
+      `chef_tier_for()` (Gotcha 19), triggers restored
+- [x] `engage_existing` (default false) keeps every SDS §10.7 standing byte-identical
+- [x] Presets: `tiny` (60) · `small` (250) · `medium` (1,000, default) · `large` (8,000)
+
+### Verification
+
+- [x] `supabase/sim/3_sim_verify.sql` — 30 assertions that `raise exception` rather than print.
+      Nothing in CI runs SQL (SDS §11.3), so this script *is* the test suite for this phase, and it
+      found all three defects in B044 plus B045
+- [x] Counter invariants (A1–A8), including `view_count` excluding anonymous rows and repeat visits
+      (B012) — plus A7/A8, which assert those rows **exist**, so A3 cannot pass vacuously
+- [x] Authorization invariants (B1–B5): no self-rating, half-star steps, no engagement on a private
+      recipe from outside its share list, and no like or rating without a view
+- [x] Temporal invariants (C1–C6): nothing predates its parent, nothing is in the future, no fork
+      older than its source
+- [x] Structural invariants (D1–D4): B022 ordering, every recipe has a `current_version_id`, no
+      `(owner_id, title)` collisions
+- [x] Shape assertions (E1–E12) — persona coverage, heavy-tail concentration, J-shaped ratings,
+      forks, long version histories, and the deliberate edge-case accounts. E3 and E9 are
+      **population-aware**: both measure quantities whose ceiling is set by how many users exist, so
+      at `tiny` they are relaxed or skipped **loudly** rather than tuned until they pass
+- [x] Idempotency: generate twice → identical counts and identical `sum(chef_score)`
+- [x] `d1`–`d7` + Kitchen standings asserted unchanged (F1–F3)
+- [x] Wall-clock: `medium` generate ~10s; full `db:reset` from an empty database ~15s
+- [ ] RLS smoke test per persona with `set local role authenticated` — not written
+- [ ] `large` preset never run; `master_chef` is asserted there but unverified
+
+### Docs
+
+- [ ] `docs/SDS.md` §12 — the simulation dataset: personas, distributions, invariants, and the
+      derived-counter rule
+- [ ] `CLAUDE.md` — the new commands, and the two traps worth a gotcha entry: engagement rows must
+      be loaded with triggers off (or the load is O(rows) profile recomputes), and teardown is
+      registry-driven
+- [ ] `README.md` — `db:sim` / `db:sim:clean` in the database section, with the B033 Docker
+      `psql` form
+- [ ] `docs/BUG-TRACKER.md` — anything the dataset surfaces. Two are predicted:
+      `recipes_search` recomputes `recipe_search_document()` per row for both the filter and the
+      rank (no stored tsvector, no GIN index), and `can_read_recipe()` runs per row for every
+      Discover read. Neither is visible at 23 recipes
+
+### Deferred
+
+- [ ] `avatar_url` and `cover_image_url` stay **null** for every sim row. There is no image asset and
+      an external URL 404s offline, which renders as a broken-image widget rather than the monogram
+      fallback the null path gives. Config knobs exist for whoever wires a bucket
+- [ ] A Postgres service job in CI that applies `0001_init.sql` → `seed` → `recipes` → sim `tiny` →
+      `3_sim_verify.sql`. It is the obvious payoff of having written the assertions, but it is a CI
+      change, not a data one
+- [ ] Building Phase 23's deferred windowed half on top of this data — the rails now have rows to
+      read, but they are still unwritten
 
 ---
 

@@ -1,0 +1,77 @@
+{
+  "slug": "malaysian-curry-laksa",
+  "title": "Curry Laksa",
+  "description": "Noodles in a coconut curry broth built on a fried spice paste, with tofu puffs that soak up more soup than seems physically reasonable.",
+  "cuisine": "Malaysian",
+  "category": "Soup",
+  "difficulty": "medium",
+  "prep_minutes": 30,
+  "cook_minutes": 35,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": null,
+  "ingredient_groups": [
+    {
+      "name": "Laksa paste",
+      "ingredients": [
+        { "quantity": 8, "unit": null, "name": "dried red chillies", "note": "soaked" },
+        { "quantity": 6, "unit": null, "name": "shallots" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic" },
+        { "quantity": 2, "unit": "stalks", "name": "lemongrass", "note": "white part only" },
+        { "quantity": 2, "unit": "cm", "name": "turmeric", "note": "fresh, or 1 tsp ground" },
+        { "quantity": 1, "unit": "Tbsp", "name": "belacan", "note": "shrimp paste, toasted" },
+        { "quantity": 30, "unit": "g", "name": "candlenuts", "note": "or macadamias" }
+      ]
+    },
+    {
+      "name": "Soup",
+      "ingredients": [
+        { "quantity": 400, "unit": "ml", "name": "coconut milk" },
+        { "quantity": 800, "unit": "ml", "name": "chicken stock" },
+        { "quantity": 300, "unit": "g", "name": "rice noodles" },
+        { "quantity": 200, "unit": "g", "name": "prawns", "note": "peeled" },
+        { "quantity": 8, "unit": null, "name": "tofu puffs", "note": "halved" },
+        { "quantity": 100, "unit": "g", "name": "bean sprouts" },
+        { "quantity": 1, "unit": "Tbsp", "name": "fish sauce" },
+        { "quantity": 1, "unit": "handful", "name": "Vietnamese mint", "note": "to serve" },
+        { "quantity": 1, "unit": null, "name": "lime", "note": "cut into wedges, to serve" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Blend the soaked dried red chillies, shallots, garlic, lemongrass, turmeric, belacan, and candlenuts into a fine paste."
+        },
+        {
+          "text": "Fry the paste in oil over a medium heat until it darkens and the oil separates.",
+          "duration_minutes": 15,
+          "tip": "Fifteen minutes is not an exaggeration. Underfried paste tastes raw and grainy in the finished soup."
+        },
+        {
+          "text": "Add the chicken stock and bring to a simmer, then stir in the coconut milk and fish sauce.",
+          "duration_minutes": 10,
+          "tip": "Keep it below a rolling boil once the coconut milk is in, or it splits."
+        },
+        {
+          "text": "Add the tofu puffs and let them drink the broth.",
+          "duration_minutes": 5
+        },
+        {
+          "text": "Poach the prawns in the soup until just opaque.",
+          "duration_minutes": 3
+        },
+        {
+          "text": "Cook the rice noodles separately, divide between bowls, and ladle the soup over."
+        },
+        {
+          "text": "Top with bean sprouts and Vietnamese mint, and serve with lime wedges."
+        }
+      ]
+    }
+  ],
+  "sim": { "weight": 1, "variant_titles": ["{title}, Vegetarian", "Weeknight {title}"] }
+}

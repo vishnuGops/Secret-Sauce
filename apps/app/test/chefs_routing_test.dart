@@ -56,6 +56,17 @@ class _FakeChefRepository implements ChefRepository {
           publicRecipeCount: 2,
         ),
       ];
+
+  // Only reached from the expanded card, which these routing tests never open.
+  @override
+  Future<List<Recipe>> topRecipes(String chefId, {int limit = 3}) async =>
+      const [];
+
+  @override
+  Future<int> chefCount() async => 1;
+
+  @override
+  Future<Map<ChefTier, int>> tierCounts() async => const {};
 }
 
 Future<GoRouter> _pumpAt(WidgetTester tester, String location,
@@ -100,7 +111,9 @@ void main() {
 
     expect(_location(router), Routes.chefs);
     expect(find.byType(ChefsScreen), findsOneWidget);
-    expect(find.text('Amara Okonkwo'), findsOneWidget);
+    // At 1400px this is the two-column page, so the chef is on the board panel
+    // and again on the Popular rail's spotlight card.
+    expect(find.text('Amara Okonkwo'), findsWidgets);
   });
 
   testWidgets('/chefs also renders signed in', (tester) async {

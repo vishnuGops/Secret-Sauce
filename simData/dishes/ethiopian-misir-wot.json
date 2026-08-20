@@ -1,0 +1,63 @@
+{
+  "slug": "ethiopian-misir-wot",
+  "title": "Misir Wot",
+  "description": "Red lentils cooked down with berbere and a large quantity of onion, which is dry-cooked first without any fat at all. Thick enough to eat with bread rather than a spoon.",
+  "cuisine": "Ethiopian",
+  "category": "Main",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 55,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Berbere varies enormously in heat between brands. Start with half and build.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 3, "unit": null, "name": "red onions", "note": "diced very fine" },
+        { "quantity": 250, "unit": "g", "name": "red lentils", "note": "rinsed" },
+        { "quantity": 3, "unit": "Tbsp", "name": "berbere" },
+        { "quantity": 3, "unit": "Tbsp", "name": "niter kibbeh", "note": "spiced clarified butter; or plain ghee" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "minced" },
+        { "quantity": 1, "unit": "Tbsp", "name": "ginger", "note": "grated" },
+        { "quantity": 2, "unit": "Tbsp", "name": "tomato paste" },
+        { "quantity": 1, "unit": "L", "name": "water", "note": "hot" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Cook the red onions in a dry pan, with no oil, stirring often until they collapse and release their moisture.",
+          "duration_minutes": 15,
+          "temperature": "medium-low",
+          "tip": "This sounds wrong and is the defining step. The onions steam in their own liquid and go sweet without frying."
+        },
+        {
+          "text": "Add the niter kibbeh, garlic, and ginger and cook until fragrant.",
+          "duration_minutes": 3
+        },
+        {
+          "text": "Stir in the berbere and tomato paste and cook them out so the spice loses its raw edge.",
+          "duration_minutes": 4
+        },
+        {
+          "text": "Add the red lentils and the hot water, and simmer, stirring now and then.",
+          "duration_minutes": 30
+        },
+        {
+          "text": "Season with the salt and cook until it is thick enough to hold the mark of a spoon.",
+          "duration_minutes": 5
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.1,
+    "variant_titles": ["{title} with Injera", "Mild {title}"]
+  }
+}

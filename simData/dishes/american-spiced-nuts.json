@@ -1,0 +1,55 @@
+{
+  "slug": "american-spiced-nuts",
+  "title": "Rosemary Spiced Nuts",
+  "description": "Mixed nuts roasted with butter, rosemary, and cayenne, tossed while still hot so the seasoning sticks. Twelve servings, gone in twenty minutes.",
+  "cuisine": "American",
+  "category": "Snack",
+  "difficulty": "easy",
+  "prep_minutes": 10,
+  "cook_minutes": 15,
+  "servings": 12,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Keeps two weeks airtight, and re-crisps in a low oven for five minutes if it softens.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "mixed nuts", "note": "unsalted — pecans, cashews, almonds" },
+        { "quantity": 2, "unit": "Tbsp", "name": "butter", "note": "melted" },
+        { "quantity": 2, "unit": "Tbsp", "name": "rosemary", "note": "chopped fine" },
+        { "quantity": 1, "unit": "Tbsp", "name": "brown sugar" },
+        { "quantity": 2, "unit": "tsp", "name": "salt" },
+        { "quantity": 0.5, "unit": "tsp", "name": "cayenne", "note": "adjust to taste" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Spread the mixed nuts on a tray and roast until they smell toasted and have taken a little colour.",
+          "duration_minutes": 15,
+          "temperature": "350°F",
+          "tip": "Shake the tray halfway. Nuts go from perfect to burnt in about ninety seconds."
+        },
+        {
+          "text": "Combine the melted butter, rosemary, brown sugar, salt, and cayenne in a large bowl."
+        },
+        {
+          "text": "Tip the hot nuts straight into the bowl and toss until every one is coated.",
+          "tip": "Hot is doing the work here — the rosemary fries slightly against the nuts and the sugar just melts."
+        },
+        {
+          "text": "Spread back out to cool and crisp before serving.",
+          "duration_minutes": 20
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.1,
+    "variant_titles": ["Holiday {title}", "Maple {title}"]
+  }
+}

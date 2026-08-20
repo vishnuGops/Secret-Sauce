@@ -57,6 +57,18 @@ class _FakeChefRepository implements ChefRepository {
   @override
   Future<List<ChefStanding>> leaderboard({int limit = 50, int offset = 0}) async =>
       const [];
+
+  // These tests only exercise the nav chrome; an empty board never opens the
+  // expanded chef card, which is the only caller of either method.
+  @override
+  Future<List<Recipe>> topRecipes(String chefId, {int limit = 3}) async =>
+      const [];
+
+  @override
+  Future<int> chefCount() async => 0;
+
+  @override
+  Future<Map<ChefTier, int>> tierCounts() async => const {};
 }
 
 /// Pumps the real router (so the shell picks the chrome) at [location].

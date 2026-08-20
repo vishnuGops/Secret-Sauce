@@ -140,7 +140,8 @@ transparently falls back to the x64 build, which works.
 | `flutter` not found after install                                          | PATH only applies to **new** terminals. Open a fresh one.                                                   |
 | `flutter run` starts, serves, then exits on its own (code 255)             | It is interactive (`r`/`R`/`q`) and quits on stdin EOF. Run it in a real terminal, not a backgrounded or piped one. For unattended use build instead: `flutter build web --release --dart-define-from-file=env.local.json`. |
 | `-d web-server` serves a **blank white page** on the second browser session (no console error) | The debug web server renders for one client; a later load gets the bootstrap scripts and nothing else (B028). For screenshots or any automated browser, build a release bundle and serve it statically instead — see below. |
-| A deep link like `http://localhost:8080/discover` lands on the landing page | The web build uses the **hash** URL strategy. Use `http://localhost:8080/#/discover`.                      |
+| A deep link like `http://localhost:8080/recipe/<id>` opens Discover instead   | The web build uses the **hash** URL strategy — the server never sees the path, so it serves the app at `/`, which redirects to `/discover`. Put the route after the hash: `http://localhost:8080/#/recipe/<id>`. |
+| `http://localhost:8080/` shows Discover, not a landing page                   | Correct as of 2026-08-20. The landing screen was retired; `/` is a redirect-only route onto `/discover`, which is the front door on web and mobile. |
 
 For screenshots, automated browsers, or anything that opens the app more than once:
 
@@ -160,6 +161,12 @@ Supabase credentials are supplied via a local, git-ignored JSON file (never comm
    Copy-Item apps/app/env.example.json apps/app/env.local.json
    # then edit apps/app/env.local.json with your SUPABASE_URL and SUPABASE_ANON_KEY
    ```
+
+   > On this machine `env.local.json` currently points at the **local** Supabase stack
+   > (`http://127.0.0.1:54321`, needs `supabase start`); the hosted project's values are kept in
+   > `apps/app/env.hosted.local.json`. Swap the files to switch. Keep the `.local` in any such
+   > filename — `env.local*` and `env.*.local*` are git-ignored, but `env.hosted.json` is **not**
+   > (B010).
 
 2. Run with the env file (Flutter's `--dart-define-from-file`). The most reliable option on
    Windows is the **web-server** device (open the printed URL in any browser):
@@ -275,6 +282,29 @@ melos run db:drop     # drop all app tables/types/functions
 melos run db:reset    # drop -> create -> seed -> recipes
 ```
 
+**No `psql` installed? Use the Supabase container's, and go through the pooler** (B033). The
+`db:*` scripts shell out to `psql`; if it is not on PATH the only client on a Docker-based setup is
+inside the local stack's DB container. Reaching the **hosted** project from there needs the
+**Session pooler** host as well — `db.<ref>.supabase.co` is IPv6-only and the container has no IPv6
+route, so it fails with `Network is unreachable`:
+
+```powershell
+# Session pooler URI: Dashboard -> Project Settings -> Database -> Connection string -> Session pooler
+$u = "postgresql://postgres.<project-ref>:<pwd>@aws-0-<region>.pooler.supabase.com:5432/postgres"
+docker exec -i supabase_db_secret-sauce psql $u -c "select 1"        # check auth first
+Get-Content supabase\migrations\0001_init.sql -Raw |
+  docker exec -i supabase_db_secret-sauce psql $u -v ON_ERROR_STOP=1 -f -
+```
+
+The pooler user is `postgres.<project-ref>`, **not** bare `postgres`, and a dashboard password
+reset takes a moment to propagate — an auth failure straight after resetting is not proof the
+password is wrong.
+
+> ⚠️ `SUPABASE_DB_URL` is a **superuser** connection string and belongs in your shell only. Never
+> put it in `apps/app/env.local.json`: that file is passed to every build through
+> `--dart-define-from-file`, so a credential in it is one `String.fromEnvironment` away from
+> shipping inside a web bundle (B034).
+
 Recipe content (no database or credentials needed — these only touch files):
 
 ```powershell
@@ -282,6 +312,39 @@ melos run recipes:validate  # parse + lint recipeData/recipes/*.json
 melos run recipes:gen       # regenerate supabase/seed_recipes.sql — commit both
 melos run recipes:check     # fail if that .sql is stale (CI runs this)
 ```
+
+The simulation **dish library** (`simData/dishes/*.json`) works the same way and is validated by
+the same code, so a dish can be promoted into the Kitchen's curated set by moving the file. Nothing
+in it becomes a recipe on its own — the generator that draws from it is not built yet
+([docs/ROADMAP.md Phase 24](docs/ROADMAP.md)):
+
+```powershell
+melos run sim:validate      # parse + lint + directory coverage rules
+melos run sim:gen           # regenerate supabase/sim/1_sim_dishes.sql — commit both
+melos run sim:check         # fail if that .sql is stale (CI runs this)
+```
+
+Building the simulated population itself needs a database. It is part of `db:reset`, so the usual
+reset brings everything back:
+
+```powershell
+melos run db:reset                          # drop -> create -> seed -> recipes -> sim (~15s)
+melos run db:sim                            # just the sim: schema -> dishes -> generate -> verify
+melos run db:sim -- --preset=small --seed=7 # tiny | small | medium (default) | large
+melos run db:sim:verify                     # 30 assertions, read-only
+melos run db:sim:clean -- --yes             # DESTRUCTIVE: removes the simulated accounts
+```
+
+At the default `medium` preset that is 1,000 simulated accounts, ~1,670 recipes and ~118k view
+rows, generated in about ten seconds. It is additive and idempotent — running it twice changes
+nothing. `db:sim:clean` deletes rows from `auth.users`, which has no undo, so it refuses to run
+without `--yes`; it removes only what the `sim.actor` / `sim.recipe` registries list, never
+anything matched by an email or id pattern.
+
+> The simulated users engage only with simulated recipes (`sim.config.engage_existing` is `false`),
+> so the Kitchen's 14 recipes and the `d1`–`d7` demo chefs keep the exact counters and scores
+> documented in [docs/SDS.md §10.7](docs/SDS.md). Their **ranks** move once 1,000 more accounts
+> exist, which is the point of having them.
 
 No `psql` installed? Use the Supabase CLI's local stack instead — its DB container ships one, and
 it is the fastest way to test schema changes without touching the hosted project (needs Docker):

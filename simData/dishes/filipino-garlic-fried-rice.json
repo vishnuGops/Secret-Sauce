@@ -1,0 +1,55 @@
+{
+  "slug": "filipino-garlic-fried-rice",
+  "title": "Garlic Fried Rice",
+  "description": "Sinangag. Day-old rice fried in garlic oil with a heavy hand of fried garlic folded back through at the end. A side dish that quietly outshines what it is served with.",
+  "cuisine": "Filipino",
+  "category": "Side",
+  "difficulty": "easy",
+  "prep_minutes": 10,
+  "cook_minutes": 15,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Freshly cooked rice will not work — it steams and clumps. Cold rice from yesterday is the requirement, not a shortcut.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 4, "unit": "cups", "name": "cooked rice", "note": "cold, from the day before, broken up by hand" },
+        { "quantity": 12, "unit": "cloves", "name": "garlic", "note": "minced" },
+        { "quantity": 4, "unit": "Tbsp", "name": "neutral oil" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" },
+        { "quantity": 2, "unit": null, "name": "spring onions", "note": "sliced, to finish" },
+        { "quantity": 4, "unit": null, "name": "eggs", "note": "fried, to serve", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Fry the minced garlic in the neutral oil over a medium-low heat until pale gold, then lift half of it out onto paper.",
+          "duration_minutes": 5,
+          "temperature": "medium-low",
+          "tip": "Pull it while it is lighter than you want — it keeps browning on the paper. Burnt garlic is bitter and unfixable."
+        },
+        {
+          "text": "Turn the heat up, add the cold cooked rice to the garlic oil left in the pan, and press it into an even layer."
+        },
+        {
+          "text": "Leave it alone so the underside crisps, then turn and repeat.",
+          "duration_minutes": 8,
+          "tip": "Constant stirring gives you warm rice. Stillness gives you texture."
+        },
+        {
+          "text": "Season with the salt, fold through the reserved crisp garlic and the spring onions, and serve with a fried egg."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.4,
+    "variant_titles": ["{title} with Longganisa", "Everyday {title}"]
+  }
+}

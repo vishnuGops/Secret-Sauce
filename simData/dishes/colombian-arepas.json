@@ -1,0 +1,52 @@
+{
+  "slug": "colombian-arepas",
+  "title": "Cheese Arepas",
+  "description": "Corn cakes made from precooked masarepa, griddled until they blister and split open with steam. Four ingredients, and the dough tells you when it is right.",
+  "cuisine": "Colombian",
+  "category": "Side",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 20,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Masarepa is not the same as masa harina and not the same as cornmeal — neither substitute works.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 250, "unit": "g", "name": "masarepa", "note": "precooked white corn flour" },
+        { "quantity": 400, "unit": "ml", "name": "warm water" },
+        { "quantity": 150, "unit": "g", "name": "queso fresco", "note": "crumbled; mozzarella works" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" },
+        { "quantity": 2, "unit": "Tbsp", "name": "butter", "note": "for the griddle" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Stir the salt into the warm water, then rain in the masarepa, mixing with your hand.",
+          "tip": "Flour into water, not the other way round — it hydrates evenly and you get no dry pockets."
+        },
+        {
+          "text": "Knead in the queso fresco and let the dough rest so the corn finishes absorbing.",
+          "duration_minutes": 10,
+          "tip": "The dough should feel like soft clay. If it cracks at the edge when you flatten it, wet your hands and knead again."
+        },
+        {
+          "text": "Shape into eight discs about a centimetre thick, smoothing the edges between wet palms."
+        },
+        {
+          "text": "Griddle in butter over a medium heat until a crust forms and they sound hollow, turning once.",
+          "duration_minutes": 20,
+          "temperature": "medium",
+          "tip": "A finished arepa puffs slightly and hisses. Do not press it down."
+        }
+      ]
+    }
+  ],
+  "sim": { "weight": 1.3, "variant_titles": ["{title} with Butter", "Stuffed {title}"] }
+}

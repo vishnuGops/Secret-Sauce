@@ -1,0 +1,65 @@
+{
+  "slug": "vietnamese-caramel-pork",
+  "title": "Vietnamese Caramel Pork",
+  "description": "Thit kho. Pork belly simmered in a caramel taken right to the edge of burnt, with fish sauce and coconut water. Dark, salty, and sweet in that order.",
+  "cuisine": "Vietnamese",
+  "category": "Main",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 75,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The caramel should smell almost scorched before the liquid goes in. Pale caramel makes a sweet, flat dish.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 700, "unit": "g", "name": "pork belly", "note": "skin on, cut into 3cm pieces" },
+        { "quantity": 4, "unit": "Tbsp", "name": "sugar" },
+        { "quantity": 3, "unit": "Tbsp", "name": "fish sauce" },
+        { "quantity": 400, "unit": "ml", "name": "coconut water" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "sliced" },
+        { "quantity": 2, "unit": null, "name": "shallots", "note": "sliced" },
+        { "quantity": 4, "unit": null, "name": "eggs", "note": "hard boiled and peeled" },
+        { "quantity": 1, "unit": "tsp", "name": "black pepper", "note": "coarsely cracked" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Melt the sugar in a dry heavy pot and let it go to a deep mahogany caramel without stirring.",
+          "duration_minutes": 6,
+          "tip": "Swirl the pan rather than stirring. Take it one shade darker than looks wise."
+        },
+        {
+          "text": "Add the garlic and shallots to the caramel — it will seize and spit — and stir until fragrant.",
+          "duration_minutes": 1
+        },
+        {
+          "text": "Add the pork belly and turn it until every piece is coated and starting to colour.",
+          "duration_minutes": 5
+        },
+        {
+          "text": "Pour in the coconut water and fish sauce, add the cracked black pepper, and bring to a simmer."
+        },
+        {
+          "text": "Cook covered on a low heat until the pork is tender.",
+          "duration_minutes": 50,
+          "temperature": "low"
+        },
+        {
+          "text": "Add the hard boiled eggs and cook uncovered so the sauce reduces to a glaze and the eggs stain brown.",
+          "duration_minutes": 12
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1,
+    "variant_titles": ["{title} with Eggs"]
+  }
+}

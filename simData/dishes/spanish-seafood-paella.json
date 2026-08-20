@@ -1,0 +1,79 @@
+{
+  "slug": "spanish-seafood-paella",
+  "title": "Seafood Paella",
+  "description": "Rice cooked flat in a wide pan and never stirred, so the bottom layer caramelises into socarrat. The seafood goes in late and stays whole.",
+  "cuisine": "Spanish",
+  "category": "Main",
+  "difficulty": "hard",
+  "prep_minutes": 25,
+  "cook_minutes": 40,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Use the widest pan you own. Depth is the enemy — the rice should sit no more than two grains deep.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 400, "unit": "g", "name": "bomba rice", "note": "or another short-grain paella rice" },
+        { "quantity": 1.2, "unit": "L", "name": "fish stock", "note": "hot" },
+        { "quantity": 1, "unit": "pinch", "name": "saffron", "note": "bloomed in a little hot stock" },
+        { "quantity": 300, "unit": "g", "name": "prawns", "note": "shell on" },
+        { "quantity": 300, "unit": "g", "name": "mussels", "note": "scrubbed and debearded" },
+        { "quantity": 200, "unit": "g", "name": "squid", "note": "cut into rings" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "diced fine" },
+        { "quantity": 3, "unit": "cloves", "name": "garlic", "note": "minced" },
+        { "quantity": 2, "unit": null, "name": "tomatoes", "note": "grated, skins discarded" },
+        { "quantity": 1, "unit": "tsp", "name": "sweet paprika" },
+        { "quantity": 4, "unit": "Tbsp", "name": "olive oil" },
+        { "quantity": 1, "unit": null, "name": "lemon", "note": "cut into wedges, to serve" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Sear the prawns and squid briefly in the olive oil and set them aside — they will finish later.",
+          "duration_minutes": 3
+        },
+        {
+          "text": "In the same pan, cook the onion and garlic down, then add the grated tomatoes and sweet paprika and reduce to a dark sofrito.",
+          "duration_minutes": 12,
+          "tip": "The sofrito should be jammy and almost dry. This is where most of the flavour lives."
+        },
+        {
+          "text": "Stir in the bomba rice and coat it in the sofrito.",
+          "duration_minutes": 2
+        },
+        {
+          "text": "Pour in the hot fish stock and the bloomed saffron, spread the rice level, and do not stir again.",
+          "tip": "From this point a spoon is forbidden. Stirring releases starch and you get risotto."
+        },
+        {
+          "text": "Cook at a strong simmer, turning the pan for even heat.",
+          "duration_minutes": 12,
+          "temperature": "medium-high"
+        },
+        {
+          "text": "Push the mussels into the rice hinge-down, return the prawns and squid to the top, and cook until the liquid has gone.",
+          "duration_minutes": 8
+        },
+        {
+          "text": "Raise the heat for the last minute to build the socarrat — listen for it crackling.",
+          "duration_minutes": 2,
+          "temperature": "high"
+        },
+        {
+          "text": "Rest off the heat under a cloth, then serve with lemon wedges.",
+          "duration_minutes": 5
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.9,
+    "variant_titles": ["{title} for Six", "Mixed {title}"]
+  }
+}

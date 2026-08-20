@@ -1,0 +1,68 @@
+{
+  "slug": "korean-braised-short-ribs",
+  "title": "Korean Braised Short Ribs",
+  "description": "Galbi jjim — short ribs braised until the meat gives up and slides off the bone, in a sauce built on grated pear rather than extra sugar. A holiday dish that rewards a slow afternoon.",
+  "cuisine": "Korean",
+  "category": "Main",
+  "difficulty": "hard",
+  "prep_minutes": 30,
+  "cook_minutes": 135,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Better the next day. Cool the braise whole, lift the set fat off the top, and reheat gently.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 1.5, "unit": "kg", "name": "beef short ribs", "note": "cut into 2-inch lengths" },
+        { "quantity": 0.5, "unit": "cup", "name": "soy sauce" },
+        { "quantity": 3, "unit": "Tbsp", "name": "brown sugar" },
+        { "quantity": 1, "unit": null, "name": "Asian pear", "note": "peeled and grated; the enzyme is what tenderises" },
+        { "quantity": 8, "unit": "cloves", "name": "garlic", "note": "smashed" },
+        { "quantity": 1, "unit": "Tbsp", "name": "ginger", "note": "grated" },
+        { "quantity": 2, "unit": null, "name": "carrots", "note": "cut into large chunks" },
+        { "quantity": 300, "unit": "g", "name": "daikon radish", "note": "cut into large chunks" },
+        { "quantity": 100, "unit": "g", "name": "shiitake mushrooms", "note": "halved" },
+        { "quantity": 1, "unit": "Tbsp", "name": "sesame oil" },
+        { "quantity": 3, "unit": null, "name": "spring onions", "note": "sliced, to finish" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Soak the short ribs in cold water, changing it once, to draw out the blood.",
+          "duration_minutes": 60,
+          "tip": "Skipping this is the difference between a clear braise and a muddy one."
+        },
+        {
+          "text": "Parboil the ribs in fresh water, then drain and rinse each piece.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Blend the pear, garlic, and ginger with the soy sauce and brown sugar into a smooth braising liquid."
+        },
+        {
+          "text": "Return the ribs to the pot, pour over the liquid, and simmer covered on the lowest heat.",
+          "duration_minutes": 90,
+          "temperature": "low",
+          "tip": "The meat should be pulling back from the bone before anything else goes in."
+        },
+        {
+          "text": "Add the carrots, daikon, and shiitake and cook uncovered so the sauce reduces and glazes.",
+          "duration_minutes": 25
+        },
+        {
+          "text": "Turn off the heat, stir through the sesame oil, and scatter with spring onions."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.2,
+    "variant_titles": ["Sunday {title}", "{title} with Daikon"]
+  }
+}

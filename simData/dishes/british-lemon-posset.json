@@ -1,0 +1,59 @@
+{
+  "slug": "british-lemon-posset",
+  "title": "Lemon Posset",
+  "description": "Three ingredients, one pan, and no setting agent — the acid in the lemon does all of it. Sets to something between a custard and a curd in four hours.",
+  "cuisine": "British",
+  "category": "Dessert",
+  "difficulty": "easy",
+  "prep_minutes": 10,
+  "cook_minutes": 8,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The ratio matters more than the technique. Too little lemon and it never sets; too much and it splits.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 600, "unit": "ml", "name": "heavy cream" },
+        { "quantity": 150, "unit": "g", "name": "sugar" },
+        { "quantity": 3, "unit": null, "name": "lemons", "note": "zest of two, juice of all three" },
+        { "quantity": 1, "unit": "handful", "name": "raspberries", "note": "to serve", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Bring the heavy cream, sugar, and lemon zest to a boil, stirring until the sugar has dissolved.",
+          "duration_minutes": 5,
+          "tip": "Use a bigger pan than seems necessary — cream climbs fast once it goes."
+        },
+        {
+          "text": "Boil steadily for three minutes, watching it does not go over.",
+          "duration_minutes": 3
+        },
+        {
+          "text": "Take off the heat, stir in the lemon juice, and leave it to thicken slightly.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Strain out the zest and pour into four glasses."
+        },
+        {
+          "text": "Chill until set.",
+          "duration_minutes": 240
+        },
+        {
+          "text": "Serve with raspberries."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.3,
+    "variant_titles": ["{title} with Shortbread", "Blood Orange {title}"]
+  }
+}

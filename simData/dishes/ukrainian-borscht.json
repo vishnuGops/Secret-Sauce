@@ -1,0 +1,71 @@
+{
+  "slug": "ukrainian-borscht",
+  "title": "Ukrainian Borscht",
+  "description": "Beet soup with a beef broth base, soured with vinegar at the end so the colour stays red rather than turning brown. Makes a large pot and improves for three days.",
+  "cuisine": "Ukrainian",
+  "category": "Soup",
+  "difficulty": "medium",
+  "prep_minutes": 30,
+  "cook_minutes": 120,
+  "servings": 8,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The vinegar is not for flavour alone — acid is what fixes the pigment. Add it too late and the pot has already gone dull.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 800, "unit": "g", "name": "beef short rib", "note": "bone in" },
+        { "quantity": 3, "unit": "L", "name": "water" },
+        { "quantity": 3, "unit": null, "name": "beets", "note": "peeled and coarsely grated" },
+        { "quantity": 2, "unit": null, "name": "carrots", "note": "grated" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "diced" },
+        { "quantity": 300, "unit": "g", "name": "white cabbage", "note": "shredded" },
+        { "quantity": 3, "unit": null, "name": "potatoes", "note": "cubed" },
+        { "quantity": 2, "unit": "Tbsp", "name": "tomato paste" },
+        { "quantity": 2, "unit": "Tbsp", "name": "red wine vinegar" },
+        { "quantity": 3, "unit": "cloves", "name": "garlic", "note": "crushed" },
+        { "quantity": 1, "unit": "bunch", "name": "dill", "note": "chopped, to finish" },
+        { "quantity": 200, "unit": "g", "name": "sour cream", "note": "to serve" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Simmer the beef short rib in the water, skimming the foam off for the first few minutes, until the meat is tender.",
+          "duration_minutes": 90,
+          "tip": "Skim properly at the start and the broth stays clear for the rest of the cook."
+        },
+        {
+          "text": "Lift out the beef, pull the meat from the bone, and return it to the pot."
+        },
+        {
+          "text": "Fry the onion and carrots until soft, then add the beets, tomato paste, and one tablespoon of the red wine vinegar and cook down.",
+          "duration_minutes": 15,
+          "tip": "Souring the beets in the pan is the insurance policy for the colour."
+        },
+        {
+          "text": "Add the potatoes to the broth and cook until nearly done.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Stir in the beet mixture and the white cabbage and simmer until the cabbage is just tender.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Off the heat, stir in the crushed garlic and the remaining vinegar, then season hard."
+        },
+        {
+          "text": "Serve with dill and a spoonful of sour cream in each bowl."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1,
+    "variant_titles": ["{title}, Meat Free", "Grandmother's {title}"]
+  }
+}

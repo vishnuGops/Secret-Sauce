@@ -108,6 +108,17 @@ ingredients (B022). The invariant is load-bearing beyond display: `update()` re-
 it just read, so a reversed read writes a reversed order back, and `recipe_versions.content_snapshot`
 inherits whatever order the read produced.
 
+**Draft-model completeness contract.** The recipe editor does not patch a recipe — it hands
+`update()` a whole `Recipe`, and `_persistContent` **deletes** the recipe's groups and re-inserts
+that value. So the editor's mutable draft types in
+[edit_models.dart](../apps/app/lib/features/recipe_editor/edit_models.dart) must carry **every**
+column of `Ingredient` and `RecipeStep`, including ones with no input yet: a field a draft drops on
+load is a field the next save erases from the database. This was live for `temperature`,
+`duration_minutes`, `tip`, `image_url`, `note` and `is_optional` (B035). `steps.image_url` has no
+picker today and is carried through verbatim for exactly this reason. Adding a column to either
+model means adding it to the draft in the same change; `recipe_editor_test.dart`'s round-trip group
+is what fails if it is not.
+
 **tags**: `id`, `name (unique)`. **recipe_tags**: `recipe_id`, `tag_id` (PK pair).
 
 **recipe_shares**: `recipe_id`, `shared_with_user_id → profiles`, `permission (share_permission)`,
@@ -229,7 +240,7 @@ erDiagram
 
 | Screen         | Route                             | Notes                                                                                 |
 | -------------- | --------------------------------- | ------------------------------------------------------------------------------------- |
-| Home / landing | `/`                               | Intro, feature highlights, sign in/up                                                 |
+| _(none)_       | `/`                               | **Redirect-only** — forwards to `/discover`. The landing screen was retired: it had no entry point in either chrome (the web brand mark already went to Discover), so it was reachable only by cold start. |
 | Sign in / up   | `/auth`                           | Supabase auth                                                                         |
 | Discover       | `/discover`                       | Popular (rating-ranked) / Trending / Recent tabs + search (public, no sign-in)         |
 | Chefs          | `/chefs`                          | Leaderboard ranked by chef score (public, no sign-in)                                 |
@@ -344,6 +355,10 @@ shipping that is the app-wide typography decision (`google_fonts` + a `textTheme
 | `TierChip`  | Tier pill (icon + label); `dense` drops the icon. `colorFor(tier, brightness)` is the shared accent, also used by the leaderboard rank medallion |
 | `ChefAvatar` | The circle alone: photo when there is one, `initialsFor(name)` when there is not. Optional `ringColor` (a `surfaceColor` gap then a ring) and `tier` (rank dot, bottom-right) — both used by the web top navigation, where the avatar *is* the account control and has to carry rank at 34px. Ring and dot are drawn **outside** the circle, so a ringed avatar is wider than `radius * 2` |
 | `ChefBadge` | `ChefAvatar` + name with the `TierChip` **under** the name; `compact` for dense surfaces, `onSurfaceImage` for the card's cover overlay. `ChefBadge.fromProfile(recipe.owner!)` is the usual call |
+| `ChefStandingCard` | One leaderboard row, in two shapes chosen by `variant`. `podium` (default) is the full-width row: tier spine, medal for ranks 1–3, four labelled stat chips, `34% to Master`. `board` is the dense row for the chefs page's 404px panel: rank pill instead of a medal, no stat chips, a 3px tier progress bar on the bottom edge. One widget, not two, so the two rows cannot drift |
+| `ChefSpotlightCard` | A chef as a collectible card (draft `1e`): tier-gradient foil frame, portrait window with serial and rank, rarity band, a "driver" row naming the input contributing most, the four totals, and the tier-ladder bar. Renders entirely from one `ChefStanding` — **no per-card fetch** |
+| `SpotlightCardPlaceholder` | The same frame and geometry with neutral bands. Holds a shelf whose data does not exist yet, or one still loading |
+| `CardRail` | A titled horizontal shelf of fixed-width cards with prev/next arrows and a `1–3 / 10` position label. Generic over its children; a horizontal `ListView` + `animateTo`, so a trackpad and a drag work as well as the arrows |
 
 Per-tier colors are defined as a light/dark pair — the light shades are unreadable on dark
 surfaces and vice versa, so `colorFor` resolves against `Theme.of(context).brightness`.
@@ -360,6 +375,25 @@ or large text scale (B016). The `DifficultyBadge` is the row's **only non-flex c
 its intrinsic width, sits flush right, and is capped at half the row by a `LayoutBuilder` +
 `ConstrainedBox`. Giving it a flex instead makes `RenderFlex` reserve half the row for it whatever
 its label says (B026); giving it no cap overflows by 1px at 276px / 2.0×.
+
+**`ChefSpotlightCard` is the second fixed-size tile in the kit, and it obeys the same rules with one
+addition.** Every band except the portrait is intrinsic and comes out of a fixed budget, so a longer
+name eats portrait height rather than growing the card. What `RecipeCard` does not have to solve is
+that the spotlight card's intrinsic bands — header, rarity band, driver row, stat grid, ladder line —
+already exceed its 356px budget well before 2.0× text scale, so no flexible band can absorb the
+growth. The tile therefore grows *with the text and only with the text*:
+`spotlightCardHeight(context) = 356 + (textScale − 1) × 168`, clamped at 2.5×, after which the
+portrait absorbs the remainder. A rail scrolls inside a page that scrolls, so a taller card costs
+nothing; dropping bands would hide data instead. `context.textScale` (`adaptive.dart`) is the shared
+measurement — it scales a real font size rather than reading the raw factor, because `TextScaler` is
+non-linear above 1.0 on some platforms.
+
+Its header and driver rows repeat the `DifficultyBadge` lesson verbatim: the score and the points
+are **non-flex inside a `ConstrainedBox`** cap, not `Flexible` beside an `Expanded`. Two flex
+children split a row 50/50 whatever the content, which truncated the chef's name at half the card
+while a shorter score left dead space beside it (B038). A non-flex child of a `Row` is laid out
+**unbounded**, so anything in that position also needs the cap — the rank pill did not have one and
+ran past the portrait edge at 3.0× (B039).
 
 ## 9. Security notes
 
@@ -411,6 +445,15 @@ inclusive (`>=`) and the seed pins a boundary case to prove it.
 **Only public recipes count.** Private-recipe engagement (possible via `recipe_shares`) must not
 leak into a world-readable number. Flipping a recipe private drops its contribution on the next
 recompute; deleting it likewise.
+
+**One client-side mirror, and it is documented as a mirror.** `ChefScoring`
+(`core/src/chef_scoring.dart`) restates the three weights and the four thresholds in Dart. It has
+to: the expanded chef card (§10.6) prints `1,980 likes × 3 = 5,940` and `9,811 points to Master
+Chef`, which cannot be derived from a stored score alone. Nothing in the app writes a score or a
+tier from it — every stored value still comes from the SQL — so the mirror is a *presentation* of
+server truth, not a second source of it. `packages/core/test/chef_scoring_test.dart` pins every
+weight and every threshold boundary against the SQL literals, so changing one side without the
+other fails the suite instead of shipping a card that explains a formula the database does not use.
 
 ### 10.3 Storage: denormalized onto `profiles`, recomputed from scratch
 
@@ -464,6 +507,22 @@ chefs_leaderboard(p_limit int default 50, p_offset int default 0)
   accounts). They still *have* a tier (`home_cook`) for badge purposes; they just don't occupy
   leaderboard rows.
 
+**Top recipes for one chef** (Phase 22), behind the expanded chef card:
+
+```sql
+chef_top_recipes(p_chef uuid, p_limit int default 3) returns setof recipes
+  order by chef_score(like_count, save_count, view_count) desc,
+           save_count desc, like_count desc, created_at desc, id
+```
+
+- `setof recipes` like the three Discovery RPCs, so the caller reuses `kRecipeSelect` and the
+  `Recipe` model — no new decode path, and the owner embedding still rides along.
+- Ordered by the **same** `chef_score()` the leaderboard aggregates, so "top by points
+  contributed" cannot drift from the score it explains. PostgREST cannot `order` by that
+  expression, which is why this is an RPC rather than a `.order()` on the table.
+- `stable`, invoker-rights, `anon`-callable, and `visibility = 'public'` filtered explicitly —
+  same reasoning as `chefs_leaderboard`, including for the chef's own dialog.
+
 ### 10.5 Client data path
 
 - `Profile` model gains `chefScore`, `chefTier`, `publicRecipeCount` (JSON keys = column names).
@@ -488,10 +547,37 @@ chefs_leaderboard(p_limit int default 50, p_offset int default 0)
   Dropping the hint breaks every recipe query at once, which is why the fragment is a single
   shared constant rather than repeated per call site.
 - `ChefRepository` (abstract + `SupabaseChefRepository`, same file, wired in
-  `core/src/providers.dart`): `leaderboard({int limit, int offset})` → `List<ChefStanding>`.
+  `core/src/providers.dart`): `leaderboard({int limit, int offset})` → `List<ChefStanding>`,
+  `topRecipes(chefId, {limit})` → `List<Recipe>`, and `chefCount()` → `int`.
   `ChefStanding` is a freezed model mirroring the RPC row. Signed-out safe by construction
   (no `_uid` use). `chef_score` is Postgres `numeric`, so it decodes through
   `(v as num).toDouble()` — a bare `as double` would throw on a whole-number score.
+
+  `chefCount()` is the "of 148" in the expanded card's `Rank 2 of 148`. It is a PostgREST exact
+  count over `profiles` where `public_recipe_count > 0` — the same population the RPC ranks —
+  with a `limit(1)` so the body stays one row while the header carries the total (`count`
+  respects filters but ignores `limit`).
+
+  `tierCounts()` → `Map<ChefTier, int>` is the chefs hero's five tiles, and is **five of that same
+  query**, one per rung, issued together with `Future.wait`. There is no RPC behind it and no
+  `group by` — PostgREST cannot aggregate, and the alternative (select every chef's `chef_tier` and
+  tally client-side) downloads a row per chef and grows without bound; five exact counts stay
+  bounded whatever the population. It filters `public_recipe_count > 0` like the others, so the
+  five values sum to `chefCount()`. The filter passes `ChefTier.wireValue` — the Postgres enum
+  label restated on the enum, because `json_serializable` keeps its `@JsonValue` mapping private to
+  generated code and a `.eq()` needs the string without a decode. `chef_models_test.dart` pins each
+  pair by round-tripping it through the decoder.
+- Feature providers (`features/chefs/chefs_providers.dart`): `chefsLeaderboardProvider`,
+  `chefCountProvider`, `chefTierCountsProvider`, and `chefDetailProvider(chefId)` — the last
+  returning a `ChefDetail` (profile + top recipes). The recipe read is caught and flagged rather
+  than thrown: everything else in the card comes from the `ChefStanding` the board already holds,
+  so a database without `chef_top_recipes` applied loses one section instead of the whole dialog.
+
+  `leaderboardPagesProvider` (a `StateProvider<int>`) is what `Show all 148` bumps.
+  `chefsLeaderboardProvider` watches it and requests `kLeaderboardPageSize × pages`, so "more" is a
+  **wider first page**, not a second one stitched on. The RPC ranks the whole table and returns a
+  prefix, so re-reading 50 ranked rows costs less than the bookkeeping to avoid it and cannot drift
+  out of order the way an accumulated list can.
 
 ### 10.6 UI
 
@@ -513,17 +599,91 @@ chefs_leaderboard(p_limit int default 50, p_offset int default 0)
   label, 2.0× text scale.
 - **Recipe detail**: full-size `ChefBadge` under the title (tap target reserved for a future
   chef-profile page).
-- **Leaderboard screen** `features/chefs/` at **`/chefs`**, inside the `ShellRoute`, added to
-  `AppShell._destinations` (trophy icon, "Chefs") — signed-out safe, so **no** change to the
-  router's `needsAuth` list. Rows: rank medallion, `ChefBadge`, score, recipe/like/save/view
-  counts; standard loading/empty/error states; `limit 50` (pagination deferred, though the RPC
-  already takes an offset).
+- **Chefs screen** `features/chefs/` at **`/chefs`**, inside the `ShellRoute`, on the nav
+  destination lists (trophy icon, "Chefs") — signed-out safe, so **no** change to the router's
+  `needsAuth` list. Standard loading/empty/error states throughout.
 
-  Two layout rules that row learned the hard way (B023): the trailing score column is
-  **width-bounded** — an unconstrained `Column` takes its intrinsic width and at 2.0× scale on a
-  320 px phone it starved the badge beside it until the badge's own row overflowed — and the stat
-  labels are `Flexible`, since a `Wrap` constrains each child to the wrap width and an
-  intrinsically-sized `Text` in a `Row` has no way to degrade.
+  Since Phase 23 it renders **three layouts**, and which one is chosen depends on the text scale as
+  well as the width:
+
+  | Condition | Layout |
+  | --- | --- |
+  | `context.isCompact` | The Phase 22 board, unchanged: one 760px column of `podium` rows, no hero |
+  | expanded **and** `textScale ≤ 1.3` | Hero, then two independently scrolling columns — a 404px leaderboard panel and the rails |
+  | otherwise | One scroll: hero, rails, then the panel sized to its content |
+
+  The text-scale bound is not cosmetic. The two-column layout is
+  `Column(hero, Expanded(Row(panel, rails)))`, so all three regions must fit the viewport at once
+  and the hero is a **non-flexible** child taking its intrinsic height — at 2.0× it was taller than
+  a 1200px window and the `Expanded` below could not absorb it (B037). Above the bound the page
+  becomes one scroll, which has no such constraint.
+
+  The draft pins the panel with `position: sticky` inside a scrolling page. Two columns each owning
+  their scroll under a fixed hero renders the same picture: the draft already gives the panel its
+  own `max-height: 675px` scroll container, and the Flutter equivalent of sticky is a nested-scroll
+  arrangement with more to get wrong.
+
+  The panel's footer carries `Show all N`, which widens the page rather than appending one.
+- **`ChefsHero`** (`features/chefs/chefs_hero.dart`) — the banner: the live-recompute kicker, the
+  population pill from `chefCountProvider`, the one-line ranking rule, five tier tiles from
+  `chefTierCountsProvider`, and the All time / Month / Week filter. **Always dark, in both themes** —
+  the gradient is a brand surface, not a scheme colour, so its foregrounds are literals and the tier
+  accents resolve at `Brightness.dark` (the light shades are unreadable on it). Its three parts row
+  only while the width clears `900 × textScale`, and stack below that: a fixed 900px meant the
+  identity block was handed ~168px at 2.0× and the strapline wrapped to seven lines (B037).
+- **Rails.** Three `CardRail`s of `ChefSpotlightCard`. Only **Popular** (all-time, straight off the
+  leaderboard payload) has data; Trending and "best of the month" rank on engagement earned inside
+  a time window, which nothing computes yet, so they render `SpotlightCardPlaceholder`s under a
+  footnote saying why. The `Momentum` / `New` sort tabs and the hero's Month / Week are rendered
+  **disabled with a tooltip** for the same reason — a control that is visibly not ready reads
+  better than a drawn feature that silently does nothing. See §10.8.
+- **`ChefStandingCard`** (`design_system`, exported) — the board row since Phase 22, the design's
+  "podium" draft, and since Phase 23 the `board` variant too (see §8). A 6 px tier spine on the
+  leading edge, a medal glyph for ranks 1–3 (a numeral
+  plus the word `rank` below), the tier-tinted `ChefAvatar`, name + dense `TierChip`, the four
+  engagement chips, and a score with `34% to Master` (or `top tier reached`) beneath it. The whole
+  row is one tap target and opens the expanded card — the board's rows were inert before.
+
+  Three layout rules, two of them learned the hard way (B023): the trailing score column is
+  **width-bounded** and its number is a `FittedBox` rather than an ellipsis (a truncated score is
+  worse than a small one); the stat labels are `Flexible` inside a `Wrap`, since a `Wrap`
+  constrains each child to the wrap width and an intrinsically-sized `Text` in a `Row` cannot
+  degrade; and the spine is a stretched `Row` child rather than an `IntrinsicHeight`, which would
+  cost an extra layout pass on every one of 50 rows. Unlike `RecipeCard` this tile is **not**
+  fixed-height — it is a list row and may grow — so a long name costs vertical space instead of
+  overflowing.
+- **Expanded chef card** (`features/chefs/chef_detail_sheet.dart`), opened by tapping a row. One
+  body, two hosts: a centred `Dialog` capped at 1152 × 720 from `Breakpoints.compact` up, and a
+  `showModalBottomSheet` at 94 % of the screen height on a phone (the default 9/16 cap cuts the
+  ladder off). Two columns on desktop, stacked in a `ListView` on compact.
+
+  Left/top — **why this score**: the tier-coloured total, then one `ScoreContributionBar` per
+  input (`1,980 likes × 3` … `5,940`, bar = share of total) ordered by contribution, the
+  "public recipes only" note, then a **`TierLadder`** and `9,811 points to Master Chef — about
+  1,963 more saves, or 3,271 more likes`. Right/bottom — **top recipes** from
+  `chef_top_recipes`, each row tapping through to `/recipe/:id`, then the four totals and a note
+  that score and rank update on every like/save/view (there is **no** nightly job).
+- **`TierLadder`** (`design_system`, exported): the four thresholds as **evenly spaced anchors**
+  (100 / 1,000 / 5,000 / 20,000 at 0 / ⅓ / ⅔ / 1) with the fill interpolating between them. A
+  linear points axis would squash Line Cook and Sous Chef into the first 5 % of the bar — useless
+  for exactly the chefs who need to read it. `TierLadder.positionFor` is public and pinned by test.
+- **`ChefSpotlightCard`** (`design_system`, exported) — a chef as a collectible card, draft `1e`.
+  Everything on it comes from the one `ChefStanding` the rail already holds, which is the whole
+  point: the draft's "move" row is the chef's signature dish, and a per-card recipe read would make
+  a ten-card shelf eleven round trips. `1e`'s own note calls the second move *the chef's strongest
+  stat*, and `ChefScoring.breakdown()` already ranks the three inputs — so the card prints
+  `Driven by likes · 1,980 likes × 3 · 5,940` from the row it was handed, reusing the arithmetic the
+  expanded card explains. Sizing rules in §8.
+
+  The portrait window has **no chef portrait behind it**: there is no such asset and no column for
+  one, so it renders `avatar_url` when there is one and the same monogram `ChefAvatar` used
+  everywhere else when there is not. The serial reads `004 / 148` — rank over `chefCount()` — with
+  the draft's `SEASON 1` dropped, since no season model exists to back it.
+- **Things in the mockup deliberately absent**: a `Follow` button and `View all N recipes` (no
+  follow model, no public chef page — the top-recipe rows are the expanded card's only navigation);
+  the season; and the draft's `RECOMPUTED 4H AGO`, which is simply wrong about this build — the
+  hero says `LIVE · UPDATES ON EVERY LIKE, SAVE AND VIEW`, because `on_recipe_stats_change` fires
+  on every one of them.
 
 ### 10.7 Seed & edge cases
 
@@ -550,6 +710,14 @@ signature is in `drop.sql` (Gotcha 5). Actual seeded standings:
 > `public_recipe_count` is 15, because the nine newly authored recipes carry no engagement and
 > contribute 0 to the score. Verified after the move — see §11.
 
+> **This table describes a *freshly seeded* database, and real traffic moves it — by design.**
+> Checked against the hosted project on 2026-08-20: Amara reads **21000.2** and the Kitchen
+> **10189.6**, not the round numbers above, because four views logged by actual app use raised
+> `view_count` by 1 on each of four recipes and `chef_score` picked them up at 0.2 apiece. That is
+> `on_view_insert` (B012) working end to end in production. Reconcile against a database that has
+> just been seeded — `melos run db:reset`, or the local stack — never against one the app has been
+> pointed at.
+
 ### 10.8 Known limits (accepted for v1)
 
 - **Self-engagement counts.** Unlike ratings (RLS-blocked), a chef may like/save their own
@@ -558,7 +726,32 @@ signature is in `drop.sql` (Gotcha 5). Actual seeded standings:
   Score is not money — deferred, noted here so it isn't rediscovered as a "bug".
 - Tier thresholds are provisional product numbers; expect retuning once real data exists (the
   backfill-on-apply makes retuning a one-line change).
-- No chef-profile page yet; the badge is not tappable-to-navigate in v1.
+- No chef-profile page yet. Since Phase 22 a board row opens the expanded chef card, but there is
+  still no route that lists one chef's public recipes, and the `ChefBadge` on a recipe card or on
+  recipe detail is still not tappable-to-navigate.
+- **The formula is public** as of Phase 22: the expanded card prints the multipliers. That is the
+  point of the card — a chef could not otherwise tell what moves their score — but it also tells
+  a would-be gamer that a save is worth 5× a view. Accepted alongside §10.8's self-engagement
+  limit, which is the larger hole.
+- **There is no windowed score.** Every number on `/chefs` is all-time. The Trending and
+  best-of-the-month rails, the `Momentum` sort and the hero's Month / Week filter are drawn,
+  disabled, and tooltipped as not-yet-wired (Phase 23, decision D4).
+
+  The data exists — `recipe_likes.created_at`, `recipe_saves.created_at` and
+  `recipe_views.viewed_at` are all there, so a windowed score is a query, not a new snapshot table.
+  Two things must be true of whoever writes it:
+
+  1. **The windowed view term must not count anonymous rows.** `recipes.view_count` deliberately
+     ignores them because `anon` holds `insert` on `recipe_views` (B012); an aggregate over the raw
+     log reopens exactly that inflation vector, this time on a ranking nobody is auditing. Count
+     `distinct (recipe_id, user_id)` where `user_id is not null`.
+  2. **Points must come from `chef_score()`**, never a restated `3 / 5 / 0.2`, or the window and
+     the board drift (Gotcha 19).
+
+  Note also that the rails will look empty against the current database even once built: `seed.sql`
+  writes the counters directly and inserts almost no engagement rows. Seeding dated ones to fix
+  that would fire the counter triggers and move every `chef_score`, invalidating the standings
+  pinned in §10.7 — so the seed needs its own answer before the rails do.
 - Rank is recomputed per request (no caching); fine at current scale.
 
 ## 11. Recipe content vs. demo data

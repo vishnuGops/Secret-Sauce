@@ -404,7 +404,9 @@ class _AccountMenu extends ConsumerWidget {
         context.go(Routes.profile);
       case _AccountAction.signOut:
         await ref.read(authControllerProvider.notifier).signOut();
-        if (context.mounted) context.go(Routes.home);
+        // Discover, not `/` — the landing page was retired and root only
+        // forwards here anyway. Going direct saves the extra redirect hop.
+        if (context.mounted) context.go(Routes.discover);
     }
   }
 

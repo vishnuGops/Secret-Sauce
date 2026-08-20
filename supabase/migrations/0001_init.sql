@@ -999,6 +999,54 @@ begin
   end if;
 end $$;
 
+-- A chef's own recipes, ranked by what each one contributes to their score.
+--
+-- This is the "Top recipes" list in the expanded chef card, and the ordering is
+-- the point: `chef_score(...)` per recipe is the same function the leaderboard
+-- sums per chef, so the list cannot disagree with the number it explains.
+-- PostgREST cannot `order` by that expression, which is why the client calls an
+-- RPC instead of the table.
+--
+-- `setof recipes` like the three Discovery RPCs above, so the caller reuses
+-- `kRecipeSelect` (the `recipes_owner_id_fkey` embedding) and the same `Recipe`
+-- decode path. `stable`, invoker-rights, `anon`-callable — the card is
+-- signed-out safe like the board.
+--
+-- `visibility = 'public'` is filtered **explicitly** rather than left to RLS:
+-- under invoker rights the chef themself would otherwise see their own private
+-- recipes here and read a different list than everyone else — the same trap
+-- documented on `chefs_leaderboard`.
+--
+-- Every historical signature must be dropped in the file that recreates the
+-- function (B024): `create or replace` cannot change a return type or an
+-- argument list, and a survivor makes the call ambiguous (42725).
+drop function if exists chef_top_recipes(uuid, int);
+create or replace function chef_top_recipes(p_chef uuid, p_limit int default 3)
+returns setof recipes
+language sql
+stable
+as $$
+  select r.*
+  from recipes r
+  where r.owner_id = p_chef
+    and r.visibility = 'public'
+  -- Deterministic full ordering: two recipes with equal contribution would
+  -- otherwise swap places between calls and make the list look unstable.
+  order by chef_score(r.like_count, r.save_count, r.view_count) desc,
+           r.save_count desc,
+           r.like_count desc,
+           r.created_at desc,
+           r.id
+  limit p_limit;
+$$;
+
+do $$
+begin
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'grant execute on function chef_top_recipes(uuid, int) to anon, authenticated';
+  end if;
+end $$;
+
 -- Atomic deep-copy fork. Returns the new recipe id.
 create or replace function fork_recipe(p_source uuid)
 returns uuid

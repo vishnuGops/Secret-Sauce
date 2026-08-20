@@ -1,0 +1,64 @@
+{
+  "slug": "german-dutch-baby",
+  "title": "Dutch Baby Pancake",
+  "description": "A single pancake that climbs the sides of a hot skillet in the oven and collapses the moment it comes out. Five minutes of work, and the batter does the rest.",
+  "cuisine": "German",
+  "category": "Breakfast",
+  "difficulty": "easy",
+  "prep_minutes": 10,
+  "cook_minutes": 20,
+  "servings": 2,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Room-temperature eggs and milk are the difference between a dramatic rise and a flat disc.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 3, "unit": null, "name": "eggs", "note": "room temperature" },
+        { "quantity": 0.5, "unit": "cup", "name": "milk", "note": "room temperature" },
+        { "quantity": 0.5, "unit": "cup", "name": "all-purpose flour" },
+        { "quantity": 1, "unit": "Tbsp", "name": "sugar" },
+        { "quantity": 0.25, "unit": "tsp", "name": "salt" },
+        { "quantity": 3, "unit": "Tbsp", "name": "butter" },
+        { "quantity": 1, "unit": null, "name": "lemon", "note": "to serve" },
+        { "quantity": 2, "unit": "Tbsp", "name": "powdered sugar", "note": "to serve" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Put a cast iron skillet in the oven and heat it thoroughly.",
+          "duration_minutes": 15,
+          "temperature": "425°F",
+          "tip": "The pan must be properly hot before the batter hits it. This is the whole trick."
+        },
+        {
+          "text": "Blend the eggs, milk, flour, sugar, and salt until completely smooth and slightly frothy."
+        },
+        {
+          "text": "Let the batter stand while the pan finishes heating.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Drop the butter into the hot skillet, swirl it up the sides as it melts, then pour the batter straight in."
+        },
+        {
+          "text": "Bake without opening the door until puffed and deeply browned at the edges.",
+          "duration_minutes": 20,
+          "temperature": "425°F"
+        },
+        {
+          "text": "Serve straight from the pan with a squeeze of lemon and a dusting of powdered sugar."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.2,
+    "variant_titles": ["Savoury {title}", "{title} with Berries"]
+  }
+}

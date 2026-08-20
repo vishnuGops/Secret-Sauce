@@ -1,0 +1,68 @@
+{
+  "slug": "israeli-shakshuka",
+  "title": "Shakshuka",
+  "description": "Eggs poached in a thick pepper and tomato sauce, spiced with cumin and caraway. One pan, and the sauce keeps for days without the eggs.",
+  "cuisine": "Israeli",
+  "category": "Breakfast",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 35,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": null,
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 3, "unit": "Tbsp", "name": "olive oil" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "diced" },
+        { "quantity": 2, "unit": null, "name": "red bell peppers", "note": "sliced" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "sliced" },
+        { "quantity": 1, "unit": "tsp", "name": "cumin", "note": "ground" },
+        { "quantity": 0.5, "unit": "tsp", "name": "caraway seed", "note": "crushed" },
+        { "quantity": 1, "unit": "tsp", "name": "sweet paprika" },
+        { "quantity": 800, "unit": "g", "name": "tinned tomatoes", "note": "crushed by hand" },
+        { "quantity": 6, "unit": null, "name": "eggs" },
+        { "quantity": 100, "unit": "g", "name": "feta", "note": "crumbled" },
+        { "quantity": 1, "unit": "handful", "name": "parsley", "note": "chopped, to finish" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Cook the onion and red bell peppers in the olive oil until genuinely soft and beginning to catch.",
+          "duration_minutes": 15,
+          "temperature": "medium-low",
+          "tip": "This is where the sweetness comes from. Ten minutes is not enough."
+        },
+        {
+          "text": "Add the garlic, cumin, caraway seed, and paprika and stir until fragrant.",
+          "duration_minutes": 2
+        },
+        {
+          "text": "Add the tinned tomatoes, season, and simmer until the sauce is thick enough to hold a channel when you drag a spoon through it.",
+          "duration_minutes": 15
+        },
+        {
+          "text": "Make six wells and crack an egg into each."
+        },
+        {
+          "text": "Cover and cook until the whites are set and the yolks are still loose.",
+          "duration_minutes": 6,
+          "tip": "Pull it a minute early — the pan carries on cooking at the table."
+        },
+        {
+          "text": "Scatter over the feta and parsley."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.6,
+    "variant_titles": ["Green {title}", "{title} for Two", "Sunday {title}"]
+  }
+}

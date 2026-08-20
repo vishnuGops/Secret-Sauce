@@ -1,0 +1,88 @@
+{
+  "slug": "polish-pierogi-ruskie",
+  "title": "Pierogi Ruskie",
+  "description": "Dumplings filled with potato and twarog, boiled and then fried in butter with onions. The dough is worked warm and rested, which is what keeps it from tearing.",
+  "cuisine": "Polish",
+  "category": "Main",
+  "difficulty": "hard",
+  "prep_minutes": 70,
+  "cook_minutes": 25,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Freeze them raw on a tray before bagging, and boil from frozen. They do not survive being stacked wet.",
+  "ingredient_groups": [
+    {
+      "name": "Dough",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "all-purpose flour" },
+        { "quantity": 250, "unit": "ml", "name": "water", "note": "warm" },
+        { "quantity": 2, "unit": "Tbsp", "name": "butter", "note": "melted" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" }
+      ]
+    },
+    {
+      "name": "Filling",
+      "ingredients": [
+        { "quantity": 600, "unit": "g", "name": "potatoes", "note": "boiled and riced" },
+        { "quantity": 250, "unit": "g", "name": "twarog", "note": "farmer's cheese; substitute dry ricotta" },
+        { "quantity": 2, "unit": null, "name": "onions", "note": "one for the filling, one to serve" },
+        { "quantity": 60, "unit": "g", "name": "butter" },
+        { "quantity": 1, "unit": "tsp", "name": "white pepper" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Dough",
+      "steps": [
+        {
+          "text": "Mix the flour and salt with the warm water and melted butter, then knead until smooth and elastic.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Cover and rest the dough.",
+          "duration_minutes": 30,
+          "tip": "Unrested dough springs back while you are trying to fill it and the seals fail."
+        }
+      ]
+    },
+    {
+      "name": "Filling",
+      "steps": [
+        {
+          "text": "Fry one diced onion in half the butter until deep golden.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Mash the fried onion into the riced potatoes and twarog with the white pepper and plenty of salt, and let it cool completely.",
+          "tip": "Taste it and over-season slightly — the dough around it is unsalted."
+        }
+      ]
+    },
+    {
+      "name": "Shaping and cooking",
+      "steps": [
+        {
+          "text": "Roll the dough thin and cut rounds, keeping the offcuts covered as you go."
+        },
+        {
+          "text": "Place a spoonful of filling on each round, fold, and pinch the edge firmly all the way along.",
+          "tip": "Wet fingers make the seal worse, not better. Dry, firm pressure holds."
+        },
+        {
+          "text": "Boil in well-salted water in batches until they float, then give them another minute.",
+          "duration_minutes": 12
+        },
+        {
+          "text": "Fry the remaining sliced onion in the rest of the butter and toss the drained pierogi through it.",
+          "duration_minutes": 8
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.7,
+    "variant_titles": ["Grandmother's {title}", "{title} with Bacon"]
+  }
+}

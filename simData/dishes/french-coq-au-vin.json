@@ -1,0 +1,88 @@
+{
+  "slug": "french-coq-au-vin",
+  "title": "Coq au Vin",
+  "description": "Chicken braised in red wine with bacon, mushrooms, and small onions. The garnish is cooked separately and added at the end so it does not turn grey in the pot.",
+  "cuisine": "French",
+  "category": "Main",
+  "difficulty": "hard",
+  "prep_minutes": 40,
+  "cook_minutes": 90,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "A whole bottle goes in. Use one you would drink, but not one you would miss.",
+  "ingredient_groups": [
+    {
+      "name": "Braise",
+      "ingredients": [
+        { "quantity": 1.6, "unit": "kg", "name": "chicken", "note": "jointed into eight pieces" },
+        { "quantity": 750, "unit": "ml", "name": "red wine", "note": "a full bottle" },
+        { "quantity": 150, "unit": "g", "name": "bacon lardons" },
+        { "quantity": 2, "unit": "Tbsp", "name": "all-purpose flour" },
+        { "quantity": 2, "unit": "Tbsp", "name": "tomato paste" },
+        { "quantity": 3, "unit": "cloves", "name": "garlic", "note": "crushed" },
+        { "quantity": 1, "unit": null, "name": "bouquet garni", "note": "thyme, bay, parsley stalks tied together" },
+        { "quantity": 300, "unit": "ml", "name": "chicken stock" }
+      ]
+    },
+    {
+      "name": "Garnish",
+      "ingredients": [
+        { "quantity": 250, "unit": "g", "name": "button mushrooms", "note": "left whole if small" },
+        { "quantity": 250, "unit": "g", "name": "pearl onions", "note": "peeled" },
+        { "quantity": 30, "unit": "g", "name": "butter" },
+        { "quantity": 1, "unit": "handful", "name": "parsley", "note": "chopped, to finish" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Braise",
+      "steps": [
+        {
+          "text": "Render the bacon lardons in a heavy pot until crisp, then lift them out.",
+          "duration_minutes": 8
+        },
+        {
+          "text": "Brown the chicken hard in the bacon fat, in batches, and set aside.",
+          "duration_minutes": 15,
+          "tip": "Crowding the pan steams the skin. Batches are slower and not optional."
+        },
+        {
+          "text": "Stir the flour and tomato paste into the fat with the crushed garlic and cook out the raw taste.",
+          "duration_minutes": 3
+        },
+        {
+          "text": "Pour in the red wine, scraping the base, and reduce by about a third.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Return the chicken and bacon, add the chicken stock and bouquet garni, and simmer covered.",
+          "duration_minutes": 60,
+          "temperature": "low"
+        }
+      ]
+    },
+    {
+      "name": "Garnish and finish",
+      "steps": [
+        {
+          "text": "Brown the pearl onions and button mushrooms separately in the butter until well coloured.",
+          "duration_minutes": 12,
+          "tip": "Cooking these in the braise turns them the colour of the wine. Separate is the whole point."
+        },
+        {
+          "text": "Add the garnish to the pot for the last few minutes, discard the bouquet garni, and check the seasoning.",
+          "duration_minutes": 5
+        },
+        {
+          "text": "Finish with chopped parsley."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.8,
+    "variant_titles": ["{title} Blanc", "Sunday {title}"]
+  }
+}

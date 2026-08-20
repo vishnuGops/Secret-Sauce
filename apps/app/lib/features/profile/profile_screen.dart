@@ -72,7 +72,9 @@ class ProfileScreen extends ConsumerWidget {
               OutlinedButton.icon(
                 onPressed: () async {
                   await ref.read(authControllerProvider.notifier).signOut();
-                  if (context.mounted) context.go(Routes.home);
+                  // Signing out here would otherwise leave the visitor on
+                  // `/profile`, which the redirect then bounces to `/auth`.
+                  if (context.mounted) context.go(Routes.discover);
                 },
                 icon: const Icon(Icons.logout),
                 label: const Text('Sign out'),

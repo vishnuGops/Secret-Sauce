@@ -1,0 +1,65 @@
+{
+  "slug": "japanese-oyakodon",
+  "title": "Oyakodon",
+  "description": "Chicken and egg over rice, cooked in a shallow pan in about eight minutes. The egg goes in twice and never fully sets — that softness is the whole dish.",
+  "cuisine": "Japanese",
+  "category": "Main",
+  "difficulty": "easy",
+  "prep_minutes": 10,
+  "cook_minutes": 10,
+  "servings": 2,
+  "visibility": "public",
+  "attribution": null,
+  "notes": null,
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 250, "unit": "g", "name": "chicken thighs", "note": "boneless, cut into bite-sized pieces" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "sliced thin" },
+        { "quantity": 4, "unit": null, "name": "eggs", "note": "beaten loosely, streaks left in" },
+        { "quantity": 150, "unit": "ml", "name": "dashi" },
+        { "quantity": 2, "unit": "Tbsp", "name": "soy sauce" },
+        { "quantity": 2, "unit": "Tbsp", "name": "mirin" },
+        { "quantity": 1, "unit": "tsp", "name": "sugar" },
+        { "quantity": 2, "unit": "bowls", "name": "steamed rice", "note": "hot" },
+        { "quantity": 2, "unit": null, "name": "spring onions", "note": "sliced, to finish" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Bring the dashi, soy sauce, mirin, and sugar to a simmer in a small shallow pan.",
+          "duration_minutes": 2
+        },
+        {
+          "text": "Add the onion and cook until translucent.",
+          "duration_minutes": 3
+        },
+        {
+          "text": "Lay in the chicken in a single layer and simmer until just cooked through.",
+          "duration_minutes": 4,
+          "tip": "Do not stir it about. The pieces should stay where you put them."
+        },
+        {
+          "text": "Pour two-thirds of the beaten eggs over in a spiral and cover the pan.",
+          "duration_minutes": 1
+        },
+        {
+          "text": "Add the remaining egg, cover again, and pull the pan off the heat while the top is still visibly loose.",
+          "tip": "Residual heat finishes it. Set egg here means you have gone too far."
+        },
+        {
+          "text": "Slide over hot steamed rice and scatter with spring onions."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.5,
+    "variant_titles": ["10-Minute {title}", "{title} for One"]
+  }
+}

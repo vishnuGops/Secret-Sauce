@@ -8,7 +8,6 @@ import 'package:go_router/go_router.dart';
 import 'package:app/features/auth/auth_screen.dart';
 import 'package:app/features/chefs/chefs_screen.dart';
 import 'package:app/features/discover/discover_screen.dart';
-import 'package:app/features/home/home_screen.dart';
 import 'package:app/features/my_recipes/my_recipes_screen.dart';
 import 'package:app/features/profile/profile_screen.dart';
 import 'package:app/features/recipe_detail/recipe_detail_screen.dart';
@@ -18,7 +17,13 @@ import 'package:app/routing/app_shell.dart';
 /// Route path constants.
 class Routes {
   Routes._();
-  static const home = '/';
+
+  /// The bare root. **Not a page** — a redirect-only route that forwards to
+  /// [discover], which is the front door on both chromes. The landing screen it
+  /// used to serve was retired, so nothing should navigate *to* this constant;
+  /// it exists because a bookmark, a hard refresh of `http://host/`, or a
+  /// platform cold start still arrives here.
+  static const root = '/';
   static const auth = '/auth';
 
   /// Same screen as [auth], opened on its sign-up tab — the top navigation
@@ -43,7 +48,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
   return GoRouter(
     navigatorKey: _rootKey,
-    initialLocation: Routes.home,
+    // Covers a cold start on mobile/desktop, where the platform reports no
+    // route. Web reports `/`, and the redirect-only root route below is what
+    // handles that — both are needed.
+    initialLocation: Routes.discover,
     refreshListenable: refresh,
     redirect: (context, state) {
       final signedIn = authRepo.currentUserId != null;
@@ -57,9 +65,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
+      // Redirect-only: no builder, so `/` never renders anything. The
+      // top-level redirect above runs first and passes it through (root is not
+      // in `needsAuth`), then this forwards to Discover for signed-in and
+      // signed-out visitors alike.
       GoRoute(
-        path: Routes.home,
-        builder: (context, state) => const HomeScreen(),
+        path: Routes.root,
+        redirect: (context, state) => Routes.discover,
       ),
       GoRoute(
         path: Routes.auth,

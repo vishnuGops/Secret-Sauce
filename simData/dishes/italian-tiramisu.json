@@ -1,0 +1,66 @@
+{
+  "slug": "italian-tiramisu",
+  "title": "Tiramisu",
+  "description": "Mascarpone and whipped egg over coffee-soaked savoiardi, set overnight in the fridge. No cream, no gelatine, and no baking — the structure comes entirely from the eggs.",
+  "cuisine": "Italian",
+  "category": "Dessert",
+  "difficulty": "medium",
+  "prep_minutes": 35,
+  "cook_minutes": 8,
+  "servings": 8,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The yolks are cooked over a bain-marie rather than left raw, which also makes the mixture more stable.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 4, "unit": null, "name": "eggs", "note": "separated" },
+        { "quantity": 100, "unit": "g", "name": "sugar" },
+        { "quantity": 500, "unit": "g", "name": "mascarpone", "note": "cold" },
+        { "quantity": 300, "unit": "ml", "name": "espresso", "note": "strong, cooled" },
+        { "quantity": 3, "unit": "Tbsp", "name": "marsala", "is_optional": true },
+        { "quantity": 300, "unit": "g", "name": "savoiardi", "note": "hard ladyfingers, not soft sponge" },
+        { "quantity": 3, "unit": "Tbsp", "name": "cocoa powder", "note": "to finish" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Whisk the egg yolks with the sugar over a pan of barely simmering water until pale, thick, and hot to the touch.",
+          "duration_minutes": 8,
+          "temperature": "bain-marie",
+          "tip": "Keep the bowl clear of the water and keep whisking, or you make sweet scrambled egg."
+        },
+        {
+          "text": "Cool the yolk mixture, then beat in the mascarpone a spoonful at a time until smooth.",
+          "tip": "Cold mascarpone into warm yolks will split. Let the yolks come down first."
+        },
+        {
+          "text": "Whip the egg whites to soft peaks and fold them through in three additions."
+        },
+        {
+          "text": "Combine the espresso and marsala in a shallow dish. Dip each savoiardi for a second per side — no longer.",
+          "tip": "They should still be firm in the middle when they go down. They keep absorbing all night."
+        },
+        {
+          "text": "Layer soaked savoiardi and cream twice, finishing with cream, and smooth the top."
+        },
+        {
+          "text": "Cover and refrigerate.",
+          "duration_minutes": 720
+        },
+        {
+          "text": "Dust heavily with cocoa powder just before serving."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.5,
+    "variant_titles": ["{title} for a Party", "Coffee-Free {title}"]
+  }
+}

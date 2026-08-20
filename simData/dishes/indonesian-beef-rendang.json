@@ -1,0 +1,76 @@
+{
+  "slug": "indonesian-beef-rendang",
+  "title": "Beef Rendang",
+  "description": "Beef simmered in coconut milk and spice paste until the liquid goes, then fried in the oil that separates out. The last twenty minutes are where it stops being a curry.",
+  "cuisine": "Indonesian",
+  "category": "Main",
+  "difficulty": "hard",
+  "prep_minutes": 30,
+  "cook_minutes": 210,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Stop early and you have a wet rendang, which is a real dish but a different one. Dry rendang keeps for days unrefrigerated, which is what it was for.",
+  "ingredient_groups": [
+    {
+      "name": "Spice paste",
+      "ingredients": [
+        { "quantity": 10, "unit": null, "name": "shallots", "note": "peeled" },
+        { "quantity": 6, "unit": "cloves", "name": "garlic" },
+        { "quantity": 8, "unit": null, "name": "dried red chillies", "note": "soaked in hot water" },
+        { "quantity": 4, "unit": "cm", "name": "galangal", "note": "sliced" },
+        { "quantity": 3, "unit": "cm", "name": "ginger", "note": "sliced" },
+        { "quantity": 2, "unit": "tsp", "name": "coriander", "note": "ground" }
+      ]
+    },
+    {
+      "name": "Braise",
+      "ingredients": [
+        { "quantity": 1.2, "unit": "kg", "name": "beef chuck", "note": "cut into large cubes" },
+        { "quantity": 800, "unit": "ml", "name": "coconut milk", "note": "full fat" },
+        { "quantity": 3, "unit": "stalks", "name": "lemongrass", "note": "bruised" },
+        { "quantity": 6, "unit": null, "name": "kaffir lime leaves" },
+        { "quantity": 2, "unit": null, "name": "turmeric leaves", "note": "tied in a knot", "is_optional": true },
+        { "quantity": 1, "unit": "Tbsp", "name": "palm sugar" },
+        { "quantity": 2, "unit": "tsp", "name": "salt" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Blend the shallots, garlic, soaked dried red chillies, galangal, ginger, and coriander into a smooth paste with a splash of water."
+        },
+        {
+          "text": "Fry the paste in a wide heavy pot until it darkens and smells sweet rather than raw.",
+          "duration_minutes": 12,
+          "tip": "A wide pot, not a deep one. The whole method depends on evaporation."
+        },
+        {
+          "text": "Add the beef chuck and turn it through the paste until sealed.",
+          "duration_minutes": 5
+        },
+        {
+          "text": "Pour in the coconut milk and add the lemongrass, kaffir lime leaves, turmeric leaves, palm sugar, and salt.",
+          "tip": "Do not cover the pot at any point."
+        },
+        {
+          "text": "Simmer uncovered, stirring occasionally, until the sauce has reduced to a thick gravy.",
+          "duration_minutes": 150,
+          "temperature": "low"
+        },
+        {
+          "text": "Keep going. The oil will split out and the gravy will turn dark brown — now stir constantly so the beef fries in it rather than catching.",
+          "duration_minutes": 25,
+          "tip": "This is the actual cooking. The colour goes from tan to near-black and the smell changes completely."
+        },
+        {
+          "text": "Serve once the beef is coated in dark paste and there is no liquid left in the pot."
+        }
+      ]
+    }
+  ],
+  "sim": { "weight": 0.8, "variant_titles": ["Dry {title}", "{title}, Wet Style"] }
+}

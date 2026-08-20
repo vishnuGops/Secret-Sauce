@@ -23,7 +23,7 @@ origin) and carry a **version history** so legacy/family recipes stay intact and
 | Layer            | Choice                                                              |
 | ---------------- | ------------------------------------------------------------------- |
 | UI               | **Flutter** — single **adaptive** codebase (web + mobile + desktop) |
-| State management | **Riverpod** — hand-written providers only (see Conventions)         |
+| State management | **Riverpod** — hand-written providers only (see Conventions)        |
 | Models           | **freezed** + **json_serializable**                                 |
 | Routing          | **go_router** (`ShellRoute` + responsive shell)                     |
 | Backend          | **Supabase** — Postgres, Auth, Storage, Row-Level Security          |
@@ -45,8 +45,14 @@ secret-sauce/
 │   ├── recipes/<slug>.json    #   one per file — the filename IS the identity
 │   ├── schema.json            #   the format, field by field, mapped to columns
 │   └── README.md              #   authoring workflow
+├── simData/                   # simulation dish LIBRARY (Phase 24, 25/120 authored)
+│   ├── dishes/<slug>.json     #   owner-agnostic; NOT recipes until the generator runs
+│   ├── schema.json            #   the 2-key delta from recipeData's format
+│   └── README.md              #   authoring workflow + directory coverage rules
 ├── tool/db.dart               # psql wrapper behind the melos db:* scripts
+├── tool/recipe_format.dart    # THE validator — shared by both generators below
 ├── tool/recipes.dart          # validates recipeData/ -> generates seed_recipes.sql
+├── tool/sim.dart              # validates simData/  -> generates sim/1_sim_dishes.sql
 ├── packages/
 │   ├── core/lib/
 │   │   ├── core.dart              # BARREL — the only public surface of `core`
@@ -59,18 +65,27 @@ secret-sauce/
 │       └── ../test/               # recipe_card_test.dart, star_rating_test.dart,
 │                                  # chef_badge_test.dart
 ├── apps/app/
-│   ├── lib/features/          # auth, home, discover, chefs, my_recipes, recipe_detail,
+│   ├── lib/features/          # auth, discover, chefs, my_recipes, recipe_detail,
 │   │                          # recipe_editor, profile — screen + *_providers.dart per feature
+│   │                          # (home/ was retired 2026-08-20 — `/` redirects to /discover)
 │   ├── lib/routing/           # app_router.dart (routes + redirect), app_shell.dart (picks the
 │   │                          #   chrome), top_nav_bar.dart (web), nav_destinations.dart (lists)
 │   ├── lib/widgets/           # app-level shared widgets (recipe_grid.dart)
-│   ├── lib/main.dart · test/{widget_test,chefs_screen_test,chefs_routing_test}.dart
+│   ├── lib/main.dart · test/{widget_test,chefs_screen_test,chefs_routing_test,
+│   │                          top_nav_bar_test,recipe_editor_test}.dart
+│   │                          # widget_test.dart covers the `/` -> /discover redirect
 │   ├── env.example.json       # template; env.local.json (git-ignored) holds real creds
 │   └── android/ ios/ web/ windows/   # platform runners are committed — no `flutter create`
 └── supabase/
     ├── migrations/0001_init.sql  # THE schema: tables, triggers, RLS, grants, storage, RPCs
     ├── seed.sql                  # DEMO fixtures: accounts, demo chefs, ratings (idempotent)
     ├── seed_recipes.sql          # GENERATED from recipeData/ — never hand-edit
+    ├── sim/                      # simulated population (Phase 24); schema `sim`, never `public`
+    │   ├── 0_sim_schema.sql      #   config, personas, presets, registries, rand helpers
+    │   ├── 1_sim_dishes.sql      #   GENERATED from simData/ — never hand-edit
+    │   ├── 2_sim_generate.sql    #   the generator; counters DERIVED from the engagement log
+    │   ├── 3_sim_verify.sql      #   30 assertions — the only test coverage this SQL has
+    │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
     └── scripts/{drop,clean}.sql
 ```
 
@@ -108,11 +123,11 @@ calls `recipeRepositoryProvider` → [recipe_repository.dart](packages/core/lib/
 
 ### Where enforcement really happens
 
-| Layer                                                                                 | Status                    |
-| ------------------------------------------------------------------------------------- | ------------------------- |
-| `redirect` in [app_router.dart:42-52](apps/app/lib/routing/app_router.dart#L42-L52)    | **UX only** — never security |
-| Hidden/disabled buttons on a screen                                                     | **UX only**               |
-| RLS policies + `GRANT`s in `supabase/migrations/0001_init.sql`                          | **The real authorization** |
+| Layer                                                                               | Status                       |
+| ----------------------------------------------------------------------------------- | ---------------------------- |
+| `redirect` in [app_router.dart:42-52](apps/app/lib/routing/app_router.dart#L42-L52) | **UX only** — never security |
+| Hidden/disabled buttons on a screen                                                 | **UX only**                  |
+| RLS policies + `GRANT`s in `supabase/migrations/0001_init.sql`                      | **The real authorization**   |
 
 `/my`, `/profile`, `/recipe/new`, and `*/edit` redirect to `/auth` when signed out. Everything
 else — Home, Discover, search, public recipe detail — is deliberately reachable signed-out, and
@@ -148,8 +163,17 @@ flutter build web --release --dart-define-from-file=env.local.json
 npx serve -l 8099 build/web            # http://localhost:8099/#/discover
 ```
 
+> **`env.local.json` decides which database you are looking at, and it is not always the hosted
+> one.** As of 2026-08-20 it points at the **local** stack (`http://127.0.0.1:54321`), with the
+> hosted project's credentials preserved beside it in `apps/app/env.hosted.local.json` — swap the
+> two files to switch back. Both names are git-ignored (`env.local*` / `env.*.local*`); a plain
+> `env.hosted.json` would **not** be — that is exactly the glob B010 was widened to catch, so never
+> save credentials under that name. The local stack needs `supabase start`, and no account in it has
+> a password anyone knows: every seeded account gets a random one (B018), so sign up a fresh user
+> and collect the confirmation mail from Mailpit at `http://127.0.0.1:54324`, not a real inbox.
+
 > **`melos run format` currently breaks `melos run analyze` (B027).** `dart format` picks its
-> style from the *package's* language version, and all four pubspecs declare `sdk: ">=3.4.0"` —
+> style from the _package's_ language version, and all four pubspecs declare `sdk: ">=3.4.0"` —
 > under 3.7, so the formatter emits the legacy short style with no trailing commas, and
 > `require_trailing_commas` then flags every one it removed. The committed tree is in the newer
 > tall style. Until the `sdk:` bound is raised (or the lint dropped), leave formatting alone; if
@@ -167,14 +191,56 @@ melos run recipes:validate  # parse + lint recipeData/recipes/*.json
 melos run recipes:gen       # regenerate supabase/seed_recipes.sql (commit both)
 melos run recipes:check     # fail if that .sql is stale — CI runs this
 
+# Simulation dish library (Phase 24). Same format and the SAME validator as
+# recipeData (tool/recipe_format.dart) — a dish is promoted to curated content by
+# moving the file and deleting its `sim` block. Nothing here is a recipe until
+# supabase/sim/2_sim_generate.sql draws from it (see db:sim below).
+melos run sim:validate      # parse + lint + directory coverage rules
+melos run sim:gen           # regenerate supabase/sim/1_sim_dishes.sql (commit both)
+melos run sim:check         # fail if that .sql is stale — CI runs this
+
 # DB tasks — need `psql` on PATH and $env:SUPABASE_DB_URL. See the warning under Gotchas.
 melos run db:create   # apply supabase/migrations/0001_init.sql (idempotent)
 melos run db:seed     # load supabase/seed.sql (idempotent; also backfills ratings — B014)
 melos run db:recipes  # load supabase/seed_recipes.sql (idempotent; run recipes:gen first)
 melos run db:clean    # truncate recipe data, keep schema + users
 melos run db:drop     # drop all app tables/types/functions (spares auth.users)
-melos run db:reset    # drop -> create -> seed -> recipes
+melos run db:reset    # drop -> create -> seed -> recipes -> sim   (~15s from empty)
+
+# Simulated population (Phase 24). Additive and idempotent; ~10s at the default
+# `medium` preset (1,000 accounts, ~1,670 recipes, ~118k view rows).
+melos run db:sim                          # schema -> dishes -> generate -> verify
+melos run db:sim -- --preset=small --seed=7
+melos run db:sim:verify                   # 30 assertions, read-only
+melos run db:sim:clean -- --yes           # DESTRUCTIVE: deletes the simulated auth.users
 ```
+
+> **The sim derives its counters; `seed.sql` authors them.** `seed.sql` writes `like_count = 2500`
+> with no `recipe_likes` rows behind it. The sim writes the rows and recomputes the counter, which
+> is what gives dated and windowed queries anything to read (SDS §10.8). Three rules follow:
+> engagement rows must be bulk-loaded with the **counter triggers disabled** (live, the load is one
+> `recompute_chef_stats()` per row); the recompute must call the real `chef_score()` /
+> `chef_tier_for()` and never restate `3 / 5 / 0.2` (Gotcha 19); and `sim.epoch_end()` is a **pinned**
+> time anchor, not `now()` — a moving anchor re-dates every recipe out from under the versions that
+> reference it (B044). Teardown is driven by the `sim.actor` / `sim.recipe` **registries**, never by
+> an email or id pattern: it deletes `auth.users` rows, and a pattern that is subtly wrong on the
+> hosted project has no undo.
+
+> **`melos run db:*` does not work on this machine as written (B033)** — `psql` is not installed,
+> and the only client available is the one inside the Supabase Docker container. Applying a schema
+> change to the **hosted** project through that container also needs the **Session pooler** host:
+> `db.<ref>.supabase.co` is IPv6-only and the container has no IPv6 route. What works:
+>
+> ```powershell
+> $u = "postgresql://postgres.<project-ref>:<pwd>@aws-0-<region>.pooler.supabase.com:5432/postgres"
+> Get-Content supabase\migrations\0001_init.sql -Raw |
+>   docker exec -i supabase_db_secret-sauce psql $u -v ON_ERROR_STOP=1 -f -
+> ```
+>
+> The pooler user is `postgres.<project-ref>`, not bare `postgres`. A dashboard password reset takes
+> a moment to propagate — check auth on its own (`psql $u -c "select 1"`) before blaming the SQL.
+> **`SUPABASE_DB_URL` never goes in `env.local.json`** (B034): that file is compiled into shipped
+> builds via `--dart-define-from-file`, and this is a superuser credential.
 
 > `--no-select` is required for every script that declares `packageFilters` in `melos.yaml`
 > (`test`, `build_runner`, `build:*`, `gen:icons`). Without a TTY the package picker aborts with
@@ -197,11 +263,11 @@ supabase stop                       # tear down
 
 ## Required environment
 
-| Name                | Purpose                        | Lives in                                                       |
-| ------------------- | ------------------------------ | -------------------------------------------------------------- |
-| `SUPABASE_URL`      | Project REST/Auth endpoint     | `apps/app/env.local.json` (git-ignored) → `--dart-define-from-file` |
-| `SUPABASE_ANON_KEY` | Public anon key                | same file                                                       |
-| `SUPABASE_DB_URL`   | Postgres URI for `db:*` scripts | shell env only — never a file                                   |
+| Name                | Purpose                         | Lives in                                                            |
+| ------------------- | ------------------------------- | ------------------------------------------------------------------- |
+| `SUPABASE_URL`      | Project REST/Auth endpoint      | `apps/app/env.local.json` (git-ignored) → `--dart-define-from-file` |
+| `SUPABASE_ANON_KEY` | Public anon key                 | same file                                                           |
+| `SUPABASE_DB_URL`   | Postgres URI for `db:*` scripts | shell env only — never a file                                       |
 
 Copy `apps/app/env.example.json` to `env.local.json` to start. `.vscode/launch.json` and every
 `melos run build:*` script already pass the file.
@@ -239,8 +305,9 @@ engagement counters of that user's **public** recipes, recomputed from scratch b
 `on_recipe_stats_change` trigger — same pattern as `recipes.rating_*`. `chef_score()` and
 `chef_tier_for()` in `0001_init.sql` are the single source of truth for the formula and the
 thresholds; an idempotent backfill on every apply is how a change reaches existing rows.
-`chefs_leaderboard(limit, offset)` is the `anon`-callable RPC behind `/chefs`. Details:
-[SDS §10](./docs/SDS.md#10-chefs-tiers--leaderboard).
+`chefs_leaderboard(limit, offset)` is the `anon`-callable RPC behind `/chefs`, and
+`chef_top_recipes(chef, limit)` — `setof recipes`, ordered by `chef_score()` per recipe — backs
+the expanded chef card. Details: [SDS §10](./docs/SDS.md#10-chefs-tiers--leaderboard).
 
 Five Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/models/enums.dart):
 `difficulty`, `recipe_visibility`, `share_permission` (`edit` reserved, unused),
@@ -248,20 +315,30 @@ Five Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/m
 
 ## Feature map
 
-| Route                             | Feature dir              | Notes                                                     |
-| --------------------------------- | ------------------------ | --------------------------------------------------------- |
-| `/`                               | `features/home`          | Landing; signed-out safe                                  |
+| Route                             | Feature dir              | Notes                                                                                                                    |
+| --------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| `/`                               | — (no screen)            | **Redirect-only** → `/discover`. `features/home` was retired 2026-08-20; see the note under the table                    |
 | `/auth`                           | `features/auth`          | `authControllerProvider` (AsyncNotifier); redirects to `/discover` when signed in; `?mode=signup` opens the sign-up side |
-| `/discover`                       | `features/discover`      | Popular / Trending / Recent + search; all four via `DiscoverRepository`; signed-out safe |
-| `/chefs`                          | `features/chefs`         | Leaderboard via `chefs_leaderboard` RPC; signed-out safe   |
-| `/my`                             | `features/my_recipes`    | My / Shared-with-me tabs; `share_dialog.dart` writes `recipe_shares` |
-| `/recipe/:id`                     | `features/recipe_detail` | Servings scaler, rating, like/save, fork, `version_history_sheet.dart`; signed-out safe |
-| `/recipe/new`, `/recipe/:id/edit` | `features/recipe_editor` | `edit_models.dart` holds mutable draft types; save appends a version |
-| `/profile`                        | `features/profile`       | Current user; reached from the bottom bar on mobile and the avatar menu on web (`myProfileProvider`) |
+| `/discover`                       | `features/discover`      | Popular / Trending / Recent + search; all four via `DiscoverRepository`; signed-out safe                                 |
+| `/chefs`                          | `features/chefs`         | Web: `chefs_hero.dart` + a 404px leaderboard panel + rails of `ChefSpotlightCard`. Compact: the plain board. A row or card opens `chef_detail_sheet.dart` (dialog on web, sheet on mobile); signed-out safe |
+| `/my`                             | `features/my_recipes`    | My / Shared-with-me tabs; `share_dialog.dart` writes `recipe_shares`                                                     |
+| `/recipe/:id`                     | `features/recipe_detail` | Servings scaler, rating, like/save, fork, `version_history_sheet.dart`; signed-out safe                                  |
+| `/recipe/new`, `/recipe/:id/edit` | `features/recipe_editor` | `edit_models.dart` holds mutable draft types; save appends a version                                                     |
+| `/profile`                        | `features/profile`       | Current user; reached from the bottom bar on mobile and the avatar menu on web (`myProfileProvider`)                     |
 
 Only `/discover`, `/chefs`, `/my`, `/profile` sit inside the `ShellRoute` (nav chrome); detail and
 editor are pushed on the root navigator. `/profile` is in the shell but is **not** a web
 destination, so the top bar's pill highlights nothing there — see Gotcha 18.
+
+**Discover is the front door; `/` is a redirect, not a page.** The landing screen was retired
+because no navigation chrome ever linked it — the web brand mark goes to `/discover`, the mobile
+bottom bar has no Home slot — so a cold start or a stale bookmark was the only way to reach it.
+Two mechanisms are needed and both are load-bearing: `initialLocation: Routes.discover` covers a
+mobile/desktop cold start (the platform reports no route), and the redirect-only
+`GoRoute(path: Routes.root)` covers web (the browser reports `/`). Adding a `builder` back to that
+route resurrects a screen nothing links to — `apps/app/test/widget_test.dart` fails if you do.
+Sign-out goes straight to `/discover` from both the avatar menu and the profile screen; do not
+point it at `/`.
 
 ## Conventions
 
@@ -290,7 +367,7 @@ destination, so the top bar's pill highlights nothing there — see Gotcha 18.
 
 The full, evidence-cited version of this list is
 [.claude/skills/review-checklist/SKILL.md](.claude/skills/review-checklist/SKILL.md) (loaded by
-the `code-review` skill). The ones you need while *writing* code:
+the `code-review` skill). The ones you need while _writing_ code:
 
 1. **Generated code is git-ignored** (`.gitignore:11-13`). A fresh clone does not compile until
    `melos run build_runner --no-select`. Codegen output never appears in a diff — say so rather
@@ -306,7 +383,7 @@ the `code-review` skill). The ones you need while *writing* code:
    `0001_init.sql:565-581`, or every API call returns `permission denied for table …` (B013).
    RLS with no policy default-denies: reads return empty, not an error.
 5. **`0001_init.sql` is one idempotent file, re-applied in place** (`db:create`, `supabase db
-   reset`, hosted paste). Every statement must be guarded: `if not exists`,
+reset`, hosted paste). Every statement must be guarded: `if not exists`,
    `drop policy if exists`, `create or replace`, `alter table … add column if not exists`.
    **Changing a function's argument list is not something `create or replace` can do** — the old
    overload survives beside the new one, and any call matching both fails with
@@ -316,10 +393,10 @@ the `code-review` skill). The ones you need while *writing* code:
 6. **Test SQL on the upgrade path, not only on a fresh `db reset`.** `supabase db reset` builds
    from scratch and `drop.sql → create → seed` drops everything first, so neither can surface a
    stale-object bug — and those are the only two paths that are convenient to run. A deployed
-   database takes a third path nobody tests: *old schema + old seed already applied, new files
-   layered on top*. Reconstruct it with `git show <last-release>:supabase/…` before believing a
+   database takes a third path nobody tests: _old schema + old seed already applied, new files
+   layered on top_. Reconstruct it with `git show <last-release>:supabase/…` before believing a
    schema change is safe. B024 shipped through a green run of both easy paths.
-6. **`db:*` scripts fire at whatever `SUPABASE_DB_URL` points at — no confirmation, no prod
+7. **`db:*` scripts fire at whatever `SUPABASE_DB_URL` points at — no confirmation, no prod
    guard** ([tool/db.dart](tool/db.dart)). `db:reset` is `drop → create → seed`. `README.md`
    documents pasting `seed.sql` into the **hosted** dashboard, so anything in that file runs on
    production by documented procedure — never put a literal credential there (B018: nine
@@ -365,7 +442,7 @@ the `code-review` skill). The ones you need while *writing* code:
     into a card grid.
 14. **New `design_system` widget → export it from `design_system.dart`**, or `apps/app` cannot
     import it.
-15. **`packages/core` is only *partly* tested, and the untested half is the risky half.**
+15. **`packages/core` is only _partly_ tested, and the untested half is the risky half.**
     `packages/core/test/` covers pure JSON→model decoding (enum wire values, column-name
     mappings, `numeric` handling) — no `SupabaseClient` needed, so that blocker never applied
     there. Still untested: **every repository method**, `snapRating`, and anything that issues a
@@ -388,19 +465,62 @@ the `code-review` skill). The ones you need while *writing* code:
 17. **Embedding `profiles` into a recipe query needs the FK hint.** `recipes` and `profiles` are
     related five ways (`owner_id`, plus many-to-many through likes/ratings/saves/shares), so the
     obvious `owner:profiles(...)` fails with `PGRST201: Could not embed because more than one
-    relationship was found`. Use the shared `kRecipeSelect` constant in
+relationship was found`. Use the shared `kRecipeSelect` constant in
     [recipe_queries.dart](packages/core/lib/src/repositories/recipe_queries.dart) — it carries
     `owner:profiles!recipes_owner_id_fkey(...)`. Dropping the hint breaks every recipe query at
     once, including the Discover RPCs.
 18. **Navigation chrome is two bars with two destination lists**, both in
     [nav_destinations.dart](apps/app/lib/routing/nav_destinations.dart): compact keeps four slots
-    *including Profile*; the web bar ([top_nav_bar.dart](apps/app/lib/routing/top_nav_bar.dart))
+    _including Profile_; the web bar ([top_nav_bar.dart](apps/app/lib/routing/top_nav_bar.dart))
     drops Profile for the avatar account menu and hides My Recipes when signed out. A new
     destination has to pick a list. The web bar carries **destinations and identity only** — `New
-    recipe` lives on the My Recipes header and search in Discover's search bar; putting either
+recipe` lives on the My Recipes header and search in Discover's search bar; putting either
     back is what crowded the row at medium. Its pill measures label widths with a `TextPainter`
     and drops labels to icons rather than wrapping, so a longer destination costs the others their
     labels — check any change at 600px and 2.0× text scale, the same envelope as the card (#13).
+19. **`ChefScoring` mirrors SQL — edit both sides in one commit.**
+    [chef_scoring.dart](packages/core/lib/src/chef_scoring.dart) restates the score weights
+    (3 / 5 / 0.2) and the tier thresholds (100 / 1000 / 5000 / 20000) in Dart, because the expanded
+    chef card *explains* them (`1,980 likes × 3`, `9,811 points to Master Chef`). SQL remains the
+    source of truth — nothing writes a score or a tier from Dart. Change `chef_score()` /
+    `chef_tier_for()` without changing this file and the card starts explaining a formula the
+    database does not use. `packages/core/test/chef_scoring_test.dart` exists to fail loudly when
+    that happens, so a failure there means **check which side moved**, not *update the expectation*.
+20. **A field the recipe editor's draft types drop is a field the next save deletes** (B035).
+    `RecipeRepository.update()` does not patch — `_persistContent` deletes the recipe's groups and
+    re-inserts the `Recipe` the editor handed it, so
+    [edit_models.dart](apps/app/lib/features/recipe_editor/edit_models.dart) must mirror **every**
+    column of `Ingredient` and `RecipeStep`, including ones with no input widget yet
+    (`steps.image_url` is carried through verbatim for that reason). It modelled a step as its text
+    alone, which both hid `temperature` / `duration_minutes` / `tip` from anyone creating a recipe
+    *and* silently wiped them from the seeded recipes on any edit. Add a column to either model and
+    you add it to the draft in the same change — `apps/app/test/recipe_editor_test.dart`'s
+    round-trip group fails if you don't. Same trap as B022's secondary damage.
+21. **`Expanded` beside `Flexible` in one row is a 50/50 split, not a priority order** (B038, and
+    B026 before it). `RenderFlex` divides the free space by flex factor, so a two-flex-child row
+    reserves half for each *whatever the content says* — the short child leaves dead space and the
+    long one truncates beside it. Where one child must win, make the other **non-flex inside a
+    `ConstrainedBox`** cap (`LayoutBuilder` → `maxWidth: constraints.maxWidth / 2` or `/ 3`) with a
+    `FittedBox` if it is a number. That is the shape `RecipeCard` uses for `DifficultyBadge`, the
+    spotlight card for its score and points, and the board row for its score. The other half of the
+    same rule: a **non-flex child of a `Row` is laid out with an unbounded main axis**, so anything
+    in that position without a cap overflows rather than shrinking (B039).
+22. **A page can be over-budget in height the same way a card row is over-budget in width** (B037).
+    `Column(header, Expanded(body))` gives the header its intrinsic height first — if the header is
+    taller than the viewport, `Expanded` gets nothing and the column overflows; no amount of
+    flexibility below it helps. Layouts that fix their own space (a non-scrolling hero over
+    fixed-height columns) must therefore bound themselves against **text scale**, not just width:
+    `context.textScale` in `adaptive.dart` is the shared measurement, and `/chefs` uses it twice —
+    the hero stacks its parts below `900 × textScale` px, and the whole page drops to a single
+    scroll above `ChefsScreen.maxTwoColumnTextScale`. Check any new fixed-height page region at
+    2.0×, the same envelope as the card (#13) and the nav bar (#18).
+23. **A modal opened from a shell screen needs `useRootNavigator: true`** (B030). `AppShell` is a
+    `Scaffold` that owns the bottom `NavigationBar` and the FAB **and** wraps the shell's inner
+    navigator, so a default `showModalBottomSheet` / `showDialog` attaches below that chrome: the
+    FAB paints over the sheet on mobile and the top nav bar stays undimmed above the dialog on web.
+    No widget test sees this — tests pump the screen without the shell — so it is a screenshot
+    check, not a test one. Two more things only screenshots catch: a name that **ellipsises**
+    rather than overflows (B032), and copy like `1 recipes` (B031).
 
 ## Docs–code sync (MANDATORY)
 
@@ -425,3 +545,50 @@ set. When in doubt, re-read the affected doc and confirm every command/flag stil
 **Maintenance rule for this file:** if a human corrects an agent twice about the same project
 fact, add it here — citing the bug ID if there is one. When a rule stops being true, delete it
 the same day.
+
+## Final response format (MANDATORY)
+
+Every task response ends with an **executive summary** — what changed and what it means, readable
+by someone who did not watch the work happen. Keep the whole thing under ~25 lines. Use this
+skeleton, dropping any section that would be empty:
+
+```markdown
+## Summary
+
+<1–3 sentences: what was asked, what is now true. Plain language, no jargon dumps.>
+
+**Changed**
+
+- `path/to/file.dart` — what changed and why (one line each)
+
+**Verified**
+
+- `melos run analyze` — SUCCESS / `melos run test --no-select` — 12 passed
+- (or) not run, because <reason>
+- Code review using /code-review outcomes
+
+**Docs updated**
+
+- `docs/ROADMAP.md` — task X marked done
+
+**Open / next**
+
+- <anything left undone, blocked, or assumed — say it plainly>
+```
+
+Rules for it:
+
+- **Lead with the outcome, not the journey.** No step-by-step replay of tool calls, no narration
+  of dead ends unless the dead end changes what the user should do next.
+- **One line per file.** Group trivial edits (`3 test files — updated fixtures`) instead of
+  listing each.
+- **Verified means run.** Quote the actual command and its real result. On Windows, `melos.bat`
+  exits 0 even on failure (B006/B007) — report what the output said (`SUCCESS`/`FAILED`), not the
+  exit code. If nothing was run, say so; never imply a green run that did not happen.
+- **State what was skipped.** Partial work, assumptions, and anything deferred go under
+  _Open / next_ — omission reads as completion.
+- **No praise, no filler, no "let me know if…".** Facts only.
+- File references stay clickable markdown links (`[recipe_card.dart](packages/design_system/lib/src/widgets/recipe_card.dart)`),
+  not backticks, per the harness rule.
+- Detail belongs **above** the summary, not inside it. The summary is the last thing in the
+  response and never repeats a full explanation already given.

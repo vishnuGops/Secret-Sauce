@@ -1,0 +1,83 @@
+{
+  "slug": "moroccan-chicken-tagine",
+  "title": "Chicken Tagine with Olives and Preserved Lemon",
+  "description": "Chicken cooked down with saffron, ginger, and a whole preserved lemon until the sauce is thick enough to coat a spoon. Salty, sour, and barely sweet.",
+  "cuisine": "Moroccan",
+  "category": "Main",
+  "difficulty": "medium",
+  "prep_minutes": 25,
+  "cook_minutes": 60,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": null,
+  "ingredient_groups": [
+    {
+      "name": "Chermoula",
+      "ingredients": [
+        { "quantity": 4, "unit": "cloves", "name": "garlic" },
+        { "quantity": 1, "unit": "tsp", "name": "ginger", "note": "ground" },
+        { "quantity": 1, "unit": "tsp", "name": "sweet paprika" },
+        { "quantity": 0.5, "unit": "tsp", "name": "turmeric" },
+        { "quantity": 1, "unit": "pinch", "name": "saffron", "note": "crumbled into a little warm water" },
+        { "quantity": 3, "unit": "Tbsp", "name": "olive oil" }
+      ]
+    },
+    {
+      "name": "Tagine",
+      "ingredients": [
+        { "quantity": 1.4, "unit": "kg", "name": "chicken thighs", "note": "bone in, skin on" },
+        { "quantity": 2, "unit": null, "name": "onions", "note": "sliced thin" },
+        { "quantity": 1, "unit": null, "name": "preserved lemon", "note": "flesh discarded, rind sliced" },
+        { "quantity": 150, "unit": "g", "name": "green olives", "note": "cracked, rinsed" },
+        { "quantity": 300, "unit": "ml", "name": "chicken stock" },
+        { "quantity": 1, "unit": "bunch", "name": "cilantro", "note": "chopped, to finish" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Chermoula",
+      "steps": [
+        {
+          "text": "Pound the garlic to a paste with a little salt, then work in the ginger, paprika, turmeric, bloomed saffron, and olive oil."
+        },
+        {
+          "text": "Rub the chermoula into the chicken thighs and leave them to take on colour.",
+          "duration_minutes": 30,
+          "tip": "An hour is better, overnight better still."
+        }
+      ]
+    },
+    {
+      "name": "Tagine",
+      "steps": [
+        {
+          "text": "Brown the chicken skin-side down in a heavy pot, then lift it out.",
+          "duration_minutes": 8
+        },
+        {
+          "text": "Soften the onions in the same fat until collapsing and sweet.",
+          "duration_minutes": 12,
+          "temperature": "medium-low"
+        },
+        {
+          "text": "Return the chicken, pour in the chicken stock, cover, and simmer.",
+          "duration_minutes": 30
+        },
+        {
+          "text": "Add the preserved lemon rind and green olives and cook uncovered so the sauce reduces and thickens.",
+          "duration_minutes": 10,
+          "tip": "Taste before adding any salt — the lemon and olives already brought plenty."
+        },
+        {
+          "text": "Finish with the chopped cilantro."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1,
+    "variant_titles": ["{title} for a Crowd"]
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "slug": "lebanese-fattoush",
+  "title": "Fattoush",
+  "description": "A bread salad built to use up flatbread that has gone stale. Sumac and pomegranate molasses do the work; the pita has to stay crisp until it reaches the table.",
+  "cuisine": "Lebanese",
+  "category": "Salad",
+  "difficulty": "easy",
+  "prep_minutes": 20,
+  "cook_minutes": 0,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Dress it at the table, not in the kitchen. Fattoush has a working life of about four minutes.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 2, "unit": null, "name": "pita breads", "note": "stale, torn into pieces and toasted crisp" },
+        { "quantity": 4, "unit": null, "name": "tomatoes", "note": "cut into wedges" },
+        { "quantity": 2, "unit": null, "name": "Persian cucumbers", "note": "roughly chopped" },
+        { "quantity": 4, "unit": null, "name": "radishes", "note": "sliced" },
+        { "quantity": 4, "unit": null, "name": "spring onions", "note": "sliced" },
+        { "quantity": 1, "unit": "cup", "name": "flat-leaf parsley", "note": "leaves picked" },
+        { "quantity": 0.5, "unit": "cup", "name": "mint", "note": "leaves picked" },
+        { "quantity": 2, "unit": "tsp", "name": "sumac" },
+        { "quantity": 1, "unit": "Tbsp", "name": "pomegranate molasses" },
+        { "quantity": 4, "unit": "Tbsp", "name": "olive oil" },
+        { "quantity": 1, "unit": null, "name": "lemon", "note": "juiced" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Whisk the olive oil, lemon juice, pomegranate molasses, and half the sumac with a good pinch of salt."
+        },
+        {
+          "text": "Combine the tomatoes, Persian cucumbers, radishes, spring onions, parsley, and mint in a wide bowl.",
+          "tip": "Cut everything to roughly the same size so no one component dominates a forkful."
+        },
+        {
+          "text": "Add the toasted pita breads and pour over the dressing."
+        },
+        {
+          "text": "Toss once, dust with the remaining sumac, and take it straight to the table."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.1,
+    "variant_titles": ["{title} with Purslane"]
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "slug": "mexican-carnitas-tacos",
+  "title": "Carnitas Tacos",
+  "description": "Pork shoulder cooked slowly in its own fat with orange and bay, then crisped hard under a broiler. Soft, rich, and shatteringly crisp in the same forkful.",
+  "cuisine": "Mexican",
+  "category": "Main",
+  "difficulty": "medium",
+  "prep_minutes": 20,
+  "cook_minutes": 195,
+  "servings": 8,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The crisping step is not optional. Braised pork alone is not carnitas.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 1.8, "unit": "kg", "name": "pork shoulder", "note": "cut into large cubes, fat left on" },
+        { "quantity": 1, "unit": null, "name": "orange", "note": "halved" },
+        { "quantity": 1, "unit": null, "name": "white onion", "note": "quartered" },
+        { "quantity": 6, "unit": "cloves", "name": "garlic" },
+        { "quantity": 2, "unit": null, "name": "bay leaves" },
+        { "quantity": 1, "unit": "tsp", "name": "cumin seed" },
+        { "quantity": 2, "unit": "tsp", "name": "salt" },
+        { "quantity": 16, "unit": null, "name": "corn tortillas", "note": "to serve" },
+        { "quantity": 1, "unit": "bunch", "name": "cilantro", "note": "to serve" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Put the pork shoulder in a heavy pot with the onion, garlic, bay leaves, cumin seed, and salt. Squeeze the orange over and drop both halves in.",
+          "tip": "The peel goes in too — the oils in it are half the point."
+        },
+        {
+          "text": "Add water to come halfway up the meat and bring to a bare simmer.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Cook uncovered on the lowest heat until the water has gone and the pork is frying in its own rendered fat.",
+          "duration_minutes": 170,
+          "temperature": "low"
+        },
+        {
+          "text": "Lift the meat out, discard the bay, orange, onion, and garlic, and shred it coarsely with two forks."
+        },
+        {
+          "text": "Spread the shredded pork on a tray, spoon over some of the rendered fat, and broil until the edges are dark and crisp.",
+          "duration_minutes": 8,
+          "temperature": "broil",
+          "tip": "Do not stir it while it crisps, or you get steam instead of crust."
+        },
+        {
+          "text": "Warm the corn tortillas, fill, and finish with cilantro."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.4,
+    "variant_titles": ["{title} with Pickled Onion", "Slow {title}"]
+  }
+}

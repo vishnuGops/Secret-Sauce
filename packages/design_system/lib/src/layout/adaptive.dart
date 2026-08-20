@@ -20,6 +20,16 @@ extension ScreenSizeContext on BuildContext {
 
   bool get isCompact => screenSize == ScreenSize.compact;
   bool get isExpanded => screenSize == ScreenSize.expanded;
+
+  /// The ambient text scale as a plain multiplier — 1.0 normally, 2.0 at the
+  /// accessibility envelope the card tests use.
+  ///
+  /// Derived by scaling a real font size rather than read off the `TextScaler`
+  /// directly: scaling is non-linear above 1.0 on some platforms, so this
+  /// measures what a widget's text will actually get. Layouts that must reserve
+  /// height for text — a fixed-size tile, a row of columns that cannot scroll —
+  /// size themselves from this.
+  double get textScale => MediaQuery.textScalerOf(this).scale(14) / 14;
 }
 
 /// Renders different widgets depending on available width. Any of [medium] or

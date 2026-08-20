@@ -44,3 +44,10 @@ jobs:
       # and nobody would notice. Needs no database — it is a file comparison.
       - name: Recipe data
         run: melos run recipes:check
+
+      # Same gate for the simulation dish library, plus its directory-level
+      # coverage rules (all 10 categories, >= 24 cuisines, a no-cook dish, an
+      # overnight step, a multi-group dish). The generator's output is only as
+      # varied as this library, and no assertion downstream would notice a gap.
+      - name: Sim dish library
+        run: melos run sim:check

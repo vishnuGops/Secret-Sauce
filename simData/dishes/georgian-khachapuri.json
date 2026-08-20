@@ -1,0 +1,74 @@
+{
+  "slug": "georgian-khachapuri",
+  "title": "Adjaruli Khachapuri",
+  "description": "A boat of enriched dough filled with salty cheese, finished with an egg yolk and butter stirred through at the table while everything is still molten.",
+  "cuisine": "Georgian",
+  "category": "Main",
+  "difficulty": "medium",
+  "prep_minutes": 30,
+  "cook_minutes": 18,
+  "servings": 2,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "You tear the pointed ends off and use them to stir the yolk into the cheese. That is the correct way to eat it and it is not optional.",
+  "ingredient_groups": [
+    {
+      "name": "Dough",
+      "ingredients": [
+        { "quantity": 300, "unit": "g", "name": "bread flour" },
+        { "quantity": 175, "unit": "ml", "name": "milk", "note": "warm" },
+        { "quantity": 7, "unit": "g", "name": "instant yeast" },
+        { "quantity": 1, "unit": "tsp", "name": "sugar" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" },
+        { "quantity": 2, "unit": "Tbsp", "name": "olive oil" }
+      ]
+    },
+    {
+      "name": "Filling",
+      "ingredients": [
+        { "quantity": 200, "unit": "g", "name": "sulguni", "note": "or half mozzarella, half feta" },
+        { "quantity": 100, "unit": "g", "name": "feta", "note": "crumbled" },
+        { "quantity": 2, "unit": null, "name": "egg yolks" },
+        { "quantity": 40, "unit": "g", "name": "butter", "note": "cubed" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Dough",
+      "steps": [
+        {
+          "text": "Mix the bread flour, instant yeast, sugar, and salt, then work in the warm milk and olive oil and knead until smooth.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Prove until doubled.",
+          "duration_minutes": 90
+        }
+      ]
+    },
+    {
+      "name": "Shaping and baking",
+      "steps": [
+        {
+          "text": "Divide in two, roll each piece into an oval, and roll the long sides inward to make thick ropes.",
+          "tip": "Pinch the two ends together hard. A boat that opens in the oven loses all its cheese."
+        },
+        {
+          "text": "Mix the sulguni and feta and heap it into each boat."
+        },
+        {
+          "text": "Bake until the crust is deep gold and the cheese is bubbling.",
+          "duration_minutes": 15,
+          "temperature": "450°F"
+        },
+        {
+          "text": "Pull the tray out, drop an egg yolk and some butter into each pool of cheese, and return briefly so the yolk warms without setting.",
+          "duration_minutes": 2,
+          "tip": "The yolk should still be liquid when it reaches the table."
+        }
+      ]
+    }
+  ],
+  "sim": { "weight": 0.9, "variant_titles": ["{title} for One", "Imeruli {title}"] }
+}

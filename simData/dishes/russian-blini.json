@@ -1,0 +1,65 @@
+{
+  "slug": "russian-blini",
+  "title": "Buckwheat Blini",
+  "description": "Yeast-raised buckwheat pancakes, left to ferment overnight so they come out sour and lacy rather than sweet. Served with sour cream and whatever is salty.",
+  "cuisine": "Russian",
+  "category": "Breakfast",
+  "difficulty": "medium",
+  "prep_minutes": 20,
+  "cook_minutes": 25,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The overnight rise is the flavour. A one-hour version works and tastes like a plain pancake.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 150, "unit": "g", "name": "buckwheat flour" },
+        { "quantity": 150, "unit": "g", "name": "all-purpose flour" },
+        { "quantity": 500, "unit": "ml", "name": "milk", "note": "warm" },
+        { "quantity": 7, "unit": "g", "name": "instant yeast" },
+        { "quantity": 2, "unit": null, "name": "eggs", "note": "separated" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" },
+        { "quantity": 30, "unit": "g", "name": "butter", "note": "melted, plus more for the pan" },
+        { "quantity": 200, "unit": "g", "name": "sour cream", "note": "to serve" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "The night before",
+      "steps": [
+        {
+          "text": "Whisk the buckwheat flour, all-purpose flour, instant yeast, and warm milk into a loose batter."
+        },
+        {
+          "text": "Cover and leave at room temperature to ferment.",
+          "duration_minutes": 600,
+          "tip": "It should smell distinctly sour in the morning and be covered in bubbles."
+        }
+      ]
+    },
+    {
+      "name": "Morning",
+      "steps": [
+        {
+          "text": "Beat in the egg yolks, salt, and melted butter."
+        },
+        {
+          "text": "Whip the egg whites to soft peaks and fold them through.",
+          "tip": "Fold, do not stir. The air is what makes them lacy."
+        },
+        {
+          "text": "Cook spoonfuls in a buttered pan over a medium heat until the surface is covered in holes, then turn.",
+          "duration_minutes": 25,
+          "temperature": "medium"
+        },
+        {
+          "text": "Serve hot with sour cream."
+        }
+      ]
+    }
+  ],
+  "sim": { "weight": 0.9, "variant_titles": ["{title} with Smoked Fish", "Quick {title}"] }
+}
