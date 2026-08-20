@@ -284,7 +284,7 @@ has to fit at 600.
 **Two different rules, on purpose.** Navigation chrome switches at the breakpoints
 (`responsiveColumns`, `AdaptiveLayout`, `context.isCompact`) — it is a different layout on each
 side. The **recipe grid does not**: it flows. `FlowGridMetrics.fit` takes the width actually
-available and fits as many columns as can each hold `kRecipeCardMinWidth` (264), caps every tile
+available and fits as many columns as can each hold `kRecipeCardMinWidth` (288), caps every tile
 at `kRecipeCardMaxWidth` (340), and splits whatever is left over into an equal gutter on each
 side so a capped row stays centred. A window drag therefore adds a column at the width where one
 genuinely fits, instead of stretching three cards across 1400px and then jumping at 1000.
@@ -294,12 +294,17 @@ genuinely fits, instead of stretching three cards across 1400px and then jumping
 | 358 (phone)     | 1       | 340 (capped) | 9    |
 | 768             | 2       | 340 (capped) | 36   |
 | 968             | 3       | 312        | 0      |
-| 1408            | 5       | 268.8      | 0      |
+| 1408            | 4       | 340 (capped) | 0    |
+
+The floor moved from 264 to **288** on 2026-08-20 (B048). 264 bought an extra column out of the
+footer: at that width the metadata row had to ellipsize `4.9 (8)` to fit, which is a truncation
+the card was never meant to reach at default text scale. A column fewer is the cheaper trade —
+1408px now packs four cards at the cap rather than five squeezed ones.
 
 The cap belongs to the **grid**, not the card: a grid cell hands its child tight constraints,
 which win over any `ConstrainedBox` inside `RecipeCard`, so the only way to hold a tile at 340 is
 to hand the delegate less width to divide (that is what the gutter is). `FlowGridMetrics` is pure,
-so it is unit-tested directly across a continuous 264→2400 sweep rather than at sampled widths.
+so it is unit-tested directly across a continuous 288→2400 sweep rather than at sampled widths.
 
 ## 8. RecipeCard contract
 
@@ -314,15 +319,30 @@ Used across Discover and My Recipes.
 
 | Band       | Content                                                                                                    | Sizing                          |
 | ---------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| **Banner** | Recipe name on `colorScheme.primary` / `onPrimary`, `titleMedium` w700, **max 2 lines** then ellipsis; the icon-only visibility chip sits at its end | intrinsic                       |
+| **Banner** | Recipe name on `colorScheme.primary` / `onPrimary`, `titleMedium` w700, **max 2 lines** then ellipsis, vertically centred; the icon-only visibility chip sits at its end | **fixed band** — `kRecipeCardBannerHeight` (65) × `context.textScale` |
 | **Cover**  | Cover image (or the `surfaceContainerHighest` + menu-glyph fallback), chef overlay bottom-right on a scrim   | **flexible — absorbs the slack** |
 | **Footer** | Description (2 lines, ellipsized), an `outlineVariant` rule, then the time · rating · difficulty row         | intrinsic                       |
 
 The name is first so it never competes with the photo for the top of the card and stays legible
 over a dark or busy cover. A two-line title takes its height **from the cover**, not from the card.
 
+**The banner is a fixed band, not an intrinsic one** (B047). It is two lines' worth of
+`titleMedium` with the title centred inside it, so a one-line name and a two-line name produce
+the *same* banner and every cover in a grid row starts at the same y — previously a one-line
+title gave a visibly shorter band than its neighbour's two-line one. The height is a **minimum**
+scaled by `context.textScale`: a hard 65px would clip two lines of 2.0× type, and text that still
+needs more grows the band (and costs the cover) rather than overflowing. The factor is clamped at
+`kRecipeCardBannerMaxScale` (2.0): the card's total height is fixed, so an unbounded band starves
+the cover and then overflows — 65 × 3.0 is 195px of banner in a 352px card. Past the ceiling the
+title's own two lines drive the band, and 130px still holds them at 3.0×, so the one-line /
+two-line match survives the clamp. The card's 3.0× height budget is a separate, pre-existing
+problem (B049).
+`packages/design_system/test/recipe_card_test.dart`'s `title banner` group pins both halves —
+the two line counts share a centre, and a longer title clamps at two lines instead of adding a
+third.
+
 **The card is a fixed-height, bounded-width tile**: `kRecipeCardHeight` (352), passed by
-`recipe_grid.dart` as the grid's `mainAxisExtent`, and `kRecipeCardMinWidth` (264) /
+`recipe_grid.dart` as the grid's `mainAxisExtent`, and `kRecipeCardMinWidth` (288) /
 `kRecipeCardMaxWidth` (340), which the grid turns into a column count (see §7 *Adaptive
 behavior*). It is not a fixed *aspect* — that was the retired card's `childAspectRatio: 0.82`,
 which left dead space under every card once the window got wide. `RecipeCard` applies the height
@@ -374,7 +394,11 @@ A fixed-height grid tile cannot grow, so the row degrades instead of overflowing
 or large text scale (B016). The `DifficultyBadge` is the row's **only non-flex child** — it takes
 its intrinsic width, sits flush right, and is capped at half the row by a `LayoutBuilder` +
 `ConstrainedBox`. Giving it a flex instead makes `RenderFlex` reserve half the row for it whatever
-its label says (B026); giving it no cap overflows by 1px at 276px / 2.0×.
+its label says (B026); giving it no cap overflows by 1px at the narrowest column / 2.0×. Since
+B048 the *floor* is set so this row never has to degrade at default text scale: 288px is the
+width at which `12h 45m` + `4.5 (1250)` + `Medium` all fit uncut. Widget tests cannot assert
+that — `flutter test` renders in a fixed-width font far wider than Roboto, so they assert *no
+overflow* and the uncut claim is a screenshot check.
 
 **`ChefSpotlightCard` is the second fixed-size tile in the kit, and it obeys the same rules with one
 addition.** Every band except the portrait is intrinsic and comes out of a fixed budget, so a longer
@@ -595,7 +619,7 @@ chef_top_recipes(p_chef uuid, p_limit int default 3) returns setof recipes
   intrinsic children to a band with no slack.
   Renders only when `recipe.owner != null` and `showChef` is true (My Recipes turns it off —
   every card there has the same owner). Regression tests at the standard envelope: both ends of
-  the card's width range (`kRecipeCardMinWidth` 264 and `kRecipeCardMaxWidth` 340), longest tier
+  the card's width range (`kRecipeCardMinWidth` 288 and `kRecipeCardMaxWidth` 340), longest tier
   label, 2.0× text scale.
 - **Recipe detail**: full-size `ChefBadge` under the title (tap target reserved for a future
   chef-profile page).

@@ -60,11 +60,18 @@ void main() {
   });
 
   // Regression: the rating pill pushed the metadata row past the card width on
-  // a rated recipe with a long time label. 264px (`kRecipeCardMinWidth`) is the
+  // a rated recipe with a long time label. 288px (`kRecipeCardMinWidth`) is the
   // narrowest card the grid produces — it packs columns down to that width
   // before wrapping. The 2.0 text scale case is the real-world trigger — at
   // default scale the margin is thin but positive, and accessibility scaling
-  // eats it.
+  // eats it. 264 is below the minimum on purpose: a container narrower than one
+  // column (a 300px-wide window) still gets one card, which must degrade rather
+  // than overflow.
+  //
+  // These assert *no overflow*, never "nothing truncates" — `flutter test`
+  // renders in a fixed-width font far wider than Roboto, so a width assertion
+  // here would pin the harness, not the layout (same reason as B038). That the
+  // metadata row fits uncut at 288 is a screenshot check.
   const longMeta = Recipe(
     id: '1',
     ownerId: 'u1',
@@ -78,11 +85,11 @@ void main() {
   );
 
   for (final (width, scale) in <(double, double)>[
+    (264, 1.0), // below the minimum — degrades, never overflows
     (kRecipeCardMinWidth, 1.0),
-    (276, 1.0),
     (kRecipeCardMaxWidth, 1.0),
+    (264, 2.0),
     (kRecipeCardMinWidth, 2.0),
-    (276, 2.0),
     (kRecipeCardMaxWidth, 2.0),
   ]) {
     testWidgets('RecipeCard metadata row fits at ${width}px, textScale $scale',
@@ -111,6 +118,109 @@ void main() {
       );
     });
   }
+
+  // The banner is a fixed band, not an intrinsic one: a one-line name and a
+  // two-line name must give the same height, or neighbouring cards in a row
+  // start their covers at different y. Asserted through the title's centre —
+  // it sits at half the band whatever the line count — plus the line count
+  // itself, so a title that grew to three lines fails here rather than silently
+  // eating the cover.
+  group('title banner', () {
+    const short = Recipe(id: '1', ownerId: 'u1', title: 'Sauce');
+    const twoLine = Recipe(
+      id: '2',
+      ownerId: 'u1',
+      title: 'Slow-Braised Short Rib Ragu',
+    );
+    const overLong = Recipe(
+      id: '3',
+      ownerId: 'u1',
+      title: 'Slow-Braised Short Rib Ragu With Soft Herb Polenta And Gremolata',
+    );
+
+    // Measured from the `InkWell`, not the `RecipeCard`: `Card` insets its
+    // content by a 4px margin, so the widget's own rect is not where the banner
+    // starts.
+    Future<(Rect content, Rect title)> pump(
+      WidgetTester tester,
+      Recipe recipe, {
+      double scale = 1.0,
+    }) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.light(),
+          home: MediaQuery(
+            data: MediaQueryData(textScaler: TextScaler.linear(scale)),
+            child: Scaffold(
+              body: Center(
+                child: SizedBox(
+                  width: kRecipeCardMinWidth,
+                  child: RecipeCard(recipe: recipe),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      return (
+        tester.getRect(find.byType(InkWell)),
+        tester.getRect(find.text(recipe.title)),
+      );
+    }
+
+    testWidgets('is the same height for a one-line and a two-line title',
+        (tester) async {
+      final (content1, title1) = await pump(tester, short);
+      final oneLine = title1.height;
+      expect(
+        title1.center.dy - content1.top,
+        closeTo(kRecipeCardBannerHeight / 2, 0.01),
+        reason: 'a one-line title is not centred in the fixed band',
+      );
+
+      final (content2, title2) = await pump(tester, twoLine);
+      expect(
+        title2.height,
+        closeTo(oneLine * 2, 0.01),
+        reason: 'expected the two-line fixture to wrap to exactly two lines',
+      );
+      expect(
+        title2.center.dy - content2.top,
+        closeTo(kRecipeCardBannerHeight / 2, 0.01),
+        reason: 'a two-line title moved the band it shares with one-line cards',
+      );
+    });
+
+    testWidgets('clamps a longer title to two lines', (tester) async {
+      final (_, oneLine) = await pump(tester, short);
+      final (content, title) = await pump(tester, overLong);
+
+      expect(
+        title.height,
+        closeTo(oneLine.height * 2, 0.01),
+        reason: 'a long title must ellipsize at two lines, not add a third',
+      );
+      expect(
+        title.center.dy - content.top,
+        closeTo(kRecipeCardBannerHeight / 2, 0.01),
+      );
+    });
+
+    // The band scales with text, because a fixed 65px would clip two lines of
+    // 2.0x type. What must hold at every scale is that the two cases match.
+    testWidgets('stays consistent at 2.0x text scale', (tester) async {
+      final (content1, title1) = await pump(tester, short, scale: 2);
+      final one = title1.center.dy - content1.top;
+      final (content2, title2) = await pump(tester, twoLine, scale: 2);
+      final two = title2.center.dy - content2.top;
+      expect(
+        one,
+        closeTo(two, 0.01),
+        reason: 'the band stopped matching between line counts at 2.0x',
+      );
+      expect(tester.takeException(), isNull);
+    });
+  });
 
   testWidgets('RecipeCard badges visibility when asked', (tester) async {
     const recipe = Recipe(id: '1', ownerId: 'u1', title: 'Secret Sauce');
@@ -147,7 +257,10 @@ void main() {
         theme: AppTheme.light(),
         home: const Scaffold(
           body: Center(
-            child: SizedBox(width: 276, child: RecipeCard(recipe: recipe)),
+            child: SizedBox(
+              width: kRecipeCardMinWidth,
+              child: RecipeCard(recipe: recipe),
+            ),
           ),
         ),
       ),

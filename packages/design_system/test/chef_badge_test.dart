@@ -198,7 +198,7 @@ void main() {
       await tester.pumpWidget(
         _wrap(
           const RecipeCard(recipe: worstCase, showVisibility: true),
-          width: 276,
+          width: kRecipeCardMinWidth,
           scale: 2.0,
         ),
       );
@@ -212,7 +212,7 @@ void main() {
     // is the contract the design pins down.
     testWidgets('overlay sits bottom-right of the cover', (tester) async {
       await tester.pumpWidget(
-        _wrap(const RecipeCard(recipe: worstCase), width: 276),
+        _wrap(const RecipeCard(recipe: worstCase), width: kRecipeCardMinWidth),
       );
 
       final card = tester.getRect(find.byType(RecipeCard));

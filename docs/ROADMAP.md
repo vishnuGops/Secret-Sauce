@@ -488,7 +488,8 @@ three cards across 1400px".
 - [x] `FlowGridMetrics.fit` in [adaptive.dart](packages/design_system/lib/src/layout/adaptive.dart):
       pure function of the available width → column count, tile width, and the gutter that keeps a
       capped row centred. No breakpoint involved, so a drag-resize reflows continuously
-- [x] `kRecipeCardMinWidth` (264) / `kRecipeCardMaxWidth` (340) alongside `kRecipeCardHeight`
+- [x] `kRecipeCardMinWidth` (264 at the time; **288** since B048) / `kRecipeCardMaxWidth` (340)
+      alongside `kRecipeCardHeight`
 - [x] `RecipeGrid` wraps its `GridView` in a `LayoutBuilder` and feeds the metrics in as
       `crossAxisCount` + extra horizontal padding — the delegate always divides the full extent
       between its columns, so **less width to divide** is the only way to cap a tile
@@ -502,10 +503,36 @@ three cards across 1400px".
 - [x] Card envelope suites re-pinned from 276/320 to **264/340** — the grid's real extremes
 - [x] `melos run analyze` clean, 82 tests pass
 
+### Card revision (2026-08-20 — the design fixed two things the port inherited)
+
+`Design System.dc.html` was updated after the port: the banner is now a fixed `65px` band with the
+title centred in it, and the fluid range starts at **288px**, not 264. Both are ported.
+
+- [x] Banner is a fixed band — `kRecipeCardBannerHeight` (65) × `context.textScale`, applied as a
+      minimum with the title vertically centred, so one-line and two-line names give the same card
+      and neighbouring covers start at the same y (B047). Scaled rather than pinned: two lines of
+      2.0× type do not fit in 65 raw pixels
+- [x] Band capped at `kRecipeCardBannerMaxScale` (2.0) — the card's height is fixed, so an
+      unbounded band starves the cover: at 3.0× it took the card from a 17px overflow (the
+      pre-existing B049 budget failure) to 48px. Clamped it is 13px, better than the baseline
+- [x] `kRecipeCardMinWidth` 264 → **288**, the floor at which the whole time / rating / difficulty
+      row fits *uncut*; at 264 the grid was buying an extra column out of the footer (B048)
+- [x] Tests: new `title banner` group (same centre for one and two lines at 1.0× and 2.0×, clamp at
+      two lines); envelope suites re-pinned to 264 (below the floor — must degrade) / 288 / 340;
+      `flow_grid_test` and `recipe_grid_test` re-pinned to the new column counts (1408px is four
+      capped cards, not five squeezed ones)
+- [x] `melos run analyze` SUCCESS, `melos run test --no-select` SUCCESS — 203 tests
+      (core 42, design_system 91, app 70)
+
 ### Deferred
 
 - [ ] Typography upgrade (Newsreader + Manrope via `google_fonts`) — app-wide, needs a yes/no
 - [ ] Cover photography is still placeholder in the design; real shots may change the 352 px height
+- [ ] Screenshot pass on the revised card — "the metadata row fits uncut at 288" is exactly the
+      claim a widget test cannot make (fixed-width test font), so it needs eyes on a real grid
+- [ ] **B049** — the card overflows at 3.0× text scale and always has. The fix is the spotlight
+      card's shape (tile height computed from text scale, `mainAxisExtent` with it), which is a
+      grid change; deliberately out of scope for the design port
 - [ ] Nothing caps the grid's overall width, so a 4K window gets ~13 columns. If that reads as too
       many, the fix is a max content width on the screens, not on the card
 

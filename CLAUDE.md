@@ -425,14 +425,19 @@ reset`, hosted paste). Every statement must be guarded: `if not exists`,
     `(value as num).toDouble()`, never a bare `as double`.
 13. **Fixed-size cards cannot grow, so their rows must degrade.** Three logged `RenderFlex`
     overflows (B001, B002, B016) came from adding an intrinsically-sized child to a
-    `RecipeCard`/grid row. Test the real envelope: **264px** wide (`kRecipeCardMinWidth`, the
+    `RecipeCard`/grid row. Test the real envelope: **288px** wide (`kRecipeCardMinWidth`, the
     narrowest column the grid packs to), longest labels, **2.0× text scale**. `RecipeCard` is a
     **fixed-height** tile — `kRecipeCardHeight` (352), passed by `recipe_grid.dart` as
-    `mainAxisExtent` — with exactly one flexible band, the cover. The title banner and the footer
-    are intrinsic: whatever you add there comes out of a fixed budget, and a longer title eats
-    cover height rather than growing the card.
+    `mainAxisExtent` — with exactly one flexible band, the cover. The title banner is a **fixed**
+    band (`kRecipeCardBannerHeight` 65 × `context.textScale`, capped at
+    `kRecipeCardBannerMaxScale` 2.0 so it cannot starve the cover, title vertically centred,
+    clamped to two lines) so one-line and two-line names give the same card (B047); the footer is
+    intrinsic. The card still overflows at **3.0×** and always has (B049) — its contract is 2.0×.
+    Whatever you add to either comes out of a fixed budget, and a longer title eats cover height
+    rather than growing the card.
     **The card grid flows; it does not switch at breakpoints.** `FlowGridMetrics.fit`
-    (`adaptive.dart`) fits as many columns as can each hold `kRecipeCardMinWidth` (264), caps every
+    (`adaptive.dart`) fits as many columns as can each hold `kRecipeCardMinWidth` (288 — the floor
+    at which the metadata row fits *uncut*; it was 264 until B048), caps every
     tile at `kRecipeCardMaxWidth` (340), and returns the gutter that centres a capped row;
     `RecipeGrid` feeds that into a `LayoutBuilder` + `SliverGridDelegateWithFixedCrossAxisCount`.
     The delegate always divides the **whole** cross-axis extent between its columns, so a tile can

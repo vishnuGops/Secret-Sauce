@@ -283,7 +283,8 @@ round-trips. The leaderboard is an RPC over the denormalized columns. Recipe→c
    B001/B002/B016 all came from intrinsic children. Widget tests at the card envelope / 2.0×.
    _(The card was later redrawn — ROADMAP Phase 20: the overlay moved bottom-left → bottom-right,
    the tile became fixed-**height** rather than fixed-aspect, and the envelope is now
-   `kRecipeCardMinWidth` 264 to `kRecipeCardMaxWidth` 340, not 276/320.)_
+   `kRecipeCardMinWidth` 288 to `kRecipeCardMaxWidth` 340, not 276/320 — the floor was 264 until
+   B048 raised it.)_
 5. **app**: `/chefs` in the `ShellRoute` (signed-out safe ⇒ `redirect` untouched), `AppShell`
    destination, leaderboard screen + providers, detail-screen badge.
 6. **Docs fold-in**: SDS §3.2/§6/§7/§8 updated to describe reality, §10 trimmed to a pointer;
@@ -300,8 +301,8 @@ round-trips. The leaderboard is an RPC over the denormalized columns. Recipe→c
   Kitchen ≈ 10.2k ⇒ `head_chef`.
 - App: every recipe card and the detail screen show the owner's badge with the tier under the
   name; `/chefs` renders signed-out; `melos run analyze` and `melos run test --no-select`
-  clean; card envelope tests pass at the card's min and max width / 2.0× (264 and 340 today —
-  they were 276/320 when this phase shipped; see Phase 20).
+  clean; card envelope tests pass at the card's min and max width / 2.0× (288 and 340 today —
+  they were 276/320 when this phase shipped, then 264/340; see Phase 20).
 - Hosted rollout is one idempotent re-apply of `0001_init.sql` + `seed.sql` (both already safe
   by rule).
 

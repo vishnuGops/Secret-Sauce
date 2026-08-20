@@ -1,7 +1,7 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// The recipe grid's real parameters — card 264–340 wide, 16px gaps.
+/// The recipe grid's real parameters — card 288–340 wide, 16px gaps.
 FlowGridMetrics fit(double available) => FlowGridMetrics.fit(
       available: available,
       minTileWidth: kRecipeCardMinWidth,
@@ -27,12 +27,13 @@ void main() {
       expect(two.tileWidth, kRecipeCardMaxWidth);
       expect(two.gutter, 2);
 
-      // 1400 fits five minimum-width cards, so it gets five — not three
-      // stretched ones.
-      final five = fit(1400);
-      expect(five.columns, 5);
-      expect(five.tileWidth, closeTo(267.2, 0.001));
-      expect(five.gutter, 0);
+      // 1400 fits four minimum-width cards (five would need 1504), so it gets
+      // four — not three stretched ones. 338 each: just under the 340 cap, so
+      // there is nothing left over and no gutter.
+      final four = fit(1400);
+      expect(four.columns, 4);
+      expect(four.tileWidth, closeTo(338, 0.001));
+      expect(four.gutter, 0);
     });
 
     test('a container narrower than one card gets one shrinking card', () {
@@ -56,7 +57,7 @@ void main() {
     // breakpoints is what makes a drag-resize jump.
     test('holds its invariants across a continuous resize', () {
       var previousColumns = 0;
-      for (var width = 264.0; width <= 2400; width += 1) {
+      for (var width = kRecipeCardMinWidth; width <= 2400; width += 1) {
         final m = fit(width);
         final rowWidth =
             m.tileWidth * m.columns + AppSpacing.md * (m.columns - 1);
@@ -86,7 +87,7 @@ void main() {
     });
 
     test('packs the most columns the width can actually hold', () {
-      for (var width = 264.0; width <= 2400; width += 7) {
+      for (var width = kRecipeCardMinWidth; width <= 2400; width += 7) {
         final m = fit(width);
         final oneMore = m.columns + 1;
         final needed =

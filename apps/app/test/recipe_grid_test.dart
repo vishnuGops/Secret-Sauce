@@ -42,13 +42,13 @@ List<Rect> _firstRow(WidgetTester tester) {
 void main() {
   // The grid derives its columns from the width it is handed, so these are
   // widths a window is actually dragged through, not breakpoint samples.
-  // 16px padding each side, 16px gaps, cards 264–340 wide.
+  // 16px padding each side, 16px gaps, cards 288–340 wide.
   for (final (width, expectedColumns) in <(double, int)>[
     (390, 1), // phone
     (700, 2), // split-screen web
     (1000, 3),
-    (1440, 5), // five real cards, not three stretched ones
-    (2000, 7), // ultrawide
+    (1440, 4), // four real cards, not three stretched ones
+    (2000, 6), // ultrawide
   ]) {
     testWidgets('$width px lays out $expectedColumns columns', (tester) async {
       tester.view.physicalSize = Size(width, 900);

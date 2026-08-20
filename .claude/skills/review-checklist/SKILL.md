@@ -157,7 +157,12 @@ adds a `Text` inside a `Row`/grid cell with no `maxLines` + `overflow`; adds a c
 slack but cannot shrink anything, so the row has no capacity to degrade (B016); or changes
 `kRecipeCardHeight` / `kRecipeCardMinWidth` / `kRecipeCardMaxWidth` / the grid delegate in
 `recipe_grid.dart` without checking the narrow end. `RecipeCard` has exactly one flexible band
-(the cover); anything added to the banner or the footer comes out of a fixed budget.
+(the cover); anything added to the banner or the footer comes out of a fixed budget. The banner is
+a **fixed** band (`kRecipeCardBannerHeight` × `context.textScale`, capped at
+`kRecipeCardBannerMaxScale`) so one- and two-line titles match (B047) — flag a diff that makes it
+intrinsic again, that pins it to a raw pixel height with no text-scale factor (two lines of 2.0×
+type do not fit in 65px), or that removes the cap: an unbounded band starves the cover in a
+fixed-height tile and turns a 17px overflow at 3.0× into a 48px one (B049).
 
 **Card grid sizing.** The recipe grid flows from the available width (`FlowGridMetrics.fit`), not
 from a breakpoint. Flag a diff that: reintroduces `responsiveColumns` or `childAspectRatio` into
@@ -170,7 +175,7 @@ The three axes that actually break it:
 
 | Axis | Worst realistic value | Why |
 | --- | --- | --- |
-| Card width | **264px** | `kRecipeCardMinWidth` — the narrowest column `FlowGridMetrics.fit` packs to before wrapping (`adaptive.dart`); narrower than the 1-column compact case, which is capped at `kRecipeCardMaxWidth` 340 |
+| Card width | **288px** | `kRecipeCardMinWidth` — the narrowest column `FlowGridMetrics.fit` packs to before wrapping (`adaptive.dart`); narrower than the 1-column compact case, which is capped at `kRecipeCardMaxWidth` 340. Raised from 264 by B048: it is the floor at which the metadata row fits *uncut*, so a diff that lowers it is buying a column out of the footer |
 | Content | longest label per field | `_timeLabel` reaches `"12h 45m"`; `ratingCount` reaches 4 digits |
 | Text scale | **2.0×** | accessibility scaling; the default-scale margin is thin but positive |
 
