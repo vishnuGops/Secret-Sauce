@@ -103,7 +103,7 @@ class _CompactBoard extends ConsumerWidget {
       body: async.when(
         loading: () => const LoadingView(),
         error: (e, _) => ErrorView(
-          message: e.toString(),
+          message: friendlyError(e),
           onRetry: () => ref.invalidate(chefsLeaderboardProvider),
         ),
         data: (chefs) => chefs.isEmpty
@@ -155,7 +155,7 @@ class _BoardPanel extends ConsumerWidget {
       error: (e, _) => Padding(
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
         child: ErrorView(
-          message: e.toString(),
+          message: friendlyError(e),
           onRetry: () => ref.invalidate(chefsLeaderboardProvider),
         ),
       ),
@@ -381,7 +381,7 @@ class _Rails extends ConsumerWidget {
       children: [
         if (async.hasError)
           ErrorView(
-            message: async.error.toString(),
+            message: friendlyError(async.error),
             onRetry: () => ref.invalidate(chefsLeaderboardProvider),
           )
         else if (popular.isNotEmpty || loading)

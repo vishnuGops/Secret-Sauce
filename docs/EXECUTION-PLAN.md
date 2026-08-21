@@ -1122,9 +1122,19 @@ below are targeted, not structural.
   (`share`, `setLiked`, `setRating`) is already a direct repository read from the widget.
   `AuthController.signOut()` was deleted with its last caller; the controller keeps exactly the
   two submissions whose `AsyncValue` the auth form renders.
-- **A4 — error surfaces**: screens render raw `e.toString()` (PostgREST codes, `AuthException`
-  dumps) in `ErrorView`/snackbars across discover/my/auth. One `friendlyError(Object)` in core,
-  used everywhere; keep the raw error in `debugPrint`.
+- **A4 — error surfaces — DONE.** `friendlyError(Object?)` in `core/src/friendly_error.dart`,
+  used at all 14 surfaces that had an `e.toString()` in them. Mapped: `PostgrestException` by
+  code (42501 → "You do not have permission to do that", 23505/23503/23514, PGRST116 → not found,
+  PGRST301 → session expired, PGRST202 → "not available on the server yet" — the RPC-missing case
+  `chefDetailProvider` already handles by hand), `WriteDeniedException` (which gained a `message`
+  getter so the sentence exists without the class name), `StorageException`, the signed-out
+  `StateError`, timeouts and socket failures, everything else to one generic line. `AuthException`
+  is deliberately **passed through**: GoTrue's messages ("Invalid login credentials") are already
+  written for end users, and a switch over them would go stale silently the next time one is
+  reworded. Network detection matches the runtime type **name** rather than importing
+  `dart:io`/`http` — `SocketException` does not exist on web, and this package declares neither
+  dependency. The mapper logs the raw error, so no call site does; 8 tests assert the property
+  that matters, that no exception dump reaches the string.
 - **A5 — share lookup correctness**: `findByEmailOrName` (`profile_repository.dart:25-34`) is an
   exact `ilike` (no wildcards) with `limit(1)` on a non-unique display name — "share with Dara"
   can pick the wrong Dara silently. Return a ranked list, `%query%` match, ShareDialog

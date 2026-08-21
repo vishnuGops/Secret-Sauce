@@ -18,7 +18,7 @@ class ProfileScreen extends ConsumerWidget {
       appBar: AppBar(title: const Text('Profile')),
       body: async.when(
         loading: () => const LoadingView(),
-        error: (e, _) => ErrorView(message: e.toString()),
+        error: (e, _) => ErrorView(message: friendlyError(e)),
         data: (profile) {
           if (profile == null) {
             return EmptyView(

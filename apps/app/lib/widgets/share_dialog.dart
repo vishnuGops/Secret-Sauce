@@ -65,7 +65,7 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
         );
       }
     } catch (e) {
-      setState(() => _error = e.toString());
+      setState(() => _error = friendlyError(e));
     } finally {
       if (mounted) setState(() => _busy = false);
     }

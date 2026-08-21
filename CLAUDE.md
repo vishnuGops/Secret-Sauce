@@ -402,6 +402,11 @@ point it at `/`.
 - **Layout**: use `AppSpacing` / `AppRadii` tokens and `responsiveColumns` / `AdaptiveLayout` /
   `context.isCompact` from `design_system`; breakpoints are 600 (compact) and 1000 (medium) —
   don't hard-code widths.
+- **Every error a user sees goes through `friendlyError()`** (core, OPT-A4). Screens rendered
+  `e.toString()`, so a denied save read as a `PostgrestException(...)` dump with the table name in
+  it. The mapper is the one place that translates and therefore the one place that logs the raw
+  error — never `debugPrint` it again at the call site, and never put a raw exception in an
+  `ErrorView` or a snackbar.
 - **No secrets in the repo.** Credentials come from `env.local.json` via `--dart-define-from-file`.
 - **Security**: never trust the client for authorization — enforce via Supabase **RLS**.
 

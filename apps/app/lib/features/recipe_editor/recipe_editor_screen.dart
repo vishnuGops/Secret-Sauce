@@ -123,7 +123,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       // pressing Save then wiped its content (B052). `getById` is awaited before
       // any field is touched, so a failure leaves the draft untouched, not half
       // filled.
-      _loadError = e.toString();
+      _loadError = friendlyError(e);
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -225,7 +225,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Save failed: $e')));
+            .showSnackBar(SnackBar(content: Text('Save failed — ${friendlyError(e)}')));
       }
     } finally {
       if (mounted) setState(() => _saving = false);

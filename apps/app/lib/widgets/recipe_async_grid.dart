@@ -43,7 +43,7 @@ class RecipeAsyncGrid<N extends PagedRecipesNotifier> extends ConsumerWidget {
       // keystroke's worth of results.
       skipLoadingOnReload: true,
       loading: () => const LoadingView(),
-      error: (e, _) => ErrorView(message: e.toString()),
+      error: (e, _) => ErrorView(message: friendlyError(e)),
       data: (page) => page.recipes.isEmpty
           ? empty
           : RecipeGrid(
@@ -88,7 +88,7 @@ class _LoadMoreButton extends StatelessWidget {
                     // `PagedRecipesNotifier.loadMore`), so this is a snackbar
                     // rather than an error screen.
                     messenger.showSnackBar(
-                      SnackBar(content: Text('Could not load more: $e')),
+                      SnackBar(content: Text(friendlyError(e))),
                     );
                   }
                 },

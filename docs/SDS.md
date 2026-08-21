@@ -500,6 +500,11 @@ ran past the portrait edge at 3.0× (B039).
 - No secrets in source; Supabase keys via `--dart-define` / env.
 - All authorization via RLS; never rely on client filtering for privacy.
 - Storage buckets scoped; signed/public URLs per bucket policy.
+- **Error text is mapped, never dumped** (OPT-A4). Every user-facing failure goes through
+  `friendlyError()` in `core`, which turns a `PostgrestException` into one actionable sentence and
+  keeps the raw object in `debugPrint`. Screens used to render `e.toString()`, which put table
+  names, SQLSTATE codes, and query fragments on screen — free schema disclosure to anyone who can
+  make a request fail.
 
 ## 10. Chefs, tiers & leaderboard
 

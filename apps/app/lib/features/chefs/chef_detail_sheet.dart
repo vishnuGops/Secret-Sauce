@@ -369,7 +369,7 @@ class _RecipesPanel extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: AppSpacing.lg),
             child: Center(child: CircularProgressIndicator()),
           ),
-          error: (e, _) => _Note(text: 'Could not load this chef: $e'),
+          error: (e, _) => _Note(text: friendlyError(e)),
           data: (data) {
             if (data.topRecipesFailed) {
               return const _Note(

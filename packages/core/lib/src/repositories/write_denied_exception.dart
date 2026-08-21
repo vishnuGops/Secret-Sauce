@@ -19,10 +19,13 @@ class WriteDeniedException implements Exception {
   /// Optional extra context for logs (an id, a table).
   final String? detail;
 
+  /// The sentence a screen shows. Separate from [toString] so `friendlyError`
+  /// can surface it without the class name in front of it.
+  String get message => 'Could not $action — it may have been deleted, or you '
+      'may no longer have permission to change it.';
+
   @override
   String toString() => detail == null
-      ? 'WriteDeniedException: could not $action — it may have been deleted, '
-          'or you may no longer have permission to change it.'
-      : 'WriteDeniedException: could not $action — it may have been deleted, '
-          'or you may no longer have permission to change it. ($detail)';
+      ? 'WriteDeniedException: $message'
+      : 'WriteDeniedException: $message ($detail)';
 }

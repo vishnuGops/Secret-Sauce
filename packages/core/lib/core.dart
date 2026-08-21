@@ -15,6 +15,7 @@ export 'src/models/chef_standing.dart';
 // Domain helpers
 export 'src/chef_scoring.dart';
 export 'src/formatting.dart';
+export 'src/friendly_error.dart';
 export 'src/paging.dart';
 
 // Services

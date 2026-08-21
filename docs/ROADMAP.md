@@ -1193,8 +1193,12 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       never opened it — `recipe_detail` did); sign-out is a direct
       `authRepositoryProvider.signOut()` at both call sites instead of a cross-feature import of
       `AuthController`, whose now-unused `signOut()` went with it
-- [ ] **OPT-A4:** central `friendlyError()` mapper — screens currently surface raw
-      PostgREST/auth `e.toString()`
+- [x] **OPT-A4:** `friendlyError()` in core maps `PostgrestException` codes (42501, 23505, 23503,
+      23514, PGRST116/301/202), `AuthException` (passed through — GoTrue writes those for users),
+      `StorageException`, `WriteDeniedException`, the signed-out `StateError`, and network faults
+      to one actionable sentence; it logs the raw error itself, so no call site does. All 14
+      surfaces converted (Discover/My grid, chefs board + sheet, recipe detail incl. fork/rate,
+      editor load + save, profile, auth, share dialog). 8 tests
 - [ ] **OPT-A5:** `findByEmailOrName` is exact-`ilike` + `limit(1)` on a non-unique name —
       sharing can silently pick the wrong user; return a list and disambiguate in the dialog
 - [ ] **OPT-A6:** schema nits: avatars bucket has no delete policy; `chefs_leaderboard` lacks

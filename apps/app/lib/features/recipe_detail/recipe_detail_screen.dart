@@ -27,7 +27,7 @@ class RecipeDetailScreen extends ConsumerWidget {
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Fork failed: $e')));
+            .showSnackBar(SnackBar(content: Text(friendlyError(e))));
       }
     }
   }
@@ -47,7 +47,7 @@ class RecipeDetailScreen extends ConsumerWidget {
         error: (e, _) => Scaffold(
           appBar: AppBar(),
           body: ErrorView(
-            message: e.toString(),
+            message: friendlyError(e),
             onRetry: () => ref.invalidate(recipeProvider(recipeId)),
           ),
         ),
@@ -132,7 +132,7 @@ Future<void> _toggleEngagement(
   } catch (e) {
     if (context.mounted) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('$failure: $e')));
+          .showSnackBar(SnackBar(content: Text('$failure — ${friendlyError(e)}')));
     }
   }
 }
@@ -328,7 +328,7 @@ class _RatingSection extends ConsumerWidget {
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Could not save rating: $e')));
+            .showSnackBar(SnackBar(content: Text('Could not save rating — ${friendlyError(e)}')));
       }
     }
   }
@@ -341,7 +341,7 @@ class _RatingSection extends ConsumerWidget {
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not remove rating: $e')),
+          SnackBar(content: Text('Could not remove rating — ${friendlyError(e)}')),
         );
       }
     }
