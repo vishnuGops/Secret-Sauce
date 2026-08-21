@@ -59,14 +59,6 @@ class ChefDetailView extends ConsumerWidget {
 
   final ChefStanding standing;
 
-  static const _months = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', //
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-  ];
-
-  static String monthYear(DateTime date) =>
-      '${_months[date.month - 1]} ${date.year}';
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
@@ -160,7 +152,7 @@ class _Header extends StatelessWidget {
           : 'Rank ${standing.chefRank} of ${groupedCount(totalChefs!)}',
       '${groupedCount(standing.publicRecipeCount)} public '
           '${standing.publicRecipeCount == 1 ? 'recipe' : 'recipes'}',
-      if (joined != null) 'joined ${ChefDetailView.monthYear(joined!)}',
+      if (joined != null) 'joined ${monthYear(joined!)}',
     ];
 
     return Container(

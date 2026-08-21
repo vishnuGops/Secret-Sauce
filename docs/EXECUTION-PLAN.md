@@ -1165,11 +1165,14 @@ below are targeted, not structural.
     people's recipes and rewrite their search documents. UPDATE stays closed for the same reason
     (a rename rewrites every carrier's document). Verified under `set local role authenticated`:
     an orphan tag deletes, an in-use tag survives the identical statement.
-- **A7 — dedupe**: `StorageService`'s two identical upload bodies → `_upload(bucket, …)`; the
-  AsyncValue→Loading/Error/Empty/`RecipeGrid` scaffold duplicated between Discover and My
-  Recipes → one `RecipeAsyncGrid` in `apps/app/lib/widgets/`; the two hand-rolled date
-  formatters (`chef_detail_sheet.dart:62-68`, `version_history_sheet.dart:54-55`) →
-  `core/src/formatting.dart`, which already declares itself the home for this.
+- **A7 — dedupe — DONE.** `StorageService._upload(bucket, …)` replaces two bodies that differed
+  by a bucket name; the `<uid>/` prefix now has one definition, which matters because every
+  storage policy on both buckets keys on it. The AsyncValue→Loading/Error/Empty/`RecipeGrid`
+  scaffold became `RecipeAsyncGrid` under OPT-P9 rather than being copied a third time around the
+  Load-more footer. The two hand-rolled date formatters moved to `core/src/formatting.dart` as
+  `monthYear` and `isoDate` — kept as **two** functions, not merged: a "joined" line wants a
+  readable month and a version history wants a sortable ISO column, and that difference is the
+  reason each widget rolled its own in the first place. 2 tests.
 - **A8 — file size + literals**: split `recipe_editor_screen.dart` (826 lines — the two
   sub-editors are natural seams), `chef_detail_sheet.dart` (606), `recipe_detail_screen.dart`
   (561); replace the literal `'/recipe/new'` / `'/recipe/:id/edit'` in `app_router.dart:83-97`

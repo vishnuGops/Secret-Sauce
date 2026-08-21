@@ -42,7 +42,7 @@ class VersionHistorySheet extends StatelessWidget {
           ),
           subtitle: v.createdAt == null
               ? null
-              : Text(_formatDate(v.createdAt!)),
+              : Text(isoDate(v.createdAt!)),
           trailing: isLatest
               ? const Chip(label: Text('Current'))
               : null,
@@ -50,7 +50,4 @@ class VersionHistorySheet extends StatelessWidget {
       },
     );
   }
-
-  String _formatDate(DateTime d) =>
-      '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
 }

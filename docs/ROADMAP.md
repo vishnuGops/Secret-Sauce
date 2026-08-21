@@ -1212,9 +1212,10 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       `versions()` still index-scans); the two deferred FKs are added only when absent, so a
       re-apply no longer revalidates every `recipes` row; `tags` keeps free creation but gained
       **delete-when-orphaned** and stays un-updatable — proven both ways on the local stack
-- [ ] **OPT-A7:** dedupe: `StorageService` upload methods; ~~the AsyncValue→Loading/Error/Empty
-      grid scaffold (Discover vs My Recipes)~~ — done with OPT-P9 (`RecipeAsyncGrid`); two
-      hand-rolled date formatters → `formatting.dart`
+- [x] **OPT-A7:** three dedupes. `StorageService`'s two upload bodies differed by bucket name
+      alone → one `_upload(bucket, …)`; the grid scaffold landed with OPT-P9 (`RecipeAsyncGrid`);
+      the two hand-rolled date formatters became `monthYear` / `isoDate` in `formatting.dart`
+      (2 tests — the month table is 0-indexed and the ISO one pads two fields)
 - [ ] **OPT-A8:** split the oversized screens (editor 826 lines, chef sheet 606, detail 561);
       replace the two literal route strings in `app_router.dart` with `Routes` constants
 - [ ] **OPT-A9:** squash `0001_init.sql` into versioned migrations once there is real data —

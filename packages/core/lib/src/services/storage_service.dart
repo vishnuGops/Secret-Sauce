@@ -18,30 +18,48 @@ class StorageService {
     required String fileName,
     required List<int> bytes,
     String contentType = 'image/jpeg',
-  }) async {
-    final uid = _requireUid();
-    final path = '$uid/$fileName';
-    await _client.storage.from(recipeImagesBucket).uploadBinary(
-          path,
-          _toUint8(bytes),
-          fileOptions: FileOptions(contentType: contentType, upsert: true),
-        );
-    return _client.storage.from(recipeImagesBucket).getPublicUrl(path);
+  }) {
+    return _upload(
+      bucket: recipeImagesBucket,
+      fileName: fileName,
+      bytes: bytes,
+      contentType: contentType,
+    );
   }
 
   Future<String> uploadAvatar({
     required String fileName,
     required List<int> bytes,
     String contentType = 'image/jpeg',
+  }) {
+    return _upload(
+      bucket: avatarsBucket,
+      fileName: fileName,
+      bytes: bytes,
+      contentType: contentType,
+    );
+  }
+
+  /// The upload both public methods do (OPT-A7): they differed by bucket name
+  /// and nothing else, twice over.
+  ///
+  /// The `<uid>/` prefix is not cosmetic — every storage policy on both buckets
+  /// is `auth.uid()::text = (storage.foldername(name))[1]`, so a path built any
+  /// other way is refused by the server rather than misfiled.
+  Future<String> _upload({
+    required String bucket,
+    required String fileName,
+    required List<int> bytes,
+    required String contentType,
   }) async {
-    final uid = _requireUid();
-    final path = '$uid/$fileName';
-    await _client.storage.from(avatarsBucket).uploadBinary(
-          path,
-          _toUint8(bytes),
-          fileOptions: FileOptions(contentType: contentType, upsert: true),
-        );
-    return _client.storage.from(avatarsBucket).getPublicUrl(path);
+    final path = '${_requireUid()}/$fileName';
+    final storage = _client.storage.from(bucket);
+    await storage.uploadBinary(
+      path,
+      _toUint8(bytes),
+      fileOptions: FileOptions(contentType: contentType, upsert: true),
+    );
+    return storage.getPublicUrl(path);
   }
 
   String _requireUid() {

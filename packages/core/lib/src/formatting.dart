@@ -40,6 +40,28 @@ String pluralNoun(int count, String plural) =>
 String countOf(int count, String plural) =>
     '${groupedCount(count)} ${pluralNoun(count, plural)}';
 
+const _kMonths = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', //
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+];
+
+/// `Mar 2025` — the resolution a "joined" or "member since" line wants.
+///
+/// English month abbreviations, like every other label in the product (see the
+/// library note above): `intl` would buy locale-aware month names for an app
+/// that has no other localized string in it.
+String monthYear(DateTime date) => '${_kMonths[date.month - 1]} ${date.year}';
+
+/// `2026-08-21` — ISO order, zero-padded.
+///
+/// Deliberately not `Mar 2025`'s cousin: a version history is a list of
+/// **timestamps to compare**, and an ISO date sorts and scans by column. The two
+/// formatters live together (OPT-A7) because they were hand-rolled one screen
+/// apart, each private to its own widget.
+String isoDate(DateTime date) => '${date.year}-'
+    '${date.month.toString().padLeft(2, '0')}-'
+    '${date.day.toString().padLeft(2, '0')}';
+
 /// Groups a score, keeping the single decimal place a `numeric` score can carry
 /// (views contribute 0.2 each) and dropping it when the value is whole.
 String groupedScore(double value) {
