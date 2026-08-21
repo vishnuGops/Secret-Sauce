@@ -3,6 +3,8 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:app/widgets/not_yet_tooltip.dart';
+
 /// Dialog to share a recipe with another user (by display name) and set
 /// their permission. Writes to `recipe_shares` via the repository.
 class ShareDialog extends ConsumerStatefulWidget {
@@ -80,17 +82,28 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
             ),
           ),
           const SizedBox(height: AppSpacing.md),
+          // `share_permission.edit` exists in the enum and the column, but
+          // nothing reads it: `recipes_update` is `owner_id = auth.uid()`, so a
+          // recipe shared "Can edit" is still read-only to the recipient.
+          // Offering it promised an access level the database does not grant, so
+          // the segment is disabled until the policy catches up (OPT-S5).
           SegmentedButton<SharePermission>(
-            segments: const [
-              ButtonSegment(
+            segments: [
+              const ButtonSegment(
                 value: SharePermission.view,
                 label: Text('Can view'),
                 icon: Icon(Icons.visibility),
               ),
               ButtonSegment(
                 value: SharePermission.edit,
-                label: Text('Can edit'),
-                icon: Icon(Icons.edit),
+                enabled: false,
+                label: notYetTooltip(
+                  enabled: false,
+                  message: 'Shared editing is not built yet — '
+                      'recipes stay read-only for the people you share them with',
+                  child: const Text('Can edit'),
+                ),
+                icon: const Icon(Icons.edit),
               ),
             ],
             selected: {_permission},

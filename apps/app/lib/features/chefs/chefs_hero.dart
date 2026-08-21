@@ -4,19 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:app/features/chefs/chefs_providers.dart';
-
-/// Explains a control that is deliberately inert, and gets out of the way of
-/// one that is not.
-///
-/// The conditional matters: `Tooltip` with an empty message still opens an
-/// empty box on hover, so wrapping every segment unconditionally would put a
-/// blank tooltip under the two thirds of these controls that work.
-Widget notYetTooltip({
-  required bool enabled,
-  required String message,
-  required Widget child,
-}) =>
-    enabled ? child : Tooltip(message: message, child: child);
+import 'package:app/widgets/not_yet_tooltip.dart';
+// `notYetTooltip` moved to apps/app/lib/widgets/ when the share dialog became
+// its second caller (OPT-S5); re-exported so existing importers of this file
+// keep working.
+export 'package:app/widgets/not_yet_tooltip.dart' show notYetTooltip;
 
 /// The banner across the top of `/chefs`: how many chefs there are, how they
 /// are ranked, and how they are spread across the five tiers.
