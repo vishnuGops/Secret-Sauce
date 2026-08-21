@@ -1146,13 +1146,25 @@ below are targeted, not structural.
   disabled until someone is chosen — there is no defensible "just share with whichever". The name
   also changed because it was a lie: `profiles` has no email column, and nothing ever matched one.
   6 tests, which also close OPT-T3's share-dialog item.
-- **A6 — schema nits** (one local-stack pass together): avatars bucket delete policy (parity
-  with recipe-images :836); `drop function if exists chefs_leaderboard(int, int)` before its
-  `create or replace` (:939 — latent B024); drop redundant `recipe_versions_recipe_idx` (:106 —
-  the unique at :104 covers it, the `recipe_views_recipe_idx` precedent); guard the FK
-  drop/re-add (:109-117) behind a `pg_constraint` existence check (today every apply rescans
-  `recipes`); `tags` write policy (insert-only by any authenticated user, no update/delete —
-  decide owner-curated vs. free tags before Phase 25 makes tags discovery-relevant).
+- **A6 — schema nits — DONE**, one local-stack pass, applied twice for idempotency:
+  - **avatars delete policy**, same folder rule as the other three. Without it a replaced avatar
+    stayed in a *public* bucket at a guessable path for the life of the project.
+  - **`drop function if exists chefs_leaderboard(int, int)`** before its `create or replace`. Not
+    load-bearing yet — the signature has never changed — but adding it *after* the ambiguous-
+    overload failure means editing a database that already has two (B024).
+  - **`recipe_versions_recipe_idx` dropped**: `unique (recipe_id, version_number)` already leads
+    with `recipe_id`. Confirmed rather than assumed — `versions()`'s query plans as an *Index Scan
+    Backward* on the unique index.
+  - **The two deferred FKs are now added only when missing.** The old unconditional drop-and-re-add
+    revalidated every row in `recipes` on every apply — work that grows with the table for a
+    constraint that never changes.
+  - **`tags` decision: free tags stay.** They are unowned by design; owner-curated tags would mean
+    a tag row per owner and a discovery surface that cannot join them. What was missing is a way
+    back out, so DELETE is now allowed **only for a tag nothing references** — that `not exists` is
+    the safety property, since deleting a tag in use would cascade `recipe_tags` rows out of other
+    people's recipes and rewrite their search documents. UPDATE stays closed for the same reason
+    (a rename rewrites every carrier's document). Verified under `set local role authenticated`:
+    an orphan tag deletes, an in-use tag survives the identical statement.
 - **A7 — dedupe**: `StorageService`'s two identical upload bodies → `_upload(bucket, …)`; the
   AsyncValue→Loading/Error/Empty/`RecipeGrid` scaffold duplicated between Discover and My
   Recipes → one `RecipeAsyncGrid` in `apps/app/lib/widgets/`; the two hand-rolled date

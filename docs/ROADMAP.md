@@ -1205,10 +1205,13 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       lone match, and keeps **Share disabled until one is chosen** — with three "Amara Baptiste"s
       in the sim data, "share with Amara" was picking one at random and reporting success.
       6 tests (also closes OPT-T3's share-dialog item)
-- [ ] **OPT-A6:** schema nits: avatars bucket has no delete policy; `chefs_leaderboard` lacks
-      its B024 drop-guard (latent `42725` on first signature change); redundant
-      `recipe_versions_recipe_idx`; unconditional FK drop/re-add on every apply; `tags` is
-      insert-only for any authenticated user (permanent namespace pollution)
+- [x] **OPT-A6:** five schema nits, one local-stack pass. Avatars bucket gained its delete policy
+      (parity with recipe-images — a replaced avatar was unreachable-but-public forever);
+      `chefs_leaderboard` gained its B024 drop-guard; redundant `recipe_versions_recipe_idx`
+      dropped (the `(recipe_id, version_number)` unique already leads with `recipe_id` — verified
+      `versions()` still index-scans); the two deferred FKs are added only when absent, so a
+      re-apply no longer revalidates every `recipes` row; `tags` keeps free creation but gained
+      **delete-when-orphaned** and stays un-updatable — proven both ways on the local stack
 - [ ] **OPT-A7:** dedupe: `StorageService` upload methods; ~~the AsyncValue→Loading/Error/Empty
       grid scaffold (Discover vs My Recipes)~~ — done with OPT-P9 (`RecipeAsyncGrid`); two
       hand-rolled date formatters → `formatting.dart`

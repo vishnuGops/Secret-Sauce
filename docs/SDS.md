@@ -121,6 +121,11 @@ model means adding it to the draft in the same change; `recipe_editor_test.dart`
 is what fails if it is not.
 
 **tags**: `id`, `name (unique)`. **recipe_tags**: `recipe_id`, `tag_id` (PK pair).
+Tags are a **shared, unowned namespace**: readable by all, creatable by any signed-in user (a tag
+must exist before a recipe can reference it), never updatable, and deletable only while nothing
+references them (OPT-A6). Insert-only was the earlier state, which made one typo permanent for
+everyone; deleting a tag still in use would cascade `recipe_tags` rows out of other people's
+recipes and rewrite their search documents, so the `not exists` guard is the safety property.
 
 **recipe_shares**: `recipe_id`, `shared_with_user_id → profiles`, `permission (share_permission)`,
 `created_at` (PK: recipe_id + user).
@@ -504,7 +509,10 @@ ran past the portrait edge at 3.0× (B039).
 
 - No secrets in source; Supabase keys via `--dart-define` / env.
 - All authorization via RLS; never rely on client filtering for privacy.
-- Storage buckets scoped; signed/public URLs per bucket policy.
+- Storage buckets scoped; signed/public URLs per bucket policy. Both buckets carry the full
+  read/insert/update/**delete** set, each scoped to a folder named for the uploader's uid — the
+  avatars bucket was missing delete until OPT-A6, so every superseded avatar stayed readable at a
+  guessable path in a public bucket.
 - **Error text is mapped, never dumped** (OPT-A4). Every user-facing failure goes through
   `friendlyError()` in `core`, which turns a `PostgrestException` into one actionable sentence and
   keeps the raw object in `debugPrint`. Screens used to render `e.toString()`, which put table

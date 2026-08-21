@@ -133,18 +133,41 @@ create table if not exists recipe_versions (
   created_at        timestamptz not null default now(),
   unique (recipe_id, version_number)
 );
-create index if not exists recipe_versions_recipe_idx on recipe_versions (recipe_id);
+-- No `(recipe_id)` index here: `unique (recipe_id, version_number)` above already
+-- leads with `recipe_id`, so a plain one is a second copy of the same B-tree
+-- prefix — maintained on every version insert and chosen by nothing (OPT-A6,
+-- same reasoning as the `recipe_views_recipe_idx` precedent).
+drop index if exists recipe_versions_recipe_idx;
 
--- Deferred FKs from recipes -> recipe_versions (guarded)
-alter table recipes drop constraint if exists recipes_current_version_fk;
-alter table recipes
-  add constraint recipes_current_version_fk
-  foreign key (current_version_id) references recipe_versions (id) on delete set null;
+-- Deferred FKs from recipes -> recipe_versions: they cannot be declared with the
+-- table because `recipe_versions` does not exist yet.
+--
+-- Added only when missing (OPT-A6). The drop-and-re-add this replaced ran on
+-- **every** apply, and adding a foreign key revalidates every existing row in
+-- `recipes` — work that grows with the table and is pure waste when the
+-- constraint is already there and unchanged. `if not exists` on the constraint
+-- name is the guard; changing a constraint's definition means renaming it or
+-- dropping it explicitly, exactly like the B024 rule for functions.
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'recipes_current_version_fk'
+  ) then
+    alter table recipes
+      add constraint recipes_current_version_fk
+      foreign key (current_version_id) references recipe_versions (id)
+      on delete set null;
+  end if;
 
-alter table recipes drop constraint if exists recipes_forked_from_version_fk;
-alter table recipes
-  add constraint recipes_forked_from_version_fk
-  foreign key (forked_from_version_id) references recipe_versions (id) on delete set null;
+  if not exists (
+    select 1 from pg_constraint where conname = 'recipes_forked_from_version_fk'
+  ) then
+    alter table recipes
+      add constraint recipes_forked_from_version_fk
+      foreign key (forked_from_version_id) references recipe_versions (id)
+      on delete set null;
+  end if;
+end $$;
 
 -- ingredient groups + ingredients
 create table if not exists ingredient_groups (
@@ -999,11 +1022,31 @@ create policy steps_write on steps for all
   using (owns_recipe((select g.recipe_id from step_groups g where g.id = group_id)))
   with check (owns_recipe((select g.recipe_id from step_groups g where g.id = group_id)));
 
--- tags: readable by all; any authenticated user may create
+-- tags: a shared, free-form namespace — readable by all, created by any signed-in
+-- user, because a tag has to exist before the recipe that needs it can reference
+-- it. That decision stands (OPT-A6); tags are not owned, so owner-curated tags
+-- would mean a tag per owner and a discovery surface that cannot join them.
+--
+-- What was missing is a way **back out**. Insert-only meant one typo — `deserrt`
+-- — was permanent, in a namespace every recipe shares. So:
+--
+--   * DELETE is allowed, but only for a tag **nothing references**. The
+--     `not exists` is the whole safety property: removing a tag in use would
+--     cascade `recipe_tags` rows out of other people's recipes and silently
+--     rewrite their search documents.
+--   * UPDATE stays closed. A rename changes the document of every recipe
+--     carrying the tag (the `tags_search_tsv_upd` trigger exists for exactly
+--     that), which is not something one user should do to another's recipe.
 drop policy if exists tags_select on tags;
 create policy tags_select on tags for select using (true);
 drop policy if exists tags_insert on tags;
 create policy tags_insert on tags for insert with check (auth.uid() is not null);
+drop policy if exists tags_delete_orphan on tags;
+create policy tags_delete_orphan on tags for delete
+  using (
+    auth.uid() is not null
+    and not exists (select 1 from recipe_tags rt where rt.tag_id = tags.id)
+  );
 
 drop policy if exists recipe_tags_select on recipe_tags;
 create policy recipe_tags_select on recipe_tags for select using (can_read_recipe(recipe_id));
@@ -1198,6 +1241,18 @@ create policy "avatars updatable by owner folder"
     and auth.uid()::text = (storage.foldername(name))[1]
   );
 
+-- Parity with recipe-images (OPT-A6): without a delete policy an avatar can be
+-- replaced but never removed, so every superseded upload stays in a **public**
+-- bucket at a guessable path for the life of the project. Same folder rule —
+-- you may only delete under your own uid.
+drop policy if exists "avatars deletable by owner folder" on storage.objects;
+create policy "avatars deletable by owner folder"
+  on storage.objects for delete
+  using (
+    bucket_id = 'avatars'
+    and auth.uid()::text = (storage.foldername(name))[1]
+  );
+
 -- ============================================================================
 -- Discovery ranking, search, and atomic fork RPCs
 -- ============================================================================
@@ -1362,6 +1417,13 @@ $$;
 -- Internal aliases deliberately avoid the RETURNS TABLE column names — in a
 -- `language sql` function those names are in scope and would make `chef_score`
 -- / `display_name` / `id` ambiguous against the tables being read.
+--
+-- The drop is not currently load-bearing — the signature has never changed — but
+-- it is where the drop has to live when it does (B024), and adding it after an
+-- ambiguous-overload failure means editing a database that already has two
+-- (OPT-A6). Note that a **return type** change needs this too, not just an
+-- argument-list change: `create or replace` refuses both.
+drop function if exists chefs_leaderboard(int, int);
 create or replace function chefs_leaderboard(p_limit int default 50, p_offset int default 0)
 returns table (
   chef_rank           bigint,
