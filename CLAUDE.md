@@ -64,8 +64,9 @@ secret-sauce/
 │   │   ├── core.dart              # BARREL — the only public surface of `core`
 │   │   ├── src/{models,repositories,services}/ + providers.dart
 │   │   │                          # + chef_scoring.dart, formatting.dart, paging.dart
-│   │   └── ../test/               # chef_models/chef_scoring/recipe_embed (decoding + pure
-│   │                              # helpers only — repositories are still untested)
+│   │   └── ../test/               # models + pure helpers + REPOSITORIES (OPT-T2), the last
+│   │                              # via test/support/fake_supabase.dart — a recording
+│   │                              # http.BaseClient under a real SupabaseClient
 │   └── design_system/lib/
 │       ├── design_system.dart     # BARREL — export new widgets here or app can't import them
 │       ├── src/{theme,layout,widgets}/
@@ -87,7 +88,8 @@ secret-sauce/
 │   ├── lib/main.dart · test/{widget_test,chefs_screen_test,chefs_routing_test,
 │   │                          top_nav_bar_test,recipe_editor_test,recipe_detail_test,
 │   │                          my_recipes_header_test,recipe_grid_test,
-│   │                          discover_search_test,paging_test,share_dialog_test}.dart
+│   │                          discover_search_test,paging_test,share_dialog_test,
+│   │                          auth_screen_test}.dart
 │   │                          # widget_test.dart covers the `/` -> /discover redirect
 │   ├── env.example.json       # template; env.local.json (git-ignored) holds real creds
 │   └── android/ ios/ web/ windows/   # platform runners are committed — no `flutter create`
@@ -520,12 +522,15 @@ the `code-review` skill). The ones you need while _writing_ code:
     into a card grid.
 14. **New `design_system` widget → export it from `design_system.dart`**, or `apps/app` cannot
     import it.
-15. **`packages/core` is only _partly_ tested, and the untested half is the risky half.**
+15. **`packages/core`'s tests do not touch a database — know what that buys.**
     `packages/core/test/` covers pure JSON→model decoding (enum wire values, column-name
     mappings, `numeric` handling) — no `SupabaseClient` needed, so that blocker never applied
     there — plus the pure helpers (`snapRating`, `friendlyError`, the formatters), closed by
-    OPT-T3/A4/A7. Still untested: **every repository method** and anything that issues a query.
-    Those remain blocked on mocking `SupabaseClient` (ROADMAP Phase 3). A green run proves
+    OPT-T3/A4/A7. **Repositories are now tested too** (OPT-T2): `test/support/fake_supabase.dart`
+    puts a recording `http.BaseClient` under a real `SupabaseClient`, so a test asserts the
+    *request* — select fragment, embed orders, page window, RPC body — and the decode of a canned
+    reply. Use it for a new repository method. What it cannot tell you is whether Postgres agrees:
+    responses are fixtures, and RLS, triggers, and constraints are not in the loop. A green run proves
     your models decode; it proves nothing about what the database actually returns. For that,
     verify against a local stack — a throwaway harness under `apps/app/test/` pointed at
     `http://127.0.0.1:54321` is the practical way to drive real repository code; delete it after,

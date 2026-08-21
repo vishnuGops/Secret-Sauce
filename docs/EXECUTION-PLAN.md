@@ -1238,10 +1238,25 @@ below are targeted, not structural.
   RLS/RPC surface nothing re-verifies today, executes the 30 sim assertions on every PR, and is
   the precondition for OPT-S1/P1/P2/A6 landing with regression cover instead of a one-off
   local-stack note in the tracker.
-- **T2 — repository unit tests**: still blocked on mocking `SupabaseClient`; re-evaluate
-  `mock_supabase_http_client` (or a thin `PostgrestClient` wrapper injected into the repos)
-  before writing a bespoke fake. Start with the read paths (`getById` decode + B022 ordering,
-  `kRecipeSelect` shape) — they are the ones OPT-P3 rewrites.
+- **T2 — repository unit tests — DONE**, and the blocker turned out to be the wrong shape of the
+  question. Nothing needs to mock `SupabaseClient`: it accepts an `httpClient`, so
+  `packages/core/test/support/fake_supabase.dart` slides a recording `BaseClient` underneath it —
+  no new dependency (`mock_supabase_http_client` was not needed), no live database, and the
+  assertion surface is the request itself. `signInAs` signs in **offline** through
+  `recoverSession`, which only touches the network for an expired session; that is what makes the
+  `_uid`-dependent methods testable.
+  14 tests over `recipe_repository.dart` and `discover_repository.dart`, aimed at the contracts
+  this repo has actually broken rather than at coverage: the `kRecipeSelect` FK hint and its
+  explicit column list (no `search_tsv`), **B022's four ascending embed orders** — which arrive as
+  four namespaced `<table>.order=` parameters, not one repeated one — OPT-P3's single request per
+  open, OPT-P9's `limit`/`offset` plus the `id` tie-break that makes an offset mean anything,
+  OPT-A1's one `save_recipe` call carrying only writable columns and content as arrays whose
+  position *is* `sort_order`, the `42501` → `WriteDeniedException` translation with no follow-up
+  read, and the signed-out paths (`myLiked` / `mySaved` / `myRating` answer without a request,
+  `logView` sends a null `user_id`, `listMine` throws before the network).
+  What it deliberately is not: a PostgREST emulator. Responses are canned, so these prove the
+  client's half of the conversation and the decode — not that Postgres would agree. That is what
+  the local-stack harnesses and (next) the CI database job are for.
 - **T3 — widget tests — DONE**, all four items. Recipe-detail interactions landed with OPT-S3 and
   ShareDialog with OPT-A5; this item added the last two:
   - **`snapRating`** (`packages/core/test/rating_test.dart`, 4 tests). The valuable one is the

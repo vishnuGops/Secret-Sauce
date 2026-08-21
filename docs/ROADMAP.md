@@ -1240,7 +1240,13 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
 - [ ] **OPT-T1:** the CI Postgres job — `0001_init.sql → seed → recipes → sim tiny →
       3_sim_verify.sql` (Phase 11's harness + Phase 24's deferred CI item; the single highest-
       leverage test investment in the repo)
-- [ ] **OPT-T2:** repository unit tests behind a mocked `SupabaseClient` (Phase 3, still open)
+- [x] **OPT-T2:** repository tests exist — 14 of them, without mocking `SupabaseClient` at all.
+      `SupabaseClient` takes an `httpClient`, so `test/support/fake_supabase.dart` records the
+      request and replies from a queue; `signInAs` uses `recoverSession` to sign in offline. Pins
+      the contracts that have broken here: the `kRecipeSelect` FK hint and column list, B022's four
+      ascending embed orders, OPT-P3's one request per open, OPT-P9's `limit`/`offset` and total
+      ordering, OPT-A1's single `save_recipe` body (writable columns only), the `42501` →
+      `WriteDeniedException` translation, and the signed-out paths that must not reach the network
 - [x] **OPT-T3:** the whole list is closed. Recipe-detail interactions landed with OPT-S3, the
       share dialog with OPT-A5, and this item added `snapRating` (4 tests, including the property
       that every input in range produces a value the SQL check constraint accepts) and the auth

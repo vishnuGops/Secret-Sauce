@@ -16,6 +16,7 @@ dependencies:
   flutter_riverpod: ^2.5.1
 
 dev_dependencies:
+  http: ^1.2.0
   build_runner: ^2.4.11
   freezed: ^2.5.7
   json_serializable: ^6.8.0
