@@ -320,7 +320,13 @@ or the first save carrying it fails the same way. `current_version_id` is moved 
 **ascending** `sort_order` (`step_order` for steps). postgrest-dart's `.order(column)` defaults to
 `ascending: false`, so every nested read passes `ascending: true` explicitly. This is not
 cosmetic: `update()` re-persists the list it just read, so a reversed read writes a reversed
-order back.
+order back. Since OPT-P3 the read is a **single nested embed** (`kRecipeDetailSelect`), so the
+rule lives in `getById`'s four `order(..., referencedTable: …, ascending: true)` calls —
+`ingredient_groups`, `ingredient_groups.ingredients`, `step_groups`, `step_groups.steps`.
+PostgREST guarantees no order for an embedded resource, so dropping any one of them is the same
+bug. `Recipe.ingredientGroups`/`stepGroups` need their `@JsonKey(name: 'ingredient_groups' /
+'step_groups')` for that embed to decode at all — remove the name and a full recipe silently
+becomes an empty one.
 
 **Ratings**: `recipe_ratings` holds one row per (user, recipe), `0.5`–`5.0` in half-star steps
 (SQL check constraint _and_ `snapRating()` in core). A trigger recomputes

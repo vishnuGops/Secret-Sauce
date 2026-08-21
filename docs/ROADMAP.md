@@ -1143,8 +1143,10 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       `recipes_public_created_idx (created_at desc) where visibility='public'`. At sim `medium`:
       trending **23.4 ms → 3.9 ms** (6.0×, 1,344 → 351 rows scored); Discover **Recent**
       **1.1 ms → 0.23 ms** and now a pure index scan with the sort eliminated
-- [ ] **OPT-P3:** `getById` is 2+G+S round trips (one per group) — collapse to one nested
-      PostgREST embed with foreign-table ordering (keep B022's explicit ascending)
+- [x] **OPT-P3:** `getById` was 2+G+S round trips (one per group) — now **one** nested PostgREST
+      embed with foreign-table ordering, B022's explicit ascending kept at all four levels.
+      **4.69 requests → 1 on average**, worst case 8 → 1. Needed `@JsonKey(name:)` on
+      `Recipe.ingredientGroups`/`stepGroups`, without which content silently decoded as empty
 - [ ] **OPT-P4:** one editor save costs ~3 full `getById` cascades (`update` → `_appendVersion`
       → return) — snapshot from the `Recipe` in hand
 - [ ] **OPT-P5:** `chefs_leaderboard` re-aggregates all public recipes per page although

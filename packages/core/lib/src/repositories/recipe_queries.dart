@@ -37,3 +37,20 @@ const _kRecipeColumns = 'id,owner_id,title,description,cover_image_url,cuisine,'
 
 const kRecipeSelect = '$_kRecipeColumns,'
     'owner:profiles!recipes_owner_id_fkey(id,display_name,avatar_url,chef_tier)';
+
+/// [kRecipeSelect] plus the recipe's grouped content, as a single nested embed
+/// (OPT-P3). Replaces the old 2 + G + S round trips — one query per ingredient
+/// group and one per step group — with one request.
+///
+/// `*` on the nested tables is fine: unlike `recipes` they carry no server-only
+/// columns, and the models want every field (B035 — a column the draft drops is
+/// a column the next save deletes).
+///
+/// **Ordering is not optional** (B022). PostgREST does not promise an order for
+/// an embedded resource, and `update()` re-persists the list it just read, so a
+/// reversed read writes a reversed recipe back. Callers must pass all four:
+/// `ingredient_groups`, `ingredient_groups.ingredients`, `step_groups`,
+/// `step_groups.steps` — see `SupabaseRecipeRepository.getById`.
+const kRecipeDetailSelect = '$kRecipeSelect,'
+    'ingredient_groups(*,ingredients(*)),'
+    'step_groups(*,steps(*))';

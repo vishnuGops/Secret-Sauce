@@ -38,10 +38,18 @@ class Recipe with _$Recipe {
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
     // Populated when a full recipe is loaded (not part of the base row).
-    @JsonKey(includeToJson: false)
+    //
+    // The `name:` is load-bearing (OPT-P3): `getById` now fetches the content as
+    // a nested PostgREST embed, which arrives under the **table** names, and
+    // without these the groups would silently decode to their empty defaults —
+    // an empty recipe, and `update()` re-persists what it read (B035's family).
+    // `includeToJson: false` stays, so `toJson()` remains the base row only and
+    // the version snapshot keeps its existing `{recipe, ingredient_groups,
+    // step_groups}` shape.
+    @JsonKey(name: 'ingredient_groups', includeToJson: false)
     @Default(<IngredientGroup>[])
     List<IngredientGroup> ingredientGroups,
-    @JsonKey(includeToJson: false)
+    @JsonKey(name: 'step_groups', includeToJson: false)
     @Default(<StepGroup>[])
     List<StepGroup> stepGroups,
     // The owning chef, embedded by PostgREST via kRecipeSelect. Null on any
