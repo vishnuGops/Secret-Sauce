@@ -1241,10 +1241,11 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       3_sim_verify.sql` (Phase 11's harness + Phase 24's deferred CI item; the single highest-
       leverage test investment in the repo)
 - [ ] **OPT-T2:** repository unit tests behind a mocked `SupabaseClient` (Phase 3, still open)
-- [ ] **OPT-T3:** widget-test gaps in priority order: ~~recipe-detail interactions (would have
-      caught B051)~~ — `recipe_detail_test.dart` landed with OPT-S3; ~~share dialog~~ —
-      `share_dialog_test.dart` landed with OPT-A5; `snapRating` (5-minute unit test, named
-      untested in Gotcha 15) remains
+- [x] **OPT-T3:** the whole list is closed. Recipe-detail interactions landed with OPT-S3, the
+      share dialog with OPT-A5, and this item added `snapRating` (4 tests, including the property
+      that every input in range produces a value the SQL check constraint accepts) and the auth
+      screen (6 tests through the **real router**: which door `?mode=signup` opens, validation
+      before network, a failed sign-in showing the mapped message and staying put)
 - [ ] **OPT-T4:** toolchain: commit `pubspec.lock` (B009) · raise the `sdk:` bound / settle
       B027 formatter conflict · migrate to `freezed` 3.x to unpin Flutter (B005)
 - [ ] **OPT-T5:** `npx playwright install chrome`, then the outstanding screenshot pass over

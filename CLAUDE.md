@@ -523,8 +523,9 @@ the `code-review` skill). The ones you need while _writing_ code:
 15. **`packages/core` is only _partly_ tested, and the untested half is the risky half.**
     `packages/core/test/` covers pure JSON→model decoding (enum wire values, column-name
     mappings, `numeric` handling) — no `SupabaseClient` needed, so that blocker never applied
-    there. Still untested: **every repository method**, `snapRating`, and anything that issues a
-    query. Those remain blocked on mocking `SupabaseClient` (ROADMAP Phase 3). A green run proves
+    there — plus the pure helpers (`snapRating`, `friendlyError`, the formatters), closed by
+    OPT-T3/A4/A7. Still untested: **every repository method** and anything that issues a query.
+    Those remain blocked on mocking `SupabaseClient` (ROADMAP Phase 3). A green run proves
     your models decode; it proves nothing about what the database actually returns. For that,
     verify against a local stack — a throwaway harness under `apps/app/test/` pointed at
     `http://127.0.0.1:54321` is the practical way to drive real repository code; delete it after,

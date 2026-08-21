@@ -1242,10 +1242,21 @@ below are targeted, not structural.
   `mock_supabase_http_client` (or a thin `PostgrestClient` wrapper injected into the repos)
   before writing a bespoke fake. Start with the read paths (`getById` decode + B022 ordering,
   `kRecipeSelect` shape) — they are the ones OPT-P3 rewrites.
-- **T3 — widget tests, priority order**: recipe-detail interactions (signed-out like/save →
-  `/auth`; toggle states — pins B051's fix), `snapRating` (pure function, named untested in
-  Gotcha 15, five minutes), ShareDialog (disambiguation UI once A5 lands), then discover/auth
-  flows.
+- **T3 — widget tests — DONE**, all four items. Recipe-detail interactions landed with OPT-S3 and
+  ShareDialog with OPT-A5; this item added the last two:
+  - **`snapRating`** (`packages/core/test/rating_test.dart`, 4 tests). The valuable one is the
+    property, not the samples: every input from 0.00 to 6.00 in hundredths must come back inside
+    `[0.5, 5.0]` **and** on a half-star step, because this function is the client half of a SQL
+    check constraint — a value that slips past it fails as `23514` at the moment someone taps a
+    star. Zero is the specific trap: a star widget that reports "unrated" as 0 must not send 0.
+  - **The auth screen** (`apps/app/test/auth_screen_test.dart`, 6 tests), driven through the real
+    router rather than a bare pump. That is not ceremony — `_submit` calls `context.canPop()`,
+    which asserts without a `GoRouter` in the tree, so a bare pump cannot reach the success path
+    at all, and `?mode=signup` only means anything through the route. Pinned: each door opens its
+    own side, the toggle still owns the mode afterwards, an invalid form never reaches the
+    repository, a successful sign-up sends the display name and lands on Discover, and a rejected
+    sign-in shows `friendlyError`'s sentence and **stays on `/auth`**.
+  Discover already had `discover_search_test.dart` (OPT-P8) and `paging_test.dart` (OPT-P9).
 - **T4 — toolchain debt, one decision each**: commit `pubspec.lock` (B009 — root cause of
   "B005 appeared suddenly"); raise the `sdk:` lower bound to ≥3.7 so `dart format` emits the
   tall style and B027's format-breaks-analyze trap closes (one whole-repo reformat commit);
