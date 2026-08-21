@@ -165,8 +165,13 @@ class SupabaseRecipeRepository implements RecipeRepository {
         await _client.from('recipes').insert(payload).select('id').single();
     final newId = row['id'] as String;
     await _persistContent(newId, recipe.ingredientGroups, recipe.stepGroups);
-    await _appendVersion(newId, 'Initial version');
-    return getById(newId);
+    // One read of the saved state, used for both the version snapshot and the
+    // return value (OPT-P4). It used to be two full cascades. The read happens
+    // *before* the version exists, so the pointer the trigger then sets is
+    // carried over by hand rather than by re-reading the whole recipe.
+    final saved = await getById(newId);
+    final versionId = await _appendVersion(saved, 'Initial version');
+    return saved.copyWith(currentVersionId: versionId);
   }
 
   @override
@@ -187,8 +192,13 @@ class SupabaseRecipeRepository implements RecipeRepository {
     await _client.from('ingredient_groups').delete().eq('recipe_id', recipe.id);
     await _client.from('step_groups').delete().eq('recipe_id', recipe.id);
     await _persistContent(recipe.id, recipe.ingredientGroups, recipe.stepGroups);
-    await _appendVersion(recipe.id, changeSummary);
-    return getById(recipe.id);
+    // One read of the saved state, used for both the version snapshot and the
+    // return value (OPT-P4). It used to be two full cascades. The read happens
+    // *before* the new version exists, so the pointer the trigger then sets is
+    // carried over by hand rather than by re-reading the whole recipe.
+    final fresh = await getById(recipe.id);
+    final versionId = await _appendVersion(fresh, changeSummary);
+    return fresh.copyWith(currentVersionId: versionId);
   }
 
   @override
@@ -412,11 +422,24 @@ class SupabaseRecipeRepository implements RecipeRepository {
     }
   }
 
-  Future<void> _appendVersion(String recipeId, String changeSummary) async {
+  /// Appends a version snapshot of [full].
+  ///
+  /// Takes the recipe rather than an id (OPT-P4): callers have just read the
+  /// saved state to return it, and this used to re-read the whole cascade to
+  /// build the same snapshot. Passing it in halves the reads per save.
+  ///
+  /// It must be the **post-save** read, not the draft the caller was handed:
+  /// `_persistContent` assigns fresh group and child ids and renumbers
+  /// `sort_order` to the list index, so the client's copy would record ids that
+  /// no longer exist and orders that were never written.
+  /// Returns the id of the version it appended, so the caller can correct the
+  /// `currentVersionId` on the copy it already read (OPT-P4) instead of
+  /// re-reading the recipe just to observe the pointer move.
+  Future<String> _appendVersion(Recipe full, String changeSummary) async {
     final existing = await _client
         .from('recipe_versions')
         .select('version_number, id')
-        .eq('recipe_id', recipeId)
+        .eq('recipe_id', full.id)
         .order('version_number', ascending: false)
         .limit(1);
 
@@ -424,7 +447,6 @@ class SupabaseRecipeRepository implements RecipeRepository {
         existing.isEmpty ? 1 : (existing.first['version_number'] as int) + 1;
     final parentId = existing.isEmpty ? null : existing.first['id'] as String?;
 
-    final full = await getById(recipeId);
     final snapshot = <String, dynamic>{
       'recipe': full.toJson(),
       'ingredient_groups': [
@@ -436,13 +458,18 @@ class SupabaseRecipeRepository implements RecipeRepository {
     // `recipes.current_version_id` is server-owned: the `recipe_versions_set_current`
     // trigger moves the pointer, and the column is not in the `authenticated`
     // UPDATE grant (B050/OPT-S1), so writing it from here would now fail 42501.
-    await _client.from('recipe_versions').insert({
-      'recipe_id': recipeId,
-      'version_number': nextNumber,
-      'parent_version_id': parentId,
-      'author_id': _uid,
-      'change_summary': changeSummary,
-      'content_snapshot': snapshot,
-    });
+    final inserted = await _client
+        .from('recipe_versions')
+        .insert({
+          'recipe_id': full.id,
+          'version_number': nextNumber,
+          'parent_version_id': parentId,
+          'author_id': _uid,
+          'change_summary': changeSummary,
+          'content_snapshot': snapshot,
+        })
+        .select('id')
+        .single();
+    return inserted['id'] as String;
   }
 }

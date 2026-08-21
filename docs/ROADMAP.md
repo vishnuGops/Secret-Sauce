@@ -1147,8 +1147,10 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       embed with foreign-table ordering, B022's explicit ascending kept at all four levels.
       **4.69 requests → 1 on average**, worst case 8 → 1. Needed `@JsonKey(name:)` on
       `Recipe.ingredientGroups`/`stepGroups`, without which content silently decoded as empty
-- [ ] **OPT-P4:** one editor save costs ~3 full `getById` cascades (`update` → `_appendVersion`
-      → return) — snapshot from the `Recipe` in hand
+- [x] **OPT-P4:** one editor save cost 2 full `getById` cascades (`_appendVersion` + the return).
+      Now **1**: the post-save read feeds both the snapshot and the return value, and
+      `_appendVersion` returns the new version id so the pointer is carried over rather than
+      re-read. Snapshot is the post-save read on purpose — the caller's draft has stale ids
 - [ ] **OPT-P5:** `chefs_leaderboard` re-aggregates all public recipes per page although
       `recompute_chef_stats` already computes the totals and discards them — persist
       `total_likes/saves/views` on `profiles`, partial index `where public_recipe_count > 0`
@@ -1213,8 +1215,13 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
 Toolchain is set up and verified (bootstrap, codegen, analyze, test, `flutter build web --release`),
 and the app runs against the hosted Supabase project with seeded data. These remain:
 
-- **Signed-in flows** not yet exercised on this machine: create / edit / fork / version history and
-  Storage image upload.
+- **Signed-in flows**: create / edit / version history **were exercised end-to-end on the local
+  stack** during OPT-P4 (throwaway account + harness, both deleted afterwards) — create with every
+  column, the trigger-set `current_version_id`, an edit that adds an ingredient, ordering preserved
+  across the delete-and-reinsert, both version snapshots, the search document refreshing, a private
+  recipe staying out of public search, and a signed-out update throwing rather than reporting
+  success. That run is what found the stale-pointer bug in P4's first cut. **Still not exercised:**
+  fork from the UI, and Storage image upload.
 - **Repository unit tests** with a mocked Supabase client.
 - **Mobile/emulator** manual pass (no Android SDK installed on the current machine).
 - Squash the single idempotent `0001_init.sql` into versioned migrations once there's real data.
