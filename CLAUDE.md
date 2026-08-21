@@ -54,7 +54,8 @@ secret-sauce/
 │   ├── dishes/<slug>.json     #   owner-agnostic; NOT recipes until the generator runs
 │   ├── schema.json            #   the 2-key delta from recipeData's format
 │   └── README.md              #   authoring workflow + directory coverage rules
-├── tool/db.dart               # psql wrapper behind the melos db:* scripts
+├── tool/db.dart               # psql wrapper behind the melos db:* scripts (db:create applies
+│                              #   every supabase/migrations/*.sql in order)
 ├── tool/recipe_format.dart    # THE validator — shared by both generators below
 ├── tool/recipes.dart          # validates recipeData/ -> generates seed_recipes.sql
 ├── tool/sim.dart              # validates simData/  -> generates sim/1_sim_dishes.sql
@@ -91,7 +92,9 @@ secret-sauce/
 │   ├── env.example.json       # template; env.local.json (git-ignored) holds real creds
 │   └── android/ ios/ web/ windows/   # platform runners are committed — no `flutter create`
 └── supabase/
-    ├── migrations/0001_init.sql  # THE schema: tables, triggers, RLS, grants, storage, RPCs
+    ├── migrations/               # numbered sequence, applied in filename order (OPT-A9)
+    │   ├── README.md            #   the rules: numbering, guards, B024 drops, how to apply
+    │   └── 0001_init.sql        #   FROZEN baseline: tables, triggers, RLS, grants, storage, RPCs
     ├── seed.sql                  # DEMO fixtures: accounts, demo chefs, ratings (idempotent)
     ├── seed_recipes.sql          # GENERATED from recipeData/ — never hand-edit
     ├── sim/                      # simulated population (Phase 24); schema `sim`, never `public`
@@ -436,9 +439,13 @@ the `code-review` skill). The ones you need while _writing_ code:
 4. **`GRANT` and RLS are both required.** A new table must be covered by the grants block at
    `0001_init.sql:565-581`, or every API call returns `permission denied for table …` (B013).
    RLS with no policy default-denies: reads return empty, not an error.
-5. **`0001_init.sql` is one idempotent file, re-applied in place** (`db:create`, `supabase db
-reset`, hosted paste). Every statement must be guarded: `if not exists`,
-   `drop policy if exists`, `create or replace`, `alter table … add column if not exists`.
+5. **`supabase/migrations/` is a numbered sequence; `0001_init.sql` is the frozen baseline**
+   (OPT-A9). Schema changes go in a **new** `NNNN_*.sql`, never back into 0001 — re-applying the
+   baseline to push a one-line change also re-runs its two whole-table backfills, and that cost
+   grows with the data. `melos run db:create` applies the whole directory in filename order and
+   tracks nothing, so **every migration still has to be re-runnable**: `if not exists`,
+   `drop policy if exists`, `create or replace`, `alter table … add column if not exists`. The
+   full rules live in [supabase/migrations/README.md](supabase/migrations/README.md).
    **Changing a function's argument list is not something `create or replace` can do** — the old
    overload survives beside the new one, and any call matching both fails with
    `42725 … is not unique`. Drop every historical signature **in the file that recreates the

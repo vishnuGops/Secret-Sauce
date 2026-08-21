@@ -1209,11 +1209,24 @@ below are targeted, not structural.
   the plan had not listed, in `chef_recipes_panel.dart` and twice in the editor
   (`context.go('/recipe/${...}')`), which are exactly the "rename silently misses" case and now
   call `Routes.recipe(...)`.
-- **A9 — migration split**: `0001_init.sql`'s every-apply work (profile backfill :264-268, chef
-  backfill :526-546, FK revalidation :109-117) grows linearly with hosted data; the file header
-  already promises versioned migrations "once there is real data". Do the split **before**
-  Phase 25 adds tables; the B024 rule (drops live in the file that recreates the function)
-  must survive the split.
+- **A9 — migration split — DONE**, and narrower than the name suggests, on purpose.
+  `supabase/migrations/` is now a **numbered sequence**: `0001_init.sql` is the frozen baseline,
+  the next schema change is `0002_*.sql`, and `melos run db:create` applies every file in the
+  directory in filename order rather than the one hard-coded path. The hosted procedure in
+  `README.md` changed from "paste 0001" to "apply the new file", which is what actually stops the
+  every-apply cost: the profile backfill and the chef backfill recompute whole tables, and shipping
+  an unrelated one-liner used to re-run both. (The FK revalidation that was the third item on this
+  list is already gone — OPT-A6 guarded it.)
+  **What was deliberately not done:** chopping the baseline's 1,900 lines into a dozen files. That
+  buys tidiness and costs a real property — a single idempotent file that `db:create`,
+  `supabase db reset`, and the dashboard paste all treat identically — for a database whose
+  existing installations are already exactly what that file produces. Freezing it is the same
+  outcome with none of the risk.
+  `supabase/migrations/README.md` is new and carries the rules the split has to survive on:
+  numbering, never editing a released file, keeping every statement guarded (nothing here tracks
+  history — `db:create` re-applies the directory), B024 drops living in the file that recreates the
+  function, grants-and-policies shipping with a new table, and verifying on the upgrade path rather
+  than a fresh reset. CLAUDE.md Gotcha 5 and the review checklist's §4 were rewritten to match.
 
 ### OPT-T — Tests, tooling & process
 

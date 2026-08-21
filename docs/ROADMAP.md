@@ -1227,9 +1227,13 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       changed, only its address. Route literals gone from the route table **and** from three
       feature call sites the plan had not spotted — `Routes.recipePattern` /
       `editRecipePattern` are the new match-side constants
-- [ ] **OPT-A9:** squash `0001_init.sql` into versioned migrations once there is real data —
-      apply time already grows with data (backfills + FK revalidation run every apply); do it
-      **before** Phase 25 adds tables, and keep the B024 drop-in-place discipline through the split
+- [x] **OPT-A9:** `supabase/migrations/` is a numbered sequence and `0001_init.sql` is the
+      **frozen baseline**; the next schema change is `0002_*.sql`. `db:create` applies the whole
+      directory in filename order, and the hosted procedure is now "apply only the new file" — so
+      shipping a one-liner stops re-running the baseline's two whole-table backfills. The
+      baseline's content was deliberately **not** chopped into pieces: that would trade a real
+      property (one re-appliable file every doc and script depends on) for tidiness.
+      `supabase/migrations/README.md` carries the rules, including the B024 drop discipline
 
 ### OPT-T — Tests, tooling & process (existing debt, consolidated)
 

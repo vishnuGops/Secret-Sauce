@@ -13,7 +13,7 @@ git-like **forking** and **version history** to preserve legacy recipes. Built w
 packages/core           # shared platform core: models, repositories, services
 packages/design_system  # shared UI: theme, RecipeCard, adaptive widgets
 apps/app                # the Flutter application (adaptive web + mobile)
-supabase/migrations     # SQL schema + RLS + storage
+supabase/migrations     # numbered SQL migrations — schema, RLS, storage (0001 = baseline)
 docs/                   # ROADMAP · EXECUTION-PLAN · SDS · BUG-TRACKER
 ```
 
@@ -285,7 +285,7 @@ and dot-source it in each shell you run database tasks from:
 
 ```powershell
 . .\db-url.local.ps1  # sets $env:SUPABASE_DB_URL for THIS shell only
-melos run db:create   # apply schema (supabase/migrations/0001_init.sql)
+melos run db:create   # apply every supabase/migrations/*.sql, in filename order
 melos run db:seed     # load demo chefs/tasters/ratings (supabase/seed.sql)
 melos run db:recipes  # load authored recipes (supabase/seed_recipes.sql)
 melos run db:clean    # truncate recipe data, keep schema + users
@@ -303,13 +303,21 @@ route, so it fails with `Network is unreachable`:
 # Session pooler URI: Dashboard -> Project Settings -> Database -> Connection string -> Session pooler
 $u = "postgresql://postgres.<project-ref>:<pwd>@aws-0-<region>.pooler.supabase.com:5432/postgres"
 docker exec -i supabase_db_secret-sauce psql $u -c "select 1"        # check auth first
-Get-Content supabase\migrations\0001_init.sql -Raw |
+Get-Content supabase\migrations\0002_whatever_you_added.sql -Raw |
   docker exec -i supabase_db_secret-sauce psql $u -v ON_ERROR_STOP=1 -f -
 ```
 
 The pooler user is `postgres.<project-ref>`, **not** bare `postgres`, and a dashboard password
 reset takes a moment to propagate — an auth failure straight after resetting is not proof the
 password is wrong.
+
+**Apply only the new migration to a hosted database.** `supabase/migrations/` is a numbered
+sequence and `0001_init.sql` is the frozen baseline (OPT-A9), so a project that already has it
+needs only the files added since. Re-applying the baseline is safe — every statement is guarded —
+but it re-runs two whole-table backfills, which is the cost the sequence exists to stop paying. A
+project that has **never** had the baseline applied, or has not had it since the OPT phase, needs
+`0001_init.sql` once, first. The rules for writing the next migration are in
+[supabase/migrations/README.md](supabase/migrations/README.md).
 
 > ⚠️ `SUPABASE_DB_URL` is a **superuser** connection string and belongs in your shell only. Never
 > put it in `apps/app/env.local.json` **or any other dart-define file**: those are passed to every

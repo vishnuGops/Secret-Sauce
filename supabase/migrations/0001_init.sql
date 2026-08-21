@@ -1,9 +1,18 @@
--- 0001_init.sql — Secret-Sauce full schema (single source of truth)
+-- 0001_init.sql — Secret-Sauce schema BASELINE
 --
--- One idempotent file: safe to re-run during early development. Contains enums,
--- tables, indexes, triggers, functions, Row-Level Security, storage buckets, and
--- the discovery/fork RPCs. Split into proper versioned migrations later, once
--- there is real data to preserve.
+-- Enums, tables, indexes, triggers, functions, Row-Level Security, storage
+-- buckets, and the discovery / chefs / fork / save RPCs. Idempotent: this is
+-- what a fresh database is built from, and re-running it is safe.
+--
+-- **FROZEN as of the OPT phase (OPT-A9).** This file is no longer where schema
+-- changes go. `supabase/migrations/` is a numbered sequence now, and the next
+-- change is `0002_<what_it_does>.sql` — because re-applying this file to push a
+-- one-line change also re-runs its two whole-table backfills, and that cost
+-- grows with the data forever.
+--
+-- The rules for the next file (numbering, guards, the B024 drop discipline,
+-- grants-with-the-table, upgrade-path verification) are in
+-- `supabase/migrations/README.md`. Read it before adding one.
 
 -- ============================================================================
 -- Extensions

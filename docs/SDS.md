@@ -627,7 +627,9 @@ Follows the `recipes.rating_*` precedent exactly — denormalized aggregates, re
   (liker/viewer) does not own, and `profiles_update` RLS is self-only; invoker rights would
   silently update 0 rows (B011 class). No recursion: it writes `profiles`, never `recipes`.
 - Idempotent backfill in `0001_init.sql` (B015 precedent): one set-based UPDATE recomputing all
-  profiles on every apply — this is also how a formula/threshold change reaches existing rows.
+  profiles on every apply of the baseline — this is also how a formula/threshold change reaches
+  existing rows. It is the reason the baseline is frozen and changes go in new migrations
+  (OPT-A9): re-running it to ship an unrelated one-liner recomputes every profile.
 - `supabase/scripts/drop.sql` gains: the trigger's function, `recompute_chef_stats(uuid)`,
   `recompute_all_chef_stats()`, `chef_score(...)`, `chef_tier_for(numeric)`,
   `chefs_leaderboard(int, int)`, and `drop type if exists chef_tier`.

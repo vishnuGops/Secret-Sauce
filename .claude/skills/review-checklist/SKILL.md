@@ -124,9 +124,12 @@ the row (sharing, editing a shared recipe, admin-ish flows) — the client-side 
 
 ## 4. SQL must survive re-running — High
 
-`0001_init.sql` is the single source of truth, applied repeatedly (`db:create`, `supabase db
-reset`, hosted re-apply), so every statement is guarded (`if not exists`, `drop policy if
-exists`, `create or replace`, `alter table add column if not exists`).
+`supabase/migrations/` is a numbered sequence applied in filename order, and `0001_init.sql` is the
+**frozen baseline** (OPT-A9) — schema changes belong in a new `NNNN_*.sql`, so **flag a diff that
+edits 0001** unless it is fixing the baseline itself before it ships anywhere. `melos run db:create`
+applies the whole directory and tracks no history, so every migration is still applied repeatedly
+and every statement stays guarded (`if not exists`, `drop policy if exists`, `create or replace`,
+`alter table add column if not exists`).
 
 Flag when a diff: adds a bare `create table`/`create type`/`create policy` with no guard; adds an
 `alter table … add column` lacking `if not exists`; or adds an early `return` to a seed helper

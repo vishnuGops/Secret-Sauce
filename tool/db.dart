@@ -17,9 +17,19 @@
 
 import 'dart:io';
 
+/// Steps that apply **every** `.sql` file in a directory, in filename order.
+///
+/// `create` is one of these as of OPT-A9: `supabase/migrations/` is a numbered
+/// sequence now, not a single file that gets edited forever. `0001_init.sql`
+/// stays the idempotent baseline — it is what a fresh database is built from —
+/// and every schema change after it is a **new** numbered file. See
+/// `supabase/migrations/README.md` for the rules that keeps honest.
+const _directories = <String, String>{
+  'create': 'supabase/migrations',
+};
+
 /// Single-file steps, by name.
 const _files = <String, String>{
-  'create': 'supabase/migrations/0001_init.sql',
   'seed': 'supabase/seed.sql',
   // Generated from recipeData/recipes/*.json by tool/recipes.dart. Standalone
   // and order-independent with respect to `seed`: both bootstrap the same
@@ -61,6 +71,9 @@ Future<int> _psql(String url, List<String> args) async {
 }
 
 Future<int> _applyFile(String url, String step) async {
+  final dir = _directories[step];
+  if (dir != null) return _applyDirectory(url, step, dir);
+
   final path = _files[step]!;
   if (!File(path).existsSync()) {
     stderr.writeln('Missing SQL file: $path');
@@ -68,6 +81,47 @@ Future<int> _applyFile(String url, String step) async {
   }
   stdout.writeln('▶ $step  ($path)');
   return _psql(url, ['-f', path]);
+}
+
+/// Applies every `.sql` file in [dir], sorted by name — the same order the
+/// Supabase CLI uses, so `melos run db:create` and `supabase db reset` cannot
+/// disagree about what "the schema" is.
+///
+/// It applies **all** of them, including ones this database has already seen:
+/// nothing here tracks migration history (the CLI's `schema_migrations` table
+/// does that for `supabase db reset` / `db push`). That is why every migration
+/// has to stay idempotent — see `supabase/migrations/README.md`. On a hosted
+/// database with real data, prefer applying only the new file: re-running the
+/// baseline is safe but re-runs its backfills, which is the cost OPT-A9 exists
+/// to stop paying on every change.
+Future<int> _applyDirectory(String url, String step, String dir) async {
+  final directory = Directory(dir);
+  if (!directory.existsSync()) {
+    stderr.writeln('Missing SQL directory: $dir');
+    return 1;
+  }
+  // Sorted by full path, which sorts by filename here because the directory
+  // prefix is identical — that is what makes `0002_` follow `0001_`, and why
+  // migrations are numbered rather than named.
+  final files = directory
+      .listSync()
+      .whereType<File>()
+      .where((f) => f.path.toLowerCase().endsWith('.sql'))
+      .map((f) => f.path)
+      .toList()
+    ..sort();
+
+  if (files.isEmpty) {
+    stderr.writeln('No .sql files in $dir');
+    return 1;
+  }
+
+  for (final path in files) {
+    stdout.writeln('▶ $step  ($path)');
+    final code = await _psql(url, ['-f', path]);
+    if (code != 0) return code;
+  }
+  return 0;
 }
 
 /// Writes the run's knobs into `sim.config` before the generator reads them.
@@ -104,7 +158,8 @@ void _usage() {
   stdout.writeln('''
 usage: dart run tool/db.dart <action> [options]
 
-  create | seed | recipes | drop | clean   apply one SQL file
+  create                                   apply every supabase/migrations/*.sql, in order
+  seed | recipes | drop | clean            apply one SQL file
   reset                                    drop -> create -> seed -> recipes -> sim
   sim                                      schema -> dishes -> generate -> verify
   sim:verify                               assertions only, read-only
@@ -152,7 +207,9 @@ Future<void> main(List<String> args) async {
   }
 
   final steps = _pipelines[action] ??
-      (_files.containsKey(action) ? [action] : const <String>[]);
+      ((_files.containsKey(action) || _directories.containsKey(action))
+          ? [action]
+          : const <String>[]);
 
   if (action == 'help' || steps.isEmpty) {
     _usage();
