@@ -285,7 +285,7 @@ and dot-source it in each shell you run database tasks from:
 
 ```powershell
 . .\db-url.local.ps1  # sets $env:SUPABASE_DB_URL for THIS shell only
-melos run db:create   # apply every supabase/migrations/*.sql, in filename order
+melos run db:create   # apply every supabase/migrations/*.sql, in filename order (psql -1 each)
 melos run db:seed     # load demo chefs/tasters/ratings (supabase/seed.sql)
 melos run db:recipes  # load authored recipes (supabase/seed_recipes.sql)
 melos run db:clean    # truncate recipe data, keep schema + users

@@ -61,10 +61,29 @@ const _pipelines = <String, List<String>>{
 /// Actions that destroy data and therefore require an explicit `--yes`.
 const _destructive = {'sim:clean'};
 
-Future<int> _psql(String url, List<String> args) async {
+/// Steps applied inside a **single transaction** (`psql -1`), so a failure
+/// halfway through a file rolls the whole file back (OPT-T6).
+///
+/// `ON_ERROR_STOP=1` already stops the run at the first error, but without `-1`
+/// everything before it has committed: a schema apply that dies two thirds of
+/// the way through leaves two thirds of a schema, and the next run starts from
+/// a state nothing describes.
+///
+/// The sim files are **exempt** and must stay that way — they open and close
+/// their own transactions around the bulk load (and toggle triggers on the
+/// tables they write), which `-1` would nest and break.
+const _transactional = {'create', 'seed', 'recipes', 'drop', 'clean'};
+
+Future<int> _psql(String url, List<String> args, {bool singleTransaction = false}) async {
   final proc = await Process.start(
     'psql',
-    [url, '-v', 'ON_ERROR_STOP=1', ...args],
+    [
+      url,
+      '-v',
+      'ON_ERROR_STOP=1',
+      if (singleTransaction) '-1',
+      ...args,
+    ],
     mode: ProcessStartMode.inheritStdio,
   );
   return proc.exitCode;
@@ -80,7 +99,7 @@ Future<int> _applyFile(String url, String step) async {
     return 1;
   }
   stdout.writeln('▶ $step  ($path)');
-  return _psql(url, ['-f', path]);
+  return _psql(url, ['-f', path], singleTransaction: _transactional.contains(step));
 }
 
 /// Applies every `.sql` file in [dir], sorted by name — the same order the
@@ -116,9 +135,13 @@ Future<int> _applyDirectory(String url, String step, String dir) async {
     return 1;
   }
 
+  // One transaction **per file**, not one across the directory: a migration is
+  // the unit that has to be all-or-nothing, and 0002 failing must not undo 0001
+  // on a database that had never seen either.
   for (final path in files) {
     stdout.writeln('▶ $step  ($path)');
-    final code = await _psql(url, ['-f', path]);
+    final code =
+        await _psql(url, ['-f', path], singleTransaction: _transactional.contains(step));
     if (code != 0) return code;
   }
   return 0;

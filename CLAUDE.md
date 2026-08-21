@@ -218,7 +218,9 @@ melos run sim:gen           # regenerate supabase/sim/1_sim_dishes.sql (commit b
 melos run sim:check         # fail if that .sql is stale — CI runs this
 
 # DB tasks — need `psql` on PATH and $env:SUPABASE_DB_URL. See the warning under Gotchas.
-melos run db:create   # apply supabase/migrations/0001_init.sql (idempotent)
+# Every step below except the sim runs under `psql -1` — one transaction per file, so a failure
+# part-way through rolls that file back instead of leaving half a schema (OPT-T6).
+melos run db:create   # apply every supabase/migrations/*.sql, in order (each idempotent)
 melos run db:seed     # load supabase/seed.sql (idempotent; also backfills ratings — B014)
 melos run db:recipes  # load supabase/seed_recipes.sql (idempotent; run recipes:gen first)
 melos run db:clean    # truncate recipe data, keep schema + users

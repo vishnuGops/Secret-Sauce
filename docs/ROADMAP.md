@@ -1249,8 +1249,11 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       B027 formatter conflict · migrate to `freezed` 3.x to unpin Flutter (B005)
 - [ ] **OPT-T5:** `npx playwright install chrome`, then the outstanding screenshot pass over
       `/chefs` v3 and the revised card (B028 procedure; Phases 20/23 both list it)
-- [ ] **OPT-T6:** `tool/db.dart`: run `db:create`/`db:seed` files under `psql -1` so a mid-file
-      failure can't leave half-applied DDL
+- [x] **OPT-T6:** `tool/db.dart` runs `create` / `seed` / `recipes` / `drop` / `clean` under
+      `psql -1`, one transaction **per file**, so a mid-file failure rolls back instead of leaving
+      a partial schema. The sim files stay exempt — they manage their own transactions and toggle
+      triggers. Verified: all three big files apply cleanly under `-1`, and a deliberate
+      mid-file error leaves nothing behind
 
 ---
 
