@@ -1126,7 +1126,10 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       git-ignored `db-url.local.ps1` (template committed as `db-url.example.ps1`). Per-shell and
       per-project rather than a global user env var, so it cannot leak into another repo's `db:*`
       run. History checked: the credential was never committed, so no rotation needed
-- [ ] **OPT-S8 (B018, open):** rotate/delete the 9 pre-fix seed accounts on the hosted project
+- [ ] **OPT-S8 (B018):** rotate the pre-fix seed accounts on the **hosted** project.
+      `supabase/scripts/rotate_seed_passwords.sql` is written and verified on the local stack
+      (16/16 rotated, recipes/ratings/profiles intact) — **running it against hosted is the
+      owner's action**, deliberately not automated: it writes to `auth.users` on production
 
 ### OPT-P — Performance & scalability (sim `medium` makes these measurable)
 

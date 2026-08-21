@@ -92,7 +92,7 @@ secret-sauce/
     │   ├── 2_sim_generate.sql    #   the generator; counters DERIVED from the engagement log
     │   ├── 3_sim_verify.sql      #   30 assertions — the only test coverage this SQL has
     │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
-    └── scripts/{drop,clean}.sql
+    └── scripts/{drop,clean}.sql · rotate_seed_passwords.sql (B018 — hosted, manual)
 ```
 
 `seed.sql` and `seed_recipes.sql` are split on purpose: the first is **demo data** with a

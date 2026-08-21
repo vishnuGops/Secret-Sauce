@@ -1067,8 +1067,13 @@ with `tool/db.dart`'s missing prod guard (Gotcha 7) is how you drop the wrong da
 and per-project is the safer shape and a `.ps1` cannot reach `--dart-define-from-file`. No
 rotation needed: `git log --all -S` finds the credential in 0 commits.
 
-**OPT-S8** is B018's open half — a hosted-project account action, not code, and not doable from
-here (see the ROADMAP entry for what it needs).
+**OPT-S8** is B018's open half. The script side is done and verified locally:
+`supabase/scripts/rotate_seed_passwords.sql` re-`crypt`s all 16 seeded accounts to a random value,
+keyed on the seed's fixed UUIDs (never a pattern — checklist §8), rotating rather than deleting
+because `auth.users` → `profiles` → `recipes` cascades would otherwise destroy the Kitchen's 14
+curated recipes and the demo ratings. **Applying it to the hosted project stays a manual owner
+action** — it writes production `auth.users`, and `tool/db.dart` has no prod guard. Instructions
+are in the script header. The item stays unchecked until that run happens.
 
 ### OPT-P — Performance & scalability
 
