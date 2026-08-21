@@ -204,6 +204,15 @@ create table if not exists recipe_saves (
   primary key (user_id, recipe_id)
 );
 
+-- Both PKs lead with `user_id`, which serves the write paths ("did I like this",
+-- "unlike this") but leaves every recipe-leading question a seq scan (OPT-P6).
+-- `created_at` is the second column so the same index answers "who liked recipe
+-- X, newest first" and the dated windows Phase 23's rails need — the engagement
+-- log is what makes windowed queries possible at all (SDS §10.8), and it is only
+-- useful if it can be read by recipe and by date.
+create index if not exists recipe_likes_recipe_idx on recipe_likes (recipe_id, created_at desc);
+create index if not exists recipe_saves_recipe_idx on recipe_saves (recipe_id, created_at desc);
+
 create table if not exists recipe_views (
   id        uuid primary key default gen_random_uuid(),
   recipe_id uuid not null references recipes (id) on delete cascade,

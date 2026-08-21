@@ -1150,8 +1150,10 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
 - [ ] **OPT-P5:** `chefs_leaderboard` re-aggregates all public recipes per page although
       `recompute_chef_stats` already computes the totals and discards them — persist
       `total_likes/saves/views` on `profiles`, partial index `where public_recipe_count > 0`
-- [ ] **OPT-P6:** `recipe_likes` / `recipe_saves` have no recipe-leading index — add
-      `(recipe_id, created_at)` on both; prerequisite for Phase 23's windowed rails
+- [x] **OPT-P6:** added `(recipe_id, created_at desc)` to `recipe_likes` / `recipe_saves` — both
+      PKs lead with `user_id`, so every recipe-leading read was a seq scan. "Who liked recipe X,
+      newest first" goes seq-scan-over-6,483-rows + sort → **pure index scan, sort eliminated**;
+      write paths still PK-served. Unblocks Phase 23's windowed rails
 - [ ] **OPT-P7:** `logView` fires on every provider re-resolution (each like/rate re-logs a
       view row) — log once per screen visit
 - [ ] **OPT-P8:** Discover search fires per keystroke — debounce ~300 ms in the provider
