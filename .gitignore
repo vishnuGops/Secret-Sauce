@@ -36,3 +36,11 @@ env.local*
 **/env.local*
 **/env.*.local*
 !**/env.example.json
+# Shell-only secrets (B034). `SUPABASE_DB_URL` is a Postgres SUPERUSER credential
+# and must never sit in a dart-define file, because every key in one is compiled
+# into the shipped bundle. It lives in a dot-sourced script instead — per project,
+# so it cannot collide with another repo's database, and a `.ps1` can never be
+# handed to `--dart-define-from-file` by accident.
+*.local.ps1
+**/*.local.ps1
+!**/*.example.ps1

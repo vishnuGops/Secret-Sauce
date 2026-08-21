@@ -1122,7 +1122,10 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       dialog isn't importing out of `features/chefs/` (pre-empts an OPT-A3 item)
 - [x] **OPT-S6:** `fork_recipe` — explicit `auth.uid() is null` guard **and** EXECUTE revoked from
       `public`/`anon`, granted back to `authenticated`; both locks verified on the local stack
-- [ ] **OPT-S7 (B034, open):** move `SUPABASE_DB_URL` out of `env.local.json` to shell env
+- [x] **OPT-S7 (B034):** `SUPABASE_DB_URL` moved out of the dart-define files into a dot-sourced,
+      git-ignored `db-url.local.ps1` (template committed as `db-url.example.ps1`). Per-shell and
+      per-project rather than a global user env var, so it cannot leak into another repo's `db:*`
+      run. History checked: the credential was never committed, so no rotation needed
 - [ ] **OPT-S8 (B018, open):** rotate/delete the 9 pre-fix seed accounts on the hosted project
 
 ### OPT-P — Performance & scalability (sim `medium` makes these measurable)

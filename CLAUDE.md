@@ -246,8 +246,9 @@ melos run db:sim:clean -- --yes           # DESTRUCTIVE: deletes the simulated a
 >
 > The pooler user is `postgres.<project-ref>`, not bare `postgres`. A dashboard password reset takes
 > a moment to propagate — check auth on its own (`psql $u -c "select 1"`) before blaming the SQL.
-> **`SUPABASE_DB_URL` never goes in `env.local.json`** (B034): that file is compiled into shipped
-> builds via `--dart-define-from-file`, and this is a superuser credential.
+> **`SUPABASE_DB_URL` never goes in a dart-define file** (B034, fixed by OPT-S7): those are
+> compiled into shipped builds via `--dart-define-from-file`, and this is a superuser credential.
+> It lives in `db-url.local.ps1` (git-ignored), dot-sourced per shell — see "Required environment".
 
 > `--no-select` is required for every script that declares `packageFilters` in `melos.yaml`
 > (`test`, `build_runner`, `build:*`, `gen:icons`). Without a TTY the package picker aborts with
@@ -274,10 +275,26 @@ supabase stop                       # tear down
 | ------------------- | ------------------------------- | ------------------------------------------------------------------- |
 | `SUPABASE_URL`      | Project REST/Auth endpoint      | `apps/app/env.local.json` (git-ignored) → `--dart-define-from-file` |
 | `SUPABASE_ANON_KEY` | Public anon key                 | same file                                                           |
-| `SUPABASE_DB_URL`   | Postgres URI for `db:*` scripts | shell env only — never a file                                       |
+| `SUPABASE_DB_URL`   | Postgres URI for `db:*` scripts | shell env — **never a dart-define file** (B034)                     |
 
 Copy `apps/app/env.example.json` to `env.local.json` to start. `.vscode/launch.json` and every
 `melos run build:*` script already pass the file.
+
+`SUPABASE_DB_URL` is a Postgres **superuser** credential and every key in a dart-define file is
+compiled into the shipped bundle, so it lives outside them (B034 / OPT-S7). Copy
+`db-url.example.ps1` to `db-url.local.ps1` (git-ignored via `*.local.ps1`) and dot-source it in
+the shell you run database tasks from:
+
+```powershell
+. .\db-url.local.ps1     # sets $env:SUPABASE_DB_URL for THIS shell only
+melos run db:create
+```
+
+Deliberately per-shell and per-project rather than a Windows user environment variable: a global
+value would be inherited by every other repo on the machine, and `tool/db.dart` fires at whatever
+`SUPABASE_DB_URL` says with no confirmation and no prod guard (Gotcha 7). The committed
+`db-url.local.ps1` template points at the **local** stack; the hosted pooler URI is a commented
+second line, so aiming `db:*` at production is an explicit act.
 
 ## Recipe data model (the crucial part)
 

@@ -1059,8 +1059,16 @@ revoked from `public` (which is what PostgREST exposes) and `anon`, then granted
 anonymous call reached the INSERT and died on `owner_id`'s not-null constraint — an accident of
 the schema reported as a constraint violation, not an authorization failure.
 
-**OPT-S7 / S8** are B034 and B018's open halves — owner actions (env file edit; hosted account
-rotation), not code. Listed so they stop living only inside old phase notes.
+**OPT-S7 — DONE.** B034's open half. `SUPABASE_DB_URL` is out of every dart-define file and into
+`db-url.local.ps1`, dot-sourced per shell, template committed as `db-url.example.ps1`, both
+covered by new `*.local.ps1` globs in `.gitignore`. The owner rejected a Windows user environment
+variable — they run several projects against different databases, and a global value combined
+with `tool/db.dart`'s missing prod guard (Gotcha 7) is how you drop the wrong database. Per-shell
+and per-project is the safer shape and a `.ps1` cannot reach `--dart-define-from-file`. No
+rotation needed: `git log --all -S` finds the credential in 0 commits.
+
+**OPT-S8** is B018's open half — a hosted-project account action, not code, and not doable from
+here (see the ROADMAP entry for what it needs).
 
 ### OPT-P — Performance & scalability
 

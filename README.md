@@ -270,10 +270,21 @@ melos run build:ipa         # release .ipa (macOS + signing)
 ```
 
 Database (require `psql` on PATH and a `SUPABASE_DB_URL` env var — Supabase dashboard →
-Project Settings → Database → Connection string → URI):
+Project Settings → Database → Connection string → URI).
+
+Keep that URI in a **dot-sourced, git-ignored script**, not in a dart-define file (B034) and not
+in a Windows user environment variable — a global value would be inherited by every other repo on
+the machine, and `tool/db.dart` fires at whatever it points at with no confirmation and no prod
+guard. Copy the template once:
 
 ```powershell
-$env:SUPABASE_DB_URL = "postgresql://postgres:<pwd>@db.<ref>.supabase.co:5432/postgres"
+Copy-Item db-url.example.ps1 db-url.local.ps1   # then edit in your real URI
+```
+
+and dot-source it in each shell you run database tasks from:
+
+```powershell
+. .\db-url.local.ps1  # sets $env:SUPABASE_DB_URL for THIS shell only
 melos run db:create   # apply schema (supabase/migrations/0001_init.sql)
 melos run db:seed     # load demo chefs/tasters/ratings (supabase/seed.sql)
 melos run db:recipes  # load authored recipes (supabase/seed_recipes.sql)
@@ -301,9 +312,10 @@ reset takes a moment to propagate — an auth failure straight after resetting i
 password is wrong.
 
 > ⚠️ `SUPABASE_DB_URL` is a **superuser** connection string and belongs in your shell only. Never
-> put it in `apps/app/env.local.json`: that file is passed to every build through
-> `--dart-define-from-file`, so a credential in it is one `String.fromEnvironment` away from
-> shipping inside a web bundle (B034).
+> put it in `apps/app/env.local.json` **or any other dart-define file**: those are passed to every
+> build through `--dart-define-from-file`, so a credential in one is one `String.fromEnvironment`
+> away from shipping inside a web bundle (B034). `.gitignore` covers `*.local.ps1` for exactly
+> this purpose, and a `.ps1` cannot be handed to `--dart-define-from-file` by accident.
 
 Recipe content (no database or credentials needed — these only touch files):
 
