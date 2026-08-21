@@ -1135,10 +1135,17 @@ below are targeted, not structural.
   `dart:io`/`http` — `SocketException` does not exist on web, and this package declares neither
   dependency. The mapper logs the raw error, so no call site does; 8 tests assert the property
   that matters, that no exception dump reaches the string.
-- **A5 — share lookup correctness**: `findByEmailOrName` (`profile_repository.dart:25-34`) is an
-  exact `ilike` (no wildcards) with `limit(1)` on a non-unique display name — "share with Dara"
-  can pick the wrong Dara silently. Return a ranked list, `%query%` match, ShareDialog
-  disambiguates.
+- **A5 — share lookup correctness — DONE.** `findByEmailOrName` is now `searchByName(query,
+  {limit})`: `%query%`, up to 8 rows, ranked in Dart as exact → prefix → contains (PostgREST
+  cannot order by "is this an exact match"), tie-broken by name then id so the list is stable
+  between calls. LIKE wildcards in the query are escaped — `_` alone would otherwise match any
+  character — and the escaping was verified against the local stack, not assumed. The dialog does
+  the disambiguating: 300 ms debounce (Discover's number, same reason), matches listed with avatar
+  and **tier**, which is the only other thing a `profiles` row carries to tell two identical names
+  apart; you are filtered out of your own results; a lone match is pre-selected; and Share is
+  disabled until someone is chosen — there is no defensible "just share with whichever". The name
+  also changed because it was a lie: `profiles` has no email column, and nothing ever matched one.
+  6 tests, which also close OPT-T3's share-dialog item.
 - **A6 — schema nits** (one local-stack pass together): avatars bucket delete policy (parity
   with recipe-images :836); `drop function if exists chefs_leaderboard(int, int)` before its
   `create or replace` (:939 — latent B024); drop redundant `recipe_versions_recipe_idx` (:106 —

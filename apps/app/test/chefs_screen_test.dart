@@ -70,7 +70,8 @@ class _FakeProfileRepository implements ProfileRepository {
       );
 
   @override
-  Future<Profile?> findByEmailOrName(String query) async => null;
+  Future<List<Profile>> searchByName(String query, {int limit = 10}) async =>
+      const [];
 
   @override
   Future<Profile> updateMine(Profile profile) async => profile;

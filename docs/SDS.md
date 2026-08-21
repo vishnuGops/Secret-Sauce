@@ -187,6 +187,11 @@ erDiagram
   revoke matches 0 rows rather than erroring, `unshare()` asks for the deleted row back and throws
   `WriteDeniedException` when none comes — otherwise the dialog reports someone removed while they
   keep access (OPT-S2; same treatment as `recipes` update/delete).
+  **Who** a share goes to is a UI decision, not a database one: `display_name` is not unique
+  (the sim carries three "Amara Baptiste"s), so `ProfileRepository.searchByName` returns a ranked
+  list — exact, then prefix, then contains, LIKE wildcards in the query escaped — and ShareDialog
+  makes the reader pick before Share is enabled (OPT-A5). The old exact-`ilike` + `limit(1)`
+  shared with whichever row came back first and reported success.
 - **likes/saves**: user manages own rows; counts denormalized on `recipes` via triggers.
 - **views**: anyone who can read a recipe may log a view, including anonymous visitors — but only
   as themselves: `views_insert`'s `with check` requires `user_id is null or user_id = auth.uid()`,

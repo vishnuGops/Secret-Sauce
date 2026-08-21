@@ -1199,8 +1199,12 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       to one actionable sentence; it logs the raw error itself, so no call site does. All 14
       surfaces converted (Discover/My grid, chefs board + sheet, recipe detail incl. fork/rate,
       editor load + save, profile, auth, share dialog). 8 tests
-- [ ] **OPT-A5:** `findByEmailOrName` is exact-`ilike` + `limit(1)` on a non-unique name —
-      sharing can silently pick the wrong user; return a list and disambiguate in the dialog
+- [x] **OPT-A5:** `findByEmailOrName` → `searchByName`, a `%query%` match returning up to 8
+      profiles ranked exact → prefix → contains (LIKE wildcards in the query escaped). ShareDialog
+      now debounces the lookup, lists the matches with avatar + tier, excludes you, auto-selects a
+      lone match, and keeps **Share disabled until one is chosen** — with three "Amara Baptiste"s
+      in the sim data, "share with Amara" was picking one at random and reporting success.
+      6 tests (also closes OPT-T3's share-dialog item)
 - [ ] **OPT-A6:** schema nits: avatars bucket has no delete policy; `chefs_leaderboard` lacks
       its B024 drop-guard (latent `42725` on first signature change); redundant
       `recipe_versions_recipe_idx`; unconditional FK drop/re-add on every apply; `tags` is
@@ -1221,8 +1225,9 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       leverage test investment in the repo)
 - [ ] **OPT-T2:** repository unit tests behind a mocked `SupabaseClient` (Phase 3, still open)
 - [ ] **OPT-T3:** widget-test gaps in priority order: ~~recipe-detail interactions (would have
-      caught B051)~~ — started, `recipe_detail_test.dart` landed with OPT-S3; `snapRating`
-      (5-minute unit test, named untested in Gotcha 15), share dialog
+      caught B051)~~ — `recipe_detail_test.dart` landed with OPT-S3; ~~share dialog~~ —
+      `share_dialog_test.dart` landed with OPT-A5; `snapRating` (5-minute unit test, named
+      untested in Gotcha 15) remains
 - [ ] **OPT-T4:** toolchain: commit `pubspec.lock` (B009) · raise the `sdk:` bound / settle
       B027 formatter conflict · migrate to `freezed` 3.x to unpin Flutter (B005)
 - [ ] **OPT-T5:** `npx playwright install chrome`, then the outstanding screenshot pass over

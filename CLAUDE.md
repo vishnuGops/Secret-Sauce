@@ -84,7 +84,7 @@ secret-sauce/
 │   ├── lib/main.dart · test/{widget_test,chefs_screen_test,chefs_routing_test,
 │   │                          top_nav_bar_test,recipe_editor_test,recipe_detail_test,
 │   │                          my_recipes_header_test,recipe_grid_test,
-│   │                          discover_search_test,paging_test}.dart
+│   │                          discover_search_test,paging_test,share_dialog_test}.dart
 │   │                          # widget_test.dart covers the `/` -> /discover redirect
 │   ├── env.example.json       # template; env.local.json (git-ignored) holds real creds
 │   └── android/ ios/ web/ windows/   # platform runners are committed — no `flutter create`
