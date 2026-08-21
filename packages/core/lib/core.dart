@@ -21,6 +21,7 @@ export 'src/services/supabase_service.dart';
 export 'src/services/storage_service.dart';
 
 // Repositories
+export 'src/repositories/write_denied_exception.dart';
 export 'src/repositories/auth_repository.dart';
 export 'src/repositories/recipe_repository.dart';
 export 'src/repositories/discover_repository.dart';

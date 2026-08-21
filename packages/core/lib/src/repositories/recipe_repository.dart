@@ -8,6 +8,7 @@ import 'package:core/src/models/recipe_step.dart';
 import 'package:core/src/models/recipe_version.dart';
 import 'package:core/src/models/step_group.dart';
 import 'package:core/src/repositories/recipe_queries.dart';
+import 'package:core/src/repositories/write_denied_exception.dart';
 
 /// Recipe CRUD, forking, versioning, sharing, and social actions.
 abstract interface class RecipeRepository {
@@ -142,10 +143,18 @@ class SupabaseRecipeRepository implements RecipeRepository {
 
   @override
   Future<Recipe> update(Recipe recipe, {String changeSummary = 'Updated'}) async {
-    await _client
+    // `.select()` is load-bearing, not decoration (Gotcha 2): without it an RLS
+    // denial matches 0 rows and reports success, and the lines below would then
+    // delete every ingredient/step group and re-persist content against a parent
+    // row that was never saved. Check before touching the content.
+    final saved = await _client
         .from('recipes')
         .update(_writablePayload(recipe))
-        .eq('id', recipe.id);
+        .eq('id', recipe.id)
+        .select('id');
+    if (saved.isEmpty) {
+      throw WriteDeniedException('save this recipe', detail: 'recipe ${recipe.id}');
+    }
     // Replace nested content wholesale (groups cascade-delete their children).
     await _client.from('ingredient_groups').delete().eq('recipe_id', recipe.id);
     await _client.from('step_groups').delete().eq('recipe_id', recipe.id);
@@ -156,7 +165,11 @@ class SupabaseRecipeRepository implements RecipeRepository {
 
   @override
   Future<void> delete(String id) async {
-    await _client.from('recipes').delete().eq('id', id);
+    final removed =
+        await _client.from('recipes').delete().eq('id', id).select('id');
+    if (removed.isEmpty) {
+      throw WriteDeniedException('delete this recipe', detail: 'recipe $id');
+    }
   }
 
   @override
@@ -193,11 +206,21 @@ class SupabaseRecipeRepository implements RecipeRepository {
 
   @override
   Future<void> unshare({required String recipeId, required String userId}) async {
-    await _client
+    // Same Gotcha 2 trap as update()/delete(): `shares_owner_all` is scoped to
+    // `owns_recipe(recipe_id)`, so a non-owner's revoke matches 0 rows and the
+    // dialog would report the person removed while they keep their access.
+    final removed = await _client
         .from('recipe_shares')
         .delete()
         .eq('recipe_id', recipeId)
-        .eq('shared_with_user_id', userId);
+        .eq('shared_with_user_id', userId)
+        .select('recipe_id');
+    if (removed.isEmpty) {
+      throw WriteDeniedException(
+        'remove this person',
+        detail: 'share $recipeId/$userId',
+      );
+    }
   }
 
   @override

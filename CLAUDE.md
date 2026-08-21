@@ -386,7 +386,12 @@ the `code-review` skill). The ones you need while _writing_ code:
    than looking for it. (`pubspec.lock` is ignored too — B009, still open.)
 2. **`.update()` / `.delete()` matching 0 rows returns success.** An RLS denial on those is
    invisible to the client (the twin of B011). `.insert()` / `.upsert()` do raise `42501`. Add
-   `.select()` to any update/delete on a path where the user may not own the row.
+   `.select()` to any update/delete on a path where the user may not own the row, and throw
+   `WriteDeniedException` (core) when the result is empty — `RecipeRepository.update()`,
+   `delete()`, and `unshare()` do this (OPT-S2). In `update()` the check sits **before** the
+   group deletes on purpose: a denied save must not reach the content-replacement step. The
+   like/save/rating deletes are keyed by the caller's own `_uid`, so RLS cannot deny them and
+   they deliberately skip the check.
 3. **Trigger rights.** A trigger that writes a row the acting user does not own must be
    `security definer set search_path = public`, or the UPDATE silently affects 0 rows (B011).
    Mutating helpers stay invoker-rights **and** must `revoke execute` from

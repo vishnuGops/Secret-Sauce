@@ -1109,8 +1109,9 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       that cannot see the row an `INSERT … RETURNING` is inserting — so **creating a recipe failed
       outright**. Policy inlined against the row's own columns. Found by OPT-S1's acceptance
       matrix; pre-existing. Also 2.4× faster on a Discover scan (15.7 ms → 6.5 ms at sim `medium`)
-- [ ] **OPT-S2:** add `.select()` + empty-result check to the `recipes` `update()` / `delete()`
-      calls in `recipe_repository.dart` (Gotcha 2 — RLS denial currently reads as success)
+- [x] **OPT-S2:** added `.select()` + empty-result check to the `recipes` `update()` / `delete()`
+      calls in `recipe_repository.dart`, plus `unshare()` (same class, same one-line fix); they
+      throw `WriteDeniedException` instead of reporting a silent no-op as success (Gotcha 2)
 - [ ] **OPT-S3 (B051):** recipe-detail like/save — guard signed-out, read my-state, make toggles
 - [ ] **OPT-S4 (B052):** recipe-editor `_load()` failure path — catch, ErrorView, block Save
 - [ ] **OPT-S5:** share dialog offers "Can edit" though `share_permission.edit` is reserved and

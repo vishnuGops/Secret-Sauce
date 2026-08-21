@@ -182,7 +182,10 @@ erDiagram
   this policy free of any self-referencing lookup on `recipes`.
 - **recipes INSERT/UPDATE/DELETE**: `owner_id = auth.uid()`.
 - Child tables (ingredients/steps/versions/…): access derived from parent recipe visibility.
-- **recipe_shares**: recipe owner manages; shared user can read own rows.
+- **recipe_shares**: recipe owner manages; shared user can read own rows. Because a non-owner's
+  revoke matches 0 rows rather than erroring, `unshare()` asks for the deleted row back and throws
+  `WriteDeniedException` when none comes — otherwise the dialog reports someone removed while they
+  keep access (OPT-S2; same treatment as `recipes` update/delete).
 - **likes/saves**: user manages own rows; counts denormalized on `recipes` via triggers.
 - **views**: anyone who can read a recipe may log a view, including anonymous visitors — but only
   as themselves: `views_insert`'s `with check` requires `user_id is null or user_id = auth.uid()`,

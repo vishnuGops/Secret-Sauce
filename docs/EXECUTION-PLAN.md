@@ -1021,9 +1021,17 @@ seed/sim create as `postgres`. Fixed by inlining the policy against the row's ow
 anon / owner / unrelated / shared-user, plus the create path itself; 2.4× faster on a Discover
 scan as a side effect.
 
-**OPT-S2 — `.select()` on recipes update/delete** (`recipe_repository.dart:145-160`): an RLS
-denial matches 0 rows and returns success today (Gotcha 2); `update()` then happily re-persists
-content while believing the parent row saved. Append `.select()` and throw on an empty result.
+**OPT-S2 — `.select()` on recipes update/delete — DONE.** An RLS denial matched 0 rows and
+returned success (Gotcha 2); `update()` then re-persisted content while believing the parent row
+saved. `update()`, `delete()`, and `unshare()` now append `.select()` and throw the new
+`WriteDeniedException` on an empty result — in `update()` the check sits **before** the group
+deletes, so a denied save can no longer destroy the recipe's content on its way out. `unshare()`
+was added to the scope because it is the same one-line fix on the sharing path the checklist
+already names; the like/save/rating deletes are keyed by `_uid`, so RLS cannot deny them and they
+were left alone. Verified on the local stack: owner update/delete/unshare return a row, a
+non-owner's return none. The editor's save already wraps the call in `try/catch`, so the throw
+surfaces as a snackbar rather than an unhandled exception; `delete()`/`unshare()` have no UI
+caller yet.
 
 **OPT-S3 (B051)** and **OPT-S4 (B052)** — see the tracker entries for mechanism; both are small,
 both sit on the product's core surfaces (detail, editor). S3 also closes the dead
