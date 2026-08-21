@@ -1216,7 +1216,18 @@ create policy "avatars updatable by owner folder"
 -- recipes is a contradiction), and Popular and Recent still cover everything.
 -- `seed.sql`/`seed_recipes.sql` create at `now()`, so a fresh install is never
 -- in that state.
-create or replace function recipes_trending(p_limit int default 20)
+--
+-- `p_offset` + the `created_at, id` tie-break are OPT-P9's half of Discover's
+-- load-more. The tie-break is not cosmetic: `offset` only makes sense over a
+-- total order, and two recipes with an equal decayed score would otherwise swap
+-- places between the page-1 and page-2 queries — one row duplicated on the
+-- second page, another never shown at all.
+--
+-- The old one-argument signature must be dropped here, in the file that
+-- recreates the function (B024): `create or replace` cannot change an argument
+-- list, and a surviving overload makes `recipes_trending(20)` ambiguous (42725).
+drop function if exists recipes_trending(int);
+create or replace function recipes_trending(p_limit int default 20, p_offset int default 0)
 returns setof recipes
 language sql
 stable
@@ -1227,8 +1238,10 @@ as $$
     and r.created_at > now() - interval '30 days'
   order by
     (r.like_count + r.view_count)::numeric
-      / power(extract(epoch from (now() - r.created_at)) / 3600.0 + 2.0, 1.5) desc
-  limit p_limit;
+      / power(extract(epoch from (now() - r.created_at)) / 3600.0 + 2.0, 1.5) desc,
+    r.created_at desc,
+    r.id
+  limit p_limit offset p_offset;
 $$;
 
 -- Popular: highest rated public recipes.
@@ -1236,8 +1249,11 @@ $$;
 -- Straight AVG(rating) would put a single 5-star recipe above a 4.8 with 300
 -- ratings, so the score is a Bayesian (weighted) average: each recipe starts
 -- with `m` phantom ratings at the site-wide mean, and real ratings pull the
--- score away from that prior. Ties fall back to saves + likes, then recency.
-create or replace function recipes_popular(p_limit int default 20)
+-- score away from that prior. Ties fall back to saves + likes, then recency,
+-- then `id` — the last one exists so the order is total and `p_offset` (OPT-P9)
+-- cannot show the same recipe on two pages. B024 drop as above.
+drop function if exists recipes_popular(int);
+create or replace function recipes_popular(p_limit int default 20, p_offset int default 0)
 returns setof recipes
 language sql
 stable
@@ -1256,15 +1272,26 @@ as $$
     ((r.rating_sum + p.m * p.mean) / (r.rating_count + p.m)) desc,
     r.rating_count desc,
     (r.save_count + r.like_count) desc,
-    r.created_at desc
-  limit p_limit;
+    r.created_at desc,
+    r.id
+  limit p_limit offset p_offset;
 $$;
 
 -- Full-text search over public recipes (title/description/ingredients/tags).
 -- Reads the trigger-maintained `search_tsv` (OPT-P1) instead of rebuilding the
 -- document per row. The `@@` is now a GIN index probe and `ts_rank` runs only
 -- over the matches, not the whole public corpus.
-create or replace function recipes_search(p_query text, p_limit int default 30)
+--
+-- `ts_rank` ties are common — a one-word query over a corpus of similar recipes
+-- produces long runs of identical rank — so the `created_at, id` tie-break
+-- matters more here than on the other two: without it, `p_offset` (OPT-P9)
+-- would reshuffle exactly the rows a second page is made of. B024 drop as above.
+drop function if exists recipes_search(text, int);
+create or replace function recipes_search(
+  p_query text,
+  p_limit int default 30,
+  p_offset int default 0
+)
 returns setof recipes
 language sql
 stable
@@ -1273,8 +1300,10 @@ as $$
   from recipes r
   where r.visibility = 'public'
     and r.search_tsv @@ websearch_to_tsquery('english', p_query)
-  order by ts_rank(r.search_tsv, websearch_to_tsquery('english', p_query)) desc
-  limit p_limit;
+  order by ts_rank(r.search_tsv, websearch_to_tsquery('english', p_query)) desc,
+           r.created_at desc,
+           r.id
+  limit p_limit offset p_offset;
 $$;
 
 -- How many chefs sit in each tier (OPT-P10). The `/chefs` hero needs all five

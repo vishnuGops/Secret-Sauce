@@ -16,7 +16,11 @@ class _RecordingDiscoverRepository implements DiscoverRepository {
   final List<String> searches = [];
 
   @override
-  Future<List<Recipe>> search(String query, {int limit = 30}) async {
+  Future<List<Recipe>> search(
+    String query, {
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) async {
     searches.add(query);
     return const [];
   }

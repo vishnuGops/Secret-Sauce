@@ -6,6 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+/// Both tabs are paged notifiers (OPT-P9), so the override supplies a page
+/// rather than a future: `fetchPage` is the one seam, and stubbing it keeps the
+/// repository (and any Supabase client) out of a chrome test entirely.
+class _EmptyMine extends MyRecipesNotifier {
+  @override
+  Future<List<Recipe>> fetchPage({required int limit, required int offset}) =>
+      Future.value(const []);
+}
+
+class _EmptyShared extends SharedWithMeNotifier {
+  @override
+  Future<List<Recipe>> fetchPage({required int limit, required int offset}) =>
+      Future.value(const []);
+}
+
 /// `New recipe` moved off the web top navigation and onto this header, which is
 /// a **fixed-height** `AppBar` toolbar — the shape that produced B001/B002/B016
 /// elsewhere. A labelled `FilledButton` carries 28px of vertical padding on top
@@ -27,8 +42,8 @@ Future<void> _pump(
     ProviderScope(
       overrides: [
         // Empty lists: this is a chrome test, and the grid has its own suite.
-        myRecipesProvider.overrideWith((ref) async => const <Recipe>[]),
-        sharedWithMeProvider.overrideWith((ref) async => const <Recipe>[]),
+        myRecipesProvider.overrideWith(_EmptyMine.new),
+        sharedWithMeProvider.overrideWith(_EmptyShared.new),
       ],
       child: MaterialApp(
         theme: AppTheme.light(),

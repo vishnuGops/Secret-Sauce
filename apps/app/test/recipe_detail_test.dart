@@ -109,10 +109,15 @@ class _FakeRecipeRepository implements RecipeRepository {
   Future<String> fork(String sourceRecipeId) => throw UnimplementedError();
 
   @override
-  Future<List<Recipe>> listMine() => throw UnimplementedError();
+  Future<List<Recipe>> listMine({int limit = kRecipePageSize, int offset = 0}) =>
+      throw UnimplementedError();
 
   @override
-  Future<List<Recipe>> listSharedWithMe() => throw UnimplementedError();
+  Future<List<Recipe>> listSharedWithMe({
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) =>
+      throw UnimplementedError();
 
   @override
   Future<void> share({

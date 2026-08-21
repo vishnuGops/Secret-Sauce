@@ -21,6 +21,7 @@ class RecipeGrid extends StatelessWidget {
     this.padding = const EdgeInsets.all(AppSpacing.md),
     this.showVisibility = false,
     this.showChef = true,
+    this.footer,
   });
 
   final List<Recipe> recipes;
@@ -33,6 +34,13 @@ class RecipeGrid extends StatelessWidget {
   /// has the same owner (My Recipes), where the badge is pure noise.
   final bool showChef;
 
+  /// Rendered below the last row, inside the same scroll view — the `Load more`
+  /// control (OPT-P9). It has to scroll **with** the grid: a fixed bar under it
+  /// would cost every screen a strip of height whether or not there is another
+  /// page, which is why this is a `CustomScrollView` rather than a `GridView`
+  /// with something bolted underneath.
+  final Widget? footer;
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -43,33 +51,52 @@ class RecipeGrid extends StatelessWidget {
           maxTileWidth: kRecipeCardMaxWidth,
           spacing: AppSpacing.md,
         );
-        return GridView.builder(
-          // The gutter is what keeps the cards at their maximum width: the
-          // delegate always divides the full cross-axis extent between the
-          // columns, so the only way to cap a tile is to hand the grid less
-          // width to divide.
-          padding: padding.copyWith(
-            left: padding.left + metrics.gutter,
-            right: padding.right + metrics.gutter,
-          ),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: metrics.columns,
-            mainAxisSpacing: AppSpacing.md,
-            crossAxisSpacing: AppSpacing.md,
-            // Fixed height, not a fixed aspect: the card is a fixed-height
-            // tile, so a wide window no longer leaves dead space under it.
-            mainAxisExtent: kRecipeCardHeight,
-          ),
-          itemCount: recipes.length,
-          itemBuilder: (context, i) {
-            final recipe = recipes[i];
-            return RecipeCard(
-              recipe: recipe,
-              showVisibility: showVisibility,
-              showChef: showChef,
-              onTap: () => context.push(Routes.recipe(recipe.id)),
-            );
-          },
+        // The gutter is what keeps the cards at their maximum width: the
+        // delegate always divides the full cross-axis extent between the
+        // columns, so the only way to cap a tile is to hand the grid less
+        // width to divide.
+        final gridPadding = padding.copyWith(
+          left: padding.left + metrics.gutter,
+          right: padding.right + metrics.gutter,
+        );
+        return CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: gridPadding,
+              sliver: SliverGrid.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: metrics.columns,
+                  mainAxisSpacing: AppSpacing.md,
+                  crossAxisSpacing: AppSpacing.md,
+                  // Fixed height, not a fixed aspect: the card is a
+                  // fixed-height tile, so a wide window no longer leaves dead
+                  // space under it.
+                  mainAxisExtent: kRecipeCardHeight,
+                ),
+                itemCount: recipes.length,
+                itemBuilder: (context, i) {
+                  final recipe = recipes[i];
+                  return RecipeCard(
+                    recipe: recipe,
+                    showVisibility: showVisibility,
+                    showChef: showChef,
+                    onTap: () => context.push(Routes.recipe(recipe.id)),
+                  );
+                },
+              ),
+            ),
+            if (footer != null)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: gridPadding.left,
+                    right: gridPadding.right,
+                    bottom: padding.bottom,
+                  ),
+                  child: footer,
+                ),
+              ),
+          ],
         );
       },
     );

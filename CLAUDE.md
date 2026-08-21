@@ -62,23 +62,27 @@ secret-sauce/
 │   ├── core/lib/
 │   │   ├── core.dart              # BARREL — the only public surface of `core`
 │   │   ├── src/{models,repositories,services}/ + providers.dart
-│   │   └── ../test/               # chef_models_test.dart (model decoding only —
-│   │                              # repositories are still untested)
+│   │   │                          # + chef_scoring.dart, formatting.dart, paging.dart
+│   │   └── ../test/               # chef_models/chef_scoring/recipe_embed (decoding + pure
+│   │                              # helpers only — repositories are still untested)
 │   └── design_system/lib/
 │       ├── design_system.dart     # BARREL — export new widgets here or app can't import them
 │       ├── src/{theme,layout,widgets}/
 │       └── ../test/               # recipe_card_test.dart, star_rating_test.dart,
-│                                  # chef_badge_test.dart
+│                                  # chef_badge_test.dart, flow_grid_test.dart, +4 chef widgets
 ├── apps/app/
 │   ├── lib/features/          # auth, discover, chefs, my_recipes, recipe_detail,
 │   │                          # recipe_editor, profile — screen + *_providers.dart per feature
 │   │                          # (home/ was retired 2026-08-20 — `/` redirects to /discover)
 │   ├── lib/routing/           # app_router.dart (routes + redirect), app_shell.dart (picks the
 │   │                          #   chrome), top_nav_bar.dart (web), nav_destinations.dart (lists)
-│   ├── lib/widgets/           # app-level shared widgets (recipe_grid.dart)
+│   ├── lib/widgets/           # app-level shared widgets (recipe_grid.dart,
+│   │                          #   recipe_async_grid.dart — the paged list every
+│   │                          #   browsing surface renders through)
 │   ├── lib/main.dart · test/{widget_test,chefs_screen_test,chefs_routing_test,
 │   │                          top_nav_bar_test,recipe_editor_test,recipe_detail_test,
-│   │                          my_recipes_header_test,recipe_grid_test}.dart
+│   │                          my_recipes_header_test,recipe_grid_test,
+│   │                          discover_search_test,paging_test}.dart
 │   │                          # widget_test.dart covers the `/` -> /discover redirect
 │   ├── env.example.json       # template; env.local.json (git-ignored) holds real creds
 │   └── android/ ios/ web/ windows/   # platform runners are committed — no `flutter create`
@@ -575,6 +579,15 @@ recipe` lives on the My Recipes header and search in Discover's search bar; putt
     No widget test sees this — tests pump the screen without the shell — so it is a screenshot
     check, not a test one. Two more things only screenshots catch: a name that **ellipsises**
     rather than overflows (B032), and copy like `1 recipes` (B031).
+24. **A paged list needs a _total_ order, or `offset` lies** (OPT-P9). Every browsing surface now
+    reads `limit`/`offset` pages, and `offset` is only meaningful over an ordering with no ties:
+    two rows the database is free to return in either order can swap between the page-1 and page-2
+    queries, which shows one recipe twice and hides another — silently, with no error anywhere.
+    So each Discover RPC's `order by` ends in `created_at desc, id`, and each table-backed read
+    (`recent`, `listMine`, `listSharedWithMe`) appends `id`/`recipe_id` after its sort column.
+    Adding a new paged surface or a new sort means adding that tie-break in the same change.
+    Client state is `PagedRecipesNotifier` (`core/src/paging.dart`) and every surface renders
+    through `RecipeAsyncGrid` — don't hand-roll a second loading/error/empty/grid ladder.
 
 ## Docs–code sync (MANDATORY)
 

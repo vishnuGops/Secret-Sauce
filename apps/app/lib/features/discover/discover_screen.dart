@@ -1,10 +1,9 @@
-import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:app/features/discover/discover_providers.dart';
-import 'package:app/widgets/recipe_grid.dart';
+import 'package:app/widgets/recipe_async_grid.dart';
 
 /// Public discovery: Popular / Trending / Recent tabs plus search.
 class DiscoverScreen extends ConsumerStatefulWidget {
@@ -67,21 +66,23 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
             ),
             Expanded(
               child: searching
-                  ? _RecipeList(
-                      provider: searchResultsProvider, emptyLabel: 'No matches')
+                  ? RecipeAsyncGrid(
+                      provider: searchResultsProvider,
+                      empty: _empty('No matches'),
+                    )
                   : TabBarView(
                       children: [
-                        _RecipeList(
+                        RecipeAsyncGrid(
                           provider: popularRecipesProvider,
-                          emptyLabel: 'No popular recipes yet',
+                          empty: _empty('No popular recipes yet'),
                         ),
-                        _RecipeList(
+                        RecipeAsyncGrid(
                           provider: trendingRecipesProvider,
-                          emptyLabel: 'Nothing trending yet',
+                          empty: _empty('Nothing trending yet'),
                         ),
-                        _RecipeList(
+                        RecipeAsyncGrid(
                           provider: recentRecipesProvider,
-                          emptyLabel: 'No recipes yet',
+                          empty: _empty('No recipes yet'),
                         ),
                       ],
                     ),
@@ -93,25 +94,8 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
   }
 }
 
-class _RecipeList extends ConsumerWidget {
-  const _RecipeList({required this.provider, required this.emptyLabel});
-
-  final ProviderListenable<AsyncValue<List<Recipe>>> provider;
-  final String emptyLabel;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final async = ref.watch(provider);
-    return async.when(
-      loading: () => const LoadingView(),
-      error: (e, _) => ErrorView(message: e.toString()),
-      data: (recipes) => recipes.isEmpty
-          ? EmptyView(
-              title: emptyLabel,
-              icon: Icons.local_dining_outlined,
-              message: 'Public recipes will appear here.',
-            )
-          : RecipeGrid(recipes: recipes),
+EmptyView _empty(String title) => EmptyView(
+      title: title,
+      icon: Icons.local_dining_outlined,
+      message: 'Public recipes will appear here.',
     );
-  }
-}

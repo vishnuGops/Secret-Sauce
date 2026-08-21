@@ -1,4 +1,3 @@
-import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,7 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:app/features/my_recipes/my_recipes_providers.dart';
 import 'package:app/routing/app_router.dart';
-import 'package:app/widgets/recipe_grid.dart';
+import 'package:app/widgets/recipe_async_grid.dart';
 
 /// My Recipes with two tabs: recipes I own and recipes shared with me.
 class MyRecipesScreen extends ConsumerWidget {
@@ -54,7 +53,7 @@ class MyRecipesScreen extends ConsumerWidget {
         ),
         body: TabBarView(
           children: [
-            _Tab(
+            RecipeAsyncGrid(
               provider: myRecipesProvider,
               showVisibility: true,
               // Every card here is mine — a repeated chef badge is noise, and
@@ -71,7 +70,7 @@ class MyRecipesScreen extends ConsumerWidget {
                 ),
               ),
             ),
-            _Tab(
+            RecipeAsyncGrid(
               provider: sharedWithMeProvider,
               empty: const EmptyView(
                 title: 'Nothing shared yet',
@@ -82,36 +81,6 @@ class MyRecipesScreen extends ConsumerWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _Tab extends ConsumerWidget {
-  const _Tab({
-    required this.provider,
-    required this.empty,
-    this.showVisibility = false,
-    this.showChef = true,
-  });
-
-  final ProviderListenable<AsyncValue<List<Recipe>>> provider;
-  final Widget empty;
-  final bool showVisibility;
-  final bool showChef;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final async = ref.watch(provider);
-    return async.when(
-      loading: () => const LoadingView(),
-      error: (e, _) => ErrorView(message: e.toString()),
-      data: (recipes) => recipes.isEmpty
-          ? empty
-          : RecipeGrid(
-              recipes: recipes,
-              showVisibility: showVisibility,
-              showChef: showChef,
-            ),
     );
   }
 }

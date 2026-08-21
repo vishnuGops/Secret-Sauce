@@ -5,6 +5,7 @@ import 'package:core/src/models/ingredient_group.dart';
 import 'package:core/src/models/recipe.dart';
 import 'package:core/src/models/recipe_version.dart';
 import 'package:core/src/models/step_group.dart';
+import 'package:core/src/paging.dart';
 import 'package:core/src/repositories/recipe_queries.dart';
 import 'package:core/src/repositories/write_denied_exception.dart';
 
@@ -13,11 +14,13 @@ abstract interface class RecipeRepository {
   /// Full recipe including grouped ingredients and steps.
   Future<Recipe> getById(String id);
 
-  /// Recipes owned by the current user.
-  Future<List<Recipe>> listMine();
+  /// Recipes owned by the current user — one page of [limit] rows starting at
+  /// [offset] (OPT-P9). Both lists were unbounded before, so a 400-recipe vault
+  /// decoded 400 rows on every visit to `/my`.
+  Future<List<Recipe>> listMine({int limit, int offset});
 
-  /// Recipes shared with the current user.
-  Future<List<Recipe>> listSharedWithMe();
+  /// Recipes shared with the current user, same paging contract as [listMine].
+  Future<List<Recipe>> listSharedWithMe({int limit, int offset});
 
   /// Create a new recipe (with nested groups) and its first version.
   Future<Recipe> create(Recipe recipe);
@@ -117,21 +120,40 @@ class SupabaseRecipeRepository implements RecipeRepository {
   }
 
   @override
-  Future<List<Recipe>> listMine() async {
+  Future<List<Recipe>> listMine({
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) async {
+    // `id` after `updated_at` because paging needs a **total** order: a save
+    // that touches two recipes in the same second would otherwise let them swap
+    // between the page-1 and page-2 reads, showing one twice and hiding the
+    // other. `range` is inclusive at both ends.
     final rows = await _client
         .from('recipes')
         .select(kRecipeSelect)
         .eq('owner_id', _uid)
-        .order('updated_at', ascending: false);
+        .order('updated_at', ascending: false)
+        .order('id', ascending: false)
+        .range(offset, offset + limit - 1);
     return rows.map<Recipe>(Recipe.fromJson).toList();
   }
 
   @override
-  Future<List<Recipe>> listSharedWithMe() async {
+  Future<List<Recipe>> listSharedWithMe({
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) async {
+    // Ordered by when the share was made — newest first, `recipe_id` breaking
+    // the tie — because `recipe_shares` is the table being paged here, not
+    // `recipes`; ordering by an embedded column is not something PostgREST can
+    // page over.
     final rows = await _client
         .from('recipe_shares')
         .select('recipes($kRecipeSelect)')
-        .eq('shared_with_user_id', _uid);
+        .eq('shared_with_user_id', _uid)
+        .order('created_at', ascending: false)
+        .order('recipe_id', ascending: false)
+        .range(offset, offset + limit - 1);
     return rows
         .map<Recipe>((r) => Recipe.fromJson(r['recipes'] as Map<String, dynamic>))
         .toList();

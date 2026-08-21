@@ -284,6 +284,34 @@ erDiagram
   nothing. `search_tsv` is server-owned: not in the column grants, written only by
   `security definer` triggers, and excluded from `kRecipeSelect` so it never ships to a client.
 
+### 6.1 Paging (OPT-P9)
+
+Every browsing surface reads **one page at a time** and grows by an explicit `Load more`:
+Discover's four lists and both My Recipes tabs. Before this, Discover was capped at 20 (30 for
+search) with no way to see row 21, and `listMine` / `listSharedWithMe` were unbounded.
+
+- `recipes_popular(p_limit, p_offset)`, `recipes_trending(p_limit, p_offset)`,
+  `recipes_search(p_query, p_limit, p_offset)` — `p_offset` added to all three, and each order-by
+  now ends in `created_at desc, id` so the ordering is **total**. That tie-break is what makes
+  `offset` meaningful at all: rows with an equal score (very common for `ts_rank`) would otherwise
+  be free to swap between the page-1 and page-2 queries, showing one recipe twice and hiding
+  another. The pre-`p_offset` signatures are dropped in `0001_init.sql` itself and listed in
+  `drop.sql` (B024).
+- Table-backed lists page with PostgREST `.range(offset, offset + limit - 1)` under the same
+  total-order rule: Recent orders `created_at desc, id desc`; `listMine` `updated_at desc,
+id desc`; `listSharedWithMe` `recipe_shares.created_at desc, recipe_id desc` (the shares row is
+  what is being paged, not the embedded recipe).
+- Client state is `PagedRecipesNotifier` (`core/src/paging.dart`), an `AutoDisposeAsyncNotifier`
+  holding a `RecipePage` (rows, `hasMore`, `loadingMore`). `hasMore` means "the last fetch came
+  back full" — the only evidence `limit`/`offset` gives without a `count(*)` per page — so a total
+  that is an exact multiple of `kRecipePageSize` (20) costs one empty request at the end.
+  `loadingMore` lives in the data rather than in an `AsyncLoading`, so the rows stay on screen
+  while the next page loads; a failed page leaves the list untouched and rethrows for a snackbar.
+  Rows already on screen are dropped from an incoming page by id, since a deletion between two
+  requests genuinely shifts the window.
+- **Load more, not infinite scroll** — a product decision: an explicit tap behaves the same under
+  a phone flick and a desktop scrollbar, and never fetches a page nobody asked for.
+
 ## 7. Screens
 
 | Screen         | Route                             | Notes                                                                                 |

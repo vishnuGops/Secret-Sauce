@@ -1168,8 +1168,13 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
 - [x] **OPT-P8:** Discover search fired per keystroke — 300 ms debounce in
       `searchResultsProvider` (`kSearchDebounce`), superseded queries cancelled on dispose so they
       never reach the network; 4 tests pin it
-- [ ] **OPT-P9:** pagination for Discover tabs and `listMine`/`listSharedWithMe` (all capped or
-      unbounded today); the leaderboard's paged RPC is the precedent
+- [x] **OPT-P9:** pagination for all six browsing surfaces — Discover's four lists and both My
+      Recipes tabs. `p_offset` on the three Discover RPCs, `.range()` on the table reads, and a
+      **total** order everywhere (`… , created_at desc, id`) so a page boundary cannot duplicate or
+      skip a row. Client state is one `PagedRecipesNotifier` in `core`; every surface renders
+      through the new `RecipeAsyncGrid`, which also absorbed the duplicated
+      Loading/Error/Empty/grid ladder (OPT-A7's grid item, done early). **Load more button, not
+      infinite scroll** — owner's call. 7 tests in `paging_test.dart`
 - [x] **OPT-P10:** `/chefs` hero issued 6 count queries → **1** `chefs_tier_counts()` RPC;
       `chefCount()` deleted because the total is the sum of the tiers, and `chefCountProvider`
       now derives it (4 call sites share the one request). `chefDetailProvider` starts both
@@ -1193,8 +1198,9 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       its B024 drop-guard (latent `42725` on first signature change); redundant
       `recipe_versions_recipe_idx`; unconditional FK drop/re-add on every apply; `tags` is
       insert-only for any authenticated user (permanent namespace pollution)
-- [ ] **OPT-A7:** dedupe: `StorageService` upload methods; the AsyncValue→Loading/Error/Empty
-      grid scaffold (Discover vs My Recipes); two hand-rolled date formatters → `formatting.dart`
+- [ ] **OPT-A7:** dedupe: `StorageService` upload methods; ~~the AsyncValue→Loading/Error/Empty
+      grid scaffold (Discover vs My Recipes)~~ — done with OPT-P9 (`RecipeAsyncGrid`); two
+      hand-rolled date formatters → `formatting.dart`
 - [ ] **OPT-A8:** split the oversized screens (editor 826 lines, chef sheet 606, detail 561);
       replace the two literal route strings in `app_router.dart` with `Routes` constants
 - [ ] **OPT-A9:** squash `0001_init.sql` into versioned migrations once there is real data —

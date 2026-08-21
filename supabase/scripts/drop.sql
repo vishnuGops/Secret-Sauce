@@ -44,9 +44,14 @@ drop function if exists on_recipe_tags_search_change() cascade;
 drop function if exists on_tags_search_change() cascade;
 drop function if exists can_read_recipe(uuid) cascade;
 drop function if exists owns_recipe(uuid) cascade;
+-- Discovery RPC signatures, oldest first: OPT-P9 added `p_offset`, and Postgres
+-- keys drops by argument list, so both overloads stay listed.
 drop function if exists recipes_trending(int) cascade;
+drop function if exists recipes_trending(int, int) cascade;
 drop function if exists recipes_popular(int) cascade;
+drop function if exists recipes_popular(int, int) cascade;
 drop function if exists recipes_search(text, int) cascade;
+drop function if exists recipes_search(text, int, int) cascade;
 drop function if exists fork_recipe(uuid) cascade;
 -- Chefs / leaderboard (Phase 18).
 drop function if exists on_recipe_stats_change() cascade;

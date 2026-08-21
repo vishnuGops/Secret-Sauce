@@ -46,16 +46,33 @@ class _FakeAuth implements AuthRepository {
 /// Discover renders. The screen falls back to its [EmptyView].
 class _FakeDiscover implements DiscoverRepository {
   @override
-  Future<List<Recipe>> popular({int limit = 20}) async => const [];
+  Future<List<Recipe>> popular({
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) async =>
+      const [];
 
   @override
-  Future<List<Recipe>> trending({int limit = 20}) async => const [];
+  Future<List<Recipe>> trending({
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) async =>
+      const [];
 
   @override
-  Future<List<Recipe>> recent({int limit = 20}) async => const [];
+  Future<List<Recipe>> recent({
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) async =>
+      const [];
 
   @override
-  Future<List<Recipe>> search(String query, {int limit = 30}) async => const [];
+  Future<List<Recipe>> search(
+    String query, {
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) async =>
+      const [];
 }
 
 Future<GoRouter> _pumpAt(WidgetTester tester, String location,
