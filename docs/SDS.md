@@ -263,7 +263,13 @@ erDiagram
 - **Trending**: recency-weighted score, e.g.
   `score = (like_count + view_count) / pow(hours_since_created + 2, 1.5)`. Both inputs are
   one-per-user by construction (`recipe_likes` PK, `on_view_insert` dedup), so the score cannot be
-  driven up by repeat traffic from one account or by anonymous visitors.
+  driven up by repeat traffic from one account or by anonymous visitors. **Candidates are bounded
+  to the last 30 days** (OPT-P2): `now()` inside the score makes the sort key non-indexable, so
+  the only lever is how many rows get scored. The bound is free in ranking terms — at 30 days the
+  divisor is ≈19,400, so an older recipe cannot place — but it does mean Trending is **empty**
+  when nothing public was created in 30 days. Deliberate; Popular and Recent still show everything.
+  `recipes_public_created_idx` — partial on `(created_at desc) where visibility = 'public'` —
+  backs both this window and Recent's ordering.
 - **Search**: Postgres full-text over title + description + ingredient names + tags.
 
 ## 7. Screens

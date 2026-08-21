@@ -90,6 +90,14 @@ create index if not exists recipes_owner_idx on recipes (owner_id);
 create index if not exists recipes_visibility_idx on recipes (visibility);
 create index if not exists recipes_forked_from_idx on recipes (forked_from_recipe_id);
 create index if not exists recipes_rating_idx on recipes (rating_avg desc, rating_count desc);
+-- Discover's two date-ordered surfaces (OPT-P2). `recipes_trending` bounds its
+-- window to the last 30 days and Discover **Recent** orders by `created_at`
+-- desc; both filter to public, so a partial index on exactly that predicate
+-- serves both and stays small (it indexes the public rows only). Partial on
+-- `visibility` rather than a composite because every reader of it filters to
+-- public — there is no "recent private recipes" surface.
+create index if not exists recipes_public_created_idx
+  on recipes (created_at desc) where visibility = 'public';
 
 -- recipe_versions (git-like snapshots)
 create table if not exists recipe_versions (
@@ -948,6 +956,19 @@ create policy "avatars updatable by owner folder"
 -- ============================================================================
 
 -- Trending: recency-weighted popularity over public recipes.
+-- Trending = engagement decayed by age. The `now()` in the score makes the sort
+-- key non-indexable by construction, so the only lever is how many rows have to
+-- be scored at all (OPT-P2): bound the candidate set to the last 30 days, which
+-- `recipes_public_created_idx` can serve directly.
+--
+-- The bound costs nothing in ranking terms — at 30 days the divisor is
+-- (720h + 2)^1.5 ≈ 19,400, so a month-old recipe already scores under a
+-- thousandth of a fresh one and could only surface if almost nothing else
+-- existed. It does mean a project with **no public recipe created in 30 days**
+-- gets an empty Trending tab; that is deliberate (a "trending" list of stale
+-- recipes is a contradiction), and Popular and Recent still cover everything.
+-- `seed.sql`/`seed_recipes.sql` create at `now()`, so a fresh install is never
+-- in that state.
 create or replace function recipes_trending(p_limit int default 20)
 returns setof recipes
 language sql
@@ -956,6 +977,7 @@ as $$
   select r.*
   from recipes r
   where r.visibility = 'public'
+    and r.created_at > now() - interval '30 days'
   order by
     (r.like_count + r.view_count)::numeric
       / power(extract(epoch from (now() - r.created_at)) / 3600.0 + 2.0, 1.5) desc

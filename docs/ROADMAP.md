@@ -1136,9 +1136,10 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
 - [ ] **OPT-P1:** `recipes_search` recomputes `recipe_search_document()` twice per public recipe
       per search — add a trigger-maintained `search_tsv` column + GIN index (predicted by Phase
       24; now measurable at 1,671 recipes)
-- [ ] **OPT-P2:** `recipes_trending` full-scans all public recipes; bound the window (~30 days)
-      + partial index on `(created_at desc) where visibility='public'` — also the first index
-      Discover **Recent** would ever use
+- [x] **OPT-P2:** `recipes_trending` bounded to 30 days + partial index
+      `recipes_public_created_idx (created_at desc) where visibility='public'`. At sim `medium`:
+      trending **23.4 ms → 3.9 ms** (6.0×, 1,344 → 351 rows scored); Discover **Recent**
+      **1.1 ms → 0.23 ms** and now a pure index scan with the sort eliminated
 - [ ] **OPT-P3:** `getById` is 2+G+S round trips (one per group) — collapse to one nested
       PostgREST embed with foreign-table ordering (keep B022's explicit ascending)
 - [ ] **OPT-P4:** one editor save costs ~3 full `getById` cascades (`update` → `_appendVersion`
