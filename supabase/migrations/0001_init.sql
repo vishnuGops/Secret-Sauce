@@ -563,6 +563,29 @@ create trigger recipe_ratings_touch
   before update on recipe_ratings
   for each row execute function touch_updated_at();
 
+-- `recipes.current_version_id` is server-owned: the client appends a
+-- `recipe_versions` row and the pointer follows here. That is what lets the
+-- column stay out of the `authenticated` UPDATE grant below (B050) — before
+-- this trigger the repository PATCHed it directly, so "trigger-maintained" was
+-- only ever true on paper. `security definer` is required for the Gotcha 3
+-- reason *and* a new one: under column-level grants an invoker-rights UPDATE of
+-- a column the role does not hold fails outright rather than matching 0 rows.
+-- Versions are append-only and the newest is always current, so last-in wins.
+create or replace function on_version_insert()
+returns trigger language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  update recipes set current_version_id = new.id where id = new.recipe_id;
+  return null;
+end;
+$$;
+drop trigger if exists recipe_versions_set_current on recipe_versions;
+create trigger recipe_versions_set_current
+  after insert on recipe_versions
+  for each row execute function on_version_insert();
+
 -- Counter helpers are trigger-internal. PostgREST exposes every function in
 -- `public` as an RPC, so drop EXECUTE for the API roles — otherwise any client
 -- could call bump_count() directly and forge like/save counts.
@@ -780,6 +803,20 @@ create policy suggestions_update on recipe_suggestions for update
 -- longer hand new tables blanket DML defaults, so a fresh project without this
 -- block answers every API call with `permission denied for table ...` (B013).
 -- Every table here has RLS enabled above, so the grants stay row-filtered.
+--
+-- RLS filters *rows*, never *columns* (a `with check` expression cannot say
+-- "not this column"), so row-scoped policies alone let an owner PATCH any column
+-- of a row they own — including `recipes.like_count` and
+-- `profiles.chef_score`, which `recipes_chef_stats` then launders into the public
+-- leaderboard (B050). Column-level grants are the only layer that can express
+-- this, so `recipes` and `profiles` drop the blanket INSERT/UPDATE and get
+-- explicit column lists mirroring `_writablePayload` (recipe_repository.dart)
+-- and `ProfileRepository.updateMine`. Everything reached through a
+-- `security definer` function (fork_recipe, handle_new_user, the counter
+-- triggers) and everything run as `postgres` (seed, sim) is unaffected.
+--
+-- MAINTENANCE: a new client-writable column on either table must be added to
+-- the matching list below, or the first save that sends it fails with 42501.
 -- ============================================================================
 do $$
 begin
@@ -794,6 +831,30 @@ begin
 
   -- Writes: only signed-in users, still row-filtered by RLS.
   grant insert, update, delete on all tables in schema public to authenticated;
+
+  -- Narrow the two tables that carry server-owned columns. The revoke must run
+  -- *after* the blanket grant above, since a re-apply re-issues it; the column
+  -- grants then run last so they survive either revoke semantics.
+  revoke insert, update on recipes  from authenticated;
+  revoke insert, update on profiles from authenticated;
+
+  -- recipes: NOT granted — like_count, save_count, view_count, rating_sum,
+  -- rating_count, rating_avg, current_version_id, created_at, updated_at (all
+  -- trigger-maintained), plus `id` (defaulted) and, on UPDATE, `owner_id`, so a
+  -- recipe cannot be reassigned out from under `recipes_update`.
+  grant insert (owner_id, title, description, cover_image_url, cuisine, category,
+                difficulty, prep_minutes, cook_minutes, servings, visibility,
+                attribution, forked_from_recipe_id, forked_from_version_id)
+    on recipes to authenticated;
+  grant update (title, description, cover_image_url, cuisine, category,
+                difficulty, prep_minutes, cook_minutes, servings, visibility,
+                attribution, forked_from_recipe_id, forked_from_version_id)
+    on recipes to authenticated;
+
+  -- profiles: NOT granted — chef_score, chef_tier, public_recipe_count,
+  -- created_at. `id` is insert-only (`profiles_insert` pins it to auth.uid()).
+  grant insert (id, display_name, avatar_url, bio) on profiles to authenticated;
+  grant update (display_name, avatar_url, bio)     on profiles to authenticated;
 
   -- Signed-out visitors may log a view of a recipe they can read.
   grant insert on recipe_views to anon;

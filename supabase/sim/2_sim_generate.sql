@@ -106,6 +106,9 @@ alter table recipe_views   disable trigger recipe_views_count;
 alter table recipe_ratings disable trigger recipe_ratings_agg;
 alter table recipes        disable trigger recipes_chef_stats;
 alter table recipes        disable trigger recipes_touch;
+-- Versions are bulk-inserted many-per-recipe; the pointer is set set-based in
+-- step 4 instead, so the per-row trigger would be N-1 wasted UPDATEs per recipe.
+alter table recipe_versions disable trigger recipe_versions_set_current;
 
 -- ============================================================================
 -- 1. The population
@@ -735,6 +738,7 @@ alter table recipe_views   enable trigger recipe_views_count;
 alter table recipe_ratings enable trigger recipe_ratings_agg;
 alter table recipes        enable trigger recipes_chef_stats;
 alter table recipes        enable trigger recipes_touch;
+alter table recipe_versions enable trigger recipe_versions_set_current;
 
 -- Counts are scoped to sim.recipe on purpose. Reporting global totals would
 -- fold in the 64 taster ratings from seed.sql and make the funnel look wrong

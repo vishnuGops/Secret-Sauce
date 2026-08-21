@@ -402,22 +402,16 @@ class SupabaseRecipeRepository implements RecipeRepository {
       'step_groups': [for (final g in full.stepGroups) g.toJson()],
     };
 
-    final vRow = await _client
-        .from('recipe_versions')
-        .insert({
-          'recipe_id': recipeId,
-          'version_number': nextNumber,
-          'parent_version_id': parentId,
-          'author_id': _uid,
-          'change_summary': changeSummary,
-          'content_snapshot': snapshot,
-        })
-        .select()
-        .single();
-
-    await _client
-        .from('recipes')
-        .update({'current_version_id': vRow['id']})
-        .eq('id', recipeId);
+    // `recipes.current_version_id` is server-owned: the `recipe_versions_set_current`
+    // trigger moves the pointer, and the column is not in the `authenticated`
+    // UPDATE grant (B050/OPT-S1), so writing it from here would now fail 42501.
+    await _client.from('recipe_versions').insert({
+      'recipe_id': recipeId,
+      'version_number': nextNumber,
+      'parent_version_id': parentId,
+      'author_id': _uid,
+      'change_summary': changeSummary,
+      'content_snapshot': snapshot,
+    });
   }
 }

@@ -203,6 +203,23 @@ erDiagram
   `select` on all public tables to `anon` + `authenticated`, DML to `authenticated`, and
   `insert on recipe_views` to `anon`. Without this a fresh Supabase project returns
   `permission denied for table ...` for every request (B013).
+- **column grants (B050, fixed by OPT-S1)**: RLS filters rows and *cannot* filter columns — a
+  `with check` expression sees the row, never which columns the statement assigned. Row-scoped
+  `recipes_update` / `profiles_update` therefore let an owner `PATCH` **any** column of their own
+  row, including `like_count` and `chef_score`, which `recipes_chef_stats` then recomputed *from
+  the forged counter* and published to the leaderboard. `recipes` and `profiles` consequently
+  drop the blanket `insert, update` grant and hold explicit column lists mirroring
+  `_writablePayload` and `ProfileRepository.updateMine`; every server-owned column
+  (`like_count`, `save_count`, `view_count`, `rating_*`, `current_version_id`, `created_at`,
+  `updated_at` / `chef_score`, `chef_tier`, `public_recipe_count`) is excluded, as is `owner_id`
+  on UPDATE so a recipe cannot be reassigned. **A new client-writable column must be added to
+  that list or the first save carrying it fails `42501`.** Nothing reached through a
+  `security definer` function or run as `postgres` (seed, sim, triggers) is affected.
+- **`current_version_id` is genuinely server-owned** as of OPT-S1: the
+  `recipe_versions_set_current` trigger moves the pointer when a version row is appended. The
+  repository used to PATCH it directly, which is why it could not stay out of the grant list
+  before. The trigger is `security definer` — under column grants an invoker-rights UPDATE of an
+  ungranted column raises `42501` instead of silently matching 0 rows.
 
 ## 5. Forking & versioning
 

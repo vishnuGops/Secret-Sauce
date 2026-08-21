@@ -290,10 +290,13 @@ Server-owned columns the client must **never** write (trigger-maintained; omitte
 `_writablePayload` in `recipe_repository.dart`): on `recipes` — `like_count`, `save_count`,
 `view_count`, `rating_sum`, `rating_count`, `rating_avg`, `current_version_id`, `created_at`,
 `updated_at`; on `profiles` — `chef_score`, `chef_tier`, `public_recipe_count` (omitted from
-`ProfileRepository.updateMine`). **Known gap (B050, open):** this list is client convention only —
-the blanket table-level `UPDATE` grant means an owner can still write these columns over raw
-PostgREST. OPT-S1 (column-level grants) is the fix; until it lands, do not add anything that
-*relies* on these columns being server-enforced against their own owner.
+`ProfileRepository.updateMine`). **This is enforced in the database (B050 fixed by OPT-S1):**
+`recipes` and `profiles` hold **column-level** `insert`/`update` grants, not the blanket
+table-level one, because RLS filters rows and cannot filter columns. Two consequences: a
+`PATCH` of a server-owned column now fails `42501` even for the row's owner, and **a new
+client-writable column must be added to the grant list in `0001_init.sql` in the same change**
+or the first save carrying it fails the same way. `current_version_id` is moved by the
+`recipe_versions_set_current` trigger — never write it from Dart.
 
 **Nested content order (B022).** Ingredient/step groups and their children are stored and read in
 **ascending** `sort_order` (`step_order` for steps). postgrest-dart's `.order(column)` defaults to

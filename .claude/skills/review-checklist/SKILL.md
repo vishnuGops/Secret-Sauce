@@ -58,11 +58,15 @@ default-denies — reads return empty, not an error); or adds an FK to `profiles
 considering B015 (an `auth.users` row can exist with no `profiles` row; the backfill at
 `0001_init.sql:245-249` is what repairs it — keep it after any `profiles` change).
 
-**Known-open (B050): server-owned columns are owner-writable.** The blanket `grant update` +
-row-scoped `recipes_update`/`profiles_update` lets an owner PATCH their own `like_count` /
-`chef_score` over PostgREST; OPT-S1 (column-level grants) is the planned fix. Do not re-file
-the status quo as a new finding — but **do** flag a diff that adds a new server-owned/derived
-column, or new code that trusts these columns against their own owner, until OPT-S1 lands.
+**Column grants (B050, fixed by OPT-S1).** RLS filters rows and cannot filter columns, so
+`recipes` and `profiles` no longer hold a blanket `insert, update` grant — they hold explicit
+column lists in the grants block, mirroring `_writablePayload` / `ProfileRepository.updateMine`.
+Flag a diff that: adds a **client-writable** column to either table without adding it to the
+matching grant list (the first save that sends it fails `42501`); adds a **server-owned/derived**
+column *to* a grant list (that reopens the leaderboard-laundering hole); restores a table-level
+`grant update on recipes/profiles`; or writes a server-owned column from Dart. `current_version_id`
+is maintained by the `recipe_versions_set_current` trigger — a client PATCH of it is now a bug,
+not a convention violation.
 
 **View counting (B012, fixed).** `on_view_insert` rolls `recipe_views` into `recipes.view_count`,
 but counts **distinct signed-in viewers**, not visits: it skips rows with a null `user_id` and

@@ -987,7 +987,13 @@ hosted (B033 pooler form), `drop.sql`/B024 blocks for signature changes.
 
 ### OPT-S — Integrity & correctness
 
-**OPT-S1 — column-level grants (B050), the one to do before anything else.**
+**OPT-S1 — column-level grants (B050) — DONE.** Landed as described below, with one addition the
+plan did not anticipate: mirroring `_writablePayload` exactly meant `current_version_id` had to
+leave the grant list, but `_appendVersion` was PATCHing it directly (CLAUDE.md called it
+"trigger-maintained"; no such trigger existed). It is now genuinely server-owned via the
+`recipe_versions_set_current` trigger, the Dart write is gone, and `2_sim_generate.sql` disables
+that trigger for its bulk version load. Acceptance met on the local stack — see B050 in the
+tracker for the full matrix. Original plan follows.
 Mechanism: `grant insert, update, delete on all tables in schema public to authenticated`
 (`0001_init.sql:796`) + row-scoped-only `recipes_update` (:666) / `profiles_update` (:656) means
 an owner may `PATCH` any column of their own row — including `like_count`, `save_count`,
