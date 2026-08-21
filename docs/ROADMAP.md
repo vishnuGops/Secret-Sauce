@@ -1158,9 +1158,12 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       PKs lead with `user_id`, so every recipe-leading read was a seq scan. "Who liked recipe X,
       newest first" goes seq-scan-over-6,483-rows + sort → **pure index scan, sort eliminated**;
       write paths still PK-served. Unblocks Phase 23's windowed rails
-- [ ] **OPT-P7:** `logView` fires on every provider re-resolution (each like/rate re-logs a
-      view row) — log once per screen visit
-- [ ] **OPT-P8:** Discover search fires per keystroke — debounce ~300 ms in the provider
+- [x] **OPT-P7:** `logView` fired on every `recipeProvider` re-resolution, so each like/save/rate
+      appended another `recipe_views` row. Moved to its own `recipeViewLoggerProvider`
+      (`autoDispose` = one per visit); 3 tests pin it
+- [x] **OPT-P8:** Discover search fired per keystroke — 300 ms debounce in
+      `searchResultsProvider` (`kSearchDebounce`), superseded queries cancelled on dispose so they
+      never reach the network; 4 tests pin it
 - [ ] **OPT-P9:** pagination for Discover tabs and `listMine`/`listSharedWithMe` (all capped or
       unbounded today); the leaderboard's paged RPC is the precedent
 - [ ] **OPT-P10:** `/chefs` hero issues 6 count queries → one `chefs_tier_counts()` RPC;
