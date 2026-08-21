@@ -7,6 +7,11 @@ import 'package:app/widgets/not_yet_tooltip.dart';
 
 /// Dialog to share a recipe with another user (by display name) and set
 /// their permission. Writes to `recipe_shares` via the repository.
+///
+/// Lives here rather than in `features/my_recipes` (OPT-A3): sharing is reached
+/// from the recipe detail screen, so a feature was importing another feature's
+/// internals to open it — the same shape that put `notYetTooltip` in this
+/// directory during OPT-S5.
 class ShareDialog extends ConsumerStatefulWidget {
   const ShareDialog({super.key, required this.recipeId});
 

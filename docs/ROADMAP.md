@@ -1187,9 +1187,12 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
 - [ ] **OPT-A1:** make `RecipeRepository.update()` atomic — one server-side transactional RPC
       for update + content persist + version append (closes Gotcha 11's data-loss window; also
       fixes the client-side `version_number` race)
-- [ ] **OPT-A2:** delete the retired `features/home/home_screen.dart` (185 dead lines)
-- [ ] **OPT-A3:** `ShareDialog` used by two features → `apps/app/lib/widgets/`; sign-out reached
-      from chrome + profile via `features/auth` import — hoist to a shared provider
+- [x] **OPT-A2:** deleted the retired `features/home/home_screen.dart` (185 dead lines) and its
+      directory; nothing imported it and `widget_test.dart` already pins the `/` redirect
+- [x] **OPT-A3:** `share_dialog.dart` → `apps/app/lib/widgets/` (it was in `my_recipes`, which
+      never opened it — `recipe_detail` did); sign-out is a direct
+      `authRepositoryProvider.signOut()` at both call sites instead of a cross-feature import of
+      `AuthController`, whose now-unused `signOut()` went with it
 - [ ] **OPT-A4:** central `friendlyError()` mapper — screens currently surface raw
       PostgREST/auth `e.toString()`
 - [ ] **OPT-A5:** `findByEmailOrName` is exact-`ilike` + `limit(1)` on a non-unique name —

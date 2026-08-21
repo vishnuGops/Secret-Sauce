@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:app/features/auth/auth_controller.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:app/routing/nav_destinations.dart';
 
@@ -403,7 +402,11 @@ class _AccountMenu extends ConsumerWidget {
       case _AccountAction.profile:
         context.go(Routes.profile);
       case _AccountAction.signOut:
-        await ref.read(authControllerProvider.notifier).signOut();
+        // The repository, not `features/auth`'s controller (OPT-A3): the nav
+        // chrome is not part of the auth feature, and sign-out has no form
+        // state to own — the controller's `AsyncValue` exists for the sign-in
+        // and sign-up submissions.
+        await ref.read(authRepositoryProvider).signOut();
         // Discover, not `/` — the landing page was retired and root only
         // forwards here anyway. Going direct saves the extra redirect hop.
         if (context.mounted) context.go(Routes.discover);

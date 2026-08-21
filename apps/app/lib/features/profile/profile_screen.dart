@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:app/features/auth/auth_controller.dart';
 import 'package:app/routing/app_router.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -71,7 +70,9 @@ class ProfileScreen extends ConsumerWidget {
               const SizedBox(height: AppSpacing.sm),
               OutlinedButton.icon(
                 onPressed: () async {
-                  await ref.read(authControllerProvider.notifier).signOut();
+                  // The repository directly (OPT-A3) — see the same call in
+                  // `top_nav_bar.dart`.
+                  await ref.read(authRepositoryProvider).signOut();
                   // Signing out here would otherwise leave the visitor on
                   // `/profile`, which the redirect then bounces to `/auth`.
                   if (context.mounted) context.go(Routes.discover);

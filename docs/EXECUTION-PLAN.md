@@ -1109,12 +1109,19 @@ below are targeted, not structural.
   `owns_recipe()` check first (the `fork_recipe` pattern), EXECUTE granted to `authenticated`
   only. Closes P4's cascade too when it lands; do it after OPT-S1 so the function is written
   against the tightened grants.
-- **A2 — dead code**: `features/home/home_screen.dart` (185 lines) survived its route's
-  retirement (B046). Delete; `widget_test.dart` already pins the redirect.
-- **A3 — cross-feature imports**: `recipe_detail` imports `my_recipes/share_dialog.dart`
-  (shared surface → `apps/app/lib/widgets/`); `top_nav_bar.dart` + `profile_screen.dart` import
-  `features/auth/auth_controller.dart` for sign-out (hoist a `signOutProvider`, or move the
-  controller beside `myProfileProvider` in core's providers).
+- **A2 — dead code — DONE.** `features/home/home_screen.dart` (185 lines) deleted; the directory
+  went with it. Nothing imported it — `widget_test.dart` already pins that `/` is a redirect with
+  no page of its own (B046).
+- **A3 — cross-feature imports — DONE.** `share_dialog.dart` moved to `apps/app/lib/widgets/`,
+  beside `not_yet_tooltip.dart`, which OPT-S5 had already hoisted out of `features/chefs/` for the
+  same reason. Note the direction the old import pointed: `recipe_detail` reached into
+  `my_recipes` for a dialog `my_recipes` itself never opened. Sign-out is now
+  `ref.read(authRepositoryProvider).signOut()` at both call sites rather than a new
+  `signOutProvider`: the plan offered a provider as one option, but a provider that wraps one
+  repository call in a closure is indirection with nothing in it — every other command in the app
+  (`share`, `setLiked`, `setRating`) is already a direct repository read from the widget.
+  `AuthController.signOut()` was deleted with its last caller; the controller keeps exactly the
+  two submissions whose `AsyncValue` the auth form renders.
 - **A4 — error surfaces**: screens render raw `e.toString()` (PostgREST codes, `AuthException`
   dumps) in `ErrorView`/snackbars across discover/my/auth. One `friendlyError(Object)` in core,
   used everywhere; keep the raw error in `debugPrint`.

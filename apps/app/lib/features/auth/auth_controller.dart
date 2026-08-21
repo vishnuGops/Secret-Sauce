@@ -1,7 +1,12 @@
 import 'package:core/core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Handles auth actions and exposes an [AsyncValue] submission state.
+/// Handles the auth **form** submissions and exposes their [AsyncValue] state.
+///
+/// Sign-out is deliberately not here (OPT-A3): it is triggered from the web
+/// account menu and the profile screen, neither of which is part of this
+/// feature, and it has no form state to own — both call
+/// `authRepositoryProvider.signOut()` directly rather than importing this file.
 class AuthController extends AutoDisposeAsyncNotifier<void> {
   @override
   Future<void> build() async {}
@@ -29,8 +34,6 @@ class AuthController extends AutoDisposeAsyncNotifier<void> {
       ),
     );
   }
-
-  Future<void> signOut() => _repo.signOut();
 }
 
 final authControllerProvider =

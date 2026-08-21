@@ -73,12 +73,14 @@ secret-sauce/
 ├── apps/app/
 │   ├── lib/features/          # auth, discover, chefs, my_recipes, recipe_detail,
 │   │                          # recipe_editor, profile — screen + *_providers.dart per feature
-│   │                          # (home/ was retired 2026-08-20 — `/` redirects to /discover)
+│   │                          # (home/ retired 2026-08-20 — `/` redirects to /discover; the
+│   │                          #  dead screen file was deleted by OPT-A2)
 │   ├── lib/routing/           # app_router.dart (routes + redirect), app_shell.dart (picks the
 │   │                          #   chrome), top_nav_bar.dart (web), nav_destinations.dart (lists)
-│   ├── lib/widgets/           # app-level shared widgets (recipe_grid.dart,
-│   │                          #   recipe_async_grid.dart — the paged list every
-│   │                          #   browsing surface renders through)
+│   ├── lib/widgets/           # app-level shared widgets — anything two features both reach:
+│   │                          #   recipe_grid.dart, recipe_async_grid.dart (the paged list every
+│   │                          #   browsing surface renders through), share_dialog.dart,
+│   │                          #   not_yet_tooltip.dart
 │   ├── lib/main.dart · test/{widget_test,chefs_screen_test,chefs_routing_test,
 │   │                          top_nav_bar_test,recipe_editor_test,recipe_detail_test,
 │   │                          my_recipes_header_test,recipe_grid_test,
@@ -361,7 +363,7 @@ Five Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/m
 | `/auth`                           | `features/auth`          | `authControllerProvider` (AsyncNotifier); redirects to `/discover` when signed in; `?mode=signup` opens the sign-up side |
 | `/discover`                       | `features/discover`      | Popular / Trending / Recent + search; all four via `DiscoverRepository`; signed-out safe                                 |
 | `/chefs`                          | `features/chefs`         | Web: `chefs_hero.dart` + a 404px leaderboard panel + rails of `ChefSpotlightCard`. Compact: the plain board. A row or card opens `chef_detail_sheet.dart` (dialog on web, sheet on mobile); signed-out safe |
-| `/my`                             | `features/my_recipes`    | My / Shared-with-me tabs; `share_dialog.dart` writes `recipe_shares`                                                     |
+| `/my`                             | `features/my_recipes`    | My / Shared-with-me tabs, both paged. Sharing is `widgets/share_dialog.dart` (opened from recipe detail; it writes `recipe_shares`) |
 | `/recipe/:id`                     | `features/recipe_detail` | Servings scaler, rating, like/save, fork, `version_history_sheet.dart`; signed-out safe                                  |
 | `/recipe/new`, `/recipe/:id/edit` | `features/recipe_editor` | `edit_models.dart` holds mutable draft types; save appends a version                                                     |
 | `/profile`                        | `features/profile`       | Current user; reached from the bottom bar on mobile and the avatar menu on web (`myProfileProvider`)                     |
