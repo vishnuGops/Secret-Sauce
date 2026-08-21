@@ -1173,10 +1173,23 @@ below are targeted, not structural.
   `monthYear` and `isoDate` — kept as **two** functions, not merged: a "joined" line wants a
   readable month and a version history wants a sortable ISO column, and that difference is the
   reason each widget rolled its own in the first place. 2 tests.
-- **A8 — file size + literals**: split `recipe_editor_screen.dart` (826 lines — the two
-  sub-editors are natural seams), `chef_detail_sheet.dart` (606), `recipe_detail_screen.dart`
-  (561); replace the literal `'/recipe/new'` / `'/recipe/:id/edit'` in `app_router.dart:83-97`
-  with `Routes` constants (the one place a rename silently misses).
+- **A8 — file size + literals — DONE.** Three splits, all pure moves — a widget changed file, not
+  behaviour, and the private helpers that only one panel uses stayed private in their new homes:
+  - `recipe_editor_screen.dart` **880 → 418**: `cover_picker.dart`, `ingredients_editor.dart`,
+    `steps_editor.dart`. The two sub-editors stay stateless and keep reporting every mutation
+    through `onChanged` — the draft still lives in one state object, which is what makes the split
+    safe.
+  - `recipe_detail_screen.dart` **629 → 311**: `rating_section.dart`, `recipe_content_views.dart`
+    (the ingredient/step renderers — the largest block, and it depends on nothing but the models),
+    `detail_chips.dart`.
+  - `chef_detail_sheet.dart` **597 → 231**: `chef_score_panel.dart`, `chef_recipes_panel.dart`,
+    `chef_detail_common.dart` (the kicker and note both panels share).
+  Route literals: the three in the route table became `Routes.newRecipe` /
+  `Routes.recipePattern` / `Routes.editRecipePattern` — the pattern constants are new, since
+  `Routes.recipe(id)` builds a path and cannot declare one. The split also surfaced three literals
+  the plan had not listed, in `chef_recipes_panel.dart` and twice in the editor
+  (`context.go('/recipe/${...}')`), which are exactly the "rename silently misses" case and now
+  call `Routes.recipe(...)`.
 - **A9 — migration split**: `0001_init.sql`'s every-apply work (profile backfill :264-268, chef
   backfill :526-546, FK revalidation :109-117) grows linearly with hosted data; the file header
   already promises versioned migrations "once there is real data". Do the split **before**

@@ -72,7 +72,9 @@ secret-sauce/
 │                                  # chef_badge_test.dart, flow_grid_test.dart, +4 chef widgets
 ├── apps/app/
 │   ├── lib/features/          # auth, discover, chefs, my_recipes, recipe_detail,
-│   │                          # recipe_editor, profile — screen + *_providers.dart per feature
+│   │                          # recipe_editor, profile — screen + *_providers.dart per feature,
+│   │                          # plus that feature's own panels (OPT-A8 split the three big
+│   │                          # screens: editor 880->418, detail 629->311, chef sheet 597->231)
 │   │                          # (home/ retired 2026-08-20 — `/` redirects to /discover; the
 │   │                          #  dead screen file was deleted by OPT-A2)
 │   ├── lib/routing/           # app_router.dart (routes + redirect), app_shell.dart (picks the

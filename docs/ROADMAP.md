@@ -1216,8 +1216,13 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       alone → one `_upload(bucket, …)`; the grid scaffold landed with OPT-P9 (`RecipeAsyncGrid`);
       the two hand-rolled date formatters became `monthYear` / `isoDate` in `formatting.dart`
       (2 tests — the month table is 0-indexed and the ISO one pads two fields)
-- [ ] **OPT-A8:** split the oversized screens (editor 826 lines, chef sheet 606, detail 561);
-      replace the two literal route strings in `app_router.dart` with `Routes` constants
+- [x] **OPT-A8:** the three oversized screens split along their real seams — editor **880 → 418**
+      (`cover_picker`, `ingredients_editor`, `steps_editor`), detail **629 → 311**
+      (`rating_section`, `recipe_content_views`, `detail_chips`), chef sheet **597 → 231**
+      (`chef_score_panel`, `chef_recipes_panel`, `chef_detail_common`). Pure moves: no widget
+      changed, only its address. Route literals gone from the route table **and** from three
+      feature call sites the plan had not spotted — `Routes.recipePattern` /
+      `editRecipePattern` are the new match-side constants
 - [ ] **OPT-A9:** squash `0001_init.sql` into versioned migrations once there is real data —
       apply time already grows with data (backfills + FK revalidation run every apply); do it
       **before** Phase 25 adds tables, and keep the B024 drop-in-place discipline through the split

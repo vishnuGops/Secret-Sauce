@@ -36,6 +36,15 @@ class Routes {
   static const newRecipe = '/recipe/new';
   static String recipe(String id) => '/recipe/$id';
   static String editRecipe(String id) => '/recipe/$id/edit';
+
+  /// The two **patterns** go_router matches on, as opposed to the builders
+  /// above that produce a concrete path. Both forms have to exist and they have
+  /// to stay in step: `recipePattern` is what the route declares,
+  /// [recipe] is what a caller navigates with, and a rename that touches only
+  /// one of them compiles and 404s (OPT-A8 — they used to be literals in the
+  /// route table, the one place a rename silently misses).
+  static const recipePattern = '/recipe/:id';
+  static const editRecipePattern = '/recipe/:id/edit';
 }
 
 final _rootKey = GlobalKey<NavigatorState>();
@@ -80,18 +89,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         ),
       ),
       GoRoute(
-        path: '/recipe/new',
+        path: Routes.newRecipe,
         parentNavigatorKey: _rootKey,
         builder: (context, state) => const RecipeEditorScreen(),
       ),
       GoRoute(
-        path: '/recipe/:id/edit',
+        path: Routes.editRecipePattern,
         parentNavigatorKey: _rootKey,
         builder: (context, state) =>
             RecipeEditorScreen(recipeId: state.pathParameters['id']),
       ),
       GoRoute(
-        path: '/recipe/:id',
+        path: Routes.recipePattern,
         parentNavigatorKey: _rootKey,
         builder: (context, state) =>
             RecipeDetailScreen(recipeId: state.pathParameters['id']!),

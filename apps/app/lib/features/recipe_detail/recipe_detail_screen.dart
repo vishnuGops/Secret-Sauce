@@ -6,6 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:app/widgets/share_dialog.dart';
+import 'package:app/features/recipe_detail/detail_chips.dart';
+import 'package:app/features/recipe_detail/rating_section.dart';
+import 'package:app/features/recipe_detail/recipe_content_views.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/features/recipe_detail/version_history_sheet.dart';
 import 'package:app/routing/app_router.dart';
@@ -188,10 +191,10 @@ class _Body extends ConsumerWidget {
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               DifficultyBadge(difficulty: recipe.difficulty),
-              _MetaChip(icon: Icons.schedule, label: '${recipe.totalMinutes} min total'),
-              _MetaChip(icon: Icons.timer_outlined, label: 'Prep ${recipe.prepMinutes}m'),
-              _MetaChip(icon: Icons.local_fire_department, label: 'Cook ${recipe.cookMinutes}m'),
-              _MetaChip(
+              MetaChip(icon: Icons.schedule, label: '${recipe.totalMinutes} min total'),
+              MetaChip(icon: Icons.timer_outlined, label: 'Prep ${recipe.prepMinutes}m'),
+              MetaChip(icon: Icons.local_fire_department, label: 'Cook ${recipe.cookMinutes}m'),
+              MetaChip(
                 icon: recipe.visibility.isPublic ? Icons.public : Icons.lock,
                 label: recipe.visibility.isPublic ? 'Public' : 'Private',
               ),
@@ -220,7 +223,7 @@ class _Body extends ConsumerWidget {
           const SizedBox(height: AppSpacing.md),
           Row(
             children: [
-              _CountAction(
+              CountAction(
                 icon: Icons.favorite_border,
                 activeIcon: Icons.favorite,
                 active: ref.watch(myLikedProvider(recipe.id)).valueOrNull ?? false,
@@ -238,7 +241,7 @@ class _Body extends ConsumerWidget {
                 ),
               ),
               const SizedBox(width: AppSpacing.md),
-              _CountAction(
+              CountAction(
                 icon: Icons.bookmark_border,
                 activeIcon: Icons.bookmark,
                 active: ref.watch(mySavedProvider(recipe.id)).valueOrNull ?? false,
@@ -265,7 +268,7 @@ class _Body extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.md),
-          _RatingSection(recipe: recipe, isOwner: isOwner),
+          RatingSection(recipe: recipe, isOwner: isOwner),
           const Divider(height: AppSpacing.xl),
           // Servings scaler
           Row(
@@ -294,335 +297,14 @@ class _Body extends ConsumerWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
           for (final group in recipe.ingredientGroups)
-            _IngredientGroupView(group: group, factor: factor),
+            IngredientGroupView(group: group, factor: factor),
           const Divider(height: AppSpacing.xl),
           Text('Instructions', style: textTheme.titleLarge),
           const SizedBox(height: AppSpacing.sm),
           for (final group in recipe.stepGroups)
-            _StepGroupView(group: group),
+            StepGroupView(group: group),
           const SizedBox(height: AppSpacing.xxl),
         ],
-      ),
-    );
-  }
-}
-
-/// "Rate this recipe" block: half-star input for signed-in non-owners, plus the
-/// current average. Owners see why they can't rate (RLS rejects self-ratings).
-class _RatingSection extends ConsumerWidget {
-  const _RatingSection({required this.recipe, required this.isOwner});
-
-  final Recipe recipe;
-  final bool isOwner;
-
-  Future<void> _save(BuildContext context, WidgetRef ref, double value) async {
-    try {
-      await ref.read(recipeRepositoryProvider).setRating(recipe.id, value);
-      ref.invalidate(myRatingProvider(recipe.id));
-      ref.invalidate(recipeProvider(recipe.id));
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Rated ${value.toStringAsFixed(1)} stars')),
-        );
-      }
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Could not save rating — ${friendlyError(e)}')));
-      }
-    }
-  }
-
-  Future<void> _clear(BuildContext context, WidgetRef ref) async {
-    try {
-      await ref.read(recipeRepositoryProvider).clearRating(recipe.id);
-      ref.invalidate(myRatingProvider(recipe.id));
-      ref.invalidate(recipeProvider(recipe.id));
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not remove rating — ${friendlyError(e)}')),
-        );
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final textTheme = Theme.of(context).textTheme;
-    final scheme = Theme.of(context).colorScheme;
-    final signedIn = ref.watch(currentUserIdProvider) != null;
-    final myRating = ref.watch(myRatingProvider(recipe.id)).valueOrNull;
-
-    final Widget action;
-    if (isOwner) {
-      action = Text(
-        'You can’t rate your own recipe.',
-        style: textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
-      );
-    } else if (!signedIn) {
-      action = Row(
-        children: [
-          Expanded(
-            child: Text(
-              'Sign in to rate this recipe.',
-              style:
-                  textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
-            ),
-          ),
-          TextButton(
-            onPressed: () => context.go(Routes.auth),
-            child: const Text('Sign in'),
-          ),
-        ],
-      );
-    } else {
-      action = Row(
-        children: [
-          StarRatingInput(
-            value: myRating,
-            size: 34,
-            onChanged: (_) {},
-            onChangeEnd: (v) => _save(context, ref, v),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          if (myRating != null)
-            TextButton(
-              onPressed: () => _clear(context, ref),
-              child: const Text('Remove'),
-            ),
-        ],
-      );
-    }
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(AppSpacing.md),
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(AppRadii.card),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            recipe.hasRatings
-                ? '${recipe.ratingLabel} out of 5 · ${recipe.ratingCount} '
-                    'rating${recipe.ratingCount == 1 ? '' : 's'}'
-                : 'No ratings yet',
-            style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          action,
-        ],
-      ),
-    );
-  }
-}
-
-class _IngredientGroupView extends StatelessWidget {
-  const _IngredientGroupView({required this.group, required this.factor});
-
-  final IngredientGroup group;
-  final double factor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (group.name.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: AppSpacing.sm, bottom: 4),
-            child: Text(group.name,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall
-                    ?.copyWith(fontWeight: FontWeight.w700)),
-          ),
-        for (final ing in group.ingredients)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 6, right: 8),
-                  child: Icon(Icons.circle, size: 6),
-                ),
-                Expanded(
-                  child: Text(
-                    _format(ing),
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                ),
-              ],
-            ),
-          ),
-      ],
-    );
-  }
-
-  String _format(Ingredient ing) {
-    final parts = <String>[];
-    if (ing.quantity != null) {
-      final scaled = ing.quantity! * factor;
-      parts.add(_trim(scaled));
-    }
-    if (ing.unit != null && ing.unit!.isNotEmpty) parts.add(ing.unit!);
-    parts.add(ing.name);
-    var text = parts.join(' ');
-    if (ing.note != null && ing.note!.isNotEmpty) text += ' (${ing.note})';
-    if (ing.isOptional) text += ' — optional';
-    return text;
-  }
-
-  String _trim(double v) {
-    if (v == v.roundToDouble()) return v.toStringAsFixed(0);
-    return v.toStringAsFixed(2).replaceFirst(RegExp(r'0+$'), '').replaceFirst(RegExp(r'\.$'), '');
-  }
-}
-
-class _StepGroupView extends StatelessWidget {
-  const _StepGroupView({required this.group});
-
-  final StepGroup group;
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (group.name.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: AppSpacing.sm, bottom: 4),
-            child: Text(group.name,
-                style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
-          ),
-        for (var i = 0; i < group.steps.length; i++)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CircleAvatar(radius: 14, child: Text('${i + 1}')),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(group.steps[i].text, style: textTheme.bodyLarge),
-                      _StepMeta(step: group.steps[i]),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-class _StepMeta extends StatelessWidget {
-  const _StepMeta({required this.step});
-  final RecipeStep step;
-
-  @override
-  Widget build(BuildContext context) {
-    final chips = <Widget>[
-      if (step.durationMinutes != null)
-        _MetaChip(icon: Icons.timer, label: '${step.durationMinutes} min'),
-      if (step.temperature != null && step.temperature!.isNotEmpty)
-        _MetaChip(icon: Icons.thermostat, label: step.temperature!),
-    ];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (chips.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Wrap(spacing: AppSpacing.sm, children: chips),
-          ),
-        if (step.tip != null && step.tip!.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text('Tip: ${step.tip}',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontStyle: FontStyle.italic,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    )),
-          ),
-      ],
-    );
-  }
-}
-
-class _MetaChip extends StatelessWidget {
-  const _MetaChip({required this.icon, required this.label});
-  final IconData icon;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 4),
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 14, color: scheme.onSurfaceVariant),
-          const SizedBox(width: 4),
-          Text(label, style: Theme.of(context).textTheme.labelSmall),
-        ],
-      ),
-    );
-  }
-}
-
-class _CountAction extends StatelessWidget {
-  const _CountAction({
-    required this.icon,
-    required this.activeIcon,
-    required this.active,
-    required this.count,
-    required this.tooltip,
-    required this.activeTooltip,
-    required this.onTap,
-  });
-
-  final IconData icon;
-
-  /// Filled variant, shown once the current user has liked/saved this recipe.
-  /// This was a dead parameter until B051 gave the screen something to read.
-  final IconData activeIcon;
-  final bool active;
-  final int count;
-  final String tooltip;
-  final String activeTooltip;
-
-  /// Receives the state the button is currently in, so the handler can write
-  /// the opposite of it.
-  final void Function(bool active) onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Tooltip(
-      message: active ? activeTooltip : tooltip,
-      child: OutlinedButton.icon(
-        onPressed: () => onTap(active),
-        icon: Icon(
-          active ? activeIcon : icon,
-          size: 18,
-          color: active ? scheme.primary : null,
-        ),
-        label: Text('$count'),
       ),
     );
   }
