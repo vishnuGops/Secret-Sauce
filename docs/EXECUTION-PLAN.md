@@ -1011,6 +1011,16 @@ on the local stack, as the owner, `PATCH /recipes?id=eq.…` with `{"like_count"
 upgrade-path apply is clean. Docs: SDS §4 gains the column-grant rule; review-checklist §2 gains
 "a new client-writable column must be added to the column grant list".
 
+**OPT-S1a — `recipes_select` must not re-query `recipes` (B053) — DONE.** Not in the original
+backlog; found by OPT-S1's acceptance matrix. `recipes_select` was `can_read_recipe(id)`, a
+`stable security definer` function that looks the row up **by its own id**. Postgres applies the
+SELECT policy to `INSERT … RETURNING` rows and a `stable` function reads the statement snapshot,
+so the just-inserted row was invisible and **every `create()` failed**. Nothing caught it because
+seed/sim create as `postgres`. Fixed by inlining the policy against the row's own columns;
+`can_read_recipe(uuid)` stays for the child tables, which pass a parent id. Verified across
+anon / owner / unrelated / shared-user, plus the create path itself; 2.4× faster on a Discover
+scan as a side effect.
+
 **OPT-S2 — `.select()` on recipes update/delete** (`recipe_repository.dart:145-160`): an RLS
 denial matches 0 rows and returns success today (Gotcha 2); `update()` then happily re-persists
 content while believing the parent row saved. Append `.select()` and throw on an empty result.

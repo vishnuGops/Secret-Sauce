@@ -174,7 +174,12 @@ erDiagram
 ## 4. Row-Level Security
 
 - **recipes SELECT**: `visibility = 'public'` OR `owner_id = auth.uid()` OR exists row in
-  `recipe_shares` for `(recipe_id, auth.uid())`.
+  `recipe_shares` for `(recipe_id, auth.uid())`. Written **inline against the row's own columns**,
+  deliberately not as `can_read_recipe(id)` (B053): Postgres applies the SELECT policy to the rows
+  an `INSERT … RETURNING` returns, and a `stable` function reads the statement snapshot, which
+  cannot contain the row being inserted — so every `create()` failed. Inlining also removed a
+  `security definer` call per scanned row (2.4× faster on a Discover scan at sim `medium`). Keep
+  this policy free of any self-referencing lookup on `recipes`.
 - **recipes INSERT/UPDATE/DELETE**: `owner_id = auth.uid()`.
 - Child tables (ingredients/steps/versions/…): access derived from parent recipe visibility.
 - **recipe_shares**: recipe owner manages; shared user can read own rows.

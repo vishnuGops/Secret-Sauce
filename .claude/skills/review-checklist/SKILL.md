@@ -68,6 +68,17 @@ column *to* a grant list (that reopens the leaderboard-laundering hole); restore
 is maintained by the `recipe_versions_set_current` trigger — a client PATCH of it is now a bug,
 not a convention violation.
 
+**A SELECT policy must not look the row up again (B053, fixed).** Postgres applies the SELECT
+policy to the rows an `INSERT … RETURNING` gives back, and PostgREST sends every
+`.insert().select()` that way. `recipes_select` used to be `can_read_recipe(id)` — a `stable`
+function that re-queries `recipes` by id — so it read the statement snapshot, could not see the
+row being inserted, and **every recipe creation failed** with `new row violates row-level security
+policy`. It is now inlined against the row's own columns. Flag any SELECT policy that calls a
+`stable` function taking the row's **own** id, or otherwise re-queries its own table; passing a
+*parent* id (the child tables' `can_read_recipe(recipe_id)`) is fine, since that row already
+exists. Seed and sim run as `postgres` and bypass RLS, so this class of bug is invisible to
+`3_sim_verify.sql` — it only appears when a real signed-in client writes.
+
 **View counting (B012, fixed).** `on_view_insert` rolls `recipe_views` into `recipes.view_count`,
 but counts **distinct signed-in viewers**, not visits: it skips rows with a null `user_id` and
 skips a user's second-and-later row for the same recipe. Two properties keep

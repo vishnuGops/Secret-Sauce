@@ -681,8 +681,28 @@ drop policy if exists profiles_insert on profiles;
 create policy profiles_insert on profiles for insert with check (id = auth.uid());
 
 -- recipes
+--
+-- This policy is deliberately NOT `can_read_recipe(id)` (B053). Postgres applies
+-- the SELECT policy to the rows an `INSERT … RETURNING` gives back, and
+-- `can_read_recipe` is `stable`, so it reads the *statement* snapshot — which
+-- cannot contain the row that same statement is inserting. It returned false for
+-- every create, and `create()` (`.insert(…).select().single()`, which PostgREST
+-- sends as `INSERT … RETURNING`) failed with "new row violates row-level
+-- security policy" before the owner test could ever pass. Comparing the row's own
+-- columns has no such problem: `visibility` / `owner_id` resolve against the new
+-- row directly. It is also cheaper — no `security definer` call per row scanned.
+-- `shares_self_select` (`shared_with_user_id = auth.uid()`) is what keeps the
+-- shares subquery working under invoker rights. `can_read_recipe(uuid)` stays for
+-- the child tables, which pass a *parent* recipe id that genuinely needs a lookup.
 drop policy if exists recipes_select on recipes;
-create policy recipes_select on recipes for select using (can_read_recipe(id));
+create policy recipes_select on recipes for select using (
+  visibility = 'public'
+  or owner_id = auth.uid()
+  or exists (
+    select 1 from recipe_shares s
+    where s.recipe_id = recipes.id and s.shared_with_user_id = auth.uid()
+  )
+);
 drop policy if exists recipes_insert on recipes;
 create policy recipes_insert on recipes for insert with check (owner_id = auth.uid());
 drop policy if exists recipes_update on recipes;
