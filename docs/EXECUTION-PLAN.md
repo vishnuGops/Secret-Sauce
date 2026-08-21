@@ -899,6 +899,229 @@ they are relaxed or skipped **loudly**, rather than quietly retuned into passing
   Neither is visible at 23 recipes. If they show up, they are `BUG-TRACKER` entries in this phase and
   fixes in the next one — a stored tsvector column with a GIN index is the known answer to the first.
 
+## Phase 25 — Restaurants & signature dishes
+
+Roadmap: [ROADMAP.md Phase 25](./ROADMAP.md#phase-25--restaurants--signature-dishes-north-star--designed-not-started) ·
+Status: **designed, not started.** This section records the design decisions so Phase 25 starts
+from an agreed shape instead of an open question. Nothing below is built.
+
+**What it is.** The product's end state (see ROADMAP "Product direction"): restaurants as a
+directory layer above chefs. A restaurant has **member chefs** (optional — most profiles never
+join one) and **signature dishes** that point at existing public `recipes`. It is discovery
+surface and identity, not a new content system.
+
+**The one decision that shapes everything: a restaurant is not a principal.** Nobody signs in as
+a restaurant. It is a row managed by `owner`-role members, exactly the way "chef" is a
+presentation of `profiles` rather than a second account type (Phase 18's core call, which this
+phase is the payoff for). Consequences:
+
+- Auth is untouched. RLS policies are written against `auth.uid()` membership lookups, the same
+  primitive `recipe_shares` already uses.
+- The engagement model is untouched. Likes/saves/views/ratings stay on recipes; a restaurant
+  reads its numbers *through* its signature dishes and member chefs, it never collects its own.
+- Teardown/ownership is simple: `created_by → profiles`, members cascade, no orphan principal.
+
+**Schema shape** (all in `0001_init.sql`, idempotent, guarded — see the ROADMAP checklist for
+the column-level detail):
+
+```
+restaurants            1 ──< restaurant_members >── 1  profiles
+restaurants            1 ──< restaurant_signature_dishes >── 1  recipes
+```
+
+Three traps, each a known bug class, called out now so the build doesn't rediscover them:
+
+1. **Grants (B013).** All three tables are created after the blanket grant block on an upgraded
+   database — grant `select` to `anon`/`authenticated` and DML to `authenticated` explicitly,
+   beside the table.
+2. **Signature dishes must be public recipes.** The table is world-readable; a row pointing at a
+   private recipe leaks that the recipe exists (title resolves for members, 404s for everyone
+   else). Enforce with a `with check` that the recipe is `public` **and** owned by a member —
+   and decide what happens when a signature recipe is later flipped private (recommended: a
+   trigger deletes the signature row, same "derived state follows source" philosophy as the
+   counter triggers).
+3. **Embedding needs FK hints from day one (Gotcha 17 / PGRST201).** `restaurants` relates to
+   `profiles` via `created_by` and via `restaurant_members` immediately, so
+   `members:profiles(...)` is ambiguous at birth. Define a `kRestaurantSelect` constant in
+   `core/src/repositories/` the way `kRecipeSelect` was defined, on the first query written.
+
+**Restaurant "score", deliberately deferred.** The obvious aggregate (sum or mean of member
+`chef_score`s, or engagement over signature dishes) inherits B043's calibration problem
+squared. Ship the directory **unranked** (alphabetical / newest) first; add ranking only after
+B043 is settled and Phase 24's sim can generate restaurant populations to calibrate against.
+
+**Build order** (the same bottom-up order every phase since 18 has used):
+
+1. Public chef page `/chef/:id` — the standing prerequisite. Identity header (ChefBadge, tier,
+   score breakdown) + a `RecipeGrid` of that chef's public recipes (`chef_top_recipes` already
+   exists; it needs a `p_limit` wide enough or a paged variant). The restaurant page copies this
+   shape, and every existing `ChefBadge` becomes tappable.
+2. SQL: enum, three tables, RLS, grants, `drop.sql` — verified on the local stack including the
+   upgrade path (Gotcha 6) and the private-flip trigger, before any Dart.
+3. `core`: models, `RestaurantRepository`, `kRestaurantSelect`, providers.
+4. `design_system`: restaurant card + member row, barrel exports, 288px / 2.0× envelope tests.
+5. `app`: `/restaurants` directory + `/restaurant/:id` detail (both signed-out safe), owner
+   management UI (create, members, signature-dish picker over the owner's public recipes).
+6. Sim extension: generated restaurants + memberships so the directory is tested at scale.
+7. Docs fold-in: SDS gains a §13 (restaurants), CLAUDE.md feature map + enum count, checklist
+   doc-sync table.
+
+**Acceptance (to be tightened when the phase starts):** directory and detail render signed-out;
+a non-member cannot write a restaurant, its members, or its signature dishes (RLS-verified on
+the local stack, not UI-verified); a private recipe cannot be, or remain, a signature dish; the
+sim generates restaurants and `3_sim_verify.sql` gains assertions for the membership and
+signature invariants; all existing standings in SDS §10.7 unchanged.
+
+## Phase OPT — Optimization & hardening
+
+Roadmap: [ROADMAP.md Phase OPT](./ROADMAP.md#phase-opt--optimization--hardening-backlog-rolling) ·
+Source: full design/architecture audit, 2026-08-20 (Dart + SQL sides audited independently, every
+logged finding re-verified against the cited source before entering the backlog). New bugs from
+the audit: **B050–B052** in [BUG-TRACKER.md](./BUG-TRACKER.md).
+
+**How to work this phase.** It is a rolling backlog, not a sprint: pick from OPT-S first (each is
+a live correctness/integrity hole), then OPT-P items as the sim makes them measurable, OPT-A
+opportunistically alongside touching work, OPT-T as its own investment. Every SQL item follows
+the standing rules — idempotent guards, upgrade-path verification (Gotcha 6), local stack before
+hosted (B033 pooler form), `drop.sql`/B024 blocks for signature changes.
+
+### OPT-S — Integrity & correctness
+
+**OPT-S1 — column-level grants (B050), the one to do before anything else.**
+Mechanism: `grant insert, update, delete on all tables in schema public to authenticated`
+(`0001_init.sql:796`) + row-scoped-only `recipes_update` (:666) / `profiles_update` (:656) means
+an owner may `PATCH` any column of their own row — including `like_count`, `save_count`,
+`view_count`, `rating_*`, and `profiles.chef_score/chef_tier/public_recipe_count`. The
+`recipes_chef_stats` trigger then recomputes `chef_score` **from the forged counter**, laundering
+it into the public leaderboard. Fix shape: in the grants block, replace the blanket `update` on
+`recipes` and `profiles` with explicit column lists mirroring `_writablePayload` /
+`ProfileRepository.updateMine` (title, description, cover, cuisine, category, difficulty, times,
+servings, visibility, attribution, fork columns / display_name, avatar_url, bio). Notes:
+`security definer` functions and everything run as `postgres` (seed, sim, triggers) are
+unaffected; `insert` needs the same treatment or the counters are forgeable at creation
+(`with check` cannot see columns, only rows — column grants are the correct layer). Acceptance:
+on the local stack, as the owner, `PATCH /recipes?id=eq.…` with `{"like_count": 99999}` fails
+`42501`; a normal editor save still round-trips; `chefs_leaderboard` unchanged after a re-apply;
+upgrade-path apply is clean. Docs: SDS §4 gains the column-grant rule; review-checklist §2 gains
+"a new client-writable column must be added to the column grant list".
+
+**OPT-S2 — `.select()` on recipes update/delete** (`recipe_repository.dart:145-160`): an RLS
+denial matches 0 rows and returns success today (Gotcha 2); `update()` then happily re-persists
+content while believing the parent row saved. Append `.select()` and throw on an empty result.
+
+**OPT-S3 (B051)** and **OPT-S4 (B052)** — see the tracker entries for mechanism; both are small,
+both sit on the product's core surfaces (detail, editor). S3 also closes the dead
+`_CountAction.activeIcon` param by finally reading `myLiked`/`mySaved` state. Regression tests:
+a signed-out tap navigates to `/auth` instead of throwing; a failed load renders `ErrorView`
+with Save disabled (the test recipe-detail interactions suite in OPT-T3 hosts both).
+
+**OPT-S5 / S6** — one-line-ish each: `notYetTooltip` on the "Can edit" segment
+(`share_dialog.dart:83-95`); `if auth.uid() is null then raise` + `revoke execute … from anon`
+on `fork_recipe` (`0001_init.sql:1051` — today an anon call dies on the `owner_id` not-null
+constraint, which is an accident, not a guard).
+
+**OPT-S7 / S8** are B034 and B018's open halves — owner actions (env file edit; hosted account
+rotation), not code. Listed so they stop living only inside old phase notes.
+
+### OPT-P — Performance & scalability
+
+The sim (`medium`: 1,671 recipes, ~118k views, 1,000 profiles) turned three predictions into
+measurables. Benchmark before/after each with `explain analyze` on the local stack at `medium`;
+record numbers in the tracker when an item lands.
+
+| ID | Mechanism (file:line) | Fix shape | Effort | Impact |
+| --- | --- | --- | --- | --- |
+| P1 | `recipes_search` (`0001_init.sql:914-925`) evaluates `recipe_search_document()` — four subqueries — **twice per public recipe per search**; nothing indexable | Trigger-maintained `recipes.search_tsv` + GIN index (a generated column can't — the document aggregates cross-table); backfill on apply; child-table edits must touch the parent's tsv (the ingredient/step/tag triggers are the subtle part) | M | HIGH |
+| P2 | `recipes_trending` (:870-882) full-scans + sorts all public recipes; `now()` in the score defeats any index | Bound to `created_at > now() - interval '30 days'` (trending older than that is a contradiction) + partial index `(created_at desc) where visibility = 'public'` — which Discover **Recent** (`order by created_at`) also starts using | S | HIGH |
+| P3 | `getById` (`recipe_repository.dart:277-319`) issues one query per ingredient/step group — 2+G+S round trips per open | One nested embed: `ingredient_groups(*, ingredients(*)), step_groups(*, steps(*))` with **explicit ascending** foreign-table ordering (B022 applies to the embedded form too — pin with a test) | M | HIGH |
+| P4 | One save = ~3 `getById` cascades (`update()` :144-155 → `_appendVersion` :384-422 → return value) | `_appendVersion` snapshots from the `Recipe` it was handed; `update()` returns the final fetch only | S | MED |
+| P5 | `chefs_leaderboard` (:955-964) re-aggregates all public recipes per page although scores are denormalized; `recompute_chef_stats` (:471-481) already computes the like/save/view totals and throws them away | Persist `total_likes/saves/views` on `profiles` in the same recompute; board becomes a pure indexed scan; partial index `where public_recipe_count > 0` | M | MED |
+| P6 | `recipe_likes`/`recipe_saves` PKs lead with `user_id`; no recipe-leading index exists | `(recipe_id, created_at)` on both — required before Phase 23's windowed rails can be anything but seq scans | S | MED |
+| P7 | `recipeProvider` body calls `logView` (`recipe_detail_providers.dart:7-14`) — every invalidate (like, rate, save) logs another append-only view row | Log once per screen visit from the screen's `initState`/first-build listener | S | MED |
+| P8 | Search RPC per keystroke (`discover_providers.dart:19-22`) | ~300 ms debounce in the provider (`Timer` + `ref.onDispose`) | S | MED |
+| P9 | No pagination: Discover capped 20/30, `listMine`/`listSharedWithMe` unbounded (`discover_repository.dart:23-56`, `recipe_repository.dart:95-102`) | `limit`/`offset` params + load-more; `leaderboardPagesProvider` is the in-repo precedent | M | MED |
+| P10 | `/chefs` hero = 6 count queries (`chef_repository.dart:66-99`); `chefDetailProvider` awaits sequentially (`chefs_providers.dart:121-123`) | `chefs_tier_counts()` RPC returning 5 rows (PostgREST can't `group by`; an RPC can); `Future.wait` the detail pair | S–M | LOW |
+| P11 | Every like/first-view = full `recompute_chef_stats` over the owner's recipes (:516-522) — accepted in SDS §10.3 | Revisit (debounce/queue) only when measured hot; noted so growth work prices it in | L | deferred |
+
+### OPT-A — Architecture & code quality
+
+The audit's headline: **the layering holds.** Zero UI→Supabase leaks, no `src/` deep imports,
+every repository behind its contract, providers hand-written and correctly placed. The items
+below are targeted, not structural.
+
+- **A1 — atomic `update()`** (the one structural item): today `update()` deletes all groups then
+  re-inserts (`recipe_repository.dart:150-152`); a failure between the two loses the recipe's
+  content (Gotcha 11), and `_appendVersion` computes `version_number` client-side (read-then-
+  insert race). Fix: one `save_recipe(...)` Postgres function — update row, replace content,
+  append version — in a single transaction, `security definer` **with** an explicit
+  `owns_recipe()` check first (the `fork_recipe` pattern), EXECUTE granted to `authenticated`
+  only. Closes P4's cascade too when it lands; do it after OPT-S1 so the function is written
+  against the tightened grants.
+- **A2 — dead code**: `features/home/home_screen.dart` (185 lines) survived its route's
+  retirement (B046). Delete; `widget_test.dart` already pins the redirect.
+- **A3 — cross-feature imports**: `recipe_detail` imports `my_recipes/share_dialog.dart`
+  (shared surface → `apps/app/lib/widgets/`); `top_nav_bar.dart` + `profile_screen.dart` import
+  `features/auth/auth_controller.dart` for sign-out (hoist a `signOutProvider`, or move the
+  controller beside `myProfileProvider` in core's providers).
+- **A4 — error surfaces**: screens render raw `e.toString()` (PostgREST codes, `AuthException`
+  dumps) in `ErrorView`/snackbars across discover/my/auth. One `friendlyError(Object)` in core,
+  used everywhere; keep the raw error in `debugPrint`.
+- **A5 — share lookup correctness**: `findByEmailOrName` (`profile_repository.dart:25-34`) is an
+  exact `ilike` (no wildcards) with `limit(1)` on a non-unique display name — "share with Dara"
+  can pick the wrong Dara silently. Return a ranked list, `%query%` match, ShareDialog
+  disambiguates.
+- **A6 — schema nits** (one local-stack pass together): avatars bucket delete policy (parity
+  with recipe-images :836); `drop function if exists chefs_leaderboard(int, int)` before its
+  `create or replace` (:939 — latent B024); drop redundant `recipe_versions_recipe_idx` (:106 —
+  the unique at :104 covers it, the `recipe_views_recipe_idx` precedent); guard the FK
+  drop/re-add (:109-117) behind a `pg_constraint` existence check (today every apply rescans
+  `recipes`); `tags` write policy (insert-only by any authenticated user, no update/delete —
+  decide owner-curated vs. free tags before Phase 25 makes tags discovery-relevant).
+- **A7 — dedupe**: `StorageService`'s two identical upload bodies → `_upload(bucket, …)`; the
+  AsyncValue→Loading/Error/Empty/`RecipeGrid` scaffold duplicated between Discover and My
+  Recipes → one `RecipeAsyncGrid` in `apps/app/lib/widgets/`; the two hand-rolled date
+  formatters (`chef_detail_sheet.dart:62-68`, `version_history_sheet.dart:54-55`) →
+  `core/src/formatting.dart`, which already declares itself the home for this.
+- **A8 — file size + literals**: split `recipe_editor_screen.dart` (826 lines — the two
+  sub-editors are natural seams), `chef_detail_sheet.dart` (606), `recipe_detail_screen.dart`
+  (561); replace the literal `'/recipe/new'` / `'/recipe/:id/edit'` in `app_router.dart:83-97`
+  with `Routes` constants (the one place a rename silently misses).
+- **A9 — migration split**: `0001_init.sql`'s every-apply work (profile backfill :264-268, chef
+  backfill :526-546, FK revalidation :109-117) grows linearly with hosted data; the file header
+  already promises versioned migrations "once there is real data". Do the split **before**
+  Phase 25 adds tables; the B024 rule (drops live in the file that recreates the function)
+  must survive the split.
+
+### OPT-T — Tests, tooling & process
+
+- **T1 — the CI database job** (Phase 11 item 2 + Phase 24's deferred item, folded): GitHub
+  Actions service running the Supabase stack (plain Postgres cannot apply `0001_init.sql` —
+  `profiles.id → auth.users`), then `0001_init → seed → seed_recipes → sim tiny →
+  3_sim_verify.sql`, twice (idempotency), plus the Gotcha-6 upgrade-path variant
+  (`git show <last-release>` base first). ~2–3 min per run. This single job covers the trigger/
+  RLS/RPC surface nothing re-verifies today, executes the 30 sim assertions on every PR, and is
+  the precondition for OPT-S1/P1/P2/A6 landing with regression cover instead of a one-off
+  local-stack note in the tracker.
+- **T2 — repository unit tests**: still blocked on mocking `SupabaseClient`; re-evaluate
+  `mock_supabase_http_client` (or a thin `PostgrestClient` wrapper injected into the repos)
+  before writing a bespoke fake. Start with the read paths (`getById` decode + B022 ordering,
+  `kRecipeSelect` shape) — they are the ones OPT-P3 rewrites.
+- **T3 — widget tests, priority order**: recipe-detail interactions (signed-out like/save →
+  `/auth`; toggle states — pins B051's fix), `snapRating` (pure function, named untested in
+  Gotcha 15, five minutes), ShareDialog (disambiguation UI once A5 lands), then discover/auth
+  flows.
+- **T4 — toolchain debt, one decision each**: commit `pubspec.lock` (B009 — root cause of
+  "B005 appeared suddenly"); raise the `sdk:` lower bound to ≥3.7 so `dart format` emits the
+  tall style and B027's format-breaks-analyze trap closes (one whole-repo reformat commit);
+  then `freezed` 3.x migration (B005's permanent fix — unpins Flutter, breaking model-syntax
+  change, its own change set).
+- **T5 — screenshots**: `npx playwright install chrome`, then the standing B028 procedure
+  (release build + static serve) over `/chefs` v3 and the revised card. Phases 22/23 both
+  proved a class of bug (B029–B032, B047/B048) that only this pass sees.
+- **T6 — `tool/db.dart`**: pass `-1` (single transaction) for `db:create`/`db:seed`/`db:recipes`
+  so a mid-file failure rolls back instead of leaving half-applied DDL; the sim files manage
+  their own transactions and are exempt.
+
 ## Build, run & release (ops)
 
 Task runner is **melos** (`melos.yaml`); Gradle only builds Android. See `README.md` for full

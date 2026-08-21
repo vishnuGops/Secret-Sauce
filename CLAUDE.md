@@ -17,6 +17,11 @@ origin) and carry a **version history** so legacy/family recipes stay intact and
 - The **structure and intuitiveness of a recipe** is the most important part of this product.
   Ingredients and steps are richly modelled (grouped, ordered, with quantities/units/timers) so
   they are easy to follow.
+- **North star** (see ROADMAP "Product direction" + Phase 25): on top of the chef layer, the app
+  will list **restaurants** — an entity *managed by* profiles, never a second login. A restaurant
+  has optional member chefs and **signature dishes** that point at existing public recipes.
+  Design a new feature so it doesn't fight that: profiles stay the only principal, engagement
+  stays on recipes.
 
 ## Tech stack
 
@@ -159,6 +164,7 @@ flutter run -d windows --dart-define-from-file=env.local.json                   
 
 # Screenshots / any automated browser: the debug web server renders for ONE client only, so a
 # second page load is blank (B028). Build and serve statically instead. Deep links are hashed.
+# Playwright needs a browser first: `npx playwright install chrome` (Chrome is not installed here).
 flutter build web --release --dart-define-from-file=env.local.json
 npx serve -l 8099 build/web            # http://localhost:8099/#/discover
 ```
@@ -284,7 +290,10 @@ Server-owned columns the client must **never** write (trigger-maintained; omitte
 `_writablePayload` in `recipe_repository.dart`): on `recipes` — `like_count`, `save_count`,
 `view_count`, `rating_sum`, `rating_count`, `rating_avg`, `current_version_id`, `created_at`,
 `updated_at`; on `profiles` — `chef_score`, `chef_tier`, `public_recipe_count` (omitted from
-`ProfileRepository.updateMine`).
+`ProfileRepository.updateMine`). **Known gap (B050, open):** this list is client convention only —
+the blanket table-level `UPDATE` grant means an owner can still write these columns over raw
+PostgREST. OPT-S1 (column-level grants) is the fix; until it lands, do not add anything that
+*relies* on these columns being server-enforced against their own owner.
 
 **Nested content order (B022).** Ingredient/step groups and their children are stored and read in
 **ascending** `sort_order` (`step_order` for steps). postgrest-dart's `.order(column)` defaults to
@@ -395,7 +404,10 @@ reset`, hosted paste). Every statement must be guarded: `if not exists`,
    stale-object bug — and those are the only two paths that are convenient to run. A deployed
    database takes a third path nobody tests: _old schema + old seed already applied, new files
    layered on top_. Reconstruct it with `git show <last-release>:supabase/…` before believing a
-   schema change is safe. B024 shipped through a green run of both easy paths.
+   schema change is safe. B024 shipped through a green run of both easy paths. The fourth path is
+   a **truly clean machine** (B045): a function in an earlier-numbered file whose body references
+   an object a later file creates passes everywhere the object already exists — verify multi-file
+   SQL from a dropped-schema state too.
 7. **`db:*` scripts fire at whatever `SUPABASE_DB_URL` points at — no confirmation, no prod
    guard** ([tool/db.dart](tool/db.dart)). `db:reset` is `drop → create → seed`. `README.md`
    documents pasting `seed.sql` into the **hosted** dashboard, so anything in that file runs on

@@ -58,6 +58,12 @@ default-denies — reads return empty, not an error); or adds an FK to `profiles
 considering B015 (an `auth.users` row can exist with no `profiles` row; the backfill at
 `0001_init.sql:245-249` is what repairs it — keep it after any `profiles` change).
 
+**Known-open (B050): server-owned columns are owner-writable.** The blanket `grant update` +
+row-scoped `recipes_update`/`profiles_update` lets an owner PATCH their own `like_count` /
+`chef_score` over PostgREST; OPT-S1 (column-level grants) is the planned fix. Do not re-file
+the status quo as a new finding — but **do** flag a diff that adds a new server-owned/derived
+column, or new code that trusts these columns against their own owner, until OPT-S1 lands.
+
 **View counting (B012, fixed).** `on_view_insert` rolls `recipe_views` into `recipes.view_count`,
 but counts **distinct signed-in viewers**, not visits: it skips rows with a null `user_id` and
 skips a user's second-and-later row for the same recipe. Two properties keep
@@ -205,13 +211,47 @@ overstates the on-device case — use it to prove a row *cannot degrade*, not as
 measurement. New `design_system` widgets must be added to the `design_system.dart` barrel or
 `apps/app` cannot import them.
 
+## 8. Generated content and the simulation — High
+
+Two generators (`tool/recipes.dart` → `supabase/seed_recipes.sql`, `tool/sim.dart` →
+`supabase/sim/1_sim_dishes.sql`) and one in-database generator (`supabase/sim/2_sim_generate.sql`).
+The failure modes here all shipped once already (B042–B045):
+
+- **Hand-edited generated SQL.** `seed_recipes.sql` and `sim/1_sim_dishes.sql` are outputs —
+  flag any diff editing them without the matching `recipeData/`/`simData/` JSON change and a
+  regen (`recipes:gen` / `sim:gen`). CI's `recipes:check`/`sim:check` catch staleness, but only
+  after the fact.
+- **Determinism (B044).** The sim's guarantee is same seed → same database. Flag any `now()`,
+  `random()`, or `setseed()` introduced into `2_sim_generate.sql` — timestamps come from the
+  pinned `sim.epoch_end()` in `sim.config`, and randomness from `sim.rand(key, stream)`
+  (hash-based, order-independent). A moving anchor re-dates recipes out from under the versions
+  that reference them, and the run still exits 0.
+- **Derived counters (Gotcha 19).** The sim recompute must call `chef_score()` /
+  `chef_tier_for()`; flag any restated `3 / 5 / 0.2` or threshold literal in sim SQL. Also flag a
+  bulk engagement load with the counter triggers left enabled — that is one
+  `recompute_chef_stats()` per row, hours instead of seconds.
+- **Teardown scope.** `9_sim_teardown.sql` deletes `auth.users` rows. It must be driven by the
+  `sim.actor` / `sim.recipe` registries — flag any deletion keyed on an email or id *pattern*;
+  a subtly-wrong pattern on the hosted project has no undo.
+- **Schema placement (B026 by construction).** Sim helpers/registries live in schema `sim`,
+  which PostgREST cannot reach. Flag a new sim function or table created in `public`.
+- **File-order coupling (B045).** The `sim/*.sql` files run 0→9; a function body in an earlier
+  file referencing an object a later file creates only fails on a *clean* database. Flag it
+  unless guarded (e.g. the table is `create table if not exists` in both files); require
+  verification from a dropped-schema state, not just a machine that has run the sim before.
+- **Assertions are the only tests.** `3_sim_verify.sql` is the sole coverage the sim has. A diff
+  that tunes a distribution until an assertion passes (rather than asserting the honest value,
+  loudly relaxed at small presets) is a finding — that is exactly the B043 trap the suite was
+  built to resist.
+
 ## Project review settings
 
 - **Integration target: `main`.** It is the only branch and both CI triggers gate on it
   (`.github/workflows/ci.yml:3-7`). Most work lands as working-tree changes on `main` — default
   to reviewing staged + unstaged rather than a three-dot diff.
 - **Severity defaults:** §1 and §6 findings are Critical. §2 and §4 are Critical when they
-  affect `0001_init.sql`/`drop.sql`, High otherwise. §3 and §5 are High. §7 is Medium.
+  affect `0001_init.sql`/`drop.sql`, High otherwise. §3, §5, and §8 are High (§8's teardown-scope
+  rule is Critical — it deletes `auth.users` rows). §7 is Medium.
 - Generated `*.g.dart` / `*.freezed.dart` are git-ignored (`.gitignore:11-13`) — their absence
   from a diff is never a finding; the missing `melos run build_runner` is (see below).
 - **`packages/core` now has a `test/` dir, but it covers model decoding only.** Every repository
@@ -232,6 +272,8 @@ same change set. Report misses as `⚠️ Potential issue`.
 | any bug found or fixed | `docs/BUG-TRACKER.md` (new row, or status change) |
 | `melos.yaml`, `.github/workflows/**`, `tool/db.dart`, `apps/app/pubspec.yaml`, `env.example.json`, platform dirs (`android/`, `ios/`, `windows/`) | `README.md` **and** CLAUDE.md "Common commands" |
 | new/changed `design_system` widget | `docs/SDS.md` §8 (RecipeCard contract / rating widgets table) + barrel export |
+| `recipeData/**` | regenerated `supabase/seed_recipes.sql` in the same diff (`recipes:gen`) |
+| `simData/**`, `supabase/sim/**`, `tool/sim.dart`, `tool/recipe_format.dart` | regenerated `supabase/sim/1_sim_dishes.sql` when dishes changed (`sim:gen`); `docs/SDS.md` §12 once it exists; ROADMAP Phase 24 status |
 
 ## Companion handoffs
 
