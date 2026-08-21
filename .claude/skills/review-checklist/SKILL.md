@@ -111,9 +111,13 @@ the row (sharing, editing a shared recipe, admin-ish flows) — the client-side 
 - **Signed-out paths.** `_uid` throws `StateError` (`recipe_repository.dart:76-80`). Flag a new
   repository call reachable from a signed-out screen (Home, Discover, recipe detail) unless it
   uses `currentUser?.id` like `logView`/`myRating` do.
-- **Non-atomic update.** `update()` deletes all `ingredient_groups`/`step_groups` then re-inserts
-  (`recipe_repository.dart:147-150`); a failure between them loses the recipe's content. Flag any
-  diff lengthening that window.
+- **Saving is one transaction (OPT-A1).** `create()`/`update()` call the `save_recipe` RPC, which
+  does row + content + version atomically and computes `version_number` under the row lock. Flag a
+  diff that moves any of those steps back to the client, that writes `recipe_versions` from Dart,
+  or that adds a client-writable column to `_writablePayload` without adding it to **both** the
+  grants block and `save_recipe`'s column list — the last one fails silently, since an absent key
+  just never saves. `save_recipe` is `security definer`, so it must keep its `owns_recipe` check
+  and its `revoke execute from public/anon`.
 - **Numeric decoding.** Postgres `numeric` arrives as a JSON number that may be int or double —
   decode via `(value as num).toDouble()` (`recipe_repository.dart:249-250`), never a bare
   `as double` on a new numeric column.

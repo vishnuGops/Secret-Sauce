@@ -1592,9 +1592,17 @@ begin
   insert into recipe_tags (recipe_id, tag_id)
   select v_new_recipe, tag_id from recipe_tags where recipe_id = p_source;
 
-  -- initial version snapshot for the fork
+  -- Initial version snapshot for the fork. It used to be a literal `'{}'` —
+  -- a version row that records nothing, so the fork's own first version could
+  -- not be restored or diffed. `recipe_snapshot` (OPT-A1) is defined for exactly
+  -- this shape. It is defined *below* this function, which is fine and not the
+  -- B045 trap: plpgsql resolves names when the body runs, not when it is
+  -- created, and no caller can reach `fork_recipe` before the apply finishes.
   insert into recipe_versions (recipe_id, version_number, author_id, change_summary, content_snapshot)
-  values (v_new_recipe, 1, auth.uid(), 'Forked from source recipe', '{}'::jsonb)
+  values (
+    v_new_recipe, 1, auth.uid(), 'Forked from source recipe',
+    recipe_snapshot(v_new_recipe)
+  )
   returning id into v_version;
 
   update recipes set current_version_id = v_version where id = v_new_recipe;
@@ -1615,5 +1623,275 @@ begin
   if exists (select 1 from pg_roles where rolname = 'anon') then
     execute 'revoke execute on function fork_recipe(uuid) from anon';
     execute 'grant execute on function fork_recipe(uuid) to authenticated';
+  end if;
+end $$;
+
+-- ============================================================================
+-- Atomic recipe save (OPT-A1)
+-- ============================================================================
+
+-- The JSON a `recipe_versions` row stores as its snapshot.
+--
+-- Built here rather than in Dart (where it lived until OPT-A1) for two reasons:
+-- the version row is now written inside the same transaction as the save, so
+-- there is no post-save read to build it from; and `fork_recipe` used to store a
+-- literal `'{}'` because assembling the same shape in SQL by hand was not worth
+-- it. Both now call this.
+--
+-- `to_jsonb(r) - 'search_tsv'` rather than a column list on purpose: a snapshot
+-- that silently drops a column added later is worse than one carrying a column
+-- nobody reads. `search_tsv` is the one exclusion — a ~450-byte tsvector,
+-- derived from the rest, that would otherwise be copied into every version row
+-- forever.
+--
+-- Ordering is explicit at all four levels for the same reason the client read is
+-- (B022): a snapshot is a restore point, and a reversed one restores a reversed
+-- recipe.
+drop function if exists recipe_snapshot(uuid);
+create or replace function recipe_snapshot(p_recipe uuid)
+returns jsonb
+language sql
+stable
+as $$
+  select jsonb_build_object(
+    'recipe', (select to_jsonb(r) - 'search_tsv' from recipes r where r.id = p_recipe),
+    'ingredient_groups', (
+      select coalesce(jsonb_agg(
+        to_jsonb(g) || jsonb_build_object('ingredients', (
+          select coalesce(jsonb_agg(to_jsonb(i) order by i.sort_order), '[]'::jsonb)
+          from ingredients i where i.group_id = g.id
+        ))
+        order by g.sort_order
+      ), '[]'::jsonb)
+      from ingredient_groups g where g.recipe_id = p_recipe
+    ),
+    'step_groups', (
+      select coalesce(jsonb_agg(
+        to_jsonb(s) || jsonb_build_object('steps', (
+          select coalesce(jsonb_agg(to_jsonb(st) order by st.step_order), '[]'::jsonb)
+          from steps st where st.group_id = s.id
+        ))
+        order by s.sort_order
+      ), '[]'::jsonb)
+      from step_groups s where s.recipe_id = p_recipe
+    )
+  );
+$$;
+
+-- Create or update a recipe, replace its content, and append its version — in
+-- **one transaction** (OPT-A1).
+--
+-- What this closes:
+--
+--   * **The data-loss window (Gotcha 11).** The client used to update the row,
+--     delete both group trees, then re-insert them one group at a time. A
+--     failure anywhere in the middle — a dropped connection, a closed laptop —
+--     left the recipe with its title saved and its content gone, permanently.
+--     Now the whole thing commits or none of it does.
+--   * **The version_number race.** `version_number` was computed client-side by
+--     reading `max(...)` and adding one, in a separate round trip from the
+--     insert, so two saves of the same recipe could read the same maximum. Here
+--     the `update recipes` below takes the row lock, so a second save waits and
+--     then reads a maximum that includes the first.
+--   * **The round trips.** A recipe with 3 ingredient groups and 4 step groups
+--     cost 1 update + 2 deletes + 7 inserts + 1 read + 1 version insert. It is
+--     now this call plus one read for the return value.
+--
+-- `security definer` because the delete-then-insert has to be one unit and the
+-- version row is written on the caller's behalf, so it opens with its own
+-- authorization check exactly like `fork_recipe`, and **only ever writes the
+-- client-writable columns**.
+--
+-- MAINTENANCE: that column list is the third copy of the same set — the grants
+-- block, `_writablePayload` in `recipe_repository.dart`, and here. A new
+-- client-writable column has to reach all three; this is the copy that fails
+-- quietly if you forget, because the column simply never saves.
+--
+-- Content arrives as JSON arrays in list order, and `sort_order` / `step_order`
+-- are the array index — the same rule the client's `_persistContent` applied,
+-- and what the editor's reordering relies on.
+-- Both drops are the B024 discipline pre-armed (OPT-A6's reasoning): the day
+-- either signature changes, the drop has to already live in the file that
+-- recreates it, not be added after a `42725` on someone's database.
+drop function if exists save_recipe(uuid, jsonb, jsonb, jsonb, text);
+create or replace function save_recipe(
+  p_recipe_id         uuid,
+  p_payload           jsonb,
+  p_ingredient_groups jsonb,
+  p_step_groups       jsonb,
+  p_change_summary    text default 'Updated'
+)
+returns uuid
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_recipe uuid;
+  v_next   int;
+  v_parent uuid;
+begin
+  if auth.uid() is null then
+    raise exception 'must be signed in to save a recipe' using errcode = '42501';
+  end if;
+
+  if p_recipe_id is null then
+    insert into recipes (
+      owner_id, title, description, cover_image_url, cuisine, category,
+      difficulty, prep_minutes, cook_minutes, servings, visibility, attribution,
+      forked_from_recipe_id, forked_from_version_id
+    ) values (
+      auth.uid(),
+      p_payload->>'title',
+      coalesce(p_payload->>'description', ''),
+      p_payload->>'cover_image_url',
+      p_payload->>'cuisine',
+      p_payload->>'category',
+      coalesce((p_payload->>'difficulty')::difficulty, 'easy'),
+      coalesce((p_payload->>'prep_minutes')::int, 0),
+      coalesce((p_payload->>'cook_minutes')::int, 0),
+      coalesce((p_payload->>'servings')::int, 1),
+      coalesce((p_payload->>'visibility')::recipe_visibility, 'private'),
+      p_payload->>'attribution',
+      (p_payload->>'forked_from_recipe_id')::uuid,
+      (p_payload->>'forked_from_version_id')::uuid
+    )
+    returning id into v_recipe;
+  else
+    -- The authorization check the definer rights bypass. `owns_recipe` is the
+    -- same predicate `recipes_update` uses, so this cannot drift from RLS.
+    if not owns_recipe(p_recipe_id) then
+      raise exception 'not authorized to save this recipe' using errcode = '42501';
+    end if;
+
+    -- Two rules, and the split is not arbitrary. A **not-null** column falls
+    -- back to what the row already holds, because a key the payload omits must
+    -- not silently reset it to a default — and it cannot mean "clear" either,
+    -- since the column forbids null (clearing a text field is an explicit `""`,
+    -- which `->>` returns as an empty string, not null). A **nullable** column
+    -- is assigned straight through, because there null genuinely means clear and
+    -- the client always sends every key (`_writablePayload`).
+    update recipes set
+      title                  = coalesce(p_payload->>'title', title),
+      description            = coalesce(p_payload->>'description', description),
+      cover_image_url        = p_payload->>'cover_image_url',
+      cuisine                = p_payload->>'cuisine',
+      category               = p_payload->>'category',
+      difficulty             = coalesce((p_payload->>'difficulty')::difficulty, difficulty),
+      prep_minutes           = coalesce((p_payload->>'prep_minutes')::int, prep_minutes),
+      cook_minutes           = coalesce((p_payload->>'cook_minutes')::int, cook_minutes),
+      servings               = coalesce((p_payload->>'servings')::int, servings),
+      visibility             = coalesce((p_payload->>'visibility')::recipe_visibility, visibility),
+      attribution            = p_payload->>'attribution',
+      forked_from_recipe_id  = (p_payload->>'forked_from_recipe_id')::uuid,
+      forked_from_version_id = (p_payload->>'forked_from_version_id')::uuid
+    where id = p_recipe_id;
+
+    v_recipe := p_recipe_id;
+
+    -- Wholesale replacement, as before — but inside the transaction, so the gap
+    -- between the delete and the re-insert is neither observable nor
+    -- interruptible. Children cascade.
+    delete from ingredient_groups where recipe_id = v_recipe;
+    delete from step_groups        where recipe_id = v_recipe;
+  end if;
+
+  with g as (
+    select
+      elem->>'name'                              as name,
+      (ord - 1)::int                             as sort_order,
+      coalesce(elem->'ingredients', '[]'::jsonb) as children
+    from jsonb_array_elements(coalesce(p_ingredient_groups, '[]'::jsonb))
+      with ordinality as t(elem, ord)
+  ),
+  ins as (
+    insert into ingredient_groups (recipe_id, name, sort_order)
+    select v_recipe, coalesce(g.name, ''), g.sort_order from g
+    returning id, sort_order
+  )
+  insert into ingredients (group_id, quantity, unit, name, note, is_optional, sort_order)
+  select
+    ins.id,
+    (c.elem->>'quantity')::numeric,
+    c.elem->>'unit',
+    coalesce(c.elem->>'name', ''),
+    c.elem->>'note',
+    coalesce((c.elem->>'is_optional')::boolean, false),
+    (c.ord - 1)::int
+  from ins
+  join g on g.sort_order = ins.sort_order
+  cross join lateral jsonb_array_elements(g.children) with ordinality as c(elem, ord);
+
+  with g as (
+    select
+      elem->>'name'                        as name,
+      (ord - 1)::int                       as sort_order,
+      coalesce(elem->'steps', '[]'::jsonb) as children
+    from jsonb_array_elements(coalesce(p_step_groups, '[]'::jsonb))
+      with ordinality as t(elem, ord)
+  ),
+  ins as (
+    insert into step_groups (recipe_id, name, sort_order)
+    select v_recipe, coalesce(g.name, ''), g.sort_order from g
+    returning id, sort_order
+  )
+  insert into steps (
+    group_id, step_order, text, image_url, duration_minutes, temperature, tip,
+    sort_order
+  )
+  select
+    ins.id,
+    (c.ord - 1)::int,
+    coalesce(c.elem->>'text', ''),
+    c.elem->>'image_url',
+    (c.elem->>'duration_minutes')::int,
+    c.elem->>'temperature',
+    c.elem->>'tip',
+    (c.ord - 1)::int
+  from ins
+  join g on g.sort_order = ins.sort_order
+  cross join lateral jsonb_array_elements(g.children) with ordinality as c(elem, ord);
+
+  -- Read after the row lock above, which is what makes them safe against a
+  -- concurrent save of the same recipe.
+  select coalesce(max(version_number), 0) + 1 into v_next
+  from recipe_versions where recipe_id = v_recipe;
+
+  select id into v_parent
+  from recipe_versions where recipe_id = v_recipe
+  order by version_number desc limit 1;
+
+  -- `current_version_id` follows via the recipe_versions_set_current trigger —
+  -- never written from here, and not in the client's grant list either (B050).
+  insert into recipe_versions (
+    recipe_id, version_number, parent_version_id, author_id, change_summary,
+    content_snapshot
+  ) values (
+    v_recipe,
+    v_next,
+    v_parent,
+    auth.uid(),
+    coalesce(nullif(p_change_summary, ''), 'Updated'),
+    recipe_snapshot(v_recipe)
+  );
+
+  return v_recipe;
+end;
+$$;
+
+-- Same two locks as fork_recipe (OPT-S6): the body refuses an anonymous caller,
+-- and EXECUTE is revoked from `public` — which is what PostgREST actually
+-- exposes — then granted back to `authenticated` only. `recipe_snapshot` is
+-- internal to these two functions and gets the full revoke: it is `stable` and
+-- harmless, but every function in `public` is an RPC and this one has no reason
+-- to be one.
+do $$
+begin
+  execute 'revoke execute on function save_recipe(uuid, jsonb, jsonb, jsonb, text) from public';
+  execute 'revoke execute on function recipe_snapshot(uuid) from public';
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'revoke execute on function save_recipe(uuid, jsonb, jsonb, jsonb, text) from anon';
+    execute 'revoke execute on function recipe_snapshot(uuid) from anon, authenticated';
+    execute 'grant execute on function save_recipe(uuid, jsonb, jsonb, jsonb, text) to authenticated';
   end if;
 end $$;

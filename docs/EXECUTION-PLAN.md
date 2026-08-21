@@ -1101,14 +1101,33 @@ The audit's headline: **the layering holds.** Zero UI→Supabase leaks, no `src/
 every repository behind its contract, providers hand-written and correctly placed. The items
 below are targeted, not structural.
 
-- **A1 — atomic `update()`** (the one structural item): today `update()` deletes all groups then
-  re-inserts (`recipe_repository.dart:150-152`); a failure between the two loses the recipe's
-  content (Gotcha 11), and `_appendVersion` computes `version_number` client-side (read-then-
-  insert race). Fix: one `save_recipe(...)` Postgres function — update row, replace content,
-  append version — in a single transaction, `security definer` **with** an explicit
-  `owns_recipe()` check first (the `fork_recipe` pattern), EXECUTE granted to `authenticated`
-  only. Closes P4's cascade too when it lands; do it after OPT-S1 so the function is written
-  against the tightened grants.
+- **A1 — atomic `save_recipe` — DONE** (the phase's one structural item). One `security definer`
+  function does create-or-update + content replace + version append in a single transaction, with
+  the `fork_recipe` authorization shape: `auth.uid()` check, then `owns_recipe(p_recipe_id)` —
+  the same predicate `recipes_update` uses — then EXECUTE revoked from `public`/`anon` and granted
+  to `authenticated`. Both refusals raise `42501`; the repository translates that back into
+  `WriteDeniedException` so OPT-S2's contract survives the rewrite.
+  - **Three things it closed:** the content-loss window (Gotcha 11 — delete-then-reinsert is now
+    uninterruptible), the `version_number` race (`max + 1` is read after the update takes the row
+    lock, so a concurrent save waits and then sees it), and the round trips — a recipe with 3
+    ingredient groups and 4 step groups cost ~10 requests and now costs 2 (the call, plus one
+    `getById` for the return value).
+  - **`recipe_snapshot(uuid)`** was not in the plan but the version row now has to be written
+    server-side, so the snapshot had to be too. `to_jsonb(row) - 'search_tsv'` rather than a column
+    list, so a column added later cannot silently fall out of the snapshot. It also repaired
+    `fork_recipe`, which stored a literal `'{}'` — a version row recording nothing — because
+    hand-assembling that JSON in SQL had not been worth it before.
+  - **The new maintenance obligation:** the writable-column set now exists in three places (grants
+    block, `_writablePayload`, `save_recipe`). CLAUDE.md Gotcha 11 and the review checklist were
+    rewritten around this; the `save_recipe` copy is the one that fails *silently*, because an
+    absent key simply never saves.
+  - **Verified end to end** with a throwaway harness against the local stack (Gotcha 15), deleted
+    after the run along with its two throwaway accounts: create round-trips every column and
+    writes version 1 with a real snapshot; an edit that reorders groups replaces content, keeps
+    list order as `sort_order`, and appends version 2 parented to version 1 with the pointer
+    moved; a non-owner's save raises `WriteDeniedException` and leaves the title untouched; a
+    signed-out save is refused. A fork's snapshot was checked separately in SQL — it now carries
+    the recipe, both group arrays, and no `search_tsv`.
 - **A2 — dead code — DONE.** `features/home/home_screen.dart` (185 lines) deleted; the directory
   went with it. Nothing imported it — `widget_test.dart` already pins that `/` is a redirect with
   no page of its own (B046).

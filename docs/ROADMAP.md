@@ -1184,9 +1184,13 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
 
 ### OPT-A — Architecture & code quality
 
-- [ ] **OPT-A1:** make `RecipeRepository.update()` atomic — one server-side transactional RPC
-      for update + content persist + version append (closes Gotcha 11's data-loss window; also
-      fixes the client-side `version_number` race)
+- [x] **OPT-A1:** `save_recipe(...)` — one transactional RPC for create/update + content replace
+      + version append. Closes Gotcha 11's data-loss window, computes `version_number` under the
+      row lock (race gone), and collapses a save from ~10 requests to 2 (the call + one read).
+      `recipe_snapshot()` builds the version snapshot server-side and also fixed `fork_recipe`,
+      whose first version stored a literal `'{}'`. Verified end to end on the local stack with a
+      throwaway harness (create, edit with reorder, non-owner refused, signed-out refused), then
+      deleted per Gotcha 15
 - [x] **OPT-A2:** deleted the retired `features/home/home_screen.dart` (185 dead lines) and its
       directory; nothing imported it and `widget_test.dart` already pins the `/` redirect
 - [x] **OPT-A3:** `share_dialog.dart` → `apps/app/lib/widgets/` (it was in `my_recipes`, which

@@ -53,6 +53,8 @@ drop function if exists recipes_popular(int, int) cascade;
 drop function if exists recipes_search(text, int) cascade;
 drop function if exists recipes_search(text, int, int) cascade;
 drop function if exists fork_recipe(uuid) cascade;
+drop function if exists save_recipe(uuid, jsonb, jsonb, jsonb, text) cascade;
+drop function if exists recipe_snapshot(uuid) cascade;
 -- Chefs / leaderboard (Phase 18).
 drop function if exists on_recipe_stats_change() cascade;
 drop function if exists recompute_chef_stats(uuid) cascade;

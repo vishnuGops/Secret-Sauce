@@ -475,9 +475,16 @@ reset`, hosted paste). Every statement must be guarded: `if not exists`,
     synthetic `view_count` values written directly by `seed.sql`, so their counter and their log
     disagree by design. Don't write code that assumes `view_count` equals a `count(distinct …)`
     over the log.
-11. **`RecipeRepository.update()` is not atomic**: it deletes all `ingredient_groups` /
-    `step_groups` then re-inserts. A failure between the two loses the recipe's content. Don't
-    lengthen that window.
+11. **Saving a recipe is one RPC, and it has to stay one** (OPT-A1). `create()` and `update()`
+    both call `save_recipe(p_recipe_id, p_payload, p_ingredient_groups, p_step_groups,
+    p_change_summary)`, which updates the row, replaces both group trees, and appends the version
+    inside a single transaction. That closed a real data-loss window — the client used to delete
+    every group and re-insert them one request at a time, so a failure in the middle left a recipe
+    with its title saved and its content gone — and the `version_number` race, which is now
+    computed under the row lock the update takes. **Don't move any of that back to the client**,
+    and note the payload column list in the function is the third copy of the writable-column set
+    (grants block, `_writablePayload`, `save_recipe`): a new column has to reach all three, and
+    this is the copy that fails silently — the column just never saves.
 12. **Postgres `numeric` arrives as a JSON number that may be int or double** — decode with
     `(value as num).toDouble()`, never a bare `as double`.
 13. **Fixed-size cards cannot grow, so their rows must degrade.** Three logged `RenderFlex`

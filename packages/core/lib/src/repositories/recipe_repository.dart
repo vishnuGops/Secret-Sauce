@@ -1,10 +1,8 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:core/src/models/enums.dart';
-import 'package:core/src/models/ingredient_group.dart';
 import 'package:core/src/models/recipe.dart';
 import 'package:core/src/models/recipe_version.dart';
-import 'package:core/src/models/step_group.dart';
 import 'package:core/src/paging.dart';
 import 'package:core/src/repositories/recipe_queries.dart';
 import 'package:core/src/repositories/write_denied_exception.dart';
@@ -179,48 +177,89 @@ class SupabaseRecipeRepository implements RecipeRepository {
 
   @override
   Future<Recipe> create(Recipe recipe) async {
-    final payload = _writablePayload(recipe)..['owner_id'] = _uid;
-    // Only the id is needed — the full row is re-read by `getById` below once
-    // the content exists. A bare `.select()` would also drag back the ~450-byte
-    // `search_tsv` (OPT-P1) for nothing.
-    final row =
-        await _client.from('recipes').insert(payload).select('id').single();
-    final newId = row['id'] as String;
-    await _persistContent(newId, recipe.ingredientGroups, recipe.stepGroups);
-    // One read of the saved state, used for both the version snapshot and the
-    // return value (OPT-P4). It used to be two full cascades. The read happens
-    // *before* the version exists, so the pointer the trigger then sets is
-    // carried over by hand rather than by re-reading the whole recipe.
-    final saved = await getById(newId);
-    final versionId = await _appendVersion(saved, 'Initial version');
-    return saved.copyWith(currentVersionId: versionId);
+    final newId = await _save(null, recipe, 'Initial version');
+    return getById(newId);
   }
 
   @override
   Future<Recipe> update(Recipe recipe, {String changeSummary = 'Updated'}) async {
-    // `.select()` is load-bearing, not decoration (Gotcha 2): without it an RLS
-    // denial matches 0 rows and reports success, and the lines below would then
-    // delete every ingredient/step group and re-persist content against a parent
-    // row that was never saved. Check before touching the content.
-    final saved = await _client
-        .from('recipes')
-        .update(_writablePayload(recipe))
-        .eq('id', recipe.id)
-        .select('id');
-    if (saved.isEmpty) {
-      throw WriteDeniedException('save this recipe', detail: 'recipe ${recipe.id}');
+    await _save(recipe.id, recipe, changeSummary);
+    return getById(recipe.id);
+  }
+
+  /// One `save_recipe` call: the row, its content, and its version row, in a
+  /// single server-side transaction (OPT-A1).
+  ///
+  /// What this replaced: an update, two deletes, one insert per group and one
+  /// per group's children, a read, and a version insert — each its own request,
+  /// each able to be the last one that lands. A failure between the deletes and
+  /// the re-inserts left the recipe with its title saved and its content gone
+  /// (Gotcha 11), and `version_number` was read and incremented client-side, so
+  /// two saves of one recipe could pick the same number.
+  ///
+  /// `p_recipe_id` null creates; the function reads `auth.uid()` for the owner
+  /// and the version author, so neither is trusted from here.
+  Future<String> _save(
+    String? recipeId,
+    Recipe recipe,
+    String changeSummary,
+  ) async {
+    try {
+      final id = await _client.rpc(
+        'save_recipe',
+        params: {
+          'p_recipe_id': recipeId,
+          'p_payload': _writablePayload(recipe),
+          'p_ingredient_groups': [
+            for (final group in recipe.ingredientGroups)
+              {
+                'name': group.name,
+                'ingredients': [
+                  for (final i in group.ingredients)
+                    {
+                      'quantity': i.quantity,
+                      'unit': i.unit,
+                      'name': i.name,
+                      'note': i.note,
+                      'is_optional': i.isOptional,
+                    },
+                ],
+              },
+          ],
+          'p_step_groups': [
+            for (final group in recipe.stepGroups)
+              {
+                'name': group.name,
+                'steps': [
+                  for (final s in group.steps)
+                    {
+                      'text': s.text,
+                      'image_url': s.imageUrl,
+                      'duration_minutes': s.durationMinutes,
+                      'temperature': s.temperature,
+                      'tip': s.tip,
+                    },
+                ],
+              },
+          ],
+          'p_change_summary': changeSummary,
+        },
+      );
+      return id as String;
+    } on PostgrestException catch (e) {
+      // The function raises `42501` when the caller does not own the recipe or
+      // is signed out. Translated back into the exception the callers already
+      // handle (OPT-S2), so a denial still cannot be mistaken for a save — the
+      // RPC never had the silent-0-rows problem, but the contract stays one
+      // thing rather than two.
+      if (e.code == '42501') {
+        throw WriteDeniedException(
+          'save this recipe',
+          detail: 'recipe ${recipeId ?? '(new)'}',
+        );
+      }
+      rethrow;
     }
-    // Replace nested content wholesale (groups cascade-delete their children).
-    await _client.from('ingredient_groups').delete().eq('recipe_id', recipe.id);
-    await _client.from('step_groups').delete().eq('recipe_id', recipe.id);
-    await _persistContent(recipe.id, recipe.ingredientGroups, recipe.stepGroups);
-    // One read of the saved state, used for both the version snapshot and the
-    // return value (OPT-P4). It used to be two full cascades. The read happens
-    // *before* the new version exists, so the pointer the trigger then sets is
-    // carried over by hand rather than by re-reading the whole recipe.
-    final fresh = await getById(recipe.id);
-    final versionId = await _appendVersion(fresh, changeSummary);
-    return fresh.copyWith(currentVersionId: versionId);
   }
 
   @override
@@ -376,122 +415,12 @@ class SupabaseRecipeRepository implements RecipeRepository {
 
   // ---------- helpers ----------
 
-  // `_fetchIngredientGroups` / `_fetchStepGroups` were removed by OPT-P3 — the
-  // one-query-per-group walk they did is now a nested embed in `getById`. B022
-  // did not go away with them: it moved into the four `order(..., ascending:
-  // true)` calls there.
-
-  Future<void> _persistContent(
-    String recipeId,
-    List<IngredientGroup> ingredientGroups,
-    List<StepGroup> stepGroups,
-  ) async {
-    for (var gi = 0; gi < ingredientGroups.length; gi++) {
-      final group = ingredientGroups[gi];
-      final gRow = await _client
-          .from('ingredient_groups')
-          .insert({
-            'recipe_id': recipeId,
-            'name': group.name,
-            'sort_order': gi,
-          })
-          .select()
-          .single();
-      final groupId = gRow['id'] as String;
-      if (group.ingredients.isNotEmpty) {
-        await _client.from('ingredients').insert([
-          for (var i = 0; i < group.ingredients.length; i++)
-            {
-              'group_id': groupId,
-              'quantity': group.ingredients[i].quantity,
-              'unit': group.ingredients[i].unit,
-              'name': group.ingredients[i].name,
-              'note': group.ingredients[i].note,
-              'is_optional': group.ingredients[i].isOptional,
-              'sort_order': i,
-            },
-        ]);
-      }
-    }
-
-    for (var gi = 0; gi < stepGroups.length; gi++) {
-      final group = stepGroups[gi];
-      final gRow = await _client
-          .from('step_groups')
-          .insert({
-            'recipe_id': recipeId,
-            'name': group.name,
-            'sort_order': gi,
-          })
-          .select()
-          .single();
-      final groupId = gRow['id'] as String;
-      if (group.steps.isNotEmpty) {
-        await _client.from('steps').insert([
-          for (var i = 0; i < group.steps.length; i++)
-            {
-              'group_id': groupId,
-              'step_order': i,
-              'text': group.steps[i].text,
-              'image_url': group.steps[i].imageUrl,
-              'duration_minutes': group.steps[i].durationMinutes,
-              'temperature': group.steps[i].temperature,
-              'tip': group.steps[i].tip,
-              'sort_order': i,
-            },
-        ]);
-      }
-    }
-  }
-
-  /// Appends a version snapshot of [full].
-  ///
-  /// Takes the recipe rather than an id (OPT-P4): callers have just read the
-  /// saved state to return it, and this used to re-read the whole cascade to
-  /// build the same snapshot. Passing it in halves the reads per save.
-  ///
-  /// It must be the **post-save** read, not the draft the caller was handed:
-  /// `_persistContent` assigns fresh group and child ids and renumbers
-  /// `sort_order` to the list index, so the client's copy would record ids that
-  /// no longer exist and orders that were never written.
-  /// Returns the id of the version it appended, so the caller can correct the
-  /// `currentVersionId` on the copy it already read (OPT-P4) instead of
-  /// re-reading the recipe just to observe the pointer move.
-  Future<String> _appendVersion(Recipe full, String changeSummary) async {
-    final existing = await _client
-        .from('recipe_versions')
-        .select('version_number, id')
-        .eq('recipe_id', full.id)
-        .order('version_number', ascending: false)
-        .limit(1);
-
-    final nextNumber =
-        existing.isEmpty ? 1 : (existing.first['version_number'] as int) + 1;
-    final parentId = existing.isEmpty ? null : existing.first['id'] as String?;
-
-    final snapshot = <String, dynamic>{
-      'recipe': full.toJson(),
-      'ingredient_groups': [
-        for (final g in full.ingredientGroups) g.toJson(),
-      ],
-      'step_groups': [for (final g in full.stepGroups) g.toJson()],
-    };
-
-    // `recipes.current_version_id` is server-owned: the `recipe_versions_set_current`
-    // trigger moves the pointer, and the column is not in the `authenticated`
-    // UPDATE grant (B050/OPT-S1), so writing it from here would now fail 42501.
-    final inserted = await _client
-        .from('recipe_versions')
-        .insert({
-          'recipe_id': full.id,
-          'version_number': nextNumber,
-          'parent_version_id': parentId,
-          'author_id': _uid,
-          'change_summary': changeSummary,
-          'content_snapshot': snapshot,
-        })
-        .select('id')
-        .single();
-    return inserted['id'] as String;
-  }
+  // Three helpers used to live here and are now one `save_recipe` call
+  // (OPT-A1): `_persistContent`, which walked the group tree issuing an insert
+  // per group, and `_appendVersion`, which read `max(version_number)` and added
+  // one from the client. `_fetchIngredientGroups` / `_fetchStepGroups` went
+  // earlier, to OPT-P3's nested embed in `getById`. What survives all three
+  // removals is B022: content order is explicit, at every level, on the read
+  // (`getById`) and on the write (the array index becomes `sort_order`, in SQL
+  // now).
 }

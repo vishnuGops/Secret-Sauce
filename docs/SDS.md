@@ -245,11 +245,30 @@ erDiagram
   `auth.uid() is null` (signed-in only) then `can_read_recipe(p_source)`. EXECUTE is revoked from
   `public` (what PostgREST exposes as an RPC) and `anon`, and granted back to `authenticated`, so
   an anonymous call is refused at the API edge as well as in the body (OPT-S6).
+- **save_recipe**: same shape — `security definer`, `auth.uid()` check, then `owns_recipe(...)`
+  (the identical predicate `recipes_update` uses, so the two cannot drift), EXECUTE revoked from
+  `public`/`anon` and granted to `authenticated`. Both refusals raise `42501`, which the
+  repository turns back into `WriteDeniedException` (OPT-A1).
 
 ## 5. Forking & versioning
 
 - **Edit** → append a `recipe_versions` row (`version_number = max+1`, `parent_version_id` = prior),
   set `recipes.current_version_id`. Snapshots are immutable → full lineage retained.
+- **All of that is one call** (OPT-A1). `save_recipe(p_recipe_id, p_payload, p_ingredient_groups,
+  p_step_groups, p_change_summary)` creates-or-updates the row, replaces both group trees, and
+  appends the version in a single transaction; `create()`/`update()` in the repository are that
+  call plus one `getById` for the return value. It replaced a client-side sequence of an update,
+  two deletes, one insert per group and per child, a read, and a version insert — with three
+  consequences:
+  - **No content-loss window.** A failure between the deletes and the re-inserts used to leave a
+    recipe with its title saved and its content gone. Commits or does not.
+  - **No `version_number` race.** The number is `max(...) + 1` read *after* the `update recipes`
+    takes the row lock, so a concurrent save of the same recipe waits and then sees it.
+  - **`sort_order` is the array index**, assigned in SQL from `with ordinality` — the same rule the
+    client applied, so the editor's ordering semantics are unchanged (B022).
+- **Snapshots are built by `recipe_snapshot(uuid)`**, `to_jsonb(row) - 'search_tsv'` at all four
+  levels with explicit ordering. It is also what `fork_recipe` now stores: the fork's first
+  version used to be a literal `'{}'`, a version row that recorded nothing.
 - **Fork** → deep-copy recipe + its groups/ingredients/steps into a new recipe owned by the forker;
   set `forked_from_recipe_id` and `forked_from_version_id`. Independent thereafter.
 - **Attribution** → `recipes.attribution` free-text preserves legacy origin/story; detail screen
