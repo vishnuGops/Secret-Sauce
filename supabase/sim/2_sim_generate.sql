@@ -24,9 +24,11 @@
 --      asserts equality, so "the triggers were off" can never come to mean
 --      "the counters are wrong".
 --
---   2. The recompute calls the REAL chef_score() and chef_tier_for(). Restating
---      3 / 5 / 0.2 here would make this the third copy of the formula
---      (CLAUDE.md Gotcha 19) and the first one nothing tests.
+--   2. The chef recompute is `recompute_all_chef_stats()` — the same function
+--      0001_init.sql's backfill runs, so the REAL chef_score() and
+--      chef_tier_for() are the only definition of the formula. Restating
+--      3 / 5 / 0.2 here would make this a second copy (CLAUDE.md Gotcha 19) and
+--      the first one nothing tests.
 -- ---------------------------------------------------------------------------
 
 \set ON_ERROR_STOP on
@@ -712,28 +714,11 @@ set like_count   = agg.likes,
 from agg
 where r.id = agg.recipe_id;
 
--- Chef standing, through the REAL functions. Same shape as the idempotent
--- backfill at the end of 0001_init.sql, and deliberately so.
-update profiles p
-set public_recipe_count = s.cnt,
-    chef_score          = s.score,
-    chef_tier           = chef_tier_for(s.score)
-from (
-  select
-    pr.id,
-    count(r.id)::int as cnt,
-    chef_score(
-      coalesce(sum(r.like_count), 0),
-      coalesce(sum(r.save_count), 0),
-      coalesce(sum(r.view_count), 0)
-    ) as score
-  from profiles pr
-  left join recipes r on r.owner_id = pr.id and r.visibility = 'public'
-  group by pr.id
-) s
-where p.id = s.id
-  and (p.public_recipe_count, p.chef_score, p.chef_tier)
-      is distinct from (s.cnt, s.score, chef_tier_for(s.score));
+-- Chef standing, through the REAL functions: `recompute_all_chef_stats()` is
+-- the same statement the idempotent backfill at the end of 0001_init.sql runs,
+-- and it is a function rather than a fourth copy of the UPDATE precisely so the
+-- formula lives in one place (Gotcha 19).
+select recompute_all_chef_stats();
 
 -- ============================================================================
 -- Triggers back on

@@ -51,6 +51,7 @@ drop function if exists fork_recipe(uuid) cascade;
 -- Chefs / leaderboard (Phase 18).
 drop function if exists on_recipe_stats_change() cascade;
 drop function if exists recompute_chef_stats(uuid) cascade;
+drop function if exists recompute_all_chef_stats() cascade;
 drop function if exists chef_score(bigint, bigint, bigint) cascade;
 drop function if exists chef_tier_for(numeric) cascade;
 drop function if exists chefs_leaderboard(int, int) cascade;

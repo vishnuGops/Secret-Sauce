@@ -65,15 +65,16 @@ flowchart TD
 
 **profiles** — 1:1 with `auth.users`
 `id (uuid, PK, = auth.uid)`, `display_name`, `avatar_url`, `bio`, `created_at`,
-`chef_score (numeric)`, `chef_tier (chef_tier)`, `public_recipe_count (int)`.
+`chef_score (numeric)`, `chef_tier (chef_tier)`, `public_recipe_count (int)`,
+`total_likes / total_saves / total_views (bigint)`.
 Created by the `on_auth_user_created` trigger. Every other table's `user_id` is an FK to
 **profiles**, not `auth.users`, so a missing profile row breaks rating/saving/view logging for
 that account — `0001_init.sql` therefore backfills profiles from `auth.users` on every apply
 (the trigger only fires on insert, so it cannot repair users that predate it; see B015).
 
-The three `chef_*` columns are **denormalized aggregates** over the engagement counters of the
-profile's *public* recipes — never written by the client; the `on_recipe_stats_change` trigger
-recomputes them from scratch. See §10.
+The three `chef_*` columns and the three `total_*` columns are **denormalized aggregates** over
+the engagement counters of the profile's *public* recipes — never written by the client; the
+`on_recipe_stats_change` trigger recomputes them from scratch. See §10.
 
 **recipes**
 `id`, `owner_id → profiles`, `title`, `description`, `cover_image_url`, `cuisine`,
@@ -219,7 +220,8 @@ erDiagram
   drop the blanket `insert, update` grant and hold explicit column lists mirroring
   `_writablePayload` and `ProfileRepository.updateMine`; every server-owned column
   (`like_count`, `save_count`, `view_count`, `rating_*`, `current_version_id`, `created_at`,
-  `updated_at` / `chef_score`, `chef_tier`, `public_recipe_count`) is excluded, as is `owner_id`
+  `updated_at` / `chef_score`, `chef_tier`, `public_recipe_count`, `total_likes`, `total_saves`,
+  `total_views`) is excluded, as is `owner_id`
   on UPDATE so a recipe cannot be reassigned. **A new client-writable column must be added to
   that list or the first save carrying it fails `42501`.** Nothing reached through a
   `security definer` function or run as `postgres` (seed, sim, triggers) is affected.
@@ -533,12 +535,26 @@ Follows the `recipes.rating_*` precedent exactly — denormalized aggregates, re
 - `profiles.chef_score numeric not null default 0`
 - `profiles.chef_tier chef_tier not null default 'home_cook'`
 - `profiles.public_recipe_count int not null default 0`
+- `profiles.total_likes / total_saves / total_views bigint not null default 0` (OPT-P5) — the
+  three sums `chef_score()` is computed from. The recompute already produced them and threw them
+  away, so the leaderboard re-derived them per page with a full aggregate over `recipes`; they
+  are written by the same statement that writes the score, so a total can never disagree with the
+  score it explains. `bigint` for the same reason `chef_score()` takes bigints: `view_count` is
+  unbounded.
 
 (added via `alter table … add column if not exists`, per the idempotency rule).
 
 - `recompute_chef_stats(p_chef uuid)` — one set-based UPDATE aggregating that chef's public
   recipes. Invoker-rights, EXECUTE **revoked** from `public`/`anon`/`authenticated` (the
   `bump_count` rule — every `public` function is otherwise a PostgREST RPC).
+- `recompute_all_chef_stats()` — the whole-table form, same revokes. Three callers need exactly
+  this statement (the idempotent backfill, `sim/2_sim_generate.sql`'s bulk load with the trigger
+  disabled, `sim/9_sim_teardown.sql` after deleting behind the triggers' backs) and all three used
+  to restate it; one function is what keeps Gotcha 19 enforceable.
+- `profiles_leaderboard_idx` — partial index on `(chef_score desc, public_recipe_count desc,
+  display_name asc, id asc) where public_recipe_count > 0`: exactly the board's ordering over
+  exactly the board's rows. It replaced `profiles_chef_score_idx` (same leading columns, no
+  filter, no other reader).
 - Trigger `on_recipe_stats_change` on `recipes`: `after insert or delete or update of like_count,
   save_count, view_count, rating_sum, rating_count, visibility, owner_id`, recomputing
   `new.owner_id` (and `old.owner_id` when it differs, and on delete). **Must be
@@ -548,8 +564,8 @@ Follows the `recipes.rating_*` precedent exactly — denormalized aggregates, re
 - Idempotent backfill in `0001_init.sql` (B015 precedent): one set-based UPDATE recomputing all
   profiles on every apply — this is also how a formula/threshold change reaches existing rows.
 - `supabase/scripts/drop.sql` gains: the trigger's function, `recompute_chef_stats(uuid)`,
-  `chef_score(...)`, `chef_tier_for(numeric)`, `chefs_leaderboard(int, int)`, and
-  `drop type if exists chef_tier`.
+  `recompute_all_chef_stats()`, `chef_score(...)`, `chef_tier_for(numeric)`,
+  `chefs_leaderboard(int, int)`, and `drop type if exists chef_tier`.
 
 Why denormalize instead of computing at read time: the chef badge renders on **every recipe
 card**, so tier must arrive with the recipe list in one query (PostgREST embedding, §10.5) —
@@ -567,9 +583,12 @@ chefs_leaderboard(p_limit int default 50, p_offset int default 0)
 ```
 
 - `stable`, invoker-rights, **callable by `anon`** — the leaderboard page is signed-out safe,
-  like Discover. `profiles` is already world-readable; the recipe sums filter
-  `visibility = 'public'` **explicitly** (not via RLS) so every viewer sees identical numbers —
-  under invoker RLS a signed-in chef would otherwise see their own private recipes folded in.
+  like Discover. Since OPT-P5 **every column is read off `profiles`**; the function aggregates
+  nothing. That also removes the trap the old version dodged by hand: its recipe sums had to
+  filter `visibility = 'public'` explicitly, because under invoker RLS a signed-in chef would
+  otherwise have seen their own private recipes folded into their totals. The persisted columns
+  are public-only by construction, and `profiles` is world-readable, so every viewer reads the
+  same row. Measured at sim `medium`: **3.5 ms → 0.5 ms** warm (52 ms cold).
 - `chef_rank` = `dense_rank() over (order by chef_score desc)` — tied scores share a rank.
   Deterministic full ordering: `chef_score desc, public_recipe_count desc, display_name asc,
   id asc`.

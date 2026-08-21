@@ -52,8 +52,30 @@ alter table profiles add column if not exists chef_score          numeric   not 
 alter table profiles add column if not exists chef_tier           chef_tier not null default 'home_cook';
 alter table profiles add column if not exists public_recipe_count int       not null default 0;
 
-create index if not exists profiles_chef_score_idx
-  on profiles (chef_score desc, public_recipe_count desc);
+-- The three engagement totals the score is computed from (OPT-P5). The
+-- recompute already summed them and threw them away, so `chefs_leaderboard` had
+-- to re-aggregate every public recipe on every page just to show the numbers
+-- beside the score. Persisting them makes the board a pure indexed read of
+-- `profiles`. `bigint` for the same reason chef_score()'s arguments are:
+-- view_count is unbounded.
+alter table profiles add column if not exists total_likes bigint not null default 0;
+alter table profiles add column if not exists total_saves bigint not null default 0;
+alter table profiles add column if not exists total_views bigint not null default 0;
+
+-- The leaderboard's exact ordering, as a partial index over exactly the rows it
+-- ranks (OPT-P5). All four keys are here because `chefs_leaderboard` orders by
+-- all four for a deterministic page boundary — a prefix-only index would leave
+-- a sort on top, and a sort has to read every row before it can return the
+-- first. Partial on `public_recipe_count > 0` because that is the board's own
+-- "is a chef at all" filter, which excludes ~83% of profiles at sim `medium`.
+create index if not exists profiles_leaderboard_idx
+  on profiles (chef_score desc, public_recipe_count desc, display_name asc, id asc)
+  where public_recipe_count > 0;
+
+-- Superseded by the partial index above: same leading columns, no filter, and
+-- the only query that ever ordered by chef_score is the board. Dropped rather
+-- than left in place so profile writes maintain one index instead of two.
+drop index if exists profiles_chef_score_idx;
 
 -- recipes
 create table if not exists recipes (
@@ -479,26 +501,39 @@ $$;
 -- would otherwise rewrite the owner's profile row with byte-identical values
 -- and leave a dead tuple behind, on a table read by every leaderboard query
 -- and every recipe embed.
+-- The engagement totals are persisted alongside the score (OPT-P5), not just
+-- fed to chef_score() and discarded: the leaderboard shows them next to the
+-- score, and re-deriving them there meant a full aggregate over every public
+-- recipe on every page of a board whose ranking column was already denormalized.
+-- They are written by the same statement that writes the score, so the three
+-- numbers and the score they explain can never disagree.
 create or replace function recompute_chef_stats(p_chef uuid)
 returns void language sql as $$
   update profiles p
   set public_recipe_count = s.cnt,
+      total_likes         = s.likes,
+      total_saves         = s.saves,
+      total_views         = s.views,
       chef_score          = s.score,
       chef_tier           = chef_tier_for(s.score)
   from (
-    select
-      count(*)::int as cnt,
-      chef_score(
-        coalesce(sum(like_count), 0),
-        coalesce(sum(save_count), 0),
-        coalesce(sum(view_count), 0)
-      ) as score
-    from recipes
-    where owner_id = p_chef and visibility = 'public'
+    select a.cnt, a.likes, a.saves, a.views,
+           chef_score(a.likes, a.saves, a.views) as score
+    from (
+      select
+        count(*)::int                          as cnt,
+        coalesce(sum(like_count), 0)::bigint    as likes,
+        coalesce(sum(save_count), 0)::bigint    as saves,
+        coalesce(sum(view_count), 0)::bigint    as views
+      from recipes
+      where owner_id = p_chef and visibility = 'public'
+    ) a
   ) s
   where p.id = p_chef
-    and (p.public_recipe_count, p.chef_score, p.chef_tier)
-        is distinct from (s.cnt, s.score, chef_tier_for(s.score));
+    and (p.public_recipe_count, p.total_likes, p.total_saves, p.total_views,
+         p.chef_score, p.chef_tier)
+        is distinct from (s.cnt, s.likes, s.saves, s.views,
+                          s.score, chef_tier_for(s.score));
 $$;
 
 -- `security definer set search_path = public` is mandatory (B011 class): the
@@ -538,29 +573,54 @@ create trigger recipes_chef_stats
   on recipes
   for each row execute function on_recipe_stats_change();
 
+-- The whole-table form of recompute_chef_stats: one set-based pass over every
+-- profile instead of one aggregate per chef.
+--
+-- It exists because three call sites need exactly this statement — the
+-- idempotent backfill below, the sim's bulk load (`2_sim_generate.sql`, which
+-- runs with `recipes_chef_stats` disabled) and the sim teardown
+-- (`9_sim_teardown.sql`, which has just deleted rows behind the triggers'
+-- backs). All three used to restate it, so OPT-P5's three new columns would
+-- have had to be added in three places, and Gotcha 19 (never restate the
+-- formula) was one copy-paste away from being violated.
+--
+-- Invoker-rights like recompute_chef_stats, with EXECUTE revoked below for the
+-- same reason: it writes every profile row in the table.
+create or replace function recompute_all_chef_stats()
+returns void language sql as $$
+  update profiles p
+  set public_recipe_count = s.cnt,
+      total_likes         = s.likes,
+      total_saves         = s.saves,
+      total_views         = s.views,
+      chef_score          = s.score,
+      chef_tier           = chef_tier_for(s.score)
+  from (
+    select a.id, a.cnt, a.likes, a.saves, a.views,
+           chef_score(a.likes, a.saves, a.views) as score
+    from (
+      select
+        pr.id,
+        count(r.id)::int                         as cnt,
+        coalesce(sum(r.like_count), 0)::bigint    as likes,
+        coalesce(sum(r.save_count), 0)::bigint    as saves,
+        coalesce(sum(r.view_count), 0)::bigint    as views
+      from profiles pr
+      left join recipes r
+        on r.owner_id = pr.id and r.visibility = 'public'
+      group by pr.id
+    ) a
+  ) s
+  where p.id = s.id
+    and (p.public_recipe_count, p.total_likes, p.total_saves, p.total_views,
+         p.chef_score, p.chef_tier)
+        is distinct from (s.cnt, s.likes, s.saves, s.views,
+                          s.score, chef_tier_for(s.score));
+$$;
+
 -- Idempotent backfill (B015 precedent): recompute every profile on every apply.
 -- This is also how a formula or threshold change reaches existing rows.
-update profiles p
-set public_recipe_count = s.cnt,
-    chef_score          = s.score,
-    chef_tier           = chef_tier_for(s.score)
-from (
-  select
-    pr.id,
-    count(r.id)::int as cnt,
-    chef_score(
-      coalesce(sum(r.like_count), 0),
-      coalesce(sum(r.save_count), 0),
-      coalesce(sum(r.view_count), 0)
-    ) as score
-  from profiles pr
-  left join recipes r
-    on r.owner_id = pr.id and r.visibility = 'public'
-  group by pr.id
-) s
-where p.id = s.id
-  and (p.public_recipe_count, p.chef_score, p.chef_tier)
-      is distinct from (s.cnt, s.score, chef_tier_for(s.score));
+select recompute_all_chef_stats();
 
 -- updated_at maintenance.
 create or replace function touch_updated_at()
@@ -611,10 +671,12 @@ begin
   execute 'revoke execute on function bump_count(uuid, text, int) from public';
   execute 'revoke execute on function recompute_recipe_rating(uuid) from public';
   execute 'revoke execute on function recompute_chef_stats(uuid) from public';
+  execute 'revoke execute on function recompute_all_chef_stats() from public';
   if exists (select 1 from pg_roles where rolname = 'anon') then
     execute 'revoke execute on function bump_count(uuid, text, int) from anon, authenticated';
     execute 'revoke execute on function recompute_recipe_rating(uuid) from anon, authenticated';
     execute 'revoke execute on function recompute_chef_stats(uuid) from anon, authenticated';
+    execute 'revoke execute on function recompute_all_chef_stats() from anon, authenticated';
   end if;
 end $$;
 
@@ -1064,7 +1126,8 @@ begin
     on recipes to authenticated;
 
   -- profiles: NOT granted — chef_score, chef_tier, public_recipe_count,
-  -- created_at. `id` is insert-only (`profiles_insert` pins it to auth.uid()).
+  -- total_likes, total_saves, total_views, created_at. `id` is insert-only
+  -- (`profiles_insert` pins it to auth.uid()).
   grant insert (id, display_name, avatar_url, bio) on profiles to authenticated;
   grant update (display_name, avatar_url, bio)     on profiles to authenticated;
 
@@ -1242,14 +1305,30 @@ as $$
   order by t.tier;
 $$;
 
--- Chefs leaderboard. Ranked by the denormalized profiles.chef_score, with the
--- engagement totals recomputed alongside so the page needs one round-trip.
+-- Chefs leaderboard. Ranked by the denormalized profiles.chef_score, reading the
+-- engagement totals denormalized beside it (OPT-P5) so the page needs one
+-- round-trip and no aggregation at all.
+--
+-- It used to re-aggregate `recipes` per page — a full scan of every public
+-- recipe to produce numbers `recompute_chef_stats` had already computed and
+-- discarded (52 ms cold / 3.5 ms warm at sim `medium`, now 0.5 ms).
+--
+-- `dense_rank()` ranks over the whole filtered set rather than the page, which
+-- is what makes rank 26 on page two say 26. It does not force a full read: the
+-- window's ordering is a prefix of `profiles_leaderboard_idx`, so the plan
+-- streams index scan → WindowAgg → incremental sort → limit and stops at
+-- `p_offset + p_limit` rows. At sim `medium` the planner still picks a seq scan
+-- (172 chefs in 26 pages — cheaper than random heap fetches); the index takes
+-- over as `profiles` grows, which is the case that needed it.
 --
 -- `stable`, invoker-rights, and callable by `anon` — the leaderboard is
--- signed-out safe like Discover. The recipe sums filter `visibility = 'public'`
--- **explicitly** rather than leaning on RLS: under invoker rights a signed-in
--- chef would otherwise see their own private recipes folded into their totals
--- and read different numbers than everyone else.
+-- signed-out safe like Discover. Reading the totals off `profiles` also closes
+-- the trap the old sums had to dodge by hand: they filtered `visibility =
+-- 'public'` explicitly because under invoker rights a signed-in chef would
+-- otherwise see their own private recipes folded into their totals and read
+-- different numbers than everyone else. The persisted columns are public-only
+-- by construction (recompute_chef_stats owns that filter), and `profiles` is
+-- world-readable, so every caller now reads the same row.
 --
 -- Internal aliases deliberately avoid the RETURNS TABLE column names — in a
 -- `language sql` function those names are in scope and would make `chef_score`
@@ -1270,17 +1349,7 @@ returns table (
 language sql
 stable
 as $$
-  with sums as (
-    select
-      r.owner_id                            as oid,
-      coalesce(sum(r.like_count), 0)::bigint as likes,
-      coalesce(sum(r.save_count), 0)::bigint as saves,
-      coalesce(sum(r.view_count), 0)::bigint as views
-    from recipes r
-    where r.visibility = 'public'
-    group by r.owner_id
-  ),
-  ranked as (
+  with ranked as (
     select
       dense_rank() over (order by p.chef_score desc) as rnk,
       p.id                  as pid,
@@ -1289,14 +1358,13 @@ as $$
       p.chef_tier           as ptier,
       p.chef_score          as pscore,
       p.public_recipe_count as pcount,
-      coalesce(s.likes, 0)  as plikes,
-      coalesce(s.saves, 0)  as psaves,
-      coalesce(s.views, 0)  as pviews
+      p.total_likes         as plikes,
+      p.total_saves         as psaves,
+      p.total_views         as pviews
     from profiles p
-    left join sums s on s.oid = p.id
     -- Chefs with no public recipes (tasters, private-only accounts, brand-new
     -- signups) still *have* a tier for badge purposes; they just don't occupy
-    -- leaderboard rows.
+    -- leaderboard rows. Also the predicate of `profiles_leaderboard_idx`.
     where p.public_recipe_count > 0
   )
   select

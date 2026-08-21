@@ -975,7 +975,7 @@ denormalized counters derived from it (the reverse of how `seed.sql` works).
 
 ### Verification
 
-- [x] `supabase/sim/3_sim_verify.sql` — 30 assertions that `raise exception` rather than print.
+- [x] `supabase/sim/3_sim_verify.sql` — 39 assertions that `raise exception` rather than print.
       Nothing in CI runs SQL (SDS §11.3), so this script *is* the test suite for this phase, and it
       found all three defects in B044 plus B045
 - [x] Counter invariants (A1–A8), including `view_count` excluding anonymous rows and repeat visits
@@ -1151,9 +1151,13 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       Now **1**: the post-save read feeds both the snapshot and the return value, and
       `_appendVersion` returns the new version id so the pointer is carried over rather than
       re-read. Snapshot is the post-save read on purpose — the caller's draft has stale ids
-- [ ] **OPT-P5:** `chefs_leaderboard` re-aggregates all public recipes per page although
-      `recompute_chef_stats` already computes the totals and discards them — persist
-      `total_likes/saves/views` on `profiles`, partial index `where public_recipe_count > 0`
+- [x] **OPT-P5:** `chefs_leaderboard` re-aggregated all public recipes per page for numbers
+      `recompute_chef_stats` already had — `profiles.total_likes/saves/views` now persist them and
+      the board reads them straight off the row: **3.5 ms → 0.5 ms** warm at sim `medium` (52 ms
+      cold), zero aggregation. New `recompute_all_chef_stats()` replaces the same UPDATE restated
+      in three files (backfill, sim generate, sim teardown) — Gotcha 19 in one place. Partial
+      `profiles_leaderboard_idx` on the board's exact ordering supersedes `profiles_chef_score_idx`;
+      new sim assertion A6b fails if a total ever drifts from the recipes behind it
 - [x] **OPT-P6:** added `(recipe_id, created_at desc)` to `recipe_likes` / `recipe_saves` — both
       PKs lead with `user_id`, so every recipe-leading read was a seq scan. "Who liked recipe X,
       newest first" goes seq-scan-over-6,483-rows + sort → **pure index scan, sort eliminated**;

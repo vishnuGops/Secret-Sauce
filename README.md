@@ -343,7 +343,7 @@ reset brings everything back:
 melos run db:reset                          # drop -> create -> seed -> recipes -> sim (~15s)
 melos run db:sim                            # just the sim: schema -> dishes -> generate -> verify
 melos run db:sim -- --preset=small --seed=7 # tiny | small | medium (default) | large
-melos run db:sim:verify                     # 30 assertions, read-only
+melos run db:sim:verify                     # 39 assertions, read-only
 melos run db:sim:clean -- --yes             # DESTRUCTIVE: removes the simulated accounts
 ```
 

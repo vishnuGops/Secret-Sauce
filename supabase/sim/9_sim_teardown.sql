@@ -88,28 +88,9 @@ delete from sim.actor;
 delete from sim.config where key = 'epoch_end';
 
 -- The counters on any surviving recipe are now whatever the triggers left them
--- at. Recompute chef standing from scratch for everyone, exactly as the
--- idempotent backfill in 0001_init.sql does.
-update profiles p
-set public_recipe_count = s.cnt,
-    chef_score          = s.score,
-    chef_tier           = chef_tier_for(s.score)
-from (
-  select
-    pr.id,
-    count(r.id)::int as cnt,
-    chef_score(
-      coalesce(sum(r.like_count), 0),
-      coalesce(sum(r.save_count), 0),
-      coalesce(sum(r.view_count), 0)
-    ) as score
-  from profiles pr
-  left join recipes r on r.owner_id = pr.id and r.visibility = 'public'
-  group by pr.id
-) s
-where p.id = s.id
-  and (p.public_recipe_count, p.chef_score, p.chef_tier)
-      is distinct from (s.cnt, s.score, chef_tier_for(s.score));
+-- at. Recompute chef standing from scratch for everyone — the same
+-- `recompute_all_chef_stats()` the idempotent backfill in 0001_init.sql runs.
+select recompute_all_chef_stats();
 
 do $$
 begin

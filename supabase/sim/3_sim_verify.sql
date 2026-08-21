@@ -83,6 +83,24 @@ begin
   select count(*) into n from profiles p where p.chef_tier <> chef_tier_for(p.chef_score);
   if n > 0 then raise exception 'A6 chef_tier disagrees with chef_tier_for() on % profiles', n; end if;
 
+  -- OPT-P5: the persisted engagement totals are what `chefs_leaderboard` now
+  -- shows, so a drift here is a wrong number on a public page — and it would be
+  -- invisible, since nothing re-derives them at read time any more.
+  select count(*) into n
+  from profiles p
+  left join (
+    select r.owner_id,
+           coalesce(sum(r.like_count), 0)::bigint as likes,
+           coalesce(sum(r.save_count), 0)::bigint as saves,
+           coalesce(sum(r.view_count), 0)::bigint as views
+    from recipes r
+    where r.visibility = 'public'
+    group by r.owner_id
+  ) s on s.owner_id = p.id
+  where (p.total_likes, p.total_saves, p.total_views)
+        is distinct from (coalesce(s.likes, 0), coalesce(s.saves, 0), coalesce(s.views, 0));
+  if n > 0 then raise exception 'A6b total_likes/saves/views disagree with the public recipes on % profiles (OPT-P5)', n; end if;
+
   -- There must actually BE anonymous and repeat rows, or A3 proved nothing.
   select count(*) into n from recipe_views v join sim.recipe sr on sr.id = v.recipe_id
    where v.user_id is null;

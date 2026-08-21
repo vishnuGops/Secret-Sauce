@@ -90,7 +90,7 @@ secret-sauce/
     │   ├── 0_sim_schema.sql      #   config, personas, presets, registries, rand helpers
     │   ├── 1_sim_dishes.sql      #   GENERATED from simData/ — never hand-edit
     │   ├── 2_sim_generate.sql    #   the generator; counters DERIVED from the engagement log
-    │   ├── 3_sim_verify.sql      #   30 assertions — the only test coverage this SQL has
+    │   ├── 3_sim_verify.sql      #   39 assertions — the only test coverage this SQL has
     │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
     └── scripts/{drop,clean}.sql · rotate_seed_passwords.sql (B018 — hosted, manual)
 ```
@@ -218,7 +218,7 @@ melos run db:reset    # drop -> create -> seed -> recipes -> sim   (~15s from em
 # `medium` preset (1,000 accounts, ~1,670 recipes, ~118k view rows).
 melos run db:sim                          # schema -> dishes -> generate -> verify
 melos run db:sim -- --preset=small --seed=7
-melos run db:sim:verify                   # 30 assertions, read-only
+melos run db:sim:verify                   # 39 assertions, read-only
 melos run db:sim:clean -- --yes           # DESTRUCTIVE: deletes the simulated auth.users
 ```
 
@@ -307,8 +307,8 @@ changes upstream" (PR-like) flow.
 Server-owned columns the client must **never** write (trigger-maintained; omitted from
 `_writablePayload` in `recipe_repository.dart`): on `recipes` — `like_count`, `save_count`,
 `view_count`, `rating_sum`, `rating_count`, `rating_avg`, `current_version_id`, `created_at`,
-`updated_at`; on `profiles` — `chef_score`, `chef_tier`, `public_recipe_count` (omitted from
-`ProfileRepository.updateMine`). **This is enforced in the database (B050 fixed by OPT-S1):**
+`updated_at`; on `profiles` — `chef_score`, `chef_tier`, `public_recipe_count`, `total_likes`,
+`total_saves`, `total_views` (omitted from `ProfileRepository.updateMine`). **This is enforced in the database (B050 fixed by OPT-S1):**
 `recipes` and `profiles` hold **column-level** `insert`/`update` grants, not the blanket
 table-level one, because RLS filters rows and cannot filter columns. Two consequences: a
 `PATCH` of a server-owned column now fails `42501` even for the row's owner, and **a new
