@@ -197,4 +197,89 @@ void main() {
       });
     }
   });
+
+  // B052 / OPT-S4. `_load()` was try/finally with no catch: a failed getById
+  // escaped as an unhandled future and the form rendered its empty defaults over
+  // a recipe that still exists. Because `update()` replaces content wholesale,
+  // one Save then deleted every ingredient and step group it had.
+  group('failed load (B052)', () {
+    testWidgets('renders ErrorView instead of an empty form', (tester) async {
+      await tester.pumpWidget(_editApp(_ThrowingRecipeRepository()));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ErrorView), findsOneWidget);
+      expect(
+        find.byType(TextFormField),
+        findsNothing,
+        reason: 'an empty draft over a real recipe is the data-loss path',
+      );
+    });
+
+    testWidgets('offers no Save button on the error screen', (tester) async {
+      await tester.pumpWidget(_editApp(_ThrowingRecipeRepository()));
+      await tester.pumpAndSettle();
+
+      expect(find.widgetWithText(FilledButton, 'Save'), findsNothing);
+    });
+
+    testWidgets('retry recovers into the loaded form', (tester) async {
+      final repo = _ThrowingRecipeRepository(failures: 1);
+      await tester.pumpWidget(_editApp(repo));
+      await tester.pumpAndSettle();
+      expect(find.byType(ErrorView), findsOneWidget);
+
+      await tester.tap(find.widgetWithText(OutlinedButton, 'Retry'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ErrorView), findsNothing);
+      expect(find.widgetWithText(FilledButton, 'Save'), findsOneWidget);
+      // The recipe that came back, not the empty defaults.
+      expect(find.text('Loaded Recipe'), findsOneWidget);
+    });
+
+    testWidgets('a successful load leaves Save enabled', (tester) async {
+      await tester.pumpWidget(_editApp(_ThrowingRecipeRepository(failures: 0)));
+      await tester.pumpAndSettle();
+
+      final save = tester.widget<FilledButton>(
+        find.widgetWithText(FilledButton, 'Save'),
+      );
+      expect(save.onPressed, isNotNull);
+    });
+  });
+}
+
+/// The editor in edit mode (`recipeId` non-null) over a stub repository.
+Widget _editApp(RecipeRepository repo) => ProviderScope(
+      overrides: [recipeRepositoryProvider.overrideWithValue(repo)],
+      child: MaterialApp(
+        theme: AppTheme.light(),
+        home: const RecipeEditorScreen(recipeId: 'r1'),
+      ),
+    );
+
+/// Fails `getById` [failures] times, then succeeds — so one stub covers both the
+/// permanent-failure and the retry-recovers cases.
+class _ThrowingRecipeRepository implements RecipeRepository {
+  _ThrowingRecipeRepository({this.failures = 1 << 30});
+
+  int failures;
+
+  @override
+  Future<Recipe> getById(String id) async {
+    if (failures > 0) {
+      failures--;
+      throw Exception('offline');
+    }
+    return const Recipe(
+      id: 'r1',
+      ownerId: 'me',
+      title: 'Loaded Recipe',
+      servings: 4,
+    );
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) =>
+      throw UnimplementedError('${invocation.memberName} not stubbed');
 }

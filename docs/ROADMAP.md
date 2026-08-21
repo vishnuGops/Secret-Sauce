@@ -1115,7 +1115,8 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
 - [x] **OPT-S3 (B051):** recipe-detail like/save — guards signed-out (routes to `/auth`), reads
       `myLiked`/`mySaved`, both are toggles, failures surface. New `recipe_detail_test.dart`
       (5 tests) is the first slice of OPT-T3's recipe-detail suite
-- [ ] **OPT-S4 (B052):** recipe-editor `_load()` failure path — catch, ErrorView, block Save
+- [x] **OPT-S4 (B052):** recipe-editor `_load()` failure path — catches, renders `ErrorView` with
+      retry instead of the form, and `_canSave` blocks Save until a load has succeeded (4 tests)
 - [ ] **OPT-S5:** share dialog offers "Can edit" though `share_permission.edit` is reserved and
       unimplemented — disable the segment with the existing `notYetTooltip` pattern
 - [ ] **OPT-S6:** `fork_recipe` — explicit `auth.uid() is null` guard + revoke EXECUTE from `anon`

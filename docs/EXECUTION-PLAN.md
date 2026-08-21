@@ -1033,14 +1033,15 @@ non-owner's return none. The editor's save already wraps the call in `try/catch`
 surfaces as a snackbar rather than an unhandled exception; `delete()`/`unshare()` have no UI
 caller yet.
 
-**OPT-S3 (B051) — DONE** and **OPT-S4 (B052)** — see the tracker entries for mechanism; both are
-small, both sit on the product's core surfaces (detail, editor). S3 also closed the dead
+**OPT-S3 (B051) — DONE** and **OPT-S4 (B052) — DONE** — see the tracker entries for mechanism;
+both were small, both sit on the product's core surfaces (detail, editor). S3 also closed the dead
 `_CountAction.activeIcon` param by finally reading `myLiked`/`mySaved` state, added those two
 methods to `RecipeRepository` (built on a shared `_hasMyRow`, `currentUser?.id`-based per
 Gotcha 9), and routed the signed-out tap to `/auth`. Its regression suite —
 `apps/app/test/recipe_detail_test.dart`, 5 tests — is the first slice of OPT-T3 and asserts the
-repository is never reached signed-out. S4's half of that suite (a failed load renders
-`ErrorView` with Save disabled) still to come.
+repository is never reached signed-out. S4's half landed in `recipe_editor_test.dart` (4 tests):
+a failed load renders `ErrorView` with no form and no Save button, retry recovers, and a
+successful load leaves Save enabled.
 
 **OPT-S5 / S6** — one-line-ish each: `notYetTooltip` on the "Can edit" segment
 (`share_dialog.dart:83-95`); `if auth.uid() is null then raise` + `revoke execute … from anon`

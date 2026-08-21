@@ -45,6 +45,19 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
   bool _loading = false;
   bool _saving = false;
 
+  /// Why the existing recipe could not be loaded, or null. Non-null puts the
+  /// screen into its error state instead of the form (B052).
+  String? _loadError;
+
+  /// Whether the draft actually reflects a recipe that came back from the
+  /// server. False while editing means the fields are the empty defaults, and
+  /// saving them would delete every ingredient and step group the recipe has
+  /// (`update()` replaces content wholesale) — so Save stays blocked.
+  /// Always true when creating: there is nothing to load.
+  bool _loaded = false;
+
+  bool get _canSave => !widget.isEditing || _loaded;
+
   @override
   void initState() {
     super.initState();
@@ -74,7 +87,10 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
   }
 
   Future<void> _load() async {
-    setState(() => _loading = true);
+    setState(() {
+      _loading = true;
+      _loadError = null;
+    });
     try {
       final recipe =
           await ref.read(recipeRepositoryProvider).getById(widget.recipeId!);
@@ -100,6 +116,14 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       if (_stepGroups.isEmpty) {
         _stepGroups.add(EditStepGroup());
       }
+      _loaded = true;
+    } catch (e) {
+      // Without this catch the exception escaped as an unhandled future and the
+      // form rendered its empty defaults over a recipe that still exists —
+      // pressing Save then wiped its content (B052). `getById` is awaited before
+      // any field is touched, so a failure leaves the draft untouched, not half
+      // filled.
+      _loadError = e.toString();
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -137,6 +161,12 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       ),
     );
     if (discard != true || !mounted) return;
+    _leave();
+  }
+
+  /// Where the editor exits to. Reached via `go`, so there is usually no back
+  /// stack to pop.
+  void _leave() {
     if (context.canPop()) {
       context.pop();
     } else if (widget.isEditing) {
@@ -147,6 +177,10 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
   }
 
   Future<void> _save() async {
+    // Belt and braces behind the build-time guard: an unloaded edit draft holds
+    // the empty defaults, and `update()` replaces content wholesale, so saving
+    // it would delete the recipe's ingredients and steps (B052).
+    if (!_canSave) return;
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
     final repo = ref.read(recipeRepositoryProvider);
@@ -203,6 +237,27 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
     if (_loading) {
       return const Scaffold(body: LoadingView());
     }
+    // A failed load must never fall through to the form: the fields are still
+    // the empty defaults, and `update()` replaces content wholesale, so one Save
+    // would delete every ingredient and step group (B052). Offer retry or exit
+    // instead — and leave via `_leave()`, not `_cancel()`, since there are no
+    // changes to confirm discarding.
+    if (_loadError != null) {
+      return Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.close),
+            tooltip: 'Close',
+            onPressed: _leave,
+          ),
+          title: const Text('Edit recipe'),
+        ),
+        body: ErrorView(
+          message: 'Could not open this recipe for editing.\n$_loadError',
+          onRetry: _load,
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -215,7 +270,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
           Padding(
             padding: const EdgeInsets.only(right: AppSpacing.sm),
             child: FilledButton.icon(
-              onPressed: _saving ? null : _save,
+              onPressed: (_saving || !_canSave) ? null : _save,
               icon: _saving
                   ? const SizedBox(
                       height: 16,
