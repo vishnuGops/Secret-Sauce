@@ -229,6 +229,11 @@ erDiagram
   before. The trigger is `security definer` — under column grants an invoker-rights UPDATE of an
   ungranted column raises `42501` instead of silently matching 0 rows.
 
+- **fork_recipe**: `security definer`, so it opens with its own authorization checks —
+  `auth.uid() is null` (signed-in only) then `can_read_recipe(p_source)`. EXECUTE is revoked from
+  `public` (what PostgREST exposes as an RPC) and `anon`, and granted back to `authenticated`, so
+  an anonymous call is refused at the API edge as well as in the body (OPT-S6).
+
 ## 5. Forking & versioning
 
 - **Edit** → append a `recipe_versions` row (`version_number = max+1`, `parent_version_id` = prior),

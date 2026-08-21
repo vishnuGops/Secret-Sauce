@@ -1043,10 +1043,21 @@ repository is never reached signed-out. S4's half landed in `recipe_editor_test.
 a failed load renders `ErrorView` with no form and no Save button, retry recovers, and a
 successful load leaves Save enabled.
 
-**OPT-S5 / S6** — one-line-ish each: `notYetTooltip` on the "Can edit" segment
-(`share_dialog.dart:83-95`); `if auth.uid() is null then raise` + `revoke execute … from anon`
-on `fork_recipe` (`0001_init.sql:1051` — today an anon call dies on the `owner_id` not-null
-constraint, which is an accident, not a guard).
+**OPT-S5 — DONE.** The "Can edit" segment is `enabled: false` behind `notYetTooltip`, which
+explains that shared editing is not built (`recipes_update` is `owner_id = auth.uid()`, so a
+recipe shared "Can edit" is read-only to the recipient either way — the control promised an
+access level the database does not grant). The helper moved from `features/chefs/chefs_hero.dart`
+to `apps/app/lib/widgets/not_yet_tooltip.dart` rather than have `my_recipes` import out of
+`features/chefs/`; `chefs_hero.dart` re-exports it so existing importers are unaffected. That
+clears one of OPT-A3's cross-feature imports early.
+
+**OPT-S6 — DONE.** `fork_recipe` opens with `if auth.uid() is null then raise`, and EXECUTE is
+revoked from `public` (which is what PostgREST exposes) and `anon`, then granted back to
+`authenticated`. Two independent locks: verified on the local stack that an `anon` call fails
+`permission denied for function fork_recipe`, an `authenticated` call with no JWT fails
+`must be signed in to fork a recipe`, and a real signed-in user still forks. Previously an
+anonymous call reached the INSERT and died on `owner_id`'s not-null constraint — an accident of
+the schema reported as a constraint violation, not an authorization failure.
 
 **OPT-S7 / S8** are B034 and B018's open halves — owner actions (env file edit; hosted account
 rotation), not code. Listed so they stop living only inside old phase notes.

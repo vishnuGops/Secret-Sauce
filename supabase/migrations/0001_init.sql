@@ -1144,6 +1144,15 @@ declare
   v_new_sg uuid;
   v_version uuid;
 begin
+  -- Authentication first, and explicitly (OPT-S6). An anonymous call used to
+  -- get as far as the INSERT and die on `owner_id`'s not-null constraint — an
+  -- accident of the schema, not a guard, and one that reports itself as a
+  -- constraint violation rather than an authorization failure. EXECUTE is also
+  -- revoked from `anon` below, so this is the second of two locks.
+  if auth.uid() is null then
+    raise exception 'must be signed in to fork a recipe';
+  end if;
+
   if not can_read_recipe(p_source) then
     raise exception 'not authorized to read source recipe';
   end if;
@@ -1197,3 +1206,18 @@ begin
   return v_new_recipe;
 end;
 $$;
+
+-- Forking is a signed-in action, so `anon` has no business calling it (OPT-S6).
+-- Postgres grants EXECUTE to `public` on every new function, which is how
+-- PostgREST exposes it as an RPC — revoking from `public` is what actually
+-- closes it, and `authenticated` then has to be granted back explicitly.
+-- Belt and braces with the `auth.uid() is null` check inside the body: this
+-- stops the call at the API edge, that stops it if the grant is ever widened.
+do $$
+begin
+  execute 'revoke execute on function fork_recipe(uuid) from public';
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'revoke execute on function fork_recipe(uuid) from anon';
+    execute 'grant execute on function fork_recipe(uuid) to authenticated';
+  end if;
+end $$;

@@ -1117,9 +1117,11 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       (5 tests) is the first slice of OPT-T3's recipe-detail suite
 - [x] **OPT-S4 (B052):** recipe-editor `_load()` failure path — catches, renders `ErrorView` with
       retry instead of the form, and `_canSave` blocks Save until a load has succeeded (4 tests)
-- [ ] **OPT-S5:** share dialog offers "Can edit" though `share_permission.edit` is reserved and
-      unimplemented — disable the segment with the existing `notYetTooltip` pattern
-- [ ] **OPT-S6:** `fork_recipe` — explicit `auth.uid() is null` guard + revoke EXECUTE from `anon`
+- [x] **OPT-S5:** share dialog no longer offers a working-looking "Can edit" — the segment is
+      `enabled: false` behind `notYetTooltip`, which moved to `apps/app/lib/widgets/` so the
+      dialog isn't importing out of `features/chefs/` (pre-empts an OPT-A3 item)
+- [x] **OPT-S6:** `fork_recipe` — explicit `auth.uid() is null` guard **and** EXECUTE revoked from
+      `public`/`anon`, granted back to `authenticated`; both locks verified on the local stack
 - [ ] **OPT-S7 (B034, open):** move `SUPABASE_DB_URL` out of `env.local.json` to shell env
 - [ ] **OPT-S8 (B018, open):** rotate/delete the 9 pre-fix seed accounts on the hosted project
 
