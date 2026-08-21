@@ -1214,6 +1214,34 @@ as $$
   limit p_limit;
 $$;
 
+-- How many chefs sit in each tier (OPT-P10). The `/chefs` hero needs all five
+-- counts plus the total; PostgREST cannot express `group by`, so the client was
+-- issuing five exact-count requests, and a sixth for the total. An RPC can, so
+-- it does — one round trip, and the total is the sum.
+--
+-- `unnest(enum_range(...))` + left join guarantees a row for every tier even
+-- when nobody is in it, which is what the five separate counts produced and what
+-- the hero renders. `public_recipe_count > 0` is the same "is a chef at all"
+-- filter the leaderboard and the old counts used.
+--
+-- `stable`, invoker-rights, `anon`-callable: `/chefs` is signed-out safe.
+-- Explicit drop first (B024): once a signature exists, `create or replace`
+-- cannot change it, and the stale overload makes every call ambiguous (42725).
+drop function if exists chefs_tier_counts();
+create or replace function chefs_tier_counts()
+returns table (tier chef_tier, chefs bigint)
+language sql
+stable
+as $$
+  select t.tier, count(p.id)
+  from unnest(enum_range(null::chef_tier)) as t(tier)
+  left join profiles p
+    on p.chef_tier = t.tier
+   and p.public_recipe_count > 0
+  group by t.tier
+  order by t.tier;
+$$;
+
 -- Chefs leaderboard. Ranked by the denormalized profiles.chef_score, with the
 -- engagement totals recomputed alongside so the page needs one round-trip.
 --

@@ -20,17 +20,17 @@ abstract interface class ChefRepository {
   /// own owner — the RPC filters visibility explicitly.
   Future<List<Recipe>> topRecipes(String chefId, {int limit});
 
-  /// How many chefs occupy the board — the denominator in "Rank 2 of 148".
-  /// Matches the RPC's own filter: a profile with no public recipe is not a
-  /// chef for ranking purposes.
-  Future<int> chefCount();
-
   /// How many chefs sit on each rung — the five tiles across the chefs hero.
   ///
-  /// Same population as [chefCount]: only profiles with at least one public
-  /// recipe, so the five values sum to it. Every tier is present in the result,
-  /// including the empty ones, so the hero renders a stable five-tile row
-  /// instead of a row whose width depends on the data.
+  /// Only profiles with at least one public recipe, matching the leaderboard's
+  /// own filter: a profile with no public recipe is not a chef for ranking
+  /// purposes. Every tier is present in the result, including the empty ones,
+  /// so the hero renders a stable five-tile row instead of a row whose width
+  /// depends on the data.
+  ///
+  /// The board's denominator — the "of 148" in "Rank 2 of 148" — is the **sum**
+  /// of these, which is why there is no longer a separate `chefCount()`:
+  /// it was a sixth request for a number this one already contains (OPT-P10).
   Future<Map<ChefTier, int>> tierCounts();
 }
 
@@ -63,38 +63,17 @@ class SupabaseChefRepository implements ChefRepository {
   }
 
   @override
-  Future<int> chefCount() async {
-    // `count` respects the filters but ignores `limit`, so the `limit(1)` keeps
-    // the body at one row while the header still carries the full total —
-    // otherwise this would download every chef id to count them.
-    final res = await _client
-        .from('profiles')
-        .select('id')
-        .gt('public_recipe_count', 0)
-        .limit(1)
-        .count(CountOption.exact);
-    return res.count;
-  }
-
-  @override
   Future<Map<ChefTier, int>> tierCounts() async {
-    // Five exact counts rather than one `group by`: PostgREST cannot aggregate,
-    // and the alternative — selecting every chef's tier and tallying on the
-    // client — downloads a row per chef and grows without bound. Each of these
-    // is the same bounded shape as `chefCount` (`limit(1)` body, exact count in
-    // the header), and they go out together.
-    final entries = await Future.wait(
-      ChefTier.values.map((tier) async {
-        final res = await _client
-            .from('profiles')
-            .select('id')
-            .gt('public_recipe_count', 0)
-            .eq('chef_tier', tier.wireValue)
-            .limit(1)
-            .count(CountOption.exact);
-        return MapEntry(tier, res.count);
-      }),
-    );
-    return Map.fromEntries(entries);
+    // One `chefs_tier_counts()` call (OPT-P10). This used to be five exact-count
+    // requests — PostgREST cannot express `group by`, but an RPC can, and the
+    // hero's total is now the sum of these rather than a sixth request.
+    // The RPC returns a row per tier even when the tier is empty, so the map is
+    // always complete and callers can index it without a null check.
+    final rows = await _client.rpc('chefs_tier_counts');
+    return {
+      for (final row in rows as List)
+        ChefTier.fromWire((row as Map<String, dynamic>)['tier'] as String):
+            (row['chefs'] as num).toInt(),
+    };
   }
 }

@@ -80,10 +80,17 @@ final chefsWindowProvider =
 
 /// Total chefs on the board — the denominator in "Rank 2 of 148".
 ///
+/// Derived from [chefTierCountsProvider] rather than fetched (OPT-P10): the
+/// tier counts cover exactly the same population — profiles with at least one
+/// public recipe — so the total is their sum, and asking the server for it
+/// again was a sixth round trip for a number the first five already contained.
+/// Four call sites share the one request.
+///
 /// Read with `valueOrNull` at the call site: the header drops to "Rank 2"
 /// rather than blocking the whole card on a count.
-final chefCountProvider = FutureProvider.autoDispose<int>((ref) {
-  return ref.watch(chefRepositoryProvider).chefCount();
+final chefCountProvider = FutureProvider.autoDispose<int>((ref) async {
+  final counts = await ref.watch(chefTierCountsProvider.future);
+  return counts.values.fold<int>(0, (sum, n) => sum + n);
 });
 
 /// Everything the expanded chef card needs beyond the [ChefStanding] the board
@@ -118,11 +125,24 @@ final chefDetailProvider =
   final chefs = ref.watch(chefRepositoryProvider);
   final profiles = ref.watch(profileRepositoryProvider);
 
-  final profile = await profiles.getById(chefId);
-  try {
-    final recipes = await chefs.topRecipes(chefId, limit: kChefTopRecipes);
-    return ChefDetail(profile: profile, topRecipes: recipes);
-  } catch (_) {
-    return ChefDetail(profile: profile, topRecipesFailed: true);
-  }
+  // Both requests are started before either is awaited (OPT-P10) — they are
+  // independent, and awaiting the profile first made the card cost the sum of
+  // two round trips instead of the slower one.
+  //
+  // `catchError` rather than a `try` around both: the recipe list stays
+  // deliberately non-fatal (the rest of the card comes from data the board
+  // already has), and a bare `Future.wait` would fail the whole thing if the
+  // RPC is missing.
+  final profileFuture = profiles.getById(chefId);
+  final recipesFuture = chefs
+      .topRecipes(chefId, limit: kChefTopRecipes)
+      .then<List<Recipe>?>((r) => r)
+      .catchError((Object _) => null);
+
+  final profile = await profileFuture;
+  final recipes = await recipesFuture;
+
+  return recipes == null
+      ? ChefDetail(profile: profile, topRecipesFailed: true)
+      : ChefDetail(profile: profile, topRecipes: recipes);
 });

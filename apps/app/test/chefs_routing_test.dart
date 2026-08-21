@@ -62,8 +62,6 @@ class _FakeChefRepository implements ChefRepository {
   Future<List<Recipe>> topRecipes(String chefId, {int limit = 3}) async =>
       const [];
 
-  @override
-  Future<int> chefCount() async => 1;
 
   @override
   Future<Map<ChefTier, int>> tierCounts() async => const {};

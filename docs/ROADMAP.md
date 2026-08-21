@@ -1166,8 +1166,10 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       never reach the network; 4 tests pin it
 - [ ] **OPT-P9:** pagination for Discover tabs and `listMine`/`listSharedWithMe` (all capped or
       unbounded today); the leaderboard's paged RPC is the precedent
-- [ ] **OPT-P10:** `/chefs` hero issues 6 count queries → one `chefs_tier_counts()` RPC;
-      `chefDetailProvider` awaits profile then top-recipes sequentially → `Future.wait`
+- [x] **OPT-P10:** `/chefs` hero issued 6 count queries → **1** `chefs_tier_counts()` RPC;
+      `chefCount()` deleted because the total is the sum of the tiers, and `chefCountProvider`
+      now derives it (4 call sites share the one request). `chefDetailProvider` starts both
+      requests before awaiting either, keeping the non-fatal top-recipes fallback
 - [ ] **OPT-P11 (accepted, revisit before growth):** per-engagement-row `recompute_chef_stats`
       is a full aggregate per like/first-view — fine now (SDS §10.3), the hot-path cost later
 

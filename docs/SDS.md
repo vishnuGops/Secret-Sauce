@@ -618,25 +618,27 @@ chef_top_recipes(p_chef uuid, p_limit int default 3) returns setof recipes
   shared constant rather than repeated per call site.
 - `ChefRepository` (abstract + `SupabaseChefRepository`, same file, wired in
   `core/src/providers.dart`): `leaderboard({int limit, int offset})` → `List<ChefStanding>`,
-  `topRecipes(chefId, {limit})` → `List<Recipe>`, and `chefCount()` → `int`.
+  `topRecipes(chefId, {limit})` → `List<Recipe>`, and `tierCounts()` → `Map<ChefTier, int>`.
   `ChefStanding` is a freezed model mirroring the RPC row. Signed-out safe by construction
   (no `_uid` use). `chef_score` is Postgres `numeric`, so it decodes through
   `(v as num).toDouble()` — a bare `as double` would throw on a whole-number score.
 
-  `chefCount()` is the "of 148" in the expanded card's `Rank 2 of 148`. It is a PostgREST exact
-  count over `profiles` where `public_recipe_count > 0` — the same population the RPC ranks —
-  with a `limit(1)` so the body stays one row while the header carries the total (`count`
-  respects filters but ignores `limit`).
+  `tierCounts()` is the chefs hero's five tiles, and since OPT-P10 it is **one**
+  `chefs_tier_counts()` RPC. PostgREST cannot express `group by`, which is why this used to be
+  five separate exact-count requests plus a sixth for the total; an RPC can, so it does. The
+  function drives off `unnest(enum_range(null::chef_tier))` left-joined to `profiles`, so a tier
+  with no chefs still returns a row and the hero keeps its stable five-tile row. It filters
+  `public_recipe_count > 0` — the same population `chefs_leaderboard` ranks.
 
-  `tierCounts()` → `Map<ChefTier, int>` is the chefs hero's five tiles, and is **five of that same
-  query**, one per rung, issued together with `Future.wait`. There is no RPC behind it and no
-  `group by` — PostgREST cannot aggregate, and the alternative (select every chef's `chef_tier` and
-  tally client-side) downloads a row per chef and grows without bound; five exact counts stay
-  bounded whatever the population. It filters `public_recipe_count > 0` like the others, so the
-  five values sum to `chefCount()`. The filter passes `ChefTier.wireValue` — the Postgres enum
-  label restated on the enum, because `json_serializable` keeps its `@JsonValue` mapping private to
-  generated code and a `.eq()` needs the string without a decode. `chef_models_test.dart` pins each
-  pair by round-tripping it through the decoder.
+  **There is no `chefCount()`.** The board's denominator — the "of 148" in `Rank 2 of 148` — is
+  the sum of the tier counts, because both cover that same population, so asking the server
+  separately was a sixth round trip for a number the first call already contained.
+  `chefCountProvider` derives it, and the four call sites share the single fetch.
+
+  Decoding the RPC's bare `chef_tier` label uses `ChefTier.fromWire`, the inverse of
+  `ChefTier.wireValue` — the Postgres enum label restated on the enum, because
+  `json_serializable` keeps its `@JsonValue` mapping private to generated code.
+  `chef_models_test.dart` pins each pair by round-tripping it through the decoder.
 - Feature providers (`features/chefs/chefs_providers.dart`): `chefsLeaderboardProvider`,
   `chefCountProvider`, `chefTierCountsProvider`, and `chefDetailProvider(chefId)` — the last
   returning a `ChefDetail` (profile + top recipes). The recipe read is caught and flagged rather
@@ -747,7 +749,7 @@ chef_top_recipes(p_chef uuid, p_limit int default 3) returns setof recipes
 
   The portrait window has **no chef portrait behind it**: there is no such asset and no column for
   one, so it renders `avatar_url` when there is one and the same monogram `ChefAvatar` used
-  everywhere else when there is not. The serial reads `004 / 148` — rank over `chefCount()` — with
+  everywhere else when there is not. The serial reads `004 / 148` — rank over the board total (`chefCountProvider`) — with
   the draft's `SEASON 1` dropped, since no season model exists to back it.
 - **Things in the mockup deliberately absent**: a `Follow` button and `View all N recipes` (no
   follow model, no public chef page — the top-recipe rows are the expanded card's only navigation);

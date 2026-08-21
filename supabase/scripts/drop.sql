@@ -54,6 +54,7 @@ drop function if exists recompute_chef_stats(uuid) cascade;
 drop function if exists chef_score(bigint, bigint, bigint) cascade;
 drop function if exists chef_tier_for(numeric) cascade;
 drop function if exists chefs_leaderboard(int, int) cascade;
+drop function if exists chefs_tier_counts() cascade;
 drop function if exists chef_top_recipes(uuid, int) cascade;
 -- seed_recipe signatures, oldest first. Each parameter-list change leaves the
 -- previous overload behind, so every historical signature stays listed here.

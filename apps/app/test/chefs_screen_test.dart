@@ -49,9 +49,8 @@ class _FakeChefRepository implements ChefRepository {
     return Future.value(recipes as List<Recipe>);
   }
 
-  @override
-  Future<int> chefCount() async => count;
-
+  // No `chefCount()` any more (OPT-P10) — the board's denominator is the sum of
+  // the tier counts below, which is why they add up to [count] (148).
   @override
   Future<Map<ChefTier, int>> tierCounts() async => const {
         ChefTier.homeCook: 61,
@@ -170,6 +169,19 @@ Widget _app(
 }
 
 void main() {
+  // OPT-P10 removed `chefCount()`; `chefCountProvider` now sums the tier counts
+  // instead, which is only correct because both cover the same population —
+  // profiles with at least one public recipe. `chefs_tier_counts()` enforces
+  // that server-side; this pins it for the fake, so every "of 148" assertion
+  // below keeps meaning what it says.
+  test('the fake tier counts sum to the board total', () async {
+    final counts = await _FakeChefRepository(const []).tierCounts();
+    expect(
+      counts.values.fold<int>(0, (sum, n) => sum + n),
+      _FakeChefRepository.count,
+    );
+  });
+
   group('compact board', () {
     testWidgets('renders a ranked board with tiers and grouped scores',
         (tester) async {

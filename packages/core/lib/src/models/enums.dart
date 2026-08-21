@@ -84,6 +84,16 @@ enum ChefTier {
         ChefTier.masterChef => 'master_chef',
       };
 
+  /// Inverse of [wireValue], for rows that arrive outside a generated decoder —
+  /// `chefs_tier_counts()` returns a bare `chef_tier` column, not a model
+  /// (OPT-P10). Throws on an unknown label rather than guessing: a new tier in
+  /// SQL that is missing here should fail loudly, the same way [wireValue]'s
+  /// switch would.
+  static ChefTier fromWire(String wire) => ChefTier.values.firstWhere(
+        (t) => t.wireValue == wire,
+        orElse: () => throw ArgumentError.value(wire, 'wire', 'unknown chef_tier'),
+      );
+
   /// Rung index, 0 (lowest) .. 4 (highest). Handy for styling ramps.
   int get rank => index;
 }
