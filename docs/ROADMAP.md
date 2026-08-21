@@ -1112,7 +1112,9 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
 - [x] **OPT-S2:** added `.select()` + empty-result check to the `recipes` `update()` / `delete()`
       calls in `recipe_repository.dart`, plus `unshare()` (same class, same one-line fix); they
       throw `WriteDeniedException` instead of reporting a silent no-op as success (Gotcha 2)
-- [ ] **OPT-S3 (B051):** recipe-detail like/save — guard signed-out, read my-state, make toggles
+- [x] **OPT-S3 (B051):** recipe-detail like/save — guards signed-out (routes to `/auth`), reads
+      `myLiked`/`mySaved`, both are toggles, failures surface. New `recipe_detail_test.dart`
+      (5 tests) is the first slice of OPT-T3's recipe-detail suite
 - [ ] **OPT-S4 (B052):** recipe-editor `_load()` failure path — catch, ErrorView, block Save
 - [ ] **OPT-S5:** share dialog offers "Can edit" though `share_permission.edit` is reserved and
       unimplemented — disable the segment with the existing `notYetTooltip` pattern
@@ -1177,8 +1179,9 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       3_sim_verify.sql` (Phase 11's harness + Phase 24's deferred CI item; the single highest-
       leverage test investment in the repo)
 - [ ] **OPT-T2:** repository unit tests behind a mocked `SupabaseClient` (Phase 3, still open)
-- [ ] **OPT-T3:** widget-test gaps in priority order: recipe-detail interactions (would have
-      caught B051), `snapRating` (5-minute unit test, named untested in Gotcha 15), share dialog
+- [ ] **OPT-T3:** widget-test gaps in priority order: ~~recipe-detail interactions (would have
+      caught B051)~~ — started, `recipe_detail_test.dart` landed with OPT-S3; `snapRating`
+      (5-minute unit test, named untested in Gotcha 15), share dialog
 - [ ] **OPT-T4:** toolchain: commit `pubspec.lock` (B009) · raise the `sdk:` bound / settle
       B027 formatter conflict · migrate to `freezed` 3.x to unpin Flutter (B005)
 - [ ] **OPT-T5:** `npx playwright install chrome`, then the outstanding screenshot pass over

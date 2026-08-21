@@ -26,6 +26,21 @@ final myRatingProvider =
   return ref.watch(recipeRepositoryProvider).myRating(id);
 });
 
+/// Whether the signed-in user has liked / saved this recipe (false = signed out).
+/// Both watch [currentUserIdProvider] so signing in or out re-resolves them, the
+/// same way [myRatingProvider] does.
+final myLikedProvider =
+    FutureProvider.autoDispose.family<bool, String>((ref, id) {
+  ref.watch(currentUserIdProvider);
+  return ref.watch(recipeRepositoryProvider).myLiked(id);
+});
+
+final mySavedProvider =
+    FutureProvider.autoDispose.family<bool, String>((ref, id) {
+  ref.watch(currentUserIdProvider);
+  return ref.watch(recipeRepositoryProvider).mySaved(id);
+});
+
 /// Selected servings for the detail screen's scaler (defaults to recipe servings).
 final selectedServingsProvider =
     StateProvider.autoDispose.family<int?, String>((ref, id) => null);

@@ -100,6 +100,39 @@ class RecipeDetailScreen extends ConsumerWidget {
   }
 }
 
+/// Like/save tap handler, shared by both buttons (B051).
+///
+/// Three things it must do that the old one-way `liked: true` call did not:
+/// send a signed-out visitor to `/auth` instead of letting `_uid` throw
+/// `StateError` inside an unawaited closure (Gotcha 9), pass the **opposite** of
+/// the current state so the action is a toggle, and surface a failure instead of
+/// swallowing it. Invalidating the state provider *and* the recipe refreshes
+/// both the icon and the trigger-maintained counter.
+Future<void> _toggleEngagement(
+  BuildContext context,
+  WidgetRef ref, {
+  required String recipeId,
+  required ProviderBase<AsyncValue<bool>> stateProvider,
+  required Future<void> Function(RecipeRepository repo, bool next) write,
+  required bool active,
+  required String failure,
+}) async {
+  if (ref.read(currentUserIdProvider) == null) {
+    context.go(Routes.auth);
+    return;
+  }
+  try {
+    await write(ref.read(recipeRepositoryProvider), !active);
+    ref.invalidate(stateProvider);
+    ref.invalidate(recipeProvider(recipeId));
+  } catch (e) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('$failure: $e')));
+    }
+  }
+}
+
 class _Body extends ConsumerWidget {
   const _Body({required this.recipe, required this.isOwner, required this.onFork});
 
@@ -186,25 +219,37 @@ class _Body extends ConsumerWidget {
               _CountAction(
                 icon: Icons.favorite_border,
                 activeIcon: Icons.favorite,
+                active: ref.watch(myLikedProvider(recipe.id)).valueOrNull ?? false,
                 count: recipe.likeCount,
-                onTap: () async {
-                  await ref
-                      .read(recipeRepositoryProvider)
-                      .setLiked(recipe.id, liked: true);
-                  ref.invalidate(recipeProvider(recipe.id));
-                },
+                tooltip: 'Like',
+                activeTooltip: 'Unlike',
+                onTap: (active) => _toggleEngagement(
+                  context,
+                  ref,
+                  recipeId: recipe.id,
+                  stateProvider: myLikedProvider(recipe.id),
+                  write: (repo, next) => repo.setLiked(recipe.id, liked: next),
+                  active: active,
+                  failure: 'Could not update your like',
+                ),
               ),
               const SizedBox(width: AppSpacing.md),
               _CountAction(
                 icon: Icons.bookmark_border,
                 activeIcon: Icons.bookmark,
+                active: ref.watch(mySavedProvider(recipe.id)).valueOrNull ?? false,
                 count: recipe.saveCount,
-                onTap: () async {
-                  await ref
-                      .read(recipeRepositoryProvider)
-                      .setSaved(recipe.id, saved: true);
-                  ref.invalidate(recipeProvider(recipe.id));
-                },
+                tooltip: 'Save',
+                activeTooltip: 'Remove from saved',
+                onTap: (active) => _toggleEngagement(
+                  context,
+                  ref,
+                  recipeId: recipe.id,
+                  stateProvider: mySavedProvider(recipe.id),
+                  write: (repo, next) => repo.setSaved(recipe.id, saved: next),
+                  active: active,
+                  failure: 'Could not update your save',
+                ),
               ),
               const Spacer(),
               if (!isOwner)
@@ -540,21 +585,41 @@ class _CountAction extends StatelessWidget {
   const _CountAction({
     required this.icon,
     required this.activeIcon,
+    required this.active,
     required this.count,
+    required this.tooltip,
+    required this.activeTooltip,
     required this.onTap,
   });
 
   final IconData icon;
+
+  /// Filled variant, shown once the current user has liked/saved this recipe.
+  /// This was a dead parameter until B051 gave the screen something to read.
   final IconData activeIcon;
+  final bool active;
   final int count;
-  final VoidCallback onTap;
+  final String tooltip;
+  final String activeTooltip;
+
+  /// Receives the state the button is currently in, so the handler can write
+  /// the opposite of it.
+  final void Function(bool active) onTap;
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton.icon(
-      onPressed: onTap,
-      icon: Icon(icon, size: 18),
-      label: Text('$count'),
+    final scheme = Theme.of(context).colorScheme;
+    return Tooltip(
+      message: active ? activeTooltip : tooltip,
+      child: OutlinedButton.icon(
+        onPressed: () => onTap(active),
+        icon: Icon(
+          active ? activeIcon : icon,
+          size: 18,
+          color: active ? scheme.primary : null,
+        ),
+        label: Text('$count'),
+      ),
     );
   }
 }

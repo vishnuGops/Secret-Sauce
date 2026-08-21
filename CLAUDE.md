@@ -77,7 +77,8 @@ secret-sauce/
 │   │                          #   chrome), top_nav_bar.dart (web), nav_destinations.dart (lists)
 │   ├── lib/widgets/           # app-level shared widgets (recipe_grid.dart)
 │   ├── lib/main.dart · test/{widget_test,chefs_screen_test,chefs_routing_test,
-│   │                          top_nav_bar_test,recipe_editor_test}.dart
+│   │                          top_nav_bar_test,recipe_editor_test,recipe_detail_test,
+│   │                          my_recipes_header_test,recipe_grid_test}.dart
 │   │                          # widget_test.dart covers the `/` -> /discover redirect
 │   ├── env.example.json       # template; env.local.json (git-ignored) holds real creds
 │   └── android/ ios/ web/ windows/   # platform runners are committed — no `flutter create`

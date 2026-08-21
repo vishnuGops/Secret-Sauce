@@ -270,7 +270,7 @@ erDiagram
 | Discover       | `/discover`                       | Popular (rating-ranked) / Trending / Recent tabs + search (public, no sign-in)         |
 | Chefs          | `/chefs`                          | Leaderboard ranked by chef score (public, no sign-in)                                 |
 | My Recipes     | `/my`                             | Tabs: My / Shared-with-me; `RecipeCard` grid with Public/Private badges                |
-| Recipe detail  | `/recipe/:id`                     | Structured view, servings scaler, rating, fork, versions (public recipes viewable signed-out) |
+| Recipe detail  | `/recipe/:id`                     | Structured view, servings scaler, rating, like/save **toggles**, fork, versions (public recipes viewable signed-out; like/save/rate send a signed-out visitor to `/auth` rather than calling the repository — B051) |
 | Recipe editor  | `/recipe/new`, `/recipe/:id/edit` | Structured create/edit                                                                |
 | Profile        | `/profile`                        | Current user                                                                          |
 

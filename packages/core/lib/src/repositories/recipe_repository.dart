@@ -45,6 +45,13 @@ abstract interface class RecipeRepository {
 
   Future<void> setLiked(String recipeId, {required bool liked});
   Future<void> setSaved(String recipeId, {required bool saved});
+
+  /// Whether the current user has liked / saved [recipeId]. Both return `false`
+  /// when signed out — these sit on a signed-out-reachable screen (Gotcha 9),
+  /// so they use `currentUser?.id` rather than `_uid`.
+  Future<bool> myLiked(String recipeId);
+  Future<bool> mySaved(String recipeId);
+
   Future<void> logView(String recipeId);
 
   /// The current user's star rating for [recipeId], or null if unrated
@@ -251,6 +258,27 @@ class SupabaseRecipeRepository implements RecipeRepository {
           .eq('user_id', _uid)
           .eq('recipe_id', recipeId);
     }
+  }
+
+  @override
+  Future<bool> myLiked(String recipeId) => _hasMyRow('recipe_likes', recipeId);
+
+  @override
+  Future<bool> mySaved(String recipeId) => _hasMyRow('recipe_saves', recipeId);
+
+  /// Shared body for [myLiked] / [mySaved]: does a `(user_id, recipe_id)` row
+  /// exist for the current user? Signed out is not an error here — the detail
+  /// screen is reachable without an account — so it answers `false`.
+  Future<bool> _hasMyRow(String table, String recipeId) async {
+    final uid = _client.auth.currentUser?.id;
+    if (uid == null) return false;
+    final row = await _client
+        .from(table)
+        .select('recipe_id')
+        .eq('recipe_id', recipeId)
+        .eq('user_id', uid)
+        .maybeSingle();
+    return row != null;
   }
 
   @override
