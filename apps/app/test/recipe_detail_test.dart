@@ -235,4 +235,45 @@ void main() {
     expect(repo.saveWrites, [false]);
     expect(find.byIcon(Icons.bookmark_border), findsOneWidget);
   });
+
+  // OPT-P7. logView used to live inside recipeProvider, which the screen
+  // invalidates on every like/save/rating — so one visit with a couple of
+  // interactions appended three or four rows to the append-only recipe_views
+  // log. It now sits in its own autoDispose provider: one row per visit.
+  group('view logging (OPT-P7)', () {
+    testWidgets('logs exactly one view for a plain visit', (tester) async {
+      final repo = _FakeRecipeRepository();
+      await _pump(tester, repo: repo, uid: 'me');
+      expect(repo.viewLogs, 1);
+    });
+
+    testWidgets('engagement does not re-log the view', (tester) async {
+      final repo = _FakeRecipeRepository();
+      await _pump(tester, repo: repo, uid: 'me');
+      expect(repo.viewLogs, 1);
+
+      await tester.tap(find.byIcon(Icons.favorite_border));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.bookmark_border));
+      await tester.pumpAndSettle();
+      // Both taps invalidate recipeProvider; neither may touch the view log.
+      await tester.tap(find.byIcon(Icons.favorite));
+      await tester.pumpAndSettle();
+
+      expect(
+        repo.viewLogs,
+        1,
+        reason: 'three engagement writes re-resolved the recipe; only the '
+            'original visit may count as a view',
+      );
+    });
+
+    testWidgets('logs a view when signed out too', (tester) async {
+      // `logView` uses currentUser?.id, so an anonymous row is valid (B012) —
+      // it just never moves view_count.
+      final repo = _FakeRecipeRepository();
+      await _pump(tester, repo: repo, uid: null);
+      expect(repo.viewLogs, 1);
+    });
+  });
 }

@@ -35,6 +35,10 @@ class RecipeDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(recipeProvider(recipeId));
+    // One view per visit (OPT-P7). Watched, not read, so it stays alive for as
+    // long as the screen does and is not re-run by the recipe invalidations
+    // that every like/save/rating triggers.
+    ref.watch(recipeViewLoggerProvider(recipeId));
     final currentUser = ref.watch(currentUserIdProvider);
 
     return Scaffold(
