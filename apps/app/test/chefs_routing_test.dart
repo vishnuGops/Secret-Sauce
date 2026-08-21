@@ -30,7 +30,10 @@ class _FakeAuth implements AuthRepository {
   Stream<AuthState> authStateChanges() => const Stream.empty();
 
   @override
-  Future<void> signIn({required String email, required String password}) async {}
+  Future<void> signIn({
+    required String email,
+    required String password,
+  }) async {}
 
   @override
   Future<void> signUp({
@@ -45,30 +48,34 @@ class _FakeAuth implements AuthRepository {
 
 class _FakeChefRepository implements ChefRepository {
   @override
-  Future<List<ChefStanding>> leaderboard({int limit = 50, int offset = 0}) async =>
-      const [
-        ChefStanding(
-          chefRank: 1,
-          id: 'd1',
-          displayName: 'Amara Okonkwo',
-          chefTier: ChefTier.masterChef,
-          chefScore: 21000,
-          publicRecipeCount: 2,
-        ),
-      ];
+  Future<List<ChefStanding>> leaderboard({
+    int limit = 50,
+    int offset = 0,
+  }) async => const [
+    ChefStanding(
+      chefRank: 1,
+      id: 'd1',
+      displayName: 'Amara Okonkwo',
+      chefTier: ChefTier.masterChef,
+      chefScore: 21000,
+      publicRecipeCount: 2,
+    ),
+  ];
 
   // Only reached from the expanded card, which these routing tests never open.
   @override
   Future<List<Recipe>> topRecipes(String chefId, {int limit = 3}) async =>
       const [];
 
-
   @override
   Future<Map<ChefTier, int>> tierCounts() async => const {};
 }
 
-Future<GoRouter> _pumpAt(WidgetTester tester, String location,
-    {String? uid}) async {
+Future<GoRouter> _pumpAt(
+  WidgetTester tester,
+  String location, {
+  String? uid,
+}) async {
   // Wide enough for the top nav bar, so destination labels render.
   tester.view.physicalSize = const Size(1400, 1000);
   tester.view.devicePixelRatio = 1.0;
@@ -89,10 +96,7 @@ Future<GoRouter> _pumpAt(WidgetTester tester, String location,
   await tester.pumpWidget(
     UncontrolledProviderScope(
       container: container,
-      child: MaterialApp.router(
-        theme: AppTheme.light(),
-        routerConfig: router,
-      ),
+      child: MaterialApp.router(theme: AppTheme.light(), routerConfig: router),
     ),
   );
   await tester.pumpAndSettle();
@@ -103,8 +107,9 @@ String _location(GoRouter router) =>
     router.routerDelegate.currentConfiguration.uri.path;
 
 void main() {
-  testWidgets('/chefs renders signed out — no redirect to /auth',
-      (tester) async {
+  testWidgets('/chefs renders signed out — no redirect to /auth', (
+    tester,
+  ) async {
     final router = await _pumpAt(tester, Routes.chefs);
 
     expect(_location(router), Routes.chefs);
@@ -133,8 +138,9 @@ void main() {
   // redirects were disabled outright would fail here. One test per route —
   // pumping two routers in a single test leaves the first one's timers running.
   for (final guarded in [Routes.myRecipes, Routes.profile, Routes.newRecipe]) {
-    testWidgets('$guarded bounces a signed-out visitor to /auth',
-        (tester) async {
+    testWidgets('$guarded bounces a signed-out visitor to /auth', (
+      tester,
+    ) async {
       final router = await _pumpAt(tester, guarded);
       expect(_location(router), Routes.auth);
     });

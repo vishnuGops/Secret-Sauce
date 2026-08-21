@@ -24,9 +24,7 @@ import 'dart:io';
 /// stays the idempotent baseline — it is what a fresh database is built from —
 /// and every schema change after it is a **new** numbered file. See
 /// `supabase/migrations/README.md` for the rules that keeps honest.
-const _directories = <String, String>{
-  'create': 'supabase/migrations',
-};
+const _directories = <String, String>{'create': 'supabase/migrations'};
 
 /// Single-file steps, by name.
 const _files = <String, String>{
@@ -74,18 +72,18 @@ const _destructive = {'sim:clean'};
 /// tables they write), which `-1` would nest and break.
 const _transactional = {'create', 'seed', 'recipes', 'drop', 'clean'};
 
-Future<int> _psql(String url, List<String> args, {bool singleTransaction = false}) async {
-  final proc = await Process.start(
-    'psql',
-    [
-      url,
-      '-v',
-      'ON_ERROR_STOP=1',
-      if (singleTransaction) '-1',
-      ...args,
-    ],
-    mode: ProcessStartMode.inheritStdio,
-  );
+Future<int> _psql(
+  String url,
+  List<String> args, {
+  bool singleTransaction = false,
+}) async {
+  final proc = await Process.start('psql', [
+    url,
+    '-v',
+    'ON_ERROR_STOP=1',
+    if (singleTransaction) '-1',
+    ...args,
+  ], mode: ProcessStartMode.inheritStdio);
   return proc.exitCode;
 }
 
@@ -99,7 +97,10 @@ Future<int> _applyFile(String url, String step) async {
     return 1;
   }
   stdout.writeln('▶ $step  ($path)');
-  return _psql(url, ['-f', path], singleTransaction: _transactional.contains(step));
+  return _psql(url, [
+    '-f',
+    path,
+  ], singleTransaction: _transactional.contains(step));
 }
 
 /// Applies every `.sql` file in [dir], sorted by name — the same order the
@@ -122,13 +123,14 @@ Future<int> _applyDirectory(String url, String step, String dir) async {
   // Sorted by full path, which sorts by filename here because the directory
   // prefix is identical — that is what makes `0002_` follow `0001_`, and why
   // migrations are numbered rather than named.
-  final files = directory
-      .listSync()
-      .whereType<File>()
-      .where((f) => f.path.toLowerCase().endsWith('.sql'))
-      .map((f) => f.path)
-      .toList()
-    ..sort();
+  final files =
+      directory
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.toLowerCase().endsWith('.sql'))
+          .map((f) => f.path)
+          .toList()
+        ..sort();
 
   if (files.isEmpty) {
     stderr.writeln('No .sql files in $dir');
@@ -140,8 +142,10 @@ Future<int> _applyDirectory(String url, String step, String dir) async {
   // on a database that had never seen either.
   for (final path in files) {
     stdout.writeln('▶ $step  ($path)');
-    final code =
-        await _psql(url, ['-f', path], singleTransaction: _transactional.contains(step));
+    final code = await _psql(url, [
+      '-f',
+      path,
+    ], singleTransaction: _transactional.contains(step));
     if (code != 0) return code;
   }
   return 0;
@@ -225,11 +229,14 @@ Future<void> main(List<String> args) async {
   }
   const presets = {'tiny', 'small', 'medium', 'large'};
   if (preset != null && !presets.contains(preset)) {
-    stderr.writeln('--preset must be one of ${presets.join(', ')} (got "$preset")');
+    stderr.writeln(
+      '--preset must be one of ${presets.join(', ')} (got "$preset")',
+    );
     exit(64);
   }
 
-  final steps = _pipelines[action] ??
+  final steps =
+      _pipelines[action] ??
       ((_files.containsKey(action) || _directories.containsKey(action))
           ? [action]
           : const <String>[]);
@@ -260,8 +267,11 @@ Future<void> main(List<String> args) async {
     // The generator reads its knobs from sim.config, so they have to be written
     // after the schema exists and before the generator runs.
     if (leaf == 'sim:generate') {
-      final code =
-          await _configureSim(url, preset, seedOpt == null ? null : int.parse(seedOpt));
+      final code = await _configureSim(
+        url,
+        preset,
+        seedOpt == null ? null : int.parse(seedOpt),
+      );
       if (code != 0) {
         stderr.writeln('✖ sim:config failed (exit $code)');
         exit(code);

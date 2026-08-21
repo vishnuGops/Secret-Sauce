@@ -53,21 +53,21 @@ class _FakeChefRepository implements ChefRepository {
   // the tier counts below, which is why they add up to [count] (148).
   @override
   Future<Map<ChefTier, int>> tierCounts() async => const {
-        ChefTier.homeCook: 61,
-        ChefTier.lineCook: 44,
-        ChefTier.sousChef: 28,
-        ChefTier.headChef: 14,
-        ChefTier.masterChef: 1,
-      };
+    ChefTier.homeCook: 61,
+    ChefTier.lineCook: 44,
+    ChefTier.sousChef: 28,
+    ChefTier.headChef: 14,
+    ChefTier.masterChef: 1,
+  };
 }
 
 class _FakeProfileRepository implements ProfileRepository {
   @override
   Future<Profile?> getById(String id) async => Profile(
-        id: id,
-        displayName: 'Secret Sauce Kitchen',
-        createdAt: DateTime(2025, 3, 14),
-      );
+    id: id,
+    displayName: 'Secret Sauce Kitchen',
+    createdAt: DateTime(2025, 3, 14),
+  );
 
   @override
   Future<List<Profile>> searchByName(String query, {int limit = 10}) async =>
@@ -159,11 +159,13 @@ Widget _app(
       // `builder`, not a MediaQuery around `home`: dialogs and sheets are
       // pushed above the Navigator, so anything wrapped inside `home` never
       // reaches them and the text-scale envelope would silently test 1.0x.
-      builder: (context, child) => MediaQuery(
-        data: MediaQuery.of(context)
-            .copyWith(textScaler: TextScaler.linear(textScale)),
-        child: child!,
-      ),
+      builder:
+          (context, child) => MediaQuery(
+            data: MediaQuery.of(
+              context,
+            ).copyWith(textScaler: TextScaler.linear(textScale)),
+            child: child!,
+          ),
       home: const ChefsScreen(),
     ),
   );
@@ -184,8 +186,9 @@ void main() {
   });
 
   group('compact board', () {
-    testWidgets('renders a ranked board with tiers and grouped scores',
-        (tester) async {
+    testWidgets('renders a ranked board with tiers and grouped scores', (
+      tester,
+    ) async {
       _size(tester, 400);
       await tester.pumpWidget(_app(_board));
       await tester.pumpAndSettle();
@@ -228,8 +231,9 @@ void main() {
       expect(find.text('Retry'), findsOneWidget);
     });
 
-    testWidgets('shows the loading state while the RPC is in flight',
-        (tester) async {
+    testWidgets('shows the loading state while the RPC is in flight', (
+      tester,
+    ) async {
       _size(tester, 400);
       await tester.pumpWidget(_app(null)); // never resolves
       await tester.pump();
@@ -239,8 +243,9 @@ void main() {
   });
 
   group('the page', () {
-    testWidgets('draws the hero, the board panel and three rails',
-        (tester) async {
+    testWidgets('draws the hero, the board panel and three rails', (
+      tester,
+    ) async {
       // Tall enough that the rails column builds all three: a `ListView` only
       // builds what is on screen, so a 1000px window would legitimately show
       // two and this would be testing the viewport, not the page.
@@ -303,8 +308,9 @@ void main() {
       expect(find.byType(CardRail), findsNWidgets(2));
     });
 
-    testWidgets('the disabled orderings and windows are inert, not hidden',
-        (tester) async {
+    testWidgets('the disabled orderings and windows are inert, not hidden', (
+      tester,
+    ) async {
       _size(tester, 1440);
       await tester.pumpWidget(_app(_board));
       await tester.pumpAndSettle();
@@ -351,8 +357,9 @@ void main() {
       expect(find.text('TOP 30 / 148'), findsOneWidget);
     });
 
-    testWidgets('a spotlight card carries the score and its top driver',
-        (tester) async {
+    testWidgets('a spotlight card carries the score and its top driver', (
+      tester,
+    ) async {
       _size(tester, 1440);
       await tester.pumpWidget(_app(const [_kitchen], recipes: [_topRecipe]));
       await tester.pumpAndSettle();
@@ -368,8 +375,9 @@ void main() {
       expect(find.text('9,811 to go'), findsOneWidget);
     });
 
-    testWidgets('a spotlight card opens the expanded chef card',
-        (tester) async {
+    testWidgets('a spotlight card opens the expanded chef card', (
+      tester,
+    ) async {
       _size(tester, 1440);
       await tester.pumpWidget(_app(const [_kitchen], recipes: [_topRecipe]));
       await tester.pumpAndSettle();
@@ -411,7 +419,10 @@ void main() {
 
       // Ladder + gap to the next tier.
       expect(find.byType(TierLadder), findsOneWidget);
-      expect(find.textContaining('9,811 points to Master Chef'), findsOneWidget);
+      expect(
+        find.textContaining('9,811 points to Master Chef'),
+        findsOneWidget,
+      );
 
       // Top recipes, ordered by contribution, with what each contributed.
       expect(find.text('Chicken Tikka Masala'), findsOneWidget);
@@ -420,7 +431,10 @@ void main() {
       // Nothing that does not exist in the build.
       expect(find.text('Follow'), findsNothing);
       expect(find.textContaining('View all'), findsNothing);
-      expect(find.textContaining('nightly'), findsOneWidget); // "no nightly job"
+      expect(
+        find.textContaining('nightly'),
+        findsOneWidget,
+      ); // "no nightly job"
     });
 
     testWidgets('opens as a bottom sheet on a phone', (tester) async {
@@ -437,8 +451,9 @@ void main() {
       expect(find.byType(Dialog), findsNothing);
     });
 
-    testWidgets('survives a database without the chef_top_recipes RPC',
-        (tester) async {
+    testWidgets('survives a database without the chef_top_recipes RPC', (
+      tester,
+    ) async {
       _size(tester, 1200, 900);
 
       await tester.pumpWidget(
@@ -450,7 +465,10 @@ void main() {
       await tester.pumpAndSettle();
 
       // One section degrades; the score explanation still renders.
-      expect(find.text('Top recipes are unavailable right now.'), findsOneWidget);
+      expect(
+        find.text('Top recipes are unavailable right now.'),
+        findsOneWidget,
+      );
       expect(find.text('1,980 likes × 3'), findsWidgets);
     });
   });
@@ -477,8 +495,9 @@ void main() {
   // two-column one, so this sweeps all three layouts at the accessibility
   // envelope.
   for (final width in <double>[320, 360, 600, 1000, 1440]) {
-    testWidgets('the chefs page fits at ${width}px, textScale 2.0',
-        (tester) async {
+    testWidgets('the chefs page fits at ${width}px, textScale 2.0', (
+      tester,
+    ) async {
       _size(tester, width, 1200);
 
       await tester.pumpWidget(_app(stress, textScale: 2.0));
@@ -492,8 +511,9 @@ void main() {
     });
   }
 
-  testWidgets('the expanded card fits a 360px phone at 2.0x text scale',
-      (tester) async {
+  testWidgets('the expanded card fits a 360px phone at 2.0x text scale', (
+    tester,
+  ) async {
     _size(tester, 360, 900);
 
     await tester.pumpWidget(

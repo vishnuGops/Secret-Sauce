@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 /// falls back to (OPT-A8).
 
 class ChefKicker extends StatelessWidget {
-  const ChefKicker({
-    super.key,required this.text});
+  const ChefKicker({super.key, required this.text});
 
   final String text;
 
@@ -26,8 +25,7 @@ class ChefKicker extends StatelessWidget {
 }
 
 class ChefNote extends StatelessWidget {
-  const ChefNote({
-    super.key,required this.text});
+  const ChefNote({super.key, required this.text});
 
   final String text;
 
@@ -38,8 +36,9 @@ class ChefNote extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
       child: Text(
         text,
-        style: theme.textTheme.bodySmall
-            ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+        style: theme.textTheme.bodySmall?.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
       ),
     );
   }

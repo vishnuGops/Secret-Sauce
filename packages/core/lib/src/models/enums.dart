@@ -12,10 +12,10 @@ enum Difficulty {
   hard;
 
   String get label => switch (this) {
-        Difficulty.easy => 'Easy',
-        Difficulty.medium => 'Medium',
-        Difficulty.hard => 'Hard',
-      };
+    Difficulty.easy => 'Easy',
+    Difficulty.medium => 'Medium',
+    Difficulty.hard => 'Hard',
+  };
 }
 
 enum RecipeVisibility {
@@ -31,7 +31,7 @@ enum SharePermission {
   @JsonValue('view')
   view,
   @JsonValue('edit')
-  edit;
+  edit,
 }
 
 enum SuggestionStatus {
@@ -40,7 +40,7 @@ enum SuggestionStatus {
   @JsonValue('accepted')
   accepted,
   @JsonValue('rejected')
-  rejected;
+  rejected,
 }
 
 /// A chef's standing, derived server-side from the engagement counters of the
@@ -63,12 +63,12 @@ enum ChefTier {
   masterChef;
 
   String get label => switch (this) {
-        ChefTier.homeCook => 'Home Cook',
-        ChefTier.lineCook => 'Line Cook',
-        ChefTier.sousChef => 'Sous Chef',
-        ChefTier.headChef => 'Head Chef',
-        ChefTier.masterChef => 'Master Chef',
-      };
+    ChefTier.homeCook => 'Home Cook',
+    ChefTier.lineCook => 'Line Cook',
+    ChefTier.sousChef => 'Sous Chef',
+    ChefTier.headChef => 'Head Chef',
+    ChefTier.masterChef => 'Master Chef',
+  };
 
   /// The Postgres enum label — the same string as the `@JsonValue` above.
   ///
@@ -77,12 +77,12 @@ enum ChefTier {
   /// wire string without going through a full decode. The two must move
   /// together; `chef_models_test.dart` pins every pair.
   String get wireValue => switch (this) {
-        ChefTier.homeCook => 'home_cook',
-        ChefTier.lineCook => 'line_cook',
-        ChefTier.sousChef => 'sous_chef',
-        ChefTier.headChef => 'head_chef',
-        ChefTier.masterChef => 'master_chef',
-      };
+    ChefTier.homeCook => 'home_cook',
+    ChefTier.lineCook => 'line_cook',
+    ChefTier.sousChef => 'sous_chef',
+    ChefTier.headChef => 'head_chef',
+    ChefTier.masterChef => 'master_chef',
+  };
 
   /// Inverse of [wireValue], for rows that arrive outside a generated decoder —
   /// `chefs_tier_counts()` returns a bare `chef_tier` column, not a model
@@ -90,9 +90,9 @@ enum ChefTier {
   /// SQL that is missing here should fail loudly, the same way [wireValue]'s
   /// switch would.
   static ChefTier fromWire(String wire) => ChefTier.values.firstWhere(
-        (t) => t.wireValue == wire,
-        orElse: () => throw ArgumentError.value(wire, 'wire', 'unknown chef_tier'),
-      );
+    (t) => t.wireValue == wire,
+    orElse: () => throw ArgumentError.value(wire, 'wire', 'unknown chef_tier'),
+  );
 
   /// Rung index, 0 (lowest) .. 4 (highest). Handy for styling ramps.
   int get rank => index;

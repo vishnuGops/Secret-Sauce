@@ -16,96 +16,98 @@ import 'package:core/src/repositories/recipe_queries.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Map<String, dynamic> _embedResponse() => {
-      'id': 'r1',
-      'owner_id': 'u1',
-      'title': 'Peruvian Ceviche with Mango',
-      'servings': 4,
-      'difficulty': 'medium',
-      'visibility': 'public',
-      'rating_avg': 4, // numeric may arrive as int — see the numeric test below
-      'ingredient_groups': [
+  'id': 'r1',
+  'owner_id': 'u1',
+  'title': 'Peruvian Ceviche with Mango',
+  'servings': 4,
+  'difficulty': 'medium',
+  'visibility': 'public',
+  'rating_avg': 4, // numeric may arrive as int — see the numeric test below
+  'ingredient_groups': [
+    {
+      'id': 'g1',
+      'recipe_id': 'r1',
+      'name': 'Cure',
+      'sort_order': 0,
+      'ingredients': [
         {
-          'id': 'g1',
-          'recipe_id': 'r1',
-          'name': 'Cure',
+          'id': 'i1',
+          'group_id': 'g1',
+          'name': 'sea bass',
+          'unit': 'g',
+          'quantity': 500,
+          'note': 'cut into 2cm cubes',
+          'is_optional': false,
           'sort_order': 0,
-          'ingredients': [
-            {
-              'id': 'i1',
-              'group_id': 'g1',
-              'name': 'sea bass',
-              'unit': 'g',
-              'quantity': 500,
-              'note': 'cut into 2cm cubes',
-              'is_optional': false,
-              'sort_order': 0,
-            },
-            {
-              'id': 'i2',
-              'group_id': 'g1',
-              'name': 'limes',
-              'unit': null,
-              'quantity': 10.5,
-              'note': null,
-              'is_optional': true,
-              'sort_order': 1,
-            },
-          ],
         },
         {
-          'id': 'g2',
-          'recipe_id': 'r1',
-          'name': 'To serve',
+          'id': 'i2',
+          'group_id': 'g1',
+          'name': 'limes',
+          'unit': null,
+          'quantity': 10.5,
+          'note': null,
+          'is_optional': true,
           'sort_order': 1,
-          'ingredients': <Map<String, dynamic>>[],
         },
       ],
-      'step_groups': [
+    },
+    {
+      'id': 'g2',
+      'recipe_id': 'r1',
+      'name': 'To serve',
+      'sort_order': 1,
+      'ingredients': <Map<String, dynamic>>[],
+    },
+  ],
+  'step_groups': [
+    {
+      'id': 's1',
+      'recipe_id': 'r1',
+      'name': 'Method',
+      'sort_order': 0,
+      'steps': [
         {
-          'id': 's1',
-          'recipe_id': 'r1',
-          'name': 'Method',
+          'id': 'st1',
+          'group_id': 's1',
+          'step_order': 0,
+          'text': 'Cube the fish.',
+          'image_url': null,
+          'duration_minutes': null,
+          'temperature': null,
+          'tip': null,
           'sort_order': 0,
-          'steps': [
-            {
-              'id': 'st1',
-              'group_id': 's1',
-              'step_order': 0,
-              'text': 'Cube the fish.',
-              'image_url': null,
-              'duration_minutes': null,
-              'temperature': null,
-              'tip': null,
-              'sort_order': 0,
-            },
-            {
-              'id': 'st2',
-              'group_id': 's1',
-              'step_order': 1,
-              'text': 'Cure in lime juice.',
-              'image_url': 'https://example.test/s.jpg',
-              'duration_minutes': 12,
-              'temperature': '4°C',
-              'tip': 'Do not over-cure.',
-              'sort_order': 1,
-            },
-          ],
+        },
+        {
+          'id': 'st2',
+          'group_id': 's1',
+          'step_order': 1,
+          'text': 'Cure in lime juice.',
+          'image_url': 'https://example.test/s.jpg',
+          'duration_minutes': 12,
+          'temperature': '4°C',
+          'tip': 'Do not over-cure.',
+          'sort_order': 1,
         },
       ],
-    };
+    },
+  ],
+};
 
 void main() {
   group('nested embed decoding (OPT-P3)', () {
-    test('ingredient_groups populates ingredientGroups, not the empty default',
-        () {
-      final r = Recipe.fromJson(_embedResponse());
-      expect(
-        r.ingredientGroups,
-        hasLength(2),
-        reason: 'a missing @JsonKey(name:) would silently yield []',
-      );
-      expect(r.ingredientGroups.first.name, 'Cure');
-    });
+    test(
+      'ingredient_groups populates ingredientGroups, not the empty default',
+      () {
+        final r = Recipe.fromJson(_embedResponse());
+        expect(
+          r.ingredientGroups,
+          hasLength(2),
+          reason: 'a missing @JsonKey(name:) would silently yield []',
+        );
+        expect(r.ingredientGroups.first.name, 'Cure');
+      },
+    );
 
     test('step_groups populates stepGroups', () {
       final r = Recipe.fromJson(_embedResponse());
@@ -127,7 +129,8 @@ void main() {
     });
 
     test('every step column survives the embed (B035)', () {
-      final step = Recipe.fromJson(_embedResponse()).stepGroups.first.steps.last;
+      final step =
+          Recipe.fromJson(_embedResponse()).stepGroups.first.steps.last;
       expect(step.imageUrl, 'https://example.test/s.jpg');
       expect(step.durationMinutes, 12);
       expect(step.temperature, '4°C');
@@ -162,12 +165,18 @@ void main() {
 
   group('kRecipeDetailSelect', () {
     test('asks for both content trees nested', () {
-      expect(kRecipeDetailSelect, contains('ingredient_groups(*,ingredients(*))'));
+      expect(
+        kRecipeDetailSelect,
+        contains('ingredient_groups(*,ingredients(*))'),
+      );
       expect(kRecipeDetailSelect, contains('step_groups(*,steps(*))'));
     });
 
     test('still carries the owner FK hint from kRecipeSelect', () {
-      expect(kRecipeDetailSelect, contains('owner:profiles!recipes_owner_id_fkey'));
+      expect(
+        kRecipeDetailSelect,
+        contains('owner:profiles!recipes_owner_id_fkey'),
+      );
     });
   });
 }

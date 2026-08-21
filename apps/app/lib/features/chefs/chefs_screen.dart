@@ -47,44 +47,45 @@ class ChefsScreen extends ConsumerWidget {
           wide ? AppSpacing.xl : AppSpacing.md,
           wide ? AppSpacing.xl : AppSpacing.md,
         ),
-        child: wide
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const ChefsHero(),
-                  const SizedBox(height: AppSpacing.lg),
-                  // Two independently scrolling columns under a fixed hero.
-                  // The draft scrolls the page and pins the panel with
-                  // `position: sticky`; the panel already owns a scroll
-                  // container there, so this renders the same thing without a
-                  // nested-scroll arrangement to get wrong.
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const SizedBox(
-                          width: panelWidth,
-                          child: _BoardPanel(scrollable: true),
-                        ),
-                        const SizedBox(width: AppSpacing.lg),
-                        Expanded(child: _Rails(height: railHeight)),
-                      ],
+        child:
+            wide
+                ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const ChefsHero(),
+                    const SizedBox(height: AppSpacing.lg),
+                    // Two independently scrolling columns under a fixed hero.
+                    // The draft scrolls the page and pins the panel with
+                    // `position: sticky`; the panel already owns a scroll
+                    // container there, so this renders the same thing without a
+                    // nested-scroll arrangement to get wrong.
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const SizedBox(
+                            width: panelWidth,
+                            child: _BoardPanel(scrollable: true),
+                          ),
+                          const SizedBox(width: AppSpacing.lg),
+                          Expanded(child: _Rails(height: railHeight)),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              )
-            // Below 1000px — or above the text scale the columns can hold —
-            // the page becomes one scroll, rails first: they are the part of
-            // this redraw a narrow window can still show properly.
-            : ListView(
-                children: [
-                  const ChefsHero(),
-                  const SizedBox(height: AppSpacing.lg),
-                  _Rails(height: railHeight, shrinkWrap: true),
-                  const SizedBox(height: AppSpacing.lg),
-                  const _BoardPanel(scrollable: false),
-                ],
-              ),
+                  ],
+                )
+                // Below 1000px — or above the text scale the columns can hold —
+                // the page becomes one scroll, rails first: they are the part of
+                // this redraw a narrow window can still show properly.
+                : ListView(
+                  children: [
+                    const ChefsHero(),
+                    const SizedBox(height: AppSpacing.lg),
+                    _Rails(height: railHeight, shrinkWrap: true),
+                    const SizedBox(height: AppSpacing.lg),
+                    const _BoardPanel(scrollable: false),
+                  ],
+                ),
       ),
     );
   }
@@ -102,29 +103,34 @@ class _CompactBoard extends ConsumerWidget {
       appBar: AppBar(title: const Text('Chefs')),
       body: async.when(
         loading: () => const LoadingView(),
-        error: (e, _) => ErrorView(
-          message: friendlyError(e),
-          onRetry: () => ref.invalidate(chefsLeaderboardProvider),
-        ),
-        data: (chefs) => chefs.isEmpty
-            ? const EmptyView(
-                title: 'No chefs yet',
-                message: 'Publish a recipe and you will show up here.',
-                icon: Icons.emoji_events_outlined,
-              )
-            : RefreshIndicator(
-                onRefresh: () async => ref.invalidate(chefsLeaderboardProvider),
-                child: ListView.separated(
-                  padding: const EdgeInsets.all(AppSpacing.md),
-                  itemCount: chefs.length,
-                  separatorBuilder: (_, __) =>
-                      const SizedBox(height: AppSpacing.sm),
-                  itemBuilder: (context, i) => ChefStandingCard(
-                    standing: chefs[i],
-                    onTap: () => showChefDetail(context, chefs[i]),
-                  ),
-                ),
-              ),
+        error:
+            (e, _) => ErrorView(
+              message: friendlyError(e),
+              onRetry: () => ref.invalidate(chefsLeaderboardProvider),
+            ),
+        data:
+            (chefs) =>
+                chefs.isEmpty
+                    ? const EmptyView(
+                      title: 'No chefs yet',
+                      message: 'Publish a recipe and you will show up here.',
+                      icon: Icons.emoji_events_outlined,
+                    )
+                    : RefreshIndicator(
+                      onRefresh:
+                          () async => ref.invalidate(chefsLeaderboardProvider),
+                      child: ListView.separated(
+                        padding: const EdgeInsets.all(AppSpacing.md),
+                        itemCount: chefs.length,
+                        separatorBuilder:
+                            (_, __) => const SizedBox(height: AppSpacing.sm),
+                        itemBuilder:
+                            (context, i) => ChefStandingCard(
+                              standing: chefs[i],
+                              onTap: () => showChefDetail(context, chefs[i]),
+                            ),
+                      ),
+                    ),
       ),
     );
   }
@@ -148,38 +154,46 @@ class _BoardPanel extends ConsumerWidget {
     final sort = ref.watch(boardSortProvider);
 
     final rows = async.when(
-      loading: () => const Padding(
-        padding: EdgeInsets.symmetric(vertical: AppSpacing.xl),
-        child: LoadingView(),
-      ),
-      error: (e, _) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
-        child: ErrorView(
-          message: friendlyError(e),
-          onRetry: () => ref.invalidate(chefsLeaderboardProvider),
-        ),
-      ),
-      data: (chefs) => chefs.isEmpty
-          ? const Padding(
-              padding: EdgeInsets.symmetric(vertical: AppSpacing.lg),
-              child: EmptyView(
-                title: 'No chefs yet',
-                message: 'Publish a recipe and you will show up here.',
-                icon: Icons.emoji_events_outlined,
-              ),
-            )
-          : ListView.separated(
-              padding: const EdgeInsets.all(AppSpacing.sm),
-              shrinkWrap: !scrollable,
-              physics: scrollable ? null : const NeverScrollableScrollPhysics(),
-              itemCount: chefs.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 6),
-              itemBuilder: (context, i) => ChefStandingCard(
-                standing: chefs[i],
-                variant: ChefCardVariant.board,
-                onTap: () => showChefDetail(context, chefs[i]),
-              ),
+      loading:
+          () => const Padding(
+            padding: EdgeInsets.symmetric(vertical: AppSpacing.xl),
+            child: LoadingView(),
+          ),
+      error:
+          (e, _) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+            child: ErrorView(
+              message: friendlyError(e),
+              onRetry: () => ref.invalidate(chefsLeaderboardProvider),
             ),
+          ),
+      data:
+          (chefs) =>
+              chefs.isEmpty
+                  ? const Padding(
+                    padding: EdgeInsets.symmetric(vertical: AppSpacing.lg),
+                    child: EmptyView(
+                      title: 'No chefs yet',
+                      message: 'Publish a recipe and you will show up here.',
+                      icon: Icons.emoji_events_outlined,
+                    ),
+                  )
+                  : ListView.separated(
+                    padding: const EdgeInsets.all(AppSpacing.sm),
+                    shrinkWrap: !scrollable,
+                    physics:
+                        scrollable
+                            ? null
+                            : const NeverScrollableScrollPhysics(),
+                    itemCount: chefs.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 6),
+                    itemBuilder:
+                        (context, i) => ChefStandingCard(
+                          standing: chefs[i],
+                          variant: ChefCardVariant.board,
+                          onTap: () => showChefDetail(context, chefs[i]),
+                        ),
+                  ),
     );
 
     return Card(
@@ -207,8 +221,9 @@ class _BoardPanel extends ConsumerWidget {
                         'Leaderboard',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w700),
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                     const SizedBox(width: AppSpacing.sm),
@@ -224,8 +239,8 @@ class _BoardPanel extends ConsumerWidget {
                 const SizedBox(height: AppSpacing.sm),
                 _SortTabs(
                   selected: sort,
-                  onSelected: (s) =>
-                      ref.read(boardSortProvider.notifier).state = s,
+                  onSelected:
+                      (s) => ref.read(boardSortProvider.notifier).state = s,
                 ),
               ],
             ),
@@ -267,15 +282,16 @@ class _PanelFooter extends ConsumerWidget {
               'Ties share a rank.',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.labelSmall
-                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ),
           ),
           if (more)
             TextButton(
               // One more page is one wider read — see `leaderboardPagesProvider`.
-              onPressed: () =>
-                  ref.read(leaderboardPagesProvider.notifier).state++,
+              onPressed:
+                  () => ref.read(leaderboardPagesProvider.notifier).state++,
               child: Text('Show all ${groupedCount(total!)}'),
             ),
         ],
@@ -316,9 +332,10 @@ class _SortTabs extends StatelessWidget {
                     alignment: Alignment.center,
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     decoration: BoxDecoration(
-                      color: sort == selected
-                          ? scheme.surfaceContainerLowest
-                          : null,
+                      color:
+                          sort == selected
+                              ? scheme.surfaceContainerLowest
+                              : null,
                       borderRadius: BorderRadius.circular(999),
                     ),
                     child: Text(
@@ -327,11 +344,15 @@ class _SortTabs extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.labelSmall?.copyWith(
                         fontWeight:
-                            sort == selected ? FontWeight.w800 : FontWeight.w700,
-                        color: sort == selected
-                            ? scheme.onSurface
-                            : scheme.onSurfaceVariant
-                                .withValues(alpha: sort.enabled ? 1 : 0.5),
+                            sort == selected
+                                ? FontWeight.w800
+                                : FontWeight.w700,
+                        color:
+                            sort == selected
+                                ? scheme.onSurface
+                                : scheme.onSurfaceVariant.withValues(
+                                  alpha: sort.enabled ? 1 : 0.5,
+                                ),
                       ),
                     ),
                   ),
@@ -393,18 +414,21 @@ class _Rails extends ConsumerWidget {
             cardWidth: kSpotlightCardWidth,
             // Placeholders while the board is still loading, so the shelf keeps
             // its height instead of collapsing and shoving the rails below it.
-            itemCount: loading
-                ? kChefRailLength
-                : popular.length.clamp(1, kChefRailLength),
-            itemBuilder: (context, i) => loading
-                ? SpotlightCardPlaceholder(
-                    tier: ChefTier.values[i % ChefTier.values.length],
-                  )
-                : ChefSpotlightCard(
-                    standing: popular[i],
-                    totalChefs: total,
-                    onTap: () => showChefDetail(context, popular[i]),
-                  ),
+            itemCount:
+                loading
+                    ? kChefRailLength
+                    : popular.length.clamp(1, kChefRailLength),
+            itemBuilder:
+                (context, i) =>
+                    loading
+                        ? SpotlightCardPlaceholder(
+                          tier: ChefTier.values[i % ChefTier.values.length],
+                        )
+                        : ChefSpotlightCard(
+                          standing: popular[i],
+                          totalChefs: total,
+                          onTap: () => showChefDetail(context, popular[i]),
+                        ),
           ),
         const SizedBox(height: AppSpacing.lg),
         CardRail(
@@ -415,9 +439,10 @@ class _Rails extends ConsumerWidget {
           cardWidth: kSpotlightCardWidth,
           itemCount: 6,
           footnote: _placeholderNote,
-          itemBuilder: (context, i) => SpotlightCardPlaceholder(
-            tier: ChefTier.values[i % ChefTier.values.length],
-          ),
+          itemBuilder:
+              (context, i) => SpotlightCardPlaceholder(
+                tier: ChefTier.values[i % ChefTier.values.length],
+              ),
         ),
         const SizedBox(height: AppSpacing.lg),
         CardRail(
@@ -428,9 +453,10 @@ class _Rails extends ConsumerWidget {
           cardWidth: kSpotlightCardWidth,
           itemCount: 6,
           footnote: _placeholderNote,
-          itemBuilder: (context, i) => SpotlightCardPlaceholder(
-            tier: ChefTier.values[(i + 2) % ChefTier.values.length],
-          ),
+          itemBuilder:
+              (context, i) => SpotlightCardPlaceholder(
+                tier: ChefTier.values[(i + 2) % ChefTier.values.length],
+              ),
         ),
       ],
     );

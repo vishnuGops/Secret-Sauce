@@ -10,35 +10,35 @@ Widget _host({
   int page = 3,
   String? footnote,
   double width = 700,
-}) =>
-    MaterialApp(
-      theme: AppTheme.light(),
-      home: Scaffold(
-        body: Center(
-          child: SizedBox(
-            width: width,
-            child: CardRail(
-              icon: Icons.trending_up,
-              title: 'Trending chefs',
-              subtitle: 'Fastest score gain in the last 7 days',
-              height: 120,
-              cardWidth: _cardWidth,
-              gap: _gap,
-              page: page,
-              footnote: footnote,
-              itemCount: itemCount,
-              itemBuilder: (context, i) => SizedBox(
+}) => MaterialApp(
+  theme: AppTheme.light(),
+  home: Scaffold(
+    body: Center(
+      child: SizedBox(
+        width: width,
+        child: CardRail(
+          icon: Icons.trending_up,
+          title: 'Trending chefs',
+          subtitle: 'Fastest score gain in the last 7 days',
+          height: 120,
+          cardWidth: _cardWidth,
+          gap: _gap,
+          page: page,
+          footnote: footnote,
+          itemCount: itemCount,
+          itemBuilder:
+              (context, i) => SizedBox(
                 width: _cardWidth,
                 child: ColoredBox(
                   color: Colors.grey,
                   child: Center(child: Text('card $i')),
                 ),
               ),
-            ),
-          ),
         ),
       ),
-    );
+    ),
+  ),
+);
 
 /// The rail's back/forward buttons, in order.
 Finder get _arrows => find.byType(IconButton);
@@ -54,8 +54,9 @@ void main() {
     expect(find.text('1–3 / 10'), findsOneWidget);
   });
 
-  testWidgets('the back arrow starts disabled and the forward one does not',
-      (tester) async {
+  testWidgets('the back arrow starts disabled and the forward one does not', (
+    tester,
+  ) async {
     await tester.pumpWidget(_host());
     expect(_enabled(tester, 0), isFalse);
     expect(_enabled(tester, 1), isTrue);
@@ -75,8 +76,9 @@ void main() {
     expect(find.text('1–3 / 10'), findsOneWidget);
   });
 
-  testWidgets('the forward arrow disables at the end and the label clamps',
-      (tester) async {
+  testWidgets('the forward arrow disables at the end and the label clamps', (
+    tester,
+  ) async {
     await tester.pumpWidget(_host());
 
     // 10 items, 3 per page: the last window starts at index 7, so three
@@ -97,8 +99,9 @@ void main() {
     expect(find.textContaining('/ 2'), findsNothing);
   });
 
-  testWidgets('the footnote renders under the shelf when given',
-      (tester) async {
+  testWidgets('the footnote renders under the shelf when given', (
+    tester,
+  ) async {
     await tester.pumpWidget(_host(footnote: 'Placeholder cards for now.'));
     expect(find.text('Placeholder cards for now.'), findsOneWidget);
 

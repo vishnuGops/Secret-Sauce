@@ -19,10 +19,7 @@ class MyRecipesScreen extends ConsumerWidget {
         appBar: AppBar(
           title: const Text('My Recipes'),
           bottom: const TabBar(
-            tabs: [
-              Tab(text: 'My Recipes'),
-              Tab(text: 'Shared with me'),
-            ],
+            tabs: [Tab(text: 'My Recipes'), Tab(text: 'Shared with me')],
           ),
           actions: [
             // `New recipe` left the web top navigation and lives on the page it
@@ -33,21 +30,22 @@ class MyRecipesScreen extends ConsumerWidget {
             // (`my_recipes_header_test.dart` pins 600–1400px at up to 2.0x).
             Padding(
               padding: const EdgeInsets.only(right: AppSpacing.sm),
-              child: context.isCompact
-                  ? IconButton(
-                      icon: const Icon(Icons.add),
-                      tooltip: 'New recipe',
-                      onPressed: () => context.go(Routes.newRecipe),
-                    )
-                  : FilledButton.icon(
-                      onPressed: () => context.go(Routes.newRecipe),
-                      icon: const Icon(Icons.add),
-                      label: const Text(
-                        'New recipe',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+              child:
+                  context.isCompact
+                      ? IconButton(
+                        icon: const Icon(Icons.add),
+                        tooltip: 'New recipe',
+                        onPressed: () => context.go(Routes.newRecipe),
+                      )
+                      : FilledButton.icon(
+                        onPressed: () => context.go(Routes.newRecipe),
+                        icon: const Icon(Icons.add),
+                        label: const Text(
+                          'New recipe',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                    ),
             ),
           ],
         ),

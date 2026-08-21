@@ -65,7 +65,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final signedIn = authRepo.currentUserId != null;
       final loc = state.matchedLocation;
-      final needsAuth = loc == Routes.myRecipes ||
+      final needsAuth =
+          loc == Routes.myRecipes ||
           loc == Routes.profile ||
           loc == Routes.newRecipe ||
           loc.endsWith('/edit');
@@ -78,15 +79,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // top-level redirect above runs first and passes it through (root is not
       // in `needsAuth`), then this forwards to Discover for signed-in and
       // signed-out visitors alike.
-      GoRoute(
-        path: Routes.root,
-        redirect: (context, state) => Routes.discover,
-      ),
+      GoRoute(path: Routes.root, redirect: (context, state) => Routes.discover),
       GoRoute(
         path: Routes.auth,
-        builder: (context, state) => AuthScreen(
-          startOnSignUp: state.uri.queryParameters['mode'] == 'signup',
-        ),
+        builder:
+            (context, state) => AuthScreen(
+              startOnSignUp: state.uri.queryParameters['mode'] == 'signup',
+            ),
       ),
       GoRoute(
         path: Routes.newRecipe,
@@ -96,19 +95,22 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.editRecipePattern,
         parentNavigatorKey: _rootKey,
-        builder: (context, state) =>
-            RecipeEditorScreen(recipeId: state.pathParameters['id']),
+        builder:
+            (context, state) =>
+                RecipeEditorScreen(recipeId: state.pathParameters['id']),
       ),
       GoRoute(
         path: Routes.recipePattern,
         parentNavigatorKey: _rootKey,
-        builder: (context, state) =>
-            RecipeDetailScreen(recipeId: state.pathParameters['id']!),
+        builder:
+            (context, state) =>
+                RecipeDetailScreen(recipeId: state.pathParameters['id']!),
       ),
       ShellRoute(
         navigatorKey: _shellKey,
-        builder: (context, state, child) =>
-            AppShell(location: state.matchedLocation, child: child),
+        builder:
+            (context, state, child) =>
+                AppShell(location: state.matchedLocation, child: child),
         routes: [
           GoRoute(
             path: Routes.discover,

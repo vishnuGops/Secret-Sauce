@@ -59,10 +59,10 @@ class ChefStandingCard extends StatelessWidget {
 
   /// Medal glyph for a podium rank, or null below the top three.
   static IconData? medalFor(int rank) => switch (rank) {
-        1 => Icons.workspace_premium,
-        2 || 3 => Icons.military_tech,
-        _ => null,
-      };
+    1 => Icons.workspace_premium,
+    2 || 3 => Icons.military_tech,
+    _ => null,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -99,11 +99,7 @@ class ChefStandingCard extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  _RankBlock(
-                    standing: standing,
-                    color: tier,
-                    compact: compact,
-                  ),
+                  _RankBlock(standing: standing, color: tier, compact: compact),
                   SizedBox(width: gap),
                   ChefAvatar(
                     name: standing.displayName,
@@ -213,8 +209,9 @@ class _BoardRow extends StatelessWidget {
                           standing.displayName,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.labelLarge
-                              ?.copyWith(fontWeight: FontWeight.w700),
+                          style: theme.textTheme.labelLarge?.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         const SizedBox(height: 2),
                         // Wrap, not Row: at 2.0x text scale the chip alone is
@@ -229,8 +226,9 @@ class _BoardRow extends StatelessWidget {
                               countOf(standing.publicRecipeCount, 'recipes'),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.labelSmall
-                                  ?.copyWith(color: scheme.onSurfaceVariant),
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: scheme.onSurfaceVariant,
+                              ),
                             ),
                           ],
                         ),
@@ -238,11 +236,7 @@ class _BoardRow extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: AppSpacing.sm),
-                  _ScoreBlock(
-                    standing: standing,
-                    color: color,
-                    compact: true,
-                  ),
+                  _ScoreBlock(standing: standing, color: color, compact: true),
                 ],
               ),
             ),
@@ -290,8 +284,10 @@ class _RankPill extends StatelessWidget {
           child: Text(
             '$rank',
             maxLines: 1,
-            style: theme.textTheme.labelLarge
-                ?.copyWith(color: color, fontWeight: FontWeight.w800),
+            style: theme.textTheme.labelLarge?.copyWith(
+              color: color,
+              fontWeight: FontWeight.w800,
+            ),
           ),
         ),
       ),
@@ -341,7 +337,8 @@ class _RankBlock extends StatelessWidget {
             child: Text(
               medal != null ? '#${standing.chefRank}' : 'rank',
               style: theme.textTheme.labelSmall?.copyWith(
-                color: medal != null ? color : theme.colorScheme.onSurfaceVariant,
+                color:
+                    medal != null ? color : theme.colorScheme.onSurfaceVariant,
                 fontWeight: medal != null ? FontWeight.w800 : null,
               ),
             ),
@@ -372,7 +369,9 @@ class _NameLine extends StatelessWidget {
       standing.displayName,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style: (compact ? theme.textTheme.titleSmall : theme.textTheme.titleMedium)
+      style: (compact
+              ? theme.textTheme.titleSmall
+              : theme.textTheme.titleMedium)
           ?.copyWith(fontWeight: FontWeight.w700),
     );
     final chip = TierChip(tier: standing.chefTier, dense: true);
@@ -409,25 +408,25 @@ class _Stats extends StatelessWidget {
     final scheme = theme.colorScheme;
 
     Widget stat(IconData icon, int value, String label) => Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 14, color: scheme.onSurfaceVariant),
-            const SizedBox(width: 4),
-            Flexible(
-              child: Text(
-                // `countOf` drops the plural's "s" at one — "1 recipes" was on
-                // the board's first render (B031).
-                compact ? groupedCount(value) : countOf(value, label),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: scheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 14, color: scheme.onSurfaceVariant),
+        const SizedBox(width: 4),
+        Flexible(
+          child: Text(
+            // `countOf` drops the plural's "s" at one — "1 recipes" was on
+            // the board's first render (B031).
+            compact ? groupedCount(value) : countOf(value, label),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: scheme.onSurfaceVariant,
+              fontWeight: FontWeight.w600,
             ),
-          ],
-        );
+          ),
+        ),
+      ],
+    );
 
     return Wrap(
       spacing: compact ? 12 : AppSpacing.md,

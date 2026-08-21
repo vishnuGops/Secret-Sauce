@@ -80,12 +80,12 @@ abstract final class ChefScoring {
 
   /// The rung above [tier], or null at the top.
   static ChefTier? nextTier(ChefTier tier) => switch (tier) {
-        ChefTier.homeCook => ChefTier.lineCook,
-        ChefTier.lineCook => ChefTier.sousChef,
-        ChefTier.sousChef => ChefTier.headChef,
-        ChefTier.headChef => ChefTier.masterChef,
-        ChefTier.masterChef => null,
-      };
+    ChefTier.homeCook => ChefTier.lineCook,
+    ChefTier.lineCook => ChefTier.sousChef,
+    ChefTier.sousChef => ChefTier.headChef,
+    ChefTier.headChef => ChefTier.masterChef,
+    ChefTier.masterChef => null,
+  };
 
   /// Points still needed to reach the next tier, or null once [ChefTier.masterChef]
   /// is reached. Derived from [score] rather than the stored tier, so a card

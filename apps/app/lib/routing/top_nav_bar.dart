@@ -23,11 +23,7 @@ import 'package:app/routing/nav_destinations.dart';
 /// * Profile is not a destination; it is the avatar, which carries a primary
 ///   ring and a tier dot so rank is readable at 34px.
 class TopNavBar extends ConsumerWidget implements PreferredSizeWidget {
-  const TopNavBar({
-    super.key,
-    required this.location,
-    required this.height,
-  });
+  const TopNavBar({super.key, required this.location, required this.height});
 
   /// Current shell location, e.g. `/discover`.
   final String location;
@@ -75,10 +71,7 @@ class TopNavBar extends ConsumerWidget implements PreferredSizeWidget {
           child: CustomMultiChildLayout(
             delegate: _BarLayout(gap: AppSpacing.md),
             children: [
-              LayoutId(
-                id: _BarSlot.brand,
-                child: _Brand(expanded: expanded),
-              ),
+              LayoutId(id: _BarSlot.brand, child: _Brand(expanded: expanded)),
               LayoutId(
                 id: _BarSlot.nav,
                 child: _NavPill(
@@ -92,9 +85,10 @@ class TopNavBar extends ConsumerWidget implements PreferredSizeWidget {
               ),
               LayoutId(
                 id: _BarSlot.actions,
-                child: signedIn
-                    ? _AccountMenu(expanded: expanded)
-                    : _SignedOutActions(expanded: expanded),
+                child:
+                    signedIn
+                        ? _AccountMenu(expanded: expanded)
+                        : _SignedOutActions(expanded: expanded),
               ),
             ],
           ),
@@ -262,7 +256,9 @@ class _NavPill extends StatelessWidget {
   /// the same class of bug as B001/B002/B016.
   _LabelMode _fit(double available, TextStyle style, TextScaler scaler) {
     final wanted =
-        expanded ? [_LabelMode.all, _LabelMode.activeOnly] : [_LabelMode.activeOnly];
+        expanded
+            ? [_LabelMode.all, _LabelMode.activeOnly]
+            : [_LabelMode.activeOnly];
     if (!available.isFinite) return wanted.first;
 
     const iconOnly = _kItemPadIconH * 2 + _kIconSize;
@@ -276,7 +272,8 @@ class _NavPill extends StatelessWidget {
       final gap = mode == _LabelMode.none ? _kItemGapIcons : _kItemGapLabelled;
       var width = _kTrackPad * 2 + gap * (destinations.length - 1);
       for (var i = 0; i < destinations.length; i++) {
-        final showLabel = mode == _LabelMode.all ||
+        final showLabel =
+            mode == _LabelMode.all ||
             (mode == _LabelMode.activeOnly && i == selectedIndex);
         width += showLabel ? labelled(destinations[i]) : iconOnly;
       }
@@ -378,9 +375,7 @@ class _NavItem extends StatelessWidget {
       ),
     );
 
-    return showLabel
-        ? item
-        : Tooltip(message: destination.label, child: item);
+    return showLabel ? item : Tooltip(message: destination.label, child: item);
   }
 }
 
@@ -420,9 +415,8 @@ class _AccountMenu extends ConsumerWidget {
     // valueOrNull, not `when`: a slow or failed profile read must still leave a
     // usable account button rather than a spinner in the chrome.
     final profile = ref.watch(myProfileProvider).valueOrNull;
-    final name = (profile?.displayName ?? '').isEmpty
-        ? 'Account'
-        : profile!.displayName;
+    final name =
+        (profile?.displayName ?? '').isEmpty ? 'Account' : profile!.displayName;
 
     return PopupMenuButton<_AccountAction>(
       tooltip: name,
@@ -430,46 +424,48 @@ class _AccountMenu extends ConsumerWidget {
       onSelected: (action) async {
         await _run(context, ref, action);
       },
-      itemBuilder: (context) => [
-        if (profile != null)
-          PopupMenuItem(
-            enabled: false,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.titleSmall
-                      ?.copyWith(fontWeight: FontWeight.w700),
+      itemBuilder:
+          (context) => [
+            if (profile != null)
+              PopupMenuItem(
+                enabled: false,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    TierChip(tier: profile.chefTier),
+                  ],
                 ),
-                const SizedBox(height: AppSpacing.xs),
-                TierChip(tier: profile.chefTier),
-              ],
+              ),
+            if (profile != null) const PopupMenuDivider(),
+            const PopupMenuItem(
+              value: _AccountAction.profile,
+              child: ListTile(
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+                leading: Icon(Icons.person_outline),
+                title: Text('Profile'),
+              ),
             ),
-          ),
-        if (profile != null) const PopupMenuDivider(),
-        const PopupMenuItem(
-          value: _AccountAction.profile,
-          child: ListTile(
-            dense: true,
-            contentPadding: EdgeInsets.zero,
-            leading: Icon(Icons.person_outline),
-            title: Text('Profile'),
-          ),
-        ),
-        const PopupMenuItem(
-          value: _AccountAction.signOut,
-          child: ListTile(
-            dense: true,
-            contentPadding: EdgeInsets.zero,
-            leading: Icon(Icons.logout),
-            title: Text('Sign out'),
-          ),
-        ),
-      ],
+            const PopupMenuItem(
+              value: _AccountAction.signOut,
+              child: ListTile(
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+                leading: Icon(Icons.logout),
+                title: Text('Sign out'),
+              ),
+            ),
+          ],
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

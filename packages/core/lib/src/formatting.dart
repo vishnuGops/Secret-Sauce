@@ -58,7 +58,8 @@ String monthYear(DateTime date) => '${_kMonths[date.month - 1]} ${date.year}';
 /// **timestamps to compare**, and an ISO date sorts and scans by column. The two
 /// formatters live together (OPT-A7) because they were hand-rolled one screen
 /// apart, each private to its own widget.
-String isoDate(DateTime date) => '${date.year}-'
+String isoDate(DateTime date) =>
+    '${date.year}-'
     '${date.month.toString().padLeft(2, '0')}-'
     '${date.day.toString().padLeft(2, '0')}';
 

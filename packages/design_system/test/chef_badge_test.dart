@@ -170,8 +170,9 @@ void main() {
       });
     }
 
-    testWidgets('renders the badge only when an owner is embedded',
-        (tester) async {
+    testWidgets('renders the badge only when an owner is embedded', (
+      tester,
+    ) async {
       const noOwner = Recipe(id: '1', ownerId: 'd1', title: 'No embed');
       await tester.pumpWidget(
         _wrap(const RecipeCard(recipe: noOwner), width: 320),
@@ -186,16 +187,14 @@ void main() {
 
     testWidgets('showChef: false suppresses the badge', (tester) async {
       await tester.pumpWidget(
-        _wrap(
-          const RecipeCard(recipe: worstCase, showChef: false),
-          width: 320,
-        ),
+        _wrap(const RecipeCard(recipe: worstCase, showChef: false), width: 320),
       );
       expect(find.byType(ChefBadge), findsNothing);
     });
 
-    testWidgets('badge and visibility pill coexist without overflow',
-        (tester) async {
+    testWidgets('badge and visibility pill coexist without overflow', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         _wrap(
           const RecipeCard(recipe: worstCase, showVisibility: true),
@@ -233,24 +232,25 @@ void main() {
 // in no test, because nothing overflowed.
 void _b055() {
   Widget host({required bool onImage}) => MaterialApp(
-        theme: AppTheme.light(),
-        home: Scaffold(
-          body: Center(
-            child: SizedBox(
-              width: 240,
-              child: ChefBadge(
-                name: 'Amara Okonkwo',
-                tier: ChefTier.masterChef,
-                compact: true,
-                onSurfaceImage: onImage,
-              ),
-            ),
+    theme: AppTheme.light(),
+    home: Scaffold(
+      body: Center(
+        child: SizedBox(
+          width: 240,
+          child: ChefBadge(
+            name: 'Amara Okonkwo',
+            tier: ChefTier.masterChef,
+            compact: true,
+            onSurfaceImage: onImage,
           ),
         ),
-      );
+      ),
+    ),
+  );
 
-  testWidgets('on a cover image the tier uses the dark-surface shade',
-      (tester) async {
+  testWidgets('on a cover image the tier uses the dark-surface shade', (
+    tester,
+  ) async {
     await tester.pumpWidget(host(onImage: true));
 
     final label = tester.widget<Text>(
@@ -266,8 +266,9 @@ void _b055() {
     );
   });
 
-  testWidgets('on a theme surface it still uses the page brightness',
-      (tester) async {
+  testWidgets('on a theme surface it still uses the page brightness', (
+    tester,
+  ) async {
     await tester.pumpWidget(host(onImage: false));
 
     final label = tester.widget<Text>(

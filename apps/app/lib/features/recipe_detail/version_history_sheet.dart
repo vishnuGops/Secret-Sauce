@@ -8,10 +8,7 @@ class VersionHistorySheet extends StatelessWidget {
 
   final List<RecipeVersion> versions;
 
-  static Future<void> show(
-    BuildContext context,
-    List<RecipeVersion> versions,
-  ) {
+  static Future<void> show(BuildContext context, List<RecipeVersion> versions) {
     return showModalBottomSheet(
       context: context,
       showDragHandle: true,
@@ -38,14 +35,12 @@ class VersionHistorySheet extends StatelessWidget {
         return ListTile(
           leading: CircleAvatar(child: Text('v${v.versionNumber}')),
           title: Text(
-            v.changeSummary.isEmpty ? 'Version ${v.versionNumber}' : v.changeSummary,
+            v.changeSummary.isEmpty
+                ? 'Version ${v.versionNumber}'
+                : v.changeSummary,
           ),
-          subtitle: v.createdAt == null
-              ? null
-              : Text(isoDate(v.createdAt!)),
-          trailing: isLatest
-              ? const Chip(label: Text('Current'))
-              : null,
+          subtitle: v.createdAt == null ? null : Text(isoDate(v.createdAt!)),
+          trailing: isLatest ? const Chip(label: Text('Current')) : null,
         );
       },
     );

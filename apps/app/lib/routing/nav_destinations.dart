@@ -62,7 +62,7 @@ const kMobileDestinations = <NavDestination>[
 /// reads as "account". My Recipes only appears signed in: signed out it is a
 /// destination that can only bounce to `/auth`.
 List<NavDestination> webDestinations({required bool signedIn}) => [
-      _discover,
-      _chefs,
-      if (signedIn) _myRecipes,
-    ];
+  _discover,
+  _chefs,
+  if (signedIn) _myRecipes,
+];

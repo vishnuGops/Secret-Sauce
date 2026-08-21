@@ -34,12 +34,12 @@ class TierChip extends StatelessWidget {
   final bool onImage;
 
   static IconData iconFor(ChefTier tier) => switch (tier) {
-        ChefTier.homeCook => Icons.egg_outlined,
-        ChefTier.lineCook => Icons.outdoor_grill_outlined,
-        ChefTier.sousChef => Icons.restaurant_outlined,
-        ChefTier.headChef => Icons.local_fire_department_outlined,
-        ChefTier.masterChef => Icons.workspace_premium_outlined,
-      };
+    ChefTier.homeCook => Icons.egg_outlined,
+    ChefTier.lineCook => Icons.outdoor_grill_outlined,
+    ChefTier.sousChef => Icons.restaurant_outlined,
+    ChefTier.headChef => Icons.local_fire_department_outlined,
+    ChefTier.masterChef => Icons.workspace_premium_outlined,
+  };
 
   /// Accent color for [tier], readable on that brightness' surfaces.
   static Color colorFor(ChefTier tier, Brightness brightness) {
@@ -63,8 +63,7 @@ class TierChip extends StatelessWidget {
     final theme = Theme.of(context);
     // On a scrim the surface is dark whatever the page's brightness is, so the
     // dark-surface half of each tier's colour pair is the correct one.
-    final color =
-        colorFor(tier, onImage ? Brightness.dark : theme.brightness);
+    final color = colorFor(tier, onImage ? Brightness.dark : theme.brightness);
 
     return Container(
       padding: EdgeInsets.symmetric(
@@ -92,8 +91,10 @@ class TierChip extends StatelessWidget {
               tier.label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.labelSmall
-                  ?.copyWith(color: color, fontWeight: FontWeight.w700),
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: color,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ],

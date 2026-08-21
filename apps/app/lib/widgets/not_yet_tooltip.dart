@@ -16,5 +16,4 @@ Widget notYetTooltip({
   required bool enabled,
   required String message,
   required Widget child,
-}) =>
-    enabled ? child : Tooltip(message: message, child: child);
+}) => enabled ? child : Tooltip(message: message, child: child);

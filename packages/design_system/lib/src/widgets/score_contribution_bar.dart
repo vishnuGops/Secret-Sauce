@@ -26,15 +26,17 @@ class ScoreContributionBar extends StatelessWidget {
   final Color color;
 
   /// `× 3`, `× 0.2` — the weight without a pointless trailing zero.
-  static String weightLabel(double weight) => weight == weight.roundToDouble()
-      ? weight.toStringAsFixed(0)
-      : weight.toString();
+  static String weightLabel(double weight) =>
+      weight == weight.roundToDouble()
+          ? weight.toStringAsFixed(0)
+          : weight.toString();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
-    final share = total <= 0 ? 0.0 : (contribution.points / total).clamp(0, 1).toDouble();
+    final share =
+        total <= 0 ? 0.0 : (contribution.points / total).clamp(0, 1).toDouble();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,8 +57,9 @@ class ScoreContributionBar extends StatelessWidget {
             Text(
               groupedScore(contribution.points),
               maxLines: 1,
-              style: theme.textTheme.labelLarge
-                  ?.copyWith(fontWeight: FontWeight.w700),
+              style: theme.textTheme.labelLarge?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ],
         ),

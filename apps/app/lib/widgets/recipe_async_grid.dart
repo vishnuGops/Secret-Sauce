@@ -44,19 +44,23 @@ class RecipeAsyncGrid<N extends PagedRecipesNotifier> extends ConsumerWidget {
       skipLoadingOnReload: true,
       loading: () => const LoadingView(),
       error: (e, _) => ErrorView(message: friendlyError(e)),
-      data: (page) => page.recipes.isEmpty
-          ? empty
-          : RecipeGrid(
-              recipes: page.recipes,
-              showVisibility: showVisibility,
-              showChef: showChef,
-              footer: page.hasMore
-                  ? _LoadMoreButton(
-                      loading: page.loadingMore,
-                      onPressed: () => ref.read(provider.notifier).loadMore(),
-                    )
-                  : null,
-            ),
+      data:
+          (page) =>
+              page.recipes.isEmpty
+                  ? empty
+                  : RecipeGrid(
+                    recipes: page.recipes,
+                    showVisibility: showVisibility,
+                    showChef: showChef,
+                    footer:
+                        page.hasMore
+                            ? _LoadMoreButton(
+                              loading: page.loadingMore,
+                              onPressed:
+                                  () => ref.read(provider.notifier).loadMore(),
+                            )
+                            : null,
+                  ),
     );
   }
 }
@@ -77,28 +81,30 @@ class _LoadMoreButton extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(top: AppSpacing.sm),
         child: OutlinedButton.icon(
-          onPressed: loading
-              ? null
-              : () async {
-                  final messenger = ScaffoldMessenger.of(context);
-                  try {
-                    await onPressed();
-                  } catch (e) {
-                    // The rows already loaded survive a failed page (see
-                    // `PagedRecipesNotifier.loadMore`), so this is a snackbar
-                    // rather than an error screen.
-                    messenger.showSnackBar(
-                      SnackBar(content: Text(friendlyError(e))),
-                    );
-                  }
-                },
-          icon: loading
-              ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
-              : const Icon(Icons.expand_more),
+          onPressed:
+              loading
+                  ? null
+                  : () async {
+                    final messenger = ScaffoldMessenger.of(context);
+                    try {
+                      await onPressed();
+                    } catch (e) {
+                      // The rows already loaded survive a failed page (see
+                      // `PagedRecipesNotifier.loadMore`), so this is a snackbar
+                      // rather than an error screen.
+                      messenger.showSnackBar(
+                        SnackBar(content: Text(friendlyError(e))),
+                      );
+                    }
+                  },
+          icon:
+              loading
+                  ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                  : const Icon(Icons.expand_more),
           label: Text(loading ? 'Loading…' : 'Load more'),
         ),
       ),

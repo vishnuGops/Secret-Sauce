@@ -9,32 +9,39 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() {
-  test('a denied write reads as the exception s own sentence, not its class',
-      () {
-    const e = WriteDeniedException('save this recipe', detail: 'recipe abc');
-    final text = friendlyError(e);
+  test(
+    'a denied write reads as the exception s own sentence, not its class',
+    () {
+      const e = WriteDeniedException('save this recipe', detail: 'recipe abc');
+      final text = friendlyError(e);
 
-    expect(text, contains('Could not save this recipe'));
-    expect(text, isNot(contains('WriteDeniedException')));
-    // The detail is for the log, not the screen.
-    expect(text, isNot(contains('recipe abc')));
-  });
+      expect(text, contains('Could not save this recipe'));
+      expect(text, isNot(contains('WriteDeniedException')));
+      // The detail is for the log, not the screen.
+      expect(text, isNot(contains('recipe abc')));
+    },
+  );
 
-  test('42501 is the permission sentence, not "permission denied for table"',
-      () {
-    final text = friendlyError(
-      const PostgrestException(
-        message: 'permission denied for table recipes',
-        code: '42501',
-      ),
-    );
+  test(
+    '42501 is the permission sentence, not "permission denied for table"',
+    () {
+      final text = friendlyError(
+        const PostgrestException(
+          message: 'permission denied for table recipes',
+          code: '42501',
+        ),
+      );
 
-    expect(text, 'You do not have permission to do that.');
-  });
+      expect(text, 'You do not have permission to do that.');
+    },
+  );
 
   test('a single() that found nothing reads as not found', () {
     final text = friendlyError(
-      const PostgrestException(message: 'JSON object requested', code: 'PGRST116'),
+      const PostgrestException(
+        message: 'JSON object requested',
+        code: 'PGRST116',
+      ),
     );
 
     expect(text, contains('could not be found'));
@@ -52,13 +59,15 @@ void main() {
     expect(text, isNot(contains('syntax error')));
   });
 
-  test('auth messages are passed through — GoTrue already writes them for users',
-      () {
-    expect(
-      friendlyError(const AuthException('Invalid login credentials')),
-      'Invalid login credentials',
-    );
-  });
+  test(
+    'auth messages are passed through — GoTrue already writes them for users',
+    () {
+      expect(
+        friendlyError(const AuthException('Invalid login credentials')),
+        'Invalid login credentials',
+      );
+    },
+  );
 
   test('the signed-out StateError points at signing in (Gotcha 9)', () {
     expect(

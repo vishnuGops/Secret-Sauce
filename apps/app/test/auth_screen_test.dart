@@ -57,24 +57,29 @@ class _FakeAuth implements AuthRepository {
 /// nothing in it, since this test is about the door, not the room.
 class _FakeDiscover implements DiscoverRepository {
   @override
-  Future<List<Recipe>> popular({int limit = kRecipePageSize, int offset = 0}) async =>
-      const [];
+  Future<List<Recipe>> popular({
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) async => const [];
 
   @override
-  Future<List<Recipe>> trending({int limit = kRecipePageSize, int offset = 0}) async =>
-      const [];
+  Future<List<Recipe>> trending({
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) async => const [];
 
   @override
-  Future<List<Recipe>> recent({int limit = kRecipePageSize, int offset = 0}) async =>
-      const [];
+  Future<List<Recipe>> recent({
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) async => const [];
 
   @override
   Future<List<Recipe>> search(
     String query, {
     int limit = kRecipePageSize,
     int offset = 0,
-  }) async =>
-      const [];
+  }) async => const [];
 }
 
 Future<GoRouter> _pumpAt(
@@ -117,10 +122,16 @@ Future<void> _fill(
   String? name,
 }) async {
   if (name != null) {
-    await tester.enterText(find.widgetWithText(TextFormField, 'Display name'), name);
+    await tester.enterText(
+      find.widgetWithText(TextFormField, 'Display name'),
+      name,
+    );
   }
   await tester.enterText(find.widgetWithText(TextFormField, 'Email'), email);
-  await tester.enterText(find.widgetWithText(TextFormField, 'Password'), password);
+  await tester.enterText(
+    find.widgetWithText(TextFormField, 'Password'),
+    password,
+  );
 }
 
 void main() {
@@ -139,7 +150,9 @@ void main() {
     expect(find.widgetWithText(TextFormField, 'Display name'), findsOneWidget);
   });
 
-  testWidgets('the toggle switches sides after the initial mode', (tester) async {
+  testWidgets('the toggle switches sides after the initial mode', (
+    tester,
+  ) async {
     await _pumpAt(tester, Routes.auth, _FakeAuth());
 
     await tester.tap(find.text("Don't have an account? Sign up"));
@@ -161,8 +174,9 @@ void main() {
     expect(find.text('Min 6 characters'), findsOneWidget);
   });
 
-  testWidgets('a valid sign-up sends the display name and leaves the screen',
-      (tester) async {
+  testWidgets('a valid sign-up sends the display name and leaves the screen', (
+    tester,
+  ) async {
     final auth = _FakeAuth();
     final router = await _pumpAt(tester, Routes.signUp, auth);
 
@@ -179,9 +193,12 @@ void main() {
     expect(_location(router), Routes.discover);
   });
 
-  testWidgets('a rejected sign-in shows the mapped message and stays put',
-      (tester) async {
-    final auth = _FakeAuth(failWith: const AuthException('Invalid login credentials'));
+  testWidgets('a rejected sign-in shows the mapped message and stays put', (
+    tester,
+  ) async {
+    final auth = _FakeAuth(
+      failWith: const AuthException('Invalid login credentials'),
+    );
     final router = await _pumpAt(tester, Routes.auth, auth);
 
     await _fill(tester, email: 'cook@example.test', password: 'good-password');
@@ -190,6 +207,10 @@ void main() {
 
     expect(find.text('Invalid login credentials'), findsOneWidget);
     expect(find.textContaining('AuthException'), findsNothing);
-    expect(_location(router), Routes.auth, reason: 'a failed sign-in navigated');
+    expect(
+      _location(router),
+      Routes.auth,
+      reason: 'a failed sign-in navigated',
+    );
   });
 }

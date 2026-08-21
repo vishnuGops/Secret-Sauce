@@ -122,9 +122,11 @@ This repo is pinned to **Flutter 3.44.8 / Dart 3.12.2** and **melos 6.x**. Both 
   melos run test --no-select         # needed
   melos run build_runner --no-select # needed
   ```
-- **`pubspec.lock` is git-ignored** (`.gitignore:7`), so dependency resolution is not reproducible
-  between machines — the same commit can resolve different `analyzer` versions on different days.
-  Pinning the SDK is what keeps this stable today; committing the lockfiles would make it exact.
+- **`pubspec.lock` is committed** (OPT-T4, closing B009). Resolution used to differ between
+  machines and between days — the same commit could pull a different `analyzer` — which is how
+  "B005 appeared suddenly" happened. All four lockfiles are now tracked, so a dependency change is
+  a reviewable diff. `melos bootstrap` respects them; delete a lockfile only when you mean to
+  re-resolve.
 
 Also verified on this machine: Windows 11 **ARM64**. Flutter 3.44.8 has no ARM64 Dart SDK and
 transparently falls back to the x64 build, which works.
@@ -238,14 +240,14 @@ idempotent.
 ```powershell
 melos run analyze   # flutter analyze across all packages
 melos run test      # run tests
-melos run format    # format code — see the warning below
+melos run format    # format code (tall style)
 ```
 
-> **Don't run `melos run format` casually — it breaks `melos run analyze` (B027).** `dart format`
-> chooses its style from the package's language version; all four pubspecs declare
-> `sdk: ">=3.4.0 <4.0.0"`, which is below the 3.7 cutoff, so the formatter rewrites the tree into
-> the legacy short style and strips the trailing commas that `require_trailing_commas` requires.
-> Fix is to raise the `sdk:` lower bound to `>=3.7.0` (one repo-wide reformat) or drop the lint.
+> **`melos run format` is safe (B027, fixed by OPT-T4).** It used to break `melos run analyze`:
+> `dart format` chooses its style from the package's language version, and all four pubspecs
+> declared `sdk: ">=3.4.0 <4.0.0"` — below the 3.7 cutoff — so it rewrote the tree into the legacy
+> short style and stripped the trailing commas `require_trailing_commas` requires. The bound is
+> now `>=3.7.0` and the repo was reformatted once, whole. Don't lower it again.
 
 ## Tasks (melos)
 

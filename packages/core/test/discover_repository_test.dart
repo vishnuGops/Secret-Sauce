@@ -15,25 +15,27 @@ import 'support/fake_supabase.dart';
 }
 
 void main() {
-  test('popular and trending pass the page to the RPC and ask for the embed',
-      () async {
-    for (final tab in ['popular', 'trending']) {
-      final (:http, :repo) = _repo();
+  test(
+    'popular and trending pass the page to the RPC and ask for the embed',
+    () async {
+      for (final tab in ['popular', 'trending']) {
+        final (:http, :repo) = _repo();
 
-      if (tab == 'popular') {
-        await repo.popular(limit: 20, offset: 40);
-      } else {
-        await repo.trending(limit: 20, offset: 40);
+        if (tab == 'popular') {
+          await repo.popular(limit: 20, offset: 40);
+        } else {
+          await repo.trending(limit: 20, offset: 40);
+        }
+
+        final req = http.requests.single;
+        expect(req.url.path, endsWith('/rpc/recipes_$tab'));
+        expect(req.json, {'p_limit': 20, 'p_offset': 40});
+        // `setof recipes`, so the owner embedding rides along — the chef badge
+        // ships with the list instead of costing a lookup per card.
+        expect(req.select, contains('owner:profiles!recipes_owner_id_fkey'));
       }
-
-      final req = http.requests.single;
-      expect(req.url.path, endsWith('/rpc/recipes_$tab'));
-      expect(req.json, {'p_limit': 20, 'p_offset': 40});
-      // `setof recipes`, so the owner embedding rides along — the chef badge
-      // ships with the list instead of costing a lookup per card.
-      expect(req.select, contains('owner:profiles!recipes_owner_id_fkey'));
-    }
-  });
+    },
+  );
 
   test('search sends the query and the page', () async {
     final (:http, :repo) = _repo();

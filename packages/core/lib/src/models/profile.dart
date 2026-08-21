@@ -23,5 +23,6 @@ class Profile with _$Profile {
     @JsonKey(name: 'public_recipe_count') @Default(0) int publicRecipeCount,
   }) = _Profile;
 
-  factory Profile.fromJson(Map<String, dynamic> json) => _$ProfileFromJson(json);
+  factory Profile.fromJson(Map<String, dynamic> json) =>
+      _$ProfileFromJson(json);
 }

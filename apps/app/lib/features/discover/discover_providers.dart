@@ -20,8 +20,8 @@ class PopularRecipesNotifier extends PagedRecipesNotifier {
 
 final popularRecipesProvider =
     AsyncNotifierProvider.autoDispose<PopularRecipesNotifier, RecipePage>(
-  PopularRecipesNotifier.new,
-);
+      PopularRecipesNotifier.new,
+    );
 
 class TrendingRecipesNotifier extends PagedRecipesNotifier {
   @override
@@ -34,8 +34,8 @@ class TrendingRecipesNotifier extends PagedRecipesNotifier {
 
 final trendingRecipesProvider =
     AsyncNotifierProvider.autoDispose<TrendingRecipesNotifier, RecipePage>(
-  TrendingRecipesNotifier.new,
-);
+      TrendingRecipesNotifier.new,
+    );
 
 class RecentRecipesNotifier extends PagedRecipesNotifier {
   @override
@@ -48,8 +48,8 @@ class RecentRecipesNotifier extends PagedRecipesNotifier {
 
 final recentRecipesProvider =
     AsyncNotifierProvider.autoDispose<RecentRecipesNotifier, RecipePage>(
-  RecentRecipesNotifier.new,
-);
+      RecentRecipesNotifier.new,
+    );
 
 /// Current search query for Discover.
 final searchQueryProvider = StateProvider.autoDispose<String>((ref) => '');
@@ -110,5 +110,5 @@ class SearchRecipesNotifier extends PagedRecipesNotifier {
 
 final searchResultsProvider =
     AsyncNotifierProvider.autoDispose<SearchRecipesNotifier, RecipePage>(
-  SearchRecipesNotifier.new,
-);
+      SearchRecipesNotifier.new,
+    );

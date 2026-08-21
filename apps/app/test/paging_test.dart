@@ -14,9 +14,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 List<Recipe> _page(int from, int count) => [
-      for (var i = from; i < from + count; i++)
-        Recipe(id: 'r$i', ownerId: 'u1', title: 'Recipe $i'),
-    ];
+  for (var i = from; i < from + count; i++)
+    Recipe(id: 'r$i', ownerId: 'u1', title: 'Recipe $i'),
+];
 
 /// Records every `(limit, offset)` it is asked for and serves from a fixed
 /// corpus, exactly as `recipes_popular(p_limit, p_offset)` does.
@@ -60,17 +60,19 @@ ProviderContainer _container(DiscoverRepository repo) {
 
 void main() {
   group('PagedRecipesNotifier', () {
-    test('the first page is one page, and a full page means there is more',
-        () async {
-      final repo = _PagingDiscoverRepository();
-      final c = _container(repo);
+    test(
+      'the first page is one page, and a full page means there is more',
+      () async {
+        final repo = _PagingDiscoverRepository();
+        final c = _container(repo);
 
-      final page = await c.read(popularRecipesProvider.future);
+        final page = await c.read(popularRecipesProvider.future);
 
-      expect(repo.calls, [(kRecipePageSize, 0)]);
-      expect(page.recipes, hasLength(kRecipePageSize));
-      expect(page.hasMore, isTrue);
-    });
+        expect(repo.calls, [(kRecipePageSize, 0)]);
+        expect(page.recipes, hasLength(kRecipePageSize));
+        expect(page.hasMore, isTrue);
+      },
+    );
 
     test('loadMore appends the next page at the right offset', () async {
       final repo = _PagingDiscoverRepository();
@@ -119,10 +121,18 @@ void main() {
       await c.read(popularRecipesProvider.future);
       await c.read(popularRecipesProvider.notifier).loadMore();
 
-      final ids = c.read(popularRecipesProvider).requireValue.recipes
-          .map((r) => r.id)
-          .toList();
-      expect(ids.toSet(), hasLength(ids.length), reason: 'a row was duplicated');
+      final ids =
+          c
+              .read(popularRecipesProvider)
+              .requireValue
+              .recipes
+              .map((r) => r.id)
+              .toList();
+      expect(
+        ids.toSet(),
+        hasLength(ids.length),
+        reason: 'a row was duplicated',
+      );
       // The full page still counts as "there is more", even though five of its
       // rows were already on screen.
       expect(c.read(popularRecipesProvider).requireValue.hasMore, isTrue);
@@ -160,8 +170,9 @@ void main() {
   });
 
   group('RecipeAsyncGrid', () {
-    testWidgets('offers Load more only while the server has more',
-        (tester) async {
+    testWidgets('offers Load more only while the server has more', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(1000, 1200);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.reset);
@@ -197,8 +208,9 @@ void main() {
       expect(find.text('Load more'), findsNothing);
     });
 
-    testWidgets('the footer survives the narrow envelope at 2.0x text scale',
-        (tester) async {
+    testWidgets('the footer survives the narrow envelope at 2.0x text scale', (
+      tester,
+    ) async {
       // The card's own envelope (CLAUDE.md #13): narrowest column the grid
       // packs to, largest accessibility scale. The footer is new furniture in
       // that space, so it gets checked at the same corner.
@@ -209,8 +221,9 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            discoverRepositoryProvider
-                .overrideWithValue(_PagingDiscoverRepository()),
+            discoverRepositoryProvider.overrideWithValue(
+              _PagingDiscoverRepository(),
+            ),
           ],
           child: MaterialApp(
             theme: AppTheme.light(),

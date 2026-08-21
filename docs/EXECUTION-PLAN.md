@@ -1287,11 +1287,21 @@ below are targeted, not structural.
     repository, a successful sign-up sends the display name and lands on Discover, and a rejected
     sign-in shows `friendlyError`'s sentence and **stays on `/auth`**.
   Discover already had `discover_search_test.dart` (OPT-P8) and `paging_test.dart` (OPT-P9).
-- **T4 — toolchain debt, one decision each**: commit `pubspec.lock` (B009 — root cause of
-  "B005 appeared suddenly"); raise the `sdk:` lower bound to ≥3.7 so `dart format` emits the
-  tall style and B027's format-breaks-analyze trap closes (one whole-repo reformat commit);
-  then `freezed` 3.x migration (B005's permanent fix — unpins Flutter, breaking model-syntax
-  change, its own change set).
+- **T4 — toolchain debt — 2 of 3 DONE.**
+  - **`pubspec.lock` committed** (B009), all four. Resolution was previously free to differ
+    between machines and between days, which is the root cause of "B005 appeared suddenly": the
+    same commit could pull a different `analyzer`. A dependency change is now a reviewable diff.
+  - **`sdk: ">=3.7.0"`** in all four pubspecs plus one whole-repo reformat (103 files). `dart
+    format` picks its style from the *package's* language version, so under 3.4 it emitted the
+    legacy short style and stripped the trailing commas `require_trailing_commas` demands — format
+    and analyze could not both be satisfied (B027). Verified in the order that matters:
+    `melos run format` **then** `melos run analyze` → SUCCESS, and all 281 tests still pass. The
+    bound is now load-bearing in the other direction: lowering it re-arms the trap.
+  - **`freezed` 3.x deferred**, tracked as OPT-T4c. It is a breaking model-syntax migration across
+    every `@freezed` class plus a `build_runner`/`analyzer` bump, and its only prize is unpinning
+    Flutter — which nothing currently needs, and which the pin exists to prevent (B005). Landing it
+    at the tail of a large batch, where a regression would be attributed to the wrong change, is
+    exactly what "its own change set" was warning against.
 - **T5 — screenshots — DONE**, and it paid for itself on the first image.
   `npx playwright install chrome` **fails on this machine** — "Failed to install Google Chrome…
   re-running as Administrator may help" — so branded Chrome is still missing and the Playwright

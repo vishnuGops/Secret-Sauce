@@ -42,14 +42,15 @@ Future<void> showChefDetail(BuildContext context, ChefStanding standing) {
     // Same reason as the sheet: without this the scrim stops at the shell's
     // body and the top navigation bar stays undimmed above the dialog.
     useRootNavigator: true,
-    builder: (_) => Dialog(
-      insetPadding: const EdgeInsets.all(AppSpacing.lg),
-      clipBehavior: Clip.antiAlias,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 1152, maxHeight: 720),
-        child: ChefDetailView(standing: standing),
-      ),
-    ),
+    builder:
+        (_) => Dialog(
+          insetPadding: const EdgeInsets.all(AppSpacing.lg),
+          clipBehavior: Clip.antiAlias,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1152, maxHeight: 720),
+            child: ChefDetailView(standing: standing),
+          ),
+        ),
   );
 }
 
@@ -84,41 +85,42 @@ class ChefDetailView extends ConsumerWidget {
           joined: detail.valueOrNull?.profile?.createdAt,
         ),
         Expanded(
-          child: compact
-              ? ListView(
-                  padding: const EdgeInsets.all(AppSpacing.md),
-                  children: [
-                    scorePanel,
-                    const Divider(height: AppSpacing.xl),
-                    recipesPanel,
-                  ],
-                )
-              : Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          border: Border(
-                            right: BorderSide(
-                              color: theme.colorScheme.outlineVariant,
+          child:
+              compact
+                  ? ListView(
+                    padding: const EdgeInsets.all(AppSpacing.md),
+                    children: [
+                      scorePanel,
+                      const Divider(height: AppSpacing.xl),
+                      recipesPanel,
+                    ],
+                  )
+                  : Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              right: BorderSide(
+                                color: theme.colorScheme.outlineVariant,
+                              ),
                             ),
                           ),
+                          child: SingleChildScrollView(
+                            padding: const EdgeInsets.all(AppSpacing.lg),
+                            child: scorePanel,
+                          ),
                         ),
+                      ),
+                      Expanded(
                         child: SingleChildScrollView(
                           padding: const EdgeInsets.all(AppSpacing.lg),
-                          child: scorePanel,
+                          child: recipesPanel,
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.all(AppSpacing.lg),
-                        child: recipesPanel,
-                      ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
         ),
       ],
     );
@@ -208,8 +210,9 @@ class _Header extends StatelessWidget {
                     TierChip(tier: standing.chefTier),
                     Text(
                       facts.join(' · '),
-                      style: theme.textTheme.bodySmall
-                          ?.copyWith(color: scheme.onSurfaceVariant),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
                     ),
                   ],
                 ),

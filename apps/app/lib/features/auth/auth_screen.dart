@@ -52,9 +52,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     final state = ref.read(authControllerProvider);
     if (!mounted) return;
     if (state.hasError) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(friendlyError(state.error))),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(friendlyError(state.error))));
     } else if (context.canPop()) {
       context.pop();
     } else {
@@ -88,9 +88,14 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   if (_isSignUp) ...[
                     TextFormField(
                       controller: _name,
-                      decoration: const InputDecoration(labelText: 'Display name'),
-                      validator: (v) =>
-                          (v == null || v.trim().isEmpty) ? 'Required' : null,
+                      decoration: const InputDecoration(
+                        labelText: 'Display name',
+                      ),
+                      validator:
+                          (v) =>
+                              (v == null || v.trim().isEmpty)
+                                  ? 'Required'
+                                  : null,
                     ),
                     const SizedBox(height: AppSpacing.md),
                   ],
@@ -98,36 +103,46 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     controller: _email,
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(labelText: 'Email'),
-                    validator: (v) =>
-                        (v == null || !v.contains('@')) ? 'Enter a valid email' : null,
+                    validator:
+                        (v) =>
+                            (v == null || !v.contains('@'))
+                                ? 'Enter a valid email'
+                                : null,
                   ),
                   const SizedBox(height: AppSpacing.md),
                   TextFormField(
                     controller: _password,
                     obscureText: true,
                     decoration: const InputDecoration(labelText: 'Password'),
-                    validator: (v) =>
-                        (v == null || v.length < 6) ? 'Min 6 characters' : null,
+                    validator:
+                        (v) =>
+                            (v == null || v.length < 6)
+                                ? 'Min 6 characters'
+                                : null,
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   FilledButton(
                     onPressed: isLoading ? null : _submit,
-                    child: isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : Text(_isSignUp ? 'Sign up' : 'Sign in'),
+                    child:
+                        isLoading
+                            ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                            : Text(_isSignUp ? 'Sign up' : 'Sign in'),
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   TextButton(
-                    onPressed: isLoading
-                        ? null
-                        : () => setState(() => _isSignUp = !_isSignUp),
-                    child: Text(_isSignUp
-                        ? 'Already have an account? Sign in'
-                        : "Don't have an account? Sign up"),
+                    onPressed:
+                        isLoading
+                            ? null
+                            : () => setState(() => _isSignUp = !_isSignUp),
+                    child: Text(
+                      _isSignUp
+                          ? 'Already have an account? Sign in'
+                          : "Don't have an account? Sign up",
+                    ),
                   ),
                 ],
               ),

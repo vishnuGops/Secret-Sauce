@@ -152,8 +152,8 @@ for `channel: stable`; bumps `freezed`/`json_serializable`/`analyzer` constraint
 matching note in `README.md#toolchain-versions`; drops `--no-select` from a `melos run` of a
 `packageFilters` script — `test`, `build_runner`, `build:*`, `gen:icons` (B006: picker aborts with
 `StdinException: Error getting terminal echo mode` in any non-TTY). On dependency changes, note
-that `pubspec.lock` is git-ignored (`.gitignore:7`, B009 still **open**), so widening a constraint
-resolves differently per machine and per day.
+that `pubspec.lock` is **committed** (B009, closed by OPT-T4) — a dependency change must arrive
+with its lockfile diff, and a diff that re-ignores the lockfiles is itself a finding.
 
 B007 (`melos` exits 0 after crashing) is a **`melos.bat` shim bug — Windows/local shells only**.
 Linux CI's wrapper propagates exit codes, so `ci.yml` relying on them is correct and **not** a

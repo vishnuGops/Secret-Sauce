@@ -34,4 +34,5 @@ export 'src/repositories/chef_repository.dart';
 export 'src/providers.dart';
 
 // Re-export Supabase types commonly used by the UI layer.
-export 'package:supabase_flutter/supabase_flutter.dart' show AuthState, AuthChangeEvent;
+export 'package:supabase_flutter/supabase_flutter.dart'
+    show AuthState, AuthChangeEvent;

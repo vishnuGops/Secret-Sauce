@@ -38,15 +38,17 @@ class ChefRecipesPanel extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
         Text(
           'Ranked by points contributed, not by rating.',
-          style:
-              theme.textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: scheme.onSurfaceVariant,
+          ),
         ),
         const SizedBox(height: AppSpacing.md),
         detail.when(
-          loading: () => const Padding(
-            padding: EdgeInsets.symmetric(vertical: AppSpacing.lg),
-            child: Center(child: CircularProgressIndicator()),
-          ),
+          loading:
+              () => const Padding(
+                padding: EdgeInsets.symmetric(vertical: AppSpacing.lg),
+                child: Center(child: CircularProgressIndicator()),
+              ),
           error: (e, _) => ChefNote(text: friendlyError(e)),
           data: (data) {
             if (data.topRecipesFailed) {
@@ -75,8 +77,9 @@ class ChefRecipesPanel extends StatelessWidget {
           // like, save, view and visibility change, so the copy says that.
           'Score and rank update the moment a recipe gains a like, save, or '
           'view — there is no nightly job.',
-          style:
-              theme.textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: scheme.onSurfaceVariant,
+          ),
         ),
       ],
     );
@@ -140,8 +143,9 @@ class _TopRecipeRow extends StatelessWidget {
                         Text(
                           '${groupedCount(recipe.likeCount)} likes · '
                           '${groupedCount(recipe.saveCount)} saves',
-                          style: theme.textTheme.bodySmall
-                              ?.copyWith(color: scheme.onSurfaceVariant),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: scheme.onSurfaceVariant,
+                          ),
                         ),
                       ],
                     ),
@@ -152,8 +156,9 @@ class _TopRecipeRow extends StatelessWidget {
               Text(
                 groupedScore(points),
                 maxLines: 1,
-                style: theme.textTheme.labelLarge
-                    ?.copyWith(fontWeight: FontWeight.w700),
+                style: theme.textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ],
           ),
@@ -174,7 +179,11 @@ class _Thumb extends StatelessWidget {
     final placeholder = Container(
       color: scheme.surfaceContainerHighest,
       alignment: Alignment.center,
-      child: Icon(Icons.restaurant_menu, size: 20, color: scheme.onSurfaceVariant),
+      child: Icon(
+        Icons.restaurant_menu,
+        size: 20,
+        color: scheme.onSurfaceVariant,
+      ),
     );
 
     return ClipRRect(
@@ -182,15 +191,17 @@ class _Thumb extends StatelessWidget {
       child: SizedBox(
         width: 56,
         height: 44,
-        child: url == null || url!.isEmpty
-            ? placeholder
-            : CachedNetworkImage(
-                imageUrl: url!,
-                fit: BoxFit.cover,
-                placeholder: (_, __) =>
-                    Container(color: scheme.surfaceContainerHighest),
-                errorWidget: (_, __, ___) => placeholder,
-              ),
+        child:
+            url == null || url!.isEmpty
+                ? placeholder
+                : CachedNetworkImage(
+                  imageUrl: url!,
+                  fit: BoxFit.cover,
+                  placeholder:
+                      (_, __) =>
+                          Container(color: scheme.surfaceContainerHighest),
+                  errorWidget: (_, __, ___) => placeholder,
+                ),
       ),
     );
   }
@@ -209,28 +220,30 @@ class _Totals extends StatelessWidget {
     final scheme = theme.colorScheme;
 
     Widget cell(int value, String label) => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
-              child: Text(
-                groupedCount(value),
-                maxLines: 1,
-                style: theme.textTheme.titleMedium
-                    ?.copyWith(fontWeight: FontWeight.w700),
-              ),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Text(
+            groupedCount(value),
+            maxLines: 1,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w700,
             ),
-            Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.labelSmall
-                  ?.copyWith(color: scheme.onSurfaceVariant),
-            ),
-          ],
-        );
+          ),
+        ),
+        Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: scheme.onSurfaceVariant,
+          ),
+        ),
+      ],
+    );
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,

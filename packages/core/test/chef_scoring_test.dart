@@ -94,7 +94,10 @@ void main() {
     test('sums back to the score', () {
       final rows = ChefScoring.breakdown(likes: 1980, saves: 780, views: 1745);
       final total = rows.fold<double>(0, (sum, r) => sum + r.points);
-      expect(total, closeTo(ChefScoring.score(likes: 1980, saves: 780, views: 1745), 1e-9));
+      expect(
+        total,
+        closeTo(ChefScoring.score(likes: 1980, saves: 780, views: 1745), 1e-9),
+      );
     });
   });
 

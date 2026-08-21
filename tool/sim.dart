@@ -81,11 +81,15 @@ void _validateSimBlocks(List<AuthoredRecipe> dishes, List<String> errors) {
         for (var i = 0; i < variants.length; i++) {
           final t = variants[i];
           if (t is! String || t.trim().isEmpty) {
-            errors.add('${dish.file}: sim.variant_titles[$i] must be a '
-                'non-empty string');
+            errors.add(
+              '${dish.file}: sim.variant_titles[$i] must be a '
+              'non-empty string',
+            );
           } else if (!t.contains('{title}')) {
-            errors.add('${dish.file}: sim.variant_titles[$i] must contain '
-                '"{title}" — it is a template, not a title');
+            errors.add(
+              '${dish.file}: sim.variant_titles[$i] must contain '
+              '"{title}" — it is a template, not a title',
+            );
           }
         }
       }
@@ -154,33 +158,47 @@ void _validateCoverage(
 
   final missingCategories = recipeCategories.difference(categories);
   if (missingCategories.isNotEmpty) {
-    issues.add('$where: no dish in ${missingCategories.length} categor'
-        '${missingCategories.length == 1 ? 'y' : 'ies'} '
-        '(${(missingCategories.toList()..sort()).join(', ')})');
+    issues.add(
+      '$where: no dish in ${missingCategories.length} categor'
+      '${missingCategories.length == 1 ? 'y' : 'ies'} '
+      '(${(missingCategories.toList()..sort()).join(', ')})',
+    );
   }
   if (cuisines.length < _minCuisines) {
-    issues.add('$where: only ${cuisines.length} distinct cuisines, '
-        'want at least $_minCuisines');
+    issues.add(
+      '$where: only ${cuisines.length} distinct cuisines, '
+      'want at least $_minCuisines',
+    );
   }
   if (difficulties.length < 3) {
-    issues.add('$where: difficulty spread is ${difficulties.length}/3 '
-        '(${(difficulties.toList()..sort()).join(', ')})');
+    issues.add(
+      '$where: difficulty spread is ${difficulties.length}/3 '
+      '(${(difficulties.toList()..sort()).join(', ')})',
+    );
   }
   if (noCook == 0) {
-    issues.add('$where: no no-cook dish (cook_minutes 0) — the detail screen '
-        'renders a cook time of zero differently');
+    issues.add(
+      '$where: no no-cook dish (cook_minutes 0) — the detail screen '
+      'renders a cook time of zero differently',
+    );
   }
   if (overnight == 0) {
-    issues.add('$where: no dish with an unattended step over 8 hours — '
-        'overnight timers are a distinct case (schema.json prep_minutes rule)');
+    issues.add(
+      '$where: no dish with an unattended step over 8 hours — '
+      'overnight timers are a distinct case (schema.json prep_minutes rule)',
+    );
   }
   if (multiGroup == 0) {
-    issues.add('$where: no multi-group dish — grouped ingredients are the '
-        'format\'s reason to exist (SDS §11.1)');
+    issues.add(
+      '$where: no multi-group dish — grouped ingredients are the '
+      'format\'s reason to exist (SDS §11.1)',
+    );
   }
   if (maxServings < 8) {
-    issues.add('$where: largest dish serves $maxServings — the servings scaler '
-        'needs a wide range to be worth testing');
+    issues.add(
+      '$where: largest dish serves $maxServings — the servings scaler '
+      'needs a wide range to be worth testing',
+    );
   }
 }
 
@@ -202,9 +220,10 @@ Map<String, dynamic> _document(AuthoredRecipe dish) {
   // `recipes` has no notes column, so a dish-level note is appended to the
   // description exactly as tool/recipes.dart does it. Same lossy-but-lossless
   // compromise, same reason.
-  final description = notes == null || notes.trim().isEmpty
-      ? r['description'] as String
-      : '${r['description']}\n\n$notes';
+  final description =
+      notes == null || notes.trim().isEmpty
+          ? r['description'] as String
+          : '${r['description']}\n\n$notes';
 
   return {
     'title': r['title'],
@@ -216,8 +235,9 @@ Map<String, dynamic> _document(AuthoredRecipe dish) {
     'cook_minutes': r['cook_minutes'],
     'servings': r['servings'],
     'attribution': r['attribution'],
-    'ingredient_groups':
-        normaliseIngredientGroups(r['ingredient_groups'] as List),
+    'ingredient_groups': normaliseIngredientGroups(
+      r['ingredient_groups'] as List,
+    ),
     'step_groups': normaliseStepGroups(r['step_groups'] as List),
     'weight': sim['weight'] ?? 1,
     'variant_titles': sim['variant_titles'] ?? const <String>[],
@@ -225,7 +245,9 @@ Map<String, dynamic> _document(AuthoredRecipe dish) {
 }
 
 String _generate(List<AuthoredRecipe> dishes) {
-  final buf = StringBuffer()..writeln('''
+  final buf =
+      StringBuffer()
+        ..writeln('''
 -- 1_sim_dishes.sql — GENERATED FILE. DO NOT EDIT BY HAND.
 --
 -- Source: simData/dishes/*.json  ·  Generator: tool/sim.dart
@@ -263,9 +285,9 @@ begin
   end if;
 end \$grants\$;
 ''')
-    ..writeln('-- ${'-' * 74}')
-    ..writeln('-- The dishes. ${dishes.length} of them, ordered by slug.')
-    ..writeln('-- ${'-' * 74}');
+        ..writeln('-- ${'-' * 74}')
+        ..writeln('-- The dishes. ${dishes.length} of them, ordered by slug.')
+        ..writeln('-- ${'-' * 74}');
 
   for (final dish in dishes) {
     buf
@@ -288,8 +310,10 @@ end \$grants\$;
     ..writeln(']::text[]);')
     ..writeln()
     ..writeln('do \$notice\$ begin')
-    ..writeln("  raise notice 'Dish library loaded (% dishes)', "
-        '(select count(*) from sim.dish);')
+    ..writeln(
+      "  raise notice 'Dish library loaded (% dishes)', "
+      '(select count(*) from sim.dish);',
+    )
     ..writeln('end \$notice\$;')
     ..writeln();
   return buf.toString();
@@ -322,8 +346,10 @@ Future<void> main(List<String> args) async {
     stderr.writeln('✖ ${errors.length} error(s) in $_dishesDir');
     exit(1);
   }
-  stdout.writeln('✔ ${set.recipes.length} dishes valid'
-      '${warnings.isEmpty ? '' : ' (${warnings.length} warning(s))'}');
+  stdout.writeln(
+    '✔ ${set.recipes.length} dishes valid'
+    '${warnings.isEmpty ? '' : ' (${warnings.length} warning(s))'}',
+  );
 
   if (action == 'validate') return;
 

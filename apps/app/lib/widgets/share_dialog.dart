@@ -118,7 +118,9 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
       _error = null;
     });
     try {
-      await ref.read(recipeRepositoryProvider).share(
+      await ref
+          .read(recipeRepositoryProvider)
+          .share(
             recipeId: widget.recipeId,
             userId: person.id,
             permission: _permission,
@@ -154,16 +156,17 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
               decoration: InputDecoration(
                 labelText: 'Search by display name',
                 prefixIcon: const Icon(Icons.person_search),
-                suffixIcon: _searching
-                    ? const Padding(
-                        padding: EdgeInsets.all(AppSpacing.sm),
-                        child: SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                      )
-                    : null,
+                suffixIcon:
+                    _searching
+                        ? const Padding(
+                          padding: EdgeInsets.all(AppSpacing.sm),
+                          child: SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        )
+                        : null,
               ),
               onChanged: _onQueryChanged,
             ),
@@ -192,7 +195,8 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
                   enabled: false,
                   label: notYetTooltip(
                     enabled: false,
-                    message: 'Shared editing is not built yet — '
+                    message:
+                        'Shared editing is not built yet — '
                         'recipes stay read-only for the people you share them with',
                     child: const Text('Can edit'),
                   ),
@@ -204,10 +208,7 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
             ),
             if (_error != null) ...[
               const SizedBox(height: AppSpacing.sm),
-              Text(
-                _error!,
-                style: TextStyle(color: theme.colorScheme.error),
-              ),
+              Text(_error!, style: TextStyle(color: theme.colorScheme.error)),
             ],
           ],
         ),
@@ -221,13 +222,14 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
           // Disabled until a person is picked: with two Daras on screen there is
           // no defensible "just share with whichever".
           onPressed: _busy || _selected == null ? null : _share,
-          child: _busy
-              ? const SizedBox(
-                  height: 18,
-                  width: 18,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
-              : const Text('Share'),
+          child:
+              _busy
+                  ? const SizedBox(
+                    height: 18,
+                    width: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                  : const Text('Share'),
         ),
       ],
     );
@@ -254,9 +256,9 @@ class _Matches extends StatelessWidget {
     if (matches.isEmpty) {
       return searched
           ? const Padding(
-              padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
-              child: Text('No user found with that name.'),
-            )
+            padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
+            child: Text('No user found with that name.'),
+          )
           : const SizedBox.shrink();
     }
 
@@ -280,7 +282,9 @@ class _Matches extends StatelessWidget {
               value: person.id,
               dense: true,
               title: Text(
-                person.displayName.isEmpty ? 'Unnamed cook' : person.displayName,
+                person.displayName.isEmpty
+                    ? 'Unnamed cook'
+                    : person.displayName,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),

@@ -100,8 +100,9 @@ void main() {
     expect(find.text(ChefTier.lineCook.label), findsOneWidget);
   });
 
-  testWidgets('Share stays disabled until one of them is picked',
-      (tester) async {
+  testWidgets('Share stays disabled until one of them is picked', (
+    tester,
+  ) async {
     final profiles = _FakeProfiles([_daraOne, _daraTwo]);
     final recipes = _RecordingRecipes();
     await _pump(tester, profiles: profiles, recipes: recipes);
@@ -146,8 +147,9 @@ void main() {
     expect(profiles.queries, ['Dara']);
   });
 
-  testWidgets('changing the query drops the previous selection',
-      (tester) async {
+  testWidgets('changing the query drops the previous selection', (
+    tester,
+  ) async {
     final profiles = _FakeProfiles([_daraOne]);
     final recipes = _RecordingRecipes();
     await _pump(tester, profiles: profiles, recipes: recipes);

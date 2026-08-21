@@ -16,17 +16,17 @@ const _recipes = <Recipe>[
 ];
 
 Widget _grid(double width) => MaterialApp(
-      theme: AppTheme.light(),
-      home: Scaffold(
-        body: Center(
-          child: SizedBox(
-            width: width,
-            height: 900,
-            child: const RecipeGrid(recipes: _recipes),
-          ),
-        ),
+  theme: AppTheme.light(),
+  home: Scaffold(
+    body: Center(
+      child: SizedBox(
+        width: width,
+        height: 900,
+        child: const RecipeGrid(recipes: _recipes),
       ),
-    );
+    ),
+  ),
+);
 
 /// The cards sharing the topmost row, left to right.
 List<Rect> _firstRow(WidgetTester tester) {

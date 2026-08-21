@@ -10,17 +10,20 @@ class DifficultyBadge extends StatelessWidget {
   final Difficulty difficulty;
 
   Color _color(ColorScheme scheme) => switch (difficulty) {
-        Difficulty.easy => Colors.green.shade600,
-        Difficulty.medium => Colors.orange.shade700,
-        Difficulty.hard => scheme.error,
-      };
+    Difficulty.easy => Colors.green.shade600,
+    Difficulty.medium => Colors.orange.shade700,
+    Difficulty.hard => scheme.error,
+  };
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final color = _color(scheme);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 2),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: 2,
+      ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(999),
@@ -38,10 +41,10 @@ class DifficultyBadge extends StatelessWidget {
               difficulty.label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context)
-                  .textTheme
-                  .labelSmall
-                  ?.copyWith(color: color, fontWeight: FontWeight.w600),
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                color: color,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],

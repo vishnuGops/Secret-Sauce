@@ -39,7 +39,10 @@ class _FakeAuth implements AuthRepository {
   Stream<AuthState> authStateChanges() => const Stream.empty();
 
   @override
-  Future<void> signIn({required String email, required String password}) async {}
+  Future<void> signIn({
+    required String email,
+    required String password,
+  }) async {}
 
   @override
   Future<void> signUp({
@@ -109,23 +112,23 @@ class _FakeRecipeRepository implements RecipeRepository {
   Future<String> fork(String sourceRecipeId) => throw UnimplementedError();
 
   @override
-  Future<List<Recipe>> listMine({int limit = kRecipePageSize, int offset = 0}) =>
-      throw UnimplementedError();
+  Future<List<Recipe>> listMine({
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) => throw UnimplementedError();
 
   @override
   Future<List<Recipe>> listSharedWithMe({
     int limit = kRecipePageSize,
     int offset = 0,
-  }) =>
-      throw UnimplementedError();
+  }) => throw UnimplementedError();
 
   @override
   Future<void> share({
     required String recipeId,
     required String userId,
     SharePermission permission = SharePermission.view,
-  }) =>
-      throw UnimplementedError();
+  }) => throw UnimplementedError();
 
   @override
   Future<void> unshare({required String recipeId, required String userId}) =>
@@ -151,8 +154,9 @@ Future<GoRouter> _pump(
     routes: [
       GoRoute(
         path: '/recipe/:id',
-        builder: (_, state) =>
-            RecipeDetailScreen(recipeId: state.pathParameters['id']!),
+        builder:
+            (_, state) =>
+                RecipeDetailScreen(recipeId: state.pathParameters['id']!),
       ),
       GoRoute(
         path: Routes.auth,
@@ -175,8 +179,9 @@ Future<GoRouter> _pump(
 }
 
 void main() {
-  testWidgets('signed out, tapping like goes to /auth and writes nothing',
-      (tester) async {
+  testWidgets('signed out, tapping like goes to /auth and writes nothing', (
+    tester,
+  ) async {
     final repo = _FakeRecipeRepository();
     await _pump(tester, repo: repo, uid: null);
 
@@ -184,12 +189,16 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('AUTH SCREEN'), findsOneWidget);
-    expect(repo.likeWrites, isEmpty,
-        reason: 'a signed-out tap must not reach the repository');
+    expect(
+      repo.likeWrites,
+      isEmpty,
+      reason: 'a signed-out tap must not reach the repository',
+    );
   });
 
-  testWidgets('signed out, tapping save goes to /auth and writes nothing',
-      (tester) async {
+  testWidgets('signed out, tapping save goes to /auth and writes nothing', (
+    tester,
+  ) async {
     final repo = _FakeRecipeRepository();
     await _pump(tester, repo: repo, uid: null);
 
@@ -200,7 +209,9 @@ void main() {
     expect(repo.saveWrites, isEmpty);
   });
 
-  testWidgets('signed in and not yet liked: tap sends liked: true', (tester) async {
+  testWidgets('signed in and not yet liked: tap sends liked: true', (
+    tester,
+  ) async {
     final repo = _FakeRecipeRepository();
     await _pump(tester, repo: repo, uid: 'me');
 
@@ -211,8 +222,9 @@ void main() {
     expect(repo.likeWrites, [true]);
   });
 
-  testWidgets('already liked: the icon is filled and the tap UNLIKES (B051)',
-      (tester) async {
+  testWidgets('already liked: the icon is filled and the tap UNLIKES (B051)', (
+    tester,
+  ) async {
     final repo = _FakeRecipeRepository(liked: true);
     await _pump(tester, repo: repo, uid: 'me');
 
@@ -223,13 +235,15 @@ void main() {
     await tester.tap(find.byIcon(Icons.favorite));
     await tester.pumpAndSettle();
 
-    expect(repo.likeWrites, [false],
-        reason: 'the action must be a toggle, not a one-way like');
+    expect(repo.likeWrites, [
+      false,
+    ], reason: 'the action must be a toggle, not a one-way like');
     expect(find.byIcon(Icons.favorite_border), findsOneWidget);
   });
 
-  testWidgets('already saved: the icon is filled and the tap UNSAVES',
-      (tester) async {
+  testWidgets('already saved: the icon is filled and the tap UNSAVES', (
+    tester,
+  ) async {
     final repo = _FakeRecipeRepository(saved: true);
     await _pump(tester, repo: repo, uid: 'me');
 
@@ -268,7 +282,8 @@ void main() {
       expect(
         repo.viewLogs,
         1,
-        reason: 'three engagement writes re-resolved the recipe; only the '
+        reason:
+            'three engagement writes re-resolved the recipe; only the '
             'original visit may count as a view',
       );
     });

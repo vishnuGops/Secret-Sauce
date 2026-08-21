@@ -19,8 +19,9 @@ class AppShell extends ConsumerWidget {
   final Widget child;
 
   int get _index {
-    final i =
-        kMobileDestinations.indexWhere((d) => location.startsWith(d.route));
+    final i = kMobileDestinations.indexWhere(
+      (d) => location.startsWith(d.route),
+    );
     return i < 0 ? 0 : i;
   }
 

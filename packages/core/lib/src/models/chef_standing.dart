@@ -50,7 +50,8 @@ class ChefStanding with _$ChefStanding {
   double get tierProgress => ChefScoring.progressToNext(chefScore);
 
   /// The rung above this chef's score, or null once Master Chef is reached.
-  ChefTier? get nextTier => ChefScoring.nextTier(ChefScoring.tierFor(chefScore));
+  ChefTier? get nextTier =>
+      ChefScoring.nextTier(ChefScoring.tierFor(chefScore));
 
   /// `27% to Master`, or null at the top tier — the line under the score.
   String? get nextTierLabel {

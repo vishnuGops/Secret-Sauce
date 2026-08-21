@@ -20,21 +20,23 @@ final leaderboardPagesProvider = StateProvider.autoDispose<int>((ref) => 1);
 
 /// The chefs leaderboard. Signed-out safe: `chefs_leaderboard` is granted to
 /// `anon`, so this resolves without a session.
-final chefsLeaderboardProvider =
-    FutureProvider.autoDispose<List<ChefStanding>>((ref) {
-  final pages = ref.watch(leaderboardPagesProvider);
-  return ref
-      .watch(chefRepositoryProvider)
-      .leaderboard(limit: kLeaderboardPageSize * pages);
-});
+final chefsLeaderboardProvider = FutureProvider.autoDispose<List<ChefStanding>>(
+  (ref) {
+    final pages = ref.watch(leaderboardPagesProvider);
+    return ref
+        .watch(chefRepositoryProvider)
+        .leaderboard(limit: kLeaderboardPageSize * pages);
+  },
+);
 
 /// How many chefs sit on each tier — the five tiles across the hero.
 ///
 /// Kept separate from [chefsLeaderboardProvider] rather than tallied from its
 /// rows: the board is one page of the ranking, so counting tiers from it would
 /// describe the top 25 while claiming to describe all 148.
-final chefTierCountsProvider =
-    FutureProvider.autoDispose<Map<ChefTier, int>>((ref) {
+final chefTierCountsProvider = FutureProvider.autoDispose<Map<ChefTier, int>>((
+  ref,
+) {
   return ref.watch(chefRepositoryProvider).tierCounts();
 });
 
@@ -72,11 +74,13 @@ enum ChefsWindow {
   final bool enabled;
 }
 
-final boardSortProvider =
-    StateProvider.autoDispose<BoardSort>((ref) => BoardSort.score);
+final boardSortProvider = StateProvider.autoDispose<BoardSort>(
+  (ref) => BoardSort.score,
+);
 
-final chefsWindowProvider =
-    StateProvider.autoDispose<ChefsWindow>((ref) => ChefsWindow.allTime);
+final chefsWindowProvider = StateProvider.autoDispose<ChefsWindow>(
+  (ref) => ChefsWindow.allTime,
+);
 
 /// Total chefs on the board — the denominator in "Rank 2 of 148".
 ///
@@ -120,8 +124,10 @@ class ChefDetail {
 /// The recipe list is deliberately non-fatal: the rest of the card is derived
 /// from data the board already has, so a missing RPC costs one section instead
 /// of the whole dialog.
-final chefDetailProvider =
-    FutureProvider.autoDispose.family<ChefDetail, String>((ref, chefId) async {
+final chefDetailProvider = FutureProvider.autoDispose.family<
+  ChefDetail,
+  String
+>((ref, chefId) async {
   final chefs = ref.watch(chefRepositoryProvider);
   final profiles = ref.watch(profileRepositoryProvider);
 

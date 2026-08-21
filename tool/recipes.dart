@@ -79,18 +79,19 @@ create extension if not exists "pgcrypto";
 ''';
 
 String _generate(List<AuthoredRecipe> recipes) {
-  final buf = StringBuffer()
-    ..writeln(_header())
-    ..writeln(_ownerBootstrap())
-    ..writeln(_functionDdl())
-    ..writeln()
-    ..writeln(_rule)
-    ..writeln('-- The recipes. ${recipes.length} of them, ordered by slug.')
-    ..writeln(_rule)
-    ..writeln('do \$seed\$')
-    ..writeln('declare')
-    ..writeln("  v_owner uuid := '$_ownerId';")
-    ..writeln('begin');
+  final buf =
+      StringBuffer()
+        ..writeln(_header())
+        ..writeln(_ownerBootstrap())
+        ..writeln(_functionDdl())
+        ..writeln()
+        ..writeln(_rule)
+        ..writeln('-- The recipes. ${recipes.length} of them, ordered by slug.')
+        ..writeln(_rule)
+        ..writeln('do \$seed\$')
+        ..writeln('declare')
+        ..writeln("  v_owner uuid := '$_ownerId';")
+        ..writeln('begin');
 
   for (final recipe in recipes) {
     buf.write(_call(recipe));
@@ -306,33 +307,41 @@ String _call(AuthoredRecipe recipe) {
   final notes = r['notes'] as String?;
   // `recipes` has no notes column, so a recipe-level note is appended to the
   // description rather than dropped. A real column is the proper fix.
-  final description = notes == null || notes.trim().isEmpty
-      ? r['description'] as String
-      : '${r['description']}\n\n$notes';
+  final description =
+      notes == null || notes.trim().isEmpty
+          ? r['description'] as String
+          : '${r['description']}\n\n$notes';
 
-  final ingredients =
-      _json(normaliseIngredientGroups(r['ingredient_groups'] as List));
+  final ingredients = _json(
+    normaliseIngredientGroups(r['ingredient_groups'] as List),
+  );
   final steps = _json(normaliseStepGroups(r['step_groups'] as List));
 
-  final buf = StringBuffer()
-    ..writeln()
-    ..writeln('  -- ${recipe.file}')
-    ..writeln('  perform seed_recipe_v2(')
-    ..writeln('    v_owner,')
-    ..writeln('    ${_lit(r['title'])},')
-    ..writeln('    ${_lit(description)},')
-    ..writeln('    ${_lit(r['cuisine'])}, ${_lit(r['category'])}, '
-        "'${r['difficulty']}',")
-    ..writeln(
-        '    ${r['prep_minutes']}, ${r['cook_minutes']}, ${r['servings']}, '
-        "'${r['visibility'] ?? 'public'}',")
-    ..writeln('    ${_lit(r['attribution'])},')
-    ..writeln('    $ingredients,')
-    ..writeln('    $steps,')
-    ..writeln('    ${demo['like_count'] ?? 0}, ${demo['save_count'] ?? 0}, '
-        '${demo['view_count'] ?? 0},')
-    ..writeln('    ${_json(demo['ratings'] ?? const [])}')
-    ..writeln('  );');
+  final buf =
+      StringBuffer()
+        ..writeln()
+        ..writeln('  -- ${recipe.file}')
+        ..writeln('  perform seed_recipe_v2(')
+        ..writeln('    v_owner,')
+        ..writeln('    ${_lit(r['title'])},')
+        ..writeln('    ${_lit(description)},')
+        ..writeln(
+          '    ${_lit(r['cuisine'])}, ${_lit(r['category'])}, '
+          "'${r['difficulty']}',",
+        )
+        ..writeln(
+          '    ${r['prep_minutes']}, ${r['cook_minutes']}, ${r['servings']}, '
+          "'${r['visibility'] ?? 'public'}',",
+        )
+        ..writeln('    ${_lit(r['attribution'])},')
+        ..writeln('    $ingredients,')
+        ..writeln('    $steps,')
+        ..writeln(
+          '    ${demo['like_count'] ?? 0}, ${demo['save_count'] ?? 0}, '
+          '${demo['view_count'] ?? 0},',
+        )
+        ..writeln('    ${_json(demo['ratings'] ?? const [])}')
+        ..writeln('  );');
   return buf.toString();
 }
 
@@ -359,8 +368,10 @@ Future<void> main(List<String> args) async {
     stderr.writeln('✖ ${set.errors.length} error(s) in $_recipesDir');
     exit(1);
   }
-  stdout.writeln('✔ ${set.recipes.length} recipes valid'
-      '${set.warnings.isEmpty ? '' : ' (${set.warnings.length} warning(s))'}');
+  stdout.writeln(
+    '✔ ${set.recipes.length} recipes valid'
+    '${set.warnings.isEmpty ? '' : ' (${set.warnings.length} warning(s))'}',
+  );
 
   if (action == 'validate') return;
 

@@ -49,8 +49,7 @@ class ChefsHero extends ConsumerWidget {
     final tiles = _TierTiles(counts: counts);
     final filter = _WindowFilter(
       selected: ref.watch(chefsWindowProvider),
-      onSelected: (w) =>
-          ref.read(chefsWindowProvider.notifier).state = w,
+      onSelected: (w) => ref.read(chefsWindowProvider.notifier).state = w,
     );
 
     return DecoratedBox(
@@ -82,26 +81,26 @@ class ChefsHero extends ConsumerWidget {
 
             return row
                 ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Flexible(child: identity),
-                      const SizedBox(width: AppSpacing.xl),
-                      Expanded(flex: 2, child: tiles),
-                      const SizedBox(width: AppSpacing.md),
-                      filter,
-                    ],
-                  )
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Flexible(child: identity),
+                    const SizedBox(width: AppSpacing.xl),
+                    Expanded(flex: 2, child: tiles),
+                    const SizedBox(width: AppSpacing.md),
+                    filter,
+                  ],
+                )
                 : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      identity,
-                      const SizedBox(height: AppSpacing.md),
-                      tiles,
-                      const SizedBox(height: AppSpacing.md),
-                      Align(alignment: Alignment.centerLeft, child: filter),
-                    ],
-                  );
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    identity,
+                    const SizedBox(height: AppSpacing.md),
+                    tiles,
+                    const SizedBox(height: AppSpacing.md),
+                    Align(alignment: Alignment.centerLeft, child: filter),
+                  ],
+                );
           },
         ),
       ),
@@ -164,8 +163,10 @@ class _Identity extends StatelessWidget {
           child: Text(
             'Ranked on what public recipes earn — likes, saves and views, '
             'nothing else.',
-            style: theme.textTheme.bodyMedium
-                ?.copyWith(color: ChefsHero._onHeroDim, height: 1.4),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: ChefsHero._onHeroDim,
+              height: 1.4,
+            ),
           ),
         ),
       ],
@@ -267,9 +268,7 @@ class _TierTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: top ? 0.10 : 0.07),
         borderRadius: BorderRadius.circular(14),
-        border: top
-            ? Border.all(color: color.withValues(alpha: 0.45))
-            : null,
+        border: top ? Border.all(color: color.withValues(alpha: 0.45)) : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -354,13 +353,16 @@ class _WindowFilter extends StatelessWidget {
                   child: Text(
                     window.label,
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color: window == selected
-                          ? const Color(0xFF2C1F1B)
-                          : window.enabled
+                      color:
+                          window == selected
+                              ? const Color(0xFF2C1F1B)
+                              : window.enabled
                               ? ChefsHero._onHeroDim
                               : ChefsHero._onHeroFaint,
                       fontWeight:
-                          window == selected ? FontWeight.w800 : FontWeight.w700,
+                          window == selected
+                              ? FontWeight.w800
+                              : FontWeight.w700,
                     ),
                   ),
                 ),

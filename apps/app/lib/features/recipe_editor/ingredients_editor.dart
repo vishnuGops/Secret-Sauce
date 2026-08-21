@@ -12,7 +12,10 @@ import 'package:app/features/recipe_editor/edit_models.dart';
 /// form runs. Splitting the file did not change that ownership.
 class IngredientsEditor extends StatelessWidget {
   const IngredientsEditor({
-    super.key,required this.groups, required this.onChanged});
+    super.key,
+    required this.groups,
+    required this.onChanged,
+  });
 
   final List<EditIngredientGroup> groups;
   final VoidCallback onChanged;
@@ -182,12 +185,7 @@ class _IngredientRow extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: AppSpacing.xs),
-                  Row(
-                    children: [
-                      Expanded(child: name),
-                      ...actions,
-                    ],
-                  ),
+                  Row(children: [Expanded(child: name), ...actions]),
                 ],
               );
             },

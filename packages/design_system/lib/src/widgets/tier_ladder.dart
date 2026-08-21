@@ -50,23 +50,23 @@ class TierLadder extends StatelessWidget {
     const rungs = ChefScoring.ladder;
 
     Widget row(List<Widget> children) => Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            for (var i = 0; i < children.length; i++)
-              Expanded(
-                child: Align(
-                  // First tick sits at the track's start, last at its end, the
-                  // rest centred — the labels have to land on the anchors.
-                  alignment: switch (i) {
-                    0 => Alignment.centerLeft,
-                    _ when i == children.length - 1 => Alignment.centerRight,
-                    _ => Alignment.center,
-                  },
-                  child: children[i],
-                ),
-              ),
-          ],
-        );
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (var i = 0; i < children.length; i++)
+          Expanded(
+            child: Align(
+              // First tick sits at the track's start, last at its end, the
+              // rest centred — the labels have to land on the anchors.
+              alignment: switch (i) {
+                0 => Alignment.centerLeft,
+                _ when i == children.length - 1 => Alignment.centerRight,
+                _ => Alignment.center,
+              },
+              child: children[i],
+            ),
+          ),
+      ],
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

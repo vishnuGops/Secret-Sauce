@@ -29,7 +29,10 @@ class _FakeAuth implements AuthRepository {
   Stream<AuthState> authStateChanges() => const Stream.empty();
 
   @override
-  Future<void> signIn({required String email, required String password}) async {}
+  Future<void> signIn({
+    required String email,
+    required String password,
+  }) async {}
 
   @override
   Future<void> signUp({
@@ -49,34 +52,33 @@ class _FakeDiscover implements DiscoverRepository {
   Future<List<Recipe>> popular({
     int limit = kRecipePageSize,
     int offset = 0,
-  }) async =>
-      const [];
+  }) async => const [];
 
   @override
   Future<List<Recipe>> trending({
     int limit = kRecipePageSize,
     int offset = 0,
-  }) async =>
-      const [];
+  }) async => const [];
 
   @override
   Future<List<Recipe>> recent({
     int limit = kRecipePageSize,
     int offset = 0,
-  }) async =>
-      const [];
+  }) async => const [];
 
   @override
   Future<List<Recipe>> search(
     String query, {
     int limit = kRecipePageSize,
     int offset = 0,
-  }) async =>
-      const [];
+  }) async => const [];
 }
 
-Future<GoRouter> _pumpAt(WidgetTester tester, String location,
-    {String? uid}) async {
+Future<GoRouter> _pumpAt(
+  WidgetTester tester,
+  String location, {
+  String? uid,
+}) async {
   tester.view.physicalSize = const Size(1400, 1000);
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.resetPhysicalSize);
@@ -96,10 +98,7 @@ Future<GoRouter> _pumpAt(WidgetTester tester, String location,
   await tester.pumpWidget(
     UncontrolledProviderScope(
       container: container,
-      child: MaterialApp.router(
-        theme: AppTheme.light(),
-        routerConfig: router,
-      ),
+      child: MaterialApp.router(theme: AppTheme.light(), routerConfig: router),
     ),
   );
   await tester.pumpAndSettle();
@@ -124,8 +123,9 @@ void main() {
     expect(find.byType(DiscoverScreen), findsOneWidget);
   });
 
-  testWidgets('the root landing is gone — / renders no page of its own',
-      (tester) async {
+  testWidgets('the root landing is gone — / renders no page of its own', (
+    tester,
+  ) async {
     await _pumpAt(tester, Routes.root);
 
     // The retired landing's copy. Its absence is the assertion: a builder put

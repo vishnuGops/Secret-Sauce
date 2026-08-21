@@ -12,49 +12,44 @@ ChefStanding _standing({
   int likes = 1980,
   int saves = 780,
   int views = 1745,
-}) =>
-    ChefStanding(
-      chefRank: rank,
-      id: 'c$rank',
-      displayName: name,
-      chefTier: tier,
-      chefScore: score,
-      publicRecipeCount: recipes,
-      totalLikes: likes,
-      totalSaves: saves,
-      totalViews: views,
-    );
+}) => ChefStanding(
+  chefRank: rank,
+  id: 'c$rank',
+  displayName: name,
+  chefTier: tier,
+  chefScore: score,
+  publicRecipeCount: recipes,
+  totalLikes: likes,
+  totalSaves: saves,
+  totalViews: views,
+);
 
 Widget _host(
   Widget card, {
   double textScale = 1.0,
   Brightness brightness = Brightness.light,
-}) =>
-    MaterialApp(
-      theme: brightness == Brightness.light ? AppTheme.light() : AppTheme.dark(),
-      home: Scaffold(
-        body: MediaQuery(
-          data: MediaQueryData(
-            size: const Size(1440, 900),
-            textScaler: TextScaler.linear(textScale),
-          ),
-          // Unbounded height on purpose: the card is a fixed-size tile and must
-          // size itself, exactly as it does inside a horizontal rail.
-          child: Align(alignment: Alignment.topLeft, child: card),
-        ),
+}) => MaterialApp(
+  theme: brightness == Brightness.light ? AppTheme.light() : AppTheme.dark(),
+  home: Scaffold(
+    body: MediaQuery(
+      data: MediaQueryData(
+        size: const Size(1440, 900),
+        textScaler: TextScaler.linear(textScale),
       ),
-    );
+      // Unbounded height on purpose: the card is a fixed-size tile and must
+      // size itself, exactly as it does inside a horizontal rail.
+      child: Align(alignment: Alignment.topLeft, child: card),
+    ),
+  ),
+);
 
 void main() {
-  testWidgets('carries score, rank, serial, tier and the four totals',
-      (tester) async {
+  testWidgets('carries score, rank, serial, tier and the four totals', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       _host(
-        ChefSpotlightCard(
-          standing: _standing(),
-          totalChefs: 148,
-          onTap: () {},
-        ),
+        ChefSpotlightCard(standing: _standing(), totalChefs: 148, onTap: () {}),
       ),
     );
 
@@ -78,8 +73,9 @@ void main() {
     expect(find.text('9,811 to go'), findsOneWidget);
   });
 
-  testWidgets('the driver row names the input doing the most work',
-      (tester) async {
+  testWidgets('the driver row names the input doing the most work', (
+    tester,
+  ) async {
     // 1,980 likes x 3 = 5,940 beats 780 saves x 5 = 3,900.
     await tester.pumpWidget(
       _host(ChefSpotlightCard(standing: _standing(), onTap: () {})),
@@ -101,8 +97,9 @@ void main() {
     expect(find.text('900 saves × 5'), findsOneWidget);
   });
 
-  testWidgets('the serial drops the denominator until the count lands',
-      (tester) async {
+  testWidgets('the serial drops the denominator until the count lands', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       _host(ChefSpotlightCard(standing: _standing(rank: 7), onTap: () {})),
     );
@@ -111,16 +108,15 @@ void main() {
 
   testWidgets('a single recipe is not "1 recipes" (B031)', (tester) async {
     await tester.pumpWidget(
-      _host(
-        ChefSpotlightCard(standing: _standing(recipes: 1), onTap: () {}),
-      ),
+      _host(ChefSpotlightCard(standing: _standing(recipes: 1), onTap: () {})),
     );
     expect(find.text('1 recipe'), findsOneWidget);
     expect(find.text('1 recipes'), findsNothing);
   });
 
-  testWidgets('the top tier says so instead of promising a next one',
-      (tester) async {
+  testWidgets('the top tier says so instead of promising a next one', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       _host(
         ChefSpotlightCard(
@@ -155,8 +151,9 @@ void main() {
     expect(taps, 1);
   });
 
-  testWidgets('a chef with no avatar falls back to the monogram',
-      (tester) async {
+  testWidgets('a chef with no avatar falls back to the monogram', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       _host(ChefSpotlightCard(standing: _standing(), onTap: () {})),
     );

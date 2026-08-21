@@ -12,7 +12,10 @@ import 'package:app/features/recipe_detail/detail_chips.dart';
 
 class IngredientGroupView extends StatelessWidget {
   const IngredientGroupView({
-    super.key,required this.group, required this.factor});
+    super.key,
+    required this.group,
+    required this.factor,
+  });
 
   final IngredientGroup group;
   final double factor;
@@ -25,11 +28,12 @@ class IngredientGroupView extends StatelessWidget {
         if (group.name.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(top: AppSpacing.sm, bottom: 4),
-            child: Text(group.name,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall
-                    ?.copyWith(fontWeight: FontWeight.w700)),
+            child: Text(
+              group.name,
+              style: Theme.of(
+                context,
+              ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+            ),
           ),
         for (final ing in group.ingredients)
           Padding(
@@ -70,13 +74,15 @@ class IngredientGroupView extends StatelessWidget {
 
   String _trim(double v) {
     if (v == v.roundToDouble()) return v.toStringAsFixed(0);
-    return v.toStringAsFixed(2).replaceFirst(RegExp(r'0+$'), '').replaceFirst(RegExp(r'\.$'), '');
+    return v
+        .toStringAsFixed(2)
+        .replaceFirst(RegExp(r'0+$'), '')
+        .replaceFirst(RegExp(r'\.$'), '');
   }
 }
 
 class StepGroupView extends StatelessWidget {
-  const StepGroupView({
-    super.key,required this.group});
+  const StepGroupView({super.key, required this.group});
 
   final StepGroup group;
 
@@ -89,8 +95,12 @@ class StepGroupView extends StatelessWidget {
         if (group.name.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(top: AppSpacing.sm, bottom: 4),
-            child: Text(group.name,
-                style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+            child: Text(
+              group.name,
+              style: textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+            ),
           ),
         for (var i = 0; i < group.steps.length; i++)
           Padding(
@@ -140,11 +150,13 @@ class _StepMeta extends StatelessWidget {
         if (step.tip != null && step.tip!.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(top: 4),
-            child: Text('Tip: ${step.tip}',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontStyle: FontStyle.italic,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    )),
+            child: Text(
+              'Tip: ${step.tip}',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                fontStyle: FontStyle.italic,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
           ),
       ],
     );

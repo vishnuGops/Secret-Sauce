@@ -3,11 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 /// The recipe grid's real parameters — card 288–340 wide, 16px gaps.
 FlowGridMetrics fit(double available) => FlowGridMetrics.fit(
-      available: available,
-      minTileWidth: kRecipeCardMinWidth,
-      maxTileWidth: kRecipeCardMaxWidth,
-      spacing: AppSpacing.md,
-    );
+  available: available,
+  minTileWidth: kRecipeCardMinWidth,
+  maxTileWidth: kRecipeCardMaxWidth,
+  spacing: AppSpacing.md,
+);
 
 void main() {
   group('FlowGridMetrics', () {

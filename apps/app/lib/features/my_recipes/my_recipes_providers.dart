@@ -17,8 +17,8 @@ class MyRecipesNotifier extends PagedRecipesNotifier {
 
 final myRecipesProvider =
     AsyncNotifierProvider.autoDispose<MyRecipesNotifier, RecipePage>(
-  MyRecipesNotifier.new,
-);
+      MyRecipesNotifier.new,
+    );
 
 class SharedWithMeNotifier extends PagedRecipesNotifier {
   @override
@@ -31,5 +31,5 @@ class SharedWithMeNotifier extends PagedRecipesNotifier {
 
 final sharedWithMeProvider =
     AsyncNotifierProvider.autoDispose<SharedWithMeNotifier, RecipePage>(
-  SharedWithMeNotifier.new,
-);
+      SharedWithMeNotifier.new,
+    );

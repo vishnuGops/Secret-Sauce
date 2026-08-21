@@ -153,8 +153,9 @@ class RecipeCard extends StatelessWidget {
                       recipe.description,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: textTheme.bodySmall
-                          ?.copyWith(color: scheme.onSurfaceVariant),
+                      style: textTheme.bodySmall?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 6),
@@ -175,48 +176,49 @@ class RecipeCard extends StatelessWidget {
                       // `kRecipeCardMinWidth` is set so that at default scale
                       // this row never has to degrade at all (B048).
                       child: LayoutBuilder(
-                        builder: (context, constraints) => Row(
-                          children: [
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.schedule,
-                                    size: 15,
-                                    color: scheme.onSurfaceVariant,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Flexible(
-                                    child: Text(
-                                      _timeLabel,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: textTheme.labelMedium,
-                                    ),
-                                  ),
-                                  if (recipe.hasRatings) ...[
-                                    const SizedBox(width: AppSpacing.sm),
-                                    Flexible(
-                                      child: RatingPill(
-                                        rating: recipe.ratingAvg,
-                                        count: recipe.ratingCount,
+                        builder:
+                            (context, constraints) => Row(
+                              children: [
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.schedule,
+                                        size: 15,
+                                        color: scheme.onSurfaceVariant,
                                       ),
-                                    ),
-                                  ],
-                                ],
-                              ),
+                                      const SizedBox(width: 4),
+                                      Flexible(
+                                        child: Text(
+                                          _timeLabel,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: textTheme.labelMedium,
+                                        ),
+                                      ),
+                                      if (recipe.hasRatings) ...[
+                                        const SizedBox(width: AppSpacing.sm),
+                                        Flexible(
+                                          child: RatingPill(
+                                            rating: recipe.ratingAvg,
+                                            count: recipe.ratingCount,
+                                          ),
+                                        ),
+                                      ],
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: AppSpacing.sm),
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxWidth: constraints.maxWidth / 2,
+                                  ),
+                                  child: DifficultyBadge(
+                                    difficulty: recipe.difficulty,
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: AppSpacing.sm),
-                            ConstrainedBox(
-                              constraints: BoxConstraints(
-                                maxWidth: constraints.maxWidth / 2,
-                              ),
-                              child: DifficultyBadge(
-                                difficulty: recipe.difficulty,
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
                     ),
                   ],
@@ -255,7 +257,8 @@ class _TitleBanner extends StatelessWidget {
     return Container(
       color: scheme.primary,
       constraints: BoxConstraints(
-        minHeight: kRecipeCardBannerHeight *
+        minHeight:
+            kRecipeCardBannerHeight *
             context.textScale.clamp(1.0, kRecipeCardBannerMaxScale),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -368,10 +371,11 @@ class _CoverImage extends StatelessWidget {
       imageUrl: url!,
       fit: BoxFit.cover,
       placeholder: (_, __) => Container(color: scheme.surfaceContainerHighest),
-      errorWidget: (_, __, ___) => Container(
-        color: scheme.surfaceContainerHighest,
-        child: const Icon(Icons.broken_image_outlined),
-      ),
+      errorWidget:
+          (_, __, ___) => Container(
+            color: scheme.surfaceContainerHighest,
+            child: const Icon(Icons.broken_image_outlined),
+          ),
     );
   }
 }

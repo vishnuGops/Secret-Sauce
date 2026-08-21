@@ -95,8 +95,9 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       _loadError = null;
     });
     try {
-      final recipe =
-          await ref.read(recipeRepositoryProvider).getById(widget.recipeId!);
+      final recipe = await ref
+          .read(recipeRepositoryProvider)
+          .getById(widget.recipeId!);
       _title.text = recipe.title;
       _description.text = recipe.description;
       _cuisine.text = recipe.cuisine ?? '';
@@ -133,8 +134,10 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
   }
 
   Future<void> _pickCover() async {
-    final picked = await ImagePicker()
-        .pickImage(source: ImageSource.gallery, maxWidth: 1600);
+    final picked = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 1600,
+    );
     if (picked == null) return;
     final bytes = await picked.readAsBytes();
     setState(() => _pendingCoverBytes = bytes);
@@ -148,20 +151,21 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
   Future<void> _cancel() async {
     final discard = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Discard changes?'),
-        content: const Text('Any unsaved changes will be lost.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Keep editing'),
+      builder:
+          (ctx) => AlertDialog(
+            title: const Text('Discard changes?'),
+            content: const Text('Any unsaved changes will be lost.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: const Text('Keep editing'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: const Text('Discard'),
+              ),
+            ],
           ),
-          FilledButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('Discard'),
-          ),
-        ],
-      ),
     );
     if (discard != true || !mounted) return;
     _leave();
@@ -191,7 +195,9 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       // Upload cover if a new image was picked.
       var coverUrl = _coverUrl;
       if (_pendingCoverBytes != null) {
-        coverUrl = await ref.read(storageServiceProvider).uploadRecipeImage(
+        coverUrl = await ref
+            .read(storageServiceProvider)
+            .uploadRecipeImage(
               fileName: 'cover_${DateTime.now().millisecondsSinceEpoch}.jpg',
               bytes: _pendingCoverBytes!,
             );
@@ -215,20 +221,22 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
         stepGroups: _stepGroups.map((g) => g.toModel()).toList(),
       );
 
-      final saved = widget.isEditing
-          ? await repo.update(base, changeSummary: 'Edited recipe')
-          : await repo.create(base);
+      final saved =
+          widget.isEditing
+              ? await repo.update(base, changeSummary: 'Edited recipe')
+              : await repo.create(base);
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Recipe saved')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Recipe saved')));
         context.go(Routes.recipe(saved.id));
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Save failed — ${friendlyError(e)}')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Save failed — ${friendlyError(e)}')),
+        );
       }
     } finally {
       if (mounted) setState(() => _saving = false);
@@ -274,12 +282,14 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
             padding: const EdgeInsets.only(right: AppSpacing.sm),
             child: FilledButton.icon(
               onPressed: (_saving || !_canSave) ? null : _save,
-              icon: _saving
-                  ? const SizedBox(
-                      height: 16,
-                      width: 16,
-                      child: CircularProgressIndicator(strokeWidth: 2))
-                  : const Icon(Icons.check),
+              icon:
+                  _saving
+                      ? const SizedBox(
+                        height: 16,
+                        width: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                      : const Icon(Icons.check),
               label: const Text('Save'),
             ),
           ),
@@ -302,15 +312,17 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                 TextFormField(
                   controller: _title,
                   decoration: const InputDecoration(labelText: 'Title'),
-                  validator: (v) =>
-                      (v == null || v.trim().isEmpty) ? 'Required' : null,
+                  validator:
+                      (v) =>
+                          (v == null || v.trim().isEmpty) ? 'Required' : null,
                 ),
                 const SizedBox(height: AppSpacing.md),
                 TextFormField(
                   controller: _description,
                   maxLines: 2,
-                  decoration:
-                      const InputDecoration(labelText: 'Short description'),
+                  decoration: const InputDecoration(
+                    labelText: 'Short description',
+                  ),
                 ),
                 const SizedBox(height: AppSpacing.md),
                 Row(
@@ -319,8 +331,9 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                       child: TextFormField(
                         controller: _prep,
                         keyboardType: TextInputType.number,
-                        decoration:
-                            const InputDecoration(labelText: 'Prep (min)'),
+                        decoration: const InputDecoration(
+                          labelText: 'Prep (min)',
+                        ),
                       ),
                     ),
                     const SizedBox(width: AppSpacing.md),
@@ -328,8 +341,9 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                       child: TextFormField(
                         controller: _cook,
                         keyboardType: TextInputType.number,
-                        decoration:
-                            const InputDecoration(labelText: 'Cook (min)'),
+                        decoration: const InputDecoration(
+                          labelText: 'Cook (min)',
+                        ),
                       ),
                     ),
                     const SizedBox(width: AppSpacing.md),
@@ -337,8 +351,9 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                       child: TextFormField(
                         controller: _servings,
                         keyboardType: TextInputType.number,
-                        decoration:
-                            const InputDecoration(labelText: 'Servings'),
+                        decoration: const InputDecoration(
+                          labelText: 'Servings',
+                        ),
                       ),
                     ),
                   ],
@@ -354,8 +369,9 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                         // and half of a 360px phone at 2.0x text scale is not
                         // enough for "Medium" + the arrow (B036).
                         isExpanded: true,
-                        decoration:
-                            const InputDecoration(labelText: 'Difficulty'),
+                        decoration: const InputDecoration(
+                          labelText: 'Difficulty',
+                        ),
                         items: [
                           for (final d in Difficulty.values)
                             DropdownMenuItem(
@@ -367,8 +383,10 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                               ),
                             ),
                         ],
-                        onChanged: (v) =>
-                            setState(() => _difficulty = v ?? Difficulty.easy),
+                        onChanged:
+                            (v) => setState(
+                              () => _difficulty = v ?? Difficulty.easy,
+                            ),
                       ),
                     ),
                     const SizedBox(width: AppSpacing.md),
@@ -383,8 +401,14 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                 const SizedBox(height: AppSpacing.md),
                 SwitchListTile(
                   value: _visibility.isPublic,
-                  onChanged: (v) => setState(() => _visibility =
-                      v ? RecipeVisibility.public : RecipeVisibility.private),
+                  onChanged:
+                      (v) => setState(
+                        () =>
+                            _visibility =
+                                v
+                                    ? RecipeVisibility.public
+                                    : RecipeVisibility.private,
+                      ),
                   title: const Text('Public'),
                   subtitle: const Text('Anyone can find this on Discover'),
                   contentPadding: EdgeInsets.zero,

@@ -23,7 +23,10 @@ class _FakeAuth implements AuthRepository {
   Stream<AuthState> authStateChanges() => const Stream.empty();
 
   @override
-  Future<void> signIn({required String email, required String password}) async {}
+  Future<void> signIn({
+    required String email,
+    required String password,
+  }) async {}
 
   @override
   Future<void> signUp({
@@ -41,10 +44,10 @@ class _FakeProfiles implements ProfileRepository {
   // would be visible rather than swallowed by a fixed row.
   @override
   Future<Profile?> getById(String id) async => Profile(
-        id: id,
-        displayName: 'Amara Okonkwo',
-        chefTier: ChefTier.sousChef,
-      );
+    id: id,
+    displayName: 'Amara Okonkwo',
+    chefTier: ChefTier.sousChef,
+  );
 
   @override
   Future<List<Profile>> searchByName(String query, {int limit = 10}) async =>
@@ -56,15 +59,16 @@ class _FakeProfiles implements ProfileRepository {
 
 class _FakeChefRepository implements ChefRepository {
   @override
-  Future<List<ChefStanding>> leaderboard({int limit = 50, int offset = 0}) async =>
-      const [];
+  Future<List<ChefStanding>> leaderboard({
+    int limit = 50,
+    int offset = 0,
+  }) async => const [];
 
   // These tests only exercise the nav chrome; an empty board never opens the
   // expanded chef card, which is the only caller of either method.
   @override
   Future<List<Recipe>> topRecipes(String chefId, {int limit = 3}) async =>
       const [];
-
 
   @override
   Future<Map<ChefTier, int>> tierCounts() async => const {};
@@ -101,11 +105,13 @@ Future<void> _pump(
       child: MaterialApp.router(
         theme: AppTheme.light(),
         routerConfig: router,
-        builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(context)
-              .copyWith(textScaler: TextScaler.linear(textScale)),
-          child: child!,
-        ),
+        builder:
+            (context, child) => MediaQuery(
+              data: MediaQuery.of(
+                context,
+              ).copyWith(textScaler: TextScaler.linear(textScale)),
+              child: child!,
+            ),
       ),
     ),
   );
@@ -114,14 +120,13 @@ Future<void> _pump(
 
 /// Only text drawn inside the bar — the hosting screen has an app bar with the
 /// same title, so an unscoped `find.text` would match either.
-Finder _inBar(String text) => find.descendant(
-      of: find.byType(TopNavBar),
-      matching: find.text(text),
-    );
+Finder _inBar(String text) =>
+    find.descendant(of: find.byType(TopNavBar), matching: find.text(text));
 
 void main() {
-  testWidgets('expanded, signed in: destinations, no Profile, no New recipe',
-      (tester) async {
+  testWidgets('expanded, signed in: destinations, no Profile, no New recipe', (
+    tester,
+  ) async {
     await _pump(tester, width: 1400, uid: 'user-1');
 
     expect(find.byType(TopNavBar), findsOneWidget);
@@ -156,8 +161,9 @@ void main() {
     expect(find.text('Sous Chef'), findsOneWidget); // tier in the menu header
   });
 
-  testWidgets('signed out: Sign in / Sign up, and no My Recipes',
-      (tester) async {
+  testWidgets('signed out: Sign in / Sign up, and no My Recipes', (
+    tester,
+  ) async {
     await _pump(tester, width: 1400);
 
     expect(_inBar('Sign in'), findsOneWidget);
@@ -166,8 +172,9 @@ void main() {
     expect(_inBar('My Recipes'), findsNothing);
   });
 
-  testWidgets('signed out at medium collapses to one login button',
-      (tester) async {
+  testWidgets('signed out at medium collapses to one login button', (
+    tester,
+  ) async {
     await _pump(tester, width: 760);
 
     expect(_inBar('Sign in'), findsNothing);
@@ -175,8 +182,9 @@ void main() {
     expect(find.byTooltip('Sign in or sign up'), findsOneWidget);
   });
 
-  testWidgets('labels drop to icons before they wrap — active label last',
-      (tester) async {
+  testWidgets('labels drop to icons before they wrap — active label last', (
+    tester,
+  ) async {
     // Three destinations plus identity at a medium width: only the active
     // label survives, and the other two become tooltips.
     await _pump(tester, width: 700, uid: 'user-1');
@@ -191,8 +199,9 @@ void main() {
   // The reason `_BarLayout` exists: a plain Row + Expanded(Center(…)) centres
   // the pill *between* the clusters, which drifts it right by half the brand.
   // Nothing else in the suite would notice that regression.
-  testWidgets('the pill is centred on the bar, not between the clusters',
-      (tester) async {
+  testWidgets('the pill is centred on the bar, not between the clusters', (
+    tester,
+  ) async {
     await _pump(tester, width: 1400, uid: 'user-1');
 
     final bar = tester.getRect(find.byType(TopNavBar));
@@ -207,12 +216,14 @@ void main() {
     expect(
       (pill.center.dx - bar.center.dx).abs(),
       lessThan(40),
-      reason: 'pill drifted ${pill.center.dx - bar.center.dx}px off the bar centre',
+      reason:
+          'pill drifted ${pill.center.dx - bar.center.dx}px off the bar centre',
     );
   });
 
-  testWidgets('Sign up opens the auth screen on its sign-up side',
-      (tester) async {
+  testWidgets('Sign up opens the auth screen on its sign-up side', (
+    tester,
+  ) async {
     await _pump(tester, width: 1400);
 
     await tester.tap(_inBar('Sign up'));
@@ -224,8 +235,9 @@ void main() {
     expect(find.text('Display name'), findsOneWidget);
   });
 
-  testWidgets('Sign in opens the same screen on its sign-in side',
-      (tester) async {
+  testWidgets('Sign in opens the same screen on its sign-in side', (
+    tester,
+  ) async {
     await _pump(tester, width: 1400);
 
     await tester.tap(_inBar('Sign in'));

@@ -7,8 +7,7 @@ import 'package:app/features/recipe_editor/edit_models.dart';
 /// `IngredientsEditor`: it renders the draft it is handed and reports every
 /// mutation through [onChanged].
 class StepsEditor extends StatelessWidget {
-  const StepsEditor({
-    super.key,required this.groups, required this.onChanged});
+  const StepsEditor({super.key, required this.groups, required this.onChanged});
 
   final List<EditStepGroup> groups;
   final VoidCallback onChanged;

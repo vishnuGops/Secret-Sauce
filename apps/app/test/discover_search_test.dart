@@ -79,11 +79,9 @@ void main() {
     );
 
     await Future<void>.delayed(kSearchDebounce * 2);
-    expect(
-      repo.searches,
-      ['chicken'],
-      reason: 'only the settled query should reach the server',
-    );
+    expect(repo.searches, [
+      'chicken',
+    ], reason: 'only the settled query should reach the server');
   });
 
   test('a superseded query is dropped, not sent late', () async {

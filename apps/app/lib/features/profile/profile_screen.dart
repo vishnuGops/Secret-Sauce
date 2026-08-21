@@ -37,23 +37,27 @@ class ProfileScreen extends ConsumerWidget {
                 child: CircleAvatar(
                   radius: 44,
                   backgroundColor: scheme.primaryContainer,
-                  backgroundImage: (profile.avatarUrl?.isNotEmpty ?? false)
-                      ? NetworkImage(profile.avatarUrl!)
-                      : null,
-                  child: (profile.avatarUrl?.isEmpty ?? true)
-                      ? Text(
-                          profile.displayName.isEmpty
-                              ? '?'
-                              : profile.displayName[0].toUpperCase(),
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        )
-                      : null,
+                  backgroundImage:
+                      (profile.avatarUrl?.isNotEmpty ?? false)
+                          ? NetworkImage(profile.avatarUrl!)
+                          : null,
+                  child:
+                      (profile.avatarUrl?.isEmpty ?? true)
+                          ? Text(
+                            profile.displayName.isEmpty
+                                ? '?'
+                                : profile.displayName[0].toUpperCase(),
+                            style: Theme.of(context).textTheme.headlineMedium,
+                          )
+                          : null,
                 ),
               ),
               const SizedBox(height: AppSpacing.md),
               Center(
                 child: Text(
-                  profile.displayName.isEmpty ? 'Unnamed cook' : profile.displayName,
+                  profile.displayName.isEmpty
+                      ? 'Unnamed cook'
+                      : profile.displayName,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),

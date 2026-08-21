@@ -36,16 +36,15 @@ class ChefBadge extends StatelessWidget {
     bool compact = false,
     bool onSurfaceImage = false,
     VoidCallback? onTap,
-  }) =>
-      ChefBadge(
-        key: key,
-        name: profile.displayName,
-        tier: profile.chefTier,
-        avatarUrl: profile.avatarUrl,
-        compact: compact,
-        onSurfaceImage: onSurfaceImage,
-        onTap: onTap,
-      );
+  }) => ChefBadge(
+    key: key,
+    name: profile.displayName,
+    tier: profile.chefTier,
+    avatarUrl: profile.avatarUrl,
+    compact: compact,
+    onSurfaceImage: onSurfaceImage,
+    onTap: onTap,
+  );
 
   final String name;
   final ChefTier tier;

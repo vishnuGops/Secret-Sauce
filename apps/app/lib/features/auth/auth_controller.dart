@@ -37,6 +37,4 @@ class AuthController extends AutoDisposeAsyncNotifier<void> {
 }
 
 final authControllerProvider =
-    AutoDisposeAsyncNotifierProvider<AuthController, void>(
-  AuthController.new,
-);
+    AutoDisposeAsyncNotifierProvider<AuthController, void>(AuthController.new);

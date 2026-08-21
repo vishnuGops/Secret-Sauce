@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('RecipeCard shows title, description, time and difficulty',
-      (tester) async {
+  testWidgets('RecipeCard shows title, description, time and difficulty', (
+    tester,
+  ) async {
     const recipe = Recipe(
       id: '1',
       ownerId: 'u1',
@@ -34,8 +35,9 @@ void main() {
     expect(find.byType(RatingPill), findsNothing); // unrated -> no pill
   });
 
-  testWidgets('RecipeCard shows the rating pill once a recipe is rated',
-      (tester) async {
+  testWidgets('RecipeCard shows the rating pill once a recipe is rated', (
+    tester,
+  ) async {
     const recipe = Recipe(
       id: '1',
       ownerId: 'u1',
@@ -92,31 +94,33 @@ void main() {
     (kRecipeCardMinWidth, 2.0),
     (kRecipeCardMaxWidth, 2.0),
   ]) {
-    testWidgets('RecipeCard metadata row fits at ${width}px, textScale $scale',
-        (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.light(),
-          home: MediaQuery(
-            data: MediaQueryData(textScaler: TextScaler.linear(scale)),
-            child: Scaffold(
-              body: Center(
-                child: SizedBox(
-                  width: width,
-                  child: const RecipeCard(recipe: longMeta),
+    testWidgets(
+      'RecipeCard metadata row fits at ${width}px, textScale $scale',
+      (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.light(),
+            home: MediaQuery(
+              data: MediaQueryData(textScaler: TextScaler.linear(scale)),
+              child: Scaffold(
+                body: Center(
+                  child: SizedBox(
+                    width: width,
+                    child: const RecipeCard(recipe: longMeta),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(
-        tester.takeException(),
-        isNull,
-        reason: 'overflow at ${width}px @ ${scale}x',
-      );
-    });
+        expect(
+          tester.takeException(),
+          isNull,
+          reason: 'overflow at ${width}px @ ${scale}x',
+        );
+      },
+    );
   }
 
   // The banner is a fixed band, not an intrinsic one: a one-line name and a
@@ -168,8 +172,9 @@ void main() {
       );
     }
 
-    testWidgets('is the same height for a one-line and a two-line title',
-        (tester) async {
+    testWidgets('is the same height for a one-line and a two-line title', (
+      tester,
+    ) async {
       final (content1, title1) = await pump(tester, short);
       final oneLine = title1.height;
       expect(
@@ -248,8 +253,9 @@ void main() {
   // mainAxisExtent). The card owns that height itself so an unbounded-height
   // parent — a Center, a Column — cannot leave the cover's Expanded unbounded
   // (B001).
-  testWidgets('RecipeCard is kRecipeCardHeight tall in an unbounded parent',
-      (tester) async {
+  testWidgets('RecipeCard is kRecipeCardHeight tall in an unbounded parent', (
+    tester,
+  ) async {
     const recipe = Recipe(id: '1', ownerId: 'u1', title: 'Secret Sauce');
 
     await tester.pumpWidget(
@@ -267,9 +273,6 @@ void main() {
     );
 
     expect(tester.takeException(), isNull);
-    expect(
-      tester.getSize(find.byType(RecipeCard)).height,
-      kRecipeCardHeight,
-    );
+    expect(tester.getSize(find.byType(RecipeCard)).height, kRecipeCardHeight);
   });
 }

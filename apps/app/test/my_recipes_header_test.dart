@@ -68,24 +68,27 @@ final _headerLabel = find.descendant(
 );
 
 void main() {
-  testWidgets('web header carries the labelled New recipe button',
-      (tester) async {
+  testWidgets('web header carries the labelled New recipe button', (
+    tester,
+  ) async {
     await _pump(tester, width: 1400);
 
     expect(_headerLabel, findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('compact keeps the icon — the FAB is the labelled action there',
-      (tester) async {
+  testWidgets('compact keeps the icon — the FAB is the labelled action there', (
+    tester,
+  ) async {
     await _pump(tester, width: 390);
 
     expect(_headerLabel, findsNothing);
     expect(find.byTooltip('New recipe'), findsOneWidget);
   });
 
-  testWidgets('2.0x text scale keeps the label and does not overflow',
-      (tester) async {
+  testWidgets('2.0x text scale keeps the label and does not overflow', (
+    tester,
+  ) async {
     await _pump(tester, width: 1400, textScale: 2.0);
 
     expect(_headerLabel, findsOneWidget);

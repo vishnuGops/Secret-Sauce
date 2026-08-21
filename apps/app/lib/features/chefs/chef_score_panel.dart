@@ -13,7 +13,10 @@ import 'package:app/features/chefs/chef_detail_common.dart';
 /// "Why this score" + the tier ladder.
 class ChefScorePanel extends StatelessWidget {
   const ChefScorePanel({
-    super.key,required this.standing, required this.color});
+    super.key,
+    required this.standing,
+    required this.color,
+  });
 
   final ChefStanding standing;
   final Color color;
@@ -45,15 +48,18 @@ class ChefScorePanel extends StatelessWidget {
                 standing.scoreLabel,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.headlineSmall
-                    ?.copyWith(fontWeight: FontWeight.w800, color: color),
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  color: color,
+                ),
               ),
             ),
             const SizedBox(width: AppSpacing.sm),
             Text(
               'points',
-              style: theme.textTheme.bodySmall
-                  ?.copyWith(color: scheme.onSurfaceVariant),
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
             ),
           ],
         ),
@@ -70,8 +76,9 @@ class ChefScorePanel extends StatelessWidget {
         Text(
           'Public recipes only. Private recipes never count toward score or '
           'rank.',
-          style:
-              theme.textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: scheme.onSurfaceVariant,
+          ),
         ),
         const Divider(height: AppSpacing.xl),
         const ChefKicker(text: 'Tier ladder'),
@@ -104,8 +111,14 @@ class ChefScorePanel extends StatelessWidget {
   /// inputs a chef can actually influence. Views are left out: they are not
   /// something a chef adds on purpose.
   static String _closingLine(ChefStanding standing) {
-    final saves = ChefScoring.unitsToNext(standing.chefScore, ChefScoring.saveWeight);
-    final likes = ChefScoring.unitsToNext(standing.chefScore, ChefScoring.likeWeight);
+    final saves = ChefScoring.unitsToNext(
+      standing.chefScore,
+      ChefScoring.saveWeight,
+    );
+    final likes = ChefScoring.unitsToNext(
+      standing.chefScore,
+      ChefScoring.likeWeight,
+    );
     return '${groupedCount(saves ?? 0)} more saves, '
         'or ${groupedCount(likes ?? 0)} more likes';
   }

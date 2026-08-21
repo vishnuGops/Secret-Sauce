@@ -29,13 +29,15 @@ library;
 /// `0001_init.sql`. Server-owned columns still belong here (the client *reads*
 /// counters, it just may not write them); only genuinely internal ones like
 /// `search_tsv` stay out.
-const _kRecipeColumns = 'id,owner_id,title,description,cover_image_url,cuisine,'
+const _kRecipeColumns =
+    'id,owner_id,title,description,cover_image_url,cuisine,'
     'category,difficulty,prep_minutes,cook_minutes,servings,visibility,'
     'attribution,forked_from_recipe_id,forked_from_version_id,'
     'current_version_id,like_count,save_count,view_count,created_at,updated_at,'
     'rating_sum,rating_count,rating_avg';
 
-const kRecipeSelect = '$_kRecipeColumns,'
+const kRecipeSelect =
+    '$_kRecipeColumns,'
     'owner:profiles!recipes_owner_id_fkey(id,display_name,avatar_url,chef_tier)';
 
 /// [kRecipeSelect] plus the recipe's grouped content, as a single nested embed
@@ -51,6 +53,7 @@ const kRecipeSelect = '$_kRecipeColumns,'
 /// reversed read writes a reversed recipe back. Callers must pass all four:
 /// `ingredient_groups`, `ingredient_groups.ingredients`, `step_groups`,
 /// `step_groups.steps` — see `SupabaseRecipeRepository.getById`.
-const kRecipeDetailSelect = '$kRecipeSelect,'
+const kRecipeDetailSelect =
+    '$kRecipeSelect,'
     'ingredient_groups(*,ingredients(*)),'
     'step_groups(*,steps(*))';

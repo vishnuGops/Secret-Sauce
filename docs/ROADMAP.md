@@ -178,7 +178,7 @@ restaurant page needs the same shape).
 - [x] Log toolchain bugs B005–B010 in `docs/BUG-TRACKER.md`
 - [x] Close the `.gitignore` gap that left extension-less `env.local` credential files tracked (B010)
 - [x] End-to-end runtime check: web server + Supabase Auth + PostgREST seeded data
-- [ ] Commit `pubspec.lock` files so resolution is reproducible _(B009 — currently git-ignored)_
+- [x] Commit `pubspec.lock` files so resolution is reproducible _(B009 — done in OPT-T4)_
 - [ ] Migrate to `freezed` 3.x so the project can track current Flutter stable _(unblocks B005)_
 
 ## Phase 14 — Ratings
@@ -1256,8 +1256,12 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       that every input in range produces a value the SQL check constraint accepts) and the auth
       screen (6 tests through the **real router**: which door `?mode=signup` opens, validation
       before network, a failed sign-in showing the mapped message and staying put)
-- [ ] **OPT-T4:** toolchain: commit `pubspec.lock` (B009) · raise the `sdk:` bound / settle
-      B027 formatter conflict · migrate to `freezed` 3.x to unpin Flutter (B005)
+- [x] **OPT-T4 (2 of 3):** `pubspec.lock` committed for all four packages (B009 closed) and the
+      `sdk:` bound raised to `>=3.7.0` with a single whole-repo reformat, so `melos run format` no
+      longer breaks `melos run analyze` (B027 closed — verified in that order).
+      **`freezed` 3.x is deliberately not done**: it is a breaking model-syntax migration whose
+      only prize is unpinning Flutter, which nothing needs today, and the plan already called it
+      "its own change set". Tracked below
 - [x] **OPT-T5:** screenshot pass done over Discover (390 / 700 / 1400), `/chefs` v3 at 1400, and
       a recipe detail at 1000, through the B028 procedure (release build + static serve). Branded
       Chrome still will not install (needs Administrator), so the pass runs on Playwright's bundled
@@ -1273,6 +1277,10 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       mid-file error leaves nothing behind
 
 ---
+
+- [ ] **OPT-T4c:** migrate to `freezed` 3.x (B005's permanent fix — unpins Flutter). Breaking
+      model syntax across every `@freezed` class, a `build_runner`/`analyzer` bump, and a full
+      codegen + verification pass. Do it when a newer Flutter is actually wanted, not before.
 
 ### Outstanding (environment-dependent)
 

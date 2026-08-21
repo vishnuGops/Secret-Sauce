@@ -170,7 +170,7 @@ melos bootstrap                     # resolve + link all packages
 melos run build_runner --no-select  # codegen (freezed/json) — REQUIRED before first analyze/run
 melos run analyze                   # flutter analyze across all packages
 melos run test --no-select          # tests (any package with a test/ dir — currently all three)
-melos run format                    # dart format . — see the B027 warning below before running
+melos run format                    # dart format . (tall style — safe since OPT-T4)
 
 # Run the app (env creds are wired in). Web-server is the most reliable device here;
 # Chrome isn't installed and Edge's debug auto-launch is flaky.
@@ -194,12 +194,12 @@ npx serve -l 8099 build/web            # http://localhost:8099/#/discover
 > a password anyone knows: every seeded account gets a random one (B018), so sign up a fresh user
 > and collect the confirmation mail from Mailpit at `http://127.0.0.1:54324`, not a real inbox.
 
-> **`melos run format` currently breaks `melos run analyze` (B027).** `dart format` picks its
-> style from the _package's_ language version, and all four pubspecs declare `sdk: ">=3.4.0"` —
-> under 3.7, so the formatter emits the legacy short style with no trailing commas, and
-> `require_trailing_commas` then flags every one it removed. The committed tree is in the newer
-> tall style. Until the `sdk:` bound is raised (or the lint dropped), leave formatting alone; if
-> you run it by accident, `git checkout --` the files it touched outside your change.
+> **`melos run format` is safe again (B027 fixed by OPT-T4).** It used to break
+> `melos run analyze`: `dart format` picks its style from the _package's_ language version, all
+> four pubspecs declared `sdk: ">=3.4.0"` — under the 3.7 cutoff — so the formatter emitted the
+> legacy short style and stripped the trailing commas `require_trailing_commas` demands. The bound
+> is now `>=3.7.0` and the tree was reformatted once, whole, so format → analyze is green. Keep
+> the bound there: dropping it back below 3.7 re-arms the trap.
 
 Build, database, and icon tasks are melos scripts (all defined in `melos.yaml`):
 
@@ -429,7 +429,9 @@ the `code-review` skill). The ones you need while _writing_ code:
 
 1. **Generated code is git-ignored** (`.gitignore:11-13`). A fresh clone does not compile until
    `melos run build_runner --no-select`. Codegen output never appears in a diff — say so rather
-   than looking for it. (`pubspec.lock` is ignored too — B009, still open.)
+   than looking for it. **`pubspec.lock` is committed** (B009 closed by OPT-T4) — a dependency
+   change shows up as a lockfile diff, and that diff is the reproducibility record, so don't
+   `.gitignore` it again.
 2. **`.update()` / `.delete()` matching 0 rows returns success.** An RLS denial on those is
    invisible to the client (the twin of B011). `.insert()` / `.upsert()` do raise `42501`. Add
    `.select()` to any update/delete on a path where the user may not own the row, and throw

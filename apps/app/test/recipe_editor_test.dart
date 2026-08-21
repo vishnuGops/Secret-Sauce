@@ -40,18 +40,20 @@ const _fullIngredient = Ingredient(
 );
 
 Widget _app({double textScale = 1.0}) => ProviderScope(
-      child: MaterialApp(
-        theme: AppTheme.light(),
-        // `builder`, not a MediaQuery around `home` — same reason as the chefs
-        // tests: overlays sit above the Navigator.
-        builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(context)
-              .copyWith(textScaler: TextScaler.linear(textScale)),
+  child: MaterialApp(
+    theme: AppTheme.light(),
+    // `builder`, not a MediaQuery around `home` — same reason as the chefs
+    // tests: overlays sit above the Navigator.
+    builder:
+        (context, child) => MediaQuery(
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: TextScaler.linear(textScale)),
           child: child!,
         ),
-        home: const RecipeEditorScreen(),
-      ),
-    );
+    home: const RecipeEditorScreen(),
+  ),
+);
 
 void main() {
   group('draft round-trip', () {
@@ -124,8 +126,9 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
     }
 
-    testWidgets('step details reveal time, temperature and tip',
-        (tester) async {
+    testWidgets('step details reveal time, temperature and tip', (
+      tester,
+    ) async {
       sizeView(tester, 800);
       await tester.pumpWidget(_app());
       await tester.pumpAndSettle();
@@ -140,8 +143,9 @@ void main() {
       expect(find.text('Tip'), findsOneWidget);
     });
 
-    testWidgets('ingredient details reveal note and the optional toggle',
-        (tester) async {
+    testWidgets('ingredient details reveal note and the optional toggle', (
+      tester,
+    ) async {
       sizeView(tester, 800);
       await tester.pumpWidget(_app());
       await tester.pumpAndSettle();
@@ -158,17 +162,15 @@ void main() {
       // that used to be unreachable from the editor entirely.
       await tester.tap(find.byType(Checkbox));
       await tester.pumpAndSettle();
-      expect(
-        tester.widget<Checkbox>(find.byType(Checkbox)).value,
-        isTrue,
-      );
+      expect(tester.widget<Checkbox>(find.byType(Checkbox)).value, isTrue);
     });
 
     // Both new blocks are Rows with intrinsic siblings, the shape behind
     // B001/B002/B016/B023. Check them at the narrowest phone and 2.0x.
     for (final width in <double>[320, 360, 600]) {
-      testWidgets('expanded detail rows fit at ${width}px, textScale 2.0',
-          (tester) async {
+      testWidgets('expanded detail rows fit at ${width}px, textScale 2.0', (
+        tester,
+      ) async {
         sizeView(tester, width);
 
         await tester.pumpWidget(_app(textScale: 2.0));
@@ -251,12 +253,12 @@ void main() {
 
 /// The editor in edit mode (`recipeId` non-null) over a stub repository.
 Widget _editApp(RecipeRepository repo) => ProviderScope(
-      overrides: [recipeRepositoryProvider.overrideWithValue(repo)],
-      child: MaterialApp(
-        theme: AppTheme.light(),
-        home: const RecipeEditorScreen(recipeId: 'r1'),
-      ),
-    );
+  overrides: [recipeRepositoryProvider.overrideWithValue(repo)],
+  child: MaterialApp(
+    theme: AppTheme.light(),
+    home: const RecipeEditorScreen(recipeId: 'r1'),
+  ),
+);
 
 /// Fails `getById` [failures] times, then succeeds — so one stub covers both the
 /// permanent-failure and the retry-recovers cases.

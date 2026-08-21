@@ -35,10 +35,11 @@ class StarRating extends StatelessWidget {
     final unrated = (count ?? 0) == 0 && rating <= 0;
 
     return Semantics(
-      label: unrated
-          ? 'Not rated yet'
-          : '${rating.toStringAsFixed(1)} out of 5 stars'
-              '${count == null ? '' : ', $count ratings'}',
+      label:
+          unrated
+              ? 'Not rated yet'
+              : '${rating.toStringAsFixed(1)} out of 5 stars'
+                  '${count == null ? '' : ', $count ratings'}',
       excludeSemantics: true,
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -70,7 +71,12 @@ class StarRating extends StatelessWidget {
 
 /// Compact single-star + value chip for dense surfaces such as `RecipeCard`.
 class RatingPill extends StatelessWidget {
-  const RatingPill({super.key, required this.rating, this.count, this.size = 15});
+  const RatingPill({
+    super.key,
+    required this.rating,
+    this.count,
+    this.size = 15,
+  });
 
   final double rating;
   final int? count;
@@ -192,9 +198,12 @@ class _StarRatingInputState extends State<StarRatingInput> {
             Icon(
               StarRating.iconFor(shown, i),
               size: widget.size,
-              color: shown - i >= 0.25
-                  ? AppTheme.rating
-                  : (widget.enabled ? scheme.outline : scheme.outlineVariant),
+              color:
+                  shown - i >= 0.25
+                      ? AppTheme.rating
+                      : (widget.enabled
+                          ? scheme.outline
+                          : scheme.outlineVariant),
             ),
         ],
       ),

@@ -138,15 +138,15 @@ class ChefAvatar extends StatelessWidget {
         width: radius * 2,
         height: radius * 2,
         fit: BoxFit.cover,
-        placeholder: (_, __) => CircleAvatar(
-          radius: radius,
-          backgroundColor: background,
-        ),
-        errorWidget: (_, __, ___) => CircleAvatar(
-          radius: radius,
-          backgroundColor: background,
-          child: Icon(Icons.person_outline, color: foreground),
-        ),
+        placeholder:
+            (_, __) =>
+                CircleAvatar(radius: radius, backgroundColor: background),
+        errorWidget:
+            (_, __, ___) => CircleAvatar(
+              radius: radius,
+              backgroundColor: background,
+              child: Icon(Icons.person_outline, color: foreground),
+            ),
       ),
     );
   }

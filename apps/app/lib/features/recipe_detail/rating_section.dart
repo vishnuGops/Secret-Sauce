@@ -10,8 +10,7 @@ import 'package:app/routing/app_router.dart';
 /// "Rate this recipe" block: half-star input for signed-in non-owners, plus the
 /// current average. Owners see why they can't rate (RLS rejects self-ratings).
 class RatingSection extends ConsumerWidget {
-  const RatingSection({
-    super.key,required this.recipe, required this.isOwner});
+  const RatingSection({super.key, required this.recipe, required this.isOwner});
 
   final Recipe recipe;
   final bool isOwner;
@@ -28,8 +27,11 @@ class RatingSection extends ConsumerWidget {
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Could not save rating — ${friendlyError(e)}')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not save rating — ${friendlyError(e)}'),
+          ),
+        );
       }
     }
   }
@@ -42,7 +44,9 @@ class RatingSection extends ConsumerWidget {
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not remove rating — ${friendlyError(e)}')),
+          SnackBar(
+            content: Text('Could not remove rating — ${friendlyError(e)}'),
+          ),
         );
       }
     }
@@ -67,8 +71,9 @@ class RatingSection extends ConsumerWidget {
           Expanded(
             child: Text(
               'Sign in to rate this recipe.',
-              style:
-                  textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+              style: textTheme.bodySmall?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
             ),
           ),
           TextButton(

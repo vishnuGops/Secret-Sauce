@@ -148,15 +148,17 @@ class _CardRailState extends State<CardRail> {
                       widget.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.titleMedium
-                          ?.copyWith(fontWeight: FontWeight.w700),
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     Text(
                       widget.subtitle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.labelSmall
-                          ?.copyWith(color: scheme.onSurfaceVariant),
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
                     ),
                   ],
                 ),
@@ -202,8 +204,9 @@ class _CardRailState extends State<CardRail> {
             padding: const EdgeInsets.only(top: AppSpacing.sm),
             child: Text(
               widget.footnote!,
-              style: theme.textTheme.bodySmall
-                  ?.copyWith(color: scheme.onSurfaceVariant),
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
             ),
           ),
       ],
@@ -237,10 +240,12 @@ class _Arrow extends StatelessWidget {
         // Disabled arrows stay visible but recede, the way the draft dims them
         // to 35% rather than removing them — a rail that loses its controls at
         // the ends reads as broken.
-        disabledBackgroundColor:
-            scheme.surfaceContainerHigh.withValues(alpha: 0.4),
-        disabledForegroundColor:
-            scheme.onSurfaceVariant.withValues(alpha: 0.38),
+        disabledBackgroundColor: scheme.surfaceContainerHigh.withValues(
+          alpha: 0.4,
+        ),
+        disabledForegroundColor: scheme.onSurfaceVariant.withValues(
+          alpha: 0.38,
+        ),
       ),
     );
   }

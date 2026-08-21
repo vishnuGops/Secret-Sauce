@@ -54,8 +54,9 @@ void main() {
     expect(find.text('Master'), findsOneWidget);
   });
 
-  testWidgets('fills to the score and tints with the current tier',
-      (tester) async {
+  testWidgets('fills to the score and tints with the current tier', (
+    tester,
+  ) async {
     await tester.pumpWidget(_host(10189));
 
     final bar = tester.widget<LinearProgressIndicator>(

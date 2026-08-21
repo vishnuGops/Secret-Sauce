@@ -12,18 +12,17 @@ ChefStanding _standing({
   int likes = 4000,
   int saves = 1600,
   int views = 5000,
-}) =>
-    ChefStanding(
-      chefRank: rank,
-      id: 'c$rank',
-      displayName: name,
-      chefTier: tier,
-      chefScore: score,
-      publicRecipeCount: recipes,
-      totalLikes: likes,
-      totalSaves: saves,
-      totalViews: views,
-    );
+}) => ChefStanding(
+  chefRank: rank,
+  id: 'c$rank',
+  displayName: name,
+  chefTier: tier,
+  chefScore: score,
+  publicRecipeCount: recipes,
+  totalLikes: likes,
+  totalSaves: saves,
+  totalViews: views,
+);
 
 Widget _host(
   ChefStanding standing, {
@@ -31,32 +30,32 @@ Widget _host(
   double width = 760,
   double textScale = 1.0,
   bool? dense,
-}) =>
-    MaterialApp(
-      theme: AppTheme.light(),
-      home: Scaffold(
-        body: MediaQuery(
-          data: MediaQueryData(
-            size: Size(width, 900),
-            textScaler: TextScaler.linear(textScale),
-          ),
-          child: Center(
-            child: SizedBox(
-              width: width,
-              child: ChefStandingCard(
-                standing: standing,
-                dense: dense,
-                onTap: onTap ?? () {},
-              ),
-            ),
+}) => MaterialApp(
+  theme: AppTheme.light(),
+  home: Scaffold(
+    body: MediaQuery(
+      data: MediaQueryData(
+        size: Size(width, 900),
+        textScaler: TextScaler.linear(textScale),
+      ),
+      child: Center(
+        child: SizedBox(
+          width: width,
+          child: ChefStandingCard(
+            standing: standing,
+            dense: dense,
+            onTap: onTap ?? () {},
           ),
         ),
       ),
-    );
+    ),
+  ),
+);
 
 void main() {
-  testWidgets('podium ranks get a medal, everyone else gets a numeral',
-      (tester) async {
+  testWidgets('podium ranks get a medal, everyone else gets a numeral', (
+    tester,
+  ) async {
     await tester.pumpWidget(_host(_standing(rank: 1)));
     expect(find.byIcon(Icons.workspace_premium), findsOneWidget);
     expect(find.text('#1'), findsOneWidget);
@@ -73,7 +72,9 @@ void main() {
     expect(find.text('rank'), findsOneWidget);
   });
 
-  testWidgets('shows grouped counts with labels, and the score', (tester) async {
+  testWidgets('shows grouped counts with labels, and the score', (
+    tester,
+  ) async {
     await tester.pumpWidget(_host(_standing(), dense: false));
 
     expect(find.text('21,000'), findsOneWidget);
@@ -83,8 +84,9 @@ void main() {
     expect(find.text('2 recipes'), findsOneWidget);
   });
 
-  testWidgets('dense drops the stat labels but keeps the numbers',
-      (tester) async {
+  testWidgets('dense drops the stat labels but keeps the numbers', (
+    tester,
+  ) async {
     await tester.pumpWidget(_host(_standing(), dense: true, width: 360));
 
     expect(find.text('4,000 likes'), findsNothing);
@@ -92,8 +94,9 @@ void main() {
     expect(find.text('1,600'), findsOneWidget);
   });
 
-  testWidgets('reports progress to the next tier, and stops at the top',
-      (tester) async {
+  testWidgets('reports progress to the next tier, and stops at the top', (
+    tester,
+  ) async {
     // Head Chef at 10,189: 5,189 into a 15,000-point band -> 34%.
     await tester.pumpWidget(
       _host(_standing(rank: 2, tier: ChefTier.headChef, score: 10189)),
@@ -114,7 +117,9 @@ void main() {
     expect(taps, 1);
   });
 
-  testWidgets('draws a tier-coloured spine on the leading edge', (tester) async {
+  testWidgets('draws a tier-coloured spine on the leading edge', (
+    tester,
+  ) async {
     await tester.pumpWidget(_host(_standing(tier: ChefTier.sousChef)));
 
     final spine = tester.widget<ColoredBox>(
@@ -123,10 +128,7 @@ void main() {
         matching: find.byType(ColoredBox),
       ),
     );
-    expect(
-      spine.color,
-      TierChip.colorFor(ChefTier.sousChef, Brightness.light),
-    );
+    expect(spine.color, TierChip.colorFor(ChefTier.sousChef, Brightness.light));
   });
 
   // The same envelope the old leaderboard row was pinned at: narrowest phone,
@@ -171,31 +173,31 @@ void main() {
       double width = ChefsPanelWidth.value,
       double textScale = 1.0,
       VoidCallback? onTap,
-    }) =>
-        MaterialApp(
-          theme: AppTheme.light(),
-          home: Scaffold(
-            body: MediaQuery(
-              data: MediaQueryData(
-                size: Size(width, 900),
-                textScaler: TextScaler.linear(textScale),
-              ),
-              child: Center(
-                child: SizedBox(
-                  width: width,
-                  child: ChefStandingCard(
-                    standing: standing,
-                    variant: ChefCardVariant.board,
-                    onTap: onTap ?? () {},
-                  ),
-                ),
+    }) => MaterialApp(
+      theme: AppTheme.light(),
+      home: Scaffold(
+        body: MediaQuery(
+          data: MediaQueryData(
+            size: Size(width, 900),
+            textScaler: TextScaler.linear(textScale),
+          ),
+          child: Center(
+            child: SizedBox(
+              width: width,
+              child: ChefStandingCard(
+                standing: standing,
+                variant: ChefCardVariant.board,
+                onTap: onTap ?? () {},
               ),
             ),
           ),
-        );
+        ),
+      ),
+    );
 
-    testWidgets('trades the medal for a rank pill and the chips for a bar',
-        (tester) async {
+    testWidgets('trades the medal for a rank pill and the chips for a bar', (
+      tester,
+    ) async {
       await tester.pumpWidget(board(_standing(rank: 1)));
 
       // No medal, no "#1", no stat chips — all of that is on the spotlight
@@ -210,8 +212,9 @@ void main() {
       expect(find.byType(LinearProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('the bar tracks progress through the current tier',
-        (tester) async {
+    testWidgets('the bar tracks progress through the current tier', (
+      tester,
+    ) async {
       // Head Chef at 10,189: 5,189 into a 15,000-point band.
       await tester.pumpWidget(
         board(_standing(rank: 2, tier: ChefTier.headChef, score: 10189)),

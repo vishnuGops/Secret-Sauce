@@ -73,12 +73,12 @@ class ChefSpotlightCard extends StatelessWidget {
   /// Foil intensity per tier: Home Cook is a flat frame, Master Chef the full
   /// sheen. Straight from the `1E` note on the draft.
   static double foilFor(ChefTier tier) => switch (tier) {
-        ChefTier.homeCook => 0.06,
-        ChefTier.lineCook => 0.10,
-        ChefTier.sousChef => 0.14,
-        ChefTier.headChef => 0.20,
-        ChefTier.masterChef => 0.28,
-      };
+    ChefTier.homeCook => 0.06,
+    ChefTier.lineCook => 0.10,
+    ChefTier.sousChef => 0.14,
+    ChefTier.headChef => 0.20,
+    ChefTier.masterChef => 0.28,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -201,10 +201,11 @@ class _FoilPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     if (opacity <= 0) return;
-    final paint = Paint()
-      ..color = Colors.white.withValues(alpha: opacity)
-      ..strokeWidth = 2
-      ..style = PaintingStyle.stroke;
+    final paint =
+        Paint()
+          ..color = Colors.white.withValues(alpha: opacity)
+          ..strokeWidth = 2
+          ..style = PaintingStyle.stroke;
 
     canvas.save();
     canvas.clipRRect(
@@ -247,59 +248,67 @@ class _Header extends StatelessWidget {
       // beside a 75px score and 29px of dead space. Same shape and same fix as
       // the recipe card's difficulty badge (B016).
       child: LayoutBuilder(
-        builder: (context, constraints) => Row(
-          children: [
-            Icon(TierChip.iconFor(standing.chefTier), size: 20, color: color),
-            const SizedBox(width: AppSpacing.sm),
-            Expanded(
-              child: Text(
-                standing.displayName,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                // TODO(fonts): the draft sets this in the display face
-                // (Newsreader). Deferred with the rest of the type decision —
-                // changing fonts is an app-wide change, not a /chefs one.
-                style: theme.textTheme.labelLarge
-                    ?.copyWith(fontWeight: FontWeight.w700),
-              ),
-            ),
-            const SizedBox(width: AppSpacing.sm),
-            ConstrainedBox(
-              // A third, not a half: the name is the identity and the score can
-              // shrink, so the cap is set where the score stops crowding it.
-              constraints: BoxConstraints(maxWidth: constraints.maxWidth / 3),
-              // A six-figure score at 2.0× fits no sane column; shrink it
-              // rather than truncate it, the same call the board row makes.
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerRight,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    Text(
-                      standing.scoreLabel,
-                      maxLines: 1,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w800,
-                        color: color,
-                        height: 1,
-                      ),
-                    ),
-                    const SizedBox(width: 2),
-                    Text(
-                      'PTS',
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
+        builder:
+            (context, constraints) => Row(
+              children: [
+                Icon(
+                  TierChip.iconFor(standing.chefTier),
+                  size: 20,
+                  color: color,
                 ),
-              ),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Text(
+                    standing.displayName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    // TODO(fonts): the draft sets this in the display face
+                    // (Newsreader). Deferred with the rest of the type decision —
+                    // changing fonts is an app-wide change, not a /chefs one.
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                ConstrainedBox(
+                  // A third, not a half: the name is the identity and the score can
+                  // shrink, so the cap is set where the score stops crowding it.
+                  constraints: BoxConstraints(
+                    maxWidth: constraints.maxWidth / 3,
+                  ),
+                  // A six-figure score at 2.0× fits no sane column; shrink it
+                  // rather than truncate it, the same call the board row makes.
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerRight,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Text(
+                          standing.scoreLabel,
+                          maxLines: 1,
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w800,
+                            color: color,
+                            height: 1,
+                          ),
+                        ),
+                        const SizedBox(width: 2),
+                        Text(
+                          'PTS',
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
       ),
     );
   }
@@ -329,10 +338,11 @@ class _Portrait extends StatelessWidget {
     final url = standing.avatarUrl;
 
     // "004 / 148", or "004" until the count lands.
-    final serial = totalChefs == null
-        ? '${standing.chefRank}'.padLeft(3, '0')
-        : '${'${standing.chefRank}'.padLeft(3, '0')} / '
-            '${groupedCount(totalChefs!)}';
+    final serial =
+        totalChefs == null
+            ? '${standing.chefRank}'.padLeft(3, '0')
+            : '${'${standing.chefRank}'.padLeft(3, '0')} / '
+                '${groupedCount(totalChefs!)}';
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -354,12 +364,12 @@ class _Portrait extends StatelessWidget {
               CachedNetworkImage(
                 imageUrl: url,
                 fit: BoxFit.cover,
-                placeholder: (_, __) =>
-                    ColoredBox(color: scheme.surfaceContainerHighest),
-                errorWidget: (_, __, ___) => _MonogramPortrait(
-                  standing: standing,
-                  color: color,
-                ),
+                placeholder:
+                    (_, __) =>
+                        ColoredBox(color: scheme.surfaceContainerHighest),
+                errorWidget:
+                    (_, __, ___) =>
+                        _MonogramPortrait(standing: standing, color: color),
               )
             else
               // TODO(portrait): there is no chef portrait asset and no column
@@ -441,17 +451,18 @@ class _MonogramPortrait extends StatelessWidget {
       // The window is short at large text scales; scale the monogram down with
       // it rather than letting a fixed radius overflow.
       child: LayoutBuilder(
-        builder: (context, constraints) => Center(
-          child: ChefAvatar(
-            name: standing.displayName,
-            radius: (constraints.maxHeight * 0.28).clamp(12.0, 44.0),
-            backgroundColor: Color.alphaBlend(
-              color.withValues(alpha: 0.16),
-              scheme.surfaceContainerHigh,
+        builder:
+            (context, constraints) => Center(
+              child: ChefAvatar(
+                name: standing.displayName,
+                radius: (constraints.maxHeight * 0.28).clamp(12.0, 44.0),
+                backgroundColor: Color.alphaBlend(
+                  color.withValues(alpha: 0.16),
+                  scheme.surfaceContainerHigh,
+                ),
+                foregroundColor: color,
+              ),
             ),
-            foregroundColor: color,
-          ),
-        ),
       ),
     );
   }
@@ -481,8 +492,10 @@ class _RankPill extends StatelessWidget {
           Text(
             'RANK $rank',
             maxLines: 1,
-            style: theme.textTheme.labelSmall
-                ?.copyWith(color: color, fontWeight: FontWeight.w800),
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: color,
+              fontWeight: FontWeight.w800,
+            ),
           ),
         ],
       ),
@@ -534,8 +547,10 @@ class _RarityBand extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.end,
-              style: theme.textTheme.labelSmall
-                  ?.copyWith(color: color, fontWeight: FontWeight.w700),
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: color,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ],
@@ -560,80 +575,87 @@ class _DriverRow extends StatelessWidget {
   final Color color;
 
   static IconData _iconFor(String label) => switch (label) {
-        'likes' => Icons.favorite,
-        'saves' => Icons.bookmark,
-        _ => Icons.visibility,
-      };
+    'likes' => Icons.favorite,
+    'saves' => Icons.bookmark,
+    _ => Icons.visibility,
+  };
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
-    final top = ChefScoring.breakdown(
-      likes: standing.totalLikes,
-      saves: standing.totalSaves,
-      views: standing.totalViews,
-    ).first;
+    final top =
+        ChefScoring.breakdown(
+          likes: standing.totalLikes,
+          saves: standing.totalSaves,
+          views: standing.totalViews,
+        ).first;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
       // Same allocation as the header: the points take their intrinsic width up
       // to a third of the row, the description takes the rest.
       child: LayoutBuilder(
-        builder: (context, constraints) => Row(
-        children: [
-          Container(
-            width: 28,
-            height: 28,
-            decoration: BoxDecoration(
-              color: Color.alphaBlend(
-                color.withValues(alpha: 0.16),
-                scheme.surfaceContainerHigh,
-              ),
-              borderRadius: BorderRadius.circular(7),
-            ),
-            child: Icon(_iconFor(top.label), size: 14, color: color),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+        builder:
+            (context, constraints) => Row(
               children: [
-                Text(
-                  'Driven by ${top.label}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.labelSmall
-                      ?.copyWith(fontWeight: FontWeight.w800),
+                Container(
+                  width: 28,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    color: Color.alphaBlend(
+                      color.withValues(alpha: 0.16),
+                      scheme.surfaceContainerHigh,
+                    ),
+                    borderRadius: BorderRadius.circular(7),
+                  ),
+                  child: Icon(_iconFor(top.label), size: 14, color: color),
                 ),
-                Text(
-                  '${countOf(top.count, top.label)} × '
-                  '${groupedScore(top.weight)}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.labelSmall
-                      ?.copyWith(color: scheme.onSurfaceVariant),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Driven by ${top.label}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      Text(
+                        '${countOf(top.count, top.label)} × '
+                        '${groupedScore(top.weight)}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: scheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: constraints.maxWidth / 3,
+                  ),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      groupedScore(top.points),
+                      maxLines: 1,
+                      style: theme.textTheme.labelLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: constraints.maxWidth / 3),
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerRight,
-              child: Text(
-                groupedScore(top.points),
-                maxLines: 1,
-                style: theme.textTheme.labelLarge
-                    ?.copyWith(fontWeight: FontWeight.w800),
-              ),
-            ),
-          ),
-        ],
-        ),
       ),
     );
   }
@@ -654,28 +676,30 @@ class _Footer extends StatelessWidget {
     final atTop = next == null;
 
     Widget cell(int value, String label) => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
-              child: Text(
-                groupedCount(value),
-                maxLines: 1,
-                style: theme.textTheme.labelSmall
-                    ?.copyWith(fontWeight: FontWeight.w800),
-              ),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Text(
+            groupedCount(value),
+            maxLines: 1,
+            style: theme.textTheme.labelSmall?.copyWith(
+              fontWeight: FontWeight.w800,
             ),
-            Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.labelSmall
-                  ?.copyWith(color: scheme.onSurfaceVariant),
-            ),
-          ],
-        );
+          ),
+        ),
+        Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: scheme.onSurfaceVariant,
+          ),
+        ),
+      ],
+    );
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 9),
@@ -774,13 +798,13 @@ class SpotlightCardPlaceholder extends StatelessWidget {
     final color = TierChip.colorFor(tier, theme.brightness);
 
     Widget bar(double width, double height) => Container(
-          width: width,
-          height: height,
-          decoration: BoxDecoration(
-            color: scheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(999),
-          ),
-        );
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(999),
+      ),
+    );
 
     return SizedBox(
       width: kSpotlightCardWidth,

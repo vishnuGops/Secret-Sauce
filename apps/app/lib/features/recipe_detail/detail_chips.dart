@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 /// read-only metadata chip and the like/save counter button (OPT-A8).
 
 class MetaChip extends StatelessWidget {
-  const MetaChip({
-    super.key,required this.icon, required this.label});
+  const MetaChip({super.key, required this.icon, required this.label});
   final IconData icon;
   final String label;
 
@@ -15,7 +14,10 @@ class MetaChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: 4,
+      ),
       decoration: BoxDecoration(
         color: scheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(999),

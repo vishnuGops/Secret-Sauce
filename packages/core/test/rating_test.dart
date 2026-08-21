@@ -35,10 +35,18 @@ void main() {
     // gesture can produce.
     for (var i = 0; i <= 600; i++) {
       final snapped = snapRating(i / 100);
-      expect(snapped, greaterThanOrEqualTo(kMinRating), reason: 'from ${i / 100}');
+      expect(
+        snapped,
+        greaterThanOrEqualTo(kMinRating),
+        reason: 'from ${i / 100}',
+      );
       expect(snapped, lessThanOrEqualTo(kMaxRating), reason: 'from ${i / 100}');
       // A half-star step, checked in tenths to keep it off binary fractions.
-      expect((snapped * 10).round() % 5, 0, reason: '${i / 100} snapped to $snapped');
+      expect(
+        (snapped * 10).round() % 5,
+        0,
+        reason: '${i / 100} snapped to $snapped',
+      );
     }
   });
 }

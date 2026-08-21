@@ -22,19 +22,19 @@ class EditIngredient {
     String name = '',
     String note = '',
     this.isOptional = false,
-  })  : quantity = TextEditingController(text: quantity),
-        unit = TextEditingController(text: unit),
-        name = TextEditingController(text: name),
-        note = TextEditingController(text: note),
-        showDetails = note.isNotEmpty || isOptional;
+  }) : quantity = TextEditingController(text: quantity),
+       unit = TextEditingController(text: unit),
+       name = TextEditingController(text: name),
+       note = TextEditingController(text: note),
+       showDetails = note.isNotEmpty || isOptional;
 
   factory EditIngredient.fromModel(Ingredient i) => EditIngredient(
-        quantity: i.quantity?.toString() ?? '',
-        unit: i.unit ?? '',
-        name: i.name,
-        note: i.note ?? '',
-        isOptional: i.isOptional,
-      );
+    quantity: i.quantity?.toString() ?? '',
+    unit: i.unit ?? '',
+    name: i.name,
+    note: i.note ?? '',
+    isOptional: i.isOptional,
+  );
 
   final TextEditingController quantity;
   final TextEditingController unit;
@@ -48,15 +48,15 @@ class EditIngredient {
   bool showDetails;
 
   Ingredient toModel(int sortOrder) => Ingredient(
-        id: '',
-        groupId: '',
-        quantity: double.tryParse(quantity.text.trim()),
-        unit: _orNull(unit),
-        name: name.text.trim(),
-        note: _orNull(note),
-        isOptional: isOptional,
-        sortOrder: sortOrder,
-      );
+    id: '',
+    groupId: '',
+    quantity: double.tryParse(quantity.text.trim()),
+    unit: _orNull(unit),
+    name: name.text.trim(),
+    note: _orNull(note),
+    isOptional: isOptional,
+    sortOrder: sortOrder,
+  );
 
   void dispose() {
     quantity.dispose();
@@ -68,8 +68,8 @@ class EditIngredient {
 
 class EditIngredientGroup {
   EditIngredientGroup({String name = '', List<EditIngredient>? ingredients})
-      : name = TextEditingController(text: name),
-        ingredients = ingredients ?? [EditIngredient()];
+    : name = TextEditingController(text: name),
+      ingredients = ingredients ?? [EditIngredient()];
 
   factory EditIngredientGroup.fromModel(IngredientGroup g) =>
       EditIngredientGroup(
@@ -81,14 +81,14 @@ class EditIngredientGroup {
   final List<EditIngredient> ingredients;
 
   IngredientGroup toModel() => IngredientGroup(
-        id: '',
-        recipeId: '',
-        name: name.text.trim(),
-        ingredients: [
-          for (var i = 0; i < ingredients.length; i++)
-            ingredients[i].toModel(i),
-        ].where((i) => i.name.isNotEmpty).toList(),
-      );
+    id: '',
+    recipeId: '',
+    name: name.text.trim(),
+    ingredients:
+        [for (var i = 0; i < ingredients.length; i++) ingredients[i].toModel(i)]
+            .where((i) => i.name.isNotEmpty)
+            .toList(),
+  );
 
   void dispose() {
     name.dispose();
@@ -105,20 +105,20 @@ class EditStep {
     String temperature = '',
     String tip = '',
     this.imageUrl,
-  })  : text = TextEditingController(text: text),
-        duration = TextEditingController(text: duration),
-        temperature = TextEditingController(text: temperature),
-        tip = TextEditingController(text: tip),
-        showDetails =
-            duration.isNotEmpty || temperature.isNotEmpty || tip.isNotEmpty;
+  }) : text = TextEditingController(text: text),
+       duration = TextEditingController(text: duration),
+       temperature = TextEditingController(text: temperature),
+       tip = TextEditingController(text: tip),
+       showDetails =
+           duration.isNotEmpty || temperature.isNotEmpty || tip.isNotEmpty;
 
   factory EditStep.fromModel(RecipeStep s) => EditStep(
-        text: s.text,
-        duration: s.durationMinutes?.toString() ?? '',
-        temperature: s.temperature ?? '',
-        tip: s.tip ?? '',
-        imageUrl: s.imageUrl,
-      );
+    text: s.text,
+    duration: s.durationMinutes?.toString() ?? '',
+    temperature: s.temperature ?? '',
+    tip: s.tip ?? '',
+    imageUrl: s.imageUrl,
+  );
 
   final TextEditingController text;
   final TextEditingController duration;
@@ -141,16 +141,16 @@ class EditStep {
       tip.text.trim().isNotEmpty;
 
   RecipeStep toModel(int order) => RecipeStep(
-        id: '',
-        groupId: '',
-        stepOrder: order,
-        sortOrder: order,
-        text: text.text.trim(),
-        imageUrl: imageUrl,
-        durationMinutes: int.tryParse(duration.text.trim()),
-        temperature: _orNull(temperature),
-        tip: _orNull(tip),
-      );
+    id: '',
+    groupId: '',
+    stepOrder: order,
+    sortOrder: order,
+    text: text.text.trim(),
+    imageUrl: imageUrl,
+    durationMinutes: int.tryParse(duration.text.trim()),
+    temperature: _orNull(temperature),
+    tip: _orNull(tip),
+  );
 
   void dispose() {
     text.dispose();
@@ -162,25 +162,26 @@ class EditStep {
 
 class EditStepGroup {
   EditStepGroup({String name = '', List<EditStep>? steps})
-      : name = TextEditingController(text: name),
-        steps = steps ?? [EditStep()];
+    : name = TextEditingController(text: name),
+      steps = steps ?? [EditStep()];
 
   factory EditStepGroup.fromModel(StepGroup g) => EditStepGroup(
-        name: g.name,
-        steps: g.steps.map(EditStep.fromModel).toList(),
-      );
+    name: g.name,
+    steps: g.steps.map(EditStep.fromModel).toList(),
+  );
 
   final TextEditingController name;
   final List<EditStep> steps;
 
   StepGroup toModel() => StepGroup(
-        id: '',
-        recipeId: '',
-        name: name.text.trim(),
-        steps: [
+    id: '',
+    recipeId: '',
+    name: name.text.trim(),
+    steps:
+        [
           for (var i = 0; i < steps.length; i++) steps[i].toModel(i),
         ].where((s) => s.text.isNotEmpty).toList(),
-      );
+  );
 
   void dispose() {
     name.dispose();

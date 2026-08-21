@@ -97,23 +97,32 @@ class SupabaseRecipeRepository implements RecipeRepository {
     // (B022): postgrest-dart defaults to descending, PostgREST promises no
     // order for an embedded resource at all, and `update()` re-persists the
     // list it just read — so a wrong order here writes a wrong recipe back.
-    final row = await _client
-        .from('recipes')
-        .select(kRecipeDetailSelect)
-        .eq('id', id)
-        .order('sort_order', referencedTable: 'ingredient_groups', ascending: true)
-        .order(
-          'sort_order',
-          referencedTable: 'ingredient_groups.ingredients',
-          ascending: true,
-        )
-        .order('sort_order', referencedTable: 'step_groups', ascending: true)
-        .order(
-          'step_order',
-          referencedTable: 'step_groups.steps',
-          ascending: true,
-        )
-        .single();
+    final row =
+        await _client
+            .from('recipes')
+            .select(kRecipeDetailSelect)
+            .eq('id', id)
+            .order(
+              'sort_order',
+              referencedTable: 'ingredient_groups',
+              ascending: true,
+            )
+            .order(
+              'sort_order',
+              referencedTable: 'ingredient_groups.ingredients',
+              ascending: true,
+            )
+            .order(
+              'sort_order',
+              referencedTable: 'step_groups',
+              ascending: true,
+            )
+            .order(
+              'step_order',
+              referencedTable: 'step_groups.steps',
+              ascending: true,
+            )
+            .single();
     return Recipe.fromJson(row);
   }
 
@@ -153,27 +162,29 @@ class SupabaseRecipeRepository implements RecipeRepository {
         .order('recipe_id', ascending: false)
         .range(offset, offset + limit - 1);
     return rows
-        .map<Recipe>((r) => Recipe.fromJson(r['recipes'] as Map<String, dynamic>))
+        .map<Recipe>(
+          (r) => Recipe.fromJson(r['recipes'] as Map<String, dynamic>),
+        )
         .toList();
   }
 
   /// Only the columns a client is allowed to write. Server-managed columns
   /// (timestamps, counters, current_version_id) are intentionally excluded.
   Map<String, dynamic> _writablePayload(Recipe recipe) => {
-        'title': recipe.title,
-        'description': recipe.description,
-        'cover_image_url': recipe.coverImageUrl,
-        'cuisine': recipe.cuisine,
-        'category': recipe.category,
-        'difficulty': recipe.difficulty.name,
-        'prep_minutes': recipe.prepMinutes,
-        'cook_minutes': recipe.cookMinutes,
-        'servings': recipe.servings,
-        'visibility': recipe.visibility.name,
-        'attribution': recipe.attribution,
-        'forked_from_recipe_id': recipe.forkedFromRecipeId,
-        'forked_from_version_id': recipe.forkedFromVersionId,
-      };
+    'title': recipe.title,
+    'description': recipe.description,
+    'cover_image_url': recipe.coverImageUrl,
+    'cuisine': recipe.cuisine,
+    'category': recipe.category,
+    'difficulty': recipe.difficulty.name,
+    'prep_minutes': recipe.prepMinutes,
+    'cook_minutes': recipe.cookMinutes,
+    'servings': recipe.servings,
+    'visibility': recipe.visibility.name,
+    'attribution': recipe.attribution,
+    'forked_from_recipe_id': recipe.forkedFromRecipeId,
+    'forked_from_version_id': recipe.forkedFromVersionId,
+  };
 
   @override
   Future<Recipe> create(Recipe recipe) async {
@@ -182,7 +193,10 @@ class SupabaseRecipeRepository implements RecipeRepository {
   }
 
   @override
-  Future<Recipe> update(Recipe recipe, {String changeSummary = 'Updated'}) async {
+  Future<Recipe> update(
+    Recipe recipe, {
+    String changeSummary = 'Updated',
+  }) async {
     await _save(recipe.id, recipe, changeSummary);
     return getById(recipe.id);
   }
@@ -264,8 +278,11 @@ class SupabaseRecipeRepository implements RecipeRepository {
 
   @override
   Future<void> delete(String id) async {
-    final removed =
-        await _client.from('recipes').delete().eq('id', id).select('id');
+    final removed = await _client
+        .from('recipes')
+        .delete()
+        .eq('id', id)
+        .select('id');
     if (removed.isEmpty) {
       throw WriteDeniedException('delete this recipe', detail: 'recipe $id');
     }
@@ -304,7 +321,10 @@ class SupabaseRecipeRepository implements RecipeRepository {
   }
 
   @override
-  Future<void> unshare({required String recipeId, required String userId}) async {
+  Future<void> unshare({
+    required String recipeId,
+    required String userId,
+  }) async {
     // Same Gotcha 2 trap as update()/delete(): `shares_owner_all` is scoped to
     // `owns_recipe(recipe_id)`, so a non-owner's revoke matches 0 rows and the
     // dialog would report the person removed while they keep their access.
@@ -325,9 +345,10 @@ class SupabaseRecipeRepository implements RecipeRepository {
   @override
   Future<void> setLiked(String recipeId, {required bool liked}) async {
     if (liked) {
-      await _client
-          .from('recipe_likes')
-          .upsert({'user_id': _uid, 'recipe_id': recipeId});
+      await _client.from('recipe_likes').upsert({
+        'user_id': _uid,
+        'recipe_id': recipeId,
+      });
     } else {
       await _client
           .from('recipe_likes')
@@ -340,9 +361,10 @@ class SupabaseRecipeRepository implements RecipeRepository {
   @override
   Future<void> setSaved(String recipeId, {required bool saved}) async {
     if (saved) {
-      await _client
-          .from('recipe_saves')
-          .upsert({'user_id': _uid, 'recipe_id': recipeId});
+      await _client.from('recipe_saves').upsert({
+        'user_id': _uid,
+        'recipe_id': recipeId,
+      });
     } else {
       await _client
           .from('recipe_saves')
@@ -364,12 +386,13 @@ class SupabaseRecipeRepository implements RecipeRepository {
   Future<bool> _hasMyRow(String table, String recipeId) async {
     final uid = _client.auth.currentUser?.id;
     if (uid == null) return false;
-    final row = await _client
-        .from(table)
-        .select('recipe_id')
-        .eq('recipe_id', recipeId)
-        .eq('user_id', uid)
-        .maybeSingle();
+    final row =
+        await _client
+            .from(table)
+            .select('recipe_id')
+            .eq('recipe_id', recipeId)
+            .eq('user_id', uid)
+            .maybeSingle();
     return row != null;
   }
 
@@ -385,12 +408,13 @@ class SupabaseRecipeRepository implements RecipeRepository {
   Future<double?> myRating(String recipeId) async {
     final uid = _client.auth.currentUser?.id;
     if (uid == null) return null;
-    final row = await _client
-        .from('recipe_ratings')
-        .select('rating')
-        .eq('recipe_id', recipeId)
-        .eq('user_id', uid)
-        .maybeSingle();
+    final row =
+        await _client
+            .from('recipe_ratings')
+            .select('rating')
+            .eq('recipe_id', recipeId)
+            .eq('user_id', uid)
+            .maybeSingle();
     final value = row?['rating'];
     return value == null ? null : (value as num).toDouble();
   }

@@ -43,8 +43,7 @@ class RecordedRequest {
 
   String? param(String name) => url.queryParameters[name];
 
-  Map<String, dynamic> get json =>
-      jsonDecode(body) as Map<String, dynamic>;
+  Map<String, dynamic> get json => jsonDecode(body) as Map<String, dynamic>;
 }
 
 /// Replies to every request from [responses], in order, and records what was
@@ -98,7 +97,8 @@ SupabaseClient fakeSupabase(RecordingHttpClient http) {
 /// `setRating`, …) be tested at all.
 Future<void> signInAs(SupabaseClient client, String userId) async {
   final expiresAt =
-      DateTime.now().add(const Duration(hours: 1)).millisecondsSinceEpoch ~/ 1000;
+      DateTime.now().add(const Duration(hours: 1)).millisecondsSinceEpoch ~/
+      1000;
   await client.auth.recoverSession(
     jsonEncode({
       'access_token': 'fake-access-token',

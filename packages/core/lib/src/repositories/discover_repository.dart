@@ -33,7 +33,9 @@ class SupabaseDiscoverRepository implements DiscoverRepository {
     final rows = await _client
         .rpc('recipes_popular', params: {'p_limit': limit, 'p_offset': offset})
         .select(kRecipeSelect);
-    return (rows as List).map((r) => Recipe.fromJson(r as Map<String, dynamic>)).toList();
+    return (rows as List)
+        .map((r) => Recipe.fromJson(r as Map<String, dynamic>))
+        .toList();
   }
 
   @override
@@ -44,7 +46,9 @@ class SupabaseDiscoverRepository implements DiscoverRepository {
     final rows = await _client
         .rpc('recipes_trending', params: {'p_limit': limit, 'p_offset': offset})
         .select(kRecipeSelect);
-    return (rows as List).map((r) => Recipe.fromJson(r as Map<String, dynamic>)).toList();
+    return (rows as List)
+        .map((r) => Recipe.fromJson(r as Map<String, dynamic>))
+        .toList();
   }
 
   @override
@@ -78,6 +82,8 @@ class SupabaseDiscoverRepository implements DiscoverRepository {
           params: {'p_query': query, 'p_limit': limit, 'p_offset': offset},
         )
         .select(kRecipeSelect);
-    return (rows as List).map((r) => Recipe.fromJson(r as Map<String, dynamic>)).toList();
+    return (rows as List)
+        .map((r) => Recipe.fromJson(r as Map<String, dynamic>))
+        .toList();
   }
 }

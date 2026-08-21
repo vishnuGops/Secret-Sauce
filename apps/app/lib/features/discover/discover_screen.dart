@@ -32,15 +32,16 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Discover'),
-          bottom: searching
-              ? null
-              : const TabBar(
-                  tabs: [
-                    Tab(text: 'Popular'),
-                    Tab(text: 'Trending'),
-                    Tab(text: 'Recent'),
-                  ],
-                ),
+          bottom:
+              searching
+                  ? null
+                  : const TabBar(
+                    tabs: [
+                      Tab(text: 'Popular'),
+                      Tab(text: 'Trending'),
+                      Tab(text: 'Recent'),
+                    ],
+                  ),
         ),
         body: Column(
           children: [
@@ -60,32 +61,33 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                       },
                     ),
                 ],
-                onChanged: (v) =>
-                    ref.read(searchQueryProvider.notifier).state = v,
+                onChanged:
+                    (v) => ref.read(searchQueryProvider.notifier).state = v,
               ),
             ),
             Expanded(
-              child: searching
-                  ? RecipeAsyncGrid(
-                      provider: searchResultsProvider,
-                      empty: _empty('No matches'),
-                    )
-                  : TabBarView(
-                      children: [
-                        RecipeAsyncGrid(
-                          provider: popularRecipesProvider,
-                          empty: _empty('No popular recipes yet'),
-                        ),
-                        RecipeAsyncGrid(
-                          provider: trendingRecipesProvider,
-                          empty: _empty('Nothing trending yet'),
-                        ),
-                        RecipeAsyncGrid(
-                          provider: recentRecipesProvider,
-                          empty: _empty('No recipes yet'),
-                        ),
-                      ],
-                    ),
+              child:
+                  searching
+                      ? RecipeAsyncGrid(
+                        provider: searchResultsProvider,
+                        empty: _empty('No matches'),
+                      )
+                      : TabBarView(
+                        children: [
+                          RecipeAsyncGrid(
+                            provider: popularRecipesProvider,
+                            empty: _empty('No popular recipes yet'),
+                          ),
+                          RecipeAsyncGrid(
+                            provider: trendingRecipesProvider,
+                            empty: _empty('Nothing trending yet'),
+                          ),
+                          RecipeAsyncGrid(
+                            provider: recentRecipesProvider,
+                            empty: _empty('No recipes yet'),
+                          ),
+                        ],
+                      ),
             ),
           ],
         ),
@@ -95,7 +97,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
 }
 
 EmptyView _empty(String title) => EmptyView(
-      title: title,
-      icon: Icons.local_dining_outlined,
-      message: 'Public recipes will appear here.',
-    );
+  title: title,
+  icon: Icons.local_dining_outlined,
+  message: 'Public recipes will appear here.',
+);

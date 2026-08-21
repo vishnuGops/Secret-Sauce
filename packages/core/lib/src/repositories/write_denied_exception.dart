@@ -21,11 +21,13 @@ class WriteDeniedException implements Exception {
 
   /// The sentence a screen shows. Separate from [toString] so `friendlyError`
   /// can surface it without the class name in front of it.
-  String get message => 'Could not $action — it may have been deleted, or you '
+  String get message =>
+      'Could not $action — it may have been deleted, or you '
       'may no longer have permission to change it.';
 
   @override
-  String toString() => detail == null
-      ? 'WriteDeniedException: $message'
-      : 'WriteDeniedException: $message ($detail)';
+  String toString() =>
+      detail == null
+          ? 'WriteDeniedException: $message'
+          : 'WriteDeniedException: $message ($detail)';
 }

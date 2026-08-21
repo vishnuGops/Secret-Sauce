@@ -22,15 +22,16 @@ class RecipeDetailScreen extends ConsumerWidget {
     try {
       final newId = await ref.read(recipeRepositoryProvider).fork(recipeId);
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Forked to your recipes')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Forked to your recipes')));
         context.go(Routes.editRecipe(newId));
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(friendlyError(e))));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(friendlyError(e))));
       }
     }
   }
@@ -47,13 +48,14 @@ class RecipeDetailScreen extends ConsumerWidget {
     return Scaffold(
       body: async.when(
         loading: () => const Scaffold(body: LoadingView()),
-        error: (e, _) => Scaffold(
-          appBar: AppBar(),
-          body: ErrorView(
-            message: friendlyError(e),
-            onRetry: () => ref.invalidate(recipeProvider(recipeId)),
-          ),
-        ),
+        error:
+            (e, _) => Scaffold(
+              appBar: AppBar(),
+              body: ErrorView(
+                message: friendlyError(e),
+                onRetry: () => ref.invalidate(recipeProvider(recipeId)),
+              ),
+            ),
         data: (recipe) {
           final isOwner = currentUser != null && currentUser == recipe.ownerId;
           return CustomScrollView(
@@ -66,8 +68,9 @@ class RecipeDetailScreen extends ConsumerWidget {
                     tooltip: 'Version history',
                     icon: const Icon(Icons.history),
                     onPressed: () async {
-                      final versions = await ref
-                          .read(recipeVersionsProvider(recipeId).future);
+                      final versions = await ref.read(
+                        recipeVersionsProvider(recipeId).future,
+                      );
                       if (context.mounted) {
                         await VersionHistorySheet.show(context, versions);
                       }
@@ -88,16 +91,26 @@ class RecipeDetailScreen extends ConsumerWidget {
                 ],
                 flexibleSpace: FlexibleSpaceBar(
                   title: Text(recipe.title),
-                  background: recipe.coverImageUrl == null
-                      ? Container(color: Theme.of(context).colorScheme.surfaceContainerHighest)
-                      : CachedNetworkImage(
-                          imageUrl: recipe.coverImageUrl!,
-                          fit: BoxFit.cover,
-                        ),
+                  background:
+                      recipe.coverImageUrl == null
+                          ? Container(
+                            color:
+                                Theme.of(
+                                  context,
+                                ).colorScheme.surfaceContainerHighest,
+                          )
+                          : CachedNetworkImage(
+                            imageUrl: recipe.coverImageUrl!,
+                            fit: BoxFit.cover,
+                          ),
                 ),
               ),
               SliverToBoxAdapter(
-                child: _Body(recipe: recipe, isOwner: isOwner, onFork: () => _fork(context, ref)),
+                child: _Body(
+                  recipe: recipe,
+                  isOwner: isOwner,
+                  onFork: () => _fork(context, ref),
+                ),
               ),
             ],
           );
@@ -134,14 +147,19 @@ Future<void> _toggleEngagement(
     ref.invalidate(recipeProvider(recipeId));
   } catch (e) {
     if (context.mounted) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('$failure — ${friendlyError(e)}')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('$failure — ${friendlyError(e)}')));
     }
   }
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({required this.recipe, required this.isOwner, required this.onFork});
+  const _Body({
+    required this.recipe,
+    required this.isOwner,
+    required this.onFork,
+  });
 
   final Recipe recipe;
   final bool isOwner;
@@ -149,7 +167,8 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final servings = ref.watch(selectedServingsProvider(recipe.id)) ?? recipe.servings;
+    final servings =
+        ref.watch(selectedServingsProvider(recipe.id)) ?? recipe.servings;
     final factor = recipe.servings == 0 ? 1.0 : servings / recipe.servings;
     final textTheme = Theme.of(context).textTheme;
 
@@ -191,9 +210,18 @@ class _Body extends ConsumerWidget {
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               DifficultyBadge(difficulty: recipe.difficulty),
-              MetaChip(icon: Icons.schedule, label: '${recipe.totalMinutes} min total'),
-              MetaChip(icon: Icons.timer_outlined, label: 'Prep ${recipe.prepMinutes}m'),
-              MetaChip(icon: Icons.local_fire_department, label: 'Cook ${recipe.cookMinutes}m'),
+              MetaChip(
+                icon: Icons.schedule,
+                label: '${recipe.totalMinutes} min total',
+              ),
+              MetaChip(
+                icon: Icons.timer_outlined,
+                label: 'Prep ${recipe.prepMinutes}m',
+              ),
+              MetaChip(
+                icon: Icons.local_fire_department,
+                label: 'Cook ${recipe.cookMinutes}m',
+              ),
               MetaChip(
                 icon: recipe.visibility.isPublic ? Icons.public : Icons.lock,
                 label: recipe.visibility.isPublic ? 'Public' : 'Private',
@@ -215,7 +243,12 @@ class _Body extends ConsumerWidget {
                 children: [
                   const Icon(Icons.auto_stories),
                   const SizedBox(width: AppSpacing.sm),
-                  Expanded(child: Text(recipe.attribution!, style: textTheme.bodyMedium)),
+                  Expanded(
+                    child: Text(
+                      recipe.attribution!,
+                      style: textTheme.bodyMedium,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -226,37 +259,43 @@ class _Body extends ConsumerWidget {
               CountAction(
                 icon: Icons.favorite_border,
                 activeIcon: Icons.favorite,
-                active: ref.watch(myLikedProvider(recipe.id)).valueOrNull ?? false,
+                active:
+                    ref.watch(myLikedProvider(recipe.id)).valueOrNull ?? false,
                 count: recipe.likeCount,
                 tooltip: 'Like',
                 activeTooltip: 'Unlike',
-                onTap: (active) => _toggleEngagement(
-                  context,
-                  ref,
-                  recipeId: recipe.id,
-                  stateProvider: myLikedProvider(recipe.id),
-                  write: (repo, next) => repo.setLiked(recipe.id, liked: next),
-                  active: active,
-                  failure: 'Could not update your like',
-                ),
+                onTap:
+                    (active) => _toggleEngagement(
+                      context,
+                      ref,
+                      recipeId: recipe.id,
+                      stateProvider: myLikedProvider(recipe.id),
+                      write:
+                          (repo, next) => repo.setLiked(recipe.id, liked: next),
+                      active: active,
+                      failure: 'Could not update your like',
+                    ),
               ),
               const SizedBox(width: AppSpacing.md),
               CountAction(
                 icon: Icons.bookmark_border,
                 activeIcon: Icons.bookmark,
-                active: ref.watch(mySavedProvider(recipe.id)).valueOrNull ?? false,
+                active:
+                    ref.watch(mySavedProvider(recipe.id)).valueOrNull ?? false,
                 count: recipe.saveCount,
                 tooltip: 'Save',
                 activeTooltip: 'Remove from saved',
-                onTap: (active) => _toggleEngagement(
-                  context,
-                  ref,
-                  recipeId: recipe.id,
-                  stateProvider: mySavedProvider(recipe.id),
-                  write: (repo, next) => repo.setSaved(recipe.id, saved: next),
-                  active: active,
-                  failure: 'Could not update your save',
-                ),
+                onTap:
+                    (active) => _toggleEngagement(
+                      context,
+                      ref,
+                      recipeId: recipe.id,
+                      stateProvider: mySavedProvider(recipe.id),
+                      write:
+                          (repo, next) => repo.setSaved(recipe.id, saved: next),
+                      active: active,
+                      failure: 'Could not update your save',
+                    ),
               ),
               const Spacer(),
               if (!isOwner)
@@ -277,11 +316,15 @@ class _Body extends ConsumerWidget {
               const Spacer(),
               IconButton.filledTonal(
                 icon: const Icon(Icons.remove),
-                onPressed: servings > 1
-                    ? () => ref
-                        .read(selectedServingsProvider(recipe.id).notifier)
-                        .state = servings - 1
-                    : null,
+                onPressed:
+                    servings > 1
+                        ? () =>
+                            ref
+                                .read(
+                                  selectedServingsProvider(recipe.id).notifier,
+                                )
+                                .state = servings - 1
+                        : null,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
@@ -289,9 +332,11 @@ class _Body extends ConsumerWidget {
               ),
               IconButton.filledTonal(
                 icon: const Icon(Icons.add),
-                onPressed: () => ref
-                    .read(selectedServingsProvider(recipe.id).notifier)
-                    .state = servings + 1,
+                onPressed:
+                    () =>
+                        ref
+                            .read(selectedServingsProvider(recipe.id).notifier)
+                            .state = servings + 1,
               ),
             ],
           ),
@@ -301,8 +346,7 @@ class _Body extends ConsumerWidget {
           const Divider(height: AppSpacing.xl),
           Text('Instructions', style: textTheme.titleLarge),
           const SizedBox(height: AppSpacing.sm),
-          for (final group in recipe.stepGroups)
-            StepGroupView(group: group),
+          for (final group in recipe.stepGroups) StepGroupView(group: group),
           const SizedBox(height: AppSpacing.xxl),
         ],
       ),

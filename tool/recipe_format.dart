@@ -172,12 +172,13 @@ List<AuthoredRecipe> _load(String dir, List<String> errors) {
     stderr.writeln('Missing directory: $dir');
     exit(1);
   }
-  final files = directory
-      .listSync()
-      .whereType<File>()
-      .where((f) => f.path.endsWith('.json'))
-      .toList()
-    ..sort((a, b) => a.path.compareTo(b.path));
+  final files =
+      directory
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.json'))
+          .toList()
+        ..sort((a, b) => a.path.compareTo(b.path));
 
   final out = <AuthoredRecipe>[];
   for (final file in files) {
@@ -185,8 +186,10 @@ List<AuthoredRecipe> _load(String dir, List<String> errors) {
     try {
       final decoded = jsonDecode(file.readAsStringSync());
       if (decoded is! Map<String, dynamic>) {
-        errors.add('$name: top level must be an object, '
-            'got ${decoded.runtimeType}');
+        errors.add(
+          '$name: top level must be an object, '
+          'got ${decoded.runtimeType}',
+        );
         continue;
       }
       out.add(AuthoredRecipe(name, decoded));
@@ -224,10 +227,10 @@ class _Validator {
   void _warn(String where, String msg) => warnings.add('$where: $msg');
 
   Set<String> get _recipeKeys => {
-        ..._baseRecipeKeys,
-        if (options.allowDemo) 'demo',
-        if (options.allowSim) 'sim',
-      };
+    ..._baseRecipeKeys,
+    if (options.allowDemo) 'demo',
+    if (options.allowSim) 'sim',
+  };
 
   void check(AuthoredRecipe recipe, Map<String, String> titles) {
     final file = recipe.file;
@@ -445,7 +448,8 @@ class _Validator {
       return;
     }
     for (final key in demo.keys) {
-      if (!_demoKeys.contains(key)) _err(file, 'demo.$key is not a known field');
+      if (!_demoKeys.contains(key))
+        _err(file, 'demo.$key is not a known field');
     }
     for (final key in const ['like_count', 'save_count', 'view_count']) {
       final v = demo[key];
@@ -463,10 +467,11 @@ class _Validator {
     // of it, so an extra rating is silently dropped rather than applied.
     if (ratings.length > options.tasterCount) {
       _err(
-          file,
-          'demo.ratings has ${ratings.length} entries but only '
-          '${options.tasterCount} taster accounts exist — the extras would be '
-          'silently dropped');
+        file,
+        'demo.ratings has ${ratings.length} entries but only '
+        '${options.tasterCount} taster accounts exist — the extras would be '
+        'silently dropped',
+      );
     }
     for (var i = 0; i < ratings.length; i++) {
       final v = ratings[i];
@@ -535,14 +540,15 @@ final _catchAllStep = RegExp(r'\bingredients?\b', caseSensitive: false);
 /// stem: limes -> lime -> lim and lime -> lim, tomatoes -> tomatoe -> tomato.
 /// (Stripping "es" outright does not: it sends limes to "lim" but leaves lime
 /// as "lime", so the pair no longer matches.)
-Set<String> stems(String input) => input
-    .toLowerCase()
-    .split(RegExp(r'[^a-zà-ÿ]+'))
-    .where((w) => w.length > 2 && !_stopWords.contains(w))
-    .map((w) => w.endsWith('s') ? w.substring(0, w.length - 1) : w)
-    .map((w) => w.endsWith('e') ? w.substring(0, w.length - 1) : w)
-    .where((w) => w.length > 2)
-    .toSet();
+Set<String> stems(String input) =>
+    input
+        .toLowerCase()
+        .split(RegExp(r'[^a-zà-ÿ]+'))
+        .where((w) => w.length > 2 && !_stopWords.contains(w))
+        .map((w) => w.endsWith('s') ? w.substring(0, w.length - 1) : w)
+        .map((w) => w.endsWith('e') ? w.substring(0, w.length - 1) : w)
+        .where((w) => w.length > 2)
+        .toSet();
 
 /// Walks every string in the decoded JSON, reporting a JSON-pointer-ish path.
 void forEachString(
@@ -564,35 +570,34 @@ void forEachString(
 /// The ingredient/step arrays, normalised: every optional key made explicit so
 /// the SQL helper never has to distinguish "absent" from "null".
 List<Map<String, dynamic>> normaliseIngredientGroups(List<dynamic> groups) => [
-      for (final g in groups.cast<Map<String, dynamic>>())
-        {
-          'name': g['name'],
-          'ingredients': [
-            for (final i
-                in (g['ingredients'] as List).cast<Map<String, dynamic>>())
-              {
-                'quantity': i['quantity'],
-                'unit': i['unit'],
-                'name': i['name'],
-                'note': i['note'],
-                'is_optional': i['is_optional'] ?? false,
-              },
-          ],
-        },
-    ];
+  for (final g in groups.cast<Map<String, dynamic>>())
+    {
+      'name': g['name'],
+      'ingredients': [
+        for (final i in (g['ingredients'] as List).cast<Map<String, dynamic>>())
+          {
+            'quantity': i['quantity'],
+            'unit': i['unit'],
+            'name': i['name'],
+            'note': i['note'],
+            'is_optional': i['is_optional'] ?? false,
+          },
+      ],
+    },
+];
 
 List<Map<String, dynamic>> normaliseStepGroups(List<dynamic> groups) => [
-      for (final g in groups.cast<Map<String, dynamic>>())
-        {
-          'name': g['name'],
-          'steps': [
-            for (final s in (g['steps'] as List).cast<Map<String, dynamic>>())
-              {
-                'text': s['text'],
-                'duration_minutes': s['duration_minutes'],
-                'temperature': s['temperature'],
-                'tip': s['tip'],
-              },
-          ],
-        },
-    ];
+  for (final g in groups.cast<Map<String, dynamic>>())
+    {
+      'name': g['name'],
+      'steps': [
+        for (final s in (g['steps'] as List).cast<Map<String, dynamic>>())
+          {
+            'text': s['text'],
+            'duration_minutes': s['duration_minutes'],
+            'temperature': s['temperature'],
+            'tip': s['tip'],
+          },
+      ],
+    },
+];

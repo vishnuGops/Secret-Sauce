@@ -49,11 +49,12 @@ class SupabaseProfileRepository implements ProfileRepository {
     final profiles = rows.map<Profile>(Profile.fromJson).toList();
     final needle = trimmed.toLowerCase();
     profiles.sort((a, b) {
-      final byRank = _rank(a.displayName, needle) - _rank(b.displayName, needle);
+      final byRank =
+          _rank(a.displayName, needle) - _rank(b.displayName, needle);
       if (byRank != 0) return byRank;
       final byName = a.displayName.toLowerCase().compareTo(
-            b.displayName.toLowerCase(),
-          );
+        b.displayName.toLowerCase(),
+      );
       // `id` last so two people with the same name keep a stable order between
       // calls rather than swapping under the reader's finger.
       return byName != 0 ? byName : a.id.compareTo(b.id);
@@ -80,16 +81,17 @@ class SupabaseProfileRepository implements ProfileRepository {
 
   @override
   Future<Profile> updateMine(Profile profile) async {
-    final row = await _client
-        .from('profiles')
-        .update({
-          'display_name': profile.displayName,
-          'avatar_url': profile.avatarUrl,
-          'bio': profile.bio,
-        })
-        .eq('id', profile.id)
-        .select()
-        .single();
+    final row =
+        await _client
+            .from('profiles')
+            .update({
+              'display_name': profile.displayName,
+              'avatar_url': profile.avatarUrl,
+              'bio': profile.bio,
+            })
+            .eq('id', profile.id)
+            .select()
+            .single();
     return Profile.fromJson(row);
   }
 }

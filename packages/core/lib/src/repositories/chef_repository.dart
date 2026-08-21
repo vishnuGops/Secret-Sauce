@@ -40,7 +40,10 @@ class SupabaseChefRepository implements ChefRepository {
   final SupabaseClient _client;
 
   @override
-  Future<List<ChefStanding>> leaderboard({int limit = 50, int offset = 0}) async {
+  Future<List<ChefStanding>> leaderboard({
+    int limit = 50,
+    int offset = 0,
+  }) async {
     final rows = await _client.rpc(
       'chefs_leaderboard',
       params: {'p_limit': limit, 'p_offset': offset},
