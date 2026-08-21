@@ -141,11 +141,15 @@ class SupabaseRecipeRepository implements RecipeRepository {
   @override
   Future<Recipe> create(Recipe recipe) async {
     final payload = _writablePayload(recipe)..['owner_id'] = _uid;
-    final row = await _client.from('recipes').insert(payload).select().single();
-    final created = Recipe.fromJson(row);
-    await _persistContent(created.id, recipe.ingredientGroups, recipe.stepGroups);
-    await _appendVersion(created.id, 'Initial version');
-    return getById(created.id);
+    // Only the id is needed — the full row is re-read by `getById` below once
+    // the content exists. A bare `.select()` would also drag back the ~450-byte
+    // `search_tsv` (OPT-P1) for nothing.
+    final row =
+        await _client.from('recipes').insert(payload).select('id').single();
+    final newId = row['id'] as String;
+    await _persistContent(newId, recipe.ingredientGroups, recipe.stepGroups);
+    await _appendVersion(newId, 'Initial version');
+    return getById(newId);
   }
 
   @override

@@ -609,12 +609,36 @@ begin
   end if;
 end $$;
 
--- Full-text search document for a recipe (title/description/ingredients/tags).
-create or replace function recipe_search_document(p_recipe uuid)
+-- ============================================================================
+-- Full-text search document (OPT-P1)
+--
+-- The document spans four tables — title, description, ingredient names, tag
+-- names — so a Postgres GENERATED column cannot produce it (those may only
+-- reference the row's own columns). It is therefore a plain column kept current
+-- by triggers, which is the only shape that can be GIN-indexed.
+--
+-- Before this, `recipes_search` called `recipe_search_document(r.id)` — four
+-- subqueries — once per public recipe in the WHERE and again per match in the
+-- ORDER BY, with nothing indexable: 540 ms per search at 1,344 public recipes.
+--
+-- `search_tsv` is server-owned. It is deliberately absent from the column
+-- grants in the block below, so the triggers that write it must be
+-- `security definer` (same reason as `recipe_versions_set_current`).
+-- ============================================================================
+alter table recipes add column if not exists search_tsv tsvector;
+create index if not exists recipes_search_tsv_idx on recipes using gin (search_tsv);
+
+-- THE definition of the document, and the only one. Takes title/description as
+-- arguments rather than reading them back by id, because the `recipes` trigger
+-- below is a BEFORE trigger on a row that is not in the statement snapshot yet
+-- — looking it up would return nothing on INSERT (the B053 trap).
+create or replace function recipe_search_tsv(
+  p_recipe uuid, p_title text, p_description text
+)
 returns tsvector language sql stable as $$
   select
-    setweight(to_tsvector('english', coalesce((select title from recipes where id = p_recipe), '')), 'A') ||
-    setweight(to_tsvector('english', coalesce((select description from recipes where id = p_recipe), '')), 'B') ||
+    setweight(to_tsvector('english', coalesce(p_title, '')), 'A') ||
+    setweight(to_tsvector('english', coalesce(p_description, '')), 'B') ||
     setweight(to_tsvector('english', coalesce(
       (select string_agg(i.name, ' ')
        from ingredients i
@@ -625,6 +649,157 @@ returns tsvector language sql stable as $$
        from recipe_tags rt join tags t on t.id = rt.tag_id
        where rt.recipe_id = p_recipe), '')), 'C');
 $$;
+
+-- Kept as the by-id form for backfills and ad-hoc checks; delegates so there is
+-- exactly one definition of the document to keep in sync.
+create or replace function recipe_search_document(p_recipe uuid)
+returns tsvector language sql stable as $$
+  select recipe_search_tsv(p_recipe, r.title, r.description)
+  from recipes r where r.id = p_recipe;
+$$;
+
+-- The recipes half: BEFORE, so the value is written in the same row write with
+-- no extra UPDATE and no recursion. Scoped to the two columns that matter, so a
+-- counter bump or a `search_tsv` write does not re-fire it.
+create or replace function on_recipe_search_change()
+returns trigger language plpgsql as $$
+begin
+  new.search_tsv := recipe_search_tsv(new.id, new.title, new.description);
+  return new;
+end;
+$$;
+drop trigger if exists recipes_search_tsv on recipes;
+create trigger recipes_search_tsv
+  before insert or update of title, description on recipes
+  for each row execute function on_recipe_search_change();
+
+-- The child half. STATEMENT-level with transition tables, not row-level: one
+-- editor save re-inserts every ingredient of the recipe, and the sim bulk-loads
+-- tens of thousands of rows — per-row would mean one full document rebuild per
+-- ingredient. `security definer` because these write `recipes.search_tsv`,
+-- which no API role is granted, and because the acting user need not own the
+-- recipe a tag rename touches.
+create or replace function refresh_search_tsv(p_recipes uuid[])
+returns void language sql security definer set search_path = public as $$
+  update recipes r
+     set search_tsv = recipe_search_tsv(r.id, r.title, r.description)
+   where r.id = any(p_recipes);
+$$;
+
+create or replace function on_ingredients_search_change()
+returns trigger language plpgsql
+security definer set search_path = public as $$
+begin
+  -- Resolved through ingredient_groups, which still exists for a direct
+  -- ingredient delete. A *group* delete cascades its ingredients away and is
+  -- handled by the group trigger below instead, using the group's own recipe_id.
+  if tg_op = 'DELETE' then
+    perform refresh_search_tsv(array(
+      select distinct g.recipe_id from oldtab o
+      join ingredient_groups g on g.id = o.group_id));
+  else
+    perform refresh_search_tsv(array(
+      select distinct g.recipe_id from newtab n
+      join ingredient_groups g on g.id = n.group_id));
+  end if;
+  return null;
+end;
+$$;
+drop trigger if exists ingredients_search_tsv_ins on ingredients;
+create trigger ingredients_search_tsv_ins after insert on ingredients
+  referencing new table as newtab
+  for each statement execute function on_ingredients_search_change();
+drop trigger if exists ingredients_search_tsv_upd on ingredients;
+create trigger ingredients_search_tsv_upd after update on ingredients
+  referencing new table as newtab
+  for each statement execute function on_ingredients_search_change();
+drop trigger if exists ingredients_search_tsv_del on ingredients;
+create trigger ingredients_search_tsv_del after delete on ingredients
+  referencing old table as oldtab
+  for each statement execute function on_ingredients_search_change();
+
+-- Group deletes: the cascade removes the ingredients first, so by the time the
+-- ingredient trigger runs the group is gone and the join finds nothing. Catch
+-- it here, where `recipe_id` is on the row itself.
+create or replace function on_ingredient_groups_search_change()
+returns trigger language plpgsql
+security definer set search_path = public as $$
+begin
+  if tg_op = 'DELETE' then
+    perform refresh_search_tsv(array(select distinct recipe_id from oldtab));
+  else
+    perform refresh_search_tsv(array(select distinct recipe_id from newtab));
+  end if;
+  return null;
+end;
+$$;
+drop trigger if exists ig_search_tsv_del on ingredient_groups;
+create trigger ig_search_tsv_del after delete on ingredient_groups
+  referencing old table as oldtab
+  for each statement execute function on_ingredient_groups_search_change();
+drop trigger if exists ig_search_tsv_upd on ingredient_groups;
+create trigger ig_search_tsv_upd after update on ingredient_groups
+  referencing new table as newtab
+  for each statement execute function on_ingredient_groups_search_change();
+
+create or replace function on_recipe_tags_search_change()
+returns trigger language plpgsql
+security definer set search_path = public as $$
+begin
+  if tg_op = 'DELETE' then
+    perform refresh_search_tsv(array(select distinct recipe_id from oldtab));
+  else
+    perform refresh_search_tsv(array(select distinct recipe_id from newtab));
+  end if;
+  return null;
+end;
+$$;
+drop trigger if exists recipe_tags_search_tsv_ins on recipe_tags;
+create trigger recipe_tags_search_tsv_ins after insert on recipe_tags
+  referencing new table as newtab
+  for each statement execute function on_recipe_tags_search_change();
+drop trigger if exists recipe_tags_search_tsv_del on recipe_tags;
+create trigger recipe_tags_search_tsv_del after delete on recipe_tags
+  referencing old table as oldtab
+  for each statement execute function on_recipe_tags_search_change();
+
+-- Renaming a tag changes the document of every recipe carrying it. Postgres
+-- rejects `update of name` alongside transition tables ("transition tables
+-- cannot be specified for triggers with column lists"), so the trigger takes
+-- every UPDATE and both transition tables, and the name comparison moves into
+-- the body — which also keeps a no-op UPDATE from rebuilding documents.
+create or replace function on_tags_search_change()
+returns trigger language plpgsql
+security definer set search_path = public as $$
+begin
+  perform refresh_search_tsv(array(
+    select distinct rt.recipe_id
+    from newtab n
+    join oldtab o on o.id = n.id
+    join recipe_tags rt on rt.tag_id = n.id
+    where n.name is distinct from o.name));
+  return null;
+end;
+$$;
+drop trigger if exists tags_search_tsv_upd on tags;
+create trigger tags_search_tsv_upd after update on tags
+  referencing old table as oldtab new table as newtab
+  for each statement execute function on_tags_search_change();
+
+-- Backfill on every apply, for rows that predate the column. Bounded by the
+-- `is null` guard so a re-apply is a no-op rather than a full rebuild.
+update recipes
+   set search_tsv = recipe_search_tsv(id, title, description)
+ where search_tsv is null;
+
+-- Trigger-internal; PostgREST exposes every public function as an RPC.
+do $$
+begin
+  execute 'revoke execute on function refresh_search_tsv(uuid[]) from public';
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'revoke execute on function refresh_search_tsv(uuid[]) from anon, authenticated';
+  end if;
+end $$;
 
 -- ============================================================================
 -- Row-Level Security
@@ -1014,6 +1189,9 @@ as $$
 $$;
 
 -- Full-text search over public recipes (title/description/ingredients/tags).
+-- Reads the trigger-maintained `search_tsv` (OPT-P1) instead of rebuilding the
+-- document per row. The `@@` is now a GIN index probe and `ts_rank` runs only
+-- over the matches, not the whole public corpus.
 create or replace function recipes_search(p_query text, p_limit int default 30)
 returns setof recipes
 language sql
@@ -1022,8 +1200,8 @@ as $$
   select r.*
   from recipes r
   where r.visibility = 'public'
-    and recipe_search_document(r.id) @@ websearch_to_tsquery('english', p_query)
-  order by ts_rank(recipe_search_document(r.id), websearch_to_tsquery('english', p_query)) desc
+    and r.search_tsv @@ websearch_to_tsquery('english', p_query)
+  order by ts_rank(r.search_tsv, websearch_to_tsquery('english', p_query)) desc
   limit p_limit;
 $$;
 

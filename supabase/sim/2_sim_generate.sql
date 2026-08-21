@@ -109,6 +109,13 @@ alter table recipes        disable trigger recipes_touch;
 -- Versions are bulk-inserted many-per-recipe; the pointer is set set-based in
 -- step 4 instead, so the per-row trigger would be N-1 wasted UPDATEs per recipe.
 alter table recipe_versions disable trigger recipe_versions_set_current;
+-- Search documents are rebuilt set-based at the end (OPT-P1). Left enabled, the
+-- ingredient load would rebuild each recipe's document once per INSERT
+-- statement, and the recipes trigger would build one from a recipe that has no
+-- ingredients yet — wasted either way, since every row is rewritten below.
+alter table recipes           disable trigger recipes_search_tsv;
+alter table ingredients       disable trigger ingredients_search_tsv_ins;
+alter table recipe_tags       disable trigger recipe_tags_search_tsv_ins;
 
 -- ============================================================================
 -- 1. The population
@@ -739,6 +746,19 @@ alter table recipe_ratings enable trigger recipe_ratings_agg;
 alter table recipes        enable trigger recipes_chef_stats;
 alter table recipes        enable trigger recipes_touch;
 alter table recipe_versions enable trigger recipe_versions_set_current;
+alter table recipes           enable trigger recipes_search_tsv;
+alter table ingredients       enable trigger ingredients_search_tsv_ins;
+alter table recipe_tags       enable trigger recipe_tags_search_tsv_ins;
+
+-- Build every simulated recipe's search document in one pass, now that its
+-- ingredients and tags are all in place (OPT-P1). Keyed on `search_tsv is null`
+-- rather than a join to `sim.recipe`: the triggers were off for the whole load,
+-- so NULL identifies exactly the rows this run created — including the forks,
+-- which are not all registered the same way — and seeded recipes (built with the
+-- triggers on) are already non-null, so this cannot touch them.
+update recipes r
+   set search_tsv = recipe_search_tsv(r.id, r.title, r.description)
+ where r.search_tsv is null;
 
 -- Counts are scoped to sim.recipe on purpose. Reporting global totals would
 -- fold in the 64 taster ratings from seed.sql and make the funnel look wrong

@@ -512,6 +512,11 @@ relationship was found`. Use the shared `kRecipeSelect` constant in
     [recipe_queries.dart](packages/core/lib/src/repositories/recipe_queries.dart) — it carries
     `owner:profiles!recipes_owner_id_fkey(...)`. Dropping the hint breaks every recipe query at
     once, including the Discover RPCs.
+    **It lists columns explicitly — it is no longer `*` (OPT-P1).** `recipes.search_tsv` is a
+    ~450-byte tsvector nothing on the client reads, and `*` shipped it on every row. So **a new
+    column on `recipes` must be added to `kRecipeSelect` too**, or it decodes as null with no
+    error — the read-side twin of the column-grant obligation. `packages/core/test/chef_models_test.dart`
+    pins the current 24.
 18. **Navigation chrome is two bars with two destination lists**, both in
     [nav_destinations.dart](apps/app/lib/routing/nav_destinations.dart): compact keeps four slots
     _including Profile_; the web bar ([top_nav_bar.dart](apps/app/lib/routing/top_nav_bar.dart))

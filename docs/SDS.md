@@ -270,7 +270,17 @@ erDiagram
   when nothing public was created in 30 days. Deliberate; Popular and Recent still show everything.
   `recipes_public_created_idx` — partial on `(created_at desc) where visibility = 'public'` —
   backs both this window and Recent's ordering.
-- **Search**: Postgres full-text over title + description + ingredient names + tags.
+- **Search**: Postgres full-text over title (weight A) + description (B) + ingredient names and
+  tag names (C), read from the trigger-maintained `recipes.search_tsv` column with a GIN index
+  (OPT-P1). The document spans four tables, so a Postgres **generated** column cannot express it —
+  it is a plain column plus triggers, which is also what makes it indexable.
+  `recipe_search_tsv(uuid, text, text)` is the single definition; it takes title and description as
+  arguments because the `recipes` BEFORE trigger cannot read its own row back on INSERT.
+  Child-table triggers are **statement-level with transition tables** (an editor save re-inserts
+  every ingredient at once). A group cascade-delete is handled by the group's own trigger, since by
+  the time the ingredient trigger runs the group row is gone and the join back to `recipe_id` finds
+  nothing. `search_tsv` is server-owned: not in the column grants, written only by
+  `security definer` triggers, and excluded from `kRecipeSelect` so it never ships to a client.
 
 ## 7. Screens
 

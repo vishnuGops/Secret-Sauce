@@ -303,8 +303,39 @@ void main() {
       expect(kRecipeSelect, contains('owner:profiles'));
     });
 
-    test('selects the base row alongside the embed', () {
-      expect(kRecipeSelect, startsWith('*,'));
+    // Was `startsWith('*,')` until OPT-P1. `recipes.search_tsv` is a ~450-byte
+    // tsvector the client never reads, and `*` shipped it on every row (~13 KB
+    // per 30-card page), so the columns are now listed explicitly. The contract
+    // that actually matters is unchanged — every column `Recipe` decodes must be
+    // requested — so assert that instead of the wildcard.
+    test('requests every column Recipe decodes', () {
+      const required = [
+        'id', 'owner_id', 'title', 'description', 'cover_image_url', 'cuisine',
+        'category', 'difficulty', 'prep_minutes', 'cook_minutes', 'servings',
+        'visibility', 'attribution', 'forked_from_recipe_id',
+        'forked_from_version_id', 'current_version_id', 'like_count',
+        'save_count', 'view_count', 'created_at', 'updated_at', 'rating_sum',
+        'rating_count', 'rating_avg',
+      ];
+      // Only the base-row part: the embed carries its own `id`/`avatar_url`.
+      final base = kRecipeSelect.substring(0, kRecipeSelect.indexOf(',owner:'));
+      for (final column in required) {
+        expect(
+          base.split(',').contains(column),
+          isTrue,
+          reason: '$column is missing from kRecipeSelect, so Recipe.$column '
+              'would silently decode as null',
+        );
+      }
+    });
+
+    test('does not request the server-owned search_tsv', () {
+      expect(
+        kRecipeSelect,
+        isNot(contains('search_tsv')),
+        reason: 'OPT-P1: the tsvector is write-only server state; shipping it '
+            'adds ~450 bytes per recipe for a field nothing reads',
+      );
     });
 
     test('requests the fields ChefBadge renders', () {

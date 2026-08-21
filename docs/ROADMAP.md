@@ -1133,9 +1133,12 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
 
 ### OPT-P — Performance & scalability (sim `medium` makes these measurable)
 
-- [ ] **OPT-P1:** `recipes_search` recomputes `recipe_search_document()` twice per public recipe
-      per search — add a trigger-maintained `search_tsv` column + GIN index (predicted by Phase
-      24; now measurable at 1,671 recipes)
+- [x] **OPT-P1:** `recipes_search` recomputed `recipe_search_document()` twice per public recipe
+      per search. Now a trigger-maintained `recipes.search_tsv` + GIN index: **539.6 ms → ~1–2.5 ms
+      (>200×)** at sim `medium`, identical result set (304 matches). Statement-level triggers with
+      transition tables cover title/description, ingredients, group cascade-deletes, tagging and
+      tag renames. `kRecipeSelect` moved off `*` so the ~450-byte tsvector doesn't ship (~13 KB
+      per 30-card page)
 - [x] **OPT-P2:** `recipes_trending` bounded to 30 days + partial index
       `recipes_public_created_idx (created_at desc) where visibility='public'`. At sim `medium`:
       trending **23.4 ms → 3.9 ms** (6.0×, 1,344 → 351 rows scored); Discover **Recent**
