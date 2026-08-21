@@ -1258,8 +1258,14 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       before network, a failed sign-in showing the mapped message and staying put)
 - [ ] **OPT-T4:** toolchain: commit `pubspec.lock` (B009) · raise the `sdk:` bound / settle
       B027 formatter conflict · migrate to `freezed` 3.x to unpin Flutter (B005)
-- [ ] **OPT-T5:** `npx playwright install chrome`, then the outstanding screenshot pass over
-      `/chefs` v3 and the revised card (B028 procedure; Phases 20/23 both list it)
+- [x] **OPT-T5:** screenshot pass done over Discover (390 / 700 / 1400), `/chefs` v3 at 1400, and
+      a recipe detail at 1000, through the B028 procedure (release build + static serve). Branded
+      Chrome still will not install (needs Administrator), so the pass runs on Playwright's bundled
+      **Chromium** via `npx playwright screenshot` — the MCP browser is the only thing that needs
+      `chrome`. Found and fixed **B055** (tier chip unreadable on a card cover — the defect is
+      colour only, so no layout test could see it) and **B056** (ungrouped like/save counters).
+      `/chefs` v3 verified correct: hero, tier tiles, tie ranks, score explanations, `1 recipe`
+      singular
 - [x] **OPT-T6:** `tool/db.dart` runs `create` / `seed` / `recipes` / `drop` / `clean` under
       `psql -1`, one transaction **per file**, so a mid-file failure rolls back instead of leaving
       a partial schema. The sim files stay exempt — they manage their own transactions and toggle

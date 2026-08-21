@@ -18,6 +18,7 @@ Widget _wrap(Widget child, {double? width, double scale = 1.0, Brightness? b}) {
 }
 
 void main() {
+  _b055();
   group('TierChip', () {
     testWidgets('renders the label for every tier', (tester) async {
       for (final tier in ChefTier.values) {
@@ -223,5 +224,61 @@ void main() {
       // In the lower half of the card, above the footer.
       expect(badge.center.dy, greaterThan(card.center.dy));
     });
+  });
+}
+
+// B055 (found by OPT-T5's screenshot pass): on a cover photo the badge drew the
+// name in white and left the tier chip in its light-surface shade — a dark
+// colour, at 14% alpha, on a black scrim. Legible in no screenshot and failing
+// in no test, because nothing overflowed.
+void _b055() {
+  Widget host({required bool onImage}) => MaterialApp(
+        theme: AppTheme.light(),
+        home: Scaffold(
+          body: Center(
+            child: SizedBox(
+              width: 240,
+              child: ChefBadge(
+                name: 'Amara Okonkwo',
+                tier: ChefTier.masterChef,
+                compact: true,
+                onSurfaceImage: onImage,
+              ),
+            ),
+          ),
+        ),
+      );
+
+  testWidgets('on a cover image the tier uses the dark-surface shade',
+      (tester) async {
+    await tester.pumpWidget(host(onImage: true));
+
+    final label = tester.widget<Text>(
+      find.descendant(
+        of: find.byType(TierChip),
+        matching: find.text(ChefTier.masterChef.label),
+      ),
+    );
+    expect(
+      label.style?.color,
+      TierChip.colorFor(ChefTier.masterChef, Brightness.dark),
+      reason: 'the light-surface shade is unreadable on the scrim',
+    );
+  });
+
+  testWidgets('on a theme surface it still uses the page brightness',
+      (tester) async {
+    await tester.pumpWidget(host(onImage: false));
+
+    final label = tester.widget<Text>(
+      find.descendant(
+        of: find.byType(TierChip),
+        matching: find.text(ChefTier.masterChef.label),
+      ),
+    );
+    expect(
+      label.style?.color,
+      TierChip.colorFor(ChefTier.masterChef, Brightness.light),
+    );
   });
 }

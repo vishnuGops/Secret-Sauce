@@ -1292,9 +1292,22 @@ below are targeted, not structural.
   tall style and B027's format-breaks-analyze trap closes (one whole-repo reformat commit);
   then `freezed` 3.x migration (B005's permanent fix — unpins Flutter, breaking model-syntax
   change, its own change set).
-- **T5 — screenshots**: `npx playwright install chrome`, then the standing B028 procedure
-  (release build + static serve) over `/chefs` v3 and the revised card. Phases 22/23 both
-  proved a class of bug (B029–B032, B047/B048) that only this pass sees.
+- **T5 — screenshots — DONE**, and it paid for itself on the first image.
+  `npx playwright install chrome` **fails on this machine** — "Failed to install Google Chrome…
+  re-running as Administrator may help" — so branded Chrome is still missing and the Playwright
+  **MCP** browser (which is configured for `chrome`) still cannot start. That does not block the
+  pass: Playwright's bundled Chromium is already installed, and
+  `npx playwright screenshot --browser chromium` drives it fine. Procedure unchanged from B028:
+  `flutter build web --release --dart-define-from-file=env.local.json`, `npx serve -l 8099
+  build/web`, hashed deep links (`#/discover`).
+  Covered: Discover at 390 / 700 / 1400, `/chefs` at 1400, a recipe detail at 1000. Two bugs, both
+  of the class this pass exists to catch — neither could fail a widget test:
+  - **B055**: the tier chip on a card cover resolved its colour from the *page's* brightness, so a
+    dark light-mode shade landed at 14% alpha on a black scrim. Nothing overflowed; the tier was
+    simply illegible. Fixed, with a regression test on the resolved colour, and re-shot to confirm.
+  - **B056**: like/save counters rendered ungrouped (`1500` next to the chef card's `1,500`).
+  `/chefs` v3 itself came out clean — hero, tier tiles, tied ranks sharing a number, the score
+  breakdown, and `1 recipe` in the singular (B031 holding).
 - **T6 — `tool/db.dart`**: pass `-1` (single transaction) for `db:create`/`db:seed`/`db:recipes`
   so a mid-file failure rolls back instead of leaving half-applied DDL; the sim files manage
   their own transactions and are exempt.

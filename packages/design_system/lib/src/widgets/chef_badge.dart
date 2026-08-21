@@ -86,7 +86,10 @@ class ChefBadge extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               // The tier sits under the name, per the product requirement.
-              TierChip(tier: tier, dense: compact),
+              // `onSurfaceImage` has to reach the chip too (B055) — the badge
+              // was passing it to the name only, so on a cover photo the name
+              // went white and the tier stayed in its light-surface shade.
+              TierChip(tier: tier, dense: compact, onImage: onSurfaceImage),
             ],
           ),
         ),

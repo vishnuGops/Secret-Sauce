@@ -9,13 +9,29 @@ import 'package:design_system/src/theme/app_theme.dart';
 /// read on a dark surface and vice versa, so each tier carries a pair. The tier
 /// labels are fixed English strings from [ChefTier.label].
 class TierChip extends StatelessWidget {
-  const TierChip({super.key, required this.tier, this.dense = false});
+  const TierChip({
+    super.key,
+    required this.tier,
+    this.dense = false,
+    this.onImage = false,
+  });
 
   final ChefTier tier;
 
   /// Drops the icon and tightens padding, for dense surfaces like a card
   /// overlay where horizontal space is the scarce resource.
   final bool dense;
+
+  /// Set when the chip sits on a **dark scrim over a cover photo** rather than
+  /// on a theme surface (B055).
+  ///
+  /// Without it the chip reads `theme.brightness` — which is the *page's*
+  /// brightness, still light — and paints the light-mode shade, a dark colour
+  /// chosen to contrast with a light background, at 14% alpha on top of black.
+  /// The label all but disappeared: on the recipe card the chef's name was
+  /// crisp white and the tier under it was dark purple on dark grey. Only a
+  /// screenshot catches this; every layout test passed.
+  final bool onImage;
 
   static IconData iconFor(ChefTier tier) => switch (tier) {
         ChefTier.homeCook => Icons.egg_outlined,
@@ -45,7 +61,10 @@ class TierChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = colorFor(tier, theme.brightness);
+    // On a scrim the surface is dark whatever the page's brightness is, so the
+    // dark-surface half of each tier's colour pair is the correct one.
+    final color =
+        colorFor(tier, onImage ? Brightness.dark : theme.brightness);
 
     return Container(
       padding: EdgeInsets.symmetric(
@@ -53,7 +72,9 @@ class TierChip extends StatelessWidget {
         vertical: dense ? 1 : 2,
       ),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.14),
+        // A heavier wash on a scrim: 14% of a pale colour over black is
+        // indistinguishable from the scrim itself.
+        color: color.withValues(alpha: onImage ? 0.28 : 0.14),
         borderRadius: BorderRadius.circular(999),
       ),
       child: Row(

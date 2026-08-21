@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
@@ -69,7 +70,10 @@ class CountAction extends StatelessWidget {
           size: 18,
           color: active ? scheme.primary : null,
         ),
-        label: Text('$count'),
+        // Grouped, like every other counter in the product (B031's family):
+        // a recipe with 1,500 likes read `1500` here and `1,500` on the chef
+        // card three taps away.
+        label: Text(groupedCount(count)),
       ),
     );
   }
