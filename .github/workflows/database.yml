@@ -1,0 +1,137 @@
+name: Database
+
+# The SQL half of this repo had no automated coverage at all (OPT-T1). The
+# triggers, the RLS policies, the grants, the ranking RPCs and the 39 sim
+# assertions were verified only by hand, on one machine, and recorded in
+# BUG-TRACKER.md afterwards — which is how B024 shipped through a green run of
+# both paths that are convenient to test locally.
+#
+# **No secret is involved and none may be added.** Every statement here runs
+# against the ephemeral Supabase stack this job starts inside the runner, at
+# the CLI's fixed local address. `tool/db.dart` fires at whatever
+# `SUPABASE_DB_URL` points at with no prod guard (CLAUDE.md Gotcha 7), so wiring
+# a `SUPABASE_DB_URL` secret into CI would aim `drop.sql` at whatever that
+# secret happens to be. The URL below is hard-coded for exactly that reason.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'supabase/**'
+      - 'recipeData/**'
+      - 'simData/**'
+      - 'tool/**'
+      - '.github/workflows/database.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'supabase/**'
+      - 'recipeData/**'
+      - 'simData/**'
+      - 'tool/**'
+      - '.github/workflows/database.yml'
+
+env:
+  # The Supabase CLI's local database, inside this runner. Not a secret, not
+  # reachable from outside the job.
+  DB_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+  PSQL: psql -v ON_ERROR_STOP=1 --quiet
+
+jobs:
+  schema:
+    name: Schema, seed, sim
+    runs-on: ubuntu-latest
+    # `supabase start` pulls a handful of images on a cold runner.
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The upgrade-path step needs the previous version of the baseline,
+          # which means history, not a shallow clone.
+          fetch-depth: 0
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      # Only the database is needed. Studio, realtime, storage, the edge runtime
+      # and the analytics stack are all cost with no assertion behind them —
+      # but the DB container itself is mandatory: `0001_init.sql` references
+      # `auth.users`, so plain Postgres cannot apply it.
+      - name: Start the local stack (database only)
+        run: |
+          supabase start \
+            -x studio,realtime,storage-api,imgproxy,edge-runtime,logflare,vector,supavisor \
+            --ignore-health-check
+
+      # ------------------------------------------------------------------
+      # Path 1 — a fresh database, the way a new machine sees the project.
+      # ------------------------------------------------------------------
+      - name: Fresh apply — baseline, seed, recipes
+        run: |
+          $PSQL "$DB_URL" -f supabase/scripts/drop.sql
+          for f in supabase/migrations/*.sql; do $PSQL "$DB_URL" -1 -f "$f"; done
+          $PSQL "$DB_URL" -1 -f supabase/seed.sql
+          $PSQL "$DB_URL" -1 -f supabase/seed_recipes.sql
+
+      - name: Simulated population (tiny) + assertions
+        run: |
+          $PSQL "$DB_URL" -f supabase/sim/0_sim_schema.sql
+          # A no-op on a fresh runner, and deliberate anyway: the generator is
+          # additive and registry-driven, so a `sim` schema that survived a
+          # `drop.sql` makes it build on top of a population whose rows are gone
+          # (B054). Cheap insurance against a future reordering of this job.
+          $PSQL "$DB_URL" -f supabase/sim/9_sim_teardown.sql
+          $PSQL "$DB_URL" -f supabase/sim/1_sim_dishes.sql
+          $PSQL "$DB_URL" -c "insert into sim.config (key, value) values ('preset','tiny'),('seed','20260820') on conflict (key) do update set value = excluded.value;"
+          $PSQL "$DB_URL" -f supabase/sim/2_sim_generate.sql
+          $PSQL "$DB_URL" -f supabase/sim/3_sim_verify.sql
+
+      # ------------------------------------------------------------------
+      # Path 2 — re-apply everything on top of itself. Every file in this repo
+      # claims to be idempotent; this is the only thing that checks.
+      # ------------------------------------------------------------------
+      - name: Re-apply (idempotency)
+        run: |
+          for f in supabase/migrations/*.sql; do $PSQL "$DB_URL" -1 -f "$f"; done
+          $PSQL "$DB_URL" -1 -f supabase/seed.sql
+          $PSQL "$DB_URL" -1 -f supabase/seed_recipes.sql
+          $PSQL "$DB_URL" -f supabase/sim/3_sim_verify.sql
+
+      # ------------------------------------------------------------------
+      # Path 3 — the upgrade path (CLAUDE.md Gotcha 6). Neither of the paths
+      # above can surface a stale-object bug, because both build from nothing.
+      # A deployed database takes this third one: the PREVIOUS baseline is
+      # already applied, and today's is layered on top. B024 shipped green
+      # through paths 1 and 2.
+      # ------------------------------------------------------------------
+      - name: Upgrade path — previous baseline, then this one
+        run: |
+          prev=$(git log -n 2 --format=%H -- supabase/migrations/0001_init.sql | tail -1)
+          head=$(git log -n 1 --format=%H -- supabase/migrations/0001_init.sql)
+          if [ "$prev" = "$head" ]; then
+            echo "::notice::Only one revision of the baseline exists — nothing to upgrade from."
+            exit 0
+          fi
+          echo "Upgrading from $prev"
+          git show "$prev:supabase/migrations/0001_init.sql" > /tmp/previous_init.sql
+
+          $PSQL "$DB_URL" -f supabase/scripts/drop.sql
+          $PSQL "$DB_URL" -1 -f /tmp/previous_init.sql
+          $PSQL "$DB_URL" -1 -f supabase/seed.sql
+          # Today's schema on top of yesterday's database.
+          for f in supabase/migrations/*.sql; do $PSQL "$DB_URL" -1 -f "$f"; done
+
+      - name: Smoke — the surfaces the app actually calls
+        run: |
+          $PSQL "$DB_URL" -c "select count(*) from recipes_popular(5, 0);"
+          $PSQL "$DB_URL" -c "select count(*) from recipes_trending(5, 0);"
+          $PSQL "$DB_URL" -c "select count(*) from recipes_search('chicken', 5, 0);"
+          $PSQL "$DB_URL" -c "select count(*) from chefs_leaderboard(5, 0);"
+          $PSQL "$DB_URL" -c "select count(*) from chefs_tier_counts();"
+
+      # A failure above leaves the stack running; this frees the runner either
+      # way and keeps the logs from ending on a Docker teardown error.
+      - name: Stop the stack
+        if: always()
+        run: supabase stop --no-backup || true

@@ -21,10 +21,11 @@ on production by documented procedure. Passwords there are randomized
 log-in-able production accounts whose credentials sat in the repo.
 
 Flag when a diff: adds a destructive action to `tool/db.dart` or widens `drop.sql`/`clean.sql`
-without a confirmation or environment check; adds a `db:*` melos script or wires `db:*`/`psql`
-into `.github/workflows/*` (CI has no `SUPABASE_DB_URL` today — a new one aims a drop at whatever
-secret is added); or puts **any literal credential** in `seed.sql` — a password, token, or API
-key, including for an account "nobody uses". `drop.sql` deliberately spares `auth.users`, so a
+without a confirmation or environment check; **adds a `SUPABASE_DB_URL` secret to
+`.github/workflows/*`** — CI does run SQL now (`database.yml`, OPT-T1) but only against the
+ephemeral stack it starts inside the runner, at a hard-coded local address, and a secret there
+would aim `drop.sql` at whatever the secret is; or puts **any literal credential** in `seed.sql` —
+a password, token, or API key, including for an account "nobody uses". `drop.sql` deliberately spares `auth.users`, so a
 seeded account is permanent and `db:reset` cannot remove it.
 
 Suggested fix shape, **advisory by project decision**: gate destructive actions on an explicit
@@ -276,10 +277,13 @@ The failure modes here all shipped once already (B042–B045):
   rule is Critical — it deletes `auth.users` rows). §7 is Medium.
 - Generated `*.g.dart` / `*.freezed.dart` are git-ignored (`.gitignore:11-13`) — their absence
   from a diff is never a finding; the missing `melos run build_runner` is (see below).
-- **`packages/core` now has a `test/` dir, but it covers model decoding only.** Every repository
-  method is still untested and still blocked on mocking `SupabaseClient`, and **no SQL is tested
-  anywhere** — CI has no database job. A green `melos run test --no-select` says nothing about a
-  repository or schema change; require local-stack evidence for those.
+- **What the suites can and cannot tell you.** `packages/core/test/` covers model decoding, the
+  pure helpers, and — since OPT-T2 — the repositories, through a recording `http.BaseClient` under
+  a real `SupabaseClient`: it asserts the *request* (select fragment, embed orders, page window,
+  RPC body) against a canned reply, not that Postgres agrees. `database.yml` (OPT-T1) applies the
+  schema, seed and sim on a real Postgres — fresh, re-applied, and on the upgrade path — but every
+  statement in it runs as `postgres`, so **RLS is bypassed**. A policy change still needs
+  local-stack evidence with `set local role authenticated` (the class B053 lived in).
 
 ## Doc-sync obligations
 

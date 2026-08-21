@@ -1230,14 +1230,29 @@ below are targeted, not structural.
 
 ### OPT-T — Tests, tooling & process
 
-- **T1 — the CI database job** (Phase 11 item 2 + Phase 24's deferred item, folded): GitHub
-  Actions service running the Supabase stack (plain Postgres cannot apply `0001_init.sql` —
-  `profiles.id → auth.users`), then `0001_init → seed → seed_recipes → sim tiny →
-  3_sim_verify.sql`, twice (idempotency), plus the Gotcha-6 upgrade-path variant
-  (`git show <last-release>` base first). ~2–3 min per run. This single job covers the trigger/
-  RLS/RPC surface nothing re-verifies today, executes the 30 sim assertions on every PR, and is
-  the precondition for OPT-S1/P1/P2/A6 landing with regression cover instead of a one-off
-  local-stack note in the tracker.
+- **T1 — the CI database job — DONE.** `.github/workflows/database.yml`, a separate workflow
+  gated on `supabase/**`, `recipeData/**`, `simData/**`, `tool/**` so a Dart-only PR does not pay
+  for it. `supabase start` inside the runner (minus studio/realtime/storage/imgproxy/edge/
+  logflare/vector/supavisor) because plain Postgres cannot apply the baseline —
+  `profiles.id → auth.users`. Three paths, in one job so they share the stack:
+  1. **Fresh:** drop → every migration → `seed.sql` → `seed_recipes.sql` → sim `tiny` →
+     `3_sim_verify.sql`'s 39 assertions.
+  2. **Re-apply:** the whole sequence again on top of itself. Every file in this repo claims
+     idempotency; nothing checked it before.
+  3. **Upgrade path** (Gotcha 6): the **previous** revision of `0001_init.sql`, found with
+     `git log -n 2 -- <path>` rather than a tag that does not exist, applied to a dropped
+     database, then today's on top. This is the path a deployed project takes and the one B024
+     shipped through — both easy paths were green.
+  Then a smoke step calling the five RPCs the app actually calls.
+  **No secret, and none may be added** — every statement runs against the runner's ephemeral
+  stack at the CLI's fixed local address. `tool/db.dart` has no prod guard (Gotcha 7), so a
+  `SUPABASE_DB_URL` secret in CI would point `drop.sql` at whatever that secret is; the workflow
+  header says so.
+  Verified by running the identical sequence against the local stack (the runner itself cannot be
+  exercised from here): all three paths clean, `ALL CHECKS PASSED` on the tiny population, the
+  five RPCs answer. That run is also what found **B054** — `db:reset` leaves the sim registry
+  pointing at a population `drop.sql` deleted, which fails the sim's own assertions. Logged, not
+  fixed: the fix makes `db:reset` delete `auth.users` rows and is the owner's call.
 - **T2 — repository unit tests — DONE**, and the blocker turned out to be the wrong shape of the
   question. Nothing needs to mock `SupabaseClient`: it accepts an `httpClient`, so
   `packages/core/test/support/fake_supabase.dart` slides a recording `BaseClient` underneath it —

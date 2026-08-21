@@ -1237,9 +1237,13 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
 
 ### OPT-T — Tests, tooling & process (existing debt, consolidated)
 
-- [ ] **OPT-T1:** the CI Postgres job — `0001_init.sql → seed → recipes → sim tiny →
-      3_sim_verify.sql` (Phase 11's harness + Phase 24's deferred CI item; the single highest-
-      leverage test investment in the repo)
+- [x] **OPT-T1:** `.github/workflows/database.yml` — a second job that starts the Supabase stack
+      inside the runner and walks **three** paths: fresh apply → seed → recipes → sim tiny → the
+      39 assertions; a full re-apply (the only thing that checks the idempotency every file
+      claims); and the **upgrade path** (Gotcha 6) — the previous revision of the baseline applied
+      first, today's layered on top, which is the path B024 shipped through. No `SUPABASE_DB_URL`
+      secret, by design. Verified by running the same sequence locally, which also turned up
+      **B054** (`db:reset` leaves a stale sim registry)
 - [x] **OPT-T2:** repository tests exist — 14 of them, without mocking `SupabaseClient` at all.
       `SupabaseClient` takes an `httpClient`, so `test/support/fake_supabase.dart` records the
       request and replies from a queue; `signInAs` uses `recoverSession` to sign in offline. Pins

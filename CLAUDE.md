@@ -44,7 +44,9 @@ second app.
 secret-sauce/
 ├── CLAUDE.md · README.md · melos.yaml · pubspec.yaml · analysis_options.yaml
 ├── .claude/skills/            # code-review + review-checklist (repo's own review criteria)
-├── .github/workflows/ci.yml   # analyze + test, pinned Flutter 3.44.8 / melos 6.3.3
+├── .github/workflows/        # ci.yml: analyze + test, pinned Flutter 3.44.8 / melos 6.3.3
+│                             # database.yml: schema/seed/sim on a real Postgres (OPT-T1) —
+│                             #   fresh + re-apply + upgrade path; NEVER give it a DB secret
 ├── docs/                      # ROADMAP · EXECUTION-PLAN · SDS · BUG-TRACKER (see "Docs–code sync")
 ├── recipeData/                # THE Secret Sauce Kitchen's 14 recipes (content)
 │   ├── recipes/<slug>.json    #   one per file — the filename IS the identity
@@ -535,8 +537,11 @@ the `code-review` skill). The ones you need while _writing_ code:
     verify against a local stack — a throwaway harness under `apps/app/test/` pointed at
     `http://127.0.0.1:54321` is the practical way to drive real repository code; delete it after,
     since CI has no database job.
-    **Nothing in CI tests SQL at all** — the formula/threshold functions, the triggers, RLS, and
-    the ranking RPCs are covered only by manual local-stack runs recorded in `BUG-TRACKER.md`.
+    **CI now applies the SQL** (`database.yml`, OPT-T1): fresh apply, re-apply, and the Gotcha 6
+    upgrade path, plus the sim's 39 assertions on a `tiny` population. What it still does not do
+    is exercise **RLS as a signed-in user** — everything in that job runs as `postgres`, which
+    bypasses policies (the class B053 lived in). Policy changes still need a local-stack run with
+    `set local role authenticated`.
 16. **`supabase/seed_recipes.sql` is generated — edit `recipeData/recipes/*.json` instead.**
     `melos run recipes:gen` rewrites it; commit both. CI's `recipes:check` catches a stale file,
     which matters because **nothing reads the JSON at runtime** — drift is invisible until the
