@@ -627,6 +627,33 @@ recipe` lives on the My Recipes header and search in Discover's search bar; putt
     Client state is `PagedRecipesNotifier` (`core/src/paging.dart`) and every surface renders
     through `RecipeAsyncGrid` — don't hand-roll a second loading/error/empty/grid ladder.
 
+## Seed-data fit (MANDATORY)
+
+**A feature that cannot be demonstrated on seeded data is not planned yet.** Every feature plan —
+before any code — answers: *what does the fixture data have to contain for this to be visible,
+exercisable, and testable?* Then one of three outcomes, stated explicitly in the plan:
+
+1. **Existing data covers it** — say which fixtures and why (e.g. "the 14 authored recipes already
+   carry two forks and three versions").
+2. **Data must be extended** — the extension is **part of the same change set**, not a follow-up.
+   Pick the right file; they are not interchangeable:
+   - `recipeData/recipes/*.json` → `melos run recipes:gen` → `supabase/seed_recipes.sql` — durable
+     **content**. Add here when the feature needs a recipe with a particular *shape*.
+   - `supabase/seed.sql` — **demo** accounts, shares, ratings, authored counters. Add here when the
+     feature needs a relationship between the demo accounts. Never a literal credential (B018).
+   - `simData/dishes/*.json` + `supabase/sim/2_sim_generate.sql` → `melos run db:sim` — **scale and
+     engagement**. Add here when the feature needs a population, a distribution, dated rows, or
+     anything ranked. New engagement kinds also need an assertion in `3_sim_verify.sql`.
+   - Commit the generated `.sql` alongside the JSON — CI's `recipes:check` / `sim:check` fail on a
+     stale file, and nothing reads the JSON at runtime (Gotcha 16).
+3. **It cannot be covered** — **say so, out loud, before building.** Name what is untestable, what
+   would be needed, and what verification is possible instead (local-stack harness, widget test with
+   fixtures, manual pass). Do not quietly build a feature whose only proof is production data.
+
+Check the [Backlog BL-5 coverage register](docs/ROADMAP.md#bl-5--seed--sim-coverage-register-read-this-when-planning-a-feature)
+first — it lists what the fixtures already cannot show (authored-vs-derived counters, the pinned
+`sim.epoch_end()` anchor, registry-scoped teardown, thin dish coverage).
+
 ## Docs–code sync (MANDATORY)
 
 Documentation and code must always be in sync. **The docs that must be kept current are:**
@@ -643,6 +670,9 @@ For **every** change, before it is considered done:
    flags, devices, env vars, tasks, app name/icon, platform config), update `README.md` **and**
    the "Common commands" section of this `CLAUDE.md`. Keep example commands copy-paste accurate
    for this environment (e.g. web runs via `-d web-server`, not `-d chrome`).
+6. **If the change needs fixture data that does not exist yet**, extend `recipeData/`, `seed.sql`,
+   or `simData/` in the same change set and regenerate — see "Seed-data fit" above. If it cannot be
+   covered by fixtures, that goes in the response, not in a follow-up.
 
 A change is **not complete** until the relevant docs above are updated in the same commit/change
 set. When in doubt, re-read the affected doc and confirm every command/flag still matches reality.

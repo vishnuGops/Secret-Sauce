@@ -1322,6 +1322,15 @@ below are targeted, not structural.
   so a mid-file failure rolls back instead of leaving half-applied DDL; the sim files manage
   their own transactions and are exempt.
 
+### Phase OPT — closed (2026-08-22)
+
+26 of 29 items done. The three that remain are not scheduled work and moved to
+[ROADMAP § Backlog](./ROADMAP.md#backlog--deferred-not-scheduled): **OPT-S8** (BL-1, an owner
+action against production `auth.users`), **OPT-P11** (BL-2, accepted debt with a stated revisit
+trigger), **OPT-T4c** (BL-4, `freezed` 3.x, its own change set). **B054** joins them as BL-3 — it
+needs a decision on whether `db:reset` may delete `auth.users` rows, not a patch. Pick further work
+from the Backlog or from Phase 25, not from this phase.
+
 ## Build, run & release (ops)
 
 Task runner is **melos** (`melos.yaml`); Gradle only builds Android. See `README.md` for full

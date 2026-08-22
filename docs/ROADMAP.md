@@ -3,7 +3,8 @@
 All implementation tasks, grouped by phase. Status is kept in sync with the code
 (see the "Docs–code sync" rule in [CLAUDE.md](../CLAUDE.md)).
 
-Legend: `[ ]` not started · `[~]` in progress · `[x]` done
+Legend: `[ ]` not started · `[~]` in progress · `[x]` done · `[→]` deferred to
+[Backlog](#backlog--deferred-not-scheduled)
 
 ## Product direction (the north star)
 
@@ -1086,7 +1087,11 @@ are rows pointing at existing `recipes` — no second recipe system.
 
 - [ ] Extend the Phase 24 generator: a few % of simulated chefs belong to generated restaurants,
       signature dishes drawn from their public recipes — so the directory, empty states, and
-      RLS paths are exercised at scale like everything else
+      RLS paths are exercised at scale like everything else.
+      **This is a prerequisite of the UI work, not a follow-up** — no fixture today contains a
+      restaurant, so the directory, the member list, and the signature-dish rail have nothing to
+      render against until it lands. See the "Seed-data fit" gate in
+      [CLAUDE.md](../CLAUDE.md#seed-data-fit-mandatory)
 
 ---
 
@@ -1097,6 +1102,12 @@ phases deferred, consolidated in one place. Detail — mechanism, fix shape, acc
 [EXECUTION-PLAN.md Phase OPT](./EXECUTION-PLAN.md#phase-opt--optimization--hardening).
 This phase is **rolling**: items are picked by priority band, not executed top-to-bottom in one
 sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG-TRACKER.md`.
+
+**Status 2026-08-22: 26 of 29 items done; the phase is closed for execution.** The three that
+remain are not scheduled work — one is an owner action on production, one is accepted debt, one is
+a deliberate deferral — so they moved to [Backlog](#backlog--deferred-not-scheduled) as `BL-1`,
+`BL-2`, `BL-4` and are marked `[→]` below. Nothing in Phase OPT is waiting on a decision except
+those.
 
 ### OPT-S — Integrity & correctness (do these first)
 
@@ -1126,10 +1137,11 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       git-ignored `db-url.local.ps1` (template committed as `db-url.example.ps1`). Per-shell and
       per-project rather than a global user env var, so it cannot leak into another repo's `db:*`
       run. History checked: the credential was never committed, so no rotation needed
-- [ ] **OPT-S8 (B018):** rotate the pre-fix seed accounts on the **hosted** project.
+- [→] **OPT-S8 (B018):** rotate the pre-fix seed accounts on the **hosted** project.
       `supabase/scripts/rotate_seed_passwords.sql` is written and verified on the local stack
       (16/16 rotated, recipes/ratings/profiles intact) — **running it against hosted is the
-      owner's action**, deliberately not automated: it writes to `auth.users` on production
+      owner's action**, deliberately not automated: it writes to `auth.users` on production.
+      → [Backlog BL-1](#bl-1--opt-s8-b018--rotate-the-hosted-seed-passwords-owner-action)
 
 ### OPT-P — Performance & scalability (sim `medium` makes these measurable)
 
@@ -1179,8 +1191,9 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
       `chefCount()` deleted because the total is the sum of the tiers, and `chefCountProvider`
       now derives it (4 call sites share the one request). `chefDetailProvider` starts both
       requests before awaiting either, keeping the non-fatal top-recipes fallback
-- [ ] **OPT-P11 (accepted, revisit before growth):** per-engagement-row `recompute_chef_stats`
-      is a full aggregate per like/first-view — fine now (SDS §10.3), the hot-path cost later
+- [→] **OPT-P11 (accepted, revisit before growth):** per-engagement-row `recompute_chef_stats`
+      is a full aggregate per like/first-view — fine now (SDS §10.3), the hot-path cost later.
+      → [Backlog BL-2](#bl-2--opt-p11--per-engagement-row-recompute_chef_stats-accepted-debt)
 
 ### OPT-A — Architecture & code quality
 
@@ -1278,14 +1291,16 @@ sitting. New audit findings land here; `Bxxx` tags mean the mechanism is in `BUG
 
 ---
 
-- [ ] **OPT-T4c:** migrate to `freezed` 3.x (B005's permanent fix — unpins Flutter). Breaking
+- [→] **OPT-T4c:** migrate to `freezed` 3.x (B005's permanent fix — unpins Flutter). Breaking
       model syntax across every `@freezed` class, a `build_runner`/`analyzer` bump, and a full
       codegen + verification pass. Do it when a newer Flutter is actually wanted, not before.
+      → [Backlog BL-4](#bl-4--opt-t4c--migrate-to-freezed-3x)
 
 ### Outstanding (environment-dependent)
 
 Toolchain is set up and verified (bootstrap, codegen, analyze, test, `flutter build web --release`),
-and the app runs against the hosted Supabase project with seeded data. These remain:
+and the app runs against the hosted Supabase project with seeded data. These remain — all now
+tracked as [Backlog BL-6](#bl-6--environment-dependent-verification-gaps):
 
 - **Signed-in flows**: create / edit / version history **were exercised end-to-end on the local
   stack** during OPT-P4 (throwaway account + harness, both deleted afterwards) — create with every
@@ -1294,6 +1309,77 @@ and the app runs against the hosted Supabase project with seeded data. These rem
   recipe staying out of public search, and a signed-out update throwing rather than reporting
   success. That run is what found the stale-pointer bug in P4's first cut. **Still not exercised:**
   fork from the UI, and Storage image upload.
-- **Repository unit tests** with a mocked Supabase client.
 - **Mobile/emulator** manual pass (no Android SDK installed on the current machine).
-- Squash the single idempotent `0001_init.sql` into versioned migrations once there's real data.
+- ~~Repository unit tests with a mocked Supabase client~~ — **done by OPT-T2**, and without a mock:
+  a recording `http.BaseClient` under a real `SupabaseClient`.
+- ~~Squash the single idempotent `0001_init.sql` into versioned migrations~~ — **superseded by
+  OPT-A9**: `supabase/migrations/` is a numbered sequence and the baseline is frozen, so a schema
+  change ships as `0002_*.sql` rather than a re-apply of 0001. Chopping the baseline itself was
+  deliberately rejected (it would trade a re-appliable file every doc and script depends on for
+  tidiness).
+
+---
+
+## Backlog — deferred, not scheduled
+
+Everything here is **known, decided, and not being worked on**. An item is in the backlog because
+it is an owner action, accepted debt, or a deferral with a stated trigger — not because it was
+forgotten. Each one names the condition that would pull it back into a phase. Nothing else in this
+document is open: Phases 0–24 are done, Phase 25 is designed-not-started, Phase OPT is closed at
+26 of 29 with the rest listed below.
+
+#### BL-1 — OPT-S8 (B018) — rotate the hosted seed passwords (owner action)
+
+Nine seeded production accounts still carry the pre-fix literal passwords that were committed in
+`seed.sql`. `supabase/scripts/rotate_seed_passwords.sql` is written and verified on the local stack
+(16/16 rotated; recipes, ratings and profiles intact). **Deliberately not automated** — it writes to
+`auth.users` on production, so no script or CI job may hold that credential.
+**Trigger:** run it whenever you next have the hosted DB URL in a shell. Until then, treat those
+accounts as compromised.
+
+#### BL-2 — OPT-P11 — per-engagement-row `recompute_chef_stats` (accepted debt)
+
+Every like and every first-view runs a full aggregate over the actor's public recipes (SDS §10.3).
+Correct, and measured fine at sim `medium`. **Trigger:** a real engagement rate where writes
+contend — revisit as an incremental delta or a debounced recompute before growth, not now.
+
+#### BL-3 — B054 — `db:reset` leaves a stale sim registry (needs a decision, not a patch)
+
+`drop.sql` never touches schema `sim` and spares `auth.users` by design, so a reset on a machine
+that has run the sim leaves 1,000 simulated accounts and a registry describing recipes that no
+longer exist; the next `db:sim` builds on the ghost and `3_sim_verify.sql` fails E9 or A7.
+Making `drop.sql` drop schema `sim` is **worse** — it strands the `auth.users` rows with no
+registry to delete them by. The right shape is `db:reset` running `9_sim_teardown.sql` first, which
+makes `db:reset` a `--yes`-gated destructive action that deletes `auth.users` rows.
+**Trigger:** owner's call on that gate. Workaround today: `melos run db:sim:clean -- --yes` before
+a reset.
+
+#### BL-4 — OPT-T4c — migrate to `freezed` 3.x
+
+B005's permanent fix; unpins Flutter 3.44.8. Breaking model syntax across every `@freezed` class
+plus a `build_runner`/`analyzer` bump and a full codegen + verification pass.
+**Trigger:** the first time a newer Flutter is actually wanted. Its own change set, never the tail
+of a batch.
+
+#### BL-5 — seed & sim coverage register (read this when planning a feature)
+
+Not a task — the standing list of what the fixtures **cannot** demonstrate, so a feature is never
+designed onto data that does not exist. See the "Seed-data fit" gate in
+[CLAUDE.md](../CLAUDE.md#seed-data-fit-mandatory). Known limits today:
+
+- `seed.sql` **authors** counters (`like_count = 2500`) with no `recipe_likes` rows behind them, so
+  any dated, windowed, or "who did this" query reads empty against demo data alone. The sim writes
+  the rows and derives the counters — that is what makes SDS §10.8-style queries testable.
+- The sim's time anchor is `sim.epoch_end()`, **pinned**, not `now()` (B044) — a feature that keys
+  off "recent" must be checked against that anchor, not the wall clock.
+- Teardown is registry-driven (B054 above), so a fixture a feature adds outside `sim.actor` /
+  `sim.recipe` will not be cleaned up.
+- 25 of a planned 120 simulation dishes are authored (Phase 24), so directory/category coverage is
+  thin in places — check `simData/README.md`'s coverage rules before assuming a category populates.
+
+#### BL-6 — environment-dependent verification gaps
+
+Not code debt — things this machine cannot exercise. **Fork from the UI** and **Storage image
+upload** are still unexercised end-to-end; the **mobile/emulator** manual pass is blocked with no
+Android SDK installed. **Trigger:** a machine with the Android SDK, and a local-stack session for
+the two flows.
