@@ -232,6 +232,75 @@ class RecipeCard extends StatelessWidget {
   }
 }
 
+/// A [RecipeCard]-shaped hole, for a shelf whose rows have not arrived.
+///
+/// Same geometry and the same bands, in neutral fills. A rail that collapses
+/// while it loads drags every shelf below it up the page and drops them back
+/// when the rows land, which reads as a broken page rather than a loading one —
+/// the argument [SpotlightCardPlaceholder] was written for, and the reason this
+/// is a placeholder rather than a spinner.
+class RecipeCardPlaceholder extends StatelessWidget {
+  const RecipeCardPlaceholder({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
+    Widget bar(double width, double height) => Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(999),
+      ),
+    );
+
+    return SizedBox(
+      height: kRecipeCardHeight,
+      child: Card(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // The banner band, muted: at full `primary` a row of placeholders
+            // is louder than the real cards beside it.
+            Container(
+              height:
+                  kRecipeCardBannerHeight *
+                  context.textScale.clamp(1.0, kRecipeCardBannerMaxScale),
+              color: scheme.surfaceContainerHigh,
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              child: Center(child: bar(double.infinity, 13)),
+            ),
+            Expanded(
+              child: Container(
+                color: scheme.surfaceContainerHighest,
+                child: Icon(
+                  Icons.restaurant_menu,
+                  size: 34,
+                  color: scheme.onSurfaceVariant.withValues(alpha: 0.35),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  bar(double.infinity, 10),
+                  const SizedBox(height: 6),
+                  bar(140, 10),
+                  const SizedBox(height: 14),
+                  Row(children: [bar(58, 12), const Spacer(), bar(72, 12)]),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 /// The recipe name as a banner across the top of the card.
 ///
 /// Two lines maximum, then an ellipsis — a longer name eats cover height, it

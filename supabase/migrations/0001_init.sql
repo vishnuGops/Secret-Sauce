@@ -4,15 +4,27 @@
 -- buckets, and the discovery / chefs / fork / save RPCs. Idempotent: this is
 -- what a fresh database is built from, and re-running it is safe.
 --
--- **FROZEN as of the OPT phase (OPT-A9).** This file is no longer where schema
--- changes go. `supabase/migrations/` is a numbered sequence now, and the next
--- change is `0002_<what_it_does>.sql` — because re-applying this file to push a
--- one-line change also re-runs its two whole-table backfills, and that cost
--- grows with the data forever.
+-- **Editable while the project is pre-release — owner's call, 2026-08-23.**
+-- Nothing outside this machine depends on the schema yet, so a change goes
+-- HERE, idempotently, rather than into a `0002_*.sql`. Phase 26's three Discover
+-- shelves were folded back in on that basis. Every statement stays guarded
+-- (`if not exists`, `create or replace`, `drop policy if exists`) because the
+-- file is applied over itself constantly.
 --
--- The rules for the next file (numbering, guards, the B024 drop discipline,
+-- **This stops the moment the schema ships to a database that is not ours.**
+-- Two things change on that day, and both bite silently:
+--   1. The Supabase CLI records applied versions in
+--      `supabase_migrations.schema_migrations` and NEVER re-runs a recorded one,
+--      so an edit here would simply not reach that database — and the deploy
+--      would report success.
+--   2. Re-applying this file re-runs its two whole-table backfills (the
+--      `profiles` B015 backfill and `recompute_all_chef_stats()` at the end),
+--      which cost ~110 ms per 1,000 profiles here and grow with the table.
+-- From then on the rule is the OPT-A9 one: a new `NNNN_*.sql` per change.
+--
+-- The rules for that file (numbering, guards, the B024 drop discipline,
 -- grants-with-the-table, upgrade-path verification) are in
--- `supabase/migrations/README.md`. Read it before adding one.
+-- `supabase/migrations/README.md`.
 
 -- ============================================================================
 -- Extensions
@@ -129,6 +141,18 @@ create index if not exists recipes_rating_idx on recipes (rating_avg desc, ratin
 -- public — there is no "recent private recipes" surface.
 create index if not exists recipes_public_created_idx
   on recipes (created_at desc) where visibility = 'public';
+
+-- Discover's shelves (Phase 26). `recipes_quick` and `recipes_projects` filter
+-- on the SUM of the two minute columns, which no other index can serve, and
+-- `recipes_most_forked` groups forks by their source. Both are partial on
+-- public rows: there is no "quick private recipes" surface, and a private fork
+-- is deliberately not counted (see the RPC).
+create index if not exists recipes_public_total_minutes_idx
+  on recipes ((prep_minutes + cook_minutes))
+  where visibility = 'public';
+create index if not exists recipes_public_fork_source_idx
+  on recipes (forked_from_recipe_id)
+  where visibility = 'public' and forked_from_recipe_id is not null;
 
 -- recipe_versions (git-like snapshots)
 create table if not exists recipe_versions (
@@ -1308,29 +1332,52 @@ as $$
   limit p_limit offset p_offset;
 $$;
 
+-- The Bayesian prior behind Popular and UNDER 30: `m` phantom ratings sitting at
+-- the site-wide mean, so a single 5-star recipe cannot outrank a 4.8 with 300
+-- ratings.
+--
+-- It is a function rather than a CTE inside one query because **two** rankings
+-- need it (Phase 26 added `recipes_quick`), and a ranking formula written twice
+-- is the bug class CLAUDE.md Gotcha 19 exists for.
+--
+-- Cross-joined, so it is evaluated ONCE PER QUERY. Written as a per-row scalar
+-- — `bayes_score(rating_sum, rating_count)` — it would re-scan every public
+-- recipe for every public recipe.
+--
+-- EXECUTE stays with `public` (the Postgres default), unlike the mutating
+-- helpers revoked below: PostgREST exposes this as an RPC, and what it exposes
+-- is one aggregate over rows `anon` can already read and sum for itself.
+--
+-- Must be created BEFORE its callers: Postgres validates a SQL function body at
+-- creation, so a `recipes_popular` that cross-joins a not-yet-existing function
+-- fails to create at all.
+create or replace function site_rating_prior(out m numeric, out mean numeric)
+returns record
+language sql
+stable
+as $$
+  select
+    5::numeric,
+    coalesce(sum(rating_sum) / nullif(sum(rating_count), 0), 3.5)
+  from recipes
+  where visibility = 'public';
+$$;
+
 -- Popular: highest rated public recipes.
 --
 -- Straight AVG(rating) would put a single 5-star recipe above a 4.8 with 300
--- ratings, so the score is a Bayesian (weighted) average: each recipe starts
--- with `m` phantom ratings at the site-wide mean, and real ratings pull the
--- score away from that prior. Ties fall back to saves + likes, then recency,
--- then `id` — the last one exists so the order is total and `p_offset` (OPT-P9)
--- cannot show the same recipe on two pages. B024 drop as above.
+-- ratings, so the score is the Bayesian (weighted) average above. Ties fall back
+-- to saves + likes, then recency, then `id` — the last one exists so the order is
+-- total and `p_offset` (OPT-P9) cannot show the same recipe on two pages. B024
+-- drop as above.
 drop function if exists recipes_popular(int);
 create or replace function recipes_popular(p_limit int default 20, p_offset int default 0)
 returns setof recipes
 language sql
 stable
 as $$
-  with prior as (
-    select
-      5::numeric as m,                                        -- prior weight (ratings)
-      coalesce(sum(rating_sum) / nullif(sum(rating_count), 0), 3.5) as mean
-    from recipes
-    where visibility = 'public'
-  )
   select r.*
-  from recipes r cross join prior p
+  from recipes r cross join site_rating_prior() p
   where r.visibility = 'public'
   order by
     ((r.rating_sum + p.m * p.mean) / (r.rating_count + p.m)) desc,
@@ -1369,6 +1416,137 @@ as $$
            r.id
   limit p_limit offset p_offset;
 $$;
+
+-- ============================================================================
+-- Discover's three shelves (Phase 26)
+--
+-- The tabs above answer "what is doing well". These answer "what am I in the
+-- mood for", and each ranks on a DIFFERENT signal — that is the design, not an
+-- accident of what was easy:
+--
+--   recipes_quick        01 UNDER 30          <= 30 min, best-RATED first
+--   recipes_projects     02 WEEKEND PROJECTS  >= 120 min or 'hard', most-SAVED
+--   recipes_most_forked  03 MOST FORKED       by public FORK count
+--
+-- A weeknight recipe is chosen on whether it is any good; a project on whether
+-- it is worth a Saturday (you save a project, you rate what you already
+-- cooked); a fork shelf can only rank on forks. Three shelves ordered by one
+-- key would be one shelf shown three times.
+--
+-- Same contract as the three RPCs above: `setof recipes` so the caller reuses
+-- `kRecipeSelect` and its owner embed, `stable`, invoker-rights, `anon`-callable,
+-- and every order ends `created_at desc, id` because `offset` is meaningless
+-- over a partial order (Gotcha 24).
+-- ============================================================================
+
+-- 01 · UNDER 30.
+--
+-- `between 1 and 30`, not `<= 30`: a recipe with no timings has an *unknown*
+-- duration, not a zero one — `RecipeCard` renders exactly that case as `—`, and
+-- a shelf promising half an hour cannot be half full of cards that decline to
+-- say.
+create or replace function recipes_quick(p_limit int default 20, p_offset int default 0)
+returns setof recipes
+language sql
+stable
+as $$
+  select r.*
+  from recipes r cross join site_rating_prior() p
+  where r.visibility = 'public'
+    and r.prep_minutes + r.cook_minutes between 1 and 30
+  order by
+    ((r.rating_sum + p.m * p.mean) / (r.rating_count + p.m)) desc,
+    r.rating_count desc,
+    (r.save_count + r.like_count) desc,
+    r.created_at desc,
+    r.id
+  limit p_limit offset p_offset;
+$$;
+
+-- 02 · WEEKEND PROJECTS.
+--
+-- Two hours of total time OR the top difficulty rung — the `or` is deliberate,
+-- since a laminated dough is a project at 90 minutes and a stock is not at four
+-- hours. The `> 0` floor applies to both branches for the reason above.
+--
+-- Ranked by SAVES: a save is the "I will cook this when I have a day" signal,
+-- and far fewer people ever get far enough with a six-hour braise to rate it.
+create or replace function recipes_projects(p_limit int default 20, p_offset int default 0)
+returns setof recipes
+language sql
+stable
+as $$
+  select r.*
+  from recipes r
+  where r.visibility = 'public'
+    and r.prep_minutes + r.cook_minutes > 0
+    and (r.prep_minutes + r.cook_minutes >= 120 or r.difficulty = 'hard')
+  order by
+    r.save_count desc,
+    r.like_count desc,
+    r.created_at desc,
+    r.id
+  limit p_limit offset p_offset;
+$$;
+
+-- 03 · MOST FORKED — the lineage shelf, and the one no other recipe app has.
+--
+-- **Only public forks count, and that is correctness, not a filter.** These
+-- RPCs are invoker-rights, so an unqualified `count(*)` over `recipes` is
+-- filtered by RLS: a private fork would count for its owner and for nobody
+-- else, and the same recipe would hold a different rank depending on who asked.
+-- Pinning the count to public rows makes the ranking identical for every caller
+-- and leaks nothing about who forked what in private.
+--
+-- Aggregate first, then join back: the fork set is a small fraction of the
+-- table and `recipes_public_fork_source_idx` covers exactly those rows. A
+-- correlated `count(*)` per candidate would probe the fork index once per public
+-- recipe instead of once.
+--
+-- Ties are the normal case early on (most forked recipes have been forked once),
+-- so the tie-break carries real weight: saves + likes decide, which makes a tied
+-- shelf read as "the most popular recipes anyone has rewritten".
+create or replace function recipes_most_forked(p_limit int default 20, p_offset int default 0)
+returns setof recipes
+language sql
+stable
+as $$
+  with forks as (
+    select f.forked_from_recipe_id as source_id, count(*)::int as fork_count
+    from recipes f
+    where f.forked_from_recipe_id is not null
+      and f.visibility = 'public'
+    group by f.forked_from_recipe_id
+  )
+  select r.*
+  from recipes r
+  join forks on forks.source_id = r.id
+  where r.visibility = 'public'
+  order by
+    forks.fork_count desc,
+    (r.save_count + r.like_count) desc,
+    r.created_at desc,
+    r.id
+  limit p_limit offset p_offset;
+$$;
+
+-- EXECUTE on a new function goes to `public` by default rather than to the API
+-- roles by name, so grant it explicitly the way `chefs_leaderboard` does (B013).
+-- Guarded on `anon` existing, because a bare Postgres has no Supabase roles.
+--
+-- After applying this to a hosted project PostgREST has to learn the functions
+-- exist; Supabase's DDL event trigger reloads the schema cache by itself. If a
+-- shelf still answers `404 … not found in schema cache`, the manual form is
+-- `notify pgrst, 'reload schema';`.
+do $$
+begin
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'grant execute on function recipes_quick(int, int) to anon, authenticated';
+    execute 'grant execute on function recipes_projects(int, int) to anon, authenticated';
+    execute 'grant execute on function recipes_most_forked(int, int) to anon, authenticated';
+    execute 'grant execute on function site_rating_prior() to anon, authenticated';
+  end if;
+end $$;
 
 -- How many chefs sit in each tier (OPT-P10). The `/chefs` hero needs all five
 -- counts plus the total; PostgREST cannot express `group by`, so the client was

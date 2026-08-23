@@ -80,6 +80,27 @@ class _FakeDiscover implements DiscoverRepository {
     int limit = kRecipePageSize,
     int offset = 0,
   }) async => const [];
+
+  @override
+  Future<List<Recipe>> quick({
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) async => const [];
+
+  @override
+  Future<List<Recipe>> projects({
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) async => const [];
+
+  @override
+  Future<List<Recipe>> mostForked({
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) async => const [];
+
+  @override
+  Future<int> publicCount() async => 0;
 }
 
 Future<GoRouter> _pumpAt(

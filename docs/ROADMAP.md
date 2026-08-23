@@ -611,9 +611,10 @@ Compact is untouched: the design is web-only, so `NavigationBar` + FAB still shi
 
 ### Deferred
 
-- [ ] Every shell screen still draws **its own `AppBar`** under the new bar (Discover, Chefs, My
-      Recipes), so web shows two stacked bars. The design's screen mockups have one; folding the
-      page title into the content is a per-screen change, not a nav change
+- [~] Every shell screen still draws **its own `AppBar`** under the new bar, so web shows two
+      stacked bars. The design's screen mockups have one; folding the page title into the content
+      is a per-screen change, not a nav change. **Discover is done** (Phase 26 — the masthead *is*
+      the title); Chefs and My Recipes still stack
 - [ ] The design's avatar is a real photo when the profile has one — `ChefAvatar` supports it, but
       no seeded profile carries an `avatar_url`, so initials are what actually render
 
@@ -849,10 +850,12 @@ Eight decisions taken before code; the four marked **owner** were the owner's ca
 
 ### Not verified
 
-- [ ] **No screenshots.** The B028 procedure needs a browser and Playwright reports `Chromium
-      distribution 'chrome' is not found`. Phase 22 found four bugs that way that no test could see,
-      and two of this phase's five were the same kind. Outstanding, not unnecessary —
-      `npx playwright install chrome` unblocks it
+- [x] **Screenshots — done 2026-08-22**, once Chrome was installed (this item's blocker). `/chefs`
+      shot at 1400 against a `medium` sim through the B028 procedure: hero, five tier tiles summing
+      to the 172 in the pill, the disabled window filter, the 404px board with `1 recipe` singular
+      (B031) and grouped scores, three spotlight cards with serial/rank/driver row, and the two
+      placeholder shelves holding their height. **No defects found** — the two the pass did find
+      were on Discover (B059/B060, Phase 26)
 - [ ] Nothing exercised on a real phone; compact is unchanged from Phase 22 either way
 
 ### Deferred
@@ -1095,6 +1098,206 @@ are rows pointing at existing `recipes` — no second recipe system.
 
 ---
 
+## Phase 26 — Discover v2: masthead, three shelves, one archive
+
+**Status: done.** Build order and the reasoning behind each call in
+[EXECUTION-PLAN.md Phase 26](./EXECUTION-PLAN.md#phase-26--discover-v2-masthead-three-shelves-one-archive).
+
+Discover was **Popular / Trending / Recent** — one corpus ranked three ways, three times. Every tab
+answered "what is doing well", none answered "what am I in the mood for", and a visitor with no
+opinion about ranking had nothing to open. It now leads with three horizontal **shelves**, and the
+old three survive underneath as a **sort** on one browse grid, which is what they always were.
+
+Three decisions taken before code; all three were the **owner's** call on the plan:
+
+| Question | Decision |
+| --- | --- |
+| Which three shelves | **owner:** `01 UNDER 30` (≤ 30 min), `02 WEEKEND PROJECTS` (≥ 120 min or `hard`), `03 MOST FORKED`. Time poles plus the one axis no other recipe app has |
+| Shelves 2 and 3 are empty on a seed-only database | **owner:** fix it in the **sim**, not by authoring content. No new `recipeData` recipes; the fork weighting below is the fixture change |
+| Do the tabs stay | **owner:** no. Masthead + shelves + one `EVERYTHING ELSE` grid with Top rated / Trending / Newest as a sort |
+
+### Ranking — one signal per shelf, and that is the design
+
+Three shelves ordered by the same key would be one shelf shown three times. `UNDER 30` ranks on the
+**Bayesian rating** (of the things you can cook tonight, the ones that turned out well),
+`WEEKEND PROJECTS` on **saves** (you file a project away, you do not cook it tonight), `MOST FORKED`
+on **forks**. Each shelf prints its own rule — `RANKED BY SAVES` — the way the chefs hero states how
+the leaderboard is computed.
+
+### Schema — folded into `supabase/migrations/0001_init.sql`
+
+> Shipped first as `0002_discover_shelves.sql`, then **folded into the baseline on 2026-08-23** at
+> the owner's call: the project is pre-release, nothing outside this machine depends on the schema,
+> so a change belongs in 0001 as long as it stays idempotent. `0002` was deleted. The freeze
+> resumes the day the schema reaches a database that is not ours — see
+> [migrations/README.md](../supabase/migrations/README.md) for why an edited baseline is silently
+> wrong after that (the CLI never re-runs a recorded version).
+
+- [x] `recipes_quick`, `recipes_projects`, `recipes_most_forked` — `setof recipes`, `stable`,
+      invoker-rights, `anon`-callable, `p_limit`/`p_offset`, every order ending `created_at desc, id`
+      (Gotcha 24)
+- [x] `site_rating_prior()` — the `m = 5` phantom-ratings prior, hoisted out of `recipes_popular`'s
+      inline CTE because `recipes_quick` needs the same arithmetic and a second copy of a ranking
+      formula is Gotcha 19. `recipes_popular` is `create or replace`d to read it; the order it
+      produces is unchanged. Called **once per query**, cross-joined — a per-row scalar would
+      re-scan every public recipe for every public recipe
+- [x] `recipes_most_forked` counts **public** forks only. Not a filter — a correctness fix: these
+      RPCs are invoker-rights, so an unqualified count is RLS-filtered and a private fork would
+      count for its owner and nobody else, giving one recipe two different ranks
+- [x] Two partial indexes: `(prep_minutes + cook_minutes)` and the fork-source column, both
+      `where visibility = 'public'`
+- [x] Grants to `anon, authenticated` in the file (B013), and every new signature listed in
+      `scripts/drop.sql`
+
+### Sim — the fork tree gets a trunk
+
+- [x] A fork's source is drawn **weighted by reach**, not uniformly: `sim.exposure_draw` (the same
+      per-recipe number §7 turns into views) × the star-chef multiplier, raised to
+      `sim.fork_bias()`. Measured at `medium`, same seed, same 74 forks: uniform spreads them over
+      **54 sources, top recipe 2**; weighted lands them on **28 sources, top recipe 10** (then
+      5, 5, 3, 3, 3). Both fill the shelf — only one *orders* it
+- [x] `sim.exposure_draw()` in `0_sim_schema.sql` — one definition, because §5 and §7 must agree
+      and they run at opposite ends of the generator
+- [x] `fork_bias` is a `sim.config` knob (default `2.0`), since it is the only thing deciding
+      whether the shelf ranks at all
+- [x] `3_sim_verify.sql` section **G**: all three shelf RPCs are executed at any preset, their row
+      counts asserted from `small` up, and the most-forked recipe must carry **≥ 3** forks — the
+      assertion that fails if the weighting is ever flattened back
+- [x] Additive, so an already-generated database keeps its flat tree until `9_sim_teardown` + regenerate
+
+### core
+
+- [x] `DiscoverRepository.quick/projects/mostForked` + `publicCount()` (a `HEAD` request with an
+      exact count — the masthead's one statistic, no rows over the wire)
+- [x] `RecordingHttpClient` takes response headers, so a `count()` request is testable at all
+
+### design_system
+
+- [x] `CardRailVariant.numbered` — set numeral, title in spaced caps, a hairline rule running out to
+      the controls, ranking kicker. A **variant**, not a second widget (the `ChefCardVariant.board`
+      precedent): the scroll controller and the `1–3 / 12` window are the substance and neither
+      differs. The rule is the only flex child, so the title is capped rather than split 50/50 (B038)
+- [x] The header sheds its kicker, then its position label, then its arrows as it narrows — Discover's
+      rails render at 320px, which the chefs rails never did
+- [x] `RecipeCardPlaceholder` — card geometry in neutral bands, so a loading shelf holds its height
+      instead of dragging the shelves below it up the page
+
+### Claude Design (the mockups, 2026-08-23)
+
+- [x] `Discover.dc.html` redrawn in **both** projects — the bound `4e0d6b97` and `0611ea41` — so the
+      tabs mockup no longer survives anywhere. Five frames: desktop full page, compact light,
+      compact dark (doubling as the seed-only empty-shelf state), searching, and notes
+- [x] `tokens.css` now describes the **v2** card in both projects: `.rbanner`, the fixed 352px
+      height, the 288/340 width bounds and the footer rule. A card is v2 when it carries an
+      `.rbanner` (`:has()`), so the four canvases still drawn cover-first keep the pre-v2 geometry
+      instead of being silently restyled — verified by re-rendering My Recipes, which is unchanged
+- [x] Side effect worth knowing: `4e0d6b97`'s tokens had no width bounds at all, so its other
+      canvases now cap cards at 340px the way `0611ea41`'s already did — which is what the shipped
+      grid actually does
+
+### app
+
+- [x] `discover_masthead.dart` — a printed masthead, not a second dark hero: rule, `THE PASS` kicker
+      with the public-recipe count, title, one line of copy, search field on the title's baseline
+- [x] `discover_shelf.dart` — one widget configured three times; a loaded-empty shelf gives the
+      **reason** ("no public recipe has been forked") rather than a spinner or a bare empty state
+- [x] `discover_screen.dart` — one `CustomScrollView`: masthead, shelves, `EVERYTHING ELSE`. Search
+      replaces everything below the masthead. **No `AppBar`** — that closes the Phase 21 deferred
+      item for this screen
+- [x] `SliverRecipeGrid` / `RecipeAsyncSliverGrid` — the grid and its loading/error/empty ladder as
+      slivers, since a page that owns its scroll cannot nest a `CustomScrollView`. `RecipeGrid` and
+      `RecipeAsyncGrid` are now thin wrappers, so the other five surfaces are untouched
+
+### Tests — 299 green, up from 281
+
+- [x] `discover_screen_test.dart` (**10**): the masthead's count, three shelves each tied to its own
+      repository call, placeholders while loading, the reason strip when loaded-empty, a failed
+      shelf retrying only itself, the sort switching the grid, search replacing the page, the
+      envelope at 320 / 390 / 700 / 1400 × 2.0× with a non-vacuous presence check, and the two
+      screenshot findings — the grid sharing the page's left edge (B059) and the sort link being
+      the width of its own label with a drawn underline (B060)
+- [x] `card_rail_test.dart` (**+5**): numeral and caps title, the three-stage narrowing, the 320px
+      envelope, and B057's over-long kicker (verified to fail without the fix — 721px overflow)
+- [x] `recipe_card_test.dart` (**+1**), `discover_repository_test.dart` (**+2**): each shelf calls
+      its own RPC with the owner embed, and `publicCount` is a `HEAD` with `count=exact`
+
+### Verified
+
+- [x] `melos run analyze` — **No issues found!** ×3, after `melos run format` (safe since OPT-T4)
+- [x] `melos run test --no-select` — core 83, design_system 99, app 117, `SUCCESS`
+- [x] **The SQL ran, from an empty database.** After the fold (2026-08-23): `9_sim_teardown` →
+      `drop.sql` (0 tables left) → the folded `0001_init.sql` on a **clean schema** → seed →
+      seed_recipes. 15 tables, 4 shelf functions, 2 shelf indexes. Then applied `0001` **four more
+      times**: zero errors, and `recipes_popular` still has exactly **one** overload, which is the
+      B024 trap this file is most exposed to. All six Discover RPCs answer on seed-only data —
+      quick **10**, projects **1**, most_forked **0**, popular 20, trending 20, search('lime') 2,
+      prior m=5 / mean 4.578 — identical to what `0002` produced, so the fold changed no behaviour.
+      This also closes the *fresh-apply* path, which the two-file version never exercised locally
+- [x] **The sim ran**, twice: once against `0002`, and again from scratch after the fold —
+      1,000 actors / 1,671 recipes, `3_sim_verify.sql` **ALL CHECKS PASSED** including §G, and the
+      fork tree reproduced **byte-for-byte** (74 forks over 28 sources, max 10), which is the
+      same-seed determinism guarantee holding across a full rebuild. Fork concentration measured
+      both ways at that seed: `fork_bias = 0` gives 74 forks over **54** sources with a maximum of
+      **2**; `fork_bias = 2.0` gives the same 74 over **28** sources with a maximum of **10**. G3
+      (`>= 3`) fails the uniform draw, which is what it is for
+- [x] **Applied to the hosted project, 2026-08-23.** `0001_init.sql` piped through the DB
+      container to the Session pooler (B033 form). Exit 0, no errors. Row counts identical before
+      and after — 24 recipes / 22 public / 17 profiles / 26 versions / 64 ratings, 15 tables — so
+      the re-apply cost data nothing. **Finding: hosted was well behind**, not merely missing the
+      shelves; the apply also installed the `search_tsv` triggers (OPT-P1), `save_recipe` (OPT-A1)
+      and `recipe_versions_set_current` (OPT-S1), all of which reported `does not exist, skipping`
+      on the way in
+- [x] **Verified as `anon` on hosted, which closes the signed-out half of the RLS gap.**
+      `set local role anon` inside a rolled-back transaction: all three shelves execute (so the
+      grants landed), and anon sees **22** recipes where `postgres` sees 24 — RLS hiding the two
+      private ones. The shelves return the same 10 / 1 / 0 for both roles, which is the
+      "same rank for every caller" property `recipes_most_forked` was written for
+- [x] **End-to-end over PostgREST with the anon key** — the check no local stack can give:
+      `recipes_quick` 200/10 rows, `recipes_projects` 200/1, `recipes_most_forked` 200/0,
+      `recipes_popular` 200/20, `recipes_trending` 200/20. Supabase's DDL event trigger reloaded
+      the schema cache by itself; no `notify pgrst` was needed
+- [x] **Screenshots** (Chrome installed 2026-08-22; B028 procedure — release build + `npx serve`):
+      Discover at 390 / 700 / 1400 against the `medium` sim, `/chefs` at 1400, and a forked recipe
+      detail at 1400. Two bugs, both fixed and pinned — **B059** and **B060**. Edges measured off
+      the PNGs rather than eyeballed, which is what caught B059's 16-vs-32px
+- [x] `/code-review` against `CLAUDE.md` + the repo checklist. Two findings, both fixed in this
+      change set — **B057** (the rail's kicker laid out unbounded, B039's class) and **B058** (a
+      `drop.sql` comment claiming a dependency Postgres does not record through a quoted function
+      body). Also caught a doc-sync miss: SDS §8's widget table now carries `RecipeCardPlaceholder`
+      and `CardRail`'s two variants
+- [x] Two more from the screenshot pass, both invisible to every test because nothing overflows:
+      **B059** (the archive grid inset 16 while the page was inset 32) and **B060** (the selected
+      sort's underline was a width-less box — zero-width and undrawn on the web, full-width and
+      stacking the links on a phone). Both fixed, both pinned by tests that fail without the fix
+
+### Not verified
+
+- [x] **Dark mode — verified 2026-08-23.** The browser cannot be switched after boot, so the app
+      was: `themeMode: ThemeMode.dark` pinned in `main.dart`, rebuilt, shot at 1400 and 390, then
+      reverted (`git diff` on `main.dart` clean) and rebuilt light. No defects — the shelf numerals
+      take their scheme accents (`01` primary, `02` tertiary, `03` secondary) and stay legible, the
+      card banner flips to the light-tone primary with dark `onPrimary` text, and the tier chip on
+      the cover scrim holds its contrast (B055's fix works in both brightnesses)
+- [x] **A fresh apply** — done as part of the fold (see above): dropped schema → `0001` → seed →
+      sim, all green
+- [~] **RLS.** The **anon** half is proven on hosted (above): shelves callable, private rows
+      filtered, identical results to `postgres`. A signed-in `authenticated` caller is still
+      unproven — that is now tracked as its own backlog item with the full matrix and the exact
+      `set local role` recipe, **BL-7**, because it is bigger than this phase and predates it
+- [ ] Nothing exercised on a real phone; 390px is a resized desktop browser
+
+### Deferred
+
+- [ ] Shelves do not page. A shelf is 12 rows and there is no "see all this shelf" route; the
+      RPCs take `p_offset` already, so it is a route and a screen, not a query
+- [ ] No shelf is personalised — nothing reads the signed-in user. `Under 30` is the same twelve
+      recipes for everyone
+- [ ] `MOST FORKED` shows no fork **count** on the card. It would need a denormalized
+      `recipes.fork_count` (trigger + backfill + `kRecipeSelect` + the sim's counter pass), which is
+      a schema change the shelf does not need to rank
+
+---
+
 ## Phase OPT — Optimization & hardening backlog (rolling)
 
 Findings from the 2026-08-20 design/architecture audit (Dart + SQL), plus the open items prior
@@ -1246,6 +1449,10 @@ those.
       shipping a one-liner stops re-running the baseline's two whole-table backfills. The
       baseline's content was deliberately **not** chopped into pieces: that would trade a real
       property (one re-appliable file every doc and script depends on) for tidiness.
+      **Partially reversed 2026-08-23** (owner): while the project is pre-release the baseline is
+      editable again, so Phase 26's shelves live in 0001 and `0002` was deleted. The machinery
+      (`db:create` over the whole directory, "apply only the new file" for hosted) is unchanged and
+      the freeze resumes the day the schema ships anywhere real.
       `supabase/migrations/README.md` carries the rules, including the B024 drop discipline
 
 ### OPT-T — Tests, tooling & process (existing debt, consolidated)
@@ -1376,6 +1583,22 @@ designed onto data that does not exist. See the "Seed-data fit" gate in
   `sim.recipe` will not be cleaned up.
 - 25 of a planned 120 simulation dishes are authored (Phase 24), so directory/category coverage is
   thin in places — check `simData/README.md`'s coverage rules before assuming a category populates.
+- The 14 authored recipes top out at **85 minutes**, contain **no `hard`** difficulty and carry
+  **no forks**, so a seed-only database cannot show anything ranked on long cooks or on lineage —
+  Phase 26's shelves `02` and `03` are empty there by construction and say so on the page. Both
+  need the sim.
+- Fork **depth** comes from `sim.fork_bias` (Phase 26). Uniform source selection spreads forks one
+  per recipe, which looks like data and ranks like nothing; anything ordered by fork count needs
+  the weighted draw and the `≥ 3` assertion in `3_sim_verify.sql` §G.
+- **The hosted project has no simulated population at all** — only `seed.sql` + `seed_recipes.sql`.
+  Measured there 2026-08-23, straight after the schema apply: `recipes_quick` **10** rows,
+  `recipes_projects` **1**, `recipes_most_forked` **0**. So `03 MOST FORKED` is legitimately empty
+  on production until somebody forks something, and the shelf's own copy ("no public recipe has
+  been forked") is the correct thing for a visitor to see there — it is not a bug report waiting to
+  happen. Do **not** "fix" it by running `db:sim` against hosted: the sim writes ~1,000 `auth.users`
+  rows and its teardown is registry-driven, so that is a one-way door on a real project. If hosted
+  ever needs a populated fork tree, seed a handful of deliberate forks in `seed.sql` instead, where
+  they are content rather than simulation.
 
 #### BL-6 — environment-dependent verification gaps
 
@@ -1383,3 +1606,61 @@ Not code debt — things this machine cannot exercise. **Fork from the UI** and 
 upload** are still unexercised end-to-end; the **mobile/emulator** manual pass is blocked with no
 Android SDK installed. **Trigger:** a machine with the Android SDK, and a local-stack session for
 the two flows.
+
+**Screenshots are no longer on this list.** Chrome was installed 2026-08-22, so the B028 procedure
+(release build + `npx serve` + Playwright) runs here; Phase 26 used it and Phase 23's outstanding
+pass was completed at the same time.
+
+**Dark mode has a procedure now** (2026-08-23). The browser cannot emulate `prefers-color-scheme`
+after Flutter reads it at boot, so shoot the *app* instead of the browser: pin
+`themeMode: ThemeMode.dark` in `apps/app/lib/main.dart`, rebuild, screenshot, then revert and
+rebuild. Check `git diff` on `main.dart` is empty before you call it done — the pin is a two-line
+edit that is very easy to leave behind.
+
+**Re-shoot on a new port after a rebuild.** `npx serve` plus the browser's HTTP cache will happily
+keep serving the *previous* build from the same origin: the light rebuild above rendered dark until
+it was served on a different port, with `matchMedia` reporting light the whole time. There is no
+service worker to blame (Flutter's is not registered in this build) — it is plain HTTP caching, and
+it will make a revert look like it did not take.
+
+What still cannot be driven here is a **tap inside the Flutter canvas**: web semantics do not come
+up headlessly, so there are no DOM nodes to target and navigation has to be driven by URL.
+
+#### BL-7 — the RLS acceptance matrix as a *signed-in* user (unproven)
+
+**The single largest verification hole in the project, and it is not environment-blocked** — the
+local stack can do it today. Everything that has ever exercised RLS here ran as `postgres`, which
+bypasses policies outright: `seed.sql`, the sim, `3_sim_verify.sql`, CI's `database.yml`, and every
+hosted check. `anon` is now covered (Phase 26 proved it on hosted: the shelves are callable and a
+signed-out reader sees 22 of 24 recipes, the two private ones filtered). **`authenticated` is not.**
+
+This is exactly the gap **B053** lived in: `recipes_select` called a `stable` function that
+re-queried its own table, so *every recipe creation failed* — and nothing caught it, because no
+test in the repo has ever inserted a row as a real signed-in user. It was found by hand, months
+late, while doing something else.
+
+What has to be exercised, per role, against a **private** recipe and a **public** one:
+
+| Role | select | insert (`… RETURNING`) | update | delete |
+| --- | --- | --- | --- | --- |
+| `anon` | ✅ done | — | — | — |
+| owner | ☐ | ☐ (the B053 shape) | ☐ | ☐ |
+| shared-with (`recipe_shares`) | ☐ | — | ☐ must FAIL | ☐ must FAIL |
+| unrelated signed-in user | ☐ must return 0 rows | — | ☐ must FAIL | ☐ must FAIL |
+
+The two that fail *silently* and therefore matter most: an `update`/`delete` matching zero rows
+returns success (Gotcha 2 — the client-side twin of B011), and a `select` policy that cannot see
+its own `INSERT … RETURNING` row (B053). Both look like working code.
+
+**How.** On the local stack, inside a rolled-back transaction:
+
+```sql
+begin;
+set local role authenticated;
+set local request.jwt.claims = '{"sub":"<a real profiles.id>"}';
+-- … the matrix above …
+rollback;
+```
+
+**Trigger:** any change to a policy, a `security definer` function, or the column grants — and
+ideally once on its own merit, since the matrix has never been run to completion.

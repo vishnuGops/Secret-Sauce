@@ -315,7 +315,11 @@ password is wrong.
 
 **Apply only the new migration to a hosted database.** `supabase/migrations/` is a numbered
 sequence and `0001_init.sql` is the frozen baseline (OPT-A9), so a project that already has it
-needs only the files added since. Re-applying the baseline is safe — every statement is guarded —
+needs only the files added since. **There are none today** — the project is still pre-release, so
+Phase 26's shelf RPCs were folded into the baseline rather than shipped as `0002`. The hosted
+project was brought up to date with a full apply of `0001_init.sql` on **2026-08-23** (row counts
+unchanged; it also picked up the `search_tsv` triggers, `save_recipe` and
+`recipe_versions_set_current`, which it had been missing). Re-applying the baseline is safe — every statement is guarded —
 but it re-runs two whole-table backfills, which is the cost the sequence exists to stop paying. A
 project that has **never** had the baseline applied, or has not had it since the OPT phase, needs
 `0001_init.sql` once, first. The rules for writing the next migration are in

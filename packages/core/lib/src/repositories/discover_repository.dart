@@ -15,6 +15,35 @@ abstract interface class DiscoverRepository {
   Future<List<Recipe>> trending({int limit, int offset});
   Future<List<Recipe>> recent({int limit, int offset});
   Future<List<Recipe>> search(String query, {int limit, int offset});
+
+  /// **01 · UNDER 30** — public recipes that take 1–30 minutes end to end,
+  /// best-rated first (the same Bayesian prior [popular] uses).
+  ///
+  /// The floor is not a typo: a recipe with no timings has an *unknown*
+  /// duration, and a shelf that promises half an hour cannot be half full of
+  /// cards that render `—`.
+  Future<List<Recipe>> quick({int limit, int offset});
+
+  /// **02 · WEEKEND PROJECTS** — two hours or more, or the top difficulty rung,
+  /// ranked by **saves**.
+  ///
+  /// Saves rather than rating on purpose: a save is "I will cook this when I
+  /// have a day", which is the decision this shelf serves. A rating comes from
+  /// whoever already got to the end.
+  Future<List<Recipe>> projects({int limit, int offset});
+
+  /// **03 · MOST FORKED** — public recipes ranked by how many *public* recipes
+  /// descend from them.
+  ///
+  /// Public-only is what makes the rank the same number for every caller: these
+  /// RPCs are invoker-rights, so an unqualified count would be RLS-filtered and
+  /// a private fork would count for its owner alone.
+  Future<List<Recipe>> mostForked({int limit, int offset});
+
+  /// How many public recipes exist — the masthead's one statistic.
+  ///
+  /// A `HEAD` request with an exact count: no rows cross the wire.
+  Future<int> publicCount();
 }
 
 class SupabaseDiscoverRepository implements DiscoverRepository {
@@ -68,6 +97,44 @@ class SupabaseDiscoverRepository implements DiscoverRepository {
         .range(offset, offset + limit - 1);
     return rows.map<Recipe>(Recipe.fromJson).toList();
   }
+
+  // The three shelves (Phase 26). Same shape as the two RPC readers above —
+  // they differ only in which ranking the server applies, which is the whole
+  // point of putting each one in SQL rather than sorting on the client.
+  @override
+  Future<List<Recipe>> quick({int limit = kRecipePageSize, int offset = 0}) =>
+      _shelf('recipes_quick', limit: limit, offset: offset);
+
+  @override
+  Future<List<Recipe>> projects({
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) => _shelf('recipes_projects', limit: limit, offset: offset);
+
+  @override
+  Future<List<Recipe>> mostForked({
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) => _shelf('recipes_most_forked', limit: limit, offset: offset);
+
+  Future<List<Recipe>> _shelf(
+    String rpc, {
+    required int limit,
+    required int offset,
+  }) async {
+    final rows = await _client
+        .rpc(rpc, params: {'p_limit': limit, 'p_offset': offset})
+        .select(kRecipeSelect);
+    return (rows as List)
+        .map((r) => Recipe.fromJson(r as Map<String, dynamic>))
+        .toList();
+  }
+
+  @override
+  Future<int> publicCount() => _client
+      .from('recipes')
+      .count(CountOption.exact)
+      .eq('visibility', 'public');
 
   @override
   Future<List<Recipe>> search(

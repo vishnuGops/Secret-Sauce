@@ -85,11 +85,12 @@ secret-sauce/
 │   │                          #   chrome), top_nav_bar.dart (web), nav_destinations.dart (lists)
 │   ├── lib/widgets/           # app-level shared widgets — anything two features both reach:
 │   │                          #   recipe_grid.dart, recipe_async_grid.dart (the paged list every
-│   │                          #   browsing surface renders through), share_dialog.dart,
+│   │                          #   browsing surface renders through — each exports a Sliver* twin
+│   │                          #   for pages that own their scroll), share_dialog.dart,
 │   │                          #   not_yet_tooltip.dart
 │   ├── lib/main.dart · test/{widget_test,chefs_screen_test,chefs_routing_test,
 │   │                          top_nav_bar_test,recipe_editor_test,recipe_detail_test,
-│   │                          my_recipes_header_test,recipe_grid_test,
+│   │                          my_recipes_header_test,recipe_grid_test,discover_screen_test,
 │   │                          discover_search_test,paging_test,share_dialog_test,
 │   │                          auth_screen_test}.dart
 │   │                          # widget_test.dart covers the `/` -> /discover redirect
@@ -98,7 +99,8 @@ secret-sauce/
 └── supabase/
     ├── migrations/               # numbered sequence, applied in filename order (OPT-A9)
     │   ├── README.md            #   the rules: numbering, guards, B024 drops, how to apply
-    │   └── 0001_init.sql        #   FROZEN baseline: tables, triggers, RLS, grants, storage, RPCs
+    │   └── 0001_init.sql        #   the whole schema: tables, triggers, RLS, grants, storage,
+    │                            #   RPCs (incl. the 3 Discover shelves). Editable while pre-release
     ├── seed.sql                  # DEMO fixtures: accounts, demo chefs, ratings (idempotent)
     ├── seed_recipes.sql          # GENERATED from recipeData/ — never hand-edit
     ├── sim/                      # simulated population (Phase 24); schema `sim`, never `public`
@@ -180,7 +182,12 @@ flutter run -d windows --dart-define-from-file=env.local.json                   
 
 # Screenshots / any automated browser: the debug web server renders for ONE client only, so a
 # second page load is blank (B028). Build and serve statically instead. Deep links are hashed.
-# Playwright needs a browser first: `npx playwright install chrome` (Chrome is not installed here).
+# Chrome is installed (2026-08-22), so Playwright drives it directly. Three things to know:
+#  - Dark mode: the browser cannot be switched after Flutter boots. Pin `themeMode: ThemeMode.dark`
+#    in main.dart, rebuild, shoot, then REVERT (check `git diff` on main.dart is empty).
+#  - After a rebuild, serve on a NEW port. The browser's HTTP cache keeps serving the previous
+#    build from the same origin, which makes a revert look like it never happened.
+#  - Flutter web exposes no DOM nodes to click headlessly — navigate by URL, not by tapping.
 flutter build web --release --dart-define-from-file=env.local.json
 npx serve -l 8099 build/web            # http://localhost:8099/#/discover
 ```
@@ -372,7 +379,7 @@ Five Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/m
 | --------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
 | `/`                               | — (no screen)            | **Redirect-only** → `/discover`. `features/home` was retired 2026-08-20; see the note under the table                    |
 | `/auth`                           | `features/auth`          | `authControllerProvider` (AsyncNotifier); redirects to `/discover` when signed in; `?mode=signup` opens the sign-up side |
-| `/discover`                       | `features/discover`      | Popular / Trending / Recent + search; all four via `DiscoverRepository`; signed-out safe                                 |
+| `/discover`                       | `features/discover`      | Masthead + search, three **shelves** (`01 UNDER 30` / `02 WEEKEND PROJECTS` / `03 MOST FORKED` — `discover_shelf.dart`), then one browse grid whose sort is the old Popular / Trending / Recent. No `AppBar` — the masthead is the title. Signed-out safe |
 | `/chefs`                          | `features/chefs`         | Web: `chefs_hero.dart` + a 404px leaderboard panel + rails of `ChefSpotlightCard`. Compact: the plain board. A row or card opens `chef_detail_sheet.dart` (dialog on web, sheet on mobile); signed-out safe |
 | `/my`                             | `features/my_recipes`    | My / Shared-with-me tabs, both paged. Sharing is `widgets/share_dialog.dart` (opened from recipe detail; it writes `recipe_shares`) |
 | `/recipe/:id`                     | `features/recipe_detail` | Servings scaler, rating, like/save, fork, `version_history_sheet.dart`; signed-out safe                                  |
@@ -447,10 +454,16 @@ the `code-review` skill). The ones you need while _writing_ code:
 4. **`GRANT` and RLS are both required.** A new table must be covered by the grants block at
    `0001_init.sql:565-581`, or every API call returns `permission denied for table …` (B013).
    RLS with no policy default-denies: reads return empty, not an error.
-5. **`supabase/migrations/` is a numbered sequence; `0001_init.sql` is the frozen baseline**
-   (OPT-A9). Schema changes go in a **new** `NNNN_*.sql`, never back into 0001 — re-applying the
-   baseline to push a one-line change also re-runs its two whole-table backfills, and that cost
-   grows with the data. `melos run db:create` applies the whole directory in filename order and
+5. **`0001_init.sql` is the whole schema, and it is editable *while the project is pre-release***
+   (owner's call, 2026-08-23 — this reverses OPT-A9's freeze for now). A change goes into 0001,
+   idempotently; Phase 26's shelf RPCs were folded back in and `0002_discover_shelves.sql` deleted.
+   **This ends the day the schema reaches a database that is not ours**, and the numbered sequence
+   resumes, because an edited baseline is then *silently* wrong twice over: the Supabase CLI records
+   applied versions in `supabase_migrations.schema_migrations` and **never re-runs a recorded one**
+   (so `db push` applies nothing and reports success), and re-applying re-runs 0001's two
+   whole-table backfills (~110 ms per 1,000 profiles, growing with the table). Full reasoning in
+   [supabase/migrations/README.md](supabase/migrations/README.md).
+   `melos run db:create` applies the whole directory in filename order and
    tracks nothing, so **every migration still has to be re-runnable**: `if not exists`,
    `drop policy if exists`, `create or replace`, `alter table … add column if not exists`. The
    full rules live in [supabase/migrations/README.md](supabase/migrations/README.md).
@@ -543,7 +556,10 @@ the `code-review` skill). The ones you need while _writing_ code:
     upgrade path, plus the sim's 39 assertions on a `tiny` population. What it still does not do
     is exercise **RLS as a signed-in user** — everything in that job runs as `postgres`, which
     bypasses policies (the class B053 lived in). Policy changes still need a local-stack run with
-    `set local role authenticated`.
+    `set local role authenticated`. `anon` is covered as of Phase 26 (proven on hosted: shelves
+    callable, private rows filtered). The **signed-in** matrix is written out and unrun as **BL-7**
+    in [docs/ROADMAP.md](docs/ROADMAP.md) — read it before touching a policy, a `security definer`
+    function, or the column grants.
 16. **`supabase/seed_recipes.sql` is generated — edit `recipeData/recipes/*.json` instead.**
     `melos run recipes:gen` rewrites it; commit both. CI's `recipes:check` catches a stale file,
     which matters because **nothing reads the JSON at runtime** — drift is invisible until the
@@ -601,6 +617,11 @@ recipe` lives on the My Recipes header and search in Discover's search bar; putt
     spotlight card for its score and points, and the board row for its score. The other half of the
     same rule: a **non-flex child of a `Row` is laid out with an unbounded main axis**, so anything
     in that position without a cap overflows rather than shrinking (B039).
+    **A box with no child takes `constraints.biggest` when bounded and `smallest` when not**
+    (B060) — so `Container(height: 2, color: …)` as an underline is full-width in a `Column` and
+    **zero-width, undrawn**, in that unbounded `Row` position. The same widget, two opposite wrong
+    answers, neither of which overflows or fails a test. A rule that belongs to a label is a
+    `BorderSide` on the box holding the label, never a sibling under it.
 22. **A page can be over-budget in height the same way a card row is over-budget in width** (B037).
     `Column(header, Expanded(body))` gives the header its intrinsic height first — if the header is
     taller than the viewport, `Expanded` gets nothing and the column overflows; no amount of
@@ -626,6 +647,14 @@ recipe` lives on the My Recipes header and search in Discover's search bar; putt
     Adding a new paged surface or a new sort means adding that tie-break in the same change.
     Client state is `PagedRecipesNotifier` (`core/src/paging.dart`) and every surface renders
     through `RecipeAsyncGrid` — don't hand-roll a second loading/error/empty/grid ladder.
+    **`RecipeGrid` / `RecipeAsyncGrid` are `CustomScrollView`s**, so a page that owns its own
+    scroll (Discover: masthead → three shelves → the grid) cannot contain one — that is a
+    scrollable inside a scrollable. Use `SliverRecipeGrid` / `RecipeAsyncSliverGrid`, which are
+    where the layout and the ladder actually live; the two box widgets are thin wrappers around
+    them. Measure with `SliverLayoutBuilder` (`crossAxisExtent` is the sliver world's `maxWidth`),
+    and give every non-grid state `SliverFillRemaining(hasScrollBody: false)` — with a full
+    viewport above it there is no remaining extent, and a scroll body of height zero renders a
+    spinner you cannot see.
 
 ## Seed-data fit (MANDATORY)
 

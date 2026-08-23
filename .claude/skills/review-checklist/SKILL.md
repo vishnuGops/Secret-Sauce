@@ -215,7 +215,16 @@ envelope test fails. Flag a row where one child must win and both carry a flex; 
 is the loser **non-flex inside a `ConstrainedBox`** cap (`LayoutBuilder` → `maxWidth / 2` or `/ 3`),
 `FittedBox` if it is a number — `RecipeCard`'s `DifficultyBadge`, `ChefSpotlightCard`'s score and
 points. The converse is also a finding: a **non-flex child of a `Row` is laid out unbounded**, so
-one added without a cap overflows instead of shrinking (B039, the spotlight rank pill at 3.0×).
+one added without a cap overflows instead of shrinking (B039, the spotlight rank pill at 3.0×;
+B057, the rail's ranking kicker).
+
+**A childless box sizes to the wrong end of the constraints (B060).** `Container`/`SizedBox` with
+no child and no width takes `constraints.biggest` when bounded and `constraints.smallest` when not.
+Flag one used as a **rule or underline under a label**: in a `Column` it stretches to the parent's
+width (which is how Discover's three sort links ended up stacked, one per line), and in the
+unbounded position above it collapses to zero and is simply **not drawn** — the selected-state
+indicator was invisible on the web. Neither overflows and neither fails an envelope test. Accepted
+shape: a `BorderSide` on the box that holds the label.
 
 **Height budgets, not just width (B037).** `Column(header, Expanded(body))` gives the header its
 intrinsic height first; a header taller than the viewport leaves `Expanded` nothing and the column

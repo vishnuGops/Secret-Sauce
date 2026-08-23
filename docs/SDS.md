@@ -313,6 +313,51 @@ erDiagram
   nothing. `search_tsv` is server-owned: not in the column grants, written only by
   `security definer` triggers, and excluded from `kRecipeSelect` so it never ships to a client.
 
+### 6.0 Shelves (Phase 26)
+
+Discover leads with three horizontal **shelves**, defined in
+`supabase/migrations/0001_init.sql`. They answer a different question from the three
+rankings above: not "what is doing well" but "what am I in the mood for".
+
+| Shelf | Predicate | Ranked by |
+| --- | --- | --- |
+| `01 UNDER 30` (`recipes_quick`) | `prep_minutes + cook_minutes` **between 1 and 30** | Bayesian rating, then the Popular tie-breaks |
+| `02 WEEKEND PROJECTS` (`recipes_projects`) | total `> 0` **and** (total `>= 120` **or** `difficulty = 'hard'`) | `save_count`, then `like_count` |
+| `03 MOST FORKED` (`recipes_most_forked`) | has at least one **public** fork | fork count, then `save_count + like_count` |
+
+Four things about this are load-bearing:
+
+- **One signal per shelf.** Three shelves ordered by the same key are one shelf shown three times.
+  A weeknight recipe is chosen on whether it is any good, a project on whether it is worth a
+  Saturday (a save is the "when I have a day" signal; a rating comes from whoever already got to
+  the end), and a fork shelf can only rank on forks. Each shelf **prints its own rule** in the
+  header.
+- **The time floor is not cosmetic.** `between 1 and 30` excludes recipes with no timings: an
+  unrecorded duration is unknown, not zero, and `RecipeCard` renders exactly that case as `—`.
+  `recipes_projects` applies the same `> 0` floor to both branches of its `or`.
+- **`recipes_most_forked` counts public forks only.** These RPCs are invoker-rights, so an
+  unqualified `count(*)` over `recipes` is filtered by RLS — a private fork would count for its
+  owner and for nobody else, and the same recipe would hold a different rank depending on who
+  asked. It aggregates first and joins back (the fork set is small and
+  `recipes_public_fork_source_idx` covers it) rather than running a correlated count per candidate.
+- **`site_rating_prior()`** is the `m = 5` prior above, hoisted out of `recipes_popular`'s inline
+  CTE so `recipes_quick` shares one definition (Gotcha 19). It is cross-joined, i.e. evaluated once
+  per query — as a per-row scalar it would re-scan every public recipe for every public recipe.
+  `recipes_popular` reads it too; its order is unchanged by the extraction.
+
+Both shelves keyed on time and the fork shelf are **empty on a seed-only database** — the 14
+authored recipes top out at 85 minutes, none is `hard`, and none has been forked. The page says so
+in place of the rail. **That includes the hosted project**, which carries no simulated population:
+measured there 2026-08-23, the shelves return 10 / 1 / **0** rows, so `MOST FORKED` is empty on
+production by construction until a real user forks something. See the BL-5 register in
+[ROADMAP.md](./ROADMAP.md#bl-5--seed--sim-coverage-register-read-this-when-planning-a-feature)
+before "fixing" it — running the sim against hosted is a one-way door. The population comes from the sim, where a fork's source is drawn weighted by
+that recipe's reach (`sim.fork_bias` in `supabase/sim/0_sim_schema.sql`, applied in
+`2_sim_generate.sql` §5) so the tree has a trunk to rank.
+
+The shelves do **not** page: each is one request for 12 rows, with no `Load more` and no
+"see all" route. `p_offset` exists on all three RPCs, so that is a screen, not a query.
+
 ### 6.1 Paging (OPT-P9)
 
 Every browsing surface reads **one page at a time** and grows by an explicit `Load more`:
@@ -347,7 +392,7 @@ id desc`; `listSharedWithMe` `recipe_shares.created_at desc, recipe_id desc` (th
 | -------------- | --------------------------------- | ------------------------------------------------------------------------------------- |
 | _(none)_       | `/`                               | **Redirect-only** — forwards to `/discover`. The landing screen was retired: it had no entry point in either chrome (the web brand mark already went to Discover), so it was reachable only by cold start. |
 | Sign in / up   | `/auth`                           | Supabase auth                                                                         |
-| Discover       | `/discover`                       | Popular (rating-ranked) / Trending / Recent tabs + search (public, no sign-in)         |
+| Discover       | `/discover`                       | Masthead + search, three shelves (`01 UNDER 30`, `02 WEEKEND PROJECTS`, `03 MOST FORKED` — §6.0), then one browse grid sorted Top rated / Trending / Newest. No `AppBar`: the masthead is the title. Public, no sign-in |
 | Chefs          | `/chefs`                          | Leaderboard ranked by chef score (public, no sign-in)                                 |
 | My Recipes     | `/my`                             | Tabs: My / Shared-with-me; `RecipeCard` grid with Public/Private badges                |
 | Recipe detail  | `/recipe/:id`                     | Structured view, servings scaler, rating, like/save **toggles**, fork, versions (public recipes viewable signed-out; like/save/rate send a signed-out visitor to `/auth` rather than calling the repository — B051) |
@@ -483,7 +528,8 @@ shipping that is the app-wide typography decision (`google_fonts` + a `textTheme
 | `ChefStandingCard` | One leaderboard row, in two shapes chosen by `variant`. `podium` (default) is the full-width row: tier spine, medal for ranks 1–3, four labelled stat chips, `34% to Master`. `board` is the dense row for the chefs page's 404px panel: rank pill instead of a medal, no stat chips, a 3px tier progress bar on the bottom edge. One widget, not two, so the two rows cannot drift |
 | `ChefSpotlightCard` | A chef as a collectible card (draft `1e`): tier-gradient foil frame, portrait window with serial and rank, rarity band, a "driver" row naming the input contributing most, the four totals, and the tier-ladder bar. Renders entirely from one `ChefStanding` — **no per-card fetch** |
 | `SpotlightCardPlaceholder` | The same frame and geometry with neutral bands. Holds a shelf whose data does not exist yet, or one still loading |
-| `CardRail` | A titled horizontal shelf of fixed-width cards with prev/next arrows and a `1–3 / 10` position label. Generic over its children; a horizontal `ListView` + `animateTo`, so a trackpad and a drag work as well as the arrows |
+| `CardRail` | A titled horizontal shelf of fixed-width cards with prev/next arrows and a `1–3 / 10` position label. Generic over its children (the **caller** sizes its tiles — a horizontal `ListView` gives a child a tight height and an unbounded width); a horizontal `ListView` + `animateTo`, so a trackpad and a drag work as well as the arrows. Two headers, chosen by `variant`: `badged` is the chefs page's icon tile over title/subtitle; `numbered` is Discover's set numeral, spaced-caps title, hairline rule and ranking kicker (§6.0). One widget, because the scroll controller, the pitch arithmetic and the position window are the substance and neither header changes them |
+| `RecipeCardPlaceholder` | `RecipeCard`'s geometry — the same banner/cover/footer bands — in neutral fills, so a loading shelf holds its height instead of collapsing and dragging every shelf below it up the page. `SpotlightCardPlaceholder`'s counterpart for recipes |
 
 Per-tier colors are defined as a light/dark pair — the light shades are unreadable on dark
 surfaces and vice versa, so `colorFor` resolves against `Theme.of(context).brightness`.

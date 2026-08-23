@@ -972,6 +972,171 @@ the local stack, not UI-verified); a private recipe cannot be, or remain, a sign
 sim generates restaurants and `3_sim_verify.sql` gains assertions for the membership and
 signature invariants; all existing standings in SDS §10.7 unchanged.
 
+## Phase 26 — Discover v2: masthead, three shelves, one archive
+
+Roadmap: [ROADMAP.md Phase 26](./ROADMAP.md#phase-26--discover-v2-masthead-three-shelves-one-archive) ·
+[SDS.md §6.0](./SDS.md#60-shelves-phase-26)
+
+**Status: done, both platforms.** No mockup — the shelf idea and the three categories came from the
+owner's brief ("horizontal rows like the chefs page, three categories, get creative"), and the
+categories were chosen against what the schema can actually rank.
+
+**Problem.** Discover was `Popular / Trending / Recent`: one corpus, three rankings, three tabs.
+Every tab answers the same question — *what is doing well* — so a visitor with no opinion about
+ranking had nothing to open, and the page had no editorial position at all. It was also the most
+generic screen in the product: any recipe app ships those three tabs.
+
+### The three decisions, taken before code
+
+All three were the owner's, on the plan. The fixture question in particular could not wait — two of
+the three shelves are empty on a seed-only database, and CLAUDE.md's seed-fit gate says that gets
+said out loud *before* building, not discovered after.
+
+| # | Question | Decision |
+| --- | --- | --- |
+| D1 | Which three shelves | `01 UNDER 30` / `02 WEEKEND PROJECTS` / `03 MOST FORKED`. Two time poles and the lineage axis. The alternatives offered were a cuisine passport (`distinct on (cuisine)` — visually the richest, but no "best Peruvian" signal exists to order it by) and a beginner bench (safest data, but then everything on the page is quick and easy) |
+| D2 | Shelves 2–3 are empty on a plain `seed.sql` + `seed_recipes.sql` | Fix it in the **sim**, not by authoring content. The alternative was two new long-cook recipes in `recipeData/` — real content-writing work for a shelf that the sim populates anyway |
+| D3 | Do the tabs survive | No. Masthead + shelves + one `EVERYTHING ELSE` grid, with the old three demoted to a **sort**. Keeping the tab bar under the shelves would have left two browsing systems doing the same job |
+
+### Why each shelf ranks on a different signal
+
+This is the part that would have been easy to get wrong by making all three consistent. `UNDER 30`
+ranks on the Bayesian rating, `WEEKEND PROJECTS` on saves, `MOST FORKED` on forks — because a
+weeknight recipe is picked on whether it is any good, a project on whether it is worth a Saturday
+(you *save* a project; you *rate* what you already cooked, and fewer people get that far with a
+six-hour braise), and a fork shelf cannot rank on anything else. Three shelves with one ordering
+would be one shelf shown three times. Each header prints its own rule.
+
+### The SQL, and the one thing that was not new work
+
+Three RPCs, shipped first as `0002_discover_shelves.sql` and **folded into `0001_init.sql` on
+2026-08-23** — the owner's call, on the grounds that the project is pre-release and nothing outside
+this machine depends on the schema yet, so an idempotent edit to the baseline beats a second file.
+The freeze resumes the moment that stops being true. Same contract as the existing Discover RPCs:
+`setof recipes` so `kRecipeSelect`'s owner embed rides along, `stable`, invoker-rights,
+`anon`-callable, `p_offset`, and every order ending `created_at desc, id` (Gotcha 24).
+
+Two calls inside it are worth recording:
+
+1. **`site_rating_prior()`.** `recipes_quick` needs the same `m = 5` Bayesian prior `recipes_popular`
+   already had inline. Copying the CTE would have made a ranking formula exist twice, which is
+   exactly the shape Gotcha 19 is about — so the prior became a function and `recipes_popular` was
+   rewritten to read it — identical order, and `site_rating_prior()` is defined **above** both
+   callers because Postgres validates a SQL function body at creation. It is **cross-joined**,
+   evaluated once per query: written as a per-row
+   scalar `bayes_score(rating_sum, rating_count)` it would re-scan every public recipe for every
+   public recipe.
+2. **`recipes_most_forked` counts public forks only** — a correctness decision, not a filter. The
+   RPC is invoker-rights, so an unqualified count is RLS-filtered: a private fork would count for
+   its owner and for nobody else, and one recipe would hold two different ranks depending on who
+   asked.
+
+### The fixture change: a fork tree with a trunk
+
+The shelf is ranked by fork count, and the sim's forks were drawn **uniformly** from every older
+public recipe. Measured on the local stack at `medium`, seed 20260820: 74 forks landed on **54
+different sources**, and the most-forked recipe in the entire database had been forked **twice**.
+The shelf fills — ties fill anything — but there is no order in it. That is not what forking looks
+like anywhere either: people rewrite the recipe everybody already cooks.
+
+So the source is now drawn **weighted by reach**: `sim.exposure_draw(n)` — the same per-recipe
+log-normal §7 turns into view rows — times the star-chef multiplier, raised to `sim.fork_bias()`
+(default 2.0, a `sim.config` knob). Same seed, same 74 forks, they now land on **28 sources with a
+top recipe at 10**, then 5, 5, 3, 3, 3 — a distribution the shelf can actually rank. Verify check
+G3 asserts a maximum of 3 or more, which is exactly the assertion the uniform draw fails. The exponent is above 1 because the two effects compound: being
+read is popularity-weighted, and wanting to rewrite what you read is popularity-weighted again.
+The draw is an exponential race (`order by ln(u) / weight desc limit 1`) — a weighted sample in one
+pass, deterministic on the (fork, candidate) pair like every other draw in the generator. It also
+replaced two correlated subqueries that scanned and sorted the eligible set twice per fork.
+
+Two consequences to know: `sim.exposure_draw` had to become a **function** (§5 and §7 must draw the
+same number for the same recipe, and they run at opposite ends of the file), and the update is
+additive — an already-generated database keeps its flat tree until `9_sim_teardown` + regenerate.
+
+### The sliver refactor nobody asked for but the page required
+
+`RecipeGrid` was a `CustomScrollView`. Discover is now one scroll from masthead to the last row of
+the archive, and a scrollable cannot nest inside a scrollable. So the grid and its
+loading/error/empty ladder were split into `SliverRecipeGrid` / `RecipeAsyncSliverGrid`, measured
+with a `SliverLayoutBuilder` (`crossAxisExtent` is the sliver world's `maxWidth`), and the two box
+widgets became thin `CustomScrollView` wrappers around them. The other five browsing surfaces did
+not change at all — which is the test that the split was done at the right seam.
+
+`SliverFillRemaining(hasScrollBody: false)` on all three states, not the default: when three shelves
+have already filled the viewport there is no remaining extent to hand a scroll body, and a spinner
+of height zero is a page that looks finished.
+
+### Design: not the chefs page again
+
+The obvious move was a second dark gradient hero and three more icon-tile rails. That would have
+made two pages that look like one page with different data in it. Instead:
+
+- **A printed masthead.** A rule, `THE PASS · 1,684 PUBLIC RECIPES` in spaced caps, the title, one
+  line of copy, and the search field sitting on the title's baseline. Kitchen jargon on purpose —
+  the pass is the counter finished plates go out over, which is what a public vault is.
+- **Numbered shelves.** `01` set in the shelf's accent, the title in spaced caps, a hairline rule
+  running out to the controls. The numeral says *sequence*; a third icon tile would have said
+  "another list". Three different scheme roles (`primary` / `tertiary` / `secondary`) so the
+  shelves are told apart at a glance without a literal colour anywhere.
+- **The archive is set apart** — heavier rule, no numeral, sort links that underline rather than a
+  pill. The shelves are an edit; the grid is the archive, and the two should not look alike.
+
+`CardRailVariant.numbered` sheds its kicker at 700px, its position label at 620, and its arrows at
+460 (all × text scale): Discover's rails render at 320px, which the chefs rails never had to.
+
+### Order of work
+
+`core` → `design_system` → `app` → tests, as usual, with the SQL first because everything else is
+shaped by what the server can return. The design_system pieces (`CardRailVariant.numbered`,
+`RecipeCardPlaceholder`) were built and tested standalone before any page work.
+
+### Verification
+
+- `melos run analyze` — **No issues found!** ×3, read from the output rather than the exit code
+  (B006/B007).
+- `melos run test --no-select` — core **83**, design_system **99**, app **117**; **299** total, up
+  from 281. `melos run format` ran first and analyze stayed green (OPT-T4's guarantee).
+- `/code-review` over the working tree against `CLAUDE.md` + the repo checklist. Two findings, both
+  fixed here: **B057** — the numbered header's ranking kicker was a non-flex `Text` in a `Row`, so
+  it was laid out unbounded (B039's class); the width gate in front of it decides only whether the
+  kicker is *drawn*, not how long the caller's string is. Proved by removing the cap and re-running:
+  `A RenderFlex overflowed by 721 pixels`. **B058** — a `drop.sql` comment claimed `cascade` would
+  reach `recipes_popular` / `recipes_quick`, which Postgres does not record for a quoted SQL
+  function body. The review also caught a doc-sync miss (SDS §8's widget table).
+- **The SQL ran on every path.** First as `0002` on the *upgrade* path — applied to a database
+  that already had `0001`, the path Gotcha 6 says neither `db reset` nor `drop → create` can
+  surface — then, after the fold, from a genuinely **empty schema**: `drop.sql` down to 0 tables,
+  the folded `0001` up, seed, content, sim. Re-applied four more times with zero errors and no
+  duplicate overload on `recipes_popular` (B024). Seed-only shelves measured **10 / 1 / 0** rows
+  both before and after the fold — the empty-shelf-03 claim confirmed rather than predicted, and
+  proof the fold was behaviour-preserving.
+- **The sim ran**, torn down by registry and regenerated at `medium` (1,000 actors, 1,671 recipes);
+  `3_sim_verify.sql` printed `ALL CHECKS PASSED` with §G included. The fork numbers in this
+  document are measured from that run, both ways, at the same seed.
+- **Screenshots** (Chrome was installed for this; B028 procedure: `flutter build web --release`
+  then `npx serve`): Discover at 390 / 700 / 1400, `/chefs` at 1400 — closing **Phase 23's**
+  outstanding gap, which found nothing — and a forked recipe detail at 1400. Edges were measured
+  out of the PNGs with a few lines of Pillow rather than eyeballed, which is the only reason B059
+  was found: a 16px-versus-32px inset is invisible at a glance and unmissable in a pixel column.
+  Two bugs, **B059** and **B060**, both fixed here.
+- **Dark mode verified** (2026-08-23) by pinning `themeMode: ThemeMode.dark`, rebuilding, shooting
+  1400 and 390, then reverting and rebuilding light. No defects: the three shelf accents survive
+  the brightness flip, and the card banner inverts correctly (light-tone `primary` with dark
+  `onPrimary`) rather than staying a dark block with white text.
+- **Applied to hosted, 2026-08-23**, through the container `psql` + Session pooler (B033). Exit 0,
+  no errors, and the row counts are byte-identical either side of it (24 / 22 / 17 / 26 / 64) — a
+  re-apply of the baseline costs data nothing, which is the property the whole editable-baseline
+  decision rests on. The apply turned up something worth knowing: **hosted was several phases
+  behind**, reporting `does not exist, skipping` for the `search_tsv` triggers (OPT-P1),
+  `save_recipe` (OPT-A1) and `recipe_versions_set_current` (OPT-S1). It has all of them now.
+- **RLS as `anon` is now proven on the real database** — `set local role anon` in a rolled-back
+  transaction returns 10 / 1 / 0 from the three shelves (grants landed) and 22 recipes against
+  `postgres`'s 24, i.e. the two private rows filtered. Over PostgREST with the anon key, all five
+  Discover RPCs answer `200` with rows. Supabase's DDL event trigger reloaded the schema cache
+  unaided.
+- Still open: RLS as a **signed-in `authenticated`** user — owner-vs-shared-vs-stranger on a private
+  recipe, which is the shape B053 lived in and which the shelves do not exercise.
+
 ## Phase OPT — Optimization & hardening
 
 Roadmap: [ROADMAP.md Phase OPT](./ROADMAP.md#phase-opt--optimization--hardening-backlog-rolling) ·
@@ -1212,7 +1377,10 @@ below are targeted, not structural.
 - **A9 — migration split — DONE**, and narrower than the name suggests, on purpose.
   `supabase/migrations/` is now a **numbered sequence**: `0001_init.sql` is the frozen baseline,
   the next schema change is `0002_*.sql`, and `melos run db:create` applies every file in the
-  directory in filename order rather than the one hard-coded path. The hosted procedure in
+  directory in filename order rather than the one hard-coded path. **Partially reversed
+  2026-08-23** (owner): pre-release, the baseline is editable again and Phase 26's shelves went into
+  0001; the directory machinery is unchanged and the freeze resumes once the schema ships anywhere
+  real. The hosted procedure in
   `README.md` changed from "paste 0001" to "apply the new file", which is what actually stops the
   every-apply cost: the profile backfill and the chef backfill recompute whole tables, and shipping
   an unrelated one-liner used to re-run both. (The FK revalidation that was the third item on this

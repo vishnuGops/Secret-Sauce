@@ -14,8 +14,19 @@ import 'package:app/routing/app_router.dart';
 /// cards, and because the rule is a pure function of width
 /// ([FlowGridMetrics.fit], recomputed on every layout) a drag-resize reflows
 /// continuously rather than jumping at 600 and 1000.
-class RecipeGrid extends StatelessWidget {
-  const RecipeGrid({
+/// [RecipeGrid] as a **sliver**, for pages that put a grid inside a scroll they
+/// do not own — Discover, where three shelves and a masthead sit above it.
+///
+/// This is where the layout actually lives; `RecipeGrid` is the box-widget
+/// wrapper around it. A grid cannot simply be dropped into a page's `ListView`:
+/// `CustomScrollView` is a scrollable, and nesting one inside another either
+/// takes an unbounded height or steals the drag.
+///
+/// Measures with a [SliverLayoutBuilder] — `crossAxisExtent` is the sliver
+/// world's `maxWidth`, and the column count is a pure function of it exactly as
+/// in the box version.
+class SliverRecipeGrid extends StatelessWidget {
+  const SliverRecipeGrid({
     super.key,
     required this.recipes,
     this.padding = const EdgeInsets.all(AppSpacing.md),
@@ -26,27 +37,19 @@ class RecipeGrid extends StatelessWidget {
 
   final List<Recipe> recipes;
   final EdgeInsets padding;
-
-  /// Overlay a public/private badge on each card — for surfaces that mix both.
   final bool showVisibility;
-
-  /// Overlay the owning chef on each card. Off on surfaces where every recipe
-  /// has the same owner (My Recipes), where the badge is pure noise.
   final bool showChef;
 
-  /// Rendered below the last row, inside the same scroll view — the `Load more`
-  /// control (OPT-P9). It has to scroll **with** the grid: a fixed bar under it
-  /// would cost every screen a strip of height whether or not there is another
-  /// page, which is why this is a `CustomScrollView` rather than a `GridView`
-  /// with something bolted underneath.
+  /// Rendered below the last row, sharing the grid's gutter — see
+  /// [RecipeGrid.footer].
   final Widget? footer;
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
+    return SliverLayoutBuilder(
       builder: (context, constraints) {
         final metrics = FlowGridMetrics.fit(
-          available: constraints.maxWidth - padding.horizontal,
+          available: constraints.crossAxisExtent - padding.horizontal,
           minTileWidth: kRecipeCardMinWidth,
           maxTileWidth: kRecipeCardMaxWidth,
           spacing: AppSpacing.md,
@@ -59,7 +62,7 @@ class RecipeGrid extends StatelessWidget {
           left: padding.left + metrics.gutter,
           right: padding.right + metrics.gutter,
         );
-        return CustomScrollView(
+        return SliverMainAxisGroup(
           slivers: [
             SliverPadding(
               padding: gridPadding,
@@ -99,6 +102,49 @@ class RecipeGrid extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class RecipeGrid extends StatelessWidget {
+  const RecipeGrid({
+    super.key,
+    required this.recipes,
+    this.padding = const EdgeInsets.all(AppSpacing.md),
+    this.showVisibility = false,
+    this.showChef = true,
+    this.footer,
+  });
+
+  final List<Recipe> recipes;
+  final EdgeInsets padding;
+
+  /// Overlay a public/private badge on each card — for surfaces that mix both.
+  final bool showVisibility;
+
+  /// Overlay the owning chef on each card. Off on surfaces where every recipe
+  /// has the same owner (My Recipes), where the badge is pure noise.
+  final bool showChef;
+
+  /// Rendered below the last row, inside the same scroll view — the `Load more`
+  /// control (OPT-P9). It has to scroll **with** the grid: a fixed bar under it
+  /// would cost every screen a strip of height whether or not there is another
+  /// page, which is why this is a `CustomScrollView` rather than a `GridView`
+  /// with something bolted underneath.
+  final Widget? footer;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        SliverRecipeGrid(
+          recipes: recipes,
+          padding: padding,
+          showVisibility: showVisibility,
+          showChef: showChef,
+          footer: footer,
+        ),
+      ],
     );
   }
 }

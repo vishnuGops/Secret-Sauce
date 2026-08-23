@@ -45,7 +45,11 @@ insert into sim.config (key, value) values
   -- standing pinned in docs/SDS.md §10.7 remains reproducible with the sim
   -- applied. Turning this on routes through sim.counter_baseline so it stays
   -- idempotent, but it does invalidate that table.
-  ('engage_existing', 'false')
+  ('engage_existing', 'false'),
+  -- How sharply forks concentrate on the recipes people actually read. 0 makes
+  -- a fork source a uniform draw among everything older; 1 weights it by the
+  -- recipe's own reach; 2 — the default — squares that. See sim.fork_bias().
+  ('fork_bias', '2.0')
 on conflict (key) do nothing;
 
 create or replace function sim.cfg(p_key text, p_default text default null)
@@ -56,6 +60,29 @@ $$;
 create or replace function sim.seed()
 returns bigint language sql stable as $$
   select sim.cfg('seed', '20260820')::bigint;
+$$;
+
+-- Exponent applied to a recipe's reach when a fork picks its source (§5 of
+-- 2_sim_generate.sql).
+--
+-- A fork means "I read this and wanted my own version of it", so the source is
+-- not a uniform draw: it is weighted by how widely the recipe was read in the
+-- first place. The exponent is above 1 because those two effects COMPOUND —
+-- being read is already popularity-weighted, and wanting to rewrite what you
+-- read is popularity-weighted again on top.
+--
+-- It is a knob rather than a literal because it is the only thing that decides
+-- whether Discover's MOST FORKED shelf ranks anything. Measured at the medium
+-- preset, seed 20260820, the same 74 forks either way:
+--
+--   fork_bias = 0    54 distinct sources, most-forked recipe has  2
+--   fork_bias = 2.0  28 distinct sources, most-forked recipe has 10 (then 5, 5, 3…)
+--
+-- Both fill a 20-card shelf; only the second one ORDERS it. Check G3 in
+-- 3_sim_verify.sql asserts a maximum of 3+, which the uniform draw fails.
+create or replace function sim.fork_bias()
+returns double precision language sql stable as $$
+  select sim.cfg('fork_bias', '2.0')::double precision;
 $$;
 
 -- ============================================================================
@@ -94,6 +121,23 @@ create or replace function sim.rand_lognormal(
   p_key text, p_stream text, p_mu double precision, p_sigma double precision
 ) returns double precision language sql stable as $$
   select exp(p_mu + p_sigma * sim.rand_normal(p_key, p_stream));
+$$;
+
+-- How widely one recipe gets read, before any multiplier.
+--
+-- The draw itself, in one place, because TWO passes need the same number for
+-- the same recipe and they run at opposite ends of the generator: §7 turns it
+-- into view rows, and §5 — which runs before a single view exists — weights
+-- fork sources by it. Inlining it twice would leave two `'exposure'` streams
+-- that agree only as long as nobody edits one of them, and a fork shelf
+-- silently uncorrelated with the recipes that are actually read is exactly the
+-- kind of wrong that still looks plausible.
+--
+-- Callers apply their own multipliers on top (persona boost, the star tail,
+-- recipe age, preset scale) — this is the per-recipe part only.
+create or replace function sim.exposure_draw(p_n bigint)
+returns double precision language sql stable as $$
+  select sim.rand_lognormal('recipe:' || p_n, 'exposure', 2.0, 1.4);
 $$;
 
 -- A timestamp in [from, to). p_skew > 1 packs draws toward `to` (recent), which

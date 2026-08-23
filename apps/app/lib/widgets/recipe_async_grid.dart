@@ -17,7 +17,7 @@ import 'package:app/widgets/recipe_grid.dart';
 /// provider types are invariant, so a plain
 /// `AutoDisposeAsyncNotifierProvider<PagedRecipesNotifier, RecipePage>`
 /// parameter would reject every concrete one.
-class RecipeAsyncGrid<N extends PagedRecipesNotifier> extends ConsumerWidget {
+class RecipeAsyncGrid<N extends PagedRecipesNotifier> extends StatelessWidget {
   const RecipeAsyncGrid({
     super.key,
     required this.provider,
@@ -35,6 +35,54 @@ class RecipeAsyncGrid<N extends PagedRecipesNotifier> extends ConsumerWidget {
   final bool showChef;
 
   @override
+  Widget build(BuildContext context) {
+    // The ladder itself lives in the sliver version — this is the same widget
+    // with its own scroll view around it, for the five surfaces that fill a
+    // screen with nothing above them.
+    return CustomScrollView(
+      slivers: [
+        RecipeAsyncSliverGrid<N>(
+          provider: provider,
+          empty: empty,
+          showVisibility: showVisibility,
+          showChef: showChef,
+        ),
+      ],
+    );
+  }
+}
+
+/// [RecipeAsyncGrid] as a sliver, for a page that already owns its scroll.
+///
+/// Discover's browse section is one: a grid under a masthead and three shelves,
+/// all in a single `CustomScrollView`. Every state becomes a sliver —
+/// loading, error and empty go in a [SliverFillRemaining] so they still centre
+/// in whatever viewport is left, exactly as they did when they had the screen
+/// to themselves.
+class RecipeAsyncSliverGrid<N extends PagedRecipesNotifier>
+    extends ConsumerWidget {
+  const RecipeAsyncSliverGrid({
+    super.key,
+    required this.provider,
+    required this.empty,
+    this.padding = const EdgeInsets.all(AppSpacing.md),
+    this.showVisibility = false,
+    this.showChef = true,
+  });
+
+  final AutoDisposeAsyncNotifierProvider<N, RecipePage> provider;
+  final Widget empty;
+
+  /// Inset around the grid. A page with its own margin passes that margin here
+  /// (B059): the default 16 is right for a grid that owns the screen and wrong
+  /// for one sitting under a masthead and three shelves already inset by 32 —
+  /// the cards would start half a gutter left of everything above them.
+  final EdgeInsets padding;
+
+  final bool showVisibility;
+  final bool showChef;
+
+  @override
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(provider);
     return async.when(
@@ -42,14 +90,29 @@ class RecipeAsyncGrid<N extends PagedRecipesNotifier> extends ConsumerWidget {
       // the new ones arrive, instead of flashing a spinner between every
       // keystroke's worth of results.
       skipLoadingOnReload: true,
-      loading: () => const LoadingView(),
-      error: (e, _) => ErrorView(message: friendlyError(e)),
+      // `hasScrollBody: false` on all three: when the shelves above have
+      // already filled the viewport there is no remaining extent to hand a
+      // scroll body, and a spinner of height zero is a page that looks done.
+      loading:
+          () => const SliverFillRemaining(
+            hasScrollBody: false,
+            child: Padding(
+              padding: EdgeInsets.all(AppSpacing.xl),
+              child: LoadingView(),
+            ),
+          ),
+      error:
+          (e, _) => SliverFillRemaining(
+            hasScrollBody: false,
+            child: ErrorView(message: friendlyError(e)),
+          ),
       data:
           (page) =>
               page.recipes.isEmpty
-                  ? empty
-                  : RecipeGrid(
+                  ? SliverFillRemaining(hasScrollBody: false, child: empty)
+                  : SliverRecipeGrid(
                     recipes: page.recipes,
+                    padding: padding,
                     showVisibility: showVisibility,
                     showChef: showChef,
                     footer:

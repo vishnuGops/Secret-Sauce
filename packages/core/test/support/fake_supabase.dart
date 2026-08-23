@@ -49,10 +49,16 @@ class RecordedRequest {
 /// Replies to every request from [responses], in order, and records what was
 /// asked. Runs out of responses -> the test fails loudly rather than hanging.
 class RecordingHttpClient extends http.BaseClient {
-  RecordingHttpClient(this.responses);
+  RecordingHttpClient(this.responses, {this.headers = const {}});
 
   /// `(statusCode, body)` pairs, consumed front to back.
   final List<(int, String)> responses;
+
+  /// Extra response headers, on every reply. PostgREST returns a count in
+  /// `content-range` and postgrest-dart reads it from there, so a `.count()`
+  /// request cannot be answered by a body alone.
+  final Map<String, String> headers;
+
   final List<RecordedRequest> requests = [];
 
   @override
@@ -73,7 +79,7 @@ class RecordingHttpClient extends http.BaseClient {
     return http.StreamedResponse(
       Stream.value(utf8.encode(payload)),
       status,
-      headers: const {'content-type': 'application/json; charset=utf-8'},
+      headers: {'content-type': 'application/json; charset=utf-8', ...headers},
       request: request,
     );
   }

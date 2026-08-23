@@ -457,32 +457,69 @@ where r.id = last.recipe_id and r.current_version_id is distinct from last.versi
 -- ~4% of recipes, always from an OLDER public recipe so the lineage is
 -- chronologically coherent. Includes forks of forks by construction: a fork is
 -- eligible as a source for anything created after it.
+--
+-- The SOURCE is drawn weighted by reach, not uniformly. Uniform is what this
+-- did until Phase 26, and it produced a fork tree with no trunk: measured at
+-- the medium preset, 74 forks landed on 54 different sources and the
+-- most-forked recipe in the database had been forked TWICE. That is not what
+-- forking looks like anywhere — people rewrite the recipe everybody already
+-- cooks — and it left Discover's MOST FORKED shelf with 20 cards to show and
+-- no order to show them in. Weighted, the same 74 forks land on 28 sources
+-- with a top recipe at 10.
+--
+-- Weight = the recipe's own exposure draw (sim.exposure_draw — the SAME number
+-- §7 turns into views, so the recipes that get forked are the recipes that get
+-- read), times the star-chef multiplier §7 also applies, raised to
+-- sim.fork_bias(). A recipe outside the sim — the Kitchen's authored 14 — has
+-- no draw, so it takes exp(2.0), the median of the distribution: eligible, and
+-- neither favoured nor excluded.
+--
+-- The draw itself is an exponential race (A-Res weighted sampling): with u
+-- uniform in (0,1), the candidate maximising ln(u)/weight is a sample from the
+-- weight distribution, in one pass, with no running total to carry. `desc`
+-- picks it because ln(u) is negative and a bigger weight pulls the ratio toward
+-- zero. Deterministic, like every other draw here: u is keyed on the (fork,
+-- candidate) pair, so a re-run reproduces the same tree.
+--
+-- One lateral instead of the two correlated subqueries this replaces — those
+-- scanned and sorted the eligible set twice per fork to return two columns of
+-- the same row.
+--
+-- The `forked_from_recipe_id is null` guard makes this additive, which also
+-- means a database generated BEFORE the weighting landed keeps its flat tree:
+-- run 9_sim_teardown.sql and regenerate to re-cut it.
 -- ============================================================================
 
 update recipes r
-set forked_from_recipe_id = src.id,
-    forked_from_version_id = src.current_version_id
+set forked_from_recipe_id = src.source_id,
+    forked_from_version_id = src.source_version_id
 from (
   select
     f.id as fork_id,
-    (select r2.id from recipes r2
-      where r2.visibility = 'public'
-        and r2.created_at < f.created_at
-        and r2.owner_id <> f.owner_id
-      order by md5(r2.id::text || f.id::text)
-      limit 1) as id,
-    (select r2.current_version_id from recipes r2
-      where r2.visibility = 'public'
-        and r2.created_at < f.created_at
-        and r2.owner_id <> f.owner_id
-      order by md5(r2.id::text || f.id::text)
-      limit 1) as current_version_id
+    s.id as source_id,
+    s.current_version_id as source_version_id
   from sim.recipe sr
   join recipes f on f.id = sr.id
+  cross join lateral (
+    select r2.id, r2.current_version_id
+    from recipes r2
+    left join sim.recipe sr2 on sr2.id = r2.id
+    left join sim.actor  a2  on a2.id = sr2.owner_id
+    where r2.visibility = 'public'
+      and r2.created_at < f.created_at
+      and r2.owner_id <> f.owner_id
+    order by
+      ln(greatest(sim.rand(f.id::text || ':' || r2.id::text, 'forksrc'), 1e-12))
+      / power(
+          coalesce(sim.exposure_draw(sr2.n), exp(2.0))
+            * case when a2.n is not null and a2.n <= sim.n_stars() then 8 else 1 end,
+          sim.fork_bias()
+        ) desc
+    limit 1
+  ) s
   where sim.rand_bool('recipe:' || sr.n, 'isfork', 0.04)
 ) src
 where r.id = src.fork_id
-  and src.id is not null
   and r.forked_from_recipe_id is null;
 
 -- ============================================================================
@@ -531,12 +568,17 @@ create index on sim_pool (slot);
 -- Reach per recipe: log-normal (a few recipes take most of the traffic),
 -- multiplied by the owner's persona boost and the star tail, and capped at the
 -- population — a recipe cannot have more distinct viewers than there are users.
+--
+-- The log-normal itself is `sim.exposure_draw`, not an expression here: §5 has
+-- to weight fork sources by the same per-recipe number long before this table
+-- exists, and two inline copies of one draw are two copies of a formula
+-- (Gotcha 19).
 create temporary table sim_reach on commit drop as
 select
   sr.id as recipe_id, sr.n, sr.owner_id, r.visibility, r.created_at,
   least(
     greatest(1, round(
-      sim.rand_lognormal('recipe:' || sr.n, 'exposure', 2.0, 1.4)
+      sim.exposure_draw(sr.n)
       * p.exposure_boost
       * case when a.n <= sim.n_stars() then 8 else 1 end
       -- Older recipes have had longer to accumulate.

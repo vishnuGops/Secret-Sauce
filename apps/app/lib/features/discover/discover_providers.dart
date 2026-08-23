@@ -51,6 +51,55 @@ final recentRecipesProvider =
       RecentRecipesNotifier.new,
     );
 
+/// How many cards one shelf holds (Phase 26).
+///
+/// Not [kRecipePageSize]: a shelf is a *sample*, not a list — it scrolls
+/// sideways, has no Load more, and everything past the first few cards is
+/// already behind a drag. Twelve is four screens' worth of paging at three
+/// cards a press and still one request.
+const int kShelfLength = 12;
+
+/// **01 · UNDER 30** — quick recipes, best-rated first.
+final quickShelfProvider = FutureProvider.autoDispose<List<Recipe>>(
+  (ref) => ref.watch(discoverRepositoryProvider).quick(limit: kShelfLength),
+);
+
+/// **02 · WEEKEND PROJECTS** — long or hard, most-saved first.
+final projectsShelfProvider = FutureProvider.autoDispose<List<Recipe>>(
+  (ref) => ref.watch(discoverRepositoryProvider).projects(limit: kShelfLength),
+);
+
+/// **03 · MOST FORKED** — ranked by public descendants.
+final mostForkedShelfProvider = FutureProvider.autoDispose<List<Recipe>>(
+  (ref) =>
+      ref.watch(discoverRepositoryProvider).mostForked(limit: kShelfLength),
+);
+
+/// The masthead's one statistic. A `HEAD` request — no rows cross the wire.
+final publicRecipeCountProvider = FutureProvider.autoDispose<int>(
+  (ref) => ref.watch(discoverRepositoryProvider).publicCount(),
+);
+
+/// How the browse grid under the shelves is ordered.
+///
+/// These are Discover's three original tabs, demoted to a sort. The shelves
+/// answer "what am I in the mood for"; this answers "show me everything", and
+/// it is the same corpus either way — which is exactly why it stopped being a
+/// tab bar competing with the shelves for the top of the page.
+enum BrowseSort {
+  topRated('Top rated'),
+  trending('Trending'),
+  newest('Newest');
+
+  const BrowseSort(this.label);
+
+  final String label;
+}
+
+final browseSortProvider = StateProvider.autoDispose<BrowseSort>(
+  (ref) => BrowseSort.topRated,
+);
+
 /// Current search query for Discover.
 final searchQueryProvider = StateProvider.autoDispose<String>((ref) => '');
 

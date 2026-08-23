@@ -275,4 +275,40 @@ void main() {
     expect(tester.takeException(), isNull);
     expect(tester.getSize(find.byType(RecipeCard)).height, kRecipeCardHeight);
   });
+
+  // The placeholder's whole job is to be exactly the size of the card it
+  // stands in for: a shelf that changes height when its rows arrive drags
+  // every shelf below it up the page (Phase 26).
+  testWidgets('RecipeCardPlaceholder matches the card at every scale', (
+    tester,
+  ) async {
+    for (final scale in [1.0, 1.5, 2.0, 3.0]) {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.light(),
+          home: MediaQuery(
+            data: MediaQueryData(textScaler: TextScaler.linear(scale)),
+            child: const Scaffold(
+              body: Center(
+                child: SizedBox(
+                  width: kRecipeCardMinWidth,
+                  child: RecipeCardPlaceholder(),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(
+        tester.takeException(),
+        isNull,
+        reason: 'placeholder overflowed at ${scale}x',
+      );
+      expect(
+        tester.getSize(find.byType(RecipeCardPlaceholder)).height,
+        kRecipeCardHeight,
+      );
+    }
+  });
 }

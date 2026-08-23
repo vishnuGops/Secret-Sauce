@@ -388,6 +388,53 @@ begin
     end if;
   end if;
 
+  -- ==========================================================================
+  -- G. Discover's shelves have something to show (Phase 26).
+  --
+  --    The sim is where a browsing surface gets its population, so "this
+  --    fixture can demonstrate that feature" is an assertion, not a hope
+  --    (CLAUDE.md, Seed-data fit). Two of the three shelves exist ONLY here:
+  --    the authored 14 recipes top out at 85 minutes and carry no forks, so a
+  --    seed-only database shows UNDER 30 and two empty shelves.
+  --
+  --    Every RPC below is EXECUTED at any preset — a shelf whose SQL is broken
+  --    fails here — but the row counts are only ASSERTED from `small` up. At 60
+  --    users the recipe draw is small enough that "no dish over two hours got
+  --    picked" is luck, not a regression, and the same reasoning gates E9.
+  -- ==========================================================================
+
+  if to_regprocedure('public.recipes_quick(int, int)') is null then
+    raise notice 'G skipped — the Discover shelf RPCs are not applied';
+  else
+    select count(*) into n from recipes_quick(20, 0);
+    select count(*) into m from recipes_projects(20, 0);
+    raise notice 'shelves: under-30 %, projects %, most-forked %',
+      n, m, (select count(*) from recipes_most_forked(20, 0));
+
+    if v_users >= 250 then
+      if n = 0 then
+        raise exception 'G1 UNDER 30 is empty — no public recipe totals 1..30 minutes';
+      end if;
+      if m = 0 then
+        raise exception 'G2 WEEKEND PROJECTS is empty — no public recipe is >= 120 min or hard';
+      end if;
+
+      -- The shelf ranks by fork count, so it needs a fork tree with a trunk and
+      -- not just 20 recipes tied at one. This is what sim.fork_bias() buys, and
+      -- it is the assertion that fails if the weighting is ever flattened back
+      -- to a uniform draw.
+      select coalesce(max(fork_count), 0) into n from (
+        select count(*) as fork_count
+        from recipes f
+        where f.forked_from_recipe_id is not null and f.visibility = 'public'
+        group by f.forked_from_recipe_id
+      ) x;
+      if n < 3 then
+        raise exception 'G3 the most-forked recipe has only % fork(s) — MOST FORKED cannot rank (check sim.fork_bias)', n;
+      end if;
+    end if;
+  end if;
+
   raise notice 'ALL CHECKS PASSED';
 end
 $verify$;

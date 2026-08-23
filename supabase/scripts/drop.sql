@@ -52,6 +52,14 @@ drop function if exists recipes_popular(int) cascade;
 drop function if exists recipes_popular(int, int) cascade;
 drop function if exists recipes_search(text, int) cascade;
 drop function if exists recipes_search(text, int, int) cascade;
+-- The three Discover shelves and the rating prior they share (Phase 26).
+drop function if exists recipes_quick(int, int) cascade;
+drop function if exists recipes_projects(int, int) cascade;
+drop function if exists recipes_most_forked(int, int) cascade;
+-- `recipes_popular` and `recipes_quick` cross-join this one, but a quoted SQL
+-- function body records no dependency, so `cascade` does not reach them —
+-- they are dropped by name above, and both are recreated by the migrations.
+drop function if exists site_rating_prior() cascade;
 drop function if exists fork_recipe(uuid) cascade;
 drop function if exists save_recipe(uuid, jsonb, jsonb, jsonb, text) cascade;
 drop function if exists recipe_snapshot(uuid) cascade;

@@ -56,6 +56,46 @@ void main() {
     expect(http.requests, isEmpty);
   });
 
+  test('each shelf calls its own RPC, with the embed (Phase 26)', () async {
+    // The three shelves differ only in which ranking the server applies, so
+    // the one thing a client test can get wrong is calling the wrong function —
+    // and every shelf would still render recipes if it did.
+    for (final (name, call)
+        in <(String, Future<void> Function(SupabaseDiscoverRepository))>[
+          ('recipes_quick', (r) => r.quick(limit: 12)),
+          ('recipes_projects', (r) => r.projects(limit: 12)),
+          ('recipes_most_forked', (r) => r.mostForked(limit: 12)),
+        ]) {
+      final (:http, :repo) = _repo();
+
+      await call(repo);
+
+      final req = http.requests.single;
+      expect(req.url.path, endsWith('/rpc/$name'));
+      expect(req.json, {'p_limit': 12, 'p_offset': 0});
+      expect(req.select, contains('owner:profiles!recipes_owner_id_fkey'));
+    }
+  });
+
+  test('publicCount asks for a count and no rows', () async {
+    final http = RecordingHttpClient(
+      [(200, jsonEncode(<Object>[]))],
+      headers: const {'content-range': '*/1684'},
+    );
+    final repo = SupabaseDiscoverRepository(fakeSupabase(http));
+
+    expect(await repo.publicCount(), 1684);
+
+    final req = http.requests.single;
+    // HEAD, not GET: the masthead wants the number in the `Content-Range`
+    // header, and downloading every public recipe to call `.length` on it is
+    // the shape this exists to avoid.
+    expect(req.method, 'HEAD');
+    expect(req.url.path, endsWith('/rest/v1/recipes'));
+    expect(req.param('visibility'), 'eq.public');
+    expect(req.headers['Prefer'], contains('count=exact'));
+  });
+
   test('recent reads the table in a total order, one page at a time', () async {
     final (:http, :repo) = _repo();
 
