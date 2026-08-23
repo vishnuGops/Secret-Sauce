@@ -1194,6 +1194,16 @@ the leaderboard is computed.
 - [x] Side effect worth knowing: `4e0d6b97`'s tokens had no width bounds at all, so its other
       canvases now cap cards at 340px the way `0611ea41`'s already did — which is what the shipped
       grid actually does
+- [x] **`My Recipes.dc.html` redrawn on the v2 card** in both projects (2026-08-23): title banner
+      first, cover, then the footer under a hairline; the visibility chip moved off the cover and
+      into the banner, icon-only with the label as a tooltip, which is where the shipped card puts
+      it. Its local `aspect-ratio: 0.82` is gone — that hack is what left dead space under every
+      tile, and it would now fight the fixed 352px height
+- [x] Audit of the rest: **only that one canvas was ever pre-v2.** `Recipe Detail`, `Recipe Editor`,
+      `Home Auth Profile`, `Chefs` and `Chefs Page` draw no recipe card at all (the `ph-img` in the
+      chefs canvases is the spotlight card's *portrait* window), and `Design System.dc.html` already
+      drew v2 — hand-rolled with inline styles, since the `.rbanner` class did not exist yet. An
+      earlier note in this file said "four canvases"; that was wrong
 
 ### app
 
