@@ -43,3 +43,9 @@ env.local*
 *.local.ps1
 **/*.local.ps1
 !**/*.example.ps1
+
+# Playwright MCP scratch output (page snapshots, console logs, screenshots).
+# Written into the working directory by any browser-driven run — the B028
+# screenshot procedure and the design-canvas checks both produce it. Tool state,
+# never a deliverable; same reason supabase/.temp is ignored above.
+.playwright-mcp/
