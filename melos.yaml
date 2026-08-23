@@ -178,3 +178,14 @@ scripts:
   db:sim:clean:
     description: Remove every simulated account and recipe. DESTRUCTIVE — needs --yes.
     run: dart run tool/db.dart sim:clean
+
+  # ---------------------------------------------------------------------------
+  # RLS acceptance matrix (docs/ROADMAP.md BL-7). Everything else that touches
+  # this schema runs as `postgres`, which bypasses policies; this is the only
+  # thing that exercises them as a signed-in user. It writes fixtures and then
+  # rolls the whole transaction back, so it leaves nothing behind — run it after
+  # any change to a policy, a `security definer` function, or the column grants.
+  # ---------------------------------------------------------------------------
+  db:rls:
+    description: Run the RLS matrix as anon/owner/shared/stranger. Rolls back.
+    run: dart run tool/db.dart rls

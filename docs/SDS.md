@@ -197,7 +197,13 @@ erDiagram
   list — exact, then prefix, then contains, LIKE wildcards in the query escaped — and ShareDialog
   makes the reader pick before Share is enabled (OPT-A5). The old exact-`ilike` + `limit(1)`
   shared with whichever row came back first and reported success.
-- **likes/saves**: user manages own rows; counts denormalized on `recipes` via triggers.
+- **likes/saves**: user manages own rows; counts denormalized on `recipes` via triggers. The read
+  test is asymmetric on purpose (B061): `with check` requires `user_id = auth.uid()` **and**
+  `can_read_recipe(recipe_id)`, so a signed-in user who guesses a private recipe's uuid cannot
+  like it into an inflated `like_count` the owner later publishes; `using` stays
+  `user_id = auth.uid()` alone, so an existing like can always be removed. Putting the read test
+  in `using` too would strand every liker's row the moment an owner flipped a recipe to private,
+  and the unlike would then match 0 rows and report success.
 - **views**: anyone who can read a recipe may log a view, including anonymous visitors — but only
   as themselves: `views_insert`'s `with check` requires `user_id is null or user_id = auth.uid()`,
   so a view cannot be attributed to another user. Only the recipe owner can read the log.
@@ -249,6 +255,34 @@ erDiagram
   (the identical predicate `recipes_update` uses, so the two cannot drift), EXECUTE revoked from
   `public`/`anon` and granted to `authenticated`. Both refusals raise `42501`, which the
   repository turns back into `WriteDeniedException` (OPT-A1).
+
+### 4.1 The acceptance matrix (`supabase/tests/rls_matrix.sql`)
+
+Everything above is asserted by one file, run with `melos run db:rls` and by CI's `database.yml`.
+It exists because every other thing that touches this schema — `seed.sql`, the sim,
+`3_sim_verify.sql`, the CI job's other steps, every hosted check — runs as `postgres`, which
+bypasses policies outright. `anon` was proven by hand in Phase 26; **`authenticated` had never been
+exercised at all**, which is the gap B053 lived in for months and where B061 was found.
+
+It creates three throwaway `auth.users` (an owner, someone the owner shares a private recipe with,
+an unrelated signed-in stranger) plus a private and a public recipe with content, re-runs the whole
+matrix under `set local role authenticated` + `request.jwt.claims`, and **rolls the transaction
+back** — so it leaves no user, no recipe and no helper function behind and is safe against any
+database. 76 checks; a failure names the check and what actually happened.
+
+Its one helper, `rls_matrix_do(text)`, executes an arbitrary string as the calling role, which is
+how a "must FAIL" check is written without aborting the run. That is also a PostgREST RPC shape
+(Gotcha 3), so it carries three locks: it refuses unless a **transaction-local** GUC arms it, it is
+dropped before the `rollback`, and `supabase/scripts/drop.sql` drops it too.
+
+Two shapes it is built around, because both look exactly like working code:
+
+- an `update`/`delete` RLS denies matches **0 rows and returns success** (Gotcha 2) — so those
+  checks assert the row count, not the absence of an error;
+- a SELECT policy that cannot see its own `INSERT … RETURNING` row (B053) — asserted longhand, so
+  "raised an error" and "succeeded but returned nothing" are distinguishable.
+
+**Trigger:** any change to a policy, a `security definer` function, or the column grants.
 
 ## 5. Forking & versioning
 
@@ -1024,4 +1058,6 @@ everything (the B022 failure mode).
 - The validator warns about an ingredient no step mentions. It cannot check the reverse — a step
   calling for salt the list never mentions — without a lexicon; that stays a manual read, and it
   was three of B025's nine defects.
-- Nothing runs the generated SQL in CI. `recipes:check` compares text only.
+- `recipes:check` compares text only — it cannot tell you the SQL applies. CI's `database.yml`
+  does apply it (OPT-T1), so that half is covered; what nothing checks is whether the *content* is
+  right, which stays a manual read.

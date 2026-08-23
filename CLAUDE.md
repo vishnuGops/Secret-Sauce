@@ -109,6 +109,8 @@ secret-sauce/
     │   ├── 2_sim_generate.sql    #   the generator; counters DERIVED from the engagement log
     │   ├── 3_sim_verify.sql      #   39 assertions — the only test coverage this SQL has
     │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
+    ├── tests/rls_matrix.sql      # the RLS matrix as a SIGNED-IN user (BL-7, `db:rls`) —
+    │                             #   76 checks; makes its own users, then ROLLS BACK
     └── scripts/{drop,clean}.sql · rotate_seed_passwords.sql (B018 — hosted, manual)
 ```
 
@@ -237,6 +239,11 @@ melos run db:recipes  # load supabase/seed_recipes.sql (idempotent; run recipes:
 melos run db:clean    # truncate recipe data, keep schema + users
 melos run db:drop     # drop all app tables/types/functions (spares auth.users)
 melos run db:reset    # drop -> create -> seed -> recipes -> sim   (~15s from empty)
+
+# The RLS acceptance matrix as a SIGNED-IN user (BL-7). Additive only in the sense that
+# it writes and then rolls back — it leaves no user, no recipe, no helper function.
+# Run it after ANY change to a policy, a `security definer` function, or the column grants.
+melos run db:rls      # 76 checks across anon / owner / shared-with / stranger
 
 # Simulated population (Phase 24). Additive and idempotent; ~10s at the default
 # `medium` preset (1,000 accounts, ~1,670 recipes, ~118k view rows).
@@ -553,13 +560,17 @@ the `code-review` skill). The ones you need while _writing_ code:
     `http://127.0.0.1:54321` is the practical way to drive real repository code; delete it after,
     since CI has no database job.
     **CI now applies the SQL** (`database.yml`, OPT-T1): fresh apply, re-apply, and the Gotcha 6
-    upgrade path, plus the sim's 39 assertions on a `tiny` population. What it still does not do
-    is exercise **RLS as a signed-in user** — everything in that job runs as `postgres`, which
-    bypasses policies (the class B053 lived in). Policy changes still need a local-stack run with
-    `set local role authenticated`. `anon` is covered as of Phase 26 (proven on hosted: shelves
-    callable, private rows filtered). The **signed-in** matrix is written out and unrun as **BL-7**
-    in [docs/ROADMAP.md](docs/ROADMAP.md) — read it before touching a policy, a `security definer`
-    function, or the column grants.
+    upgrade path, plus the sim's 39 assertions on a `tiny` population. Every statement in *those*
+    steps runs as `postgres`, which bypasses policies — so CI also runs
+    [supabase/tests/rls_matrix.sql](supabase/tests/rls_matrix.sql) (**BL-7**, `melos run db:rls`),
+    which is the only thing here that exercises RLS as a **signed-in** user. It switches to
+    `set local role authenticated`, runs 76 checks across anon / owner / shared-with / unrelated
+    stranger, and rolls the whole transaction back. It closed the class B053 lived in and found
+    B061 on its first complete run. **Run it, and add a check to it, whenever you touch a policy, a
+    `security definer` function, or the column grants** — a new table with new policies that the
+    matrix does not name is still unproven. What it does *not* cover: Storage bucket policies, and
+    the PostgREST edge (it talks to Postgres directly, so it proves the policy, not that
+    postgrest-dart sends what the policy expects — `packages/core/test/` is the other half).
 16. **`supabase/seed_recipes.sql` is generated — edit `recipeData/recipes/*.json` instead.**
     `melos run recipes:gen` rewrites it; commit both. CI's `recipes:check` catches a stale file,
     which matters because **nothing reads the JSON at runtime** — drift is invisible until the

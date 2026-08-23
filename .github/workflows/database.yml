@@ -74,6 +74,18 @@ jobs:
           $PSQL "$DB_URL" -1 -f supabase/seed.sql
           $PSQL "$DB_URL" -1 -f supabase/seed_recipes.sql
 
+      # ------------------------------------------------------------------
+      # The RLS acceptance matrix (ROADMAP BL-7). Every other step in this job
+      # runs as `postgres`, which bypasses policies outright — so until this
+      # step existed, CI could not have caught B053 (a SELECT policy that could
+      # not see its own `INSERT … RETURNING` row) or B061 (a `with check` that
+      # let a stranger like a recipe they cannot read). It switches role to
+      # `authenticated` inside a transaction and rolls back, so it leaves the
+      # database exactly as the step above left it.
+      # ------------------------------------------------------------------
+      - name: RLS matrix — as a signed-in user
+        run: $PSQL "$DB_URL" -f supabase/tests/rls_matrix.sql
+
       - name: Simulated population (tiny) + assertions
         run: |
           $PSQL "$DB_URL" -f supabase/sim/0_sim_schema.sql

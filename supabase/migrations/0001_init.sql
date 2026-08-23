@@ -1095,18 +1095,31 @@ drop policy if exists shares_self_select on recipe_shares;
 create policy shares_self_select on recipe_shares for select
   using (shared_with_user_id = auth.uid());
 
--- likes / saves: user manages own rows; readable if recipe readable
+-- likes / saves: a user manages their own rows, and may only add one to a recipe
+-- they can actually read.
+--
+-- The `can_read_recipe` half is in `with check` ONLY, and the split is the whole
+-- point (B061). `with check` governs INSERT, so a signed-in user who guesses a
+-- private recipe's uuid cannot like it into an inflated `like_count` that the
+-- owner then publishes — the hole `ratings_write` and `views_insert` were already
+-- closed against and these two were not. `using` governs SELECT/UPDATE/DELETE and
+-- stays `user_id = auth.uid()` alone, so an existing like can always be removed:
+-- adding the read test there would strand every liker's row the moment an owner
+-- flipped a recipe to private, and unliking would then match 0 rows and report
+-- success (Gotcha 2).
 drop policy if exists likes_select on recipe_likes;
 create policy likes_select on recipe_likes for select using (can_read_recipe(recipe_id));
 drop policy if exists likes_write on recipe_likes;
 create policy likes_write on recipe_likes for all
-  using (user_id = auth.uid()) with check (user_id = auth.uid());
+  using (user_id = auth.uid())
+  with check (user_id = auth.uid() and can_read_recipe(recipe_id));
 
 drop policy if exists saves_select on recipe_saves;
 create policy saves_select on recipe_saves for select using (user_id = auth.uid());
 drop policy if exists saves_write on recipe_saves;
 create policy saves_write on recipe_saves for all
-  using (user_id = auth.uid()) with check (user_id = auth.uid());
+  using (user_id = auth.uid())
+  with check (user_id = auth.uid() and can_read_recipe(recipe_id));
 
 -- ratings: readable with the recipe; a user writes only their own row, only for a
 -- recipe they can read, and never for their own recipe (no self-rating).

@@ -125,12 +125,17 @@ the row (sharing, editing a shared recipe, admin-ish flows) — the client-side 
 
 ## 4. SQL must survive re-running — High
 
-`supabase/migrations/` is a numbered sequence applied in filename order, and `0001_init.sql` is the
-**frozen baseline** (OPT-A9) — schema changes belong in a new `NNNN_*.sql`, so **flag a diff that
-edits 0001** unless it is fixing the baseline itself before it ships anywhere. `melos run db:create`
-applies the whole directory and tracks no history, so every migration is still applied repeatedly
-and every statement stays guarded (`if not exists`, `drop policy if exists`, `create or replace`,
-`alter table add column if not exists`).
+`supabase/migrations/` is a numbered sequence applied in filename order. `0001_init.sql` is the
+baseline, and **it is editable while the project is pre-release** — owner's call, 2026-08-23,
+reversing OPT-A9's freeze (CLAUDE.md Gotcha 5; Phase 26's shelf RPCs were folded back in and
+`0002_discover_shelves.sql` deleted). So a diff that edits 0001 is **not** a finding today. It
+becomes one the day the schema reaches a database that is not ours, because the CLI records applied
+versions in `supabase_migrations.schema_migrations` and never re-runs a recorded one — from then on
+schema changes belong in a new `NNNN_*.sql` and an edited baseline is silently a no-op. Check
+`supabase/migrations/README.md` before assuming which regime is in force.
+`melos run db:create` applies the whole directory and tracks no history either way, so every
+migration is still applied repeatedly and every statement stays guarded (`if not exists`,
+`drop policy if exists`, `create or replace`, `alter table add column if not exists`).
 
 Flag when a diff: adds a bare `create table`/`create type`/`create policy` with no guard; adds an
 `alter table … add column` lacking `if not exists`; or adds an early `return` to a seed helper
@@ -290,9 +295,15 @@ The failure modes here all shipped once already (B042–B045):
   pure helpers, and — since OPT-T2 — the repositories, through a recording `http.BaseClient` under
   a real `SupabaseClient`: it asserts the *request* (select fragment, embed orders, page window,
   RPC body) against a canned reply, not that Postgres agrees. `database.yml` (OPT-T1) applies the
-  schema, seed and sim on a real Postgres — fresh, re-applied, and on the upgrade path — but every
-  statement in it runs as `postgres`, so **RLS is bypassed**. A policy change still needs
-  local-stack evidence with `set local role authenticated` (the class B053 lived in).
+  schema, seed and sim on a real Postgres — fresh, re-applied, and on the upgrade path. Every
+  statement in those steps runs as `postgres`, so **RLS is bypassed there** — but the job now also
+  runs `supabase/tests/rls_matrix.sql` (BL-7), which switches to `authenticated` and asserts the
+  76-check matrix, so a policy regression of the B053/B061 class does fail CI. What the matrix
+  covers is the tables and RPCs it names; a **new** table, policy, or `security definer` function
+  needs a check added to it in the same change. Flag a diff that touches a policy, a definer
+  function, or the column grants and neither changes `rls_matrix.sql` nor says which existing
+  checks already cover it — a *tightening* of an already-asserted policy legitimately needs no new
+  check, so the escape is naming them, not silence.
 
 ## Doc-sync obligations
 

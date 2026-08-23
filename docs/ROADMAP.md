@@ -1290,10 +1290,10 @@ the leaderboard is computed.
       the cover scrim holds its contrast (B055's fix works in both brightnesses)
 - [x] **A fresh apply** — done as part of the fold (see above): dropped schema → `0001` → seed →
       sim, all green
-- [~] **RLS.** The **anon** half is proven on hosted (above): shelves callable, private rows
-      filtered, identical results to `postgres`. A signed-in `authenticated` caller is still
-      unproven — that is now tracked as its own backlog item with the full matrix and the exact
-      `set local role` recipe, **BL-7**, because it is bigger than this phase and predates it
+- [x] **RLS.** The **anon** half is proven on hosted (above): shelves callable, private rows
+      filtered, identical results to `postgres`. The signed-in `authenticated` half was bigger than
+      this phase and predated it, so it went to the backlog as **BL-7** — **now closed**:
+      `supabase/tests/rls_matrix.sql`, 76 checks, in CI, and it found B061 on its first run
 - [ ] Nothing exercised on a real phone; 390px is a resized desktop browser
 
 ### Deferred
@@ -1636,41 +1636,53 @@ it will make a revert look like it did not take.
 What still cannot be driven here is a **tap inside the Flutter canvas**: web semantics do not come
 up headlessly, so there are no DOM nodes to target and navigation has to be driven by URL.
 
-#### BL-7 — the RLS acceptance matrix as a *signed-in* user (unproven)
+#### BL-7 — the RLS acceptance matrix as a *signed-in* user — **DONE (2026-08-23)**
 
-**The single largest verification hole in the project, and it is not environment-blocked** — the
-local stack can do it today. Everything that has ever exercised RLS here ran as `postgres`, which
-bypasses policies outright: `seed.sql`, the sim, `3_sim_verify.sql`, CI's `database.yml`, and every
-hosted check. `anon` is now covered (Phase 26 proved it on hosted: the shelves are callable and a
-signed-out reader sees 22 of 24 recipes, the two private ones filtered). **`authenticated` is not.**
+**Was the single largest verification hole in the project.** Everything that had ever exercised RLS
+here ran as `postgres`, which bypasses policies outright: `seed.sql`, the sim, `3_sim_verify.sql`,
+CI's `database.yml`, and every hosted check. `anon` was covered (Phase 26 proved it on hosted: the
+shelves are callable and a signed-out reader sees 22 of 24 recipes, the two private ones filtered).
+`authenticated` was not — exactly the gap **B053** lived in, where `recipes_select` called a
+`stable` function that re-queried its own table so *every recipe creation failed*, unnoticed for
+months, found by hand while doing something else.
 
-This is exactly the gap **B053** lived in: `recipes_select` called a `stable` function that
-re-queried its own table, so *every recipe creation failed* — and nothing caught it, because no
-test in the repo has ever inserted a row as a real signed-in user. It was found by hand, months
-late, while doing something else.
+- [x] **The matrix is now a file**: [supabase/tests/rls_matrix.sql](../supabase/tests/rls_matrix.sql),
+      `melos run db:rls`. It creates three throwaway `auth.users` (owner / shared-with / unrelated
+      stranger), a private and a public recipe with content, re-runs everything under `set local
+      role authenticated` + `request.jwt.claims`, prints one PASS/FAIL line per check, and **rolls
+      the transaction back** — no user, no recipe, no helper function survives it. **76 checks, all
+      passing** on the local stack.
+- [x] **CI runs it** — a new `RLS matrix — as a signed-in user` step in `database.yml`, straight
+      after the fresh apply. A B053/B061-class regression now fails a pull request.
+- [x] **It found a real hole on its first complete run: [B061](BUG-TRACKER.md).** `likes_write` and
+      `saves_write` checked only `user_id = auth.uid()`, with no read test — so any signed-in user
+      who knew a private recipe's uuid could like or save it and move its `like_count` /
+      `save_count`, which the owner then publishes when they flip it public. `ratings_write` and
+      `views_insert` had `can_read_recipe` and these two did not. Fixed in `0001_init.sql`;
+      reverting the policy turns the run red on exactly D18 and D20, which is how the check was
+      proven non-vacuous.
 
-What has to be exercised, per role, against a **private** recipe and a **public** one:
+What is covered, per role, against a **private** recipe, a **shared** private recipe, and a
+**public** one:
 
-| Role | select | insert (`… RETURNING`) | update | delete |
-| --- | --- | --- | --- | --- |
-| `anon` | ✅ done | — | — | — |
-| owner | ☐ | ☐ (the B053 shape) | ☐ | ☐ |
-| shared-with (`recipe_shares`) | ☐ | — | ☐ must FAIL | ☐ must FAIL |
-| unrelated signed-in user | ☐ must return 0 rows | — | ☐ must FAIL | ☐ must FAIL |
+| Role | select | insert (`… RETURNING`) | update | delete | RPCs |
+| --- | --- | --- | --- | --- | --- |
+| `anon` | ✅ | ✅ must FAIL | — | — | ✅ `fork_recipe` must FAIL |
+| owner | ✅ | ✅ (the B053 shape) | ✅ + column grants must FAIL (B050) | ✅ | ✅ `save_recipe` create/update; the five revoked helpers must FAIL |
+| shared-with (`recipe_shares`) | ✅ incl. content + versions | ✅ must FAIL | ✅ 0 rows, no error | ✅ 0 rows, no error | ✅ `save_recipe` must FAIL, `fork_recipe` allowed |
+| unrelated signed-in user | ✅ 0 rows | ✅ must FAIL | ✅ 0 rows, no error | ✅ 0 rows, no error | ✅ `fork_recipe` public allowed / private must FAIL |
 
-The two that fail *silently* and therefore matter most: an `update`/`delete` matching zero rows
-returns success (Gotcha 2 — the client-side twin of B011), and a `select` policy that cannot see
-its own `INSERT … RETURNING` row (B053). Both look like working code.
+The two that fail *silently* and therefore mattered most are asserted as such: an `update`/`delete`
+matching zero rows returns success (Gotcha 2 — the server-side twin of B011), so those checks
+assert the **row count**, not the absence of an error; and a `select` policy that cannot see its
+own `INSERT … RETURNING` row (B053) is written longhand so "raised" and "succeeded but returned
+nothing" are distinguishable. Both look like working code.
 
-**How.** On the local stack, inside a rolled-back transaction:
+**Trigger:** any change to a policy, a `security definer` function, or the column grants — run
+`melos run db:rls`, and add a check to the file for any new table, policy, or definer function in
+the same change.
 
-```sql
-begin;
-set local role authenticated;
-set local request.jwt.claims = '{"sub":"<a real profiles.id>"}';
--- … the matrix above …
-rollback;
-```
-
-**Trigger:** any change to a policy, a `security definer` function, or the column grants — and
-ideally once on its own merit, since the matrix has never been run to completion.
+**Still not covered by it:** Storage RLS (the `recipe-images` / `avatars` bucket policies), which
+needs the storage container and an upload rather than SQL; and the PostgREST edge — the matrix
+talks to Postgres directly, so it proves the policies, not that postgrest-dart sends what the
+policies expect. `packages/core/test/`'s recording client is the other half of that pair.

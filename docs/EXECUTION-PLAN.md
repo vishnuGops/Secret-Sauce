@@ -1421,6 +1421,13 @@ below are targeted, not structural.
   five RPCs answer. That run is also what found **B054** — `db:reset` leaves the sim registry
   pointing at a population `drop.sql` deleted, which fails the sim's own assertions. Logged, not
   fixed: the fix makes `db:reset` delete `auth.users` rows and is the owner's call.
+  **T1a — the RLS matrix step (BL-7, 2026-08-23).** Every step above runs as `postgres`, which
+  bypasses policies, so the job could not have caught B053 and did not catch B061. A fourth step,
+  straight after the fresh apply, runs `supabase/tests/rls_matrix.sql`: three throwaway
+  `auth.users`, a private and a public recipe with content, 76 checks re-run under
+  `set local role authenticated` + `request.jwt.claims`, then `rollback` — so it leaves the
+  database exactly as the step before it did and the sim step behind it is unaffected. Also
+  available as `melos run db:rls`. Detail and the covered matrix: ROADMAP BL-7 / SDS §4.1.
 - **T2 — repository unit tests — DONE**, and the blocker turned out to be the wrong shape of the
   question. Nothing needs to mock `SupabaseClient`: it accepts an `httpClient`, so
   `packages/core/test/support/fake_supabase.dart` slides a recording `BaseClient` underneath it —
@@ -1516,8 +1523,9 @@ detail. Key facts to keep in sync:
 - **App name:** Android `android:label`, iOS `CFBundleDisplayName` = `Secret-Sauce`.
 - **Launcher icon:** `flutter_launcher_icons` config in `apps/app/pubspec.yaml`; source at
   `apps/app/assets/icon/app_icon.png`; generate with `melos run gen:icons`.
-- **DB tasks:** `melos run db:create | db:seed | db:clean | db:drop | db:reset` via `tool/db.dart`
-  (needs `psql` + `SUPABASE_DB_URL`). Scripts in `supabase/scripts/`.
+- **DB tasks:** `melos run db:create | db:seed | db:clean | db:drop | db:reset | db:rls` via
+  `tool/db.dart` (needs `psql` + `SUPABASE_DB_URL`). Scripts in `supabase/scripts/`; the RLS
+  acceptance matrix in `supabase/tests/`.
 
 ---
 

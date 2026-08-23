@@ -89,6 +89,14 @@ drop function if exists seed_ratings(uuid, jsonb) cascade;
 drop function if exists seed_recipe_v2(uuid, text, text, text, text, difficulty, int, int, int, recipe_visibility, text, jsonb, jsonb, int, int, int, jsonb) cascade;
 drop function if exists seed_recipe_v2_ratings(uuid, jsonb) cascade;
 
+-- The RLS matrix's helper (supabase/tests/rls_matrix.sql). It is created inside
+-- that file's transaction and dropped before its `rollback`, so it should never
+-- exist here — this is the third lock, after the arming check in its body and
+-- that drop. It executes an arbitrary string and Postgres exposes every function
+-- in `public` as a PostgREST RPC, so a copy that somehow reached a committed
+-- schema is exactly the surface Gotcha 3 is about.
+drop function if exists rls_matrix_do(text) cascade;
+
 -- Enums.
 drop type if exists difficulty cascade;
 drop type if exists recipe_visibility cascade;

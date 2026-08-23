@@ -63,6 +63,12 @@ failure mode of getting it wrong is a deploy that silently applies nothing.
 7. **Verify from a dropped-schema state, not just an incremental apply**
    (Gotcha 6 / B045). A body that references an object created later in the file
    passes on any machine that already has the object and fails on a clean one.
+8. **A policy, a `security definer` function, or a column grant means running
+   `melos run db:rls`** — `supabase/tests/rls_matrix.sql`, the only thing here
+   that exercises RLS as a signed-in user (everything else, including the rest of
+   CI, runs as `postgres` and bypasses policies). If the change adds a table or a
+   policy the matrix does not name, add the check in the same change: an
+   unasserted policy is how B053 and B061 both survived.
 
 ## Applying
 

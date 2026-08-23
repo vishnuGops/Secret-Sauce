@@ -3,6 +3,7 @@
 // Usage (via melos):
 //   melos run db:create | db:seed | db:recipes | db:drop | db:clean | db:reset
 //   melos run db:sim | db:sim:verify | db:sim:clean
+//   melos run db:rls
 // Requires:
 //   * `psql` on PATH (PostgreSQL client).
 //   * SUPABASE_DB_URL env var — the connection string from the Supabase
@@ -43,6 +44,11 @@ const _files = <String, String>{
   'sim:generate': 'supabase/sim/2_sim_generate.sql',
   'sim:verify': 'supabase/sim/3_sim_verify.sql',
   'sim:teardown': 'supabase/sim/9_sim_teardown.sql',
+  // The RLS acceptance matrix (docs/ROADMAP.md BL-7). Creates three throwaway
+  // users and two recipes, re-runs the whole authorization matrix as each of
+  // them under `set local role authenticated`, and ROLLS THE WHOLE THING BACK.
+  // Exempt from `-1` below because it owns that transaction itself.
+  'rls': 'supabase/tests/rls_matrix.sql',
 };
 
 /// Multi-step actions, in order.
@@ -69,7 +75,8 @@ const _destructive = {'sim:clean'};
 ///
 /// The sim files are **exempt** and must stay that way — they open and close
 /// their own transactions around the bulk load (and toggle triggers on the
-/// tables they write), which `-1` would nest and break.
+/// tables they write), which `-1` would nest and break. `rls` is exempt for the
+/// same reason and a sharper one: its `rollback` *is* the cleanup.
 const _transactional = {'create', 'seed', 'recipes', 'drop', 'clean'};
 
 Future<int> _psql(
@@ -191,6 +198,7 @@ usage: dart run tool/db.dart <action> [options]
   sim                                      schema -> dishes -> generate -> verify
   sim:verify                               assertions only, read-only
   sim:clean                                DESTRUCTIVE teardown (requires --yes)
+  rls                                      the RLS matrix as a signed-in user (rolls back)
 
 options:
   --preset=<tiny|small|medium|large>       sim size (default: whatever sim.config holds)
