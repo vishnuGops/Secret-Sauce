@@ -10,15 +10,17 @@ import 'package:app/routing/app_router.dart';
 /// The small controls the detail screen's header row is built from: a
 /// read-only metadata chip, the like/save counter button, and the paired
 /// like+save row both layouts share (OPT-A8).
-
-/// Cook mode (the v2 canvas's C/D/E/H frames) is not built yet; every
-/// "Start cooking" control is inert behind this message until it is.
-const kCookModeSoon =
-    'Cook mode is on the way — follow the steps in order for now.';
+///
+/// `kCookModeSoon` used to live here, holding every "Start cooking" control
+/// inert behind a tooltip. Cook mode is built, so the constant is gone rather
+/// than kept "just in case" — a message about an unbuilt feature outliving the
+/// feature is how dead copy ships.
 
 class MetaChip extends StatelessWidget {
-  const MetaChip({super.key, required this.icon, required this.label});
-  final IconData icon;
+  /// [icon] is optional: cook mode's "you'll need" chips are ingredient names,
+  /// where an icon in front of every one of six chips is noise.
+  const MetaChip({super.key, this.icon, required this.label});
+  final IconData? icon;
   final String label;
 
   @override
@@ -36,9 +38,26 @@ class MetaChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: scheme.onSurfaceVariant),
-          const SizedBox(width: 4),
-          Text(label, style: Theme.of(context).textTheme.labelSmall),
+          if (icon != null) ...[
+            Icon(icon, size: 14, color: scheme.onSurfaceVariant),
+            const SizedBox(width: 4),
+          ],
+          // Flexible, and wrapping to two lines, because the label is not
+          // always a short fact. Cook mode puts a whole ingredient
+          // ("1.25 cup Unbleached wheat flour") in one of these, which is wider
+          // than a 390px phone can hold — and a `Text` in a `Row` with no
+          // flexible sibling is laid out at its intrinsic width and overflows
+          // rather than shrinking (Gotcha 21). Two lines instead of one so a
+          // long ingredient wraps inside the pill instead of ellipsising the
+          // part that says which ingredient it is.
+          Flexible(
+            child: Text(
+              label,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
+          ),
         ],
       ),
     );

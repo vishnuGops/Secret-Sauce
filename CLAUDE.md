@@ -90,12 +90,15 @@ secret-sauce/
 │   │                          #   not_yet_tooltip.dart
 │   ├── lib/main.dart · test/{widget_test,chefs_screen_test,chefs_routing_test,
 │   │                          top_nav_bar_test,recipe_editor_test,recipe_detail_test,
-│   │                          recipe_detail_v2_test,my_recipes_header_test,recipe_grid_test,
-│   │                          discover_screen_test,discover_search_test,paging_test,
-│   │                          share_dialog_test,auth_screen_test}.dart
+│   │                          recipe_detail_v2_test,cook_mode_test,my_recipes_header_test,
+│   │                          recipe_grid_test,discover_screen_test,discover_search_test,
+│   │                          paging_test,share_dialog_test,auth_screen_test}.dart
 │   │                          # the two detail suites split by window: recipe_detail_test pumps
 │   │                          # the default 800x600 (v1 layout), recipe_detail_v2_test pumps
 │   │                          # 1440/1000 incl. a 2.0x text-scale envelope (v2 layout)
+│   │                          # cook_mode_test covers the pure derivations (flatten, weighted
+│   │                          # segments, step->ingredient matching) + both layouts at
+│   │                          # 390/1000/1440 x {1.0, 2.0}
 │   │                          # widget_test.dart covers the `/` -> /discover redirect
 │   ├── env.example.json       # template; env.local.json (git-ignored) holds real creds
 │   └── android/ ios/ web/ windows/   # platform runners are committed — no `flutter create`
@@ -392,12 +395,13 @@ Five Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/m
 | `/discover`                       | `features/discover`      | Masthead + search, three **shelves** (`01 UNDER 30` / `02 WEEKEND PROJECTS` / `03 MOST FORKED` — `discover_shelf.dart`), then one browse grid whose sort is the old Popular / Trending / Recent. No `AppBar` — the masthead is the title. Signed-out safe |
 | `/chefs`                          | `features/chefs`         | Web: `chefs_hero.dart` + a 404px leaderboard panel + rails of `ChefSpotlightCard`. Compact: the plain board. A row or card opens `chef_detail_sheet.dart` (dialog on web, sheet on mobile); signed-out safe |
 | `/my`                             | `features/my_recipes`    | My / Shared-with-me tabs, both paged. Sharing is `widgets/share_dialog.dart` (opened from recipe detail; it writes `recipe_shares`) |
-| `/recipe/:id`                     | `features/recipe_detail` | **Two layouts, one `context.isExpanded` branch (Phase 27).** ≥1000: `recipe_detail_expanded.dart` — measured 1140px page, header band, facts strip, `ingredient_rail.dart` / `method_column.dart` with check-off. <1000: the v1 hero + `_Body`. Both: servings scaler, rating, like/save, fork, `version_history_sheet.dart`; signed-out safe. Cook mode is drawn but **not built** — every `Start cooking` is inert behind `kCookModeSoon` |
+| `/recipe/:id`                     | `features/recipe_detail` | **Two layouts, one `context.isExpanded` branch (Phase 27).** ≥1000: `recipe_detail_expanded.dart` — measured 1140px page, header band, facts strip, `ingredient_rail.dart` / `method_column.dart` with check-off. <1000: the v1 hero + `_Body`. Both: servings scaler, rating, like/save, fork, `version_history_sheet.dart`; signed-out safe. Every `Start cooking` now opens cook mode |
+| `/recipe/:id/cook`                | `features/recipe_detail` | **Cook mode** — full-screen, one step at a time, **always dark** (`AppTheme.dark()`, the only screen that overrides the theme; the phone is propped under kitchen lights). `cook_mode_screen.dart` (route + shortcuts) → `cook_step_view.dart` (compact frames C/D, web frame H) → `cook_finish_view.dart` (frame E). Pure derivations in `cook_mode_model.dart`, session + timers in `cook_mode_providers.dart`. Signed-out safe; **not** in `needsAuth`. See "Cook mode" below |
 | `/recipe/new`, `/recipe/:id/edit` | `features/recipe_editor` | `edit_models.dart` holds mutable draft types; save appends a version                                                     |
 | `/profile`                        | `features/profile`       | Current user; reached from the bottom bar on mobile and the avatar menu on web (`myProfileProvider`)                     |
 
-Only `/discover`, `/chefs`, `/my`, `/profile` sit inside the `ShellRoute` (nav chrome); detail and
-editor are pushed on the root navigator. `/profile` is in the shell but is **not** a web
+Only `/discover`, `/chefs`, `/my`, `/profile` sit inside the `ShellRoute` (nav chrome); detail,
+editor, and cook mode are pushed on the root navigator. `/profile` is in the shell but is **not** a web
 destination, so the top bar's pill highlights nothing there — see Gotcha 18.
 
 **Discover is the front door; `/` is a redirect, not a page.** The landing screen was retired
@@ -409,6 +413,32 @@ mobile/desktop cold start (the platform reports no route), and the redirect-only
 route resurrects a screen nothing links to — `apps/app/test/widget_test.dart` fails if you do.
 Sign-out goes straight to `/discover` from both the avatar menu and the profile screen; do not
 point it at `/`.
+
+### Cook mode
+
+Four things about `/recipe/:id/cook` are load-bearing:
+
+- **Several timers may run at once, driven by one `Timer.periodic`.** That is the design, not an
+  accident: a 60-minute chill has to keep counting while the cook moves on to the next step, which
+  is the only reason a step timer beats a kitchen timer. One ticker for all of them means one thing
+  to cancel on dispose — a per-timer periodic is the classic `Timer is still pending` test failure.
+- **The alarm is state, not an event.** `CookSessionState.ringing` holds step ids until
+  acknowledged, so a bake that finishes while the cook is reading step 3 is still ringing when they
+  look up. The chime itself is Flutter's own `SystemSound` + `HapticFeedback` — **no dependency,
+  and therefore foreground-only**. The copy says "keep this screen open" and "chime when a timer
+  ends" rather than the canvas's "screen stays awake" / "alarm rings even with the screen off":
+  those need `wakelock_plus` and `flutter_local_notifications` plus Android/iOS config, deferred by
+  the owner's call (2026-08-23). **If you add either plugin, change that copy in the same commit.**
+- **There is no schema link between a step and an ingredient**, so `stepIngredients()` derives the
+  "you'll need" list by matching a distinctive word of each ingredient name against the step's
+  prose, whole-word, with a stop-word list. It is a hint and the UI says so; a step naming nothing
+  hides the panel rather than showing an empty one. Don't promote it to a checklist without a real
+  `step_ingredients` table.
+- **`cookSessionProvider` and the check-off providers are deliberately not `autoDispose`.** Backing
+  out of cook mode to look at the ingredient list must not throw away a running timer or the
+  checklist. Cook mode also reads the *same* `selectedServingsProvider` the reading page writes, so
+  a recipe scaled to 8 says 8 in both places — two surfaces printing different quantities for one
+  ingredient is the B066 class of bug.
 
 ## Conventions
 
@@ -673,6 +703,16 @@ recipe` lives on the My Recipes header and search in Discover's search bar; putt
     and give every non-grid state `SliverFillRemaining(hasScrollBody: false)` — with a full
     viewport above it there is no remaining extent, and a scroll body of height zero renders a
     spinner you cannot see.
+25. **A `LayoutBuilder` measures *its own position*, so one placed in an unbounded position
+    measures `infinity`** (B067). The accepted cap for "one child of this `Row` must win" is the
+    loser non-flex inside a `ConstrainedBox(maxWidth: constraints.maxWidth / N)` (#21) — but put
+    the `LayoutBuilder` supplying that width *inside* the `Row` and it is a non-flex child too, so
+    `constraints.maxWidth` is `double.infinity`, the cap is `infinity / N`, and nothing is capped.
+    It reads exactly like the correct shape in review and overflows identically. **Hoist the
+    `LayoutBuilder` to the nearest bounded ancestor** — outside the `Row`, around it. Cook mode's
+    web top bar had this for one test run: 186px over at 1000px × 2.0×, green at 1440 × 2.0 *and*
+    at 1000 × 1.0 — which is the other half of the lesson, that one width or one scale proves
+    nothing and the two-axis matrix is the test (#13, #22).
 
 ## Seed-data fit (MANDATORY)
 

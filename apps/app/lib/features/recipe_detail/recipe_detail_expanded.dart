@@ -13,7 +13,6 @@ import 'package:app/features/recipe_detail/rating_section.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/features/recipe_detail/version_history_sheet.dart';
 import 'package:app/routing/app_router.dart';
-import 'package:app/widgets/not_yet_tooltip.dart';
 import 'package:app/widgets/share_dialog.dart';
 
 /// The v2 reading page for expanded (web/desktop) windows — the "Recipe Detail
@@ -277,14 +276,12 @@ class _HeaderBand extends ConsumerWidget {
                         runSpacing: AppSpacing.sm,
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
-                          notYetTooltip(
-                            enabled: false,
-                            message: kCookModeSoon,
-                            child: FilledButton.icon(
-                              onPressed: null,
-                              icon: const Icon(Icons.outdoor_grill),
-                              label: const Text('Start cooking'),
-                            ),
+                          FilledButton.icon(
+                            onPressed:
+                                () =>
+                                    context.push(Routes.cookRecipe(recipe.id)),
+                            icon: const Icon(Icons.outdoor_grill),
+                            label: const Text('Start cooking'),
                           ),
                           if (!isOwner)
                             FilledButton.tonalIcon(

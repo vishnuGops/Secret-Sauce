@@ -10,6 +10,7 @@ import 'package:app/features/chefs/chefs_screen.dart';
 import 'package:app/features/discover/discover_screen.dart';
 import 'package:app/features/my_recipes/my_recipes_screen.dart';
 import 'package:app/features/profile/profile_screen.dart';
+import 'package:app/features/recipe_detail/cook_mode_screen.dart';
 import 'package:app/features/recipe_detail/recipe_detail_screen.dart';
 import 'package:app/features/recipe_editor/recipe_editor_screen.dart';
 import 'package:app/routing/app_shell.dart';
@@ -37,6 +38,12 @@ class Routes {
   static String recipe(String id) => '/recipe/$id';
   static String editRecipe(String id) => '/recipe/$id/edit';
 
+  /// Cook mode. Its own route rather than a flag on recipe detail, so the back
+  /// button leaves cooking instead of leaving the recipe, and a cook can keep
+  /// the URL. Deliberately **not** in `needsAuth`: cooking a public recipe needs
+  /// no account, exactly like reading one.
+  static String cookRecipe(String id) => '/recipe/$id/cook';
+
   /// The two **patterns** go_router matches on, as opposed to the builders
   /// above that produce a concrete path. Both forms have to exist and they have
   /// to stay in step: `recipePattern` is what the route declares,
@@ -45,6 +52,7 @@ class Routes {
   /// route table, the one place a rename silently misses).
   static const recipePattern = '/recipe/:id';
   static const editRecipePattern = '/recipe/:id/edit';
+  static const cookRecipePattern = '/recipe/:id/cook';
 }
 
 final _rootKey = GlobalKey<NavigatorState>();
@@ -98,6 +106,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder:
             (context, state) =>
                 RecipeEditorScreen(recipeId: state.pathParameters['id']),
+      ),
+      // Ahead of `recipePattern` for readability only — go_router matches on the
+      // full path, so `/recipe/x/cook` never falls through to `/recipe/:id`.
+      GoRoute(
+        path: Routes.cookRecipePattern,
+        parentNavigatorKey: _rootKey,
+        builder:
+            (context, state) =>
+                CookModeScreen(recipeId: state.pathParameters['id']!),
       ),
       GoRoute(
         path: Routes.recipePattern,

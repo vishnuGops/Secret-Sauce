@@ -1310,7 +1310,8 @@ the leaderboard is computed.
 
 ## Phase 27 — Recipe detail v2 (web): measured page, ingredients rail, method column
 
-**Status: web done, compact not started.** Drawn in the Claude Design canvas
+**Status: reading page (web) done · cook mode done · compact v2 not started.** Drawn in the Claude
+Design canvas
 `Recipe Detail v2.dc.html`; the as-built reference it was drawn against is `Recipe Detail.dc.html`
 (redrawn 2026-08-23 from real full-page captures).
 
@@ -1378,7 +1379,16 @@ because the fixtures happen not to reach either state. Both fixed:
 
 ### Seed-data fit
 
-Existing fixtures cover it, and this was checked before building: **Spring Vegetable Tart**
+Existing fixtures cover both the reading page and cook mode, and this was checked before building
+each. Cook mode in particular needs a recipe with **more than one step group** (or the weighted
+progress bar and the per-group numbering are untestable), steps carrying `duration_minutes` (or
+there is no timer to start), and step prose that actually names its ingredients (or the derived
+"you'll need" list is empty everywhere). **Spring Vegetable Tart** has all three: 3 step groups,
+durations of 60 / 20 / 12 / 2 / 35 minutes including the 1-hour chill, tips, temperatures, and prose
+that says "the flour", "the onion", "the leek". No new fixture data was needed for either half, so
+none was added.
+
+The rest, as checked for the reading page: **Spring Vegetable Tart**
 (`recipeData/recipes/spring-vegetable-tart.json`) has 3 ingredient groups and 3 step groups with
 per-group numbering, an attribution, and zero engagement; **Chicken Tikka Masala** has ratings,
 likes, saves, temperature and tip fields on its steps. No new fixture data was needed, so none was
@@ -1386,12 +1396,56 @@ added. What the local fixtures **cannot** show: cover images (no seeded recipe c
 band's cover column is dead on the local stack — it is exercised on hosted only), and a recipe with
 `forked_from_recipe_id` set (the fork line renders from the model but no seeded recipe is a fork).
 
+### Cook mode — built (canvas frames C, D, E, H)
+
+`/recipe/:id/cook`, its own route on the root navigator, **always dark** (the phone is propped under
+kitchen lights, so the mode overrides the theme — the only screen that does). Signed-out safe.
+
+- [x] **The step walk.** `flattenCookSteps` turns grouped steps into a flat list that still knows
+      its group, so the header says `Filling · step 1 of 3` and numbering restarts per group while
+      `Step 5 of 9` counts overall
+- [x] **Segmented progress, weighted by step count** — a 4-step crust and a 2-step bake are not
+      halves of the same job. Fill counts steps *behind* the cook, so landing on a group's first
+      step fills nothing
+- [x] **Step timers, several at once, one shared tick.** Start / pause / resume / +1 min / reset,
+      seeded from `steps.duration_minutes` (a step without one gets no timer rather than a made-up
+      default). A timer keeps counting when the cook moves on — the whole reason a step timer beats
+      a kitchen timer — and the alarm is **state, not an event**, so a bake that finishes while
+      you are on step 3 is still ringing when you look up
+- [x] **Finish screen** (frame E): steps cooked, wall-clock elapsed against the recipe's estimate,
+      and the rating — asked at the one moment the cook knows the answer. Fork for non-owners,
+      "not done — back to the last step" so it is a session state and not a dead end
+- [x] **Web layout** (frame H): step text at `displaySmall`, the ring beside the controls rather
+      than under them, and a rail holding this step's ingredients and what is coming up. Space
+      advances, arrows move, escape leaves
+- [x] **"You'll need" per step**, derived — see the honesty note below
+- [x] Both layouts pumped at 390 / 1000 / 1440 × {1.0, 2.0}; three bugs caught pre-ship
+      (**B067**–**B069**), of which B067 is a new mechanism and is now Gotcha 25
+
+**Deferred by the owner's call (2026-08-23), and the copy says so.** The canvas promises
+"screen stays awake" and "alarm rings even with the screen off". Both need plugins
+(`wakelock_plus`, `flutter_local_notifications`) plus Android/iOS config on the committed runners,
+and neither is verifiable by a widget test on this machine. So the chime is Flutter's own
+`SystemSound` + `HapticFeedback` — real, and **foreground-only** — and the chips read "Keep this
+screen open" / "Chime when a timer ends". Adding either plugin means changing that copy in the same
+commit.
+
+- [ ] **Screen-awake while cooking** (`wakelock_plus`) — one dependency, no manifest edits
+- [ ] **Alarm with the app backgrounded** (`flutter_local_notifications` + notification channel,
+      `POST_NOTIFICATIONS`, iOS permission, exact-alarm handling)
+- [ ] **The cook's note.** Frame E draws "add a note for next time"; `recipe_ratings` holds a
+      rating and two timestamps and nothing else, so the field is **not drawn** rather than drawn
+      dead. It needs a `note text` column plus its grant, its RLS `with check`, a check in
+      `rls_matrix.sql` (Gotcha 15), the model and the repository — its own change set
+- [ ] **A real `step_ingredients` link.** `stepIngredients()` derives the per-step list by matching
+      a distinctive word of each ingredient name against the step's prose (whole-word, stop-word
+      filtered), because **no schema link exists**. It works on real recipe prose — "boneless
+      chicken thigh" is found by "the chicken" — and it is a hint, not a checklist: a step that
+      names nothing hides the panel, and "add the remaining spices" finds nothing. Promoting it to
+      a checklist needs the table
+
 ### Not built — the rest of the canvas
 
-- [ ] **Cook mode** (canvas frames C, D, E, H): full-screen step view, step timers, screen-awake,
-      the finish screen that asks for the rating. Every `Start cooking` control is present and
-      **inert** behind a `notYetTooltip`, so the entry point is designed and the promise is not made
-      falsely
 - [ ] **Compact (390px) v2** — the canvas's frame B: cover-first, jump chips, sticky
       `Ready to cook?` bar. Compact and medium still render the v1 hero layout; the branch is a
       single `context.isExpanded` check in `recipe_detail_screen.dart`

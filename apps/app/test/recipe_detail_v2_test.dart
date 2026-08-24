@@ -233,8 +233,17 @@ void main() {
     expect(find.text('LONGEST WAIT'), findsOneWidget);
     // The version line doubles as the history opener.
     expect(find.textContaining('Version 2'), findsOneWidget);
-    // Two inert cook-mode entry points: header band + teaser panel.
+    // Two cook-mode entry points, both live since Phase 27's cook mode landed:
+    // header band + teaser panel.
     expect(find.text('Start cooking'), findsNWidgets(2));
+    for (final button in tester.widgetList<ButtonStyleButton>(
+      find.ancestor(
+        of: find.text('Start cooking'),
+        matching: find.byType(ButtonStyleButton),
+      ),
+    )) {
+      expect(button.onPressed, isNotNull);
+    }
     // v1 furniture must be gone.
     expect(find.text('Instructions'), findsNothing);
     expect(find.byType(SliverAppBar), findsNothing);

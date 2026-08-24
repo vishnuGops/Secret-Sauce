@@ -455,7 +455,7 @@ drew.
 | Metadata | a `Wrap` of `MetaChip`s | **facts strip** — Total · Hands on · Cook · Difficulty · **Longest wait** · Visibility, as labelled cells with hairline dividers |
 | Ingredients | bulleted list, one column, full width | `IngredientRail` — check-off rows in a fixed quantity gutter, grouped, with the servings stepper and a gathered counter |
 | Steps | numbered rows | `MethodColumn` — tappable cards that collapse when done, group heading + step count per group |
-| Cook mode | — | entry points present and **inert** (`notYetTooltip`, `kCookModeSoon`) |
+| Cook mode | — | both entry points open `/recipe/:id/cook` (§7.2) |
 
 Three things about the v2 page are load-bearing and easy to undo by accident:
 
@@ -482,6 +482,74 @@ Three things about the v2 page are load-bearing and easy to undo by accident:
 Checked ingredients and done steps live in `checkedIngredientsProvider` / `doneStepsProvider` —
 **not** `autoDispose`, because leaving the screen mid-cook and coming back must not clear the
 checklist. They are session state, not device state, and the UI says so.
+
+### 7.2 Cook mode (`/recipe/:id/cook`, Phase 27)
+
+A **mode**, not a third layout of the recipe: its own route on the root navigator, its own session
+state, and its own theme. Canvas frames C (phone step), D (phone timer), E (finish), H (web).
+
+| | Compact (frames C/D) | Web ≥ 1000 (frame H) |
+| --- | --- | --- |
+| Step text | `headlineSmall`, one step fills the screen | `displaySmall` — readable across a kitchen |
+| Timer | ring stacked over the controls | ring beside them |
+| Ingredients | `You'll need` chips at the bottom | a 400px rail: this step's ingredients + `Coming up` |
+| Advance | a 52px `Done — next step` bar you can hit with a knuckle | buttons + space / ← → / esc |
+
+**It is always dark.** `CookModeScreen` pins `AppTheme.dark()` regardless of the platform setting —
+the only screen in the app that overrides the theme — because the phone is propped on a counter
+under kitchen lighting and a light page is glare. The pin sits *outside* the `AsyncValue` branch so
+the loading and error states are dark too; a white flash on the way in is the glare the mode exists
+to avoid.
+
+**The step model keeps its groups.** Steps are stored grouped, and the grouping is not decoration:
+the header reads `Filling · step 1 of 3` and numbering restarts per group, while `Step 5 of 9`
+counts overall, and the progress bar is one segment per group **weighted by step count** (a 4-step
+crust and a 2-step bake are not halves of the same job). `flattenCookSteps` produces the flat walk
+with both positions on every entry; `cookSegments` produces the bars. A group with no steps is
+dropped — it would otherwise earn a zero-width segment and a heading for nothing. Segment fill
+counts steps *behind* the cook, so landing on a group's first step fills nothing.
+
+**Timers: several at once, one ticker.**
+
+- A timer is seeded from `steps.duration_minutes`. A step without one gets **no** timer rather than
+  a default — a clock on "Serve with rice" is worse than no clock.
+- Several may run simultaneously **by design**: a chill or a bake keeps counting while the cook
+  moves on, which is the only reason a step timer beats a kitchen timer. `CookSessionNotifier`
+  drives them all from a single `Timer.periodic`, so the cost is independent of how many there are
+  and there is exactly one thing to cancel on dispose.
+- **The alarm is state, not an event.** `CookSessionState.ringing` holds step ids until
+  acknowledged, so a bake that finishes while the cook is reading step 3 is still ringing when they
+  look up. An event would be lost on the rebuild the step change causes — precisely the case that
+  matters.
+- The chime is Flutter's own `SystemSound.play` + `HapticFeedback.vibrate`: **no dependency, and
+  therefore foreground-only.** The UI's copy is "Keep this screen open" and "Chime when a timer
+  ends", not the canvas's "screen stays awake" / "alarm rings even with the screen off" — those need
+  `wakelock_plus` and `flutter_local_notifications` with platform config, deferred (ROADMAP Phase
+  27). Adding either plugin means changing that copy in the same commit.
+
+**"You'll need" is derived, and there is no schema behind it.** No `step_ingredients` table exists
+and nothing on `steps` points at an ingredient row. `stepIngredients()` reads the step's own prose
+instead: an ingredient matches when a distinctive word of its name appears in the step text as a
+**whole word**, with a stop-word list dropping the words ("chopped", "fresh") that would attach half
+the list to every step. Word-wise rather than whole-name because the stored name is rarely the
+phrase the step uses — "boneless chicken thigh" appears as "the chicken". Whole-word is what makes
+it safe: `\bbutter\b` does not fire on "buttermilk". Consequences: a step naming nothing hides the
+panel rather than showing an empty one, and "add the remaining spices" finds nothing. **It is a
+hint, not a checklist**, and cook mode keeps a pointer to the full list for that reason.
+
+**Session lifetime and shared state.** `cookSessionProvider` is a `NotifierProvider.family` on the
+recipe id and is **not** `autoDispose` — backing out to check the ingredient list must not throw
+away a running timer. Cook mode reads the *same* `selectedServingsProvider` the reading page writes,
+so a recipe scaled to 8 servings says 8 in both places; two surfaces printing different quantities
+for one ingredient is the B066 class of bug, which is also why both quantity gutters read
+`ingredientQuantityLabel` from core rather than each carrying a copy.
+
+**The finish screen is where the rating gets asked** — the one moment the cook knows the answer. It
+writes through the same `setRating` path as the reading page, so RLS is still what forbids rating
+your own recipe; the owner branch explains it rather than enforcing it. It reports wall-clock
+elapsed against `recipe.totalMinutes`, and is a *state* of the session, not a dead end: "not done —
+back to the last step" returns. The canvas's "note for next time" is **not drawn**, because
+`recipe_ratings` has no column for it (see ROADMAP Phase 27 for what adding one costs).
 
 ### Adaptive behavior
 

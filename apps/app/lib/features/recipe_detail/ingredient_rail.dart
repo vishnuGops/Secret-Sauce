@@ -220,48 +220,6 @@ class _IngredientRow extends StatelessWidget {
   final bool done;
   final VoidCallback onTap;
 
-  bool get _hasUnit => (ingredient.unit ?? '').isNotEmpty;
-
-  bool get _hasNote => (ingredient.note ?? '').isNotEmpty;
-
-  /// True when the gutter has nothing but the note to show, so the note is the
-  /// quantity ("to taste") and must not also ride along with the name.
-  bool get _noteIsQuantity =>
-      ingredient.quantity == null && !_hasUnit && _hasNote;
-
-  /// What goes in the gutter: `1.5 cup`, the bare unit, the note, or a dash —
-  /// in that order.
-  ///
-  /// The unit fallback matters because `quantity` is nullable and the editor
-  /// reaches that state by accident: type `1/2` in the quantity field, the
-  /// parse fails, and the row saves with `unit: 'cup'` and no number. The v1
-  /// renderer ([recipe_content_views.dart]) prints the unit either way, so
-  /// without this the same row read differently on the two sides of the 1000px
-  /// branch (B066). The unit outranks the note because a unit with no number is
-  /// a data defect worth seeing, while a note is prose that reads fine beside
-  /// the name.
-  String get _quantityLabel {
-    final quantity = ingredient.quantity;
-    final unit = ingredient.unit;
-    if (quantity == null) {
-      if (_hasUnit) return unit!;
-      return _hasNote ? ingredient.note! : '—';
-    }
-    final amount = _trim(quantity * factor);
-    return _hasUnit ? '$amount $unit' : amount;
-  }
-
-  static String _trim(double v) {
-    if (v == v.roundToDouble()) return v.toStringAsFixed(0);
-    return v
-        .toStringAsFixed(2)
-        .replaceFirst(RegExp(r'0+$'), '')
-        .replaceFirst(RegExp(r'\.$'), '');
-  }
-
-  static String _sentenceCase(String s) =>
-      s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
-
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
@@ -290,8 +248,13 @@ class _IngredientRow extends StatelessWidget {
 
     // The note doubles as the quantity when the gutter has nothing else to show
     // ("to taste"), and only then — otherwise it rides along with the name, so
-    // a unit-without-quantity row keeps both halves.
-    final showNote = _hasNote && !_noteIsQuantity;
+    // a unit-without-quantity row keeps both halves. The chain itself lives in
+    // core (B066) because cook mode's rail draws the same gutter, and two copies
+    // of it is how the two sides of the 1000px branch disagreed in the first
+    // place.
+    final showNote =
+        (ingredient.note ?? '').isNotEmpty &&
+        !ingredientNoteIsQuantity(ingredient);
 
     return InkWell(
       onTap: onTap,
@@ -325,12 +288,15 @@ class _IngredientRow extends StatelessWidget {
               width:
                   kIngredientQuantityGutter *
                   context.textScale.clamp(1.0, kDetailRailMaxScale),
-              child: Text(_quantityLabel, style: qtyStyle),
+              child: Text(
+                ingredientQuantityLabel(ingredient, factor: factor),
+                style: qtyStyle,
+              ),
             ),
             Expanded(
               child: Text.rich(
                 TextSpan(
-                  text: _sentenceCase(ingredient.name),
+                  text: sentenceCase(ingredient.name),
                   children: [
                     if (showNote)
                       TextSpan(text: ' (${ingredient.note})', style: noteStyle),

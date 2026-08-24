@@ -2,10 +2,11 @@ import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:app/features/recipe_detail/detail_chips.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
-import 'package:app/widgets/not_yet_tooltip.dart';
+import 'package:app/routing/app_router.dart';
 
 /// The v2 method column: tappable step cards that collapse when done, group
 /// headers that keep per-group numbering visible, and the cook-mode teaser.
@@ -98,7 +99,7 @@ class MethodColumn extends ConsumerWidget {
             ),
         ],
         const SizedBox(height: 4),
-        const _CookModeTeaser(),
+        _CookModeTeaser(recipeId: recipe.id),
       ],
     );
   }
@@ -113,7 +114,9 @@ class MethodColumn extends ConsumerWidget {
 /// (Gotcha 21). Threshold rather than a measurement, the same shape `/chefs`
 /// uses to drop to one column.
 class _CookModeTeaser extends StatelessWidget {
-  const _CookModeTeaser();
+  const _CookModeTeaser({required this.recipeId});
+
+  final String recipeId;
 
   static const double _kTeaserStackScale = 1.3;
 
@@ -134,10 +137,9 @@ class _CookModeTeaser extends StatelessWidget {
         ),
       ],
     );
-    final button = notYetTooltip(
-      enabled: false,
-      message: kCookModeSoon,
-      child: const FilledButton(onPressed: null, child: Text('Start cooking')),
+    final button = FilledButton(
+      onPressed: () => context.push(Routes.cookRecipe(recipeId)),
+      child: const Text('Start cooking'),
     );
 
     return Container(

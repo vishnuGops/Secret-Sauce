@@ -6,6 +6,8 @@
 /// formatting ever lands, this is the one place to replace.
 library;
 
+import 'package:core/src/models/ingredient.dart';
+
 /// Groups a whole number with commas — `1980` becomes `1,980`.
 ///
 /// Negative values keep their sign. Counts are never negative in this schema,
@@ -76,6 +78,66 @@ String formatMinutes(int minutes) {
   if (hours == 0) return '$rest min';
   if (rest == 0) return '$hours h';
   return '$hours h $rest m';
+}
+
+/// `Plain yoghurt` from `plain yoghurt`.
+///
+/// Ingredient names are stored lowercase and capitalised at render, because in a
+/// quantity/name grid the capital is the left edge of the scanned column. Doing
+/// it here rather than in the widget is what stops the two surfaces that draw
+/// that grid — the reading page's rail and cook mode's rail — from disagreeing.
+String sentenceCase(String s) =>
+    s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
+
+/// Trims a scaled quantity to the shortest honest decimal: `2`, `1.5`, `1.25`.
+String _trimQuantity(double v) {
+  if (v == v.roundToDouble()) return v.toStringAsFixed(0);
+  return v
+      .toStringAsFixed(2)
+      .replaceFirst(RegExp(r'0+$'), '')
+      .replaceFirst(RegExp(r'\.$'), '');
+}
+
+/// True when [ingredient] has nothing but its note to put in a quantity column,
+/// so the note *is* the quantity ("to taste") and must not also be printed
+/// beside the name.
+bool ingredientNoteIsQuantity(Ingredient ingredient) =>
+    ingredient.quantity == null &&
+    (ingredient.unit ?? '').isEmpty &&
+    (ingredient.note ?? '').isNotEmpty;
+
+/// What belongs in a fixed quantity gutter for [ingredient], scaled by [factor].
+///
+/// The chain is `quantity + unit` → `unit` → `note` → `—`, and every link is
+/// reachable: `ingredients.quantity` is nullable, and the editor's quantity
+/// field parses a decimal, so typing `1/2` fails the parse and saves a row with
+/// a unit and no number. The unit outranks the note because a unit with no
+/// number is a data defect worth seeing; the note then rides beside the name
+/// instead (see [ingredientNoteIsQuantity]), so no combination silently drops a
+/// half. Printing `—` and losing the unit was B066.
+///
+/// [factor] scales the number only — never the unit, and callers must never pass
+/// it to a duration or a temperature, which do not scale with servings.
+String ingredientQuantityLabel(Ingredient ingredient, {double factor = 1}) {
+  final unit = ingredient.unit;
+  final hasUnit = (unit ?? '').isNotEmpty;
+  final quantity = ingredient.quantity;
+  if (quantity == null) {
+    if (hasUnit) return unit!;
+    final note = ingredient.note;
+    return (note ?? '').isEmpty ? '—' : note!;
+  }
+  final amount = _trimQuantity(quantity * factor);
+  return hasUnit ? '$amount $unit' : amount;
+}
+
+/// `1.5 cup yoghurt` — the gutter label and the name on one line, for places
+/// too narrow for a two-column grid (cook mode's chips). Drops the `—` rather
+/// than printing a dash in front of a name.
+String ingredientOneLine(Ingredient ingredient, {double factor = 1}) {
+  final qty = ingredientQuantityLabel(ingredient, factor: factor);
+  final name = sentenceCase(ingredient.name);
+  return qty == '—' ? name : '$qty $name';
 }
 
 /// Groups a score, keeping the single decimal place a `numeric` score can carry

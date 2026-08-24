@@ -1203,15 +1203,74 @@ observable on this machine's data — which is the interesting part:
   the whole table (`quantity + unit` → `unit` → `note` → `—`, note beside the name unless it took
   the gutter), and the test pins all four rows rather than the one that was reported.
 
+### Cook mode — the second half
+
+Four of the canvas's eight frames, built as a **mode** rather than another layout: its own route on
+the root navigator, its own session, its own theme.
+
+**Two scope questions were settled with the owner before any code**, because both change the
+architecture rather than the styling, and guessing wrong wastes the build:
+
+1. *Screen-awake and a background alarm* — `wakelock_plus` and `flutter_local_notifications`, plus
+   Android/iOS config on the committed runners, none of it verifiable by a widget test here.
+   **Answer: pure Dart now.** The chime is Flutter's own `SystemSound` + `HapticFeedback`, which is
+   real and foreground-only, and the copy was rewritten to match ("Keep this screen open", "Chime
+   when a timer ends") rather than left promising the canvas's two chips.
+2. *The finish screen's "note for next time"* — `recipe_ratings` has no column for it.
+   **Answer: ship the rating, drop the note**, with the column it needs named in the roadmap. A
+   drawn-but-dead input is a second inert affordance, and this change set exists partly to remove
+   the first one.
+
+**Order of work, and the one decision inside each:**
+
+1. **The pure derivations first** (`cook_mode_model.dart`), because they are the part that can be
+   wrong invisibly. `flattenCookSteps` has to keep group identity — a flat 1..N loses the `Filling ·
+   step 1 of 3` header *and* the weighted progress bar. `cookSegments`' fill counts steps **behind**
+   the cook, so a group's first step fills nothing; the canvas draws both readings across two frames
+   (33% on C, 50% on D) and this is the one that does not claim credit for a step still in front of
+   you.
+2. **The session** (`cook_mode_providers.dart`). The design question was how many timers can run.
+   One-at-a-time needs arbitration ("a timer is already running on step 4 — replace it?"), which is
+   a dialog and a decision the cook should not have to make; **many-at-once with a single shared
+   `Timer.periodic`** turned out to be both the simpler code and what the canvas asks for ("it keeps
+   counting if you move to the next step"). One ticker also means one thing to cancel on dispose —
+   a per-timer periodic is the classic `Timer is still pending` test failure.
+3. **The alarm as state, not an event.** `ringing` is a `Set<String>` of step ids held until
+   acknowledged. An event (a callback, a one-shot snackbar) is lost on the rebuild that a step
+   change causes, which is exactly the case that matters: the bake finishes while you are reading
+   step 3.
+4. **The step→ingredient derivation**, knowing there is no schema link. Whole-name matching fails on
+   real data — the row says "boneless chicken thigh" and the prose says "the chicken" — so it
+   matches **word-wise** with a stop-word list, whole-word so `\bbutter\b` does not fire on
+   "buttermilk". Hidden when it finds nothing, and labelled as a hint.
+5. **The shared quantity formatters moved into core** on the way past. Cook mode's rail draws the
+   same quantity gutter as the reading page's, and B066 had just been fixed *twice* in two files
+   — so `ingredientQuantityLabel` / `ingredientNoteIsQuantity` / `sentenceCase` / `ingredientOneLine`
+   now live in `core/src/formatting.dart` with their own tests, and both rails read them.
+6. **The envelope test before the browser**, again.
+
+### What the envelope test bought, again
+
+Three bugs on the first run, and the interesting one is **B067**: the web top bar capped its chips
+the documented way — non-flex inside a `ConstrainedBox(maxWidth: constraints.maxWidth / 3)`, the
+B038 shape — with the `LayoutBuilder` supplying that width placed *inside* the `Row`. A non-flex
+child of a `Row` is laid out unbounded, so `constraints.maxWidth` there is `double.infinity`, the cap
+is `infinity / 3`, and it capped nothing. **The fix for a Gotcha 21 overflow reproduced the Gotcha 21
+overflow, while reading in review exactly like the accepted shape.** It was 186px over at
+1000px × 2.0× and green at 1440 × 2.0 *and* at 1000 × 1.0 — one width or one scale would have shipped
+it. Now Gotcha 25: hoist the `LayoutBuilder` to the nearest bounded ancestor.
+
+The other two: `MetaChip` could not degrade (B068 — a shared widget whose `Text` had no
+`maxLines`/`overflow`, harmless for `12 min` and 15px over once a caller passed a whole ingredient),
+and "not done — back to the last step" did nothing (B069 — `goTo`'s early return guarded on the
+index alone, and the finish screen is a *flag* beside the index, so the one control that targets the
+current step matched the guard and cleared nothing).
+
 ### Deliberately not built
 
-Cook mode is the larger half of the canvas (four of its eight frames) and is a **mode**, not a
-screen: full-screen step view, per-step timers, screen-awake, an alarm that survives the screen
-going off, and a finish screen that asks for the rating at the one moment the cook knows the answer.
-It is not a layout change and it was not in this change. The entry points are drawn and **inert**
-behind `notYetTooltip` + `kCookModeSoon`, which is the honest state: the affordance is designed,
-the promise is not falsely made. Compact v2 is likewise untouched — `/recipe/:id` below 1000px is
-still the v1 page.
+Compact v2 is untouched — `/recipe/:id` below 1000px is still the v1 page. Cook mode's compact
+layout **is** built, so a phone gets frames C/D/E; it is the *reading* page below 1000px that is
+still v1.
 
 ## Phase OPT — Optimization & hardening
 
