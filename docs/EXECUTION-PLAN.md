@@ -1266,11 +1266,54 @@ and "not done — back to the last step" did nothing (B069 — `goTo`'s early re
 index alone, and the finish screen is a *flag* beside the index, so the one control that targets the
 current step matched the guard and cleared nothing).
 
-### Deliberately not built
+### Compact v2, and retiring v1
 
-Compact v2 is untouched — `/recipe/:id` below 1000px is still the v1 page. Cook mode's compact
-layout **is** built, so a phone gets frames C/D/E; it is the *reading* page below 1000px that is
-still v1.
+The decision that shaped this one was **not** how to draw frame B — it was what to do with the
+600–1000 band. Three options, and the third is what shipped:
+
+1. Compact v2 below 600, v1 for 600–1000. Three layouts, one of them a design nobody drew.
+2. Compact v2 below 600, expanded v2 down to 600. The expanded page is a 352px rail beside a method
+   column inside a measured 1140px page; at 620px that is two columns of about 290px each.
+3. **Compact v2 for everything below 1000, v1 deleted.** A single-column cover-first page reads
+   correctly at 800px — it is a wider version of the same thing, not a compromise — and it takes the
+   layout count from three to two.
+
+So `recipe_content_views.dart` and `_Body` are gone, and `/recipe/:id` is now one
+`context.isExpanded` branch between two v2 layouts. `recipe_detail_test.dart` **needed no changes to
+its existing tests** to move with it: all eight assert what reached the repository (which value
+`setLiked` was sent, how many rows `logView` wrote), not what the tree looked like. That is the
+argument for behavioural tests in one paragraph — a layout was deleted underneath them and they
+stayed green and stayed meaningful.
+
+The reuse is the other half. `IngredientRail(bordered: false)` and `MethodColumn` are the *same*
+widgets the expanded page uses, because the alternative had already been tried: B066 was two copies
+of the ingredient list disagreeing across the 1000px branch, and B065/B066 had just been fixed. The
+only thing compact re-specifies is `FactsStrip(quad: true)` — six cells across 390px is 65px each,
+narrower than the word "Difficulty".
+
+Two shapes here are new and worth naming:
+
+- **A pinned sliver has exactly one height**, so the usual escape hatches do not apply: a `Wrap`
+  cannot reflow inside it and a `Row` of intrinsically-sized chips is the Gotcha 21 overflow. The
+  jump bar's content therefore scrolls **horizontally** — nothing can overflow in the axis that
+  matters, which leaves the height as the only thing to bound against text scale.
+- **The bottom bar is outside the scroll**, as `Column(Expanded(scroll), bar)` rather than a `Stack`
+  with a reserved bottom padding. The bar's height grows with text scale, so any reserve constant is
+  wrong at some scale — overlapping the last step or leaving a gap. Sized by its own content it is
+  right at every scale. Cook mode's compact view already used this shape.
+
+**B070 is the finding worth keeping.** The rail's heading row — `Row(Expanded(title), counter)` —
+overflowed by 9.5px at 390px × 2.0×, in a widget that had been green for a week. It is the same
+non-flex-child diagnosis as B062/B063, which fixed the two rows *below* it and left the heading
+alone, correctly at the time: nothing then rendered the rail narrower than the 493px column the
+expanded page gives it. Compact reused it at 358px. **A widget's envelope is the set of widths it
+has actually been pumped at, and adding a caller re-opens it** — so a reuse is a reason to re-run
+the envelope, not a reason to trust it.
+
+### Still not built
+
+Sticky ingredients rail on the expanded page, version-history v2 (needs a snapshot diff), naming the
+fork parent (needs a second read), persisted check-offs, and cook mode's two deferred plugins.
 
 ## Phase OPT — Optimization & hardening
 

@@ -93,9 +93,10 @@ secret-sauce/
 │   │                          recipe_detail_v2_test,cook_mode_test,my_recipes_header_test,
 │   │                          recipe_grid_test,discover_screen_test,discover_search_test,
 │   │                          paging_test,share_dialog_test,auth_screen_test}.dart
-│   │                          # the two detail suites split by window: recipe_detail_test pumps
-│   │                          # the default 800x600 (v1 layout), recipe_detail_v2_test pumps
-│   │                          # 1440/1000 incl. a 2.0x text-scale envelope (v2 layout)
+│   │                          # the two detail suites split by window: recipe_detail_test covers
+│   │                          # the COMPACT layout (engagement at the default 800x600, plus its
+│   │                          # own 390/600/800 x {1.0,2.0} envelope), recipe_detail_v2_test the
+│   │                          # expanded one at 1440/1000 x {1.0,2.0}
 │   │                          # cook_mode_test covers the pure derivations (flatten, weighted
 │   │                          # segments, step->ingredient matching) + both layouts at
 │   │                          # 390/1000/1440 x {1.0, 2.0}
@@ -395,7 +396,7 @@ Five Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/m
 | `/discover`                       | `features/discover`      | Masthead + search, three **shelves** (`01 UNDER 30` / `02 WEEKEND PROJECTS` / `03 MOST FORKED` — `discover_shelf.dart`), then one browse grid whose sort is the old Popular / Trending / Recent. No `AppBar` — the masthead is the title. Signed-out safe |
 | `/chefs`                          | `features/chefs`         | Web: `chefs_hero.dart` + a 404px leaderboard panel + rails of `ChefSpotlightCard`. Compact: the plain board. A row or card opens `chef_detail_sheet.dart` (dialog on web, sheet on mobile); signed-out safe |
 | `/my`                             | `features/my_recipes`    | My / Shared-with-me tabs, both paged. Sharing is `widgets/share_dialog.dart` (opened from recipe detail; it writes `recipe_shares`) |
-| `/recipe/:id`                     | `features/recipe_detail` | **Two layouts, one `context.isExpanded` branch (Phase 27).** ≥1000: `recipe_detail_expanded.dart` — measured 1140px page, header band, facts strip, `ingredient_rail.dart` / `method_column.dart` with check-off. <1000: the v1 hero + `_Body`. Both: servings scaler, rating, like/save, fork, `version_history_sheet.dart`; signed-out safe. Every `Start cooking` now opens cook mode |
+| `/recipe/:id`                     | `features/recipe_detail` | **Two v2 layouts, one `context.isExpanded` branch (Phase 27).** ≥1000: `recipe_detail_expanded.dart` — measured 1140px page, header band, facts strip. <1000 (compact **and** medium): `recipe_detail_compact.dart` — cover-first, facts quad, pinned jump bar, `Ready to cook?` bar. Both share `ingredient_rail.dart` (`bordered:` is the only difference) and `method_column.dart`. The v1 hero and `recipe_content_views.dart` are **deleted** — don't reintroduce a third layout for the 600–1000 band. Servings scaler, rating, like/save, fork, version history; signed-out safe |
 | `/recipe/:id/cook`                | `features/recipe_detail` | **Cook mode** — full-screen, one step at a time, **always dark** (`AppTheme.dark()`, the only screen that overrides the theme; the phone is propped under kitchen lights). `cook_mode_screen.dart` (route + shortcuts) → `cook_step_view.dart` (compact frames C/D, web frame H) → `cook_finish_view.dart` (frame E). Pure derivations in `cook_mode_model.dart`, session + timers in `cook_mode_providers.dart`. Signed-out safe; **not** in `needsAuth`. See "Cook mode" below |
 | `/recipe/new`, `/recipe/:id/edit` | `features/recipe_editor` | `edit_models.dart` holds mutable draft types; save appends a version                                                     |
 | `/profile`                        | `features/profile`       | Current user; reached from the bottom bar on mobile and the avatar menu on web (`myProfileProvider`)                     |
@@ -713,6 +714,14 @@ recipe` lives on the My Recipes header and search in Discover's search bar; putt
     web top bar had this for one test run: 186px over at 1000px × 2.0×, green at 1440 × 2.0 *and*
     at 1000 × 1.0 — which is the other half of the lesson, that one width or one scale proves
     nothing and the two-axis matrix is the test (#13, #22).
+26. **A widget's envelope is the set of widths it has actually been pumped at, so giving it a new
+    caller re-opens it** (B070). The ingredients rail's heading row — `Row(Expanded(title), counter)`
+    — was green for a week and overflowed by 9.5px the moment compact v2 reused the widget: the
+    expanded page hands the rail a `352 × 1.4` = 493px column, compact hands it the 358px content
+    box of a 390px phone. B062/B063 had fixed the two rows *below* that heading on exactly this
+    diagnosis and correctly left it alone, because nothing then rendered it narrow enough to fail.
+    **Reuse is a reason to re-run the envelope, not evidence that you don't need to** — and the
+    honest fix is almost always the same `Wrap` (#21), not a new breakpoint.
 
 ## Seed-data fit (MANDATORY)
 

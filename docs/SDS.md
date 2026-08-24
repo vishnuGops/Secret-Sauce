@@ -442,30 +442,39 @@ id desc`; `listSharedWithMe` `recipe_shares.created_at desc, recipe_id desc` (th
 
 ### 7.1 Recipe detail: the two layouts (Phase 27)
 
-`recipe_detail_screen.dart` branches on `context.isExpanded` and nothing else. Expanded windows get
-`RecipeDetailExpanded`; compact and medium get the original `_Body` under the collapsing
-`SliverAppBar`. The branch is deliberately a single check rather than an `AdaptiveLayout` with three
-builders — there is no medium-specific design, and pretending otherwise would freeze a layout nobody
-drew.
+`recipe_detail_screen.dart` branches on `context.isExpanded` and nothing else: expanded windows get
+`RecipeDetailExpanded`, everything below gets `RecipeDetailCompact`. The branch is deliberately a
+single check rather than an `AdaptiveLayout` with three builders — there is no medium-specific
+design, and pretending otherwise would freeze a layout nobody drew.
 
-| | v1 (compact / medium) | v2 (expanded, ≥ 1000) |
+**Both layouts are v2. The v1 hero is deleted** — a 240px `SliverAppBar` over one padded `Column`,
+plus `recipe_content_views.dart`, removed when compact v2 landed. Compact serves **compact *and*
+medium**: the canvas draws no medium screen, a single-column cover-first page reads correctly at
+800px, and keeping v1 for the 600–1000 band would have meant a third layout for a width nobody drew.
+
+| | Compact (< 1000, frames B/F) | Expanded (≥ 1000, frame A) |
 | --- | --- | --- |
-| Measure | full window width | centred, capped at `kDetailPageWidth` (1140) |
-| Identity | 240px `SliverAppBar` with the title over the cover | full-bleed header band: version line, title, description, attribution, chef + rating, action row; cover as a 400×280 card beside it |
-| Metadata | a `Wrap` of `MetaChip`s | **facts strip** — Total · Hands on · Cook · Difficulty · **Longest wait** · Visibility, as labelled cells with hairline dividers |
-| Ingredients | bulleted list, one column, full width | `IngredientRail` — check-off rows in a fixed quantity gutter, grouped, with the servings stepper and a gathered counter |
-| Steps | numbered rows | `MethodColumn` — tappable cards that collapse when done, group heading + step count per group |
-| Cook mode | — | both entry points open `/recipe/:id/cook` (§7.2) |
+| Measure | full width, single column | centred, capped at `kDetailPageWidth` (1140), two columns |
+| Identity | full-bleed cover with floating chrome, then title / chef / rating / description / attribution | header band: version line, title, description, attribution, chef + rating, action row; cover as a 400×280 card beside it |
+| Metadata | `FactsStrip(quad: true)` — Total · Hands on · Difficulty · **Longest wait** as 2×2 | `FactsStrip` — the same four plus Cook and Visibility, one row of labelled cells |
+| Visibility | a `Private` badge on the cover | a facts cell |
+| Navigation | **pinned jump bar** — Ingredients / Method / Fork | none needed; both columns are on screen |
+| Ingredients | `IngredientRail(bordered: false)` — full width, no card edge | `IngredientRail()` — a bordered column beside the method |
+| Steps | `MethodColumn` | `MethodColumn` |
+| Cook mode | `Ready to cook?` pinned below the scroll, plus the method teaser | the header band button, plus the method teaser |
 
-Three things about the v2 page are load-bearing and easy to undo by accident:
+The two content panels are **one implementation each**, differing only in `bordered`. That is
+deliberate: B066 was two copies of the ingredient list disagreeing across this very branch.
+
+Things about the v2 page that are load-bearing and easy to undo by accident:
 
 - **`Longest wait` is derived, not stored.** It is the longest single `steps.duration_minutes` in the
   recipe — the number that answers "can I cook this tonight". Nothing persists it; adding a column
   for it would put it in `kRecipeSelect`, the grants block and `save_recipe` (Gotcha 11/17) to save
   a `max()` over data already loaded.
 - **Only quantities scale.** The rail multiplies `quantity` by `servings / recipe.servings` and
-  colours the changed ones `primary`; step durations and temperatures are never touched. Same rule
-  as v1, made visible by the "Scaled from N" note.
+  colours the changed ones `primary`; step durations and temperatures are never touched. Made
+  visible by the "Scaled from N" note, and read by cook mode too (§7.2).
 - **`ingredients.quantity` is nullable, so the gutter has a fallback chain**: `quantity + unit`, else
   the bare `unit`, else the `note` ("to taste"), else `—`. All four states are reachable from the
   editor — a quantity field that fails to parse (`1/2`) saves the unit with no number — and the unit
@@ -478,6 +487,16 @@ Three things about the v2 page are load-bearing and easy to undo by accident:
   `context.textScale.clamp(1.0, kDetailRailMaxScale)` (1.4). At 2.0× a fixed rail turns every
   ingredient name into a three-line wrap, and the cap is what keeps the method column the wider of
   the two. B062–B064 are what happens without this and without the `Wrap`s beside it.
+- **Compact's two fixed-height regions are the pinned jump bar and the bottom bar**, and they are
+  bounded differently on purpose. The jump bar is a `SliverPersistentHeader`, which has exactly one
+  height — so a `Wrap` cannot reflow inside it and a `Row` of intrinsic chips is the Gotcha 21
+  overflow; its content **scrolls horizontally** instead, and only the height is scaled against
+  `context.textScale`. The `Ready to cook?` bar sits **outside** the scroll as
+  `Column(Expanded(scroll), bar)` rather than in a `Stack` over a reserved padding, because its own
+  height grows with text scale and any reserve constant would be wrong at some scale.
+- **A widget's envelope is the set of widths it has been pumped at.** The rail was green for a week
+  and overflowed the moment compact reused it at 358px instead of the expanded page's 493px column
+  (B070). Giving an existing widget a new caller re-opens its envelope; re-run it.
 
 Checked ingredients and done steps live in `checkedIngredientsProvider` / `doneStepsProvider` —
 **not** `autoDispose`, because leaving the screen mid-cook and coming back must not clear the

@@ -15,9 +15,20 @@ import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 /// Names are sentence-cased at render — the DB stores them lowercase, and in a
 /// quantity/name grid the capital is the left edge of the scanned column.
 class IngredientRail extends ConsumerWidget {
-  const IngredientRail({super.key, required this.recipe});
+  const IngredientRail({super.key, required this.recipe, this.bordered = true});
 
   final Recipe recipe;
+
+  /// Whether to draw the panel's card border and background.
+  ///
+  /// True on the expanded page, where the rail is a column *beside* the method
+  /// and needs an edge to be a column at all. False on compact, where it is a
+  /// full-width section between two dividers and a border would be a box drawn
+  /// round the whole screen. Everything inside — the gutter, the stepper, the
+  /// check-off, the scaled-quantity colouring — is identical either way, which is
+  /// the point of one widget rather than two: B066 was the two copies of this
+  /// list disagreeing.
+  final bool bordered;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -41,19 +52,31 @@ class IngredientRail extends ConsumerWidget {
     }
 
     return Container(
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerLowest,
-        border: Border.all(color: scheme.outlineVariant),
-        borderRadius: BorderRadius.circular(AppRadii.card),
-      ),
+      decoration:
+          bordered
+              ? BoxDecoration(
+                color: scheme.surfaceContainerLowest,
+                border: Border.all(color: scheme.outlineVariant),
+                borderRadius: BorderRadius.circular(AppRadii.card),
+              )
+              : null,
       padding: const EdgeInsets.all(AppSpacing.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          // A Wrap for the same reason as the two rows below it: the gathered
+          // counter is non-flex and therefore laid out unbounded (Gotcha 21), so
+          // at 2.0× it overflowed the heading row by 9.5px — on **compact**,
+          // where the rail is the 358px content box of a 390px phone rather than
+          // the 493px column the expanded page gives it. The widget was correct
+          // at every width it had been pumped at until compact v2 reused it.
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.xs,
             children: [
-              Expanded(child: Text('Ingredients', style: textTheme.titleLarge)),
+              Text('Ingredients', style: textTheme.titleLarge),
               Text(
                 '$gathered of ${all.length} gathered',
                 style: textTheme.labelMedium?.copyWith(

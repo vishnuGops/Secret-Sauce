@@ -11,6 +11,14 @@ import 'dart:async';
 // These overrides swap `recipeRepositoryProvider` / `authRepositoryProvider`
 // (core) rather than the screen's own providers, so the wiring in
 // recipe_detail_providers.dart is exercised instead of stubbed out.
+//
+// This suite pumps the **compact/medium** layout — it used to mean "the v1 hero"
+// and now means `recipe_detail_compact.dart`, since the v1 layout was deleted
+// when compact v2 landed. Every engagement test below survived that swap
+// untouched, which is the point of testing behaviour rather than widget trees:
+// they assert what reached the repository, not what the page looked like. The
+// layout's own assertions are in the two groups at the bottom.
+import 'package:app/features/recipe_detail/ingredient_rail.dart';
 import 'package:app/features/recipe_detail/recipe_detail_screen.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:core/core.dart';
@@ -25,6 +33,58 @@ const _recipe = Recipe(
   title: 'Suya-Spiced Lamb Skewers',
   likeCount: 12,
   saveCount: 3,
+);
+
+/// A recipe with the shape the compact layout has furniture for: two step
+/// groups, ingredients, an attribution, a private visibility badge.
+const _fullRecipe = Recipe(
+  id: 'r1',
+  ownerId: 'someone-else',
+  title: 'Spring Vegetable Tart',
+  description: 'A flaky all-butter crust.',
+  attribution: 'Written down from Rosa’s kitchen in 1987.',
+  prepMinutes: 30,
+  cookMinutes: 55,
+  servings: 8,
+  visibility: RecipeVisibility.private,
+  ingredientGroups: [
+    IngredientGroup(
+      id: 'ig1',
+      recipeId: 'r1',
+      name: 'Crust',
+      ingredients: [
+        Ingredient(
+          id: 'i1',
+          groupId: 'ig1',
+          quantity: 1.25,
+          unit: 'cup',
+          name: 'wheat flour',
+        ),
+      ],
+    ),
+  ],
+  stepGroups: [
+    StepGroup(
+      id: 'sg1',
+      recipeId: 'r1',
+      name: 'Crust',
+      steps: [
+        RecipeStep(id: 's1', groupId: 'sg1', text: 'Mix the flour and salt.'),
+        RecipeStep(
+          id: 's2',
+          groupId: 'sg1',
+          text: 'Chill the dough.',
+          durationMinutes: 60,
+        ),
+      ],
+    ),
+    StepGroup(
+      id: 'sg2',
+      recipeId: 'r1',
+      name: 'Bake',
+      steps: [RecipeStep(id: 's3', groupId: 'sg2', text: 'Bake until golden.')],
+    ),
+  ],
 );
 
 class _FakeAuth implements AuthRepository {
@@ -58,17 +118,22 @@ class _FakeAuth implements AuthRepository {
 /// Records every engagement write so a test can assert the *value* sent, which
 /// is the half B051 got wrong — it always sent `true`.
 class _FakeRecipeRepository implements RecipeRepository {
-  _FakeRecipeRepository({this.liked = false, this.saved = false});
+  _FakeRecipeRepository({
+    this.liked = false,
+    this.saved = false,
+    this.recipe = _recipe,
+  });
 
   bool liked;
   bool saved;
+  final Recipe recipe;
 
   final List<bool> likeWrites = [];
   final List<bool> saveWrites = [];
   int viewLogs = 0;
 
   @override
-  Future<Recipe> getById(String id) async => _recipe;
+  Future<Recipe> getById(String id) async => recipe;
 
   @override
   Future<bool> myLiked(String recipeId) async => liked;
@@ -148,7 +213,16 @@ Future<GoRouter> _pump(
   WidgetTester tester, {
   required _FakeRecipeRepository repo,
   required String? uid,
+  Size? size,
+  double textScale = 1,
 }) async {
+  if (size != null) {
+    tester.view.physicalSize = size;
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+  }
+
   final router = GoRouter(
     initialLocation: '/recipe/r1',
     routes: [
@@ -157,6 +231,10 @@ Future<GoRouter> _pump(
         builder:
             (_, state) =>
                 RecipeDetailScreen(recipeId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: Routes.cookRecipePattern,
+        builder: (_, __) => const Scaffold(body: Text('COOK MODE')),
       ),
       GoRoute(
         path: Routes.auth,
@@ -171,7 +249,16 @@ Future<GoRouter> _pump(
         recipeRepositoryProvider.overrideWithValue(repo),
         authRepositoryProvider.overrideWithValue(_FakeAuth(uid)),
       ],
-      child: MaterialApp.router(routerConfig: router),
+      child: MaterialApp.router(
+        routerConfig: router,
+        builder:
+            (context, child) => MediaQuery(
+              data: MediaQuery.of(
+                context,
+              ).copyWith(textScaler: TextScaler.linear(textScale)),
+              child: child!,
+            ),
+      ),
     ),
   );
   await tester.pumpAndSettle();
@@ -295,5 +382,119 @@ void main() {
       await _pump(tester, repo: repo, uid: null);
       expect(repo.viewLogs, 1);
     });
+  });
+
+  // The compact v2 layout (canvas frame B + frame F's owner state), which
+  // replaced the v1 hero below 1000px.
+  group('compact v2 (frame B)', () {
+    testWidgets('renders the v2 furniture and none of v1’s', (tester) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+
+      // Facts quad: the four that fit, not the six the wide strip carries.
+      expect(find.text('TOTAL'), findsOneWidget);
+      expect(find.text('HANDS ON'), findsOneWidget);
+      expect(find.text('LONGEST WAIT'), findsOneWidget);
+      expect(find.text('DIFFICULTY'), findsOneWidget);
+      expect(find.text('COOK'), findsNothing);
+      expect(find.text('VISIBILITY'), findsNothing);
+      // Private, so the badge is on the cover instead.
+      expect(find.text('Private'), findsOneWidget);
+
+      // Jump bar, ingredients rail, method column, sticky cook bar.
+      expect(find.text('Ingredients'), findsWidgets);
+      expect(find.text('Method'), findsWidgets);
+      expect(find.text('Ready to cook?'), findsOneWidget);
+      expect(find.text('3 steps · 1 h 25 m'), findsOneWidget);
+      // The attribution box (frame F).
+      expect(find.textContaining('Rosa’s kitchen'), findsOneWidget);
+
+      // v1 is gone: no collapsing hero, no "Instructions" heading.
+      expect(find.byType(SliverAppBar), findsNothing);
+      expect(find.text('Instructions'), findsNothing);
+    });
+
+    testWidgets('the sticky bar starts cooking', (tester) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+
+      // Two entry points on this page — the method column's teaser inside the
+      // scroll, and the pinned bar after it. `.last` is the bar.
+      expect(find.text('Start cooking'), findsNWidgets(2));
+      await tester.tap(find.text('Start cooking').last);
+      await tester.pumpAndSettle();
+      expect(find.text('COOK MODE'), findsOneWidget);
+    });
+
+    testWidgets('the ingredients rail shares the reading page’s gutter', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+
+      // Same widget as the expanded page's left column — scaled quantity in the
+      // gutter, sentence-cased name, check-off counter.
+      expect(find.text('1.25 cup'), findsOneWidget);
+      expect(find.text('Wheat flour'), findsOneWidget);
+      expect(find.text('0 of 1 gathered'), findsOneWidget);
+      // And it is bare here rather than a bordered card.
+      expect(
+        tester.widget<IngredientRail>(find.byType(IngredientRail)).bordered,
+        isFalse,
+      );
+    });
+
+    testWidgets('the owner gets edit and share, and no fork chip', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(
+        tester,
+        repo: repo,
+        uid: 'someone-else',
+        size: const Size(390, 844),
+      );
+
+      expect(find.byIcon(Icons.edit), findsOneWidget);
+      expect(find.byIcon(Icons.share), findsOneWidget);
+      // You cannot fork your own recipe, so the chip is absent.
+      expect(find.widgetWithText(ActionChip, 'Fork'), findsNothing);
+    });
+
+    testWidgets('a non-owner gets the fork chip and no editing', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 844));
+
+      expect(find.widgetWithText(ActionChip, 'Fork'), findsOneWidget);
+      expect(find.byIcon(Icons.edit), findsNothing);
+      expect(find.byIcon(Icons.share), findsNothing);
+    });
+  });
+
+  // Same two-axis matrix as the expanded page (B062–B064) and cook mode (B067):
+  // 390 is the phone the layout was drawn for, 800 is the medium band that used
+  // to get v1 and now gets this, and 2.0× is the accessibility envelope. The
+  // pinned jump bar and the sticky cook bar are both fixed-height regions, which
+  // is the shape Gotcha 22 is about.
+  group('layout envelope', () {
+    for (final width in [390.0, 600.0, 800.0]) {
+      for (final scale in [1.0, 2.0]) {
+        testWidgets('no overflow at ${width}px, textScale $scale', (
+          tester,
+        ) async {
+          final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+          await _pump(
+            tester,
+            repo: repo,
+            uid: 'me',
+            size: Size(width, 1600),
+            textScale: scale,
+          );
+          expect(tester.takeException(), isNull);
+        });
+      }
+    }
   });
 }

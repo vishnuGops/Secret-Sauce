@@ -1310,8 +1310,8 @@ the leaderboard is computed.
 
 ## Phase 27 — Recipe detail v2 (web): measured page, ingredients rail, method column
 
-**Status: reading page (web) done · cook mode done · compact v2 not started.** Drawn in the Claude
-Design canvas
+**Status: done.** Reading page (web + compact), cook mode, and the v1 layout retired. Drawn in the
+Claude Design canvas
 `Recipe Detail v2.dc.html`; the as-built reference it was drawn against is `Recipe Detail.dc.html`
 (redrawn 2026-08-23 from real full-page captures).
 
@@ -1444,11 +1444,34 @@ commit.
       names nothing hides the panel, and "add the remaining spices" finds nothing. Promoting it to
       a checklist needs the table
 
-### Not built — the rest of the canvas
+### Compact v2 — built, and v1 is gone (canvas frame B + frame F)
 
-- [ ] **Compact (390px) v2** — the canvas's frame B: cover-first, jump chips, sticky
-      `Ready to cook?` bar. Compact and medium still render the v1 hero layout; the branch is a
-      single `context.isExpanded` check in `recipe_detail_screen.dart`
+- [x] **`recipe_detail_compact.dart` replaced the v1 hero**, rather than sitting beside it. The
+      240px `SliverAppBar` over one padded `Column`, and `recipe_content_views.dart` with it, are
+      **deleted** — so the page below 1000px is no longer a different *design* from the page above
+      it, only a different layout of the same one
+- [x] **It serves compact and medium both.** The canvas draws no medium screen, and a single-column
+      cover-first page reads correctly at 800px. Keeping v1 alive for the 600–1000 band would have
+      meant maintaining a third layout for a width nobody designed
+- [x] **Cover-first** with the chrome floating on it (back / history / share / edit), a scrim behind
+      each button so a themed icon colour is never painted onto an unknown photo (the B055 mistake),
+      and a `Private` badge on the cover instead of a facts cell. No cover → the same band, shorter,
+      in `surfaceContainerHighest` — which is what the local stack always shows, since no seeded
+      recipe carries one
+- [x] **Facts quad**: `FactsStrip(quad: true)` — Total / Hands on / Difficulty / Longest wait as
+      2×2. Six cells across 390px is 65px each, narrower than the word "Difficulty"
+- [x] **Pinned jump bar** — Ingredients / Method / Fork. Its content scrolls **horizontally**: a
+      pinned sliver has one fixed height, so a `Wrap` cannot save it and a `Row` of intrinsic chips
+      is the Gotcha 21 overflow waiting to happen at 2.0×
+- [x] **`Ready to cook?` pinned to the bottom**, outside the scroll as
+      `Column(Expanded(scroll), bar)` rather than a `Stack` with a reserved padding — the bar's
+      height grows with text scale, so any reserve constant is wrong at some scale
+- [x] **The two panels are reused, not reimplemented.** `IngredientRail(bordered: false)` and
+      `MethodColumn` are the same widgets the expanded page uses; only the card border differs.
+      That is deliberate — B066 *was* two copies of the ingredient list disagreeing
+- [x] Envelope at 390 / 600 / 800 × {1.0, 2.0}; it found **B070** on the first run
+
+### Still not built — the rest of the canvas
 - [ ] **Sticky ingredients rail.** The canvas has it `position: sticky`; the Flutter page scrolls it
       with the content. Needs real sliver work (a pinned sliver beside a scrolling one), not a
       widget swap

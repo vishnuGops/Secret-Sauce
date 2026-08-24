@@ -333,16 +333,25 @@ class _HeaderBand extends ConsumerWidget {
   }
 }
 
-/// The labelled facts strip that replaces the v1 chip row on wide windows:
-/// Total · Hands on · Cook · Difficulty · Longest wait · Visibility.
+/// The labelled facts strip that replaces the v1 chip row:
+/// Total · Hands on · Cook · Difficulty · Longest wait · Visibility in one row
+/// on a wide window, and a 2×2 quad of the four that matter on a phone.
 ///
 /// "Longest wait" is the longest single step duration — the number that decides
 /// whether this is cookable tonight. `IntrinsicHeight` keeps the cell hairlines
 /// full-height when a label wraps at large text scales.
 class FactsStrip extends StatelessWidget {
-  const FactsStrip({super.key, required this.recipe});
+  const FactsStrip({super.key, required this.recipe, this.quad = false});
 
   final Recipe recipe;
+
+  /// Lay the cells out as a 2×2 grid instead of a single row (canvas frame B).
+  ///
+  /// Six cells across a 390px phone is 65px each — narrower than the word
+  /// "Difficulty" — so compact keeps four and stacks them. Cook is dropped
+  /// because Total and Hands on bound it, and Visibility because the cover
+  /// already carries a badge when a recipe is private.
+  final bool quad;
 
   int get _longestStepMinutes {
     var longest = 0;
@@ -359,31 +368,98 @@ class FactsStrip extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
 
-    final cells = <Widget>[
-      _FactCell(label: 'Total', value: formatMinutes(recipe.totalMinutes)),
-      _FactCell(label: 'Hands on', value: formatMinutes(recipe.prepMinutes)),
-      _FactCell(label: 'Cook', value: formatMinutes(recipe.cookMinutes)),
-      _FactCell(
-        label: 'Difficulty',
-        child: DifficultyBadge(difficulty: recipe.difficulty),
-      ),
-      _FactCell(
-        label: 'Longest wait',
-        value: formatMinutes(_longestStepMinutes),
-      ),
-      _FactCell(
-        label: 'Visibility',
-        value: recipe.visibility.isPublic ? 'Public' : 'Private',
-        dim: true,
-      ),
-    ];
+    final total = _FactCell(
+      label: 'Total',
+      value: formatMinutes(recipe.totalMinutes),
+    );
+    final handsOn = _FactCell(
+      label: 'Hands on',
+      value: formatMinutes(recipe.prepMinutes),
+    );
+    final difficulty = _FactCell(
+      label: 'Difficulty',
+      child: DifficultyBadge(difficulty: recipe.difficulty),
+    );
+    final longestWait = _FactCell(
+      label: 'Longest wait',
+      value: formatMinutes(_longestStepMinutes),
+    );
+
+    final cells =
+        quad
+            ? <Widget>[total, handsOn, difficulty, longestWait]
+            : <Widget>[
+              total,
+              handsOn,
+              _FactCell(
+                label: 'Cook',
+                value: formatMinutes(recipe.cookMinutes),
+              ),
+              difficulty,
+              longestWait,
+              _FactCell(
+                label: 'Visibility',
+                value: recipe.visibility.isPublic ? 'Public' : 'Private',
+                dim: true,
+              ),
+            ];
+
+    final border = BoxDecoration(
+      color: scheme.surfaceContainerLowest,
+      border: Border.all(color: scheme.outlineVariant),
+      borderRadius: BorderRadius.circular(AppRadii.card),
+    );
+
+    if (quad) {
+      Widget row(Widget left, Widget right, {required bool first}) =>
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: Container(
+                    decoration:
+                        first
+                            ? null
+                            : BoxDecoration(
+                              border: Border(
+                                top: BorderSide(color: scheme.outlineVariant),
+                              ),
+                            ),
+                    child: left,
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: BorderSide(color: scheme.outlineVariant),
+                        top:
+                            first
+                                ? BorderSide.none
+                                : BorderSide(color: scheme.outlineVariant),
+                      ),
+                    ),
+                    child: right,
+                  ),
+                ),
+              ],
+            ),
+          );
+      return Container(
+        decoration: border,
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          children: [
+            row(cells[0], cells[1], first: true),
+            row(cells[2], cells[3], first: false),
+          ],
+        ),
+      );
+    }
 
     return Container(
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerLowest,
-        border: Border.all(color: scheme.outlineVariant),
-        borderRadius: BorderRadius.circular(AppRadii.card),
-      ),
+      decoration: border,
       clipBehavior: Clip.antiAlias,
       child: IntrinsicHeight(
         child: Row(
