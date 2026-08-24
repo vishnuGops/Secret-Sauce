@@ -93,6 +93,13 @@ the `recipe_ratings` trigger recomputes them from scratch so they cannot drift.
 `author_id → profiles`, `change_summary`, `content_snapshot (jsonb)` (full recipe body at that point),
 `created_at`.
 
+`content_snapshot` is **write-only from the client's point of view**: `save_recipe` writes it and no
+UI reads it. `RecipeRepository.versions()` therefore selects `kRecipeVersionSelect` — every column
+*except* the snapshot — because the v2 detail header watches that provider on every page open and
+the snapshot is a whole recipe of `jsonb` per row (B065). `RecipeVersion.contentSnapshot` decodes to
+its `@Default({})`. A future diff/restore feature needs the column and must take its own read for
+the one version it is showing, not widen this list.
+
 **ingredient_groups**: `id`, `recipe_id`, `name` (e.g. "For the sauce"), `sort_order`.
 **ingredients**: `id`, `group_id → ingredient_groups`, `quantity (numeric, nullable)`,
 `unit`, `name`, `note`, `is_optional (bool)`, `sort_order`.
@@ -429,9 +436,52 @@ id desc`; `listSharedWithMe` `recipe_shares.created_at desc, recipe_id desc` (th
 | Discover       | `/discover`                       | Masthead + search, three shelves (`01 UNDER 30`, `02 WEEKEND PROJECTS`, `03 MOST FORKED` — §6.0), then one browse grid sorted Top rated / Trending / Newest. No `AppBar`: the masthead is the title. Public, no sign-in |
 | Chefs          | `/chefs`                          | Leaderboard ranked by chef score (public, no sign-in)                                 |
 | My Recipes     | `/my`                             | Tabs: My / Shared-with-me; `RecipeCard` grid with Public/Private badges                |
-| Recipe detail  | `/recipe/:id`                     | Structured view, servings scaler, rating, like/save **toggles**, fork, versions (public recipes viewable signed-out; like/save/rate send a signed-out visitor to `/auth` rather than calling the repository — B051) |
+| Recipe detail  | `/recipe/:id`                     | **Two layouts, one screen (§7.1).** Expanded (≥ 1000) renders the v2 reading page: measured 1140px column, header band, facts strip, ingredients rail / method column. Compact and medium keep the v1 hero + single column. Both: servings scaler, rating, like/save **toggles**, fork, versions (public recipes viewable signed-out; like/save/rate send a signed-out visitor to `/auth` rather than calling the repository — B051) |
 | Recipe editor  | `/recipe/new`, `/recipe/:id/edit` | Structured create/edit                                                                |
 | Profile        | `/profile`                        | Current user                                                                          |
+
+### 7.1 Recipe detail: the two layouts (Phase 27)
+
+`recipe_detail_screen.dart` branches on `context.isExpanded` and nothing else. Expanded windows get
+`RecipeDetailExpanded`; compact and medium get the original `_Body` under the collapsing
+`SliverAppBar`. The branch is deliberately a single check rather than an `AdaptiveLayout` with three
+builders — there is no medium-specific design, and pretending otherwise would freeze a layout nobody
+drew.
+
+| | v1 (compact / medium) | v2 (expanded, ≥ 1000) |
+| --- | --- | --- |
+| Measure | full window width | centred, capped at `kDetailPageWidth` (1140) |
+| Identity | 240px `SliverAppBar` with the title over the cover | full-bleed header band: version line, title, description, attribution, chef + rating, action row; cover as a 400×280 card beside it |
+| Metadata | a `Wrap` of `MetaChip`s | **facts strip** — Total · Hands on · Cook · Difficulty · **Longest wait** · Visibility, as labelled cells with hairline dividers |
+| Ingredients | bulleted list, one column, full width | `IngredientRail` — check-off rows in a fixed quantity gutter, grouped, with the servings stepper and a gathered counter |
+| Steps | numbered rows | `MethodColumn` — tappable cards that collapse when done, group heading + step count per group |
+| Cook mode | — | entry points present and **inert** (`notYetTooltip`, `kCookModeSoon`) |
+
+Three things about the v2 page are load-bearing and easy to undo by accident:
+
+- **`Longest wait` is derived, not stored.** It is the longest single `steps.duration_minutes` in the
+  recipe — the number that answers "can I cook this tonight". Nothing persists it; adding a column
+  for it would put it in `kRecipeSelect`, the grants block and `save_recipe` (Gotcha 11/17) to save
+  a `max()` over data already loaded.
+- **Only quantities scale.** The rail multiplies `quantity` by `servings / recipe.servings` and
+  colours the changed ones `primary`; step durations and temperatures are never touched. Same rule
+  as v1, made visible by the "Scaled from N" note.
+- **`ingredients.quantity` is nullable, so the gutter has a fallback chain**: `quantity + unit`, else
+  the bare `unit`, else the `note` ("to taste"), else `—`. All four states are reachable from the
+  editor — a quantity field that fails to parse (`1/2`) saves the unit with no number — and the unit
+  must survive that, because v1 prints it either way (B066). The unit outranks the note because a
+  unit with no number is a data defect worth seeing; the note then rides beside the name instead, so
+  neither half is dropped. The note takes the gutter **only** when it is the one thing there, which
+  is also the only case it is not repeated beside the name.
+- **The rail is bounded against text scale, not fixed.** `kDetailRailWidth` (352) and
+  `kIngredientQuantityGutter` (86) are both multiplied by
+  `context.textScale.clamp(1.0, kDetailRailMaxScale)` (1.4). At 2.0× a fixed rail turns every
+  ingredient name into a three-line wrap, and the cap is what keeps the method column the wider of
+  the two. B062–B064 are what happens without this and without the `Wrap`s beside it.
+
+Checked ingredients and done steps live in `checkedIngredientsProvider` / `doneStepsProvider` —
+**not** `autoDispose`, because leaving the screen mid-cook and coming back must not clear the
+checklist. They are session state, not device state, and the UI says so.
 
 ### Adaptive behavior
 

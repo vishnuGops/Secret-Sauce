@@ -74,3 +74,20 @@ final mySavedProvider = FutureProvider.autoDispose.family<bool, String>((
 final selectedServingsProvider = StateProvider.autoDispose.family<int?, String>(
   (ref, id) => null,
 );
+
+/// Ingredient ids the user has ticked off in the v2 rail, per recipe.
+///
+/// Deliberately **not** autoDispose: mid-cook you leave the screen (look
+/// something up, answer a message) and come back — losing the checklist on
+/// return would make it useless. Session-scoped for now; the design copy
+/// promises device persistence, which needs a storage decision (BL: persist to
+/// shared_preferences) before the label can claim it.
+final checkedIngredientsProvider = StateProvider.family<Set<String>, String>(
+  (ref, recipeId) => const {},
+);
+
+/// Step ids ticked off in the v2 method column, per recipe. Same lifetime
+/// reasoning as [checkedIngredientsProvider].
+final doneStepsProvider = StateProvider.family<Set<String>, String>(
+  (ref, recipeId) => const {},
+);

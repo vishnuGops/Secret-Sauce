@@ -63,6 +63,21 @@ String isoDate(DateTime date) =>
     '${date.month.toString().padLeft(2, '0')}-'
     '${date.day.toString().padLeft(2, '0')}';
 
+/// `70` → `1 h 10 m`, `40` → `40 min`, `120` → `2 h`, `0`/negative → `—`.
+///
+/// The recipe-detail facts strip reads durations side by side, so hours are
+/// split out instead of showing `70 min`. Chips inside a step keep the raw
+/// `N min` form — a step long enough to need hours is a data problem, not a
+/// formatting one.
+String formatMinutes(int minutes) {
+  if (minutes <= 0) return '—';
+  final hours = minutes ~/ 60;
+  final rest = minutes % 60;
+  if (hours == 0) return '$rest min';
+  if (rest == 0) return '$hours h';
+  return '$hours h $rest m';
+}
+
 /// Groups a score, keeping the single decimal place a `numeric` score can carry
 /// (views contribute 0.2 each) and dropping it when the value is whole.
 String groupedScore(double value) {

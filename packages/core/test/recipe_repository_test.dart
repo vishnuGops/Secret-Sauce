@@ -322,6 +322,44 @@ void main() {
     });
   });
 
+  group('versions', () {
+    test('does not ask for content_snapshot', () async {
+      // The snapshot is a whole recipe as jsonb (~10 KB a version, nine on some
+      // recipes) and nothing on the client reads it — but the v2 header band
+      // watches this provider on every page open. A bare `select()` shipped all
+      // of it, and no local run could show that: every seeded snapshot is `{}`.
+      final (:http, :client, :repo) = _repo([
+        (
+          200,
+          jsonEncode([
+            {
+              'id': 'v2',
+              'recipe_id': 'r1',
+              'version_number': 2,
+              'parent_version_id': 'v1',
+              'author_id': _uid,
+              'change_summary': 'Hotter rub',
+              'created_at': '2026-08-02T10:00:00Z',
+            },
+          ]),
+        ),
+      ]);
+
+      final versions = await repo.versions('r1');
+
+      final req = http.requests.single;
+      expect(req.select, isNot(contains('content_snapshot')));
+      expect(req.select, contains('version_number'));
+      expect(req.select, contains('change_summary'));
+      expect(req.order, 'version_number.desc.nullslast');
+      // The column is gone from the wire, so the model falls back to its
+      // `@Default({})` — decoding must not need the key.
+      expect(versions.single.contentSnapshot, isEmpty);
+      expect(versions.single.versionNumber, 2);
+      expect(versions.single.changeSummary, 'Hotter rub');
+    });
+  });
+
   group('signed-out reads', () {
     test('myLiked answers false without a request (Gotcha 9)', () async {
       final (:http, :client, :repo) = _repo([]);

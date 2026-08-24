@@ -301,7 +301,7 @@ class SupabaseRecipeRepository implements RecipeRepository {
   Future<List<RecipeVersion>> versions(String recipeId) async {
     final rows = await _client
         .from('recipe_versions')
-        .select()
+        .select(kRecipeVersionSelect)
         .eq('recipe_id', recipeId)
         .order('version_number', ascending: false);
     return rows.map<RecipeVersion>(RecipeVersion.fromJson).toList();

@@ -9,6 +9,7 @@ import 'package:app/widgets/share_dialog.dart';
 import 'package:app/features/recipe_detail/detail_chips.dart';
 import 'package:app/features/recipe_detail/rating_section.dart';
 import 'package:app/features/recipe_detail/recipe_content_views.dart';
+import 'package:app/features/recipe_detail/recipe_detail_expanded.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/features/recipe_detail/version_history_sheet.dart';
 import 'package:app/routing/app_router.dart';
@@ -58,6 +59,16 @@ class RecipeDetailScreen extends ConsumerWidget {
             ),
         data: (recipe) {
           final isOwner = currentUser != null && currentUser == recipe.ownerId;
+          // The v2 reading page (header band + ingredients rail / method) is
+          // web-first: expanded windows only. Compact and medium keep the v1
+          // hero layout until the compact redesign lands.
+          if (context.isExpanded) {
+            return RecipeDetailExpanded(
+              recipe: recipe,
+              isOwner: isOwner,
+              onFork: () => _fork(context, ref),
+            );
+          }
           return CustomScrollView(
             slivers: [
               SliverAppBar(
@@ -117,40 +128,6 @@ class RecipeDetailScreen extends ConsumerWidget {
         },
       ),
     );
-  }
-}
-
-/// Like/save tap handler, shared by both buttons (B051).
-///
-/// Three things it must do that the old one-way `liked: true` call did not:
-/// send a signed-out visitor to `/auth` instead of letting `_uid` throw
-/// `StateError` inside an unawaited closure (Gotcha 9), pass the **opposite** of
-/// the current state so the action is a toggle, and surface a failure instead of
-/// swallowing it. Invalidating the state provider *and* the recipe refreshes
-/// both the icon and the trigger-maintained counter.
-Future<void> _toggleEngagement(
-  BuildContext context,
-  WidgetRef ref, {
-  required String recipeId,
-  required ProviderBase<AsyncValue<bool>> stateProvider,
-  required Future<void> Function(RecipeRepository repo, bool next) write,
-  required bool active,
-  required String failure,
-}) async {
-  if (ref.read(currentUserIdProvider) == null) {
-    context.go(Routes.auth);
-    return;
-  }
-  try {
-    await write(ref.read(recipeRepositoryProvider), !active);
-    ref.invalidate(stateProvider);
-    ref.invalidate(recipeProvider(recipeId));
-  } catch (e) {
-    if (context.mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('$failure — ${friendlyError(e)}')));
-    }
   }
 }
 
@@ -256,47 +233,7 @@ class _Body extends ConsumerWidget {
           const SizedBox(height: AppSpacing.md),
           Row(
             children: [
-              CountAction(
-                icon: Icons.favorite_border,
-                activeIcon: Icons.favorite,
-                active:
-                    ref.watch(myLikedProvider(recipe.id)).valueOrNull ?? false,
-                count: recipe.likeCount,
-                tooltip: 'Like',
-                activeTooltip: 'Unlike',
-                onTap:
-                    (active) => _toggleEngagement(
-                      context,
-                      ref,
-                      recipeId: recipe.id,
-                      stateProvider: myLikedProvider(recipe.id),
-                      write:
-                          (repo, next) => repo.setLiked(recipe.id, liked: next),
-                      active: active,
-                      failure: 'Could not update your like',
-                    ),
-              ),
-              const SizedBox(width: AppSpacing.md),
-              CountAction(
-                icon: Icons.bookmark_border,
-                activeIcon: Icons.bookmark,
-                active:
-                    ref.watch(mySavedProvider(recipe.id)).valueOrNull ?? false,
-                count: recipe.saveCount,
-                tooltip: 'Save',
-                activeTooltip: 'Remove from saved',
-                onTap:
-                    (active) => _toggleEngagement(
-                      context,
-                      ref,
-                      recipeId: recipe.id,
-                      stateProvider: mySavedProvider(recipe.id),
-                      write:
-                          (repo, next) => repo.setSaved(recipe.id, saved: next),
-                      active: active,
-                      failure: 'Could not update your save',
-                    ),
-              ),
+              LikeSaveButtons(recipe: recipe),
               const Spacer(),
               if (!isOwner)
                 FilledButton.tonalIcon(

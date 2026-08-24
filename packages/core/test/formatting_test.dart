@@ -17,4 +17,13 @@ void main() {
     expect(isoDate(DateTime(2026, 12, 9)), '2026-12-09');
     expect(isoDate(DateTime(2026, 1, 1)), '2026-01-01');
   });
+
+  test('formatMinutes splits hours out and dashes the empty case', () {
+    expect(formatMinutes(40), '40 min');
+    expect(formatMinutes(70), '1 h 10 m');
+    expect(formatMinutes(120), '2 h');
+    expect(formatMinutes(60), '1 h');
+    expect(formatMinutes(0), '—');
+    expect(formatMinutes(-5), '—');
+  });
 }

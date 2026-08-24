@@ -1137,6 +1137,82 @@ shaped by what the server can return. The design_system pieces (`CardRailVariant
 - Still open: RLS as a **signed-in `authenticated`** user — owner-vs-shared-vs-stranger on a private
   recipe, which is the shape B053 lived in and which the shelves do not exercise.
 
+## Phase 27 — Recipe detail v2 (web)
+
+Roadmap: [ROADMAP.md Phase 27](./ROADMAP.md#phase-27--recipe-detail-v2-web-measured-page-ingredients-rail-method-column) ·
+[SDS.md §7.1](./SDS.md#71-recipe-detail-the-two-layouts-phase-27)
+
+**Status: web done, compact not started.** Built from the `Recipe Detail v2.dc.html` canvas, which
+was drawn against `Recipe Detail.dc.html` — an as-built transcription of real full-page captures of
+the shipped v1 page, taken first precisely so the redesign was measured against what exists rather
+than what the old canvas claimed existed. That first canvas covered only the top third of the page
+and had missed step groups entirely.
+
+### Order of work, and why
+
+1. **`formatMinutes()` into core, with tests.** The facts strip is the first surface that reads
+   durations side by side, where `70 min` beside `40 min` is worse than `1 h 10 m` beside `40 min`.
+   Pure function, so it belongs in `core/src/formatting.dart` next to `groupedCount` and
+   `isoDate` — not a private helper in the widget that needed it first (the mistake OPT-A7 undid).
+2. **`LikeSaveButtons` extracted before either layout used it.** The v2 band and the v1 body both
+   need like/save, and B051's fix (toggle, not one-way; signed-out goes to `/auth`; failures
+   surface) is subtle enough that a second copy would drift. `_toggleEngagement` moved with it out
+   of the screen and into `detail_chips.dart`.
+3. **The branch, then the new files.** `recipe_detail_screen.dart` gained one
+   `if (context.isExpanded)`; everything new landed in three files beside it. The existing
+   `recipe_detail_test.dart` pumps the default 800×600, so it kept exercising v1 unchanged and
+   never had to be touched — which is the whole reason the branch is on window width rather than a
+   flag.
+4. **The envelope test before the browser.** Written to fail: pump the whole page at
+   {1000, 1440} × {1.0, 2.0} and assert `takeException()` is null.
+
+### What the envelope test bought
+
+It failed on its first run and found three real overflows (B062/B063/B064) — the servings row, the
+rail footer, and the cook-mode teaser. The third only overflows at **1000px**, not 1440, so a
+single-width check would have shipped it. All three are the same shape and it is worth stating
+plainly, because the repo has now hit it six times: **a non-flex child of a `Row` is laid out at its
+intrinsic width, and a `Wrap`/threshold is the fix, not more flexibility on the sibling.** Buttons
+whose labels grow with text scale are the reliable trigger.
+
+Getting the widget chain out of a failing envelope test is not obvious: `tester.takeException()`
+*consumes* the `FlutterError` before the framework prints its `error-causing widget` dump, so the
+failure says only "overflowed by 52 pixels". A throwaway probe test that captures
+`FlutterError.onError` into a list and prints each `FlutterErrorDetails` gives the file and line
+directly. Worth reaching for immediately next time rather than reasoning about intrinsic widths.
+
+### What the envelope test could not buy
+
+Neither of the two findings `/code-review` turned up afterwards is a layout defect, and neither is
+observable on this machine's data — which is the interesting part:
+
+- **B065** — the header band watches `recipeVersionsProvider`, and `versions()` was a bare
+  `.select()`, so every page open pulled `recipe_versions.content_snapshot` (a whole recipe as
+  `jsonb`, up to nine rows) to render a *count*. Every seeded snapshot is `'{}'`, in all three
+  fixture sources, so locally a ~90 KB read looks like a 900-byte one; only a recipe edited through
+  `save_recipe` shows the real size. Fixed with `kRecipeVersionSelect`. The general lesson: **the
+  fixtures are empty in exactly the places that make an over-fetch cheap**, so "it felt fast
+  locally" is not evidence about a read whose payload grows with use.
+- **B066** — an ingredient with a unit and no quantity rendered `—` and dropped the unit, while v1
+  printed it. Nothing seeded reaches that state; the editor does, on a quantity field that fails to
+  parse. A test had to *construct* the fixture to see it, which is now what
+  `recipe_detail_v2_test.dart` does (the fake repository takes the recipe so a test can vary it).
+  Worth noting how the first fix was itself wrong: adding the unit *after* the note in the chain
+  fixed the reported case and silently created a new one — `unit + note + no quantity` then dropped
+  the unit instead. Four nullable-ish inputs into one 86px gutter is a truth table, so the fix is
+  the whole table (`quantity + unit` → `unit` → `note` → `—`, note beside the name unless it took
+  the gutter), and the test pins all four rows rather than the one that was reported.
+
+### Deliberately not built
+
+Cook mode is the larger half of the canvas (four of its eight frames) and is a **mode**, not a
+screen: full-screen step view, per-step timers, screen-awake, an alarm that survives the screen
+going off, and a finish screen that asks for the rating at the one moment the cook knows the answer.
+It is not a layout change and it was not in this change. The entry points are drawn and **inert**
+behind `notYetTooltip` + `kCookModeSoon`, which is the honest state: the affordance is designed,
+the promise is not falsely made. Compact v2 is likewise untouched — `/recipe/:id` below 1000px is
+still the v1 page.
+
 ## Phase OPT — Optimization & hardening
 
 Roadmap: [ROADMAP.md Phase OPT](./ROADMAP.md#phase-opt--optimization--hardening-backlog-rolling) ·

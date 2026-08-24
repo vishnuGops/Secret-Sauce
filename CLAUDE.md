@@ -90,9 +90,12 @@ secret-sauce/
 │   │                          #   not_yet_tooltip.dart
 │   ├── lib/main.dart · test/{widget_test,chefs_screen_test,chefs_routing_test,
 │   │                          top_nav_bar_test,recipe_editor_test,recipe_detail_test,
-│   │                          my_recipes_header_test,recipe_grid_test,discover_screen_test,
-│   │                          discover_search_test,paging_test,share_dialog_test,
-│   │                          auth_screen_test}.dart
+│   │                          recipe_detail_v2_test,my_recipes_header_test,recipe_grid_test,
+│   │                          discover_screen_test,discover_search_test,paging_test,
+│   │                          share_dialog_test,auth_screen_test}.dart
+│   │                          # the two detail suites split by window: recipe_detail_test pumps
+│   │                          # the default 800x600 (v1 layout), recipe_detail_v2_test pumps
+│   │                          # 1440/1000 incl. a 2.0x text-scale envelope (v2 layout)
 │   │                          # widget_test.dart covers the `/` -> /discover redirect
 │   ├── env.example.json       # template; env.local.json (git-ignored) holds real creds
 │   └── android/ ios/ web/ windows/   # platform runners are committed — no `flutter create`
@@ -389,7 +392,7 @@ Five Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/m
 | `/discover`                       | `features/discover`      | Masthead + search, three **shelves** (`01 UNDER 30` / `02 WEEKEND PROJECTS` / `03 MOST FORKED` — `discover_shelf.dart`), then one browse grid whose sort is the old Popular / Trending / Recent. No `AppBar` — the masthead is the title. Signed-out safe |
 | `/chefs`                          | `features/chefs`         | Web: `chefs_hero.dart` + a 404px leaderboard panel + rails of `ChefSpotlightCard`. Compact: the plain board. A row or card opens `chef_detail_sheet.dart` (dialog on web, sheet on mobile); signed-out safe |
 | `/my`                             | `features/my_recipes`    | My / Shared-with-me tabs, both paged. Sharing is `widgets/share_dialog.dart` (opened from recipe detail; it writes `recipe_shares`) |
-| `/recipe/:id`                     | `features/recipe_detail` | Servings scaler, rating, like/save, fork, `version_history_sheet.dart`; signed-out safe                                  |
+| `/recipe/:id`                     | `features/recipe_detail` | **Two layouts, one `context.isExpanded` branch (Phase 27).** ≥1000: `recipe_detail_expanded.dart` — measured 1140px page, header band, facts strip, `ingredient_rail.dart` / `method_column.dart` with check-off. <1000: the v1 hero + `_Body`. Both: servings scaler, rating, like/save, fork, `version_history_sheet.dart`; signed-out safe. Cook mode is drawn but **not built** — every `Start cooking` is inert behind `kCookModeSoon` |
 | `/recipe/new`, `/recipe/:id/edit` | `features/recipe_editor` | `edit_models.dart` holds mutable draft types; save appends a version                                                     |
 | `/profile`                        | `features/profile`       | Current user; reached from the bottom bar on mobile and the avatar menu on web (`myProfileProvider`)                     |
 
@@ -591,7 +594,11 @@ relationship was found`. Use the shared `kRecipeSelect` constant in
     ~450-byte tsvector nothing on the client reads, and `*` shipped it on every row. So **a new
     column on `recipes` must be added to `kRecipeSelect` too**, or it decodes as null with no
     error — the read-side twin of the column-grant obligation. `packages/core/test/chef_models_test.dart`
-    pins the current 24.
+    pins the current 24. Same rule now on `recipe_versions`: `versions()` selects
+    `kRecipeVersionSelect`, which deliberately **omits `content_snapshot`** — a whole recipe as
+    `jsonb` per row that no UI reads, and the v2 detail header watches that provider on every page
+    open (B065). Local fixtures all write `'{}'` there, so an over-fetch of it is invisible until a
+    recipe has actually been edited.
 18. **Navigation chrome is two bars with two destination lists**, both in
     [nav_destinations.dart](apps/app/lib/routing/nav_destinations.dart): compact keeps four slots
     _including Profile_; the web bar ([top_nav_bar.dart](apps/app/lib/routing/top_nav_bar.dart))

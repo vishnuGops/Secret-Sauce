@@ -1308,6 +1308,106 @@ the leaderboard is computed.
 
 ---
 
+## Phase 27 — Recipe detail v2 (web): measured page, ingredients rail, method column
+
+**Status: web done, compact not started.** Drawn in the Claude Design canvas
+`Recipe Detail v2.dc.html`; the as-built reference it was drawn against is `Recipe Detail.dc.html`
+(redrawn 2026-08-23 from real full-page captures).
+
+The v1 page was one `Column` with 24px padding inside a `CustomScrollView` under a 240px
+`SliverAppBar`. On a 1440px window every ingredient line and every step ran the full 1392px measure,
+the metadata was a row of chips that said `70 min total` without saying which 70 minutes mattered,
+and nothing on the page could be *used* while cooking — no check-off, no progress, no sense of
+where you were.
+
+### What shipped (expanded windows only, ≥ 1000px)
+
+- [x] **Measured page.** Content is capped at `kDetailPageWidth` (1140) and centred, so no line runs
+      the window's width again. The header band spans full-bleed; the columns below sit inside the
+      measure
+- [x] **Header band** carries identity: version line (doubles as the history opener), title at
+      `displaySmall`, description, attribution, chef badge + rating, then the action row —
+      Start cooking / Fork / like / save, and share + edit for the owner
+- [x] **Facts strip** replaces the chip row: Total · Hands on · Cook · Difficulty · **Longest wait**
+      · Visibility as labelled cells. `Longest wait` is derived (the longest single step duration)
+      and is the fact that decides whether a recipe is cookable tonight
+- [x] **Ingredients rail**, left, `kDetailRailWidth` (352) — reading order is gather → cook.
+      Quantities sit in their own `kIngredientQuantityGutter` (86) column so the numbers scan
+      vertically; scaled quantities turn `primary` when servings differ, times and temperatures
+      never scale; names are sentence-cased at render (the DB stores them lowercase)
+- [x] **Check off ingredients and steps.** A checked ingredient strikes through and moves the
+      `n of m gathered` counter; a done step collapses to one dim line with its duration, so the
+      next thing to do is always the first full-size card
+- [x] **Step groups keep their identity** — group heading, step count, numbering restarting at 1
+      per group. The v1 layout rendered the same data; the redraw makes the grouping legible
+- [x] **`formatMinutes()`** in core (`1 h 10 m` / `40 min` / `—`), with tests
+- [x] **Like/save extracted** to `LikeSaveButtons` in `detail_chips.dart` so the v1 body and the v2
+      band cannot drift apart on the toggle behaviour B051 fixed
+
+### Text-scale envelope — three overflows caught before they shipped
+
+The new test file asserts *no exception* while pumping the whole page at {1000, 1440} × {1.0, 2.0}.
+It failed on the first run and found three real `RenderFlex` overflows, all the same shape
+(Gotcha 21: a non-flex child of a `Row` takes its intrinsic width, so a flexible sibling cannot
+save it):
+
+| Where | At 2.0× | Fix |
+| --- | --- | --- |
+| Rail servings row | two `IconButton`s + count are wider than the rail | `Wrap` — the stepper drops to its own line |
+| Rail footer | `Clear checks` alone exceeds the rail | `Wrap` — the note wraps under it |
+| Cook-mode teaser | `Start cooking` is ~390px, wider than the 393px method column at 1000px | stacks above `1.3×`, the shape `/chefs` uses |
+
+The rail width and the quantity gutter are now **bounded against text scale** rather than fixed
+(`context.textScale.clamp(1.0, kDetailRailMaxScale)`) — Gotcha 22.
+
+### Two review findings — both invisible on local fixtures
+
+`/code-review` found two things no test and no screenshot on this machine could have surfaced,
+because the fixtures happen not to reach either state. Both fixed:
+
+- [x] **B065 (high, perf):** the header band watches `recipeVersionsProvider`, and `versions()` was
+      a bare `.select()` — so every page open downloaded `recipe_versions.content_snapshot`, a whole
+      recipe as `jsonb` (~10 KB × up to nine versions), to render a version *count*. Invisible
+      locally because every seeded snapshot is `'{}'`. New `kRecipeVersionSelect` names the seven
+      columns the client reads
+- [x] **B066 (medium):** an ingredient with a unit and **no** quantity rendered `—` and dropped the
+      unit — reachable by typing `1/2` in the editor's quantity field, and the v1 renderer prints
+      the unit in the same case, so the row read differently either side of the 1000px branch. The
+      gutter now falls back `quantity + unit` → `unit` → `note` → `—`, and the note rides beside the
+      name unless it took the gutter, so no combination loses a half
+
+### Seed-data fit
+
+Existing fixtures cover it, and this was checked before building: **Spring Vegetable Tart**
+(`recipeData/recipes/spring-vegetable-tart.json`) has 3 ingredient groups and 3 step groups with
+per-group numbering, an attribution, and zero engagement; **Chicken Tikka Masala** has ratings,
+likes, saves, temperature and tip fields on its steps. No new fixture data was needed, so none was
+added. What the local fixtures **cannot** show: cover images (no seeded recipe carries one, so the
+band's cover column is dead on the local stack — it is exercised on hosted only), and a recipe with
+`forked_from_recipe_id` set (the fork line renders from the model but no seeded recipe is a fork).
+
+### Not built — the rest of the canvas
+
+- [ ] **Cook mode** (canvas frames C, D, E, H): full-screen step view, step timers, screen-awake,
+      the finish screen that asks for the rating. Every `Start cooking` control is present and
+      **inert** behind a `notYetTooltip`, so the entry point is designed and the promise is not made
+      falsely
+- [ ] **Compact (390px) v2** — the canvas's frame B: cover-first, jump chips, sticky
+      `Ready to cook?` bar. Compact and medium still render the v1 hero layout; the branch is a
+      single `context.isExpanded` check in `recipe_detail_screen.dart`
+- [ ] **Sticky ingredients rail.** The canvas has it `position: sticky`; the Flutter page scrolls it
+      with the content. Needs real sliver work (a pinned sliver beside a scrolling one), not a
+      widget swap
+- [ ] **Version history v2** (canvas frame G): what changed, not only when — needs a diff between
+      snapshots, and a fork count the schema does not denormalize
+- [ ] **Owner-fork lineage line** ("Forked from X · v3") shows only `Forked recipe`; naming the
+      parent needs a second read
+- [ ] Checks are session state (`checkedIngredientsProvider` / `doneStepsProvider`), not persisted.
+      The copy says so — "Checks last until you close the app" — rather than promising the device
+      persistence the canvas claims
+
+---
+
 ## Phase OPT — Optimization & hardening backlog (rolling)
 
 Findings from the 2026-08-20 design/architecture audit (Dart + SQL), plus the open items prior

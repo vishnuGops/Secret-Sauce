@@ -57,3 +57,21 @@ const kRecipeDetailSelect =
     '$kRecipeSelect,'
     'ingredient_groups(*,ingredients(*)),'
     'step_groups(*,steps(*))';
+
+/// Every `recipe_versions` column **except `content_snapshot`**.
+///
+/// The snapshot is a whole recipe as `jsonb` — ~10 KB per version, and some
+/// recipes carry nine of them — and nothing on the client reads it: the version
+/// history sheet renders `version_number`, `change_summary`, and `created_at`,
+/// and the header band on the v2 detail layout reads only the count. A bare
+/// `select()` shipped all of it on every page open, which is invisible against
+/// the local stack because every seeded snapshot is `{}` (`seed.sql`,
+/// `seed_recipes.sql`, and `2_sim_generate.sql` all write an empty object) and
+/// only shows up once a real edit has been saved through `save_recipe`.
+///
+/// `RecipeVersion.contentSnapshot` therefore decodes to its `@Default({})`.
+/// If a "diff two versions" or "restore this version" feature ever lands it
+/// needs the column, and it needs its **own** read — not this one.
+const kRecipeVersionSelect =
+    'id,recipe_id,version_number,parent_version_id,author_id,change_summary,'
+    'created_at';
