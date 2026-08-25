@@ -11,7 +11,20 @@
   "visibility": "public",
   "attribution": "Secret Sauce Kitchen",
   "notes": null,
-  "nutrition": null,
+  "nutrition": {
+    "calories": 200,
+    "total_fat_g": 8.1,
+    "saturated_fat_g": 3.0,
+    "trans_fat_g": 0.0,
+    "cholesterol_mg": 23,
+    "sodium_mg": 127,
+    "total_carbs_g": 30.8,
+    "dietary_fiber_g": 1.9,
+    "total_sugars_g": 11.9,
+    "added_sugars_g": 6.3,
+    "protein_g": 2.2,
+    "source": "auto"
+  },
   "ingredient_groups": [
     {
       "name": "Filling",

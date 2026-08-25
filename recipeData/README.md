@@ -49,18 +49,50 @@ Four things the validator cares about that are easy to get wrong:
   tart diameter, piece count — goes in `description`.
 - **Unattended time is not prep time.** Chilling, rising, and marinating go on
   the step that waits, as `duration_minutes`, so the app can show a timer.
-- **`nutrition` is `null` or an object — never `{}`.** The label is optional and
-  most files have none; write it out as an explicit `"nutrition": null`, which is
-  the one representation of "no info" the whole feature branches on. Values are
-  **per serving at that file's own `servings`** — the detail screen never
-  multiplies them, because scaling a recipe up makes a bigger batch, not a bigger
-  serving. Unknown keys are hard errors: the `jsonb` column would accept them and
-  they would then decode to nothing.
+- **`nutrition` is `null` or an object — never `{}`.** `null` is the one
+  representation of "no info" the whole feature branches on, so write it out
+  explicitly. Values are **per serving at that file's own `servings`** — the
+  detail screen never multiplies them, because scaling a recipe up makes a bigger
+  batch, not a bigger serving. Unknown keys are hard errors: the `jsonb` column
+  would accept them and they would then decode to nothing.
 
-> `chicken-tikka-masala` and `spring-vegetable-tart` currently carry **dummy**
-> values — all eleven fields at `10` — so the panel is inspectable on a local
-> stack. Every `% Daily Value` they print is nonsense; replacing them with real
-> numbers is open content work (docs/ROADMAP.md Phase 28, Deferred).
+### Nutrition, and where the numbers come from (Phase 29d)
+
+Every label here is now real. Three states exist and all three ship on seed, on
+purpose — the app's Automatic / Manual / None modes have to be demonstrable
+without a hosted database:
+
+| state | files | what it means |
+| --- | --- | --- |
+| **auto** (`"source": "auto"`) | 12 | computed by `estimate_nutrition()` from this file's ingredient `food` links |
+| **manual** (no `source` key) | `fresh-guacamole` | numbers a cook typed; two rows are "to taste", so auto would count 4 of 6 |
+| **none** (`"nutrition": null`) | `classic-margarita` | deliberately no label |
+
+**Manual is spelled by the key's absence** — there is no `"source": "manual"`,
+which is what let 29c add the key without migrating a single existing label. An
+object carrying only `source` is rejected exactly like `{}`.
+
+**An auto label is a snapshot, not a formula.** These files are static JSON;
+nothing recomputes them at runtime. Whenever you change an auto recipe's
+ingredients, its `servings`, or anything in [`nutritionData/`](../nutritionData/),
+regenerate its label and commit it:
+
+```powershell
+# with the local stack up and the registry + recipes loaded
+docker exec supabase_db_secret-sauce psql -U postgres -d postgres -t -A -c `
+  "select estimate_nutrition(recipe_snapshot(id)->'ingredient_groups', servings)->'label'
+     from recipes where title = 'Tuna Fishcakes'"
+```
+
+A database that already holds the recipe fixes itself instead:
+`recompute_auto_nutrition()` re-estimates every `source = 'auto'` recipe and runs
+on every apply of `0001_init.sql`. The JSON is the path for a *fresh* database,
+which is why it has to be committed in sync.
+
+**The estimate sums raw ingredients.** It cannot model cooking yield —
+evaporation, reduction, drained frying oil — and a juiced fruit counts as the
+whole fruit. That is why the label prints `Estimated from ingredients — not a
+measured analysis.` and why no copy anywhere may call it FDA-compliant.
 
 ## Editing a published recipe
 

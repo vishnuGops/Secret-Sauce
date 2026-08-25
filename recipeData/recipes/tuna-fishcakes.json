@@ -11,7 +11,19 @@
   "visibility": "public",
   "attribution": "Secret Sauce Kitchen",
   "notes": "Form larger patties instead of six small ones and serve them on buns as fish burgers.",
-  "nutrition": null,
+  "nutrition": {
+    "calories": 330,
+    "total_fat_g": 13.8,
+    "saturated_fat_g": 6.8,
+    "trans_fat_g": 0.1,
+    "cholesterol_mg": 134,
+    "sodium_mg": 1159,
+    "total_carbs_g": 33.2,
+    "dietary_fiber_g": 4.1,
+    "total_sugars_g": 6.1,
+    "protein_g": 20.4,
+    "source": "auto"
+  },
   "ingredient_groups": [
     {
       "name": "",

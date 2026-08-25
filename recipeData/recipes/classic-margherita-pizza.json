@@ -11,7 +11,19 @@
   "visibility": "public",
   "attribution": "Traditional Naples pizzeria style.",
   "notes": null,
-  "nutrition": null,
+  "nutrition": {
+    "calories": 718,
+    "total_fat_g": 22.1,
+    "saturated_fat_g": 9.9,
+    "trans_fat_g": 0.0,
+    "cholesterol_mg": 49,
+    "sodium_mg": 1364,
+    "total_carbs_g": 100.1,
+    "dietary_fiber_g": 5.2,
+    "total_sugars_g": 2.3,
+    "protein_g": 28.0,
+    "source": "auto"
+  },
   "ingredient_groups": [
     {
       "name": "Dough",

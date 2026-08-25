@@ -231,6 +231,51 @@ Coverage: `supabase/tests/nutrition_estimate.sql` (fixture foods, units and tree
 expected labels, rolled back; wired into `database.yml`) is the arithmetic's only test — the
 matrix proves the policy geometry, not that a cup of flour weighs 120 g.
 
+#### The registry-refresh path — `recompute_auto_nutrition` (Phase 29d)
+
+**A stored estimate is a snapshot, not a live view.** `save_recipe` computes a label once and the
+column is what every card and detail page renders; nothing re-runs `estimate_nutrition` on read,
+and it should not — the whole point of storing the eleven numbers is that a shelf query does not
+have to sum an ingredient tree. The cost is that a change to `nutritionData/` — a corrected gram
+weight, a new named portion, a food that gained its saturated-fat row — reaches only recipes
+saved *after* it. Every label already in the table keeps the old arithmetic, silently.
+
+`recompute_auto_nutrition()` closes that, and it is deliberately the same shape as
+`recompute_all_chef_stats()` (§10): an idempotent whole-table recompute called at the end of
+`0001_init.sql` on **every apply**, so a change to the inputs reaches existing rows the same way
+a change to `chef_score()` does — not through a hand-written data migration per release. Its
+input tree is `recipe_snapshot(id) -> 'ingredient_groups'`, which is exactly what `save_recipe`
+persisted, so nothing here re-derives a tree by hand.
+
+Four properties are load-bearing:
+
+- **Only `source = 'auto'` rows are touched.** Manual is spelled by the key's absence, so that
+  predicate is the entire argument for why a registry edit cannot overwrite numbers a human
+  typed.
+- **`is distinct from` makes it a no-op when nothing moved.** `recipes_touch` is an
+  unconditional `before update` trigger; without the guard, every apply would bump `updated_at`
+  on every estimated recipe in the database.
+- **An empty registry returns early.** Both `db:reset` and `database.yml`'s upgrade path apply
+  this file *before* `nutrition_foods.sql`, so the on-apply call can genuinely run with no
+  registry loaded — and without the guard it would recompute every label to null. Nothing to
+  estimate *with* is not the same as nothing to estimate.
+- **Recomputing to null is one-way.** A recipe whose links all broke drops to `null` ("no info",
+  the same thing `save_recipe` stores for Automatic-with-nothing-counted, B22d) and, carrying no
+  `source`, leaves this function's `where` clause for good. Re-opening the recipe and picking
+  Automatic again is the recovery, and it is a cook's decision, not a migration's.
+
+Invoker-rights with `execute` revoked from `public`/`anon`/`authenticated`, like every other
+mutating helper (Gotcha 3) — PostgREST would otherwise expose a whole-table rewrite as an RPC.
+
+Coverage: `supabase/tests/nutrition_fixtures.sql` (`melos run db:nutrition:verify`), which is the
+other half of the estimator's testing and the only part that needs the **real** registry loaded.
+It asserts that all three label states ship on seed, that every committed `source = 'auto'` label
+still equals what the current registry computes (the drift gate — `recipes:check` proves the SQL
+matches `recipeData/`, nothing else proves the numbers inside it match `nutritionData/`), and
+then breaks three things on purpose inside a rolled-back transaction: a corrupted auto label must
+come back, a manual label must not move, and deleting the registry must not blank anything. Each
+of the four was proven non-vacuous by reverting the code it covers and watching it go red.
+
 **recipe_versions** — git-like immutable snapshots
 `id`, `recipe_id → recipes`, `version_number (int)`, `parent_version_id → recipe_versions` (nullable),
 `author_id → profiles`, `change_summary`, `content_snapshot (jsonb)` (full recipe body at that point),
@@ -434,10 +479,11 @@ It creates three throwaway `auth.users` (an owner, someone the owner shares a pr
 an unrelated signed-in stranger) plus a private and a public recipe with content, re-runs the whole
 matrix under `set local role authenticated` + `request.jwt.claims`, and **rolls the transaction
 back** — so it leaves no user, no recipe and no helper function behind and is safe against any
-database. 91 checks (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
+database. 92 checks (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
 ingredient food link, in 29b; B22c and B22d, the auto-estimate source-smuggling guard and its
-nothing-counted case, in 29c — B22d found **B075** on its first run); a failure names the
-check and what actually happened.
+nothing-counted case, in 29c — B22d found **B075** on its first run; **E10**, that
+`recompute_auto_nutrition()` is not callable as a signed-in user, in 29d — a whole-table rewrite
+whose only lock is a `revoke execute`); a failure names the check and what actually happened.
 
 Its one helper, `rls_matrix_do(text)`, executes an arbitrary string as the calling role, which is
 how a "must FAIL" check is written without aborting the run. That is also a PostgREST RPC shape
@@ -1367,12 +1413,29 @@ The recipes arrived as one flat array of `{"amount": "1 1/4 cup", "item": "flour
 - **Unattended time is not prep time.** Chilling, rising, and marinating are a step's
   `duration_minutes`, so the detail screen shows a timer instead of the headline time inflating.
 
-**`nutrition` (Phase 28)** is an optional object of 11 non-negative numbers, per serving at that
-file's own `servings`. The format spells absence out as an explicit `"nutrition": null` rather
-than an omitted key — twelve of the fourteen files carry that, and it is what exercises the
-detail screen's empty state — and an empty object `{}` is a hard error, because `null` is the one
-representation of "no info" everywhere else in the feature. Unknown keys are hard errors too: the
-`jsonb` column would accept them and they would then decode to nothing, silently. `simData`
+**`nutrition` (Phase 28)** is an optional object of 11 non-negative numbers plus the `source`
+stamp, per serving at that file's own `servings`. The format spells absence out as an explicit
+`"nutrition": null` rather than an omitted key, and an empty object `{}` is a hard error, because
+`null` is the one representation of "no info" everywhere else in the feature — as is an object
+carrying only `source`. Unknown keys are hard errors too: the `jsonb` column would accept them
+and they would then decode to nothing, silently.
+
+**Phase 29d made all fourteen labels real, and split them three ways on purpose** — Automatic /
+Manual / None is a three-way choice in the editor, so a fixture set that can only show two of
+them cannot demonstrate the feature on seed alone (the Seed-data fit gate):
+
+| state | files | why |
+| --- | --- | --- |
+| `"source": "auto"` | 12 | `estimate_nutrition()` output over each file's own `food` links, coverage 4/6 to 17/19 |
+| no `source` key | `fresh-guacamole` | two rows are "to taste", so auto counts 4 of 6 — the honest reason a cook types the numbers |
+| `"nutrition": null` | `classic-margarita` | deliberately no label, and what exercises the detail screen's empty state |
+
+This replaced the two all-`10` placeholders Phase 28 shipped for inspectability. **A committed
+auto label is a snapshot**: nothing recomputes it at runtime, so changing an auto recipe's
+ingredients or anything in `nutritionData/` means regenerating and re-committing it —
+`supabase/tests/nutrition_fixtures.sql` is the gate that fails when someone doesn't, and
+`recompute_auto_nutrition()` (§3.1) is the fix for a database that already holds the recipe.
+`simData`
 inherits all of this through its `$ref`, and **no dish authors one** — a label belongs to a recipe
 as published, not to the dish idea, and hand-authoring 120 of them would be busywork with no
 signal in it. The simulation generates them instead: `sim.nutrition_for(key, category)`

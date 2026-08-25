@@ -11,7 +11,19 @@
   "visibility": "public",
   "attribution": null,
   "notes": null,
-  "nutrition": null,
+  "nutrition": {
+    "calories": 250,
+    "total_fat_g": 22,
+    "saturated_fat_g": 3.2,
+    "trans_fat_g": 0,
+    "cholesterol_mg": 0,
+    "sodium_mg": 310,
+    "total_carbs_g": 16,
+    "dietary_fiber_g": 11,
+    "total_sugars_g": 2,
+    "added_sugars_g": 0,
+    "protein_g": 3
+  },
   "ingredient_groups": [
     {
       "name": "",

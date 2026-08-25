@@ -11,7 +11,20 @@
   "visibility": "public",
   "attribution": "A tweaked take on the classic Toll House cookie.",
   "notes": null,
-  "nutrition": null,
+  "nutrition": {
+    "calories": 184,
+    "total_fat_g": 9.8,
+    "saturated_fat_g": 5.8,
+    "trans_fat_g": 0.0,
+    "cholesterol_mg": 31,
+    "sodium_mg": 34,
+    "total_carbs_g": 22.1,
+    "dietary_fiber_g": 1.2,
+    "total_sugars_g": 12.3,
+    "added_sugars_g": 12.2,
+    "protein_g": 2.2,
+    "source": "auto"
+  },
   "ingredient_groups": [
     {
       "name": "",

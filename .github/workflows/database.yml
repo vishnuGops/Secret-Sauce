@@ -101,6 +101,18 @@ jobs:
       - name: Nutrition estimator — fixture trees, exact labels
         run: $PSQL "$DB_URL" -f supabase/tests/nutrition_estimate.sql
 
+      # ------------------------------------------------------------------
+      # The other half (Phase 29d), and the only one that needs the REAL
+      # registry loaded: `seed_recipes.sql`'s twelve `source = 'auto'` labels
+      # are static JSON. `recipes:check` proves that SQL matches recipeData/;
+      # nothing proves the numbers inside it still match nutritionData/. This
+      # re-estimates every one of them and fails on drift, and exercises
+      # `recompute_auto_nutrition()` — including its empty-registry guard —
+      # by breaking things on purpose inside a transaction it rolls back.
+      # ------------------------------------------------------------------
+      - name: Nutrition fixtures — committed labels vs. the registry
+        run: $PSQL "$DB_URL" -f supabase/tests/nutrition_fixtures.sql
+
       - name: Simulated population (tiny) + assertions
         run: |
           $PSQL "$DB_URL" -f supabase/sim/0_sim_schema.sql

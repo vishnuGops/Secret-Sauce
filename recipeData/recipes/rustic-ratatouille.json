@@ -11,7 +11,19 @@
   "visibility": "public",
   "attribution": "Secret Sauce Kitchen",
   "notes": null,
-  "nutrition": null,
+  "nutrition": {
+    "calories": 208,
+    "total_fat_g": 10.6,
+    "saturated_fat_g": 1.4,
+    "trans_fat_g": 0.0,
+    "cholesterol_mg": 0,
+    "sodium_mg": 416,
+    "total_carbs_g": 27.9,
+    "dietary_fiber_g": 10.7,
+    "total_sugars_g": 13.0,
+    "protein_g": 5.6,
+    "source": "auto"
+  },
   "ingredient_groups": [
     {
       "name": "",

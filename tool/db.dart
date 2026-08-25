@@ -53,6 +53,15 @@ const _files = <String, String>{
   // them under `set local role authenticated`, and ROLLS THE WHOLE THING BACK.
   // Exempt from `-1` below because it owns that transaction itself.
   'rls': 'supabase/tests/rls_matrix.sql',
+  // The auto-nutrition arithmetic on fixture trees (Phase 29c) and the
+  // committed labels against the committed registry (Phase 29d). Both own
+  // their transaction and roll it back, so both are `-1`-exempt for the same
+  // reason `rls` is. `nutrition:estimate` is self-sufficient; `nutrition:verify`
+  // needs the registry AND the recipes already applied. Note the neighbouring
+  // melos script `nutrition:check` is a different thing — a pure file staleness
+  // check on the generated SQL, no database involved.
+  'nutrition:estimate': 'supabase/tests/nutrition_estimate.sql',
+  'nutrition:verify': 'supabase/tests/nutrition_fixtures.sql',
 };
 
 /// Multi-step actions, in order.
@@ -210,6 +219,8 @@ usage: dart run tool/db.dart <action> [options]
   sim:verify                               assertions only, read-only
   sim:clean                                DESTRUCTIVE teardown (requires --yes)
   rls                                      the RLS matrix as a signed-in user (rolls back)
+  nutrition:estimate                       estimator arithmetic on fixture trees (rolls back)
+  nutrition:verify                         committed labels vs. the registry (rolls back)
 
 options:
   --preset=<tiny|small|medium|large>       sim size (default: whatever sim.config holds)

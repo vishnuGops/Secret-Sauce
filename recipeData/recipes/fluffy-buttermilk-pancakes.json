@@ -11,7 +11,20 @@
   "visibility": "public",
   "attribution": null,
   "notes": null,
-  "nutrition": null,
+  "nutrition": {
+    "calories": 345,
+    "total_fat_g": 12.4,
+    "saturated_fat_g": 7.0,
+    "trans_fat_g": 0.0,
+    "cholesterol_mg": 77,
+    "sodium_mg": 674,
+    "total_carbs_g": 48.7,
+    "dietary_fiber_g": 1.4,
+    "total_sugars_g": 10.3,
+    "added_sugars_g": 6.3,
+    "protein_g": 9.3,
+    "source": "auto"
+  },
   "ingredient_groups": [
     {
       "name": "Dry",

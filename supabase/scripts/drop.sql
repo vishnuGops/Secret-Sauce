@@ -52,9 +52,11 @@ drop function if exists can_read_recipe(uuid) cascade;
 drop function if exists owns_recipe(uuid) cascade;
 -- Food registry typeahead (Phase 29a).
 drop function if exists search_foods(text, int) cascade;
--- Auto-nutrition estimator + batched link candidates (Phase 29c).
+-- Auto-nutrition estimator + batched link candidates (Phase 29c) and the
+-- registry-refresh backfill over stored labels (Phase 29d).
 drop function if exists estimate_nutrition(jsonb, int) cascade;
 drop function if exists match_foods(text[]) cascade;
+drop function if exists recompute_auto_nutrition() cascade;
 -- Discovery RPC signatures, oldest first: OPT-P9 added `p_offset`, and Postgres
 -- keys drops by argument list, so both overloads stay listed.
 drop function if exists recipes_trending(int) cascade;

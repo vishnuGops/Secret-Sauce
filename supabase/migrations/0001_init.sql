@@ -2549,3 +2549,94 @@ begin
     execute 'grant execute on function match_foods(text[]) to authenticated';
   end if;
 end $$;
+
+-- ============================================================================
+-- recompute_auto_nutrition — the registry-refresh path (Phase 29d)
+-- ============================================================================
+-- An estimated label is a **stored snapshot**, not a live view: `save_recipe`
+-- computes it once, at save time, and nothing reads it back through
+-- `estimate_nutrition` again. That is the right trade for a value every recipe
+-- card and detail page renders — but it means a change to `nutritionData/`
+-- (a corrected gram weight, a new portion, a food that gained its saturated-fat
+-- row) reaches only recipes saved *after* it. Every label already in the table
+-- keeps the old arithmetic, silently and forever.
+--
+-- This is the same shape as `recompute_all_chef_stats()` and it is here for the
+-- same reason (Gotcha 19's twin): the formula and its inputs live in one place,
+-- so the way a change to them reaches existing rows is an idempotent whole-table
+-- recompute on every apply, not a hand-written data migration per release.
+--
+-- Three properties this depends on:
+--
+--   * **Only `source = 'auto'` rows are touched.** A manual label is a number a
+--     human typed and no registry edit may overwrite it; `source`'s absence is
+--     what spells manual (29c), so the predicate is the whole safety argument.
+--   * **`recipe_snapshot(id) -> 'ingredient_groups'` is the same tree shape the
+--     editor sends** — `save_recipe` persists exactly what `recipe_snapshot`
+--     reads back, so this recomputes from the identical input the save path
+--     estimated from. Nothing here re-derives a tree by hand.
+--   * **`is distinct from` makes it a no-op when nothing moved,** which is what
+--     lets it run on every apply. `recipes_touch` is an unconditional
+--     `before update` trigger, so without that guard every apply would bump
+--     `updated_at` on every estimated recipe.
+--
+-- The `nullif` is B075 one more time: `-> 'label'` is `'null'::jsonb`, not SQL
+-- NULL, when nothing counted. A recipe whose links all broke therefore drops to
+-- `null` — "no info", the honest answer, and the same thing `save_recipe` stores
+-- for Automatic-with-nothing-counted (B22d). Note this is **one-way**: a null
+-- label carries no `source`, so the row leaves this function's `where` clause
+-- and a later registry fix will not re-estimate it. Re-opening the recipe and
+-- picking Automatic again is the recovery, and it is a cook's decision to make.
+--
+-- Invoker-rights, `execute` revoked below, exactly like `recompute_all_chef_stats`
+-- (Gotcha 3): it writes rows the caller does not own, and PostgREST would
+-- otherwise expose it as an RPC.
+create or replace function recompute_auto_nutrition()
+returns void
+language plpgsql
+as $$
+begin
+  -- An empty registry can only produce null labels, so a run that precedes the
+  -- registry load would blank every estimated label in the database. That is
+  -- reachable on two real paths, not a hypothetical: `db:reset` applies this
+  -- file *before* `nutrition_foods.sql`, and so does the upgrade path in
+  -- `database.yml`. Nothing to estimate with is not the same as nothing to
+  -- estimate.
+  if not exists (select 1 from food) then
+    return;
+  end if;
+
+  update recipes r
+  set nutrition = e.label
+  from (
+    select
+      r2.id,
+      nullif(
+        estimate_nutrition(
+          recipe_snapshot(r2.id) -> 'ingredient_groups',
+          r2.servings
+        ) -> 'label',
+        'null'::jsonb
+      ) as label
+    from recipes r2
+    where r2.nutrition ->> 'source' = 'auto'
+  ) e
+  where r.id = e.id
+    and r.nutrition is distinct from e.label;
+end;
+$$;
+
+do $$
+begin
+  execute 'revoke execute on function recompute_auto_nutrition() from public';
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'revoke execute on function recompute_auto_nutrition() from anon, authenticated';
+  end if;
+end $$;
+
+-- Idempotent backfill, the `recompute_all_chef_stats()` precedent: re-estimate
+-- every stored auto label on every apply. A fresh database has no recipes yet
+-- and an empty registry, so this is a no-op there and the committed
+-- `seed_recipes.sql` labels stand — which is why those have to be regenerated
+-- and committed alongside a `nutritionData/` change (recipeData/README.md).
+select recompute_auto_nutrition();

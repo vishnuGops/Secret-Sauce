@@ -683,6 +683,21 @@ begin
     'select * from search_foods(''bl7 fixture'', 5)');
   v_log := v_log || format(E'%s\tE7  signed-in · search_foods finds the fixture\t%s', v_err is null and v_n = 1, coalesce(v_err, v_n || ' row'));
 
+  -- Phase 29d. `recompute_auto_nutrition()` rewrites the `nutrition` column of
+  -- every estimated recipe in the table, and it is invoker-rights — so the
+  -- ONLY thing standing between a signed-in client and that whole-table write
+  -- is the `revoke execute`, which PostgREST would otherwise ignore (it
+  -- exposes every `public` function as an RPC). This is the check that proves
+  -- the revoke is still there.
+  --
+  -- Double-locked like E2, and the non-vacuity ritual has to account for it:
+  -- granting this function back alone still yields 42501, because its body
+  -- calls `recipe_snapshot`, which is revoked from `authenticated` too. Both
+  -- grants have to be handed back before this goes red — verified 2026-08-25.
+  select err into v_err from public.rls_matrix_do(
+    'select recompute_auto_nutrition()');
+  v_log := v_log || format(E'%s\tE10 signed-in · recompute_auto_nutrition must FAIL\t%s', v_err = '42501', coalesce(v_err, 'no error'));
+
   execute 'set local role anon';
   perform set_config('request.jwt.claim.sub', '', true);
   perform set_config('request.jwt.claims', '', true);

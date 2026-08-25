@@ -292,28 +292,37 @@ melos run db:seed     # load demo chefs/tasters/ratings (supabase/seed.sql)
 melos run db:recipes  # load authored recipes (supabase/seed_recipes.sql)
 melos run db:clean    # truncate recipe data, keep schema + users
 melos run db:drop     # drop all app tables/types/functions
-melos run db:reset    # drop -> create -> seed -> recipes
+melos run db:reset    # drop -> create -> nutrition -> seed -> recipes -> sim
 melos run db:rls      # RLS acceptance matrix as a SIGNED-IN user — writes, then rolls back
+melos run db:nutrition:estimate  # auto-nutrition arithmetic on fixture trees — rolls back
+melos run db:nutrition:verify    # committed labels vs. the loaded registry — rolls back
 ```
 
 `db:rls` is the odd one out and the only safe-by-construction one: it applies
-`supabase/tests/rls_matrix.sql`, which creates three throwaway users and two recipes, re-runs 91
+`supabase/tests/rls_matrix.sql`, which creates three throwaway users and two recipes, re-runs 92
 authorization checks under `set local role authenticated`, prints a PASS/FAIL line for each, and
 **rolls the whole transaction back** — no user, no recipe and no helper function survives it. It is
 the only thing in the repo that exercises RLS as a signed-in caller; everything else (the seed, the
 sim, the CI job's other steps) runs as `postgres`, which bypasses policies. Run it after any change
 to a policy, a `security definer` function, or the column grants. CI runs it too.
 
-There is a second rollback-safe SQL test, with no melos script because it needs no arguments —
-`supabase/tests/nutrition_estimate.sql` (Phase 29c). It feeds fixture ingredient trees with known
-gram weights through `estimate_nutrition` / `match_foods` and asserts the **exact** expected
-labels, so it is the only coverage the auto-nutrition arithmetic has (the RLS matrix proves the
-policy geometry, not that a cup of flour weighs 120 g). It brings its own foods and units, so the
-registry need not be loaded, and CI runs it after the fresh apply:
+Two more rollback-safe SQL tests cover auto nutrition, and they need **different** databases:
 
-```powershell
-psql "$env:SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/tests/nutrition_estimate.sql
-```
+- **`db:nutrition:estimate`** → `supabase/tests/nutrition_estimate.sql` (Phase 29c). Feeds fixture
+  ingredient trees with known gram weights through `estimate_nutrition` / `match_foods` and
+  asserts the **exact** expected labels, so it is the only coverage the arithmetic has (the RLS
+  matrix proves the policy geometry, not that a cup of flour weighs 120 g). It brings its own
+  foods and units, so it runs against any database with the schema applied.
+- **`db:nutrition:verify`** → `supabase/tests/nutrition_fixtures.sql` (Phase 29d). Needs the
+  **real** registry *and* the recipes loaded (`db:reset`, or nutrition → seed → recipes). Twelve
+  of the fourteen authored labels are estimator output committed as static JSON;
+  `recipes:check` proves that SQL matches `recipeData/`, and this proves the numbers inside it
+  still match `nutritionData/`. It also exercises `recompute_auto_nutrition()` by breaking three
+  things on purpose — a corrupted auto label, a manual label that must not move, a deleted
+  registry — inside the transaction it rolls back.
+
+CI runs both after the fresh apply. Note `db:nutrition:verify` is **not** `nutrition:check`: the
+latter is a pure file staleness check on the generated SQL and never opens a connection.
 
 **No `psql` installed? Use the Supabase container's, and go through the pooler** (B033). The
 `db:*` scripts shell out to `psql`; if it is not on PATH the only client on a Docker-based setup is
@@ -391,6 +400,13 @@ melos run fdc:extract -- --bundle="C:\path\to\FoodData_Central_csv_2026-04-30"
 
 See [nutritionData/README.md](nutritionData/README.md) for the authoring workflow, the
 authored-over-extracted precedence rules, and the known vocabulary gaps.
+
+> **Editing the registry has a second half.** Twelve of the fourteen authored recipes carry
+> `"source": "auto"` labels that were computed from it once and committed as static JSON — nothing
+> recomputes them at runtime. After a `nutritionData/` change, regenerate those labels and commit
+> them ([recipeData/README.md](recipeData/README.md) has the query), or `db:nutrition:verify`
+> fails. A database that already holds the recipes fixes itself instead:
+> `recompute_auto_nutrition()` runs on every apply of the schema.
 
 Building the simulated population itself needs a database. It is part of `db:reset`, so the usual
 reset brings everything back:

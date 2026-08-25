@@ -11,7 +11,19 @@
   "visibility": "public",
   "attribution": "Late-night Roman comfort food.",
   "notes": null,
-  "nutrition": null,
+  "nutrition": {
+    "calories": 624,
+    "total_fat_g": 29.0,
+    "saturated_fat_g": 4.1,
+    "trans_fat_g": 0.0,
+    "cholesterol_mg": 0,
+    "sodium_mg": 8,
+    "total_carbs_g": 77.2,
+    "dietary_fiber_g": 3.6,
+    "total_sugars_g": 2.8,
+    "protein_g": 13.5,
+    "source": "auto"
+  },
   "ingredient_groups": [
     {
       "name": "",

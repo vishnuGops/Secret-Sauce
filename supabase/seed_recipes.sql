@@ -237,7 +237,7 @@ begin
     $sr$[{"name":"","steps":[{"text":"Preheat the oven to 400°F.","duration_minutes":null,"temperature":"400°F","tip":null},{"text":"In a bowl, mix together the nectarines, blueberries, lemon juice, lemon zest, sugar, and cornstarch.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Unroll the pie crust, flattening it with a rolling pin if needed to remove creases. It should be about 1/8-inch thick and 10-12 inches across. Place it on parchment paper on a large rimmed baking sheet.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Using a slotted spoon, pile the fruit onto the centre of the crust and spread it into an even layer, leaving a 2-3 inch border.","duration_minutes":null,"temperature":null,"tip":"The slotted spoon matters — the juice left behind in the bowl is what would otherwise soak through the base."},{"text":"Fold the edges of the dough over the fruit, pleating as you go and pinching each fold gently to seal it.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Chill the assembled galette on its baking sheet in the freezer.","duration_minutes":15,"temperature":null,"tip":"Cold dough hits the hot oven and sets before it can slump."},{"text":"Brush the galette with the egg wash, sprinkle with turbinado sugar, and bake on the centre rack until golden brown and the filling is bubbling. Serve warm with vanilla ice cream.","duration_minutes":35,"temperature":"400°F","tip":null}]}]$sr$::jsonb,
     0, 0, 0,
     $sr$[]$sr$::jsonb,
-    NULL
+    $sr${"calories":200,"total_fat_g":8.1,"saturated_fat_g":3.0,"trans_fat_g":0.0,"cholesterol_mg":23,"sodium_mg":127,"total_carbs_g":30.8,"dietary_fiber_g":1.9,"total_sugars_g":11.9,"added_sugars_g":6.3,"protein_g":2.2,"source":"auto"}$sr$::jsonb
   );
 
   -- brown-butter-chocolate-chip-cookies.json
@@ -252,7 +252,7 @@ begin
     $sr$[{"name":"","steps":[{"text":"Brown the butter until it smells nutty, then let it cool slightly.","duration_minutes":6,"temperature":"medium","tip":"Watch the milk solids, not the clock — they go from golden to burnt in seconds."},{"text":"Whisk in both sugars, the egg, the yolk, and the vanilla until smooth.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Fold in the flour and baking soda, then the chopped chocolate.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Chill the dough for deeper flavour.","duration_minutes":30,"temperature":null,"tip":null},{"text":"Scoop onto trays and bake until the edges set but the centres still look underdone.","duration_minutes":11,"temperature":"350°F","tip":null},{"text":"Cool on the tray so they finish setting.","duration_minutes":null,"temperature":null,"tip":null}]}]$sr$::jsonb,
     412, 358, 3050,
     $sr$[5,5,5,4.5,5,5,4.5,5]$sr$::jsonb,
-    NULL
+    $sr${"calories":184,"total_fat_g":9.8,"saturated_fat_g":5.8,"trans_fat_g":0.0,"cholesterol_mg":31,"sodium_mg":34,"total_carbs_g":22.1,"dietary_fiber_g":1.2,"total_sugars_g":12.3,"added_sugars_g":12.2,"protein_g":2.2,"source":"auto"}$sr$::jsonb
   );
 
   -- chicken-tikka-masala.json
@@ -267,7 +267,7 @@ begin
     $sr$[{"name":"","steps":[{"text":"Marinate the chicken in the yoghurt and half the spice blend.","duration_minutes":30,"temperature":null,"tip":"Longer is better — overnight if you can."},{"text":"Sear or grill the chicken until charred at the edges, then set it aside.","duration_minutes":8,"temperature":"high","tip":"It does not need to cook through here; it finishes in the gravy."},{"text":"Soften the onion in the butter, then add the garlic, ginger, and the rest of the spice blend.","duration_minutes":6,"temperature":"medium","tip":null},{"text":"Pour in the passata and simmer until it deepens in colour.","duration_minutes":15,"temperature":"low","tip":null},{"text":"Stir in the cream and return the chicken to warm through.","duration_minutes":8,"temperature":null,"tip":null},{"text":"Serve with basmati rice or naan.","duration_minutes":null,"temperature":null,"tip":null}]}]$sr$::jsonb,
     311, 240, 2100,
     $sr$[4.5,4,4.5,5,4,4.5,4,4]$sr$::jsonb,
-    $sr${"calories":10,"total_fat_g":10,"saturated_fat_g":10,"trans_fat_g":10,"cholesterol_mg":10,"sodium_mg":10,"total_carbs_g":10,"dietary_fiber_g":10,"total_sugars_g":10,"added_sugars_g":10,"protein_g":10}$sr$::jsonb
+    $sr${"calories":361,"total_fat_g":18.9,"saturated_fat_g":9.6,"trans_fat_g":0.2,"cholesterol_mg":178,"sodium_mg":194,"total_carbs_g":14.7,"dietary_fiber_g":2.4,"total_sugars_g":8.2,"protein_g":33.4,"source":"auto"}$sr$::jsonb
   );
 
   -- classic-margarita.json
@@ -299,7 +299,7 @@ Mocktail: replace the tequila and orange liqueur with 6 oz lime sparkling water 
     $sr$[{"name":"Dough","steps":[{"text":"Dissolve the yeast in the warm water and let it sit until foamy.","duration_minutes":10,"temperature":null,"tip":"No foam means dead yeast — start again rather than pressing on."},{"text":"Mix the flour and salt, add the yeast water, and knead into a smooth dough.","duration_minutes":10,"temperature":null,"tip":null},{"text":"Cover and let rise until doubled.","duration_minutes":90,"temperature":null,"tip":null}]},{"name":"Shape and bake","steps":[{"text":"Stretch the dough by hand into a thin round and top with the crushed tomato and torn mozzarella.","duration_minutes":null,"temperature":null,"tip":"Hands, not a rolling pin — a pin crushes out the gas that makes the rim puff."},{"text":"Bake in the hottest possible oven until the crust is charred and bubbling.","duration_minutes":10,"temperature":"as hot as the oven goes","tip":null},{"text":"Finish with the fresh basil and a drizzle of olive oil.","duration_minutes":null,"temperature":null,"tip":null}]}]$sr$::jsonb,
     128, 74, 940,
     $sr$[5,4.5,5,4.5,5,4,4.5,5]$sr$::jsonb,
-    NULL
+    $sr${"calories":718,"total_fat_g":22.1,"saturated_fat_g":9.9,"trans_fat_g":0.0,"cholesterol_mg":49,"sodium_mg":1364,"total_carbs_g":100.1,"dietary_fiber_g":5.2,"total_sugars_g":2.3,"protein_g":28.0,"source":"auto"}$sr$::jsonb
   );
 
   -- fluffy-buttermilk-pancakes.json
@@ -314,7 +314,7 @@ Mocktail: replace the tequila and orange liqueur with 6 oz lime sparkling water 
     $sr$[{"name":"","steps":[{"text":"Whisk the dry ingredients together in a bowl.","duration_minutes":null,"temperature":null,"tip":null},{"text":"In another bowl, whisk the buttermilk, egg, and melted butter.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Fold the wet into the dry until just combined.","duration_minutes":null,"temperature":null,"tip":"Lumps are fine. Overmixing develops gluten and gives you flat, rubbery pancakes."},{"text":"Rest the batter so the leavening activates.","duration_minutes":5,"temperature":null,"tip":null},{"text":"Cook ladlefuls on a medium griddle until bubbles form on the surface, then flip and cook until golden.","duration_minutes":4,"temperature":"medium","tip":null},{"text":"Serve stacked with butter and maple syrup.","duration_minutes":null,"temperature":null,"tip":null}]}]$sr$::jsonb,
     98, 61, 780,
     $sr$[4,3.5,4,4.5,3.5,4]$sr$::jsonb,
-    NULL
+    $sr${"calories":345,"total_fat_g":12.4,"saturated_fat_g":7.0,"trans_fat_g":0.0,"cholesterol_mg":77,"sodium_mg":674,"total_carbs_g":48.7,"dietary_fiber_g":1.4,"total_sugars_g":10.3,"added_sugars_g":6.3,"protein_g":9.3,"source":"auto"}$sr$::jsonb
   );
 
   -- fresh-guacamole.json
@@ -329,7 +329,7 @@ Mocktail: replace the tequila and orange liqueur with 6 oz lime sparkling water 
     $sr$[{"name":"","steps":[{"text":"Halve the avocados and scoop the flesh into a bowl.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Mash to your preferred texture — leave it chunky.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Fold in the lime juice, red onion, jalapeño, and coriander.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Season with salt and serve right away with tortilla chips.","duration_minutes":null,"temperature":null,"tip":"It browns fast. Press cling film onto the surface if it has to wait."}]}]$sr$::jsonb,
     76, 52, 610,
     $sr$[5,4.5,4]$sr$::jsonb,
-    NULL
+    $sr${"calories":250,"total_fat_g":22,"saturated_fat_g":3.2,"trans_fat_g":0,"cholesterol_mg":0,"sodium_mg":310,"total_carbs_g":16,"dietary_fiber_g":11,"total_sugars_g":2,"added_sugars_g":0,"protein_g":3}$sr$::jsonb
   );
 
   -- raspberry-brownies.json
@@ -344,7 +344,7 @@ Mocktail: replace the tequila and orange liqueur with 6 oz lime sparkling water 
     $sr$[{"name":"","steps":[{"text":"Preheat the oven to 350°F and grease an 8-inch square baking dish with butter or cooking spray.","duration_minutes":null,"temperature":"350°F","tip":null},{"text":"In a 2-quart pot, melt the butter over medium heat and whisk in the cocoa powder until smooth. Remove from the heat and let it cool slightly.","duration_minutes":null,"temperature":"medium","tip":"Cool it before the eggs go in, or they scramble."},{"text":"In a bowl, mix the cocoa and butter mixture with both sugars, the eggs, and the vanilla until smooth. Stir in the flour until just combined, then fold in the raspberries and chocolate chips.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Scrape the batter into the prepared dish and bake until a tester comes out with fudgy crumbs.","duration_minutes":35,"temperature":"350°F","tip":"A clean tester means you have gone too far — pull them while the centre still looks underdone."}]}]$sr$::jsonb,
     0, 0, 0,
     $sr$[]$sr$::jsonb,
-    NULL
+    $sr${"calories":147,"total_fat_g":7.0,"saturated_fat_g":4.1,"trans_fat_g":0.0,"cholesterol_mg":39,"sodium_mg":13,"total_carbs_g":21.2,"dietary_fiber_g":2.3,"total_sugars_g":13.6,"added_sugars_g":12.9,"protein_g":2.4,"source":"auto"}$sr$::jsonb
   );
 
   -- rustic-ratatouille.json
@@ -359,7 +359,7 @@ Mocktail: replace the tequila and orange liqueur with 6 oz lime sparkling water 
     $sr$[{"name":"Roast","steps":[{"text":"Preheat the oven to 425°F and line a large rimmed baking sheet with foil or a silicone mat.","duration_minutes":null,"temperature":"425°F","tip":null},{"text":"Cut the eggplant, zucchini, and bell pepper into chunks and put them in a bowl with the whole cherry tomatoes. Toss with 1 1/2 Tbsp of the olive oil, the kosher salt, and the black pepper, then spread out in a single layer on the prepared sheet.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Roast until the vegetables are tender and browning at the edges.","duration_minutes":20,"temperature":"425°F","tip":"A single layer with room between the pieces is the difference between roasting and steaming."}]},{"name":"Bake","steps":[{"text":"Heat the remaining 1/2 Tbsp olive oil in a heavy-bottomed, oven-going pot over medium heat. Cook the onion until softened and translucent, about 5 minutes, then add the garlic and cook one minute more. Add the roasted vegetables and mix everything together, gently smashing the tomatoes with the back of a spoon to release their juices.","duration_minutes":6,"temperature":"medium","tip":null},{"text":"Reduce the oven to 375°F and bake the ratatouille. Stir in the chopped basil, season to taste, and serve over hot pasta or polenta, or with crusty bread.","duration_minutes":30,"temperature":"375°F","tip":null}]}]$sr$::jsonb,
     0, 0, 0,
     $sr$[]$sr$::jsonb,
-    NULL
+    $sr${"calories":208,"total_fat_g":10.6,"saturated_fat_g":1.4,"trans_fat_g":0.0,"cholesterol_mg":0,"sodium_mg":416,"total_carbs_g":27.9,"dietary_fiber_g":10.7,"total_sugars_g":13.0,"protein_g":5.6,"source":"auto"}$sr$::jsonb
   );
 
   -- shirazi-salad.json
@@ -374,7 +374,7 @@ Mocktail: replace the tequila and orange liqueur with 6 oz lime sparkling water 
     $sr$[{"name":"","steps":[{"text":"Toss all of the ingredients together in a large bowl. Taste and adjust the seasoning.","duration_minutes":null,"temperature":null,"tip":"Dice everything to roughly the same size — that is what makes this salad read as one thing rather than a bowl of parts."},{"text":"Cover and refrigerate to let the flavours get to know each other.","duration_minutes":60,"temperature":null,"tip":null}]}]$sr$::jsonb,
     0, 0, 0,
     $sr$[]$sr$::jsonb,
-    NULL
+    $sr${"calories":110,"total_fat_g":4.2,"saturated_fat_g":0.6,"trans_fat_g":0.0,"cholesterol_mg":0,"sodium_mg":12,"total_carbs_g":18.8,"dietary_fiber_g":3.9,"total_sugars_g":6.3,"protein_g":3.1,"source":"auto"}$sr$::jsonb
   );
 
   -- spaghetti-aglio-e-olio.json
@@ -389,7 +389,7 @@ Mocktail: replace the tequila and orange liqueur with 6 oz lime sparkling water 
     $sr$[{"name":"","steps":[{"text":"Boil the spaghetti in water seasoned generously with salt until al dente, then reserve a cup of the pasta water before draining.","duration_minutes":9,"temperature":null,"tip":"The starchy water is the sauce — reserve it before you drain, not after."},{"text":"Gently warm the olive oil and sliced garlic until the garlic is pale gold.","duration_minutes":4,"temperature":"low","tip":"Do not let it brown. Browned garlic turns the whole dish bitter and there is no recovering it."},{"text":"Add the chilli flakes and a splash of the pasta water to emulsify.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Toss the drained pasta in the oil, adding more pasta water until it turns glossy.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Finish with the chopped parsley and serve immediately.","duration_minutes":null,"temperature":null,"tip":null}]}]$sr$::jsonb,
     203, 156, 1520,
     $sr$[5,5,4.5,5,4.5,5,5,4.5]$sr$::jsonb,
-    NULL
+    $sr${"calories":624,"total_fat_g":29.0,"saturated_fat_g":4.1,"trans_fat_g":0.0,"cholesterol_mg":0,"sodium_mg":8,"total_carbs_g":77.2,"dietary_fiber_g":3.6,"total_sugars_g":2.8,"protein_g":13.5,"source":"auto"}$sr$::jsonb
   );
 
   -- spring-vegetable-tart.json
@@ -404,7 +404,7 @@ Mocktail: replace the tequila and orange liqueur with 6 oz lime sparkling water 
     $sr$[{"name":"Crust","steps":[{"text":"Mix the flour and kosher salt. Using a pastry cutter, blend in the cold butter until the dough gathers into small pea-sized clumps. Add the ice water 1 or 2 tablespoons at a time until the dough forms a ball, then gently form it into a thick, even disk.","duration_minutes":null,"temperature":null,"tip":"Stop as soon as it holds together — worked dough turns tough."},{"text":"Wrap the disk in plastic wrap and refrigerate.","duration_minutes":60,"temperature":null,"tip":"Overnight is better if you have the time."},{"text":"Preheat the oven to 350°F. Roll out the crust and gently fit it into the tart pan. Roll over the top with a rolling pin to trim the edges, then dock the crust all over with a fork.","duration_minutes":null,"temperature":"350°F","tip":null},{"text":"Blind-bake the crust until set and lightly coloured.","duration_minutes":20,"temperature":"350°F","tip":null}]},{"name":"Filling","steps":[{"text":"In a large skillet, heat 2 Tbsp butter over medium heat. Fry the onion until translucent and beginning to soften, about 5 minutes. Add the leek and garlic and continue cooking until the leek is tender, another 5-7 minutes. Remove to a medium bowl.","duration_minutes":12,"temperature":"medium","tip":null},{"text":"In the same skillet, fry the prosciutto over medium heat until brown and crisp, then mix it into the leek mixture.","duration_minutes":2,"temperature":"medium","tip":null},{"text":"Add the peas, parmesan, Gruyère, Gouda, poultry seasoning, salt, and pepper to the vegetables. Whisk the eggs and milk together and stir those in as well.","duration_minutes":null,"temperature":null,"tip":null}]},{"name":"Assemble and bake","steps":[{"text":"Brush the bottom and sides of the pre-baked crust with Dijon mustard, add the filling, and top with the asparagus.","duration_minutes":null,"temperature":null,"tip":"The mustard layer keeps the crust from going soggy under the custard."},{"text":"Bake until the filling is set and the crust is golden. Serve warm.","duration_minutes":35,"temperature":"350°F","tip":null}]}]$sr$::jsonb,
     0, 0, 0,
     $sr$[]$sr$::jsonb,
-    $sr${"calories":10,"total_fat_g":10,"saturated_fat_g":10,"trans_fat_g":10,"cholesterol_mg":10,"sodium_mg":10,"total_carbs_g":10,"dietary_fiber_g":10,"total_sugars_g":10,"added_sugars_g":10,"protein_g":10}$sr$::jsonb
+    $sr${"calories":305,"total_fat_g":18.9,"saturated_fat_g":10.5,"trans_fat_g":0.1,"cholesterol_mg":99,"sodium_mg":465,"total_carbs_g":22.6,"dietary_fiber_g":2.2,"total_sugars_g":3.0,"protein_g":11.7,"source":"auto"}$sr$::jsonb
   );
 
   -- teriyaki-pork-pineapple-skewers.json
@@ -419,7 +419,7 @@ Mocktail: replace the tequila and orange liqueur with 6 oz lime sparkling water 
     $sr$[{"name":"Teriyaki sauce","steps":[{"text":"In a small saucepan, whisk together the mirin, pineapple juice, tamari, honey, rice vinegar, garlic, ginger, and red pepper flakes. Bring to a low boil, reduce the heat to medium, and simmer until slightly reduced.","duration_minutes":10,"temperature":"medium","tip":null},{"text":"In a small bowl, whisk together the cornstarch and water, then whisk that into the sauce. Cook and stir until thickened and bubbly.","duration_minutes":2,"temperature":null,"tip":"Mix the slurry with cold water and add it off a hard boil, or it seizes into lumps."}]},{"name":"Skewers","steps":[{"text":"Pat the pork dry and cut it into 1 1/2-inch cubes if needed. Sprinkle with salt, black pepper, smoked paprika, and tamari, then toss with the olive oil to coat.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Set the pork aside to marinate.","duration_minutes":30,"temperature":null,"tip":null},{"text":"Cut the pineapple, bell pepper, and yellow onion into 1 1/2-inch pieces, then load them onto the soaked skewers alternating with the pork.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Grill or broil on high, brushing with the teriyaki sauce and turning every 3-5 minutes, until the pork is cooked through and lacquered.","duration_minutes":15,"temperature":"high","tip":"Keep back some sauce for serving — anything that touched raw pork goes on the grill, not the table."}]}]$sr$::jsonb,
     0, 0, 0,
     $sr$[]$sr$::jsonb,
-    NULL
+    $sr${"calories":371,"total_fat_g":6.4,"saturated_fat_g":1.3,"trans_fat_g":0.0,"cholesterol_mg":74,"sodium_mg":1243,"total_carbs_g":54.0,"dietary_fiber_g":4.9,"total_sugars_g":41.3,"added_sugars_g":13.0,"protein_g":28.2,"source":"auto"}$sr$::jsonb
   );
 
   -- tuna-fishcakes.json
@@ -436,7 +436,7 @@ Form larger patties instead of six small ones and serve them on buns as fish bur
     $sr$[{"name":"","steps":[{"text":"In a small skillet, heat the butter over medium heat. Cook the yellow onion and garlic until translucent and fragrant.","duration_minutes":5,"temperature":"medium","tip":null},{"text":"Add every remaining ingredient except the frying oil to a large bowl, including the cooked onion and garlic. Mix well.","duration_minutes":null,"temperature":null,"tip":null},{"text":"Using a 1/4 cup measuring cup, scoop up the mixture and form it into patties about 1/2-inch thick.","duration_minutes":null,"temperature":null,"tip":"Press firmly — loosely packed cakes fall apart in the pan."},{"text":"Heat oil in a cast iron skillet over medium heat and cook the fishcakes until golden, 1-2 minutes per side. Sprinkle with salt and serve hot with your favourite dipping sauce.","duration_minutes":4,"temperature":"medium","tip":null}]}]$sr$::jsonb,
     0, 0, 0,
     $sr$[]$sr$::jsonb,
-    NULL
+    $sr${"calories":330,"total_fat_g":13.8,"saturated_fat_g":6.8,"trans_fat_g":0.1,"cholesterol_mg":134,"sodium_mg":1159,"total_carbs_g":33.2,"dietary_fiber_g":4.1,"total_sugars_g":6.1,"protein_g":20.4,"source":"auto"}$sr$::jsonb
   );
   raise notice 'Recipe seed complete (% authored recipes)', 14;
 end $seed$;

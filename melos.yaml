@@ -216,3 +216,20 @@ scripts:
   db:rls:
     description: Run the RLS matrix as anon/owner/shared/stranger. Rolls back.
     run: dart run tool/db.dart rls
+
+  # ---------------------------------------------------------------------------
+  # Auto-nutrition SQL (Phase 29). The estimator's arithmetic has no other
+  # coverage — `packages/core` decodes canned replies and the RLS matrix proves
+  # policy geometry, and neither can say whether a cup of flour weighs 120 g.
+  # db:nutrition:verify is the other half: seed_recipes.sql's twelve `auto`
+  # labels are static JSON, so it re-estimates them against the LOADED registry
+  # and fails when the two have drifted apart — unlike `nutrition:check` above,
+  # which is a pure file check and never opens a connection. Both roll back.
+  # ---------------------------------------------------------------------------
+  db:nutrition:estimate:
+    description: Estimator arithmetic on fixture trees, exact labels. Rolls back.
+    run: dart run tool/db.dart nutrition:estimate
+
+  db:nutrition:verify:
+    description: Committed auto labels vs. the loaded registry + the backfill. Rolls back.
+    run: dart run tool/db.dart nutrition:verify

@@ -94,7 +94,7 @@
       "type": ["object", "null"],
       "additionalProperties": false,
       "minProperties": 1,
-      "description": "recipes.nutrition — the per-serving nutrition-facts label, as ONE jsonb column rather than eleven numerics. Values are per serving at THIS recipe's `servings` and are never multiplied by the detail screen's servings scaler (scaling 4->8 doubles the batch and the servings, so a serving is unchanged). Every field is optional; `null` — not `{}` — is the one representation of \"no nutrition info\", and the detail screen's Nutrition tab renders its empty state from it. Mirrored by RecipeNutrition in packages/core and by _nutritionKeys in tool/recipe_format.dart; unknown keys are a hard error there because the jsonb column itself would accept them.",
+      "description": "recipes.nutrition — the per-serving nutrition-facts label, as ONE jsonb column rather than eleven numerics. Values are per serving at THIS recipe's `servings` and are never multiplied by the detail screen's servings scaler (scaling 4->8 doubles the batch and the servings, so a serving is unchanged). Every field is optional; `null` — not `{}` — is the one representation of \"no nutrition info\", and the detail screen's Nutrition tab renders its empty state from it. Mirrored by RecipeNutrition in packages/core and by _nutritionKeys in tool/recipe_format.dart; unknown keys are a hard error there because the jsonb column itself would accept them. `source` is the twelfth key and the only non-numeric one (Phase 29c).",
       "properties": {
         "calories": { "type": "number", "minimum": 0, "description": "kcal per serving. No % Daily Value is printed for calories, as on a real label." },
         "total_fat_g": { "type": "number", "minimum": 0, "description": "Grams. %DV against 78 g." },
@@ -106,7 +106,8 @@
         "dietary_fiber_g": { "type": "number", "minimum": 0, "description": "Grams, indented under total carbohydrate. %DV against 28 g." },
         "total_sugars_g": { "type": "number", "minimum": 0, "description": "Grams, indented under total carbohydrate. No %DV — only added sugars carry one." },
         "added_sugars_g": { "type": "number", "minimum": 0, "description": "Grams, indented under total sugars. %DV against 50 g." },
-        "protein_g": { "type": "number", "minimum": 0, "description": "Grams. %DV against 50 g." }
+        "protein_g": { "type": "number", "minimum": 0, "description": "Grams. %DV against 50 g." },
+        "source": { "const": "auto", "description": "Provenance (Phase 29c). `\"auto\"` means the eleven numbers above were computed from this file's ingredient `food` links by estimate_nutrition() — the label then prints an `Estimated from ingredients` footnote. MANUAL IS SPELLED BY ABSENCE: there is no `\"manual\"` value, which is what made the key migration-free for every label written before it existed. An object carrying ONLY `source` is rejected like an empty one — use `null` for \"no info\". Regenerate an auto label whenever the recipe's ingredients or nutritionData/ change; `recompute_auto_nutrition()` in 0001_init.sql does the same job for a database that already holds the recipe." }
       }
     },
     "ingredient_groups": {

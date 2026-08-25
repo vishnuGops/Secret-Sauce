@@ -131,9 +131,13 @@ secret-sauce/
     │   ├── 3_sim_verify.sql      #   43 assertions — the only test coverage this SQL has
     │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
     ├── tests/rls_matrix.sql      # the RLS matrix as a SIGNED-IN user (BL-7, `db:rls`) —
-    │                             #   91 checks; makes its own users, then ROLLS BACK
+    │                             #   92 checks; makes its own users, then ROLLS BACK
     ├── tests/nutrition_estimate.sql  # the estimator's ONLY coverage (Phase 29c): fixture
     │                             #   foods/units/trees -> exact labels, then ROLLS BACK
+    ├── tests/nutrition_fixtures.sql  # the other half (29d, `db:nutrition:verify`): the
+    │                             #   COMMITTED auto labels re-estimated against the REAL
+    │                             #   registry (drift gate) + recompute_auto_nutrition()
+    │                             #   broken on purpose, then ROLLS BACK
     └── scripts/{drop,clean}.sql · rotate_seed_passwords.sql (B018 — hosted, manual)
 ```
 
@@ -275,11 +279,16 @@ melos run db:reset    # drop -> create -> nutrition -> seed -> recipes -> sim (~
 # The RLS acceptance matrix as a SIGNED-IN user (BL-7). Additive only in the sense that
 # it writes and then rolls back — it leaves no user, no recipe, no helper function.
 # Run it after ANY change to a policy, a `security definer` function, or the column grants.
-melos run db:rls      # 91 checks across anon / owner / shared-with / stranger
+melos run db:rls      # 92 checks across anon / owner / shared-with / stranger
 
-# The auto-nutrition arithmetic (Phase 29c) — fixture trees, exact labels, rolls back.
-# Self-sufficient: brings its own foods/units, so the registry need not be loaded.
-psql "$env:SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/tests/nutrition_estimate.sql
+# Auto-nutrition SQL. Both roll back; run them after touching the estimator, the
+# backfill, nutritionData/, or an auto recipe's ingredients.
+melos run db:nutrition:estimate  # 29c arithmetic on fixture trees — self-sufficient,
+                                 #   brings its own foods/units, registry not needed
+melos run db:nutrition:verify    # 29d: the COMMITTED auto labels vs. the LOADED registry
+                                 #   (drift gate) + the backfill — needs nutrition + recipes
+                                 #   applied. NOT the same as `nutrition:check`, which is a
+                                 #   pure file staleness check on the generated SQL.
 
 # Simulated population (Phase 24). Additive and idempotent; ~10s at the default
 # `medium` preset (1,000 accounts, ~1,670 recipes, ~118k view rows).
@@ -316,6 +325,18 @@ melos run db:sim:clean -- --yes           # DESTRUCTIVE: deletes the simulated a
 > `JalapeÃ±o`) — silently, because psql renders the bytes back the same way. cmd's
 > `<` streams raw bytes. The same form (with `-U postgres -d postgres` instead of
 > `$u`) is how to apply files to the **local** stack's container.
+>
+> **From a Bash/MSYS shell, don't fight the redirection — copy the file in instead.**
+> `cmd /c "... -f - < file"` piped to anything (`| tail`) hangs there, and MSYS
+> rewrites a container path like `/tmp/x.sql` into a Windows one. Both go away with:
+>
+> ```bash
+> docker cp supabase/migrations/0001_init.sql supabase_db_secret-sauce:/tmp/0001_init.sql
+> MSYS_NO_PATHCONV=1 docker exec supabase_db_secret-sauce \
+>   psql -U postgres -d postgres -v ON_ERROR_STOP=1 -1 -f /tmp/0001_init.sql
+> ```
+>
+> `docker cp` is byte-faithful, so this keeps B074's guarantee.
 >
 > The pooler user is `postgres.<project-ref>`, not bare `postgres`. A dashboard password reset takes
 > a moment to propagate — check auth on its own (`psql $u -c "select 1"`) before blaming the SQL.
@@ -419,10 +440,11 @@ becomes an empty one.
 
 **Nutrition** (Phase 28): `recipes.nutrition` is **one nullable `jsonb` column, not eleven
 numerics** — the writable-column set is restated in ~13 places, so a column costs each copy a
-line. Fixture coverage is split on purpose: `recipeData` carries two **placeholder** all-10 labels
-(inspectable, nutritionally nonsense) and twelve explicit nulls, while the **sim generates** a
-varied label per recipe (`sim.nutrition_for` in `0_sim_schema.sql`, per-category ranges, ~80% of
-the population) — so anything that needs plausible labels at scale needs `melos run db:sim`.
+line. Fixture coverage is split on purpose: `recipeData` carries **all three label states** since
+29d (12 estimator-computed `source: 'auto'`, `fresh-guacamole` manual, `classic-margarita` null),
+while the **sim generates** a varied label per recipe (`sim.nutrition_for` in `0_sim_schema.sql`,
+per-category ranges, ~80% of the population) — so anything that needs plausible labels at scale
+needs `melos run db:sim`.
 A sim label is internally consistent arithmetic, **not real nutrition data** for the dish named on
 the card. `null` is the one representation of "no info" (an all-empty editor entry normalizes to it).
 The 11 keys **plus `source`** (29c) are pinned by `RecipeNutrition` in core and `_nutritionKeys` in
@@ -446,6 +468,19 @@ learn: the recomputed label needs its own `nullif(…, 'null'::jsonb)` because
 `isEmpty` must ignore `source`, or `{source:'auto'}` counts as a label; and an unresolvable
 ingredient contributes **nothing** and is named in the editor's not-counted list — never a
 guessed density, because a water default makes a cup of flour 236 g instead of 120 g.
+
+**A stored estimate is a snapshot, not a live view** (29d). Nothing re-runs `estimate_nutrition`
+on read, so a change to `nutritionData/` reaches only recipes saved after it. Two paths keep the
+rest honest and they cover different databases: `recompute_auto_nutrition()` re-estimates every
+`source = 'auto'` row and runs at the end of **every apply** of `0001_init.sql` (the
+`recompute_all_chef_stats` pattern) — that is the fix for a database that already holds the
+recipe; and the committed `recipeData` labels, which a *fresh* database seeds verbatim, have to be
+regenerated by hand and committed. `melos run db:nutrition:verify`
+(`supabase/tests/nutrition_fixtures.sql`, in CI) fails when those two have drifted apart. Three
+things about the backfill: it touches only `source = 'auto'` (manual is a human's numbers), it
+returns early on an **empty registry** (both `db:reset` and CI's upgrade path apply 0001 *before*
+`nutrition_foods.sql`, so without that it would blank every label), and a row it recomputes to
+null leaves its `where` clause **for good** — re-picking Automatic in the editor is the recovery.
 
 **Ratings**: `recipe_ratings` holds one row per (user, recipe), `0.5`–`5.0` in half-star steps
 (SQL check constraint _and_ `snapRating()` in core). A trigger recomputes
@@ -683,7 +718,7 @@ the `code-review` skill). The ones you need while _writing_ code:
     steps runs as `postgres`, which bypasses policies — so CI also runs
     [supabase/tests/rls_matrix.sql](supabase/tests/rls_matrix.sql) (**BL-7**, `melos run db:rls`),
     which is the only thing here that exercises RLS as a **signed-in** user. It switches to
-    `set local role authenticated`, runs 91 checks across anon / owner / shared-with / unrelated
+    `set local role authenticated`, runs 92 checks across anon / owner / shared-with / unrelated
     stranger, and rolls the whole transaction back. It closed the class B053 lived in and found
     B061 on its first complete run. **Run it, and add a check to it, whenever you touch a policy, a
     `security definer` function, or the column grants** — a new table with new policies that the

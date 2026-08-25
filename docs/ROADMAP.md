@@ -1684,14 +1684,14 @@ drawn-but-dead affordance is worse than absence). Mechanism, alternatives, and o
       a committed USDA FoodData Central registry, ingredient-level food links, estimated labels
       with an `Estimated` disclosure. The schema was already shaped for it — it writes the same
       column
-- [ ] **Real nutrition values** for the 14 authored recipes — folded into Phase 29d, where the
-      estimator itself replaces the dummy 10s with computed labels
+- [x] **Real nutrition values** for the 14 authored recipes — done in Phase 29d: the estimator's
+      own output replaced the dummy 10s, 12 recipes `auto`, one manual, one null
 - [ ] Micronutrients (vitamin D, calcium, iron, potassium — the label's lower block) and a
       per-100 g display — stays deferred; Phase 29 keeps the 11-field key set
 
 ---
 
-## Phase 29 — Auto nutrition: food registry, ingredient links, estimated labels (in progress — 29a–c done 2026-08-25)
+## Phase 29 — Auto nutrition: food registry, ingredient links, estimated labels (DONE — 2026-08-25)
 
 Phase 28 shipped the label and manual entry; this phase makes the label **computable from the
 ingredients**, so most cooks never type eleven numbers. The editor's nutrition panel becomes a
@@ -1847,23 +1847,54 @@ only** — nothing in the repo, CI, or the app ever reads it.
       **B22c** (a save claiming `auto` with `calories: 9999` stores the recomputed 100) and
       **B22d** (auto with nothing counted stores SQL NULL) — 89 → **91 checks**
 
-### 29d — Fixture refresh & docs
+### 29d — Fixture refresh & docs — DONE (2026-08-25)
 
-- [ ] Replace the two all-10 placeholder labels: run the estimator over the linked authored
-      recipes, commit real `source: 'auto'` labels for most, keep ≥ 1 manual and ≥ 1 null so all
-      three states are demonstrable on seed alone (the Seed-data fit gate)
-- [ ] Registry-value refresh path: idempotent recompute of every `source = 'auto'` recipe on
-      apply — the chef-score backfill pattern
-- [ ] Sim untouched: its invented labels read as manual via the absent-key default, truthfully.
-      Linking `simData` dish ingredients is optional follow-up curation, not a gate
-- [ ] Docs: SDS (registry tables, RPCs, provenance, estimation ladder), CLAUDE.md (nutrition
-      paragraph, commands, repo layout), README (`fdc:extract` needs the bundle path),
-      BL-5 register updated (labels no longer only generated-or-placeholder)
+- [x] Replaced the two all-10 placeholder labels: `estimate_nutrition` run over all 14 linked
+      authored recipes against the real registry, and the output committed —
+      **12 `source: 'auto'`** (coverage 4/6 to 17/19), **`fresh-guacamole` manual** (two rows are
+      "to taste", so auto counts 4 of 6 — the honest reason a cook types the numbers), and
+      **`classic-margarita` null**. All three editor modes therefore demo on seed alone (the
+      Seed-data fit gate); `seed_recipes.sql` regenerated and committed
+- [x] `recompute_auto_nutrition()` in `0001_init.sql` + `select` on every apply, the
+      `recompute_all_chef_stats()` pattern. Estimates from `recipe_snapshot(id) ->
+      'ingredient_groups'` (the same tree `save_recipe` persisted, never a hand-rolled one),
+      touches only `source = 'auto'`, `is distinct from`-guarded so an apply that changes nothing
+      does not bump `updated_at` through `recipes_touch`, and **returns early on an empty
+      registry** — `db:reset` and CI's upgrade path both apply 0001 *before*
+      `nutrition_foods.sql`, so without that guard the on-apply call blanks every stored label.
+      Invoker-rights, `execute` revoked (Gotcha 3); listed in `drop.sql` (B024 discipline)
+- [x] `rls_matrix.sql` **E10** (91 -> **92 checks**): a signed-in user calling
+      `recompute_auto_nutrition()` must fail `42501`. Double-locked like E2 — the function's own
+      revoke *and* `recipe_snapshot`'s — so the non-vacuity ritual had to hand both grants back
+      before it went red
+- [x] `supabase/tests/nutrition_fixtures.sql` (`melos run db:nutrition:verify`, wired into
+      `database.yml` after the fresh apply) — the drift gate the pipeline was missing:
+      `recipes:check` proves the SQL matches `recipeData/`, nothing proved the numbers inside it
+      still match `nutritionData/`. Asserts all three states exist, every committed auto label
+      equals its recompute, and then breaks three things inside a rolled-back transaction:
+      a corrupted auto label must come back, a manual label must not move, a deleted registry
+      must blank nothing. **All four proven non-vacuous** by reverting the code each covers
+- [x] Sim untouched, as planned: its invented labels carry no `source`, so they read as manual
+      and the backfill's predicate never selects them (confirmed against a generated population —
+      12 auto of 87 labelled). Linking `simData` ingredients stays optional follow-up curation
+- [x] Docs: SDS §3.1 (the refresh path, its four load-bearing properties) + §11.1 (the three-way
+      fixture split), CLAUDE.md (nutrition paragraph, snapshot-not-live-view rule, commands, repo
+      layout, the Bash-side `docker cp` form of B033/B074), README (`fdc:extract` bundle path,
+      the two new `db:nutrition:*` scripts), `recipeData/{README,schema}.json` (`source` documented,
+      the regenerate-on-change rule), BL-5 register
 
 ### Verification plan
 
-- [x] `melos run analyze` (SUCCESS) / `test --no-select` (216 app + core + design_system, all
-      passed) / `recipes:check` · `sim:check` · `nutrition:check` (SUCCESS)
+- [x] `melos run analyze` (SUCCESS) / `test --no-select` (218 app + 122 core + 115 design_system,
+      all passed) / `recipes:check` · `sim:check` · `nutrition:check` (SUCCESS)
+- [x] **29d:** `melos run db:rls` — **92 passed, 0 failed** (was 91), E10 proven non-vacuous by
+      granting both `recompute_auto_nutrition()` and `recipe_snapshot` back to `authenticated`.
+      `db:nutrition:verify` green on the clean, seeded and upgraded databases, and each
+      of its four assertions proven non-vacuous by reverting the code it covers — no-op backfill
+      → §3 red, predicate widened past `source = 'auto'` → §4 red, empty-registry guard removed
+      → §5 red, a registry calorie value moved by 5 → §2 red. Sim regenerated and
+      `3_sim_verify.sql` re-run (ALL CHECKS PASSED) to confirm the backfill leaves invented
+      labels alone
 - [x] Local stack: the Gotcha 6 upgrade path (today's baseline over the running database) **and**
       the truly-clean B045 path (`drop.sql` → 0001 → nutrition → seed → seed_recipes), both green
       — `estimate_nutrition` reading tables a later file loads is exactly that class
@@ -2192,14 +2223,24 @@ designed onto data that does not exist. See the "Seed-data fit" gate in
 - Fork **depth** comes from `sim.fork_bias` (Phase 26). Uniform source selection spreads forks one
   per recipe, which looks like data and ranks like nothing; anything ordered by fork count needs
   the weighted draw and the `≥ 3` assertion in `3_sim_verify.sql` §G.
-- **Nutrition labels are generated, not authored** (Phase 28). `recipeData` carries two
-  placeholder all-10 labels and twelve explicit nulls; anything that needs *varied* or plausible
-  labels needs `db:sim`, where `sim.nutrition_for` draws one per recipe from a per-category
-  profile (~80% of the population; the other 20% exercise the empty state). Two consequences: the
-  numbers are internally consistent but **not real nutrition data** for the dish named on the
-  card, so nothing may present a sim label as a fact about food; and the **hosted project has
-  none at all**, since it has no simulated population and `seed_recipe_v2` early-returns on an
-  existing `(owner_id, title)`.
+- **Nutrition labels: `recipeData` is now real, the sim is still invented** (Phase 29d). All 14
+  authored recipes carry a genuine label — 12 estimated from their own ingredient links
+  (`source: 'auto'`), `fresh-guacamole` manual, `classic-margarita` null — so **all three editor
+  modes demo on seed alone**, which was the gap the all-10 placeholders left. What seed still
+  cannot give you is *scale*: anything needing hundreds of varied labels needs `db:sim`, where
+  `sim.nutrition_for` draws one per recipe from a per-category profile (~80% of the population;
+  the other 20% exercise the empty state). Three consequences. A sim label is internally
+  consistent arithmetic but **not real nutrition data** for the dish named on the card, so nothing
+  may present one as a fact about food. Sim labels carry **no `source`**, so they read as manual
+  and `recompute_auto_nutrition()` never touches them — correct, but it means the *backfill* has
+  no sim coverage either; `supabase/tests/nutrition_fixtures.sql` is where it is exercised. And
+  the **hosted project has neither** the sim nor 29d's labels. It has no simulated population, and
+  `seed_recipe_v2` early-returns on an existing `(owner_id, title)`, so its 14 recipes still carry
+  what Phase 28 seeded — the two all-10 placeholders and twelve nulls. **The backfill will not fix
+  that**, and correctly so: those labels are manual (no `source`) or absent, which is exactly what
+  `recompute_auto_nutrition()` is built to leave alone. Getting 29d's labels onto hosted means
+  deleting and re-seeding those recipes there. Open owner action, tracked here rather than
+  attempted from this machine.
 - **The hosted project has no simulated population at all** — only `seed.sql` + `seed_recipes.sql`.
   Measured there 2026-08-23, straight after the schema apply: `recipes_quick` **10** rows,
   `recipes_projects` **1**, `recipes_most_forked` **0**. So `03 MOST FORKED` is legitimately empty
@@ -2250,7 +2291,7 @@ months, found by hand while doing something else.
       `melos run db:rls`. It creates three throwaway `auth.users` (owner / shared-with / unrelated
       stranger), a private and a public recipe with content, re-runs everything under `set local
       role authenticated` + `request.jwt.claims`, prints one PASS/FAIL line per check, and **rolls
-      the transaction back** — no user, no recipe, no helper function survives it. **91 checks, all
+      the transaction back** — no user, no recipe, no helper function survives it. **92 checks, all
       passing** on the local stack (79 + Phase 29a's §E registry nine + 29b's B22b food link +
       29c's B22c/B22d auto-estimate guards, the pair that found B075).
 - [x] **CI runs it** — a new `RLS matrix — as a signed-in user` step in `database.yml`, straight

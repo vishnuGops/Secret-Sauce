@@ -1518,7 +1518,8 @@ inspectable.
   the ask says so — every %DV they produce is nonsense (10 g fat = 13% DV) and the plan treats
   replacing them as named deferred work, not an afterthought. They cannot reach hosted:
   `seed_recipe_v2` early-returns on existing `(owner_id, title)` (Gotcha 16), which here is a
-  feature.
+  feature. *(Closed by Phase 29d, 2026-08-25: the estimator's own output replaced them. The same
+  early-return means hosted still carries the 10s — see the BL-5 register.)*
 - **The rail refactor is the riskiest diff** — it touches the one widget both layouts share and
   B070 lives in. Mitigated by the two-commit split and the per-tab envelope re-runs.
 - **Tab discoverability on compact**: the jump bar keeps its `Ingredients` chip and gains no
@@ -1533,8 +1534,39 @@ inspectable.
 
 Roadmap: [ROADMAP.md Phase 29](./ROADMAP.md#phase-29--auto-nutrition-food-registry-ingredient-links-estimated-labels-planned--not-started)
 
-**Status: 29a–c DONE (2026-08-25); 29d not started.** Phase 28's first Deferred item, promoted to
-its own phase after the data source question was answered by measurement rather than assumption.
+**Status: DONE (29a–d, 2026-08-25).** Phase 28's first Deferred item, promoted to its own phase
+after the data source question was answered by measurement rather than assumption.
+
+**29d, as landed — the deltas from the plan below:**
+
+- **The fixture split is 12 / 1 / 1, and which recipe got which is an argument, not a coin toss.**
+  `fresh-guacamole` is the manual one because two of its six ingredient rows are "to taste"
+  (`quantity: null`), so Automatic counts 4 of 6 — it is the recipe where a cook has an actual
+  reason to type the numbers, which is what a fixture should demonstrate. `classic-margarita`
+  stays null because its estimate is the honest failure mode of a raw-ingredient sum: four juiced
+  limes and an orange count as whole fruit, so the drink comes out with 5.3 g of fibre. Shipping
+  that as a label would have made the disclosure footnote carry more weight than it can.
+- **The refresh path needed a guard the plan did not name.** `db:reset` and `database.yml`'s
+  upgrade path both apply `0001_init.sql` *before* `nutrition_foods.sql`, so the on-apply
+  backfill can genuinely run against an empty registry — where every label recomputes to null.
+  `recompute_auto_nutrition()` therefore returns early when `food` is empty. Nothing to estimate
+  *with* is not the same as nothing to estimate, and the difference is a silent data loss.
+- **Recomputing to null is one-way, and that is left as documented behaviour.** A null label
+  carries no `source`, so the row leaves the backfill's `where` clause permanently. The
+  alternative — storing `{"source":"auto"}` alone as a marker — is exactly what `isEmpty` and the
+  validator already reject, so there is nowhere to put the flag. Re-picking Automatic in the
+  editor is the recovery.
+- **A gate the pipeline was missing turned up while writing this.** `recipes:check` proves
+  `seed_recipes.sql` matches `recipeData/`; **nothing** proved the numbers inside it still match
+  `nutritionData/`. Now that twelve labels are estimator output, that gap is a live drift risk —
+  edit a gram weight, ship the registry, forget to regenerate, and a fresh database seeds labels
+  the estimator no longer agrees with. `supabase/tests/nutrition_fixtures.sql`
+  (`melos run db:nutrition:verify`, wired into CI) closes it, and also covers the backfill itself:
+  a corrupted auto label must come back, a manual label must not move, a deleted registry must
+  blank nothing. Each of its four assertions was proven non-vacuous by reverting the code it
+  covers — the BL-7 ritual applied outside the matrix.
+- **No new bug.** The two placeholders were replaced, not fixed around; the estimator, the
+  editor, and `save_recipe` were untouched.
 
 **29c, as landed — the deltas from the plan below, so 29d consumes what exists:**
 
@@ -1821,7 +1853,9 @@ which is worse than "not counted".
    returns).
 4. **29d — fixture refresh + docs**: estimator output replaces the two all-10 placeholders,
    ≥ 1 manual + ≥ 1 null kept so all three states demo on seed; the idempotent
-   recompute-on-apply backfill; SDS / CLAUDE.md / README / BL-5.
+   recompute-on-apply backfill; SDS / CLAUDE.md / README / BL-5. Landed with one addition —
+   `nutrition_fixtures.sql`, the drift gate that keeps those committed labels honest against the
+   committed registry, which the plan had not identified as a gap.
 
 ### How it will be verified
 

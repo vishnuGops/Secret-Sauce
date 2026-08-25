@@ -11,7 +11,20 @@
   "visibility": "public",
   "attribution": "Secret Sauce Kitchen",
   "notes": null,
-  "nutrition": null,
+  "nutrition": {
+    "calories": 371,
+    "total_fat_g": 6.4,
+    "saturated_fat_g": 1.3,
+    "trans_fat_g": 0.0,
+    "cholesterol_mg": 74,
+    "sodium_mg": 1243,
+    "total_carbs_g": 54.0,
+    "dietary_fiber_g": 4.9,
+    "total_sugars_g": 41.3,
+    "added_sugars_g": 13.0,
+    "protein_g": 28.2,
+    "source": "auto"
+  },
   "ingredient_groups": [
     {
       "name": "Teriyaki sauce",
