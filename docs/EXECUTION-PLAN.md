@@ -1317,7 +1317,7 @@ fork parent (needs a second read), persisted check-offs, and cook mode's two def
 
 ## Phase 28 — Nutrition facts: label, tabs, manual entry
 
-Roadmap: [ROADMAP.md Phase 28](./ROADMAP.md#phase-28--nutrition-facts-per-serving-label-rail-tabs-manual-entry-planned-not-started)
+Roadmap: [ROADMAP.md Phase 28](./ROADMAP.md#phase-28--nutrition-facts-per-serving-label-rail-tabs-manual-entry-done)
 
 **Status: DONE (2026-08-24).** Shipped as planned. Four things the plan did not anticipate, all
 of them small and all of them recorded:
@@ -1528,6 +1528,233 @@ inspectable.
 - **`includeIfNull: false` on the model's `toJson`** keeps stored json lean, but means a field
   can never be *explicitly cleared to null* field-by-field through a partial update — acceptable
   because saves always write the whole object (or SQL `NULL`), never a patch.
+
+## Phase 29 — Auto nutrition: food registry, ingredient links, estimated labels
+
+Roadmap: [ROADMAP.md Phase 29](./ROADMAP.md#phase-29--auto-nutrition-food-registry-ingredient-links-estimated-labels-planned--not-started)
+
+**Status: PLANNED (2026-08-24), not started.** Phase 28's first Deferred item, promoted to its
+own phase after the data source question was answered by measurement rather than assumption.
+
+The ask, in product terms: the editor's nutrition panel becomes **Automatic / Manual / None**.
+Automatic computes the per-serving label from the ingredients so the cook types nothing; Manual
+stays exactly as shipped; None saves `null`. The estimate must be honest — marked on the label,
+never presented as measured fact — and switching modes must never destroy data silently.
+
+### What the data measured (2026-08-24, on the actual bundle)
+
+The USDA FoodData Central CSV release of 2026-04-30 (public domain / CC0), 3.1 GB on disk at
+`FoodData_Central_csv_2026-04-30/`. Every number below was measured with awk over the real files
+before this plan was written, because the v1 feedback nearly shipped two wrong assumptions
+(sugars id, added-sugars availability):
+
+| label field | nutrient id | generic foods with a value (of 13,694) |
+| --- | --- | --- |
+| protein / fat / carbs / sodium | 1003 / 1004 / 1005 / 1093 | 13,543–13,649 (99%) |
+| energy (kcal) | 1008, fallback 2047 → 2048 | 13,359 (98%) — the gap is Foundation foods |
+| saturated fat / cholesterol / fiber | 1258 / 1253 / 1079 | 12,903–13,033 (94%) |
+| total sugars | **2000** — *not* the deprecated 1063 (185 rows) | 11,443 (84%) |
+| trans fat | 1257 | 4,289 (**31%**) — stays null-heavy, label omits null rows |
+| **added sugars** | 1235 | **0** — exists only on branded label transcriptions |
+
+"Generic" = `sr_legacy_food` + `foundation_food` + `survey_fndds_food`. Two exclusions, both
+deliberate: `branded_food` (2.0M rows, 910 MB — barcode-specific, wrong shape for "1 cup flour",
+and the only reason the bundle is 3.1 GB) and, from the *matching index*, FNDDS survey foods —
+they are composite **dishes** (`chicken tikka masala` would match as an ingredient). That leaves
+**8,262** usable foods, curated down to the ~400–600 the kitchen vocabulary actually needs; the
+corpus (14 recipes + 25 dishes) contains **237 distinct ingredient names** today.
+
+Portions: 13,044 of 13,694 foods carry ≥ 1 portion row, but SR Legacy sets
+`measure_unit_id = 9999` and hides the real unit in the free-text `modifier` (`cup, chopped`,
+`tbsp chopped`, `medium (2-1/2" dia)`) — needs its own parser at extract time. Foundation foods
+often have **none**: `Flour, wheat, all-purpose, enriched, bleached` (fdc 789890) has zero
+portion rows, so "1 cup flour" dies on the most common baking ingredient unless curation prefers
+SR Legacy ids and keeps density overrides for staples. The corpus's own unit column is free text
+with 25 distinct spellings, including `handful`, `pinch`, `bunch`, `pkg`, `large piece` and the
+`clove`/`cloves`, `cup`/`cups` doublets — `nutritionData/units.json` canonicalizes them once.
+
+### The decisions, and the alternatives they beat
+
+1. **Link at input time; never match at save time.** The alternative — fuzzy-match ingredient
+   names inside the save path — re-guesses on every save, so the same recipe could print
+   different labels on consecutive edits, and a review step degrades into fatigue. Instead the
+   ingredients editor gets a typeahead: picking a suggestion writes `ingredients.food_id`
+   silently; typing past it leaves plain text. Inference survives only as `match_foods()`, a
+   batched one-shot proposing top-3 candidates per **unlinked** name, human-confirmed in a review
+   sheet when an old recipe first switches to Auto. Consistency comes from the link being a
+   stored fact, not a repeated guess.
+2. **Display name and identity are separate columns.** Cooks write `San Marzano tomatoes` and
+   `00 pizza flour`; FDC writes `Tomatoes, red, ripe, raw`. Any design that normalizes the
+   *rendered* name fights the product's first principle (the structure and readability of the
+   recipe). `name` stays free text everywhere; `food_id` is invisible metadata.
+3. **`ingredients.food_id` as a real column — not a name-keyed map in the nutrition jsonb.** The
+   map variant is cheaper (zero column restatements) and was rejected because it is keyed by the
+   one thing the cook is free to edit: rename `butter` to `unsalted butter` and the link dies
+   silently; two `butter` rows in different groups collide. A per-row FK survives renames,
+   duplicates, forks (deep copy copies it), and the editor's delete-and-reinsert save shape —
+   *provided the draft carries it*, which is exactly the B035 obligation and its existing
+   round-trip test. The full restatement cost, itemized: `fork_recipe`
+   (`0001_init.sql:1799`), `save_recipe` (`:2044`), `seed_recipe_v2`'s insert (generated from
+   [tool/recipes.dart:226](../tool/recipes.dart#L226)), the sim's insert
+   (`2_sim_generate.sql:380`), [ingredient.dart](../packages/core/lib/src/models/ingredient.dart),
+   `EditIngredient` in [edit_models.dart](../apps/app/lib/features/recipe_editor/edit_models.dart),
+   both `schema.json`s, and the validator. The read side costs nothing — `kRecipeDetailSelect`
+   embeds `ingredients(*)` ([recipe_queries.dart:56-58](../packages/core/lib/src/repositories/recipe_queries.dart#L56-L58)),
+   and there is no ingredient-column test pin to move. `on delete set null`, so retiring a
+   registry entry orphans links gracefully.
+4. **Provenance rides *inside* the jsonb: `source: 'auto'`, absent = manual.** A `nutrition_source`
+   column on `recipes` would cost one line in each of the ~13 writable-column copies Phase 28
+   enumerated; a 12th jsonb key costs `RecipeNutrition`, `_nutritionKeys`, and nothing else.
+   Absent-means-manual is what makes it migration-free: every label already saved and all ~1,320
+   sim labels (which are *invented*, not computed — calling them `auto` would be a lie) read
+   correctly without touching a row. `None` stays `null`; a Manual save with every box empty
+   normalizes to `null` too — the mode collapse is deliberate, one representation per state.
+   In Dart it is a plain `String?` with an `isEstimated` getter, not a Postgres enum (nothing in
+   SQL switches on it) and not a nested model (B071 stays un-re-armed).
+5. **Estimation arithmetic exists exactly once, in SQL.** `estimate_nutrition()` for the
+   editor's preview; `save_recipe` calls the same internals when the incoming label claims
+   `auto` — **discarding the client's numbers**, so fabricated "estimates" die at the one gate
+   that sees the ingredient trees in the same transaction (the Gotcha 11 shape). The rejected
+   alternative — a ChefScoring-style Dart mirror for live preview — buys per-keystroke latency
+   nobody needs (matches change by discrete picks, not keystrokes) at the price of the Gotcha 19
+   two-implementations tax. One RPC round-trip per match change is fine.
+6. **The registry is committed, generated data; the 3.1 GB bundle is an authoring tool.** Two
+   steps, deliberately split: `tool/fdc.dart` (**extract**) reads the CSVs from a path argument
+   and writes per-100 g values + parsed portions *into* `nutritionData/foods.json`, run only when
+   adding foods; `tool/nutrition.dart` (**gen**) turns the JSON into
+   `supabase/nutrition_foods.sql` with no CSV in sight, so CI's `nutrition:check` works like
+   `recipes:check`. Extract output is committed and human-reviewed, which is what lets the
+   SR-Legacy modifier parser be imperfect — its mistakes surface in a readable diff, not in a
+   label. The rejected alternatives: committing any CSV subset (opaque, unreviewable), or a
+   runtime nutrition API (a network dependency + terms-of-service surface for data that never
+   changes).
+7. **A generic `Estimated from ingredients` footnote, not `from 14 of 16`.** The counted/total
+   pair would be two more pinned keys in every copy of the key set, to print a number the editor
+   already shows with names attached. `estimate_nutrition` still *returns* counted / total /
+   unmatched — the editor renders them; the stored label carries only `source`.
+
+### Schema, and the grams ladder
+
+```sql
+create table food (
+  id            text primary key,          -- slug: 'all-purpose-flour'
+  display_name  text not null,
+  fdc_id        int,
+  calories numeric, total_fat_g numeric, … protein_g numeric,   -- 11 per-100g columns, EAV flattened
+  grams_per_ml  numeric,                   -- null = volume units unresolvable for this food
+  is_added_sugar boolean not null default false,
+  search_tsv    tsvector generated always as (…) stored
+);
+create table food_alias   (alias text, food_id text references food);
+create table food_portion (food_id text references food, unit_key text, grams numeric);
+alter table ingredients add column if not exists food_id text
+  references food(id) on delete set null;
+create extension if not exists pg_trgm;    -- 0001 has only pgcrypto today
+```
+
+RLS on all three, **select-only** for `authenticated`, zero write policies; grants block extended
+(Gotcha 4 — both are required); `search_foods` / `match_foods` / `estimate_nutrition` revoked
+from `anon` (Gotcha 3 — PostgREST exposes every public function; only the signed-in editor needs
+them; the detail page reads the stored label).
+
+Per-ingredient grams, in order, first hit wins — anything that falls through **contributes
+nothing and is named in the editor's "not counted" list**:
+
+1. skip outright: `is_optional`, no `food_id`, `quantity is null`
+2. mass unit (`g`, `kg`, `oz`, `lb`) → direct conversion
+3. volume unit (`ml`, `L`, `tsp`, `Tbsp`, `cup`, `fl oz`, `pint`) → × `grams_per_ml` when set
+4. named portion (`clove`, `stick`, `bunch`, `large`, bare count) → `food_portion.unit_key`
+5. unresolvable (`handful`, `pinch`, `to taste`) → skip
+
+Then per 100 g × grams, summed, ÷ `recipes.servings` (the base count — Phase 28's per-serving
+semantics, untouched). Added sugars = Σ total sugars of `is_added_sugar` foods (the measured 0%
+means it can never come from data). Trans fat null when unknown — the label already omits null
+rows. **Never guess a density**: a water default makes a cup of flour 236 g instead of 120 g,
+which is worse than "not counted".
+
+### Traps, named before they are written
+
+- **The FK makes seed order load-bearing.** `seed_recipes.sql` will insert ingredients carrying
+  `food_id`, so `nutrition_foods.sql` must apply first: `db:reset` becomes drop → create →
+  **nutrition** → seed → recipes → sim, and `config.toml`'s `sql_paths` gains the file *before*
+  `seed_recipes.sql`. The truly-clean path (B045) is the one that bites here — a machine that
+  has never loaded the registry fails mid-`seed_recipes` with an FK violation, while every
+  machine that ran 29a once stays green. `drop.sql` learns the three tables and the RPCs (B024's
+  rule: the drop lives where a re-apply can find it).
+- **`db:clean` must spare the registry.** It truncates *recipe* data; `food` is reference data
+  with no user rows and survives, or every post-clean seed hits the FK trap above.
+- **Source smuggling is a policy question, so the matrix owns it.** A client claiming
+  `source: 'auto'` with fabricated numbers must find them discarded. `rls_matrix.sql` gains the
+  check: save with `{source: 'auto', calories: 9999}` over known fixture trees, read back the
+  recomputed value. Proven non-vacuous the BL-7 way — comment out the recompute branch once,
+  watch it go red.
+- **Auto with nothing counted must save `null`, loudly.** Zero linked ingredients → an all-null
+  estimate → `isEmpty` → normalized to `null` → the recipe silently reopens as **None**. The
+  editor warns inline before save instead of letting the mode collapse read as data loss.
+- **`_nutritionKeys` and `RecipeNutrition` learn `source` in the same change** — the validator
+  rejects unknown keys as hard errors today, so a generated fixture carrying `source` fails
+  `recipes:validate` until both sides move. `isEmpty` must ignore it, or `{source: 'auto'}`
+  counts as a label.
+- **`seed_recipe_v2`'s signature does not change** — ingredients arrive inside the existing
+  jsonb argument — so the B024 overload trap (42725) is *not* re-armed. Stated because Phase 28
+  hit it and the reviewer will ask.
+- **The typeahead re-opens the ingredient row's envelope** (Gotcha 26 / B070 — reuse is a reason
+  to re-run it). A suggestion overlay plus a link chip inside a row that already holds quantity /
+  unit / name at 320 px × 2.0× is exactly the crowded-Row shape of B038/B062.
+
+### Order of work, and why
+
+1. **29a — registry + pipeline first**, because everything else consumes it: `nutritionData/`,
+   both tools, melos scripts, the tables + `search_foods` in `0001`, load order, matrix rows,
+   and the 237-name corpus mapping. Ends with `db:reset` green on fresh, upgrade, *and* clean
+   paths — no UI change yet.
+2. **29b — links at input**: the `food_id` column with its full restatement list in one change
+   set (the B035 test is the gate), the typeahead, the repository, recipeData slugs +
+   `recipes:gen`. Ships alone: links accumulate value before any estimate exists.
+3. **29c — estimation + modes**: `estimate_nutrition` + `match_foods` + the `save_recipe` auto
+   branch + `source` + the editor's segmented control, review sheet, preview, and the label
+   footnote. SQL before Dart within the stage, `nutrition_estimate.sql` before the editor
+   consumes the RPC — the Phase 28 discipline (every later stage decodes what this stage
+   returns).
+4. **29d — fixture refresh + docs**: estimator output replaces the two all-10 placeholders,
+   ≥ 1 manual + ≥ 1 null kept so all three states demo on seed; the idempotent
+   recompute-on-apply backfill; SDS / CLAUDE.md / README / BL-5.
+
+### How it will be verified
+
+- `melos run analyze` / `test --no-select` / `format`; `recipes:check` / `sim:check` /
+  `nutrition:check` (grep for `SUCCESS`, B006/B007).
+- `supabase db reset` fresh; the Gotcha 6 upgrade path; the B045 truly-clean path — named above
+  as the one the FK ordering actually threatens.
+- `melos run db:rls` from 79 checks: registry read-only rows, RPC grants, the smuggling check —
+  each proven non-vacuous by one deliberate revert (BL-7 ritual).
+- `supabase/tests/nutrition_estimate.sql` in `database.yml`: fixture trees with known grams →
+  exact labels, the unit ladder edge cases (mass, volume-with-density, named portion,
+  unresolvable, optional, null quantity, added-sugar rule), rolled back.
+- `fake_supabase` request assertions for `search_foods` / `estimate_nutrition` bodies; the
+  `EditIngredient.foodId` round-trip in the existing editor group; widget tests for the
+  segmented control, the not-counted list, and mode transitions.
+- Screenshots (B028): typeahead open, Auto pane with matches + not-counted, estimated label with
+  footnote, × {light, dark}.
+- What fixtures cannot show, said now: typeahead *feel* and real match quality — a manual
+  local-stack pass, plus the review sheet exercised against an old unlinked recipe.
+
+### Risks, stated
+
+- **Curation is the long pole, not code.** Hand-mapping ~240 names (then ~600) to FDC ids with
+  densities and portions is hours of judgment; `tool/fdc.dart` reduces it to review, not zero.
+  Scope guard: corpus first, grow on demand.
+- **Match quality is contained, not solved.** Human-at-input + reviewable backfill means the
+  worst case is an *unlinked* ingredient and a smaller denominator — never a wrong number
+  printed silently.
+- **Cooking yield is permanently unmodelled.** Raw-ingredient sums ignore reduction, evaporation,
+  drained frying oil; `retention_factor.csv` does not model moisture. The footnote is the
+  disclosure, and no copy anywhere may call the estimate FDA-compliant.
+- **Vocabulary gaps are ongoing** (`tikka spice blend` has no FDC row). The not-counted list is
+  the honest surface; the mining loop that turns those names into curation candidates is named
+  Deferred, not promised.
+- **`pg_trgm` on hosted** — available on Supabase, but the extension create must be verified on
+  the pooler path (B033) before the typeahead ships, not after.
 
 ## Phase OPT — Optimization & hardening
 

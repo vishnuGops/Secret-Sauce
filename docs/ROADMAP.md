@@ -1680,13 +1680,162 @@ drawn-but-dead affordance is worse than absence). Mechanism, alternatives, and o
 
 ### Deferred
 
-- [ ] **Auto-calculate from ingredients** — needs a nutrition data source decision, a mapping
-      from free-text ingredient names, and an "estimated" disclosure on the label; its own phase.
-      The schema is already shaped for it (it writes the same column)
-- [ ] **Real nutrition values** for the 14 authored recipes (content task; replaces the dummy
-      10s)
+- [ ] **Auto-calculate from ingredients** — now **Phase 29** (planned 2026-08-24, not started):
+      a committed USDA FoodData Central registry, ingredient-level food links, estimated labels
+      with an `Estimated` disclosure. The schema was already shaped for it — it writes the same
+      column
+- [ ] **Real nutrition values** for the 14 authored recipes — folded into Phase 29d, where the
+      estimator itself replaces the dummy 10s with computed labels
 - [ ] Micronutrients (vitamin D, calcium, iron, potassium — the label's lower block) and a
-      per-100 g display
+      per-100 g display — stays deferred; Phase 29 keeps the 11-field key set
+
+---
+
+## Phase 29 — Auto nutrition: food registry, ingredient links, estimated labels (planned — not started)
+
+Phase 28 shipped the label and manual entry; this phase makes the label **computable from the
+ingredients**, so most cooks never type eleven numbers. The editor's nutrition panel becomes a
+three-way choice — **Automatic / Manual / None** — where Automatic estimates the per-serving
+label from the ingredient list and marks it as an estimate. Mechanism, alternatives beaten, and
+the traps: [EXECUTION-PLAN.md Phase 29](./EXECUTION-PLAN.md#phase-29--auto-nutrition-food-registry-ingredient-links-estimated-labels).
+
+The data source is the USDA **FoodData Central** CSV bundle (2026-04-30 release, public domain),
+**measured before this plan was written** (2026-08-24, on the actual bundle): 9 of the 11 label
+fields have ≥ 94% coverage across the 13,694 generic foods; **added sugars has zero rows** in
+every generic food and must be rule-derived; trans fat is 31% and stays null-heavy; total sugars
+is nutrient id **2000**, not the deprecated 1063. The 3.1 GB bundle is an **authoring-time input
+only** — nothing in the repo, CI, or the app ever reads it.
+
+### Decisions (taken in planning, before code)
+
+- **Ingredients are linked to foods at input time, not matched at save time.** A typeahead in the
+  ingredients editor sets an invisible `food_id` when the cook picks a suggestion; free text past
+  the dropdown is always allowed and never blocked. Matching-by-inference survives only as a
+  one-shot, human-reviewed **backfill** for recipes written before the link existed. A link chosen
+  once by a human is deterministic forever; save-time fuzzy matching would re-guess on every save.
+- **The cook's words stay.** `ingredients.name` remains free text and is what every surface
+  renders; `food_id` is metadata no card ever shows. Forcing canonical names would fight the
+  product's core claim (structure and intuitiveness of the recipe).
+- **Provenance is a `source` key inside the existing `nutrition` jsonb** — `'auto'` when
+  estimated; **absent means manual**, so every already-saved label and all ~1,320 sim labels read
+  correctly with zero migration. `null` column stays the one representation of "no info", so
+  **None** and Manual-all-empty collapse to the same state on purpose.
+- **Arithmetic exists once, in SQL.** `estimate_nutrition()` is the preview; `save_recipe`
+  recomputes through the same internals whenever the incoming label says `source = 'auto'` —
+  client-sent auto numbers are preview-only and never stored. No Dart mirror (the Gotcha 19 twin
+  risk is not bought when nothing needs per-keystroke recompute).
+- **The registry is committed data, not a runtime dependency.** `nutritionData/foods.json`
+  (~400–600 curated foods; the corpus needs 237 names today) carries per-100 g values extracted
+  *once* from the CSVs by `tool/fdc.dart`; `tool/nutrition.dart` generates
+  `supabase/nutrition_foods.sql` from the JSON alone, so CI checks staleness without the bundle —
+  the recipeData pattern, split into extract + gen.
+- **Honesty over coverage.** An unlinked ingredient, an unresolvable unit (`handful`, `pinch`,
+  `to taste`), a null quantity, or an `is_optional` row contributes nothing and is listed as
+  "not counted" in the editor; the label carries a generic `Estimated from ingredients` footnote
+  (per-count footnote considered and dropped — it would grow the pinned key set for a line the
+  editor already shows better).
+
+### 29a — Food registry & pipeline
+
+- [ ] `nutritionData/` — `foods.json` (slug, display name, `fdc_id`, aliases, per-100 g values,
+      `grams_per_ml`, named portions, `is_added_sugar`), `units.json` (canonical spellings +
+      class: mass / volume / count / unresolvable), `README.md` authoring workflow
+- [ ] `tool/fdc.dart` — **extract**: reads the CSV bundle (path by argument, never committed),
+      writes values into `foods.json`; energy fallback 1008 → 2047 → 2048, sugars id 2000,
+      SR-Legacy `modifier` portion parsing; prefers SR Legacy ids (Foundation foods often have no
+      portions — all-purpose flour has none)
+- [ ] `tool/nutrition.dart` — **gen**: `foods.json` → `supabase/nutrition_foods.sql`; melos
+      `nutrition:gen` / `nutrition:check` (CI), pure file ops like `recipes:*`
+- [ ] Schema in `0001_init.sql` (pre-release, folded in): `food` (11 per-100 g numeric columns —
+      FDC's EAV flattened), `food_alias`, `food_portion`, `create extension if not exists
+      pg_trgm`, `search_foods(q, lim)` RPC; RLS select-only for `authenticated`, zero write
+      policies, grants block extended (Gotcha 4), RPC revoked from `anon` (Gotcha 3)
+- [ ] Load order: `db:nutrition` melos script; `db:reset` becomes drop → create → **nutrition** →
+      seed → recipes → sim; `config.toml` `sql_paths` gains the file **before** `seed_recipes.sql`
+      (29b's FK makes the order load-bearing); `drop.sql` learns the three tables + the RPC
+- [ ] `rls_matrix.sql`: food tables readable as `authenticated`, writes fail `42501`, `anon`
+      select empty/denied, `search_foods` callable signed-in only
+- [ ] Seed the vocabulary from the corpus: map the 237 distinct ingredient names (14 recipes +
+      25 dishes) first, so every authored recipe is estimable on day one
+
+### 29b — Ingredient links at input
+
+- [ ] `ingredients.food_id` — nullable `references food(id) on delete set null`. Every
+      restatement site in the same change: `fork_recipe` (`0001_init.sql:1799`), `save_recipe`
+      (`:2044`), `seed_recipe_v2` via [tool/recipes.dart](../tool/recipes.dart), the sim's insert
+      (`2_sim_generate.sql:380`), `Ingredient` model, `EditIngredient` draft (B035 — the
+      round-trip test fails if dropped), both `schema.json`s + `tool/recipe_format.dart`
+      (optional `food` key, slug must exist in `foods.json`). Read side is free —
+      `kRecipeDetailSelect` embeds `ingredients(*)`
+- [ ] Typeahead in `ingredients_editor.dart` against `search_foods` (alias exact > prefix >
+      trigram): picking sets name + link, typing past it leaves free text; a linked row shows a
+      subtle chip, clearable; envelope re-run for the row (Gotcha 26)
+- [ ] `SupabaseFoodRepository` (abstract + impl, wired in core providers) with `fake_supabase`
+      request-assertion tests
+- [ ] `recipeData/recipes/*.json` gain `food` slugs on linkable ingredients; `recipes:gen`,
+      commit both
+
+### 29c — Modes, estimation, provenance
+
+- [ ] `estimate_nutrition(p_ingredient_groups jsonb, p_servings int) → jsonb` — pure; grams
+      ladder: mass unit direct / volume × `grams_per_ml` / count via `food_portion` / else skip;
+      skips optional + unlinked + null-quantity rows; added sugars = Σ total sugars of
+      `is_added_sugar` foods; ÷ servings; returns label + counted/total + unmatched names.
+      `authenticated` only
+- [ ] `match_foods(names text[]) → jsonb` — batched top-3 candidates per name, for the backfill
+      review sheet only
+- [ ] `save_recipe`: when `nutrition->>'source' = 'auto'`, discard client numbers, recompute from
+      the incoming trees, stamp `source`; manual/null pass through untouched. Signature unchanged
+      — no 42725 exposure
+- [ ] `RecipeNutrition.source` (`String?`, `includeIfNull: false`, `isEmpty` ignores it,
+      `isEstimated` getter); `_nutritionKeys` learns `source`; label never renders it. `String`
+      field, so B071's nested-model trap is not re-armed
+- [ ] Editor: segmented **Automatic / Manual / None** (`ChoiceChip`s in a `Wrap`, the Phase 28
+      Gotcha 21 shape — not `SegmentedButton`); Auto pane = match list + not-counted list +
+      preview label via the RPC; zero counted ingredients → inline warning, saves `null` rather
+      than an empty lie; Auto → Manual seeds the fields with the computed values; Manual → Auto
+      confirms overwrite
+- [ ] `NutritionFactsLabel`: optional `Estimated from ingredients` footnote line;
+      `nutrition_tab.dart` passes `isEstimated`
+- [ ] `supabase/tests/nutrition_estimate.sql` — fixture trees → exact expected labels, rolls
+      back; wired into `database.yml` (this SQL's only coverage, the `3_sim_verify.sql`
+      rationale); `rls_matrix.sql` gains the **source-smuggling check**: a save claiming `auto`
+      with fabricated calories stores the recomputed number, not the claim
+
+### 29d — Fixture refresh & docs
+
+- [ ] Replace the two all-10 placeholder labels: run the estimator over the linked authored
+      recipes, commit real `source: 'auto'` labels for most, keep ≥ 1 manual and ≥ 1 null so all
+      three states are demonstrable on seed alone (the Seed-data fit gate)
+- [ ] Registry-value refresh path: idempotent recompute of every `source = 'auto'` recipe on
+      apply — the chef-score backfill pattern
+- [ ] Sim untouched: its invented labels read as manual via the absent-key default, truthfully.
+      Linking `simData` dish ingredients is optional follow-up curation, not a gate
+- [ ] Docs: SDS (registry tables, RPCs, provenance, estimation ladder), CLAUDE.md (nutrition
+      paragraph, commands, repo layout), README (`fdc:extract` needs the bundle path),
+      BL-5 register updated (labels no longer only generated-or-placeholder)
+
+### Verification plan
+
+- [ ] `melos run analyze` / `test --no-select` / `format`; `recipes:check` / `sim:check` /
+      `nutrition:check`
+- [ ] Local stack fresh path **and** the Gotcha 6 upgrade path (new tables + data file layered on
+      an old database), plus the truly-clean B045 path — `estimate_nutrition` referencing tables
+      a later file loads is exactly that class
+- [ ] `melos run db:rls` — count moves from 79; new checks proven non-vacuous by reverting one
+      grant and the smuggling guard once (the BL-7 ritual)
+- [ ] Editor envelope with typeahead + Auto pane at 320 / 360 / 600 × 2.0×; detail suites re-run
+      per tab with the footnote present
+- [ ] Screenshots (B028): Auto pane with matches + not-counted list, estimated label with
+      footnote × {light, dark}
+
+### Deferred (out of scope for 29)
+
+- [ ] Cooking yield / moisture loss — raw-ingredient sums, permanently disclosed as an estimate;
+      not fixable with this dataset
+- [ ] Micronutrients + per-100 g display (carried from Phase 28)
+- [ ] Vocabulary mining loop (surfacing unlinked ingredient names as curation candidates)
+- [ ] `simData` ingredient links (optional curation, above)
 
 ---
 
@@ -1924,10 +2073,10 @@ tracked as [Backlog BL-6](#bl-6--environment-dependent-verification-gaps):
 Everything here is **known, decided, and not being worked on**. An item is in the backlog because
 it is an owner action, accepted debt, or a deferral with a stated trigger — not because it was
 forgotten. Each one names the condition that would pull it back into a phase. Nothing else in this
-document is open: Phases 0–24 and 26–28 are done, Phase 25 is designed-not-started, Phase OPT is
-closed at 26 of 29 with the rest listed below. Phase 28's own Deferred block (auto-calculate, real
-nutrition values for the 14 authored recipes, micronutrients) sits with the phase rather than here,
-because each has a named successor phase rather than a trigger condition.
+document is open: Phases 0–24 and 26–28 are done, Phase 25 is designed-not-started, Phase 29 is
+planned-not-started, Phase OPT is closed at 26 of 29 with the rest listed below. Phase 28's
+Deferred block resolved into Phase 29 (auto-calculate and the real label values); micronutrients
+stays with the phase rather than here, a feature deferral with no trigger condition.
 
 #### BL-1 — OPT-S8 (B018) — rotate the hosted seed passwords (owner action)
 
