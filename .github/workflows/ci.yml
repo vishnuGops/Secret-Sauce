@@ -51,3 +51,9 @@ jobs:
       # varied as this library, and no assertion downstream would notice a gap.
       - name: Sim dish library
         run: melos run sim:check
+
+      # Same gate for the food registry (Phase 29a): lints nutritionData/ and
+      # fails if supabase/nutrition_foods.sql is stale. Works offline — the
+      # USDA CSV bundle is an authoring-time input only, never in CI.
+      - name: Food registry
+        run: melos run nutrition:check

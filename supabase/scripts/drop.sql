@@ -6,7 +6,13 @@
 drop trigger if exists on_auth_user_created on auth.users;
 
 -- Tables (cascade clears dependent rows, FKs, indexes, policies).
+-- The food registry (Phase 29a) drops with everything else — it is rebuilt by
+-- `db:nutrition`, which `db:reset` runs right after `create`.
 drop table if exists
+  food_unit,
+  food_portion,
+  food_alias,
+  food,
   recipe_suggestions,
   recipe_ratings,
   recipe_views,
@@ -44,6 +50,8 @@ drop function if exists on_recipe_tags_search_change() cascade;
 drop function if exists on_tags_search_change() cascade;
 drop function if exists can_read_recipe(uuid) cascade;
 drop function if exists owns_recipe(uuid) cascade;
+-- Food registry typeahead (Phase 29a).
+drop function if exists search_foods(text, int) cascade;
 -- Discovery RPC signatures, oldest first: OPT-P9 added `p_offset`, and Postgres
 -- keys drops by argument list, so both overloads stay listed.
 drop function if exists recipes_trending(int) cascade;

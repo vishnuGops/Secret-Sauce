@@ -1691,7 +1691,7 @@ drawn-but-dead affordance is worse than absence). Mechanism, alternatives, and o
 
 ---
 
-## Phase 29 — Auto nutrition: food registry, ingredient links, estimated labels (planned — not started)
+## Phase 29 — Auto nutrition: food registry, ingredient links, estimated labels (in progress — 29a done 2026-08-25)
 
 Phase 28 shipped the label and manual entry; this phase makes the label **computable from the
 ingredients**, so most cooks never type eleven numbers. The editor's nutrition panel becomes a
@@ -1735,28 +1735,47 @@ only** — nothing in the repo, CI, or the app ever reads it.
   (per-count footnote considered and dropped — it would grow the pinned key set for a line the
   editor already shows better).
 
-### 29a — Food registry & pipeline
+### 29a — Food registry & pipeline — DONE (2026-08-25)
 
-- [ ] `nutritionData/` — `foods.json` (slug, display name, `fdc_id`, aliases, per-100 g values,
+- [x] `nutritionData/` — `foods.json` (slug, display name, `fdc_id`, aliases, per-100 g values,
       `grams_per_ml`, named portions, `is_added_sugar`), `units.json` (canonical spellings +
-      class: mass / volume / count / unresolvable), `README.md` authoring workflow
-- [ ] `tool/fdc.dart` — **extract**: reads the CSV bundle (path by argument, never committed),
+      class: mass / volume / count / unresolvable), `README.md` authoring workflow. **78 foods,
+      277 aliases, 174 portions committed.** Authored fields win over the machine-written
+      `extracted` block, per unit key / per value
+- [x] `tool/fdc.dart` — **extract**: reads the CSV bundle (path by argument, never committed),
       writes values into `foods.json`; energy fallback 1008 → 2047 → 2048, sugars id 2000,
-      SR-Legacy `modifier` portion parsing; prefers SR Legacy ids (Foundation foods often have no
-      portions — all-purpose flour has none)
-- [ ] `tool/nutrition.dart` — **gen**: `foods.json` → `supabase/nutrition_foods.sql`; melos
-      `nutrition:gen` / `nutrition:check` (CI), pure file ops like `recipes:*`
-- [ ] Schema in `0001_init.sql` (pre-release, folded in): `food` (11 per-100 g numeric columns —
-      FDC's EAV flattened), `food_alias`, `food_portion`, `create extension if not exists
-      pg_trgm`, `search_foods(q, lim)` RPC; RLS select-only for `authenticated`, zero write
-      policies, grants block extended (Gotcha 4), RPC revoked from `anon` (Gotcha 3)
-- [ ] Load order: `db:nutrition` melos script; `db:reset` becomes drop → create → **nutrition** →
+      SR-Legacy `modifier` portion parsing (parenthetical strip → first comma segment →
+      spelling/size/display-name-token match), derived `grams_per_ml` from the largest volume
+      portion; run against the 2026-04-30 bundle
+- [x] `tool/nutrition.dart` — **gen**: `foods.json` + `units.json` →
+      `supabase/nutrition_foods.sql`; melos `nutrition:validate` / `nutrition:gen` /
+      `nutrition:check` (CI), pure file ops like `recipes:*`
+- [x] Schema in `0001_init.sql` (pre-release, folded in): `food` (11 per-100 g numeric columns —
+      FDC's EAV flattened, named exactly as the label's jsonb keys), `food_alias`, `food_portion`,
+      **`food_unit`** (units.json's SQL mirror, one row per spelling — added so 29c's estimator
+      reads a table instead of restating conversions), `pg_trgm`, `search_foods(q, lim)` RPC
+      (exact > prefix > trigram, total order, capped 25); RLS select-only for `authenticated`,
+      zero write policies, write grants revoked (Gotcha 4), RPC revoked from `anon` (Gotcha 3).
+      No `search_tsv` generated column — aliases live in another table, so the typeahead is
+      prefix + trigram over both
+- [x] Load order: `db:nutrition` melos script; `db:reset` is drop → create → **nutrition** →
       seed → recipes → sim; `config.toml` `sql_paths` gains the file **before** `seed_recipes.sql`
-      (29b's FK makes the order load-bearing); `drop.sql` learns the three tables + the RPC
-- [ ] `rls_matrix.sql`: food tables readable as `authenticated`, writes fail `42501`, `anon`
-      select empty/denied, `search_foods` callable signed-in only
-- [ ] Seed the vocabulary from the corpus: map the 237 distinct ingredient names (14 recipes +
-      25 dishes) first, so every authored recipe is estimable on day one
+      (29b's FK makes the order load-bearing); `drop.sql` learns all four tables + the RPC;
+      `db:clean` spares the registry (it never listed it); `database.yml` applies the registry on
+      the fresh, re-apply, and upgrade paths and smokes `search_foods`
+- [x] `rls_matrix.sql`: new section E (E1–E9, 79 → **88 checks**) — registry readable signed-in,
+      all four tables' writes fail `42501`, `anon` reads empty, `search_foods` finds a fixture
+      signed-in and fails `42501` as `anon`. Proven non-vacuous the BL-7 way — E2 needs **both**
+      locks (grant + policy) removed to go red, which is the defense-in-depth working
+- [x] Seed the vocabulary from the corpus: all 104 distinct recipeData names mapped — 137/147
+      ingredient rows linkable; the 7 unlinkable names (`mirin`, `orange liqueur`, `tikka spice
+      blend`, `bamboo skewers`, the two salt-and-pepper composites, one serving suggestion) are
+      documented gaps in `nutritionData/README.md`. simData's ~111 unmatched names are 29d's
+      optional curation, per the plan
+- Found and fixed during verification: **B074** — the documented B033 psql pattern
+  (`Get-Content -Raw | docker exec`) mojibakes every multibyte character; byte-faithful
+  `cmd /c` redirection is the corrected form, local DB rebuilt clean. Hosted probe is an open
+  owner action (see the tracker)
 
 ### 29b — Ingredient links at input
 
@@ -2074,7 +2093,8 @@ Everything here is **known, decided, and not being worked on**. An item is in th
 it is an owner action, accepted debt, or a deferral with a stated trigger — not because it was
 forgotten. Each one names the condition that would pull it back into a phase. Nothing else in this
 document is open: Phases 0–24 and 26–28 are done, Phase 25 is designed-not-started, Phase 29 is
-planned-not-started, Phase OPT is closed at 26 of 29 with the rest listed below. Phase 28's
+in progress (29a done 2026-08-25; 29b–d remain), Phase OPT is closed at 26 of 29 with the rest
+listed below. Phase 28's
 Deferred block resolved into Phase 29 (auto-calculate and the real label values); micronutrients
 stays with the phase rather than here, a feature deferral with no trigger condition.
 
@@ -2191,8 +2211,8 @@ months, found by hand while doing something else.
       `melos run db:rls`. It creates three throwaway `auth.users` (owner / shared-with / unrelated
       stranger), a private and a public recipe with content, re-runs everything under `set local
       role authenticated` + `request.jwt.claims`, prints one PASS/FAIL line per check, and **rolls
-      the transaction back** — no user, no recipe, no helper function survives it. **79 checks, all
-      passing** on the local stack.
+      the transaction back** — no user, no recipe, no helper function survives it. **88 checks, all
+      passing** on the local stack (79 + Phase 29a's §E registry nine).
 - [x] **CI runs it** — a new `RLS matrix — as a signed-in user` step in `database.yml`, straight
       after the fresh apply. A B053/B061-class regression now fails a pull request.
 - [x] **It found a real hole on its first complete run: [B061](BUG-TRACKER.md).** `likes_write` and

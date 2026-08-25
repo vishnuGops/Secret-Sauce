@@ -196,6 +196,12 @@ begin
   insert into recipe_tags (recipe_id, tag_id) values (v_public, v_tag);
   insert into tags (name) values ('bl7-orphan') returning id into v_orphan;
 
+  -- Food registry fixture (Phase 29a). The matrix must not depend on
+  -- nutrition_foods.sql having been applied — it brings its own row, and the
+  -- rollback takes it away again.
+  insert into food (id, display_name, calories) values ('bl7-food', 'BL-7 fixture food', 100);
+  insert into food_alias (alias, food_id) values ('bl7 fixture food', 'bl7-food');
+
   -- ==========================================================================
   -- A. anon — already proven in Phase 26; kept as a regression guard, and
   --    because a signed-in result only means something next to a signed-out one.
@@ -600,6 +606,51 @@ begin
   select err, rows into v_err, v_n from public.rls_matrix_do(format(
     'delete from tags where id = %L', v_orphan));
   v_log := v_log || format(E'%s\tD28 stranger · delete an orphan tag\t%s', v_err is null and v_n = 1, coalesce(v_err, v_n || ' row'));
+
+  -- ==========================================================================
+  -- E. food registry (Phase 29a) — reference data: readable signed-in only,
+  --    written by nobody. Write denials are 42501 at the GRANT layer (the
+  --    grants block revokes DML — RLS is never consulted), and `anon` has no
+  --    select policy at all, so its reads come back empty rather than erroring.
+  --    Still v_other's claims from section D — any signed-in user will do.
+  -- ==========================================================================
+  select count(*) into n from food where id = 'bl7-food';
+  v_log := v_log || format(E'%s\tE1  signed-in · select the food registry\t%s row', n = 1, n);
+
+  select err into v_err from public.rls_matrix_do(
+    'insert into food (id, display_name) values (''bl7-forged'', ''x'')');
+  v_log := v_log || format(E'%s\tE2  signed-in · insert a food must FAIL\t%s', v_err = '42501', coalesce(v_err, 'no error'));
+
+  select err into v_err from public.rls_matrix_do(
+    'update food set calories = 9999 where id = ''bl7-food''');
+  v_log := v_log || format(E'%s\tE3  signed-in · update a food must FAIL\t%s', v_err = '42501', coalesce(v_err, 'no error'));
+
+  select err into v_err from public.rls_matrix_do(
+    'delete from food where id = ''bl7-food''');
+  v_log := v_log || format(E'%s\tE4  signed-in · delete a food must FAIL\t%s', v_err = '42501', coalesce(v_err, 'no error'));
+
+  select err into v_err from public.rls_matrix_do(
+    'insert into food_alias (alias, food_id) values (''bl7-forged'', ''bl7-food'')');
+  v_log := v_log || format(E'%s\tE5  signed-in · insert a food_alias must FAIL\t%s', v_err = '42501', coalesce(v_err, 'no error'));
+
+  select err into v_err from public.rls_matrix_do(
+    'insert into food_unit (spelling, unit_key, class) values (''bl7'', ''each'', ''count'')');
+  v_log := v_log || format(E'%s\tE6  signed-in · insert a food_unit must FAIL\t%s', v_err = '42501', coalesce(v_err, 'no error'));
+
+  select err, rows into v_err, v_n from public.rls_matrix_do(
+    'select * from search_foods(''bl7 fixture'', 5)');
+  v_log := v_log || format(E'%s\tE7  signed-in · search_foods finds the fixture\t%s', v_err is null and v_n = 1, coalesce(v_err, v_n || ' row'));
+
+  execute 'set local role anon';
+  perform set_config('request.jwt.claim.sub', '', true);
+  perform set_config('request.jwt.claims', '', true);
+
+  select count(*) into n from food;
+  v_log := v_log || format(E'%s\tE8  anon · select the food registry sees nothing\t%s row', n = 0, n);
+
+  select err into v_err from public.rls_matrix_do(
+    'select * from search_foods(''bl7 fixture'', 5)');
+  v_log := v_log || format(E'%s\tE9  anon · search_foods must FAIL\t%s', v_err = '42501', coalesce(v_err, 'no error'));
 
   -- ==========================================================================
   -- Report

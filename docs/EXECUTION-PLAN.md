@@ -1533,8 +1533,35 @@ inspectable.
 
 Roadmap: [ROADMAP.md Phase 29](./ROADMAP.md#phase-29--auto-nutrition-food-registry-ingredient-links-estimated-labels-planned--not-started)
 
-**Status: PLANNED (2026-08-24), not started.** Phase 28's first Deferred item, promoted to its
-own phase after the data source question was answered by measurement rather than assumption.
+**Status: 29a DONE (2026-08-25); 29b–d not started.** Phase 28's first Deferred item, promoted to
+its own phase after the data source question was answered by measurement rather than assumption.
+
+**29a, as landed — the deltas from the plan below, so 29b–c consume what exists rather than what
+was sketched:**
+
+- **`food_unit` is a fourth table** (not in the original three): units.json's SQL mirror, one row
+  per accepted spelling (`spelling` PK → `unit_key`, `class`, `factor`; `''` is the bare-count
+  marker). Added so 29c's `estimate_nutrition` reads a table the generator maintains instead of
+  restating conversions in a function body. Covered by the same RLS/grant/matrix/drop treatment.
+- **No `search_tsv` generated column on `food`.** The sketch's tsvector cannot reach
+  `food_alias` (a generated column sees one row of one table), so `search_foods` ranks
+  exact > prefix > trigram over `lower(display_name)` + `food_alias.alias`, with two `gin_trgm_ops`
+  indexes and a total order ending in `f.id`. Returns `(id, display_name)` only.
+- **Registry reads are signed-in-only** (`auth.uid() is not null` select policies; `anon` reads
+  come back empty rather than erroring, and `search_foods` is revoked from `anon` outright).
+- **foods.json carries a machine-owned `extracted` block per food** (per-100 g values, parsed
+  portions with their source modifier, derived `grams_per_ml` + which portion derived it);
+  authored top-level `per_100g` / `grams_per_ml` / `portions` win per map / value / unit key.
+  `tool/nutrition.dart` owns the merge; both tools are bundle-free except `fdc:extract`.
+- **Committed registry: 78 foods, 277 aliases, 174 portions.** All 104 distinct recipeData names
+  mapped (137/147 ingredient rows linkable); the 7 unlinkable names are documented in
+  `nutritionData/README.md`, including the proxy-mapping rule (`fdc_id` names the data source,
+  not an identity claim — rice vinegar → cider vinegar's row, dijon → yellow prepared).
+- **Matrix at 88** (was 79): section E, E1–E9. The registry write denial is double-locked
+  (revoked grant AND zero-policy RLS), so the non-vacuity ritual had to remove both to see red.
+- **B074 found during verification:** the documented B033 psql pipe mojibakes multibyte
+  characters; the corrected byte-faithful form is `cmd /c "docker exec -i … < file"`. The local
+  stack was rebuilt clean; probing the hosted project is an open owner action.
 
 The ask, in product terms: the editor's nutrition panel becomes **Automatic / Manual / None**.
 Automatic computes the per-serving label from the ingredients so the cook types nothing; Manual
@@ -1726,8 +1753,10 @@ which is worse than "not counted".
   `nutrition:check` (grep for `SUCCESS`, B006/B007).
 - `supabase db reset` fresh; the Gotcha 6 upgrade path; the B045 truly-clean path — named above
   as the one the FK ordering actually threatens.
-- `melos run db:rls` from 79 checks: registry read-only rows, RPC grants, the smuggling check —
-  each proven non-vacuous by one deliberate revert (BL-7 ritual).
+- `melos run db:rls` — **29a landed the registry rows and RPC-grant checks (79 → 88, §E)**, each
+  proven non-vacuous by one deliberate revert (BL-7 ritual; the registry's E2 needed *both* locks
+  removed — grant and policy — which is the defense-in-depth working). The source-smuggling check
+  is still 29c's.
 - `supabase/tests/nutrition_estimate.sql` in `database.yml`: fixture trees with known grams →
   exact labels, the unit ladder edge cases (mass, volume-with-density, named portion,
   unresolvable, optional, null quantity, added-sugar rule), rolled back.

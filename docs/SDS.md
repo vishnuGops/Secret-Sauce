@@ -116,6 +116,44 @@ It is client-writable, so it appears in both column grant lists, in `_writablePa
 `recipe_snapshot` needed no change — it is `to_jsonb(r) - 'search_tsv'`, so version snapshots pick
 the column up on their own.
 
+### 3.1 Food registry (Phase 29a)
+
+Four **reference-data** tables behind auto nutrition, populated only by
+`supabase/nutrition_foods.sql` (generated from `nutritionData/` — see its README for the
+authoring workflow) and read-only to every client role:
+
+- **`food`** — `id` (text slug PK), `display_name`, `fdc_id` (the USDA source row; a *proxy*
+  mapping borrows a nutritionally-equivalent row and says so in the JSON's `note`), the **11
+  per-100 g numeric columns named exactly as the label's jsonb keys** (FDC's EAV flattened, so
+  nothing translates between registry and label), `grams_per_ml` (null = volume units
+  unresolvable for this food), `is_added_sugar` (the estimator counts this food's total sugars
+  as added — the FDC bundle has zero added-sugar rows for generic foods).
+- **`food_alias`** — lowercase, globally unique input spellings → `food_id`. Covers the corpus
+  spelling of every ingredient the food should link (accented and unaccented).
+- **`food_portion`** — `(food_id, unit_key) → grams` for one named portion (`clove` = 3 g,
+  `each` = 50 g for an egg).
+- **`food_unit`** — the canonical unit registry from `units.json`, one row per accepted
+  spelling: `spelling` PK → `unit_key`, `class` (`mass` / `volume` / `count`), `factor` (grams
+  per unit for mass, ml per unit for volume, null for count). Spelling `''` is the bare-count
+  marker (`2 eggs`). 29c's `estimate_nutrition` reads this table; nothing in SQL restates a
+  conversion.
+
+**Access:** RLS select policies are `auth.uid() is not null` (signed-in only — the detail page
+reads the stored label; only the editor needs the registry), there are **zero write policies**,
+and the grants block also revokes DML from `authenticated` — two independent locks, so a client
+write fails `42501` at the grant layer before RLS is consulted, and removing either lock alone
+still denies (proven in `rls_matrix.sql` §E, checks E1–E9). `anon` reads come back empty.
+
+**`search_foods(p_query, p_limit)`** is the typeahead RPC: exact alias/name match, then prefix,
+then a `pg_trgm` tail over `lower(display_name)` and `food_alias.alias` (two `gin_trgm_ops`
+indexes), total order ending in `f.id`, limit clamped to 25, returns `(id, display_name)` only.
+`stable`, invoker-rights, revoked from `anon`, granted to `authenticated`.
+
+**Load order is load-bearing:** `db:reset` is drop → create → **nutrition** → seed → recipes →
+sim, and `config.toml`'s `sql_paths` lists `nutrition_foods.sql` before `seed_recipes.sql`,
+because 29b adds `ingredients.food_id references food(id) on delete set null`. `db:clean`
+deliberately spares the registry (reference data, not recipe data).
+
 **recipe_versions** — git-like immutable snapshots
 `id`, `recipe_id → recipes`, `version_number (int)`, `parent_version_id → recipe_versions` (nullable),
 `author_id → profiles`, `change_summary`, `content_snapshot (jsonb)` (full recipe body at that point),
@@ -303,7 +341,8 @@ It creates three throwaway `auth.users` (an owner, someone the owner shares a pr
 an unrelated signed-in stranger) plus a private and a public recipe with content, re-runs the whole
 matrix under `set local role authenticated` + `request.jwt.claims`, and **rolls the transaction
 back** — so it leaves no user, no recipe and no helper function behind and is safe against any
-database. 79 checks; a failure names the check and what actually happened.
+database. 88 checks (§E, the food registry's nine, joined in Phase 29a); a failure names the
+check and what actually happened.
 
 Its one helper, `rls_matrix_do(text)`, executes an arbitrary string as the calling role, which is
 how a "must FAIL" check is written without aborting the run. That is also a PostgREST RPC shape

@@ -129,6 +129,28 @@ scripts:
     run: dart run tool/sim.dart check
 
   # ---------------------------------------------------------------------------
+  # Food registry (docs/ROADMAP.md Phase 29). nutritionData/{foods,units}.json
+  # is the committed source; supabase/nutrition_foods.sql is generated from it.
+  # nutrition:* are pure file operations like recipes:*. fdc:extract is the one
+  # exception: it needs the 3.1 GB USDA CSV bundle on disk (never committed) —
+  # pass its path with --bundle=. Run it only when adding or refreshing foods.
+  # ---------------------------------------------------------------------------
+  fdc:extract:
+    description: Fill foods.json `extracted` blocks from the USDA CSV bundle.
+    run: dart run tool/fdc.dart
+  nutrition:validate:
+    description: Parse and lint nutritionData/{foods,units}.json. Writes nothing.
+    run: dart run tool/nutrition.dart validate
+
+  nutrition:gen:
+    description: Regenerate supabase/nutrition_foods.sql from nutritionData/.
+    run: dart run tool/nutrition.dart gen
+
+  nutrition:check:
+    description: Fail if supabase/nutrition_foods.sql is stale (used by CI).
+    run: dart run tool/nutrition.dart check
+
+  # ---------------------------------------------------------------------------
   # Database tasks. Require `psql` on PATH and a SUPABASE_DB_URL env var
   # (Supabase dashboard -> Project Settings -> Database -> Connection string).
   #   db:create  apply the schema      db:seed     load demo data
@@ -148,6 +170,10 @@ scripts:
     description: Load the authored recipes (supabase/seed_recipes.sql).
     run: dart run tool/db.dart recipes
 
+  db:nutrition:
+    description: Load the food registry (supabase/nutrition_foods.sql).
+    run: dart run tool/db.dart nutrition
+
   db:drop:
     description: Drop all app tables, types, and functions.
     run: dart run tool/db.dart drop
@@ -157,9 +183,10 @@ scripts:
     run: dart run tool/db.dart clean
 
   db:reset:
-    description: Drop, re-create, seed, load the authored recipes, and rebuild the
-      simulated population. Safe for the pinned standings in docs/SDS.md §10.7 —
-      sim.config.engage_existing is false, so only the ranks move.
+    description: Drop, re-create, load the food registry, seed, load the authored
+      recipes, and rebuild the simulated population. Safe for the pinned standings
+      in docs/SDS.md §10.7 — sim.config.engage_existing is false, so only the
+      ranks move.
     run: dart run tool/db.dart reset
 
   # ---------------------------------------------------------------------------

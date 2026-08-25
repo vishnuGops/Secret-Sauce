@@ -19,6 +19,7 @@ on:
       - 'supabase/**'
       - 'recipeData/**'
       - 'simData/**'
+      - 'nutritionData/**'
       - 'tool/**'
       - '.github/workflows/database.yml'
   pull_request:
@@ -27,6 +28,7 @@ on:
       - 'supabase/**'
       - 'recipeData/**'
       - 'simData/**'
+      - 'nutritionData/**'
       - 'tool/**'
       - '.github/workflows/database.yml'
 
@@ -67,10 +69,12 @@ jobs:
       # ------------------------------------------------------------------
       # Path 1 — a fresh database, the way a new machine sees the project.
       # ------------------------------------------------------------------
-      - name: Fresh apply — baseline, seed, recipes
+      - name: Fresh apply — baseline, nutrition, seed, recipes
         run: |
           $PSQL "$DB_URL" -f supabase/scripts/drop.sql
           for f in supabase/migrations/*.sql; do $PSQL "$DB_URL" -1 -f "$f"; done
+          # Registry before recipes: 29b gives ingredients a food_id FK into it.
+          $PSQL "$DB_URL" -1 -f supabase/nutrition_foods.sql
           $PSQL "$DB_URL" -1 -f supabase/seed.sql
           $PSQL "$DB_URL" -1 -f supabase/seed_recipes.sql
 
@@ -106,6 +110,7 @@ jobs:
       - name: Re-apply (idempotency)
         run: |
           for f in supabase/migrations/*.sql; do $PSQL "$DB_URL" -1 -f "$f"; done
+          $PSQL "$DB_URL" -1 -f supabase/nutrition_foods.sql
           $PSQL "$DB_URL" -1 -f supabase/seed.sql
           $PSQL "$DB_URL" -1 -f supabase/seed_recipes.sql
           $PSQL "$DB_URL" -f supabase/sim/3_sim_verify.sql
@@ -131,8 +136,10 @@ jobs:
           $PSQL "$DB_URL" -f supabase/scripts/drop.sql
           $PSQL "$DB_URL" -1 -f /tmp/previous_init.sql
           $PSQL "$DB_URL" -1 -f supabase/seed.sql
-          # Today's schema on top of yesterday's database.
+          # Today's schema on top of yesterday's database, then the registry —
+          # the B045 shape: its tables exist only after today's baseline runs.
           for f in supabase/migrations/*.sql; do $PSQL "$DB_URL" -1 -f "$f"; done
+          $PSQL "$DB_URL" -1 -f supabase/nutrition_foods.sql
 
       - name: Smoke — the surfaces the app actually calls
         run: |
@@ -141,6 +148,7 @@ jobs:
           $PSQL "$DB_URL" -c "select count(*) from recipes_search('chicken', 5, 0);"
           $PSQL "$DB_URL" -c "select count(*) from chefs_leaderboard(5, 0);"
           $PSQL "$DB_URL" -c "select count(*) from chefs_tier_counts();"
+          $PSQL "$DB_URL" -c "select count(*) from search_foods('butter', 5);"
 
       # A failure above leaves the stack running; this frees the runner either
       # way and keeps the logs from ending on a Docker teardown error.

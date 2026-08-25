@@ -1,0 +1,49 @@
+{
+  "_comment": [
+    "units.json — the canonical unit registry for auto nutrition (Phase 29a).",
+    "One entry per canonical unit; `spellings` are every accepted input form,",
+    "lowercase (matching is case-insensitive). `factor` is grams per 1 unit for",
+    "mass, millilitres per 1 unit for volume, and null for count — a count unit",
+    "resolves through food_portion, per food. The empty spelling \"\" is the",
+    "bare-count marker: an ingredient with a quantity and no unit ('2 eggs')",
+    "resolves through the 'each' portion.",
+    "`unresolvable` documents spellings the estimator deliberately skips — an",
+    "unknown spelling behaves identically, so this list is intent, not a gate.",
+    "Consumed by tool/nutrition.dart, which generates the food_unit table in",
+    "supabase/nutrition_foods.sql; the estimator (29c) reads that table, so this",
+    "file is the single source and nothing in SQL restates a conversion."
+  ],
+  "units": [
+    { "key": "g", "class": "mass", "factor": 1, "spellings": ["g", "gram", "grams"] },
+    { "key": "kg", "class": "mass", "factor": 1000, "spellings": ["kg", "kilogram", "kilograms"] },
+    { "key": "oz", "class": "mass", "factor": 28.3495, "spellings": ["oz", "ounce", "ounces"] },
+    { "key": "lb", "class": "mass", "factor": 453.592, "spellings": ["lb", "lbs", "pound", "pounds"] },
+    { "key": "ml", "class": "volume", "factor": 1, "spellings": ["ml", "millilitre", "millilitres", "milliliter", "milliliters"] },
+    { "key": "l", "class": "volume", "factor": 1000, "spellings": ["l", "litre", "litres", "liter", "liters"] },
+    { "key": "tsp", "class": "volume", "factor": 4.92892, "spellings": ["tsp", "teaspoon", "teaspoons"] },
+    { "key": "tbsp", "class": "volume", "factor": 14.7868, "spellings": ["tbsp", "tablespoon", "tablespoons"] },
+    { "key": "cup", "class": "volume", "factor": 236.588, "spellings": ["cup", "cups"] },
+    { "key": "fl-oz", "class": "volume", "factor": 29.5735, "spellings": ["fl oz", "fluid ounce", "fluid ounces"] },
+    { "key": "pint", "class": "volume", "factor": 473.176, "spellings": ["pint", "pints"] },
+    { "key": "each", "class": "count", "factor": null, "spellings": [""] },
+    { "key": "clove", "class": "count", "factor": null, "spellings": ["clove", "cloves"] },
+    { "key": "stalk", "class": "count", "factor": null, "spellings": ["stalk", "stalks"] },
+    { "key": "stick", "class": "count", "factor": null, "spellings": ["stick", "sticks"] },
+    { "key": "bunch", "class": "count", "factor": null, "spellings": ["bunch", "bunches"] },
+    { "key": "pkg", "class": "count", "factor": null, "spellings": ["pkg", "package", "packages"] },
+    { "key": "pouch", "class": "count", "factor": null, "spellings": ["pouch", "pouches"] },
+    { "key": "slice", "class": "count", "factor": null, "spellings": ["slice", "slices"] }
+  ],
+  "unresolvable": [
+    "handful",
+    "pinch",
+    "dash",
+    "to taste",
+    "bowl",
+    "bowls",
+    "large piece",
+    "small piece",
+    "cm",
+    "inch"
+  ]
+}

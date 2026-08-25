@@ -1,0 +1,3205 @@
+{
+  "_comment": [
+    "foods.json — the curated food registry for auto nutrition (Phase 29a).",
+    "One entry per food, ordered by slug. Authored fields: slug, display_name,",
+    "fdc_id, aliases, is_added_sugar, grams_per_ml, portions, note. The",
+    "`extracted` object is WRITTEN BY tool/fdc.dart from the USDA FoodData",
+    "Central CSV bundle — never edit it by hand; re-run `melos run fdc:extract`",
+    "instead. Authored `grams_per_ml` and `portions` win over extracted values",
+    "of the same unit. `fdc_id` names the data source, not an identity claim —",
+    "a proxy mapping (rice vinegar -> cider vinegar's row) is allowed when the",
+    "nutrition is equivalent and the `note` says so. Aliases are lowercase and",
+    "globally unique; they should cover the corpus spelling of every ingredient",
+    "the food is meant to link (see README.md for the workflow)."
+  ],
+  "foods": [
+    {
+      "slug": "active-dry-yeast",
+      "display_name": "Active dry yeast",
+      "fdc_id": 175043,
+      "aliases": [
+        "active dry yeast",
+        "yeast",
+        "instant yeast",
+        "dry yeast"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 325.0,
+          "protein_g": 40.44,
+          "total_fat_g": 7.61,
+          "total_carbs_g": 41.22,
+          "sodium_mg": 51.0,
+          "saturated_fat_g": 1.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 26.9,
+          "total_sugars_g": 0.0
+        },
+        "portions": [
+          {
+            "unit": "tbsp",
+            "grams": 12.0,
+            "from": "tbsp"
+          },
+          {
+            "unit": "tsp",
+            "grams": 4.0,
+            "from": "tsp"
+          }
+        ],
+        "grams_per_ml": 0.81,
+        "grams_per_ml_from": "tbsp"
+      }
+    },
+    {
+      "slug": "all-purpose-flour",
+      "display_name": "All-purpose flour",
+      "fdc_id": 168894,
+      "aliases": [
+        "all-purpose flour",
+        "all purpose flour",
+        "flour",
+        "plain flour",
+        "00 pizza flour",
+        "00 flour"
+      ],
+      "note": "00 pizza flour mapped here — nutritionally equivalent to all-purpose; FDC has no 00 row.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 364.0,
+          "protein_g": 10.33,
+          "total_fat_g": 0.98,
+          "total_carbs_g": 76.31,
+          "sodium_mg": 2.0,
+          "saturated_fat_g": 0.16,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 2.7,
+          "total_sugars_g": 0.27
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 125.0,
+            "from": "cup"
+          }
+        ],
+        "grams_per_ml": 0.53,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "asparagus",
+      "display_name": "Asparagus",
+      "fdc_id": 168389,
+      "aliases": [
+        "asparagus",
+        "asparagus spears"
+      ],
+      "portions": [
+        {
+          "unit": "bunch",
+          "grams": 450
+        }
+      ],
+      "note": "A market bunch of asparagus is about a pound; authored because FDC has only per-spear portions.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 20.0,
+          "protein_g": 2.2,
+          "total_fat_g": 0.12,
+          "total_carbs_g": 3.88,
+          "sodium_mg": 2.0,
+          "saturated_fat_g": 0.04,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 2.1,
+          "total_sugars_g": 1.88
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 134.0,
+            "from": "cup"
+          }
+        ],
+        "grams_per_ml": 0.57,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "avocado",
+      "display_name": "Avocado",
+      "fdc_id": 171705,
+      "aliases": [
+        "avocado",
+        "avocados",
+        "ripe avocados",
+        "ripe avocado"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 160.0,
+          "protein_g": 2.0,
+          "total_fat_g": 14.66,
+          "total_carbs_g": 8.53,
+          "sodium_mg": 7.0,
+          "saturated_fat_g": 2.13,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 6.7,
+          "total_sugars_g": 0.66
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 150.0,
+            "from": "cup, cubes"
+          },
+          {
+            "unit": "each",
+            "grams": 201.0,
+            "from": "avocado, NS as to Florida or California"
+          }
+        ],
+        "grams_per_ml": 0.63,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "baking-powder",
+      "display_name": "Baking powder",
+      "fdc_id": 172803,
+      "aliases": [
+        "baking powder"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 53.0,
+          "protein_g": 0.0,
+          "total_fat_g": 0.0,
+          "total_carbs_g": 27.7,
+          "sodium_mg": 10600.0,
+          "saturated_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 0.2,
+          "total_sugars_g": 0.0
+        },
+        "portions": [
+          {
+            "unit": "tsp",
+            "grams": 4.6,
+            "from": "tsp"
+          }
+        ],
+        "grams_per_ml": 0.93,
+        "grams_per_ml_from": "tsp"
+      }
+    },
+    {
+      "slug": "baking-soda",
+      "display_name": "Baking soda",
+      "fdc_id": 175040,
+      "aliases": [
+        "baking soda",
+        "bicarbonate of soda",
+        "sodium bicarbonate"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 0.0,
+          "protein_g": 0.0,
+          "total_fat_g": 0.0,
+          "total_carbs_g": 0.0,
+          "sodium_mg": 27360.0,
+          "saturated_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 0.0
+        },
+        "portions": [
+          {
+            "unit": "tsp",
+            "grams": 4.6,
+            "from": "tsp"
+          }
+        ],
+        "grams_per_ml": 0.93,
+        "grams_per_ml_from": "tsp"
+      }
+    },
+    {
+      "slug": "balsamic-vinegar",
+      "display_name": "Balsamic vinegar",
+      "fdc_id": 172241,
+      "aliases": [
+        "balsamic vinegar",
+        "golden balsamic vinegar",
+        "white balsamic vinegar"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 88.0,
+          "protein_g": 0.49,
+          "total_fat_g": 0.0,
+          "total_carbs_g": 17.03,
+          "sodium_mg": 23.0,
+          "saturated_fat_g": 0.0,
+          "trans_fat_g": 0.0,
+          "total_sugars_g": 14.95
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 255.0,
+            "from": "cup"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 16.0,
+            "from": "tbsp"
+          },
+          {
+            "unit": "tsp",
+            "grams": 5.3,
+            "from": "tsp"
+          }
+        ],
+        "grams_per_ml": 1.08,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "basil-fresh",
+      "display_name": "Fresh basil",
+      "fdc_id": 172232,
+      "aliases": [
+        "basil",
+        "fresh basil",
+        "fresh basil leaves",
+        "basil leaves"
+      ],
+      "portions": [
+        {
+          "unit": "bunch",
+          "grams": 60
+        }
+      ],
+      "note": "Bunch weight authored — a retail basil bunch runs 2–2.5 oz.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 23.0,
+          "protein_g": 3.15,
+          "total_fat_g": 0.64,
+          "total_carbs_g": 2.65,
+          "sodium_mg": 4.0,
+          "saturated_fat_g": 0.04,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 1.6,
+          "total_sugars_g": 0.3
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 24.0,
+            "from": "cup leaves, whole"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 2.65,
+            "from": "tbsp, chopped"
+          }
+        ],
+        "grams_per_ml": 0.1,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "black-pepper",
+      "display_name": "Black pepper",
+      "fdc_id": 170931,
+      "aliases": [
+        "black pepper",
+        "ground black pepper",
+        "pepper",
+        "cracked black pepper",
+        "freshly ground black pepper"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 251.0,
+          "protein_g": 10.39,
+          "total_fat_g": 3.26,
+          "total_carbs_g": 63.95,
+          "sodium_mg": 20.0,
+          "saturated_fat_g": 1.39,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 25.3,
+          "total_sugars_g": 0.64
+        },
+        "portions": [
+          {
+            "unit": "tbsp",
+            "grams": 6.9,
+            "from": "tbsp, ground"
+          },
+          {
+            "unit": "tsp",
+            "grams": 2.3,
+            "from": "tsp, ground"
+          }
+        ],
+        "grams_per_ml": 0.47,
+        "grams_per_ml_from": "tbsp"
+      }
+    },
+    {
+      "slug": "blueberries",
+      "display_name": "Blueberries",
+      "fdc_id": 171711,
+      "aliases": [
+        "blueberries",
+        "fresh blueberries",
+        "blueberry"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 57.0,
+          "protein_g": 0.74,
+          "total_fat_g": 0.33,
+          "total_carbs_g": 14.49,
+          "sodium_mg": 1.0,
+          "saturated_fat_g": 0.03,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 2.4,
+          "total_sugars_g": 9.96
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 148.0,
+            "from": "cup"
+          }
+        ],
+        "grams_per_ml": 0.63,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "brown-sugar",
+      "display_name": "Brown sugar",
+      "fdc_id": 168833,
+      "is_added_sugar": true,
+      "aliases": [
+        "brown sugar",
+        "light brown sugar",
+        "dark brown sugar"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 380.0,
+          "protein_g": 0.12,
+          "total_fat_g": 0.0,
+          "total_carbs_g": 98.09,
+          "sodium_mg": 28.0,
+          "saturated_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 97.02
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 220.0,
+            "from": "cup packed"
+          },
+          {
+            "unit": "tsp",
+            "grams": 3.0,
+            "from": "tsp unpacked"
+          }
+        ],
+        "grams_per_ml": 0.93,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "butter",
+      "display_name": "Butter (unsalted)",
+      "fdc_id": 173430,
+      "aliases": [
+        "butter",
+        "unsalted butter"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 717.0,
+          "protein_g": 0.85,
+          "total_fat_g": 81.11,
+          "total_carbs_g": 0.06,
+          "sodium_mg": 11.0,
+          "saturated_fat_g": 50.49,
+          "cholesterol_mg": 215.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 0.06
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 227.0,
+            "from": "cup"
+          },
+          {
+            "unit": "stick",
+            "grams": 113.0,
+            "from": "stick"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 14.2,
+            "from": "tbsp"
+          }
+        ],
+        "grams_per_ml": 0.96,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "butter-salted",
+      "display_name": "Butter (salted)",
+      "fdc_id": 173410,
+      "aliases": [
+        "salted butter"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 717.0,
+          "protein_g": 0.85,
+          "total_fat_g": 81.11,
+          "total_carbs_g": 0.06,
+          "sodium_mg": 643.0,
+          "saturated_fat_g": 51.37,
+          "trans_fat_g": 3.28,
+          "cholesterol_mg": 215.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 0.06
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 227.0,
+            "from": "cup"
+          },
+          {
+            "unit": "stick",
+            "grams": 113.0,
+            "from": "stick"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 14.2,
+            "from": "tbsp"
+          }
+        ],
+        "grams_per_ml": 0.96,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "buttermilk",
+      "display_name": "Buttermilk",
+      "fdc_id": 172225,
+      "aliases": [
+        "buttermilk",
+        "cultured buttermilk"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 62.0,
+          "protein_g": 3.21,
+          "total_fat_g": 3.31,
+          "total_carbs_g": 4.88,
+          "sodium_mg": 105.0,
+          "saturated_fat_g": 1.9,
+          "cholesterol_mg": 11.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 4.88
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 245.0,
+            "from": "cup"
+          }
+        ],
+        "grams_per_ml": 1.04,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "canola-oil",
+      "display_name": "Canola oil",
+      "fdc_id": 172336,
+      "aliases": [
+        "canola oil",
+        "oil",
+        "vegetable oil",
+        "neutral oil",
+        "rapeseed oil"
+      ],
+      "note": "The registry's neutral-oil default; a bare 'oil' links here.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 884.0,
+          "protein_g": 0.0,
+          "total_fat_g": 100.0,
+          "total_carbs_g": 0.0,
+          "sodium_mg": 0.0,
+          "saturated_fat_g": 7.37,
+          "trans_fat_g": 0.4,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 0.0
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 218.0,
+            "from": "cup"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 14.0,
+            "from": "tbsp"
+          },
+          {
+            "unit": "tsp",
+            "grams": 4.5,
+            "from": "tsp"
+          }
+        ],
+        "grams_per_ml": 0.92,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "cherry-tomatoes",
+      "display_name": "Cherry tomatoes",
+      "fdc_id": 321360,
+      "aliases": [
+        "cherry tomatoes",
+        "grape tomatoes",
+        "cherry tomato"
+      ],
+      "portions": [
+        {
+          "unit": "pint",
+          "grams": 300
+        }
+      ],
+      "note": "Foundation grape-tomato row (SR has none). Dry-pint clamshell authored at ~10.5 oz.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 27.0,
+          "protein_g": 0.83,
+          "total_fat_g": 0.63,
+          "total_carbs_g": 5.51,
+          "sodium_mg": 6.0,
+          "dietary_fiber_g": 2.1
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 152.0,
+            "from": ""
+          },
+          {
+            "unit": "each",
+            "grams": 9.94,
+            "from": ""
+          }
+        ],
+        "grams_per_ml": 0.64,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "chicken-thigh",
+      "display_name": "Chicken thigh (boneless, skinless)",
+      "fdc_id": 173627,
+      "aliases": [
+        "boneless chicken thigh",
+        "chicken thigh",
+        "chicken thighs",
+        "boneless skinless chicken thighs"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 121.0,
+          "protein_g": 19.66,
+          "total_fat_g": 4.12,
+          "total_carbs_g": 0.0,
+          "sodium_mg": 95.0,
+          "saturated_fat_g": 1.1,
+          "trans_fat_g": 0.02,
+          "cholesterol_mg": 94.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 0.0
+        },
+        "portions": [
+          {
+            "unit": "each",
+            "grams": 149.0,
+            "from": "thigh without skin"
+          },
+          {
+            "unit": "oz",
+            "grams": 28.25,
+            "from": "oz"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "chocolate-chips",
+      "display_name": "Chocolate chips (semisweet)",
+      "fdc_id": 167976,
+      "is_added_sugar": true,
+      "aliases": [
+        "chocolate chips",
+        "semisweet chocolate chips",
+        "semi-sweet chocolate chips",
+        "dark chocolate chips"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 480.0,
+          "protein_g": 4.2,
+          "total_fat_g": 30.0,
+          "total_carbs_g": 63.9,
+          "sodium_mg": 11.0,
+          "saturated_fat_g": 17.75,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 5.9,
+          "total_sugars_g": 54.5
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 182.0,
+            "from": "cup large chips"
+          },
+          {
+            "unit": "oz",
+            "grams": 28.35,
+            "from": "oz (approx 60 pcs)"
+          }
+        ],
+        "grams_per_ml": 0.77,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "cocoa-powder",
+      "display_name": "Cocoa powder (unsweetened)",
+      "fdc_id": 169593,
+      "aliases": [
+        "unsweetened cocoa powder",
+        "cocoa powder",
+        "cocoa",
+        "dutch process cocoa"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 228.0,
+          "protein_g": 19.6,
+          "total_fat_g": 13.7,
+          "total_carbs_g": 57.9,
+          "sodium_mg": 21.0,
+          "saturated_fat_g": 8.07,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 37.0,
+          "total_sugars_g": 1.75
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 86.0,
+            "from": "cup"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 5.4,
+            "from": "tbsp"
+          }
+        ],
+        "grams_per_ml": 0.36,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "coriander",
+      "display_name": "Fresh coriander (cilantro)",
+      "fdc_id": 169997,
+      "aliases": [
+        "fresh coriander",
+        "coriander",
+        "cilantro",
+        "fresh cilantro",
+        "coriander leaves"
+      ],
+      "portions": [
+        {
+          "unit": "bunch",
+          "grams": 93
+        }
+      ],
+      "note": "Bunch weight authored — a retail cilantro bunch is ~3 oz.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 23.0,
+          "protein_g": 2.13,
+          "total_fat_g": 0.52,
+          "total_carbs_g": 3.67,
+          "sodium_mg": 46.0,
+          "saturated_fat_g": 0.01,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 2.8,
+          "total_sugars_g": 0.87
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 16.0,
+            "from": "cup"
+          }
+        ],
+        "grams_per_ml": 0.07,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "cornstarch",
+      "display_name": "Cornstarch",
+      "fdc_id": 169698,
+      "aliases": [
+        "cornstarch",
+        "corn starch",
+        "cornflour"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 381.0,
+          "protein_g": 0.26,
+          "total_fat_g": 0.05,
+          "total_carbs_g": 91.27,
+          "sodium_mg": 9.0,
+          "saturated_fat_g": 0.01,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 0.9,
+          "total_sugars_g": 0.0
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 128.0,
+            "from": "cup"
+          }
+        ],
+        "grams_per_ml": 0.54,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "cucumber",
+      "display_name": "Cucumber",
+      "fdc_id": 168409,
+      "aliases": [
+        "cucumber",
+        "cucumbers",
+        "persian cucumbers",
+        "persian cucumber",
+        "english cucumber"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 15.0,
+          "protein_g": 0.65,
+          "total_fat_g": 0.11,
+          "total_carbs_g": 3.63,
+          "sodium_mg": 2.0,
+          "saturated_fat_g": 0.04,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 0.5,
+          "total_sugars_g": 1.67
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 104.0,
+            "from": "cup slices"
+          },
+          {
+            "unit": "each",
+            "grams": 301.0,
+            "from": "cucumber (8-1/4\")"
+          }
+        ],
+        "grams_per_ml": 0.44,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "dark-chocolate",
+      "display_name": "Dark chocolate (70–85%)",
+      "fdc_id": 170273,
+      "is_added_sugar": true,
+      "aliases": [
+        "dark chocolate",
+        "bittersweet chocolate",
+        "70% chocolate"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 598.0,
+          "protein_g": 7.79,
+          "total_fat_g": 42.63,
+          "total_carbs_g": 45.9,
+          "sodium_mg": 20.0,
+          "saturated_fat_g": 24.49,
+          "trans_fat_g": 0.03,
+          "cholesterol_mg": 3.0,
+          "dietary_fiber_g": 10.9,
+          "total_sugars_g": 23.99
+        },
+        "portions": [
+          {
+            "unit": "oz",
+            "grams": 28.35,
+            "from": "oz"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "dijon-mustard",
+      "display_name": "Dijon mustard",
+      "fdc_id": 172234,
+      "aliases": [
+        "dijon mustard",
+        "mustard",
+        "whole-grain mustard"
+      ],
+      "note": "Proxy: FDC's only generic prepared mustard is yellow; dijon is nutritionally equivalent at label precision.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 60.0,
+          "protein_g": 3.74,
+          "total_fat_g": 3.34,
+          "total_carbs_g": 5.83,
+          "sodium_mg": 1104.0,
+          "saturated_fat_g": 0.21,
+          "trans_fat_g": 0.01,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 4.0,
+          "total_sugars_g": 0.92
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 249.0,
+            "from": "cup"
+          },
+          {
+            "unit": "tsp",
+            "grams": 5.0,
+            "from": "tsp or 1 packet"
+          }
+        ],
+        "grams_per_ml": 1.05,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "dill",
+      "display_name": "Fresh dill",
+      "fdc_id": 172233,
+      "aliases": [
+        "fresh dill",
+        "dill",
+        "dill weed"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 43.0,
+          "protein_g": 3.46,
+          "total_fat_g": 1.12,
+          "total_carbs_g": 7.02,
+          "sodium_mg": 61.0,
+          "saturated_fat_g": 0.06,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 2.1
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 8.9,
+            "from": "cup sprigs"
+          }
+        ],
+        "grams_per_ml": 0.04,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "egg",
+      "display_name": "Egg",
+      "fdc_id": 171287,
+      "aliases": [
+        "egg",
+        "eggs",
+        "whole egg",
+        "large egg",
+        "large eggs"
+      ],
+      "portions": [
+        {
+          "unit": "each",
+          "grams": 50
+        }
+      ],
+      "note": "One egg is a LARGE egg (50 g) by baking convention — FDC's medium row would win the parser's fallback otherwise.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 143.0,
+          "protein_g": 12.56,
+          "total_fat_g": 9.51,
+          "total_carbs_g": 0.72,
+          "sodium_mg": 142.0,
+          "saturated_fat_g": 3.13,
+          "trans_fat_g": 0.04,
+          "cholesterol_mg": 372.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 0.37
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 243.0,
+            "from": "cup (4.86 large eggs)"
+          },
+          {
+            "unit": "each",
+            "grams": 44.0,
+            "from": "medium"
+          }
+        ],
+        "grams_per_ml": 1.03,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "egg-yolk",
+      "display_name": "Egg yolk",
+      "fdc_id": 172184,
+      "aliases": [
+        "egg yolk",
+        "egg yolks"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 322.0,
+          "protein_g": 15.86,
+          "total_fat_g": 26.54,
+          "total_carbs_g": 3.59,
+          "sodium_mg": 48.0,
+          "saturated_fat_g": 9.55,
+          "cholesterol_mg": 1085.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 0.56
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 243.0,
+            "from": "cup"
+          },
+          {
+            "unit": "each",
+            "grams": 17.0,
+            "from": "large"
+          }
+        ],
+        "grams_per_ml": 1.03,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "eggplant",
+      "display_name": "Eggplant",
+      "fdc_id": 169228,
+      "aliases": [
+        "eggplant",
+        "aubergine",
+        "eggplants"
+      ],
+      "portions": [
+        {
+          "unit": "each",
+          "grams": 548
+        }
+      ],
+      "note": "FDC's whole-eggplant portion (~1.25 lb), authored because the modifier does not parse to a size word.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 25.0,
+          "protein_g": 0.98,
+          "total_fat_g": 0.18,
+          "total_carbs_g": 5.88,
+          "sodium_mg": 2.0,
+          "saturated_fat_g": 0.03,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 3.0,
+          "total_sugars_g": 3.53
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 82.0,
+            "from": "cup, cubes"
+          },
+          {
+            "unit": "each",
+            "grams": 458.0,
+            "from": "eggplant, peeled (yield from 1-1/4 lb)"
+          }
+        ],
+        "grams_per_ml": 0.35,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "flat-leaf-parsley",
+      "display_name": "Flat-leaf parsley",
+      "fdc_id": 170416,
+      "aliases": [
+        "flat-leaf parsley",
+        "parsley",
+        "fresh parsley",
+        "italian parsley"
+      ],
+      "portions": [
+        {
+          "unit": "bunch",
+          "grams": 60
+        }
+      ],
+      "note": "Bunch weight authored — a retail parsley bunch is ~2 oz.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 36.0,
+          "protein_g": 2.97,
+          "total_fat_g": 0.79,
+          "total_carbs_g": 6.33,
+          "sodium_mg": 56.0,
+          "saturated_fat_g": 0.13,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 3.3,
+          "total_sugars_g": 0.85
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 60.0,
+            "from": "cup chopped"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 3.8,
+            "from": "tbsp"
+          }
+        ],
+        "grams_per_ml": 0.25,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "garlic",
+      "display_name": "Garlic",
+      "fdc_id": 169230,
+      "aliases": [
+        "garlic",
+        "fresh garlic",
+        "garlic cloves"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 149.0,
+          "protein_g": 6.36,
+          "total_fat_g": 0.5,
+          "total_carbs_g": 33.06,
+          "sodium_mg": 17.0,
+          "saturated_fat_g": 0.09,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 2.1,
+          "total_sugars_g": 1.0
+        },
+        "portions": [
+          {
+            "unit": "clove",
+            "grams": 3.0,
+            "from": "clove"
+          },
+          {
+            "unit": "cup",
+            "grams": 136.0,
+            "from": "cup"
+          },
+          {
+            "unit": "tsp",
+            "grams": 2.8,
+            "from": "tsp"
+          }
+        ],
+        "grams_per_ml": 0.57,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "garlic-powder",
+      "display_name": "Garlic powder",
+      "fdc_id": 171325,
+      "aliases": [
+        "garlic powder"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 331.0,
+          "protein_g": 16.55,
+          "total_fat_g": 0.73,
+          "total_carbs_g": 72.73,
+          "sodium_mg": 60.0,
+          "saturated_fat_g": 0.25,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 9.0,
+          "total_sugars_g": 2.43
+        },
+        "portions": [
+          {
+            "unit": "tbsp",
+            "grams": 9.7,
+            "from": "tbsp"
+          },
+          {
+            "unit": "tsp",
+            "grams": 3.1,
+            "from": "tsp"
+          }
+        ],
+        "grams_per_ml": 0.66,
+        "grams_per_ml_from": "tbsp"
+      }
+    },
+    {
+      "slug": "ginger",
+      "display_name": "Fresh ginger",
+      "fdc_id": 169231,
+      "aliases": [
+        "fresh ginger",
+        "ginger",
+        "ginger root",
+        "grated ginger"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 80.0,
+          "protein_g": 1.82,
+          "total_fat_g": 0.75,
+          "total_carbs_g": 17.77,
+          "sodium_mg": 13.0,
+          "saturated_fat_g": 0.2,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 2.0,
+          "total_sugars_g": 1.7
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 96.0,
+            "from": "cup slices (1\" dia)"
+          },
+          {
+            "unit": "slice",
+            "grams": 2.2,
+            "from": "slices (1\" dia)"
+          },
+          {
+            "unit": "tsp",
+            "grams": 2.0,
+            "from": "tsp"
+          }
+        ],
+        "grams_per_ml": 0.41,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "granulated-sugar",
+      "display_name": "Granulated sugar",
+      "fdc_id": 169655,
+      "is_added_sugar": true,
+      "aliases": [
+        "sugar",
+        "white sugar",
+        "granulated sugar",
+        "granulated cane sugar",
+        "organic cane sugar",
+        "organic granulated cane sugar",
+        "cane sugar",
+        "caster sugar"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 387.0,
+          "protein_g": 0.0,
+          "total_fat_g": 0.0,
+          "total_carbs_g": 99.98,
+          "sodium_mg": 1.0,
+          "saturated_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 99.8
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 200.0,
+            "from": "cup"
+          },
+          {
+            "unit": "tsp",
+            "grams": 4.2,
+            "from": "tsp"
+          }
+        ],
+        "grams_per_ml": 0.85,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "green-onions",
+      "display_name": "Green onions (scallions)",
+      "fdc_id": 170005,
+      "aliases": [
+        "green onions",
+        "green onion",
+        "scallions",
+        "scallion",
+        "spring onions",
+        "spring onion"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 32.0,
+          "protein_g": 1.83,
+          "total_fat_g": 0.19,
+          "total_carbs_g": 7.34,
+          "sodium_mg": 16.0,
+          "saturated_fat_g": 0.03,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 2.6,
+          "total_sugars_g": 2.33
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 100.0,
+            "from": "cup, chopped"
+          },
+          {
+            "unit": "each",
+            "grams": 15.0,
+            "from": "medium (4-1/8\" long)"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 6.0,
+            "from": "tbsp chopped"
+          }
+        ],
+        "grams_per_ml": 0.42,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "gruyere",
+      "display_name": "Gruyère",
+      "fdc_id": 171242,
+      "aliases": [
+        "gruyère",
+        "gruyere",
+        "gruyere cheese"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 413.0,
+          "protein_g": 29.81,
+          "total_fat_g": 32.34,
+          "total_carbs_g": 0.36,
+          "sodium_mg": 714.0,
+          "saturated_fat_g": 18.91,
+          "cholesterol_mg": 110.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 0.36
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 132.0,
+            "from": "cup, diced"
+          },
+          {
+            "unit": "oz",
+            "grams": 28.35,
+            "from": "oz"
+          },
+          {
+            "unit": "pkg",
+            "grams": 170.0,
+            "from": "package (6 oz)"
+          },
+          {
+            "unit": "slice",
+            "grams": 28.0,
+            "from": "slice (1 oz)"
+          }
+        ],
+        "grams_per_ml": 0.56,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "heavy-cream",
+      "display_name": "Heavy cream",
+      "fdc_id": 170859,
+      "aliases": [
+        "heavy cream",
+        "heavy whipping cream",
+        "double cream",
+        "whipping cream"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 340.0,
+          "protein_g": 2.84,
+          "total_fat_g": 36.08,
+          "total_carbs_g": 2.84,
+          "sodium_mg": 27.0,
+          "saturated_fat_g": 23.03,
+          "trans_fat_g": 1.24,
+          "cholesterol_mg": 113.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 2.92
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 120.0,
+            "from": "cup, whipped"
+          },
+          {
+            "unit": "fl-oz",
+            "grams": 29.8,
+            "from": "fl oz"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 15.0,
+            "from": "tbsp"
+          }
+        ],
+        "grams_per_ml": 0.51,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "honey",
+      "display_name": "Honey",
+      "fdc_id": 169640,
+      "is_added_sugar": true,
+      "aliases": [
+        "honey"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 304.0,
+          "protein_g": 0.3,
+          "total_fat_g": 0.0,
+          "total_carbs_g": 82.4,
+          "sodium_mg": 4.0,
+          "saturated_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 0.2,
+          "total_sugars_g": 82.12
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 339.0,
+            "from": "cup"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 21.0,
+            "from": "tbsp"
+          }
+        ],
+        "grams_per_ml": 1.43,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "jalapeno",
+      "display_name": "Jalapeño",
+      "fdc_id": 168576,
+      "aliases": [
+        "jalapeño",
+        "jalapeno",
+        "jalapeños",
+        "jalapenos"
+      ],
+      "portions": [
+        {
+          "unit": "each",
+          "grams": 14
+        }
+      ],
+      "note": "FDC's per-pepper portion, authored because the modifier ('pepper') defeats the parser.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 29.0,
+          "protein_g": 0.91,
+          "total_fat_g": 0.37,
+          "total_carbs_g": 6.5,
+          "sodium_mg": 3.0,
+          "saturated_fat_g": 0.09,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 2.8,
+          "total_sugars_g": 4.12
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 90.0,
+            "from": "cup, sliced"
+          }
+        ],
+        "grams_per_ml": 0.38,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "kosher-salt",
+      "display_name": "Salt",
+      "fdc_id": 173468,
+      "aliases": [
+        "salt",
+        "kosher salt",
+        "sea salt",
+        "table salt",
+        "fine sea salt",
+        "flaky salt"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 0.0,
+          "protein_g": 0.0,
+          "total_fat_g": 0.0,
+          "total_carbs_g": 0.0,
+          "sodium_mg": 38758.0,
+          "saturated_fat_g": 0.0,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 0.0
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 292.0,
+            "from": "cup"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 18.0,
+            "from": "tbsp"
+          },
+          {
+            "unit": "tsp",
+            "grams": 6.0,
+            "from": "tsp"
+          }
+        ],
+        "grams_per_ml": 1.23,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "leek",
+      "display_name": "Leek",
+      "fdc_id": 169246,
+      "aliases": [
+        "leek",
+        "leeks"
+      ],
+      "portions": [
+        {
+          "unit": "each",
+          "grams": 89
+        }
+      ],
+      "note": "FDC's per-leek portion, authored because the modifier ('leek') needs the display-name rule.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 61.0,
+          "protein_g": 1.5,
+          "total_fat_g": 0.3,
+          "total_carbs_g": 14.15,
+          "sodium_mg": 20.0,
+          "saturated_fat_g": 0.04,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 1.8,
+          "total_sugars_g": 3.9
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 89.0,
+            "from": "cup"
+          },
+          {
+            "unit": "each",
+            "grams": 89.0,
+            "from": "leek"
+          },
+          {
+            "unit": "slice",
+            "grams": 6.0,
+            "from": "slice"
+          }
+        ],
+        "grams_per_ml": 0.38,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "lemon",
+      "display_name": "Lemon",
+      "fdc_id": 167746,
+      "aliases": [
+        "lemon",
+        "lemons"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 29.0,
+          "protein_g": 1.1,
+          "total_fat_g": 0.3,
+          "total_carbs_g": 9.32,
+          "sodium_mg": 2.0,
+          "saturated_fat_g": 0.04,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 2.8,
+          "total_sugars_g": 2.5
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 212.0,
+            "from": "cup, sections"
+          },
+          {
+            "unit": "each",
+            "grams": 58.0,
+            "from": "fruit (2-1/8\" dia)"
+          }
+        ],
+        "grams_per_ml": 0.9,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "lemon-juice",
+      "display_name": "Lemon juice",
+      "fdc_id": 167747,
+      "aliases": [
+        "lemon juice",
+        "fresh lemon juice",
+        "juice of lemon"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 22.0,
+          "protein_g": 0.35,
+          "total_fat_g": 0.24,
+          "total_carbs_g": 6.9,
+          "sodium_mg": 1.0,
+          "saturated_fat_g": 0.04,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 0.3,
+          "total_sugars_g": 2.52
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 244.0,
+            "from": "cup"
+          },
+          {
+            "unit": "each",
+            "grams": 48.0,
+            "from": "lemon yields"
+          },
+          {
+            "unit": "fl-oz",
+            "grams": 30.5,
+            "from": "fl oz"
+          }
+        ],
+        "grams_per_ml": 1.03,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "lemon-zest",
+      "display_name": "Lemon zest",
+      "fdc_id": 167749,
+      "aliases": [
+        "lemon zest",
+        "lemon peel",
+        "zest of lemon"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 47.0,
+          "protein_g": 1.5,
+          "total_fat_g": 0.3,
+          "total_carbs_g": 16.0,
+          "sodium_mg": 6.0,
+          "saturated_fat_g": 0.04,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 10.6,
+          "total_sugars_g": 4.17
+        },
+        "portions": [
+          {
+            "unit": "tbsp",
+            "grams": 6.0,
+            "from": "tbsp"
+          },
+          {
+            "unit": "tsp",
+            "grams": 2.0,
+            "from": "tsp"
+          }
+        ],
+        "grams_per_ml": 0.41,
+        "grams_per_ml_from": "tbsp"
+      }
+    },
+    {
+      "slug": "lime",
+      "display_name": "Lime",
+      "fdc_id": 168155,
+      "aliases": [
+        "lime",
+        "limes"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 30.0,
+          "protein_g": 0.7,
+          "total_fat_g": 0.2,
+          "total_carbs_g": 10.54,
+          "sodium_mg": 2.0,
+          "saturated_fat_g": 0.02,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 2.8,
+          "total_sugars_g": 1.69
+        },
+        "portions": [
+          {
+            "unit": "each",
+            "grams": 67.0,
+            "from": "fruit (2\" dia)"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "mini-sweet-peppers",
+      "display_name": "Mini sweet peppers",
+      "fdc_id": 170108,
+      "aliases": [
+        "mini sweet peppers",
+        "mini sweet pepper",
+        "mini peppers"
+      ],
+      "portions": [
+        {
+          "unit": "each",
+          "grams": 30
+        }
+      ],
+      "note": "Same FDC row as red bell pepper; separate entry so a bare count means one ~30 g mini, not a 119 g bell.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 26.0,
+          "protein_g": 0.99,
+          "total_fat_g": 0.3,
+          "total_carbs_g": 6.03,
+          "sodium_mg": 4.0,
+          "saturated_fat_g": 0.06,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 2.1,
+          "total_sugars_g": 4.2
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 149.0,
+            "from": "cup, chopped"
+          },
+          {
+            "unit": "each",
+            "grams": 119.0,
+            "from": "medium (approx 2-3/4\" long, 2-1/2 dia.)"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 9.3,
+            "from": "tablespoon"
+          }
+        ],
+        "grams_per_ml": 0.63,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "mozzarella",
+      "display_name": "Fresh mozzarella",
+      "fdc_id": 170845,
+      "aliases": [
+        "fresh mozzarella",
+        "mozzarella",
+        "mozzarella cheese",
+        "buffalo mozzarella"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 299.0,
+          "protein_g": 22.17,
+          "total_fat_g": 22.14,
+          "total_carbs_g": 2.4,
+          "sodium_mg": 486.0,
+          "saturated_fat_g": 13.9,
+          "cholesterol_mg": 79.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 0.0
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 112.0,
+            "from": "cup, shredded"
+          },
+          {
+            "unit": "oz",
+            "grams": 28.35,
+            "from": "oz"
+          },
+          {
+            "unit": "slice",
+            "grams": 28.33,
+            "from": "slices"
+          }
+        ],
+        "grams_per_ml": 0.47,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "nectarine",
+      "display_name": "Nectarine",
+      "fdc_id": 169914,
+      "aliases": [
+        "nectarine",
+        "nectarines"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 44.0,
+          "protein_g": 1.06,
+          "total_fat_g": 0.32,
+          "total_carbs_g": 10.55,
+          "sodium_mg": 0.0,
+          "saturated_fat_g": 0.03,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 1.7,
+          "total_sugars_g": 7.89
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 143.0,
+            "from": "cup slices"
+          },
+          {
+            "unit": "each",
+            "grams": 142.0,
+            "from": "medium (2-1/2\" dia)"
+          }
+        ],
+        "grams_per_ml": 0.6,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "olive-oil",
+      "display_name": "Olive oil",
+      "fdc_id": 171413,
+      "aliases": [
+        "olive oil",
+        "extra-virgin olive oil",
+        "extra virgin olive oil",
+        "evoo"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 884.0,
+          "protein_g": 0.0,
+          "total_fat_g": 100.0,
+          "total_carbs_g": 0.0,
+          "sodium_mg": 2.0,
+          "saturated_fat_g": 13.81,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 0.0
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 216.0,
+            "from": "cup"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 13.5,
+            "from": "tablespoon"
+          },
+          {
+            "unit": "tsp",
+            "grams": 4.5,
+            "from": "tsp"
+          }
+        ],
+        "grams_per_ml": 0.91,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "onion",
+      "display_name": "Onion",
+      "fdc_id": 170000,
+      "aliases": [
+        "onion",
+        "onions",
+        "yellow onion",
+        "red onion",
+        "white onion",
+        "brown onion"
+      ],
+      "note": "One row serves every raw-onion colour — the label difference is below display precision.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 40.0,
+          "protein_g": 1.1,
+          "total_fat_g": 0.1,
+          "total_carbs_g": 9.34,
+          "sodium_mg": 4.0,
+          "saturated_fat_g": 0.04,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 1.7,
+          "total_sugars_g": 4.24
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 160.0,
+            "from": "cup, chopped"
+          },
+          {
+            "unit": "each",
+            "grams": 110.0,
+            "from": "medium (2-1/2\" dia)"
+          },
+          {
+            "unit": "slice",
+            "grams": 38.0,
+            "from": "slice, large (1/4\" thick)"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 10.0,
+            "from": "tbsp chopped"
+          }
+        ],
+        "grams_per_ml": 0.68,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "orange",
+      "display_name": "Orange",
+      "fdc_id": 169097,
+      "aliases": [
+        "orange",
+        "oranges"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 47.0,
+          "protein_g": 0.94,
+          "total_fat_g": 0.12,
+          "total_carbs_g": 11.75,
+          "sodium_mg": 0.0,
+          "saturated_fat_g": 0.02,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 2.4,
+          "total_sugars_g": 9.35
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 180.0,
+            "from": "cup, sections"
+          },
+          {
+            "unit": "each",
+            "grams": 131.0,
+            "from": "fruit (2-5/8\" dia)"
+          }
+        ],
+        "grams_per_ml": 0.76,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "panko",
+      "display_name": "Panko bread crumbs",
+      "fdc_id": 174928,
+      "aliases": [
+        "panko bread crumbs",
+        "panko",
+        "bread crumbs",
+        "breadcrumbs",
+        "dried breadcrumbs"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 395.0,
+          "protein_g": 13.35,
+          "total_fat_g": 5.3,
+          "total_carbs_g": 71.98,
+          "sodium_mg": 732.0,
+          "saturated_fat_g": 1.2,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 4.5,
+          "total_sugars_g": 6.2
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 108.0,
+            "from": "cup"
+          },
+          {
+            "unit": "oz",
+            "grams": 28.35,
+            "from": "oz"
+          }
+        ],
+        "grams_per_ml": 0.46,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "parmesan",
+      "display_name": "Parmesan",
+      "fdc_id": 171247,
+      "aliases": [
+        "parmesan",
+        "parmesan cheese",
+        "parmigiano-reggiano",
+        "grated parmesan"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 420.0,
+          "protein_g": 28.42,
+          "total_fat_g": 27.84,
+          "total_carbs_g": 13.91,
+          "sodium_mg": 1804.0,
+          "saturated_fat_g": 15.37,
+          "trans_fat_g": 0.88,
+          "cholesterol_mg": 86.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 0.07
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 100.0,
+            "from": "cup"
+          },
+          {
+            "unit": "oz",
+            "grams": 28.35,
+            "from": "oz"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 5.0,
+            "from": "tbsp"
+          }
+        ],
+        "grams_per_ml": 0.42,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "peas",
+      "display_name": "Green peas (frozen)",
+      "fdc_id": 170016,
+      "aliases": [
+        "peas",
+        "green peas",
+        "frozen peas",
+        "petits pois"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 77.0,
+          "protein_g": 5.22,
+          "total_fat_g": 0.4,
+          "total_carbs_g": 13.62,
+          "sodium_mg": 108.0,
+          "saturated_fat_g": 0.07,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 4.5,
+          "total_sugars_g": 5.0
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 134.0,
+            "from": "cup"
+          },
+          {
+            "unit": "pkg",
+            "grams": 284.0,
+            "from": "package"
+          }
+        ],
+        "grams_per_ml": 0.57,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "pie-crust",
+      "display_name": "Pie crust (refrigerated)",
+      "fdc_id": 167932,
+      "aliases": [
+        "refrigerated pie crust",
+        "pie crust",
+        "shortcrust pastry"
+      ],
+      "portions": [
+        {
+          "unit": "each",
+          "grams": 229
+        }
+      ],
+      "note": "FDC's per-crust portion, authored because the modifier ('pie crust') needs the display-name rule.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 445.0,
+          "protein_g": 2.97,
+          "total_fat_g": 25.46,
+          "total_carbs_g": 51.11,
+          "sodium_mg": 409.0,
+          "saturated_fat_g": 9.6,
+          "dietary_fiber_g": 1.8
+        },
+        "portions": [
+          {
+            "unit": "each",
+            "grams": 229.0,
+            "from": "pie crust (average weight)"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "pineapple",
+      "display_name": "Pineapple",
+      "fdc_id": 169124,
+      "aliases": [
+        "pineapple",
+        "fresh pineapple",
+        "pineapple chunks"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 50.0,
+          "protein_g": 0.54,
+          "total_fat_g": 0.12,
+          "total_carbs_g": 13.12,
+          "sodium_mg": 1.0,
+          "saturated_fat_g": 0.01,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 1.4,
+          "total_sugars_g": 9.85
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 165.0,
+            "from": "cup, chunks"
+          },
+          {
+            "unit": "each",
+            "grams": 905.0,
+            "from": "fruit"
+          },
+          {
+            "unit": "slice",
+            "grams": 166.0,
+            "from": "slice (4-2/3\" dia x 3/4\" thick)"
+          }
+        ],
+        "grams_per_ml": 0.7,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "pineapple-juice",
+      "display_name": "Pineapple juice",
+      "fdc_id": 168187,
+      "aliases": [
+        "pineapple juice"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 53.0,
+          "protein_g": 0.36,
+          "total_fat_g": 0.12,
+          "total_carbs_g": 12.87,
+          "sodium_mg": 2.0,
+          "saturated_fat_g": 0.01,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 0.2,
+          "total_sugars_g": 9.98
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 250.0,
+            "from": "cup"
+          },
+          {
+            "unit": "fl-oz",
+            "grams": 31.3,
+            "from": "fl oz"
+          }
+        ],
+        "grams_per_ml": 1.06,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "pork-tenderloin",
+      "display_name": "Pork tenderloin",
+      "fdc_id": 168249,
+      "aliases": [
+        "pork",
+        "pork tenderloin",
+        "pork loin"
+      ],
+      "note": "The corpus's bare 'pork' (skewers) is closest to lean loin; shoulder cuts would need their own row.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 109.0,
+          "protein_g": 20.95,
+          "total_fat_g": 2.17,
+          "total_carbs_g": 0.0,
+          "sodium_mg": 53.0,
+          "saturated_fat_g": 0.7,
+          "trans_fat_g": 0.02,
+          "cholesterol_mg": 65.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 0.0
+        },
+        "portions": [
+          {
+            "unit": "lb",
+            "grams": 453.6,
+            "from": "lb"
+          },
+          {
+            "unit": "oz",
+            "grams": 28.25,
+            "from": "oz"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "poultry-seasoning",
+      "display_name": "Poultry seasoning",
+      "fdc_id": 171331,
+      "aliases": [
+        "poultry seasoning"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 307.0,
+          "protein_g": 9.59,
+          "total_fat_g": 7.53,
+          "total_carbs_g": 65.59,
+          "sodium_mg": 27.0,
+          "saturated_fat_g": 3.29,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 11.3,
+          "total_sugars_g": 1.8
+        },
+        "portions": [
+          {
+            "unit": "tbsp",
+            "grams": 4.4,
+            "from": "tbsp"
+          },
+          {
+            "unit": "tsp",
+            "grams": 1.5,
+            "from": "tsp"
+          }
+        ],
+        "grams_per_ml": 0.3,
+        "grams_per_ml_from": "tbsp"
+      }
+    },
+    {
+      "slug": "prosciutto",
+      "display_name": "Prosciutto",
+      "fdc_id": 173864,
+      "aliases": [
+        "prosciutto",
+        "parma ham"
+      ],
+      "portions": [
+        {
+          "unit": "pkg",
+          "grams": 85
+        }
+      ],
+      "note": "Proxy: FDC has no generic prosciutto; sliced deli ham (~11% fat) is the nearest row. Retail package authored at 3 oz.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 164.0,
+          "protein_g": 16.6,
+          "total_fat_g": 8.8,
+          "total_carbs_g": 3.63,
+          "sodium_mg": 814.0,
+          "saturated_fat_g": 0.5,
+          "cholesterol_mg": 57.0,
+          "dietary_fiber_g": 1.3,
+          "total_sugars_g": 1.0
+        },
+        "portions": [
+          {
+            "unit": "slice",
+            "grams": 28.0,
+            "from": "slice"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "raspberries",
+      "display_name": "Raspberries",
+      "fdc_id": 167755,
+      "aliases": [
+        "raspberries",
+        "fresh raspberries",
+        "raspberry"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 52.0,
+          "protein_g": 1.2,
+          "total_fat_g": 0.65,
+          "total_carbs_g": 11.94,
+          "sodium_mg": 1.0,
+          "saturated_fat_g": 0.02,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 6.5,
+          "total_sugars_g": 4.42
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 123.0,
+            "from": "cup"
+          },
+          {
+            "unit": "each",
+            "grams": 1.9,
+            "from": "raspberries"
+          },
+          {
+            "unit": "pint",
+            "grams": 312.0,
+            "from": "pint as purchased, yields"
+          }
+        ],
+        "grams_per_ml": 0.52,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "red-bell-pepper",
+      "display_name": "Red bell pepper",
+      "fdc_id": 170108,
+      "aliases": [
+        "red bell pepper",
+        "bell pepper",
+        "red pepper",
+        "sweet peppers",
+        "capsicum"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 26.0,
+          "protein_g": 0.99,
+          "total_fat_g": 0.3,
+          "total_carbs_g": 6.03,
+          "sodium_mg": 4.0,
+          "saturated_fat_g": 0.06,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 2.1,
+          "total_sugars_g": 4.2
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 149.0,
+            "from": "cup, chopped"
+          },
+          {
+            "unit": "each",
+            "grams": 119.0,
+            "from": "medium (approx 2-3/4\" long, 2-1/2 dia.)"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 9.3,
+            "from": "tablespoon"
+          }
+        ],
+        "grams_per_ml": 0.63,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "red-pepper-flakes",
+      "display_name": "Red pepper flakes",
+      "fdc_id": 170932,
+      "aliases": [
+        "red pepper flakes",
+        "red chilli flakes",
+        "chilli flakes",
+        "chili flakes",
+        "crushed red pepper",
+        "cayenne",
+        "cayenne pepper"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 318.0,
+          "protein_g": 12.01,
+          "total_fat_g": 17.27,
+          "total_carbs_g": 56.63,
+          "sodium_mg": 30.0,
+          "saturated_fat_g": 3.26,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 27.2,
+          "total_sugars_g": 10.34
+        },
+        "portions": [
+          {
+            "unit": "tbsp",
+            "grams": 5.3,
+            "from": "tbsp"
+          },
+          {
+            "unit": "tsp",
+            "grams": 1.8,
+            "from": "tsp"
+          }
+        ],
+        "grams_per_ml": 0.36,
+        "grams_per_ml_from": "tbsp"
+      }
+    },
+    {
+      "slug": "rice-vinegar",
+      "display_name": "Rice vinegar",
+      "fdc_id": 173469,
+      "aliases": [
+        "rice vinegar",
+        "rice wine vinegar"
+      ],
+      "note": "Proxy: FDC has no generic rice vinegar; cider vinegar's row is nutritionally equivalent at label precision.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 21.0,
+          "protein_g": 0.0,
+          "total_fat_g": 0.0,
+          "total_carbs_g": 0.93,
+          "sodium_mg": 5.0,
+          "saturated_fat_g": 0.0,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 0.4
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 239.0,
+            "from": "cup"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 14.9,
+            "from": "tbsp"
+          },
+          {
+            "unit": "tsp",
+            "grams": 5.0,
+            "from": "tsp"
+          }
+        ],
+        "grams_per_ml": 1.01,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "san-marzano-tomatoes",
+      "display_name": "Canned whole tomatoes",
+      "fdc_id": 170051,
+      "aliases": [
+        "san marzano tomatoes",
+        "canned tomatoes",
+        "whole peeled tomatoes",
+        "canned whole tomatoes",
+        "tinned tomatoes"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 16.0,
+          "protein_g": 0.79,
+          "total_fat_g": 0.25,
+          "total_carbs_g": 3.47,
+          "sodium_mg": 115.0,
+          "saturated_fat_g": 0.03,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 1.9,
+          "total_sugars_g": 2.55
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 240.0,
+            "from": "cup"
+          },
+          {
+            "unit": "each",
+            "grams": 111.0,
+            "from": "medium"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 15.0,
+            "from": "tbsp"
+          }
+        ],
+        "grams_per_ml": 1.01,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "smoked-gouda",
+      "display_name": "Gouda",
+      "fdc_id": 171241,
+      "aliases": [
+        "smoked gouda",
+        "gouda",
+        "gouda cheese"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 356.0,
+          "protein_g": 24.94,
+          "total_fat_g": 27.44,
+          "total_carbs_g": 2.22,
+          "sodium_mg": 819.0,
+          "saturated_fat_g": 17.61,
+          "cholesterol_mg": 114.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 2.22
+        },
+        "portions": [
+          {
+            "unit": "oz",
+            "grams": 28.35,
+            "from": "oz"
+          },
+          {
+            "unit": "pkg",
+            "grams": 198.0,
+            "from": "package (7 oz)"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "smoked-paprika",
+      "display_name": "Paprika",
+      "fdc_id": 171329,
+      "aliases": [
+        "smoked paprika",
+        "paprika",
+        "sweet paprika",
+        "hot paprika"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 282.0,
+          "protein_g": 14.14,
+          "total_fat_g": 12.89,
+          "total_carbs_g": 53.99,
+          "sodium_mg": 68.0,
+          "saturated_fat_g": 2.14,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 34.9,
+          "total_sugars_g": 10.34
+        },
+        "portions": [
+          {
+            "unit": "tbsp",
+            "grams": 6.8,
+            "from": "tbsp"
+          },
+          {
+            "unit": "tsp",
+            "grams": 2.3,
+            "from": "tsp"
+          }
+        ],
+        "grams_per_ml": 0.46,
+        "grams_per_ml_from": "tbsp"
+      }
+    },
+    {
+      "slug": "spaghetti",
+      "display_name": "Spaghetti (dry)",
+      "fdc_id": 169736,
+      "aliases": [
+        "spaghetti",
+        "pasta",
+        "dried pasta",
+        "dry pasta",
+        "linguine",
+        "bucatini"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 371.0,
+          "protein_g": 13.04,
+          "total_fat_g": 1.51,
+          "total_carbs_g": 74.67,
+          "sodium_mg": 6.0,
+          "saturated_fat_g": 0.28,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 3.2,
+          "total_sugars_g": 2.67
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 91.0,
+            "from": "cup spaghetti"
+          },
+          {
+            "unit": "oz",
+            "grams": 28.5,
+            "from": "oz"
+          }
+        ],
+        "grams_per_ml": 0.38,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "tamari",
+      "display_name": "Tamari",
+      "fdc_id": 174278,
+      "aliases": [
+        "tamari",
+        "soy sauce",
+        "shoyu"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 60.0,
+          "protein_g": 10.51,
+          "total_fat_g": 0.1,
+          "total_carbs_g": 5.57,
+          "sodium_mg": 5586.0,
+          "saturated_fat_g": 0.01,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 0.8,
+          "total_sugars_g": 1.7
+        },
+        "portions": [
+          {
+            "unit": "tbsp",
+            "grams": 18.0,
+            "from": "tbsp"
+          },
+          {
+            "unit": "tsp",
+            "grams": 6.0,
+            "from": "tsp"
+          }
+        ],
+        "grams_per_ml": 1.22,
+        "grams_per_ml_from": "tbsp"
+      }
+    },
+    {
+      "slug": "tequila",
+      "display_name": "Tequila",
+      "fdc_id": 174815,
+      "aliases": [
+        "tequila blanco",
+        "tequila",
+        "vodka",
+        "gin",
+        "rum",
+        "whiskey"
+      ],
+      "note": "FDC's 80-proof distilled-spirits row; one row serves every plain spirit.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 231.0,
+          "protein_g": 0.0,
+          "total_fat_g": 0.0,
+          "total_carbs_g": 0.0,
+          "sodium_mg": 1.0,
+          "saturated_fat_g": 0.0,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 0.0
+        },
+        "portions": [
+          {
+            "unit": "fl-oz",
+            "grams": 27.8,
+            "from": "fl oz"
+          }
+        ],
+        "grams_per_ml": 0.94,
+        "grams_per_ml_from": "fl-oz"
+      }
+    },
+    {
+      "slug": "tomato-passata",
+      "display_name": "Tomato passata",
+      "fdc_id": 170460,
+      "aliases": [
+        "tomato passata",
+        "passata",
+        "tomato puree",
+        "tomato purée"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 38.0,
+          "protein_g": 1.65,
+          "total_fat_g": 0.21,
+          "total_carbs_g": 8.98,
+          "sodium_mg": 28.0,
+          "saturated_fat_g": 0.03,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 1.9,
+          "total_sugars_g": 4.83
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 250.0,
+            "from": "cup"
+          }
+        ],
+        "grams_per_ml": 1.06,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "tuna",
+      "display_name": "Tuna (canned in water)",
+      "fdc_id": 173709,
+      "aliases": [
+        "tuna",
+        "canned tuna",
+        "tuna in water"
+      ],
+      "portions": [
+        {
+          "unit": "pouch",
+          "grams": 85
+        }
+      ],
+      "note": "Retail pouch authored at 3 oz drained weight.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 86.0,
+          "protein_g": 19.44,
+          "total_fat_g": 0.96,
+          "total_carbs_g": 0.0,
+          "sodium_mg": 247.0,
+          "saturated_fat_g": 0.21,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 36.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 0.0
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 154.0,
+            "from": "cup, solid or chunks"
+          },
+          {
+            "unit": "oz",
+            "grams": 28.35,
+            "from": "oz"
+          }
+        ],
+        "grams_per_ml": 0.65,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "turbinado-sugar",
+      "display_name": "Turbinado sugar",
+      "fdc_id": 170674,
+      "is_added_sugar": true,
+      "aliases": [
+        "turbinado sugar",
+        "raw sugar",
+        "demerara sugar"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 399.0,
+          "protein_g": 0.0,
+          "total_fat_g": 0.0,
+          "total_carbs_g": 99.8,
+          "sodium_mg": 3.0,
+          "total_sugars_g": 99.19
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 202.0,
+            "from": "cup"
+          },
+          {
+            "unit": "tsp",
+            "grams": 4.6,
+            "from": "tsp"
+          }
+        ],
+        "grams_per_ml": 0.85,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "unbleached-flour",
+      "display_name": "Unbleached wheat flour",
+      "fdc_id": 168936,
+      "aliases": [
+        "unbleached wheat flour",
+        "organic unbleached wheat flour",
+        "unbleached all-purpose flour"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 364.0,
+          "protein_g": 10.33,
+          "total_fat_g": 0.98,
+          "total_carbs_g": 76.31,
+          "sodium_mg": 2.0,
+          "saturated_fat_g": 0.16,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 2.7,
+          "total_sugars_g": 0.27
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 125.0,
+            "from": "cup"
+          }
+        ],
+        "grams_per_ml": 0.53,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "vanilla-extract",
+      "display_name": "Vanilla extract",
+      "fdc_id": 173471,
+      "aliases": [
+        "vanilla extract",
+        "vanilla",
+        "pure vanilla extract"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 288.0,
+          "protein_g": 0.06,
+          "total_fat_g": 0.06,
+          "total_carbs_g": 12.65,
+          "sodium_mg": 9.0,
+          "saturated_fat_g": 0.01,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 12.65
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 208.0,
+            "from": "cup"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 13.0,
+            "from": "tbsp"
+          },
+          {
+            "unit": "tsp",
+            "grams": 4.2,
+            "from": "tsp"
+          }
+        ],
+        "grams_per_ml": 0.88,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "water",
+      "display_name": "Water",
+      "fdc_id": 174158,
+      "grams_per_ml": 1.0,
+      "aliases": [
+        "water",
+        "filtered water",
+        "ice",
+        "ice water",
+        "cold water",
+        "warm water",
+        "hot water"
+      ],
+      "note": "Zeros across the label — mapped so watery rows count as counted instead of padding the not-counted list.",
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 0.0,
+          "protein_g": 0.0,
+          "total_fat_g": 0.0,
+          "total_carbs_g": 0.0,
+          "sodium_mg": 2.0,
+          "saturated_fat_g": 0.0,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 0.0
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 237.0,
+            "from": "cup"
+          },
+          {
+            "unit": "fl-oz",
+            "grams": 29.6,
+            "from": "fl oz"
+          },
+          {
+            "unit": "ml",
+            "grams": 1.0,
+            "from": "ml"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "whole-milk",
+      "display_name": "Whole milk",
+      "fdc_id": 171265,
+      "aliases": [
+        "whole milk",
+        "milk",
+        "full-fat milk"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 61.0,
+          "protein_g": 3.15,
+          "total_fat_g": 3.25,
+          "total_carbs_g": 4.8,
+          "sodium_mg": 43.0,
+          "saturated_fat_g": 1.87,
+          "cholesterol_mg": 10.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 5.05
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 244.0,
+            "from": "cup"
+          },
+          {
+            "unit": "fl-oz",
+            "grams": 30.5,
+            "from": "fl oz"
+          },
+          {
+            "unit": "tbsp",
+            "grams": 15.0,
+            "from": "tbsp"
+          }
+        ],
+        "grams_per_ml": 1.03,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "yogurt",
+      "display_name": "Plain yogurt (whole milk)",
+      "fdc_id": 171284,
+      "aliases": [
+        "plain yoghurt",
+        "plain yogurt",
+        "yogurt",
+        "yoghurt",
+        "natural yoghurt"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 61.0,
+          "protein_g": 3.47,
+          "total_fat_g": 3.25,
+          "total_carbs_g": 4.66,
+          "sodium_mg": 46.0,
+          "saturated_fat_g": 2.1,
+          "cholesterol_mg": 13.0,
+          "dietary_fiber_g": 0.0,
+          "total_sugars_g": 4.66
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 245.0,
+            "from": "cup (8 fl oz)"
+          }
+        ],
+        "grams_per_ml": 1.04,
+        "grams_per_ml_from": "cup"
+      }
+    },
+    {
+      "slug": "zucchini",
+      "display_name": "Zucchini",
+      "fdc_id": 169291,
+      "aliases": [
+        "zucchini",
+        "courgette",
+        "zucchinis",
+        "courgettes"
+      ],
+      "extracted": {
+        "source": "FoodData_Central_csv_2026-04-30",
+        "per_100g": {
+          "calories": 17.0,
+          "protein_g": 1.21,
+          "total_fat_g": 0.32,
+          "total_carbs_g": 3.11,
+          "sodium_mg": 8.0,
+          "saturated_fat_g": 0.08,
+          "trans_fat_g": 0.0,
+          "cholesterol_mg": 0.0,
+          "dietary_fiber_g": 1.0,
+          "total_sugars_g": 2.5
+        },
+        "portions": [
+          {
+            "unit": "cup",
+            "grams": 124.0,
+            "from": "cup, chopped"
+          },
+          {
+            "unit": "each",
+            "grams": 196.0,
+            "from": "medium"
+          },
+          {
+            "unit": "slice",
+            "grams": 9.9,
+            "from": "slice"
+          }
+        ],
+        "grams_per_ml": 0.52,
+        "grams_per_ml_from": "cup"
+      }
+    }
+  ]
+}

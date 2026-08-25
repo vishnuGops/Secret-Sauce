@@ -359,11 +359,33 @@ melos run sim:gen           # regenerate supabase/sim/1_sim_dishes.sql — commi
 melos run sim:check         # fail if that .sql is stale (CI runs this)
 ```
 
+The **food registry** (`nutritionData/`, Phase 29) follows the same generated-SQL pattern —
+`foods.json` + `units.json` → `supabase/nutrition_foods.sql`, loaded by `db:nutrition` and by
+`db:reset` right after the schema (before the recipes — 29b gives ingredients a `food_id` FK):
+
+```powershell
+melos run nutrition:validate  # parse + lint nutritionData/
+melos run nutrition:gen       # regenerate supabase/nutrition_foods.sql — commit both
+melos run nutrition:check     # fail if that .sql is stale (CI runs this)
+```
+
+`fdc:extract` is the one authoring-time exception: it fills each food's per-100 g values and
+portions from the USDA FoodData Central CSV bundle (3.1 GB on disk, public domain, **never
+committed and never needed by CI**). Download the "Full Download of All Data Types" CSV zip from
+fdc.nal.usda.gov, unzip it anywhere, and pass the path:
+
+```powershell
+melos run fdc:extract -- --bundle="C:\path\to\FoodData_Central_csv_2026-04-30"
+```
+
+See [nutritionData/README.md](nutritionData/README.md) for the authoring workflow, the
+authored-over-extracted precedence rules, and the known vocabulary gaps.
+
 Building the simulated population itself needs a database. It is part of `db:reset`, so the usual
 reset brings everything back:
 
 ```powershell
-melos run db:reset                          # drop -> create -> seed -> recipes -> sim (~15s)
+melos run db:reset                          # drop -> create -> nutrition -> seed -> recipes -> sim (~15s)
 melos run db:sim                            # just the sim: schema -> dishes -> generate -> verify
 melos run db:sim -- --preset=small --seed=7 # tiny | small | medium (default) | large
 melos run db:sim:verify                     # 39 assertions, read-only

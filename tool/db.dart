@@ -34,6 +34,10 @@ const _files = <String, String>{
   // and order-independent with respect to `seed`: both bootstrap the same
   // Secret Sauce Kitchen account with conflict guards.
   'recipes': 'supabase/seed_recipes.sql',
+  // Generated from nutritionData/ by tool/nutrition.dart. Reference data, not
+  // demo data: `clean` leaves it alone. Ordered BEFORE `recipes` in `reset`
+  // because Phase 29b gives ingredients a food_id FK into it.
+  'nutrition': 'supabase/nutrition_foods.sql',
   'drop': 'supabase/scripts/drop.sql',
   'clean': 'supabase/scripts/clean.sql',
   // Simulation (docs/ROADMAP.md Phase 24). Split by lifecycle, not by taste:
@@ -57,7 +61,7 @@ const _pipelines = <String, List<String>>{
   // sim.config.engage_existing is false by default, so simulated users engage
   // only with simulated recipes and every standing pinned in docs/SDS.md §10.7
   // survives byte-identical — only the RANKS move.
-  'reset': ['drop', 'create', 'seed', 'recipes', 'sim'],
+  'reset': ['drop', 'create', 'nutrition', 'seed', 'recipes', 'sim'],
   'sim': ['sim:schema', 'sim:dishes', 'sim:generate', 'sim:verify'],
   'sim:clean': ['sim:teardown'],
 };
@@ -77,7 +81,7 @@ const _destructive = {'sim:clean'};
 /// their own transactions around the bulk load (and toggle triggers on the
 /// tables they write), which `-1` would nest and break. `rls` is exempt for the
 /// same reason and a sharper one: its `rollback` *is* the cleanup.
-const _transactional = {'create', 'seed', 'recipes', 'drop', 'clean'};
+const _transactional = {'create', 'seed', 'recipes', 'nutrition', 'drop', 'clean'};
 
 Future<int> _psql(
   String url,
@@ -193,8 +197,8 @@ void _usage() {
 usage: dart run tool/db.dart <action> [options]
 
   create                                   apply every supabase/migrations/*.sql, in order
-  seed | recipes | drop | clean            apply one SQL file
-  reset                                    drop -> create -> seed -> recipes -> sim
+  seed | recipes | nutrition | drop | clean  apply one SQL file
+  reset                                    drop -> create -> nutrition -> seed -> recipes -> sim
   sim                                      schema -> dishes -> generate -> verify
   sim:verify                               assertions only, read-only
   sim:clean                                DESTRUCTIVE teardown (requires --yes)

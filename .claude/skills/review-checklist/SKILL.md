@@ -310,7 +310,7 @@ The failure modes here all shipped once already (B042–B045):
   schema, seed and sim on a real Postgres — fresh, re-applied, and on the upgrade path. Every
   statement in those steps runs as `postgres`, so **RLS is bypassed there** — but the job now also
   runs `supabase/tests/rls_matrix.sql` (BL-7), which switches to `authenticated` and asserts the
-  76-check matrix, so a policy regression of the B053/B061 class does fail CI. What the matrix
+  88-check matrix, so a policy regression of the B053/B061 class does fail CI. What the matrix
   covers is the tables and RPCs it names; a **new** table, policy, or `security definer` function
   needs a check added to it in the same change. Flag a diff that touches a policy, a definer
   function, or the column grants and neither changes `rls_matrix.sql` nor says which existing

@@ -13,12 +13,14 @@ port = 54322
 major_version = 15
 
 # `supabase db reset` applies these in order after the migrations. The order is
-# load-bearing: seed_recipes.sql reaches seed.sql's taster accounts for its demo
-# ratings through a to_regprocedure() guard, so running it first would create the
+# load-bearing twice over: nutrition_foods.sql must precede seed_recipes.sql
+# (Phase 29b gives ingredients a food_id FK into the registry), and
+# seed_recipes.sql reaches seed.sql's taster accounts for its demo ratings
+# through a to_regprocedure() guard, so running it first would create the
 # recipes but skip their ratings.
 [db.seed]
 enabled = true
-sql_paths = ["./seed.sql", "./seed_recipes.sql"]
+sql_paths = ["./nutrition_foods.sql", "./seed.sql", "./seed_recipes.sql"]
 
 [studio]
 enabled = true

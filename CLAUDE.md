@@ -56,11 +56,18 @@ secret-sauce/
 │   ├── dishes/<slug>.json     #   owner-agnostic; NOT recipes until the generator runs
 │   ├── schema.json            #   the 2-key delta from recipeData's format
 │   └── README.md              #   authoring workflow + directory coverage rules
+├── nutritionData/             # food registry for auto nutrition (Phase 29a)
+│   ├── foods.json             #   curated foods: slug, fdc_id, aliases + machine-written
+│   │                          #   `extracted` blocks (per-100g values, parsed portions)
+│   ├── units.json             #   canonical units: every spelling, class, factor
+│   └── README.md              #   authoring workflow + the known vocabulary gaps
 ├── tool/db.dart               # psql wrapper behind the melos db:* scripts (db:create applies
 │                              #   every supabase/migrations/*.sql in order)
 ├── tool/recipe_format.dart    # THE validator — shared by both generators below
 ├── tool/recipes.dart          # validates recipeData/ -> generates seed_recipes.sql
 ├── tool/sim.dart              # validates simData/  -> generates sim/1_sim_dishes.sql
+├── tool/fdc.dart              # EXTRACT: USDA CSV bundle (path by arg) -> foods.json values
+├── tool/nutrition.dart        # GEN: nutritionData/ -> supabase/nutrition_foods.sql
 ├── packages/
 │   ├── core/lib/
 │   │   ├── core.dart              # BARREL — the only public surface of `core`
@@ -112,6 +119,8 @@ secret-sauce/
     │                            #   RPCs (incl. the 3 Discover shelves). Editable while pre-release
     ├── seed.sql                  # DEMO fixtures: accounts, demo chefs, ratings (idempotent)
     ├── seed_recipes.sql          # GENERATED from recipeData/ — never hand-edit
+    ├── nutrition_foods.sql       # GENERATED from nutritionData/ — never hand-edit;
+    │                             #   applied BEFORE seed_recipes (29b's food_id FK)
     ├── sim/                      # simulated population (Phase 24); schema `sim`, never `public`
     │   ├── 0_sim_schema.sql      #   config, personas, presets, registries, rand helpers,
     │   │                         #   nutrition_profile + nutrition_for() (Phase 28)
@@ -120,7 +129,7 @@ secret-sauce/
     │   ├── 3_sim_verify.sql      #   43 assertions — the only test coverage this SQL has
     │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
     ├── tests/rls_matrix.sql      # the RLS matrix as a SIGNED-IN user (BL-7, `db:rls`) —
-    │                             #   79 checks; makes its own users, then ROLLS BACK
+    │                             #   88 checks; makes its own users, then ROLLS BACK
     └── scripts/{drop,clean}.sql · rotate_seed_passwords.sql (B018 — hosted, manual)
 ```
 
@@ -240,20 +249,29 @@ melos run sim:validate      # parse + lint + directory coverage rules
 melos run sim:gen           # regenerate supabase/sim/1_sim_dishes.sql (commit both)
 melos run sim:check         # fail if that .sql is stale — CI runs this
 
+# Food registry (Phase 29). nutritionData/{foods,units}.json -> generated SQL,
+# same pattern as recipes:*. fdc:extract is the one authoring-time exception:
+# it needs the 3.1 GB USDA CSV bundle on disk (never committed, never in CI).
+melos run nutrition:validate  # parse + lint nutritionData/
+melos run nutrition:gen       # regenerate supabase/nutrition_foods.sql (commit both)
+melos run nutrition:check     # fail if that .sql is stale — CI runs this
+melos run fdc:extract -- --bundle="C:\path\to\FoodData_Central_csv_2026-04-30"
+
 # DB tasks — need `psql` on PATH and $env:SUPABASE_DB_URL. See the warning under Gotchas.
 # Every step below except the sim runs under `psql -1` — one transaction per file, so a failure
 # part-way through rolls that file back instead of leaving half a schema (OPT-T6).
 melos run db:create   # apply every supabase/migrations/*.sql, in order (each idempotent)
+melos run db:nutrition # load supabase/nutrition_foods.sql (idempotent reference data)
 melos run db:seed     # load supabase/seed.sql (idempotent; also backfills ratings — B014)
 melos run db:recipes  # load supabase/seed_recipes.sql (idempotent; run recipes:gen first)
-melos run db:clean    # truncate recipe data, keep schema + users
+melos run db:clean    # truncate recipe data, keep schema + users (SPARES the food registry)
 melos run db:drop     # drop all app tables/types/functions (spares auth.users)
-melos run db:reset    # drop -> create -> seed -> recipes -> sim   (~15s from empty)
+melos run db:reset    # drop -> create -> nutrition -> seed -> recipes -> sim (~15s from empty)
 
 # The RLS acceptance matrix as a SIGNED-IN user (BL-7). Additive only in the sense that
 # it writes and then rolls back — it leaves no user, no recipe, no helper function.
 # Run it after ANY change to a policy, a `security definer` function, or the column grants.
-melos run db:rls      # 79 checks across anon / owner / shared-with / stranger
+melos run db:rls      # 88 checks across anon / owner / shared-with / stranger
 
 # Simulated population (Phase 24). Additive and idempotent; ~10s at the default
 # `medium` preset (1,000 accounts, ~1,670 recipes, ~118k view rows).
@@ -281,9 +299,15 @@ melos run db:sim:clean -- --yes           # DESTRUCTIVE: deletes the simulated a
 >
 > ```powershell
 > $u = "postgresql://postgres.<project-ref>:<pwd>@aws-0-<region>.pooler.supabase.com:5432/postgres"
-> Get-Content supabase\migrations\0001_init.sql -Raw |
->   docker exec -i supabase_db_secret-sauce psql $u -v ON_ERROR_STOP=1 -f -
+> cmd /c "docker exec -i supabase_db_secret-sauce psql $u -v ON_ERROR_STOP=1 -f - < supabase\migrations\0001_init.sql"
 > ```
+>
+> **The redirection must go through `cmd /c`, never a PowerShell pipe** (B074):
+> `Get-Content -Raw | docker exec -i psql` re-encodes the file through the console
+> codepage, so every multibyte character is stored as mojibake (`Jalapeño` →
+> `JalapeÃ±o`) — silently, because psql renders the bytes back the same way. cmd's
+> `<` streams raw bytes. The same form (with `-U postgres -d postgres` instead of
+> `$u`) is how to apply files to the **local** stack's container.
 >
 > The pooler user is `postgres.<project-ref>`, not bare `postgres`. A dashboard password reset takes
 > a moment to propagate — check auth on its own (`psql $u -c "select 1"`) before blaming the SQL.
@@ -625,7 +649,7 @@ the `code-review` skill). The ones you need while _writing_ code:
     steps runs as `postgres`, which bypasses policies — so CI also runs
     [supabase/tests/rls_matrix.sql](supabase/tests/rls_matrix.sql) (**BL-7**, `melos run db:rls`),
     which is the only thing here that exercises RLS as a **signed-in** user. It switches to
-    `set local role authenticated`, runs 79 checks across anon / owner / shared-with / unrelated
+    `set local role authenticated`, runs 88 checks across anon / owner / shared-with / unrelated
     stranger, and rolls the whole transaction back. It closed the class B053 lived in and found
     B061 on its first complete run. **Run it, and add a check to it, whenever you touch a policy, a
     `security definer` function, or the column grants** — a new table with new policies that the

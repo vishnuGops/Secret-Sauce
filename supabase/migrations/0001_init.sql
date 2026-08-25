@@ -30,6 +30,7 @@
 -- Extensions
 -- ============================================================================
 create extension if not exists "pgcrypto";      -- gen_random_uuid()
+create extension if not exists "pg_trgm";       -- search_foods typeahead (Phase 29)
 
 -- ============================================================================
 -- Enums (guarded so the script can be re-run)
@@ -349,6 +350,71 @@ create table if not exists recipe_suggestions (
   payload       jsonb,
   created_at    timestamptz not null default now()
 );
+
+-- ============================================================================
+-- Food registry (Phase 29a) — reference data for auto nutrition
+--
+-- Populated by supabase/nutrition_foods.sql (GENERATED from nutritionData/ —
+-- `melos run nutrition:gen`), read-only to every client role: RLS below is
+-- select-only and the grants block revokes writes. `db:clean` does not touch
+-- these tables (it truncates *recipe* data; this is reference data), which is
+-- what keeps a post-clean `db:recipes` green once 29b's ingredients.food_id
+-- FK exists.
+--
+-- The 11 per-100 g columns are FDC's EAV flattened, named exactly as the
+-- nutrition label's jsonb keys (Phase 28) so nothing translates between them.
+-- ============================================================================
+
+create table if not exists food (
+  id              text primary key,             -- slug: 'all-purpose-flour'
+  display_name    text not null,
+  fdc_id          int,                          -- USDA source row; null = authored
+  calories        numeric,
+  total_fat_g     numeric,
+  saturated_fat_g numeric,
+  trans_fat_g     numeric,
+  cholesterol_mg  numeric,
+  sodium_mg       numeric,
+  total_carbs_g   numeric,
+  dietary_fiber_g numeric,
+  total_sugars_g  numeric,
+  added_sugars_g  numeric,
+  protein_g       numeric,
+  grams_per_ml    numeric,        -- null = volume units unresolvable for this food
+  is_added_sugar  boolean not null default false
+);
+
+-- Lowercase, globally unique input spellings ('flour', '00 pizza flour').
+create table if not exists food_alias (
+  alias   text primary key,
+  food_id text not null references food (id) on delete cascade
+);
+create index if not exists food_alias_food_idx on food_alias (food_id);
+
+-- Grams for one named portion of one food ('clove' = 3 g, 'each' = 50 g).
+create table if not exists food_portion (
+  food_id  text not null references food (id) on delete cascade,
+  unit_key text not null,
+  grams    numeric not null check (grams > 0),
+  primary key (food_id, unit_key)
+);
+
+-- The canonical unit registry (from nutritionData/units.json): one row per
+-- accepted spelling. `factor` is grams per unit (mass) or ml per unit
+-- (volume); null for count units, which resolve through food_portion.
+-- Spelling '' is the bare-count marker ('2 eggs').
+create table if not exists food_unit (
+  spelling text primary key,
+  unit_key text not null,
+  class    text not null check (class in ('mass', 'volume', 'count')),
+  factor   numeric check (factor is null or factor > 0)
+);
+
+-- Typeahead indexes: prefix matches use the PKs; these serve the trigram tail.
+create index if not exists food_display_name_trgm_idx
+  on food using gin (lower(display_name) gin_trgm_ops);
+create index if not exists food_alias_trgm_idx
+  on food_alias using gin (alias gin_trgm_ops);
 
 -- ============================================================================
 -- Functions & triggers
@@ -1003,6 +1069,10 @@ alter table recipe_saves        enable row level security;
 alter table recipe_views        enable row level security;
 alter table recipe_ratings      enable row level security;
 alter table recipe_suggestions  enable row level security;
+alter table food                enable row level security;
+alter table food_alias          enable row level security;
+alter table food_portion        enable row level security;
+alter table food_unit           enable row level security;
 
 -- profiles: world-readable, self-writable
 drop policy if exists profiles_select on profiles;
@@ -1180,6 +1250,25 @@ drop policy if exists suggestions_update on recipe_suggestions;
 create policy suggestions_update on recipe_suggestions for update
   using (owns_recipe(recipe_id));
 
+-- food registry (Phase 29a): reference data, readable signed-in only, written
+-- exclusively by nutrition_foods.sql running as postgres. Select-only policies
+-- + zero write policies; the grants block below also revokes the write GRANTs,
+-- so a client write fails 42501 at the grant layer before RLS is consulted.
+-- `anon` gets no policy at all: the detail page reads the stored label, and
+-- only the signed-in editor needs the registry (Gotcha 3's least-surface rule).
+drop policy if exists food_select on food;
+create policy food_select on food for select
+  using (auth.uid() is not null);
+drop policy if exists food_alias_select on food_alias;
+create policy food_alias_select on food_alias for select
+  using (auth.uid() is not null);
+drop policy if exists food_portion_select on food_portion;
+create policy food_portion_select on food_portion for select
+  using (auth.uid() is not null);
+drop policy if exists food_unit_select on food_unit;
+create policy food_unit_select on food_unit for select
+  using (auth.uid() is not null);
+
 -- ============================================================================
 -- Table grants for the PostgREST roles
 --
@@ -1246,6 +1335,12 @@ begin
 
   -- Signed-out visitors may log a view of a recipe they can read.
   grant insert on recipe_views to anon;
+
+  -- Food registry (Phase 29a): reference data — no client role writes it, and
+  -- the RLS above narrows reads to signed-in users, so `anon`'s blanket select
+  -- returns empty rather than erroring.
+  revoke insert, update, delete on food, food_alias, food_portion, food_unit
+    from authenticated;
 end $$;
 
 -- ============================================================================
@@ -2125,5 +2220,70 @@ begin
     execute 'revoke execute on function save_recipe(uuid, jsonb, jsonb, jsonb, text) from anon';
     execute 'revoke execute on function recipe_snapshot(uuid) from anon, authenticated';
     execute 'grant execute on function save_recipe(uuid, jsonb, jsonb, jsonb, text) to authenticated';
+  end if;
+end $$;
+
+-- ============================================================================
+-- search_foods — the ingredients editor's typeahead (Phase 29a)
+--
+-- Rank: exact alias/name match, then prefix, then trigram tail (pg_trgm `%`,
+-- default 0.3 threshold — prefix LIKE carries queries too short to trigram).
+-- Returns id + display_name only: the editor needs nothing else, and the row's
+-- nutrition columns are not this surface's business.
+--
+-- Invoker-rights and `authenticated`-only, like the registry tables it reads:
+-- only the signed-in editor links ingredients (Gotcha 3 — PostgREST exposes
+-- every public function, so anon is revoked explicitly). Every order ends in
+-- `f.id` because ties are otherwise free to swap (Gotcha 24 applies to any
+-- limited read, not just paged ones).
+-- ============================================================================
+create or replace function search_foods(p_query text, p_limit int default 10)
+returns table (id text, display_name text)
+language sql
+stable
+as $$
+  -- `term` feeds similarity(); `pat` is the LIKE prefix with the user's
+  -- wildcards escaped, so a query of '%' cannot rank every food as a prefix
+  -- match. The limit clamp coalesces first — `limit NULL` would mean no limit.
+  with q as (
+    select t.term,
+           replace(replace(replace(t.term, '\', '\\'), '%', '\%'), '_', '\_')
+             || '%' as pat
+    from (select lower(trim(p_query)) as term) t
+  )
+  select f.id, f.display_name
+  from food f
+  cross join q
+  left join food_alias a on a.food_id = f.id
+  where q.term <> ''
+    and (
+      a.alias like q.pat
+      or lower(f.display_name) like q.pat
+      or a.alias % q.term
+      or lower(f.display_name) % q.term
+    )
+  group by f.id, f.display_name, q.term, q.pat
+  order by
+    min(case
+      when a.alias = q.term or lower(f.display_name) = q.term then 0
+      when a.alias like q.pat
+        or lower(f.display_name) like q.pat then 1
+      else 2
+    end),
+    max(greatest(
+      coalesce(similarity(a.alias, q.term), 0),
+      similarity(lower(f.display_name), q.term)
+    )) desc,
+    f.display_name,
+    f.id
+  limit least(greatest(coalesce(p_limit, 10), 1), 25);
+$$;
+
+do $$
+begin
+  execute 'revoke execute on function search_foods(text, int) from public';
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'revoke execute on function search_foods(text, int) from anon';
+    execute 'grant execute on function search_foods(text, int) to authenticated';
   end if;
 end $$;
