@@ -105,6 +105,7 @@ const _baseRecipeKeys = {
   'visibility',
   'attribution',
   'notes',
+  'nutrition',
   'ingredient_groups',
   'step_groups',
 };
@@ -119,6 +120,24 @@ const _requiredRecipeKeys = [
   'ingredient_groups',
   'step_groups',
 ];
+
+/// The eleven label fields, and only those — the authoring-side copy of
+/// `RecipeNutrition`. Postgres stores the value as an unstructured `jsonb`, so
+/// a typo'd key would be accepted by the column, saved, and then silently
+/// dropped on decode; this set is what turns that into a build failure.
+const _nutritionKeys = {
+  'calories',
+  'total_fat_g',
+  'saturated_fat_g',
+  'trans_fat_g',
+  'cholesterol_mg',
+  'sodium_mg',
+  'total_carbs_g',
+  'dietary_fiber_g',
+  'total_sugars_g',
+  'added_sugars_g',
+  'protein_g',
+};
 const _ingredientKeys = {'quantity', 'unit', 'name', 'note', 'is_optional'};
 const _stepKeys = {'text', 'duration_minutes', 'temperature', 'tip'};
 const _demoKeys = {'like_count', 'save_count', 'view_count', 'ratings'};
@@ -289,6 +308,7 @@ class _Validator {
     _requireInt(file, r, 'cook_minutes', min: 0, max: 1440);
     _requireInt(file, r, 'servings', min: 1, max: 100);
 
+    _validateNutrition(file, r);
     _validateIngredientGroups(file, r);
     _validateStepGroups(file, r);
     if (options.allowDemo) _validateDemo(file, r);
@@ -334,6 +354,40 @@ class _Validator {
       _err(file, '$key must be an integer');
     } else if (v < min || v > max) {
       _err(file, '$key must be between $min and $max (got $v)');
+    }
+  }
+
+  /// `nutrition` is optional and **never required** — most recipes have no
+  /// label, and the format spells the absence out as an explicit `null` rather
+  /// than an omitted key, so both forms are accepted here.
+  ///
+  /// An empty object is rejected: `null` is the one representation of "no
+  /// info" everywhere else in this feature (the model normalizes to it, the
+  /// column stores it, the UI branches on it), and a second spelling of the
+  /// same state is how two surfaces start disagreeing.
+  void _validateNutrition(String file, Map<String, dynamic> r) {
+    if (!r.containsKey('nutrition') || r['nutrition'] == null) return;
+    final n = r['nutrition'];
+    if (n is! Map<String, dynamic>) {
+      _err(file, 'nutrition must be an object or null');
+      return;
+    }
+    if (n.isEmpty) {
+      _err(file, 'nutrition is an empty object — use null for "no info"');
+      return;
+    }
+    for (final key in n.keys) {
+      if (!_nutritionKeys.contains(key)) {
+        _err(file, 'nutrition unknown field "$key"');
+      }
+    }
+    for (final entry in n.entries) {
+      final v = entry.value;
+      // Zero is legitimate on a label (0 g trans fat is a printed row), so the
+      // bound is non-negative, unlike `quantity`'s.
+      if (v is! num || v < 0) {
+        _err(file, 'nutrition.${entry.key} must be a non-negative number');
+      }
     }
   }
 

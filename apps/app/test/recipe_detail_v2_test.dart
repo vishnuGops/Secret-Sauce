@@ -5,6 +5,7 @@ import 'dart:async';
 // `context.isExpanded` selects the v2 path; the v1 suite in
 // recipe_detail_test.dart pumps at the default 800×600 and keeps covering the
 // compact/medium layout.
+import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/features/recipe_detail/recipe_detail_screen.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:core/core.dart';
@@ -58,6 +59,19 @@ const _recipe = Recipe(
       ],
     ),
   ],
+);
+
+/// [_recipe] with a nutrition label. 4 servings × 430 kcal, so the batch line
+/// is four figures and its grouping is exercised.
+final _labelledRecipe = _recipe.copyWith(
+  nutrition: const RecipeNutrition(
+    calories: 430,
+    totalFatG: 22,
+    saturatedFatG: 6,
+    sodiumMg: 600,
+    totalCarbsG: 18,
+    proteinG: 38,
+  ),
 );
 
 class _FakeAuth implements AuthRepository {
@@ -176,6 +190,7 @@ Future<void> _pump(
   Size size = const Size(1440, 900),
   double textScale = 1,
   Recipe recipe = _recipe,
+  RailTab? railTab,
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
@@ -205,6 +220,8 @@ Future<void> _pump(
           _FakeRecipeRepository(recipe),
         ),
         authRepositoryProvider.overrideWithValue(_FakeAuth(uid)),
+        if (railTab != null)
+          railTabProvider(recipe.id).overrideWith((ref) => railTab),
       ],
       child: MaterialApp.router(
         routerConfig: router,
@@ -363,19 +380,81 @@ void main() {
     expect(find.text('—'), findsOneWidget); // coriander
   });
 
+  // Phase 28. Same rail host, same two tabs, same one stepper as compact —
+  // that is the point of `RailPanel` being one widget.
+  group('nutrition tab (expanded)', () {
+    testWidgets('opens on Ingredients and switches to the label', (
+      tester,
+    ) async {
+      await _pump(tester, recipe: _labelledRecipe);
+
+      expect(find.text('Boneless chicken thigh'), findsOneWidget);
+      expect(find.text('Nutrition Facts'), findsNothing);
+
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Nutrition'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Nutrition Facts'), findsOneWidget);
+      expect(find.text('26%'), findsOneWidget); // 600 mg sodium / 2,300 mg
+      expect(find.text('Boneless chicken thigh'), findsNothing);
+    });
+
+    testWidgets('the stepper stays put and drives the batch line', (
+      tester,
+    ) async {
+      await _pump(tester, recipe: _labelledRecipe);
+
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Nutrition'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('4 servings · 1,720 kcal total'), findsOne);
+
+      await tester.tap(find.byTooltip('More servings'));
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('5 servings · 2,150 kcal total'), findsOne);
+      expect(find.text('430'), findsOneWidget); // per serving, unmoved
+      expect(
+        find.textContaining('this recipe is written for 4'),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('a recipe with no data shows the empty state', (tester) async {
+      await _pump(tester);
+
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Nutrition'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('No nutrition info available'), findsOneWidget);
+    });
+  });
+
   // The facts strip divides a fixed width between six cells and the rail holds
   // a fixed 86px quantity gutter, so both are the shape that overflowed three
   // times on the card (B001/B002/B016). A RenderFlex overflow throws in a
   // widget test, so pumping the whole page is the assertion.
+  //
+  // Per TAB since Phase 28 — the rail restructure re-opens its width envelope
+  // (Gotcha 26), and the label is new furniture in the same 352 × textScale
+  // column.
   group('layout envelope', () {
-    for (final width in [1000.0, 1440.0]) {
-      for (final scale in [1.0, 2.0]) {
-        testWidgets('no overflow at ${width}px, textScale $scale', (
-          tester,
-        ) async {
-          await _pump(tester, size: Size(width, 2400), textScale: scale);
-          expect(tester.takeException(), isNull);
-        });
+    for (final tab in RailTab.values) {
+      for (final width in [1000.0, 1440.0]) {
+        for (final scale in [1.0, 2.0]) {
+          testWidgets(
+            'no overflow at ${width}px, textScale $scale on ${tab.name}',
+            (tester) async {
+              await _pump(
+                tester,
+                size: Size(width, 2400),
+                textScale: scale,
+                recipe: _labelledRecipe,
+                railTab: tab,
+              );
+              expect(tester.takeException(), isNull);
+            },
+          );
+        }
       }
     }
   });

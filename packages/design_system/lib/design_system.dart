@@ -15,3 +15,4 @@ export 'src/widgets/chef_spotlight_card.dart';
 export 'src/widgets/card_rail.dart';
 export 'src/widgets/tier_ladder.dart';
 export 'src/widgets/score_contribution_bar.dart';
+export 'src/widgets/nutrition_facts_label.dart';

@@ -184,6 +184,10 @@ class SupabaseRecipeRepository implements RecipeRepository {
     'attribution': recipe.attribution,
     'forked_from_recipe_id': recipe.forkedFromRecipeId,
     'forked_from_version_id': recipe.forkedFromVersionId,
+    // Always sent, `null` included — the key is how `save_recipe` learns the
+    // label was cleared. On the SQL side that null arrives as `'null'::jsonb`,
+    // not SQL NULL, which is why both branches wrap it in `nullif(…)`.
+    'nutrition': recipe.nutrition?.toJson(),
   };
 
   @override

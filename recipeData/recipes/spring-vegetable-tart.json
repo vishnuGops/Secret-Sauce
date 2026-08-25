@@ -11,6 +11,19 @@
   "visibility": "public",
   "attribution": "Secret Sauce Kitchen",
   "notes": null,
+  "nutrition": {
+    "calories": 10,
+    "total_fat_g": 10,
+    "saturated_fat_g": 10,
+    "trans_fat_g": 10,
+    "cholesterol_mg": 10,
+    "sodium_mg": 10,
+    "total_carbs_g": 10,
+    "dietary_fiber_g": 10,
+    "total_sugars_g": 10,
+    "added_sugars_g": 10,
+    "protein_g": 10
+  },
   "ingredient_groups": [
     {
       "name": "Crust",

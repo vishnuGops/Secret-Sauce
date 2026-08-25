@@ -106,6 +106,98 @@ void main() {
       expect(out.imageUrl, isNull);
     });
 
+    // Phase 28. Same obligation as the two above: `save_recipe` writes the
+    // whole `nutrition` object, so a field the draft drops is a field the next
+    // save deletes.
+    test('EditNutrition preserves all 11 fields', () {
+      const full = RecipeNutrition(
+        calories: 240,
+        totalFatG: 10,
+        saturatedFatG: 4.5,
+        transFatG: 0,
+        cholesterolMg: 30,
+        sodiumMg: 600,
+        totalCarbsG: 33,
+        dietaryFiberG: 7,
+        totalSugarsG: 12,
+        addedSugarsG: 15,
+        proteinG: 25,
+      );
+
+      final out = EditNutrition.fromModel(full).toModel();
+
+      expect(out, full);
+    });
+
+    test('all-empty becomes null, never an empty object', () {
+      expect(EditNutrition().toModel(), isNull);
+      expect(EditNutrition.fromModel(null).toModel(), isNull);
+      // The distinction that matters: `{}` would render a label with a
+      // masthead and no rows; null renders the empty state.
+      expect(
+        EditNutrition.fromModel(const RecipeNutrition()).toModel(),
+        isNull,
+      );
+    });
+
+    test('one value is enough to produce a label', () {
+      final draft = EditNutrition();
+      draft.calories.text = '180';
+      expect(draft.toModel(), const RecipeNutrition(calories: 180));
+      expect(draft.hasValues, isTrue);
+    });
+
+    test('a numeric round-trip does not gain a decimal point', () {
+      // Postgres hands back `10.0`; the box the user typed `10` into must not
+      // start saying `10.0`.
+      final draft = EditNutrition.fromModel(
+        const RecipeNutrition(calories: 10),
+      );
+      expect(draft.calories.text, '10');
+      expect(
+        EditNutrition.fromModel(
+          const RecipeNutrition(saturatedFatG: 4.5),
+        ).saturatedFat.text,
+        '4.5',
+      );
+    });
+
+    // Mirrors `_Field`'s validator. The screen reads this to decide whether a
+    // blocked save was the nutrition panel's fault, so the two predicates
+    // agreeing is the contract — not an implementation detail.
+    test('hasInvalidEntry matches what the field validator rejects', () {
+      final draft = EditNutrition();
+      expect(draft.hasInvalidEntry, isFalse);
+
+      draft.calories.text = '  '; // blank is not invalid, it is absent
+      expect(draft.hasInvalidEntry, isFalse);
+
+      draft.calories.text = '1/2'; // tryParse -> null
+      expect(draft.hasInvalidEntry, isTrue);
+
+      draft.calories.text = '-3';
+      expect(draft.hasInvalidEntry, isTrue);
+
+      draft.calories.text = '1.5';
+      expect(draft.hasInvalidEntry, isFalse);
+      // Zero is a legitimate label value (0 g trans fat is a printed row).
+      draft.transFat.text = '0';
+      expect(draft.hasInvalidEntry, isFalse);
+    });
+
+    test('load() refills the SAME controllers, so dispose stays wired', () {
+      final draft = EditNutrition();
+      final calories = draft.calories;
+      draft.load(const RecipeNutrition(calories: 99));
+      expect(identical(draft.calories, calories), isTrue);
+      expect(calories.text, '99');
+      // And loading null clears rather than leaving the previous recipe's
+      // numbers behind.
+      draft.load(null);
+      expect(calories.text, '');
+      expect(draft.hasValues, isFalse);
+    });
+
     test('details start revealed when the loaded row already uses them', () {
       expect(EditStep.fromModel(_fullStep).showDetails, isTrue);
       expect(EditIngredient.fromModel(_fullIngredient).showDetails, isTrue);
@@ -165,8 +257,104 @@ void main() {
       expect(tester.widget<Checkbox>(find.byType(Checkbox)).value, isTrue);
     });
 
+    // Phase 28. The panel is collapsed on a new recipe — eleven empty boxes
+    // between Attribution and Ingredients would push the parts of the form
+    // everyone uses off the first screen.
+    testWidgets('nutrition starts collapsed and opens on Add', (tester) async {
+      sizeView(tester, 800);
+      await tester.pumpWidget(_app());
+      await tester.pumpAndSettle();
+
+      expect(find.text('Nutrition facts'), findsOneWidget);
+      expect(find.text('Cholesterol'), findsNothing);
+
+      await tester.tap(find.widgetWithText(TextButton, 'Add'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Calories'), findsOneWidget);
+      expect(find.text('Cholesterol'), findsOneWidget);
+      expect(find.text('Protein'), findsOneWidget);
+    });
+
+    testWidgets('a non-numeric entry blocks Save instead of being dropped', (
+      tester,
+    ) async {
+      sizeView(tester, 800);
+      await tester.pumpWidget(_app());
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.widgetWithText(TextButton, 'Add'));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.widgetWithText(TextFormField, 'Title'), 'X');
+      await tester.enterText(
+        find.widgetWithText(TextFormField, 'Calories'),
+        '1/2',
+      );
+      await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+      await tester.pumpAndSettle();
+
+      // `double.tryParse('1/2')` is null — without the validator this would be
+      // saved as "no calories" with no word to the user (the B066 shape).
+      expect(find.textContaining('Numbers only'), findsOneWidget);
+    });
+
+    // B072's actual mechanism, and the one the test above cannot reach: the
+    // panel is COLLAPSED. A `TextFormField` that leaves the tree leaves
+    // `Form.validate()` with it, so without `maintainState: true` the entry is
+    // never validated and `tryParse` drops it in silence. Delete that flag and
+    // the test above stays green; this one does not.
+    testWidgets('an invalid entry still blocks Save while collapsed', (
+      tester,
+    ) async {
+      sizeView(tester, 800);
+      await tester.pumpWidget(_app());
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.widgetWithText(TextButton, 'Add'));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.widgetWithText(TextFormField, 'Title'), 'X');
+      await tester.enterText(
+        find.widgetWithText(TextFormField, 'Calories'),
+        '1/2',
+      );
+
+      await tester.tap(find.widgetWithText(TextButton, 'Hide'));
+      await tester.pumpAndSettle();
+      expect(find.text('Cholesterol'), findsNothing);
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+      await tester.pumpAndSettle();
+
+      // Blocked — and the panel is back open, so the error is reachable
+      // instead of being a Save button that does nothing.
+      expect(find.widgetWithText(TextButton, 'Hide'), findsOneWidget);
+      expect(find.textContaining('Numbers only'), findsOneWidget);
+    });
+
+    // The other half of that rule: the force-expand is scoped to a *nutrition*
+    // failure. A blank Title must not unfold eleven boxes that have nothing to
+    // do with the error above them.
+    testWidgets('a blank title does not unfold the nutrition panel', (
+      tester,
+    ) async {
+      sizeView(tester, 800);
+      await tester.pumpWidget(_app());
+      await tester.pumpAndSettle();
+
+      // Title left empty; nutrition never touched.
+      await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Required'), findsOneWidget);
+      expect(find.widgetWithText(TextButton, 'Add'), findsOneWidget);
+      expect(find.text('Cholesterol'), findsNothing);
+    });
+
     // Both new blocks are Rows with intrinsic siblings, the shape behind
-    // B001/B002/B016/B023. Check them at the narrowest phone and 2.0x.
+    // B001/B002/B016/B023. Check them at the narrowest phone and 2.0x —
+    // with the nutrition panel expanded too (Phase 28).
     for (final width in <double>[320, 360, 600]) {
       testWidgets('expanded detail rows fit at ${width}px, textScale 2.0', (
         tester,
@@ -179,6 +367,14 @@ void main() {
           tester.takeException(),
           isNull,
           reason: 'collapsed form overflows at ${width}px @ 2.0x',
+        );
+
+        await tester.tap(find.widgetWithText(TextButton, 'Add'));
+        await tester.pumpAndSettle();
+        expect(
+          tester.takeException(),
+          isNull,
+          reason: 'nutrition panel overflows at ${width}px @ 2.0x',
         );
 
         await tester.tap(find.byTooltip('Note & optional'));

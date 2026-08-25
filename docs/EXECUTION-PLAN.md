@@ -652,7 +652,7 @@ Design: SDS §12 (to be written in this phase)
 `tool/sim.dart`, `simData/` with **25 of 120** dishes, all five `supabase/sim/*.sql` files, the
 `melos run sim:* / db:sim*` scripts, and the CI gate. `melos run db:reset` now rebuilds the whole
 thing — 1,694 recipes, 1,016 profiles, ~118k view rows — from an empty database in **~15 seconds**,
-and `3_sim_verify.sql` passes all 39 assertions.
+and `3_sim_verify.sql` passes all 43 assertions.
 
 **Two decisions below were reversed by what the build found**, and both are worth reading before
 trusting the rest of this section:
@@ -1319,7 +1319,79 @@ fork parent (needs a second read), persisted check-offs, and cook mode's two def
 
 Roadmap: [ROADMAP.md Phase 28](./ROADMAP.md#phase-28--nutrition-facts-per-serving-label-rail-tabs-manual-entry-planned-not-started)
 
-**Status: planned, not started.** The ask, verbatim in product terms: a nutrition panel styled
+**Status: DONE (2026-08-24).** Shipped as planned. Four things the plan did not anticipate, all
+of them small and all of them recorded:
+
+1. **`Recipe.toJson()` does not flatten a nested model** (B071). `explicitToJson` is off for
+   `packages/core`, and every other nested field on `Recipe` is `includeToJson: false`, so
+   `nutrition` was the first one that had to serialize itself — the generator emitted
+   `'nutrition': instance.nutrition` and `jsonEncode` would have thrown at whatever call site
+   touched it. Closed with an explicit `@JsonKey(toJson: _nutritionToJson)`. No production caller
+   existed yet, which is exactly why it needed a test rather than a fix later.
+2. **The editor's collapse had to keep its fields in the `Form`** (B072). A `TextFormField` that
+   leaves the tree leaves `Form.validate()` with it, so a half-typed `1/2` could be collapsed out
+   of sight and then silently dropped by `tryParse` — the B066 shape, one keystroke away. The
+   panel uses `Visibility(maintainState: true)`, and the screen re-opens it when a save is blocked
+   so a hidden error is never a dead end. That moved `expanded` from the panel's own state up to
+   `_RecipeEditorScreenState`. Review then narrowed the re-open: it fires only when
+   `EditNutrition.hasInvalidEntry`, because an unconditional version unfolded eleven nutrition
+   boxes whenever a blank **Title** blocked the save.
+3. **`EditNutrition.load()` rather than a second instance.** The editor builds its draft in a
+   field initializer and `_load()` runs afterwards, so `fromModel` would have produced a second
+   object whose `dispose()` nobody wired up. `load()` refills the live controllers; the
+   `fromModel` factory is `EditNutrition()..load(n)` and is what the round-trip tests use.
+4. **Test fixture percentages have to be distinct.** The label's first fixture put sodium and
+   fibre both at 25% and `findsOneWidget` failed for a reason that had nothing to do with the
+   widget. The committed fixture is chosen so all eight land on different numbers.
+
+**Added after the fact, on the owner's ask (2026-08-24): the sim generates labels.** The two
+all-10 fixtures make the panel *reachable* and stop there — two recipes, and every `% Daily Value`
+they print is nonsense. So `sim.nutrition_for(key, category)` in `0_sim_schema.sql` draws one per
+simulated recipe and `2_sim_generate.sql` writes it. The decisions worth recording:
+
+- **Derive from calories, don't draw eleven independent numbers.** Independent draws give 200 kcal
+  beside 40 g of fat — non-null, and obviously fake to anyone who reads a label. Calories are
+  drawn per category, split into fat / protein / carb *energy* shares, and converted at 9 / 4 / 4
+  kcal per gram, so the macros reconstruct the calorie figure. A sampled Dessert: 340 kcal,
+  14 g fat, 5.5 g protein, 48 g carbs — 14×9 + 5.5×4 + 48×4 = 340, exactly.
+- **Per-category ranges as a table, not a `case` ladder.** `sim.nutrition_profile` holds one row
+  per category, so retuning Dessert is a one-row update rather than a function rewrite — the same
+  reasoning `sim.persona` and `sim.title_variant` already use.
+- **Bound every sub-value by its parent, after rounding.** Saturated ≤ total fat, added ≤ total
+  sugars, fibre + sugars ≤ carbs. Rounding first and bounding second, because the reverse lets
+  `round()` push a child past a bound that was satisfied a moment earlier. A label that
+  contradicts itself reads as data, which is worse than no label.
+- **~20% get nothing.** The empty state is a real state; a population where every recipe has a
+  label cannot demonstrate it, and D5–D7 would be asserting over a set that never varies.
+- **`sim.rand` only** (B044). Verified by regenerating the whole population twice from the same
+  seed and comparing an md5 over all 1,671 `(n, nutrition)` pairs — identical.
+
+Four new assertions, **D5–D8** (39 → 43): self-consistency, the exact 11-key set, non-negative
+numbers, and that both populations exist. D5 confirmed non-vacuous by writing
+`saturated_fat_g = 999` into one row and watching it fire, then restoring the row from
+`sim.nutrition_for` and getting the original md5 back — which re-proves determinism from the other
+direction. Measured shape at `medium`: 1,320 of 1,671 labelled (79%), Main 547 kcal / 38 g protein
+average, Dessert 36 g sugars, Sauce 127 kcal.
+
+**What `/code-review` found afterwards**, all fixed in the same change set: the unconditional
+re-open above; **B073**, where hoisting the stepper out of `IngredientRail` restated its "is this
+scaled?" test and dropped the `servings == 0` guard, so a 0-serving recipe's banner claimed a
+colour change the list did not make (the general lesson: an extraction that *restates* a predicate
+rather than moving it is where a pure refactor stops being one); a regression test for B072 that
+never collapsed the panel and so would have stayed green with `maintainState: true` deleted; and
+two doc-sync misses — `NutritionFactsLabel` absent from the SDS §8 widget inventory, and five
+present-tense references still calling the RLS matrix 76 checks.
+
+Verified: `melos run analyze` / `test --no-select` / `format` all SUCCESS (core 108,
+design_system 113, app 199); `supabase db reset` (fresh) **and** the upgrade path — new `0001` +
+new `seed_recipes.sql` layered on a database that already had the old ones, which left exactly one
+`seed_recipe_v2` overload; `db:rls` at **79 checks**, and the new grant check confirmed
+non-vacuous by revoking `update (nutrition)` once and watching B9a go red; the B072 test confirmed
+non-vacuous the same way, by deleting `maintainState: true` and watching it go red;
+`recipes:check` and `sim:check` clean; screenshots on the built app for both tabs × both layouts ×
+{empty, populated} × {light, dark}. The original plan follows.
+
+The ask, verbatim in product terms: a nutrition panel styled
 like the label on a store product; on both layouts it shares the ingredients' place as two tabs
 under the servings control (`Ingredients` default, `Nutrition` beside it); both tabs respond to
 the servings stepper; manual entry or leave-empty only (auto-calculate later); empty shows
@@ -1724,7 +1796,7 @@ below are targeted, not structural.
   logflare/vector/supavisor) because plain Postgres cannot apply the baseline —
   `profiles.id → auth.users`. Three paths, in one job so they share the stack:
   1. **Fresh:** drop → every migration → `seed.sql` → `seed_recipes.sql` → sim `tiny` →
-     `3_sim_verify.sql`'s 39 assertions.
+     `3_sim_verify.sql`'s 43 assertions.
   2. **Re-apply:** the whole sequence again on top of itself. Every file in this repo claims
      idempotency; nothing checked it before.
   3. **Upgrade path** (Gotcha 6): the **previous** revision of `0001_init.sql`, found with

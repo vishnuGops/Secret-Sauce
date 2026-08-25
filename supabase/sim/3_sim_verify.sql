@@ -231,6 +231,53 @@ begin
   ) x;
   if n > 0 then raise exception 'D4 % (owner_id, title) collisions', n; end if;
 
+  -- Phase 28. `sim.nutrition_for` builds the label from a calorie draw rather
+  -- than field by field, so the interesting failure is not "is it null" — it is
+  -- a label that contradicts itself, which reads as data on the panel and is
+  -- worse than no label at all. Three parent/child bounds, all of which the
+  -- function applies AFTER rounding for exactly this reason.
+  select count(*) into n
+  from sim.recipe sr join recipes r on r.id = sr.id
+  where r.nutrition is not null
+    and (
+         (r.nutrition ->> 'saturated_fat_g')::numeric > (r.nutrition ->> 'total_fat_g')::numeric
+      or (r.nutrition ->> 'added_sugars_g')::numeric  > (r.nutrition ->> 'total_sugars_g')::numeric
+      or (r.nutrition ->> 'dietary_fiber_g')::numeric
+       + (r.nutrition ->> 'total_sugars_g')::numeric  > (r.nutrition ->> 'total_carbs_g')::numeric
+    );
+  if n > 0 then raise exception 'D5 % nutrition labels contradict themselves (sub-value exceeds its parent)', n; end if;
+
+  -- The key set is the 11 `RecipeNutrition` decodes, no more and no fewer. An
+  -- extra key is accepted by the jsonb column and then decodes to nothing —
+  -- the read-side twin of the authoring validator's unknown-field error — and a
+  -- missing one would mean a `case` fell through to null.
+  select count(*) into n
+  from sim.recipe sr join recipes r on r.id = sr.id
+  where r.nutrition is not null
+    and (
+      select array_agg(k order by k) from jsonb_object_keys(r.nutrition) k
+    ) is distinct from array[
+      'added_sugars_g','calories','cholesterol_mg','dietary_fiber_g','protein_g',
+      'saturated_fat_g','sodium_mg','total_carbs_g','total_fat_g','total_sugars_g',
+      'trans_fat_g'
+    ];
+  if n > 0 then raise exception 'D6 % nutrition labels do not carry exactly the 11 RecipeNutrition keys', n; end if;
+
+  select count(*) into n
+  from sim.recipe sr join recipes r on r.id = sr.id
+  cross join lateral jsonb_each(coalesce(r.nutrition, '{}'::jsonb)) e
+  where jsonb_typeof(e.value) <> 'number' or (e.value)::text::numeric < 0;
+  if n > 0 then raise exception 'D7 % nutrition values are not non-negative numbers', n; end if;
+
+  -- Both states have to EXIST, or the two checks above are vacuous and the
+  -- detail screen's `No nutrition info available` branch has nothing to stand
+  -- on. The draw is 80/20, so at `tiny` the band is loose on purpose.
+  select round(100.0 * count(*) filter (where r.nutrition is not null) / greatest(count(*), 1))
+    into n from sim.recipe sr join recipes r on r.id = sr.id;
+  if n < 50 or n > 95 then
+    raise exception 'D8 %%% of simulated recipes carry a nutrition label — expected 50-95%% (the 20%% with none exercise the empty state)', n;
+  end if;
+
   -- ==========================================================================
   -- E. Shape — is this dataset actually the one we designed?
   --    These are the checks that catch a tuning change quietly flattening the

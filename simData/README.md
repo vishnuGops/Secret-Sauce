@@ -27,6 +27,24 @@ Exactly two keys differ:
 | `demo` | allowed | **rejected** | Engagement is *generated* from a modelled history, never authored. A hand-typed `like_count` is the thing Phase 24 exists to stop doing |
 | `sim` | rejected | allowed | Generation hints — see below |
 
+### Don't author `nutrition` here
+
+The format allows it (simData inherits `recipeData/schema.json` by `$ref`), but **no dish uses
+it and none should**. A nutrition label is a property of a recipe *as published* — one cook's
+version of a dish, at their serving size — not of the dish idea, and hand-typing eleven numbers
+across 120 files would be busywork with no signal in it.
+
+The simulation draws one instead:
+[`sim.nutrition_for(key, category)`](../supabase/sim/0_sim_schema.sql) gives each generated
+recipe a label built from a per-category calorie draw, so the macros add up at 9 / 4 / 4 kcal per
+gram and Desserts read sweet where Mains read high-protein. About a fifth get none, so the
+detail screen's `No nutrition info available` state is populated too. It is the same reasoning as
+`demo`: generated from a model beats hand-typed, and for the same reason.
+
+An authored label *would* win if one ever appeared — the generator writes
+`coalesce(nullif(doc -> 'nutrition', 'null'::jsonb), sim.nutrition_for(…))` — so promoting a dish
+into `recipeData/` and giving it real values there is the supported path.
+
 ### The `sim` block
 
 Both fields are optional.

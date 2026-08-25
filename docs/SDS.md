@@ -83,10 +83,38 @@ the engagement counters of the profile's *public* recipes — never written by t
 `forked_from_recipe_id → recipes` (nullable), `forked_from_version_id → recipe_versions` (nullable),
 `current_version_id → recipe_versions` (nullable), `like_count`, `save_count`, `view_count`,
 `rating_sum (numeric)`, `rating_count (int)`, `rating_avg (numeric(3,2))`,
-`created_at`, `updated_at`.
+`nutrition (jsonb, nullable)`, `created_at`, `updated_at`.
 
 The three `rating_*` columns are **denormalized aggregates** — never written by the client;
 the `recipe_ratings` trigger recomputes them from scratch so they cannot drift.
+
+`nutrition` (Phase 28) is the per-serving nutrition-facts label, and it is deliberately **one
+jsonb column rather than eleven `numeric` ones**: the writable-recipe-column set is restated in
+about thirteen places across SQL, Dart, and the authoring tooling, so one column costs each copy
+a line where eleven would cost eleven. Four rules follow.
+
+- **`null` means "no nutrition info", and it is the only spelling of it.** An all-empty entry is
+  normalized to `null` in the editor before it reaches the repository; the detail screen's
+  Nutrition tab branches on exactly that.
+- **The key set is fixed at 11 optional non-negative numbers** — `calories`, `total_fat_g`,
+  `saturated_fat_g`, `trans_fat_g`, `cholesterol_mg`, `sodium_mg`, `total_carbs_g`,
+  `dietary_fiber_g`, `total_sugars_g`, `added_sugars_g`, `protein_g`. Postgres cannot check the
+  interior of a `jsonb`, so the constraint `recipes_nutrition_is_object` only insists the value is
+  an object; `RecipeNutrition` in core and `_nutritionKeys` in `tool/recipe_format.dart` are what
+  pin the keys, and the authoring validator treats an unknown one as a hard error.
+- **Values are per serving at the recipe's own `servings`, and nothing multiplies them.** Scaling
+  4 → 8 doubles the batch *and* the servings, so a serving is unchanged; the servings stepper moves
+  the label's servings line and its batch total, never a row.
+- **JSON null is not SQL NULL.** `_writablePayload` always sends the key, so a recipe with no
+  label arrives as `"nutrition": null`, and `p_payload -> 'nutrition'` returns `'null'::jsonb` —
+  which fails the typeof check. Both `save_recipe` branches therefore write
+  `nullif(p_payload -> 'nutrition', 'null'::jsonb)`, with `->` and never `->>` (there is no
+  implicit text→jsonb cast). `supabase/tests/rls_matrix.sql` asserts both halves.
+
+It is client-writable, so it appears in both column grant lists, in `_writablePayload`, in
+`save_recipe`'s two branches, in `fork_recipe`'s insert list, and in `kRecipeSelect`.
+`recipe_snapshot` needed no change — it is `to_jsonb(r) - 'search_tsv'`, so version snapshots pick
+the column up on their own.
 
 **recipe_versions** — git-like immutable snapshots
 `id`, `recipe_id → recipes`, `version_number (int)`, `parent_version_id → recipe_versions` (nullable),
@@ -275,7 +303,7 @@ It creates three throwaway `auth.users` (an owner, someone the owner shares a pr
 an unrelated signed-in stranger) plus a private and a public recipe with content, re-runs the whole
 matrix under `set local role authenticated` + `request.jwt.claims`, and **rolls the transaction
 back** — so it leaves no user, no recipe and no helper function behind and is safe against any
-database. 76 checks; a failure names the check and what actually happened.
+database. 79 checks; a failure names the check and what actually happened.
 
 Its one helper, `rls_matrix_do(text)`, executes an arbitrary string as the calling role, which is
 how a "must FAIL" check is written without aborting the run. That is also a PostgREST RPC shape
@@ -459,12 +487,36 @@ medium**: the canvas draws no medium screen, a single-column cover-first page re
 | Metadata | `FactsStrip(quad: true)` — Total · Hands on · Difficulty · **Longest wait** as 2×2 | `FactsStrip` — the same four plus Cook and Visibility, one row of labelled cells |
 | Visibility | a `Private` badge on the cover | a facts cell |
 | Navigation | **pinned jump bar** — Ingredients / Method / Fork | none needed; both columns are on screen |
-| Ingredients | `IngredientRail(bordered: false)` — full width, no card edge | `IngredientRail()` — a bordered column beside the method |
+| Rail | `RailPanel(bordered: false)` — full width, no card edge | `RailPanel()` — a bordered column beside the method |
 | Steps | `MethodColumn` | `MethodColumn` |
 | Cook mode | `Ready to cook?` pinned below the scroll, plus the method teaser | the header band button, plus the method teaser |
 
 The two content panels are **one implementation each**, differing only in `bordered`. That is
 deliberate: B066 was two copies of the ingredient list disagreeing across this very branch.
+
+**The rail is a tab host (Phase 28).** `RailPanel` renders, top to bottom: `ServingsRow` → two
+`ChoiceChip`s → the active pane, which is `IngredientRail` or `NutritionTab`. Four parts of that
+shape are load-bearing:
+
+- **The stepper is above the tabs, not inside a pane.** Nutrition depends on the serving count
+  exactly as the ingredient list does — the label's batch line is calories × the selected
+  servings — so a stepper trapped behind the other tab would make that line unexplainable, and a
+  second stepper in the nutrition pane is B066 by construction. Both panes and cook mode read the
+  one `selectedServingsProvider`.
+- **The card border belongs to the host**, which is why `bordered` moved off `IngredientRail`. The
+  pane swap then happens inside one frame instead of exchanging two differently-bordered boxes.
+- **The tabs are `ChoiceChip`s in a `Wrap`, not a `SegmentedButton`.** Compact's content box is
+  358px and a segmented control is one intrinsic `Row` with no reflow escape (Gotcha 21) — the
+  same reason the three rows inside the ingredient pane are `Wrap`s.
+- **`railTabProvider` is `autoDispose`**, so every visit opens on Ingredients. Compact's
+  `_jumpToIngredients` tear-off also resets it, so the pinned jump chip cannot scroll to a section
+  whose list is hidden behind the other tab.
+
+`NutritionTab` renders `NutritionFactsLabel` (design_system) or `No nutrition info available`, and
+the branch is simply `recipe.nutrition == null`. The label is store-label styling in `onSurface`
+tokens — no literal black anywhere, so dark mode holds — omits every row with no value, and prints
+`% Daily Value` from the FDA 2,000-calorie constants in `core/src/nutrition_facts.dart`. It never
+multiplies a per-serving number (see §3.2).
 
 Things about the v2 page that are load-bearing and easy to undo by accident:
 
@@ -496,7 +548,9 @@ Things about the v2 page that are load-bearing and easy to undo by accident:
   height grows with text scale and any reserve constant would be wrong at some scale.
 - **A widget's envelope is the set of widths it has been pumped at.** The rail was green for a week
   and overflowed the moment compact reused it at 358px instead of the expanded page's 493px column
-  (B070). Giving an existing widget a new caller re-opens its envelope; re-run it.
+  (B070). Giving an existing widget a new caller re-opens its envelope; re-run it. Phase 28's rail
+  restructure re-opened it again, which is why both detail suites now run their envelope matrix
+  **per tab** and `NutritionFactsLabel` carries its own at {320, 358, 493} × {1.0, 2.0}.
 
 Checked ingredients and done steps live in `checkedIngredientsProvider` / `doneStepsProvider` —
 **not** `autoDispose`, because leaving the screen mid-cook and coming back must not clear the
@@ -688,6 +742,12 @@ shipping that is the app-wide typography decision (`google_fonts` + a `textTheme
 | `StarRating`      | Read-only 5-star display with half stars, value, and rating count   |
 | `RatingPill`      | Compact single star + value, for dense surfaces (`RecipeCard`)      |
 | `StarRatingInput` | Interactive half-star input; `onChangeEnd` fires when a gesture ends |
+
+### Nutrition widgets (`design_system`)
+
+| Widget | Use |
+| --- | --- |
+| `NutritionFactsLabel` | The per-serving nutrition panel, drawn like the label on a store product: heavy outer rule, `Nutrition Facts` masthead, servings and per-serving lines, oversized Calories row, right-aligned `% Daily Value` column, sub-rows indented under fat / carbs / total sugars, and the 2,000-calorie footnote. Takes a `RecipeNutrition` plus the selected and base serving counts (`design_system` already depends on `core`, so it takes the model directly). Three properties are the contract: **a row with no value does not render** — a label carrying only calories is a short label, not a column of dashes; **no per-serving number is ever multiplied** — `servings` moves the servings line and the batch total only (§3.2); and there is **no hard-coded black** — ink is `onSurface` on `surface`, so dark mode holds and the label's weight comes from rule thickness and type weight instead. The %DV arithmetic and the value trimming live in `core/src/nutrition_facts.dart`, not here, because a future editor preview or export computes the same numbers (the OPT-A7 rule). Envelope pinned at {320, 358, 493} × {1.0, 2.0} — the widths the two detail rails actually hand it |
 
 ### Chef widgets (`design_system`)
 
@@ -1169,6 +1229,52 @@ The recipes arrived as one flat array of `{"amount": "1 1/4 cup", "item": "flour
   a duplicate until the groups are named.
 - **Unattended time is not prep time.** Chilling, rising, and marinating are a step's
   `duration_minutes`, so the detail screen shows a timer instead of the headline time inflating.
+
+**`nutrition` (Phase 28)** is an optional object of 11 non-negative numbers, per serving at that
+file's own `servings`. The format spells absence out as an explicit `"nutrition": null` rather
+than an omitted key — twelve of the fourteen files carry that, and it is what exercises the
+detail screen's empty state — and an empty object `{}` is a hard error, because `null` is the one
+representation of "no info" everywhere else in the feature. Unknown keys are hard errors too: the
+`jsonb` column would accept them and they would then decode to nothing, silently. `simData`
+inherits all of this through its `$ref`, and **no dish authors one** — a label belongs to a recipe
+as published, not to the dish idea, and hand-authoring 120 of them would be busywork with no
+signal in it. The simulation generates them instead: `sim.nutrition_for(key, category)`
+(`0_sim_schema.sql`) draws a label for each simulated recipe and `2_sim_generate.sql` writes it,
+so a `db:sim` population carries ~1,320 varied labels. Three properties are what make it worth
+looking at rather than merely non-null:
+
+- **Derived from a calorie draw, not field by field.** Independent draws produce labels that do
+  not add up — 200 kcal beside 40 g of fat — and looking like a real label is the panel's entire
+  job. Calories are drawn per category, split into fat / protein / carb *energy* shares, and
+  converted at 9 / 4 / 4 kcal per gram, so the macros reconstruct the calorie figure.
+- **Ranges are per category**, held as rows in `sim.nutrition_profile` rather than a `case`
+  ladder, so retuning one is a one-row update. Dessert and Drink draw high sugar, Main high
+  protein and calories, Sauce and Side low everything.
+- **Every sub-value is bounded by its parent** — saturated ≤ total fat, added ≤ total sugars,
+  fibre + sugars ≤ carbs — with the bound applied *after* rounding, so rounding cannot push a
+  child past it. A label that contradicts itself reads as data and is worse than no label.
+
+About a fifth of simulated recipes get **no** label, because the empty state is a real state and a
+population where every recipe has one cannot demonstrate it. Randomness is `sim.rand` only, so the
+B044 guarantee holds: same seed → same labels. `3_sim_verify.sql` asserts all of it —
+**D5** self-consistency, **D6** the exact 11-key set, **D7** non-negative numbers, **D8** that
+both the labelled and unlabelled populations exist (without which D5–D7 are vacuous).
+
+An authored dish label would still win: the generator writes
+`coalesce(nullif(doc -> 'nutrition', 'null'::jsonb), sim.nutrition_for(…))`. The `nullif` is the
+same JSON-null trap as everywhere else — a dish spelling the field out as `"nutrition": null`
+yields a JSON null, not SQL `NULL`.
+
+`seed_recipe_v2` gained `p_nutrition jsonb default null` as its **last** argument. That is a
+signature change, so the previous 17-argument form is dropped in the generated file itself — not
+only in `drop.sql`, which a plain re-apply never runs (B024 / Gotcha 5). Without that line the
+upgrade path dies with `42725 … is not unique` while a fresh reset and a re-apply both stay green.
+
+**The two dummy fixtures cannot reach production, by design.** `chicken-tikka-masala` and
+`spring-vegetable-tart` carry all 11 fields at `10` so the label is inspectable on a local stack;
+every `% Daily Value` they produce is nonsense. Because `seed_recipe_v2` early-returns on an
+existing `(owner_id, title)`, a re-seed never pushes them to a database that already has those
+recipes. Replacing them with real values is named deferred work, not an afterthought.
 
 ### 11.2 Identity and ordering
 

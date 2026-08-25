@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:app/features/recipe_detail/detail_chips.dart';
 import 'package:app/features/recipe_detail/detail_layout.dart';
-import 'package:app/features/recipe_detail/ingredient_rail.dart';
+import 'package:app/features/recipe_detail/rail_panel.dart';
 import 'package:app/features/recipe_detail/method_column.dart';
 import 'package:app/features/recipe_detail/rating_section.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
@@ -73,7 +73,7 @@ class RecipeDetailExpanded extends ConsumerWidget {
                           width:
                               kDetailRailWidth *
                               context.textScale.clamp(1.0, kDetailRailMaxScale),
-                          child: IngredientRail(recipe: recipe),
+                          child: RailPanel(recipe: recipe),
                         ),
                         const SizedBox(width: AppSpacing.xl),
                         Expanded(

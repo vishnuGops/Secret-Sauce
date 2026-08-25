@@ -118,7 +118,19 @@ the row (sharing, editing a shared recipe, admin-ish flows) — the client-side 
   or that adds a client-writable column to `_writablePayload` without adding it to **both** the
   grants block and `save_recipe`'s column list — the last one fails silently, since an absent key
   just never saves. `save_recipe` is `security definer`, so it must keep its `owns_recipe` check
-  and its `revoke execute from public/anon`.
+  and its `revoke execute from public/anon`. It must reach `kRecipeSelect` too, or it decodes as
+  null on the way back with no error (Gotcha 17). Note the **grant** omission is silent for a
+  column the app only ever writes through the RPC — definer rights bypass it — so a new one also
+  needs a positive owner-update check in `supabase/tests/rls_matrix.sql`, which is the only thing
+  that proves the grant exists. `recipes.nutrition` (Phase 28) is the worked example.
+- **A `jsonb` column carrying a Dart model.** `null` from Dart arrives as `'null'::jsonb`, which
+  is **not** SQL `NULL` and fails any `jsonb_typeof` check — flag an extraction that is not
+  wrapped in `nullif(…, 'null'::jsonb)`. Flag `->>` where `->` is meant: there is no implicit
+  text→jsonb cast, so the wrong arrow is a runtime error on the first save.
+- **Nested-model `toJson` (B071).** `explicitToJson` is off for `packages/core`. Flag a new
+  model-typed field on a `@freezed` class that has neither `includeToJson: false` nor an explicit
+  `@JsonKey(toJson: …)` — the generator emits the object itself and `jsonEncode` throws at the
+  call site, not at the model.
 - **Numeric decoding.** Postgres `numeric` arrives as a JSON number that may be int or double —
   decode via `(value as num).toDouble()` (`recipe_repository.dart:249-250`), never a bare
   `as double` on a new numeric column.

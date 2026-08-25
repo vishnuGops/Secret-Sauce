@@ -71,8 +71,30 @@ final mySavedProvider = FutureProvider.autoDispose.family<bool, String>((
 });
 
 /// Selected servings for the detail screen's scaler (defaults to recipe servings).
+///
+/// Cook mode reads this same provider, so a recipe scaled to 8 says 8 on both
+/// surfaces. Phase 28 added a third reader — the nutrition label's batch line —
+/// on the same terms: one number, one source (B066).
 final selectedServingsProvider = StateProvider.autoDispose.family<int?, String>(
   (ref, id) => null,
+);
+
+/// Which pane `RailPanel` is showing.
+///
+/// Lives here rather than beside the widget so the provider file stays the one
+/// place the detail screen's state is declared, and so `RailPanel` and
+/// `recipe_detail_compact.dart`'s jump-chip tear-off can both reach it without
+/// importing each other.
+enum RailTab { ingredients, nutrition }
+
+/// The selected rail tab, per recipe.
+///
+/// `autoDispose`, so every visit starts on Ingredients — the ask names that as
+/// the default, and a tab that remembered itself across visits would open a
+/// recipe on a label the reader did not ask for. Family-keyed like its two
+/// siblings above.
+final railTabProvider = StateProvider.autoDispose.family<RailTab, String>(
+  (ref, id) => RailTab.ingredients,
 );
 
 /// Ingredient ids the user has ticked off in the v2 rail, per recipe.

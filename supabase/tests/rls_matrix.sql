@@ -106,6 +106,7 @@ declare
   v_n        bigint;
   n          bigint;
   i          int;
+  v_json     jsonb;
 
   -- results
   v_log      text[] := '{}';
@@ -279,6 +280,15 @@ begin
     'update recipes set owner_id = %L where id = %L', v_other, v_private));
   v_log := v_log || format(E'%s\tB9  owner · reassign own recipe must FAIL\t%s', v_err = '42501', coalesce(v_err, 'no error'));
 
+  -- The positive half of the same rule, for Phase 28's `nutrition` (a
+  -- client-writable column). `save_recipe` is `security definer`, so a missing
+  -- grant would NOT show up on the app's save path — a direct PATCH is the only
+  -- thing that fails, and nothing in the app issues one for recipes yet. This
+  -- check is therefore the only proof the grant exists.
+  select err, rows into v_err, v_n from public.rls_matrix_do(format(
+    'update recipes set nutrition = ''{"calories":10}''::jsonb where id = %L', v_private));
+  v_log := v_log || format(E'%s\tB9a owner · update own nutrition (column grant)\t%s', v_err is null and v_n = 1, coalesce(v_err, v_n || ' row'));
+
   select err into v_err from public.rls_matrix_do(format(
     'update profiles set chef_score = 9999 where id = %L', v_owner));
   v_log := v_log || format(E'%s\tB10 owner · update own chef_score must FAIL (B050)\t%s', v_err = '42501', coalesce(v_err, 'no error'));
@@ -331,7 +341,8 @@ begin
   -- `security definer` RPC, so this is what a real save proves.
   begin
     v_saved := save_recipe(null,
-      '{"title":"BL-7 via save_recipe","servings":2,"visibility":"private"}'::jsonb,
+      '{"title":"BL-7 via save_recipe","servings":2,"visibility":"private",'
+      '"nutrition":{"calories":210,"protein_g":9.5}}'::jsonb,
       '[{"name":"Main","ingredients":[{"name":"salt","quantity":1,"unit":"tsp"}]}]'::jsonb,
       '[{"name":"Method","steps":[{"text":"Stir."}]}]'::jsonb,
       'BL-7');
@@ -346,9 +357,27 @@ begin
   -- group trees wholesale (Gotcha 11), so pointing this at `v_private` would
   -- empty the content section C2 goes on to read and turn a green run red for
   -- the wrong reason.
+  -- The insert branch's `nutrition` extraction, read back. `->` not `->>`, so a
+  -- wrong arrow is a runtime error at B22 and this line never gets to disagree.
+  select nutrition into v_json from recipes where id = v_saved;
+  v_log := v_log || format(E'%s\tB22a owner · save_recipe stores the nutrition object\t%s',
+    v_json is not null and (v_json->>'calories')::numeric = 210,
+    coalesce(v_json::text, 'null'));
+
   select err into v_err from public.rls_matrix_do(format(
     'select save_recipe(%L, ''{"title":"BL-7 saved again"}''::jsonb, ''[]''::jsonb, ''[]''::jsonb, ''BL-7'')', v_saved));
   v_log := v_log || format(E'%s\tB23 owner · save_recipe(own id, …) updates\t%s', v_err is null, coalesce(v_err, 'ok'));
+
+  -- JSON null is not SQL NULL. `_writablePayload` always sends the key, so a
+  -- recipe with no nutrition arrives as `"nutrition": null` — which `->` returns
+  -- as `'null'::jsonb`, a value that fails `recipes_nutrition_is_object`. The
+  -- `nullif` in both save branches is what turns it into a real NULL; without it
+  -- this update raises 23514 instead of clearing the column.
+  select err into v_err from public.rls_matrix_do(format(
+    'select save_recipe(%L, ''{"title":"BL-7 cleared","nutrition":null}''::jsonb, ''[]''::jsonb, ''[]''::jsonb, ''BL-7'')', v_saved));
+  select nutrition into v_json from recipes where id = v_saved;
+  v_log := v_log || format(E'%s\tB23a owner · save_recipe JSON-null nutrition lands as SQL NULL\t%s',
+    v_err is null and v_json is null, coalesce(v_err, coalesce(v_json::text, 'null')));
 
   -- `views_select` is `owns_recipe`, so only the owner reads the log — the
   -- fixture row was written by the sharee (see C15, which must see nothing).

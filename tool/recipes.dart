@@ -152,12 +152,14 @@ String _functionDdl() => '''
 -- signature change leaves the OLD overload alive beside the new one and every
 -- call then matches both (`42725 … is not unique`). Drops belong HERE, in the
 -- file that recreates the function — drop.sql is a separate destructive script
--- that a plain re-apply never runs. There are no historical signatures to drop
--- yet; when this one changes, add its exact argument list below and keep every
--- earlier entry.
+-- that a plain re-apply never runs. Add each outgoing argument list below and
+-- keep every earlier entry.
 --
---   drop function if exists seed_recipe_v2(<the previous argument list>);
---
+-- Phase 28 appended `p_nutrition jsonb`, so the 17-argument form is dropped
+-- here. Without this line the upgrade path (old seed already applied, new file
+-- layered on top — CLAUDE.md Gotcha 6) dies with `42725 … is not unique` while
+-- a fresh reset and a re-apply both stay green.
+drop function if exists seed_recipe_v2(uuid, text, text, text, text, difficulty, int, int, int, recipe_visibility, text, jsonb, jsonb, int, int, int, jsonb);
 -- ---------------------------------------------------------------------------
 create or replace function seed_recipe_v2(
   p_owner       uuid,
@@ -176,7 +178,10 @@ create or replace function seed_recipe_v2(
   p_likes       int   default 0,
   p_saves       int   default 0,
   p_views       int   default 0,
-  p_ratings     jsonb default '[]'::jsonb
+  p_ratings     jsonb default '[]'::jsonb,
+  -- Appended LAST and defaulted, so an existing call site that predates it
+  -- still compiles. Per-serving label; null for a recipe with no data.
+  p_nutrition   jsonb default null
 )
 returns void
 language plpgsql
@@ -199,11 +204,11 @@ begin
   insert into recipes (
     owner_id, title, description, cuisine, category, difficulty,
     prep_minutes, cook_minutes, servings, visibility, attribution,
-    like_count, save_count, view_count
+    like_count, save_count, view_count, nutrition
   ) values (
     p_owner, p_title, p_description, p_cuisine, p_category, p_difficulty,
     p_prep, p_cook, p_servings, p_visibility, p_attribution,
-    p_likes, p_saves, p_views
+    p_likes, p_saves, p_views, p_nutrition
   ) returning id into v_recipe;
 
   -- Groups and their children are numbered from 0 WITHIN each group, matching
@@ -292,10 +297,10 @@ end
 -- the trigger-rights rule in CLAUDE.md.
 do \$grants\$
 begin
-  execute 'revoke execute on function seed_recipe_v2(uuid, text, text, text, text, difficulty, int, int, int, recipe_visibility, text, jsonb, jsonb, int, int, int, jsonb) from public';
+  execute 'revoke execute on function seed_recipe_v2(uuid, text, text, text, text, difficulty, int, int, int, recipe_visibility, text, jsonb, jsonb, int, int, int, jsonb, jsonb) from public';
   execute 'revoke execute on function seed_recipe_v2_ratings(uuid, jsonb) from public';
   if exists (select 1 from pg_roles where rolname = 'anon') then
-    execute 'revoke execute on function seed_recipe_v2(uuid, text, text, text, text, difficulty, int, int, int, recipe_visibility, text, jsonb, jsonb, int, int, int, jsonb) from anon, authenticated';
+    execute 'revoke execute on function seed_recipe_v2(uuid, text, text, text, text, difficulty, int, int, int, recipe_visibility, text, jsonb, jsonb, int, int, int, jsonb, jsonb) from anon, authenticated';
     execute 'revoke execute on function seed_recipe_v2_ratings(uuid, jsonb) from anon, authenticated';
   end if;
 end \$grants\$;
@@ -340,7 +345,13 @@ String _call(AuthoredRecipe recipe) {
           '    ${demo['like_count'] ?? 0}, ${demo['save_count'] ?? 0}, '
           '${demo['view_count'] ?? 0},',
         )
-        ..writeln('    ${_json(demo['ratings'] ?? const [])}')
+        ..writeln('    ${_json(demo['ratings'] ?? const [])},')
+        // `null` and an absent key mean the same thing — no label — and the
+        // column's check constraint rejects `'null'::jsonb`, so the SQL NULL
+        // has to be a bare NULL and not a json one.
+        ..writeln(
+          '    ${r['nutrition'] == null ? 'NULL' : _json(r['nutrition'])}',
+        )
         ..writeln('  );');
   return buf.toString();
 }

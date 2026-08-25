@@ -9,12 +9,14 @@ export 'src/models/ingredient_group.dart';
 export 'src/models/recipe_step.dart';
 export 'src/models/step_group.dart';
 export 'src/models/recipe_version.dart';
+export 'src/models/recipe_nutrition.dart';
 export 'src/models/recipe.dart';
 export 'src/models/chef_standing.dart';
 
 // Domain helpers
 export 'src/chef_scoring.dart';
 export 'src/formatting.dart';
+export 'src/nutrition_facts.dart';
 export 'src/friendly_error.dart';
 export 'src/paging.dart';
 

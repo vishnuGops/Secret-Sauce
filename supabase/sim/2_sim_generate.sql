@@ -326,7 +326,7 @@ from sim_new_recipe r;
 insert into recipes (
   id, owner_id, title, description, cuisine, category, difficulty,
   prep_minutes, cook_minutes, servings, visibility, attribution,
-  created_at, updated_at
+  nutrition, created_at, updated_at
 )
 select
   t.id, t.owner_id, t.title,
@@ -335,6 +335,20 @@ select
   (t.doc ->> 'prep_minutes')::int, (t.doc ->> 'cook_minutes')::int,
   (t.doc ->> 'servings')::int,
   t.visibility, t.doc ->> 'attribution',
+  -- Phase 28. An authored label wins; otherwise the generator draws one from
+  -- the dish's category (`sim.nutrition_for`, defined in 0_sim_schema.sql).
+  -- No dish carries one today — a label belongs to a recipe as published, not
+  -- to the dish idea — but the format allows it via simData's `$ref`, and
+  -- authored-beats-generated is the right precedence if one ever does.
+  --
+  -- `nullif(…, 'null'::jsonb)` because a dish spelling the field out as an
+  -- explicit `"nutrition": null` (which is how recipeData writes "no info")
+  -- yields a JSON null here, not SQL NULL — the same trap `save_recipe`
+  -- handles, and `recipes_nutrition_is_object` rejects it either way.
+  coalesce(
+    nullif(t.doc -> 'nutrition', 'null'::jsonb),
+    sim.nutrition_for('recipe:' || t.n, t.doc ->> 'category')
+  ),
   t.created_at, t.created_at
 from sim_titled t
 on conflict (id) do nothing;

@@ -34,7 +34,7 @@ const _kRecipeColumns =
     'category,difficulty,prep_minutes,cook_minutes,servings,visibility,'
     'attribution,forked_from_recipe_id,forked_from_version_id,'
     'current_version_id,like_count,save_count,view_count,created_at,updated_at,'
-    'rating_sum,rating_count,rating_avg';
+    'rating_sum,rating_count,rating_avg,nutrition';
 
 const kRecipeSelect =
     '$_kRecipeColumns,'

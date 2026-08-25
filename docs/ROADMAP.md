@@ -979,7 +979,7 @@ denormalized counters derived from it (the reverse of how `seed.sql` works).
 
 ### Verification
 
-- [x] `supabase/sim/3_sim_verify.sql` — 39 assertions that `raise exception` rather than print.
+- [x] `supabase/sim/3_sim_verify.sql` — 43 assertions that `raise exception` rather than print.
       Nothing in CI runs SQL (SDS §11.3), so this script *is* the test suite for this phase, and it
       found all three defects in B044 plus B045
 - [x] Counter invariants (A1–A8), including `view_count` excluding anonymous rows and repeat visits
@@ -1485,9 +1485,23 @@ commit.
 
 ---
 
-## Phase 28 — Nutrition facts: per-serving label, rail tabs, manual entry (planned, not started)
+## Phase 28 — Nutrition facts: per-serving label, rail tabs, manual entry (done)
 
-**Status: planned in detail, not started.** Recipes gain an optional **nutrition facts** panel
+**Status: DONE (2026-08-24).** Everything below shipped as planned; the three Deferred items at
+the bottom are the only open work. Three things the plan did not anticipate, all recorded where
+they belong: `Recipe.toJson()` needed an explicit `@JsonKey(toJson:)` for the nested model
+(**B071** — `explicitToJson` is off for this package and every other nested field on `Recipe` is
+`includeToJson: false`, so `nutrition` was the first one that had to flatten itself); the editor's
+collapse had to keep its fields registered with the `Form` (**B072**, `Visibility(maintainState:
+true)`) or a half-typed number could be hidden and then silently dropped; and hoisting the servings
+stepper out of `IngredientRail` restated its "is this scaled?" test instead of moving it, dropping
+the `servings == 0` guard (**B073**, found by `/code-review` — an extraction that restates a
+predicate is where a pure refactor stops being one). Verified on the local stack across the fresh
+path, the upgrade path, and `db:rls` at **79 checks** (76 + 3), with the grant check confirmed
+non-vacuous by reverting it once — and B072's test likewise, by deleting `maintainState: true` and
+watching it go red.
+
+Recipes gain an optional **nutrition facts** panel
 drawn like the label on a store product — the bold `Nutrition Facts` header, servings line,
 oversized Calories row, per-nutrient rows with a `% Daily Value` column, heavy rules between
 sections. It shares the rail with ingredients as **two tabs under the servings stepper** —
@@ -1532,121 +1546,136 @@ drawn-but-dead affordance is worse than absence). Mechanism, alternatives, and o
 
 ### Schema (`0001_init.sql`, idempotent — pre-release, so folded into the baseline)
 
-- [ ] `alter table recipes add column if not exists nutrition jsonb` (nullable)
-- [ ] Named check `recipes_nutrition_is_object` — `nutrition is null or jsonb_typeof(nutrition)
+- [x] `alter table recipes add column if not exists nutrition jsonb` (nullable)
+- [x] Named check `recipes_nutrition_is_object` — `nutrition is null or jsonb_typeof(nutrition)
       = 'object'` — added via the guarded `do $$ … pg_constraint` pattern the deferred FKs use
-- [ ] `nutrition` in **both** column-level grant lists (insert + update). The RPC save path is
+- [x] `nutrition` in **both** column-level grant lists (insert + update). The RPC save path is
       `security definer` and would not catch the omission — the grant is what keeps a direct
       `PATCH` of a client-writable column working and the B050 story consistent
-- [ ] `save_recipe`: insert-branch column + extraction, update-branch assignment — both as
+- [x] `save_recipe`: insert-branch column + extraction, update-branch assignment — both as
       `nullif(p_payload -> 'nutrition', 'null'::jsonb)`. The arrow is `->` (jsonb), not `->>`
       (text — no implicit cast, runtime error); the `nullif` is because a Dart map with a null
       value arrives as **JSON null**, which is not SQL `NULL` and would fail the typeof check
-- [ ] `fork_recipe`: `nutrition` added to its insert list — a fork is a deep copy and carries the
+- [x] `fork_recipe`: `nutrition` added to its insert list — a fork is a deep copy and carries the
       label
-- [ ] `recipe_snapshot` needs **nothing** — it is `to_jsonb(r) - 'search_tsv'`, so version
+- [x] `recipe_snapshot` needs **nothing** — it is `to_jsonb(r) - 'search_tsv'`, so version
       snapshots pick the column up automatically
-- [ ] `rls_matrix.sql`: a positive owner-update check on `nutrition` (the missing-grant failure
+- [x] `rls_matrix.sql`: a positive owner-update check on `nutrition` (the missing-grant failure
       is silent on the RPC path, so the matrix is where it becomes visible), plus the
       `save_recipe` round-trip literal extended to write a nutrition object and read it back, and
       one check that a JSON-null payload lands as SQL `NULL` (the `nullif` proof)
 
 ### core
 
-- [ ] `RecipeNutrition` freezed model (`src/models/recipe_nutrition.dart`): `calories`,
+- [x] `RecipeNutrition` freezed model (`src/models/recipe_nutrition.dart`): `calories`,
       `total_fat_g`, `saturated_fat_g`, `trans_fat_g`, `cholesterol_mg`, `sodium_mg`,
       `total_carbs_g`, `dietary_fiber_g`, `total_sugars_g`, `added_sugars_g`, `protein_g` — all
       `double?` (`numeric` arrives int-or-double, Gotcha 12), `includeIfNull: false` on `toJson`
       so stored json carries only entered fields, plus an `isEmpty` getter. Exported from
       `core.dart` — the barrel is the only public surface, and both `design_system` and the app
       need the type
-- [ ] `Recipe.nutrition` (`RecipeNutrition?`, wire key `nutrition`) + `melos run build_runner
+- [x] `Recipe.nutrition` (`RecipeNutrition?`, wire key `nutrition`) + `melos run build_runner
       --no-select`
-- [ ] `_kRecipeColumns` + `nutrition` (24 → 25) — the read-side twin obligation (Gotcha 17);
+- [x] `_kRecipeColumns` + `nutrition` (24 → 25) — the read-side twin obligation (Gotcha 17);
       without it the column decodes as null with no error
-- [ ] `_writablePayload` + `'nutrition': recipe.nutrition?.toJson()` (13 → 14 keys)
-- [ ] `% Daily Value`: FDA 2,000-kcal daily-value constants + `percentDailyValue()` + a value
+- [x] `_writablePayload` + `'nutrition': recipe.nutrition?.toJson()` (13 → 14 keys)
+- [x] `% Daily Value`: FDA 2,000-kcal daily-value constants + `percentDailyValue()` + a value
       formatter that trims like `_trimQuantity`, in `core/src/formatting.dart` (or a sibling
       `nutrition_facts.dart`) — pure, tested
-- [ ] Tests: decode (int / double / absent / JSON null), `toJson` omits null keys, the
+- [x] Tests: decode (int / double / absent / JSON null), `toJson` omits null keys, the
       `chef_models_test.dart` select pin gains `nutrition` (it pins **membership**, so a new
       column passes silently unless added there), `recipe_repository_test.dart` fixture row +
       a save assertion on `p_payload['nutrition']`
 
 ### design_system
 
-- [ ] `NutritionFactsLabel` (`src/widgets/nutrition_facts_label.dart`): store-label design —
+- [x] `NutritionFactsLabel` (`src/widgets/nutrition_facts_label.dart`): store-label design —
       heavy outer border, `Nutrition Facts` header, servings + per-serving lines, thick section
       rules, oversized Calories row, right-aligned `% DV` column, indented sub-rows (saturated /
       trans under fat; fiber / sugars / added under carbs), the 2,000-calorie footnote. Only rows
       with values render; no hard-coded black anywhere
-- [ ] Barrel export (Gotcha 14) + widget test: row omission, %DV text, envelope at
+- [x] Barrel export (Gotcha 14) + widget test: row omission, %DV text, envelope at
       {320, 358, 493} × {1.0, 2.0} — the widths the two layouts actually hand the rail
 
 ### app — recipe detail
 
-- [ ] `servings_row.dart`: stepper + `Scaled from N` banner extracted from `IngredientRail`
+- [x] `servings_row.dart`: stepper + `Scaled from N` banner extracted from `IngredientRail`
       (which keeps its heading, list, and footer)
-- [ ] `rail_panel.dart`: the shared host — bordered card on expanded, bare on compact (the
+- [x] `rail_panel.dart`: the shared host — bordered card on expanded, bare on compact (the
       `bordered` param moves here from `IngredientRail`); children: `ServingsRow` → tab chips →
       active pane
-- [ ] `nutrition_tab.dart`: watches `selectedServingsProvider(recipe.id)`, renders
+- [x] `nutrition_tab.dart`: watches `selectedServingsProvider(recipe.id)`, renders
       `NutritionFactsLabel` with the scaled count + batch line, or the
       `No nutrition info available` empty state
-- [ ] `railTabProvider` beside the other detail providers; compact's `_jumpToIngredients` also
+- [x] `railTabProvider` beside the other detail providers; compact's `_jumpToIngredients` also
       resets it, so the jump chip never lands on a hidden ingredient list
-- [ ] Both layouts swap `IngredientRail` for the host; `IngredientRail` loses its `bordered`
+- [x] Both layouts swap `IngredientRail` for the host; `IngredientRail` loses its `bordered`
       param (the container moves to the host), so the compact suite's `.bordered isFalse`
       assertion moves with it — an expected API break, not a regression. Cook mode untouched —
       it has its own gutter and already reads the same servings provider
-- [ ] Tests in both suites: Ingredients is default, switch shows the label, empty recipe shows
+- [x] Tests in both suites: Ingredients is default, switch shows the label, empty recipe shows
       the empty text, the stepper moves the batch line, jump-chip reset; envelope matrices re-run
       **per tab** (compact 390 / 600 / 800, expanded 1000 / 1440, × {1.0, 2.0}) — the rail
       restructure re-opens B070's envelope (Gotcha 26)
 
 ### app — recipe editor
 
-- [ ] `EditNutrition` in `edit_models.dart`: 11 controllers, `fromModel` / `toModel` (all-empty →
+- [x] `EditNutrition` in `edit_models.dart`: 11 controllers, `fromModel` / `toModel` (all-empty →
       `null`, never `{}`), dispose wired into the screen's controller-dispose list — a field the
       draft drops is a field the next save deletes (B035 / Gotcha 20)
-- [ ] `nutrition_editor.dart` panel (same contract as the other editors: draft + `onChanged`),
+- [x] `nutrition_editor.dart` panel (same contract as the other editors: draft + `onChanged`),
       after Attribution; collapsed when empty, expanded when values exist; numeric
       `TextFormField`s with inline validators so a non-parseable entry **blocks save** instead of
       silently dropping (the B066 lesson)
-- [ ] Round-trip tests: every field survives load → save, all-empty → `null`; editor envelope
+- [x] Round-trip tests: every field survives load → save, all-empty → `null`; editor envelope
       re-run with the panel expanded (320 / 360 / 600 × 2.0×)
 
 ### Content & seed-data fit (the gate: data extended in this change set)
 
-- [ ] `recipeData/schema.json`: optional `nutrition` object (`additionalProperties: false`,
+- [x] `recipeData/schema.json`: optional `nutrition` object (`additionalProperties: false`,
       11 non-negative numbers). `tool/recipe_format.dart`: `nutrition` in `_baseRecipeKeys`
       (optional, never required) + a `_validateNutrition` (unknown keys stay hard errors).
-      `simData` inherits via `$ref`; dishes stay nutrition-free and the sim generator needs **no
-      change** — the column is nullable and absent from its explicit insert list
-- [ ] `seed_recipe_v2` gains `p_nutrition jsonb default null`, **appended last** — a signature
+      `simData` inherits via `$ref`; dishes stay nutrition-free, because a label belongs to a
+      recipe as published rather than to the dish idea, and hand-authoring 120 of them would be
+      busywork with no signal in it
+- [x] `seed_recipe_v2` gains `p_nutrition jsonb default null`, **appended last** — a signature
       change, so the previous 17-arg signature joins the in-file `drop function if exists` list
       (B024 / Gotcha 5) and the revoke strings and `drop.sql` line move with it; all of it emitted
       from `tool/recipes.dart`
-- [ ] Dummy values, per the ask: `chicken-tikka-masala` and `spring-vegetable-tart` get all 11
+- [x] Dummy values, per the ask: `chicken-tikka-masala` and `spring-vegetable-tart` get all 11
       fields = `10`; the other 12 files get an explicit `"nutrition": null` (the format spells
       optional fields out) and exercise the empty state. `melos run recipes:gen`, commit both;
       CI `recipes:check` guards staleness
-- [ ] What the fixtures **cannot** show: hosted keeps `nutrition = null` — `seed_recipe_v2`
+- [x] What the fixtures **cannot** show: hosted keeps `nutrition = null` — `seed_recipe_v2`
       early-returns on an existing `(owner_id, title)`, so a re-seed never pushes the dummy 10s
       to production. That is the intended outcome (placeholder data must not ship); real label
       values are the content task in Deferred
+- [x] **Sim labels (added 2026-08-24, owner's ask).** The two all-10 fixtures make the panel
+      *reachable*; they do not make it look like a product — every `% Daily Value` they print is
+      nonsense and there are two of them. So `sim.nutrition_for(key, category)`
+      (`0_sim_schema.sql`) draws a label per simulated recipe and `2_sim_generate.sql` writes it,
+      giving ~1,320 varied labels across the population. Three properties make it worth looking at
+      rather than merely non-null: values are **derived from a calorie draw**, not field by field,
+      so the label adds up at 9/4/4 kcal per gram; ranges are **per category**, from the
+      `sim.nutrition_profile` table (Dessert draws high sugar, Main high protein, Sauce low
+      everything); and every sub-value is **bounded by its parent**. ~20% get no label, because
+      the empty state is a real state and a population where every recipe has one cannot
+      demonstrate it. Randomness is `sim.rand` only — same seed → same labels (B044), verified by
+      regenerating twice and comparing an md5 over all 1,671 rows. New assertions **D5–D8** in
+      `3_sim_verify.sql` (39 → 43): self-consistency, the exact 11-key set, non-negative numbers,
+      and that both the labelled and unlabelled states actually exist
 
 ### Verification plan
 
-- [ ] `melos run analyze` · `melos run test --no-select` · `melos run format`
-- [ ] Local stack: `supabase db reset`; then the Gotcha 6 **upgrade path** — old schema + old
+- [x] `melos run analyze` · `melos run test --no-select` · `melos run format`
+- [x] Local stack: `supabase db reset`; then the Gotcha 6 **upgrade path** — old schema + old
       seed (via `git show`) with the new files layered on top. The `seed_recipe_v2` signature
       change is exactly the class that ships green through the two easy paths (B024)
-- [ ] `melos run db:rls` — the count moves from 76 with the three new checks
-- [ ] `melos run recipes:check` · `melos run sim:check`
-- [ ] Screenshots (B028 procedure): both tabs × both layouts × {empty, populated} × {light,
+- [x] `melos run db:rls` — the count moves from 76 with the three new checks
+- [x] `melos run recipes:check` · `melos run sim:check`
+- [x] Screenshots (B028 procedure): both tabs × both layouts × {empty, populated} × {light,
       dark} — dark is where a hard-coded label black would betray itself
-- [ ] Docs on completion: SDS §3.2 (recipes table), §7.1 (the tab host), §11 (authoring format);
+- [x] Docs on completion: SDS §3.2 (recipes table), §7.1 (the tab host), §11 (authoring format);
       CLAUDE.md feature-map row for `/recipe/:id` and the server-owned/writable column lists
 
 ### Deferred
@@ -1822,7 +1851,7 @@ those.
 
 - [x] **OPT-T1:** `.github/workflows/database.yml` — a second job that starts the Supabase stack
       inside the runner and walks **three** paths: fresh apply → seed → recipes → sim tiny → the
-      39 assertions; a full re-apply (the only thing that checks the idempotency every file
+      43 assertions; a full re-apply (the only thing that checks the idempotency every file
       claims); and the **upgrade path** (Gotcha 6) — the previous revision of the baseline applied
       first, today's layered on top, which is the path B024 shipped through. No `SUPABASE_DB_URL`
       secret, by design. Verified by running the same sequence locally, which also turned up
@@ -1895,8 +1924,10 @@ tracked as [Backlog BL-6](#bl-6--environment-dependent-verification-gaps):
 Everything here is **known, decided, and not being worked on**. An item is in the backlog because
 it is an owner action, accepted debt, or a deferral with a stated trigger — not because it was
 forgotten. Each one names the condition that would pull it back into a phase. Nothing else in this
-document is open: Phases 0–24, 26 and 27 are done, Phase 25 is designed-not-started, Phase 28 is
-planned-not-started, Phase OPT is closed at 26 of 29 with the rest listed below.
+document is open: Phases 0–24 and 26–28 are done, Phase 25 is designed-not-started, Phase OPT is
+closed at 26 of 29 with the rest listed below. Phase 28's own Deferred block (auto-calculate, real
+nutrition values for the 14 authored recipes, micronutrients) sits with the phase rather than here,
+because each has a named successor phase rather than a trigger condition.
 
 #### BL-1 — OPT-S8 (B018) — rotate the hosted seed passwords (owner action)
 
@@ -1953,6 +1984,14 @@ designed onto data that does not exist. See the "Seed-data fit" gate in
 - Fork **depth** comes from `sim.fork_bias` (Phase 26). Uniform source selection spreads forks one
   per recipe, which looks like data and ranks like nothing; anything ordered by fork count needs
   the weighted draw and the `≥ 3` assertion in `3_sim_verify.sql` §G.
+- **Nutrition labels are generated, not authored** (Phase 28). `recipeData` carries two
+  placeholder all-10 labels and twelve explicit nulls; anything that needs *varied* or plausible
+  labels needs `db:sim`, where `sim.nutrition_for` draws one per recipe from a per-category
+  profile (~80% of the population; the other 20% exercise the empty state). Two consequences: the
+  numbers are internally consistent but **not real nutrition data** for the dish named on the
+  card, so nothing may present a sim label as a fact about food; and the **hosted project has
+  none at all**, since it has no simulated population and `seed_recipe_v2` early-returns on an
+  existing `(owner_id, title)`.
 - **The hosted project has no simulated population at all** — only `seed.sql` + `seed_recipes.sql`.
   Measured there 2026-08-23, straight after the schema apply: `recipes_quick` **10** rows,
   `recipes_projects` **1**, `recipes_most_forked` **0**. So `03 MOST FORKED` is legitimately empty
@@ -2003,7 +2042,7 @@ months, found by hand while doing something else.
       `melos run db:rls`. It creates three throwaway `auth.users` (owner / shared-with / unrelated
       stranger), a private and a public recipe with content, re-runs everything under `set local
       role authenticated` + `request.jwt.claims`, prints one PASS/FAIL line per check, and **rolls
-      the transaction back** — no user, no recipe, no helper function survives it. **76 checks, all
+      the transaction back** — no user, no recipe, no helper function survives it. **79 checks, all
       passing** on the local stack.
 - [x] **CI runs it** — a new `RLS matrix — as a signed-in user` step in `database.yml`, straight
       after the fresh apply. A B053/B061-class regression now fails a pull request.

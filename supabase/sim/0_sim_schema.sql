@@ -140,6 +140,176 @@ returns double precision language sql stable as $$
   select sim.rand_lognormal('recipe:' || p_n, 'exposure', 2.0, 1.4);
 $$;
 
+-- ============================================================================
+-- Nutrition labels (Phase 28)
+--
+-- The dish LIBRARY is deliberately nutrition-free — a label is a property of a
+-- recipe as published, not of the dish idea, and hand-authoring 120 of them
+-- would be busywork with no signal in it. So the generator draws one, the same
+-- way it draws every other per-recipe property: from `sim.rand`, never
+-- `random()`, so same seed → same database (B044).
+--
+-- Two things make the output worth looking at rather than just non-null:
+--
+--   * **It is derived from calories, not drawn field by field.** Independent
+--     draws produce labels that do not add up — 200 kcal beside 40 g of fat —
+--     and the panel's whole job is to look like a real one. Calories are drawn
+--     per category, split into fat / protein / carb *energy* shares, and
+--     converted at 9 / 4 / 4 kcal per gram.
+--   * **Sub-values are bounded by their parents.** Saturated ≤ total fat, added
+--     sugars ≤ total sugars, fibre + sugars ≤ carbs. A label that contradicts
+--     itself is worse than no label, and `3_sim_verify.sql` asserts all three.
+--
+-- Roughly a fifth of recipes get NO label, because the empty state is a real
+-- state and a population where every recipe has one cannot demonstrate it.
+-- ============================================================================
+
+-- Per-category calorie band and macro character, as DATA rather than a `case`
+-- ladder, so retuning a category is a one-row update.
+--
+--   kcal_lo/hi   per-serving calorie band
+--   fat_e/pro_e  share of energy from fat / protein (carbs are the remainder)
+--   sodium_lo/hi mg per serving
+--   fibre_share  fraction of carb grams that is fibre
+--   sugar_share  fraction of carb grams that is total sugars
+--   added_share  fraction of total sugars that is *added*
+--   chol_per_pro mg of cholesterol per gram of protein (0 for plant-leaning)
+create table if not exists sim.nutrition_profile (
+  category     text primary key,
+  kcal_lo      int  not null,
+  kcal_hi      int  not null,
+  fat_e        numeric not null,
+  pro_e        numeric not null,
+  sodium_lo    int  not null,
+  sodium_hi    int  not null,
+  fibre_share  numeric not null,
+  sugar_share  numeric not null,
+  added_share  numeric not null,
+  chol_per_pro numeric not null
+);
+
+-- `''` is the fallback row for a dish with no category. Values are ordinary
+-- nutrition-panel arithmetic, not measurements — see the header.
+insert into sim.nutrition_profile (
+  category, kcal_lo, kcal_hi, fat_e, pro_e, sodium_lo, sodium_hi,
+  fibre_share, sugar_share, added_share, chol_per_pro
+) values
+  ('Appetizer', 120, 320, 0.42, 0.16,  220,  680, 0.08, 0.12, 0.15, 0.9),
+  ('Breakfast', 250, 550, 0.35, 0.18,  180,  620, 0.09, 0.28, 0.35, 1.4),
+  ('Main',      350, 750, 0.38, 0.28,  320,  900, 0.07, 0.08, 0.05, 1.6),
+  ('Side',      100, 280, 0.33, 0.10,  150,  520, 0.14, 0.14, 0.05, 0.3),
+  ('Salad',     120, 380, 0.45, 0.12,  120,  480, 0.22, 0.20, 0.05, 0.4),
+  ('Soup',      120, 320, 0.32, 0.16,  380,  980, 0.16, 0.16, 0.05, 0.7),
+  ('Dessert',   250, 600, 0.40, 0.06,   80,  340, 0.05, 0.62, 0.80, 1.1),
+  ('Drink',      80, 260, 0.18, 0.06,   10,  140, 0.03, 0.78, 0.70, 0.5),
+  ('Snack',     120, 350, 0.42, 0.10,  180,  620, 0.09, 0.30, 0.45, 0.4),
+  ('Sauce',      60, 200, 0.55, 0.06,  420, 1100, 0.06, 0.22, 0.25, 0.6),
+  ('',          180, 520, 0.36, 0.18,  200,  700, 0.10, 0.22, 0.20, 0.9)
+on conflict (category) do update set
+  kcal_lo = excluded.kcal_lo, kcal_hi = excluded.kcal_hi,
+  fat_e = excluded.fat_e, pro_e = excluded.pro_e,
+  sodium_lo = excluded.sodium_lo, sodium_hi = excluded.sodium_hi,
+  fibre_share = excluded.fibre_share, sugar_share = excluded.sugar_share,
+  added_share = excluded.added_share, chol_per_pro = excluded.chol_per_pro;
+
+-- The label for one recipe, or NULL for the ~20% that carry none.
+--
+-- `p_key` identifies the recipe (`'recipe:' || n`, the same convention
+-- `exposure_draw` uses); every field draws on its own `nutr/*` stream, so two
+-- decisions about the same recipe never correlate.
+--
+-- Returns the 11-key shape `RecipeNutrition` decodes — no more, no fewer. An
+-- unknown key would be accepted by the `jsonb` column and then silently decode
+-- to nothing, which is exactly why `tool/recipe_format.dart` treats one as a
+-- hard error on the authoring side.
+create or replace function sim.nutrition_for(p_key text, p_category text)
+returns jsonb language plpgsql stable as $$
+declare
+  p        sim.nutrition_profile%rowtype;
+  v_kcal   numeric;
+  v_jitter numeric;
+  v_fat    numeric;
+  v_sat    numeric;
+  v_trans  numeric;
+  v_pro    numeric;
+  v_carb   numeric;
+  v_fibre  numeric;
+  v_sugar  numeric;
+  v_added  numeric;
+  v_chol   numeric;
+  v_sodium numeric;
+begin
+  -- The empty state is a state. Drawn first so it costs nothing else.
+  if not sim.rand_bool(p_key, 'nutr/has', 0.8) then
+    return null;
+  end if;
+
+  select * into p from sim.nutrition_profile
+   where category = coalesce(nullif(p_category, ''), '');
+  if not found then
+    select * into p from sim.nutrition_profile where category = '';
+  end if;
+
+  v_kcal := round(sim.rand_int(p_key, 'nutr/kcal', p.kcal_lo, p.kcal_hi) / 5.0) * 5;
+
+  -- Energy shares jitter ±20% of themselves, so two Mains do not read as the
+  -- same dish with a different calorie count.
+  v_jitter := 0.8 + sim.rand(p_key, 'nutr/split') * 0.4;
+  v_fat := round((v_kcal * least(p.fat_e * v_jitter, 0.7) / 9.0)::numeric, 1);
+  v_pro := round((v_kcal * least(p.pro_e * (1.6 - v_jitter + 0.4), 0.5) / 4.0)::numeric, 1);
+
+  -- Carbs are the remainder, floored at zero: the two draws above can, at their
+  -- extremes, claim more than the whole calorie budget.
+  v_carb := round(greatest(v_kcal - v_fat * 9 - v_pro * 4, 0)::numeric / 4.0, 1);
+
+  -- Sub-values, each bounded by its parent. Rounded BEFORE the bound is applied
+  -- so rounding cannot push a child past it.
+  v_sat := least(
+    round((v_fat * (0.25 + sim.rand(p_key, 'nutr/sat') * 0.30))::numeric, 1),
+    v_fat
+  );
+  -- Trans fat is 0 on most real labels; only the fried/baked categories carry
+  -- a trace, and a printed `0 g` row is itself worth rendering.
+  v_trans := case
+    when p.category in ('Dessert', 'Snack', 'Appetizer')
+         and sim.rand_bool(p_key, 'nutr/trans', 0.35)
+    then round((sim.rand(p_key, 'nutr/transv') * 1.5)::numeric, 1)
+    else 0
+  end;
+
+  v_fibre := least(
+    round((v_carb * p.fibre_share * (0.6 + sim.rand(p_key, 'nutr/fibre') * 0.8))::numeric, 1),
+    v_carb
+  );
+  v_sugar := least(
+    round((v_carb * p.sugar_share * (0.6 + sim.rand(p_key, 'nutr/sugar') * 0.8))::numeric, 1),
+    v_carb - v_fibre
+  );
+  v_sugar := greatest(v_sugar, 0);
+  v_added := least(
+    round((v_sugar * p.added_share * (0.5 + sim.rand(p_key, 'nutr/added') * 1.0))::numeric, 1),
+    v_sugar
+  );
+
+  v_chol := round(v_pro * p.chol_per_pro * (0.5 + sim.rand(p_key, 'nutr/chol') * 1.0));
+  v_sodium := round(sim.rand_int(p_key, 'nutr/sodium', p.sodium_lo, p.sodium_hi) / 10.0) * 10;
+
+  return jsonb_build_object(
+    'calories',        v_kcal,
+    'total_fat_g',     v_fat,
+    'saturated_fat_g', v_sat,
+    'trans_fat_g',     v_trans,
+    'cholesterol_mg',  v_chol,
+    'sodium_mg',       v_sodium,
+    'total_carbs_g',   v_carb,
+    'dietary_fiber_g', v_fibre,
+    'total_sugars_g',  v_sugar,
+    'added_sugars_g',  v_added,
+    'protein_g',       v_pro
+  );
+end;
+$$;
+
 -- A timestamp in [from, to). p_skew > 1 packs draws toward `to` (recent), which
 -- is what both signups and engagement actually look like.
 create or replace function sim.rand_ts(

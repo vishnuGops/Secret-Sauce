@@ -87,6 +87,8 @@ drop function if exists seed_ratings(uuid, jsonb) cascade;
 -- (B042). Same rule as seed_recipe: every historical signature stays listed,
 -- oldest first, because Postgres keys drops by argument list.
 drop function if exists seed_recipe_v2(uuid, text, text, text, text, difficulty, int, int, int, recipe_visibility, text, jsonb, jsonb, int, int, int, jsonb) cascade;
+-- + p_nutrition jsonb (Phase 28).
+drop function if exists seed_recipe_v2(uuid, text, text, text, text, difficulty, int, int, int, recipe_visibility, text, jsonb, jsonb, int, int, int, jsonb, jsonb) cascade;
 drop function if exists seed_recipe_v2_ratings(uuid, jsonb) cascade;
 
 -- The RLS matrix's helper (supabase/tests/rls_matrix.sql). It is created inside

@@ -40,7 +40,7 @@ nobody would notice.
 2. `melos run recipes:validate` — fix errors, read the warnings.
 3. `melos run recipes:gen` and commit **both** the JSON and the regenerated SQL.
 
-Three things the validator cares about that are easy to get wrong:
+Four things the validator cares about that are easy to get wrong:
 
 - **`quantity` is a decimal, not a fraction string.** `1.25`, never `"1 1/4"`.
   The recipe detail screen scales every quantity by `target / servings`; a string
@@ -49,6 +49,18 @@ Three things the validator cares about that are easy to get wrong:
   tart diameter, piece count — goes in `description`.
 - **Unattended time is not prep time.** Chilling, rising, and marinating go on
   the step that waits, as `duration_minutes`, so the app can show a timer.
+- **`nutrition` is `null` or an object — never `{}`.** The label is optional and
+  most files have none; write it out as an explicit `"nutrition": null`, which is
+  the one representation of "no info" the whole feature branches on. Values are
+  **per serving at that file's own `servings`** — the detail screen never
+  multiplies them, because scaling a recipe up makes a bigger batch, not a bigger
+  serving. Unknown keys are hard errors: the `jsonb` column would accept them and
+  they would then decode to nothing.
+
+> `chicken-tikka-masala` and `spring-vegetable-tart` currently carry **dummy**
+> values — all eleven fields at `10` — so the panel is inspectable on a local
+> stack. Every `% Daily Value` they print is nonsense; replacing them with real
+> numbers is open content work (docs/ROADMAP.md Phase 28, Deferred).
 
 ## Editing a published recipe
 

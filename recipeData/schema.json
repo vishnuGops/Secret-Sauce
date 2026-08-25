@@ -90,6 +90,25 @@
       "type": ["string", "null"],
       "description": "Recipe-level note (variation, substitution, make-ahead). `recipes` has NO notes column, so tool/recipes.dart appends this to `description` as a trailing paragraph. Lossless but not ideal — a real `notes` column is the proper fix (docs/ROADMAP.md)."
     },
+    "nutrition": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "minProperties": 1,
+      "description": "recipes.nutrition — the per-serving nutrition-facts label, as ONE jsonb column rather than eleven numerics. Values are per serving at THIS recipe's `servings` and are never multiplied by the detail screen's servings scaler (scaling 4->8 doubles the batch and the servings, so a serving is unchanged). Every field is optional; `null` — not `{}` — is the one representation of \"no nutrition info\", and the detail screen's Nutrition tab renders its empty state from it. Mirrored by RecipeNutrition in packages/core and by _nutritionKeys in tool/recipe_format.dart; unknown keys are a hard error there because the jsonb column itself would accept them.",
+      "properties": {
+        "calories": { "type": "number", "minimum": 0, "description": "kcal per serving. No % Daily Value is printed for calories, as on a real label." },
+        "total_fat_g": { "type": "number", "minimum": 0, "description": "Grams. %DV against 78 g." },
+        "saturated_fat_g": { "type": "number", "minimum": 0, "description": "Grams, indented under total fat. %DV against 20 g." },
+        "trans_fat_g": { "type": "number", "minimum": 0, "description": "Grams, indented under total fat. No %DV — there is no established daily value." },
+        "cholesterol_mg": { "type": "number", "minimum": 0, "description": "Milligrams. %DV against 300 mg." },
+        "sodium_mg": { "type": "number", "minimum": 0, "description": "Milligrams. %DV against 2,300 mg." },
+        "total_carbs_g": { "type": "number", "minimum": 0, "description": "Grams. %DV against 275 g." },
+        "dietary_fiber_g": { "type": "number", "minimum": 0, "description": "Grams, indented under total carbohydrate. %DV against 28 g." },
+        "total_sugars_g": { "type": "number", "minimum": 0, "description": "Grams, indented under total carbohydrate. No %DV — only added sugars carry one." },
+        "added_sugars_g": { "type": "number", "minimum": 0, "description": "Grams, indented under total sugars. %DV against 50 g." },
+        "protein_g": { "type": "number", "minimum": 0, "description": "Grams. %DV against 50 g." }
+      }
+    },
     "ingredient_groups": {
       "type": "array",
       "minItems": 1,

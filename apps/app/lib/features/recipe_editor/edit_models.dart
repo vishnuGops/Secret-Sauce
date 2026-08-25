@@ -15,6 +15,141 @@ String? _orNull(TextEditingController c) {
   return text.isEmpty ? null : text;
 }
 
+/// The 11 nutrition-label fields as text controllers (Phase 28).
+///
+/// Field-for-field with `RecipeNutrition` — the B035 obligation applies here as
+/// much as it does to ingredients and steps: `save_recipe` writes the whole
+/// `nutrition` object, so a field this class drops is a field the next save
+/// deletes from the label.
+///
+/// [toModel] returns **null** when every box is empty, never `{}`: `null` is
+/// the one representation of "no nutrition info" — in the column, on the wire,
+/// and in the detail screen's empty-state branch — and a second spelling of it
+/// is how two surfaces start disagreeing.
+class EditNutrition {
+  EditNutrition({
+    String calories = '',
+    String totalFat = '',
+    String saturatedFat = '',
+    String transFat = '',
+    String cholesterol = '',
+    String sodium = '',
+    String totalCarbs = '',
+    String dietaryFiber = '',
+    String totalSugars = '',
+    String addedSugars = '',
+    String protein = '',
+  }) : calories = TextEditingController(text: calories),
+       totalFat = TextEditingController(text: totalFat),
+       saturatedFat = TextEditingController(text: saturatedFat),
+       transFat = TextEditingController(text: transFat),
+       cholesterol = TextEditingController(text: cholesterol),
+       sodium = TextEditingController(text: sodium),
+       totalCarbs = TextEditingController(text: totalCarbs),
+       dietaryFiber = TextEditingController(text: dietaryFiber),
+       totalSugars = TextEditingController(text: totalSugars),
+       addedSugars = TextEditingController(text: addedSugars),
+       protein = TextEditingController(text: protein);
+
+  factory EditNutrition.fromModel(RecipeNutrition? n) =>
+      EditNutrition()..load(n);
+
+  /// Fills the existing controllers from [n] (or empties them for null).
+  ///
+  /// The editor creates its `EditNutrition` once, in a field initializer, and
+  /// `_load()` runs afterwards — so this writes into the live controllers
+  /// rather than handing back a second instance whose `dispose()` nobody wired
+  /// up.
+  void load(RecipeNutrition? n) {
+    calories.text = _num(n?.calories);
+    totalFat.text = _num(n?.totalFatG);
+    saturatedFat.text = _num(n?.saturatedFatG);
+    transFat.text = _num(n?.transFatG);
+    cholesterol.text = _num(n?.cholesterolMg);
+    sodium.text = _num(n?.sodiumMg);
+    totalCarbs.text = _num(n?.totalCarbsG);
+    dietaryFiber.text = _num(n?.dietaryFiberG);
+    totalSugars.text = _num(n?.totalSugarsG);
+    addedSugars.text = _num(n?.addedSugarsG);
+    protein.text = _num(n?.proteinG);
+  }
+
+  /// A stored `numeric` round-trips as `10.0`; showing that in a box the user
+  /// typed `10` into reads as the editor having changed their entry.
+  static String _num(double? v) => v == null ? '' : formatNutritionValue(v);
+
+  final TextEditingController calories;
+  final TextEditingController totalFat;
+  final TextEditingController saturatedFat;
+  final TextEditingController transFat;
+  final TextEditingController cholesterol;
+  final TextEditingController sodium;
+  final TextEditingController totalCarbs;
+  final TextEditingController dietaryFiber;
+  final TextEditingController totalSugars;
+  final TextEditingController addedSugars;
+  final TextEditingController protein;
+
+  List<TextEditingController> get _all => [
+    calories,
+    totalFat,
+    saturatedFat,
+    transFat,
+    cholesterol,
+    sodium,
+    totalCarbs,
+    dietaryFiber,
+    totalSugars,
+    addedSugars,
+    protein,
+  ];
+
+  /// True when at least one box has something in it. Drives whether the panel
+  /// opens expanded — a recipe that already carries a label must not hide it
+  /// behind a collapsed header.
+  bool get hasValues => _all.any((c) => c.text.trim().isNotEmpty);
+
+  /// True when a box holds something that is not a non-negative number — the
+  /// entries `_Field`'s validator rejects and [toModel] would otherwise drop.
+  ///
+  /// Restates that validator's rule on purpose: the screen needs the answer
+  /// *before* deciding whether a blocked save was the nutrition panel's fault,
+  /// and `Form.validate()` only says that the form as a whole failed. Keep the
+  /// two predicates in step — `recipe_editor_test.dart` fails if they drift.
+  bool get hasInvalidEntry => _all.any((c) {
+    final text = c.text.trim();
+    if (text.isEmpty) return false;
+    final value = double.tryParse(text);
+    return value == null || value < 0;
+  });
+
+  RecipeNutrition? toModel() {
+    final model = RecipeNutrition(
+      calories: _parse(calories),
+      totalFatG: _parse(totalFat),
+      saturatedFatG: _parse(saturatedFat),
+      transFatG: _parse(transFat),
+      cholesterolMg: _parse(cholesterol),
+      sodiumMg: _parse(sodium),
+      totalCarbsG: _parse(totalCarbs),
+      dietaryFiberG: _parse(dietaryFiber),
+      totalSugarsG: _parse(totalSugars),
+      addedSugarsG: _parse(addedSugars),
+      proteinG: _parse(protein),
+    );
+    return model.isEmpty ? null : model;
+  }
+
+  static double? _parse(TextEditingController c) =>
+      double.tryParse(c.text.trim());
+
+  void dispose() {
+    for (final c in _all) {
+      c.dispose();
+    }
+  }
+}
+
 class EditIngredient {
   EditIngredient({
     String quantity = '',

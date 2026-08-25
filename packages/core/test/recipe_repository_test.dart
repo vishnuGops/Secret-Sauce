@@ -45,6 +45,7 @@ Map<String, dynamic> _recipeRow({
   'rating_sum': 9.0,
   'rating_count': 2,
   'rating_avg': 4.5,
+  'nutrition': {'calories': 520, 'protein_g': 31.5},
   'ingredient_groups': [
     {
       'id': 'g1',
@@ -282,6 +283,40 @@ void main() {
         expect(saved.title, 'Renamed');
       },
     );
+
+    // Phase 28. The request-side half of what the RLS matrix proves on the
+    // policy side: `nutrition` reaches `p_payload` as the label's own key set,
+    // and the key is present-but-null when there is no label — that null is
+    // what tells `save_recipe` to clear the column.
+    test('nutrition rides in p_payload, and null is still sent', () async {
+      final (:http, :client, :repo) = _repo([
+        (200, jsonEncode('r1')),
+        (200, jsonEncode(_recipeRow())),
+        (200, jsonEncode('r1')),
+        (200, jsonEncode(_recipeRow())),
+      ]);
+      await signInAs(client, _uid);
+
+      await repo.update(
+        const Recipe(
+          id: 'r1',
+          ownerId: _uid,
+          title: 'With label',
+          nutrition: RecipeNutrition(calories: 520, proteinG: 31.5),
+        ),
+      );
+      final withLabel =
+          http.requests.first.json['p_payload'] as Map<String, dynamic>;
+      expect(withLabel['nutrition'], {'calories': 520.0, 'protein_g': 31.5});
+
+      await repo.update(
+        const Recipe(id: 'r1', ownerId: _uid, title: 'No label'),
+      );
+      final cleared =
+          http.requests[2].json['p_payload'] as Map<String, dynamic>;
+      expect(cleared.containsKey('nutrition'), isTrue);
+      expect(cleared['nutrition'], isNull);
+    });
 
     test('create sends a null recipe id', () async {
       final (:http, :client, :repo) = _repo([

@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:app/features/recipe_detail/detail_chips.dart';
-import 'package:app/features/recipe_detail/ingredient_rail.dart';
+import 'package:app/features/recipe_detail/rail_panel.dart';
 import 'package:app/features/recipe_detail/method_column.dart';
 import 'package:app/features/recipe_detail/rating_section.dart';
 import 'package:app/features/recipe_detail/recipe_detail_expanded.dart'
@@ -61,7 +61,15 @@ class _RecipeDetailCompactState extends ConsumerState<RecipeDetailCompact> {
   // closures would answer true on every single build — rebuilding a pinned
   // sliver every frame, which is worse than the incomplete comparison it was
   // meant to fix.
-  void _jumpToIngredients() => _jumpTo(_ingredientsKey);
+  // Also resets the rail to the Ingredients tab (Phase 28). The chip promises
+  // to take you to the ingredient list, and after a visit to the Nutrition tab
+  // that list is not on screen — scrolling to a section whose content is hidden
+  // behind the other tab is the chip lying about where it went.
+  void _jumpToIngredients() {
+    ref.read(railTabProvider(widget.recipe.id).notifier).state =
+        RailTab.ingredients;
+    _jumpTo(_ingredientsKey);
+  }
 
   void _jumpToMethod() => _jumpTo(_methodKey);
 
@@ -110,7 +118,7 @@ class _RecipeDetailCompactState extends ConsumerState<RecipeDetailCompact> {
                     // implementation either way.
                     KeyedSubtree(
                       key: _ingredientsKey,
-                      child: IngredientRail(recipe: recipe, bordered: false),
+                      child: RailPanel(recipe: recipe, bordered: false),
                     ),
                     const Divider(height: 1),
                     Padding(

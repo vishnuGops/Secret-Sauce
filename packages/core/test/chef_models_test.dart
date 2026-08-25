@@ -334,6 +334,7 @@ void main() {
         'rating_sum',
         'rating_count',
         'rating_avg',
+        'nutrition',
       ];
       // Only the base-row part: the embed carries its own `id`/`avatar_url`.
       final base = kRecipeSelect.substring(0, kRecipeSelect.indexOf(',owner:'));

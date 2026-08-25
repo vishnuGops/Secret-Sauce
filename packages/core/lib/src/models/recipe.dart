@@ -3,10 +3,13 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:core/src/models/enums.dart';
 import 'package:core/src/models/ingredient_group.dart';
 import 'package:core/src/models/profile.dart';
+import 'package:core/src/models/recipe_nutrition.dart';
 import 'package:core/src/models/step_group.dart';
 
 part 'recipe.freezed.dart';
 part 'recipe.g.dart';
+
+Map<String, dynamic>? _nutritionToJson(RecipeNutrition? n) => n?.toJson();
 
 @freezed
 class Recipe with _$Recipe {
@@ -37,6 +40,17 @@ class Recipe with _$Recipe {
     @JsonKey(name: 'rating_count') @Default(0) int ratingCount,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
+    // Per-serving nutrition label, or null for "no info" — the ONE
+    // representation of the empty state (an all-empty entry is normalized to
+    // null before it reaches the repository). Client-writable, so it is in
+    // `_writablePayload`, both column grant lists, and `save_recipe`.
+    //
+    // The explicit `toJson:` is not decoration. `explicitToJson` is off for
+    // this package, and every other nested model on `Recipe` is
+    // `includeToJson: false`, so this is the first field whose value has to be
+    // flattened — without it the generator emits the object itself and
+    // `jsonEncode(recipe.toJson())` throws at the call site rather than here.
+    @JsonKey(toJson: _nutritionToJson) RecipeNutrition? nutrition,
     // Populated when a full recipe is loaded (not part of the base row).
     //
     // The `name:` is load-bearing (OPT-P3): `getById` now fetches the content as

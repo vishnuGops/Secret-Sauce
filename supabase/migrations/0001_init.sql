@@ -129,6 +129,15 @@ alter table recipes add column if not exists rating_sum   numeric      not null 
 alter table recipes add column if not exists rating_count int          not null default 0;
 alter table recipes add column if not exists rating_avg   numeric(3,2) not null default 0;
 
+-- Nutrition facts (Phase 28). ONE nullable jsonb column, not eleven numerics:
+-- the writable-recipe-column set is restated in ~13 places, so a column costs
+-- each copy a line. `null` means "no info" and is the only representation of it
+-- — an all-empty entry is normalized to null before it reaches the repository.
+-- Postgres cannot type-check the interior, so the key set is pinned by
+-- `RecipeNutrition` in core and by `tool/recipe_format.dart`; the constraint
+-- below is the one thing the database itself can insist on.
+alter table recipes add column if not exists nutrition jsonb;
+
 create index if not exists recipes_owner_idx on recipes (owner_id);
 create index if not exists recipes_visibility_idx on recipes (visibility);
 create index if not exists recipes_forked_from_idx on recipes (forked_from_recipe_id);
@@ -199,6 +208,19 @@ begin
       add constraint recipes_forked_from_version_fk
       foreign key (forked_from_version_id) references recipe_versions (id)
       on delete set null;
+  end if;
+
+  -- `nutrition` is a label, i.e. a json OBJECT or nothing. A JSON scalar or
+  -- array in that column would decode to garbage on the client with no error,
+  -- so the shape is pinned here. Note this also rejects `'null'::jsonb` (whose
+  -- jsonb_typeof is 'null', not 'object'), which is why both save_recipe
+  -- branches wrap the payload extraction in `nullif(…, 'null'::jsonb)`.
+  if not exists (
+    select 1 from pg_constraint where conname = 'recipes_nutrition_is_object'
+  ) then
+    alter table recipes
+      add constraint recipes_nutrition_is_object
+      check (nutrition is null or jsonb_typeof(nutrition) = 'object');
   end if;
 end $$;
 
@@ -1207,11 +1229,13 @@ begin
   -- recipe cannot be reassigned out from under `recipes_update`.
   grant insert (owner_id, title, description, cover_image_url, cuisine, category,
                 difficulty, prep_minutes, cook_minutes, servings, visibility,
-                attribution, forked_from_recipe_id, forked_from_version_id)
+                attribution, forked_from_recipe_id, forked_from_version_id,
+                nutrition)
     on recipes to authenticated;
   grant update (title, description, cover_image_url, cuisine, category,
                 difficulty, prep_minutes, cook_minutes, servings, visibility,
-                attribution, forked_from_recipe_id, forked_from_version_id)
+                attribution, forked_from_recipe_id, forked_from_version_id,
+                nutrition)
     on recipes to authenticated;
 
   -- profiles: NOT granted — chef_score, chef_tier, public_recipe_count,
@@ -1758,11 +1782,11 @@ begin
   insert into recipes (
     owner_id, title, description, cover_image_url, cuisine, category, difficulty,
     prep_minutes, cook_minutes, servings, visibility, attribution,
-    forked_from_recipe_id, forked_from_version_id
+    forked_from_recipe_id, forked_from_version_id, nutrition
   ) values (
     auth.uid(), v_src.title, v_src.description, v_src.cover_image_url, v_src.cuisine,
     v_src.category, v_src.difficulty, v_src.prep_minutes, v_src.cook_minutes, v_src.servings,
-    'private', v_src.attribution, v_src.id, v_src.current_version_id
+    'private', v_src.attribution, v_src.id, v_src.current_version_id, v_src.nutrition
   )
   returning id into v_new_recipe;
 
@@ -1939,7 +1963,7 @@ begin
     insert into recipes (
       owner_id, title, description, cover_image_url, cuisine, category,
       difficulty, prep_minutes, cook_minutes, servings, visibility, attribution,
-      forked_from_recipe_id, forked_from_version_id
+      forked_from_recipe_id, forked_from_version_id, nutrition
     ) values (
       auth.uid(),
       p_payload->>'title',
@@ -1954,7 +1978,12 @@ begin
       coalesce((p_payload->>'visibility')::recipe_visibility, 'private'),
       p_payload->>'attribution',
       (p_payload->>'forked_from_recipe_id')::uuid,
-      (p_payload->>'forked_from_version_id')::uuid
+      (p_payload->>'forked_from_version_id')::uuid,
+      -- `->` (jsonb), never `->>` (text): there is no implicit text→jsonb cast,
+      -- so the wrong arrow is a runtime error on the first save. The `nullif`
+      -- is the JSON-null trap: a Dart map with a null value arrives as
+      -- `'null'::jsonb`, which is NOT SQL NULL and fails the typeof check.
+      nullif(p_payload -> 'nutrition', 'null'::jsonb)
     )
     returning id into v_recipe;
   else
@@ -1984,7 +2013,10 @@ begin
       visibility             = coalesce((p_payload->>'visibility')::recipe_visibility, visibility),
       attribution            = p_payload->>'attribution',
       forked_from_recipe_id  = (p_payload->>'forked_from_recipe_id')::uuid,
-      forked_from_version_id = (p_payload->>'forked_from_version_id')::uuid
+      forked_from_version_id = (p_payload->>'forked_from_version_id')::uuid,
+      -- Nullable, so it is assigned straight through like the other nullable
+      -- columns; see the insert branch for why it is `->` + `nullif`.
+      nutrition              = nullif(p_payload -> 'nutrition', 'null'::jsonb)
     where id = p_recipe_id;
 
     v_recipe := p_recipe_id;

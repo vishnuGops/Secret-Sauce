@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:app/features/recipe_editor/cover_picker.dart';
 import 'package:app/features/recipe_editor/edit_models.dart';
 import 'package:app/features/recipe_editor/ingredients_editor.dart';
+import 'package:app/features/recipe_editor/nutrition_editor.dart';
 import 'package:app/features/recipe_editor/steps_editor.dart';
 import 'package:app/routing/app_router.dart';
 
@@ -44,6 +45,13 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
 
   final List<EditIngredientGroup> _ingredientGroups = [EditIngredientGroup()];
   final List<EditStepGroup> _stepGroups = [EditStepGroup()];
+  final EditNutrition _nutrition = EditNutrition();
+
+  /// Whether the nutrition panel is open. Owned here rather than by the panel
+  /// so a blocked save can force it open — its fields stay registered with the
+  /// `Form` while collapsed, so an invalid entry hidden behind the header still
+  /// stops the save, and an error nobody can see would otherwise be a dead end.
+  bool _nutritionExpanded = false;
 
   bool _loading = false;
   bool _saving = false;
@@ -86,6 +94,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
     for (final g in _stepGroups) {
       g.dispose();
     }
+    _nutrition.dispose();
     super.dispose();
   }
 
@@ -108,6 +117,10 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       _difficulty = recipe.difficulty;
       _visibility = recipe.visibility;
       _coverUrl = recipe.coverImageUrl;
+      _nutrition.load(recipe.nutrition);
+      // A recipe that already carries a label must not hide it behind a
+      // collapsed header.
+      _nutritionExpanded = _nutrition.hasValues;
       _ingredientGroups
         ..clear()
         ..addAll(recipe.ingredientGroups.map(EditIngredientGroup.fromModel));
@@ -188,7 +201,17 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
     // the empty defaults, and `update()` replaces content wholesale, so saving
     // it would delete the recipe's ingredients and steps (B052).
     if (!_canSave) return;
-    if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) {
+      // The nutrition fields stay registered with the Form while the panel is
+      // collapsed, so one of them can be what blocked this save — open the
+      // panel in that case rather than leaving Save doing nothing. Scoped to a
+      // *nutrition* failure on purpose: a blank Title must not unfold eleven
+      // boxes that have nothing to do with the error above them.
+      if (_nutrition.hasInvalidEntry) {
+        setState(() => _nutritionExpanded = true);
+      }
+      return;
+    }
     setState(() => _saving = true);
     final repo = ref.read(recipeRepositoryProvider);
     try {
@@ -217,6 +240,9 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
         cookMinutes: _parseInt(_cook),
         servings: int.tryParse(_servings.text.trim()) ?? 1,
         visibility: _visibility,
+        // Null when every box is empty, never `{}` — one representation of
+        // "no nutrition info", all the way to the column.
+        nutrition: _nutrition.toModel(),
         ingredientGroups: _ingredientGroups.map((g) => g.toModel()).toList(),
         stepGroups: _stepGroups.map((g) => g.toModel()).toList(),
       );
@@ -420,6 +446,16 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                     labelText: 'Attribution / story (optional)',
                     hintText: "e.g. Grandma Rosa's Sunday sauce",
                   ),
+                ),
+                const Divider(height: AppSpacing.xl),
+                NutritionEditor(
+                  nutrition: _nutrition,
+                  expanded: _nutritionExpanded,
+                  onToggle:
+                      () => setState(
+                        () => _nutritionExpanded = !_nutritionExpanded,
+                      ),
+                  onChanged: () => setState(() {}),
                 ),
                 const Divider(height: AppSpacing.xl),
                 IngredientsEditor(

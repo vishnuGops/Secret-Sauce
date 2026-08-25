@@ -6,29 +6,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app/features/recipe_detail/detail_layout.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 
-/// The v2 ingredients panel: servings scaler, grouped check-off list with a
-/// fixed quantity gutter, and a clear-checks footer.
+/// The `Ingredients` pane: grouped check-off list with a fixed quantity
+/// gutter, plus its heading and clear-checks footer.
 ///
 /// Quantities live in their own column so the numbers scan vertically while
 /// shopping; scaled quantities turn primary-coloured when servings differ from
 /// the recipe's own, and times/temperatures never scale (same rule as v1).
 /// Names are sentence-cased at render — the DB stores them lowercase, and in a
 /// quantity/name grid the capital is the left edge of the scanned column.
+///
+/// **This is a pane, not a panel** (Phase 28). It no longer owns the servings
+/// stepper (now [ServingsRow], hoisted so it stays visible on the Nutrition
+/// tab), the card border, or the padding — all three moved up to `RailPanel`,
+/// the host both detail layouts actually place. One widget for both layouts is
+/// still the point: B066 was two copies of this list disagreeing.
 class IngredientRail extends ConsumerWidget {
-  const IngredientRail({super.key, required this.recipe, this.bordered = true});
+  const IngredientRail({super.key, required this.recipe});
 
   final Recipe recipe;
-
-  /// Whether to draw the panel's card border and background.
-  ///
-  /// True on the expanded page, where the rail is a column *beside* the method
-  /// and needs an edge to be a column at all. False on compact, where it is a
-  /// full-width section between two dividers and a border would be a box drawn
-  /// round the whole screen. Everything inside — the gutter, the stepper, the
-  /// check-off, the scaled-quantity colouring — is identical either way, which is
-  /// the point of one widget rather than two: B066 was the two copies of this
-  /// list disagreeing.
-  final bool bordered;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -51,179 +46,87 @@ class IngredientRail extends ConsumerWidget {
       notifier.state = next;
     }
 
-    return Container(
-      decoration:
-          bordered
-              ? BoxDecoration(
-                color: scheme.surfaceContainerLowest,
-                border: Border.all(color: scheme.outlineVariant),
-                borderRadius: BorderRadius.circular(AppRadii.card),
-              )
-              : null,
-      padding: const EdgeInsets.all(AppSpacing.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // A Wrap for the same reason as the two rows below it: the gathered
-          // counter is non-flex and therefore laid out unbounded (Gotcha 21), so
-          // at 2.0× it overflowed the heading row by 9.5px — on **compact**,
-          // where the rail is the 358px content box of a 390px phone rather than
-          // the 493px column the expanded page gives it. The widget was correct
-          // at every width it had been pumped at until compact v2 reused it.
-          Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: AppSpacing.sm,
-            runSpacing: AppSpacing.xs,
-            children: [
-              Text('Ingredients', style: textTheme.titleLarge),
-              Text(
-                '$gathered of ${all.length} gathered',
-                style: textTheme.labelMedium?.copyWith(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // A Wrap for the same reason as the footer row below it: the gathered
+        // counter is non-flex and therefore laid out unbounded (Gotcha 21), so
+        // at 2.0× it overflowed the heading row by 9.5px — on **compact**,
+        // where the rail is the 358px content box of a 390px phone rather than
+        // the 493px column the expanded page gives it. The widget was correct
+        // at every width it had been pumped at until compact v2 reused it.
+        Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.xs,
+          children: [
+            Text('Ingredients', style: textTheme.titleLarge),
+            Text(
+              '$gathered of ${all.length} gathered',
+              style: textTheme.labelMedium?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        const Divider(height: 1),
+        for (final group in recipe.ingredientGroups) ...[
+          if (group.name.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 12, bottom: 2),
+              child: Text(
+                group.name.toUpperCase(),
+                style: textTheme.labelSmall?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1,
                   color: scheme.onSurfaceVariant,
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          // A Wrap, not a Row: the two icon buttons and the count are non-flex
-          // and grow with text scale, so at 2.0× they are wider than the rail
-          // and a Row overflows however flexible the label is (Gotcha 21). The
-          // stepper drops to its own line instead.
-          Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: AppSpacing.sm,
-            runSpacing: AppSpacing.xs,
-            children: [
-              Text(
-                'Servings',
-                style: textTheme.labelLarge?.copyWith(
-                  color: scheme.onSurfaceVariant,
-                ),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton.filledTonal(
-                    tooltip: 'Fewer servings',
-                    icon: const Icon(Icons.remove, size: 20),
-                    onPressed:
-                        servings > 1
-                            ? () =>
-                                ref
-                                    .read(
-                                      selectedServingsProvider(
-                                        recipe.id,
-                                      ).notifier,
-                                    )
-                                    .state = servings - 1
-                            : null,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.sm,
-                    ),
-                    child: Text('$servings', style: textTheme.titleMedium),
-                  ),
-                  IconButton.filledTonal(
-                    tooltip: 'More servings',
-                    icon: const Icon(Icons.add, size: 20),
-                    onPressed:
-                        () =>
-                            ref
-                                .read(
-                                  selectedServingsProvider(recipe.id).notifier,
-                                )
-                                .state = servings + 1,
-                  ),
-                ],
-              ),
-            ],
-          ),
-          if (scaled) ...[
-            const SizedBox(height: AppSpacing.xs),
-            Text.rich(
-              TextSpan(
-                text: 'Scaled from ${recipe.servings} — quantities in ',
-                children: [
-                  TextSpan(
-                    text: 'colour',
-                    style: TextStyle(
-                      color: scheme.primary,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  const TextSpan(
-                    text: ' changed. Times and temperatures are unchanged.',
-                  ),
-                ],
-              ),
+            ),
+          for (final ing in group.ingredients)
+            _IngredientRow(
+              ingredient: ing,
+              factor: factor,
+              highlightScaled: scaled && ing.quantity != null,
+              done: checked.contains(ing.id),
+              onTap: () => toggle(ing.id),
+            ),
+        ],
+        const SizedBox(height: 12),
+        const Divider(height: 1),
+        const SizedBox(height: AppSpacing.xs),
+        // Same reason as the servings row: the button is non-flex and is
+        // wider than the rail at 2.0×, so the note wraps under it instead of
+        // the row overflowing.
+        Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.xs,
+          children: [
+            TextButton(
+              onPressed:
+                  checked.isEmpty
+                      ? null
+                      : () =>
+                          ref
+                              .read(
+                                checkedIngredientsProvider(recipe.id).notifier,
+                              )
+                              .state = const {},
+              child: const Text('Clear checks'),
+            ),
+            Text(
+              'Checks last until you close the app',
               style: textTheme.bodySmall?.copyWith(
                 color: scheme.onSurfaceVariant,
               ),
             ),
           ],
-          const SizedBox(height: AppSpacing.sm),
-          const Divider(height: 1),
-          for (final group in recipe.ingredientGroups) ...[
-            if (group.name.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 12, bottom: 2),
-                child: Text(
-                  group.name.toUpperCase(),
-                  style: textTheme.labelSmall?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 1,
-                    color: scheme.onSurfaceVariant,
-                  ),
-                ),
-              ),
-            for (final ing in group.ingredients)
-              _IngredientRow(
-                ingredient: ing,
-                factor: factor,
-                highlightScaled: scaled && ing.quantity != null,
-                done: checked.contains(ing.id),
-                onTap: () => toggle(ing.id),
-              ),
-          ],
-          const SizedBox(height: 12),
-          const Divider(height: 1),
-          const SizedBox(height: AppSpacing.xs),
-          // Same reason as the servings row: the button is non-flex and is
-          // wider than the rail at 2.0×, so the note wraps under it instead of
-          // the row overflowing.
-          Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: AppSpacing.sm,
-            runSpacing: AppSpacing.xs,
-            children: [
-              TextButton(
-                onPressed:
-                    checked.isEmpty
-                        ? null
-                        : () =>
-                            ref
-                                .read(
-                                  checkedIngredientsProvider(
-                                    recipe.id,
-                                  ).notifier,
-                                )
-                                .state = const {},
-                child: const Text('Clear checks'),
-              ),
-              Text(
-                'Checks last until you close the app',
-                style: textTheme.bodySmall?.copyWith(
-                  color: scheme.onSurfaceVariant,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

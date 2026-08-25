@@ -65,7 +65,8 @@ secret-sauce/
 │   ├── core/lib/
 │   │   ├── core.dart              # BARREL — the only public surface of `core`
 │   │   ├── src/{models,repositories,services}/ + providers.dart
-│   │   │                          # + chef_scoring.dart, formatting.dart, paging.dart
+│   │   │                          # + chef_scoring.dart, formatting.dart, paging.dart,
+│   │   │                          #   nutrition_facts.dart (FDA %DV constants + helpers)
 │   │   └── ../test/               # models + pure helpers + REPOSITORIES (OPT-T2), the last
 │   │                              # via test/support/fake_supabase.dart — a recording
 │   │                              # http.BaseClient under a real SupabaseClient
@@ -73,7 +74,8 @@ secret-sauce/
 │       ├── design_system.dart     # BARREL — export new widgets here or app can't import them
 │       ├── src/{theme,layout,widgets}/
 │       └── ../test/               # recipe_card_test.dart, star_rating_test.dart,
-│                                  # chef_badge_test.dart, flow_grid_test.dart, +4 chef widgets
+│                                  # chef_badge_test.dart, flow_grid_test.dart, +4 chef widgets,
+│                                  # nutrition_facts_label_test.dart
 ├── apps/app/
 │   ├── lib/features/          # auth, discover, chefs, my_recipes, recipe_detail,
 │   │                          # recipe_editor, profile — screen + *_providers.dart per feature,
@@ -111,13 +113,14 @@ secret-sauce/
     ├── seed.sql                  # DEMO fixtures: accounts, demo chefs, ratings (idempotent)
     ├── seed_recipes.sql          # GENERATED from recipeData/ — never hand-edit
     ├── sim/                      # simulated population (Phase 24); schema `sim`, never `public`
-    │   ├── 0_sim_schema.sql      #   config, personas, presets, registries, rand helpers
+    │   ├── 0_sim_schema.sql      #   config, personas, presets, registries, rand helpers,
+    │   │                         #   nutrition_profile + nutrition_for() (Phase 28)
     │   ├── 1_sim_dishes.sql      #   GENERATED from simData/ — never hand-edit
     │   ├── 2_sim_generate.sql    #   the generator; counters DERIVED from the engagement log
-    │   ├── 3_sim_verify.sql      #   39 assertions — the only test coverage this SQL has
+    │   ├── 3_sim_verify.sql      #   43 assertions — the only test coverage this SQL has
     │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
     ├── tests/rls_matrix.sql      # the RLS matrix as a SIGNED-IN user (BL-7, `db:rls`) —
-    │                             #   76 checks; makes its own users, then ROLLS BACK
+    │                             #   79 checks; makes its own users, then ROLLS BACK
     └── scripts/{drop,clean}.sql · rotate_seed_passwords.sql (B018 — hosted, manual)
 ```
 
@@ -250,13 +253,13 @@ melos run db:reset    # drop -> create -> seed -> recipes -> sim   (~15s from em
 # The RLS acceptance matrix as a SIGNED-IN user (BL-7). Additive only in the sense that
 # it writes and then rolls back — it leaves no user, no recipe, no helper function.
 # Run it after ANY change to a policy, a `security definer` function, or the column grants.
-melos run db:rls      # 76 checks across anon / owner / shared-with / stranger
+melos run db:rls      # 79 checks across anon / owner / shared-with / stranger
 
 # Simulated population (Phase 24). Additive and idempotent; ~10s at the default
 # `medium` preset (1,000 accounts, ~1,670 recipes, ~118k view rows).
 melos run db:sim                          # schema -> dishes -> generate -> verify
 melos run db:sim -- --preset=small --seed=7
-melos run db:sim:verify                   # 39 assertions, read-only
+melos run db:sim:verify                   # 43 assertions, read-only
 melos run db:sim:clean -- --yes           # DESTRUCTIVE: deletes the simulated auth.users
 ```
 
@@ -353,6 +356,10 @@ table-level one, because RLS filters rows and cannot filter columns. Two consequ
 client-writable column must be added to the grant list in `0001_init.sql` in the same change**
 or the first save carrying it fails the same way. `current_version_id` is moved by the
 `recipe_versions_set_current` trigger — never write it from Dart.
+The newest client-writable column is `recipes.nutrition` (Phase 28) — a nullable `jsonb`
+per-serving label, `null` for "no info". Note the grant omission is **silent** for it: the app
+saves through `save_recipe`, which is `security definer`, so only a direct `PATCH` would fail —
+which is why `supabase/tests/rls_matrix.sql` carries a positive owner-update check on it (B9a).
 
 **Nested content order (B022).** Ingredient/step groups and their children are stored and read in
 **ascending** `sort_order` (`step_order` for steps). postgrest-dart's `.order(column)` defaults to
@@ -365,6 +372,22 @@ PostgREST guarantees no order for an embedded resource, so dropping any one of t
 bug. `Recipe.ingredientGroups`/`stepGroups` need their `@JsonKey(name: 'ingredient_groups' /
 'step_groups')` for that embed to decode at all — remove the name and a full recipe silently
 becomes an empty one.
+
+**Nutrition** (Phase 28): `recipes.nutrition` is **one nullable `jsonb` column, not eleven
+numerics** — the writable-column set is restated in ~13 places, so a column costs each copy a
+line. Fixture coverage is split on purpose: `recipeData` carries two **placeholder** all-10 labels
+(inspectable, nutritionally nonsense) and twelve explicit nulls, while the **sim generates** a
+varied label per recipe (`sim.nutrition_for` in `0_sim_schema.sql`, per-category ranges, ~80% of
+the population) — so anything that needs plausible labels at scale needs `melos run db:sim`.
+A sim label is internally consistent arithmetic, **not real nutrition data** for the dish named on
+the card. `null` is the one representation of "no info" (an all-empty editor entry normalizes to it).
+The 11 keys are pinned by `RecipeNutrition` in core and `_nutritionKeys` in
+`tool/recipe_format.dart`; Postgres only checks `jsonb_typeof(...) = 'object'`. Values are **per
+serving and never multiplied** — scaling 4 → 8 doubles the batch *and* the servings, so the
+stepper moves the label's servings line and its batch total, not a row. Two traps that are only
+visible in SQL: a Dart `null` arrives as `'null'::jsonb`, not SQL `NULL`, so both `save_recipe`
+branches use `nullif(p_payload -> 'nutrition', 'null'::jsonb)`; and it is `->`, never `->>`
+(no implicit text→jsonb cast).
 
 **Ratings**: `recipe_ratings` holds one row per (user, recipe), `0.5`–`5.0` in half-star steps
 (SQL check constraint _and_ `snapRating()` in core). A trigger recomputes
@@ -396,7 +419,7 @@ Five Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/m
 | `/discover`                       | `features/discover`      | Masthead + search, three **shelves** (`01 UNDER 30` / `02 WEEKEND PROJECTS` / `03 MOST FORKED` — `discover_shelf.dart`), then one browse grid whose sort is the old Popular / Trending / Recent. No `AppBar` — the masthead is the title. Signed-out safe |
 | `/chefs`                          | `features/chefs`         | Web: `chefs_hero.dart` + a 404px leaderboard panel + rails of `ChefSpotlightCard`. Compact: the plain board. A row or card opens `chef_detail_sheet.dart` (dialog on web, sheet on mobile); signed-out safe |
 | `/my`                             | `features/my_recipes`    | My / Shared-with-me tabs, both paged. Sharing is `widgets/share_dialog.dart` (opened from recipe detail; it writes `recipe_shares`) |
-| `/recipe/:id`                     | `features/recipe_detail` | **Two v2 layouts, one `context.isExpanded` branch (Phase 27).** ≥1000: `recipe_detail_expanded.dart` — measured 1140px page, header band, facts strip. <1000 (compact **and** medium): `recipe_detail_compact.dart` — cover-first, facts quad, pinned jump bar, `Ready to cook?` bar. Both share `ingredient_rail.dart` (`bordered:` is the only difference) and `method_column.dart`. The v1 hero and `recipe_content_views.dart` are **deleted** — don't reintroduce a third layout for the 600–1000 band. Servings scaler, rating, like/save, fork, version history; signed-out safe |
+| `/recipe/:id`                     | `features/recipe_detail` | **Two v2 layouts, one `context.isExpanded` branch (Phase 27).** ≥1000: `recipe_detail_expanded.dart` — measured 1140px page, header band, facts strip. <1000 (compact **and** medium): `recipe_detail_compact.dart` — cover-first, facts quad, pinned jump bar, `Ready to cook?` bar. Both place `rail_panel.dart` (`bordered:` is the only difference) and `method_column.dart`. The v1 hero and `recipe_content_views.dart` are **deleted** — don't reintroduce a third layout for the 600–1000 band. `RailPanel` is the tab host (Phase 28): `servings_row.dart` on top, then `Ingredients` / `Nutrition` chips, then `ingredient_rail.dart` or `nutrition_tab.dart`. Rating, like/save, fork, version history; signed-out safe |
 | `/recipe/:id/cook`                | `features/recipe_detail` | **Cook mode** — full-screen, one step at a time, **always dark** (`AppTheme.dark()`, the only screen that overrides the theme; the phone is propped under kitchen lights). `cook_mode_screen.dart` (route + shortcuts) → `cook_step_view.dart` (compact frames C/D, web frame H) → `cook_finish_view.dart` (frame E). Pure derivations in `cook_mode_model.dart`, session + timers in `cook_mode_providers.dart`. Signed-out safe; **not** in `needsAuth`. See "Cook mode" below |
 | `/recipe/new`, `/recipe/:id/edit` | `features/recipe_editor` | `edit_models.dart` holds mutable draft types; save appends a version                                                     |
 | `/profile`                        | `features/profile`       | Current user; reached from the bottom bar on mobile and the avatar menu on web (`myProfileProvider`)                     |
@@ -447,6 +470,10 @@ Four things about `/recipe/:id/cook` are load-bearing:
   `melos run build_runner --no-select`. Never hand-edit generated `*.g.dart` / `*.freezed.dart`.
   Only `packages/core` has codegen — it is the only package with `build_runner`, so it is the only
   one the script touches.
+  **A new field whose type is another model needs an explicit `@JsonKey(toJson: …)`** unless it is
+  `includeToJson: false` (B071). `explicitToJson` is off for this package, so `json_serializable`
+  writes the object itself — `jsonEncode` then throws at whatever call site touches it, not here.
+  `Recipe.nutrition` is the worked example.
 - **Providers are hand-written; there is no riverpod codegen.** `riverpod_annotation` /
   `riverpod_generator` were removed as unused (B021) — every provider is a plain `Provider` /
   `FutureProvider` / `StateProvider` / `NotifierProvider`. Don't reintroduce generated providers
@@ -594,11 +621,11 @@ the `code-review` skill). The ones you need while _writing_ code:
     `http://127.0.0.1:54321` is the practical way to drive real repository code; delete it after,
     since CI has no database job.
     **CI now applies the SQL** (`database.yml`, OPT-T1): fresh apply, re-apply, and the Gotcha 6
-    upgrade path, plus the sim's 39 assertions on a `tiny` population. Every statement in *those*
+    upgrade path, plus the sim's 43 assertions on a `tiny` population. Every statement in *those*
     steps runs as `postgres`, which bypasses policies — so CI also runs
     [supabase/tests/rls_matrix.sql](supabase/tests/rls_matrix.sql) (**BL-7**, `melos run db:rls`),
     which is the only thing here that exercises RLS as a **signed-in** user. It switches to
-    `set local role authenticated`, runs 76 checks across anon / owner / shared-with / unrelated
+    `set local role authenticated`, runs 79 checks across anon / owner / shared-with / unrelated
     stranger, and rolls the whole transaction back. It closed the class B053 lived in and found
     B061 on its first complete run. **Run it, and add a check to it, whenever you touch a policy, a
     `security definer` function, or the column grants** — a new table with new policies that the
@@ -625,7 +652,7 @@ relationship was found`. Use the shared `kRecipeSelect` constant in
     ~450-byte tsvector nothing on the client reads, and `*` shipped it on every row. So **a new
     column on `recipes` must be added to `kRecipeSelect` too**, or it decodes as null with no
     error — the read-side twin of the column-grant obligation. `packages/core/test/chef_models_test.dart`
-    pins the current 24. Same rule now on `recipe_versions`: `versions()` selects
+    pins the current 25. Same rule now on `recipe_versions`: `versions()` selects
     `kRecipeVersionSelect`, which deliberately **omits `content_snapshot`** — a whole recipe as
     `jsonb` per row that no UI reads, and the v2 detail header watches that provider on every page
     open (B065). Local fixtures all write `'{}'` there, so an over-fetch of it is invisible until a

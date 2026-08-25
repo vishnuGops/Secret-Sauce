@@ -18,7 +18,8 @@ import 'dart:async';
 // untouched, which is the point of testing behaviour rather than widget trees:
 // they assert what reached the repository, not what the page looked like. The
 // layout's own assertions are in the two groups at the bottom.
-import 'package:app/features/recipe_detail/ingredient_rail.dart';
+import 'package:app/features/recipe_detail/rail_panel.dart';
+import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/features/recipe_detail/recipe_detail_screen.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:core/core.dart';
@@ -85,6 +86,19 @@ const _fullRecipe = Recipe(
       steps: [RecipeStep(id: 's3', groupId: 'sg2', text: 'Bake until golden.')],
     ),
   ],
+);
+
+/// [_fullRecipe] with a nutrition label. 8 servings × 320 kcal, so the batch
+/// line is a four-figure number and the grouping is exercised too.
+final _labelledRecipe = _fullRecipe.copyWith(
+  nutrition: const RecipeNutrition(
+    calories: 320,
+    totalFatG: 12,
+    saturatedFatG: 5,
+    sodiumMg: 480,
+    totalCarbsG: 30,
+    proteinG: 9,
+  ),
 );
 
 class _FakeAuth implements AuthRepository {
@@ -215,6 +229,7 @@ Future<GoRouter> _pump(
   required String? uid,
   Size? size,
   double textScale = 1,
+  RailTab? railTab,
 }) async {
   if (size != null) {
     tester.view.physicalSize = size;
@@ -248,6 +263,10 @@ Future<GoRouter> _pump(
       overrides: [
         recipeRepositoryProvider.overrideWithValue(repo),
         authRepositoryProvider.overrideWithValue(_FakeAuth(uid)),
+        // Lets the envelope matrix run per TAB without depending on the chip
+        // being scrolled into view first — at 2.0× on a 390px page it is not.
+        if (railTab != null)
+          railTabProvider(repo.recipe.id).overrideWith((ref) => railTab),
       ],
       child: MaterialApp.router(
         routerConfig: router,
@@ -437,9 +456,11 @@ void main() {
       expect(find.text('1.25 cup'), findsOneWidget);
       expect(find.text('Wheat flour'), findsOneWidget);
       expect(find.text('0 of 1 gathered'), findsOneWidget);
-      // And it is bare here rather than a bordered card.
+      // And it is bare here rather than a bordered card. The flag moved from
+      // `IngredientRail` to `RailPanel` in Phase 28, when the container went up
+      // to the tab host — an expected API break, not a regression.
       expect(
-        tester.widget<IngredientRail>(find.byType(IngredientRail)).bordered,
+        tester.widget<RailPanel>(find.byType(RailPanel)).bordered,
         isFalse,
       );
     });
@@ -473,27 +494,140 @@ void main() {
     });
   });
 
+  // Phase 28. The rail is two tabs under one shared servings stepper.
+  group('nutrition tab (compact)', () {
+    testWidgets('opens on Ingredients, with both chips present', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _labelledRecipe);
+      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 1600));
+
+      expect(find.widgetWithText(ChoiceChip, 'Ingredients'), findsOneWidget);
+      expect(find.widgetWithText(ChoiceChip, 'Nutrition'), findsOneWidget);
+      // The ingredient list, not the label.
+      expect(find.text('Wheat flour'), findsOneWidget);
+      expect(find.text('Nutrition Facts'), findsNothing);
+    });
+
+    testWidgets('switching shows the label and keeps the stepper', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _labelledRecipe);
+      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 1600));
+
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Nutrition'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Nutrition Facts'), findsOneWidget);
+      expect(find.textContaining('Total Fat 12 g'), findsOneWidget);
+      expect(find.text('Wheat flour'), findsNothing);
+      // The stepper is hoisted above the tabs precisely so it survives the
+      // switch — the batch line below depends on it.
+      expect(find.text('Servings'), findsOneWidget);
+      expect(find.byTooltip('More servings'), findsOneWidget);
+    });
+
+    testWidgets('the stepper moves the batch line, not the per-serving row', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _labelledRecipe);
+      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 1600));
+
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Nutrition'));
+      await tester.pumpAndSettle();
+
+      // 8 servings × 320 kcal.
+      expect(find.textContaining('8 servings · 2,560 kcal total'), findsOne);
+
+      await tester.tap(find.byTooltip('More servings'));
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('9 servings · 2,880 kcal total'), findsOne);
+      // The per-serving number is unchanged. This is the decision, not a
+      // detail: scaling 8 → 9 makes a bigger batch, not a bigger serving.
+      expect(find.text('320'), findsOneWidget);
+    });
+
+    testWidgets('a recipe with no data shows the empty state', (tester) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 1600));
+
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Nutrition'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('No nutrition info available'), findsOneWidget);
+      expect(find.text('Nutrition Facts'), findsNothing);
+    });
+
+    // The stepper and the ingredient list have to agree about what "scaled"
+    // means. `servings = 0` is reachable — the editor's box is
+    // `int.tryParse(…) ?? 1`, `save_recipe` only coalesces a null, and the
+    // column has no positive check — and the rail deliberately leaves such a
+    // recipe's quantities unscaled, so the banner must not promise a colour
+    // change the list below does not make.
+    testWidgets('a 0-serving recipe never claims to be scaled', (tester) async {
+      final repo = _FakeRecipeRepository(
+        recipe: _fullRecipe.copyWith(servings: 0),
+      );
+      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 1600));
+
+      await tester.tap(find.byTooltip('More servings'));
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('Scaled from'), findsNothing);
+      // The quantity is unscaled, which is what makes the absent banner right.
+      expect(find.text('1.25 cup'), findsOneWidget);
+    });
+
+    testWidgets('the jump chip sends the rail back to Ingredients', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _labelledRecipe);
+      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 1600));
+
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Nutrition'));
+      await tester.pumpAndSettle();
+      expect(find.text('Wheat flour'), findsNothing);
+
+      // The pinned jump bar's chip, not the tab chip of the same name.
+      await tester.tap(find.widgetWithText(ActionChip, 'Ingredients'));
+      await tester.pumpAndSettle();
+
+      // Otherwise the chip scrolls to a section whose content is hidden behind
+      // the other tab.
+      expect(find.text('Wheat flour'), findsOneWidget);
+    });
+  });
+
   // Same two-axis matrix as the expanded page (B062–B064) and cook mode (B067):
   // 390 is the phone the layout was drawn for, 800 is the medium band that used
   // to get v1 and now gets this, and 2.0× is the accessibility envelope. The
   // pinned jump bar and the sticky cook bar are both fixed-height regions, which
   // is the shape Gotcha 22 is about.
+  //
+  // Re-run **per tab** since Phase 28: the rail restructure re-opens the
+  // envelope B070 lives in (Gotcha 26), and the nutrition label is a widget
+  // neither layout had ever handed a width before.
   group('layout envelope', () {
-    for (final width in [390.0, 600.0, 800.0]) {
-      for (final scale in [1.0, 2.0]) {
-        testWidgets('no overflow at ${width}px, textScale $scale', (
-          tester,
-        ) async {
-          final repo = _FakeRecipeRepository(recipe: _fullRecipe);
-          await _pump(
-            tester,
-            repo: repo,
-            uid: 'me',
-            size: Size(width, 1600),
-            textScale: scale,
+    for (final tab in RailTab.values) {
+      for (final width in [390.0, 600.0, 800.0]) {
+        for (final scale in [1.0, 2.0]) {
+          testWidgets(
+            'no overflow at ${width}px, textScale $scale on ${tab.name}',
+            (tester) async {
+              final repo = _FakeRecipeRepository(recipe: _labelledRecipe);
+              await _pump(
+                tester,
+                repo: repo,
+                uid: 'me',
+                size: Size(width, 1600),
+                textScale: scale,
+                railTab: tab,
+              );
+              expect(tester.takeException(), isNull);
+            },
           );
-          expect(tester.takeException(), isNull);
-        });
+        }
       }
     }
   });
