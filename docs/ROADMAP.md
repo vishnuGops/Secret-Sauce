@@ -1485,6 +1485,182 @@ commit.
 
 ---
 
+## Phase 28 — Nutrition facts: per-serving label, rail tabs, manual entry (planned, not started)
+
+**Status: planned in detail, not started.** Recipes gain an optional **nutrition facts** panel
+drawn like the label on a store product — the bold `Nutrition Facts` header, servings line,
+oversized Calories row, per-nutrient rows with a `% Daily Value` column, heavy rules between
+sections. It shares the rail with ingredients as **two tabs under the servings stepper** —
+`Ingredients` (the default) and `Nutrition` — on **both** detail layouts, and both tabs read the
+same `selectedServingsProvider`, because two surfaces printing different numbers for one serving
+count is the B066 class of bug.
+
+Three input modes were named in the ask; two are in scope now: **manual entry** in the editor,
+and **leave empty** — a recipe without data shows `No nutrition info available` inside the tab.
+**Auto-calculate is deferred**, and no inert button ships for it (the Phase 27 rule: a
+drawn-but-dead affordance is worse than absence). Mechanism, alternatives, and order of work:
+[EXECUTION-PLAN.md Phase 28](./EXECUTION-PLAN.md#phase-28--nutrition-facts-label-tabs-manual-entry).
+
+### Decisions (taken in planning, before code)
+
+- **Storage is one nullable `jsonb` column, `recipes.nutrition`** — not eleven numeric columns.
+  The writable-recipe-column set is restated in ~13 places (both grant lists, `_writablePayload`,
+  `save_recipe`'s two branches, `fork_recipe`, `_kRecipeColumns`, the model, `seed_recipe_v2` +
+  its generator + its revoke/drop strings, the validator, `schema.json`, the read-side test pins);
+  one column costs each copy one line, eleven would cost eleven each. `null` means "no info"; an
+  all-empty entry is normalized to `null` **before** the repository so the empty state has exactly
+  one representation. The key set *inside* the json is fixed — 11 label fields, all optional
+  non-negative numbers — enforced by the model, the editor, and the authoring validator.
+- **Values are per serving at the recipe's base `servings`, and the label never multiplies
+  them.** Scaling 4 → 8 doubles the ingredients *and* the servings, so each serving is unchanged;
+  a label that multiplied per-serving values by the factor would be wrong at every factor ≠ 1.
+  The stepper still visibly moves the label: the servings line prints the **scaled** count and a
+  batch line (`8 servings · 1,920 kcal total`) is calories × scaled servings. That is what
+  "depends on the serving size" means here.
+- **The servings stepper is hoisted out of `IngredientRail` into the shared tab host**, so it
+  stays on screen on either tab — nutrition depends on it exactly as ingredients do, and a
+  stepper hidden behind the other tab would make the batch line unexplainable. The hoist re-opens
+  the rail's width envelope (Gotcha 26) and the plan budgets a full re-run for it.
+- **Tabs are two `ChoiceChip`s in a `Wrap`**, not a `SegmentedButton`: the compact content box is
+  358 px and a segmented control is one intrinsic `Row` that cannot reflow at 2.0× (Gotcha 21).
+  Tab state is a `StateProvider.autoDispose.family<RailTab, String>` beside
+  `selectedServingsProvider` — `autoDispose`, so every visit starts on Ingredients.
+- **The label widget is `NutritionFactsLabel` in `design_system`** (which already depends on
+  `core`, so it takes `RecipeNutrition` directly), exported from the barrel (Gotcha 14), themed
+  with `onSurface` tokens rather than literal black so dark mode holds. Rows with no value are
+  omitted; `% Daily Value` is computed in core from the FDA daily-value constants.
+
+### Schema (`0001_init.sql`, idempotent — pre-release, so folded into the baseline)
+
+- [ ] `alter table recipes add column if not exists nutrition jsonb` (nullable)
+- [ ] Named check `recipes_nutrition_is_object` — `nutrition is null or jsonb_typeof(nutrition)
+      = 'object'` — added via the guarded `do $$ … pg_constraint` pattern the deferred FKs use
+- [ ] `nutrition` in **both** column-level grant lists (insert + update). The RPC save path is
+      `security definer` and would not catch the omission — the grant is what keeps a direct
+      `PATCH` of a client-writable column working and the B050 story consistent
+- [ ] `save_recipe`: insert-branch column + extraction, update-branch assignment — both as
+      `nullif(p_payload -> 'nutrition', 'null'::jsonb)`. The arrow is `->` (jsonb), not `->>`
+      (text — no implicit cast, runtime error); the `nullif` is because a Dart map with a null
+      value arrives as **JSON null**, which is not SQL `NULL` and would fail the typeof check
+- [ ] `fork_recipe`: `nutrition` added to its insert list — a fork is a deep copy and carries the
+      label
+- [ ] `recipe_snapshot` needs **nothing** — it is `to_jsonb(r) - 'search_tsv'`, so version
+      snapshots pick the column up automatically
+- [ ] `rls_matrix.sql`: a positive owner-update check on `nutrition` (the missing-grant failure
+      is silent on the RPC path, so the matrix is where it becomes visible), plus the
+      `save_recipe` round-trip literal extended to write a nutrition object and read it back, and
+      one check that a JSON-null payload lands as SQL `NULL` (the `nullif` proof)
+
+### core
+
+- [ ] `RecipeNutrition` freezed model (`src/models/recipe_nutrition.dart`): `calories`,
+      `total_fat_g`, `saturated_fat_g`, `trans_fat_g`, `cholesterol_mg`, `sodium_mg`,
+      `total_carbs_g`, `dietary_fiber_g`, `total_sugars_g`, `added_sugars_g`, `protein_g` — all
+      `double?` (`numeric` arrives int-or-double, Gotcha 12), `includeIfNull: false` on `toJson`
+      so stored json carries only entered fields, plus an `isEmpty` getter. Exported from
+      `core.dart` — the barrel is the only public surface, and both `design_system` and the app
+      need the type
+- [ ] `Recipe.nutrition` (`RecipeNutrition?`, wire key `nutrition`) + `melos run build_runner
+      --no-select`
+- [ ] `_kRecipeColumns` + `nutrition` (24 → 25) — the read-side twin obligation (Gotcha 17);
+      without it the column decodes as null with no error
+- [ ] `_writablePayload` + `'nutrition': recipe.nutrition?.toJson()` (13 → 14 keys)
+- [ ] `% Daily Value`: FDA 2,000-kcal daily-value constants + `percentDailyValue()` + a value
+      formatter that trims like `_trimQuantity`, in `core/src/formatting.dart` (or a sibling
+      `nutrition_facts.dart`) — pure, tested
+- [ ] Tests: decode (int / double / absent / JSON null), `toJson` omits null keys, the
+      `chef_models_test.dart` select pin gains `nutrition` (it pins **membership**, so a new
+      column passes silently unless added there), `recipe_repository_test.dart` fixture row +
+      a save assertion on `p_payload['nutrition']`
+
+### design_system
+
+- [ ] `NutritionFactsLabel` (`src/widgets/nutrition_facts_label.dart`): store-label design —
+      heavy outer border, `Nutrition Facts` header, servings + per-serving lines, thick section
+      rules, oversized Calories row, right-aligned `% DV` column, indented sub-rows (saturated /
+      trans under fat; fiber / sugars / added under carbs), the 2,000-calorie footnote. Only rows
+      with values render; no hard-coded black anywhere
+- [ ] Barrel export (Gotcha 14) + widget test: row omission, %DV text, envelope at
+      {320, 358, 493} × {1.0, 2.0} — the widths the two layouts actually hand the rail
+
+### app — recipe detail
+
+- [ ] `servings_row.dart`: stepper + `Scaled from N` banner extracted from `IngredientRail`
+      (which keeps its heading, list, and footer)
+- [ ] `rail_panel.dart`: the shared host — bordered card on expanded, bare on compact (the
+      `bordered` param moves here from `IngredientRail`); children: `ServingsRow` → tab chips →
+      active pane
+- [ ] `nutrition_tab.dart`: watches `selectedServingsProvider(recipe.id)`, renders
+      `NutritionFactsLabel` with the scaled count + batch line, or the
+      `No nutrition info available` empty state
+- [ ] `railTabProvider` beside the other detail providers; compact's `_jumpToIngredients` also
+      resets it, so the jump chip never lands on a hidden ingredient list
+- [ ] Both layouts swap `IngredientRail` for the host; `IngredientRail` loses its `bordered`
+      param (the container moves to the host), so the compact suite's `.bordered isFalse`
+      assertion moves with it — an expected API break, not a regression. Cook mode untouched —
+      it has its own gutter and already reads the same servings provider
+- [ ] Tests in both suites: Ingredients is default, switch shows the label, empty recipe shows
+      the empty text, the stepper moves the batch line, jump-chip reset; envelope matrices re-run
+      **per tab** (compact 390 / 600 / 800, expanded 1000 / 1440, × {1.0, 2.0}) — the rail
+      restructure re-opens B070's envelope (Gotcha 26)
+
+### app — recipe editor
+
+- [ ] `EditNutrition` in `edit_models.dart`: 11 controllers, `fromModel` / `toModel` (all-empty →
+      `null`, never `{}`), dispose wired into the screen's controller-dispose list — a field the
+      draft drops is a field the next save deletes (B035 / Gotcha 20)
+- [ ] `nutrition_editor.dart` panel (same contract as the other editors: draft + `onChanged`),
+      after Attribution; collapsed when empty, expanded when values exist; numeric
+      `TextFormField`s with inline validators so a non-parseable entry **blocks save** instead of
+      silently dropping (the B066 lesson)
+- [ ] Round-trip tests: every field survives load → save, all-empty → `null`; editor envelope
+      re-run with the panel expanded (320 / 360 / 600 × 2.0×)
+
+### Content & seed-data fit (the gate: data extended in this change set)
+
+- [ ] `recipeData/schema.json`: optional `nutrition` object (`additionalProperties: false`,
+      11 non-negative numbers). `tool/recipe_format.dart`: `nutrition` in `_baseRecipeKeys`
+      (optional, never required) + a `_validateNutrition` (unknown keys stay hard errors).
+      `simData` inherits via `$ref`; dishes stay nutrition-free and the sim generator needs **no
+      change** — the column is nullable and absent from its explicit insert list
+- [ ] `seed_recipe_v2` gains `p_nutrition jsonb default null`, **appended last** — a signature
+      change, so the previous 17-arg signature joins the in-file `drop function if exists` list
+      (B024 / Gotcha 5) and the revoke strings and `drop.sql` line move with it; all of it emitted
+      from `tool/recipes.dart`
+- [ ] Dummy values, per the ask: `chicken-tikka-masala` and `spring-vegetable-tart` get all 11
+      fields = `10`; the other 12 files get an explicit `"nutrition": null` (the format spells
+      optional fields out) and exercise the empty state. `melos run recipes:gen`, commit both;
+      CI `recipes:check` guards staleness
+- [ ] What the fixtures **cannot** show: hosted keeps `nutrition = null` — `seed_recipe_v2`
+      early-returns on an existing `(owner_id, title)`, so a re-seed never pushes the dummy 10s
+      to production. That is the intended outcome (placeholder data must not ship); real label
+      values are the content task in Deferred
+
+### Verification plan
+
+- [ ] `melos run analyze` · `melos run test --no-select` · `melos run format`
+- [ ] Local stack: `supabase db reset`; then the Gotcha 6 **upgrade path** — old schema + old
+      seed (via `git show`) with the new files layered on top. The `seed_recipe_v2` signature
+      change is exactly the class that ships green through the two easy paths (B024)
+- [ ] `melos run db:rls` — the count moves from 76 with the three new checks
+- [ ] `melos run recipes:check` · `melos run sim:check`
+- [ ] Screenshots (B028 procedure): both tabs × both layouts × {empty, populated} × {light,
+      dark} — dark is where a hard-coded label black would betray itself
+- [ ] Docs on completion: SDS §3.2 (recipes table), §7.1 (the tab host), §11 (authoring format);
+      CLAUDE.md feature-map row for `/recipe/:id` and the server-owned/writable column lists
+
+### Deferred
+
+- [ ] **Auto-calculate from ingredients** — needs a nutrition data source decision, a mapping
+      from free-text ingredient names, and an "estimated" disclosure on the label; its own phase.
+      The schema is already shaped for it (it writes the same column)
+- [ ] **Real nutrition values** for the 14 authored recipes (content task; replaces the dummy
+      10s)
+- [ ] Micronutrients (vitamin D, calcium, iron, potassium — the label's lower block) and a
+      per-100 g display
+
+---
+
 ## Phase OPT — Optimization & hardening backlog (rolling)
 
 Findings from the 2026-08-20 design/architecture audit (Dart + SQL), plus the open items prior
@@ -1719,8 +1895,8 @@ tracked as [Backlog BL-6](#bl-6--environment-dependent-verification-gaps):
 Everything here is **known, decided, and not being worked on**. An item is in the backlog because
 it is an owner action, accepted debt, or a deferral with a stated trigger — not because it was
 forgotten. Each one names the condition that would pull it back into a phase. Nothing else in this
-document is open: Phases 0–24 are done, Phase 25 is designed-not-started, Phase OPT is closed at
-26 of 29 with the rest listed below.
+document is open: Phases 0–24, 26 and 27 are done, Phase 25 is designed-not-started, Phase 28 is
+planned-not-started, Phase OPT is closed at 26 of 29 with the rest listed below.
 
 #### BL-1 — OPT-S8 (B018) — rotate the hosted seed passwords (owner action)
 
