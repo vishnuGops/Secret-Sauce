@@ -1691,7 +1691,7 @@ drawn-but-dead affordance is worse than absence). Mechanism, alternatives, and o
 
 ---
 
-## Phase 29 — Auto nutrition: food registry, ingredient links, estimated labels (in progress — 29a–b done 2026-08-25)
+## Phase 29 — Auto nutrition: food registry, ingredient links, estimated labels (in progress — 29a–c done 2026-08-25)
 
 Phase 28 shipped the label and manual entry; this phase makes the label **computable from the
 ingredients**, so most cooks never type eleven numbers. The editor's nutrition panel becomes a
@@ -1804,32 +1804,48 @@ only** — nothing in the repo, CI, or the app ever reads it.
 - [x] `rls_matrix.sql` B22b (88 → **89 checks**): the owner's `save_recipe` stores the ingredient
       link, read back through RLS
 
-### 29c — Modes, estimation, provenance
+### 29c — Modes, estimation, provenance — DONE (2026-08-25)
 
-- [ ] `estimate_nutrition(p_ingredient_groups jsonb, p_servings int) → jsonb` — pure; grams
-      ladder: mass unit direct / volume × `grams_per_ml` / count via `food_portion` / else skip;
-      skips optional + unlinked + null-quantity rows; added sugars = Σ total sugars of
-      `is_added_sugar` foods; ÷ servings; returns label + counted/total + unmatched names.
-      `authenticated` only
-- [ ] `match_foods(names text[]) → jsonb` — batched top-3 candidates per name, for the backfill
-      review sheet only
-- [ ] `save_recipe`: when `nutrition->>'source' = 'auto'`, discard client numbers, recompute from
-      the incoming trees, stamp `source`; manual/null pass through untouched. Signature unchanged
-      — no 42725 exposure
-- [ ] `RecipeNutrition.source` (`String?`, `includeIfNull: false`, `isEmpty` ignores it,
-      `isEstimated` getter); `_nutritionKeys` learns `source`; label never renders it. `String`
-      field, so B071's nested-model trap is not re-armed
-- [ ] Editor: segmented **Automatic / Manual / None** (`ChoiceChip`s in a `Wrap`, the Phase 28
-      Gotcha 21 shape — not `SegmentedButton`); Auto pane = match list + not-counted list +
-      preview label via the RPC; zero counted ingredients → inline warning, saves `null` rather
-      than an empty lie; Auto → Manual seeds the fields with the computed values; Manual → Auto
-      confirms overwrite
-- [ ] `NutritionFactsLabel`: optional `Estimated from ingredients` footnote line;
-      `nutrition_tab.dart` passes `isEstimated`
-- [ ] `supabase/tests/nutrition_estimate.sql` — fixture trees → exact expected labels, rolls
-      back; wired into `database.yml` (this SQL's only coverage, the `3_sim_verify.sql`
-      rationale); `rls_matrix.sql` gains the **source-smuggling check**: a save claiming `auto`
-      with fabricated calories stores the recomputed number, not the claim
+- [x] `estimate_nutrition(p_ingredient_groups jsonb, p_servings int) → jsonb` — pure over its
+      arguments plus the registry (it never reads `recipes`/`ingredients`, so an **unsaved**
+      draft previews through the same function the save path recomputes with); grams ladder:
+      mass × `food_unit.factor` / volume × factor × `grams_per_ml` / count via `food_portion`
+      (`''` = bare count) / else skip; skips optional + unlinked + nameless rows and any
+      `quantity` that is null **or ≤ 0** (**B076** — the column has no positive check, and a
+      negative row would subtract from the label rather than be absent from it);
+      added sugars = authored `added_sugars_g`, else Σ total sugars of `is_added_sugar` foods;
+      ÷ `greatest(servings, 1)`; kcal/mg rounded whole, grams to one decimal; returns
+      `{label, counted, total, unmatched}` with the label **null** when nothing counted and
+      `source: 'auto'` stamped when it did. `authenticated` only
+- [x] `match_foods(names text[]) → jsonb` — batched top-3 `search_foods` candidates per trimmed
+      name, `[]` (not an absent key) when nothing matches, capped at 100 names
+- [x] `save_recipe`: when `nutrition->>'source' = 'auto'`, discard client numbers and recompute
+      from the incoming trees against the **effective** servings (payload's, else the row's, read
+      `for update`); manual/null pass through untouched. Signature unchanged — no 42725 exposure.
+      Found **B075** doing it: the recomputed label needs its own
+      `nullif(…, 'null'::jsonb)` or the nothing-counted case aborts the save with `23514`
+- [x] `RecipeNutrition.source` (`String?`, `includeIfNull: false`, `isEmpty` ignores it,
+      `isEstimated` getter); `_nutritionKeys` learns `source` (validator: `'auto'` is its only
+      value, and a `{source}`-only object is rejected like an empty one); label never renders it
+- [x] `NutritionEstimate` model + `FoodRepository.estimate()` / `matchFoods()`; the RPC trees
+      come from a new shared `content_payload.dart` that `save_recipe`'s caller uses too, so the
+      preview can never estimate a different tree than the one that saves
+- [x] Editor: **Automatic / Manual / None** (`ChoiceChip`s in a `Wrap`, the Gotcha 21 shape —
+      not `SegmentedButton`); Auto pane = counted-of-total header, preview label, not-counted
+      list with a per-row reason and tappable `match_foods` chips that link the row; zero counted
+      → inline warning, saves `null` rather than an empty lie; Auto → Manual seeds the fields
+      with the **fresh** computed values (not the stale stored ones); Manual → Auto confirms
+      before discarding typed numbers. The estimate refreshes on the three discrete events
+      **and** on a 500 ms debounce from the ingredient list and the servings field (**B077** —
+      the pane's own copy sends the cook to the list below, and servings is the divisor)
+- [x] `NutritionFactsLabel`: optional `Estimated from ingredients — not a measured analysis.`
+      footnote; `nutrition_tab.dart` passes `nutrition.isEstimated`
+- [x] `supabase/tests/nutrition_estimate.sql` — fixture foods/units/trees → exact expected
+      labels (whole ladder, nothing-counted, null/zero servings, rounding + the authored
+      added-sugars override, empty tree, `match_foods`), rolled back; wired into `database.yml`
+      (this SQL's only coverage, the `3_sim_verify.sql` rationale); `rls_matrix.sql` gains
+      **B22c** (a save claiming `auto` with `calories: 9999` stores the recomputed 100) and
+      **B22d** (auto with nothing counted stores SQL NULL) — 89 → **91 checks**
 
 ### 29d — Fixture refresh & docs
 
@@ -1846,17 +1862,30 @@ only** — nothing in the repo, CI, or the app ever reads it.
 
 ### Verification plan
 
-- [ ] `melos run analyze` / `test --no-select` / `format`; `recipes:check` / `sim:check` /
-      `nutrition:check`
-- [ ] Local stack fresh path **and** the Gotcha 6 upgrade path (new tables + data file layered on
-      an old database), plus the truly-clean B045 path — `estimate_nutrition` referencing tables
-      a later file loads is exactly that class
-- [ ] `melos run db:rls` — count moves from 79; new checks proven non-vacuous by reverting one
-      grant and the smuggling guard once (the BL-7 ritual)
-- [ ] Editor envelope with typeahead + Auto pane at 320 / 360 / 600 × 2.0×; detail suites re-run
-      per tab with the footnote present
-- [ ] Screenshots (B028): Auto pane with matches + not-counted list, estimated label with
-      footnote × {light, dark}
+- [x] `melos run analyze` (SUCCESS) / `test --no-select` (216 app + core + design_system, all
+      passed) / `recipes:check` · `sim:check` · `nutrition:check` (SUCCESS)
+- [x] Local stack: the Gotcha 6 upgrade path (today's baseline over the running database) **and**
+      the truly-clean B045 path (`drop.sql` → 0001 → nutrition → seed → seed_recipes), both green
+      — `estimate_nutrition` reading tables a later file loads is exactly that class
+- [x] `melos run db:rls` — **91 passed, 0 failed** (was 89). Non-vacuity the BL-7 way: with the
+      recompute branch replaced by `if false then`, B22c and B22d both go red and the fabricated
+      `calories: 9999` is what lands in the column
+- [x] `supabase/tests/nutrition_estimate.sql` — all assertions passed, on both the upgraded and
+      the freshly rebuilt database
+- [x] Editor envelope with the mode chips + Auto pane (preview label, not-counted list,
+      suggestion chips) at 320 / 360 / 600 × 2.0×; detail suite asserts the footnote on an
+      estimated label and its absence on a manual one
+- [x] Estimator sanity against the **real** curated registry (not fixtures): all 14 authored
+      recipes produce plausible per-serving labels at high coverage (Spring Vegetable Tart 17/19,
+      Tuna Fishcakes 15/16, Pancakes 8/8, Cookies 9/9), and the unmatched names are exactly the
+      documented vocabulary gaps (`tikka spice blend`, `mirin`, `salt and pepper`, `bamboo
+      skewers`). The eight recipes that estimate 0/N are all **`seed.sql` demo** recipes, which
+      predate 29b and carry no `food_id` — a fixture fact, not an estimator fault
+- [ ] Screenshots (B028) — **not run.** The Auto pane lives behind the auth redirect, and
+      Flutter web exposes no DOM nodes, so a headless driver cannot sign in or type into the
+      editor to reach it (CLAUDE.md's own B028 note). Covered instead by the widget envelope
+      above; the label footnote adds no colour literal (theme `onSurfaceVariant` + italic), so
+      the dark-mode risk it would have checked is not present
 
 ### Deferred (out of scope for 29)
 
@@ -2221,8 +2250,9 @@ months, found by hand while doing something else.
       `melos run db:rls`. It creates three throwaway `auth.users` (owner / shared-with / unrelated
       stranger), a private and a public recipe with content, re-runs everything under `set local
       role authenticated` + `request.jwt.claims`, prints one PASS/FAIL line per check, and **rolls
-      the transaction back** — no user, no recipe, no helper function survives it. **89 checks, all
-      passing** on the local stack (79 + Phase 29a's §E registry nine + 29b's B22b food link).
+      the transaction back** — no user, no recipe, no helper function survives it. **91 checks, all
+      passing** on the local stack (79 + Phase 29a's §E registry nine + 29b's B22b food link +
+      29c's B22c/B22d auto-estimate guards, the pair that found B075).
 - [x] **CI runs it** — a new `RLS matrix — as a signed-in user` step in `database.yml`, straight
       after the fresh apply. A B053/B061-class regression now fails a pull request.
 - [x] **It found a real hole on its first complete run: [B061](BUG-TRACKER.md).** `likes_write` and

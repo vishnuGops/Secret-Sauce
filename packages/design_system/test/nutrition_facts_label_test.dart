@@ -189,6 +189,40 @@ void main() {
     expect(find.textContaining('this recipe is written for'), findsNothing);
   });
 
+  // Phase 29c: provenance. The footnote is opt-in via the parameter — the
+  // caller (nutrition_tab) passes `nutrition.isEstimated` — and absent by
+  // default so a manual label never disclaims itself.
+  testWidgets('an estimated label carries the disclosure footnote', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _host(
+        const NutritionFactsLabel(
+          nutrition: _full,
+          servings: 4,
+          baseServings: 4,
+          isEstimated: true,
+        ),
+      ),
+    );
+
+    expect(find.textContaining('Estimated from ingredients'), findsOneWidget);
+  });
+
+  testWidgets('a manual label carries no footnote', (tester) async {
+    await tester.pumpWidget(
+      _host(
+        const NutritionFactsLabel(
+          nutrition: _full,
+          servings: 4,
+          baseServings: 4,
+        ),
+      ),
+    );
+
+    expect(find.textContaining('Estimated from ingredients'), findsNothing);
+  });
+
   testWidgets('uses theme ink, not a hard-coded black', (tester) async {
     await tester.pumpWidget(
       _host(
@@ -216,10 +250,13 @@ void main() {
       testWidgets('fits ${width.toInt()}px at ${scale}x', (tester) async {
         await tester.pumpWidget(
           _host(
+            // Footnote present (29c): the envelope is re-run with every line
+            // the label can carry, per Gotcha 26.
             const NutritionFactsLabel(
               nutrition: _full,
               servings: 12,
               baseServings: 4,
+              isEstimated: true,
             ),
             width: width,
             textScale: scale,

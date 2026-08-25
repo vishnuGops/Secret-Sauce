@@ -49,6 +49,15 @@ class RecipeNutrition with _$RecipeNutrition {
     @JsonKey(name: 'total_sugars_g', includeIfNull: false) double? totalSugarsG,
     @JsonKey(name: 'added_sugars_g', includeIfNull: false) double? addedSugarsG,
     @JsonKey(name: 'protein_g', includeIfNull: false) double? proteinG,
+
+    /// Provenance (Phase 29c): `'auto'` when the label was computed from the
+    /// ingredient list by `estimate_nutrition` — **absent means manual**, so
+    /// every label saved before this field existed (and every sim-invented
+    /// one) reads correctly with zero migration. A plain `String?`, not an
+    /// enum (nothing in SQL switches on it) and not a nested model (B071
+    /// stays un-re-armed). The label never renders the value itself; it
+    /// drives the `Estimated from ingredients` footnote via [isEstimated].
+    @JsonKey(includeIfNull: false) String? source,
   }) = _RecipeNutrition;
 
   factory RecipeNutrition.fromJson(Map<String, dynamic> json) =>
@@ -60,6 +69,10 @@ class RecipeNutrition with _$RecipeNutrition {
   /// repository, so "no nutrition info" has exactly one representation on the
   /// wire and in the column. This getter is how the editor and the fixtures
   /// decide that.
+  ///
+  /// [source] is deliberately ignored: `{source: 'auto'}` with no values is
+  /// still no label — counting provenance as content would let an empty
+  /// estimate survive normalization as a masthead with no rows.
   bool get isEmpty =>
       calories == null &&
       totalFatG == null &&
@@ -74,4 +87,9 @@ class RecipeNutrition with _$RecipeNutrition {
       proteinG == null;
 
   bool get isNotEmpty => !isEmpty;
+
+  /// Whether this label was computed from the ingredient list rather than
+  /// entered by hand — drives the label's `Estimated from ingredients`
+  /// footnote and the editor's mode detection on load.
+  bool get isEstimated => source == 'auto';
 }

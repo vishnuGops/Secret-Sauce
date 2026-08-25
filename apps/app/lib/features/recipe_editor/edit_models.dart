@@ -15,6 +15,15 @@ String? _orNull(TextEditingController c) {
   return text.isEmpty ? null : text;
 }
 
+/// The editor's three-way nutrition choice (Phase 29c).
+///
+/// What each saves: [auto] sends `{source: 'auto'}` and the server recomputes
+/// the label from the ingredient trees inside `save_recipe` (client numbers
+/// are preview-only and never stored); [manual] sends the typed values;
+/// [none] sends null. None and an all-empty Manual collapse to the same
+/// stored state on purpose — one representation of "no info".
+enum EditNutritionMode { auto, manual, none }
+
 /// The 11 nutrition-label fields as text controllers (Phase 28).
 ///
 /// Field-for-field with `RecipeNutrition` — the B035 obligation applies here as

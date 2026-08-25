@@ -73,7 +73,9 @@ secret-sauce/
 │   │   ├── core.dart              # BARREL — the only public surface of `core`
 │   │   ├── src/{models,repositories,services}/ + providers.dart
 │   │   │                          # + chef_scoring.dart, formatting.dart, paging.dart,
-│   │   │                          #   nutrition_facts.dart (FDA %DV constants + helpers)
+│   │   │                          #   nutrition_facts.dart (FDA %DV constants + helpers),
+│   │   │                          #   repositories/content_payload.dart (the ingredient/step
+│   │   │                          #   tree encoder shared by save_recipe + estimate_nutrition)
 │   │   └── ../test/               # models + pure helpers + REPOSITORIES (OPT-T2), the last
 │   │                              # via test/support/fake_supabase.dart — a recording
 │   │                              # http.BaseClient under a real SupabaseClient
@@ -129,7 +131,9 @@ secret-sauce/
     │   ├── 3_sim_verify.sql      #   43 assertions — the only test coverage this SQL has
     │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
     ├── tests/rls_matrix.sql      # the RLS matrix as a SIGNED-IN user (BL-7, `db:rls`) —
-    │                             #   89 checks; makes its own users, then ROLLS BACK
+    │                             #   91 checks; makes its own users, then ROLLS BACK
+    ├── tests/nutrition_estimate.sql  # the estimator's ONLY coverage (Phase 29c): fixture
+    │                             #   foods/units/trees -> exact labels, then ROLLS BACK
     └── scripts/{drop,clean}.sql · rotate_seed_passwords.sql (B018 — hosted, manual)
 ```
 
@@ -271,7 +275,11 @@ melos run db:reset    # drop -> create -> nutrition -> seed -> recipes -> sim (~
 # The RLS acceptance matrix as a SIGNED-IN user (BL-7). Additive only in the sense that
 # it writes and then rolls back — it leaves no user, no recipe, no helper function.
 # Run it after ANY change to a policy, a `security definer` function, or the column grants.
-melos run db:rls      # 89 checks across anon / owner / shared-with / stranger
+melos run db:rls      # 91 checks across anon / owner / shared-with / stranger
+
+# The auto-nutrition arithmetic (Phase 29c) — fixture trees, exact labels, rolls back.
+# Self-sufficient: brings its own foods/units, so the registry need not be loaded.
+psql "$env:SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/tests/nutrition_estimate.sql
 
 # Simulated population (Phase 24). Additive and idempotent; ~10s at the default
 # `medium` preset (1,000 accounts, ~1,670 recipes, ~118k view rows).
@@ -375,7 +383,9 @@ every surface renders; the link is invisible metadata that 29c's estimator sums.
 optional `food` key in `recipeData`/`simData` JSON (slug checked against `foods.json` by the
 validator), it travels as `food_id` everywhere else. The ingredient column set now lives in five
 copies — `save_recipe`, `fork_recipe`, `seed_recipe_v2`, the sim's insert, and the client's
-`_save` payload — plus `Ingredient`, `EditIngredient` (B035), and both `schema.json`s; a new
+shared tree encoder [content_payload.dart](packages/core/lib/src/repositories/content_payload.dart)
+(29c: one encoder for the save RPC **and** the estimator preview, so the two can never disagree
+about the tree) — plus `Ingredient`, `EditIngredient` (B035), and both `schema.json`s; a new
 ingredient column must reach all of them in one change. `rls_matrix.sql` B22b pins the
 `save_recipe` copy, the one that fails silently.
 
@@ -415,13 +425,27 @@ varied label per recipe (`sim.nutrition_for` in `0_sim_schema.sql`, per-category
 the population) — so anything that needs plausible labels at scale needs `melos run db:sim`.
 A sim label is internally consistent arithmetic, **not real nutrition data** for the dish named on
 the card. `null` is the one representation of "no info" (an all-empty editor entry normalizes to it).
-The 11 keys are pinned by `RecipeNutrition` in core and `_nutritionKeys` in
+The 11 keys **plus `source`** (29c) are pinned by `RecipeNutrition` in core and `_nutritionKeys` in
 `tool/recipe_format.dart`; Postgres only checks `jsonb_typeof(...) = 'object'`. Values are **per
 serving and never multiplied** — scaling 4 → 8 doubles the batch *and* the servings, so the
 stepper moves the label's servings line and its batch total, not a row. Two traps that are only
 visible in SQL: a Dart `null` arrives as `'null'::jsonb`, not SQL `NULL`, so both `save_recipe`
 branches use `nullif(p_payload -> 'nutrition', 'null'::jsonb)`; and it is `->`, never `->>`
 (no implicit text→jsonb cast).
+
+**Auto nutrition** (Phase 29c): `source: 'auto'` inside that same jsonb means the label was
+**computed from the ingredient list**; the key's absence means manual, which is what made it
+migration-free for every already-saved and sim-invented label. `estimate_nutrition()` holds the
+arithmetic **once** — pure over its arguments plus the registry, so the editor previews an
+unsaved draft with it — and `save_recipe` calls the same function whenever the incoming label
+claims `auto`, **discarding the client's numbers**: an estimate is only ever trusted from the one
+gate that sees the ingredient trees in the same transaction (`rls_matrix.sql` B22c/B22d).
+There is deliberately **no Dart mirror** of the formula. Three rules that cost a bug each to
+learn: the recomputed label needs its own `nullif(…, 'null'::jsonb)` because
+`estimate_nutrition(…) -> 'label'` is JSON null, not SQL NULL, when nothing counted (**B075**);
+`isEmpty` must ignore `source`, or `{source:'auto'}` counts as a label; and an unresolvable
+ingredient contributes **nothing** and is named in the editor's not-counted list — never a
+guessed density, because a water default makes a cup of flour 236 g instead of 120 g.
 
 **Ratings**: `recipe_ratings` holds one row per (user, recipe), `0.5`–`5.0` in half-star steps
 (SQL check constraint _and_ `snapRating()` in core). A trigger recomputes
@@ -659,7 +683,7 @@ the `code-review` skill). The ones you need while _writing_ code:
     steps runs as `postgres`, which bypasses policies — so CI also runs
     [supabase/tests/rls_matrix.sql](supabase/tests/rls_matrix.sql) (**BL-7**, `melos run db:rls`),
     which is the only thing here that exercises RLS as a **signed-in** user. It switches to
-    `set local role authenticated`, runs 89 checks across anon / owner / shared-with / unrelated
+    `set local role authenticated`, runs 91 checks across anon / owner / shared-with / unrelated
     stranger, and rolls the whole transaction back. It closed the class B053 lived in and found
     B061 on its first complete run. **Run it, and add a check to it, whenever you touch a policy, a
     `security definer` function, or the column grants** — a new table with new policies that the

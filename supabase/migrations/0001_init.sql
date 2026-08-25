@@ -2060,15 +2060,44 @@ security definer
 set search_path = public
 as $$
 declare
-  v_recipe uuid;
-  v_next   int;
-  v_parent uuid;
+  v_recipe    uuid;
+  v_next      int;
+  v_parent    uuid;
+  v_servings  int;
+  v_nutrition jsonb;
 begin
   if auth.uid() is null then
     raise exception 'must be signed in to save a recipe' using errcode = '42501';
   end if;
 
+  -- `->` (jsonb), never `->>` (text): there is no implicit text→jsonb cast,
+  -- so the wrong arrow is a runtime error on the first save. The `nullif`
+  -- is the JSON-null trap: a Dart map with a null value arrives as
+  -- `'null'::jsonb`, which is NOT SQL NULL and fails the typeof check.
+  v_nutrition := nullif(p_payload -> 'nutrition', 'null'::jsonb);
+
   if p_recipe_id is null then
+    -- Phase 29c: a label claiming `source = 'auto'` is recomputed from the
+    -- SAME trees this transaction persists — the client's numbers are
+    -- preview-only and die here, which is what makes fabricated "estimates"
+    -- impossible to store (the Gotcha 11 shape: the one gate that sees the
+    -- content sees the label too). Manual labels (no `source`) and null pass
+    -- through untouched. `estimate_nutrition` stamps `source` itself and
+    -- returns a null label when nothing counted, so Auto-with-nothing stores
+    -- SQL NULL, never an empty lie.
+    if v_nutrition ->> 'source' = 'auto' then
+      -- The `nullif` again, one layer deeper and for the same reason: a null
+      -- `label` key is `'null'::jsonb`, which is NOT SQL NULL and fails
+      -- `recipes_nutrition_is_object` with 23514. Found by BL-7's B22d.
+      v_nutrition := nullif(
+        estimate_nutrition(
+          p_ingredient_groups,
+          coalesce((p_payload->>'servings')::int, 1)
+        ) -> 'label',
+        'null'::jsonb
+      );
+    end if;
+
     insert into recipes (
       owner_id, title, description, cover_image_url, cuisine, category,
       difficulty, prep_minutes, cook_minutes, servings, visibility, attribution,
@@ -2088,11 +2117,7 @@ begin
       p_payload->>'attribution',
       (p_payload->>'forked_from_recipe_id')::uuid,
       (p_payload->>'forked_from_version_id')::uuid,
-      -- `->` (jsonb), never `->>` (text): there is no implicit text→jsonb cast,
-      -- so the wrong arrow is a runtime error on the first save. The `nullif`
-      -- is the JSON-null trap: a Dart map with a null value arrives as
-      -- `'null'::jsonb`, which is NOT SQL NULL and fails the typeof check.
-      nullif(p_payload -> 'nutrition', 'null'::jsonb)
+      v_nutrition
     )
     returning id into v_recipe;
   else
@@ -2100,6 +2125,23 @@ begin
     -- same predicate `recipes_update` uses, so this cannot drift from RLS.
     if not owns_recipe(p_recipe_id) then
       raise exception 'not authorized to save this recipe' using errcode = '42501';
+    end if;
+
+    -- The insert branch's auto recompute (Phase 29c), against the EFFECTIVE
+    -- serving count — the payload's when sent, the row's when omitted, the
+    -- same coalesce the update below applies. `for update` takes the row lock
+    -- a statement early so a concurrent save of the same recipe cannot read a
+    -- servings value the other transaction is about to change.
+    if v_nutrition ->> 'source' = 'auto' then
+      select coalesce((p_payload->>'servings')::int, servings)
+        into v_servings
+        from recipes where id = p_recipe_id
+        for update;
+      -- `nullif` per the insert branch: a null label is `'null'::jsonb`.
+      v_nutrition := nullif(
+        estimate_nutrition(p_ingredient_groups, v_servings) -> 'label',
+        'null'::jsonb
+      );
     end if;
 
     -- Two rules, and the split is not arbitrary. A **not-null** column falls
@@ -2124,8 +2166,9 @@ begin
       forked_from_recipe_id  = (p_payload->>'forked_from_recipe_id')::uuid,
       forked_from_version_id = (p_payload->>'forked_from_version_id')::uuid,
       -- Nullable, so it is assigned straight through like the other nullable
-      -- columns; see the insert branch for why it is `->` + `nullif`.
-      nutrition              = nullif(p_payload -> 'nutrition', 'null'::jsonb)
+      -- columns; extracted (and possibly recomputed) at the top of the
+      -- function — see the declaration for the `->` + `nullif` reasoning.
+      nutrition              = v_nutrition
     where id = p_recipe_id;
 
     v_recipe := p_recipe_id;
@@ -2302,5 +2345,207 @@ begin
   if exists (select 1 from pg_roles where rolname = 'anon') then
     execute 'revoke execute on function search_foods(text, int) from anon';
     execute 'grant execute on function search_foods(text, int) to authenticated';
+  end if;
+end $$;
+
+-- ============================================================================
+-- estimate_nutrition — the auto-nutrition arithmetic (Phase 29c)
+--
+-- Pure over its arguments plus the registry tables: it never reads `recipes`
+-- or `ingredients`, so the editor can preview an UNSAVED draft with the same
+-- trees the save path sends, and `save_recipe`'s auto branch recomputes
+-- through this exact function — the arithmetic exists once, here, and there
+-- is deliberately no Dart mirror (the Gotcha 19 two-implementations tax,
+-- not bought when nothing needs per-keystroke recompute).
+--
+-- The grams ladder, first hit wins; anything that falls through contributes
+-- NOTHING and is named in `unmatched` (the editor's "not counted" list —
+-- honesty over coverage, and never a guessed density: a water default makes a
+-- cup of flour 236 g instead of 120 g, which is worse than absence):
+--
+--   1. skip outright: `is_optional`, no/unknown `food_id`, `quantity` null
+--   2. mass unit      → quantity × food_unit.factor (grams per unit)
+--   3. volume unit    → quantity × factor (ml) × food.grams_per_ml
+--                       (null grams_per_ml = unresolvable for this food)
+--   4. count unit     → quantity × food_portion.grams for that unit_key
+--                       ('' spelling is the bare-count marker → 'each')
+--   5. unknown / unresolvable spelling → skip (units.json's `unresolvable`
+--                       list is intent, not a gate — absence behaves the same)
+--
+-- Then Σ (grams × per-100 g ⁄ 100), ÷ servings. Added sugars can never come
+-- from FDC data (measured at 0 rows across every generic food), so they are
+-- rule-derived: the food's authored `added_sugars_g` when curated, else its
+-- total sugars when `is_added_sugar`. A nutrient every counted food lacks
+-- stays absent from the label rather than printing a false 0 — `sum()`
+-- ignores nulls and `jsonb_strip_nulls` drops the key.
+--
+-- Returns `{label, counted, total, unmatched}`. `label` is null when nothing
+-- counted (never an all-empty object — null is the one spelling of "no
+-- info"), and otherwise carries `source: 'auto'` — the provenance stamp is
+-- applied HERE so every consumer of the arithmetic stores the same shape.
+-- Rounding: whole numbers for kcal and mg, one decimal for grams — inside
+-- `formatNutritionValue`'s two-decimal ceiling. jsonb compares numbers as
+-- numerics, so 10 and 10.0 stay equal in the fixture assertions.
+--
+-- Invoker-rights + `authenticated`-only like the registry it reads (Gotcha
+-- 3); inside `save_recipe` it runs with definer rights, which also holds.
+-- ============================================================================
+create or replace function estimate_nutrition(
+  p_ingredient_groups jsonb,
+  p_servings          int
+)
+returns jsonb
+language sql
+stable
+as $$
+  with ing as (
+    select
+      coalesce(c.elem->>'name', '')                     as name,
+      (c.elem->>'quantity')::numeric                    as quantity,
+      lower(trim(coalesce(c.elem->>'unit', '')))        as unit,
+      c.elem->>'food_id'                                as food_id,
+      coalesce((c.elem->>'is_optional')::boolean, false) as is_optional
+    from jsonb_array_elements(coalesce(p_ingredient_groups, '[]'::jsonb)) g(elem)
+    cross join lateral
+      jsonb_array_elements(coalesce(g.elem->'ingredients', '[]'::jsonb)) c(elem)
+    -- Nameless rows are the editor's blank placeholders; the save path drops
+    -- them too, so they must not pad `total`.
+    where coalesce(c.elem->>'name', '') <> ''
+  ),
+  resolved as (
+    select
+      i.name,
+      f.is_added_sugar,
+      f.calories, f.total_fat_g, f.saturated_fat_g, f.trans_fat_g,
+      f.cholesterol_mg, f.sodium_mg, f.total_carbs_g, f.dietary_fiber_g,
+      f.total_sugars_g, f.added_sugars_g, f.protein_g,
+      -- The ladder. A `case` with no `else` yields null for every fall-through
+      -- (unknown spelling, volume without density, count without a portion),
+      -- which is the single "not counted" marker everything below keys on.
+      case
+        -- `quantity <= 0` skips with the null case, not with the arithmetic:
+        -- the column has no positive check and the editor's Qty box is a bare
+        -- TextField, so `-2` is storable — and a negative row would *subtract*
+        -- from the label, which is a wrong number rather than a missing one.
+        when i.is_optional or i.quantity is null or i.quantity <= 0
+          or f.id is null then null
+        when u.class = 'mass'   then i.quantity * u.factor
+        when u.class = 'volume' then i.quantity * u.factor * f.grams_per_ml
+        when u.class = 'count'  then i.quantity * p.grams
+      end as grams
+    from ing i
+    left join food f       on f.id = i.food_id
+    left join food_unit u  on u.spelling = i.unit
+    left join food_portion p on p.food_id = f.id and p.unit_key = u.unit_key
+  ),
+  sums as (
+    select
+      count(*)                                  as total,
+      count(*) filter (where grams is not null) as counted,
+      coalesce(
+        jsonb_agg(distinct name) filter (where grams is null),
+        '[]'::jsonb
+      )                                         as unmatched,
+      sum(grams * calories        / 100) as calories,
+      sum(grams * total_fat_g     / 100) as total_fat_g,
+      sum(grams * saturated_fat_g / 100) as saturated_fat_g,
+      sum(grams * trans_fat_g     / 100) as trans_fat_g,
+      sum(grams * cholesterol_mg  / 100) as cholesterol_mg,
+      sum(grams * sodium_mg       / 100) as sodium_mg,
+      sum(grams * total_carbs_g   / 100) as total_carbs_g,
+      sum(grams * dietary_fiber_g / 100) as dietary_fiber_g,
+      sum(grams * total_sugars_g  / 100) as total_sugars_g,
+      -- The added-sugars rule (see the header): authored value first, else
+      -- total sugars for foods flagged as added sugar, else nothing.
+      sum(grams * coalesce(
+            added_sugars_g,
+            case when is_added_sugar then total_sugars_g end
+          ) / 100)                         as added_sugars_g,
+      sum(grams * protein_g       / 100) as protein_g
+    from resolved
+  ),
+  label as (
+    select
+      s.counted, s.total, s.unmatched,
+      jsonb_strip_nulls(jsonb_build_object(
+        'calories',        round(s.calories        / v.n, 0),
+        'total_fat_g',     round(s.total_fat_g     / v.n, 1),
+        'saturated_fat_g', round(s.saturated_fat_g / v.n, 1),
+        'trans_fat_g',     round(s.trans_fat_g     / v.n, 1),
+        'cholesterol_mg',  round(s.cholesterol_mg  / v.n, 0),
+        'sodium_mg',       round(s.sodium_mg       / v.n, 0),
+        'total_carbs_g',   round(s.total_carbs_g   / v.n, 1),
+        'dietary_fiber_g', round(s.dietary_fiber_g / v.n, 1),
+        'total_sugars_g',  round(s.total_sugars_g  / v.n, 1),
+        'added_sugars_g',  round(s.added_sugars_g  / v.n, 1),
+        'protein_g',       round(s.protein_g       / v.n, 1)
+      )) as label
+    from sums s
+    cross join (select greatest(coalesce(p_servings, 1), 1)::numeric as n) v
+  )
+  select jsonb_build_object(
+    'label', case
+      when l.counted = 0 or l.label = '{}'::jsonb then null
+      else l.label || jsonb_build_object('source', 'auto')
+    end,
+    'counted',   l.counted,
+    'total',     l.total,
+    'unmatched', l.unmatched
+  )
+  from label l;
+$$;
+
+do $$
+begin
+  execute 'revoke execute on function estimate_nutrition(jsonb, int) from public';
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'revoke execute on function estimate_nutrition(jsonb, int) from anon';
+    execute 'grant execute on function estimate_nutrition(jsonb, int) to authenticated';
+  end if;
+end $$;
+
+-- ============================================================================
+-- match_foods — batched link candidates for the editor's review flow (29c)
+--
+-- Top-3 `search_foods` candidates per distinct name, keyed by the name as
+-- given, `[]` when nothing matches (the key stays, so the caller can tell
+-- "looked, found nothing" from "never asked"). One call for a whole recipe's
+-- unlinked names when an old recipe first switches to Automatic — inference
+-- proposes, a human confirms, and only the confirmed link is ever stored
+-- (matching is never re-run at save time; the link is a stored fact).
+--
+-- Capped at 100 names: no recipe has more, and this is an `authenticated`
+-- RPC. Same lock shape as `search_foods`, which it wraps.
+-- ============================================================================
+create or replace function match_foods(p_names text[])
+returns jsonb
+language sql
+stable
+as $$
+  select coalesce(
+    jsonb_object_agg(n.name, coalesce(c.cands, '[]'::jsonb)),
+    '{}'::jsonb
+  )
+  from (
+    select distinct trim(t.name) as name
+    from unnest(coalesce(p_names, '{}'::text[])) t(name)
+    where coalesce(trim(t.name), '') <> ''
+    order by 1
+    limit 100
+  ) n
+  cross join lateral (
+    select jsonb_agg(
+      jsonb_build_object('id', s.id, 'display_name', s.display_name)
+    ) as cands
+    from search_foods(n.name, 3) s
+  ) c;
+$$;
+
+do $$
+begin
+  execute 'revoke execute on function match_foods(text[]) from public';
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'revoke execute on function match_foods(text[]) from anon';
+    execute 'grant execute on function match_foods(text[]) to authenticated';
   end if;
 end $$;

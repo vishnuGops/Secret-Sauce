@@ -297,12 +297,23 @@ melos run db:rls      # RLS acceptance matrix as a SIGNED-IN user — writes, th
 ```
 
 `db:rls` is the odd one out and the only safe-by-construction one: it applies
-`supabase/tests/rls_matrix.sql`, which creates three throwaway users and two recipes, re-runs 76
+`supabase/tests/rls_matrix.sql`, which creates three throwaway users and two recipes, re-runs 91
 authorization checks under `set local role authenticated`, prints a PASS/FAIL line for each, and
 **rolls the whole transaction back** — no user, no recipe and no helper function survives it. It is
 the only thing in the repo that exercises RLS as a signed-in caller; everything else (the seed, the
 sim, the CI job's other steps) runs as `postgres`, which bypasses policies. Run it after any change
 to a policy, a `security definer` function, or the column grants. CI runs it too.
+
+There is a second rollback-safe SQL test, with no melos script because it needs no arguments —
+`supabase/tests/nutrition_estimate.sql` (Phase 29c). It feeds fixture ingredient trees with known
+gram weights through `estimate_nutrition` / `match_foods` and asserts the **exact** expected
+labels, so it is the only coverage the auto-nutrition arithmetic has (the RLS matrix proves the
+policy geometry, not that a cup of flour weighs 120 g). It brings its own foods and units, so the
+registry need not be loaded, and CI runs it after the fresh apply:
+
+```powershell
+psql "$env:SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/tests/nutrition_estimate.sql
+```
 
 **No `psql` installed? Use the Supabase container's, and go through the pooler** (B033). The
 `db:*` scripts shell out to `psql`; if it is not on PATH the only client on a Docker-based setup is

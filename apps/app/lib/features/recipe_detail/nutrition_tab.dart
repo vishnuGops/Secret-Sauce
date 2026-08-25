@@ -36,6 +36,9 @@ class NutritionTab extends ConsumerWidget {
       nutrition: nutrition,
       servings: servings,
       baseServings: recipe.servings,
+      // The footnote is provenance, not decoration: an estimated label must
+      // never present itself as a measured one (Phase 29c).
+      isEstimated: nutrition.isEstimated,
     );
   }
 }

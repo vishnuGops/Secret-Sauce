@@ -4,6 +4,7 @@ import 'package:core/src/models/enums.dart';
 import 'package:core/src/models/recipe.dart';
 import 'package:core/src/models/recipe_version.dart';
 import 'package:core/src/paging.dart';
+import 'package:core/src/repositories/content_payload.dart';
 import 'package:core/src/repositories/recipe_queries.dart';
 import 'package:core/src/repositories/write_denied_exception.dart';
 
@@ -223,44 +224,18 @@ class SupabaseRecipeRepository implements RecipeRepository {
     String changeSummary,
   ) async {
     try {
+      // The trees come from the shared encoder (content_payload.dart) so the
+      // editor's nutrition preview — which estimates over the same encoding —
+      // can never disagree with what this call persists.
       final id = await _client.rpc(
         'save_recipe',
         params: {
           'p_recipe_id': recipeId,
           'p_payload': _writablePayload(recipe),
-          'p_ingredient_groups': [
-            for (final group in recipe.ingredientGroups)
-              {
-                'name': group.name,
-                'ingredients': [
-                  for (final i in group.ingredients)
-                    {
-                      'quantity': i.quantity,
-                      'unit': i.unit,
-                      'name': i.name,
-                      'note': i.note,
-                      'is_optional': i.isOptional,
-                      'food_id': i.foodId,
-                    },
-                ],
-              },
-          ],
-          'p_step_groups': [
-            for (final group in recipe.stepGroups)
-              {
-                'name': group.name,
-                'steps': [
-                  for (final s in group.steps)
-                    {
-                      'text': s.text,
-                      'image_url': s.imageUrl,
-                      'duration_minutes': s.durationMinutes,
-                      'temperature': s.temperature,
-                      'tip': s.tip,
-                    },
-                ],
-              },
-          ],
+          'p_ingredient_groups': ingredientGroupsPayload(
+            recipe.ingredientGroups,
+          ),
+          'p_step_groups': stepGroupsPayload(recipe.stepGroups),
           'p_change_summary': changeSummary,
         },
       );

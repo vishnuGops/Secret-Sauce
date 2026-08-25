@@ -129,10 +129,13 @@ const _requiredRecipeKeys = [
   'step_groups',
 ];
 
-/// The eleven label fields, and only those — the authoring-side copy of
-/// `RecipeNutrition`. Postgres stores the value as an unstructured `jsonb`, so
-/// a typo'd key would be accepted by the column, saved, and then silently
-/// dropped on decode; this set is what turns that into a build failure.
+/// The eleven label fields plus the `source` provenance stamp (Phase 29c) —
+/// the authoring-side copy of `RecipeNutrition`. Postgres stores the value as
+/// an unstructured `jsonb`, so a typo'd key would be accepted by the column,
+/// saved, and then silently dropped on decode; this set is what turns that
+/// into a build failure. `source` is the one non-numeric key: `'auto'` marks a
+/// label the estimator computed (29d commits such fixtures), absent means
+/// manual, and no other value exists.
 const _nutritionKeys = {
   'calories',
   'total_fat_g',
@@ -145,6 +148,7 @@ const _nutritionKeys = {
   'total_sugars_g',
   'added_sugars_g',
   'protein_g',
+  'source',
 };
 const _ingredientKeys = {
   'quantity',
@@ -414,6 +418,13 @@ class _Validator {
       _err(file, 'nutrition is an empty object — use null for "no info"');
       return;
     }
+    if (n.keys.every((k) => k == 'source')) {
+      // Provenance is not content: `{source: 'auto'}` would decode to an
+      // empty label (isEmpty ignores source) and normalize away on the first
+      // edit — the fixture should say null and mean it.
+      _err(file, 'nutrition carries only "source" — use null for "no info"');
+      return;
+    }
     for (final key in n.keys) {
       if (!_nutritionKeys.contains(key)) {
         _err(file, 'nutrition unknown field "$key"');
@@ -421,6 +432,14 @@ class _Validator {
     }
     for (final entry in n.entries) {
       final v = entry.value;
+      // The provenance stamp (29c) is the one non-numeric key, and 'auto' is
+      // its only value — manual is spelled by absence, never 'manual'.
+      if (entry.key == 'source') {
+        if (v != 'auto') {
+          _err(file, "nutrition.source must be 'auto' (absent means manual)");
+        }
+        continue;
+      }
       // Zero is legitimate on a label (0 g trans fat is a printed row), so the
       // bound is non-negative, unlike `quantity`'s.
       if (v is! num || v < 0) {

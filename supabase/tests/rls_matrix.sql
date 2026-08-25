@@ -201,6 +201,10 @@ begin
   -- rollback takes it away again.
   insert into food (id, display_name, calories) values ('bl7-food', 'BL-7 fixture food', 100);
   insert into food_alias (alias, food_id) values ('bl7 fixture food', 'bl7-food');
+  -- A private mass unit for B22c's known-grams arithmetic (29c): 1 bl7-gram
+  -- = 1 g, a spelling the real registry can never carry.
+  insert into food_unit (spelling, unit_key, class, factor)
+  values ('bl7-gram', 'bl7-gram', 'mass', 1);
 
   -- ==========================================================================
   -- A. anon — already proven in Phase 26; kept as a regression guard, and
@@ -379,6 +383,34 @@ begin
   join ingredient_groups g on g.id = i.group_id
   where g.recipe_id = v_saved and i.food_id = 'bl7-food';
   v_log := v_log || format(E'%s\tB22b owner · save_recipe stores the ingredient food link\t%s row', n = 1, n);
+
+  -- Phase 29c: source smuggling. A save CLAIMING `source: 'auto'` with
+  -- fabricated numbers must store the label recomputed from the trees this
+  -- same call persists, never the claim. bl7-food is 100 kcal/100 g, so
+  -- 200 bl7-gram ÷ 2 servings = 100 kcal — not the 9999 the payload asserts.
+  -- Proven non-vacuous by commenting the recompute branch out of save_recipe
+  -- once (BL-7 ritual): this line alone goes red.
+  select err into v_err from public.rls_matrix_do(format(
+    'select save_recipe(%L, ''{"title":"BL-7 auto","servings":2,'
+    '"nutrition":{"source":"auto","calories":9999}}''::jsonb, '
+    '''[{"name":"Main","ingredients":[{"name":"bl7 sugar","quantity":200,'
+    '"unit":"bl7-gram","food_id":"bl7-food"}]}]''::jsonb, '
+    '''[]''::jsonb, ''BL-7'')', v_saved));
+  select nutrition into v_json from recipes where id = v_saved;
+  v_log := v_log || format(E'%s\tB22c owner · auto save stores the RECOMPUTED label, not the claim\t%s',
+    v_err is null and (v_json->>'calories')::numeric = 100 and v_json->>'source' = 'auto',
+    coalesce(v_err, coalesce(v_json::text, 'null')));
+
+  -- And auto with nothing counted stores SQL NULL: an estimate of nothing is
+  -- "no info" — the fabricated calories must not survive as a fallback.
+  select err into v_err from public.rls_matrix_do(format(
+    'select save_recipe(%L, ''{"title":"BL-7 auto empty",'
+    '"nutrition":{"source":"auto","calories":9999}}''::jsonb, '
+    '''[{"name":"Main","ingredients":[{"name":"unlinked","quantity":1,"unit":"tsp"}]}]''::jsonb, '
+    '''[]''::jsonb, ''BL-7'')', v_saved));
+  select nutrition into v_json from recipes where id = v_saved;
+  v_log := v_log || format(E'%s\tB22d owner · auto with nothing counted stores NULL\t%s',
+    v_err is null and v_json is null, coalesce(v_err, coalesce(v_json::text, 'null')));
 
   select err into v_err from public.rls_matrix_do(format(
     'select save_recipe(%L, ''{"title":"BL-7 saved again"}''::jsonb, ''[]''::jsonb, ''[]''::jsonb, ''BL-7'')', v_saved));

@@ -42,6 +42,11 @@ const _fullIngredient = Ingredient(
 );
 
 Widget _app({double textScale = 1.0}) => ProviderScope(
+  overrides: [
+    // The nutrition panel's Automatic mode reaches the registry (29c); the
+    // stub keeps every test off the network.
+    foodRepositoryProvider.overrideWithValue(_StubFoodRepository()),
+  ],
   child: MaterialApp(
     theme: AppTheme.light(),
     // `builder`, not a MediaQuery around `home` — same reason as the chefs
@@ -269,18 +274,30 @@ void main() {
       expect(tester.widget<Checkbox>(find.byType(Checkbox)).value, isTrue);
     });
 
-    // Phase 28. The panel is collapsed on a new recipe — eleven empty boxes
-    // between Attribution and Ingredients would push the parts of the form
-    // everyone uses off the first screen.
-    testWidgets('nutrition starts collapsed and opens on Add', (tester) async {
+    // Phase 28, reshaped by 29c: the panel is collapsed on a new recipe, and
+    // opening it shows the three-way mode choice with None selected — the
+    // eleven boxes appear only once the cook picks Manual.
+    testWidgets('nutrition opens on Add; Manual reveals the fields', (
+      tester,
+    ) async {
       sizeView(tester, 800);
       await tester.pumpWidget(_app());
       await tester.pumpAndSettle();
 
       expect(find.text('Nutrition facts'), findsOneWidget);
       expect(find.text('Cholesterol'), findsNothing);
+      expect(find.byType(ChoiceChip), findsNothing);
 
       await tester.tap(find.widgetWithText(TextButton, 'Add'));
+      await tester.pumpAndSettle();
+
+      // The choice, not the boxes: None is the default on a new recipe.
+      expect(find.widgetWithText(ChoiceChip, 'Automatic'), findsOneWidget);
+      expect(find.widgetWithText(ChoiceChip, 'Manual'), findsOneWidget);
+      expect(find.widgetWithText(ChoiceChip, 'None'), findsOneWidget);
+      expect(find.text('Calories'), findsNothing);
+
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Manual'));
       await tester.pumpAndSettle();
 
       expect(find.text('Calories'), findsOneWidget);
@@ -296,6 +313,8 @@ void main() {
       await tester.pumpAndSettle();
 
       await tester.tap(find.widgetWithText(TextButton, 'Add'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Manual'));
       await tester.pumpAndSettle();
 
       await tester.enterText(find.widgetWithText(TextFormField, 'Title'), 'X');
@@ -324,6 +343,8 @@ void main() {
       await tester.pumpAndSettle();
 
       await tester.tap(find.widgetWithText(TextButton, 'Add'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Manual'));
       await tester.pumpAndSettle();
 
       await tester.enterText(find.widgetWithText(TextFormField, 'Title'), 'X');
@@ -382,6 +403,14 @@ void main() {
         );
 
         await tester.tap(find.widgetWithText(TextButton, 'Add'));
+        await tester.pumpAndSettle();
+        expect(
+          tester.takeException(),
+          isNull,
+          reason: 'nutrition mode chips overflow at ${width}px @ 2.0x',
+        );
+
+        await tester.tap(find.widgetWithText(ChoiceChip, 'Manual'));
         await tester.pumpAndSettle();
         expect(
           tester.takeException(),
@@ -537,6 +566,238 @@ void main() {
     }
   });
 
+  // Phase 29c: the three-way mode, its transitions, and the Auto pane's
+  // honesty surfaces. The stub estimates like the server does (counted =
+  // linked rows with a quantity, null label at zero), so these are the same
+  // shapes the real RPC produces.
+  group('nutrition modes (Phase 29c)', () {
+    // The form is a plain ListView — the nutrition panel sits below the fold
+    // at 600px and is never built there (same reason as the editor-inputs
+    // group). Tall viewport instead of scripted scrolls.
+    void sizeView(WidgetTester tester, double width) {
+      tester.view.physicalSize = Size(width, 6000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+    }
+
+    testWidgets(
+      'a stored auto label reopens as Automatic with the honest pane',
+      (tester) async {
+        sizeView(tester, 800);
+        await tester.pumpWidget(
+          _editApp(_LoadedRecipeRepository(_autoRecipe())),
+        );
+        await tester.pumpAndSettle();
+
+        // 1 linked of 2 named rows, straight from the loaded draft.
+        expect(
+          find.textContaining('Estimated from 1 of 2 ingredients'),
+          findsOneWidget,
+        );
+        // The preview is the real label widget, marked as an estimate.
+        expect(find.text('Nutrition Facts'), findsOneWidget);
+        expect(
+          find.textContaining('Estimated from ingredients'),
+          findsOneWidget,
+        );
+        // The not-counted list names the row and the reason.
+        expect(find.textContaining('onion'), findsWidgets);
+        expect(find.textContaining('not linked to a food'), findsOneWidget);
+      },
+    );
+
+    testWidgets('a suggestion chip links the row and recounts', (tester) async {
+      sizeView(tester, 800);
+      await tester.pumpWidget(_editApp(_LoadedRecipeRepository(_autoRecipe())));
+      await tester.pumpAndSettle();
+
+      // One link chip already (flour); onion offers a match_foods candidate.
+      expect(find.byType(InputChip), findsOneWidget);
+      await tester.tap(find.widgetWithText(ActionChip, 'All-purpose flour'));
+      await tester.pumpAndSettle();
+
+      // The confirmed link is a draft fact: the row grows its chip and the
+      // re-estimate counts it.
+      expect(find.byType(InputChip), findsNWidgets(2));
+      expect(
+        find.textContaining('Estimated from 2 of 2 ingredients'),
+        findsOneWidget,
+      );
+      expect(find.textContaining('not linked to a food'), findsNothing);
+    });
+
+    // The stale-preview trap: the Auto pane tells the cook to link foods "in
+    // the ingredient list", and that list is a different widget. Without the
+    // debounced re-estimate the header and label keep describing the previous
+    // draft until the refresh button is found.
+    testWidgets('editing the ingredients below re-estimates', (tester) async {
+      sizeView(tester, 800);
+      await tester.pumpWidget(
+        _editApp(_LoadedRecipeRepository(_autoRecipe(linked: false))),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.textContaining('Nothing to estimate from yet'),
+        findsOneWidget,
+      );
+
+      // Link the free-text row through the ingredient list's own typeahead.
+      await tester.enterText(
+        find.widgetWithText(TextField, 'Name').first,
+        'flou',
+      );
+      await tester.pump(
+        const Duration(milliseconds: 300),
+      ); // typeahead debounce
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('All-purpose flour').last);
+      await tester.pump(const Duration(milliseconds: 600)); // estimate debounce
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('Nothing to estimate from yet'), findsNothing);
+      expect(find.text('Nutrition Facts'), findsOneWidget);
+    });
+
+    // Same trap on the other input the estimate depends on: servings is the
+    // divisor, so a stale label would print per-4 rows under an "8 servings"
+    // line.
+    testWidgets('changing servings re-estimates', (tester) async {
+      sizeView(tester, 800);
+      final repo = _RecordingFoodRepository();
+      await tester.pumpWidget(
+        _editApp(_LoadedRecipeRepository(_autoRecipe()), food: repo),
+      );
+      await tester.pumpAndSettle();
+      expect(repo.servingsSeen, [4]);
+
+      await tester.enterText(
+        find.widgetWithText(TextFormField, 'Servings'),
+        '8',
+      );
+      await tester.pump(const Duration(milliseconds: 600));
+      await tester.pumpAndSettle();
+
+      expect(repo.servingsSeen, [4, 8]);
+    });
+
+    testWidgets('Automatic with nothing counted warns and saves no lie', (
+      tester,
+    ) async {
+      sizeView(tester, 800);
+      await tester.pumpWidget(
+        _editApp(_LoadedRecipeRepository(_autoRecipe(linked: false))),
+      );
+      await tester.pumpAndSettle();
+
+      expect(
+        find.textContaining('Nothing to estimate from yet'),
+        findsOneWidget,
+      );
+      // No preview label to mislead with.
+      expect(find.text('Nutrition Facts'), findsNothing);
+    });
+
+    testWidgets('Auto -> Manual seeds the fields with the computed values', (
+      tester,
+    ) async {
+      sizeView(tester, 800);
+      await tester.pumpWidget(_editApp(_LoadedRecipeRepository(_autoRecipe())));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Manual'));
+      await tester.pumpAndSettle();
+
+      // The estimate's values, not the stored 999 the recipe carried — the
+      // cook edits the current estimate, and the seeded copy sheds `source`.
+      expect(find.widgetWithText(TextFormField, '250'), findsOneWidget);
+      expect(find.text('Calories'), findsOneWidget);
+      expect(find.textContaining('Estimated from 1 of'), findsNothing);
+    });
+
+    testWidgets('Manual with values asks before switching to Automatic', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(800, 4000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(_app());
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.widgetWithText(TextButton, 'Add'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Manual'));
+      await tester.pumpAndSettle();
+      await tester.enterText(
+        find.widgetWithText(TextFormField, 'Calories'),
+        '100',
+      );
+
+      // Cancel keeps the typed values and the mode.
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Automatic'));
+      await tester.pumpAndSettle();
+      expect(find.text('Switch to automatic?'), findsOneWidget);
+      await tester.tap(find.widgetWithText(TextButton, 'Keep manual'));
+      await tester.pumpAndSettle();
+      expect(find.widgetWithText(TextFormField, '100'), findsOneWidget);
+
+      // Confirm switches — an empty draft estimates to the honest warning.
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Automatic'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(FilledButton, 'Use automatic'));
+      await tester.pumpAndSettle();
+      expect(
+        find.textContaining('Nothing to estimate from yet'),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('None from Manual asks nothing and hides the boxes', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(800, 4000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(_app());
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.widgetWithText(TextButton, 'Add'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Manual'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(ChoiceChip, 'None'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Calories'), findsNothing);
+      expect(find.textContaining('no nutrition panel'), findsOneWidget);
+    });
+
+    // The Auto pane's envelope (Gotcha 13/26): preview label + not-counted
+    // list + suggestion chips, at the same matrix as every other editor row.
+    for (final width in <double>[320, 360, 600]) {
+      testWidgets('the Auto pane fits at ${width}px, textScale 2.0', (
+        tester,
+      ) async {
+        tester.view.physicalSize = Size(width, 6000);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        await tester.pumpWidget(
+          _editApp(_LoadedRecipeRepository(_autoRecipe()), textScale: 2.0),
+        );
+        await tester.pumpAndSettle();
+        expect(
+          tester.takeException(),
+          isNull,
+          reason: 'Auto pane overflows at ${width}px @ 2.0x',
+        );
+      });
+    }
+  });
+
   // B052 / OPT-S4. `_load()` was try/finally with no catch: a failed getById
   // escaped as an unhandled future and the form rendered its empty defaults over
   // a recipe that still exists. Because `update()` replaces content wholesale,
@@ -588,17 +849,36 @@ void main() {
   });
 }
 
-/// The editor in edit mode (`recipeId` non-null) over a stub repository.
-Widget _editApp(RecipeRepository repo) => ProviderScope(
-  overrides: [recipeRepositoryProvider.overrideWithValue(repo)],
+/// The editor in edit mode (`recipeId` non-null) over stub repositories.
+Widget _editApp(
+  RecipeRepository repo, {
+  double textScale = 1.0,
+  FoodRepository? food,
+}) => ProviderScope(
+  overrides: [
+    recipeRepositoryProvider.overrideWithValue(repo),
+    foodRepositoryProvider.overrideWithValue(food ?? _StubFoodRepository()),
+  ],
   child: MaterialApp(
     theme: AppTheme.light(),
+    builder:
+        (context, child) => MediaQuery(
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: TextScaler.linear(textScale)),
+          child: child!,
+        ),
     home: const RecipeEditorScreen(recipeId: 'r1'),
   ),
 );
 
 /// Registry stub for the typeahead: two flours for a `flo…` query, nothing for
 /// anything else — enough to cover pick, free-text, and empty-result paths.
+///
+/// The 29c halves mimic the server's honesty contract instead of canning one
+/// reply: `estimate` counts the rows that could contribute (linked, with a
+/// quantity) and names the rest, returning a null label when nothing counted —
+/// so the mode tests exercise the same shapes the real RPC produces.
 class _StubFoodRepository implements FoodRepository {
   @override
   Future<List<FoodHit>> search(String query, {int limit = 10}) async =>
@@ -611,6 +891,113 @@ class _StubFoodRepository implements FoodRepository {
 
   @override
   Future<Map<String, String>> displayNames(List<String> ids) async => const {};
+
+  @override
+  Future<NutritionEstimate> estimate({
+    required List<IngredientGroup> ingredientGroups,
+    required int servings,
+  }) async {
+    final rows = [for (final g in ingredientGroups) ...g.ingredients];
+    final counted =
+        rows.where((i) => i.foodId != null && i.quantity != null).length;
+    return NutritionEstimate(
+      label:
+          counted == 0
+              ? null
+              : const RecipeNutrition(
+                calories: 250,
+                proteinG: 12,
+                source: 'auto',
+              ),
+      counted: counted,
+      total: rows.length,
+      unmatched: [
+        for (final i in rows)
+          if (i.foodId == null || i.quantity == null) i.name,
+      ],
+    );
+  }
+
+  @override
+  Future<Map<String, List<FoodHit>>> matchFoods(List<String> names) async => {
+    for (final n in names)
+      n: const [
+        FoodHit(id: 'all-purpose-flour', displayName: 'All-purpose flour'),
+      ],
+  };
+}
+
+/// [_StubFoodRepository] that records the serving count each estimate was
+/// asked for — the servings field is a divisor, so "did it re-estimate?" is
+/// the only thing worth asserting about that input.
+class _RecordingFoodRepository extends _StubFoodRepository {
+  final List<int> servingsSeen = [];
+
+  @override
+  Future<NutritionEstimate> estimate({
+    required List<IngredientGroup> ingredientGroups,
+    required int servings,
+  }) {
+    servingsSeen.add(servings);
+    return super.estimate(
+      ingredientGroups: ingredientGroups,
+      servings: servings,
+    );
+  }
+}
+
+/// A recipe whose stored label claims `source: 'auto'` (the stored 999 is
+/// deliberately NOT what the stub estimates — the pane must show the fresh
+/// estimate, and Auto -> Manual must seed the fresh values, never the stale
+/// stored ones). One linked row with a quantity, one free-text row.
+Recipe _autoRecipe({bool linked = true}) => Recipe(
+  id: 'r1',
+  ownerId: 'me',
+  title: 'Auto Recipe',
+  servings: 4,
+  nutrition: const RecipeNutrition(calories: 999, source: 'auto'),
+  ingredientGroups: [
+    IngredientGroup(
+      id: 'g1',
+      recipeId: 'r1',
+      name: 'Main',
+      ingredients: [
+        if (linked)
+          const Ingredient(
+            id: 'i1',
+            groupId: 'g1',
+            quantity: 200,
+            unit: 'g',
+            name: 'flour',
+            isOptional: false,
+            sortOrder: 0,
+            foodId: 'all-purpose-flour',
+          ),
+        const Ingredient(
+          id: 'i2',
+          groupId: 'g1',
+          quantity: 1,
+          name: 'onion',
+          isOptional: false,
+          sortOrder: 1,
+        ),
+      ],
+    ),
+  ],
+);
+
+/// Loads one fixed recipe — the 29c mode tests' edit-path entry.
+class _LoadedRecipeRepository implements RecipeRepository {
+  _LoadedRecipeRepository(this.recipe);
+
+  final Recipe recipe;
+
+  @override
+  Future<Recipe> getById(String id) async => recipe;
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) =>
+      throw UnimplementedError('${invocation.memberName} not stubbed');
 }
 
 /// Fails `getById` [failures] times, then succeeds — so one stub covers both the

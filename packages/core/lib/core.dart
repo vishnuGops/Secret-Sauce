@@ -13,6 +13,7 @@ export 'src/models/recipe_nutrition.dart';
 export 'src/models/recipe.dart';
 export 'src/models/chef_standing.dart';
 export 'src/models/food_hit.dart';
+export 'src/models/nutrition_estimate.dart';
 
 // Domain helpers
 export 'src/chef_scoring.dart';

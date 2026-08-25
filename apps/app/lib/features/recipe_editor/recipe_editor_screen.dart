@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:core/core.dart';
@@ -53,6 +54,29 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
   /// stops the save, and an error nobody can see would otherwise be a dead end.
   bool _nutritionExpanded = false;
 
+  /// The three-way nutrition choice (Phase 29c). What it saves: `auto` sends
+  /// `{source: 'auto'}` and `save_recipe` recomputes the label server-side
+  /// from the same trees it persists; `manual` sends the typed values; `none`
+  /// sends null. On load, a stored `source: 'auto'` reopens as Automatic,
+  /// any other label as Manual, null as None.
+  EditNutritionMode _nutritionMode = EditNutritionMode.none;
+
+  /// The Auto pane's preview state. The estimate is fetched on entering
+  /// Automatic, after a suggestion links a row, and on the pane's refresh
+  /// button — discrete events, not keystrokes (one RPC per match change is
+  /// the design; there is no Dart mirror of the arithmetic).
+  NutritionEstimate? _estimate;
+  bool _estimateLoading = false;
+  String? _estimateError;
+  Map<String, List<FoodHit>> _matchSuggestions = const {};
+
+  /// Coalesces estimate refreshes triggered by editing the ingredients or the
+  /// servings while Automatic is selected. Those are not discrete events —
+  /// `onChanged` fires per keystroke — so they debounce rather than firing an
+  /// RPC per character, the same 250 ms shape the typeahead uses, doubled
+  /// because this one is not a hint but a recompute.
+  Timer? _estimateDebounce;
+
   bool _loading = false;
   bool _saving = false;
 
@@ -95,6 +119,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       g.dispose();
     }
     _nutrition.dispose();
+    _estimateDebounce?.cancel();
     super.dispose();
   }
 
@@ -118,9 +143,20 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       _visibility = recipe.visibility;
       _coverUrl = recipe.coverImageUrl;
       _nutrition.load(recipe.nutrition);
+      // Mode from provenance (29c): `source: 'auto'` reopens as Automatic,
+      // any other stored label as Manual, null as None. The stored auto
+      // values were loaded into the manual controllers above on purpose —
+      // they are the seed if the cook switches to Manual.
+      final nutrition = recipe.nutrition;
+      _nutritionMode =
+          nutrition == null || nutrition.isEmpty
+              ? EditNutritionMode.none
+              : nutrition.isEstimated
+              ? EditNutritionMode.auto
+              : EditNutritionMode.manual;
       // A recipe that already carries a label must not hide it behind a
       // collapsed header.
-      _nutritionExpanded = _nutrition.hasValues;
+      _nutritionExpanded = _nutritionMode != EditNutritionMode.none;
       _ingredientGroups
         ..clear()
         ..addAll(recipe.ingredientGroups.map(EditIngredientGroup.fromModel));
@@ -135,6 +171,11 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       }
       await _labelFoodLinks();
       _loaded = true;
+      // The Auto pane needs its preview; fire-and-forget, it manages its own
+      // loading/error state and the form is usable meanwhile.
+      if (_nutritionMode == EditNutritionMode.auto) {
+        unawaited(_refreshEstimate());
+      }
     } catch (e) {
       // Without this catch the exception escaped as an unhandled future and the
       // form rendered its empty defaults over a recipe that still exists —
@@ -170,6 +211,129 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       }
     } catch (_) {
       // Chips render 'Linked'; nothing else depends on the lookup.
+    }
+  }
+
+  /// Fetches the Auto pane's preview: the estimate over the CURRENT draft
+  /// trees (the same encoder the save path uses), then `match_foods`
+  /// candidates for whatever is unlinked. The suggestion lookup failing is
+  /// not an estimate failure — it is a hint surface, so it degrades to no
+  /// chips silently.
+  Future<void> _refreshEstimate() async {
+    final groups = _ingredientGroups.map((g) => g.toModel()).toList();
+    final servings = int.tryParse(_servings.text.trim()) ?? 1;
+    setState(() {
+      _estimateLoading = true;
+      _estimateError = null;
+    });
+    try {
+      final repo = ref.read(foodRepositoryProvider);
+      final estimate = await repo.estimate(
+        ingredientGroups: groups,
+        servings: servings,
+      );
+      final unlinked = <String>{
+        for (final g in _ingredientGroups)
+          for (final i in g.ingredients)
+            if (i.foodId == null && i.name.text.trim().isNotEmpty)
+              i.name.text.trim(),
+      };
+      var suggestions = const <String, List<FoodHit>>{};
+      if (unlinked.isNotEmpty) {
+        try {
+          suggestions = await repo.matchFoods(unlinked.toList());
+        } catch (_) {
+          // No chips this round; the estimate stands without them.
+        }
+      }
+      if (!mounted) return;
+      setState(() {
+        _estimate = estimate;
+        _matchSuggestions = suggestions;
+        _estimateLoading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _estimateLoading = false;
+        _estimateError = friendlyError(e);
+      });
+    }
+  }
+
+  /// Re-estimates after an edit to the ingredients or the servings, debounced.
+  ///
+  /// Without this the Auto pane silently goes stale against the very workflow
+  /// it prints: linking a food in the ingredient list below (or changing the
+  /// servings the label is *per*) would leave the preview and the
+  /// counted-of-total header describing the previous draft until the cook
+  /// found the refresh button. A no-op outside Automatic, where nothing reads
+  /// the estimate.
+  void _scheduleEstimate() {
+    if (_nutritionMode != EditNutritionMode.auto) return;
+    _estimateDebounce?.cancel();
+    _estimateDebounce = Timer(
+      const Duration(milliseconds: 500),
+      () => unawaited(_refreshEstimate()),
+    );
+  }
+
+  /// A tapped `match_foods` candidate — the human confirmation that turns a
+  /// proposal into a stored link. Same write the typeahead pick does.
+  void _linkSuggestion(EditIngredient row, FoodHit hit) {
+    setState(() {
+      row.foodId = hit.id;
+      row.foodLabel = hit.displayName;
+    });
+    unawaited(_refreshEstimate());
+  }
+
+  /// Mode transitions, with their two rules (Phase 29c): entering Automatic
+  /// over typed manual values asks first — saving in Automatic discards
+  /// those numbers server-side, and that must never happen silently; leaving
+  /// Automatic for Manual seeds the fields with the computed values so the
+  /// cook edits the estimate instead of eleven empty boxes.
+  Future<void> _selectNutritionMode(EditNutritionMode mode) async {
+    if (mode == _nutritionMode) return;
+    if (mode == EditNutritionMode.auto &&
+        _nutritionMode == EditNutritionMode.manual &&
+        _nutrition.hasValues) {
+      final replace = await showDialog<bool>(
+        context: context,
+        builder:
+            (ctx) => AlertDialog(
+              title: const Text('Switch to automatic?'),
+              content: const Text(
+                'Saving in Automatic replaces your entered values with the '
+                'estimate computed from the ingredient list.',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(false),
+                  child: const Text('Keep manual'),
+                ),
+                FilledButton(
+                  onPressed: () => Navigator.of(ctx).pop(true),
+                  child: const Text('Use automatic'),
+                ),
+              ],
+            ),
+      );
+      if (replace != true || !mounted) return;
+    }
+    setState(() {
+      final previous = _nutritionMode;
+      _nutritionMode = mode;
+      if (mode == EditNutritionMode.manual &&
+          previous == EditNutritionMode.auto &&
+          _estimate?.label != null) {
+        // `load` copies the 11 values and ignores `source`, so the seeded
+        // manual label sheds the estimate stamp — it is the cook's now.
+        _nutrition.load(_estimate!.label);
+      }
+    });
+    if (mode == EditNutritionMode.auto) {
+      unawaited(_refreshEstimate());
     }
   }
 
@@ -233,8 +397,11 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       // collapsed, so one of them can be what blocked this save — open the
       // panel in that case rather than leaving Save doing nothing. Scoped to a
       // *nutrition* failure on purpose: a blank Title must not unfold eleven
-      // boxes that have nothing to do with the error above them.
-      if (_nutrition.hasInvalidEntry) {
+      // boxes that have nothing to do with the error above them. Manual mode
+      // only — in Automatic and None the fields are out of the tree and out
+      // of the save, so their text cannot be what blocked it.
+      if (_nutritionMode == EditNutritionMode.manual &&
+          _nutrition.hasInvalidEntry) {
         setState(() => _nutritionExpanded = true);
       }
       return;
@@ -267,9 +434,17 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
         cookMinutes: _parseInt(_cook),
         servings: int.tryParse(_servings.text.trim()) ?? 1,
         visibility: _visibility,
-        // Null when every box is empty, never `{}` — one representation of
+        // The mode decides the payload (29c). Automatic sends only the
+        // provenance claim — `save_recipe` recomputes the label from the
+        // trees in this same call, so preview numbers are never trusted from
+        // here, and an estimate with nothing counted stores null. Manual is
+        // null when every box is empty, never `{}` — one representation of
         // "no nutrition info", all the way to the column.
-        nutrition: _nutrition.toModel(),
+        nutrition: switch (_nutritionMode) {
+          EditNutritionMode.none => null,
+          EditNutritionMode.manual => _nutrition.toModel(),
+          EditNutritionMode.auto => const RecipeNutrition(source: 'auto'),
+        },
         ingredientGroups: _ingredientGroups.map((g) => g.toModel()).toList(),
         stepGroups: _stepGroups.map((g) => g.toModel()).toList(),
       );
@@ -407,6 +582,13 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                         decoration: const InputDecoration(
                           labelText: 'Servings',
                         ),
+                        // The estimate is *per serving*, so this number is a
+                        // divisor: 4 → 8 halves every row. Re-estimate, or the
+                        // pane prints per-4 values under an "8 servings" line.
+                        onChanged: (_) {
+                          setState(() {});
+                          _scheduleEstimate();
+                        },
                       ),
                     ),
                   ],
@@ -476,6 +658,9 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                 ),
                 const Divider(height: AppSpacing.xl),
                 NutritionEditor(
+                  mode: _nutritionMode,
+                  onModeSelected:
+                      (mode) => unawaited(_selectNutritionMode(mode)),
                   nutrition: _nutrition,
                   expanded: _nutritionExpanded,
                   onToggle:
@@ -483,11 +668,24 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                         () => _nutritionExpanded = !_nutritionExpanded,
                       ),
                   onChanged: () => setState(() {}),
+                  groups: _ingredientGroups,
+                  servings: int.tryParse(_servings.text.trim()) ?? 1,
+                  estimate: _estimate,
+                  estimateLoading: _estimateLoading,
+                  estimateError: _estimateError,
+                  suggestions: _matchSuggestions,
+                  onRefreshEstimate: () => unawaited(_refreshEstimate()),
+                  onPickSuggestion: _linkSuggestion,
                 ),
                 const Divider(height: AppSpacing.xl),
                 IngredientsEditor(
                   groups: _ingredientGroups,
-                  onChanged: () => setState(() {}),
+                  onChanged: () {
+                    setState(() {});
+                    // Linking a food down here is what the Auto pane's own
+                    // copy tells the cook to do, so the estimate has to follow.
+                    _scheduleEstimate();
+                  },
                 ),
                 const Divider(height: AppSpacing.xl),
                 StepsEditor(

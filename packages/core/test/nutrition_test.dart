@@ -80,6 +80,79 @@ void main() {
     });
   });
 
+  // Phase 29c: provenance rides inside the jsonb. Absent means manual, so
+  // every label saved before the field existed reads correctly untouched.
+  group('RecipeNutrition.source', () {
+    test('absent means manual; auto means estimated', () {
+      expect(
+        RecipeNutrition.fromJson(const {'calories': 100}).isEstimated,
+        isFalse,
+      );
+      final auto = RecipeNutrition.fromJson(const {
+        'calories': 100,
+        'source': 'auto',
+      });
+      expect(auto.source, 'auto');
+      expect(auto.isEstimated, isTrue);
+    });
+
+    test('round-trips through toJson, and only when set', () {
+      const manual = RecipeNutrition(calories: 100);
+      expect(manual.toJson().containsKey('source'), isFalse);
+      const auto = RecipeNutrition(calories: 100, source: 'auto');
+      expect(auto.toJson()['source'], 'auto');
+    });
+
+    test('isEmpty ignores it — {source: auto} is still no label', () {
+      expect(const RecipeNutrition(source: 'auto').isEmpty, isTrue);
+      expect(
+        RecipeNutrition.fromJson(const {'source': 'auto'}).isEmpty,
+        isTrue,
+      );
+    });
+  });
+
+  // What `estimate_nutrition` returns — the editor's Auto pane decodes this.
+  group('NutritionEstimate', () {
+    test('decodes the label with its stamp and the honesty counts', () {
+      final e = NutritionEstimate.fromJson(const {
+        'label': {'calories': 320, 'protein_g': 12.5, 'source': 'auto'},
+        'counted': 7,
+        'total': 13,
+        'unmatched': ['handful of herbs', 'mystery spice'],
+      });
+      expect(e.label?.calories, 320.0);
+      expect(e.label?.isEstimated, isTrue);
+      expect(e.counted, 7);
+      expect(e.total, 13);
+      expect(e.unmatched, ['handful of herbs', 'mystery spice']);
+      expect(e.hasLabel, isTrue);
+    });
+
+    test('a null label is "nothing counted", not an empty one', () {
+      final e = NutritionEstimate.fromJson(const {
+        'label': null,
+        'counted': 0,
+        'total': 2,
+        'unmatched': ['salt', 'pepper'],
+      });
+      expect(e.label, isNull);
+      expect(e.hasLabel, isFalse);
+    });
+
+    test('toJson never encodes the nested label (B071)', () {
+      final e = NutritionEstimate.fromJson(const {
+        'label': {'calories': 320, 'source': 'auto'},
+        'counted': 1,
+        'total': 1,
+        'unmatched': <String>[],
+      });
+      // An estimate is decode-only; a `jsonEncode` reaching the nested model
+      // is exactly the trap B071 documents, so the key must not appear.
+      expect(e.toJson().containsKey('label'), isFalse);
+    });
+  });
+
   group('Recipe.nutrition', () {
     Map<String, dynamic> row(Object? nutrition) => {
       'id': 'r1',

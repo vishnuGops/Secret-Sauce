@@ -559,6 +559,24 @@ void main() {
       expect(find.text('Nutrition Facts'), findsNothing);
     });
 
+    // Phase 29c: provenance reaches the reader. A stored `source: 'auto'`
+    // renders the disclosure footnote; the manual label above renders none
+    // (the 'switching shows the label' test would catch a stray footnote as
+    // an extra line, but say it explicitly here).
+    testWidgets('an estimated label carries the footnote', (tester) async {
+      final repo = _FakeRecipeRepository(
+        recipe: _labelledRecipe.copyWith(
+          nutrition: _labelledRecipe.nutrition!.copyWith(source: 'auto'),
+        ),
+      );
+      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 1600));
+
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Nutrition'));
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('Estimated from ingredients'), findsOneWidget);
+    });
+
     // The stepper and the ingredient list have to agree about what "scaled"
     // means. `servings = 0` is reachable — the editor's box is
     // `int.tryParse(…) ?? 1`, `save_recipe` only coalesces a null, and the

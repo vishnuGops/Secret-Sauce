@@ -32,6 +32,7 @@ class NutritionFactsLabel extends StatelessWidget {
     required this.nutrition,
     required this.servings,
     required this.baseServings,
+    this.isEstimated = false,
   });
 
   final RecipeNutrition nutrition;
@@ -43,6 +44,13 @@ class NutritionFactsLabel extends StatelessWidget {
   /// The recipe's own serving count — the basis the stored values are per.
   /// Shown only when the two differ, so the label says what it is a label *of*.
   final int baseServings;
+
+  /// Whether these values were computed from the ingredient list rather than
+  /// entered (Phase 29c) — adds the `Estimated from ingredients` footnote.
+  /// A parameter rather than reading `nutrition.source` directly so the
+  /// caller decides what counts as estimated; `nutrition_tab.dart` passes
+  /// `nutrition.isEstimated`.
+  final bool isEstimated;
 
   @override
   Widget build(BuildContext context) {
@@ -211,6 +219,20 @@ class NutritionFactsLabel extends StatelessWidget {
             bold: true,
           ),
           _Rule(color: ink, thickness: 4),
+          // The honesty line (Phase 29c): a computed label is a raw-ingredient
+          // sum — cooking yield, evaporation, drained oil are unmodelled — so
+          // it says so, always, and no copy may call it a measured analysis.
+          if (isEstimated)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Text(
+                'Estimated from ingredients — not a measured analysis.',
+                style: textTheme.bodySmall?.copyWith(
+                  color: dim,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
           Text(
             '* Percent Daily Values are based on a 2,000 calorie diet. '
             'Your daily values may be higher or lower depending on your '

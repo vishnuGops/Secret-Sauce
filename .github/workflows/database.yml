@@ -90,6 +90,17 @@ jobs:
       - name: RLS matrix — as a signed-in user
         run: $PSQL "$DB_URL" -f supabase/tests/rls_matrix.sql
 
+      # ------------------------------------------------------------------
+      # The auto-nutrition arithmetic (Phase 29c): fixture trees with known
+      # gram weights through estimate_nutrition/match_foods, exact expected
+      # labels, rolled back. This file is that SQL's ONLY coverage — the
+      # matrix proves the policy geometry, not that a cup of flour weighs
+      # 120 g. Self-sufficient: brings its own foods/units, so it does not
+      # depend on nutrition_foods.sql being loaded.
+      # ------------------------------------------------------------------
+      - name: Nutrition estimator — fixture trees, exact labels
+        run: $PSQL "$DB_URL" -f supabase/tests/nutrition_estimate.sql
+
       - name: Simulated population (tiny) + assertions
         run: |
           $PSQL "$DB_URL" -f supabase/sim/0_sim_schema.sql

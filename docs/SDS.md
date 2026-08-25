@@ -91,25 +91,36 @@ the `recipe_ratings` trigger recomputes them from scratch so they cannot drift.
 `nutrition` (Phase 28) is the per-serving nutrition-facts label, and it is deliberately **one
 jsonb column rather than eleven `numeric` ones**: the writable-recipe-column set is restated in
 about thirteen places across SQL, Dart, and the authoring tooling, so one column costs each copy
-a line where eleven would cost eleven. Four rules follow.
+a line where eleven would cost eleven. Five rules follow.
 
 - **`null` means "no nutrition info", and it is the only spelling of it.** An all-empty entry is
   normalized to `null` in the editor before it reaches the repository; the detail screen's
-  Nutrition tab branches on exactly that.
+  Nutrition tab branches on exactly that. An Automatic estimate that counts nothing normalizes
+  the same way (Phase 29c) — the editor warns first, so the collapse never reads as data loss.
 - **The key set is fixed at 11 optional non-negative numbers** — `calories`, `total_fat_g`,
   `saturated_fat_g`, `trans_fat_g`, `cholesterol_mg`, `sodium_mg`, `total_carbs_g`,
-  `dietary_fiber_g`, `total_sugars_g`, `added_sugars_g`, `protein_g`. Postgres cannot check the
+  `dietary_fiber_g`, `total_sugars_g`, `added_sugars_g`, `protein_g` — **plus `source`**, the
+  Phase 29c provenance stamp. Postgres cannot check the
   interior of a `jsonb`, so the constraint `recipes_nutrition_is_object` only insists the value is
   an object; `RecipeNutrition` in core and `_nutritionKeys` in `tool/recipe_format.dart` are what
   pin the keys, and the authoring validator treats an unknown one as a hard error.
+- **`source: 'auto'` means estimated; the key's absence means manual** (Phase 29c). Absence is
+  what makes it migration-free: every label saved before the field existed, and all ~1,320
+  sim-invented ones, read correctly with no row touched — and calling an invented sim label
+  `auto` would have been a lie. It is a plain `String?` in Dart with an `isEstimated` getter, not
+  an enum (nothing in SQL switches on it) and not a nested model (B071 stays un-re-armed);
+  `isEmpty` ignores it, so `{source: 'auto'}` alone is still no label. The label never renders
+  the value — it renders the *consequence*, an `Estimated from ingredients` footnote.
 - **Values are per serving at the recipe's own `servings`, and nothing multiplies them.** Scaling
   4 → 8 doubles the batch *and* the servings, so a serving is unchanged; the servings stepper moves
   the label's servings line and its batch total, never a row.
-- **JSON null is not SQL NULL.** `_writablePayload` always sends the key, so a recipe with no
-  label arrives as `"nutrition": null`, and `p_payload -> 'nutrition'` returns `'null'::jsonb` —
-  which fails the typeof check. Both `save_recipe` branches therefore write
-  `nullif(p_payload -> 'nutrition', 'null'::jsonb)`, with `->` and never `->>` (there is no
-  implicit text→jsonb cast). `supabase/tests/rls_matrix.sql` asserts both halves.
+- **JSON null is not SQL NULL, on the way in *and* on the way out.** `_writablePayload` always
+  sends the key, so a recipe with no label arrives as `"nutrition": null`, and
+  `p_payload -> 'nutrition'` returns `'null'::jsonb` — which fails the typeof check. The same is
+  true of `estimate_nutrition(…) -> 'label'` when nothing counted (**B075**). Both `save_recipe`
+  branches therefore wrap **both** values in `nullif(…, 'null'::jsonb)`, with `->` and never
+  `->>` (there is no implicit text→jsonb cast). `supabase/tests/rls_matrix.sql` asserts every
+  half: B23a for the payload, B22d for the recomputed label.
 
 It is client-writable, so it appears in both column grant lists, in `_writablePayload`, in
 `save_recipe`'s two branches, in `fork_recipe`'s insert list, and in `kRecipeSelect`.
@@ -157,6 +168,68 @@ label the link chips of a loaded recipe; empty input makes no request).
 sim, and `config.toml`'s `sql_paths` lists `nutrition_foods.sql` before `seed_recipes.sql`,
 because 29b adds `ingredients.food_id references food(id) on delete set null`. `db:clean`
 deliberately spares the registry (reference data, not recipe data).
+
+#### Estimation — `estimate_nutrition` and `match_foods` (Phase 29c)
+
+**`estimate_nutrition(p_ingredient_groups jsonb, p_servings int) → jsonb`** is the whole
+arithmetic, and it exists exactly once. It is `stable` and **pure over its arguments plus the
+registry tables** — it never reads `recipes` or `ingredients` — which is what lets the editor
+preview an *unsaved* draft with the same function `save_recipe` recomputes with. There is
+deliberately **no Dart mirror**: matches change by discrete picks rather than keystrokes, so one
+RPC per change is affordable, and a second implementation would buy the Gotcha 19 tax for
+nothing.
+
+Per-ingredient grams, first hit wins; anything that falls through **contributes nothing and is
+named back to the caller**:
+
+1. skip outright — `is_optional`, no (or unknown) `food_id`, `quantity` null, empty name;
+2. **mass** unit → `quantity × food_unit.factor`;
+3. **volume** unit → `quantity × factor × food.grams_per_ml`, and null density skips (never
+   guess: a water default makes a cup of flour 236 g instead of 120 g, which is worse than
+   "not counted");
+4. **count** unit → `quantity × food_portion.grams` for that `unit_key`, where spelling `''` is
+   the bare count (`2 eggs` → the `each` portion);
+5. anything else — `handful`, `pinch`, an unknown spelling — skips. `units.json`'s
+   `unresolvable` list is documentation of intent; an unlisted spelling behaves identically.
+
+Then Σ(grams × per-100 g ÷ 100) ÷ `greatest(servings, 1)`, kcal and mg rounded whole, grams to
+one decimal. **Added sugars** are rule-derived because the FDC bundle has zero added-sugar rows
+for generic foods: the food's authored `added_sugars_g` if curated, else its total sugars when
+`is_added_sugar`. A nutrient that no counted food carries stays **absent** rather than printing a
+false `0` (`sum()` ignores nulls, `jsonb_strip_nulls` drops the key).
+
+The return is `{label, counted, total, unmatched}`. `label` is **null** when nothing counted —
+never an empty object — and otherwise carries `source: 'auto'`, stamped inside the function so
+every consumer stores the identical shape. `counted`/`total`/`unmatched` exist for the editor's
+honesty surfaces and are **not stored**: a per-recipe "from 14 of 16" would be two more pinned
+keys in every copy of the key set, to print a number the editor already shows with names
+attached.
+
+**`save_recipe` is where an estimate becomes fact.** When the incoming label says
+`source = 'auto'`, the function discards the client's numbers and recomputes from the trees it is
+persisting **in the same transaction** — against the effective serving count (the payload's when
+sent, the row's when omitted, read `for update`). So a client cannot smuggle fabricated numbers
+in under an `auto` claim; `rls_matrix.sql` B22c proves it by saving `calories: 9999` over known
+fixture trees and reading back the recomputed 100, and B22d proves the nothing-counted case
+stores SQL NULL. Manual labels and `null` pass through untouched, and the signature is unchanged,
+so no `42725` overload is created.
+
+**`match_foods(names text[]) → jsonb`** is the review flow's batched lookup: top-3 `search_foods`
+candidates per trimmed name, `[]` rather than an absent key when nothing matches ("looked, found
+nothing" is an answer), capped at 100 names. Inference **proposes**; only a human-confirmed pick
+is ever stored, which is what keeps a link a stored fact rather than a guess repeated on every
+save.
+
+Both RPCs are invoker-rights, revoked from `public`/`anon`, granted to `authenticated`.
+`FoodRepository` gains `estimate({ingredientGroups, servings})` → `NutritionEstimate` and
+`matchFoods(names)`; both encode their trees with `core/src/repositories/content_payload.dart`,
+**the same encoder `save_recipe`'s caller uses**, so a preview cannot estimate a tree the save
+would not persist. That makes `content_payload.dart` a restatement site for any new ingredient or
+step column.
+
+Coverage: `supabase/tests/nutrition_estimate.sql` (fixture foods, units and trees → exact
+expected labels, rolled back; wired into `database.yml`) is the arithmetic's only test — the
+matrix proves the policy geometry, not that a cup of flour weighs 120 g.
 
 **recipe_versions** — git-like immutable snapshots
 `id`, `recipe_id → recipes`, `version_number (int)`, `parent_version_id → recipe_versions` (nullable),
@@ -361,8 +434,9 @@ It creates three throwaway `auth.users` (an owner, someone the owner shares a pr
 an unrelated signed-in stranger) plus a private and a public recipe with content, re-runs the whole
 matrix under `set local role authenticated` + `request.jwt.claims`, and **rolls the transaction
 back** — so it leaves no user, no recipe and no helper function behind and is safe against any
-database. 89 checks (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
-ingredient food link, in 29b); a failure names the
+database. 91 checks (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
+ingredient food link, in 29b; B22c and B22d, the auto-estimate source-smuggling guard and its
+nothing-counted case, in 29c — B22d found **B075** on its first run); a failure names the
 check and what actually happened.
 
 Its one helper, `rls_matrix_do(text)`, executes an arbitrary string as the calling role, which is
@@ -576,7 +650,10 @@ shape are load-bearing:
 the branch is simply `recipe.nutrition == null`. The label is store-label styling in `onSurface`
 tokens — no literal black anywhere, so dark mode holds — omits every row with no value, and prints
 `% Daily Value` from the FDA 2,000-calorie constants in `core/src/nutrition_facts.dart`. It never
-multiplies a per-serving number (see §3.2).
+multiplies a per-serving number (see §3.2). When the tab passes `isEstimated` — i.e. the stored
+label carries `source: 'auto'` (Phase 29c) — it adds one more line above the %DV footnote:
+`Estimated from ingredients — not a measured analysis.` That disclosure is the whole reason the
+provenance is stored, so no copy anywhere may present a computed label as measured fact.
 
 Things about the v2 page that are load-bearing and easy to undo by accident:
 

@@ -1533,8 +1533,55 @@ inspectable.
 
 Roadmap: [ROADMAP.md Phase 29](./ROADMAP.md#phase-29--auto-nutrition-food-registry-ingredient-links-estimated-labels-planned--not-started)
 
-**Status: 29a–b DONE (2026-08-25); 29c–d not started.** Phase 28's first Deferred item, promoted to
+**Status: 29a–c DONE (2026-08-25); 29d not started.** Phase 28's first Deferred item, promoted to
 its own phase after the data source question was answered by measurement rather than assumption.
+
+**29c, as landed — the deltas from the plan below, so 29d consumes what exists:**
+
+- **`estimate_nutrition` is pure over its arguments *and never reads `recipes` or
+  `ingredients`.*** That is what lets the editor preview an **unsaved** draft: it passes the same
+  trees `save_recipe` will persist, encoded by a new shared
+  [content_payload.dart](../packages/core/lib/src/repositories/content_payload.dart) that both
+  call sites use. A preview and a save can therefore never disagree about the tree — which is a
+  stronger guarantee than "the arithmetic exists once", and it costs one more restatement site
+  for a new ingredient column (now listed in CLAUDE.md's ingredient-column rule).
+- **The provenance stamp is applied inside `estimate_nutrition`,** not by its callers, so every
+  consumer of the arithmetic stores the identical shape. The RPC returns
+  `{label, counted, total, unmatched}`; `label` is JSON null when nothing counted and the
+  editor's warning branch keys on exactly that.
+- **B075, found by the matrix before the feature shipped:** `estimate_nutrition(…) -> 'label'`
+  yields `'null'::jsonb`, not SQL NULL, so an Automatic save with nothing countable aborted with
+  `23514` against `recipes_nutrition_is_object`. Both `save_recipe` branches now wrap the
+  recomputed value in `nullif(…, 'null'::jsonb)` — the same trap Phase 28 documented for the
+  *incoming* payload, one layer deeper on the *outgoing* value. B22d was written before the
+  branch was proven and went red on its first run, which is the argument for writing the matrix
+  check first.
+- **The update branch recomputes against the *effective* servings** — the payload's when sent,
+  the row's when omitted — read `for update`, so a concurrent save of the same recipe cannot
+  divide by a serving count the other transaction is about to change.
+- **`match_foods` returns `[]` rather than omitting the key** for a name with no candidates:
+  "looked, found nothing" and "never asked" are different answers, and the review list renders
+  the difference.
+- **The not-counted list derives its reasons locally** (optional / not linked / no quantity) from
+  the draft and only takes *"unit cannot be converted"* from the RPC's `unmatched`, so the list
+  is right the instant a row changes, before the next estimate lands.
+- **Mode transitions carry the two rules the plan named**, and Auto → Manual seeds from the
+  **fresh estimate**, not the stored label — editing a stale number would be the worse default.
+- **Two defects caught in this change set's own review, both pre-ship.** **B076**: the ladder
+  multiplied a negative `quantity` (storable — no positive check on the column, no validator on
+  the editor's Qty box) and *subtracted* from the label, so it now skips `quantity <= 0` the way
+  it skips null. **B077**: the estimate refreshed only on discrete events, while the Auto pane's
+  empty state tells the cook to link foods *in the ingredient list below* — a different widget —
+  and the servings field is the per-serving divisor; both now trigger a 500 ms debounced
+  re-estimate. The lesson in both is the same: an estimate is only honest if it describes the
+  draft in front of the user.
+- **Matrix at 91** (was 89): B22c (smuggled `calories: 9999` stores the recomputed 100) and B22d
+  (nothing counted stores SQL NULL), both proven non-vacuous by replacing the recompute
+  condition with `if false then` and watching the fabricated value land in the column.
+- **Estimator sanity against the real registry**, which no fixture can show: all 14 authored
+  recipes produce plausible labels at high coverage, and every unmatched name is one of the
+  documented vocabulary gaps. `seed.sql`'s demo recipes estimate 0/N — they predate 29b and have
+  no links — which is worth knowing before 29d picks fixtures.
 
 **29b, as landed — the deltas from the plan below, so 29c–d consume what exists:**
 
