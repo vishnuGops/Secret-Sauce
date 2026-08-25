@@ -1533,8 +1533,37 @@ inspectable.
 
 Roadmap: [ROADMAP.md Phase 29](./ROADMAP.md#phase-29--auto-nutrition-food-registry-ingredient-links-estimated-labels-planned--not-started)
 
-**Status: 29a DONE (2026-08-25); 29b–d not started.** Phase 28's first Deferred item, promoted to
+**Status: 29a–b DONE (2026-08-25); 29c–d not started.** Phase 28's first Deferred item, promoted to
 its own phase after the data source question was answered by measurement rather than assumption.
+
+**29b, as landed — the deltas from the plan below, so 29c–d consume what exists:**
+
+- **`food_id` is declared by `alter table … add column if not exists` after the registry
+  tables** in `0001_init.sql`, not inline in `create table ingredients` — `ingredients` is
+  created before `food` exists in the file's apply order, so the sketch's inline `references
+  food` would fail every fresh apply. `ingredients_food_idx` serves the FK's
+  `on delete set null` scan and 29c's estimation join.
+- **The payload key is `food_id` everywhere except the authoring JSON**, where it is `food`
+  (a slug the validator checks against `foods.json` via the new `loadFoodSlugs()`;
+  `normaliseIngredientGroups` translates). `seed_recipe_v2`'s signature is unchanged — the
+  key rides the existing jsonb argument, so no 42725 exposure, as planned.
+- **`FoodRepository` grew a second method**: `displayNames(ids)` — a two-column `in.()` select
+  used by the editor to label the link chips of a *loaded* recipe (the DB stores only the id;
+  a label picked this session is kept in `EditIngredient.foodLabel`, session-only). Empty input
+  makes no request.
+- **Typeahead**: `RawAutocomplete` over the existing name controller + a `FocusNode` now owned
+  by `EditIngredient`; 250 ms debounce, ≥ 2 chars, every failure (registry unreachable,
+  signed-out) collapses to "no suggestions" — a hint surface, deliberately not routed through
+  `friendlyError`. **Renaming does not clear the link** (surviving renames is the point of the
+  per-row FK); only the chip's delete does. The chip sits on its own line under the row — the
+  row was already at its width budget (B070) — and the envelope was re-run at 320/360/600 × 2.0
+  with a long label.
+- **Matrix at 89** (was 88): B22 now saves a linked ingredient and B22b reads `food_id` back —
+  proven non-vacuous by nulling the `save_recipe` pass-through once (B22b alone went red).
+- **137/147 recipeData rows linked** by a one-shot alias-matching script (77 distinct foods);
+  the 7 unlinkable names match `nutritionData/README.md`'s documented gaps exactly. simData
+  stays unlinked (29d's optional curation) but its generated docs now carry `food_id: null`
+  explicitly, and the sim's ingredient insert passes the key through.
 
 **29a, as landed — the deltas from the plan below, so 29b–c consume what exists rather than what
 was sketched:**

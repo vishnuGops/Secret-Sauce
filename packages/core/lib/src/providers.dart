@@ -5,6 +5,7 @@ import 'package:core/src/models/profile.dart';
 import 'package:core/src/repositories/auth_repository.dart';
 import 'package:core/src/repositories/chef_repository.dart';
 import 'package:core/src/repositories/discover_repository.dart';
+import 'package:core/src/repositories/food_repository.dart';
 import 'package:core/src/repositories/profile_repository.dart';
 import 'package:core/src/repositories/recipe_repository.dart';
 import 'package:core/src/services/storage_service.dart';
@@ -33,6 +34,10 @@ final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
 
 final chefRepositoryProvider = Provider<ChefRepository>((ref) {
   return SupabaseChefRepository(ref.watch(supabaseClientProvider));
+});
+
+final foodRepositoryProvider = Provider<FoodRepository>((ref) {
+  return SupabaseFoodRepository(ref.watch(supabaseClientProvider));
 });
 
 final storageServiceProvider = Provider<StorageService>((ref) {

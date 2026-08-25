@@ -16,15 +16,15 @@
     {
       "name": "",
       "ingredients": [
-        { "quantity": 0.5, "unit": "cup", "name": "butter", "note": "plus more for the pan" },
-        { "quantity": 0.75, "unit": "cup", "name": "unsweetened cocoa powder" },
-        { "quantity": 0.5, "unit": "cup", "name": "granulated cane sugar" },
-        { "quantity": 0.5, "unit": "cup", "name": "brown sugar" },
-        { "quantity": 2, "unit": null, "name": "eggs", "note": "beaten" },
-        { "quantity": 1, "unit": "tsp", "name": "vanilla" },
-        { "quantity": 0.75, "unit": "cup", "name": "unbleached wheat flour" },
-        { "quantity": 6, "unit": "oz", "name": "fresh raspberries" },
-        { "quantity": 0.5, "unit": "cup", "name": "chocolate chips", "is_optional": true }
+        { "quantity": 0.5, "unit": "cup", "name": "butter", "note": "plus more for the pan", "food": "butter" },
+        { "quantity": 0.75, "unit": "cup", "name": "unsweetened cocoa powder", "food": "cocoa-powder" },
+        { "quantity": 0.5, "unit": "cup", "name": "granulated cane sugar", "food": "granulated-sugar" },
+        { "quantity": 0.5, "unit": "cup", "name": "brown sugar", "food": "brown-sugar" },
+        { "quantity": 2, "unit": null, "name": "eggs", "note": "beaten", "food": "egg" },
+        { "quantity": 1, "unit": "tsp", "name": "vanilla", "food": "vanilla-extract" },
+        { "quantity": 0.75, "unit": "cup", "name": "unbleached wheat flour", "food": "unbleached-flour" },
+        { "quantity": 6, "unit": "oz", "name": "fresh raspberries", "food": "raspberries" },
+        { "quantity": 0.5, "unit": "cup", "name": "chocolate chips", "is_optional": true, "food": "chocolate-chips" }
       ]
     }
   ],

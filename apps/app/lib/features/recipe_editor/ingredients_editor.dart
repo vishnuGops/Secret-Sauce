@@ -1,5 +1,7 @@
+import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:app/features/recipe_editor/edit_models.dart';
 
@@ -93,7 +95,7 @@ class IngredientsEditor extends StatelessWidget {
   }
 }
 
-class _IngredientRow extends StatelessWidget {
+class _IngredientRow extends ConsumerWidget {
   const _IngredientRow({
     required this.ingredient,
     required this.onChanged,
@@ -112,8 +114,29 @@ class _IngredientRow extends StatelessWidget {
   static double _wideThreshold(BuildContext context) =>
       248 + 120 * (MediaQuery.textScalerOf(context).scale(16) / 16);
 
+  /// Typeahead matches for the name field (Phase 29b) — a hint surface, never
+  /// a gate. Anything that stops a lookup (query too short, the registry
+  /// unreachable, signed-out `42501`) resolves to no suggestions and the cook
+  /// keeps typing free text; that is why the failure path is silent rather
+  /// than routed through `friendlyError` — there is no error state to show,
+  /// the feature simply is not adding hints right now.
+  Future<Iterable<FoodHit>> _search(WidgetRef ref, String raw) async {
+    final query = raw.trim();
+    if (query.length < 2) return const Iterable<FoodHit>.empty();
+    // Debounce: wait, then only fire if the cook has stopped on this query.
+    await Future<void>.delayed(const Duration(milliseconds: 250));
+    if (query != ingredient.name.text.trim()) {
+      return const Iterable<FoodHit>.empty();
+    }
+    try {
+      return await ref.read(foodRepositoryProvider).search(query);
+    } catch (_) {
+      return const Iterable<FoodHit>.empty();
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scheme = Theme.of(context).colorScheme;
     final marked =
         ingredient.note.text.trim().isNotEmpty || ingredient.isOptional;
@@ -133,9 +156,59 @@ class _IngredientRow extends StatelessWidget {
         decoration: const InputDecoration(labelText: 'Unit', isDense: true),
       ),
     );
-    final name = TextField(
-      controller: ingredient.name,
-      decoration: const InputDecoration(labelText: 'Name', isDense: true),
+    // The name is free text with a registry typeahead over it: picking a
+    // suggestion writes the display name AND the invisible food link; typing
+    // past the dropdown is never blocked. The overlay attaches at this
+    // widget's position, so the field itself is what RawAutocomplete wraps.
+    final name = RawAutocomplete<FoodHit>(
+      textEditingController: ingredient.name,
+      focusNode: ingredient.nameFocus,
+      displayStringForOption: (hit) => hit.displayName,
+      optionsBuilder: (value) => _search(ref, value.text),
+      onSelected: (hit) {
+        ingredient.foodId = hit.id;
+        ingredient.foodLabel = hit.displayName;
+        onChanged();
+      },
+      fieldViewBuilder:
+          (context, controller, focusNode, onFieldSubmitted) => TextField(
+            controller: controller,
+            focusNode: focusNode,
+            decoration: const InputDecoration(labelText: 'Name', isDense: true),
+            onSubmitted: (_) => onFieldSubmitted(),
+          ),
+      optionsViewBuilder:
+          (context, onSelected, options) => Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              elevation: 4,
+              borderRadius: BorderRadius.circular(AppRadii.button),
+              clipBehavior: Clip.antiAlias,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxHeight: 240,
+                  maxWidth: 320,
+                ),
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  itemCount: options.length,
+                  itemBuilder: (context, index) {
+                    final hit = options.elementAt(index);
+                    return ListTile(
+                      dense: true,
+                      title: Text(
+                        hit.displayName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      onTap: () => onSelected(hit),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
     );
     final actions = [
       IconButton(
@@ -190,6 +263,36 @@ class _IngredientRow extends StatelessWidget {
               );
             },
           ),
+          // The link chip sits on its own line rather than inside the row
+          // above — that row is already at its width budget (Gotcha 26 is the
+          // receipt), and a chip whose label is a food name cannot share a line
+          // with three fields at 320px x 2.0x. Flexible + ellipsis so a long
+          // display name shrinks instead of overflowing.
+          if (ingredient.foodId != null)
+            Padding(
+              padding: const EdgeInsets.only(top: AppSpacing.xs),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: InputChip(
+                      avatar: const Icon(Icons.link, size: 16),
+                      label: Text(
+                        ingredient.foodLabel ?? 'Linked',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      visualDensity: VisualDensity.compact,
+                      deleteButtonTooltipMessage: 'Remove link',
+                      onDeleted: () {
+                        ingredient.foodId = null;
+                        ingredient.foodLabel = null;
+                        onChanged();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
           if (ingredient.showDetails)
             Padding(
               padding: const EdgeInsets.only(

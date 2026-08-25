@@ -14,6 +14,11 @@ class Ingredient with _$Ingredient {
     String? note,
     @JsonKey(name: 'is_optional') @Default(false) bool isOptional,
     @JsonKey(name: 'sort_order') @Default(0) int sortOrder,
+
+    /// Link into the food registry (Phase 29b) — a `food.id` slug, set by the
+    /// editor's typeahead, or null for a free-text ingredient. Metadata only:
+    /// [name] stays the cook's words and is what every surface renders.
+    @JsonKey(name: 'food_id') String? foodId,
   }) = _Ingredient;
 
   factory Ingredient.fromJson(Map<String, dynamic> json) =>

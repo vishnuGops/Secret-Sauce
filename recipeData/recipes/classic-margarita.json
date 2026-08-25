@@ -16,18 +16,18 @@
     {
       "name": "Simple syrup",
       "ingredients": [
-        { "quantity": 0.5, "unit": "cup", "name": "organic granulated cane sugar" },
-        { "quantity": 0.5, "unit": "cup", "name": "filtered water" }
+        { "quantity": 0.5, "unit": "cup", "name": "organic granulated cane sugar", "food": "granulated-sugar" },
+        { "quantity": 0.5, "unit": "cup", "name": "filtered water", "food": "water" }
       ]
     },
     {
       "name": "Margarita",
       "ingredients": [
-        { "quantity": 4, "unit": null, "name": "limes", "note": "juiced, about 4 oz" },
-        { "quantity": 1, "unit": null, "name": "orange", "note": "juiced, about 2 oz" },
-        { "quantity": 4, "unit": "oz", "name": "tequila blanco" },
+        { "quantity": 4, "unit": null, "name": "limes", "note": "juiced, about 4 oz", "food": "lime" },
+        { "quantity": 1, "unit": null, "name": "orange", "note": "juiced, about 2 oz", "food": "orange" },
+        { "quantity": 4, "unit": "oz", "name": "tequila blanco", "food": "tequila" },
         { "quantity": 2, "unit": "oz", "name": "orange liqueur" },
-        { "quantity": null, "unit": null, "name": "ice" }
+        { "quantity": null, "unit": null, "name": "ice", "food": "water" }
       ]
     }
   ],

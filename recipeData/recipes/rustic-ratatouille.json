@@ -16,16 +16,16 @@
     {
       "name": "",
       "ingredients": [
-        { "quantity": 2, "unit": "Tbsp", "name": "olive oil", "note": "divided" },
-        { "quantity": 1, "unit": null, "name": "eggplant" },
-        { "quantity": 2, "unit": null, "name": "zucchini", "note": "small" },
-        { "quantity": 1, "unit": null, "name": "red bell pepper" },
-        { "quantity": 1, "unit": "pint", "name": "cherry tomatoes" },
-        { "quantity": 0.5, "unit": "tsp", "name": "kosher salt" },
-        { "quantity": 0.25, "unit": "tsp", "name": "black pepper" },
-        { "quantity": 1, "unit": null, "name": "yellow onion", "note": "chopped" },
-        { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "minced" },
-        { "quantity": 0.5, "unit": "bunch", "name": "basil", "note": "chopped" },
+        { "quantity": 2, "unit": "Tbsp", "name": "olive oil", "note": "divided", "food": "olive-oil" },
+        { "quantity": 1, "unit": null, "name": "eggplant", "food": "eggplant" },
+        { "quantity": 2, "unit": null, "name": "zucchini", "note": "small", "food": "zucchini" },
+        { "quantity": 1, "unit": null, "name": "red bell pepper", "food": "red-bell-pepper" },
+        { "quantity": 1, "unit": "pint", "name": "cherry tomatoes", "food": "cherry-tomatoes" },
+        { "quantity": 0.5, "unit": "tsp", "name": "kosher salt", "food": "kosher-salt" },
+        { "quantity": 0.25, "unit": "tsp", "name": "black pepper", "food": "black-pepper" },
+        { "quantity": 1, "unit": null, "name": "yellow onion", "note": "chopped", "food": "onion" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "minced", "food": "garlic" },
+        { "quantity": 0.5, "unit": "bunch", "name": "basil", "note": "chopped", "food": "basil-fresh" },
         { "quantity": null, "unit": null, "name": "salt and pepper", "note": "to taste" },
         { "quantity": null, "unit": null, "name": "hot cooked pasta, polenta, or crusty bread", "note": "for serving" }
       ]

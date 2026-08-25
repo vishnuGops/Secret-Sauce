@@ -8,6 +8,7 @@
 // dropped between the core model and the editor's mutable draft types. The
 // widget group covers the envelope the new inputs have to survive (Gotcha 13).
 import 'package:app/features/recipe_editor/edit_models.dart';
+import 'package:app/features/recipe_editor/ingredients_editor.dart';
 import 'package:app/features/recipe_editor/recipe_editor_screen.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
@@ -37,6 +38,7 @@ const _fullIngredient = Ingredient(
   note: 'sifted',
   isOptional: true,
   sortOrder: 2,
+  foodId: 'all-purpose-flour',
 );
 
 Widget _app({double textScale = 1.0}) => ProviderScope(
@@ -69,7 +71,7 @@ void main() {
       expect(out.imageUrl, _fullStep.imageUrl);
     });
 
-    test('EditIngredient preserves note and isOptional', () {
+    test('EditIngredient preserves note, isOptional and the food link', () {
       final draft = EditIngredient.fromModel(_fullIngredient);
       final out = draft.toModel(2);
 
@@ -78,6 +80,16 @@ void main() {
       expect(out.name, 'plain flour');
       expect(out.note, 'sifted');
       expect(out.isOptional, isTrue);
+      // Phase 29b: the invisible registry link survives the draft round-trip —
+      // dropping it here is how an edit would silently unlink every ingredient
+      // (the exact B035 failure, one field later).
+      expect(out.foodId, 'all-purpose-flour');
+    });
+
+    test('clearing the chip clears the link on the next save', () {
+      final draft = EditIngredient.fromModel(_fullIngredient);
+      draft.foodId = null; // what the chip's delete does
+      expect(draft.toModel(0).foodId, isNull);
     });
 
     test('a whole step group survives load -> save unchanged', () {
@@ -396,6 +408,135 @@ void main() {
     }
   });
 
+  // Phase 29b: the name field's registry typeahead and the link chip. Pumped
+  // as IngredientsEditor directly — the full screen adds nothing to these
+  // behaviours and would drag the whole form into every pump.
+  group('food link (Phase 29b)', () {
+    Widget app(List<EditIngredientGroup> groups, {double textScale = 1.0}) =>
+        ProviderScope(
+          overrides: [
+            foodRepositoryProvider.overrideWithValue(_StubFoodRepository()),
+          ],
+          child: MaterialApp(
+            theme: AppTheme.light(),
+            builder:
+                (context, child) => MediaQuery(
+                  data: MediaQuery.of(
+                    context,
+                  ).copyWith(textScaler: TextScaler.linear(textScale)),
+                  child: child!,
+                ),
+            home: Scaffold(
+              body: SingleChildScrollView(
+                child: StatefulBuilder(
+                  builder:
+                      (context, setState) => IngredientsEditor(
+                        groups: groups,
+                        onChanged: () => setState(() {}),
+                      ),
+                ),
+              ),
+            ),
+          ),
+        );
+
+    testWidgets('picking a suggestion sets the name AND the link', (
+      tester,
+    ) async {
+      final groups = [EditIngredientGroup()];
+      await tester.pumpWidget(app(groups));
+
+      await tester.enterText(find.widgetWithText(TextField, 'Name'), 'flou');
+      await tester.pump(const Duration(milliseconds: 300)); // debounce
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('All-purpose flour').last);
+      await tester.pumpAndSettle();
+
+      final ingredient = groups.single.ingredients.single;
+      expect(ingredient.foodId, 'all-purpose-flour');
+      expect(ingredient.name.text, 'All-purpose flour');
+      expect(find.byType(InputChip), findsOneWidget);
+    });
+
+    testWidgets('typing past the dropdown stays free text, unlinked', (
+      tester,
+    ) async {
+      final groups = [EditIngredientGroup()];
+      await tester.pumpWidget(app(groups));
+
+      await tester.enterText(
+        find.widgetWithText(TextField, 'Name'),
+        'grandma\'s secret blend',
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pumpAndSettle();
+
+      expect(groups.single.ingredients.single.foodId, isNull);
+      expect(find.byType(InputChip), findsNothing);
+    });
+
+    testWidgets('renaming keeps the link; only the chip clears it', (
+      tester,
+    ) async {
+      final groups = [
+        EditIngredientGroup(
+          ingredients: [
+            EditIngredient(name: 'plain flour')
+              ..foodId = 'all-purpose-flour'
+              ..foodLabel = 'All-purpose flour',
+          ],
+        ),
+      ];
+      await tester.pumpWidget(app(groups));
+      expect(find.byType(InputChip), findsOneWidget);
+
+      // Renaming is the case the per-row FK exists for — the link survives.
+      await tester.enterText(
+        find.widgetWithText(TextField, 'Name'),
+        'my best flour',
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pumpAndSettle();
+      expect(groups.single.ingredients.single.foodId, 'all-purpose-flour');
+
+      await tester.tap(find.byTooltip('Remove link'));
+      await tester.pumpAndSettle();
+      expect(groups.single.ingredients.single.foodId, isNull);
+      expect(find.byType(InputChip), findsNothing);
+    });
+
+    // The row's envelope, re-run with the chip present (Gotcha 26): a linked
+    // row is a new caller of a row that was at its width budget already.
+    for (final width in <double>[320, 360, 600]) {
+      testWidgets('a linked row fits at ${width}px, textScale 2.0', (
+        tester,
+      ) async {
+        tester.view.physicalSize = Size(width, 2000);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        final groups = [
+          EditIngredientGroup(
+            ingredients: [
+              EditIngredient(name: 'extra virgin olive oil')
+                ..foodId = 'olive-oil'
+                ..foodLabel = 'Olive oil, extra virgin, cold pressed',
+            ],
+          ),
+        ];
+        await tester.pumpWidget(app(groups, textScale: 2.0));
+        await tester.pumpAndSettle();
+        expect(
+          tester.takeException(),
+          isNull,
+          reason: 'linked ingredient row overflows at ${width}px @ 2.0x',
+        );
+      });
+    }
+  });
+
   // B052 / OPT-S4. `_load()` was try/finally with no catch: a failed getById
   // escaped as an unhandled future and the form rendered its empty defaults over
   // a recipe that still exists. Because `update()` replaces content wholesale,
@@ -455,6 +596,22 @@ Widget _editApp(RecipeRepository repo) => ProviderScope(
     home: const RecipeEditorScreen(recipeId: 'r1'),
   ),
 );
+
+/// Registry stub for the typeahead: two flours for a `flo…` query, nothing for
+/// anything else — enough to cover pick, free-text, and empty-result paths.
+class _StubFoodRepository implements FoodRepository {
+  @override
+  Future<List<FoodHit>> search(String query, {int limit = 10}) async =>
+      query.startsWith('flo')
+          ? const [
+            FoodHit(id: 'all-purpose-flour', displayName: 'All-purpose flour'),
+            FoodHit(id: 'bread-flour', displayName: 'Bread flour'),
+          ]
+          : const [];
+
+  @override
+  Future<Map<String, String>> displayNames(List<String> ids) async => const {};
+}
 
 /// Fails `getById` [failures] times, then succeeds — so one stub covers both the
 /// permanent-failure and the retry-recovers cases.

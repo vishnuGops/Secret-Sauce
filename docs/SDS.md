@@ -147,7 +147,11 @@ still denies (proven in `rls_matrix.sql` §E, checks E1–E9). `anon` reads come
 **`search_foods(p_query, p_limit)`** is the typeahead RPC: exact alias/name match, then prefix,
 then a `pg_trgm` tail over `lower(display_name)` and `food_alias.alias` (two `gin_trgm_ops`
 indexes), total order ending in `f.id`, limit clamped to 25, returns `(id, display_name)` only.
-`stable`, invoker-rights, revoked from `anon`, granted to `authenticated`.
+`stable`, invoker-rights, revoked from `anon`, granted to `authenticated`. Consumed by
+`FoodRepository` (Phase 29b — abstract + `SupabaseFoodRepository`, wired in
+`core/src/providers.dart`): `search(query, {limit})` → `List<FoodHit>` and
+`displayNames(ids)` → `Map<String, String>` (a two-column `in.()` select the editor uses to
+label the link chips of a loaded recipe; empty input makes no request).
 
 **Load order is load-bearing:** `db:reset` is drop → create → **nutrition** → seed → recipes →
 sim, and `config.toml`'s `sql_paths` lists `nutrition_foods.sql` before `seed_recipes.sql`,
@@ -168,7 +172,23 @@ the one version it is showing, not widen this list.
 
 **ingredient_groups**: `id`, `recipe_id`, `name` (e.g. "For the sauce"), `sort_order`.
 **ingredients**: `id`, `group_id → ingredient_groups`, `quantity (numeric, nullable)`,
-`unit`, `name`, `note`, `is_optional (bool)`, `sort_order`.
+`unit`, `name`, `note`, `is_optional (bool)`, `sort_order`,
+`food_id (text, nullable → food, on delete set null)`.
+
+**`food_id` — the ingredient → registry link (Phase 29b).** Set by the editor's typeahead when
+the cook picks a suggestion; null for free text, which is never blocked. `name` stays the cook's
+words and is what every surface renders — the link is invisible metadata that 29c's estimator
+sums. A real per-row FK rather than a name-keyed map so the link survives renames, duplicate
+names across groups, forks (`fork_recipe` copies it), and the editor's delete-and-reinsert save;
+`on delete set null` means retiring a registry entry orphans links instead of blocking. The
+column is declared via `alter table … add column if not exists` *after* the registry tables in
+`0001_init.sql`, because `ingredients` is created before `food` in apply order. Restatement
+sites, all in one change set: `fork_recipe`, `save_recipe` (payload key `food_id`),
+`seed_recipe_v2` (authored as `food` in recipeData JSON, normalised to `food_id`), the sim's
+insert (null today), `Ingredient.foodId`, `EditIngredient.foodId`, both schema.jsons and
+`tool/recipe_format.dart` (which checks the slug exists in `foods.json`). The read side rides
+the existing `ingredients(*)` embed. 137 of the 147 authored ingredient rows are linked; the 7
+unlinkable names are the gaps documented in `nutritionData/README.md`.
 
 **step_groups**: `id`, `recipe_id`, `name`, `sort_order`.
 **steps**: `id`, `group_id → step_groups`, `step_order (int)`, `text`, `image_url`,
@@ -341,7 +361,8 @@ It creates three throwaway `auth.users` (an owner, someone the owner shares a pr
 an unrelated signed-in stranger) plus a private and a public recipe with content, re-runs the whole
 matrix under `set local role authenticated` + `request.jwt.claims`, and **rolls the transaction
 back** — so it leaves no user, no recipe and no helper function behind and is safe against any
-database. 88 checks (§E, the food registry's nine, joined in Phase 29a); a failure names the
+database. 89 checks (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
+ingredient food link, in 29b); a failure names the
 check and what actually happened.
 
 Its one helper, `rls_matrix_do(text)`, executes an arbitrary string as the calling role, which is

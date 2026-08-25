@@ -16,12 +16,12 @@
     {
       "name": "",
       "ingredients": [
-        { "quantity": 200, "unit": "g", "name": "spaghetti" },
-        { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "thinly sliced" },
-        { "quantity": 60, "unit": "ml", "name": "extra-virgin olive oil" },
-        { "quantity": 1, "unit": "tsp", "name": "red chilli flakes" },
-        { "quantity": null, "unit": null, "name": "flat-leaf parsley", "note": "chopped" },
-        { "quantity": null, "unit": null, "name": "salt", "note": "for the pasta water, and to taste" }
+        { "quantity": 200, "unit": "g", "name": "spaghetti", "food": "spaghetti" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "thinly sliced", "food": "garlic" },
+        { "quantity": 60, "unit": "ml", "name": "extra-virgin olive oil", "food": "olive-oil" },
+        { "quantity": 1, "unit": "tsp", "name": "red chilli flakes", "food": "red-pepper-flakes" },
+        { "quantity": null, "unit": null, "name": "flat-leaf parsley", "note": "chopped", "food": "flat-leaf-parsley" },
+        { "quantity": null, "unit": null, "name": "salt", "note": "for the pasta water, and to taste", "food": "kosher-salt" }
       ]
     }
   ],

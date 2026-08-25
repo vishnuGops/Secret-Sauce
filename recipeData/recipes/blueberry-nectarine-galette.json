@@ -16,20 +16,20 @@
     {
       "name": "Filling",
       "ingredients": [
-        { "quantity": 2, "unit": null, "name": "nectarines", "note": "chopped" },
-        { "quantity": 1.5, "unit": "cup", "name": "fresh blueberries" },
-        { "quantity": 0.5, "unit": "Tbsp", "name": "lemon zest" },
-        { "quantity": 1, "unit": "Tbsp", "name": "fresh lemon juice" },
-        { "quantity": 0.25, "unit": "cup", "name": "organic cane sugar", "note": "adjust to the sweetness of the fruit" },
-        { "quantity": 2, "unit": "Tbsp", "name": "cornstarch" }
+        { "quantity": 2, "unit": null, "name": "nectarines", "note": "chopped", "food": "nectarine" },
+        { "quantity": 1.5, "unit": "cup", "name": "fresh blueberries", "food": "blueberries" },
+        { "quantity": 0.5, "unit": "Tbsp", "name": "lemon zest", "food": "lemon-zest" },
+        { "quantity": 1, "unit": "Tbsp", "name": "fresh lemon juice", "food": "lemon-juice" },
+        { "quantity": 0.25, "unit": "cup", "name": "organic cane sugar", "note": "adjust to the sweetness of the fruit", "food": "granulated-sugar" },
+        { "quantity": 2, "unit": "Tbsp", "name": "cornstarch", "food": "cornstarch" }
       ]
     },
     {
       "name": "To assemble",
       "ingredients": [
-        { "quantity": 1, "unit": null, "name": "refrigerated pie crust" },
-        { "quantity": 1, "unit": null, "name": "egg", "note": "beaten with 1 Tbsp water, for egg wash" },
-        { "quantity": null, "unit": null, "name": "turbinado sugar", "note": "for garnish" }
+        { "quantity": 1, "unit": null, "name": "refrigerated pie crust", "food": "pie-crust" },
+        { "quantity": 1, "unit": null, "name": "egg", "note": "beaten with 1 Tbsp water, for egg wash", "food": "egg" },
+        { "quantity": null, "unit": null, "name": "turbinado sugar", "note": "for garnish", "food": "turbinado-sugar" }
       ]
     }
   ],

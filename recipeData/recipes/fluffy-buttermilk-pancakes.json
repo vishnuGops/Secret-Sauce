@@ -16,19 +16,19 @@
     {
       "name": "Dry",
       "ingredients": [
-        { "quantity": 200, "unit": "g", "name": "all-purpose flour" },
-        { "quantity": 2, "unit": "Tbsp", "name": "sugar" },
-        { "quantity": 1, "unit": "tsp", "name": "baking powder" },
-        { "quantity": 0.5, "unit": "tsp", "name": "baking soda" },
-        { "quantity": 0.5, "unit": "tsp", "name": "salt" }
+        { "quantity": 200, "unit": "g", "name": "all-purpose flour", "food": "all-purpose-flour" },
+        { "quantity": 2, "unit": "Tbsp", "name": "sugar", "food": "granulated-sugar" },
+        { "quantity": 1, "unit": "tsp", "name": "baking powder", "food": "baking-powder" },
+        { "quantity": 0.5, "unit": "tsp", "name": "baking soda", "food": "baking-soda" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt", "food": "kosher-salt" }
       ]
     },
     {
       "name": "Wet",
       "ingredients": [
-        { "quantity": 300, "unit": "ml", "name": "buttermilk" },
-        { "quantity": 1, "unit": null, "name": "egg" },
-        { "quantity": 40, "unit": "g", "name": "butter", "note": "melted" }
+        { "quantity": 300, "unit": "ml", "name": "buttermilk", "food": "buttermilk" },
+        { "quantity": 1, "unit": null, "name": "egg", "food": "egg" },
+        { "quantity": 40, "unit": "g", "name": "butter", "note": "melted", "food": "butter" }
       ]
     }
   ],

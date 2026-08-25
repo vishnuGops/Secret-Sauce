@@ -16,19 +16,19 @@
     {
       "name": "Dough",
       "ingredients": [
-        { "quantity": 250, "unit": "g", "name": "00 pizza flour" },
-        { "quantity": 160, "unit": "ml", "name": "water", "note": "warm" },
-        { "quantity": 3, "unit": "g", "name": "active dry yeast" },
-        { "quantity": 5, "unit": "g", "name": "salt" }
+        { "quantity": 250, "unit": "g", "name": "00 pizza flour", "food": "all-purpose-flour" },
+        { "quantity": 160, "unit": "ml", "name": "water", "note": "warm", "food": "water" },
+        { "quantity": 3, "unit": "g", "name": "active dry yeast", "food": "active-dry-yeast" },
+        { "quantity": 5, "unit": "g", "name": "salt", "food": "kosher-salt" }
       ]
     },
     {
       "name": "Topping",
       "ingredients": [
-        { "quantity": 150, "unit": "g", "name": "San Marzano tomatoes", "note": "crushed" },
-        { "quantity": 125, "unit": "g", "name": "fresh mozzarella", "note": "torn" },
-        { "quantity": null, "unit": null, "name": "fresh basil leaves" },
-        { "quantity": 1, "unit": "Tbsp", "name": "extra-virgin olive oil" }
+        { "quantity": 150, "unit": "g", "name": "San Marzano tomatoes", "note": "crushed", "food": "san-marzano-tomatoes" },
+        { "quantity": 125, "unit": "g", "name": "fresh mozzarella", "note": "torn", "food": "mozzarella" },
+        { "quantity": null, "unit": null, "name": "fresh basil leaves", "food": "basil-fresh" },
+        { "quantity": 1, "unit": "Tbsp", "name": "extra-virgin olive oil", "food": "olive-oil" }
       ]
     }
   ],

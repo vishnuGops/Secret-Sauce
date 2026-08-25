@@ -1691,7 +1691,7 @@ drawn-but-dead affordance is worse than absence). Mechanism, alternatives, and o
 
 ---
 
-## Phase 29 — Auto nutrition: food registry, ingredient links, estimated labels (in progress — 29a done 2026-08-25)
+## Phase 29 — Auto nutrition: food registry, ingredient links, estimated labels (in progress — 29a–b done 2026-08-25)
 
 Phase 28 shipped the label and manual entry; this phase makes the label **computable from the
 ingredients**, so most cooks never type eleven numbers. The editor's nutrition panel becomes a
@@ -1777,22 +1777,32 @@ only** — nothing in the repo, CI, or the app ever reads it.
   `cmd /c` redirection is the corrected form, local DB rebuilt clean. Hosted probe is an open
   owner action (see the tracker)
 
-### 29b — Ingredient links at input
+### 29b — Ingredient links at input — DONE (2026-08-25)
 
-- [ ] `ingredients.food_id` — nullable `references food(id) on delete set null`. Every
-      restatement site in the same change: `fork_recipe` (`0001_init.sql:1799`), `save_recipe`
-      (`:2044`), `seed_recipe_v2` via [tool/recipes.dart](../tool/recipes.dart), the sim's insert
-      (`2_sim_generate.sql:380`), `Ingredient` model, `EditIngredient` draft (B035 — the
-      round-trip test fails if dropped), both `schema.json`s + `tool/recipe_format.dart`
-      (optional `food` key, slug must exist in `foods.json`). Read side is free —
-      `kRecipeDetailSelect` embeds `ingredients(*)`
-- [ ] Typeahead in `ingredients_editor.dart` against `search_foods` (alias exact > prefix >
-      trigram): picking sets name + link, typing past it leaves free text; a linked row shows a
-      subtle chip, clearable; envelope re-run for the row (Gotcha 26)
-- [ ] `SupabaseFoodRepository` (abstract + impl, wired in core providers) with `fake_supabase`
-      request-assertion tests
-- [ ] `recipeData/recipes/*.json` gain `food` slugs on linkable ingredients; `recipes:gen`,
-      commit both
+- [x] `ingredients.food_id` — nullable `references food(id) on delete set null`, declared via
+      `alter table … if not exists` *after* the registry tables (fresh-apply order: `ingredients`
+      is created before `food` exists), plus `ingredients_food_idx`. Every restatement site in
+      the same change: `fork_recipe`, `save_recipe` (payload key `food_id`, no signature change),
+      `seed_recipe_v2` via [tool/recipes.dart](../tool/recipes.dart) (same — the key rides the
+      existing jsonb argument), the sim's insert (null pass-through until 29d's optional
+      curation), `Ingredient.foodId`, `EditIngredient.foodId` (B035 — the round-trip test covers
+      it), both `schema.json`s + `tool/recipe_format.dart` (optional `food` key; the slug must
+      exist in `foods.json`, loaded by the new `loadFoodSlugs()`). Read side free —
+      `kRecipeDetailSelect` embeds `ingredients(*)`, `recipe_snapshot` is `to_jsonb`
+- [x] Typeahead in `ingredients_editor.dart`: `RawAutocomplete` over the name field against
+      `search_foods` (250 ms debounce, ≥ 2 chars, failures collapse to "no suggestions" — a hint
+      surface, never a gate); picking sets name + link, typing past it leaves free text and
+      **renaming keeps the link** (surviving a rename is the point of the FK); a linked row shows
+      an `InputChip` on its own line (clearable, label ellipsises); envelope re-run at
+      320/360/600 × 2.0 with the chip present (Gotcha 26)
+- [x] `FoodRepository` (abstract + `SupabaseFoodRepository`, wired in core providers):
+      `search()` + `displayNames()` (labels the chips of a loaded recipe; empty input makes no
+      request), with `fake_supabase` request-assertion tests; `FoodHit` model
+- [x] `recipeData/recipes/*.json`: `food` slugs on all 137 linkable ingredient rows (the 7
+      documented unlinkable names stay free text); `seed_recipes.sql` + `1_sim_dishes.sql`
+      regenerated and committed
+- [x] `rls_matrix.sql` B22b (88 → **89 checks**): the owner's `save_recipe` stores the ingredient
+      link, read back through RLS
 
 ### 29c — Modes, estimation, provenance
 
@@ -2093,7 +2103,7 @@ Everything here is **known, decided, and not being worked on**. An item is in th
 it is an owner action, accepted debt, or a deferral with a stated trigger — not because it was
 forgotten. Each one names the condition that would pull it back into a phase. Nothing else in this
 document is open: Phases 0–24 and 26–28 are done, Phase 25 is designed-not-started, Phase 29 is
-in progress (29a done 2026-08-25; 29b–d remain), Phase OPT is closed at 26 of 29 with the rest
+in progress (29a–b done 2026-08-25; 29c–d remain), Phase OPT is closed at 26 of 29 with the rest
 listed below. Phase 28's
 Deferred block resolved into Phase 29 (auto-calculate and the real label values); micronutrients
 stays with the phase rather than here, a feature deferral with no trigger condition.
@@ -2211,8 +2221,8 @@ months, found by hand while doing something else.
       `melos run db:rls`. It creates three throwaway `auth.users` (owner / shared-with / unrelated
       stranger), a private and a public recipe with content, re-runs everything under `set local
       role authenticated` + `request.jwt.claims`, prints one PASS/FAIL line per check, and **rolls
-      the transaction back** — no user, no recipe, no helper function survives it. **88 checks, all
-      passing** on the local stack (79 + Phase 29a's §E registry nine).
+      the transaction back** — no user, no recipe, no helper function survives it. **89 checks, all
+      passing** on the local stack (79 + Phase 29a's §E registry nine + 29b's B22b food link).
 - [x] **CI runs it** — a new `RLS matrix — as a signed-in user` step in `database.yml`, straight
       after the fresh apply. A B053/B061-class regression now fails a pull request.
 - [x] **It found a real hole on its first complete run: [B061](BUG-TRACKER.md).** `likes_write` and

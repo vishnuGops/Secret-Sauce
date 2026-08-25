@@ -37,10 +37,13 @@ const _ownerId = '00000000-0000-0000-0000-0000000000aa';
 const _tag = r'$sr$';
 
 /// recipeData carries `demo` blocks and reaches seed.sql's 8 taster accounts.
-const _options = RecipeFormatOptions(
+/// Not const: `foodSlugs` is read from nutritionData/foods.json so an
+/// ingredient's `food` link is validated against the registry (Phase 29b).
+final _options = RecipeFormatOptions(
   allowDemo: true,
   tasterCount: 8,
   dollarTag: _tag,
+  foodSlugs: loadFoodSlugs('nutritionData/foods.json'),
 );
 
 // ---------------------------------------------------------------------------
@@ -173,7 +176,7 @@ create or replace function seed_recipe_v2(
   p_servings    int,
   p_visibility  recipe_visibility,
   p_attribution text,
-  p_ingredients jsonb,   -- [{"name":"Crust","ingredients":[{"quantity":1.25,"unit":"cup","name":"flour","note":null,"is_optional":false}]}]
+  p_ingredients jsonb,   -- [{"name":"Crust","ingredients":[{"quantity":1.25,"unit":"cup","name":"flour","note":null,"is_optional":false,"food_id":"all-purpose-flour"}]}]
   p_steps       jsonb,   -- [{"name":"Crust","steps":[{"text":"…","duration_minutes":60,"temperature":"350°F","tip":null}]}]
   p_likes       int   default 0,
   p_saves       int   default 0,
@@ -223,7 +226,7 @@ begin
 
     v_idx := 0;
     for v_item in select * from jsonb_array_elements(coalesce(v_grp -> 'ingredients', '[]'::jsonb)) loop
-      insert into ingredients (group_id, quantity, unit, name, note, is_optional, sort_order)
+      insert into ingredients (group_id, quantity, unit, name, note, is_optional, sort_order, food_id)
       values (
         v_group,
         (v_item ->> 'quantity')::numeric,
@@ -231,7 +234,10 @@ begin
         v_item ->> 'name',
         v_item ->> 'note',
         coalesce((v_item ->> 'is_optional')::boolean, false),
-        v_idx
+        v_idx,
+        -- Phase 29b. FK-checked against `food`, which is why db:reset loads
+        -- nutrition_foods.sql before this file.
+        v_item ->> 'food_id'
       );
       v_idx := v_idx + 1;
     end loop;

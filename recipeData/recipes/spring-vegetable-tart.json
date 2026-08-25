@@ -28,35 +28,35 @@
     {
       "name": "Crust",
       "ingredients": [
-        { "quantity": 1.25, "unit": "cup", "name": "organic unbleached wheat flour" },
-        { "quantity": 0.5, "unit": "tsp", "name": "kosher salt" },
-        { "quantity": 6, "unit": "Tbsp", "name": "butter", "note": "cold, cut into 1/2-inch cubes" },
-        { "quantity": 3, "unit": "Tbsp", "name": "ice water", "note": "start with 2 Tbsp and add as needed" }
+        { "quantity": 1.25, "unit": "cup", "name": "organic unbleached wheat flour", "food": "unbleached-flour" },
+        { "quantity": 0.5, "unit": "tsp", "name": "kosher salt", "food": "kosher-salt" },
+        { "quantity": 6, "unit": "Tbsp", "name": "butter", "note": "cold, cut into 1/2-inch cubes", "food": "butter" },
+        { "quantity": 3, "unit": "Tbsp", "name": "ice water", "note": "start with 2 Tbsp and add as needed", "food": "water" }
       ]
     },
     {
       "name": "Filling",
       "ingredients": [
-        { "quantity": 2, "unit": "Tbsp", "name": "butter" },
-        { "quantity": 1, "unit": null, "name": "yellow onion", "note": "chopped" },
-        { "quantity": 1, "unit": null, "name": "leek", "note": "large, thinly sliced, tough leaves removed" },
-        { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "smashed and minced" },
-        { "quantity": 1, "unit": "pkg", "name": "prosciutto", "note": "thinly sliced" },
-        { "quantity": 0.5, "unit": "cup", "name": "peas" },
-        { "quantity": 0.5, "unit": "cup", "name": "parmesan", "note": "shredded" },
-        { "quantity": 0.5, "unit": "cup", "name": "Gruyère", "note": "shredded" },
-        { "quantity": 0.25, "unit": "cup", "name": "smoked Gouda", "note": "shredded" },
-        { "quantity": 1, "unit": "tsp", "name": "poultry seasoning" },
+        { "quantity": 2, "unit": "Tbsp", "name": "butter", "food": "butter" },
+        { "quantity": 1, "unit": null, "name": "yellow onion", "note": "chopped", "food": "onion" },
+        { "quantity": 1, "unit": null, "name": "leek", "note": "large, thinly sliced, tough leaves removed", "food": "leek" },
+        { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "smashed and minced", "food": "garlic" },
+        { "quantity": 1, "unit": "pkg", "name": "prosciutto", "note": "thinly sliced", "food": "prosciutto" },
+        { "quantity": 0.5, "unit": "cup", "name": "peas", "food": "peas" },
+        { "quantity": 0.5, "unit": "cup", "name": "parmesan", "note": "shredded", "food": "parmesan" },
+        { "quantity": 0.5, "unit": "cup", "name": "Gruyère", "note": "shredded", "food": "gruyere" },
+        { "quantity": 0.25, "unit": "cup", "name": "smoked Gouda", "note": "shredded", "food": "smoked-gouda" },
+        { "quantity": 1, "unit": "tsp", "name": "poultry seasoning", "food": "poultry-seasoning" },
         { "quantity": null, "unit": null, "name": "salt and pepper", "note": "to taste" },
-        { "quantity": 2, "unit": null, "name": "eggs" },
-        { "quantity": 0.5, "unit": "cup", "name": "whole milk" }
+        { "quantity": 2, "unit": null, "name": "eggs", "food": "egg" },
+        { "quantity": 0.5, "unit": "cup", "name": "whole milk", "food": "whole-milk" }
       ]
     },
     {
       "name": "To assemble",
       "ingredients": [
-        { "quantity": 1, "unit": "Tbsp", "name": "Dijon mustard" },
-        { "quantity": 0.5, "unit": "bunch", "name": "asparagus", "note": "trimmed" }
+        { "quantity": 1, "unit": "Tbsp", "name": "Dijon mustard", "food": "dijon-mustard" },
+        { "quantity": 0.5, "unit": "bunch", "name": "asparagus", "note": "trimmed", "food": "asparagus" }
       ]
     }
   ],

@@ -157,10 +157,12 @@ class EditIngredient {
     String name = '',
     String note = '',
     this.isOptional = false,
+    this.foodId,
   }) : quantity = TextEditingController(text: quantity),
        unit = TextEditingController(text: unit),
        name = TextEditingController(text: name),
        note = TextEditingController(text: note),
+       nameFocus = FocusNode(),
        showDetails = note.isNotEmpty || isOptional;
 
   factory EditIngredient.fromModel(Ingredient i) => EditIngredient(
@@ -169,6 +171,7 @@ class EditIngredient {
     name: i.name,
     note: i.note ?? '',
     isOptional: i.isOptional,
+    foodId: i.foodId,
   );
 
   final TextEditingController quantity;
@@ -176,7 +179,23 @@ class EditIngredient {
   final TextEditingController name;
   final TextEditingController note;
 
+  /// For the name field's typeahead overlay (`RawAutocomplete` needs the node
+  /// and the controller to come from the same owner).
+  final FocusNode nameFocus;
+
   bool isOptional;
+
+  /// The food-registry link (Phase 29b) — `food.id`, or null for free text.
+  /// Set by picking a typeahead suggestion, cleared by the chip; deliberately
+  /// NOT cleared when the name is retyped, because surviving a rename is the
+  /// point of a per-row link (the cook's words stay theirs, the link stays
+  /// linked until they say otherwise).
+  String? foodId;
+
+  /// Display name for the chip. Session-only — the database stores only the
+  /// id — filled by a pick or by the editor's post-load lookup; null renders
+  /// the generic label.
+  String? foodLabel;
 
   /// Whether the note/optional line is revealed. Starts open when the loaded
   /// ingredient already uses either, so an edit cannot hide existing content.
@@ -191,6 +210,7 @@ class EditIngredient {
     note: _orNull(note),
     isOptional: isOptional,
     sortOrder: sortOrder,
+    foodId: foodId,
   );
 
   void dispose() {
@@ -198,6 +218,7 @@ class EditIngredient {
     unit.dispose();
     name.dispose();
     note.dispose();
+    nameFocus.dispose();
   }
 }
 

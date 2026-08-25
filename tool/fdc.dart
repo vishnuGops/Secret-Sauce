@@ -77,10 +77,9 @@ List<String> _csv(String line) {
 }
 
 Stream<List<String>> _rows(String path) async* {
-  final lines = File(path)
-      .openRead()
-      .transform(utf8.decoder)
-      .transform(const LineSplitter());
+  final lines = File(
+    path,
+  ).openRead().transform(utf8.decoder).transform(const LineSplitter());
   var first = true;
   await for (final line in lines) {
     if (first) {
@@ -165,7 +164,9 @@ Future<void> main(List<String> args) async {
   // The zip unpacks to a same-named inner directory; accept either level.
   var dir = Directory(bundle);
   if (!File('${dir.path}/food_nutrient.csv').existsSync()) {
-    final inner = Directory('${dir.path}/${dir.uri.pathSegments.where((s) => s.isNotEmpty).last}');
+    final inner = Directory(
+      '${dir.path}/${dir.uri.pathSegments.where((s) => s.isNotEmpty).last}',
+    );
     if (File('${inner.path}/food_nutrient.csv').existsSync()) dir = inner;
   }
   if (!File('${dir.path}/food_nutrient.csv').existsSync()) {
@@ -241,13 +242,15 @@ Future<void> main(List<String> args) async {
     if (measureId != '9999' && measureNames.containsKey(measureId)) {
       key = _portionKey(measureNames[measureId]!, unitBySpelling, eachWords);
     } else {
-      final wholePhrase = modifier
-          .toLowerCase()
-          .replaceAll(RegExp(r'\s*\([^)]*\)'), '')
-          .split(',')
-          .first
-          .trim();
-      if (eachWords.length > 1 && wholePhrase == food['display_name'].toString().toLowerCase()) {
+      final wholePhrase =
+          modifier
+              .toLowerCase()
+              .replaceAll(RegExp(r'\s*\([^)]*\)'), '')
+              .split(',')
+              .first
+              .trim();
+      if (eachWords.length > 1 &&
+          wholePhrase == food['display_name'].toString().toLowerCase()) {
         key = 'each';
       }
       key ??= _portionKey(modifier, unitBySpelling, eachWords);
@@ -264,7 +267,9 @@ Future<void> main(List<String> args) async {
     if (fdcId == null) continue;
     final n = nutrients[fdcId];
     if (n == null) {
-      stderr.writeln('  warning  ${food['slug']}: fdc $fdcId has no nutrient rows');
+      stderr.writeln(
+        '  warning  ${food['slug']}: fdc $fdcId has no nutrient rows',
+      );
       warned++;
       continue;
     }
@@ -315,7 +320,12 @@ Future<void> main(List<String> args) async {
     // Derived density, unless authored. Priority: the larger the measured
     // volume, the smaller the relative measurement error.
     if (food['grams_per_ml'] == null) {
-      const volume = {'cup': 236.588, 'fl-oz': 29.5735, 'tbsp': 14.7868, 'tsp': 4.92892};
+      const volume = {
+        'cup': 236.588,
+        'fl-oz': 29.5735,
+        'tbsp': 14.7868,
+        'tsp': 4.92892,
+      };
       for (final e in volume.entries) {
         final row = p[e.key];
         if (row != null) {

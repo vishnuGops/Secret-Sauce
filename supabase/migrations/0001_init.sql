@@ -358,8 +358,8 @@ create table if not exists recipe_suggestions (
 -- `melos run nutrition:gen`), read-only to every client role: RLS below is
 -- select-only and the grants block revokes writes. `db:clean` does not touch
 -- these tables (it truncates *recipe* data; this is reference data), which is
--- what keeps a post-clean `db:recipes` green once 29b's ingredients.food_id
--- FK exists.
+-- what keeps a post-clean `db:recipes` green now that ingredients.food_id
+-- (29b, below) references `food`.
 --
 -- The 11 per-100 g columns are FDC's EAV flattened, named exactly as the
 -- nutrition label's jsonb keys (Phase 28) so nothing translates between them.
@@ -415,6 +415,20 @@ create index if not exists food_display_name_trgm_idx
   on food using gin (lower(display_name) gin_trgm_ops);
 create index if not exists food_alias_trgm_idx
   on food_alias using gin (alias gin_trgm_ops);
+
+-- The ingredient → food link (Phase 29b). A real nullable column, not a
+-- name-keyed map in the nutrition jsonb, so the link survives renames,
+-- duplicate names across groups, forks (the deep copy copies it), and the
+-- editor's delete-and-reinsert save. `on delete set null`: retiring a registry
+-- entry orphans links gracefully instead of blocking the delete.
+--
+-- An `alter` here rather than a column in the create above, because
+-- `ingredients` is created before `food` exists in this file's apply order —
+-- an inline `references food` would fail every fresh apply (the B045 class).
+alter table ingredients add column if not exists food_id text
+  references food (id) on delete set null;
+-- Serves the FK's `on delete set null` scan and 29c's estimation join.
+create index if not exists ingredients_food_idx on ingredients (food_id);
 
 -- ============================================================================
 -- Functions & triggers
@@ -1891,8 +1905,8 @@ begin
     values (v_new_recipe, v_ig.name, v_ig.sort_order)
     returning id into v_new_ig;
 
-    insert into ingredients (group_id, quantity, unit, name, note, is_optional, sort_order)
-    select v_new_ig, quantity, unit, name, note, is_optional, sort_order
+    insert into ingredients (group_id, quantity, unit, name, note, is_optional, sort_order, food_id)
+    select v_new_ig, quantity, unit, name, note, is_optional, sort_order, food_id
     from ingredients where group_id = v_ig.id;
   end loop;
 
@@ -2136,7 +2150,7 @@ begin
     select v_recipe, coalesce(g.name, ''), g.sort_order from g
     returning id, sort_order
   )
-  insert into ingredients (group_id, quantity, unit, name, note, is_optional, sort_order)
+  insert into ingredients (group_id, quantity, unit, name, note, is_optional, sort_order, food_id)
   select
     ins.id,
     (c.elem->>'quantity')::numeric,
@@ -2144,7 +2158,10 @@ begin
     coalesce(c.elem->>'name', ''),
     c.elem->>'note',
     coalesce((c.elem->>'is_optional')::boolean, false),
-    (c.ord - 1)::int
+    (c.ord - 1)::int,
+    -- Text slug; FK-checked. A key the payload omits (or a json null) arrives
+    -- as SQL NULL — an unlinked ingredient, not an error.
+    c.elem->>'food_id'
   from ins
   join g on g.sort_order = ins.sort_order
   cross join lateral jsonb_array_elements(g.children) with ordinality as c(elem, ord);

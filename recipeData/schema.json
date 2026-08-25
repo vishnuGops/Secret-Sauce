@@ -184,6 +184,11 @@
           "type": "boolean",
           "default": false,
           "description": "ingredients.is_optional. Use this instead of writing '(optional)' into the name."
+        },
+        "food": {
+          "type": ["string", "null"],
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "description": "ingredients.food_id — the link into the food registry (Phase 29b). Must be a slug that exists in nutritionData/foods.json; tool/recipe_format.dart enforces that, because the generated SQL carries it into a real FK column. Optional and invisible to every rendered surface: `name` stays the cook's words, this is what auto nutrition (29c) sums. Leave it off for the documented registry gaps (mirin, spice blends, composites — see nutritionData/README.md)."
         }
       }
     },

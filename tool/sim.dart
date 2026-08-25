@@ -35,10 +35,15 @@ const _outPath = 'supabase/sim/1_sim_dishes.sql';
 /// by side; the validator rejects content containing it.
 const _tag = r'$sd$';
 
-const _options = RecipeFormatOptions(
+/// Not const: `foodSlugs` is read from nutritionData/foods.json (Phase 29b).
+/// No dish carries a `food` link yet — linking simData is 29d's optional
+/// curation — but the validator accepts the key now so promotion to
+/// recipeData never has to strip it.
+final _options = RecipeFormatOptions(
   allowDemo: false, // engagement is generated, never authored
   allowSim: true,
   dollarTag: _tag,
+  foodSlugs: loadFoodSlugs('nutritionData/foods.json'),
 );
 
 /// Keys allowed inside the optional `sim` block.

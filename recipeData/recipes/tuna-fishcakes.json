@@ -16,22 +16,22 @@
     {
       "name": "",
       "ingredients": [
-        { "quantity": 1, "unit": "pouch", "name": "tuna", "note": "3 oz pouch or 5 oz can, drained" },
-        { "quantity": 1, "unit": "Tbsp", "name": "butter" },
-        { "quantity": 0.5, "unit": "cup", "name": "yellow onion", "note": "minced" },
-        { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "minced" },
-        { "quantity": 0.5, "unit": "cup", "name": "panko bread crumbs" },
-        { "quantity": 0.25, "unit": "cup", "name": "parmesan", "note": "grated" },
-        { "quantity": 2, "unit": null, "name": "mini sweet peppers", "note": "1/4-inch dice" },
-        { "quantity": 2, "unit": null, "name": "green onions", "note": "minced" },
-        { "quantity": 1, "unit": null, "name": "egg" },
-        { "quantity": 1, "unit": "Tbsp", "name": "lemon juice" },
-        { "quantity": 1, "unit": null, "name": "lemon", "note": "zest only" },
-        { "quantity": 0.5, "unit": "tsp", "name": "kosher salt" },
-        { "quantity": 0.25, "unit": "tsp", "name": "black pepper" },
-        { "quantity": 0.5, "unit": "tsp", "name": "smoked paprika" },
-        { "quantity": 0.25, "unit": "tsp", "name": "garlic powder" },
-        { "quantity": null, "unit": null, "name": "oil", "note": "for frying" }
+        { "quantity": 1, "unit": "pouch", "name": "tuna", "note": "3 oz pouch or 5 oz can, drained", "food": "tuna" },
+        { "quantity": 1, "unit": "Tbsp", "name": "butter", "food": "butter" },
+        { "quantity": 0.5, "unit": "cup", "name": "yellow onion", "note": "minced", "food": "onion" },
+        { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "minced", "food": "garlic" },
+        { "quantity": 0.5, "unit": "cup", "name": "panko bread crumbs", "food": "panko" },
+        { "quantity": 0.25, "unit": "cup", "name": "parmesan", "note": "grated", "food": "parmesan" },
+        { "quantity": 2, "unit": null, "name": "mini sweet peppers", "note": "1/4-inch dice", "food": "mini-sweet-peppers" },
+        { "quantity": 2, "unit": null, "name": "green onions", "note": "minced", "food": "green-onions" },
+        { "quantity": 1, "unit": null, "name": "egg", "food": "egg" },
+        { "quantity": 1, "unit": "Tbsp", "name": "lemon juice", "food": "lemon-juice" },
+        { "quantity": 1, "unit": null, "name": "lemon", "note": "zest only", "food": "lemon" },
+        { "quantity": 0.5, "unit": "tsp", "name": "kosher salt", "food": "kosher-salt" },
+        { "quantity": 0.25, "unit": "tsp", "name": "black pepper", "food": "black-pepper" },
+        { "quantity": 0.5, "unit": "tsp", "name": "smoked paprika", "food": "smoked-paprika" },
+        { "quantity": 0.25, "unit": "tsp", "name": "garlic powder", "food": "garlic-powder" },
+        { "quantity": null, "unit": null, "name": "oil", "note": "for frying", "food": "canola-oil" }
       ]
     }
   ],

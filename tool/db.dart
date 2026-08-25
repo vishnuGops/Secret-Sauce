@@ -81,7 +81,14 @@ const _destructive = {'sim:clean'};
 /// their own transactions around the bulk load (and toggle triggers on the
 /// tables they write), which `-1` would nest and break. `rls` is exempt for the
 /// same reason and a sharper one: its `rollback` *is* the cleanup.
-const _transactional = {'create', 'seed', 'recipes', 'nutrition', 'drop', 'clean'};
+const _transactional = {
+  'create',
+  'seed',
+  'recipes',
+  'nutrition',
+  'drop',
+  'clean',
+};
 
 Future<int> _psql(
   String url,

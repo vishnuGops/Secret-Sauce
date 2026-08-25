@@ -44,6 +44,7 @@ class RecipeFormatOptions {
     this.allowSim = false,
     this.tasterCount = 8,
     this.dollarTag = r'$sr$',
+    this.foodSlugs,
   });
 
   /// `demo` — fake engagement counters + taster ratings. recipeData only.
@@ -51,6 +52,13 @@ class RecipeFormatOptions {
 
   /// `sim` — generation hints for the population seed. simData only.
   final bool allowSim;
+
+  /// Every slug in nutritionData/foods.json (via [loadFoodSlugs]), so an
+  /// ingredient's `food` link is checked against the registry it references —
+  /// the generated SQL would otherwise die on the FK at apply time, per file
+  /// applied rather than per slug typo'd. Null skips the existence check (the
+  /// key is still type-checked); both generators pass it.
+  final Set<String>? foodSlugs;
 
   /// How many seeded taster accounts exist, so a longer `demo.ratings` array can
   /// be rejected rather than silently truncated by seed_ratings().
@@ -138,7 +146,14 @@ const _nutritionKeys = {
   'added_sugars_g',
   'protein_g',
 };
-const _ingredientKeys = {'quantity', 'unit', 'name', 'note', 'is_optional'};
+const _ingredientKeys = {
+  'quantity',
+  'unit',
+  'name',
+  'note',
+  'is_optional',
+  'food',
+};
 const _stepKeys = {'text', 'duration_minutes', 'temperature', 'tip'};
 const _demoKeys = {'like_count', 'save_count', 'view_count', 'ratings'};
 
@@ -170,6 +185,29 @@ const _stopWords = {
   'unbleached',
   'granulated',
 };
+
+/// Every food slug in nutritionData/foods.json, for [RecipeFormatOptions.foodSlugs].
+///
+/// Exits on a missing or malformed file rather than returning an empty set: an
+/// empty set would fail every linked ingredient with "unknown slug", which
+/// points the author at their recipe when the broken thing is the registry.
+Set<String> loadFoodSlugs(String path) {
+  final file = File(path);
+  if (!file.existsSync()) {
+    stderr.writeln('Missing food registry: $path');
+    exit(1);
+  }
+  final decoded = jsonDecode(file.readAsStringSync());
+  final foods = decoded is Map<String, dynamic> ? decoded['foods'] : null;
+  if (foods is! List) {
+    stderr.writeln('$path: expected a top-level "foods" array');
+    exit(1);
+  }
+  return {
+    for (final f in foods)
+      if (f is Map && f['slug'] is String) f['slug'] as String,
+  };
+}
 
 /// Loads every `*.json` in [dir], sorted by filename so generated SQL is stable,
 /// then validates the lot. Exits the process if the directory is missing — that
@@ -439,6 +477,21 @@ class _Validator {
         if (item['is_optional'] != null && item['is_optional'] is! bool) {
           _err(file, '$iat.is_optional must be a boolean');
         }
+        // `food` — the ingredient → registry link (Phase 29b). Optional; when
+        // present it must name a slug foods.json actually has, because the
+        // generated SQL carries it into a real FK column.
+        final food = item['food'];
+        if (food != null) {
+          if (food is! String) {
+            _err(file, '$iat.food must be a string or null');
+          } else if (options.foodSlugs != null &&
+              !options.foodSlugs!.contains(food)) {
+            _err(
+              file,
+              '$iat.food "$food" is not a slug in nutritionData/foods.json',
+            );
+          }
+        }
         // "(optional)" in the name defeats the is_optional flag the UI reads.
         if (name is String && name.toLowerCase().contains('optional')) {
           _warn(file, '$iat.name says "optional" — use "is_optional": true');
@@ -635,6 +688,9 @@ List<Map<String, dynamic>> normaliseIngredientGroups(List<dynamic> groups) => [
             'name': i['name'],
             'note': i['note'],
             'is_optional': i['is_optional'] ?? false,
+            // Authored as `food`, emitted as `food_id` — the column name, and
+            // the same key the client's save payload uses.
+            'food_id': i['food'],
           },
       ],
     },

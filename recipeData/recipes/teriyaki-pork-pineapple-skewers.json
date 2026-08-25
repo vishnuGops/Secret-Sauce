@@ -17,28 +17,28 @@
       "name": "Teriyaki sauce",
       "ingredients": [
         { "quantity": 0.5, "unit": "cup", "name": "mirin" },
-        { "quantity": 0.5, "unit": "cup", "name": "pineapple juice", "note": "orange juice also works" },
-        { "quantity": 0.25, "unit": "cup", "name": "tamari" },
-        { "quantity": 3, "unit": "Tbsp", "name": "honey" },
-        { "quantity": 1, "unit": "Tbsp", "name": "rice vinegar" },
-        { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "grated" },
-        { "quantity": 1, "unit": "inch", "name": "fresh ginger", "note": "grated" },
-        { "quantity": 1, "unit": "tsp", "name": "red pepper flakes", "note": "or to taste" },
-        { "quantity": 1, "unit": "tsp", "name": "cornstarch" },
-        { "quantity": 1, "unit": "Tbsp", "name": "water" }
+        { "quantity": 0.5, "unit": "cup", "name": "pineapple juice", "note": "orange juice also works", "food": "pineapple-juice" },
+        { "quantity": 0.25, "unit": "cup", "name": "tamari", "food": "tamari" },
+        { "quantity": 3, "unit": "Tbsp", "name": "honey", "food": "honey" },
+        { "quantity": 1, "unit": "Tbsp", "name": "rice vinegar", "food": "rice-vinegar" },
+        { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "grated", "food": "garlic" },
+        { "quantity": 1, "unit": "inch", "name": "fresh ginger", "note": "grated", "food": "ginger" },
+        { "quantity": 1, "unit": "tsp", "name": "red pepper flakes", "note": "or to taste", "food": "red-pepper-flakes" },
+        { "quantity": 1, "unit": "tsp", "name": "cornstarch", "food": "cornstarch" },
+        { "quantity": 1, "unit": "Tbsp", "name": "water", "food": "water" }
       ]
     },
     {
       "name": "Pork and skewers",
       "ingredients": [
-        { "quantity": 1, "unit": "lb", "name": "pork", "note": "cut for kabobs" },
-        { "quantity": 1, "unit": "Tbsp", "name": "olive oil" },
-        { "quantity": 2, "unit": "tsp", "name": "tamari" },
-        { "quantity": 1, "unit": "tsp", "name": "smoked paprika" },
+        { "quantity": 1, "unit": "lb", "name": "pork", "note": "cut for kabobs", "food": "pork-tenderloin" },
+        { "quantity": 1, "unit": "Tbsp", "name": "olive oil", "food": "olive-oil" },
+        { "quantity": 2, "unit": "tsp", "name": "tamari", "food": "tamari" },
+        { "quantity": 1, "unit": "tsp", "name": "smoked paprika", "food": "smoked-paprika" },
         { "quantity": null, "unit": null, "name": "salt and black pepper", "note": "to taste" },
-        { "quantity": 1, "unit": null, "name": "pineapple", "note": "small, skin and core removed" },
-        { "quantity": 1, "unit": null, "name": "red bell pepper", "note": "stemmed and seeded" },
-        { "quantity": 1, "unit": null, "name": "yellow onion" },
+        { "quantity": 1, "unit": null, "name": "pineapple", "note": "small, skin and core removed", "food": "pineapple" },
+        { "quantity": 1, "unit": null, "name": "red bell pepper", "note": "stemmed and seeded", "food": "red-bell-pepper" },
+        { "quantity": 1, "unit": null, "name": "yellow onion", "food": "onion" },
         { "quantity": 6, "unit": null, "name": "bamboo skewers", "note": "4-6, soaked in water at least 30 minutes" }
       ]
     }

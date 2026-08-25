@@ -226,6 +226,7 @@ void main() {
                   unit: 'cup',
                   name: 'yoghurt',
                   sortOrder: 0,
+                  foodId: 'greek-yogurt',
                 ),
               ],
             ),
@@ -275,6 +276,10 @@ void main() {
         final ingredients = groups.single['ingredients'] as List;
         expect(ingredients.single['quantity'], 1.5);
         expect(ingredients.single['is_optional'], false);
+        // Phase 29b: the registry link rides in the same payload — a key the
+        // client drops here is a link the next save silently severs (the B035
+        // shape, one layer down).
+        expect(ingredients.single['food_id'], 'greek-yogurt');
 
         final steps = (body['p_step_groups'] as List).single['steps'] as List;
         expect(steps.single['text'], 'Marinate overnight');

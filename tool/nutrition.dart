@@ -57,7 +57,11 @@ class _Fail {
 // Load + validate
 // ---------------------------------------------------------------------------
 
-({List<Map<String, dynamic>> foods, List<Map<String, dynamic>> units, _Fail log})
+({
+  List<Map<String, dynamic>> foods,
+  List<Map<String, dynamic>> units,
+  _Fail log,
+})
 _load() {
   final log = _Fail();
 
@@ -87,7 +91,8 @@ _load() {
       log.err('units.$key: $klass unit needs a positive factor');
     }
     for (final s in (u['spellings'] as List? ?? const []).cast<String>()) {
-      if (s != s.toLowerCase()) log.err('units.$key: spelling "$s" not lowercase');
+      if (s != s.toLowerCase())
+        log.err('units.$key: spelling "$s" not lowercase');
       if (!spellings.add(s)) log.err('units: duplicate spelling "$s"');
     }
   }
@@ -123,7 +128,9 @@ _load() {
     if (!_slugRe.hasMatch(slug)) log.err('$where: slug not kebab-case');
     if (!slugs.add(slug)) log.err('$where: duplicate slug');
     if (prevSlug != null && slug.compareTo(prevSlug) < 0) {
-      log.err('$where: out of slug order (after $prevSlug) — keep the file sorted');
+      log.err(
+        '$where: out of slug order (after $prevSlug) — keep the file sorted',
+      );
     }
     prevSlug = slug;
 
@@ -134,13 +141,16 @@ _load() {
     for (final a in (f['aliases'] as List? ?? const []).cast<String>()) {
       if (a != a.toLowerCase()) log.err('$where: alias "$a" not lowercase');
       if (a.trim().isEmpty) log.err('$where: empty alias');
-      if (!aliases.add(a)) log.err('$where: alias "$a" duplicated across foods');
+      if (!aliases.add(a))
+        log.err('$where: alias "$a" duplicated across foods');
     }
 
     final merged = _merged(f);
     final per100 = merged.per100;
     if (per100.isEmpty) {
-      log.err('$where: no per-100 g values (run fdc:extract or author per_100g)');
+      log.err(
+        '$where: no per-100 g values (run fdc:extract or author per_100g)',
+      );
     }
     for (final e in per100.entries) {
       if (!_labelKeys.contains(e.key)) {
@@ -186,7 +196,11 @@ _load() {
 
 /// Authored-over-extracted merge for one food. The single place precedence
 /// lives; the emitter and the validator both go through it.
-({Map<String, num> per100, num? gramsPerMl, List<Map<String, dynamic>> portions})
+({
+  Map<String, num> per100,
+  num? gramsPerMl,
+  List<Map<String, dynamic>> portions,
+})
 _merged(Map<String, dynamic> f) {
   final extracted = (f['extracted'] as Map<String, dynamic>?) ?? const {};
 
@@ -196,16 +210,16 @@ _merged(Map<String, dynamic> f) {
         .map((k, v) => MapEntry(k, v as num)),
   };
 
-  final gramsPerMl =
-      (f['grams_per_ml'] ?? extracted['grams_per_ml']) as num?;
+  final gramsPerMl = (f['grams_per_ml'] ?? extracted['grams_per_ml']) as num?;
 
   final authored =
       ((f['portions'] as List?) ?? const []).cast<Map<String, dynamic>>();
   final authoredUnits = {for (final p in authored) p['unit'] as String};
   final portions = [
     ...authored,
-    for (final p in ((extracted['portions'] as List?) ?? const [])
-        .cast<Map<String, dynamic>>())
+    for (final p
+        in ((extracted['portions'] as List?) ?? const [])
+            .cast<Map<String, dynamic>>())
       if (!authoredUnits.contains(p['unit'] as String)) p,
   ]..sort((a, b) => (a['unit'] as String).compareTo(b['unit'] as String));
 
@@ -250,7 +264,9 @@ insert into food_unit (spelling, unit_key, class, factor) values
     final klass = u['class'] as String;
     final factor = u['factor'] as num?;
     for (final s in (u['spellings'] as List).cast<String>()) {
-      unitRows.add("  (${_lit(s)}, ${_lit(key)}, ${_lit(klass)}, ${_num(factor)})");
+      unitRows.add(
+        "  (${_lit(s)}, ${_lit(key)}, ${_lit(klass)}, ${_num(factor)})",
+      );
     }
   }
   buf
@@ -268,12 +284,16 @@ insert into food_unit (spelling, unit_key, class, factor) values
       ..writeln('  cholesterol_mg, sodium_mg, total_carbs_g, dietary_fiber_g,')
       ..writeln('  total_sugars_g, added_sugars_g, protein_g,')
       ..writeln('  grams_per_ml, is_added_sugar)')
-      ..writeln('values (${_lit(slug)}, ${_lit(f['display_name'] as String)}, '
-          '${_num(f['fdc_id'] as num?)},')
+      ..writeln(
+        'values (${_lit(slug)}, ${_lit(f['display_name'] as String)}, '
+        '${_num(f['fdc_id'] as num?)},',
+      )
       ..writeln('  ${_labelKeys.map((k) => _num(p[k])).join(', ')},')
       ..writeln('  ${_num(m.gramsPerMl)}, ${f['is_added_sugar'] == true})')
       ..writeln('on conflict (id) do update set')
-      ..writeln('  display_name = excluded.display_name, fdc_id = excluded.fdc_id,')
+      ..writeln(
+        '  display_name = excluded.display_name, fdc_id = excluded.fdc_id,',
+      )
       ..writeln('  ${_labelKeys.map((k) => '$k = excluded.$k').join(', ')},')
       ..writeln('  grams_per_ml = excluded.grams_per_ml,')
       ..writeln('  is_added_sugar = excluded.is_added_sugar;');
@@ -297,9 +317,7 @@ delete from food_portion;''');
       aliasRows.add('  (${_lit(a)}, $slug)');
     }
     for (final p in _merged(f).portions) {
-      portionRows.add(
-        '  ($slug, ${_lit(p['unit'] as String)}, ${p['grams']})',
-      );
+      portionRows.add('  ($slug, ${_lit(p['unit'] as String)}, ${p['grams']})');
     }
   }
   buf
@@ -309,10 +327,12 @@ delete from food_portion;''');
     ..writeln('insert into food_portion (food_id, unit_key, grams) values')
     ..writeln('${portionRows.join(',\n')};')
     ..writeln()
-    ..writeln("do \$\$ begin raise notice "
-        "'Food registry loaded (${foods.length} foods, "
-        "${aliasRows.length} aliases, ${portionRows.length} portions)'; "
-        'end \$\$;');
+    ..writeln(
+      "do \$\$ begin raise notice "
+      "'Food registry loaded (${foods.length} foods, "
+      "${aliasRows.length} aliases, ${portionRows.length} portions)'; "
+      'end \$\$;',
+    );
   return buf.toString();
 }
 

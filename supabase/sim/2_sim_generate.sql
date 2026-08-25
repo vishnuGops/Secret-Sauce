@@ -377,14 +377,18 @@ cross join lateral (
 ) g
 on conflict (id) do nothing;
 
-insert into ingredients (id, group_id, quantity, unit, name, note, is_optional, sort_order)
+insert into ingredients (id, group_id, quantity, unit, name, note, is_optional, sort_order, food_id)
 select
   sim.uid('ing', t.n::bigint * 10000 + g.ord * 100 + i.ord),
   sim.uid('ig', t.n::bigint * 100 + g.ord),
   nullif(i.value ->> 'quantity', '')::numeric,
   i.value ->> 'unit', i.value ->> 'name', i.value ->> 'note',
   coalesce((i.value ->> 'is_optional')::boolean, false),
-  i.ord
+  i.ord,
+  -- Phase 29b pass-through. Every dish doc carries the key (the normaliser
+  -- makes optional keys explicit) but none links a food yet — that is 29d's
+  -- optional curation — so this is null across the population today.
+  i.value ->> 'food_id'
 from sim_titled t
 cross join lateral (
   select value, (ordinality - 1)::int as ord

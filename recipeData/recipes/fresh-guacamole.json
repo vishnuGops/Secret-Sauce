@@ -16,12 +16,12 @@
     {
       "name": "",
       "ingredients": [
-        { "quantity": 3, "unit": null, "name": "ripe avocados" },
-        { "quantity": 1, "unit": null, "name": "lime", "note": "juiced" },
-        { "quantity": 0.5, "unit": null, "name": "red onion", "note": "finely diced" },
-        { "quantity": 1, "unit": null, "name": "jalapeño", "note": "minced" },
-        { "quantity": null, "unit": null, "name": "fresh coriander", "note": "chopped" },
-        { "quantity": null, "unit": null, "name": "salt", "note": "to taste" }
+        { "quantity": 3, "unit": null, "name": "ripe avocados", "food": "avocado" },
+        { "quantity": 1, "unit": null, "name": "lime", "note": "juiced", "food": "lime" },
+        { "quantity": 0.5, "unit": null, "name": "red onion", "note": "finely diced", "food": "onion" },
+        { "quantity": 1, "unit": null, "name": "jalapeño", "note": "minced", "food": "jalapeno" },
+        { "quantity": null, "unit": null, "name": "fresh coriander", "note": "chopped", "food": "coriander" },
+        { "quantity": null, "unit": null, "name": "salt", "note": "to taste", "food": "kosher-salt" }
       ]
     }
   ],

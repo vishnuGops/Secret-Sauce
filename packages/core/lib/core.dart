@@ -12,6 +12,7 @@ export 'src/models/recipe_version.dart';
 export 'src/models/recipe_nutrition.dart';
 export 'src/models/recipe.dart';
 export 'src/models/chef_standing.dart';
+export 'src/models/food_hit.dart';
 
 // Domain helpers
 export 'src/chef_scoring.dart';
@@ -31,6 +32,7 @@ export 'src/repositories/recipe_repository.dart';
 export 'src/repositories/discover_repository.dart';
 export 'src/repositories/profile_repository.dart';
 export 'src/repositories/chef_repository.dart';
+export 'src/repositories/food_repository.dart';
 
 // Providers
 export 'src/providers.dart';

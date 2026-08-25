@@ -16,15 +16,15 @@
     {
       "name": "",
       "ingredients": [
-        { "quantity": 170, "unit": "g", "name": "butter" },
-        { "quantity": 150, "unit": "g", "name": "brown sugar" },
-        { "quantity": 100, "unit": "g", "name": "white sugar" },
-        { "quantity": 1, "unit": null, "name": "egg" },
-        { "quantity": 1, "unit": null, "name": "egg yolk" },
-        { "quantity": 1, "unit": "tsp", "name": "vanilla extract" },
-        { "quantity": 250, "unit": "g", "name": "all-purpose flour" },
-        { "quantity": 0.5, "unit": "tsp", "name": "baking soda" },
-        { "quantity": 200, "unit": "g", "name": "dark chocolate", "note": "chopped" }
+        { "quantity": 170, "unit": "g", "name": "butter", "food": "butter" },
+        { "quantity": 150, "unit": "g", "name": "brown sugar", "food": "brown-sugar" },
+        { "quantity": 100, "unit": "g", "name": "white sugar", "food": "granulated-sugar" },
+        { "quantity": 1, "unit": null, "name": "egg", "food": "egg" },
+        { "quantity": 1, "unit": null, "name": "egg yolk", "food": "egg-yolk" },
+        { "quantity": 1, "unit": "tsp", "name": "vanilla extract", "food": "vanilla-extract" },
+        { "quantity": 250, "unit": "g", "name": "all-purpose flour", "food": "all-purpose-flour" },
+        { "quantity": 0.5, "unit": "tsp", "name": "baking soda", "food": "baking-soda" },
+        { "quantity": 200, "unit": "g", "name": "dark chocolate", "note": "chopped", "food": "dark-chocolate" }
       ]
     }
   ],

@@ -240,6 +240,7 @@ class SupabaseRecipeRepository implements RecipeRepository {
                       'name': i.name,
                       'note': i.note,
                       'is_optional': i.isOptional,
+                      'food_id': i.foodId,
                     },
                 ],
               },

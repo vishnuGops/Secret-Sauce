@@ -349,7 +349,7 @@ begin
     v_saved := save_recipe(null,
       '{"title":"BL-7 via save_recipe","servings":2,"visibility":"private",'
       '"nutrition":{"calories":210,"protein_g":9.5}}'::jsonb,
-      '[{"name":"Main","ingredients":[{"name":"salt","quantity":1,"unit":"tsp"}]}]'::jsonb,
+      '[{"name":"Main","ingredients":[{"name":"salt","quantity":1,"unit":"tsp","food_id":"bl7-food"}]}]'::jsonb,
       '[{"name":"Method","steps":[{"text":"Stir."}]}]'::jsonb,
       'BL-7');
     v_err := null;
@@ -369,6 +369,16 @@ begin
   v_log := v_log || format(E'%s\tB22a owner · save_recipe stores the nutrition object\t%s',
     v_json is not null and (v_json->>'calories')::numeric = 210,
     coalesce(v_json::text, 'null'));
+
+  -- Phase 29b: the ingredient → food link rides the same RPC call. This is the
+  -- only place the write path is proven — the app never PATCHes `ingredients`
+  -- directly, so a save_recipe that dropped the key would fail silently (the
+  -- Gotcha 11 "third copy" failure, one column later).
+  select count(*) into n
+  from ingredients i
+  join ingredient_groups g on g.id = i.group_id
+  where g.recipe_id = v_saved and i.food_id = 'bl7-food';
+  v_log := v_log || format(E'%s\tB22b owner · save_recipe stores the ingredient food link\t%s row', n = 1, n);
 
   select err into v_err from public.rls_matrix_do(format(
     'select save_recipe(%L, ''{"title":"BL-7 saved again"}''::jsonb, ''[]''::jsonb, ''[]''::jsonb, ''BL-7'')', v_saved));

@@ -133,6 +133,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       if (_stepGroups.isEmpty) {
         _stepGroups.add(EditStepGroup());
       }
+      await _labelFoodLinks();
       _loaded = true;
     } catch (e) {
       // Without this catch the exception escaped as an unhandled future and the
@@ -143,6 +144,32 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       _loadError = friendlyError(e);
     } finally {
       if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  /// Fills each linked ingredient's chip label from the registry (Phase 29b).
+  /// The database stores only `food_id`, so a loaded recipe knows *that* a row
+  /// is linked but not what to call the link. Failure is deliberately silent —
+  /// the chip falls back to its generic label and the link itself is intact,
+  /// so there is no error state worth interrupting the load for.
+  Future<void> _labelFoodLinks() async {
+    final ids = <String>{
+      for (final g in _ingredientGroups)
+        for (final i in g.ingredients)
+          if (i.foodId != null) i.foodId!,
+    };
+    if (ids.isEmpty) return;
+    try {
+      final names = await ref
+          .read(foodRepositoryProvider)
+          .displayNames(ids.toList());
+      for (final g in _ingredientGroups) {
+        for (final i in g.ingredients) {
+          i.foodLabel = names[i.foodId];
+        }
+      }
+    } catch (_) {
+      // Chips render 'Linked'; nothing else depends on the lookup.
     }
   }
 

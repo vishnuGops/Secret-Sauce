@@ -129,7 +129,7 @@ secret-sauce/
     │   ├── 3_sim_verify.sql      #   43 assertions — the only test coverage this SQL has
     │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
     ├── tests/rls_matrix.sql      # the RLS matrix as a SIGNED-IN user (BL-7, `db:rls`) —
-    │                             #   88 checks; makes its own users, then ROLLS BACK
+    │                             #   89 checks; makes its own users, then ROLLS BACK
     └── scripts/{drop,clean}.sql · rotate_seed_passwords.sql (B018 — hosted, manual)
 ```
 
@@ -271,7 +271,7 @@ melos run db:reset    # drop -> create -> nutrition -> seed -> recipes -> sim (~
 # The RLS acceptance matrix as a SIGNED-IN user (BL-7). Additive only in the sense that
 # it writes and then rolls back — it leaves no user, no recipe, no helper function.
 # Run it after ANY change to a policy, a `security definer` function, or the column grants.
-melos run db:rls      # 88 checks across anon / owner / shared-with / stranger
+melos run db:rls      # 89 checks across anon / owner / shared-with / stranger
 
 # Simulated population (Phase 24). Additive and idempotent; ~10s at the default
 # `medium` preset (1,000 accounts, ~1,670 recipes, ~118k view rows).
@@ -368,6 +368,16 @@ See [docs/SDS.md §3–§6](./docs/SDS.md) for the full spec. Summary: a `recipe
 (git-like); forking deep-copies a recipe and records `forked_from_recipe_id` +
 `forked_from_version_id`. A `recipe_suggestions` table is reserved (stub) for a future "suggest
 changes upstream" (PR-like) flow.
+
+An ingredient may carry `food_id` (Phase 29b) — a nullable text FK into the `food` registry, set
+by the editor's typeahead, `on delete set null`. `name` stays the cook's free text and is what
+every surface renders; the link is invisible metadata that 29c's estimator sums. Authored as an
+optional `food` key in `recipeData`/`simData` JSON (slug checked against `foods.json` by the
+validator), it travels as `food_id` everywhere else. The ingredient column set now lives in five
+copies — `save_recipe`, `fork_recipe`, `seed_recipe_v2`, the sim's insert, and the client's
+`_save` payload — plus `Ingredient`, `EditIngredient` (B035), and both `schema.json`s; a new
+ingredient column must reach all of them in one change. `rls_matrix.sql` B22b pins the
+`save_recipe` copy, the one that fails silently.
 
 Server-owned columns the client must **never** write (trigger-maintained; omitted from
 `_writablePayload` in `recipe_repository.dart`): on `recipes` — `like_count`, `save_count`,
@@ -649,7 +659,7 @@ the `code-review` skill). The ones you need while _writing_ code:
     steps runs as `postgres`, which bypasses policies — so CI also runs
     [supabase/tests/rls_matrix.sql](supabase/tests/rls_matrix.sql) (**BL-7**, `melos run db:rls`),
     which is the only thing here that exercises RLS as a **signed-in** user. It switches to
-    `set local role authenticated`, runs 88 checks across anon / owner / shared-with / unrelated
+    `set local role authenticated`, runs 89 checks across anon / owner / shared-with / unrelated
     stranger, and rolls the whole transaction back. It closed the class B053 lived in and found
     B061 on its first complete run. **Run it, and add a check to it, whenever you touch a policy, a
     `security definer` function, or the column grants** — a new table with new policies that the
