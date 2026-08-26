@@ -953,17 +953,32 @@ previews during a drag; the caller persists on `onChangeEnd` so a drag writes on
 If the gesture is **cancelled** — an ancestor scroll view claims it after a press-and-hold — the
 preview is dropped and `onChangeEnd` never fires, so the stars never show an unsaved value (B017).
 
-The `RecipeCard` metadata row (time · rating · difficulty) is width-adaptive: the time label and
-both `RatingPill` texts are `Flexible` and ellipsize in that order, inside an `Expanded` group.
-A fixed-height grid tile cannot grow, so the row degrades instead of overflowing at narrow widths
-or large text scale (B016). The `DifficultyBadge` is the row's **only non-flex child** — it takes
-its intrinsic width, sits flush right, and is capped at half the row by a `LayoutBuilder` +
-`ConstrainedBox`. Giving it a flex instead makes `RenderFlex` reserve half the row for it whatever
-its label says (B026); giving it no cap overflows by 1px at the narrowest column / 2.0×. Since
-B048 the *floor* is set so this row never has to degrade at default text scale: 288px is the
-width at which `12h 45m` + `4.5 (1250)` + `Medium` all fit uncut. Widget tests cannot assert
-that — `flutter test` renders in a fixed-width font far wider than Roboto, so they assert *no
-overflow* and the uncut claim is a screenshot check.
+The `RecipeCard` metadata row (time · rating · difficulty) is width-adaptive. A fixed-height grid
+tile cannot grow, so the row degrades instead of overflowing at narrow widths or large text scale
+(B016). The `DifficultyBadge` is the row's **only non-flex child** — it takes its intrinsic width,
+sits flush right, and is capped at half the row by a `LayoutBuilder` + `ConstrainedBox`. Giving it
+a flex instead makes `RenderFlex` reserve half the row for it whatever its label says (B026);
+giving it no cap overflows by 1px at the narrowest column / 2.0×.
+
+**Everything left of the badge degrades in one fixed order, and the order is carried by flex
+factors** (B080). The rule is *the rating value is the last thing to go*: the time label yields
+first, then the rating count, and only then the number — which is the only part of the row a
+reader cannot infer from the rest of the card. So the time label is `Flexible(flex: 1)` against the
+pill's `flex: 2`, and inside `RatingPill` the value is `flex: 2` against the count's `flex: 1`.
+Both levels are flex on purpose: `RenderFlex` hands each flex child `freeSpace × flex / totalFlex`
+as its **allowance**, so a *higher* factor is more room and not an earlier surrender — written the
+other way round (which it was) the row prints `5… (1)`, losing the number and keeping the count.
+A non-flex child would be worse still: it is laid out with an unbounded main axis and overflows
+instead of ellipsizing (B039). Equal factors are the trap in between — they reserve half the space
+for the time label whatever it needs, which is B026's mechanism one level in.
+
+Since B048 the *floor* is set so this row never has to degrade at default text scale: 288px is the
+width at which `12h 45m` + `4.5 (1250)` + `Medium` all fit uncut. Widget tests cannot assert that
+directly — `flutter test` renders in a fixed-width font far wider than Roboto, so a pixel
+assertion pins the harness. They assert *no overflow*, plus the degradation **order** above via
+`RenderParagraph.didExceedMaxLines`, which is font-robust because it is an implication rather than
+a measurement. The absolute uncut claim remains a screenshot check — and B080 is what that check
+caught the first time it was run.
 
 **`ChefSpotlightCard` is the second fixed-size tile in the kit, and it obeys the same rules with one
 addition.** Every band except the portrait is intrinsic and comes out of a fixed budget, so a longer

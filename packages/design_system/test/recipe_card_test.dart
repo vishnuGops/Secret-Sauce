@@ -1,6 +1,7 @@
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -72,8 +73,9 @@ void main() {
   //
   // These assert *no overflow*, never "nothing truncates" — `flutter test`
   // renders in a fixed-width font far wider than Roboto, so a width assertion
-  // here would pin the harness, not the layout (same reason as B038). That the
-  // metadata row fits uncut at 288 is a screenshot check.
+  // here would pin the harness, not the layout (same reason as B038).
+  // "Nothing truncates" now has its own group below (B080), which asks the
+  // renderer instead of measuring pixels.
   const longMeta = Recipe(
     id: '1',
     ownerId: 'u1',
@@ -122,6 +124,127 @@ void main() {
       },
     );
   }
+
+  // B080 — the half the envelope suite above cannot see. An ellipsis is not a
+  // `RenderFlex` overflow, so `takeException()` stays null while the row quietly
+  // prints `5…` instead of `5.0`. That shipped, and Phase 20's deferred
+  // screenshot pass found it on a real grid, exactly where the roadmap predicted
+  // a widget test could not look.
+  //
+  // A test *can* look — just not with a ruler. `RenderParagraph` already worked
+  // out whether it had to clip, so ask it instead of measuring pixels.
+  //
+  // **What is and is not assertable here.** `flutter test` renders in a
+  // fixed-width font far wider than Roboto, so "nothing is cut at 288" is
+  // simply false in the harness and true on a device — asserting it would pin
+  // the font, which is what the envelope suite above refuses to do for the same
+  // reason. What survives the font swap is the *shape* of the degradation, and
+  // that is what B080 actually broke:
+  //
+  // The shape is one law: **the rating value is the last thing to go.** The row
+  // gives up the time label first, then the rating count, and only then the
+  // number itself — because the number is the only part that cannot be inferred
+  // from the rest of the card. Stated as an implication, so it holds at widths
+  // where nothing is cut and at widths where everything is; only the specific
+  // inversion is forbidden.
+  //
+  // That law was false before the fix at real widths — at 320px/Easy the value
+  // was clipped while both the time and the count came through whole — and it is
+  // font-robust, which the absolute "nothing is cut at 288" claim is not. That
+  // one stays a screenshot check; see ROADMAP Phase 20 for the run that found
+  // this.
+  group('metadata row degrades in the right order (B080)', () {
+    // The card that actually broke: `Medium` is a wider badge than `Easy` or
+    // `Hard`, and that extra width was what starved the rating pill.
+    const rated = Recipe(
+      id: '1',
+      ownerId: 'u1',
+      title: 'Weeknight Curry Laksa',
+      description: 'Noodles in a coconut curry broth.',
+      difficulty: Difficulty.medium,
+      cookMinutes: 65, // "1h 5m"
+      ratingAvg: 5,
+      ratingCount: 1,
+    );
+
+    bool clipped(WidgetTester tester, Finder text) =>
+        tester.renderObject<RenderParagraph>(text).didExceedMaxLines;
+
+    Future<void> pump(WidgetTester tester, Recipe recipe, double width) =>
+        tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.light(),
+            home: Scaffold(
+              body: Center(
+                child: SizedBox(
+                  width: width,
+                  child: RecipeCard(recipe: recipe),
+                ),
+              ),
+            ),
+          ),
+        );
+
+    // Every width the grid actually produces, plus one below the floor.
+    const widths = [264.0, kRecipeCardMinWidth, 320.0, kRecipeCardMaxWidth];
+
+    testWidgets('the rating value is the last thing the row gives up', (
+      tester,
+    ) async {
+      // Swept rather than sampled: the inversion showed up at some widths and
+      // not others (320/Easy yes, 288/Easy no, because both were already gone
+      // there), so a single width is a coin flip.
+      for (final width in widths) {
+        for (final difficulty in Difficulty.values) {
+          for (final recipe in [
+            rated.copyWith(difficulty: difficulty),
+            // The synthetic worst case too: "12h 45m" and a four-digit count.
+            rated.copyWith(
+              difficulty: difficulty,
+              cookMinutes: 765,
+              ratingCount: 1250,
+            ),
+          ]) {
+            await pump(tester, recipe, width);
+
+            final where =
+                '${width}px / ${difficulty.label} / '
+                '${recipe.totalMinutes}min / count ${recipe.ratingCount}';
+            expect(find.text(difficulty.label), findsOneWidget);
+
+            final valueCut = clipped(tester, find.text('5.0'));
+            final countCut = clipped(
+              tester,
+              find.text(' (${recipe.ratingCount})'),
+            );
+            // Mirrors the card's own `_timeLabel`, which is private. Both
+            // fixtures are over an hour and not on the hour, so one form covers
+            // them: 65 -> "1h 5m", 765 -> "12h 45m".
+            final timeLabel =
+                '${recipe.totalMinutes ~/ 60}h ${recipe.totalMinutes % 60}m';
+            final timeCut = clipped(tester, find.text(timeLabel));
+
+            expect(
+              valueCut && !countCut,
+              isFalse,
+              reason:
+                  'at $where the rating VALUE was clipped while the count came '
+                  'through whole — that is B080 exactly, and `5…` reads as any '
+                  'rating from 5.0 down',
+            );
+            expect(
+              valueCut && !timeCut,
+              isFalse,
+              reason:
+                  'at $where the rating VALUE was clipped while the time label '
+                  'came through whole — the time is the cheapest thing in the '
+                  'row to lose, so it yields first',
+            );
+          }
+        }
+      }
+    });
+  });
 
   // The banner is a fixed band, not an intrinsic one: a one-line name and a
   // two-line name must give the same height, or neighbouring cards in a row

@@ -235,6 +235,21 @@ points. The converse is also a finding: a **non-flex child of a `Row` is laid ou
 one added without a cap overflows instead of shrinking (B039, the spotlight rank pill at 3.0×;
 B057, the rail's ranking kicker).
 
+**The cap is not the only accepted shape, and it is the wrong one when every child must keep
+shrinking (B080).** Then the *weights* carry the priority, and the direction is the part people get
+backwards: `RenderFlex` gives each flex child `freeSpace × flex / totalFlex` as its **maximum**, so
+a larger factor protects a child rather than sacrificing it. Flag (a) sibling flex children with
+**equal** factors where one is plainly shorter than the other — the short one reserves half the row
+it does not need, which is this same mechanism one level in; and (b) any comment claiming "X yields
+first" sitting above a row where **X carries the larger factor** — that is B080 verbatim, and it
+clipped `RecipeCard`'s rating to `5…` while keeping the count. Do not propose the `ConstrainedBox`
+cap as the fix without checking the envelope: capping `RecipeCard`'s time label at `maxWidth / 3`
+was tried and starved the rating pill until its own `Row` overflowed, in four previously-green
+cases. **None of this trips an overflow**, so `takeException()` cannot see it; the assertion that
+can is `RenderParagraph.didExceedMaxLines` written as an implication (`value clipped ⇒ count
+clipped`), never as a pixel width — the harness font is far wider than Roboto, so a width pins the
+harness and an implication survives.
+
 **A childless box sizes to the wrong end of the constraints (B060).** `Container`/`SizedBox` with
 no child and no width takes `constraints.biggest` when bounded and `constraints.smallest` when not.
 Flag one used as a **rule or underline under a label**: in a `Column` it stretches to the parent's

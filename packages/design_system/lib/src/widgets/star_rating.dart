@@ -91,8 +91,16 @@ class RatingPill extends StatelessWidget {
         Icon(Icons.star_rounded, size: size, color: AppTheme.rating),
         const SizedBox(width: 2),
         // Both texts give up space when the host row is tight — callers place
-        // this pill inside a Flexible. The count yields first (flex 2 vs 1).
+        // this pill inside a Flexible. **The count yields first**, and that
+        // needs the value to carry the *larger* flex, not the smaller (B080):
+        // `RenderFlex` hands each flex child `freeSpace * flex / totalFlex` as
+        // its maximum, so a higher factor is a bigger allowance, not an earlier
+        // surrender. Written the other way round it did the exact opposite of
+        // this comment — on a 288px card the value was clipped to `5…` while
+        // the count `(1)` came through whole, which loses the one number the
+        // pill exists to show.
         Flexible(
+          flex: 2,
           child: Text(
             rating.toStringAsFixed(1),
             maxLines: 1,
@@ -102,7 +110,6 @@ class RatingPill extends StatelessWidget {
         ),
         if (count != null)
           Flexible(
-            flex: 2,
             child: Text(
               ' ($count)',
               maxLines: 1,

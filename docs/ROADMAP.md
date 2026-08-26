@@ -594,8 +594,19 @@ title centred in it, and the fluid range starts at **288px**, not 264. Both are 
 
 - [ ] Typography upgrade (Newsreader + Manrope via `google_fonts`) — app-wide, needs a yes/no
 - [ ] Cover photography is still placeholder in the design; real shots may change the 352 px height
-- [ ] Screenshot pass on the revised card — "the metadata row fits uncut at 288" is exactly the
-      claim a widget test cannot make (fixed-width test font), so it needs eyes on a real grid
+- [x] Screenshot pass on the revised card — **run 2026-08-25, and it found [B080](BUG-TRACKER.md)**,
+      which is the whole argument for having deferred it rather than dropped it. "The metadata row
+      fits uncut at 288" was **false**: a rated recipe with a `Medium` badge printed `★ 5… (1)`,
+      and on one card `1…` was really **1.5** — the ellipsis rounds a rating down to its first
+      digit, on the one element the pill exists to show, while the *count* the code's own comment
+      says yields first came through whole. 5 of 20 visible cards on a real grid at 1248px
+      (4 columns × exactly 288). Two stacked `RenderFlex` mistakes, both Gotcha 21's shape one
+      level deeper than B026 fixed it; both fixed, and re-shot to confirm.
+      **What made it invisible:** an ellipsis is not an overflow, so `takeException()` stayed
+      null — the envelope suite's own comment had said as much and named this pass as the check.
+      The regression test that now exists asks `RenderParagraph.didExceedMaxLines` instead of
+      measuring pixels, so it states a *law* (`the rating value is the last thing the row gives
+      up`) rather than a width, and survives the harness's fixed-width font
 - [ ] **B049** — the card overflows at 3.0× text scale and always has. The fix is the spotlight
       card's shape (tile height computed from text scale, `mainAxisExtent` with it), which is a
       grid change; deliberately out of scope for the design port

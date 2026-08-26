@@ -31,6 +31,11 @@ const double kRecipeCardHeight = 352;
 /// may truncate*. At 264 a wide grid packed one more column by buying it out of
 /// the footer — `4.9 (8)` ellipsized to fit. A column fewer is the cheaper
 /// trade.
+///
+/// Setting the floor is necessary and was not sufficient: B080 truncated the
+/// rating here anyway, because the row's flex factors gave the space to the
+/// wrong children. The width buys the room; the metadata row's degradation
+/// order decides who gets it.
 const double kRecipeCardMinWidth = 288;
 
 /// Height of the title banner, before text scale.
@@ -188,6 +193,26 @@ class RecipeCard extends StatelessWidget {
                                         color: scheme.onSurfaceVariant,
                                       ),
                                       const SizedBox(width: 4),
+                                      // Flex **1 against the rating's 2**, not
+                                      // the even split this was (B080). Equal
+                                      // factors hand each child half the free
+                                      // space whatever it needs, so beside a
+                                      // `Medium` badge at 288px the short time
+                                      // label sat on ~30px it had no use for
+                                      // while `5.0 (1)` was cut to `5…` — the
+                                      // same B026/B038 mechanism the badge
+                                      // below was fixed for, one level in.
+                                      // Both stay flex on purpose: a non-flex
+                                      // child of a `Row` is laid out with an
+                                      // unbounded main axis and overflows
+                                      // rather than ellipsizing (B039), and a
+                                      // fixed-fraction `ConstrainedBox` cap
+                                      // instead starves the pill until its own
+                                      // `Row` overflows — measured, not
+                                      // assumed: `maxWidth / 3` here failed
+                                      // four cases of the envelope suite below,
+                                      // at 264 × 1.0 and at 2.0× on every
+                                      // width.
                                       Flexible(
                                         child: Text(
                                           _timeLabel,
@@ -199,6 +224,7 @@ class RecipeCard extends StatelessWidget {
                                       if (recipe.hasRatings) ...[
                                         const SizedBox(width: AppSpacing.sm),
                                         Flexible(
+                                          flex: 2,
                                           child: RatingPill(
                                             rating: recipe.ratingAvg,
                                             count: recipe.ratingCount,

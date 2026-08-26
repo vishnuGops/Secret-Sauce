@@ -811,7 +811,9 @@ recipe` lives on the My Recipes header and search in Discover's search bar; putt
     long one truncates beside it. Where one child must win, make the other **non-flex inside a
     `ConstrainedBox`** cap (`LayoutBuilder` → `maxWidth: constraints.maxWidth / 2` or `/ 3`) with a
     `FittedBox` if it is a number. That is the shape `RecipeCard` uses for `DifficultyBadge`, the
-    spotlight card for its score and points, and the board row for its score. The other half of the
+    spotlight card for its score and points, and the board row for its score — but it is only
+    right when the loser can stop flexing; when **both** children must keep shrinking, the remedy
+    is unequal flex weights instead (Gotcha 27). The other half of the
     same rule: a **non-flex child of a `Row` is laid out with an unbounded main axis**, so anything
     in that position without a cap overflows rather than shrinking (B039).
     **A box with no child takes `constraints.biggest` when bounded and `smallest` when not**
@@ -870,6 +872,24 @@ recipe` lives on the My Recipes header and search in Discover's search bar; putt
     diagnosis and correctly left it alone, because nothing then rendered it narrow enough to fail.
     **Reuse is a reason to re-run the envelope, not evidence that you don't need to** — and the
     honest fix is almost always the same `Wrap` (#21), not a new breakpoint.
+27. **When every child of a row must keep flexing, the flex *weights* carry the priority — and a
+    bigger weight is a bigger allowance, not an earlier surrender** (B080). `RenderFlex` hands each
+    flex child `freeSpace × flex / totalFlex` as its **maximum**, so the child you want to protect
+    takes the **larger** factor. `RatingPill` had it exactly backwards under a comment reading
+    "the count yields first (flex 2 vs 1)": the value carried the smaller factor, so a 288px card
+    printed `★ 5… (1)` — count intact, number gone, and on one seeded recipe `1…` was really
+    **1.5**. Two rules follow. *Equal* factors are the trap in between #21's two poles: they
+    reserve half the row for a child that needs a third, which is B026's mechanism one level in.
+    And #21's `ConstrainedBox` cap is **not** a drop-in here — capping `RecipeCard`'s time label
+    at `maxWidth / 3` starved the pill until its own `Row` overflowed, in four cases of an
+    envelope suite that had been green. Decide the degradation *order* first (`RecipeCard`'s is
+    time → count → value, because the value is the only part a reader cannot infer), then write
+    the weights to match it, and state the order in a comment — the comment is what made this
+    bug findable at all.
+    **An ellipsis is not an overflow**, so none of this fails `takeException()`. Assert the order
+    with `RenderParagraph.didExceedMaxLines` as an *implication* (`value clipped ⇒ count clipped`),
+    never as a pixel width: `flutter test`'s fixed-width font is far wider than Roboto, so a width
+    assertion pins the harness while an implication survives the font swap.
 
 ## Seed-data fit (MANDATORY)
 
