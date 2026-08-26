@@ -2096,9 +2096,24 @@ destination. Nothing is lost from the content: the page composes the same OPT-A8
       assertions, not deleted, plus one new check that the *tapped* row decides the chef (a tied
       row, so an implementation keying off rank instead of id lands wrong). The dialog's content
       assertions moved to the new `chef_page_test.dart` (17 tests)
-- [ ] **Screenshots (B028) — not run.** The page is signed-out safe and URL-reachable, so unlike
-      Phase 29's editor pane a headless driver *can* reach it. Left undone: worth a pass in light
-      and dark before this is called visually finished
+- [x] **Screenshots (B028) — run 2026-08-25, no defects.** The page is signed-out safe and
+      URL-reachable, so unlike Phase 29's editor pane a headless driver *can* reach it: release
+      build + `npx serve` + Playwright/Chrome, navigating by hash URL. **Three states**, against
+      the local stack with the sim loaded — and note which width and theme each actually got, so
+      the gaps are visible rather than implied:
+      the **ranked** chef (Kitchen — rank 2, head chef, 14 recipes) at 1440×1000 and 390×1600,
+      light *and* dark; the **not-ranked** chef (`d6` Farid Haddad — private-only) at 1440, light
+      and dark, showing `Not ranked yet · 0 public recipes · joined Aug 2026`, the explanatory line
+      in place of the score panel, and the grid's empty state; and the **paged** case (a sim chef
+      with 23 public recipes) at 1440, **light only**, showing `Load more` after exactly 20 —
+      `kRecipePageSize`, so the page boundary lands where OPT-P9 says it does. Also confirmed
+      visually: `showChef: false` (no badge on a single card of the chef's own grid), the tier
+      tint changing the header band per chef, and a Cyrillic display name rendering with correct
+      initials. Dark mode is legible everywhere it was shot — no B055-class colour defect, which is
+      the one thing a layout test cannot see. Procedure per BL-6: `themeMode` pinned in
+      `main.dart`, rebuilt, served on a **new port**, then reverted and `git diff` confirmed empty.
+      **The header carries no rank denominator** — it reads `Rank 2 · 14 public recipes`, not the
+      dialog's old `Rank 2 of 148`, since `chef_standing` returns a rank and not a population size
 
 ### Deferred / follow-ups
 

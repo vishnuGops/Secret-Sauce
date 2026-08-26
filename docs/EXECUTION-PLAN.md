@@ -2045,7 +2045,17 @@ unexercised — a standing BL-5 limit, not new to this phase.
 - Envelope at 320 / 390 / 600 / 1000 / 1440 × {1.0, 2.0} — the page has a fixed-height header over
   a grid, the Gotcha 22 shape
 - Screenshots via the B028 procedure, light **and** dark: the page is signed-out safe and reachable
-  by URL, so unlike Phase 29's editor pane a headless driver *can* reach it
+  by URL, so unlike Phase 29's editor pane a headless driver *can* reach it.
+  **Run 2026-08-25 and clean** — three states: ranked (1440 + 390, both themes), not-ranked
+  (1440, both themes), paged (1440, light only).
+  The lesson worth keeping is which states were worth shooting: the two that a widget test pumps
+  with a fixture but that only real data composes — the **not-ranked** header (`d6`, no standing
+  row, so the score panel is replaced rather than emptied) and the **page boundary** (a sim chef
+  with 23 public recipes puts `Load more` after exactly `kRecipePageSize`). The per-tier header
+  tint and a Cyrillic name's initials came free from picking real chefs off the local board
+  instead of inventing one — and the run also settled that the header prints `Rank 2 · 14 public
+  recipes`, with **no denominator**: `Rank N of M` belonged to the retired dialog, which had
+  `chefCount` behind it
 - `chefs_screen_test.dart`: the five `ChefDetailView` assertions become navigation assertions
 
 ### Risks
