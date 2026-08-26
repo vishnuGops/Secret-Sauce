@@ -18,8 +18,11 @@
 # (which is IPv6-only, and the Docker psql container has no IPv6 route — B033).
 # The pooler user is `postgres.<project-ref>`, not a bare `postgres`.
 
-# Local stack (supabase start):
-# $env:SUPABASE_DB_URL = "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
+# Local stack (supabase start) — the default, and the safe target:
+$env:SUPABASE_DB_URL = "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
 
-# Hosted (Session pooler):
-$env:SUPABASE_DB_URL = "postgresql://postgres.<project-ref>:<password>@aws-0-<region>.pooler.supabase.com:5432/postgres"
+# Hosted (Session pooler) — uncomment ONLY for a deliberate production task, and
+# comment out the local line above when you do. These are sequential assignments,
+# so whichever runs last wins: uncommenting this one without commenting that one
+# leaves the shell aimed at production, silently.
+# $env:SUPABASE_DB_URL = "postgresql://postgres.<project-ref>:<password>@aws-0-<region>.pooler.supabase.com:5432/postgres"

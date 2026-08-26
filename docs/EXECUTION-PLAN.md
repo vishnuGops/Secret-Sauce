@@ -1518,8 +1518,9 @@ inspectable.
   the ask says so — every %DV they produce is nonsense (10 g fat = 13% DV) and the plan treats
   replacing them as named deferred work, not an afterthought. They cannot reach hosted:
   `seed_recipe_v2` early-returns on existing `(owner_id, title)` (Gotcha 16), which here is a
-  feature. *(Closed by Phase 29d, 2026-08-25: the estimator's own output replaced them. The same
-  early-return means hosted still carries the 10s — see the BL-5 register.)*
+  feature. *(Closed by Phase 29d, 2026-08-25: the estimator's own output replaced them. Hosted
+  never carried the 10s either — it was still on the Phase 27 schema, with no `nutrition` column
+  at all — and was brought to 29d with real labels the same day; see the BL-5 register.)*
 - **The rail refactor is the riskiest diff** — it touches the one widget both layouts share and
   B070 lives in. Mitigated by the two-commit split and the per-tab envelope re-runs.
 - **Tab discoverability on compact**: the jump bar keeps its `Ingredients` chip and gains no

@@ -1649,7 +1649,9 @@ drawn-but-dead affordance is worse than absence). Mechanism, alternatives, and o
 - [x] What the fixtures **cannot** show: hosted keeps `nutrition = null` — `seed_recipe_v2`
       early-returns on an existing `(owner_id, title)`, so a re-seed never pushes the dummy 10s
       to production. That is the intended outcome (placeholder data must not ship); real label
-      values are the content task in Deferred
+      values are the content task in Deferred. *(Superseded 2026-08-25: hosted was in fact still
+      on the Phase 27 schema with no `nutrition` column at all, so the 10s could not have reached
+      it by any route. It now carries 29d's real labels — see the BL-5 rollout bullet.)*
 - [x] **Sim labels (added 2026-08-24, owner's ask).** The two all-10 fixtures make the panel
       *reachable*; they do not make it look like a product — every `% Daily Value` they print is
       nonsense and there are two of them. So `sim.nutrition_for(key, category)`
@@ -2162,9 +2164,9 @@ tracked as [Backlog BL-6](#bl-6--environment-dependent-verification-gaps):
 Everything here is **known, decided, and not being worked on**. An item is in the backlog because
 it is an owner action, accepted debt, or a deferral with a stated trigger — not because it was
 forgotten. Each one names the condition that would pull it back into a phase. Nothing else in this
-document is open: Phases 0–24 and 26–28 are done, Phase 25 is designed-not-started, Phase 29 is
-in progress (29a–b done 2026-08-25; 29c–d remain), Phase OPT is closed at 26 of 29 with the rest
-listed below. Phase 28's
+document is open: Phases 0–24 and 26–29 are done — 29a–d all landed 2026-08-25 and reached the
+hosted project the same day — Phase 25 is designed-not-started, and Phase OPT is closed at 26 of
+29 with the rest listed below. Phase 28's
 Deferred block resolved into Phase 29 (auto-calculate and the real label values); micronutrients
 stays with the phase rather than here, a feature deferral with no trigger condition.
 
@@ -2176,6 +2178,10 @@ Nine seeded production accounts still carry the pre-fix literal passwords that w
 `auth.users` on production, so no script or CI job may hold that credential.
 **Trigger:** run it whenever you next have the hosted DB URL in a shell. Until then, treat those
 accounts as compromised.
+**Deferred once, knowingly (2026-08-25).** The Phase 29 hosted rollout had the pooler URI in a
+shell — precisely the stated trigger — and the owner's call was to skip it as non-priority. Noted
+so this does not keep reading as "the trigger has never come up": it has, once, and was declined.
+The trigger stands unchanged for the next such session.
 
 #### BL-2 — OPT-P11 — per-engagement-row `recompute_chef_stats` (accepted debt)
 
@@ -2233,14 +2239,27 @@ designed onto data that does not exist. See the "Seed-data fit" gate in
   consistent arithmetic but **not real nutrition data** for the dish named on the card, so nothing
   may present one as a fact about food. Sim labels carry **no `source`**, so they read as manual
   and `recompute_auto_nutrition()` never touches them — correct, but it means the *backfill* has
-  no sim coverage either; `supabase/tests/nutrition_fixtures.sql` is where it is exercised. And
-  the **hosted project has neither** the sim nor 29d's labels. It has no simulated population, and
-  `seed_recipe_v2` early-returns on an existing `(owner_id, title)`, so its 14 recipes still carry
-  what Phase 28 seeded — the two all-10 placeholders and twelve nulls. **The backfill will not fix
-  that**, and correctly so: those labels are manual (no `source`) or absent, which is exactly what
-  `recompute_auto_nutrition()` is built to leave alone. Getting 29d's labels onto hosted means
-  deleting and re-seeding those recipes there. Open owner action, tracked here rather than
-  attempted from this machine.
+  no sim coverage either; `supabase/tests/nutrition_fixtures.sql` is where it is exercised. The
+  **hosted project now carries 29d's labels** (2026-08-25) but still has no sim — see the hosted
+  rollout bullet below, which also corrects what this register used to claim about it.
+- **Hosted was brought from Phase 27 to 29d on 2026-08-25 — and this register had it wrong.**
+  It claimed hosted carried "the two all-10 placeholders and twelve nulls". It carried neither:
+  Phase 28 had never been applied there, so `recipes.nutrition` did not exist as a column at all,
+  nor did `food`, `ingredients.food_id`, `estimate_nutrition` or `recompute_auto_nutrition`. The
+  last apply had been 2026-08-23 (Phase 27). **A claim about a database you cannot see goes stale
+  silently** — this one was two phases out of date and was being planned around. Measure first.
+  What the rollout took, in order: `pg_dump` of the public schema as the only undo (no PITR on the
+  free tier), `0001_init.sql`, `nutrition_foods.sql` (78 foods / 277 aliases / 174 portions),
+  delete the 14 kitchen recipes, re-apply `seed_recipes.sql`, verify. The delete was safe because
+  it was **measured, not assumed**: those 14 carried 0 likes, 0 saves, 0 shares, 0 forks and all
+  sat at version 1, their visible like/save/view counters are authored by `seed_recipe_v2`, and
+  their 41 rating rows are the seed file's own demo ratings — so everything came back. Total cost
+  was 4 rows in `recipe_views` (3 distinct viewers, so `view_count` fell by 1 on three recipes).
+  Verified after: 12 `auto` / 1 manual / 1 null, 137 linked ingredients, and **0 drift** between
+  the committed labels and what the hosted registry recomputes. Note the general shape — because
+  `seed_recipe_v2` is not an upsert (Gotcha 16), delete-and-reseed is the *only* way to push a
+  content change to a database that already has the recipe, and whether that is acceptable is an
+  engagement question to be answered with a query, not a guess.
 - **The hosted project has no simulated population at all** — only `seed.sql` + `seed_recipes.sql`.
   Measured there 2026-08-23, straight after the schema apply: `recipes_quick` **10** rows,
   `recipes_projects` **1**, `recipes_most_forked` **0**. So `03 MOST FORKED` is legitimately empty

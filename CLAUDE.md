@@ -338,6 +338,24 @@ melos run db:sim:clean -- --yes           # DESTRUCTIVE: deletes the simulated a
 >
 > `docker cp` is byte-faithful, so this keeps B074's guarantee.
 >
+> **Prefer this third form for anything hosted (B079).** A throwaway container whose client major
+> matches the server, with the SQL mounted in — no shell decodes anything, so B074 holds, and it
+> behaves identically from PowerShell and Bash:
+>
+> ```powershell
+> docker run --rm -v "C:\Users\vishv\Desktop\Code\Secret-Sauce\supabase:/sql:ro" postgres:17-alpine psql $env:SUPABASE_DB_URL -v ON_ERROR_STOP=1 -1 -q -f /sql/migrations/0001_init.sql
+> ```
+>
+> It also fixes what the stack's container cannot do at all: `supabase_db_secret-sauce` ships
+> **psql/pg_dump 15.8** and the hosted project runs **17.6**. `psql` tolerates that gap — which is
+> why the forms above appear to work — but `pg_dump` aborts on a major mismatch, so **a backup of
+> hosted must come from a 17-series client**. There is no PITR on the free tier, so that dump is
+> the only undo a production write has:
+>
+> ```powershell
+> docker run --rm -v "<outdir>:/backup" postgres:17-alpine pg_dump $env:SUPABASE_DB_URL --schema=public --no-owner --no-privileges -f /backup/hosted.sql
+> ```
+>
 > The pooler user is `postgres.<project-ref>`, not bare `postgres`. A dashboard password reset takes
 > a moment to propagate — check auth on its own (`psql $u -c "select 1"`) before blaming the SQL.
 > **`SUPABASE_DB_URL` never goes in a dart-define file** (B034, fixed by OPT-S7): those are
