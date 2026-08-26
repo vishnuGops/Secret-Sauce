@@ -3,8 +3,9 @@
 All implementation tasks, grouped by phase. Status is kept in sync with the code
 (see the "Docs–code sync" rule in [CLAUDE.md](../CLAUDE.md)).
 
-Legend: `[ ]` not started · `[~]` in progress · `[x]` done · `[→]` deferred to
-[Backlog](#backlog--deferred-not-scheduled)
+Legend: `[ ]` not started · `[~]` in progress · `[x]` done · `[→]` moved elsewhere — to
+[Backlog](#backlog--deferred-not-scheduled), or to a later phase that now owns it (the item names
+which)
 
 ## Product direction (the north star)
 
@@ -74,7 +75,9 @@ restaurant page needs the same shape).
 - [x] `StorageService` (image upload)
 - [x] `packages/core/test/` exists — model/enum JSON decoding is covered (pure functions; no
       client needed)
-- [ ] Unit tests for **repositories** _(still blocked — needs Supabase client mocking)_
+- [x] Unit tests for **repositories** — done by **OPT-T2**, and the blocker turned out not to
+      exist: `SupabaseClient` takes an `httpClient`, so `packages/core/test/support/fake_supabase.dart`
+      records the request and replies from a queue under a **real** client. 14 tests; no mock
 
 ## Phase 4 — design_system
 
@@ -140,29 +143,42 @@ restaurant page needs the same shape).
 - [x] `view_count` rollup trigger — counts distinct signed-in viewers, ignores anonymous and
       repeat views (advisory-locked against concurrent first-views), so trending is not
       inflatable (B012)
-- [ ] **SQL regression harness — the largest untested surface in the project.** The B012 view
-      trigger, every RLS policy, the rank RPCs, and (as of Phase 18) the whole chef score/tier/
-      leaderboard layer are verified only by manual local-stack runs recorded in
-      `docs/BUG-TRACKER.md`. CI has no database job, so any of it can regress and ship green —
-      and the failure mode for the trigger/RLS bugs is *silence*, not an error (B011, B012).
+- [x] **SQL regression harness — built, and it is shape (2).** This was the largest untested
+      surface in the project: the B012 view trigger, every RLS policy, the rank RPCs and the whole
+      chef score/tier/leaderboard layer were verified only by manual local-stack runs recorded in
+      `docs/BUG-TRACKER.md`, and the failure mode for the trigger/RLS class is *silence*, not an
+      error (B011, B012). The recommendation was "a suite **plus a CI job**, on the full Supabase
+      stack because `profiles.id` references `auth.users`". That is what shipped, across four
+      pieces built in different phases:
 
-      Two shapes, deliberately different in value:
+      - **`.github/workflows/database.yml`** (OPT-T1) — starts the stack inside the runner and
+        walks **three** paths: fresh apply, full re-apply (the only check of the idempotency every
+        file claims), and the Gotcha 6 **upgrade path** that B024 shipped through. No
+        `SUPABASE_DB_URL` secret, by design (Gotcha 7)
+      - **`supabase/tests/rls_matrix.sql`** (BL-7, `melos run db:rls`) — 92 checks as a **signed-in**
+        user across anon / owner / shared-with / stranger, rolled back. Every other SQL step in CI
+        runs as `postgres`, which bypasses policies; this is the only thing that does not. Found
+        B061 on its first complete run
+      - **`supabase/sim/3_sim_verify.sql`** (Phase 24) — 43 assertions over a generated `tiny`
+        population: counter invariants incl. B012's anonymous/repeat-view exclusion, authorization,
+        temporal, structural and shape
+      - **`supabase/tests/nutrition_{estimate,fixtures}.sql`** (Phase 29c/29d) — the estimator's
+        arithmetic on fixture trees, and the committed labels re-estimated against the real
+        registry as a drift gate
 
-      1. `supabase/tests/*.sql` + a `melos run test:sql` script, run against `supabase start`.
-         Cheap and repeatable, but opt-in — an opt-in suite for a schema this trigger-heavy goes
-         stale.
-      2. The above **plus a CI job**. Actually catches regressions. Costs ~2–3 min of Docker
-         startup per run, and must be the full Supabase stack rather than a plain Postgres
-         service: `profiles.id` references `auth.users`, so a bare Postgres cannot apply
-         `0001_init.sql` at all.
-
-      Recommended: (2). Deferred by decision, not oversight.
+      **What is still not covered**, so this item closing does not overstate itself: Storage bucket
+      policies (needs the storage container and a real upload, not SQL); the PostgREST edge (the
+      matrix talks to Postgres directly, so it proves the policy, not that postgrest-dart sends what
+      the policy expects — `packages/core/test/` is the other half); and there is no aggregate
+      `melos run test:sql` — the suites run as `db:rls` / `db:sim:verify` / `db:nutrition:estimate` /
+      `db:nutrition:verify`, four scripts, all four wired into CI
 
 ## Phase 12 — Polish, tests, verification
 
 - [x] Widget tests (`RecipeCard`, root `/` → `/discover` redirect) — passing. The Home landing
       test was replaced by the redirect test when that screen was retired.
-- [ ] Repository unit tests _(deferred — need Supabase client mocking)_
+- [x] Repository unit tests — landed with **OPT-T2** (recording `http.BaseClient`, not a mock);
+      see Phase 3
 - [x] `melos run analyze` clean (core, design_system, app)
 - [x] Manual verification on web (`web-server` @ :8080) — sign-up works
 - [ ] Manual verification on mobile/emulator _(pending)_
@@ -333,18 +349,26 @@ Execution: [EXECUTION-PLAN.md Phase 18](./EXECUTION-PLAN.md#phase-18--chefs-tier
 Widget + model coverage landed with the feature (65 tests). These are what is still uncovered;
 none blocks the feature, all are real regression surface.
 
-- [ ] **SQL regression harness for the chef objects** — see Phase 11's entry, which this folds
-      into: `chef_score()` / `chef_tier_for()` thresholds (incl. the inclusive-at-100 boundary),
-      `recompute_chef_stats` and its `is distinct from` guard, `on_recipe_stats_change`
-      (**`security definer`** — drop it and non-owner engagement silently stops counting, B011
-      again), public-only filtering, `dense_rank` ties, the `public_recipe_count = 0` exclusion,
-      and `anon` being able to call `chefs_leaderboard` but **not** `recompute_chef_stats`.
-      Verified by hand once (BUG-TRACKER); nothing re-verifies it.
+- [~] **SQL regression harness for the chef objects** — mostly covered now, via Phase 11's entry
+      (closed) rather than as its own file. What **is** re-verified on every CI run: `chef_score()`
+      over each profile's public recipes (`3_sim_verify.sql` **A5**, which is also the Gotcha 19
+      guard — a restated 3/5/0.2 fails it), `chef_tier_for()` agreeing with the stored tier
+      (**A6**), the OPT-P5 totals not drifting (**A6b**), the inclusive-at-100 boundary
+      (**F3** — Dara pinned at exactly 100), `on_recipe_stats_change` and public-only filtering
+      implicitly (A5 is computed over `visibility = 'public'` and fails if the trigger stops
+      firing), and `recompute_chef_stats` / `recompute_all_chef_stats` being **unreachable** as a
+      signed-in user (`rls_matrix.sql` **B17**/**B18**, `42501`).
+      **Still unasserted**: `dense_rank` ties, the `public_recipe_count = 0` exclusion, and `anon`
+      *specifically* being able to call `chefs_leaderboard` — CI's smoke step calls it as
+      `postgres`, and the matrix's anon section does not name it. All three were verified by hand
+      once (BUG-TRACKER, Phase 18/22). Three checks in `rls_matrix.sql` would close it.
 - [ ] `ChefRepository.leaderboard` unit test _(blocked with the other repositories — Phase 3)_
 - [ ] Recipe detail renders the owner badge _(needs a `RecipeRepository` fake — 15 methods)_
 - [ ] My Recipes passes `showChef: false` _(cheap; the widget flag is tested, the screen wiring
       is not)_
-- [ ] `ChefBadge` `onTap` / `onSurfaceImage` / avatar-URL branches
+- [ ] `ChefBadge` `onTap` / `onSurfaceImage` / avatar-URL branches. `onTap` is untested because it
+      is **unreachable** — nothing passes one. [Phase 30](#phase-30--public-chef-page-chefid--planned-not-started)
+      gives it a destination and covers it there
 - [x] `RecipeCard` chef overlay position is asserted, not just "it renders" — Phase 20 pins it to
       the cover's **bottom-right** (v2 moved it there)
 
@@ -738,8 +762,10 @@ Four choices settled with the user before any code (the design left all four ope
 
 ### Deferred
 
-- [ ] No public chef page. "View all N recipes" was cut with the Follow button — there is still no
-      route that lists one chef's public recipes
+- [→] No public chef page. "View all N recipes" was cut with the Follow button — there is still no
+      route that lists one chef's public recipes.
+      → **[Phase 30](#phase-30--public-chef-page-chefid--planned-not-started)**, which also retires
+      the dialog this phase built
 - [ ] Pagination: the board is still one `limit: 50` page, though the RPC takes an offset
 - [ ] "Joined <month year>" comes from `profiles.created_at`, which is the **profile** row's age,
       not the account's
@@ -869,7 +895,9 @@ Eight decisions taken before code; the four marked **owner** were the owner's ca
 - [ ] The `New` sort would work today (`profiles.created_at` exists) but needs a column
       `chefs_leaderboard` does not return, so it moves with the rest of the windowed work
 - [ ] Display/mono fonts — an app-wide decision, not a `/chefs` one
-- [ ] Still no public chef page, so a spotlight card's only destination is the expanded dialog
+- [→] Still no public chef page, so a spotlight card's only destination is the expanded dialog
+      → **[Phase 30](#phase-30--public-chef-page-chefid--planned-not-started)** — the spotlight
+      card's tap becomes the page
 
 ## Phase 24 — Simulated population: a realistic user + engagement dataset
 
@@ -980,8 +1008,10 @@ denormalized counters derived from it (the reverse of how `seed.sql` works).
 ### Verification
 
 - [x] `supabase/sim/3_sim_verify.sql` — 43 assertions that `raise exception` rather than print.
-      Nothing in CI runs SQL (SDS §11.3), so this script *is* the test suite for this phase, and it
-      found all three defects in B044 plus B045
+      This script *is* the test suite for this phase — there is no other coverage of the generator —
+      and it found all three defects in B044 plus B045. Written when nothing in CI ran SQL at all;
+      **OPT-T1 now runs it there** on a `tiny` population, which is what turned it from an opt-in
+      script into a regression gate
 - [x] Counter invariants (A1–A8), including `view_count` excluding anonymous rows and repeat visits
       (B012) — plus A7/A8, which assert those rows **exist**, so A3 cannot pass vacuously
 - [x] Authorization invariants (B1–B5): no self-rating, half-star steps, no engagement on a private
@@ -1020,9 +1050,10 @@ denormalized counters derived from it (the reverse of how `seed.sql` works).
 - [ ] `avatar_url` and `cover_image_url` stay **null** for every sim row. There is no image asset and
       an external URL 404s offline, which renders as a broken-image widget rather than the monogram
       fallback the null path gives. Config knobs exist for whoever wires a bucket
-- [ ] A Postgres service job in CI that applies `0001_init.sql` → `seed` → `recipes` → sim `tiny` →
-      `3_sim_verify.sql`. It is the obvious payoff of having written the assertions, but it is a CI
-      change, not a data one
+- [x] A CI job that applies `0001_init.sql` → `seed` → `recipes` → sim `tiny` → `3_sim_verify.sql`
+      — **done by OPT-T1** as `.github/workflows/database.yml`, which also walks the re-apply and
+      upgrade paths. Not a "Postgres service" job as written here: `profiles.id` references
+      `auth.users`, so it starts the real Supabase stack (database container only) instead
 - [ ] Building Phase 23's deferred windowed half on top of this data — the rails now have rows to
       read, but they are still unwritten
 
@@ -1040,6 +1071,8 @@ are rows pointing at existing `recipes` — no second recipe system.
 - [ ] **Public chef page** (`/chef/:id`) — deferred since Phase 22 and now load-bearing: the
       restaurant page is the same shape (identity header + recipe grid), and a member-chef row
       needs somewhere to tap through to. Build the chef page first; the restaurant page copies it.
+      **Now scheduled as its own phase** — see [Phase 30](#phase-30--public-chef-page-chefid--planned-not-started),
+      planned 2026-08-25.
 - [ ] Decide the tier-calibration question (B043) before restaurant scores restate it — a
       restaurant aggregate over miscalibrated chef scores bakes the miscalibration in twice.
 - [ ] SQL regression harness (Phase 11's item): Phase 25 adds tables, RLS, triggers, and RPCs on
@@ -1930,6 +1963,85 @@ only** — nothing in the repo, CI, or the app ever reads it.
 
 ---
 
+## Phase 30 — Public chef page (`/chef/:id`) — planned, not started
+
+Design, build order, and the traps: [EXECUTION-PLAN.md Phase 30](./EXECUTION-PLAN.md#phase-30--public-chef-page-chefid).
+**Planned 2026-08-25; no code written.**
+
+Deferred since Phase 22 and pulled forward now because it is **Phase 25's first prerequisite**: a
+restaurant page is the same shape (identity header + recipe grid) and a member-chef row needs a
+destination. Today a chef tap opens a modal, there is no route listing one chef's public recipes,
+and a chef cannot be linked or shared.
+
+**Owner's decision (2026-08-25): the page replaces the dialog.** `chef_detail_sheet.dart` is
+deleted; every chef tap navigates. The trade was argued both ways and is recorded in the execution
+plan — what is lost is peek-without-leaving-the-board, what is gained is a deep-linkable
+destination. Nothing is lost from the content: the page composes the same OPT-A8 panels.
+
+### Schema (`0001_init.sql`, idempotent)
+
+- [ ] `chef_standing(p_chef uuid)` — the leaderboard's row shape for **one** chef, `stable`,
+      invoker-rights, `anon`-callable. A **new name**, not a `chefs_leaderboard` overload (B024 /
+      Gotcha 5), and the `dense_rank()` is computed over the full population then filtered — rank
+      the filtered set instead and every chef comes back rank 1
+- [ ] **Index — measure first, do not add blind.** `recipes_owner_idx (owner_id)` already exists
+      (`0001_init.sql:142`) and serves the equality; only the `created_at desc, id` sort is
+      unindexed. A partial `(owner_id, created_at desc) where visibility = 'public'` is justified by
+      an `explain analyze` at sim `medium`, not by assumption — the biggest seeded chef owns 14
+      recipes
+- [ ] `drop.sql` entry + the in-file B024 drop block
+
+### core
+
+- [ ] `ChefRepository.standing(chefId)` → `ChefStanding?`; **null means "profile exists but is not
+      a chef"** — `chefs_leaderboard` excludes `public_recipe_count = 0`, so the private-only seed
+      chef `d6` has no rank and the page must render that rather than 404
+- [ ] Paged public-recipes read on `RecipeRepository` beside `listMine` (same shape, one filter
+      apart), total order ending `created_at desc, id` (Gotcha 24). The explicit
+      `visibility = 'public'` filter is **load-bearing**: RLS hands a signed-in owner their own
+      private rows, so without it a chef's public page shows them what nobody else can see
+- [ ] `fake_supabase.dart` tests for both — request shape, embed, page window
+
+### app
+
+- [ ] `/chef/:id` on the **root** navigator (like recipe detail), signed-out safe, **not** in
+      `needsAuth`; `Routes.chef(id)` **and** `Routes.chefPattern`, both, per OPT-A8
+- [ ] **No nav destination** — Gotcha 18: a fifth costs the web pill its labels
+- [ ] `features/chefs/chef_page.dart` — `_Header` moved out of the sheet (minus its close button),
+      `ChefScorePanel`, then `RecipeAsyncSliverGrid` under a `PUBLIC RECIPES (n)` rule; one
+      `CustomScrollView` since the page owns its scroll
+- [ ] Three `showChefDetail` call sites in `chefs_screen.dart` → `context.push`; then delete
+      `chef_detail_sheet.dart`. `ChefRecipesPanel` loses its only caller — fold it into the page or
+      delete it with the sheet, don't orphan it
+- [ ] `ChefBadge.onTap` wired on the card cover overlay and recipe detail's badge — which also
+      closes Phase 18's open coverage item for that branch, untested because it was unreachable
+
+### Seed-data fit — **outcome 1: existing data covers it**
+
+- [x] Checked before planning. Kitchen's 14 public recipes give a genuinely paged grid; d1–d7 give
+      a chef per tier, Dara at exactly 100, and the Chen Wei / Greta rank-4 tie; **d6 private-only**
+      gives the not-a-chef state on seed alone; `db:sim` at `medium` gives ~172 chefs for a real
+      rank denominator. **No fixture change needed.** What seed cannot show: no profile carries an
+      `avatar_url`, so the header's photo path ships unexercised (a standing BL-5 limit)
+
+### Verification plan
+
+- [ ] `analyze` · `test --no-select` · `format`
+- [ ] Local stack: fresh **and** the Gotcha 6 upgrade path (a new function + index on an applied
+      baseline is the B024 shape)
+- [ ] `melos run db:rls` — `chef_standing` as `anon`, and its zero-row answer for a private-only
+      profile. **Fold-in:** the three chef checks Phase 18 still lists as unasserted (`dense_rank`
+      ties, the `public_recipe_count = 0` exclusion, `anon` calling `chefs_leaderboard`) belong in
+      the same section and would close that item
+- [ ] Envelope at 320 / 390 / 600 / 1000 / 1440 × {1.0, 2.0} — fixed-height header over a grid is
+      the Gotcha 22 shape
+- [ ] Screenshots (B028), light and dark. Unlike Phase 29's editor pane this page is signed-out
+      safe and URL-reachable, so a headless driver can actually get to it
+- [ ] `chefs_screen_test.dart`'s five `ChefDetailView` assertions **rewritten** as navigation
+      assertions, not deleted — a phase that ends with fewer tests is a regression however green
+
+---
+
 ## Phase OPT — Optimization & hardening backlog (rolling)
 
 Findings from the 2026-08-20 design/architecture audit (Dart + SQL), plus the open items prior
@@ -2163,12 +2275,20 @@ tracked as [Backlog BL-6](#bl-6--environment-dependent-verification-gaps):
 
 Everything here is **known, decided, and not being worked on**. An item is in the backlog because
 it is an owner action, accepted debt, or a deferral with a stated trigger — not because it was
-forgotten. Each one names the condition that would pull it back into a phase. Nothing else in this
-document is open: Phases 0–24 and 26–29 are done — 29a–d all landed 2026-08-25 and reached the
-hosted project the same day — Phase 25 is designed-not-started, and Phase OPT is closed at 26 of
-29 with the rest listed below. Phase 28's
-Deferred block resolved into Phase 29 (auto-calculate and the real label values); micronutrients
-stays with the phase rather than here, a feature deferral with no trigger condition.
+forgotten. Each one names the condition that would pull it back into a phase.
+
+**What is open elsewhere in this document**, so the backlog is not mistaken for the whole picture:
+Phases 0–23 and 26–29 shipped their scope (29a–d all landed 2026-08-25 and reached the hosted
+project the same day), each carrying its own **Deferred** block; **Phase 24 is `[~]` in progress**
+— the generator and its 43 assertions are done, but the dish library is 25 of 120, `people.json` /
+`vocab.json` / `sim.rand_zipf` are unwritten and so is SDS §12; **Phase 30 is planned-not-started**
+(the public chef page, pulled forward 2026-08-25 because it is Phase 25's first prerequisite);
+**Phase 25 is designed-not-started** behind that and two other prerequisites; and Phase OPT is
+closed at 26 of 29 with the rest listed below. Two
+single-item stragglers sit in otherwise-complete phases: per-step image upload (Phase 9) and the
+mobile/emulator pass (Phase 12, which is BL-6). Phase 28's Deferred block resolved into Phase 29
+(auto-calculate and the real label values); micronutrients stays with the phase rather than here, a
+feature deferral with no trigger condition.
 
 #### BL-1 — OPT-S8 (B018) — rotate the hosted seed passwords (owner action)
 

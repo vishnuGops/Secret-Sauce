@@ -235,8 +235,11 @@ rendered widget):
    first assertion (`['SG-B', 'SG-A']` instead of `['SG-A', 'SG-B']`), so the check genuinely
    discriminates rather than passing vacuously.
 
-That harness is not committed. Repository tests remain blocked on mocking `SupabaseClient`
-(ROADMAP Phase 3); this was a one-off verification, not new coverage.
+That harness is not committed; this was a one-off verification, not new coverage. *(Superseded by
+**OPT-T2**: repository tests exist now, and mocking `SupabaseClient` — believed to be the blocker
+when this was written — turned out to be unnecessary. `SupabaseClient` takes an `httpClient`, so
+`packages/core/test/support/fake_supabase.dart` records the request and replies from a queue under
+a real client. B022's four ascending embed orders are pinned there.)*
 
 ## Phase 18 — Chefs, tiers & leaderboard
 
@@ -849,8 +852,10 @@ assertions above, idempotency (apply twice → identical counts *and* identical 
 `d1`–`d7` plus the Kitchen still hold the scores and tiers SDS §10.7 pins. **Their ranks will move,
 and that is the point of the phase.**
 
-Nothing in CI runs SQL today (SDS §11.3), so this script is the only test coverage this phase gets —
-which is also the strongest argument yet for the deferred Postgres CI job.
+This script is the only test coverage this phase gets. It was written when nothing in CI ran SQL at
+all, and was the strongest argument for the CI database job — which **OPT-T1 then built**
+(`.github/workflows/database.yml`), so the assertions now run on every push against a `tiny`
+population instead of only when someone remembers to.
 
 ### What the dataset proved (2026-08-20)
 
@@ -952,10 +957,14 @@ B043 is settled and Phase 24's sim can generate restaurant populations to calibr
 
 **Build order** (the same bottom-up order every phase since 18 has used):
 
-1. Public chef page `/chef/:id` — the standing prerequisite. Identity header (ChefBadge, tier,
-   score breakdown) + a `RecipeGrid` of that chef's public recipes (`chef_top_recipes` already
-   exists; it needs a `p_limit` wide enough or a paged variant). The restaurant page copies this
-   shape, and every existing `ChefBadge` becomes tappable.
+1. Public chef page `/chef/:id` — the standing prerequisite, now **planned as its own
+   [Phase 30](#phase-30--public-chef-page-chefid)** rather than step 1 here. The restaurant page
+   copies its shape, and every existing `ChefBadge` becomes tappable. Two corrections to what this
+   line used to assume: the recipe grid is a **paged table read**, not a wider `chef_top_recipes`
+   (adding `p_offset` to that function is the B024 overload trap), and the page needs a new
+   `chef_standing(p_chef)` RPC because a URL carries a uuid while the existing dialog was handed a
+   whole `ChefStanding` — rank is a `dense_rank()` over the population and cannot be derived from
+   one row.
 2. SQL: enum, three tables, RLS, grants, `drop.sql` — verified on the local stack including the
    upgrade path (Gotcha 6) and the private-flip trigger, before any Dart.
 3. `core`: models, `RestaurantRepository`, `kRestaurantSelect`, providers.
@@ -1895,6 +1904,140 @@ which is worse than "not counted".
   Deferred, not promised.
 - **`pg_trgm` on hosted** — available on Supabase, but the extension create must be verified on
   the pooler path (B033) before the typeahead ships, not after.
+
+## Phase 30 — Public chef page (`/chef/:id`)
+
+Roadmap: [ROADMAP.md Phase 30](./ROADMAP.md#phase-30--public-chef-page-chefid--planned-not-started).
+**Status: planned, not started** (2026-08-25).
+
+Deferred since Phase 22, when `Follow` and `View all N recipes` were both cut and the second one
+left a hole: **there is still no route that lists one chef's public recipes.** Phase 23 re-logged
+it, and Phase 25 lists it as the first of three prerequisites — a restaurant page is the same
+shape (identity header + recipe grid) and a member-chef row needs a destination, so the chef page
+is the template the restaurant page copies. Building it first is why it is pulled forward now.
+
+### Decisions
+
+| Question | Decision |
+| --- | --- |
+| Does the expanded dialog survive? | **owner (2026-08-25): no — the page replaces it.** `chef_detail_sheet.dart` is deleted and every chef tap navigates. See the trade below |
+| Route shape | `/chef/:id` on the **root** navigator, like recipe detail — a destination pushed over the chrome, not a shell tab. Signed-out safe, **not** in `needsAuth` |
+| Nav destination | **No.** Gotcha 18: a fifth destination costs the web pill its labels. Reached from the board, the spotlight rails, `RecipeCard`'s chef overlay and recipe detail's badge |
+| Recipe list source | A **table read**, not a new RPC — `owner_id = :id and visibility = 'public'`, paged through the existing `PagedRecipesNotifier` |
+| Ordering | Newest first (`created_at desc, id`), not score contribution. A visitor browsing a chef wants their catalogue; `chef_top_recipes`' ranking answers "why is this chef ranked here", which is the score panel's job |
+
+**The trade the owner accepted, recorded because it is a real one.** The dialog is built, tested,
+and carries the B030 `useRootNavigator` lesson in two tuned presentations; peek-without-losing-your-
+place is genuinely the right interaction on a leaderboard, where the visitor is comparing chefs. The
+counter-argument that won: one destination, deep-linkable and shareable, is what a modal can never
+be, and two surfaces explaining one score is the drift risk B066 was. Nothing is lost from the
+*content* — the page composes the same OPT-A8 panels the dialog did.
+
+### The trap this phase is really about
+
+**The dialog was handed a `ChefStanding`; a URL carries a uuid.** `ChefDetailView` takes a whole
+`ChefStanding` — score, **rank**, tier, `publicRecipeCount` — because the board already had one
+from `chefs_leaderboard(p_limit, p_offset)`. A deep link has none of that, and `chef_rank` is a
+`dense_rank()` over the entire ranked population: it cannot be derived from one `profiles` row, on
+the client or anywhere else. So the page needs a read that does not exist yet.
+
+Three things about the fix, each a past bug class:
+
+1. **New function name, never a new overload.** Adding `p_chef` to `chefs_leaderboard` leaves the
+   two-arg signature alive beside it and any call matching both fails `42725 … is not unique`
+   (Gotcha 5 / B024). It is `chef_standing(p_chef uuid)`, with its own drop block in the file that
+   creates it *and* a line in `scripts/drop.sql`.
+2. **Filter outside the window, not inside it.** `dense_rank()` must be computed over the full
+   population and the row selected from the result. A `where p.id = p_chef` in the same query as
+   the window function ranks a one-row set and every chef comes back **rank 1** — it looks correct
+   on the first chef anyone tests, which is the top of the board.
+3. **Not every profile is a chef.** `chefs_leaderboard` excludes `public_recipe_count = 0`, so
+   `chef_standing` returns **zero rows** for the private-only seed chef `d6` — who exists, owns a
+   recipe with 5,000 likes, and has no rank. The page renders that as a real state (profile header,
+   no score panel, empty grid with a reason), distinct from "no such profile", which is a 404.
+
+### Build order (each step leaves the tree green)
+
+1. **SQL first, on the local stack, before any Dart** — the standing rule.
+   - `chef_standing(p_chef uuid)` → the leaderboard's row shape, `stable`, invoker-rights,
+     `grant execute … to anon, authenticated` inside the existing `pg_roles` guard block (B013 —
+     the blanket grant block runs before this object exists on a fresh apply). Same explicit
+     `visibility = 'public'` reasoning as `chefs_leaderboard`.
+   - **Index: measure before adding one.** `recipes_owner_idx (owner_id)` already exists
+     (`0001_init.sql:142`), so the equality is served; what it cannot do is eliminate the
+     `created_at desc, id` sort. A partial `(owner_id, created_at desc) where visibility = 'public'`
+     would, but the biggest seeded chef owns 14 recipes and the sim's heaviest owns a few dozen —
+     so this is an OPT-P2-shaped optimization to be justified with an `explain analyze` at sim
+     `medium`, not a prerequisite. Do not add it blind.
+   - `drop.sql` + the in-file B024 drop block.
+2. **core** — `ChefRepository.standing(String chefId) → ChefStanding?` (null = not a chef) and the
+   paged public-recipes read. Put the recipe read on `RecipeRepository` beside `listMine`, not on
+   `ChefRepository`: it is a `recipes` query and `listMine` is the same shape one filter apart.
+   **The `visibility = 'public'` filter is load-bearing, not cosmetic** — RLS returns a signed-in
+   owner their own private recipes, so without it a chef viewing their own public page sees rows no
+   other visitor can, which is exactly the "one recipe, two different answers" defect
+   `chef_top_recipes`' explicit filter exists to prevent. Total order ends `created_at desc, id`
+   (Gotcha 24). Tests through `fake_supabase.dart` — request shape, the embed, the page window.
+3. **app — the page**, before touching anything that exists. `features/chefs/chef_page.dart`:
+   `_Header` **moved** out of `chef_detail_sheet.dart` (it is already the right widget — avatar,
+   name, `TierChip`, "Rank 4 of 172 · 14 public recipes · joined Mar 2025" — minus its close
+   button), then `ChefScorePanel`, then `RecipeAsyncSliverGrid` under a `PUBLIC RECIPES (n)` rule.
+   One `CustomScrollView`, since the page owns its scroll (Gotcha 24). `Routes.chef(id)` **and**
+   `Routes.chefPattern` both, per OPT-A8 — a rename that touches one compiles and 404s.
+4. **Swap the call sites, then delete.** Three `showChefDetail(context, chefs[i])` in
+   `chefs_screen.dart` (board row, stacked board, spotlight rail) become `context.push`. Then
+   `chef_detail_sheet.dart` is deleted whole. `ChefRecipesPanel` loses its only caller — fold its
+   "top recipes" section into the page or delete it with the sheet; do not leave it orphaned.
+5. **Wire the badges.** `ChefBadge.onTap` on the card cover overlay and recipe detail's badge under
+   the title now have somewhere to go. This also closes ROADMAP Phase 18's open coverage item for
+   that branch, which has been untested because it was unreachable.
+6. **Envelope + docs.** Then CLAUDE.md's feature map gains the route, SDS §10 gains the page.
+
+### Seed-data fit — outcome 1, existing data covers it
+
+Checked before planning, per the gate. No fixture change is needed and none is proposed:
+
+- **Kitchen** owns 14 public recipes → a genuinely paged grid (two pages at 12), not a grid with
+  one page pretending to be paged.
+- **d1–d7** give one chef per tier, **Dara Nilsson at exactly 100** (the inclusive boundary the
+  header's tier line prints), and the **Chen Wei / Greta Lindqvist tie at rank 4** — so "Rank 4 of
+  N" renders for two different chefs, which is the only way to see the `dense_rank` line is honest.
+- **d6 is private-only** (`public_recipe_count = 0`) → the not-a-chef state above, with an empty
+  grid, on seed alone.
+- A **zero-engagement** chef exercises the score panel at 0 without a divide-by-zero in
+  `progressToNext`.
+- `db:sim` at `medium` gives ~172 chefs, so the rank denominator and the deep-linked rank are
+  exercised at real cardinality rather than against 8 rows.
+
+**What the fixtures cannot show, stated rather than discovered later:** no seeded profile carries
+an `avatar_url`, so the page's header renders the monogram path only and the photo path ships
+unexercised — a standing BL-5 limit, not new to this phase.
+
+### Verification plan
+
+- `melos run analyze` · `melos run test --no-select` · `melos run format`
+- Local stack: the fresh path **and** the Gotcha 6 upgrade path — a new function plus a new index
+  layered onto an already-applied baseline is exactly the shape B024 shipped through
+- `melos run db:rls` — new checks: `chef_standing` callable as **anon**, and its zero-row answer
+  for a private-only profile. **Fold-in opportunity:** the three chef checks ROADMAP Phase 18 still
+  lists as unasserted (`dense_rank` ties, the `public_recipe_count = 0` exclusion, and `anon`
+  calling `chefs_leaderboard` at all) belong in the same section and would close that item
+- Envelope at 320 / 390 / 600 / 1000 / 1440 × {1.0, 2.0} — the page has a fixed-height header over
+  a grid, the Gotcha 22 shape
+- Screenshots via the B028 procedure, light **and** dark: the page is signed-out safe and reachable
+  by URL, so unlike Phase 29's editor pane a headless driver *can* reach it
+- `chefs_screen_test.dart`: the five `ChefDetailView` assertions become navigation assertions
+
+### Risks
+
+- **Deleting a tested surface is the largest one.** The five dialog assertions are not deleted,
+  they are rewritten — a phase that ends with fewer tests than it started is a regression however
+  green it runs.
+- `ChefStanding` is currently only ever built from `chefs_leaderboard`'s payload. If
+  `chef_standing` returns a shape that differs by one column the model decodes it as null with no
+  error (Gotcha 17's class) — pin both call paths in `chef_models_test.dart`.
+- Peek-from-board is genuinely lost. If it is missed after shipping, the cheap restoration is a
+  hover/long-press preview, not resurrecting the modal.
 
 ## Phase OPT — Optimization & hardening
 

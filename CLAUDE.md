@@ -730,7 +730,7 @@ the `code-review` skill). The ones you need while _writing_ code:
     your models decode; it proves nothing about what the database actually returns. For that,
     verify against a local stack — a throwaway harness under `apps/app/test/` pointed at
     `http://127.0.0.1:54321` is the practical way to drive real repository code; delete it after,
-    since CI has no database job.
+    since no CI job serves PostgREST (`database.yml` starts the database container only).
     **CI now applies the SQL** (`database.yml`, OPT-T1): fresh apply, re-apply, and the Gotcha 6
     upgrade path, plus the sim's 43 assertions on a `tiny` population. Every statement in *those*
     steps runs as `postgres`, which bypasses policies — so CI also runs
