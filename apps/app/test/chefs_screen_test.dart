@@ -3,28 +3,25 @@ import 'dart:async';
 // Overrides `chefRepositoryProvider` (core) rather than the screen's own
 // provider, so the FutureProvider wiring in chefs_providers.dart is exercised
 // too instead of being stubbed out.
-import 'package:app/features/chefs/chef_detail_sheet.dart';
 import 'package:app/features/chefs/chefs_hero.dart';
 import 'package:app/features/chefs/chefs_providers.dart';
 import 'package:app/features/chefs/chefs_screen.dart';
+import 'package:app/routing/app_router.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
 /// Stand-in for the RPCs. `ChefRepository` is an abstract interface precisely
 /// so it can be swapped like this — no Supabase client is constructed.
 class _FakeChefRepository implements ChefRepository {
-  _FakeChefRepository(this._result, {this.recipes = const []});
+  _FakeChefRepository(this._result);
 
   /// A `List<ChefStanding>` to return, an `Exception` to throw, or null to
   /// hang forever (so the loading state can be observed).
   final Object? _result;
-
-  /// What `chef_top_recipes` returns. An `Exception` here stands for a database
-  /// that has not had the RPC applied yet.
-  final Object recipes;
 
   /// Fixed: the header renders "Rank 2 of 148" from this.
   static const count = 148;
@@ -43,10 +40,21 @@ class _FakeChefRepository implements ChefRepository {
     return Future.value(all.take(limit).toList());
   }
 
+  // Nothing on this screen calls it since Phase 30 replaced the expanded card —
+  // which listed top recipes — with `/chef/:id`, which lists all of them.
   @override
-  Future<List<Recipe>> topRecipes(String chefId, {int limit = 3}) {
-    if (recipes is Exception) return Future.error(recipes as Exception);
-    return Future.value(recipes as List<Recipe>);
+  Future<List<Recipe>> topRecipes(String chefId, {int limit = 3}) =>
+      throw UnimplementedError();
+
+  @override
+  Future<ChefStanding?> standing(String chefId) async {
+    if (_result is! List<ChefStanding>) return null;
+    // Mirrors the RPC: zero rows for a profile that holds no board row, which
+    // the client turns into null rather than an error.
+    for (final s in _result) {
+      if (s.id == chefId) return s;
+    }
+    return null;
   }
 
   // No `chefCount()` any more (OPT-P10) — the board's denominator is the sum of
@@ -120,17 +128,6 @@ const _kitchen = ChefStanding(
   totalViews: 1745,
 );
 
-const _topRecipe = Recipe(
-  id: 'r1',
-  ownerId: 'ssk',
-  title: 'Chicken Tikka Masala',
-  likeCount: 820,
-  saveCount: 310,
-  viewCount: 400,
-  ratingAvg: 4.3,
-  ratingCount: 12,
-);
-
 /// Sizes the test window, since the screen now renders three different layouts.
 /// 400 is the phone board, 1440 the two-column page.
 void _size(WidgetTester tester, double width, [double height = 1000]) {
@@ -142,23 +139,19 @@ void _size(WidgetTester tester, double width, [double height = 1000]) {
 
 _FakeChefRepository? _lastRepo;
 
-Widget _app(
-  Object? result, {
-  Object recipes = const <Recipe>[],
-  double textScale = 1.0,
-}) {
-  final repo = _FakeChefRepository(result, recipes: recipes);
+Widget _app(Object? result, {double textScale = 1.0}) {
+  final repo = _FakeChefRepository(result);
   _lastRepo = repo;
   return ProviderScope(
     overrides: [
       chefRepositoryProvider.overrideWithValue(repo),
       profileRepositoryProvider.overrideWithValue(_FakeProfileRepository()),
     ],
-    child: MaterialApp(
+    child: MaterialApp.router(
       theme: AppTheme.light(),
-      // `builder`, not a MediaQuery around `home`: dialogs and sheets are
-      // pushed above the Navigator, so anything wrapped inside `home` never
-      // reaches them and the text-scale envelope would silently test 1.0x.
+      // `builder`, not a MediaQuery around the page: route pages are pushed
+      // above this Navigator, so anything wrapped inside one never reaches them
+      // and the text-scale envelope would silently test 1.0x.
       builder:
           (context, child) => MediaQuery(
             data: MediaQuery.of(
@@ -166,10 +159,33 @@ Widget _app(
             ).copyWith(textScaler: TextScaler.linear(textScale)),
             child: child!,
           ),
-      home: const ChefsScreen(),
+      routerConfig: _router(),
     ),
   );
 }
+
+/// The board now **navigates** instead of opening a dialog, so these tests need
+/// a real router: `context.push` throws without one.
+///
+/// `/chef/:id` lands on a probe rather than the real [ChefPage] — this suite is
+/// about the board sending you to the right chef, and the page's own content is
+/// covered by `chef_page_test.dart` with its own fakes. Routing a stub also
+/// keeps a `RecipeRepository` out of this file, which the board does not use.
+GoRouter _router() => GoRouter(
+  initialLocation: Routes.chefs,
+  routes: [
+    GoRoute(
+      path: Routes.chefs,
+      builder: (context, state) => const ChefsScreen(),
+    ),
+    GoRoute(
+      path: Routes.chefPattern,
+      builder:
+          (context, state) =>
+              Scaffold(body: Text('CHEF PAGE ${state.pathParameters['id']}')),
+    ),
+  ],
+);
 
 void main() {
   // OPT-P10 removed `chefCount()`; `chefCountProvider` now sums the tier counts
@@ -361,7 +377,7 @@ void main() {
       tester,
     ) async {
       _size(tester, 1440);
-      await tester.pumpWidget(_app(const [_kitchen], recipes: [_topRecipe]));
+      await tester.pumpWidget(_app(const [_kitchen]));
       await tester.pumpAndSettle();
 
       // 780 saves x 5 = 3,900 beats 1,980 likes x 3 = 5,940? No — likes lead,
@@ -375,101 +391,73 @@ void main() {
       expect(find.text('9,811 to go'), findsOneWidget);
     });
 
-    testWidgets('a spotlight card opens the expanded chef card', (
-      tester,
-    ) async {
+    testWidgets("a spotlight card opens that chef's page", (tester) async {
       _size(tester, 1440);
-      await tester.pumpWidget(_app(const [_kitchen], recipes: [_topRecipe]));
+      await tester.pumpWidget(_app(const [_kitchen]));
       await tester.pumpAndSettle();
 
-      expect(find.byType(ChefDetailView), findsNothing);
+      expect(find.text('CHEF PAGE ssk'), findsNothing);
       await tester.tap(find.byType(ChefSpotlightCard).first);
       await tester.pumpAndSettle();
 
-      expect(find.byType(ChefDetailView), findsOneWidget);
+      // The id matters, not just that something opened: the rails render more
+      // than one chef, and a card wired to the wrong index would still navigate.
+      expect(find.text('CHEF PAGE ssk'), findsOneWidget);
     });
   });
 
-  group('expanded chef card', () {
-    testWidgets('a row tap opens it with the score explained', (tester) async {
+  // Phase 30 replaced the expanded dialog with `/chef/:id`. These are the same
+  // five interactions the dialog suite asserted, rewritten as navigation —
+  // deleting them instead would have ended the phase with less coverage than it
+  // started. What the dialog *rendered* is now asserted in `chef_page_test.dart`.
+  group('opening a chef', () {
+    testWidgets('a board row navigates to that chef', (tester) async {
       _size(tester, 1200, 900);
 
-      await tester.pumpWidget(_app(const [_kitchen], recipes: [_topRecipe]));
+      await tester.pumpWidget(_app(const [_kitchen]));
       await tester.pumpAndSettle();
 
-      expect(find.byType(ChefDetailView), findsNothing);
+      expect(find.text('CHEF PAGE ssk'), findsNothing);
       // The name is on the panel row and again on the rail card; the panel row
       // comes first in the tree.
       await tester.tap(find.text('Secret Sauce Kitchen').first);
       await tester.pumpAndSettle();
 
-      expect(find.byType(ChefDetailView), findsOneWidget);
-
-      // The multipliers are the reason the card exists.
-      expect(find.text('1,980 likes × 3'), findsWidgets);
-      expect(find.text('780 saves × 5'), findsOneWidget);
-      expect(find.text('1,745 views × 0.2'), findsOneWidget);
-      // Twice: the dialog's breakdown, and the spotlight card behind it, which
-      // names the same top contribution.
-      expect(find.text('5,940'), findsWidgets);
-
-      // Rank line uses the count RPC; joined date comes from the profile.
-      expect(find.textContaining('Rank 2 of 148'), findsOneWidget);
-      expect(find.textContaining('joined Mar 2025'), findsOneWidget);
-
-      // Ladder + gap to the next tier.
-      expect(find.byType(TierLadder), findsOneWidget);
-      expect(
-        find.textContaining('9,811 points to Master Chef'),
-        findsOneWidget,
-      );
-
-      // Top recipes, ordered by contribution, with what each contributed.
-      expect(find.text('Chicken Tikka Masala'), findsOneWidget);
-      expect(find.text('4,090'), findsOneWidget); // 820*3 + 310*5 + 400*0.2
-
-      // Nothing that does not exist in the build.
-      expect(find.text('Follow'), findsNothing);
-      expect(find.textContaining('View all'), findsNothing);
-      expect(
-        find.textContaining('nightly'),
-        findsOneWidget,
-      ); // "no nightly job"
+      expect(find.text('CHEF PAGE ssk'), findsOneWidget);
     });
 
-    testWidgets('opens as a bottom sheet on a phone', (tester) async {
+    testWidgets('a phone board navigates too — no sheet, no dialog', (
+      tester,
+    ) async {
       _size(tester, 400, 900);
 
-      await tester.pumpWidget(_app(const [_kitchen], recipes: [_topRecipe]));
+      await tester.pumpWidget(_app(const [_kitchen]));
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Secret Sauce Kitchen'));
       await tester.pumpAndSettle();
 
-      expect(find.byType(ChefDetailView), findsOneWidget);
-      expect(find.byType(BottomSheet), findsOneWidget);
+      expect(find.text('CHEF PAGE ssk'), findsOneWidget);
+      // The two presentations the dialog used to pick between are gone on
+      // purpose; a phone gets the same destination a desktop does.
+      expect(find.byType(BottomSheet), findsNothing);
       expect(find.byType(Dialog), findsNothing);
     });
 
-    testWidgets('survives a database without the chef_top_recipes RPC', (
+    testWidgets('the tapped row decides the chef, not the first one', (
       tester,
     ) async {
-      _size(tester, 1200, 900);
+      _size(tester, 400, 900);
 
-      await tester.pumpWidget(
-        _app(const [_kitchen], recipes: Exception('function does not exist')),
-      );
+      await tester.pumpWidget(_app(_board));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Secret Sauce Kitchen').first);
+      // Third row — a tied-rank chef, so an implementation keying off rank
+      // rather than id would land on the wrong one.
+      await tester.tap(find.text('Greta Lindqvist'));
       await tester.pumpAndSettle();
 
-      // One section degrades; the score explanation still renders.
-      expect(
-        find.text('Top recipes are unavailable right now.'),
-        findsOneWidget,
-      );
-      expect(find.text('1,980 likes × 3'), findsWidgets);
+      expect(find.text('CHEF PAGE d7'), findsOneWidget);
     });
   });
 
@@ -516,9 +504,7 @@ void main() {
   ) async {
     _size(tester, 360, 900);
 
-    await tester.pumpWidget(
-      _app(const [_kitchen], recipes: [_topRecipe], textScale: 2.0),
-    );
+    await tester.pumpWidget(_app(const [_kitchen], textScale: 2.0));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Secret Sauce Kitchen'));

@@ -1138,6 +1138,43 @@ chef_top_recipes(p_chef uuid, p_limit int default 3) returns setof recipes
   expression, which is why this is an RPC rather than a `.order()` on the table.
 - `stable`, invoker-rights, `anon`-callable, and `visibility = 'public'` filtered explicitly —
   same reasoning as `chefs_leaderboard`, including for the chef's own dialog.
+- **No caller since Phase 30.** It backed the expanded dialog's "Top recipes" list; `/chef/:id`
+  shows the chef's whole catalogue instead, so a top-3 section would print the same recipes twice.
+  Retained rather than dropped — it is the query shape Phase 25's signature dishes will want.
+
+**One chef's standing by id** (Phase 30), behind `/chef/:id`:
+
+```sql
+chef_standing(p_chef uuid) returns table (…the chefs_leaderboard row shape…)
+  with ranked as (select dense_rank() over (order by chef_score desc), …
+                  from profiles where public_recipe_count > 0)
+  select … from ranked where pid = p_chef   -- filter OUTSIDE the window
+```
+
+- Exists because **`chef_rank` cannot be reconstructed from one row.** The board hands its card a
+  whole `ChefStanding` it already fetched; a page reached by URL starts with a uuid, and the rank
+  is a `dense_rank()` over every ranked profile. Same return shape as `chefs_leaderboard` on
+  purpose, so `ChefStanding` decodes from either without a second model.
+- **The id filter is applied outside the window.** Inside it, `dense_rank()` ranks a one-row set
+  and every chef returns `chef_rank = 1` — which reads as correct on whoever is top of the board,
+  the obvious test subject. Postgres does not push an outer qual through a window function unless
+  the qual is on a `PARTITION BY` column, and there is no partition, so the CTE is evaluated over
+  the whole table as written. `rls_matrix.sql` **F3** pins this and was proven non-vacuous by
+  making exactly that mistake.
+- **Zero rows is a state, not an error.** It carries the board's `public_recipe_count > 0` filter,
+  so a private-only or brand-new profile returns nothing while its `profiles` row reads fine. The
+  client maps that to "not ranked yet"; only a missing *profile* is a 404. `ChefRepository.standing`
+  therefore decodes the array rather than calling `.single()`, which would raise `PGRST116` on the
+  legitimate answer.
+- A **new function name**, never a `p_chef` argument added to `chefs_leaderboard` — that would
+  leave the two-argument signature alive beside it and make any matching call fail `42725` (B024).
+
+**One chef's public recipes** is *not* an RPC: `RecipeRepository.listByChef` reads the table with
+`owner_id = :id and visibility = 'public'`, newest first, tie-broken on `id` (Gotcha 24), paged
+through the shared `PagedRecipesNotifier`. The `visibility` filter is **load-bearing, not a
+restatement of RLS**: `recipes_select` lets a signed-in owner read their own private rows, so
+without it a chef's public page would show them recipes no other visitor can see — the same
+"one recipe, two different answers" defect `chef_top_recipes`' explicit filter prevents.
 
 ### 10.5 Client data path
 
@@ -1270,17 +1307,29 @@ chef_top_recipes(p_chef uuid, p_limit int default 3) returns setof recipes
   cost an extra layout pass on every one of 50 rows. Unlike `RecipeCard` this tile is **not**
   fixed-height — it is a list row and may grow — so a long name costs vertical space instead of
   overflowing.
-- **Expanded chef card** (`features/chefs/chef_detail_sheet.dart`), opened by tapping a row. One
-  body, two hosts: a centred `Dialog` capped at 1152 × 720 from `Breakpoints.compact` up, and a
-  `showModalBottomSheet` at 94 % of the screen height on a phone (the default 9/16 cap cuts the
-  ladder off). Two columns on desktop, stacked in a `ListView` on compact.
+- **Chef page** `/chef/:id` (`features/chefs/chef_page.dart`), opened by tapping a board row, a
+  spotlight card, or the chef badge on recipe detail. **Replaced the expanded dialog in Phase 30**
+  — `chef_detail_sheet.dart` and `chef_recipes_panel.dart` are deleted. The dialog could not be
+  linked, shared or bookmarked and listed only three recipes; the page is a destination with the
+  chef's whole public catalogue under it. Root navigator, signed-out safe, no nav destination
+  (Gotcha 18).
 
-  Left/top — **why this score**: the tier-coloured total, then one `ScoreContributionBar` per
-  input (`1,980 likes × 3` … `5,940`, bar = share of total) ordered by contribution, the
-  "public recipes only" note, then a **`TierLadder`** and `9,811 points to Master Chef — about
-  1,963 more saves, or 3,271 more likes`. Right/bottom — **top recipes** from
-  `chef_top_recipes`, each row tapping through to `/recipe/:id`, then the four totals and a note
-  that score and rank update on every like/save/view (there is **no** nightly job).
+  Top — **`ChefIdentityHeader`**: `ChefAvatar`, name, `TierChip`, and a `Wrap`ped fact line
+  (`Rank 4 · 14 public recipes · joined Mar 2025`, or `Not ranked yet`). It takes a `Profile` plus
+  an **optional** `ChefStanding`, where the dialog's version required a standing outright — the
+  board always had one to hand its card and a URL has neither, which is the whole shape of the
+  phase. Then — **why this score**, the same `ChefScorePanel` the dialog used: tier-coloured total,
+  one `ScoreContributionBar` per input (`1,980 likes × 3` … `5,940`) ordered by contribution, the
+  "public recipes only" note, a **`TierLadder`**, `9,811 points to Master Chef — about 1,963 more
+  saves, or 3,271 more likes`, and the note that score and rank update on every like/save/view
+  (there is **no** nightly job — carried over deliberately, since losing it with the dialog would
+  have quietly restored the mockup's false claim). Then a `PUBLIC RECIPES (n)` rule over a paged
+  `RecipeAsyncSliverGrid` with `showChef: false`.
+
+  An **unranked** chef — a real profile with no public recipe, like the seed's private-only `d6` —
+  gets the header, a sentence explaining that private recipes never count toward score or rank, and
+  an empty grid. No score panel: rendering one full of zeroes would be a worse lie than omitting
+  it. Only a *missing profile* is an error.
 - **`TierLadder`** (`design_system`, exported): the four thresholds as **evenly spaced anchors**
   (100 / 1,000 / 5,000 / 20,000 at 0 / ⅓ / ⅔ / 1) with the fill interpolating between them. A
   linear points axis would squash Line Cook and Sous Chef into the first 5 % of the bar — useless

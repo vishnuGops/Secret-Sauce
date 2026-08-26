@@ -4,9 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// How many chefs one page of the leaderboard holds — the panel's `TOP 25`.
 const kLeaderboardPageSize = 25;
 
-/// How many recipes the expanded chef card lists under "Top recipes".
-const kChefTopRecipes = 3;
-
 /// How many chefs each rail shows.
 const kChefRailLength = 10;
 
@@ -97,58 +94,104 @@ final chefCountProvider = FutureProvider.autoDispose<int>((ref) async {
   return counts.values.fold<int>(0, (sum, n) => sum + n);
 });
 
-/// Everything the expanded chef card needs beyond the [ChefStanding] the board
-/// already holds.
-class ChefDetail {
-  const ChefDetail({
-    this.profile,
-    this.topRecipes = const [],
-    this.topRecipesFailed = false,
-  });
+/// Everything `/chef/:id` needs about the chef themself: the profile row and
+/// the leaderboard standing, fetched together (Phase 30).
+///
+/// The two are deliberately separate reads with different failure meanings. The
+/// **profile** is the page — without it there is no chef and the route is a 404.
+/// The **standing** is null for a real profile that simply holds no rank
+/// (private-only, brand-new, no public recipe), which is a state the page
+/// renders rather than an error.
+class ChefPageData {
+  const ChefPageData({required this.profile, this.standing});
 
-  /// The chef's profile row, for the "joined" date. Null when the read finds
-  /// nothing — the card simply omits that clause.
-  final Profile? profile;
+  final Profile profile;
 
-  /// Public recipes ordered by score contribution, from `chef_top_recipes`.
-  final List<Recipe> topRecipes;
-
-  /// True when the RPC itself failed. Kept separate from "no recipes" because
-  /// the two need different copy — and because a database that has not had
-  /// `0001_init.sql` re-applied has no `chef_top_recipes` at all.
-  final bool topRecipesFailed;
+  /// Null when this profile is not on the board — see [ChefRepository.standing].
+  final ChefStanding? standing;
 }
 
-/// Profile + top recipes for one chef, fetched together.
+/// Profile + standing for one chef.
 ///
-/// The recipe list is deliberately non-fatal: the rest of the card is derived
-/// from data the board already has, so a missing RPC costs one section instead
-/// of the whole dialog.
-final chefDetailProvider = FutureProvider.autoDispose.family<
-  ChefDetail,
+/// Both requests are started before either is awaited (the OPT-P10 shape) —
+/// they are independent, so awaiting the profile first would cost the sum of two
+/// round trips instead of the slower one.
+///
+/// Unlike the dialog this replaced, **neither read is swallowed**: the board
+/// used to hand the card a `ChefStanding` it already had, so a failed fetch cost
+/// one section; here the page has a uuid and nothing else, so a failure is a
+/// failure and the screen shows a retry.
+final chefPageProvider = FutureProvider.autoDispose.family<
+  ChefPageData,
   String
 >((ref, chefId) async {
-  final chefs = ref.watch(chefRepositoryProvider);
   final profiles = ref.watch(profileRepositoryProvider);
+  final chefs = ref.watch(chefRepositoryProvider);
 
-  // Both requests are started before either is awaited (OPT-P10) — they are
-  // independent, and awaiting the profile first made the card cost the sum of
-  // two round trips instead of the slower one.
-  //
-  // `catchError` rather than a `try` around both: the recipe list stays
-  // deliberately non-fatal (the rest of the card comes from data the board
-  // already has), and a bare `Future.wait` would fail the whole thing if the
-  // RPC is missing.
-  final profileFuture = profiles.getById(chefId);
-  final recipesFuture = chefs
-      .topRecipes(chefId, limit: kChefTopRecipes)
-      .then<List<Recipe>?>((r) => r)
-      .catchError((Object _) => null);
+  // `Future.wait`, not two sequential awaits over two started futures.
+  // Starting both and awaiting them one after the other leaves the second
+  // with **no handler attached** until the first completes, so a fast failure
+  // there is delivered as an unhandled async error before anything can catch
+  // it — the provider still reports it, and the app also logs a zone error
+  // for the same exception. `Future.wait` subscribes to both up front and
+  // rethrows the first failure, which keeps the parallelism without the
+  // window.
+  final results = await Future.wait<Object?>([
+    profiles.getById(chefId),
+    chefs.standing(chefId),
+  ]);
 
-  final profile = await profileFuture;
-  final recipes = await recipesFuture;
-
-  return recipes == null
-      ? ChefDetail(profile: profile, topRecipesFailed: true)
-      : ChefDetail(profile: profile, topRecipes: recipes);
+  final profile = results[0] as Profile?;
+  if (profile == null) {
+    // The one genuine 404: a uuid with no profile behind it. A *null
+    // standing* is not this — see [ChefPageData].
+    throw StateError('No chef with id $chefId');
+  }
+  return ChefPageData(profile: profile, standing: results[1] as ChefStanding?);
 });
+
+/// Which chef `/chef/:id` is showing — the argument [ChefRecipesNotifier] pages
+/// against. **Meant to be overridden**, never read at its default.
+///
+/// Not a `.family` on the notifier: a family notifier has to extend
+/// `AutoDisposeFamilyAsyncNotifier`, which is not a [PagedRecipesNotifier], so
+/// it could not use the shared `RecipeAsyncSliverGrid` ladder at all — and
+/// re-implementing that ladder is what OPT-A7 consolidated away.
+///
+/// `ChefPage` supplies it by wrapping its subtree in a `ProviderScope` that
+/// overrides this **and** [chefRecipesProvider], so each page gets its own
+/// notifier bound to its own chef. The alternative — writing a `StateProvider`
+/// from `initState` — throws `Tried to modify a provider while the widget tree
+/// was building`, which is how this arrived at the scoped form.
+///
+/// The default is empty so a stray read fetches nothing rather than paging some
+/// arbitrary chef, exactly as an empty search query does.
+final viewedChefIdProvider = Provider<String>((ref) => '');
+
+/// One chef's public recipes, paged — the grid on `/chef/:id`.
+class ChefRecipesNotifier extends PagedRecipesNotifier {
+  /// The chef this build is serving. Captured once, so `Load more` cannot page
+  /// one chef's offsets against another chef's results.
+  String _chefId = '';
+
+  @override
+  Future<RecipePage> firstPage() {
+    // Synchronous, before any `await`: this is the build phase, and it is what
+    // makes a new chef a new build.
+    _chefId = ref.watch(viewedChefIdProvider);
+    if (_chefId.isEmpty) return Future.value(const RecipePage());
+    return super.firstPage();
+  }
+
+  @override
+  Future<List<Recipe>> fetchPage({required int limit, required int offset}) {
+    return ref
+        .read(recipeRepositoryProvider)
+        .listByChef(_chefId, limit: limit, offset: offset);
+  }
+}
+
+final chefRecipesProvider =
+    AsyncNotifierProvider.autoDispose<ChefRecipesNotifier, RecipePage>(
+      ChefRecipesNotifier.new,
+    );

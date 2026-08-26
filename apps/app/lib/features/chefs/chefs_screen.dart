@@ -2,10 +2,11 @@ import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-import 'package:app/features/chefs/chef_detail_sheet.dart';
 import 'package:app/features/chefs/chefs_hero.dart';
 import 'package:app/features/chefs/chefs_providers.dart';
+import 'package:app/routing/app_router.dart';
 
 /// Chefs leaderboard — ranked by chef score over each chef's public recipes.
 ///
@@ -127,7 +128,8 @@ class _CompactBoard extends ConsumerWidget {
                         itemBuilder:
                             (context, i) => ChefStandingCard(
                               standing: chefs[i],
-                              onTap: () => showChefDetail(context, chefs[i]),
+                              onTap:
+                                  () => context.push(Routes.chef(chefs[i].id)),
                             ),
                       ),
                     ),
@@ -191,7 +193,7 @@ class _BoardPanel extends ConsumerWidget {
                         (context, i) => ChefStandingCard(
                           standing: chefs[i],
                           variant: ChefCardVariant.board,
-                          onTap: () => showChefDetail(context, chefs[i]),
+                          onTap: () => context.push(Routes.chef(chefs[i].id)),
                         ),
                   ),
     );
@@ -427,7 +429,7 @@ class _Rails extends ConsumerWidget {
                         : ChefSpotlightCard(
                           standing: popular[i],
                           totalChefs: total,
-                          onTap: () => showChefDetail(context, popular[i]),
+                          onTap: () => context.push(Routes.chef(popular[i].id)),
                         ),
           ),
         const SizedBox(height: AppSpacing.lg),

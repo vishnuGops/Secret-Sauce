@@ -15,6 +15,16 @@ abstract interface class ChefRepository {
   /// public recipe appear.
   Future<List<ChefStanding>> leaderboard({int limit, int offset});
 
+  /// One chef's leaderboard row by id — score, tier, totals, and the `chef_rank`
+  /// that `/chef/:id` cannot compute for itself.
+  ///
+  /// **Null means "this profile holds no rank"**, not "no such profile" and not
+  /// an error: `chef_standing` carries the board's own `public_recipe_count > 0`
+  /// filter, so a private-only or brand-new account returns zero rows while its
+  /// `profiles` row exists and reads perfectly well. The page renders that as a
+  /// state; only a missing *profile* is a 404.
+  Future<ChefStanding?> standing(String chefId);
+
   /// A chef's public recipes, ordered by what each contributes to their score
   /// (`chef_top_recipes`). Private recipes never appear, including for their
   /// own owner — the RPC filters visibility explicitly.
@@ -51,6 +61,18 @@ class SupabaseChefRepository implements ChefRepository {
     return (rows as List)
         .map((r) => ChefStanding.fromJson(r as Map<String, dynamic>))
         .toList();
+  }
+
+  @override
+  Future<ChefStanding?> standing(String chefId) async {
+    // The RPC returns at most one row, but it is `returns table`, so PostgREST
+    // sends an array either way — `.single()` would turn the legitimate
+    // "not a chef" answer into a PGRST116 exception, which is the one thing the
+    // caller must be able to tell apart from a failure.
+    final rows = await _client.rpc('chef_standing', params: {'p_chef': chefId});
+    final list = rows as List;
+    if (list.isEmpty) return null;
+    return ChefStanding.fromJson(list.first as Map<String, dynamic>);
   }
 
   @override

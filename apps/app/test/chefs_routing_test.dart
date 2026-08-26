@@ -62,10 +62,13 @@ class _FakeChefRepository implements ChefRepository {
     ),
   ];
 
-  // Only reached from the expanded card, which these routing tests never open.
+  // Only reached from a chef page, which these routing tests never open.
   @override
   Future<List<Recipe>> topRecipes(String chefId, {int limit = 3}) async =>
       const [];
+
+  @override
+  Future<ChefStanding?> standing(String chefId) async => null;
 
   @override
   Future<Map<ChefTier, int>> tierCounts() async => const {};

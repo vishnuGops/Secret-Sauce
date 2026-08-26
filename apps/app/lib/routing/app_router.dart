@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:app/features/auth/auth_screen.dart';
+import 'package:app/features/chefs/chef_page.dart';
 import 'package:app/features/chefs/chefs_screen.dart';
 import 'package:app/features/discover/discover_screen.dart';
 import 'package:app/features/my_recipes/my_recipes_screen.dart';
@@ -53,6 +54,15 @@ class Routes {
   static const recipePattern = '/recipe/:id';
   static const editRecipePattern = '/recipe/:id/edit';
   static const cookRecipePattern = '/recipe/:id/cook';
+
+  /// One chef's public page (Phase 30). Singular `/chef/`, so it does not
+  /// collide with the plural `/chefs` leaderboard — go_router matches on the
+  /// full path, and these differ in the first segment.
+  ///
+  /// Signed-out safe and deliberately absent from `needsAuth`: it lists public
+  /// recipes, exactly like Discover and recipe detail.
+  static String chef(String id) => '/chef/$id';
+  static const chefPattern = '/chef/:id';
 }
 
 final _rootKey = GlobalKey<NavigatorState>();
@@ -122,6 +132,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder:
             (context, state) =>
                 RecipeDetailScreen(recipeId: state.pathParameters['id']!),
+      ),
+      // A destination pushed over the chrome, like recipe detail — not a shell
+      // tab. It is reached from the board, the spotlight rails and every chef
+      // badge, so it must sit above the nav rather than inside it.
+      GoRoute(
+        path: Routes.chefPattern,
+        parentNavigatorKey: _rootKey,
+        builder:
+            (context, state) => ChefPage(chefId: state.pathParameters['id']!),
       ),
       ShellRoute(
         navigatorKey: _shellKey,

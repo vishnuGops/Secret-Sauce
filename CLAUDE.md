@@ -100,7 +100,8 @@ secret-sauce/
 │   │                          #   for pages that own their scroll), share_dialog.dart,
 │   │                          #   not_yet_tooltip.dart
 │   ├── lib/main.dart · test/{widget_test,chefs_screen_test,chefs_routing_test,
-│   │                          top_nav_bar_test,recipe_editor_test,recipe_detail_test,
+│   │                          chef_page_test,top_nav_bar_test,recipe_editor_test,
+│   │                          recipe_detail_test,
 │   │                          recipe_detail_v2_test,cook_mode_test,my_recipes_header_test,
 │   │                          recipe_grid_test,discover_screen_test,discover_search_test,
 │   │                          paging_test,share_dialog_test,auth_screen_test}.dart
@@ -131,7 +132,7 @@ secret-sauce/
     │   ├── 3_sim_verify.sql      #   43 assertions — the only test coverage this SQL has
     │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
     ├── tests/rls_matrix.sql      # the RLS matrix as a SIGNED-IN user (BL-7, `db:rls`) —
-    │                             #   92 checks; makes its own users, then ROLLS BACK
+    │                             #   98 checks; makes its own users, then ROLLS BACK
     ├── tests/nutrition_estimate.sql  # the estimator's ONLY coverage (Phase 29c): fixture
     │                             #   foods/units/trees -> exact labels, then ROLLS BACK
     ├── tests/nutrition_fixtures.sql  # the other half (29d, `db:nutrition:verify`): the
@@ -279,7 +280,7 @@ melos run db:reset    # drop -> create -> nutrition -> seed -> recipes -> sim (~
 # The RLS acceptance matrix as a SIGNED-IN user (BL-7). Additive only in the sense that
 # it writes and then rolls back — it leaves no user, no recipe, no helper function.
 # Run it after ANY change to a policy, a `security definer` function, or the column grants.
-melos run db:rls      # 92 checks across anon / owner / shared-with / stranger
+melos run db:rls      # 98 checks across anon / owner / shared-with / stranger
 
 # Auto-nutrition SQL. Both roll back; run them after touching the estimator, the
 # backfill, nutritionData/, or an auto recipe's ingredients.
@@ -514,8 +515,16 @@ engagement counters of that user's **public** recipes, recomputed from scratch b
 `chef_tier_for()` in `0001_init.sql` are the single source of truth for the formula and the
 thresholds; an idempotent backfill on every apply is how a change reaches existing rows.
 `chefs_leaderboard(limit, offset)` is the `anon`-callable RPC behind `/chefs`, and
-`chef_top_recipes(chef, limit)` — `setof recipes`, ordered by `chef_score()` per recipe — backs
-the expanded chef card. Details: [SDS §10](./docs/SDS.md#10-chefs-tiers--leaderboard).
+`chef_standing(chef)` is the **same row shape for one chef by id** — what `/chef/:id` needs, since
+a URL carries a uuid and `chef_rank` is a `dense_rank()` over the whole ranked population that no
+single `profiles` row contains. Two things about it (Phase 30): the id filter is applied **outside
+the window**, because filtering inside it ranks a one-row set and returns `chef_rank = 1` for every
+chef — which looks right on whoever is top of the board; and it returns **zero rows**, not an
+error, for a profile with no public recipes, which the client turns into "not ranked yet" rather
+than a 404. `rls_matrix.sql` §F pins both, plus the `dense_rank` tie and the exclusion.
+`chef_top_recipes(chef, limit)` — `setof recipes`, ordered by `chef_score()` per recipe — backed
+the retired chef dialog and currently has **no caller**.
+Details: [SDS §10](./docs/SDS.md#10-chefs-tiers--leaderboard).
 
 Five Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/models/enums.dart):
 `difficulty`, `recipe_visibility`, `share_permission` (`edit` reserved, unused),
@@ -528,7 +537,8 @@ Five Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/m
 | `/`                               | — (no screen)            | **Redirect-only** → `/discover`. `features/home` was retired 2026-08-20; see the note under the table                    |
 | `/auth`                           | `features/auth`          | `authControllerProvider` (AsyncNotifier); redirects to `/discover` when signed in; `?mode=signup` opens the sign-up side |
 | `/discover`                       | `features/discover`      | Masthead + search, three **shelves** (`01 UNDER 30` / `02 WEEKEND PROJECTS` / `03 MOST FORKED` — `discover_shelf.dart`), then one browse grid whose sort is the old Popular / Trending / Recent. No `AppBar` — the masthead is the title. Signed-out safe |
-| `/chefs`                          | `features/chefs`         | Web: `chefs_hero.dart` + a 404px leaderboard panel + rails of `ChefSpotlightCard`. Compact: the plain board. A row or card opens `chef_detail_sheet.dart` (dialog on web, sheet on mobile); signed-out safe |
+| `/chefs`                          | `features/chefs`         | Web: `chefs_hero.dart` + a 404px leaderboard panel + rails of `ChefSpotlightCard`. Compact: the plain board. A row or card **navigates to `/chef/:id`** (Phase 30 retired the dialog — `chef_detail_sheet.dart` is deleted); signed-out safe |
+| `/chef/:id`                       | `features/chefs`         | **One chef's public page** (Phase 30). `chef_identity_header.dart` (profile + *optional* `ChefStanding`) → `ChefScorePanel` → paged `RecipeAsyncSliverGrid` of their public recipes. Root navigator, signed-out safe, **no nav destination** (Gotcha 18). Needs `chef_standing(p_chef)` because a URL carries only a uuid and `chef_rank` is a `dense_rank()` over the whole population |
 | `/my`                             | `features/my_recipes`    | My / Shared-with-me tabs, both paged. Sharing is `widgets/share_dialog.dart` (opened from recipe detail; it writes `recipe_shares`) |
 | `/recipe/:id`                     | `features/recipe_detail` | **Two v2 layouts, one `context.isExpanded` branch (Phase 27).** ≥1000: `recipe_detail_expanded.dart` — measured 1140px page, header band, facts strip. <1000 (compact **and** medium): `recipe_detail_compact.dart` — cover-first, facts quad, pinned jump bar, `Ready to cook?` bar. Both place `rail_panel.dart` (`bordered:` is the only difference) and `method_column.dart`. The v1 hero and `recipe_content_views.dart` are **deleted** — don't reintroduce a third layout for the 600–1000 band. `RailPanel` is the tab host (Phase 28): `servings_row.dart` on top, then `Ingredients` / `Nutrition` chips, then `ingredient_rail.dart` or `nutrition_tab.dart`. Rating, like/save, fork, version history; signed-out safe |
 | `/recipe/:id/cook`                | `features/recipe_detail` | **Cook mode** — full-screen, one step at a time, **always dark** (`AppTheme.dark()`, the only screen that overrides the theme; the phone is propped under kitchen lights). `cook_mode_screen.dart` (route + shortcuts) → `cook_step_view.dart` (compact frames C/D, web frame H) → `cook_finish_view.dart` (frame E). Pure derivations in `cook_mode_model.dart`, session + timers in `cook_mode_providers.dart`. Signed-out safe; **not** in `needsAuth`. See "Cook mode" below |
@@ -736,7 +746,7 @@ the `code-review` skill). The ones you need while _writing_ code:
     steps runs as `postgres`, which bypasses policies — so CI also runs
     [supabase/tests/rls_matrix.sql](supabase/tests/rls_matrix.sql) (**BL-7**, `melos run db:rls`),
     which is the only thing here that exercises RLS as a **signed-in** user. It switches to
-    `set local role authenticated`, runs 92 checks across anon / owner / shared-with / unrelated
+    `set local role authenticated`, runs 98 checks across anon / owner / shared-with / unrelated
     stranger, and rolls the whole transaction back. It closed the class B053 lived in and found
     B061 on its first complete run. **Run it, and add a check to it, whenever you touch a policy, a
     `security definer` function, or the column grants** — a new table with new policies that the

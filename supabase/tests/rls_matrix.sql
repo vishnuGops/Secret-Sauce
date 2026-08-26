@@ -710,6 +710,74 @@ begin
   v_log := v_log || format(E'%s\tE9  anon · search_foods must FAIL\t%s', v_err = '42501', coalesce(v_err, 'no error'));
 
   -- ==========================================================================
+  -- F. The chef reads behind `/chef/:id` (Phase 30) — and the three chef checks
+  --    ROADMAP Phase 18 had listed as unasserted since 2026-08-19.
+  --
+  --    The page is signed-out safe, so this whole section runs as `anon`: the
+  --    claim is not merely "these functions work", it is that a visitor with no
+  --    account gets the same ranking every signed-in user does.
+  --
+  --    `chef_score` / `public_recipe_count` are written directly below. They are
+  --    trigger-maintained columns and this is not testing the trigger — it is
+  --    testing what the two RPCs do with the values they read, which is the only
+  --    way to pin a *tie* deterministically. The whole file rolls back.
+  -- ==========================================================================
+  execute 'reset role';
+
+  -- Two chefs on the board with byte-identical scores, and one profile that is
+  -- deliberately left off it.
+  update profiles set chef_score = 4242, public_recipe_count = 2
+   where id in (v_owner, v_sharee);
+  update profiles set chef_score = 99999, public_recipe_count = 0
+   where id = v_other;
+
+  execute 'set local role anon';
+  perform set_config('request.jwt.claim.sub', '', true);
+  perform set_config('request.jwt.claims', '', true);
+
+  -- F1: the board itself is anon-callable. Every prior run of this proved it as
+  -- `postgres`, which bypasses grants entirely, so it proved nothing about anon.
+  select count(*) into n from chefs_leaderboard(100, 0);
+  v_log := v_log || format(E'%s\tF1  anon · chefs_leaderboard is callable\t%s row', n > 0, n);
+
+  select count(*) into n from chef_standing(v_owner);
+  v_log := v_log || format(E'%s\tF2  anon · chef_standing returns the chef''s row\t%s row', n = 1, n);
+
+  -- F3: THE trap this phase exists around. `dense_rank()` has to be computed
+  -- over the whole population and the row picked out of the result; filter
+  -- inside the window instead and every chef alive comes back rank 1, which
+  -- looks correct on whoever is top of the board.
+  select s.chef_rank into n from chef_standing(v_owner) s;
+  select count(*) into v_n from chefs_leaderboard(1000, 0) b
+   where b.id = v_owner and b.chef_rank = n;
+  v_log := v_log || format(E'%s\tF3  anon · chef_standing rank == the board''s rank\t%s',
+    v_n = 1, format('rank %s, %s matching board row', n, v_n));
+
+  -- F4: the `public_recipe_count = 0` exclusion, from both directions. A
+  -- profile that owns no public recipe holds no rank however high its score —
+  -- which is why the score above it is the largest in the fixture.
+  select count(*) into n from chef_standing(v_other);
+  v_log := v_log || format(E'%s\tF4  anon · chef_standing is empty for a non-chef\t%s row', n = 0, n);
+
+  select count(*) into n from chefs_leaderboard(1000, 0) b where b.id = v_other;
+  v_log := v_log || format(E'%s\tF5  anon · the board excludes a non-chef too\t%s row', n = 0, n);
+
+  -- F6: dense_rank ties share a rank. Two profiles, one score, one rank — and
+  -- that rank has to be the **board's**, not just equal to each other. Checking
+  -- only "one distinct rank" would pass under the F3 bug too, since a
+  -- collapsed window rank returns 1 for everybody: verified 2026-08-25 by
+  -- breaking the function, where F3 went red and a count-only F6 stayed green.
+  select count(*) into n from (
+    select a.chef_rank from chef_standing(v_owner) a
+    union all
+    select b.chef_rank from chef_standing(v_sharee) b
+  ) t
+  where t.chef_rank = (
+    select b2.chef_rank from chefs_leaderboard(1000, 0) b2 where b2.id = v_owner
+  );
+  v_log := v_log || format(E'%s\tF6  anon · tied chefs share the board''s rank\t%s of 2 agree', n = 2, n);
+
+  -- ==========================================================================
   -- Report
   -- ==========================================================================
   execute 'reset role';

@@ -21,6 +21,12 @@ abstract interface class RecipeRepository {
   /// Recipes shared with the current user, same paging contract as [listMine].
   Future<List<Recipe>> listSharedWithMe({int limit, int offset});
 
+  /// One chef's **public** recipes, newest first — the grid on `/chef/:id`.
+  ///
+  /// Signed-out safe (Gotcha 9): it takes the chef's id as an argument and never
+  /// touches `_uid`, so it cannot throw the signed-out `StateError`.
+  Future<List<Recipe>> listByChef(String chefId, {int limit, int offset});
+
   /// Create a new recipe (with nested groups) and its first version.
   Future<Recipe> create(Recipe recipe);
 
@@ -167,6 +173,35 @@ class SupabaseRecipeRepository implements RecipeRepository {
           (r) => Recipe.fromJson(r['recipes'] as Map<String, dynamic>),
         )
         .toList();
+  }
+
+  @override
+  Future<List<Recipe>> listByChef(
+    String chefId, {
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) async {
+    // `visibility = 'public'` is filtered **explicitly and is load-bearing** —
+    // it is not a restatement of what RLS already does. `recipes_select` lets a
+    // signed-in user read their *own* private recipes, so without this filter a
+    // chef opening their own public page would see rows no other visitor can,
+    // and the "14 public recipes" in the header would not match the grid under
+    // it. Exactly the reasoning behind `chef_top_recipes`' own explicit filter.
+    //
+    // Newest first rather than by score contribution: this is the chef's
+    // catalogue, and "why is this chef ranked here" is the score panel's job.
+    // `id` after `created_at` because paging needs a **total** order (Gotcha 24)
+    // — two recipes created in the same second could otherwise swap between the
+    // page-1 and page-2 reads, showing one twice and hiding the other.
+    final rows = await _client
+        .from('recipes')
+        .select(kRecipeSelect)
+        .eq('owner_id', chefId)
+        .eq('visibility', 'public')
+        .order('created_at', ascending: false)
+        .order('id', ascending: false)
+        .range(offset, offset + limit - 1);
+    return rows.map<Recipe>(Recipe.fromJson).toList();
   }
 
   /// Only the columns a client is allowed to write. Server-managed columns

@@ -203,6 +203,13 @@ class _FakeRecipeRepository implements RecipeRepository {
   }) => throw UnimplementedError();
 
   @override
+  Future<List<Recipe>> listByChef(
+    String chefId, {
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) => throw UnimplementedError();
+
+  @override
   Future<void> share({
     required String recipeId,
     required String userId,

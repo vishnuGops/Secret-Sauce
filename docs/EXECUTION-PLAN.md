@@ -1907,8 +1907,28 @@ which is worse than "not counted".
 
 ## Phase 30 — Public chef page (`/chef/:id`)
 
-Roadmap: [ROADMAP.md Phase 30](./ROADMAP.md#phase-30--public-chef-page-chefid--planned-not-started).
-**Status: planned, not started** (2026-08-25).
+Roadmap: [ROADMAP.md Phase 30](./ROADMAP.md#phase-30--public-chef-page-chefid--done-2026-08-25).
+**Status: DONE** (planned and built 2026-08-25).
+
+**What the build changed about this plan**, recorded because the plan was written before the code:
+
+1. **The argument hand-off is a scoped override, not a `StateProvider` write.** The plan followed
+   `SearchRecipesNotifier`'s precedent of reading the argument from a sibling provider — correct,
+   but the page cannot *write* that provider from `initState`: Riverpod throws `Tried to modify a
+   provider while the widget tree was building`. `ChefPage` wraps its body in a `ProviderScope`
+   overriding `viewedChefIdProvider` **and** `chefRecipesProvider`. The second override is not
+   optional: without it the notifier is created in the root container, reads the root's empty
+   default, and the grid sits permanently empty with no error anywhere.
+2. **Two started futures awaited in sequence is an unhandled-error bug.** `chefPageProvider` began
+   as "start both, `await` one then the other" (the OPT-P10 shape). The second future has no
+   handler attached during that window, so a fast failure is delivered as an unhandled async error
+   *in addition to* the one the provider reports. `Future.wait` subscribes to both up front.
+3. **The index was measured and not added** — `recipes_owner_idx (owner_id)` already existed, which
+   the plan's first draft got wrong and the review caught before any code was written.
+4. **`ChefRecipesPanel` was deleted rather than folded in**, so `chef_top_recipes` and
+   `ChefRepository.topRecipes` now have no caller. Both kept — see the roadmap's Deferred block.
+5. **The card cover overlay was not wired.** Recipe detail's badge was; the card's needs a new
+   `RecipeCard` parameter threaded to six surfaces and a decision about nested tap targets.
 
 Deferred since Phase 22, when `Follow` and `View all N recipes` were both cut and the second one
 left a hole: **there is still no route that lists one chef's public recipes.** Phase 23 re-logged

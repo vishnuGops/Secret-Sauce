@@ -1809,6 +1809,78 @@ begin
   end if;
 end $$;
 
+-- One chef's leaderboard row, by id — what `/chef/:id` needs and the board
+-- cannot supply (Phase 30).
+--
+-- The page is reachable by URL, so it starts with a uuid and nothing else, while
+-- the board hands its rows a whole standing it already fetched. `chef_rank` is
+-- the part that cannot be reconstructed client-side at any price: it is a
+-- `dense_rank()` over every ranked profile, so a single `profiles` row does not
+-- contain it and neither does any join that stops short of the full population.
+--
+-- **The filter is applied outside the window, not inside it.** Moving
+-- `where p.id = p_chef` up into `ranked` would rank a one-row set and return
+-- `chef_rank = 1` for every chef alive — and it would look right on the first
+-- chef anyone tests, because the obvious test subject is the top of the board.
+-- Postgres does not push an outer qual through a window function unless the qual
+-- is on a PARTITION BY column, and there is no partition here, so the CTE is
+-- evaluated over the whole table exactly as written.
+--
+-- A **new function**, not a `p_chef` argument bolted onto `chefs_leaderboard`:
+-- adding one would leave the two-argument signature alive beside it and any call
+-- matching both fails 42725 (B024). Deliberately the same return shape as the
+-- board, so `ChefStanding` decodes from either without a second model.
+--
+-- Returns **zero rows** for a profile with no public recipes, matching the
+-- board's own `public_recipe_count > 0` filter: the private-only seed chef `d6`
+-- exists and owns a recipe with 5,000 likes, but holds no rank. The client turns
+-- that into "this profile is not a chef yet", which is a page state, not a 404.
+drop function if exists chef_standing(uuid);
+create or replace function chef_standing(p_chef uuid)
+returns table (
+  chef_rank           bigint,
+  id                  uuid,
+  display_name        text,
+  avatar_url          text,
+  chef_tier           chef_tier,
+  chef_score          numeric,
+  public_recipe_count int,
+  total_likes         bigint,
+  total_saves         bigint,
+  total_views         bigint
+)
+language sql
+stable
+as $$
+  with ranked as (
+    select
+      dense_rank() over (order by p.chef_score desc) as rnk,
+      p.id                  as pid,
+      p.display_name        as pname,
+      p.avatar_url          as pavatar,
+      p.chef_tier           as ptier,
+      p.chef_score          as pscore,
+      p.public_recipe_count as pcount,
+      p.total_likes         as plikes,
+      p.total_saves         as psaves,
+      p.total_views         as pviews
+    from profiles p
+    where p.public_recipe_count > 0
+  )
+  select
+    x.rnk, x.pid, x.pname, x.pavatar, x.ptier, x.pscore, x.pcount,
+    x.plikes, x.psaves, x.pviews
+  from ranked x
+  where x.pid = p_chef;
+$$;
+
+do $$
+begin
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'grant execute on function chef_standing(uuid) to anon, authenticated';
+  end if;
+end $$;
+
 -- A chef's own recipes, ranked by what each one contributes to their score.
 --
 -- This is the "Top recipes" list in the expanded chef card, and the ordering is

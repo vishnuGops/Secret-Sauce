@@ -363,7 +363,11 @@ class _IdentityBand extends StatelessWidget {
             runSpacing: AppSpacing.sm,
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              if (recipe.owner != null) ChefBadge.fromProfile(recipe.owner!),
+              if (recipe.owner != null)
+                ChefBadge.fromProfile(
+                  recipe.owner!,
+                  onTap: () => context.push(Routes.chef(recipe.owner!.id)),
+                ),
               StarRating(
                 rating: recipe.ratingAvg,
                 count: recipe.ratingCount,

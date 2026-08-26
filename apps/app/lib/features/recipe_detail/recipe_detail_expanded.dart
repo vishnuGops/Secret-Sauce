@@ -262,7 +262,13 @@ class _HeaderBand extends ConsumerWidget {
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           if (recipe.owner != null)
-                            ChefBadge.fromProfile(recipe.owner!),
+                            ChefBadge.fromProfile(
+                              recipe.owner!,
+                              onTap:
+                                  () => context.push(
+                                    Routes.chef(recipe.owner!.id),
+                                  ),
+                            ),
                           StarRating(
                             rating: recipe.ratingAvg,
                             count: recipe.ratingCount,
