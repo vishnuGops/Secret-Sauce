@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
@@ -122,6 +123,88 @@ void main() {
       );
       expect(find.text('Bruno Castellani'), findsOneWidget);
       expect(find.text('Head Chef'), findsOneWidget);
+    });
+
+    // The avatar-URL branch. No seeded profile carries an `avatar_url`
+    // (a standing BL-5 limit), so initials are what every screenshot and every
+    // other test has ever rendered — this is the only thing that walks the
+    // other side of `ChefAvatar._circle`.
+    testWidgets('an avatar url replaces the initials with the photo', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrap(
+          const ChefBadge(
+            name: 'Greta Lindqvist',
+            tier: ChefTier.sousChef,
+            avatarUrl: 'https://example.test/greta.jpg',
+          ),
+          width: 320,
+        ),
+      );
+      // Not `pumpAndSettle`: the image never resolves here and the placeholder
+      // is the point — what matters is which branch the widget took.
+      await tester.pump();
+
+      expect(find.byType(CachedNetworkImage), findsOneWidget);
+      expect(find.text('GL'), findsNothing);
+    });
+
+    testWidgets('fromProfile passes the avatar url through', (tester) async {
+      await tester.pumpWidget(
+        _wrap(
+          ChefBadge.fromProfile(
+            const Profile(
+              id: 'd1',
+              displayName: 'Bruno Castellani',
+              avatarUrl: 'https://example.test/bruno.jpg',
+              chefTier: ChefTier.headChef,
+            ),
+          ),
+          width: 320,
+        ),
+      );
+      await tester.pump();
+
+      expect(find.byType(CachedNetworkImage), findsOneWidget);
+      expect(find.text('BC'), findsNothing);
+    });
+
+    // `onTap` was unreachable until Phase 30 gave the badge a destination
+    // (`/chef/:id`, from both recipe-detail layouts). The app suites assert
+    // where the tap goes; this pins the widget half — that the callback fires
+    // at all, and that a badge without one stays inert rather than growing an
+    // invisible tap target on a card cover.
+    testWidgets('taps only when a callback is supplied', (tester) async {
+      var taps = 0;
+      await tester.pumpWidget(
+        _wrap(
+          ChefBadge(
+            name: 'Amara Okonkwo',
+            tier: ChefTier.masterChef,
+            onTap: () => taps++,
+          ),
+          width: 320,
+        ),
+      );
+
+      await tester.tap(find.byType(ChefBadge));
+      await tester.pump();
+      expect(taps, 1);
+
+      await tester.pumpWidget(
+        _wrap(
+          const ChefBadge(name: 'Amara Okonkwo', tier: ChefTier.masterChef),
+          width: 320,
+        ),
+      );
+      expect(
+        find.descendant(
+          of: find.byType(ChefBadge),
+          matching: find.byType(InkWell),
+        ),
+        findsNothing,
+      );
     });
   });
 

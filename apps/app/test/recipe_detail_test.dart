@@ -23,6 +23,7 @@ import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/features/recipe_detail/recipe_detail_screen.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:core/core.dart';
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -86,6 +87,18 @@ const _fullRecipe = Recipe(
       steps: [RecipeStep(id: 's3', groupId: 'sg2', text: 'Bake until golden.')],
     ),
   ],
+);
+
+/// [_fullRecipe] with its owner embedded — what `kRecipeSelect`'s FK-hinted
+/// `owner:profiles!recipes_owner_id_fkey(...)` actually delivers. Every list
+/// query carries it, so the detail header can name the chef without a lookup.
+final _ownedRecipe = _fullRecipe.copyWith(
+  ownerId: 'd1',
+  owner: const Profile(
+    id: 'd1',
+    displayName: 'Amara Baptiste',
+    chefTier: ChefTier.masterChef,
+  ),
 );
 
 /// [_fullRecipe] with a nutrition label. 8 servings × 320 kcal, so the batch
@@ -261,6 +274,12 @@ Future<GoRouter> _pump(
       GoRoute(
         path: Routes.auth,
         builder: (_, __) => const Scaffold(body: Text('AUTH SCREEN')),
+      ),
+      GoRoute(
+        path: Routes.chefPattern,
+        builder:
+            (_, state) =>
+                Scaffold(body: Text('CHEF ${state.pathParameters['id']}')),
       ),
     ],
   );
@@ -498,6 +517,42 @@ void main() {
       expect(find.widgetWithText(ActionChip, 'Fork'), findsOneWidget);
       expect(find.byIcon(Icons.edit), findsNothing);
       expect(find.byIcon(Icons.share), findsNothing);
+    });
+  });
+
+  group('owner badge (compact)', () {
+    // Phase 18 shipped the badge and listed "recipe detail renders the owner
+    // badge" as uncovered, blocked on a `RecipeRepository` fake that now exists
+    // in this file. The read path it pins is `kRecipeSelect`'s FK-hinted embed:
+    // drop the hint and `recipe.owner` is null on every surface at once, which
+    // renders as *nothing* rather than as an error (Gotcha 17).
+    testWidgets('names the embedded owner and their tier', (tester) async {
+      final repo = _FakeRecipeRepository(recipe: _ownedRecipe);
+      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+
+      expect(find.byType(ChefBadge), findsOneWidget);
+      expect(find.text('Amara Baptiste'), findsOneWidget);
+      expect(find.text('Master Chef'), findsOneWidget);
+    });
+
+    testWidgets('no embed, no badge — and no empty furniture', (tester) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+
+      expect(find.byType(ChefBadge), findsNothing);
+    });
+
+    testWidgets('tapping it opens that chef’s page (Phase 30)', (tester) async {
+      // The `ChefBadge.onTap` branch Phase 18 recorded as unreachable. It has a
+      // destination now, and the id must come from the *owner*, not the recipe:
+      // both are on the same object, so a wrong one still navigates somewhere.
+      final repo = _FakeRecipeRepository(recipe: _ownedRecipe);
+      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+
+      await tester.tap(find.byType(ChefBadge));
+      await tester.pumpAndSettle();
+
+      expect(find.text('CHEF d1'), findsOneWidget);
     });
   });
 

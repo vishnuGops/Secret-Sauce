@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+/// `MyRecipesScreen`: the header the `New recipe` button moved onto (Phase 21)
+/// and the two grids under it, whose per-tab flags are the screen's only other
+/// wiring.
+///
 /// Both tabs are paged notifiers (OPT-P9), so the override supplies a page
 /// rather than a future: `fetchPage` is the one seam, and stubbing it keeps the
 /// repository (and any Supabase client) out of a chrome test entirely.
@@ -21,6 +25,35 @@ class _EmptyShared extends SharedWithMeNotifier {
       Future.value(const []);
 }
 
+/// A recipe with its owner embedded — the badge renders only when there is one,
+/// so a card with no `owner` would pass a `showChef: false` assertion for the
+/// wrong reason.
+const _owned = Recipe(
+  id: 'r1',
+  ownerId: 'd1',
+  title: 'Suya-Spiced Lamb Skewers',
+  // Explicit, not defaulted: the visibility-pill assertion below reads this
+  // value, and a model default is not a contract this suite gets to lean on.
+  visibility: RecipeVisibility.private,
+  owner: Profile(
+    id: 'd1',
+    displayName: 'Amara Baptiste',
+    chefTier: ChefTier.masterChef,
+  ),
+);
+
+class _OneMine extends MyRecipesNotifier {
+  @override
+  Future<List<Recipe>> fetchPage({required int limit, required int offset}) =>
+      Future.value(offset == 0 ? const [_owned] : const []);
+}
+
+class _OneShared extends SharedWithMeNotifier {
+  @override
+  Future<List<Recipe>> fetchPage({required int limit, required int offset}) =>
+      Future.value(offset == 0 ? const [_owned] : const []);
+}
+
 /// `New recipe` moved off the web top navigation and onto this header, which is
 /// a **fixed-height** `AppBar` toolbar — the shape that produced B001/B002/B016
 /// elsewhere. A labelled `FilledButton` carries 28px of vertical padding on top
@@ -32,6 +65,7 @@ Future<void> _pump(
   WidgetTester tester, {
   required double width,
   double textScale = 1.0,
+  bool populated = false,
 }) async {
   tester.view.physicalSize = Size(width, 900);
   tester.view.devicePixelRatio = 1.0;
@@ -41,9 +75,14 @@ Future<void> _pump(
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
-        // Empty lists: this is a chrome test, and the grid has its own suite.
-        myRecipesProvider.overrideWith(_EmptyMine.new),
-        sharedWithMeProvider.overrideWith(_EmptyShared.new),
+        // Empty by default: the chrome tests do not need cards, and the grid
+        // has its own suite.
+        myRecipesProvider.overrideWith(
+          populated ? _OneMine.new : _EmptyMine.new,
+        ),
+        sharedWithMeProvider.overrideWith(
+          populated ? _OneShared.new : _EmptyShared.new,
+        ),
       ],
       child: MaterialApp(
         theme: AppTheme.light(),
@@ -93,6 +132,38 @@ void main() {
 
     expect(_headerLabel, findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  // Phase 18 left this as "the widget flag is tested, the screen wiring is
+  // not" — `RecipeCard(showChef: false)` had a test, the screen passing it did
+  // not, and the two tabs disagree on purpose. Both flags fail *silently*: a
+  // wrong `showChef` draws a badge nobody notices, a missing `showVisibility`
+  // hides the private pill on the one surface that needs it.
+  group('per-tab card flags', () {
+    testWidgets('My Recipes: no chef badge, but the visibility pill', (
+      tester,
+    ) async {
+      await _pump(tester, width: 1400, populated: true);
+
+      // Every card here is mine, so naming me on each one is noise — and the
+      // pill needs the cover space the badge would take.
+      expect(find.byType(ChefBadge), findsNothing);
+      expect(find.byTooltip('Private'), findsOneWidget);
+    });
+
+    testWidgets('Shared with me: the chef badge, no visibility pill', (
+      tester,
+    ) async {
+      await _pump(tester, width: 1400, populated: true);
+
+      await tester.tap(find.text('Shared with me'));
+      await tester.pumpAndSettle();
+
+      // Someone else's recipe, so who shared it is the point.
+      expect(find.byType(ChefBadge), findsOneWidget);
+      expect(find.text('Amara Baptiste'), findsOneWidget);
+      expect(find.byTooltip('Private'), findsNothing);
+    });
   });
 
   for (final (width, scale) in <(double, double)>[

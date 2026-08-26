@@ -77,7 +77,9 @@ restaurant page needs the same shape).
       client needed)
 - [x] Unit tests for **repositories** — done by **OPT-T2**, and the blocker turned out not to
       exist: `SupabaseClient` takes an `httpClient`, so `packages/core/test/support/fake_supabase.dart`
-      records the request and replies from a queue under a **real** client. 14 tests; no mock
+      records the request and replies from a queue under a **real** client. 14 tests at first; no
+      mock. **33 now** across four repositories — `food` landed with Phase 29a, and `chef` with
+      the Phase 18 coverage sweep (2026-08-25), which was the last one still unwritten
 
 ## Phase 4 — design_system
 
@@ -365,13 +367,30 @@ none blocks the feature, all are real regression surface.
       which every prior run had proved as `postgres`, a role that bypasses grants and therefore
       proved nothing. Marked `[~]` rather than `[x]` only because `recompute_chef_stats`'s
       `is distinct from` guard still has no direct assertion.
-- [ ] `ChefRepository.leaderboard` unit test _(blocked with the other repositories — Phase 3)_
-- [ ] Recipe detail renders the owner badge _(needs a `RecipeRepository` fake — 15 methods)_
-- [ ] My Recipes passes `showChef: false` _(cheap; the widget flag is tested, the screen wiring
-      is not)_
-- [ ] `ChefBadge` `onTap` / `onSurfaceImage` / avatar-URL branches. `onTap` is untested because it
-      is **unreachable** — nothing passes one. [Phase 30](#phase-30--public-chef-page-chefid--planned-not-started)
-      gives it a destination and covers it there
+**The four Dart gaps are closed (2026-08-25).** Each was blocked on something that has since been
+built — OPT-T2's recording HTTP client, the `RecipeRepository` fake that grew inside
+`recipe_detail_test.dart`, and Phase 30 giving `ChefBadge.onTap` a destination — so none of them
+needed new infrastructure, only the observation that the blocker had gone.
+
+- [x] `ChefRepository.leaderboard` unit test — `packages/core/test/chef_repository_test.dart`,
+      **7 tests** covering all four methods, not just the board. What it pins: the RPC name and
+      params for each, `kRecipeSelect`'s FK hint on `topRecipes` (Gotcha 17), `chef_score` arriving
+      as an int *or* a double (Gotcha 12), `standing` decoding **zero rows to `null`** rather than
+      the `PGRST116` a `.single()` would raise — the difference between "not ranked yet" and an
+      error page — and every method running with no session (Gotcha 9)
+- [x] Recipe detail renders the owner badge — **both layouts**, since the badge has two call sites
+      and Gotcha 26 says the second does not inherit the first's proof. `recipe_detail_test.dart`
+      (compact) and `recipe_detail_v2_test.dart` (expanded) each assert the name and tier render,
+      that no embed draws no badge, and that a tap lands on `/chef/:id` **with the owner's id** —
+      the recipe's own id is on the same object, so a wrong one still navigates somewhere
+- [x] My Recipes passes `showChef: false` — `my_recipes_header_test.dart`, and the Shared-with-me
+      tab asserted the other way (badge **on**, visibility pill off), because the two tabs disagree
+      deliberately. Proven non-vacuous by flipping the flag: the My tab test goes red
+- [x] `ChefBadge` `onTap` / `onSurfaceImage` / avatar-URL branches. `onSurfaceImage` was already
+      covered by B055's pair; the other two are now in `chef_badge_test.dart` — the callback fires
+      and a badge **without** one grows no `InkWell`, and an `avatar_url` takes the
+      `CachedNetworkImage` branch instead of the initials. The avatar path had never been rendered
+      by any test or screenshot, because no seeded profile carries one (a standing BL-5 limit)
 - [x] `RecipeCard` chef overlay position is asserted, not just "it renders" — Phase 20 pins it to
       the cover's **bottom-right** (v2 moved it there)
 
@@ -2039,8 +2058,9 @@ destination. Nothing is lost from the content: the page composes the same OPT-A8
       title now opens the chef. **Not** wired on the `RecipeCard` cover overlay: that needs a new
       `RecipeCard` parameter threaded through `RecipeGrid`/`SliverRecipeGrid` to six surfaces, and
       a second tap target inside an already-tappable card is an interaction decision, not a wiring
-      one. Phase 18's `ChefBadge.onTap` coverage item is therefore **partly** closed — the branch
-      is now reachable and exercised, on one of its two intended sites
+      one. Phase 18's `ChefBadge.onTap` **coverage** item is closed by the 2026-08-25 sweep (the
+      branch is tested at the widget level and at both detail call sites); what stays open is the
+      second *site*, listed under Deferred below
 
 ### Seed-data fit — **outcome 1: existing data covers it**
 

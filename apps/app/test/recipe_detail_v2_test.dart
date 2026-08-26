@@ -9,6 +9,7 @@ import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/features/recipe_detail/recipe_detail_screen.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:core/core.dart';
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -59,6 +60,17 @@ const _recipe = Recipe(
       ],
     ),
   ],
+);
+
+/// [_recipe] with its owner embedded, as `kRecipeSelect`'s FK-hinted
+/// `owner:profiles!recipes_owner_id_fkey(...)` delivers it.
+final _ownedRecipe = _recipe.copyWith(
+  ownerId: 'd1',
+  owner: const Profile(
+    id: 'd1',
+    displayName: 'Amara Baptiste',
+    chefTier: ChefTier.masterChef,
+  ),
 );
 
 /// [_recipe] with a nutrition label. 4 servings × 430 kcal, so the batch line
@@ -191,7 +203,7 @@ class _FakeRecipeRepository implements RecipeRepository {
   Future<void> clearRating(String recipeId) => throw UnimplementedError();
 }
 
-Future<void> _pump(
+Future<GoRouter> _pump(
   WidgetTester tester, {
   String? uid,
   Size size = const Size(1440, 900),
@@ -216,6 +228,12 @@ Future<void> _pump(
       GoRoute(
         path: Routes.auth,
         builder: (_, __) => const Scaffold(body: Text('AUTH SCREEN')),
+      ),
+      GoRoute(
+        path: Routes.chefPattern,
+        builder:
+            (_, state) =>
+                Scaffold(body: Text('CHEF ${state.pathParameters['id']}')),
       ),
     ],
   );
@@ -243,6 +261,7 @@ Future<void> _pump(
     ),
   );
   await tester.pumpAndSettle();
+  return router;
 }
 
 void main() {
@@ -441,6 +460,34 @@ void main() {
   // times on the card (B001/B002/B016). A RenderFlex overflow throws in a
   // widget test, so pumping the whole page is the assertion.
   //
+  // The expanded header band is the badge's *second* call site — the compact
+  // suite covers the first (Gotcha 26: a second caller re-opens the contract,
+  // it does not inherit the first one's proof).
+  group('owner badge (expanded)', () {
+    testWidgets('names the embedded owner and their tier', (tester) async {
+      await _pump(tester, recipe: _ownedRecipe);
+
+      expect(find.byType(ChefBadge), findsOneWidget);
+      expect(find.text('Amara Baptiste'), findsOneWidget);
+      expect(find.text('Master Chef'), findsOneWidget);
+    });
+
+    testWidgets('no embed, no badge', (tester) async {
+      await _pump(tester);
+
+      expect(find.byType(ChefBadge), findsNothing);
+    });
+
+    testWidgets('tapping it opens that chef’s page (Phase 30)', (tester) async {
+      await _pump(tester, recipe: _ownedRecipe);
+
+      await tester.tap(find.byType(ChefBadge));
+      await tester.pumpAndSettle();
+
+      expect(find.text('CHEF d1'), findsOneWidget);
+    });
+  });
+
   // Per TAB since Phase 28 — the rail restructure re-opens its width envelope
   // (Gotcha 26), and the label is new furniture in the same 352 × textScale
   // column.

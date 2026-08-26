@@ -2369,6 +2369,15 @@ below are targeted, not structural.
   What it deliberately is not: a PostgREST emulator. Responses are canned, so these prove the
   client's half of the conversation and the decode — not that Postgres would agree. That is what
   the local-stack harnesses and (next) the CI database job are for.
+  **The harness outlived the item, which was the point.** `food_repository_test.dart` arrived with
+  Phase 29a and `chef_repository_test.dart` on 2026-08-25, closing the last untested repository and
+  with it ROADMAP Phase 18's "blocked with the other repositories" line — the blocker had been gone
+  since OPT-T2 and nobody had noticed. **33 tests over four repositories** now. The chef file's
+  contracts are the same *kind*: the RPC name and params for each of the four methods, the
+  `kRecipeSelect` FK hint on `topRecipes`, `chef_score` decoding whether Postgres sends `10197` or
+  `10197.4` (Gotcha 12), `standing` turning zero rows into **`null`** rather than the `PGRST116` a
+  `.single()` would raise — the difference between "not ranked yet" and an error page — and all
+  four running with no session at all (Gotcha 9).
 - **T3 — widget tests — DONE**, all four items. Recipe-detail interactions landed with OPT-S3 and
   ShareDialog with OPT-A5; this item added the last two:
   - **`snapRating`** (`packages/core/test/rating_test.dart`, 4 tests). The valuable one is the
