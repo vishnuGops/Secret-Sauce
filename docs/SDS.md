@@ -1568,3 +1568,249 @@ everything (the B022 failure mode).
 - `recipes:check` compares text only — it cannot tell you the SQL applies. CI's `database.yml`
   does apply it (OPT-T1), so that half is covered; what nothing checks is whether the *content* is
   right, which stays a manual read.
+
+---
+
+## 12. The simulated population
+
+`supabase/seed.sql` gives the database **content**; the sim gives it **shape**. Everything that
+only appears at scale — pagination boundaries, a ranking with something to rank, a search index
+worth having, a `dense_rank` with real ties, an engagement history with dates on it — needs a
+population, and hand-authoring one is not possible at the sizes that matter.
+
+Five files under `supabase/sim/`, applied `0 → 1 → 2 → 3` by `melos run db:sim` and removed by
+`9_sim_teardown.sql`. **Nothing lives in `public`.**
+
+| File | Role |
+| --- | --- |
+| `0_sim_schema.sql` | The `sim` schema: config, the deterministic draw functions, personas, presets, registries, nutrition profiles, title variants |
+| `1_sim_dishes.sql` | **Generated** from `simData/dishes/*.json` by `tool/sim.dart` — the dish library, owner-agnostic |
+| `2_sim_generate.sql` | The generator: population → recipes → content → versions → forks → shares → views → engagement → counters |
+| `3_sim_verify.sql` | **46** `raise exception` assertions in seven groups (A–G). The sim's entire test suite |
+| `9_sim_teardown.sql` | Registry-driven deletion, including the `auth.users` rows |
+
+### 12.1 The one idea: counters are derived, never authored
+
+`seed.sql` writes `like_count = 2500` with no `recipe_likes` rows behind it. The sim writes the
+rows and lets the same arithmetic the triggers use produce the number. That is the whole point:
+**a counter with no log behind it answers "how many" and nothing else**, so every dated, windowed,
+or "who did this" query reads empty against demo data alone (§10.8).
+
+Three consequences, each of which has already cost a bug:
+
+- **The bulk load runs with the counter triggers disabled.** Live, ~200k engagement rows are ~200k
+  advisory locks, ~200k `update recipes`, and — because `recipes_chef_stats` watches those
+  columns — ~200k full `recompute_chef_stats()` passes. Step 9 then sets every counter set-based,
+  and `3_sim_verify.sql` group **A** re-derives all of them independently and asserts equality, so
+  "the triggers were off" can never quietly become "the counters are wrong".
+- **The chef recompute calls `recompute_all_chef_stats()`** — the same function `0001_init.sql`'s
+  backfill runs. Restating `3 / 5 / 0.2` or a tier threshold here would make this a second copy of
+  the formula and leave the first one untested (Gotcha 19). Assertion **A5** is the guard.
+- **`view_count` counts distinct signed-in viewers.** Anonymous rows and repeat visits are written
+  to the log and deliberately excluded from the counter (B012), so the log and the counter disagree
+  by design and a query must not assume otherwise.
+
+### 12.2 Determinism, and why it is hashing rather than `setseed()`
+
+The guarantee is *same seed + same preset → same database*. `setseed()` + `random()` only delivers
+that for a fixed evaluation order, which a plan change or a parallel scan breaks silently. So every
+draw is `sim.rand(key, stream)` — a hash of the row's own key — and is therefore a pure function of
+the row, independent of how Postgres executes anything. `key` names the row (`'recipe:412'`),
+`stream` names the decision (`'persona'`, `'nutr/kcal'`), so two decisions about one row never
+correlate. `rand_int`, `rand_bool`, `rand_normal` (Box–Muller), `rand_lognormal`, `rand_ts` and
+`uid` all build on it.
+
+**Time is anchored, not live.** `sim.epoch_end()` is pinned into `sim.config` on the first run and
+read from there forever after; `epoch_start()` is 24 months earlier. Every timestamp is
+`from + (to − from) × u`, so a `now()` anchor would re-date the entire dataset on every run — which
+is exactly B044: a re-run dated each recipe slightly later than the registry had recorded while
+`recipe_versions` still derived from the registry, leaving all 1,671 versions dated before their own
+recipe. Assertion **C4** caught it; nothing else would have, because every individual file still
+succeeded. Teardown clears the key, so a genuinely fresh build re-anchors to today while a re-run
+on top of existing data stays byte-stable. **A feature that keys off "recent" must be checked
+against this anchor, not the wall clock.**
+
+`sim.uid()` takes a `bigint`, and that is load-bearing rather than defensive: ids are composed as
+`n * 10000 + group * 100 + child`, which overflows a 32-bit int at the `large` preset.
+
+### 12.3 Personas
+
+The distribution is **data** (`sim.persona`), so retuning a share is a one-row update. Shares sum
+to 1.0. The starting point is the 90-9-1 rule, moved upward because keeping your *own* recipes is
+this product's core value — private-only creators are a real group here, not an anomaly. Even so,
+**79% of accounts own no public recipe**, which is the case the database had never contained.
+
+| Persona | Share | Recipes | Private | View weight | like / save / rate per view | Exposure |
+| --- | --- | --- | --- | --- | --- | --- |
+| `ghost` | 22.0% | 0 | — | 1 | .01 / — / — | ×1 |
+| `lurker` | 43.0% | 0 | — | 6 | .08 / .02 / .01 | ×1 |
+| `collector` | 14.0% | 0–1 | 80% | 9 | .18 / .22 / .05 | ×1 |
+| `casual` | 11.0% | 1–3 | 30% | 5 | .14 / .10 / .06 | ×1 |
+| `regular` | 6.0% | 4–15 | 15% | 7 | .16 / .12 / .08 | ×2 |
+| `power` | 2.5% | 15–60 | 10% | 8 | .15 / .11 / .07 | ×6 |
+| `vault` | 1.5% | 3–20 | **100%** | 3 | .05 / .03 / .02 | ×1 |
+
+`vault` exists to keep the private path populated; `collector` at an 80% private rate is what makes
+"saves a lot, publishes almost nothing" a visible pattern. On top of the personas, one account per
+500 carries a **star tail** — a power law in creator reach, without which no chef ever reaches
+`master_chef`, because the tier thresholds were calibrated against hand-written demo numbers rather
+than anything organic (B043, still open).
+
+### 12.4 Presets
+
+`users` drives everything: recipe count falls out of the persona mix, engagement falls out of the
+recipe count.
+
+| Preset | Users | Engagement scale | Use |
+| --- | --- | --- | --- |
+| `tiny` | 60 | 0.5 | Screenshots and CI. Seconds. |
+| `small` | 250 | 0.8 | Safe on a hosted free tier. |
+| `medium` | 1,000 | 1.0 | **Default.** ~1,670 recipes, ~118k view rows, ~10s (Phase 24's recorded run — re-measure rather than re-quote). Breaks pagination, ranking and search assumptions. |
+| `large` | 8,000 | 1.2 | Stress test. **Never run** — `master_chef` is asserted at this size but unverified. |
+
+### 12.5 The generator, in the order it runs
+
+Everything is additive and idempotent — nothing in `2_sim_generate.sql` deletes, so shrinking a
+population means running the teardown first.
+
+1. **Population** — persona by inverse CDF, signup date skewed toward recent, `auth.users` +
+   `profiles`, registered in `sim.actor`.
+2. **Recipes** — a weighted draw over `sim.dish` (the author's own `weight`), titled through
+   `sim.title_variant` indexed **by occurrence**, so one owner drawing the same dish twice cannot
+   produce the same title twice. `(owner_id, title)` is the import key and a collision silently
+   collapses two recipes into one row (§11.2); collisions *across* owners are left alone, because
+   two people publishing their own take on a dish is legitimate and the database had never held
+   that case either.
+3. **Content** — ingredient and step groups from the dish document, `sort_order` / `step_order`
+   from array position. Group **D** asserts the ordering (B022's shape).
+4. **Version history** — many rows per recipe, with `current_version_id` set set-based rather than
+   by the per-row trigger.
+5. **Forks** — the source is **not** a uniform draw. A fork means "I read this and wanted my own
+   version", so it is weighted by the recipe's own reach, raised to `sim.fork_bias` (default 2.0)
+   because the two effects compound. Measured at `medium`, the same 74 forks either way:
+   `fork_bias = 0` gives 54 distinct sources and a maximum of 2; `fork_bias = 2.0` gives 28 sources
+   and a maximum of 10. **Both fill Discover's `MOST FORKED` shelf; only the second orders it** —
+   assertion **G3** requires a maximum of 3+, which the uniform draw fails.
+6. **Shares** — `recipe_shares` rows, which is the only way the shared-with-me surface has anything
+   in it at scale.
+7. **Views — the base of the funnel.** Reach per recipe is log-normal (`sim.exposure_draw`), times
+   the owner's persona boost, the star tail, recipe age and the preset scale, capped at the
+   population: a recipe cannot have more distinct viewers than there are users. The viewer pool is
+   weighted by `view_weight`, so a lurker appears six times and a ghost once.
+8. **Likes, saves, ratings — strictly subsets of the viewers.** Nothing is drawn independently. A
+   like with no view is data no real session could produce, and it would quietly invalidate every
+   windowed metric built on this later.
+9. **Counters** — the only place a counter is written (§12.1).
+
+`sim.exposure_draw` is a function rather than an inline expression because **two passes need the
+same number for the same recipe** and they run at opposite ends of the generator: step 7 turns it
+into view rows, and step 5 — which runs before a single view exists — weights fork sources by it.
+Two inline copies would be two copies of a formula, and a fork shelf silently uncorrelated with what
+is actually read is the kind of wrong that still looks plausible.
+
+### 12.6 Nutrition labels
+
+The dish library is deliberately nutrition-free — a label is a property of a recipe as published,
+not of a dish idea. The generator draws one per recipe from `sim.nutrition_profile`, a per-category
+table of calorie bands and macro character, and it is **derived from calories rather than field by
+field**: independent draws produce labels that do not add up (200 kcal beside 40 g of fat). Calories
+are drawn per category, split into fat/protein energy shares, and converted at 9/4/4 kcal per gram
+with carbs as the remainder. Sub-values are bounded by their parents — saturated ≤ total fat,
+added ≤ total sugars, fibre + sugars ≤ carbs — and all three bounds are asserted, because a label
+that contradicts itself is worse than none.
+
+**~20% of recipes get no label**, because the empty state is a real state and a population where
+every recipe has one cannot demonstrate it.
+
+Two things to hold onto. A sim label is internally consistent arithmetic and **not real nutrition
+data** for the dish named on the card, so nothing may present one as a fact about food. And sim
+labels carry **no `source` key**, so they read as manual and `recompute_auto_nutrition()` never
+touches them — correct, but it means the backfill has no sim coverage;
+`supabase/tests/nutrition_fixtures.sql` is where that is exercised instead.
+
+### 12.7 Verification
+
+`3_sim_verify.sql` is read-only, safe against a database where the sim was never applied, and is
+**the entire test suite for the sim** — a generator that produced garbage would otherwise look
+exactly like one that worked. Seven groups:
+
+| | What it asserts |
+| --- | --- |
+| **A** | Counter invariants — every counter equals what the triggers would have produced, incl. B012's anonymous/repeat-view exclusion; `chef_score()` / `chef_tier_for()` agree with the stored values (A5/A6); the OPT-P5 profile totals have not drifted (A6b) |
+| **B** | Authorization — no row RLS could not have produced |
+| **C** | Temporal — nothing predates its parent, nothing is in the future (C4 is B044's guard) |
+| **D** | Structural — content ordering (B022) |
+| **E** | Shape — is this the dataset that was designed? Persona mix, private/public split, the funnel's subset property |
+| **F** | The pre-existing seed is untouched while `engage_existing` is off — d1–d7 and the Kitchen's standings byte-identical |
+| **G** | Discover's shelves have something to rank (Phase 26), including the fork-depth check above |
+
+CI runs the whole sequence on a `tiny` population in `database.yml` — with the caveat below.
+
+**The count is 46, not the 43 quoted elsewhere in these docs until 2026-08-25.** 43 was correct when
+Phase 24 shipped; Phase 26 added group **G** and never updated the number. Recount it rather than
+copying it — a stale assertion count reads as "this is still the suite I reviewed" and is exactly
+the kind of claim that decays without anything failing.
+
+**`ALL CHECKS PASSED` does not mean all 46 ran.** Some checks depend on population size, because a
+distribution assertion at 60 users measures the *viewer cap* rather than the distribution. The file
+handles that two different ways, and the difference matters:
+
+**Scaled — the good shape.** `E9` asks how far up the tier ladder the exposure tail reaches, and
+scales what it demands to what the population can physically produce: `master_chef` at ≥ 5,000
+users, `head_chef` at ≥ 250, and below that the weaker but still real "some chef left `home_cook`".
+It always runs. This is the pattern to copy, and the alternative is named in its own comment: at 60
+users nobody can accumulate 1,000 points, so demanding `head_chef` there would only teach whoever
+tunes the model to inflate it until the number appears (B043).
+
+**Skipped — where no honest threshold exists.** Four checks do not run below **250** users, an
+exact constant, not a rule of thumb:
+
+- **`G1`, `G2`, `G3` — all of group G.** `G3` is the fork-depth check, and it is the only thing
+  standing between `sim.fork_bias` and a `MOST FORKED` shelf that ranks nothing.
+- **`E3`**, the view-concentration tail: a recipe cannot have more distinct viewers than there are
+  users, so at `tiny` every popular recipe saturates at 60 and the ratio is bounded by arithmetic
+  whatever the distribution does.
+
+So a `tiny` run evaluates **42 of 46**, with `E9` in its weakest form. **CI runs `tiny`**
+(`database.yml` pins `preset = tiny`, `seed = 20260820`), which means **no automated run has ever
+evaluated G3** — the shelf ranking Phase 26 shipped is verified only when somebody runs `small` or
+larger by hand.
+
+Every skip prints a `raise notice` naming itself, so the run is legible — but the final
+`ALL CHECKS PASSED` is unconditional. Read the notices, not just the last line. **The practical
+rule: after touching the generator or `sim.fork_bias`, run at least `small` locally.**
+
+### 12.8 Safety
+
+- **The schema is `sim`, never `public`.** Supabase exposes `public` to PostgREST, so a helper
+  placed there becomes a callable RPC by default — that is B026, and `seed.sql` carries a whole
+  `revoke` block to undo it. A schema PostgREST does not know about makes the same guarantee by
+  construction and cannot be forgotten when someone adds the next helper.
+- **Teardown is driven by the `sim.actor` / `sim.recipe` registries**, never by an email or id
+  pattern. It deletes `auth.users` rows, and a pattern that is subtly wrong on a hosted project has
+  no undo.
+- **`engage_existing` is `false`.** Simulated users engage only with simulated recipes, so the
+  counters on the Kitchen's 14 recipes and on d1–d7 stay byte-identical and every standing pinned
+  in §10.7 stays reproducible with the sim applied. Turning it on routes through
+  `sim.counter_baseline` to stay idempotent, but it invalidates that table.
+- **Do not run the sim against the hosted project.** It writes ~1,000 `auth.users` rows and its
+  teardown is registry-driven, so that is a one-way door on a real project. If hosted ever needs a
+  populated fork tree, seed a handful of deliberate forks in `seed.sql`, where they are content
+  rather than simulation.
+- **`db:reset` does not clear the sim** (B054): `drop.sql` never touches schema `sim` and spares
+  `auth.users` by design, so a reset on a machine that has run the sim leaves the accounts and a
+  registry describing recipes that no longer exist. Run `melos run db:sim:clean -- --yes` first.
+
+### 12.9 Gaps
+
+- The dish library is **25 of a planned 120**, so directory and category coverage is thin in places
+  — check `simData/README.md`'s coverage rules before assuming a category populates.
+- `simData/people.json` and `vocab.json` are unwritten, so names and the tag vocabulary are not yet
+  drawn from authored pools; `sim.rand_zipf` is unwritten for the same reason.
+- `avatar_url` and `cover_image_url` are **null for every sim row**. There is no image asset behind
+  the population, so any surface whose real appearance depends on a photo is unexercised at scale.
+- No RLS smoke test per persona — every statement in the sim and its verifier runs as `postgres`,
+  which bypasses policies entirely. `supabase/tests/rls_matrix.sql` (BL-7) is what covers that, and
+  it builds its own three users rather than using this population.
+- Ingredient `food_id` links are not drawn, so the sim contributes nothing to auto-nutrition
+  coverage (§12.6).

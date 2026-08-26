@@ -346,7 +346,7 @@ same change set. Report misses as `⚠️ Potential issue`.
 | `melos.yaml`, `.github/workflows/**`, `tool/db.dart`, `apps/app/pubspec.yaml`, `env.example.json`, platform dirs (`android/`, `ios/`, `windows/`) | `README.md` **and** CLAUDE.md "Common commands" |
 | new/changed `design_system` widget | `docs/SDS.md` §8 (RecipeCard contract / rating widgets table) + barrel export |
 | `recipeData/**` | regenerated `supabase/seed_recipes.sql` in the same diff (`recipes:gen`) |
-| `simData/**`, `supabase/sim/**`, `tool/sim.dart`, `tool/recipe_format.dart` | regenerated `supabase/sim/1_sim_dishes.sql` when dishes changed (`sim:gen`); `docs/SDS.md` §12 once it exists; ROADMAP Phase 24 status |
+| `simData/**`, `supabase/sim/**`, `tool/sim.dart`, `tool/recipe_format.dart` | regenerated `supabase/sim/1_sim_dishes.sql` when dishes changed (`sim:gen`); `docs/SDS.md` §12 (the simulation dataset — personas, distributions, invariants); ROADMAP Phase 24 status |
 
 ## Companion handoffs
 

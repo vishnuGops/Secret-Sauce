@@ -161,7 +161,7 @@ restaurant page needs the same shape).
         user across anon / owner / shared-with / stranger, rolled back. Every other SQL step in CI
         runs as `postgres`, which bypasses policies; this is the only thing that does not. Found
         B061 on its first complete run
-      - **`supabase/sim/3_sim_verify.sql`** (Phase 24) — 43 assertions over a generated `tiny`
+      - **`supabase/sim/3_sim_verify.sql`** (Phase 24) — 46 assertions over a generated `tiny`
         population: counter invariants incl. B012's anonymous/repeat-view exclusion, authorization,
         temporal, structural and shape
       - **`supabase/tests/nutrition_{estimate,fixtures}.sql`** (Phase 29c/29d) — the estimator's
@@ -1039,7 +1039,7 @@ denormalized counters derived from it (the reverse of how `seed.sql` works).
 
 ### Verification
 
-- [x] `supabase/sim/3_sim_verify.sql` — 43 assertions that `raise exception` rather than print.
+- [x] `supabase/sim/3_sim_verify.sql` — 46 assertions that `raise exception` rather than print.
       This script *is* the test suite for this phase — there is no other coverage of the generator —
       and it found all three defects in B044 plus B045. Written when nothing in CI ran SQL at all;
       **OPT-T1 now runs it there** on a `tiny` population, which is what turned it from an opt-in
@@ -1061,11 +1061,27 @@ denormalized counters derived from it (the reverse of how `seed.sql` works).
 - [x] Wall-clock: `medium` generate ~10s; full `db:reset` from an empty database ~15s
 - [ ] RLS smoke test per persona with `set local role authenticated` — not written
 - [ ] `large` preset never run; `master_chef` is asserted there but unverified
+- [x] **The assertion count was stale everywhere: 43 → 46.** 43 was right when Phase 24 shipped;
+      Phase 26 added group **G** and no doc followed. Corrected in `CLAUDE.md`, this file, and
+      `EXECUTION-PLAN.md` (nine call sites), and SDS §12 now says to recount rather than copy
+- [ ] **CI's `tiny` preset does not run group G at all** — G1/G2/G3 are gated on `v_users >= 250`,
+      so **G3**, the fork-depth assertion that is the only guard on `sim.fork_bias` and therefore on
+      `MOST FORKED` ranking anything, is exercised by **no automated run**. With `E3` gated the same
+      way, `ALL CHECKS PASSED` at `tiny` means **42 of 46** (plus `E9` in its weakest form — that
+      one is *scaled* to the population rather than skipped, which is the pattern the other four
+      should probably follow). Found while writing SDS §12, by running the verifier and reading the
+      notices instead of the summary line. Options, none taken yet: raise CI to `small` (slower, but
+      the shelf RPCs are what Phase 26 shipped), give G3 a population-scaled threshold the way E9
+      has, or accept it and say so at the call site. **Needs a decision, not a patch**
 
 ### Docs
 
-- [ ] `docs/SDS.md` §12 — the simulation dataset: personas, distributions, invariants, and the
-      derived-counter rule _(still the one unwritten doc for this phase)_
+- [x] `docs/SDS.md` §12 — the simulation dataset: personas, distributions, invariants, and the
+      derived-counter rule. **Written 2026-08-25**, in nine parts: the derived-counter rule and its
+      three consequences, determinism (why hashing rather than `setseed()`, and the pinned time
+      anchor), the persona and preset tables as data, the generator step by step, the nutrition
+      draw, verification, safety, and the gaps. Two things the writing turned up, both now recorded
+      there rather than only here — see the two items directly below
 - [x] `CLAUDE.md` — the new commands, and the two traps worth a gotcha entry: engagement rows must
       be loaded with triggers off (or the load is O(rows) profile recomputes), and teardown is
       registry-driven
@@ -2303,7 +2319,7 @@ those.
 
 - [x] **OPT-T1:** `.github/workflows/database.yml` — a second job that starts the Supabase stack
       inside the runner and walks **three** paths: fresh apply → seed → recipes → sim tiny → the
-      43 assertions; a full re-apply (the only thing that checks the idempotency every file
+      46 assertions; a full re-apply (the only thing that checks the idempotency every file
       claims); and the **upgrade path** (Gotcha 6) — the previous revision of the baseline applied
       first, today's layered on top, which is the path B024 shipped through. No `SUPABASE_DB_URL`
       secret, by design. Verified by running the same sequence locally, which also turned up
@@ -2380,8 +2396,10 @@ forgotten. Each one names the condition that would pull it back into a phase.
 **What is open elsewhere in this document**, so the backlog is not mistaken for the whole picture:
 Phases 0–23 and 26–29 shipped their scope (29a–d all landed 2026-08-25 and reached the hosted
 project the same day), each carrying its own **Deferred** block; **Phase 24 is `[~]` in progress**
-— the generator and its 43 assertions are done, but the dish library is 25 of 120, `people.json` /
-`vocab.json` / `sim.rand_zipf` are unwritten and so is SDS §12; **Phase 30 shipped 2026-08-25**
+— the generator and its 46 assertions are done, but the dish library is 25 of 120, `people.json` /
+`vocab.json` / `sim.rand_zipf` are unwritten (SDS §12 **is** written now, 2026-08-25, and it
+records a new open question: CI's `tiny` preset skips the whole of verify group G);
+**Phase 30 shipped 2026-08-25**
 (the public chef page, pulled forward because it was Phase 25's first prerequisite — that
 prerequisite is now met); **Phase 25 is designed-not-started** behind its two remaining
 prerequisites, B043's tier calibration and the SQL harness (itself now closed, see Phase 11); and

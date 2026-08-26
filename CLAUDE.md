@@ -129,7 +129,7 @@ secret-sauce/
     │   │                         #   nutrition_profile + nutrition_for() (Phase 28)
     │   ├── 1_sim_dishes.sql      #   GENERATED from simData/ — never hand-edit
     │   ├── 2_sim_generate.sql    #   the generator; counters DERIVED from the engagement log
-    │   ├── 3_sim_verify.sql      #   43 assertions — the only test coverage this SQL has
+    │   ├── 3_sim_verify.sql      #   46 assertions — the only test coverage this SQL has
     │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
     ├── tests/rls_matrix.sql      # the RLS matrix as a SIGNED-IN user (BL-7, `db:rls`) —
     │                             #   98 checks; makes its own users, then ROLLS BACK
@@ -295,7 +295,7 @@ melos run db:nutrition:verify    # 29d: the COMMITTED auto labels vs. the LOADED
 # `medium` preset (1,000 accounts, ~1,670 recipes, ~118k view rows).
 melos run db:sim                          # schema -> dishes -> generate -> verify
 melos run db:sim -- --preset=small --seed=7
-melos run db:sim:verify                   # 43 assertions, read-only
+melos run db:sim:verify                   # 46 assertions, read-only
 melos run db:sim:clean -- --yes           # DESTRUCTIVE: deletes the simulated auth.users
 ```
 
@@ -742,7 +742,7 @@ the `code-review` skill). The ones you need while _writing_ code:
     `http://127.0.0.1:54321` is the practical way to drive real repository code; delete it after,
     since no CI job serves PostgREST (`database.yml` starts the database container only).
     **CI now applies the SQL** (`database.yml`, OPT-T1): fresh apply, re-apply, and the Gotcha 6
-    upgrade path, plus the sim's 43 assertions on a `tiny` population. Every statement in *those*
+    upgrade path, plus the sim's 46 assertions on a `tiny` population. Every statement in *those*
     steps runs as `postgres`, which bypasses policies — so CI also runs
     [supabase/tests/rls_matrix.sql](supabase/tests/rls_matrix.sql) (**BL-7**, `melos run db:rls`),
     which is the only thing here that exercises RLS as a **signed-in** user. It switches to

@@ -649,13 +649,13 @@ Not met: the three tabs do not reorder the board and the hero filter does not fi
 ## Phase 24 — Simulated population: a realistic user + engagement dataset
 
 Roadmap: [ROADMAP.md Phase 24](./ROADMAP.md#phase-24--simulated-population-a-realistic-user--engagement-dataset) ·
-Design: SDS §12 (to be written in this phase)
+Design: [SDS §12](./SDS.md#12-the-simulated-population) (written 2026-08-25)
 
 **Status: working end to end at the `medium` preset.** Built 2026-08-20: the shared validator,
 `tool/sim.dart`, `simData/` with **25 of 120** dishes, all five `supabase/sim/*.sql` files, the
 `melos run sim:* / db:sim*` scripts, and the CI gate. `melos run db:reset` now rebuilds the whole
 thing — 1,694 recipes, 1,016 profiles, ~118k view rows — from an empty database in **~15 seconds**,
-and `3_sim_verify.sql` passes all 43 assertions.
+and `3_sim_verify.sql` passes all 46 assertions.
 
 **Two decisions below were reversed by what the build found**, and both are worth reading before
 trusting the rest of this section:
@@ -2336,7 +2336,7 @@ below are targeted, not structural.
   logflare/vector/supavisor) because plain Postgres cannot apply the baseline —
   `profiles.id → auth.users`. Three paths, in one job so they share the stack:
   1. **Fresh:** drop → every migration → `seed.sql` → `seed_recipes.sql` → sim `tiny` →
-     `3_sim_verify.sql`'s 43 assertions.
+     `3_sim_verify.sql`'s 46 assertions.
   2. **Re-apply:** the whole sequence again on top of itself. Every file in this repo claims
      idempotency; nothing checked it before.
   3. **Upgrade path** (Gotcha 6): the **previous** revision of `0001_init.sql`, found with
