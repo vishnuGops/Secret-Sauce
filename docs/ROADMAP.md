@@ -33,10 +33,10 @@ restaurant page needs the same shape).
 
 ## Shipped phases — archived
 
-Phases 0–23, 26–31 and Phase OPT are **done** and their full task lists, verification logs, and
+Phases 0–23, 26–32 and Phase OPT are **done** and their full task lists, verification logs, and
 decision history have moved to [archive/ROADMAP-phases-0-31.md](./archive/ROADMAP-phases-0-31.md).
 One line each here; open items they left behind are consolidated in the register below, in the
-[Backlog](#backlog--deferred-not-scheduled), or in [Phase 32](#phase-32--audit-remediation-planned-2026-08-26).
+[Backlog](#backlog--deferred-not-scheduled), or in [Phase 32](#phase-32--audit-remediation--shipped-2026-08-26).
 
 | Phase | What shipped                                                                                   |
 | ----- | ---------------------------------------------------------------------------------------------- |
@@ -58,6 +58,7 @@ One line each here; open items they left behind are consolidated in the register
 | 29    | Auto nutrition (a–d): food registry, `food_id` links, `estimate_nutrition`, fixture refresh    |
 | 30    | Public chef page `/chef/:id` + `chef_standing` RPC; chef dialog retired                        |
 | 31    | Chef page sort tabs (All / Popular / Trending) + `chef_trending_recipes`                       |
+| 32    | Audit remediation, six bands: SQL integrity + storage limits (32a), measured indexes (32b), app correctness incl. B084/B085 (32c), shared-package hygiene incl. B083/B086 (32d), the three coverage gaps (32e), CI + a restorable backup B087 (32f) |
 | OPT   | Hardening: 26 of 29 items (column grants B050, save_recipe RPC, search_tsv, paging, CI database job, RLS matrix…); remainder → Backlog BL-1/2/4 |
 
 ## Carried-over open items (from archived phases)
@@ -368,248 +369,14 @@ are rows pointing at existing `recipes` — no second recipe system.
 
 ---
 
-## Phase 32 — Audit remediation (planned 2026-08-26)
+## Phase 32 — Audit remediation — SHIPPED 2026-08-26
 
-Findings of the 2026-08-26 principal-engineer audit — three full read-throughs: the Flutter app
-layer, the shared packages, and the SQL/tooling/CI surface. Mechanism, order of work, traps, and
-acceptance criteria: [EXECUTION-PLAN.md Phase 32](./EXECUTION-PLAN.md#phase-32--audit-remediation).
-Bands 32a–32b are **correctness and security** and come first; 32c–32f are hygiene and can
-interleave with feature work. Every SQL item follows the standing rules: idempotent in
-`0001_init.sql`, B024 drop discipline, a `rls_matrix.sql` check per policy/grant change proven
-non-vacuous, `melos run db:rls` + the Gotcha 6 upgrade path before anything reaches hosted.
+All six bands (32a–32f) are done; the full task list and verification log moved to
+[archive/ROADMAP-phases-0-31.md](./archive/ROADMAP-phases-0-31.md). One row in the shipped table
+above. What the audit left **undecided** is below — it was never scheduled, and the decision is
+still owed.
 
-### 32a — SQL integrity & security (first)
-
-- [x] **32a1 (B082, high) — close the fork-lineage forgery — DONE 2026-08-26.** Lineage is now
-      server-owned end to end: out of **both** column-grant lists, `save_recipe` raises `42501` on a
-      create carrying it and preserves the stored value on update, and `_writablePayload` stops
-      sending it. Grants alone were not enough in two directions — `save_recipe` is `security
-      definer` and would have been the way around them, and `fork_recipe` legitimately forks your
-      own recipe, so **`recipes_most_forked` now counts distinct forkers other than the owner**
-      (Gotcha 10's distinct-actor rule, applied to lineage); `3_sim_verify.sql` G3 counts the same
-      way so the guard measures what the shelf measures. Five new matrix checks (B9b/B9c/B23b/B23c
-      + F11), **107 passed / 0 failed** (was 102), each proven non-vacuous — see BUG-TRACKER B082
-      for the second defect the ritual turned up
-- [x] **32a2 — CHECK constraints + length caps — DONE 2026-08-26.** RLS says who may write a
-      column and the grants say which columns; neither said anything about the **value**, so
-      `servings = 0` and `prep_minutes = -5` were storable over PostgREST. Five guarded
-      constraints: `recipes_servings_positive`, `recipes_minutes_nonneg`, `recipes_text_lengths`
-      (title 200 / description 10k), `profiles_text_lengths` (display_name 80 / bio 500),
-      `ingredients_quantity_positive` (null-or-positive — B076's negative-subtracts-from-the-label
-      case, now unstorable rather than only skipped). Bounds were **measured first** against seed +
-      sim `medium` (real maxima: title 58, description 319, display_name 51, bio 69), because a
-      check constraint validates existing rows and an apply that trips one aborts. Two client-side
-      halves so the bound is a red field rather than a refused save: a Qty validator and
-      `maxLength` on title/description (`counterText: ''`, so the editor's envelope is unchanged);
-      `handle_new_user` **clamps** display_name with `left(…, 80)` instead of letting the
-      constraint refuse the whole signup. Review widened it: the length cap covers **all six** text
-      columns `kRecipeSelect` ships (naming two left the same amplifier one column over),
-      `recipes_text_lengths` is **`not valid`** so a first apply onto a *populated* database cannot
-      roll the whole file back, and Servings/Prep/Cook got the validators the constraint would
-      otherwise have turned into an unattributed `23514`. It also caught a real defect: `if not
-      exists` guards a constraint by **name**, so the widened definition was a silent no-op — B024's
-      rule, now applied to constraints. Nine matrix checks (B9d–B9i, B11a/B11b, B13a/B13b),
-      **117 passed / 0 failed**, deny-checks proven non-vacuous by dropping the constraints
-- [x] **32a3 — the unasserted policies — DONE 2026-08-26.** Seven checks (117 → **124**), each on
-      something whose only proof was that nothing contradicted it: `tags` UPDATE denied by *policy
-      absence* (**D29** — asserted as 0 rows, since RLS-with-no-policy filters rather than raises),
-      a forged `profiles` insert (**D30**, against a **fresh** uuid so the primary key cannot be
-      what refuses it), `recipe_suggestions` insert both ways (**D25**/**D25a** — the refusal alone
-      would also pass under `with check (false)`), authorship forgery (**D25b**), the share row's
-      invisibility to a stranger (**D31**), and anon's *deliberate* `recipe_views` insert
-      (**A7**/**A8** — the one write `anon` is supposed to have, pinned with its
-      counter-doesn't-move twin so tightening it becomes a decision rather than a deleted line).
-      `recipe_suggestions` is now written through **column grants** — `update (status)` alone, and
-      an insert list omitting `status` so a proposer cannot file their own suggestion
-      pre-`accepted`. Review caught the first cut granting `summary`/`payload` on an
-      author-edits-their-wording rationale the policy contradicts: `suggestions_update` is
-      `using (owns_recipe(...))`, so the only principal it empowers is the recipe's **owner**, who
-      would then be rewriting someone else's words under their name. The added `with check` is
-      documented as unreachable belt-and-braces rather than credited with the fix. The fixture
-      share is now `edit` rather than `view` — and **C3 asserts the literal**, so the upgrade of
-      every section-C refusal to "not even an `edit` share is a write right" is carried by a check
-      rather than by a comment. Seven proven non-vacuous by breaking each lock in turn (**126
-      checks** after the owner's-seat pair D32/D33 replaced a duplicate)
-- [x] **32a4 (B091) — Storage bucket hardening — DONE 2026-08-26.** Both buckets carry
-      `file_size_limit = 5 MB` and `allowed_mime_types = {image/jpeg, image/png, image/webp}`.
-      The policies decided *who* writes and *where*; nothing decided **what**, so a signed-in user
-      could store an object of unbounded size and any declared type in a world-readable bucket.
-      (Object *count* is untouched — a per-object limit is not a quota.) Written as an `update`,
-      not part of the bucket insert: `on conflict do nothing` would skip every database that
-      already has them, the silent-no-op shape 32a2 hit. **Exercised against the real Storage API**
-      (RLS sees an object row, not the bytes): 2 KB PNG `200`, 6 MB PNG `413`, `text/plain` `415`,
-      another user's folder `403` — with rows 2 and 3 each flipping to `200` when its own column is
-      cleared. `rls_matrix.sql` **S1** now asserts the *configuration* (a plain row read, which is
-      what drifts via a dashboard edit), and the editor guards bytes against `kMaxUploadBytes`
-      before uploading, because `maxWidth` is ignored by the desktop pickers and Android re-encodes
-      alpha picks as lossless PNG. Review also corrected the record: every app upload declares
-      `image/jpeg` and `uploadAvatar` has no callers, so the size limit is the load-bearing half
-
-### 32b — SQL performance
-
-- [x] **32b — indexes, measured — DONE 2026-08-26.** Nine added, two dropped, every claim checked
-      with `explain analyze` against sim `small` rather than taken from the audit's prediction.
-      **Added:** the five FK columns Postgres never indexes for you — `recipes(current_version_id)`,
-      `recipes(forked_from_version_id)`, `recipe_versions(parent_version_id)`,
-      `recipe_views(user_id)`, `recipe_tags(tag_id)` — plus all three of
-      `recipe_suggestions`' (its cascade fires on every recipe delete however empty it is), and the
-      partial `recipe_views (recipe_id, viewed_at desc, user_id)` that `chef_trending_recipes` was
-      missing (Phase 31 gave the likes half its index and skipped the views half).
-      **Dropped:** `recipes_visibility_idx` (two values, and every reader is a *partial* index's
-      predicate) and `recipes_rating_idx` (nothing orders by the raw average — Popular ranks on the
-      Bayesian expression — and it was maintained on every rating write).
-      **Measured, warm, isolated:** deleting a 9-version recipe takes its three version-FK triggers
-      from 0.52 / 0.84 / 0.63 ms to 0.09 / 0.11 / 0.12; deleting a profile takes the
-      `recipe_views` FK check from 1.61 ms to 0.54; `chef_trending_recipes` goes 0.62 → 0.32 ms.
-      **A first pass said the opposite** — cold caches right after an index build made the profile
-      delete look 3× *slower*, which is exactly the reading that would have justified dropping the
-      right index. Re-measured warm with fresh `analyze` and A/B'd one index at a time
-
-### 32c — App correctness (Flutter) — DONE 2026-08-26
-
-- [x] **32c1 (B084) — signed-out fork guard on recipe detail — DONE.** One handler
-      ([fork_action.dart](../apps/app/lib/features/recipe_detail/fork_action.dart)) behind the
-      reading page's chip and cook mode's finish button: signed-out routes to `/auth` without
-      touching the RPC, success lands in the **editor** on the copy, failure is one snackbar off a
-      messenger captured before the navigation. The finish screen used to send you to the fork's
-      *reading* page — a fork exists to be changed, so both go to the editor now. Every suite
-      fake's `fork()` recorded instead of throwing, and six tests drive the three outcomes at both
-      call sites
-- [x] **32c2 (B085) — `PopScope` on the recipe editor — DONE for the platform back gesture.**
-      `canPop: !_dirty`, with the pop handler and the close button sharing one `_confirmDiscard()`.
-      `_dirty` comes from listeners on the seven text fields plus the `onChanged` the editors
-      already report, and is reset at the end of `_load()` (filling the fields fires those
-      listeners) — which also fixes the inverse: an untouched editor leaves without asking.
-      **The web browser's Back button remains uncovered** and is stated as such in code and
-      tracker: it arrives as route information for the `Router`, never as a pop, so `PopScope` is
-      not consulted and Flutter exposes no hook. Six tests drive it through `handlePopRoute()`
-- [x] **32c3 — `selectedServingsProvider` lifetime resolved — DONE.** Plain `.family`, matching
-      the two check-off providers it sits beside: it was declared `autoDispose` while
-      `cook_step_view.dart` documented the opposite, so scaling a recipe to 8 and stepping into
-      cook mode silently reset the reading page to 4 (B066's own failure, with a detour). Pinned by
-      a test that leaves the screen and comes back
-- [x] **32c4 — small hardening batch — DONE.** Share dialog captures its `ScaffoldMessenger`
-      before `pop`; both editors remove the row, rebuild, and dispose its controllers in a
-      post-frame callback rather than disposing first; cook-mode timers hold a **wall-clock
-      deadline** instead of a counter a tick decrements, so a suspended app loses the chime and
-      never the elapsed time. The clock is injectable (`cookClockProvider`) because
-      `tester.pump(d)` moves the fake timer queue and not `DateTime.now()` — the suite points it at
-      `tester.binding.clock`, and a hand-driven clock proves the suspension case.
-      (`_pickCover`'s try/catch had already landed with 32a4.)
-- [x] **32c5 — dedupe recipe_detail — DONE.** One rating-write handler
-      ([rating_actions.dart](../apps/app/lib/features/recipe_detail/rating_actions.dart)) for the
-      reading page and the finish screen; `popOrGo(context, fallback)`
-      ([pop_or_go.dart](../apps/app/lib/routing/pop_or_go.dart)) replacing four copies (it lives in
-      `routing/`, not `widgets/` — it is not a widget); `ForkedLabel` / `AttributionBlock` in
-      [detail_provenance.dart](../apps/app/lib/features/recipe_detail/detail_provenance.dart) for
-      both layouts; the cook rail's hardcoded `SizedBox(width: 74)` is now
-      `kIngredientQuantityGutter × context.textScale.clamp(1.0, kDetailRailMaxScale)` — the same
-      gutter the reading rail uses, so `1.25 cup` no longer wraps to three lines at 2.0×
-
-### 32d — Shared-package hygiene — DONE 2026-08-26
-
-- [x] **32d1 (B086) — `kRecipeSelect` drift — DONE.** `rating_sum` dropped from the select (25 → 24
-      columns): `Recipe` has `ratingAvg` and `ratingCount` and no sum, so every row of every grid
-      carried a number nothing could read. The pin test's label was false in the same way and is
-      fixed, and the **inverse** test is new — every column the select requests must decode into a
-      `Recipe` field, so this class fails loudly instead of accumulating. Proven non-vacuous by
-      putting `rating_sum` back
-- [x] **32d2 — one trimmer, one duration formatter — DONE.** `trimDecimal` in `formatting.dart` is
-      the single body; `formatNutritionValue` keeps its name as a one-line delegate (it is what the
-      label widget and the editor's draft call, and `trimDecimal` says nothing about nutrition at
-      those call sites). `RecipeCard._timeLabel` now calls `formatMinutes(…, compact: true)` rather
-      than restating the arithmetic — the card keeps the narrow `1h 10m` rendering as a **width**
-      decision, since its metadata row degrades time → count → value (B080) and the two characters
-      the spaces cost come out of the rating beside it
-- [x] **32d3 (B083) — `searchByName` ranking window — DONE.** The server window is now
-      `min(limit × 3, kProfileSearchMaxRows)` and the ranked list is cut back to `limit` after
-      sorting, so an exact match no longer has to be alphabetically early to be findable. The cap is
-      stated as bounding the fix rather than completing it: beyond 40 contains-matches the honest
-      answer is still the dialog's "type more". New `profile_repository_test.dart` (9 tests) covers
-      the window, the cap, the rank order, the id tie-break, `_escapeLike`, and `updateMine`'s
-      payload omitting every server-owned column — a documented invariant with no pin until now
-- [x] **32d4 — signed-out error coupling — DONE.** `StorageService` threw `Must be signed in to
-      upload files.`, which `friendlyError` does not recognise, so a signed-out upload read
-      "Something went wrong" while every other signed-out write said what to do. It throws the
-      mapper's own `Not authenticated.` now; both that and the `StorageException` branch are pinned
-- [x] **32d5 — the OPT-S2 contract is pinned — DONE.** Four tests: `delete()` and `unshare()`
-      returning zero rows raise `WriteDeniedException` (and the `.select()` that makes the check
-      possible is asserted), plus their success paths. `listByChef` is pinned on
-      `visibility=eq.public` — without it a chef opening their own page sees private rows no other
-      visitor can, and the header count stops matching the grid
-- [x] **32d6 — dead code + placement — DONE.** `responsiveColumns` deleted (zero callers; Gotcha 13
-      and the review checklist amended in the same change), `chefs_hero.dart`'s dead re-export
-      deleted, `notYetTooltip` moved into `design_system` with a barrel export (Gotcha 14) and its
-      three importers updated, and `AppRadii.pill = 999` now carries all **22** `circular(999)`
-      sites across 12 files
-
-### 32e — Test coverage gaps — DONE 2026-08-26
-
-- [x] **32e1 — profile screen — DONE.** New `profile_screen_test.dart`, 8 tests: the three async
-      states (a hung read for loading, a thrown one for `ErrorView` — asserting no raw
-      `Exception:` reaches the screen), the loaded profile, the initials fallback (no seeded or
-      simulated profile carries an `avatar_url`, so that is the branch every real render takes),
-      the unnamed-cook copy, the signed-out empty state and its way in, `New recipe`, and sign-out
-      landing on **`/discover`** rather than `/profile` (which the redirect would bounce to
-      `/auth`) or `/` (a redirect-only route since home was retired)
-- [x] **32e2 — the reading page's rating write and the editor's save — DONE.** Five rating tests in
-      `recipe_detail_test.dart`: the write reaching the repository, the Remove button appearing
-      (which *is* the `myRatingProvider` invalidation assertion), the clear, the refusal snackbar,
-      and the signed-out and owner branches. Five editor tests: `create` on a new recipe, `update`
-      with its change summary on an edit, the blank-title block before the repository is touched,
-      the failure snackbar, and no Save button at all while an edit draft is still loading (B052's
-      `_canSave` guard). **Two of them passed for the wrong reason first**: without an
-      `authRepositoryProvider` override `_save` reaches the real Supabase singleton, throws inside
-      its own `try`, and reports "Save failed" — so the failure test was green while the two
-      success tests were red
-- [x] **32e3 — version history sheet — DONE.** Two tests in the same suite: real rows through the
-      compact cover's history button — order, the `Current` chip on row 0 only, the `Version N`
-      fallback for a version with no summary, the ISO date — plus the empty-state copy. Every fake
-      in every suite returned `const []` before this, so the sheet had only ever rendered empty
-
-### 32f — CI & operations — DONE 2026-08-26
-
-- [x] **32f1 — format gate — DONE.** `dart format --output=none --set-exit-if-changed` over
-      `git ls-files '*.dart'` in `ci.yml`. Tracked files only: the generated `*.g.dart` /
-      `*.freezed.dart` are git-ignored and formatted by a builder whose `dart_style` version is not
-      this job's to police, so `dart format .` would gate on somebody else's output
-- [x] **32f2 — `database.yml` drives `tool/db.dart` — DONE.** The fresh path is now a single
-      `dart run tool/db.dart reset --preset=small --seed=20260820`, and the matrix, both nutrition
-      suites, the re-apply and the sim all go through the tool. The ordering lived in three places
-      (the tool, the workflow, `config.toml`) and CI executed the copy nobody runs; now the file CI
-      exercises is the file a developer runs. `psql` stays for the one step the tool has no name
-      for — `git show`ing the previous baseline — and for the smoke `-c` queries. Needs the pinned
-      Dart (via `flutter-action`) plus `dart pub get`; the root package is pure Dart, so no
-      bootstrap
-- [x] **32f3 — `supabase/setup-cli` pinned — DONE.** `2.108.0`, the version this machine runs,
-      which starts **PostgreSQL 15.8** — recorded in the workflow, because the CLI chooses the
-      server major the whole job proves things against. And the two steps that exercise *behaviour*
-      rather than syntax now run **after the upgrade path too**: the RLS matrix, and a sim rebuilt
-      on the upgraded schema (rebuilt rather than re-verified — `drop.sql` took its recipes and
-      spared `auth.users`, so the registry points at rows that no longer exist, B054)
-- [x] **32f4 — `flutter build web` smoke job — DONE.** A second `ci.yml` job compiles a release web
-      build against `env.example.json`. `flutter test` runs on the VM; nothing in CI had ever run
-      dart2js over the whole program, where a tree-shaking failure or a plugin with no web
-      implementation would show up. It proves compilation, not runtime
-- [x] **32f5 (B087) — `db:backup` + the restore doc — DONE.** `melos run db:backup` writes **two**
-      timestamped dumps: `public` (schema + data) and `auth` **data-only** for `users` /
-      `identities`. Public alone restores into a project whose accounts do not exist — every
-      `profiles.id` is an FK to `auth.users` — and auth *DDL* would collide with the schema a fresh
-      project already owns. `--docker` runs `pg_dump` in `postgres:17-alpine` because a client older
-      than the server aborts (B079), rewriting a loopback URL to `host.docker.internal` so the same
-      command dumps the local stack. **Exercised end to end** against the local stack: 4.9 MB public
-      with `COPY public.recipes`, 104 KB auth with both `COPY auth.*` blocks, from a 17.10 client
-      against a 15.8 server. `backups/` and the dump filename patterns are git-ignored — a
-      production dump carries every password hash in `auth.users`. Storage objects are documented as
-      **not** covered
-- [x] **32f6 — the baselining runbook — DONE.** In
-      [supabase/migrations/README.md](../supabase/migrations/README.md): back up, `migration list`,
-      `supabase migration repair --status applied 0001 --linked`, confirm, then the sequence is
-      live. Written against the pinned CLI and verified against its `--help` rather than recalled,
-      with the two traps named (it takes the version number, not the filename; a project that never
-      had the baseline must **apply** it rather than be stamped)
-
-### Needs a decision first (not scheduled — argue before building)
+### Phase 32's undecided items (argue before building)
 
 - `recipe_views` retention/partitioning — the table grows without bound and `anon` can insert
   (B012 protects the counter, not the table); needs a retention design decision
@@ -772,7 +539,8 @@ up headlessly, so there are no DOM nodes to target and navigation has to be driv
 #### BL-7 — the RLS acceptance matrix as a _signed-in_ user — **DONE (2026-08-23)**
 
 Closed: [supabase/tests/rls_matrix.sql](../supabase/tests/rls_matrix.sql) (`melos run db:rls`) —
-**102 checks** across anon / owner / shared-with / stranger, rolled back, wired into CI
+**127 checks** as of Phase 32 (102 when BL-7 closed) across anon / owner / shared-with /
+stranger, rolled back, wired into CI
 (`database.yml`). Found B061 on its first complete run. **Standing rule:** any change to a policy,
 a `security definer` function, or the column grants → run it, and add a check for any new surface
 in the same change. Still not covered by the matrix: Storage bucket RLS (needs the storage

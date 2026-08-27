@@ -410,11 +410,13 @@ another instance of Gotcha 21, and it is now Gotcha 25.
 | ---- | ---------- | -------- | ---- | ----------- | ------ | ------------ |
 | B081 | 2026-08-26 | medium | sim/verify | **E9's population tiering claimed a rung `small` cannot reach.** `3_sim_verify.sql`'s E9 asserted that some simulated chef reaches `head_chef` (5,000 points) at any preset with `v_users >= 250`. Nobody had ever run 250: CI was pinned to `tiny` and every hand-run used `medium`, so the branch boundary was copied from where E3 and group G start rather than from what the population can produce. It cannot — 250 accounts cap a single recipe near 2,000 points (250 likes × 3 + 250 saves × 5 + 250 views × 0.2), and the best simulated chef at `small` scored **3,078**, a `sous_chef`. The failure surfaced on the *first* run of the preset, i.e. the moment the ROADMAP's "raise CI to `small`" option was taken, and it would have landed as a red CI run on whoever took it. | fixed | Four rungs instead of three, one per reachable ceiling: `master_chef` at `large`, `head_chef` at `>= 1000` (the medium claim, unchanged), **`sous_chef` at `>= 250`**, and "any tier above `home_cook`" below that. Verified by generating `small` (seed `20260820`) on the local stack: `ALL CHECKS PASSED`, with group G now executing — `shelves: under-30 20, projects 20, most-forked 6` — and E3 no longer printing its skip notice. That is 46 of 46 in CI, against 42 of 46 before. |
 
-### 2026-08-26 principal-engineer audit — confirmed defects (all open, owned by ROADMAP Phase 32)
+### 2026-08-26 principal-engineer audit — confirmed defects (all **fixed** in Phase 32)
 
-Three full read-throughs (app layer, shared packages, SQL/tooling/CI). Only **defects** are
-tracked here; the hygiene and performance findings live in
-[ROADMAP Phase 32](./ROADMAP.md#phase-32--audit-remediation-planned-2026-08-26).
+Three full read-throughs (app layer, shared packages, SQL/tooling/CI). Every row below shipped a
+fix the same day, across bands 32a–32f; the two B0xx rows the bands *found* while fixing them
+(B088, B090/B091's review corrections) are recorded in place rather than as new sections. Only
+**defects** are tracked here; the hygiene and performance findings live in
+[ROADMAP Phase 32](./ROADMAP.md#phase-32--audit-remediation--shipped-2026-08-26).
 
 | ID   | Date       | Severity | Area | Description | Status | Fix / Commit |
 | ---- | ---------- | -------- | ---- | ----------- | ------ | ------------ |

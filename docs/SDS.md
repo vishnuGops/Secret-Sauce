@@ -534,7 +534,7 @@ It creates three throwaway `auth.users` (an owner, someone the owner shares a pr
 an unrelated signed-in stranger) plus a private and a public recipe with content, re-runs the whole
 matrix under `set local role authenticated` + `request.jwt.claims`, and **rolls the transaction
 back** — so it leaves no user, no recipe and no helper function behind and is safe against any
-database. **126 checks** (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
+database. **127 checks** (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
 ingredient food link, in 29b; B22c and B22d, the auto-estimate source-smuggling guard and its
 nothing-counted case, in 29c — B22d found **B075** on its first run; **E10**, that
 `recompute_auto_nutrition()` is not callable as a signed-in user, in 29d — a whole-table rewrite
