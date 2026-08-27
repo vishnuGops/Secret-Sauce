@@ -71,11 +71,19 @@ String isoDate(DateTime date) =>
 /// split out instead of showing `70 min`. Chips inside a step keep the raw
 /// `N min` form — a step long enough to need hours is a data problem, not a
 /// formatting one.
-String formatMinutes(int minutes) {
+///
+/// [compact] drops the spaces — `1h 10m` — and exists for exactly one caller,
+/// `RecipeCard`'s time label (32d2, which merged the card's own private copy of
+/// this arithmetic into this function). It is a **width** decision, not a style
+/// one: the card is a fixed-size tile whose metadata row degrades time → count
+/// → value under pressure (B080), so the two characters the spaces cost come
+/// straight out of the rating beside it. Nothing else should pass it.
+String formatMinutes(int minutes, {bool compact = false}) {
   if (minutes <= 0) return '—';
   final hours = minutes ~/ 60;
   final rest = minutes % 60;
   if (hours == 0) return '$rest min';
+  if (compact) return rest == 0 ? '${hours}h' : '${hours}h ${rest}m';
   if (rest == 0) return '$hours h';
   return '$hours h $rest m';
 }
@@ -89,8 +97,14 @@ String formatMinutes(int minutes) {
 String sentenceCase(String s) =>
     s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
 
-/// Trims a scaled quantity to the shortest honest decimal: `2`, `1.5`, `1.25`.
-String _trimQuantity(double v) {
+/// The shortest honest decimal for [v]: `2`, `1.5`, `1.25`.
+///
+/// One implementation for the two places a stored `numeric` reaches a label —
+/// a scaled ingredient quantity and a nutrition value (32d2, where the two
+/// bodies were byte-identical in two files). Two decimal places is the ceiling
+/// in both: quantities are scaled by a servings ratio, nutrition data is never
+/// finer, and `10.0 g` reads like a precision nobody entered.
+String trimDecimal(double v) {
   if (v == v.roundToDouble()) return v.toStringAsFixed(0);
   return v
       .toStringAsFixed(2)
@@ -127,7 +141,7 @@ String ingredientQuantityLabel(Ingredient ingredient, {double factor = 1}) {
     final note = ingredient.note;
     return (note ?? '').isEmpty ? '—' : note!;
   }
-  final amount = _trimQuantity(quantity * factor);
+  final amount = trimDecimal(quantity * factor);
   return hasUnit ? '$amount $unit' : amount;
 }
 

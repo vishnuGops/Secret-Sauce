@@ -75,10 +75,17 @@ class StorageService {
     return storage.getPublicUrl(path);
   }
 
+  /// The signed-out guard, worded to match the mapper (32d4).
+  ///
+  /// `friendlyError` recognises `StateError` **by its message** — it looks for
+  /// `Not authenticated`, which is what `SupabaseRecipeRepository._uid` throws
+  /// (Gotcha 9). This threw a different sentence, so a signed-out upload fell
+  /// through to "Something went wrong" instead of "You need to be signed in to
+  /// do that". Same string, same prompt, one behaviour.
   String _requireUid() {
     final uid = _client.auth.currentUser?.id;
     if (uid == null) {
-      throw StateError('Must be signed in to upload files.');
+      throw StateError('Not authenticated.');
     }
     return uid;
   }

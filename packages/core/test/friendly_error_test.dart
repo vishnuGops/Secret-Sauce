@@ -76,6 +76,24 @@ void main() {
     );
   });
 
+  // 32d4. `StorageService` threw its own sentence ("Must be signed in to upload
+  // files."), which this mapper does not recognise — so a signed-out upload read
+  // "Something went wrong" while every other signed-out write said what to do.
+  // The two now throw the same string, and this is the pin.
+  test('the storage signed-out guard maps like every other one', () {
+    expect(
+      friendlyError(StateError('Not authenticated.')),
+      contains('signed in'),
+    );
+  });
+
+  test('a StorageException says which thing failed', () {
+    expect(
+      friendlyError(const StorageException('Payload too large')),
+      contains('could not be uploaded'),
+    );
+  });
+
   test('a timeout reads as a connection problem', () {
     expect(friendlyError(TimeoutException('nope')), contains('connection'));
   });

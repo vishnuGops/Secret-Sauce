@@ -73,7 +73,7 @@ class TierLadder extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(999),
+          borderRadius: BorderRadius.circular(AppRadii.pill),
           child: LinearProgressIndicator(
             value: positionFor(score),
             minHeight: height,

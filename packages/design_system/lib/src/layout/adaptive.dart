@@ -56,18 +56,6 @@ class AdaptiveLayout extends StatelessWidget {
   }
 }
 
-/// Number of columns for a responsive grid, chosen by breakpoint.
-///
-/// Grids of **fixed-width** tiles (the recipe card, which is capped at
-/// `kRecipeCardMaxWidth`) should use [FlowGridMetrics] instead: it derives the
-/// column count from the width actually available rather than from the window,
-/// so the tiles never stretch past their maximum.
-int responsiveColumns(BuildContext context) => switch (context.screenSize) {
-  ScreenSize.compact => 1,
-  ScreenSize.medium => 2,
-  ScreenSize.expanded => 3,
-};
-
 /// How many tiles of a bounded width fit across [available], and how wide each
 /// one ends up.
 ///

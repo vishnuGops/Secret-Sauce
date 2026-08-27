@@ -65,7 +65,7 @@ class ScoreContributionBar extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.xs),
         ClipRRect(
-          borderRadius: BorderRadius.circular(999),
+          borderRadius: BorderRadius.circular(AppRadii.pill),
           child: LinearProgressIndicator(
             value: share,
             minHeight: 8,

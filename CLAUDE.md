@@ -101,8 +101,8 @@ secret-sauce/
 │   ├── lib/widgets/           # app-level shared widgets — anything two features both reach:
 │   │                          #   recipe_grid.dart, recipe_async_grid.dart (the paged list every
 │   │                          #   browsing surface renders through — each exports a Sliver* twin
-│   │                          #   for pages that own their scroll), share_dialog.dart,
-│   │                          #   not_yet_tooltip.dart
+│   │                          #   for pages that own their scroll), share_dialog.dart
+│   │                          #   (not_yet_tooltip.dart moved to design_system — 32d6)
 │   ├── lib/main.dart · test/{widget_test,chefs_screen_test,chefs_routing_test,
 │   │                          chef_page_test,top_nav_bar_test,recipe_editor_test,
 │   │                          recipe_detail_test,
@@ -638,8 +638,9 @@ Four things about `/recipe/:id/cook` are load-bearing:
 - **Naming**: files `snake_case.dart`; types `PascalCase`.
 - **Lints beyond `flutter_lints`**: `prefer_const_constructors`, `prefer_final_locals`,
   `unawaited_futures`, `require_trailing_commas`.
-- **Layout**: use `AppSpacing` / `AppRadii` tokens and `responsiveColumns` / `AdaptiveLayout` /
-  `context.isCompact` from `design_system`; breakpoints are 600 (compact) and 1000 (medium) —
+- **Layout**: use `AppSpacing` / `AppRadii` tokens (including `AppRadii.pill` for a fully rounded
+  end — 32d6 swept 22 literal `circular(999)`s into it) and `AdaptiveLayout` / `context.isCompact`
+  / `FlowGridMetrics` from `design_system`; breakpoints are 600 (compact) and 1000 (medium) —
   don't hard-code widths.
 - **Every error a user sees goes through `friendlyError()`** (core, OPT-A4). Screens rendered
   `e.toString()`, so a denied save read as a `PostgrestException(...)` dump with the table name in
@@ -769,8 +770,10 @@ the `code-review` skill). The ones you need while _writing_ code:
     The delegate always divides the **whole** cross-axis extent between its columns, so a tile can
     only be capped by handing the grid less width — that is what the gutter padding is for; a
     `ConstrainedBox` inside the card is ignored under the cell's tight constraints.
-    `responsiveColumns` still exists for navigation chrome and non-card grids — don't wire it back
-    into a card grid.
+    `responsiveColumns` — the breakpoint-keyed 1/2/3 column count — was **deleted in 32d6**: it had
+    no callers left once every grid became a flowing one, and a dead helper is an invitation to
+    wire the wrong sizing rule back in. Navigation chrome branches on `context.isCompact` /
+    `AdaptiveLayout` instead.
 14. **New `design_system` widget → export it from `design_system.dart`**, or `apps/app` cannot
     import it.
 15. **`packages/core`'s tests do not touch a database — know what that buys.**
@@ -818,8 +821,10 @@ relationship was found`. Use the shared `kRecipeSelect` constant in
     **It lists columns explicitly — it is no longer `*` (OPT-P1).** `recipes.search_tsv` is a
     ~450-byte tsvector nothing on the client reads, and `*` shipped it on every row. So **a new
     column on `recipes` must be added to `kRecipeSelect` too**, or it decodes as null with no
-    error — the read-side twin of the column-grant obligation. `packages/core/test/chef_models_test.dart`
-    pins the current 25. Same rule now on `recipe_versions`: `versions()` selects
+    error — the read-side twin of the column-grant obligation. **The obligation runs both ways since
+    32d1**: `rating_sum` was fetched on every row of every grid with no `Recipe` field behind it
+    (B086), so `packages/core/test/chef_models_test.dart` now pins the current **24** in both
+    directions — every decoded column requested, and every requested column decoded. Same rule now on `recipe_versions`: `versions()` selects
     `kRecipeVersionSelect`, which deliberately **omits `content_snapshot`** — a whole recipe as
     `jsonb` per row that no UI reads, and the v2 detail header watches that provider on every page
     open (B065). Local fixtures all write `'{}'` there, so an over-fetch of it is invisible until a

@@ -1,6 +1,14 @@
+import 'dart:math' as math;
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:core/src/models/profile.dart';
+
+/// Ceiling on the rows [SupabaseProfileRepository.searchByName] ranks over.
+///
+/// Public so a test can state the boundary it is testing rather than restating
+/// the number (32d3).
+const int kProfileSearchMaxRows = 40;
 
 /// Read/update user profiles; used by sharing (user lookup) and profile screen.
 abstract interface class ProfileRepository {
@@ -39,12 +47,19 @@ class SupabaseProfileRepository implements ProfileRepository {
     // "Dara Okonkwo". The order here is only the tie-break — the ranking that
     // decides what the reader sees first happens below, because PostgREST
     // cannot order by "is this an exact match".
+    //
+    // The window is deliberately **wider than [limit]** (B083, 32d3). Ranking
+    // client-side over a server-side `limit(limit)` ranks the wrong set: the
+    // server orders alphabetically, so with more contains-matches than the
+    // dialog shows, an exact "Dara" alphabetically behind eight "Darabont"s
+    // never arrives and cannot be promoted — the failure appears exactly at the
+    // scale OPT-A5 was built for. Over-fetch, rank, then cut.
     final rows = await _client
         .from('profiles')
         .select()
         .ilike('display_name', '%${_escapeLike(trimmed)}%')
         .order('display_name', ascending: true)
-        .limit(limit);
+        .limit(_searchWindow(limit));
 
     final profiles = rows.map<Profile>(Profile.fromJson).toList();
     final needle = trimmed.toLowerCase();
@@ -59,8 +74,21 @@ class SupabaseProfileRepository implements ProfileRepository {
       // calls rather than swapping under the reader's finger.
       return byName != 0 ? byName : a.id.compareTo(b.id);
     });
-    return profiles;
+    return profiles.length > limit ? profiles.sublist(0, limit) : profiles;
   }
+
+  /// How many rows to rank over for a page of [limit].
+  ///
+  /// Three pages' worth, capped: the cap is what keeps a one-letter query from
+  /// dragging the whole `profiles` table across the wire on a population of
+  /// thousands. It bounds the fix rather than completing it — an exact match
+  /// alphabetically behind [kProfileSearchMaxRows] contains-matches is still
+  /// unreachable, and the honest answer there is the one the dialog already
+  /// gives: type more.
+  static int _searchWindow(int limit) =>
+      limit >= kProfileSearchMaxRows
+          ? limit
+          : math.min(limit * 3, kProfileSearchMaxRows);
 
   /// 0 exact, 1 prefix, 2 anywhere — the order someone typing a name expects.
   static int _rank(String name, String lowercaseQuery) {

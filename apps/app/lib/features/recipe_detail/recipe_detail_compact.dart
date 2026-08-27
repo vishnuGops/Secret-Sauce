@@ -244,7 +244,7 @@ class _Cover extends ConsumerWidget {
                 ),
                 decoration: BoxDecoration(
                   color: scheme.surface.withValues(alpha: 0.9),
-                  borderRadius: BorderRadius.circular(999),
+                  borderRadius: BorderRadius.circular(AppRadii.pill),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

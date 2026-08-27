@@ -27,6 +27,36 @@ void main() {
     expect(formatMinutes(-5), '—');
   });
 
+  // 32d2: `RecipeCard` had its own copy of this arithmetic, rendering the same
+  // duration two characters narrower. It is the same function now, and the
+  // narrow rendering is an argument — the card's metadata row spends those two
+  // characters on the rating beside it (B080).
+  test('formatMinutes compact drops the spaces and nothing else', () {
+    expect(formatMinutes(70, compact: true), '1h 10m');
+    expect(formatMinutes(120, compact: true), '2h');
+    expect(formatMinutes(765, compact: true), '12h 45m');
+    // Under an hour and the empty case are identical in both renderings.
+    expect(formatMinutes(40, compact: true), '40 min');
+    expect(formatMinutes(0, compact: true), '—');
+  });
+
+  // One trimmer for the two places a stored `numeric` reaches a label (32d2).
+  test('trimDecimal keeps the shortest honest decimal', () {
+    expect(trimDecimal(2), '2');
+    expect(trimDecimal(2.0), '2');
+    expect(trimDecimal(1.5), '1.5');
+    expect(trimDecimal(1.25), '1.25');
+    expect(trimDecimal(2.50), '2.5');
+    // Two places is the ceiling — a scaled third of a cup rounds rather than
+    // printing 0.3333333333333333.
+    expect(trimDecimal(1 / 3), '0.33');
+  });
+
+  test('formatNutritionValue is that trimmer, under its own name', () {
+    expect(formatNutritionValue(10), trimDecimal(10));
+    expect(formatNutritionValue(0.25), trimDecimal(0.25));
+  });
+
   test('sentenceCase capitalises without touching the rest', () {
     expect(sentenceCase('plain yoghurt'), 'Plain yoghurt');
     // Not title case — "Gruyère, shredded" must not become "Gruyère, Shredded".

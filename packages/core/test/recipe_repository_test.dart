@@ -412,6 +412,96 @@ void main() {
     });
   });
 
+  // 32d5. OPT-S2's contract — the project's headline silent-failure class
+  // (Gotcha 2) — had no test at all. `.delete()` matching zero rows is a
+  // **success** at the PostgREST layer, so an RLS denial on these two paths is
+  // indistinguishable from a write unless the repository checks the returned
+  // rows, which is what these pin.
+  group('denied writes (OPT-S2 / Gotcha 2)', () {
+    test('delete returning no rows is WriteDeniedException', () async {
+      final (:http, :client, :repo) = _repo([(200, jsonEncode(<Object>[]))]);
+      await signInAs(client, _uid);
+
+      await expectLater(
+        repo.delete('r1'),
+        throwsA(isA<WriteDeniedException>()),
+      );
+      // The `.select()` is what makes the check possible in the first place: a
+      // bare delete returns nothing to count.
+      expect(http.requests.single.select, 'id');
+    });
+
+    test('delete returning the row succeeds', () async {
+      final (:http, :client, :repo) = _repo([
+        (
+          200,
+          jsonEncode([
+            {'id': 'r1'},
+          ]),
+        ),
+      ]);
+      await signInAs(client, _uid);
+
+      await repo.delete('r1');
+
+      expect(http.requests.single.param('id'), 'eq.r1');
+    });
+
+    test('unshare returning no rows is WriteDeniedException', () async {
+      final (:http, :client, :repo) = _repo([(200, jsonEncode(<Object>[]))]);
+      await signInAs(client, _uid);
+
+      await expectLater(
+        repo.unshare(recipeId: 'r1', userId: 'u2'),
+        throwsA(isA<WriteDeniedException>()),
+      );
+      final req = http.requests.single;
+      expect(req.select, 'recipe_id');
+      expect(req.param('recipe_id'), 'eq.r1');
+      expect(req.param('shared_with_user_id'), 'eq.u2');
+    });
+
+    test('unshare returning the row succeeds', () async {
+      final (:http, :client, :repo) = _repo([
+        (
+          200,
+          jsonEncode([
+            {'recipe_id': 'r1'},
+          ]),
+        ),
+      ]);
+      await signInAs(client, _uid);
+
+      await repo.unshare(recipeId: 'r1', userId: 'u2');
+
+      expect(http.requests, hasLength(1));
+    });
+  });
+
+  group('listByChef', () {
+    test('filters to public rows, in a total order', () async {
+      final (:http, :client, :repo) = _repo([
+        (200, jsonEncode([_recipeRow()])),
+      ]);
+
+      await repo.listByChef('d1');
+
+      final req = http.requests.single;
+      expect(req.param('owner_id'), 'eq.d1');
+      // Load-bearing, not a restatement of RLS: `recipes_select` lets a signed-in
+      // user read their own private recipes, so without this a chef opening
+      // their own page sees rows nobody else can — and the public-recipe count
+      // in the header stops matching the grid under it.
+      expect(
+        req.param('visibility'),
+        'eq.public',
+        reason: 'the chef page must not leak the owner their own private rows',
+      );
+      expect(req.order, 'created_at.desc.nullslast,id.desc.nullslast');
+      expect(req.param('limit'), '$kRecipePageSize');
+    });
+  });
+
   group('signed-out reads', () {
     test('myLiked answers false without a request (Gotcha 9)', () async {
       final (:http, :client, :repo) = _repo([]);

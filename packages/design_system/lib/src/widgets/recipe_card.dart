@@ -102,14 +102,12 @@ class RecipeCard extends StatelessWidget {
   /// so the badge is not repeated on every tile.
   final bool showChef;
 
-  String get _timeLabel {
-    final total = recipe.totalMinutes;
-    if (total <= 0) return '—';
-    if (total < 60) return '$total min';
-    final h = total ~/ 60;
-    final m = total % 60;
-    return m == 0 ? '${h}h' : '${h}h ${m}m';
-  }
+  /// `45 min`, `1h 10m`, `—`. Core's formatter in its compact rendering (32d2):
+  /// the card had its own copy of the same arithmetic, so `1 h 10 m` and
+  /// `1h 10m` were two functions' opinions rather than one decision. The spaces
+  /// stay off **here** because this label is the first thing the metadata row
+  /// sacrifices when it runs out of width (B080).
+  String get _timeLabel => formatMinutes(recipe.totalMinutes, compact: true);
 
   @override
   Widget build(BuildContext context) {
@@ -277,7 +275,7 @@ class RecipeCardPlaceholder extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         color: scheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.circular(AppRadii.pill),
       ),
     );
 
@@ -404,7 +402,7 @@ class _ChefOverlay extends StatelessWidget {
         // Scrim: cover photos are arbitrary, so the badge carries its own
         // contrast rather than relying on the image being dark.
         color: Colors.black.withValues(alpha: 0.55),
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.circular(AppRadii.pill),
       ),
       child: ChefBadge.fromProfile(owner, compact: true, onSurfaceImage: true),
     );
@@ -431,7 +429,7 @@ class _VisibilityBadge extends StatelessWidget {
         padding: const EdgeInsets.all(AppSpacing.xs),
         decoration: BoxDecoration(
           color: scheme.surface.withValues(alpha: 0.92),
-          borderRadius: BorderRadius.circular(999),
+          borderRadius: BorderRadius.circular(AppRadii.pill),
           border: Border.all(color: scheme.outlineVariant),
         ),
         child: Icon(

@@ -74,7 +74,7 @@ class TierChip extends StatelessWidget {
         // A heavier wash on a scrim: 14% of a pale colour over black is
         // indistinguishable from the scrim itself.
         color: color.withValues(alpha: onImage ? 0.28 : 0.14),
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.circular(AppRadii.pill),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

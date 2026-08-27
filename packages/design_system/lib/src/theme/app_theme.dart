@@ -63,4 +63,13 @@ class AppRadii {
   AppRadii._();
   static const double button = 12;
   static const double card = 16;
+
+  /// A fully rounded end — chips, badges, pills, the nav bar's selection.
+  ///
+  /// 999 rather than a computed half-height: `BorderRadius.circular` clamps to
+  /// half the shorter side, so any number past the tallest pill in the product
+  /// renders identically and none of the 22 call sites (32d6) has to know its
+  /// own height. It was that literal, twelve files over, until this constant
+  /// gave the shape a name.
+  static const double pill = 999;
 }

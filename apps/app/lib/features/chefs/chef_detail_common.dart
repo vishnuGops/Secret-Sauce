@@ -1,8 +1,6 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
-import 'package:app/widgets/not_yet_tooltip.dart';
-
 /// The small pieces the chefs feature shares between the board and `/chef/:id`:
 /// the all-caps section kicker, the muted note an empty or failed section falls
 /// back to (OPT-A8), and the segmented pill both pages switch a ranking with.
@@ -91,7 +89,7 @@ class ChefPillTabs<T> extends StatelessWidget {
       padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
         color: scheme.surfaceContainerHigh,
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.circular(AppRadii.pill),
       ),
       child: Row(
         children: [
@@ -106,14 +104,14 @@ class ChefPillTabs<T> extends StatelessWidget {
                     message: disabledMessage,
                     child: InkWell(
                       onTap: enabled ? () => onSelected(option) : null,
-                      borderRadius: BorderRadius.circular(999),
+                      borderRadius: BorderRadius.circular(AppRadii.pill),
                       child: Container(
                         alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(vertical: 5),
                         decoration: BoxDecoration(
                           color:
                               isSelected ? scheme.surfaceContainerLowest : null,
-                          borderRadius: BorderRadius.circular(999),
+                          borderRadius: BorderRadius.circular(AppRadii.pill),
                         ),
                         child: Text(
                           labelOf(option),

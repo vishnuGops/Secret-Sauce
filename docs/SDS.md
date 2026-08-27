@@ -921,7 +921,8 @@ has to fit at 600.
   shell route with **no** selected destination — the pill highlights nothing there.
 
 **Two different rules, on purpose.** Navigation chrome switches at the breakpoints
-(`responsiveColumns`, `AdaptiveLayout`, `context.isCompact`) — it is a different layout on each
+(`AdaptiveLayout`, `context.isCompact` — `responsiveColumns` was deleted in 32d6 with its last
+caller) — it is a different layout on each
 side. The **recipe grid does not**: it flows. `FlowGridMetrics.fit` takes the width actually
 available and fits as many columns as can each hold `kRecipeCardMinWidth` (288), caps every tile
 at `kRecipeCardMaxWidth` (340), and splits whatever is left over into an equal gutter on each
@@ -1024,6 +1025,7 @@ shipping that is the app-wide typography decision (`google_fonts` + a `textTheme
 | `ChefSpotlightCard` | A chef as a collectible card (draft `1e`): tier-gradient foil frame, portrait window with serial and rank, rarity band, a "driver" row naming the input contributing most, the four totals, and the tier-ladder bar. Renders entirely from one `ChefStanding` — **no per-card fetch** |
 | `SpotlightCardPlaceholder` | The same frame and geometry with neutral bands. Holds a shelf whose data does not exist yet, or one still loading |
 | `CardRail` | A titled horizontal shelf of fixed-width cards with prev/next arrows and a `1–3 / 10` position label. Generic over its children (the **caller** sizes its tiles — a horizontal `ListView` gives a child a tight height and an unbounded width); a horizontal `ListView` + `animateTo`, so a trackpad and a drag work as well as the arrows. Two headers, chosen by `variant`: `badged` is the chefs page's icon tile over title/subtitle; `numbered` is Discover's set numeral, spaced-caps title, hairline rule and ranking kicker (§6.0). One widget, because the scroll controller, the pitch arithmetic and the position window are the substance and neither header changes them |
+| `notYetTooltip` | Not a widget class but a helper: wraps a deliberately inert control in a `Tooltip` explaining why, and returns the child untouched when it is enabled (an empty-message `Tooltip` still opens an empty box on hover). Three callers — `/chefs`' windowed rails, the chef page's, and the share dialog's reserved `share_permission.edit` segment. Moved here from `apps/app/lib/widgets/` in 32d6: it holds no app state and no routing |
 | `RecipeCardPlaceholder` | `RecipeCard`'s geometry — the same banner/cover/footer bands — in neutral fills, so a loading shelf holds its height instead of collapsing and dragging every shelf below it up the page. `SpotlightCardPlaceholder`'s counterpart for recipes |
 
 Per-tier colors are defined as a light/dark pair — the light shades are unreadable on dark

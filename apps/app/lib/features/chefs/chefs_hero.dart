@@ -4,11 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:app/features/chefs/chefs_providers.dart';
-import 'package:app/widgets/not_yet_tooltip.dart';
-// `notYetTooltip` moved to apps/app/lib/widgets/ when the share dialog became
-// its second caller (OPT-S5); re-exported so existing importers of this file
-// keep working.
-export 'package:app/widgets/not_yet_tooltip.dart' show notYetTooltip;
 
 /// The banner across the top of `/chefs`: how many chefs there are, how they
 /// are ranked, and how they are spread across the five tiers.
@@ -187,7 +182,7 @@ class _RankedPill extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.10),
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.circular(AppRadii.pill),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -279,7 +274,7 @@ class _TierTile extends StatelessWidget {
             height: 3,
             decoration: BoxDecoration(
               color: color,
-              borderRadius: BorderRadius.circular(999),
+              borderRadius: BorderRadius.circular(AppRadii.pill),
             ),
           ),
           const SizedBox(height: 5),
@@ -329,7 +324,7 @@ class _WindowFilter extends StatelessWidget {
       padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.10),
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.circular(AppRadii.pill),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -340,7 +335,7 @@ class _WindowFilter extends StatelessWidget {
               message: 'Needs dated engagement data — not wired up yet',
               child: InkWell(
                 onTap: window.enabled ? () => onSelected(window) : null,
-                borderRadius: BorderRadius.circular(999),
+                borderRadius: BorderRadius.circular(AppRadii.pill),
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,
@@ -348,7 +343,7 @@ class _WindowFilter extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: window == selected ? Colors.white : null,
-                    borderRadius: BorderRadius.circular(999),
+                    borderRadius: BorderRadius.circular(AppRadii.pill),
                   ),
                   child: Text(
                     window.label,

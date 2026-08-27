@@ -106,7 +106,9 @@ the row (sharing, editing a shared recipe, admin-ish flows) — the client-side 
 `202-229`, `263-269`); severity scales with what a silent no-op costs on that path. Also:
 
 - **Column allowlist.** `_writablePayload` (`recipe_repository.dart:115-129`) omits server-managed
-  columns. Flag a diff adding `rating_avg`/`rating_sum`/`rating_count`/`like_count`/`save_count`/
+  columns. The **read** side has an allowlist too: `kRecipeSelect` must request every column
+  `Recipe` decodes *and nothing more* — `rating_sum` was fetched for months with no field behind it
+  (B086, fixed in 32d1), and `chef_models_test.dart` pins both directions. Flag a diff adding `rating_avg`/`rating_sum`/`rating_count`/`like_count`/`save_count`/
   `view_count`/`current_version_id`/`created_at`/`updated_at` to a client payload — trigger-owned
   (CLAUDE.md, "Ratings").
 - **Signed-out paths.** `_uid` throws `StateError` (`recipe_repository.dart:76-80`). Flag a new
@@ -211,8 +213,8 @@ type do not fit in 65px), or that removes the cap: an unbounded band starves the
 fixed-height tile and turns a 17px overflow at 3.0× into a 48px one (B049).
 
 **Card grid sizing.** The recipe grid flows from the available width (`FlowGridMetrics.fit`), not
-from a breakpoint. Flag a diff that: reintroduces `responsiveColumns` or `childAspectRatio` into
-`recipe_grid.dart`; adds a `ConstrainedBox`/`SizedBox` width cap inside `RecipeCard` (a grid
+from a breakpoint. Flag a diff that: reintroduces a breakpoint-keyed column count (the old
+`responsiveColumns`, deleted in 32d6) or `childAspectRatio` into `recipe_grid.dart`; adds a `ConstrainedBox`/`SizedBox` width cap inside `RecipeCard` (a grid
 cell's tight constraints override it — the cap has to come from the grid's padding); or lowers
 `kRecipeCardMinWidth` without re-pinning the card envelope tests to the new minimum.
 

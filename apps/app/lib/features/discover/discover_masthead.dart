@@ -107,7 +107,7 @@ class DiscoverMasthead extends StatelessWidget {
                   height: 3,
                   decoration: BoxDecoration(
                     color: scheme.primary,
-                    borderRadius: BorderRadius.circular(999),
+                    borderRadius: BorderRadius.circular(AppRadii.pill),
                   ),
                 ),
                 Expanded(

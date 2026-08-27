@@ -675,33 +675,64 @@ before: +16). `melos run format` reformatted 5 files. New tests: fork ×3 on the
 on the finish screen, the servings-lifetime round trip, six editor-leaving tests driven through
 `handlePopRoute()` (including the caret-move one above), and the suspended-clock timer. No SQL changed, so no `db:*` run was needed.
 
-### 32d — Shared-package hygiene
+### 32d — Shared-package hygiene — DONE 2026-08-26
 
-- **32d1** — remove `rating_sum` from `kRecipeSelect`
-  ([recipe_queries.dart](../packages/core/lib/src/repositories/recipe_queries.dart)); fix the pin
-  test's label (it currently lists `rating_sum` under "every column Recipe decodes" — false); add
-  the **inverse** test: every column in the select decodes into a `Recipe` field, so
-  fetched-but-never-decoded drift fails loudly. Count moves 25 → 24; update the pin.
-- **32d2** — export one trim helper from
-  [formatting.dart](../packages/core/lib/src/formatting.dart), delete `formatNutritionValue`'s
-  byte-identical body (keep the name as a one-line delegate if call sites are many); route
-  `RecipeCard._timeLabel` through `formatMinutes` so card and facts strip agree (`1h 10m` vs
-  `1 h 10 m` today — pick **one** rendering, update whichever tests pin the other).
-- **32d3** — `searchByName`: server orders + limits **before** the client ranks. Over-fetch
-  (`limit * 3`, cap 40) then rank client-side, or add an `ilike` prefix pass first. Create
-  `profile_repository_test.dart`: `_escapeLike` (literal `%`/`_` in queries), exact-beats-prefix-
-  beats-contains, the id tie-break, and `updateMine`'s payload omitting every server-owned column
-  (that omission is a documented invariant with no pin today).
-- **32d4** — `StorageService` signed-out `StateError` message → `'Not authenticated.'` (the string
-  `friendlyError` already matches); add `StorageException` mapping test.
-- **32d5** — in `recipe_repository_test.dart`: `delete()` and `unshare()` returning empty →
-  `WriteDeniedException` (the OPT-S2 contract, untested); `listByChef` sends
-  `visibility=eq.public` (the load-bearing filter — without it an owner sees their own private
-  rows on their public page).
-- **32d6** — delete `responsiveColumns` (zero call sites) and amend CLAUDE.md Gotcha 13's claim in
-  the same commit; delete the dead `notYetTooltip` re-export in `chefs_hero.dart`; move
-  `not_yet_tooltip.dart` → `design_system` with barrel export (Gotcha 14) and update importers;
-  add `AppRadii.pill = 999` and sweep all 22 `BorderRadius.circular(999)` sites (12 files).
+**32d1 (B086) — the select's obligation runs both ways.** `rating_sum` left `kRecipeSelect`; the
+pin test's claim to list "every column Recipe decodes" was false while it named that column, and is
+now true at 24. The new test is the inverse — every column the select requests must decode into a
+`Recipe` field — because the missing-column direction was already covered and this one was not, and
+it fails in the quietest possible way: PostgREST answers happily, the decoder ignores what it does
+not know, and the bytes ride on every row of every grid forever. Proven non-vacuous by restoring
+`rating_sum` and watching it fail.
+
+**32d2 — two duplications, two different resolutions.** `_trimQuantity` and `formatNutritionValue`
+had byte-identical bodies in two files; `trimDecimal` is now the body and `formatNutritionValue` is
+a one-line delegate that keeps its name, because the label widget and the editor's draft both call
+it and `trimDecimal` says nothing about nutrition at a call site. The duration pair is not the same
+shape: `RecipeCard` had its own copy rendering `1h 10m` where `formatMinutes` renders `1 h 10 m`.
+One function now, with `compact:` — and that is a **width** decision rather than a style one, so it
+is documented as such: the card's metadata row degrades time → count → value under pressure (B080),
+so widening the time label spends the rating's budget. Adopting the spaced form on the card would
+have re-opened an envelope B080 had just settled, for no reader benefit.
+
+**32d3 (B083) — over-fetch, rank, cut.** `searchByName` ranks exact > prefix > contains
+client-side, over a set the server had already truncated to `limit` in alphabetical order — so at
+sim scale an exact "Dara" behind eight "Darabont"s could not be promoted, because it never arrived.
+The window is now `min(limit × 3, 40)` with the list cut back after sorting. The cap is stated
+honestly as bounding the fix, not completing it: past 40 contains-matches the answer is the one the
+dialog already gives. `profile_repository_test.dart` is new (the file did not exist) and covers the
+window, the cap, the `limit >= cap` edge, the rank order, the id tie-break, `_escapeLike`'s three
+metacharacters, the empty query, and `updateMine`'s three-key payload.
+
+**32d4 — a message the mapper recognises.** `friendlyError` matches `StateError` on the substring
+`Not authenticated` — the string `SupabaseRecipeRepository._uid` throws. `StorageService` threw a
+different sentence, so the one path that could plausibly be hit signed-out (uploading a cover) fell
+through to the generic fallback. Same string now, plus tests for both it and the `StorageException`
+branch.
+
+**32d5 — the headline silent-failure class had no test.** Gotcha 2 is that `.update()`/`.delete()`
+matching zero rows is a *success* at the PostgREST layer; OPT-S2's answer was `.select()` plus an
+empty check, and nothing pinned it. Four tests now do, plus `listByChef`'s `visibility=eq.public`,
+which is load-bearing rather than a restatement of RLS: `recipes_select` lets a signed-in user read
+their own private recipes, so without the filter a chef's own public page shows them rows nobody
+else can see and the header count stops matching the grid.
+
+**32d6 — three deletions and a token.** `responsiveColumns` had no callers left once every card
+grid became a flowing one; it is deleted, and Gotcha 13 and the review checklist were amended in the
+same change rather than left pointing at a symbol that no longer exists. `chefs_hero.dart`'s
+`export … show notYetTooltip` was a compatibility shim for importers that no longer exist.
+`notYetTooltip` itself moved to `design_system` with a barrel export — it holds no app state, no
+routing and no data, and three callers across two features and one app-level dialog use it.
+`AppRadii.pill = 999` replaced 22 literals across 12 files; the constant is 999 rather than a
+computed half-height because `BorderRadius.circular` clamps to half the shorter side, so no call
+site has to know how tall its own pill is.
+
+**Verified:** `melos run analyze` — **No issues found** in all three packages;
+`melos run test --no-select` — **core 150 / design_system 119 / app 261, all passed** (core was 130:
++20). `melos run format` reformatted 4 files. No SQL changed. The two behavioural changes that reach
+the wire — the search window and the dropped column — are pinned by request assertions against the
+recording client, which is what that harness is for; neither was exercised against a live database
+(Gotcha 15's standing caveat).
 
 ### 32e — Test coverage
 

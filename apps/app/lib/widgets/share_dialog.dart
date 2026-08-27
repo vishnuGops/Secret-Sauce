@@ -5,15 +5,14 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:app/widgets/not_yet_tooltip.dart';
-
 /// Dialog to share a recipe with another user and set their permission. Writes
 /// to `recipe_shares` via the repository.
 ///
 /// Lives here rather than in `features/my_recipes` (OPT-A3): sharing is reached
 /// from the recipe detail screen, so a feature was importing another feature's
-/// internals to open it — the same shape that put `notYetTooltip` in this
-/// directory during OPT-S5.
+/// internals to open it. `notYetTooltip` took the same journey one step
+/// further, ending up in `design_system` (32d6) once it turned out to be a
+/// presentational primitive with three callers.
 ///
 /// It **asks which person** (OPT-A5). `display_name` is not unique, and the old
 /// version took the first exact match the database happened to return: typing

@@ -29,12 +29,18 @@ library;
 /// `0001_init.sql`. Server-owned columns still belong here (the client *reads*
 /// counters, it just may not write them); only genuinely internal ones like
 /// `search_tsv` stay out.
+///
+/// The obligation runs **both ways** (B086, 32d1). `rating_sum` was requested
+/// here for months and `Recipe` has no field for it, so every row of every grid
+/// carried a number nothing could read — the mirror image of a missing column,
+/// and just as silent. `chef_models_test.dart` now pins both directions: every
+/// column the model decodes is requested, and every column requested decodes.
 const _kRecipeColumns =
     'id,owner_id,title,description,cover_image_url,cuisine,'
     'category,difficulty,prep_minutes,cook_minutes,servings,visibility,'
     'attribution,forked_from_recipe_id,forked_from_version_id,'
     'current_version_id,like_count,save_count,view_count,created_at,updated_at,'
-    'rating_sum,rating_count,rating_avg,nutrition';
+    'rating_count,rating_avg,nutrition';
 
 const kRecipeSelect =
     '$_kRecipeColumns,'

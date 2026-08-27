@@ -224,7 +224,7 @@ class _NavPill extends StatelessWidget {
           padding: const EdgeInsets.all(_kTrackPad),
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerHigh,
-            borderRadius: BorderRadius.circular(999),
+            borderRadius: BorderRadius.circular(AppRadii.pill),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,

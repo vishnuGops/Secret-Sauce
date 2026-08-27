@@ -506,26 +506,42 @@ non-vacuous, `melos run db:rls` + the Gotcha 6 upgrade path before anything reac
       `kIngredientQuantityGutter × context.textScale.clamp(1.0, kDetailRailMaxScale)` — the same
       gutter the reading rail uses, so `1.25 cup` no longer wraps to three lines at 2.0×
 
-### 32d — Shared-package hygiene
+### 32d — Shared-package hygiene — DONE 2026-08-26
 
-- [ ] **32d1 (B086) — `kRecipeSelect` drift**: `rating_sum` is fetched but `Recipe` never decodes it —
-      drop it from the select, fix the mislabeled pin test, add the inverse test (every selected
-      column decodes) so this class fails loudly
-- [ ] **32d2 — one decimal-trim helper** (`_trimQuantity` ≡ `formatNutritionValue`, byte-identical
-      bodies) and one duration formatter (`formatMinutes` vs `RecipeCard._timeLabel` already render
-      the same duration differently)
-- [ ] **32d3 (B083) — `searchByName` ranking window**: server truncates at `limit` **before** the client
-      ranks, so an exact match can never arrive among >limit contains-matches at sim scale.
-      Over-fetch or rank server-side; create the missing `profile_repository_test.dart`
-- [ ] **32d4 — signed-out error coupling**: `StorageService` throws a message `friendlyError()`
-      doesn't recognize, so a signed-out upload reads "Something went wrong" instead of the
-      signed-in prompt; standardize + test `StorageException` mapping
-- [ ] **32d5 — pin the OPT-S2 contract**: tests for `delete()` / `unshare()` empty-result →
-      `WriteDeniedException`, and `listByChef`'s load-bearing visibility filter — the project's
-      headline silent-failure class has no test today
-- [ ] **32d6 — dead code + placement**: delete `responsiveColumns` (zero callers; amend Gotcha 13),
-      delete `chefs_hero.dart`'s dead re-export, move `notYetTooltip` into `design_system` (barrel
-      export), add `AppRadii.pill` and sweep **all 22** `circular(999)` sites (12 files)
+- [x] **32d1 (B086) — `kRecipeSelect` drift — DONE.** `rating_sum` dropped from the select (25 → 24
+      columns): `Recipe` has `ratingAvg` and `ratingCount` and no sum, so every row of every grid
+      carried a number nothing could read. The pin test's label was false in the same way and is
+      fixed, and the **inverse** test is new — every column the select requests must decode into a
+      `Recipe` field, so this class fails loudly instead of accumulating. Proven non-vacuous by
+      putting `rating_sum` back
+- [x] **32d2 — one trimmer, one duration formatter — DONE.** `trimDecimal` in `formatting.dart` is
+      the single body; `formatNutritionValue` keeps its name as a one-line delegate (it is what the
+      label widget and the editor's draft call, and `trimDecimal` says nothing about nutrition at
+      those call sites). `RecipeCard._timeLabel` now calls `formatMinutes(…, compact: true)` rather
+      than restating the arithmetic — the card keeps the narrow `1h 10m` rendering as a **width**
+      decision, since its metadata row degrades time → count → value (B080) and the two characters
+      the spaces cost come out of the rating beside it
+- [x] **32d3 (B083) — `searchByName` ranking window — DONE.** The server window is now
+      `min(limit × 3, kProfileSearchMaxRows)` and the ranked list is cut back to `limit` after
+      sorting, so an exact match no longer has to be alphabetically early to be findable. The cap is
+      stated as bounding the fix rather than completing it: beyond 40 contains-matches the honest
+      answer is still the dialog's "type more". New `profile_repository_test.dart` (9 tests) covers
+      the window, the cap, the rank order, the id tie-break, `_escapeLike`, and `updateMine`'s
+      payload omitting every server-owned column — a documented invariant with no pin until now
+- [x] **32d4 — signed-out error coupling — DONE.** `StorageService` threw `Must be signed in to
+      upload files.`, which `friendlyError` does not recognise, so a signed-out upload read
+      "Something went wrong" while every other signed-out write said what to do. It throws the
+      mapper's own `Not authenticated.` now; both that and the `StorageException` branch are pinned
+- [x] **32d5 — the OPT-S2 contract is pinned — DONE.** Four tests: `delete()` and `unshare()`
+      returning zero rows raise `WriteDeniedException` (and the `.select()` that makes the check
+      possible is asserted), plus their success paths. `listByChef` is pinned on
+      `visibility=eq.public` — without it a chef opening their own page sees private rows no other
+      visitor can, and the header count stops matching the grid
+- [x] **32d6 — dead code + placement — DONE.** `responsiveColumns` deleted (zero callers; Gotcha 13
+      and the review checklist amended in the same change), `chefs_hero.dart`'s dead re-export
+      deleted, `notYetTooltip` moved into `design_system` with a barrel export (Gotcha 14) and its
+      three importers updated, and `AppRadii.pill = 999` now carries all **22** `circular(999)`
+      sites across 12 files
 
 ### 32e — Test coverage gaps
 

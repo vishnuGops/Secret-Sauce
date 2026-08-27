@@ -308,6 +308,12 @@ void main() {
     // per 30-card page), so the columns are now listed explicitly. The contract
     // that actually matters is unchanged — every column `Recipe` decodes must be
     // requested — so assert that instead of the wildcard.
+    //
+    // The list below used to include `rating_sum`, under a name claiming these
+    // are the columns the model decodes. It is not one: `Recipe` has
+    // `ratingAvg` and `ratingCount` and no sum, so the select carried a number
+    // nothing could read and the pin said otherwise (B086). The inverse test
+    // after this one is what makes that class fail loudly.
     test('requests every column Recipe decodes', () {
       const required = [
         'id',
@@ -331,7 +337,6 @@ void main() {
         'view_count',
         'created_at',
         'updated_at',
-        'rating_sum',
         'rating_count',
         'rating_avg',
         'nutrition',
@@ -345,6 +350,30 @@ void main() {
           reason:
               '$column is missing from kRecipeSelect, so Recipe.$column '
               'would silently decode as null',
+        );
+      }
+    });
+
+    // The other direction (32d1). Without it, a column can be requested forever
+    // with no field behind it — dead weight on every row of every grid, and
+    // invisible, because PostgREST answers happily and the decoder ignores what
+    // it does not know.
+    test('every column it requests decodes into a Recipe field', () {
+      const sample = Recipe(id: 'r1', ownerId: 'u1', title: 'Tart');
+      final known = sample.toJson().keys.toSet();
+      // The two embeds are `includeToJson: false` (they are nested reads, not
+      // columns) and `owner` is the FK embed, so they are named rather than
+      // discovered.
+      known.addAll(['ingredient_groups', 'step_groups', 'owner']);
+
+      final base = kRecipeSelect.substring(0, kRecipeSelect.indexOf(',owner:'));
+      for (final column in base.split(',')) {
+        expect(
+          known.contains(column),
+          isTrue,
+          reason:
+              '$column is fetched on every recipe row and no Recipe field '
+              'decodes it — either add the field or drop the column (B086)',
         );
       }
     });

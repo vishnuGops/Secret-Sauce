@@ -6,6 +6,8 @@
 /// today, and an editor preview or an export would compute the same numbers.
 library;
 
+import 'package:core/src/formatting.dart';
+
 /// FDA reference daily values for a 2,000-calorie diet — the same basis the
 /// footnote on a real label states.
 ///
@@ -39,14 +41,8 @@ int? percentDailyValue(double? value, double dailyValue) {
 
 /// A nutrient amount as the shortest honest decimal — `10`, `1.5`, `0.25`.
 ///
-/// The same trimming `ingredientQuantityLabel` applies to a scaled quantity,
-/// and for the same reason: a stored `numeric` round-trips as `10.0`, and
-/// `10.0 g` on a label reads like a measurement precision nobody entered.
-/// Two decimal places is the ceiling; nutrition data is never finer.
-String formatNutritionValue(double value) {
-  if (value == value.roundToDouble()) return value.toStringAsFixed(0);
-  return value
-      .toStringAsFixed(2)
-      .replaceFirst(RegExp(r'0+$'), '')
-      .replaceFirst(RegExp(r'\.$'), '');
-}
+/// Kept as a name rather than folded away: it is what the label widget and the
+/// editor's draft both call, and `trimDecimal` says nothing about nutrition at
+/// the call site. The body is gone — it was byte-identical to the quantity
+/// trimmer, in another file, which is how two roundings drift apart (32d2).
+String formatNutritionValue(double value) => trimDecimal(value);
