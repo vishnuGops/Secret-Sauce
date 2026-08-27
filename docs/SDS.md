@@ -453,6 +453,17 @@ erDiagram
   on UPDATE so a recipe cannot be reassigned. **A new client-writable column must be added to
   that list or the first save carrying it fails `42501`.** Nothing reached through a
   `security definer` function or run as `postgres` (seed, sim, triggers) is affected.
+- **`recipe_suggestions` (32a3)**: the reserved PR-flow stub is now written entirely through
+  **column grants** — `insert (recipe_id, from_recipe_id, author_id, summary, payload)` with
+  `status` omitted so the `'open'` default is the only way in, and `update (status)` alone.
+  `update` is deliberately *not* wider: `suggestions_update` is `using (owns_recipe(recipe_id))`,
+  so the only principal an update grant can empower is the recipe's **owner** — granting the
+  proposal's own `summary`/`payload` would let them rewrite someone else's words under that
+  person's name. The policy's `with check (owns_recipe(recipe_id))` is belt-and-braces for the day
+  that list widens and **no matrix check can reach it**: every writable column leaves
+  `owns_recipe(recipe_id)` unchanged, so the clause is a tautology on every reachable path.
+  "This column may not change" stays a column statement rather than a policy one, because saying
+  it in a `with check` would need a subquery reading the row's own table — the B053 shape.
 - **value bounds (32a2)**: grants decide *which* columns a client may write and RLS decides *which
   rows*; neither says what a legal **value** is, so until 2026-08-26 a direct `PATCH` could store
   `servings = 0` (which every per-serving number downstream divides by) or a megabyte of
@@ -513,7 +524,7 @@ It creates three throwaway `auth.users` (an owner, someone the owner shares a pr
 an unrelated signed-in stranger) plus a private and a public recipe with content, re-runs the whole
 matrix under `set local role authenticated` + `request.jwt.claims`, and **rolls the transaction
 back** — so it leaves no user, no recipe and no helper function behind and is safe against any
-database. **107 checks** (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
+database. **126 checks** (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
 ingredient food link, in 29b; B22c and B22d, the auto-estimate source-smuggling guard and its
 nothing-counted case, in 29c — B22d found **B075** on its first run; **E10**, that
 `recompute_auto_nutrition()` is not callable as a signed-in user, in 29d — a whole-table rewrite

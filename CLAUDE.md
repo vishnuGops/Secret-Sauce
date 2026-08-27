@@ -135,7 +135,7 @@ secret-sauce/
     │   ├── 3_sim_verify.sql      #   46 assertions — the only test coverage this SQL has
     │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
     ├── tests/rls_matrix.sql      # the RLS matrix as a SIGNED-IN user (BL-7, `db:rls`) —
-    │                             #   107 checks; makes its own users, then ROLLS BACK
+    │                             #   126 checks; makes its own users, then ROLLS BACK
     ├── tests/nutrition_estimate.sql  # the estimator's ONLY coverage (Phase 29c): fixture
     │                             #   foods/units/trees -> exact labels, then ROLLS BACK
     ├── tests/nutrition_fixtures.sql  # the other half (29d, `db:nutrition:verify`): the
@@ -283,7 +283,7 @@ melos run db:reset    # drop -> create -> nutrition -> seed -> recipes -> sim (~
 # The RLS acceptance matrix as a SIGNED-IN user (BL-7). Additive only in the sense that
 # it writes and then rolls back — it leaves no user, no recipe, no helper function.
 # Run it after ANY change to a policy, a `security definer` function, or the column grants.
-melos run db:rls      # 107 checks across anon / owner / shared-with / stranger
+melos run db:rls      # 126 checks across anon / owner / shared-with / stranger
 
 # Auto-nutrition SQL. Both roll back; run them after touching the estimator, the
 # backfill, nutritionData/, or an auto recipe's ingredients.
@@ -774,7 +774,7 @@ the `code-review` skill). The ones you need while _writing_ code:
     steps runs as `postgres`, which bypasses policies — so CI also runs
     [supabase/tests/rls_matrix.sql](supabase/tests/rls_matrix.sql) (**BL-7**, `melos run db:rls`),
     which is the only thing here that exercises RLS as a **signed-in** user. It switches to
-    `set local role authenticated`, runs 107 checks across anon / owner / shared-with / unrelated
+    `set local role authenticated`, runs 126 checks across anon / owner / shared-with / unrelated
     stranger, and rolls the whole transaction back. It closed the class B053 lived in and found
     B061 on its first complete run. **Run it, and add a check to it, whenever you touch a policy, a
     `security definer` function, or the column grants** — a new table with new policies that the

@@ -300,7 +300,7 @@ melos run db:nutrition:verify    # committed labels vs. the loaded registry — 
 ```
 
 `db:rls` is the odd one out and the only safe-by-construction one: it applies
-`supabase/tests/rls_matrix.sql`, which creates three throwaway users and two recipes, re-runs 92
+`supabase/tests/rls_matrix.sql`, which creates three throwaway users and three recipes, re-runs 126
 authorization checks under `set local role authenticated`, prints a PASS/FAIL line for each, and
 **rolls the whole transaction back** — no user, no recipe and no helper function survives it. It is
 the only thing in the repo that exercises RLS as a signed-in caller; everything else (the seed, the

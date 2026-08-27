@@ -461,13 +461,57 @@ tables all three write). `melos run analyze` clean; `test --no-select` SUCCESS (
 Qty validator's test, which asks the validator directly for the passing cases — a form that
 validates goes on to read a repository this suite has no client for).
 
-**32a3 — five matrix checks** (~40 lines in [rls_matrix.sql](../supabase/tests/rls_matrix.sql)):
-`tags` UPDATE denied (its security rests on policy *absence* today — pin it before someone adds a
-`for all` policy); `profiles` insert with `id <> auth.uid()` denied; `recipe_suggestions` update
-cannot rewrite `author_id` — **requires adding a `with check` to `suggestions_update`** in 0001
-(it has only `using` today, so the owner can forge authorship); an `edit`-permission share row
-behaves exactly as `view` (insert one, re-run the C5/C7 shapes); anon `recipe_views` insert
-**succeeds** (pins B012's deliberate write path, so a future tightening is a conscious act).
+**32a3 — the unasserted policies — DONE 2026-08-26.** Seven checks, 117 → **124**. Each covers
+something that was true only because nothing contradicted it:
+
+- **D29 — `tags` UPDATE.** Its security is *policy absence*: select/insert/delete exist, update does
+  not. Asserted as **0 rows, not an error** — RLS with no matching policy filters rather than
+  raises (Gotcha 2), so an error assertion here would fail forever. Proven by adding a
+  `tags_update` policy and watching it go red.
+- **D30 — forged `profiles` insert.** Against `gen_random_uuid()`, deliberately: aiming it at
+  another fixture user's id makes the primary key the thing that refuses (`23505`) and the check
+  passes while proving nothing. With a fresh id the policy is the only thing in the way.
+- **D25 / D25a / D25b — `recipe_suggestions`.** The refusal was already covered; the *permission*
+  was not, and a refusal-only pair passes just as well under `with check (false)`. D25b is the new
+  hole: `suggestions_update` had `using` and no `with check`.
+- **D31 — the share row is invisible** to someone it was not granted to.
+- **A7 / A8 — anon's deliberate write.** `anon` holds `insert on recipe_views` on purpose and
+  B012's whole design follows from it. Pinning a *permission* the way denials are pinned makes
+  tightening it a decision somebody takes rather than a line somebody deletes; A8 is its twin —
+  the row lands, the counter does not move — asserted as a **delta**, because other checks in the
+  file log views too.
+
+**`recipe_suggestions` is written through column grants**, the B050 instrument, not through the
+policy: `insert (recipe_id, from_recipe_id, author_id, summary, payload)` — `status` omitted, so
+the `'open'` default is the only way in and a proposer cannot file their own suggestion
+pre-`accepted` — and `update (status)` **alone**.
+
+**The first cut got that grant wrong, and the review is what caught it.** It also granted
+`summary`/`payload`, justified as "an author editing their own wording is a legitimate future
+feature". The policy contradicts that justification: `suggestions_update` is
+`using (owns_recipe(recipe_id))`, so the only principal an update grant can empower is the
+**recipe's owner**. Granting the proposal's own text therefore let the owner rewrite someone else's
+words under that person's name — the same misattribution this band exists to close, one column
+over, and reachable over PostgREST with any signed-in JWT. An author-edit flow needs the *policy*
+to admit the author first, and `status` would have to leave the author's reach in the same change.
+
+Two more corrections from the same pass. The added `with check (owns_recipe(recipe_id))` is
+**unreachable** — `recipe_id` is ungranted, so a client statement fails `42501` at the privilege
+check before RLS is consulted, and every column a client *can* write leaves the expression's value
+unchanged; it is kept as belt-and-braces for the day the grant list widens, and the docs now say
+that rather than crediting it with the fix. And the **fixture share is `edit`, not `view`** —
+`share_permission`'s `edit` is reserved and ignored by every policy, so sharing at the stronger
+level costs nothing and upgrades all eleven section-C refusals from "a viewer cannot write" to
+"not even an `edit` share is a write right". **C3 now asserts the literal**, because a fixture
+change no check observes is a comment, not coverage.
+
+**Verified:** apply exit 0, twice; `db:rls` **126 passed / 0 failed**. Non-vacuity by breaking each
+lock in turn and restoring: A7 (revoke anon's insert), D25b (hand back the blanket update grant),
+D29 (add a `tags_update` policy), D30 (widen `profiles_insert` to `true`), D31 (add a delete
+policy), D33 (grant `summary` back), C3 (revert the fixture to `view`). D32 is the positive one —
+the owner *can* move `status` — without which a change locking the owner out entirely would pass
+every other check in the file. `nutrition_estimate`, `nutrition_fixtures`, `3_sim_verify` green.
+No Dart changed, so `analyze` and `test` were not re-run for this band.
 
 **32a4 — Storage hardening.** Set `file_size_limit` (suggest 5 MB) and `allowed_mime_types`
 (`image/jpeg`, `image/png`, `image/webp`) on both buckets — `update storage.buckets set …` in

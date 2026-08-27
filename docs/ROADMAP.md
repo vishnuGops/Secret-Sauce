@@ -410,11 +410,26 @@ non-vacuous, `melos run db:rls` + the Gotcha 6 upgrade path before anything reac
       exists` guards a constraint by **name**, so the widened definition was a silent no-op — B024's
       rule, now applied to constraints. Nine matrix checks (B9d–B9i, B11a/B11b, B13a/B13b),
       **117 passed / 0 failed**, deny-checks proven non-vacuous by dropping the constraints
-- [ ] **32a3 — five new RLS matrix checks** for policies that exist only as absence today: `tags`
-      UPDATE denial, forged `profiles` insert (`id <> auth.uid()`), `recipe_suggestions` update
-      forging `author_id` (the policy has `using` but no `with check` — fix that too), an
-      `edit`-permission share behaving as view, anon `recipe_views` insert allowed (pins B012's
-      write path)
+- [x] **32a3 — the unasserted policies — DONE 2026-08-26.** Seven checks (117 → **124**), each on
+      something whose only proof was that nothing contradicted it: `tags` UPDATE denied by *policy
+      absence* (**D29** — asserted as 0 rows, since RLS-with-no-policy filters rather than raises),
+      a forged `profiles` insert (**D30**, against a **fresh** uuid so the primary key cannot be
+      what refuses it), `recipe_suggestions` insert both ways (**D25**/**D25a** — the refusal alone
+      would also pass under `with check (false)`), authorship forgery (**D25b**), the share row's
+      invisibility to a stranger (**D31**), and anon's *deliberate* `recipe_views` insert
+      (**A7**/**A8** — the one write `anon` is supposed to have, pinned with its
+      counter-doesn't-move twin so tightening it becomes a decision rather than a deleted line).
+      `recipe_suggestions` is now written through **column grants** — `update (status)` alone, and
+      an insert list omitting `status` so a proposer cannot file their own suggestion
+      pre-`accepted`. Review caught the first cut granting `summary`/`payload` on an
+      author-edits-their-wording rationale the policy contradicts: `suggestions_update` is
+      `using (owns_recipe(...))`, so the only principal it empowers is the recipe's **owner**, who
+      would then be rewriting someone else's words under their name. The added `with check` is
+      documented as unreachable belt-and-braces rather than credited with the fix. The fixture
+      share is now `edit` rather than `view` — and **C3 asserts the literal**, so the upgrade of
+      every section-C refusal to "not even an `edit` share is a write right" is carried by a check
+      rather than by a comment. Seven proven non-vacuous by breaking each lock in turn (**126
+      checks** after the owner's-seat pair D32/D33 replaced a duplicate)
 - [ ] **32a4 — Storage bucket hardening**: set `file_size_limit` + `allowed_mime_types` on
       `recipe-images` and `avatars` — today an authenticated user can fill the quota with
       arbitrary files at public URLs

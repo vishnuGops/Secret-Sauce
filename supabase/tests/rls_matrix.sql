@@ -180,8 +180,15 @@ begin
   insert into ingredients (group_id, name, quantity, unit)
   values (v_ig_pub, 'sugar', 1, 'tsp');
 
+  -- **`edit`, not `view`** (32a3). `share_permission` has an `edit` value that
+  -- every policy ignores — `recipes_update` is `owns_recipe`, full stop — and
+  -- the share dialog ships that segment disabled behind `notYetTooltip`
+  -- (OPT-S5) because of it. Sharing at the *stronger* reserved level costs
+  -- nothing and upgrades every refusal in section C from "a viewer cannot
+  -- write" to "not even an `edit` share is an update right", which is the
+  -- claim that would quietly become false the day someone wires the segment up.
   insert into recipe_shares (recipe_id, shared_with_user_id, permission)
-  values (v_private, v_sharee, 'view');
+  values (v_private, v_sharee, 'edit');
 
   -- A view logged by the sharee, so B24 (the owner can read the log) and C15
   -- (the person who made the view cannot) both have a row to be right about.
@@ -233,6 +240,25 @@ begin
 
   select err into v_err from public.rls_matrix_do('insert into tags (name) values (''bl7-anon'')');
   v_log := v_log || format(E'%s\tA6  anon · insert a tag must FAIL\t%s', v_err = '42501', coalesce(v_err, 'no error'));
+
+  -- A7 (32a3): the one write `anon` is *supposed* to have. `anon` holds
+  -- `insert on recipe_views` deliberately — a signed-out visitor reading a
+  -- public recipe logs a view — and B012's whole design (the counter skips null
+  -- `user_id` rows) exists because of it. Pinning the permission the same way
+  -- the denials are pinned makes tightening it a decision somebody takes rather
+  -- than a line somebody deletes, and pairs with A8: the row lands, the counter
+  -- does not move.
+  select view_count into n from recipes where id = v_public;
+  select err into v_err from public.rls_matrix_do(format(
+    'insert into recipe_views (recipe_id, user_id) values (%L, null)', v_public));
+  v_log := v_log || format(E'%s\tA7  anon · log an anonymous view of a public recipe\t%s', v_err is null, coalesce(v_err, 'ok'));
+
+  -- A delta, not an absolute: other checks in this file log views too, and a
+  -- test that fails because a *different* check ran first proves nothing about
+  -- the trigger it names.
+  select view_count into v_n from recipes where id = v_public;
+  v_log := v_log || format(E'%s\tA8  anon · …and it moves no counter (B012)\t%s',
+    v_n = n, format('view_count %s -> %s', n, v_n));
 
   -- ==========================================================================
   -- B. owner — the row's own user. Reads, the B053 create shape, the writes
@@ -552,8 +578,12 @@ begin
   select count(*) into n from ingredient_groups where recipe_id = v_private;
   v_log := v_log || format(E'%s\tC2  shared · select its content\t%s row', n >= 1, n);
 
-  select count(*) into n from recipe_shares where recipe_id = v_private;
-  v_log := v_log || format(E'%s\tC3  shared · select own share row\t%s row', n = 1, n);
+  -- The `permission` literal is asserted here and nowhere else, which is what
+  -- makes the fixture's `edit` (32a3) load-bearing rather than decorative: every
+  -- refusal below then reads as "not even an `edit` share is a write right".
+  select count(*) into n from recipe_shares
+   where recipe_id = v_private and permission = 'edit';
+  v_log := v_log || format(E'%s\tC3  shared · select own share row, at the reserved `edit` level\t%s row', n = 1, n);
 
   select count(*) into n from recipe_versions where recipe_id = v_private;
   v_log := v_log || format(E'%s\tC4  shared · select its version history\t%s row', n >= 1, n);
@@ -739,6 +769,28 @@ begin
     'insert into recipe_suggestions (recipe_id, author_id, summary) values (%L, %L, ''BL-7'')', v_public, v_owner));
   v_log := v_log || format(E'%s\tD25 stranger · suggest AS another user must FAIL\t%s', v_err = '42501', coalesce(v_err, 'no error'));
 
+  -- D25a (32a3): the legitimate half — a signed-in user may file a suggestion as
+  -- themselves. (`suggestions_insert` is `author_id = auth.uid()` alone; it does
+  -- not require the recipe be readable, and this check does not claim it does.)
+  -- Without this the insert policy is only ever proven by its refusal, which a
+  -- `with check (false)` would satisfy just as well.
+  select err, rows into v_err, v_n from public.rls_matrix_do(format(
+    'insert into recipe_suggestions (recipe_id, author_id, summary) values (%L, %L, ''BL-7 suggestion'')',
+    v_public, v_other));
+  v_log := v_log || format(E'%s\tD25a stranger · suggest as themselves\t%s', v_err is null and v_n = 1, coalesce(v_err, v_n || ' row'));
+
+  -- D25b (32a3): authorship cannot be moved, by anybody. Held by the column
+  -- grant rather than a policy, because "this column may not change" is a column
+  -- statement and saying it in a `with check` would need a subquery reading the
+  -- row's own table (the B053 shape) — and because column privileges are checked
+  -- *before* RLS, this is `42501` for every role, which is why the check reads
+  -- the same from the stranger's seat it actually runs in. D33 below takes the
+  -- owner's seat, where the same lock matters most.
+  select err into v_err from public.rls_matrix_do(format(
+    'update recipe_suggestions set author_id = %L where recipe_id = %L', v_other, v_public));
+  v_log := v_log || format(E'%s\tD25b stranger · rewrite a suggestion''s author must FAIL (32a3)\t%s',
+    v_err = '42501', coalesce(v_err, 'no error'));
+
   -- Tags are a shared namespace on purpose (OPT-A6): any signed-in user may add
   -- one, and may remove one only while nothing references it.
   select err into v_err from public.rls_matrix_do('insert into tags (name) values (''bl7-stranger'')');
@@ -751,6 +803,63 @@ begin
   select err, rows into v_err, v_n from public.rls_matrix_do(format(
     'delete from tags where id = %L', v_orphan));
   v_log := v_log || format(E'%s\tD28 stranger · delete an orphan tag\t%s', v_err is null and v_n = 1, coalesce(v_err, v_n || ' row'));
+
+  -- D29 (32a3): `tags` has select / insert / delete policies and **no update
+  -- policy**, so a rename is denied by nothing existing rather than by something
+  -- refusing. That is a working lock and an invisible one — the day somebody
+  -- replaces the three with a single `for all`, renames open silently and every
+  -- recipe carrying the tag changes meaning at once. Pinning the *absence* is
+  -- what makes it a decision. RLS with no matching policy denies by filtering,
+  -- so an UPDATE matches **0 rows and raises nothing** (Gotcha 2) — assert the
+  -- row count, never the error.
+  select err, rows into v_err, v_n from public.rls_matrix_do(format(
+    'update tags set name = ''bl7-renamed'' where id = %L', v_tag));
+  v_log := v_log || format(E'%s\tD29 stranger · rename a tag matches 0 rows (no update policy)\t%s',
+    v_err is null and v_n = 0, coalesce(v_err, v_n || ' row'));
+
+  -- D30 (32a3): `profiles_insert` pins `id` to `auth.uid()`. Profiles normally
+  -- arrive from `handle_new_user`, so this policy has never been exercised by a
+  -- client at all — a forged row would be a profile someone else's `auth.users`
+  -- id points at, and every FK into `profiles` would then attribute their
+  -- recipes and ratings to it.
+  -- A **fresh** id, not another fixture user's: inserting over an existing
+  -- profile fails `23505` on the primary key, which would let this check pass
+  -- while proving nothing about the policy. With an id nobody holds, the policy
+  -- is the only thing between the statement and the row (verified 2026-08-26 by
+  -- widening it to `with check (true)` and watching this line go red).
+  select err into v_err from public.rls_matrix_do(
+    'insert into profiles (id, display_name) values (gen_random_uuid(), ''BL-7 forged profile'')');
+  v_log := v_log || format(E'%s\tD30 stranger · insert a profile AS another user must FAIL\t%s', v_err = '42501', coalesce(v_err, 'no error'));
+
+  -- D31 (32a3): `recipe_suggestions` has select/insert/update policies and **no
+  -- delete policy** — the same policy-absence lock D29 pins for `tags`, on the
+  -- table this band is actually editing. 0 rows and no error, for the same
+  -- reason D29 is (Gotcha 2). The row D25a left behind is the fixture.
+  select err, rows into v_err, v_n from public.rls_matrix_do(format(
+    'delete from recipe_suggestions where recipe_id = %L', v_public));
+  v_log := v_log || format(E'%s\tD31 stranger · delete own suggestion matches 0 rows (no delete policy)\t%s',
+    v_err is null and v_n = 0, coalesce(v_err, v_n || ' row'));
+
+  -- D32/D33 (32a3): the owner's seat, which nothing else in this file occupies —
+  -- section D holds `v_other`'s claims from :651 through to §E, so D25b above is
+  -- a *stranger* hitting the column grant (labelled accordingly). Without these
+  -- two, `suggestions_update`'s `using` is proven only by refusals: a change that
+  -- locked the owner out entirely would pass every other check in the file.
+  perform set_config('request.jwt.claims', json_build_object('sub', v_owner)::text, true);
+
+  select err, rows into v_err, v_n from public.rls_matrix_do(format(
+    'update recipe_suggestions set status = ''accepted'' where recipe_id = %L', v_public));
+  v_log := v_log || format(E'%s\tD32 owner-of-recipe · move a suggestion''s status\t%s',
+    v_err is null and v_n = 1, coalesce(v_err, v_n || ' row'));
+
+  -- The substance of someone else's proposal is not the owner's to rewrite: the
+  -- update grant is `status` alone, so this is `42501` at the privilege check.
+  select err into v_err from public.rls_matrix_do(format(
+    'update recipe_suggestions set summary = ''BL-7 rewritten by the owner'' where recipe_id = %L', v_public));
+  v_log := v_log || format(E'%s\tD33 owner-of-recipe · rewrite someone''s suggestion text must FAIL (32a3)\t%s',
+    v_err = '42501', coalesce(v_err, 'no error'));
+
+  perform set_config('request.jwt.claims', json_build_object('sub', v_other)::text, true);
 
   -- ==========================================================================
   -- E. food registry (Phase 29a) — reference data: readable signed-in only,

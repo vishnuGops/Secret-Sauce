@@ -1390,8 +1390,28 @@ drop policy if exists suggestions_insert on recipe_suggestions;
 create policy suggestions_insert on recipe_suggestions for insert
   with check (author_id = auth.uid());
 drop policy if exists suggestions_update on recipe_suggestions;
+-- 32a3: `using` decides which rows an UPDATE may *touch*; `with check` decides
+-- what they may be turned *into*, and this policy had only the first — so the
+-- owner could re-point `recipe_id` at **any** recipe and carry someone's
+-- suggestion onto it.
+--
+-- What actually stops that today is the **column grant** below, which does not
+-- include `recipe_id`: a client attempt fails `42501` at the privilege check,
+-- before RLS is consulted. So be honest about this clause — it is
+-- belt-and-braces for the day that grant list widens, and **no check in
+-- `rls_matrix.sql` can reach it**, because every column a client may write
+-- (`status` alone) leaves `owns_recipe(recipe_id)` unchanged, which makes the
+-- expression a tautology on every reachable path. It is kept for the same
+-- reason `fork_recipe` keeps its `auth.uid() is null` guard beside its revoke:
+-- two locks, and the grant is the one being tested.
+--
+-- Authorship is held by the column grant too, not by a policy — "this column
+-- may not change" is a column statement, and expressing it here would mean a
+-- `with check` subquery reading `recipe_suggestions` by its own id, the B053
+-- shape in the one file whose job is to catch that.
 create policy suggestions_update on recipe_suggestions for update
-  using (owns_recipe(recipe_id));
+  using (owns_recipe(recipe_id))
+  with check (owns_recipe(recipe_id));
 
 -- food registry (Phase 29a): reference data, readable signed-in only, written
 -- exclusively by nutrition_foods.sql running as postgres. Select-only policies
@@ -1482,6 +1502,29 @@ begin
   -- (`profiles_insert` pins it to auth.uid()).
   grant insert (id, display_name, avatar_url, bio) on profiles to authenticated;
   grant update (display_name, avatar_url, bio)     on profiles to authenticated;
+
+  -- recipe_suggestions (32a3): the reserved PR-flow stub. A suggestion is a
+  -- claim about **who** proposed **what** against **which** recipe, so the only
+  -- thing an update may move is where it ends up — `status`, and *only* status.
+  --
+  -- `summary` and `payload` are deliberately NOT granted, and the reasoning is
+  -- worth keeping because the first cut got it wrong: `suggestions_update` is
+  -- `using (owns_recipe(recipe_id))`, so the only principal an update grant can
+  -- empower is the **recipe's owner** — not the author. Granting the proposal's
+  -- own text would therefore let the owner rewrite someone else's words under
+  -- their name, which is the misattribution this band closed one column over.
+  -- An author editing their own wording needs the *policy* to admit the author
+  -- first; that is a different change, and `status` would have to leave the
+  -- author's reach in the same breath.
+  --
+  -- `status` is likewise absent from the INSERT list: `suggestions_insert` pins
+  -- the author but says nothing about status, so a blanket insert grant lets a
+  -- proposer file their own suggestion pre-`accepted`. The column default
+  -- (`'open'`) is the only way in.
+  revoke insert, update on recipe_suggestions from authenticated;
+  grant insert (recipe_id, from_recipe_id, author_id, summary, payload)
+    on recipe_suggestions to authenticated;
+  grant update (status) on recipe_suggestions to authenticated;
 
   -- Signed-out visitors may log a view of a recipe they can read.
   grant insert on recipe_views to anon;
