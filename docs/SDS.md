@@ -453,6 +453,28 @@ erDiagram
   on UPDATE so a recipe cannot be reassigned. **A new client-writable column must be added to
   that list or the first save carrying it fails `42501`.** Nothing reached through a
   `security definer` function or run as `postgres` (seed, sim, triggers) is affected.
+- **value bounds (32a2)**: grants decide *which* columns a client may write and RLS decides *which
+  rows*; neither says what a legal **value** is, so until 2026-08-26 a direct `PATCH` could store
+  `servings = 0` (which every per-serving number downstream divides by) or a megabyte of
+  `display_name` (which rides `kRecipeSelect` onto every card of every grid). Five check
+  constraints now bound them — `recipes_servings_positive`, `recipes_minutes_nonneg`,
+  `recipes_text_lengths` (**all six** text columns `kRecipeSelect` ships — title 200, description
+  10 000, attribution 2 000, cuisine/category 80, cover_image_url 2 048 — since bounding only the
+  obvious two leaves the same amplifier one column over), `profiles_text_lengths` (display_name 80,
+  bio 500) and `ingredients_quantity_positive` (null-or-positive; NULL is the "to taste"
+  ingredient and stays legal). They fail as **`23514`**, not `42501` — a different failure from a
+  missing grant, which is why `rls_matrix.sql` B9d–B9i / B11a–B11b / B13a–B13b assert the exact
+  code, and pin that NULL stays legal where it means *absent*.
+  `recipes_text_lengths` is **`not valid`** on purpose: every database it has been measured on is
+  fixture-built by generators that already enforce these bounds, so the rows that can actually
+  violate — prose typed before the editor had a `maxLength` — exist only on a populated database,
+  where `psql -1` would roll back the whole file over one of them. It enforces every future write
+  and scans nothing already stored; `profiles` takes the other shape (clamp, then constrain).
+  **Guarding a constraint with `if not exists` keys on its name**, so changing a predicate under an
+  existing name is a silent no-op — B024's rule, one object type over; `recipes_text_lengths` is
+  therefore dropped explicitly in the file that recreates it.
+  `handle_new_user` **clamps** display_name with `left(…, 80)` because it runs inside the signup
+  transaction, where a rejection would refuse the account rather than the name.
 - **fork lineage is server-owned too (B082)**: `forked_from_recipe_id` and
   `forked_from_version_id` left both column-grant lists on 2026-08-26, because lineage is a claim
   *about another user's recipe* and `recipes_most_forked` ranks on it — a client that can write it

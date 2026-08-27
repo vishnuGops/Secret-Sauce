@@ -30,6 +30,14 @@ class RecipeEditorScreen extends ConsumerStatefulWidget {
 }
 
 class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
+  /// `recipes_minutes_nonneg` (32a2), stated where the cook can see it. Shared
+  /// by Prep and Cook because one rule with two call sites is how the two stay
+  /// the same rule. Unparseable is not rejected — `_parseInt` reads it as 0.
+  static String? _nonNegativeMinutes(String? v) {
+    final n = int.tryParse((v ?? '').trim());
+    return (n != null && n < 0) ? 'Cannot be negative' : null;
+  }
+
   final _formKey = GlobalKey<FormState>();
   final _title = TextEditingController();
   final _description = TextEditingController();
@@ -539,7 +547,23 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                 const SizedBox(height: AppSpacing.md),
                 TextFormField(
                   controller: _title,
-                  decoration: const InputDecoration(labelText: 'Title'),
+                  // `recipes_text_lengths` (32a2) caps these in the database, so
+                  // the field enforces the same numbers here — a save refused by
+                  // a check constraint reads as "something went wrong", while a
+                  // field that stops accepting characters explains itself.
+                  maxLength: 200,
+                  // `counterText: ''` keeps the enforcement and drops the
+                  // `0/200` counter: nobody writing a recipe title is budgeting
+                  // characters, and the counter is a new band of text under two
+                  // fields the editor's envelope suite measures at 2.0×.
+                  // Approximate on purpose: `maxLength` counts grapheme
+                  // clusters and `char_length()` counts code points, so a title
+                  // of composed emoji can satisfy this and still trip the
+                  // constraint. SQL is authoritative; this is the courtesy.
+                  decoration: const InputDecoration(
+                    labelText: 'Title',
+                    counterText: '',
+                  ),
                   validator:
                       (v) =>
                           (v == null || v.trim().isEmpty) ? 'Required' : null,
@@ -548,8 +572,10 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                 TextFormField(
                   controller: _description,
                   maxLines: 2,
+                  maxLength: 10000,
                   decoration: const InputDecoration(
                     labelText: 'Short description',
+                    counterText: '',
                   ),
                 ),
                 const SizedBox(height: AppSpacing.md),
@@ -562,6 +588,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                         decoration: const InputDecoration(
                           labelText: 'Prep (min)',
                         ),
+                        validator: _nonNegativeMinutes,
                       ),
                     ),
                     const SizedBox(width: AppSpacing.md),
@@ -572,6 +599,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                         decoration: const InputDecoration(
                           labelText: 'Cook (min)',
                         ),
+                        validator: _nonNegativeMinutes,
                       ),
                     ),
                     const SizedBox(width: AppSpacing.md),
@@ -582,6 +610,15 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                         decoration: const InputDecoration(
                           labelText: 'Servings',
                         ),
+                        // `recipes_servings_positive` (32a2). Unparseable text
+                        // stays valid because `_save` reads it as `?? 1`, which
+                        // the constraint accepts — it is only a *parsed*
+                        // non-positive number that would reach the RPC and come
+                        // back as an unattributed `23514`.
+                        validator: (v) {
+                          final n = int.tryParse((v ?? '').trim());
+                          return (n != null && n < 1) ? 'At least 1' : null;
+                        },
                         // The estimate is *per serving*, so this number is a
                         // divisor: 4 → 8 halves every row. Re-estimate, or the
                         // pane prints per-4 values under an "8 servings" line.

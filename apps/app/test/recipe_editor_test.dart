@@ -274,6 +274,37 @@ void main() {
       expect(tester.widget<Checkbox>(find.byType(Checkbox)).value, isTrue);
     });
 
+    // 32a2: `ingredients_quantity_positive` makes a zero or negative quantity
+    // unstorable, so the field has to say so before the save does — a check
+    // constraint surfaces as a generic failure, and B076 is the reason the value
+    // matters: a negative quantity *subtracted* from an estimated label.
+    testWidgets('a non-positive quantity blocks Save', (tester) async {
+      sizeView(tester, 800);
+      await tester.pumpWidget(_app());
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.widgetWithText(TextFormField, 'Title'), 'X');
+      await tester.enterText(find.widgetWithText(TextFormField, 'Qty'), '-2');
+      await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+      await tester.pumpAndSettle();
+      expect(find.text('Must be > 0'), findsOneWidget);
+
+      // The remaining cases are asked of the validator directly rather than
+      // through Save: a form that *passes* validation goes on to read the
+      // repository provider, which needs a live Supabase client this suite does
+      // not have. Empty is the "to taste" ingredient and stays valid — the SQL
+      // check allows NULL for the same reason, and that is the half that would
+      // break real recipes if the rule were written as "required".
+      final qty = tester.widget<TextFormField>(
+        find.widgetWithText(TextFormField, 'Qty'),
+      );
+      expect(qty.validator!(''), isNull);
+      expect(qty.validator!('  '), isNull);
+      expect(qty.validator!('0'), 'Must be > 0');
+      expect(qty.validator!('1/2'), 'Numbers only');
+      expect(qty.validator!('1.5'), isNull);
+    });
+
     // Phase 28, reshaped by 29c: the panel is collapsed on a new recipe, and
     // opening it shows the three-way mode choice with None selected — the
     // eleven boxes appear only once the cook picks Manual.

@@ -67,6 +67,42 @@ create table if not exists profiles (
   created_at   timestamptz not null default now()
 );
 
+-- 32a2: `display_name` is embedded in `kRecipeSelect`, so it ships on every card
+-- of every grid — an unbounded one is a payload amplifier aimed at every other
+-- user. `handle_new_user` copies it out of unvalidated signup metadata, so the
+-- bound has to live here rather than in the editor. Measured maxima over seed +
+-- sim `medium` on 2026-08-26: display_name 51, bio 69.
+--
+-- Clamped **before** constraining, rather than added `not valid` the way
+-- `recipes_text_lengths` is. The two tables get different treatment because
+-- truncation costs different things: an over-long `display_name` predates
+-- `handle_new_user`'s own `left(…, 80)` clamp, so shortening it is the same
+-- decision that function already makes on every signup — while silently cutting
+-- a cook's recipe prose is data loss, which is why that one is left unvalidated
+-- instead. Idempotent: on a clean table it updates zero rows.
+update public.profiles set display_name = left(display_name, 80)
+ where char_length(display_name) > 80;
+update public.profiles set bio = left(bio, 500)
+ where bio is not null and char_length(bio) > 500;
+
+do $$
+begin
+  -- Guarded by name, and therefore subject to the same trap `recipes_text_lengths`
+  -- fell into: **changing this predicate later means dropping the constraint
+  -- explicitly in this file**, or every database that already has it keeps the
+  -- old rule silently. It is not dropped-and-re-added unconditionally the way
+  -- that one is, because this constraint is `valid` and a re-add rescans every
+  -- profile row on every apply — the cost OPT-A6 removed from the deferred FKs.
+  if not exists (
+    select 1 from pg_constraint where conname = 'profiles_text_lengths'
+  ) then
+    alter table profiles
+      add constraint profiles_text_lengths
+      check (char_length(display_name) <= 80
+             and (bio is null or char_length(bio) <= 500));
+  end if;
+end $$;
+
 -- Denormalized "chef" standing, maintained by on_recipe_stats_change over the
 -- owner's *public* recipes. Server-owned — the client never writes these.
 -- Added via `alter` so an already-deployed 0001 picks them up on re-run.
@@ -223,6 +259,77 @@ begin
       add constraint recipes_nutrition_is_object
       check (nutrition is null or jsonb_typeof(nutrition) = 'object');
   end if;
+
+  -- 32a2: bounds on the client-writable numbers. RLS says *who* may write a
+  -- column and the column grants say *which* columns; neither says anything
+  -- about the value, so until now `servings = 0` and `prep_minutes = -5` were
+  -- storable over PostgREST. `servings` is the one that bites hardest: the
+  -- servings scaler divides by it and `estimate_nutrition` divides by
+  -- `greatest(servings, 1)`, so a zero is a per-serving label computed against a
+  -- recipe that claims to serve nobody.
+  if not exists (
+    select 1 from pg_constraint where conname = 'recipes_servings_positive'
+  ) then
+    alter table recipes
+      add constraint recipes_servings_positive check (servings >= 1);
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'recipes_minutes_nonneg'
+  ) then
+    alter table recipes
+      add constraint recipes_minutes_nonneg
+      check (prep_minutes >= 0 and cook_minutes >= 0);
+  end if;
+
+  -- Length caps. **Every text column a client can write and everyone else
+  -- downloads** — not just the obvious two: `kRecipeSelect` ships `title`,
+  -- `description`, `attribution`, `cuisine`, `category` and `cover_image_url` on
+  -- every row of every grid, and all six sit in both column-grant lists, so a
+  -- cap that named only `title` would leave the same amplifier one column over.
+  -- None had an upper bound at all, so one account could store a megabyte on a
+  -- public recipe and make every visitor download it per card.
+  --
+  -- Bounds sit well above the real corpus (measured 2026-08-26 over seed + sim
+  -- `medium`: title 58, description 319, attribution 51, cuisine 13, category 9,
+  -- display_name 51, bio 69), because a check constraint is validated against
+  -- existing rows and an apply that trips one aborts the whole file under
+  -- `psql -1`.
+  --
+  -- **`not valid`, deliberately.** Every database this has been measured on is
+  -- fixture-built, and the generators already enforce these bounds — so the
+  -- measurement proves nothing about the rows that can actually violate: a
+  -- description typed before the editor had a `maxLength`, or a display_name
+  -- from a signup before `handle_new_user` clamped. Those exist only on a
+  -- populated database, which is the one path nobody tests (Gotcha 6). A
+  -- `not valid` constraint is enforced on every future insert and update — the
+  -- whole point — and simply does not scan what is already there, so the first
+  -- apply onto real data cannot roll back the schema. Promoting it is a separate,
+  -- deliberate `alter table … validate constraint` once the table is known clean.
+  -- **B024's rule, for constraints.** `if not exists` keys on the *name*, so a
+  -- database that already holds an older definition under this name keeps it
+  -- forever and the apply reports success — which is exactly what happened
+  -- while this was being written: the first cut bounded `title` and
+  -- `description` only, and re-applying the six-column version was a silent
+  -- no-op until `rls_matrix.sql` B9h asked. So the superseded definition is
+  -- dropped explicitly here, in the file that recreates it, rather than only in
+  -- `drop.sql` (which a plain re-apply never runs). The drop costs nothing to
+  -- repeat because the constraint is `not valid` — re-adding it scans no rows,
+  -- unlike the FK re-add OPT-A6 removed for that reason.
+  alter table recipes drop constraint if exists recipes_text_lengths;
+  if not exists (
+    select 1 from pg_constraint where conname = 'recipes_text_lengths'
+  ) then
+    alter table recipes
+      add constraint recipes_text_lengths
+      check (char_length(title) <= 200
+             and char_length(description) <= 10000
+             and (attribution     is null or char_length(attribution)     <= 2000)
+             and (cuisine         is null or char_length(cuisine)         <= 80)
+             and (category        is null or char_length(category)        <= 80)
+             and (cover_image_url is null or char_length(cover_image_url) <= 2048))
+      not valid;
+  end if;
 end $$;
 
 -- ingredient groups + ingredients
@@ -245,6 +352,23 @@ create table if not exists ingredients (
   sort_order  int not null default 0
 );
 create index if not exists ingredients_group_idx on ingredients (group_id);
+
+-- 32a2: a quantity is absent or it is a real amount. NULL is the "to taste"
+-- case and stays legal; zero and negative are not, and the negative one is why
+-- this is a constraint rather than a lint — B076 found that `estimate_nutrition`
+-- would multiply it by the food's per-100 g values and *subtract* from the
+-- label, which is a wrong number rather than a missing one. The estimator still
+-- skips `quantity <= 0` defensively; this stops it being storable at all.
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'ingredients_quantity_positive'
+  ) then
+    alter table ingredients
+      add constraint ingredients_quantity_positive
+      check (quantity is null or quantity > 0);
+  end if;
+end $$;
 
 -- step groups + steps
 create table if not exists step_groups (
@@ -442,8 +566,13 @@ security definer
 set search_path = public
 as $$
 begin
+  -- `left(…, 80)` rather than letting `profiles_text_lengths` reject it: this
+  -- runs inside the signup transaction, so a constraint violation here does not
+  -- refuse a display name, it refuses the **account**. The metadata is
+  -- unvalidated client input and 80 is far past any real name, so clamping is
+  -- the honest failure mode — same spirit as the `on conflict do nothing` below.
   insert into public.profiles (id, display_name)
-  values (new.id, coalesce(new.raw_user_meta_data ->> 'display_name', ''))
+  values (new.id, left(coalesce(new.raw_user_meta_data ->> 'display_name', ''), 80))
   on conflict (id) do nothing;   -- never block a signup on an existing profile
   return new;
 end;
@@ -459,7 +588,7 @@ create trigger on_auth_user_created
 -- this, such a user is signed in but has no profile, and every FK to profiles
 -- fails: rating, saving, and even logging a view (B015).
 insert into public.profiles (id, display_name)
-select u.id, coalesce(u.raw_user_meta_data ->> 'display_name', '')
+select u.id, left(coalesce(u.raw_user_meta_data ->> 'display_name', ''), 80)
 from auth.users u
 left join public.profiles p on p.id = u.id
 where p.id is null;
@@ -2612,10 +2741,12 @@ as $$
       -- (unknown spelling, volume without density, count without a portion),
       -- which is the single "not counted" marker everything below keys on.
       case
-        -- `quantity <= 0` skips with the null case, not with the arithmetic:
-        -- the column has no positive check and the editor's Qty box is a bare
-        -- TextField, so `-2` is storable — and a negative row would *subtract*
-        -- from the label, which is a wrong number rather than a missing one.
+        -- `quantity <= 0` skips with the null case, not with the arithmetic: a
+        -- negative row would *subtract* from the label, which is a wrong number
+        -- rather than a missing one (B076). `ingredients_quantity_positive`
+        -- (32a2) now makes it unstorable and the editor's Qty field says so
+        -- first; this stays as the belt-and-braces guard for any row written
+        -- before either existed.
         when i.is_optional or i.quantity is null or i.quantity <= 0
           or f.id is null then null
         when u.class = 'mass'   then i.quantity * u.factor

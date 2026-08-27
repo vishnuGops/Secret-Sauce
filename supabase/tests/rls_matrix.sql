@@ -314,6 +314,60 @@ begin
     'values (%L, ''BL-7 forged fork'', 1, %L)', v_owner, v_public));
   v_log := v_log || format(E'%s\tB9c owner · forge fork lineage by INSERT must FAIL (B082)\t%s', v_err = '42501', coalesce(v_err, 'no error'));
 
+  -- 32a2: the value bounds. A column grant says the owner may write `servings`;
+  -- nothing said what a legal `servings` is, so `0` was storable over PostgREST
+  -- and every per-serving number downstream divided by it. `23514` is a check
+  -- constraint — a different failure from `42501`, and asserting the exact code
+  -- is what distinguishes "the bound rejected it" from "the grant did".
+  select err into v_err from public.rls_matrix_do(format(
+    'update recipes set servings = 0 where id = %L', v_private));
+  v_log := v_log || format(E'%s\tB9d owner · servings = 0 must FAIL (32a2)\t%s', v_err = '23514', coalesce(v_err, 'no error'));
+
+  select err into v_err from public.rls_matrix_do(format(
+    'update recipes set prep_minutes = -5 where id = %L', v_private));
+  v_log := v_log || format(E'%s\tB9e owner · negative prep_minutes must FAIL (32a2)\t%s', v_err = '23514', coalesce(v_err, 'no error'));
+
+  select err into v_err from public.rls_matrix_do(format(
+    'update recipes set title = repeat(''x'', 201) where id = %L', v_private));
+  v_log := v_log || format(E'%s\tB9f owner · a 201-char title must FAIL (32a2)\t%s', v_err = '23514', coalesce(v_err, 'no error'));
+
+  -- Both length constraints are multi-part predicates, and a check that
+  -- exercises one conjunct proves nothing about its siblings — dropping the
+  -- constraint turns the tested half red either way. So each conjunct gets its
+  -- own line; `attribution` also stands in for the four nullable ones, whose
+  -- shared shape is the `is null or` guard most likely to be inverted later.
+  select err into v_err from public.rls_matrix_do(format(
+    'update recipes set description = repeat(''x'', 10001) where id = %L', v_private));
+  v_log := v_log || format(E'%s\tB9g owner · a 10001-char description must FAIL (32a2)\t%s', v_err = '23514', coalesce(v_err, 'no error'));
+
+  select err into v_err from public.rls_matrix_do(format(
+    'update recipes set attribution = repeat(''x'', 2001) where id = %L', v_private));
+  v_log := v_log || format(E'%s\tB9h owner · a 2001-char attribution must FAIL (32a2)\t%s', v_err = '23514', coalesce(v_err, 'no error'));
+
+  select err, rows into v_err, v_n from public.rls_matrix_do(format(
+    'update recipes set attribution = null where id = %L', v_private));
+  v_log := v_log || format(E'%s\tB9i owner · a NULL attribution is still legal\t%s', v_err is null and v_n = 1, coalesce(v_err, v_n || ' row'));
+
+  -- The quantity bound is the one with a wrong-number consequence rather than a
+  -- missing-value one: B076 showed a negative quantity *subtracting* from an
+  -- estimated label. The estimator still skips it defensively; this makes it
+  -- unstorable.
+  select err into v_err from public.rls_matrix_do(format(
+    'insert into ingredients (group_id, name, quantity) values (%L, ''BL-7 negative'', -2)', v_ig_priv));
+  v_log := v_log || format(E'%s\tB13a owner · a negative ingredient quantity must FAIL (32a2)\t%s', v_err = '23514', coalesce(v_err, 'no error'));
+
+  select err, rows into v_err, v_n from public.rls_matrix_do(format(
+    'insert into ingredients (group_id, name, quantity) values (%L, ''BL-7 to taste'', null)', v_ig_priv));
+  v_log := v_log || format(E'%s\tB13b owner · a NULL quantity is still legal ("to taste")\t%s', v_err is null and v_n = 1, coalesce(v_err, v_n || ' row'));
+
+  select err into v_err from public.rls_matrix_do(format(
+    'update profiles set display_name = repeat(''x'', 81) where id = %L', v_owner));
+  v_log := v_log || format(E'%s\tB11a owner · an 81-char display_name must FAIL (32a2)\t%s', v_err = '23514', coalesce(v_err, 'no error'));
+
+  select err into v_err from public.rls_matrix_do(format(
+    'update profiles set bio = repeat(''x'', 501) where id = %L', v_owner));
+  v_log := v_log || format(E'%s\tB11b owner · a 501-char bio must FAIL (32a2)\t%s', v_err = '23514', coalesce(v_err, 'no error'));
+
   select err into v_err from public.rls_matrix_do(format(
     'update profiles set chef_score = 9999 where id = %L', v_owner));
   v_log := v_log || format(E'%s\tB10 owner · update own chef_score must FAIL (B050)\t%s', v_err = '42501', coalesce(v_err, 'no error'));

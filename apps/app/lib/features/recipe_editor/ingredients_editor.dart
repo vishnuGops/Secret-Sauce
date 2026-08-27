@@ -143,10 +143,24 @@ class _IngredientRow extends ConsumerWidget {
 
     final quantity = SizedBox(
       width: 64,
-      child: TextField(
+      child: TextFormField(
         controller: ingredient.quantity,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         decoration: const InputDecoration(labelText: 'Qty', isDense: true),
+        // `ingredients_quantity_positive` (32a2) is the real guard; this is the
+        // same rule stated where the cook can see it, so the failure is a red
+        // field rather than a refused save. Empty stays valid — a "to taste"
+        // ingredient has no quantity, which is not the same as zero (B076: a
+        // zero counts toward coverage while contributing nothing, and a
+        // negative one *subtracts* from an estimated label).
+        validator: (v) {
+          final text = (v ?? '').trim();
+          if (text.isEmpty) return null;
+          final value = double.tryParse(text);
+          if (value == null) return 'Numbers only';
+          if (value <= 0) return 'Must be > 0';
+          return null;
+        },
       ),
     );
     final unit = SizedBox(

@@ -682,6 +682,12 @@ the `code-review` skill). The ones you need while _writing_ code:
    `42725 … is not unique`. Drop every historical signature **in the file that recreates the
    function**, not only in `drop.sql`: `drop.sql` is a separate destructive script that a plain
    re-apply or re-seed never runs (B024).
+   **The same trap has a constraint form** (found in 32a2): `if not exists (select 1 from
+   pg_constraint where conname = …)` keys on the **name**, so widening a `check` predicate under an
+   existing name applies to a fresh database and is a silent no-op on every database that already
+   has it. Drop the superseded constraint explicitly in the same file — cheap when the constraint is
+   `not valid` (no rescan), which is why `recipes_text_lengths` does it unconditionally and
+   `profiles_text_lengths` (valid, and a re-add rescans every row) states the rule instead.
 6. **Test SQL on the upgrade path, not only on a fresh `db reset`.** `supabase db reset` builds
    from scratch and `drop.sql → create → seed` drops everything first, so neither can surface a
    stale-object bug — and those are the only two paths that are convenient to run. A deployed

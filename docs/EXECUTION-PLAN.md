@@ -401,16 +401,65 @@ PASSED with the shelf unchanged at 6 rows and 0 self-forks in the population —
 change is a measured no-op on honest data. `melos run analyze` clean; `test --no-select` SUCCESS
 (core 130, app 246). Fresh apply left to CI: the change adds no new object, so B045 does not apply.
 
-**32a2 — CHECK constraints + length caps.** Add via the existing guarded `do $$ …
-pg_constraint` pattern (the deferred-FK block in 0001 is the template): `recipes_servings_min
-(servings >= 1)`, `recipes_minutes_nonneg (prep_minutes >= 0 and cook_minutes >= 0)`,
-`ingredients_quantity_positive (quantity is null or quantity > 0)`, `char_length` caps —
-suggested `title <= 200`, `display_name <= 80`, `bio <= 500`, `description <= 10000`; **measure
-first**: run max-length queries against a seeded + sim `medium` database and pick bounds above
-the observed maxima, because a constraint added over violating rows aborts the apply. One matrix
-deny-check per constraint (each is client-reachable via PATCH). Editor side: no change required
-(validators already block non-numeric input); if a cap can be hit from the editor, add the
-`maxLength` there in the same change so the failure is client-side first.
+**32a2 — CHECK constraints + length caps — DONE 2026-08-26.** Five constraints via the guarded
+`do $$ … pg_constraint` pattern, each beside its own table: `recipes_servings_positive`,
+`recipes_minutes_nonneg`, `recipes_text_lengths` (title 200 / description 10 000),
+`profiles_text_lengths` (display_name 80 / bio 500), `ingredients_quantity_positive`.
+
+**Measured before written**, as the plan required: over seed + sim `medium` the real maxima are
+title 58, description 319, display_name 51, bio 69, servings 1–24, and **zero** rows violating any
+proposed bound — which is what makes the constraints safe to add, since a check validates existing
+rows and an apply that trips one aborts mid-file.
+
+Two things the plan did not anticipate, both about where the failure surfaces:
+
+- **`handle_new_user` clamps rather than rejects.** It copies `display_name` out of unvalidated
+  signup metadata *inside the signup transaction*, so a constraint violation there would not refuse
+  a display name — it would refuse the **account**. It (and the B015 backfill beside it) now wrap
+  the value in `left(…, 80)`. Same spirit as the `on conflict do nothing` it already carried.
+- **The editor states the same rules first.** The Qty field became a `TextFormField` with a
+  validator (empty is legal — "to taste" is a real ingredient with no quantity; `<= 0` and
+  unparseable are not), and title/description carry `maxLength` with **`counterText: ''`** — the
+  enforcement without the `0/200` counter, which would otherwise add a band of text under two
+  fields that the editor's 320/360/600 × 2.0× envelope suite measures.
+
+**Three things `/code-review` changed, all of them scope the first cut had drawn too small:**
+
+- **The cap covers all six text columns `kRecipeSelect` ships**, not two. `attribution`, `cuisine`,
+  `category` and `cover_image_url` are in the same select *and* both grant lists, so bounding only
+  `title` and `description` left the identical amplifier one column over. Measured too (attribution
+  51, cuisine 13, category 9, cover_image_url 0) before the bounds were written.
+- **`recipes_text_lengths` is `not valid`.** "Measured first" had been measured against
+  fixture-built databases whose generators *already* enforce these bounds
+  (`tool/recipe_format.dart` gates servings 1–100, minutes 0–1440, quantity positive-or-null for
+  both `recipeData/` and `simData/`), so it proved nothing about the rows that can actually
+  violate: a description typed before the editor had a `maxLength`, a display_name from a signup
+  before `handle_new_user` clamped. Those exist only on a populated database, and `psql -1` rolls
+  back the **whole file** on one bad row. `not valid` enforces every future write and scans nothing
+  already there; promoting it is a deliberate `validate constraint` once a table is known clean.
+  `profiles` takes the other shape — clamp, then constrain — because truncating a display name is
+  what `handle_new_user` already does on every signup, while truncating a cook's prose is data loss.
+- **`servings` / `prep` / `cook` gained validators.** Typing `0` in Servings passed
+  `Form.validate()`, reached the RPC, and came back as `23514` → *"Some of that information is not
+  valid"*, naming none of the editor's fifteen fields. The constraint without the validator moves a
+  silent corruption to an unattributable error.
+
+**And one defect of its own making, which is why the matrix gained the conjunct checks.** `if not
+exists` on a constraint keys on the **name**: the six-column `recipes_text_lengths` was a silent
+no-op on this machine, because the two-column version already existed under that name. Same shape
+as B024 for functions, and the fix is the same — drop the superseded definition explicitly in the
+file that recreates it. Free to repeat here precisely because the constraint is `not valid`.
+`profiles_text_lengths` keeps the plain `if not exists` guard (a re-add would rescan every profile
+row — the cost OPT-A6 removed from the deferred FKs) with the rule stated inline for the next edit.
+
+**Verified:** apply over the running database exit 0, **twice** (idempotent); `db:rls`
+**117 passed / 0 failed** — B9d–B9i, B11a/B11b, B13a/B13b, where B9i and B13b pin that NULL stays
+legal where it means *absent*. Non-vacuity: the deny-checks go red when the constraints are
+dropped, the NULL-legal pair stays green, and B9h is the check that caught the name-guard bug.
+`nutrition_estimate` / `nutrition_fixtures` / `3_sim_verify` all green (the constraints sit on
+tables all three write). `melos run analyze` clean; `test --no-select` SUCCESS (app 247, +1 for the
+Qty validator's test, which asks the validator directly for the passing cases — a form that
+validates goes on to read a repository this suite has no client for).
 
 **32a3 — five matrix checks** (~40 lines in [rls_matrix.sql](../supabase/tests/rls_matrix.sql)):
 `tags` UPDATE denied (its security rests on policy *absence* today — pin it before someone adds a

@@ -390,10 +390,26 @@ non-vacuous, `melos run db:rls` + the Gotcha 6 upgrade path before anything reac
       way so the guard measures what the shelf measures. Five new matrix checks (B9b/B9c/B23b/B23c
       + F11), **107 passed / 0 failed** (was 102), each proven non-vacuous — see BUG-TRACKER B082
       for the second defect the ritual turned up
-- [ ] **32a2 — CHECK constraints + length caps** on client-writable columns: `servings >= 1`,
-      `prep/cook_minutes >= 0`, `ingredients.quantity` null-or-positive, `char_length` caps on
-      `title` / `display_name` / `bio` / `description`. Guarded adds; verify against seed + sim
-      `medium` data before committing the bounds; one matrix deny-check each
+- [x] **32a2 — CHECK constraints + length caps — DONE 2026-08-26.** RLS says who may write a
+      column and the grants say which columns; neither said anything about the **value**, so
+      `servings = 0` and `prep_minutes = -5` were storable over PostgREST. Five guarded
+      constraints: `recipes_servings_positive`, `recipes_minutes_nonneg`, `recipes_text_lengths`
+      (title 200 / description 10k), `profiles_text_lengths` (display_name 80 / bio 500),
+      `ingredients_quantity_positive` (null-or-positive — B076's negative-subtracts-from-the-label
+      case, now unstorable rather than only skipped). Bounds were **measured first** against seed +
+      sim `medium` (real maxima: title 58, description 319, display_name 51, bio 69), because a
+      check constraint validates existing rows and an apply that trips one aborts. Two client-side
+      halves so the bound is a red field rather than a refused save: a Qty validator and
+      `maxLength` on title/description (`counterText: ''`, so the editor's envelope is unchanged);
+      `handle_new_user` **clamps** display_name with `left(…, 80)` instead of letting the
+      constraint refuse the whole signup. Review widened it: the length cap covers **all six** text
+      columns `kRecipeSelect` ships (naming two left the same amplifier one column over),
+      `recipes_text_lengths` is **`not valid`** so a first apply onto a *populated* database cannot
+      roll the whole file back, and Servings/Prep/Cook got the validators the constraint would
+      otherwise have turned into an unattributed `23514`. It also caught a real defect: `if not
+      exists` guards a constraint by **name**, so the widened definition was a silent no-op — B024's
+      rule, now applied to constraints. Nine matrix checks (B9d–B9i, B11a/B11b, B13a/B13b),
+      **117 passed / 0 failed**, deny-checks proven non-vacuous by dropping the constraints
 - [ ] **32a3 — five new RLS matrix checks** for policies that exist only as absence today: `tags`
       UPDATE denial, forged `profiles` insert (`id <> auth.uid()`), `recipe_suggestions` update
       forging `author_id` (the policy has `using` but no `with check` — fix that too), an

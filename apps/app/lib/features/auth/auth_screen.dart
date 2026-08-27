@@ -88,8 +88,15 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   if (_isSignUp) ...[
                     TextFormField(
                       controller: _name,
+                      // `handle_new_user` clamps this to 80 with `left(…, 80)`
+                      // rather than letting `profiles_text_lengths` refuse the
+                      // signup (32a2) — so without a limit here a long name is
+                      // silently truncated and the cook is never told. The field
+                      // is where that gets said.
+                      maxLength: 80,
                       decoration: const InputDecoration(
                         labelText: 'Display name',
+                        counterText: '',
                       ),
                       validator:
                           (v) =>
