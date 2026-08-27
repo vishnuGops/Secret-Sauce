@@ -32,6 +32,14 @@ jobs:
       - name: Codegen
         run: melos run build_runner --no-select
 
+      # 32f1. `melos run format` was safe again from OPT-T4 on (B027) and
+      # nothing checked that anyone had run it. Only **tracked** files: the
+      # generated `*.g.dart` / `*.freezed.dart` are git-ignored and written by
+      # a builder whose formatter version is not this one's to police.
+      # `--output=none` checks without rewriting.
+      - name: Format
+        run: dart format --output=none --set-exit-if-changed $(git ls-files '*.dart')
+
       - name: Analyze
         run: melos run analyze
 
@@ -57,3 +65,34 @@ jobs:
       # USDA CSV bundle is an authoring-time input only, never in CI.
       - name: Food registry
         run: melos run nutrition:check
+
+  # 32f4. Nothing in CI compiled a release build, and `flutter test` does not:
+  # the test harness runs on the VM, while a web release build runs dart2js over
+  # the whole program. A tree-shaking or deferred-loading failure, or a plugin
+  # with no web implementation, is invisible to every other job here.
+  #
+  # It proves **compilation**, not runtime — `env.example.json` holds a
+  # placeholder URL and key, which is fine because they are only baked in as
+  # strings. Nothing here connects to anything.
+  build-web:
+    name: Web release build (compile only)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.8
+
+      - name: Activate melos
+        run: dart pub global activate melos 6.3.3
+
+      - name: Bootstrap
+        run: melos bootstrap
+
+      - name: Codegen
+        run: melos run build_runner --no-select
+
+      - name: Build web
+        working-directory: apps/app
+        run: flutter build web --release --dart-define-from-file=env.example.json

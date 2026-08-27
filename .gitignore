@@ -28,6 +28,14 @@ supabase/.env
 # `supabase link`, so it must never be committed.
 supabase/.branches/
 supabase/.temp/
+
+# Database dumps (`melos run db:backup`). A production dump contains every
+# account row in `auth.users` — including password hashes — and every private
+# recipe. It never belongs in the repo, whatever it is named.
+backups/
+*_dump.sql
+public_*.sql
+auth_*.sql
 # Local dart-define env files (keep the committed example only).
 # Extension-less globs on purpose: a file saved as `env.local` (no .json) holds the
 # same live credentials but was NOT matched by `**/env.local.json` alone.

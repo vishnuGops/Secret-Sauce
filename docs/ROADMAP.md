@@ -567,22 +567,47 @@ non-vacuous, `melos run db:rls` + the Gotcha 6 upgrade path before anything reac
       fallback for a version with no summary, the ISO date — plus the empty-state copy. Every fake
       in every suite returned `const []` before this, so the sheet had only ever rendered empty
 
-### 32f — CI & operations
+### 32f — CI & operations — DONE 2026-08-26
 
-- [ ] **32f1 — format gate** in `ci.yml` (`dart format --set-exit-if-changed`)
-- [ ] **32f2 — drive `database.yml` through `tool/db.dart`** — CI re-implements the apply pipeline
-      in bash, so the tool CI claims to cover is never executed and three copies of the ordering
-      (db.dart, workflow, `config.toml`) can drift
-- [ ] **32f3 — pin `supabase/setup-cli`** (currently `latest` — the one unpinned component in a
-      pinned toolchain); re-run `rls_matrix` + sim verify after the **upgrade** path, not only the
-      fresh one
-- [ ] **32f4 — `flutter build web` smoke job** — nothing in CI compiles a release build today
-- [ ] **32f5 (B087, high) — `db:backup` task + restore doc**: the documented `pg_dump --schema=public` omits
-      `auth.users` entirely — a restore has profiles with no logins behind them. Free tier has no
-      PITR; this dump is the only undo production has
-- [ ] **32f6 — migration-baseline runbook** in `supabase/migrations/README.md`: the exact
-      `supabase migration repair` / stamp sequence for the day the 0001-editing era ends — written
-      calm, not improvised live
+- [x] **32f1 — format gate — DONE.** `dart format --output=none --set-exit-if-changed` over
+      `git ls-files '*.dart'` in `ci.yml`. Tracked files only: the generated `*.g.dart` /
+      `*.freezed.dart` are git-ignored and formatted by a builder whose `dart_style` version is not
+      this job's to police, so `dart format .` would gate on somebody else's output
+- [x] **32f2 — `database.yml` drives `tool/db.dart` — DONE.** The fresh path is now a single
+      `dart run tool/db.dart reset --preset=small --seed=20260820`, and the matrix, both nutrition
+      suites, the re-apply and the sim all go through the tool. The ordering lived in three places
+      (the tool, the workflow, `config.toml`) and CI executed the copy nobody runs; now the file CI
+      exercises is the file a developer runs. `psql` stays for the one step the tool has no name
+      for — `git show`ing the previous baseline — and for the smoke `-c` queries. Needs the pinned
+      Dart (via `flutter-action`) plus `dart pub get`; the root package is pure Dart, so no
+      bootstrap
+- [x] **32f3 — `supabase/setup-cli` pinned — DONE.** `2.108.0`, the version this machine runs,
+      which starts **PostgreSQL 15.8** — recorded in the workflow, because the CLI chooses the
+      server major the whole job proves things against. And the two steps that exercise *behaviour*
+      rather than syntax now run **after the upgrade path too**: the RLS matrix, and a sim rebuilt
+      on the upgraded schema (rebuilt rather than re-verified — `drop.sql` took its recipes and
+      spared `auth.users`, so the registry points at rows that no longer exist, B054)
+- [x] **32f4 — `flutter build web` smoke job — DONE.** A second `ci.yml` job compiles a release web
+      build against `env.example.json`. `flutter test` runs on the VM; nothing in CI had ever run
+      dart2js over the whole program, where a tree-shaking failure or a plugin with no web
+      implementation would show up. It proves compilation, not runtime
+- [x] **32f5 (B087) — `db:backup` + the restore doc — DONE.** `melos run db:backup` writes **two**
+      timestamped dumps: `public` (schema + data) and `auth` **data-only** for `users` /
+      `identities`. Public alone restores into a project whose accounts do not exist — every
+      `profiles.id` is an FK to `auth.users` — and auth *DDL* would collide with the schema a fresh
+      project already owns. `--docker` runs `pg_dump` in `postgres:17-alpine` because a client older
+      than the server aborts (B079), rewriting a loopback URL to `host.docker.internal` so the same
+      command dumps the local stack. **Exercised end to end** against the local stack: 4.9 MB public
+      with `COPY public.recipes`, 104 KB auth with both `COPY auth.*` blocks, from a 17.10 client
+      against a 15.8 server. `backups/` and the dump filename patterns are git-ignored — a
+      production dump carries every password hash in `auth.users`. Storage objects are documented as
+      **not** covered
+- [x] **32f6 — the baselining runbook — DONE.** In
+      [supabase/migrations/README.md](../supabase/migrations/README.md): back up, `migration list`,
+      `supabase migration repair --status applied 0001 --linked`, confirm, then the sequence is
+      live. Written against the pinned CLI and verified against its `--help` rather than recalled,
+      with the two traps named (it takes the version number, not the filename; a project that never
+      had the baseline must **apply** it rather than be stamped)
 
 ### Needs a decision first (not scheduled — argue before building)
 

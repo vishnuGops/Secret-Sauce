@@ -78,6 +78,30 @@ const _pipelines = <String, List<String>>{
 /// Actions that destroy data and therefore require an explicit `--yes`.
 const _destructive = {'sim:clean'};
 
+/// The two dumps a restorable backup needs (B087, Phase 32f5).
+///
+/// **`--schema=public` alone is not a backup of this project.** Every
+/// `profiles.id` is an FK to `auth.users`, so a public-only dump restores into a
+/// project whose accounts do not exist: the restore itself fails on the FK, and
+/// if it did not, the result would be a vault of recipes nobody can sign in to
+/// own. The free tier has no PITR, so this pair is production's only undo.
+///
+/// Auth is dumped **data-only and table-by-table**, never `--schema=auth`: a
+/// fresh Supabase project already owns that schema (as `supabase_auth_admin`,
+/// with its own version of the tables), so restoring auth DDL collides on
+/// ownership before it reaches a single row.
+///
+/// What is **not** covered, stated rather than implied: Storage objects. The
+/// `storage.objects` rows ride in neither dump and the bytes live in S3, so a
+/// restore comes back with recipes whose `cover_image_url` points at nothing.
+const _dumps = <({String name, List<String> args})>[
+  (name: 'public', args: ['--schema=public', '--no-owner', '--no-privileges']),
+  (
+    name: 'auth',
+    args: ['--data-only', '--table=auth.users', '--table=auth.identities'],
+  ),
+];
+
 /// Steps applied inside a **single transaction** (`psql -1`), so a failure
 /// halfway through a file rolls the whole file back (OPT-T6).
 ///
@@ -196,6 +220,87 @@ Future<int> _configureSim(String url, String? preset, int? seed) async {
   ]);
 }
 
+/// Dumps [_dumps] into [outDir], timestamped, and returns 0 on success.
+///
+/// [stamp] is passed in rather than read here so the two files of one run share
+/// a name, and [useDocker] runs the dump inside `postgres:17-alpine` instead of
+/// from PATH. That is not a convenience: `pg_dump` **aborts on a server major
+/// newer than its own**, the hosted project runs 17.x, and the client inside the
+/// local Supabase stack is 15.8 (B079) — so on a machine whose only client is
+/// the stack's, the container is the only form that can back up production at
+/// all. `psql` tolerates that gap, which is exactly why the mismatch goes
+/// unnoticed until the day it matters.
+Future<int> _backup(
+  String url,
+  String outDir,
+  String stamp, {
+  required bool useDocker,
+}) async {
+  final dir = Directory(outDir);
+  if (!dir.existsSync()) dir.createSync(recursive: true);
+  final absolute = dir.absolute.path;
+
+  // Inside a container, `127.0.0.1` is the container. A loopback URL therefore
+  // has to be rewritten to reach the host's stack, and the gateway alias has to
+  // be added because it is not automatic outside Docker Desktop. Hosted URLs
+  // are untouched — they are the case this form exists for.
+  final target = useDocker ? _dockerReachable(url) : url;
+  final hostAlias =
+      useDocker && target != url
+          ? ['--add-host=host.docker.internal:host-gateway']
+          : const <String>[];
+
+  for (final dump in _dumps) {
+    final file = '${dump.name}_$stamp.sql';
+    stdout.writeln('▶ backup  ($outDir/$file)');
+    final Process proc;
+    if (useDocker) {
+      proc = await Process.start('docker', [
+        'run',
+        '--rm',
+        ...hostAlias,
+        // The output directory is mounted rather than streamed, so the bytes
+        // never pass through a shell that could re-encode them (B074).
+        '-v',
+        '$absolute:/backup',
+        'postgres:17-alpine',
+        'pg_dump',
+        target,
+        ...dump.args,
+        '-f',
+        '/backup/$file',
+      ], mode: ProcessStartMode.inheritStdio);
+    } else {
+      proc = await Process.start('pg_dump', [
+        url,
+        ...dump.args,
+        '-f',
+        '$outDir/$file',
+      ], mode: ProcessStartMode.inheritStdio);
+    }
+    final code = await proc.exitCode;
+    if (code != 0) return code;
+  }
+
+  stdout.writeln(
+    'Restore order is auth BEFORE public — the FKs point that way.\n'
+    'Storage objects are NOT in these files; see README.md#backups.',
+  );
+  return 0;
+}
+
+/// [url] with a loopback host swapped for `host.docker.internal`, unchanged
+/// otherwise. Returns the input on an unparseable string rather than guessing.
+String _dockerReachable(String url) {
+  try {
+    final uri = Uri.parse(url);
+    if (uri.host != '127.0.0.1' && uri.host != 'localhost') return url;
+    return uri.replace(host: 'host.docker.internal').toString();
+  } on FormatException {
+    return url;
+  }
+}
+
 /// The host being targeted, with any credential stripped. `db:*` fires at
 /// whatever SUPABASE_DB_URL points at with no prod guard (CLAUDE.md Gotcha 7),
 /// so the least this can do is say where.
@@ -221,10 +326,13 @@ usage: dart run tool/db.dart <action> [options]
   rls                                      the RLS matrix as a signed-in user (rolls back)
   nutrition:estimate                       estimator arithmetic on fixture trees (rolls back)
   nutrition:verify                         committed labels vs. the registry (rolls back)
+  backup                                   pg_dump public + auth data, timestamped (read-only)
 
 options:
   --preset=<tiny|small|medium|large>       sim size (default: whatever sim.config holds)
   --seed=<int>                             sim random seed
+  --out=<dir>                              backup destination (default: backups/)
+  --docker                                 run pg_dump in postgres:17-alpine (see B079)
   --yes                                    confirm a destructive action
 ''');
 }
@@ -251,6 +359,7 @@ Future<void> main(List<String> args) async {
 
   final preset = optionOf('preset');
   final seedOpt = optionOf('seed');
+  final outDir = optionOf('out') ?? 'backups';
   final confirmed = flags.contains('--yes');
 
   if (seedOpt != null && int.tryParse(seedOpt) == null) {
@@ -263,6 +372,34 @@ Future<void> main(List<String> args) async {
       '--preset must be one of ${presets.join(', ')} (got "$preset")',
     );
     exit(64);
+  }
+
+  // Read-only and file-producing rather than file-applying, so it short-circuits
+  // the step machinery below entirely.
+  if (action == 'backup') {
+    stdout.writeln('target: ${_describeTarget(url)}');
+    final now = DateTime.now().toUtc();
+    String two(int v) => v.toString().padLeft(2, '0');
+    final stamp =
+        '${now.year}${two(now.month)}${two(now.day)}'
+        'T${two(now.hour)}${two(now.minute)}${two(now.second)}Z';
+    final code = await _backup(
+      url,
+      outDir,
+      stamp,
+      useDocker: flags.contains('--docker'),
+    );
+    if (code != 0) {
+      stderr.writeln(
+        '✖ backup failed (exit $code).\n'
+        '  No pg_dump on PATH? Re-run with --docker, which uses '
+        'postgres:17-alpine —\n'
+        '  and note a client older than the server aborts outright (B079).',
+      );
+      exit(code);
+    }
+    stdout.writeln('✔ done');
+    return;
   }
 
   final steps =

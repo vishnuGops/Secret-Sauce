@@ -36,6 +36,54 @@ or anyone else's clone), `0001_init.sql` is history and every change after it is
 a new `0002_*.sql`, `0003_*.sql`, … Do not rediscover this the hard way: the
 failure mode of getting it wrong is a deploy that silently applies nothing.
 
+### The baselining runbook (write it calm, run it once)
+
+This is the sequence for that day. It is written now, against the **pinned CLI
+(2.108.0)**, so that nobody has to work it out while a deploy is half done —
+and it is the reason `.github/workflows/database.yml` pins that version rather
+than tracking `latest`.
+
+The problem it solves: `supabase db push` applies migrations the history table
+does not already list. A hosted project that was brought up to date by *applying
+`0001_init.sql` by hand* (which is how this one was updated on 2026-08-23) has
+the schema but **no history row**, so the first `push` would try to apply the
+whole baseline again. Re-applying is safe — every statement is guarded — but it
+re-runs two whole-table backfills and, worse, teaches you nothing about whether
+the sequence is working. Repairing the history is what makes `push` honest from
+then on.
+
+1. **Back up first, both halves.** `melos run db:backup -- --docker`. There is
+   no PITR on the free tier; this is the undo. See
+   [README.md#backups](../../README.md#backups).
+2. **Look before touching.** `supabase migration list --linked` prints local vs
+   remote versions. A baseline applied by hand shows local `0001` with no remote
+   counterpart.
+3. **Stamp the baseline as applied** — this writes a history row, it does not
+   run any SQL:
+
+   ```bash
+   supabase migration repair --status applied 0001 --linked
+   ```
+
+   (`--linked` targets the linked project; `--db-url "<uri>"` does the same
+   without linking, and the URI must be percent-encoded. Verified against CLI
+   2.108.0 — check `supabase migration repair --help` if the pin moves.)
+4. **Confirm** with `supabase migration list --linked` that `0001` now appears
+   on both sides.
+5. **From here the sequence is live.** Every schema change is a new numbered
+   file, `supabase db push` applies exactly the new ones, and `0001_init.sql`
+   becomes read-only history — editing it after this point is the silent no-op
+   this whole section exists to prevent.
+6. **`melos run db:create` keeps working regardless** and stays the local tool:
+   it applies every file in order and tracks nothing, which is why every
+   migration still has to be re-runnable (rule 1 below).
+
+Two traps worth naming while there is no pressure: `repair` takes the **version
+number** (`0001`), not the filename; and a project that has genuinely never had
+the baseline applied must **apply** it (`db push` or by hand) rather than being
+stamped — stamping an unapplied migration tells the CLI a lie it will never
+re-check.
+
 ## The rules (which apply either way)
 
 1. **Every statement is guarded** — `if not exists`, `drop policy if exists`,

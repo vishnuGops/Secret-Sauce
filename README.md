@@ -297,6 +297,7 @@ melos run db:reset    # drop -> create -> nutrition -> seed -> recipes -> sim
 melos run db:rls      # RLS acceptance matrix as a SIGNED-IN user — writes, then rolls back
 melos run db:nutrition:estimate  # auto-nutrition arithmetic on fixture trees — rolls back
 melos run db:nutrition:verify    # committed labels vs. the loaded registry — rolls back
+melos run db:backup -- --docker  # two pg_dump files, timestamped — read-only (see Backups)
 ```
 
 `db:rls` is the odd one out and the only safe-by-construction one: it applies
@@ -342,6 +343,48 @@ Get-Content supabase\migrations\0002_whatever_you_added.sql -Raw |
 The pooler user is `postgres.<project-ref>`, **not** bare `postgres`, and a dashboard password
 reset takes a moment to propagate — an auth failure straight after resetting is not proof the
 password is wrong.
+
+### Backups
+
+**`melos run db:backup` is the only undo production has** — the Supabase free tier has no
+point-in-time recovery, so whatever this writes is the whole safety net. It is read-only: two
+`pg_dump` runs, timestamped together, into `backups/` (git-ignored; override with `--out=<dir>`).
+
+```powershell
+. .\db-url.local.ps1                                   # point at the project you mean to dump
+melos run db:backup -- --docker --out=D:\backups\secret-sauce
+```
+
+Two files, and **both are required** (B087):
+
+| File | What it holds | Why it alone is not enough |
+| --- | --- | --- |
+| `public_<stamp>.sql` | the whole app schema and its data | every `profiles.id` is an FK to `auth.users`; restored on its own it fails on that FK |
+| `auth_<stamp>.sql` | `auth.users` + `auth.identities`, **data only** | the recipes and profiles live in the other file |
+
+Auth is dumped data-only and table-by-table on purpose: a fresh Supabase project already owns the
+`auth` schema (as `supabase_auth_admin`, with its own copy of those tables), so restoring auth
+*DDL* collides on ownership before it reaches a row.
+
+**`--docker` runs `pg_dump` inside `postgres:17-alpine`.** That is not convenience — `pg_dump`
+**aborts** against a server whose major is newer than its own, the hosted project runs 17.x, and
+the client inside the local Supabase stack is 15.8 (B079/B033). On a machine whose only client is
+the stack's container, this flag is the difference between a backup and an error message. A
+loopback URL is rewritten to `host.docker.internal` automatically so the same command also dumps
+the local stack.
+
+**Restore order is auth first, then public** — the FKs point that way:
+
+```powershell
+psql $env:SUPABASE_DB_URL -v ON_ERROR_STOP=1 -f auth_<stamp>.sql
+psql $env:SUPABASE_DB_URL -v ON_ERROR_STOP=1 -f public_<stamp>.sql
+```
+
+**What is not covered, stated rather than implied:** Storage objects. The bytes live in S3 and
+`storage.objects` is in neither dump, so a restored project has recipes whose `cover_image_url`
+points at nothing. Today that costs nothing — no seeded or simulated recipe carries a cover and
+`uploadAvatar` has no callers — but the day real cooks upload photos, this gap becomes real and
+needs its own answer (the Storage API, not `pg_dump`).
 
 **Apply only the new migration to a hosted database.** `supabase/migrations/` is a numbered
 sequence and `0001_init.sql` is the frozen baseline (OPT-A9), so a project that already has it

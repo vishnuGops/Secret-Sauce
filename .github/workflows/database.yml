@@ -36,6 +36,11 @@ env:
   # The Supabase CLI's local database, inside this runner. Not a secret, not
   # reachable from outside the job.
   DB_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+  # The same address, under the name `tool/db.dart` reads (32f2). It is a
+  # literal here and must stay one: the tool fires at whatever this points at
+  # with no prod guard (CLAUDE.md Gotcha 7), so a repository *secret* in this
+  # position would aim `drop` at whatever the secret happens to be.
+  SUPABASE_DB_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
   PSQL: psql -v ON_ERROR_STOP=1 --quiet
 
 jobs:
@@ -52,9 +57,32 @@ jobs:
           # which means history, not a shallow clone.
           fetch-depth: 0
 
+      # Pinned, like every other component of this toolchain (32f3). `latest`
+      # was the one moving part in a repo that pins Flutter to a patch: the CLI
+      # chooses the Postgres image the whole job runs against, so a release that
+      # bumped the major would change what CI proves without a commit here.
+      # 2.108.0 starts **PostgreSQL 15.8** (`supabase_db_*`), which is what the
+      # measurements and the B079 client-version note describe.
       - uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version: 2.108.0
+
+      # `tool/db.dart` is plain Dart over `psql` — the root package has no
+      # Flutter dependency — but the SDK still has to be the pinned one, and
+      # `dart run` needs a package config, hence the `pub get`.
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.8
+
+      - name: Resolve the workspace root (for tool/db.dart)
+        run: dart pub get
+
+      - name: Ensure a psql client
+        run: |
+          command -v psql >/dev/null 2>&1 || {
+            sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client
+          }
+          psql --version
 
       # Only the database is needed. Studio, realtime, storage, the edge runtime
       # and the analytics stack are all cost with no assertion behind them —
@@ -68,15 +96,16 @@ jobs:
 
       # ------------------------------------------------------------------
       # Path 1 — a fresh database, the way a new machine sees the project.
+      #
+      # Through `tool/db.dart` rather than a bash transcription of it (32f2).
+      # The ordering — drop, baseline, registry before recipes (29b's food_id
+      # FK), then the sim — used to live in three places (the tool, this file,
+      # and `config.toml`'s `db.seed.sql_paths`), and only two of them were ever
+      # executed here. Now the file CI runs is the file a developer runs, so a
+      # `db:reset` that breaks breaks here.
       # ------------------------------------------------------------------
-      - name: Fresh apply — baseline, nutrition, seed, recipes
-        run: |
-          $PSQL "$DB_URL" -f supabase/scripts/drop.sql
-          for f in supabase/migrations/*.sql; do $PSQL "$DB_URL" -1 -f "$f"; done
-          # Registry before recipes: 29b gives ingredients a food_id FK into it.
-          $PSQL "$DB_URL" -1 -f supabase/nutrition_foods.sql
-          $PSQL "$DB_URL" -1 -f supabase/seed.sql
-          $PSQL "$DB_URL" -1 -f supabase/seed_recipes.sql
+      - name: Fresh apply — db:reset through the real tool
+        run: dart run tool/db.dart reset --preset=small --seed=20260820
 
       # ------------------------------------------------------------------
       # The RLS acceptance matrix (ROADMAP BL-7). Every other step in this job
@@ -88,7 +117,7 @@ jobs:
       # database exactly as the step above left it.
       # ------------------------------------------------------------------
       - name: RLS matrix — as a signed-in user
-        run: $PSQL "$DB_URL" -f supabase/tests/rls_matrix.sql
+        run: dart run tool/db.dart rls
 
       # ------------------------------------------------------------------
       # The auto-nutrition arithmetic (Phase 29c): fixture trees with known
@@ -99,7 +128,7 @@ jobs:
       # depend on nutrition_foods.sql being loaded.
       # ------------------------------------------------------------------
       - name: Nutrition estimator — fixture trees, exact labels
-        run: $PSQL "$DB_URL" -f supabase/tests/nutrition_estimate.sql
+        run: dart run tool/db.dart nutrition:estimate
 
       # ------------------------------------------------------------------
       # The other half (Phase 29d), and the only one that needs the REAL
@@ -111,28 +140,19 @@ jobs:
       # by breaking things on purpose inside a transaction it rolls back.
       # ------------------------------------------------------------------
       - name: Nutrition fixtures — committed labels vs. the registry
-        run: $PSQL "$DB_URL" -f supabase/tests/nutrition_fixtures.sql
+        run: dart run tool/db.dart nutrition:verify
 
-      # `small` (250 accounts), not `tiny` (60). Four assertions in
-      # 3_sim_verify.sql gate on `v_users >= 250` — E3 (the exposure tail) and
-      # the whole of group G, which includes **G3, the only automated guard on
-      # `sim.fork_bias` and therefore on MOST FORKED ranking anything at all**.
-      # At `tiny` the shelf RPCs were executed but their row counts never
-      # asserted, so `ALL CHECKS PASSED` here meant 42 of 46 and said nothing
-      # about it. Phase 26's shelves are a large part of what this job exists to
-      # protect; the extra population costs a couple of seconds per path.
-      - name: Simulated population (small) + assertions
-        run: |
-          $PSQL "$DB_URL" -f supabase/sim/0_sim_schema.sql
-          # A no-op on a fresh runner, and deliberate anyway: the generator is
-          # additive and registry-driven, so a `sim` schema that survived a
-          # `drop.sql` makes it build on top of a population whose rows are gone
-          # (B054). Cheap insurance against a future reordering of this job.
-          $PSQL "$DB_URL" -f supabase/sim/9_sim_teardown.sql
-          $PSQL "$DB_URL" -f supabase/sim/1_sim_dishes.sql
-          $PSQL "$DB_URL" -c "insert into sim.config (key, value) values ('preset','small'),('seed','20260820') on conflict (key) do update set value = excluded.value;"
-          $PSQL "$DB_URL" -f supabase/sim/2_sim_generate.sql
-          $PSQL "$DB_URL" -f supabase/sim/3_sim_verify.sql
+      # The population is built by the `reset` above, at `small` (250 accounts)
+      # rather than `tiny` (60): four assertions in `3_sim_verify.sql` gate on
+      # `v_users >= 250` — E3 (the exposure tail) and the whole of group G,
+      # which includes **G3, the only automated guard on `sim.fork_bias` and
+      # therefore on MOST FORKED ranking anything at all**. At `tiny` the shelf
+      # RPCs were executed but their row counts never asserted, so
+      # `ALL CHECKS PASSED` meant 42 of 46 and said nothing about them.
+      # This step re-runs the assertions read-only, so the log names them as
+      # their own gate rather than burying them in the apply above.
+      - name: Simulated population — assertions
+        run: dart run tool/db.dart sim:verify
 
       # ------------------------------------------------------------------
       # Path 2 — re-apply everything on top of itself. Every file in this repo
@@ -140,11 +160,11 @@ jobs:
       # ------------------------------------------------------------------
       - name: Re-apply (idempotency)
         run: |
-          for f in supabase/migrations/*.sql; do $PSQL "$DB_URL" -1 -f "$f"; done
-          $PSQL "$DB_URL" -1 -f supabase/nutrition_foods.sql
-          $PSQL "$DB_URL" -1 -f supabase/seed.sql
-          $PSQL "$DB_URL" -1 -f supabase/seed_recipes.sql
-          $PSQL "$DB_URL" -f supabase/sim/3_sim_verify.sql
+          dart run tool/db.dart create
+          dart run tool/db.dart nutrition
+          dart run tool/db.dart seed
+          dart run tool/db.dart recipes
+          dart run tool/db.dart sim:verify
 
       # ------------------------------------------------------------------
       # Path 3 — the upgrade path (CLAUDE.md Gotcha 6). Neither of the paths
@@ -164,13 +184,38 @@ jobs:
           echo "Upgrading from $prev"
           git show "$prev:supabase/migrations/0001_init.sql" > /tmp/previous_init.sql
 
+          # `psql` directly for these two: the previous baseline is a file
+          # `tool/db.dart` has no name for, which is the whole point of the step.
           $PSQL "$DB_URL" -f supabase/scripts/drop.sql
           $PSQL "$DB_URL" -1 -f /tmp/previous_init.sql
           $PSQL "$DB_URL" -1 -f supabase/seed.sql
           # Today's schema on top of yesterday's database, then the registry —
           # the B045 shape: its tables exist only after today's baseline runs.
-          for f in supabase/migrations/*.sql; do $PSQL "$DB_URL" -1 -f "$f"; done
-          $PSQL "$DB_URL" -1 -f supabase/nutrition_foods.sql
+          dart run tool/db.dart create
+          dart run tool/db.dart nutrition
+          dart run tool/db.dart recipes
+
+      # ------------------------------------------------------------------
+      # 32f3. Both of these used to run against the FRESH database only, so an
+      # upgrade that left a policy or a generator broken passed CI: the two
+      # things that actually exercise behaviour never saw the upgraded schema.
+      # The sim is rebuilt rather than re-verified — `drop.sql` took its recipes
+      # with it while sparing `auth.users`, so the registry points at rows that
+      # no longer exist (B054), and asserting over that would be asserting over
+      # nothing.
+      #
+      # Both run whatever the step above did: on the very first revision of the
+      # baseline there is nothing to upgrade *from*, so they re-check the fresh
+      # database instead. That is a weaker claim than the step names, and it is
+      # the right trade — the alternative is a conditional that goes stale.
+      # ------------------------------------------------------------------
+      - name: RLS matrix — after the upgrade path
+        run: dart run tool/db.dart rls
+
+      - name: Simulated population — rebuilt on the upgraded schema
+        run: |
+          dart run tool/db.dart sim:clean --yes
+          dart run tool/db.dart sim --preset=small --seed=20260820
 
       - name: Smoke — the surfaces the app actually calls
         run: |

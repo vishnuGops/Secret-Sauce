@@ -213,6 +213,18 @@ scripts:
   # rolls the whole transaction back, so it leaves nothing behind — run it after
   # any change to a policy, a `security definer` function, or the column grants.
   # ---------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
+  # Backups (B087, Phase 32f5). Read-only, and the ONLY undo production has —
+  # the free tier has no PITR. Two files per run because `--schema=public` alone
+  # restores into a project with no accounts behind its profiles.
+  #   melos run db:backup -- --docker --out=C:\backups\secret-sauce
+  # `--docker` runs pg_dump in postgres:17-alpine: a client older than the
+  # server aborts, and the local stack ships 15.8 against a hosted 17.x (B079).
+  # ---------------------------------------------------------------------------
+  db:backup:
+    description: Dump public + auth data, timestamped. Read-only; see README.md#backups.
+    run: dart run tool/db.dart backup
+
   db:rls:
     description: Run the RLS matrix as anon/owner/shared/stranger. Rolls back.
     run: dart run tool/db.dart rls

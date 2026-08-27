@@ -46,9 +46,12 @@ second app.
 secret-sauce/
 ├── CLAUDE.md · README.md · melos.yaml · pubspec.yaml · analysis_options.yaml
 ├── .claude/skills/            # code-review + review-checklist (repo's own review criteria)
-├── .github/workflows/        # ci.yml: analyze + test, pinned Flutter 3.44.8 / melos 6.3.3
+├── .github/workflows/        # ci.yml: format gate + analyze + test + a web release BUILD
+│                             #   (32f4, compile-only), pinned Flutter 3.44.8 / melos 6.3.3
 │                             # database.yml: schema/seed/sim on a real Postgres (OPT-T1) —
-│                             #   fresh + re-apply + upgrade path; NEVER give it a DB secret
+│                             #   fresh + re-apply + upgrade path, driven through tool/db.dart
+│                             #   (32f2) on a PINNED supabase CLI; the RLS matrix and the sim
+│                             #   run after the upgrade path too. NEVER give it a DB secret
 ├── docs/                      # ROADMAP · EXECUTION-PLAN · SDS · BUG-TRACKER (see "Docs–code sync")
 │   └── archive/               #   shipped-phase history (frozen — completed phases move here)
 ├── recipeData/                # THE Secret Sauce Kitchen's 14 recipes (content)
@@ -302,6 +305,14 @@ melos run db:sim                          # schema -> dishes -> generate -> veri
 melos run db:sim -- --preset=small --seed=7
 melos run db:sim:verify                   # 46 assertions, read-only
 melos run db:sim:clean -- --yes           # DESTRUCTIVE: deletes the simulated auth.users
+
+# Backups (32f5, B087). Read-only, and the only undo the free tier gives you.
+# TWO files per run: public alone restores into a project with no accounts
+# behind its profiles, because every profiles.id is an FK to auth.users.
+# `--docker` runs pg_dump in postgres:17-alpine — a client older than the server
+# aborts outright, and the local stack ships 15.8 against a hosted 17.x (B079).
+# Restore order is auth BEFORE public. Storage objects are NOT covered.
+melos run db:backup -- --docker --out=D:ackups\secret-sauce
 ```
 
 > **The sim derives its counters; `seed.sql` authors them.** `seed.sql` writes `like_count = 2500`
