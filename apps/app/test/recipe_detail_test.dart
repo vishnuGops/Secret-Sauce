@@ -167,6 +167,18 @@ class _FakeRecipeRepository implements RecipeRepository {
   /// Make the next fork fail, to drive the snackbar path.
   bool forkFails = false;
 
+  /// The rating half (32e2). Both detail layouts mount `RatingSection` and only
+  /// cook mode's twin was ever driven, so the reading page's write, its clear,
+  /// and its failure path had no coverage at all.
+  double? rating;
+  final List<double> ratingWrites = [];
+  int ratingClears = 0;
+  bool ratingFails = false;
+
+  /// What the version sheet is handed. Empty by default — every suite fake
+  /// returned `const []` until 32e3, so the sheet had never rendered a row.
+  List<RecipeVersion> versionRows = const [];
+
   @override
   Future<Recipe> getById(String id) async => recipe;
 
@@ -192,10 +204,10 @@ class _FakeRecipeRepository implements RecipeRepository {
   Future<void> logView(String recipeId) async => viewLogs++;
 
   @override
-  Future<double?> myRating(String recipeId) async => null;
+  Future<double?> myRating(String recipeId) async => rating;
 
   @override
-  Future<List<RecipeVersion>> versions(String recipeId) async => const [];
+  Future<List<RecipeVersion>> versions(String recipeId) async => versionRows;
 
   // Unused on this screen's read path.
   @override
@@ -246,11 +258,17 @@ class _FakeRecipeRepository implements RecipeRepository {
       throw UnimplementedError();
 
   @override
-  Future<void> setRating(String recipeId, double rating) =>
-      throw UnimplementedError();
+  Future<void> setRating(String recipeId, double value) async {
+    if (ratingFails) throw Exception('nope');
+    ratingWrites.add(value);
+    rating = value;
+  }
 
   @override
-  Future<void> clearRating(String recipeId) => throw UnimplementedError();
+  Future<void> clearRating(String recipeId) async {
+    ratingClears++;
+    rating = null;
+  }
 }
 
 /// Pumps the detail screen behind a real router, so `context.go(Routes.auth)`
@@ -594,6 +612,145 @@ void main() {
 
       expect(find.textContaining('Could not fork'), findsOneWidget);
       expect(find.text('EDITOR r2'), findsNothing);
+    });
+  });
+
+  // 32e2. `RatingSection` is mounted by both detail layouts and was driven by
+  // neither: the only rating test in the suite was cook mode's finish screen.
+  // These go through the shared handler (32c5), so they cover the write path
+  // both surfaces now share — what reaches the repository, and what the block
+  // does afterwards.
+  group('rating (compact)', () {
+    Future<void> rate(WidgetTester tester) async {
+      final stars = find.byType(StarRatingInput);
+      await tester.ensureVisible(stars);
+      await tester.pumpAndSettle();
+      await tester.tap(stars);
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('signed in, a tap writes and the block catches up', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 844));
+
+      await rate(tester);
+
+      expect(repo.ratingWrites, hasLength(1));
+      expect(repo.ratingWrites.single, inInclusiveRange(0.5, 5.0));
+      expect(find.textContaining('Rated'), findsOneWidget);
+      // The Remove button only appears once `myRatingProvider` has re-resolved,
+      // so its presence *is* the invalidation assertion.
+      expect(find.text('Remove'), findsOneWidget);
+    });
+
+    testWidgets('Remove clears the rating', (tester) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe)..rating = 4;
+      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 844));
+
+      final remove = find.text('Remove');
+      await tester.ensureVisible(remove);
+      await tester.pumpAndSettle();
+      await tester.tap(remove);
+      await tester.pumpAndSettle();
+
+      expect(repo.ratingClears, 1);
+      // Clearing is silent on success — the stars emptying is the feedback —
+      // and the button leaves with the rating it removed.
+      expect(find.text('Remove'), findsNothing);
+      expect(find.textContaining('Could not'), findsNothing);
+    });
+
+    testWidgets('a refused rating says so and writes nothing', (tester) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe)
+        ..ratingFails = true;
+      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 844));
+
+      await rate(tester);
+
+      expect(repo.ratingWrites, isEmpty);
+      expect(find.textContaining('Could not save rating'), findsOneWidget);
+    });
+
+    testWidgets('signed out, there is no star input, only the way in', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+
+      expect(find.byType(StarRatingInput), findsNothing);
+      final signIn = find.text('Sign in');
+      await tester.ensureVisible(signIn);
+      await tester.pumpAndSettle();
+      await tester.tap(signIn);
+      await tester.pumpAndSettle();
+
+      expect(find.text('AUTH SCREEN'), findsOneWidget);
+      expect(repo.ratingWrites, isEmpty);
+    });
+
+    testWidgets('the owner is told why the stars are missing', (tester) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(
+        tester,
+        repo: repo,
+        uid: 'someone-else',
+        size: const Size(390, 844),
+      );
+
+      expect(find.byType(StarRatingInput), findsNothing);
+      // RLS is what actually refuses a self-rating; this branch explains it.
+      expect(find.textContaining('rate your own recipe'), findsOneWidget);
+    });
+  });
+
+  // 32e3. Every fake in every suite returned `const []` for `versions()`, so
+  // the sheet had only ever rendered its empty state.
+  group('version history sheet', () {
+    testWidgets('lists the versions newest first, marking the current one', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe)
+        ..versionRows = [
+          RecipeVersion(
+            id: 'v2',
+            recipeId: 'r1',
+            versionNumber: 2,
+            authorId: 'someone-else',
+            changeSummary: 'Hotter rub',
+            createdAt: DateTime.utc(2026, 8, 21),
+          ),
+          RecipeVersion(
+            id: 'v1',
+            recipeId: 'r1',
+            versionNumber: 1,
+            authorId: 'someone-else',
+            createdAt: DateTime.utc(2026, 8, 1),
+          ),
+        ];
+      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+
+      await tester.tap(find.byTooltip('Version history'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Hotter rub'), findsOneWidget);
+      // No summary on v1 — the row says what it knows rather than going blank.
+      expect(find.text('Version 1'), findsOneWidget);
+      expect(find.text('2026-08-21'), findsOneWidget);
+      // `versions()` is ordered newest first, so the chip belongs to row 0.
+      expect(find.widgetWithText(Chip, 'Current'), findsOneWidget);
+      expect(find.text('v2'), findsOneWidget);
+    });
+
+    testWidgets('a recipe with no history says so', (tester) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+
+      await tester.tap(find.byTooltip('Version history'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('No version history yet.'), findsOneWidget);
     });
   });
 

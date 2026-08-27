@@ -108,7 +108,8 @@ secret-sauce/
 │   │                          recipe_detail_test,
 │   │                          recipe_detail_v2_test,cook_mode_test,my_recipes_header_test,
 │   │                          recipe_grid_test,discover_screen_test,discover_search_test,
-│   │                          paging_test,share_dialog_test,auth_screen_test}.dart
+│   │                          paging_test,share_dialog_test,auth_screen_test,
+│   │                          profile_screen_test}.dart
 │   │                          # the two detail suites split by window: recipe_detail_test covers
 │   │                          # the COMPACT layout (engagement at the default 800x600, plus its
 │   │                          # own 390/600/800 x {1.0,2.0} envelope), recipe_detail_v2_test the

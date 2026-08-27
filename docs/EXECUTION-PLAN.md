@@ -734,16 +734,44 @@ the wire — the search window and the dropped column — are pinned by request 
 recording client, which is what that harness is for; neither was exercised against a live database
 (Gotcha 15's standing caveat).
 
-### 32e — Test coverage
+### 32e — Test coverage — DONE 2026-08-26
 
-- **32e1** — `profile_screen_test.dart`: loading / error / data states, sign-out lands on
-  `/discover` (not `/`), avatar initials fallback.
-- **32e2** — reading-page rating write: make both detail suites' `setRating` fakes record; assert
-  save, clear, invalidation, and the failure snackbar through `RatingSection` itself. Editor save
-  path: drive `_save` to `repo.create` (new) and `repo.update` (edit), assert `_canSave` blocks
-  until loaded, success navigates, failure snackbars — today no test calls either repo method.
-- **32e3** — version-history sheet: one suite hands `versions()` real rows; assert list order,
-  "Current" chip, and the empty state copy.
+**32e1 — `/profile` had no test file.** Eight now, driven through the real router with the two
+*repositories* overridden rather than `myProfileProvider` itself, so the provider's own wiring —
+it watches `currentUserIdProvider`, which watches the auth stream — is exercised instead of
+stubbed. The loading state needs a read that never completes (a `Completer` with no completion),
+because anything that resolves races the first `pump`. The sign-out assertion is the one worth
+having: the button must land on `/discover`, since staying on `/profile` hands the visitor to the
+redirect (which sends them to `/auth`) and `/` has been redirect-only since home was retired.
+
+**32e2 — two write paths nothing had driven.** `RatingSection` is mounted by both detail layouts
+and neither had ever been rated in a test; the only rating coverage was cook mode's finish screen.
+Five tests now cover the shared handler from the reading page: the value reaching the repository,
+the **Remove button appearing** (the observable proof that `myRatingProvider` was invalidated —
+asserting an invalidation directly would assert the implementation), the clear, the refusal
+snackbar, and the two non-writing branches.
+
+The editor half is the bigger gap: no test called `repo.create` or `repo.update`, so the whole save
+path — success navigation, the change summary an edit records, the failure snackbar — was unpinned
+on the one action that writes an entire recipe. Five tests now do.
+
+**Two of them were green for the wrong reason on the first run, and that is the lesson.** Without
+an `authRepositoryProvider` override, `_save`'s `ref.read(currentUserIdProvider)` reaches the real
+`SupabaseAuthRepository`, which asserts `Supabase.instance` was initialised. That throws *inside*
+`_save`'s own `try`, so the screen shows "Save failed" — which is exactly what the refusal test
+asserts. A test whose subject is a failure path will happily pass on somebody else's failure; the
+two success tests failing is what exposed it.
+
+**32e3 — the version sheet had only ever rendered its empty state**, because every fake in every
+suite returned `const []`. It now gets real rows through the compact cover's history button, and
+the assertions are the ones a reader would notice breaking: newest first, the `Current` chip on row
+0 and nowhere else, `Version N` where a version has no summary, and the ISO date the sheet uses
+because a history is a column of timestamps to compare.
+
+**Verified:** `melos run analyze` — **No issues found** in all three packages;
+`melos run test --no-select` — **core 150 / design_system 119 / app 281, all passed** (app was 261:
++20). `melos run format` reformatted 2 files. Tests only — no `lib/` file changed in this band, so
+there is nothing here for a database run to verify.
 
 ### 32f — CI & operations
 

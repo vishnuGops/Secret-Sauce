@@ -543,14 +543,29 @@ non-vacuous, `melos run db:rls` + the Gotcha 6 upgrade path before anything reac
       three importers updated, and `AppRadii.pill = 999` now carries all **22** `circular(999)`
       sites across 12 files
 
-### 32e — Test coverage gaps
+### 32e — Test coverage gaps — DONE 2026-08-26
 
-- [ ] **32e1 — profile screen** test file (three states + sign-out navigation) — zero coverage today
-- [ ] **32e2 — reading-page rating write** (both layouts mount `RatingSection`; only the finish
-      screen's twin is tested) and **editor save path** (`_save` never drives `create`/`update` in
-      any test; success navigation and failure snackbar unpinned)
-- [ ] **32e3 — version history sheet** body (every fake returns `const []`, so the sheet has never
-      rendered rows in a test)
+- [x] **32e1 — profile screen — DONE.** New `profile_screen_test.dart`, 8 tests: the three async
+      states (a hung read for loading, a thrown one for `ErrorView` — asserting no raw
+      `Exception:` reaches the screen), the loaded profile, the initials fallback (no seeded or
+      simulated profile carries an `avatar_url`, so that is the branch every real render takes),
+      the unnamed-cook copy, the signed-out empty state and its way in, `New recipe`, and sign-out
+      landing on **`/discover`** rather than `/profile` (which the redirect would bounce to
+      `/auth`) or `/` (a redirect-only route since home was retired)
+- [x] **32e2 — the reading page's rating write and the editor's save — DONE.** Five rating tests in
+      `recipe_detail_test.dart`: the write reaching the repository, the Remove button appearing
+      (which *is* the `myRatingProvider` invalidation assertion), the clear, the refusal snackbar,
+      and the signed-out and owner branches. Five editor tests: `create` on a new recipe, `update`
+      with its change summary on an edit, the blank-title block before the repository is touched,
+      the failure snackbar, and no Save button at all while an edit draft is still loading (B052's
+      `_canSave` guard). **Two of them passed for the wrong reason first**: without an
+      `authRepositoryProvider` override `_save` reaches the real Supabase singleton, throws inside
+      its own `try`, and reports "Save failed" — so the failure test was green while the two
+      success tests were red
+- [x] **32e3 — version history sheet — DONE.** Two tests in the same suite: real rows through the
+      compact cover's history button — order, the `Current` chip on row 0 only, the `Version N`
+      fallback for a version with no summary, the ISO date — plus the empty-state copy. Every fake
+      in every suite returned `const []` before this, so the sheet had only ever rendered empty
 
 ### 32f — CI & operations
 

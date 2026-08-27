@@ -7,6 +7,8 @@
 // The round-trip group is the load-bearing half: it fails if any field is
 // dropped between the core model and the editor's mutable draft types. The
 // widget group covers the envelope the new inputs have to survive (Gotcha 13).
+import 'dart:async';
+
 import 'package:app/features/recipe_editor/edit_models.dart';
 import 'package:app/features/recipe_editor/ingredients_editor.dart';
 import 'package:app/features/recipe_editor/recipe_editor_screen.dart';
@@ -881,6 +883,98 @@ void main() {
     });
   });
 
+  // 32e2. `_save` had never been driven: no test in this file called
+  // `repo.create` or `repo.update`, so the success navigation, the change
+  // summary an edit records, and the failure snackbar were all unpinned — on
+  // the one path that writes a whole recipe.
+  group('saving (32e2)', () {
+    testWidgets('a new recipe goes through create and opens the recipe', (
+      tester,
+    ) async {
+      final repo = _RecordingRecipeRepository();
+      await tester.pumpWidget(_routedNewApp(repo));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(_titleField, 'Suya-Spiced Lamb');
+      await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+      await tester.pumpAndSettle();
+
+      expect(repo.created, hasLength(1));
+      expect(repo.created.single.title, 'Suya-Spiced Lamb');
+      expect(repo.updated, isEmpty);
+      expect(find.text('RECIPE PAGE'), findsOneWidget);
+    });
+
+    testWidgets('an edit goes through update, with a change summary', (
+      tester,
+    ) async {
+      final repo = _RecordingRecipeRepository();
+      await tester.pumpWidget(_routedEditApp(repo));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find.widgetWithText(TextFormField, 'Loaded Recipe'),
+        'Loaded Recipe, hotter',
+      );
+      await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+      await tester.pumpAndSettle();
+
+      expect(repo.created, isEmpty);
+      expect(repo.updated, hasLength(1));
+      expect(repo.updated.single.$1.title, 'Loaded Recipe, hotter');
+      expect(repo.updated.single.$1.id, 'r1');
+      // Every edit appends a version, and the summary is what the history sheet
+      // prints for it.
+      expect(repo.updated.single.$2, isNotEmpty);
+      expect(find.text('RECIPE PAGE'), findsOneWidget);
+    });
+
+    testWidgets('a blank title blocks the save before the repository', (
+      tester,
+    ) async {
+      final repo = _RecordingRecipeRepository();
+      await tester.pumpWidget(_routedNewApp(repo));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+      await tester.pumpAndSettle();
+
+      expect(repo.created, isEmpty);
+      expect(find.text('Required'), findsOneWidget);
+    });
+
+    testWidgets('a refused save says so and stays in the editor', (
+      tester,
+    ) async {
+      final repo = _RecordingRecipeRepository(fail: true);
+      await tester.pumpWidget(_routedNewApp(repo));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(_titleField, 'Suya-Spiced Lamb');
+      await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('Save failed'), findsOneWidget);
+      expect(find.text('RECIPE PAGE'), findsNothing);
+      // Still editable — a failed save must not leave the button spinning.
+      final save = tester.widget<FilledButton>(
+        find.widgetWithText(FilledButton, 'Save'),
+      );
+      expect(save.onPressed, isNotNull);
+    });
+
+    testWidgets('an unloaded edit draft offers no Save at all', (tester) async {
+      // `_canSave`'s reason for existing (B052): the draft holds empty defaults
+      // until the load lands, and `update()` replaces content wholesale — so a
+      // save here would delete every group the recipe has.
+      await tester.pumpWidget(_routedEditApp(_HangingRecipeRepository()));
+      await tester.pump();
+
+      expect(find.byType(LoadingView), findsOneWidget);
+      expect(find.widgetWithText(FilledButton, 'Save'), findsNothing);
+    });
+  });
+
   // 32c2 / B085. The discard confirm hung off the close button alone, so a
   // system back gesture dropped a half-written recipe without a word — and the
   // inverse: closing an untouched editor asked about changes that did not
@@ -1024,6 +1118,113 @@ Widget _editApp(
   ),
 );
 
+/// Signed in, offline. `_save` reads `currentUserIdProvider` for the owner id,
+/// which without this override reaches the real `SupabaseAuthRepository` and
+/// asserts that `Supabase.instance` was initialised — an exception `_save`
+/// catches, so the save "fails" for a reason that has nothing to do with the
+/// repository under test. It cost two red tests to find (32e2).
+class _FakeAuth implements AuthRepository {
+  @override
+  String? get currentUserId => 'me';
+
+  @override
+  Stream<AuthState> authStateChanges() => const Stream.empty();
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) =>
+      throw UnimplementedError('${invocation.memberName} not stubbed');
+}
+
+/// The Title field of an empty editor, found by its label rather than its value.
+final Finder _titleField = find.ancestor(
+  of: find.text('Title'),
+  matching: find.byType(TextFormField),
+);
+
+/// Records what `_save` sent, and can refuse (32e2).
+///
+/// `getById` answers the same loaded recipe `_loadedRepo` uses, so one fake
+/// covers both the create and the edit path.
+class _RecordingRecipeRepository implements RecipeRepository {
+  _RecordingRecipeRepository({this.fail = false});
+
+  final bool fail;
+  final List<Recipe> created = [];
+  final List<(Recipe, String)> updated = [];
+
+  static const _loaded = Recipe(
+    id: 'r1',
+    ownerId: 'me',
+    title: 'Loaded Recipe',
+    servings: 4,
+  );
+
+  @override
+  Future<Recipe> getById(String id) async => _loaded;
+
+  @override
+  Future<Recipe> create(Recipe recipe) async {
+    if (fail) throw Exception('denied');
+    created.add(recipe);
+    return recipe.copyWith(id: 'r-new');
+  }
+
+  @override
+  Future<Recipe> update(
+    Recipe recipe, {
+    String changeSummary = 'Updated',
+  }) async {
+    if (fail) throw Exception('denied');
+    updated.add((recipe, changeSummary));
+    return recipe;
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) =>
+      throw UnimplementedError('${invocation.memberName} not stubbed');
+}
+
+/// A load that never lands — the only way to hold the editor in its loading
+/// state long enough to assert what it does *not* offer there.
+class _HangingRecipeRepository implements RecipeRepository {
+  @override
+  Future<Recipe> getById(String id) => Completer<Recipe>().future;
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) =>
+      throw UnimplementedError('${invocation.memberName} not stubbed');
+}
+
+/// The editor in **create** mode behind a real router, so `_save`'s
+/// `context.go(Routes.recipe(saved.id))` has somewhere to land.
+Widget _routedNewApp(RecipeRepository repo) => ProviderScope(
+  overrides: [
+    recipeRepositoryProvider.overrideWithValue(repo),
+    authRepositoryProvider.overrideWithValue(_FakeAuth()),
+    foodRepositoryProvider.overrideWithValue(_StubFoodRepository()),
+  ],
+  child: MaterialApp.router(
+    theme: AppTheme.light(),
+    routerConfig: GoRouter(
+      initialLocation: Routes.newRecipe,
+      routes: [
+        GoRoute(
+          path: Routes.newRecipe,
+          builder: (_, __) => const RecipeEditorScreen(),
+        ),
+        GoRoute(
+          path: Routes.recipePattern,
+          builder: (_, __) => const Scaffold(body: Text('RECIPE PAGE')),
+        ),
+        GoRoute(
+          path: Routes.myRecipes,
+          builder: (_, __) => const Scaffold(body: Text('MY RECIPES')),
+        ),
+      ],
+    ),
+  ),
+);
+
 /// One loaded recipe with nothing exotic in it — the leaving tests only need a
 /// form with real content in its fields.
 _LoadedRecipeRepository _loadedRepo() => _LoadedRecipeRepository(
@@ -1038,6 +1239,7 @@ _LoadedRecipeRepository _loadedRepo() => _LoadedRecipeRepository(
 Widget _routedEditApp(RecipeRepository repo) => ProviderScope(
   overrides: [
     recipeRepositoryProvider.overrideWithValue(repo),
+    authRepositoryProvider.overrideWithValue(_FakeAuth()),
     foodRepositoryProvider.overrideWithValue(_StubFoodRepository()),
   ],
   child: MaterialApp.router(
