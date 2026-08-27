@@ -4,13 +4,13 @@ import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:app/features/chefs/chef_detail_common.dart';
 import 'package:app/features/chefs/chef_identity_header.dart';
 import 'package:app/features/chefs/chef_score_panel.dart';
 import 'package:app/features/chefs/chefs_providers.dart';
 import 'package:app/routing/app_router.dart';
+import 'package:app/routing/pop_or_go.dart';
 import 'package:app/widgets/recipe_async_grid.dart';
 
 /// `/chef/:id` — one chef's public page (Phase 30).
@@ -84,16 +84,7 @@ class _BackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BackButton(
-      onPressed: () {
-        final nav = Navigator.of(context);
-        if (nav.canPop()) {
-          nav.pop();
-        } else {
-          context.go(Routes.chefs);
-        }
-      },
-    );
+    return BackButton(onPressed: () => popOrGo(context, Routes.chefs));
   }
 }
 

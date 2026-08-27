@@ -75,7 +75,16 @@ final mySavedProvider = FutureProvider.autoDispose.family<bool, String>((
 /// Cook mode reads this same provider, so a recipe scaled to 8 says 8 on both
 /// surfaces. Phase 28 added a third reader — the nutrition label's batch line —
 /// on the same terms: one number, one source (B066).
-final selectedServingsProvider = StateProvider.autoDispose.family<int?, String>(
+///
+/// Deliberately **not** `autoDispose`, and 32c3 is where that was settled: it
+/// was declared `autoDispose` while `cook_step_view.dart` documented the
+/// opposite, so a cook who scaled a recipe to 8, walked into cook mode and came
+/// back was reading a page that had quietly reset to 4. It now has the lifetime
+/// its two siblings below already have — the checklists survive leaving the
+/// screen for exactly the same reason, and B066 is that two surfaces must never
+/// print different quantities for one ingredient. Session-scoped, like them:
+/// the choice lives until the app exits.
+final selectedServingsProvider = StateProvider.family<int?, String>(
   (ref, id) => null,
 );
 

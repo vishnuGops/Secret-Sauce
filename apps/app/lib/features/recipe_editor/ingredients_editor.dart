@@ -49,10 +49,19 @@ class IngredientsEditor extends StatelessWidget {
                       if (groups.length > 1)
                         IconButton(
                           icon: const Icon(Icons.delete_outline),
+                          // Remove, rebuild, *then* dispose (32c4). Disposing
+                          // first leaves controllers that a still-mounted
+                          // `TextField` is attached to; it survives today only
+                          // because the rebuild happens in the same frame. The
+                          // post-frame callback is what makes that an ordering
+                          // rather than a tolerance — by the time it runs the
+                          // row's element is gone.
                           onPressed: () {
-                            groups[gi].dispose();
-                            groups.removeAt(gi);
+                            final removed = groups.removeAt(gi);
                             onChanged();
+                            WidgetsBinding.instance.addPostFrameCallback(
+                              (_) => removed.dispose(),
+                            );
                           },
                         ),
                     ],
@@ -61,10 +70,14 @@ class IngredientsEditor extends StatelessWidget {
                     _IngredientRow(
                       ingredient: groups[gi].ingredients[ii],
                       onChanged: onChanged,
+                      // Same remove-rebuild-dispose order as the group button
+                      // above.
                       onRemove: () {
-                        groups[gi].ingredients[ii].dispose();
-                        groups[gi].ingredients.removeAt(ii);
+                        final removed = groups[gi].ingredients.removeAt(ii);
                         onChanged();
+                        WidgetsBinding.instance.addPostFrameCallback(
+                          (_) => removed.dispose(),
+                        );
                       },
                     ),
                   Align(

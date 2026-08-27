@@ -708,7 +708,7 @@ id desc`; `listSharedWithMe` `recipe_shares.created_at desc, recipe_id desc` (th
 | Discover       | `/discover`                       | Masthead + search, three shelves (`01 UNDER 30`, `02 WEEKEND PROJECTS`, `03 MOST FORKED` — §6.0), then one browse grid sorted Top rated / Trending / Newest. No `AppBar`: the masthead is the title. Public, no sign-in |
 | Chefs          | `/chefs`                          | Leaderboard ranked by chef score (public, no sign-in)                                 |
 | My Recipes     | `/my`                             | Tabs: My / Shared-with-me; `RecipeCard` grid with Public/Private badges                |
-| Recipe detail  | `/recipe/:id`                     | **Two layouts, one screen (§7.1).** Expanded (≥ 1000) renders the v2 reading page: measured 1140px column, header band, facts strip, ingredients rail / method column. Compact and medium keep the v1 hero + single column. Both: servings scaler, rating, like/save **toggles**, fork, versions (public recipes viewable signed-out; like/save/rate send a signed-out visitor to `/auth` rather than calling the repository — B051) |
+| Recipe detail  | `/recipe/:id`                     | **Two layouts, one screen (§7.1).** Expanded (≥ 1000) renders the v2 reading page: measured 1140px column, header band, facts strip, ingredients rail / method column. Compact **and medium** render the v2 compact page — cover-first, facts quad, pinned jump bar, `Ready to cook?` bar; the v1 hero was deleted when compact v2 landed, so there is no third design for the 600–1000 band. Both: servings scaler, rating, like/save **toggles**, fork, versions (public recipes viewable signed-out; like/save/rate/**fork** send a signed-out visitor to `/auth` rather than calling the repository — B051, and B084 for fork) |
 | Recipe editor  | `/recipe/new`, `/recipe/:id/edit` | Structured create/edit                                                                |
 | Profile        | `/profile`                        | Current user                                                                          |
 
@@ -801,7 +801,10 @@ Things about the v2 page that are load-bearing and easy to undo by accident:
 
 Checked ingredients and done steps live in `checkedIngredientsProvider` / `doneStepsProvider` —
 **not** `autoDispose`, because leaving the screen mid-cook and coming back must not clear the
-checklist. They are session state, not device state, and the UI says so.
+checklist. They are session state, not device state, and the UI says so. **`selectedServingsProvider`
+joined them in 32c3**: it was `autoDispose` while cook mode's own comment claimed the opposite, so
+scaling a recipe to 8, stepping into cook mode and coming back showed a page that had quietly reset
+to 4 — a B066 failure produced by a lifetime, not by a second copy of the number.
 
 ### 7.2 Cook mode (`/recipe/:id/cook`, Phase 27)
 
@@ -862,11 +865,25 @@ recipe id and is **not** `autoDispose` — backing out to check the ingredient l
 away a running timer. Cook mode reads the *same* `selectedServingsProvider` the reading page writes,
 so a recipe scaled to 8 servings says 8 in both places; two surfaces printing different quantities
 for one ingredient is the B066 class of bug, which is also why both quantity gutters read
-`ingredientQuantityLabel` from core rather than each carrying a copy.
+`ingredientQuantityLabel` from core **and share `kIngredientQuantityGutter` × the rail's text-scale
+clamp** (32c5 — the cook rail had a hardcoded 74px that did not grow with the type, so the same
+`1.25 cup` sat on one line while reading and wrapped to three while cooking).
+
+**Timers are deadlines, not counters (32c4).** A running `CookTimer` stores `endsAt` on the wall
+clock; the one `Timer.periodic` prompts a recompute rather than subtracting a second. The
+difference only shows up where it matters — a suspended or backgrounded app receives no ticks, and a
+counter would come back claiming the whole chill is still ahead of it. What suspension actually
+costs is the chime, which is foreground-only anyway (no notification plugin), so the copy still says
+"keep this screen open". The clock is injected through `cookClockProvider` because
+`tester.pump(d)` moves Flutter's fake timer queue and not `DateTime.now()`: without the override a
+deadline-based countdown is frozen in every widget test.
 
 **The finish screen is where the rating gets asked** — the one moment the cook knows the answer. It
-writes through the same `setRating` path as the reading page, so RLS is still what forbids rating
-your own recipe; the owner branch explains it rather than enforcing it. It reports wall-clock
+writes through the same `setRating` path as the reading page — literally the same handler since
+32c5 (`rating_actions.dart`), so the two cannot drift in copy or in what they invalidate — and RLS
+is still what forbids rating your own recipe; the owner branch explains it rather than enforcing it.
+Its Fork button shares `forkRecipe` with the reading page's chip for the same reason (32c1): both
+guard the signed-out case client-side, and both land in the **editor** on the new copy. It reports wall-clock
 elapsed against `recipe.totalMinutes`, and is a *state* of the session, not a dead end: "not done —
 back to the last step" returns. The canvas's "note for next time" is **not drawn**, because
 `recipe_ratings` has no column for it (see ROADMAP Phase 27 for what adding one costs).

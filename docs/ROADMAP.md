@@ -465,25 +465,46 @@ non-vacuous, `melos run db:rls` + the Gotcha 6 upgrade path before anything reac
       delete look 3× *slower*, which is exactly the reading that would have justified dropping the
       right index. Re-measured warm with fresh `analyze` and A/B'd one index at a time
 
-### 32c — App correctness (Flutter)
+### 32c — App correctness (Flutter) — DONE 2026-08-26
 
-- [ ] **32c1 (B084) — signed-out fork guard on recipe detail** — the Fork chip fires the RPC signed-out
-      and surfaces a Postgres denial, while cook mode's finish screen correctly routes to `/auth`.
-      Extract one shared fork handler; both call sites use it; test the tap (every fake's `fork()`
-      currently throws `UnimplementedError`, so the flow has never been driven)
-- [ ] **32c2 (B085) — `PopScope` on the recipe editor** — the discard-confirm guards only the close
-      button; Android back / browser back silently drops a half-written recipe. Add dirty tracking
-      so an untouched editor doesn't nag
-- [ ] **32c3 — resolve the `selectedServingsProvider` lifetime contradiction** — declared
-      `autoDispose`, commented as not-autoDispose; leaving detail resets the scale while the
-      checklists survive. Decide one lifetime, fix comment or declaration, pin with a test
-- [ ] **32c4 — small hardening batch**: `_pickCover` try/catch; share dialog captures its
-      `ScaffoldMessenger` before `pop`; editors remove-then-dispose row controllers; cook-mode
-      timers move to wall-clock deadlines (survives OS suspension; prerequisite for the wakelock
-      item)
-- [ ] **32c5 — dedupe recipe_detail**: one rating-write handler (detail + finish screen), one
-      `popOrGo` helper (4 copies), shared attribution/fork-lineage block (compact + expanded),
-      cook rail adopts `kIngredientQuantityGutter` × scale clamp (fixes a real 2.0× wrap)
+- [x] **32c1 (B084) — signed-out fork guard on recipe detail — DONE.** One handler
+      ([fork_action.dart](../apps/app/lib/features/recipe_detail/fork_action.dart)) behind the
+      reading page's chip and cook mode's finish button: signed-out routes to `/auth` without
+      touching the RPC, success lands in the **editor** on the copy, failure is one snackbar off a
+      messenger captured before the navigation. The finish screen used to send you to the fork's
+      *reading* page — a fork exists to be changed, so both go to the editor now. Every suite
+      fake's `fork()` recorded instead of throwing, and six tests drive the three outcomes at both
+      call sites
+- [x] **32c2 (B085) — `PopScope` on the recipe editor — DONE for the platform back gesture.**
+      `canPop: !_dirty`, with the pop handler and the close button sharing one `_confirmDiscard()`.
+      `_dirty` comes from listeners on the seven text fields plus the `onChanged` the editors
+      already report, and is reset at the end of `_load()` (filling the fields fires those
+      listeners) — which also fixes the inverse: an untouched editor leaves without asking.
+      **The web browser's Back button remains uncovered** and is stated as such in code and
+      tracker: it arrives as route information for the `Router`, never as a pop, so `PopScope` is
+      not consulted and Flutter exposes no hook. Six tests drive it through `handlePopRoute()`
+- [x] **32c3 — `selectedServingsProvider` lifetime resolved — DONE.** Plain `.family`, matching
+      the two check-off providers it sits beside: it was declared `autoDispose` while
+      `cook_step_view.dart` documented the opposite, so scaling a recipe to 8 and stepping into
+      cook mode silently reset the reading page to 4 (B066's own failure, with a detour). Pinned by
+      a test that leaves the screen and comes back
+- [x] **32c4 — small hardening batch — DONE.** Share dialog captures its `ScaffoldMessenger`
+      before `pop`; both editors remove the row, rebuild, and dispose its controllers in a
+      post-frame callback rather than disposing first; cook-mode timers hold a **wall-clock
+      deadline** instead of a counter a tick decrements, so a suspended app loses the chime and
+      never the elapsed time. The clock is injectable (`cookClockProvider`) because
+      `tester.pump(d)` moves the fake timer queue and not `DateTime.now()` — the suite points it at
+      `tester.binding.clock`, and a hand-driven clock proves the suspension case.
+      (`_pickCover`'s try/catch had already landed with 32a4.)
+- [x] **32c5 — dedupe recipe_detail — DONE.** One rating-write handler
+      ([rating_actions.dart](../apps/app/lib/features/recipe_detail/rating_actions.dart)) for the
+      reading page and the finish screen; `popOrGo(context, fallback)`
+      ([pop_or_go.dart](../apps/app/lib/routing/pop_or_go.dart)) replacing four copies (it lives in
+      `routing/`, not `widgets/` — it is not a widget); `ForkedLabel` / `AttributionBlock` in
+      [detail_provenance.dart](../apps/app/lib/features/recipe_detail/detail_provenance.dart) for
+      both layouts; the cook rail's hardcoded `SizedBox(width: 74)` is now
+      `kIngredientQuantityGutter × context.textScale.clamp(1.0, kDetailRailMaxScale)` — the same
+      gutter the reading rail uses, so `1.25 cup` no longer wraps to three lines at 2.0×
 
 ### 32d — Shared-package hygiene
 

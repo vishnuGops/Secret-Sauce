@@ -3,7 +3,6 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:app/features/recipe_detail/cook_finish_view.dart';
 import 'package:app/features/recipe_detail/cook_mode_model.dart';
@@ -11,6 +10,7 @@ import 'package:app/features/recipe_detail/cook_mode_providers.dart';
 import 'package:app/features/recipe_detail/cook_step_view.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/routing/app_router.dart';
+import 'package:app/routing/pop_or_go.dart';
 
 /// Cook mode — the full-screen, one-step-at-a-time mode behind every
 /// "Start cooking" control (canvas frames C, D, E, H).
@@ -65,15 +65,11 @@ class _CookMode extends ConsumerWidget {
 
   final Recipe recipe;
 
-  void _leave(BuildContext context) {
-    if (Navigator.of(context).canPop()) {
-      Navigator.of(context).pop();
-    } else {
-      // Deep-linked straight into cook mode: there is nothing to pop back to,
-      // so go to the recipe rather than leaving the cook on a dead screen.
-      context.go(Routes.recipe(recipe.id));
-    }
-  }
+  // Deep-linked straight into cook mode: there is nothing to pop back to, so
+  // `popOrGo` sends the cook to the recipe rather than leaving them on a dead
+  // screen.
+  void _leave(BuildContext context) =>
+      popOrGo(context, Routes.recipe(recipe.id));
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

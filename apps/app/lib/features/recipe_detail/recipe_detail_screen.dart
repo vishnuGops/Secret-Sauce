@@ -2,35 +2,16 @@ import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
+import 'package:app/features/recipe_detail/fork_action.dart';
 import 'package:app/features/recipe_detail/recipe_detail_compact.dart';
 import 'package:app/features/recipe_detail/recipe_detail_expanded.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
-import 'package:app/routing/app_router.dart';
 
 class RecipeDetailScreen extends ConsumerWidget {
   const RecipeDetailScreen({super.key, required this.recipeId});
 
   final String recipeId;
-
-  Future<void> _fork(BuildContext context, WidgetRef ref) async {
-    try {
-      final newId = await ref.read(recipeRepositoryProvider).fork(recipeId);
-      if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Forked to your recipes')));
-        context.go(Routes.editRecipe(newId));
-      }
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(friendlyError(e))));
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -64,12 +45,12 @@ class RecipeDetailScreen extends ConsumerWidget {
               ? RecipeDetailExpanded(
                 recipe: recipe,
                 isOwner: isOwner,
-                onFork: () => _fork(context, ref),
+                onFork: () => forkRecipe(context, ref, recipeId),
               )
               : RecipeDetailCompact(
                 recipe: recipe,
                 isOwner: isOwner,
-                onFork: () => _fork(context, ref),
+                onFork: () => forkRecipe(context, ref, recipeId),
               );
         },
       ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:app/features/recipe_detail/rating_actions.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/routing/app_router.dart';
 
@@ -14,43 +15,6 @@ class RatingSection extends ConsumerWidget {
 
   final Recipe recipe;
   final bool isOwner;
-
-  Future<void> _save(BuildContext context, WidgetRef ref, double value) async {
-    try {
-      await ref.read(recipeRepositoryProvider).setRating(recipe.id, value);
-      ref.invalidate(myRatingProvider(recipe.id));
-      ref.invalidate(recipeProvider(recipe.id));
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Rated ${value.toStringAsFixed(1)} stars')),
-        );
-      }
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Could not save rating — ${friendlyError(e)}'),
-          ),
-        );
-      }
-    }
-  }
-
-  Future<void> _clear(BuildContext context, WidgetRef ref) async {
-    try {
-      await ref.read(recipeRepositoryProvider).clearRating(recipe.id);
-      ref.invalidate(myRatingProvider(recipe.id));
-      ref.invalidate(recipeProvider(recipe.id));
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Could not remove rating — ${friendlyError(e)}'),
-          ),
-        );
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -89,12 +53,12 @@ class RatingSection extends ConsumerWidget {
             value: myRating,
             size: 34,
             onChanged: (_) {},
-            onChangeEnd: (v) => _save(context, ref, v),
+            onChangeEnd: (v) => saveRating(context, ref, recipe.id, v),
           ),
           const SizedBox(width: AppSpacing.sm),
           if (myRating != null)
             TextButton(
-              onPressed: () => _clear(context, ref),
+              onPressed: () => clearRating(context, ref, recipe.id),
               child: const Text('Remove'),
             ),
         ],

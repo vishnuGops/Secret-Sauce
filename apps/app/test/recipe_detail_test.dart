@@ -159,6 +159,14 @@ class _FakeRecipeRepository implements RecipeRepository {
   final List<bool> saveWrites = [];
   int viewLogs = 0;
 
+  /// Every recipe id `fork()` was asked to copy. It used to throw
+  /// `UnimplementedError`, which is why the fork flow had never been driven from
+  /// a test at all (B084).
+  final List<String> forkedFrom = [];
+
+  /// Make the next fork fail, to drive the snackbar path.
+  bool forkFails = false;
+
   @override
   Future<Recipe> getById(String id) async => recipe;
 
@@ -201,7 +209,11 @@ class _FakeRecipeRepository implements RecipeRepository {
   Future<void> delete(String id) => throw UnimplementedError();
 
   @override
-  Future<String> fork(String sourceRecipeId) => throw UnimplementedError();
+  Future<String> fork(String sourceRecipeId) async {
+    forkedFrom.add(sourceRecipeId);
+    if (forkFails) throw Exception('nope');
+    return 'r2';
+  }
 
   @override
   Future<List<Recipe>> listMine({
@@ -274,6 +286,12 @@ Future<GoRouter> _pump(
       GoRoute(
         path: Routes.auth,
         builder: (_, __) => const Scaffold(body: Text('AUTH SCREEN')),
+      ),
+      GoRoute(
+        path: Routes.editRecipePattern,
+        builder:
+            (_, state) =>
+                Scaffold(body: Text('EDITOR ${state.pathParameters['id']}')),
       ),
       GoRoute(
         path: Routes.chefPattern,
@@ -517,6 +535,96 @@ void main() {
       expect(find.widgetWithText(ActionChip, 'Fork'), findsOneWidget);
       expect(find.byIcon(Icons.edit), findsNothing);
       expect(find.byIcon(Icons.share), findsNothing);
+    });
+  });
+
+  // 32c1 / B084. The chip fired the RPC while signed out and rendered whatever
+  // Postgres said back; cook mode's finish screen had the guard. Both call sites
+  // are `forkRecipe` now, and this is the reading page's half — the finish
+  // screen's is in `cook_mode_test.dart`.
+  group('fork (compact)', () {
+    // The jump bar scrolls horizontally (a pinned sliver cannot wrap), so at
+    // 390px the Fork chip sits off the right edge: `ensureVisible` first, or the
+    // tap lands on nothing and the assertion below blames the handler.
+    Future<void> tapFork(WidgetTester tester) async {
+      final fork = find.widgetWithText(ActionChip, 'Fork');
+      await tester.ensureVisible(fork);
+      await tester.pumpAndSettle();
+      await tester.tap(fork);
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('signed out, the chip goes to /auth and writes nothing', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+
+      await tapFork(tester);
+
+      expect(find.text('AUTH SCREEN'), findsOneWidget);
+      expect(
+        repo.forkedFrom,
+        isEmpty,
+        reason: 'a signed-out fork must not reach the RPC',
+      );
+    });
+
+    testWidgets('signed in, it copies the recipe and opens the editor', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 844));
+
+      await tapFork(tester);
+
+      expect(repo.forkedFrom, ['r1']);
+      // The copy, not the original — a fork exists to be changed.
+      expect(find.text('EDITOR r2'), findsOneWidget);
+    });
+
+    testWidgets('a failed fork says so and stays on the recipe', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      repo.forkFails = true;
+      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 844));
+
+      await tapFork(tester);
+
+      expect(find.textContaining('Could not fork'), findsOneWidget);
+      expect(find.text('EDITOR r2'), findsNothing);
+    });
+  });
+
+  // 32c3. The provider was declared `autoDispose` while `cook_step_view.dart`
+  // documented the opposite, so a cook who scaled a recipe, stepped into cook
+  // mode and came back was reading a page that had silently reset — the B066
+  // failure (two surfaces, two quantities for one ingredient) with a detour.
+  group('servings scale lifetime (32c3)', () {
+    testWidgets('survives leaving the screen and coming back', (tester) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      final router = await _pump(
+        tester,
+        repo: repo,
+        uid: null,
+        size: const Size(390, 844),
+      );
+
+      await tester.tap(find.byTooltip('More servings'));
+      await tester.pumpAndSettle();
+      expect(find.text('9'), findsOneWidget);
+      expect(find.textContaining('Scaled from 8'), findsOneWidget);
+
+      router.go(Routes.cookRecipe('r1'));
+      await tester.pumpAndSettle();
+      expect(find.text('COOK MODE'), findsOneWidget);
+
+      router.go(Routes.recipe('r1'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('9'), findsOneWidget);
+      expect(find.textContaining('Scaled from 8'), findsOneWidget);
     });
   });
 

@@ -3,17 +3,40 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// The wall clock cook mode measures against.
+///
+/// Injectable for one reason: the timers below are **deadline**-based, and
+/// `tester.pump(Duration(seconds: 1))` advances Flutter's fake timer queue
+/// without moving `DateTime.now()` by a microsecond — so a countdown read from
+/// the real clock would sit still in every widget test. The test harness
+/// overrides this with `tester.binding.clock.now`, which the same pump does
+/// advance.
+final cookClockProvider = Provider<DateTime Function()>((ref) => DateTime.now);
+
 /// One step timer. Immutable; the notifier replaces it on every tick.
+///
+/// A running timer is stored as a **deadline**, not as a counter that a tick
+/// decrements (32c4). The two agree while the app is on screen and diverge the
+/// moment it is not: a suspended app stops receiving ticks, so a decremented
+/// counter would come back from a backgrounded twenty minutes still claiming
+/// twenty minutes left, while a deadline is simply in the past. [remaining] is
+/// kept alongside as the value the UI reads and the value a paused timer
+/// carries; the tick recomputes it from [endsAt] rather than subtracting.
 class CookTimer {
   const CookTimer({
     required this.total,
     required this.remaining,
     required this.running,
+    this.endsAt,
   });
 
   final Duration total;
   final Duration remaining;
   final bool running;
+
+  /// When this timer runs out, on the wall clock. Null while paused or done —
+  /// a paused timer has no deadline, only a balance.
+  final DateTime? endsAt;
 
   bool get isDone => remaining <= Duration.zero;
 
@@ -24,12 +47,21 @@ class CookTimer {
     return (gone / total.inSeconds).clamp(0.0, 1.0);
   }
 
-  CookTimer copyWith({Duration? remaining, bool? running, Duration? total}) =>
-      CookTimer(
-        total: total ?? this.total,
-        remaining: remaining ?? this.remaining,
-        running: running ?? this.running,
-      );
+  /// [endsAt] takes `clearEndsAt` rather than a nullable default, because
+  /// "leave it alone" and "there is no deadline any more" are different edits
+  /// and a null argument cannot say which one it means.
+  CookTimer copyWith({
+    Duration? remaining,
+    bool? running,
+    Duration? total,
+    DateTime? endsAt,
+    bool clearEndsAt = false,
+  }) => CookTimer(
+    total: total ?? this.total,
+    remaining: remaining ?? this.remaining,
+    running: running ?? this.running,
+    endsAt: clearEndsAt ? null : (endsAt ?? this.endsAt),
+  );
 }
 
 /// Everything one cooking session holds.
@@ -87,10 +119,12 @@ class CookSessionState {
 class CookSessionNotifier extends FamilyNotifier<CookSessionState, String> {
   Timer? _ticker;
 
+  DateTime _now() => ref.read(cookClockProvider)();
+
   @override
   CookSessionState build(String recipeId) {
     ref.onDispose(() => _ticker?.cancel());
-    return CookSessionState(stepIndex: 0, startedAt: DateTime.now());
+    return CookSessionState(stepIndex: 0, startedAt: _now());
   }
 
   /// Moves to [index] and leaves the finish screen.
@@ -124,20 +158,36 @@ class CookSessionNotifier extends FamilyNotifier<CookSessionState, String> {
   void finish() => state = state.copyWith(finished: true);
 
   /// Starts (or restarts) [stepId]'s timer at [total], or resumes a paused one.
+  ///
+  /// Either way the deadline is stamped here, from the balance that is being
+  /// started: a resume owes what was left when it was paused, not the full
+  /// duration.
   void startTimer(String stepId, Duration total) {
     final existing = state.timers[stepId];
-    final resume =
-        existing != null && !existing.running && !existing.isDone
-            ? existing.copyWith(running: true)
-            : CookTimer(total: total, remaining: total, running: true);
-    _writeTimer(stepId, resume);
+    final resuming = existing != null && !existing.running && !existing.isDone;
+    final balance = resuming ? existing.remaining : total;
+    _writeTimer(
+      stepId,
+      CookTimer(
+        total: resuming ? existing.total : total,
+        remaining: balance,
+        running: true,
+        endsAt: _now().add(balance),
+      ),
+    );
     _syncTicker();
   }
 
+  /// Banks whatever is left *now* and drops the deadline. Without recomputing
+  /// here, a pause during the second between two ticks would round in the
+  /// cook's favour by up to a second on every pause.
   void pauseTimer(String stepId) {
     final t = state.timers[stepId];
     if (t == null) return;
-    _writeTimer(stepId, t.copyWith(running: false));
+    _writeTimer(
+      stepId,
+      t.copyWith(remaining: _remainingOf(t), running: false, clearEndsAt: true),
+    );
     _syncTicker();
   }
 
@@ -153,20 +203,33 @@ class CookSessionNotifier extends FamilyNotifier<CookSessionState, String> {
   }
 
   /// `+1 min`. Also un-rings a timer that had just run out, since extending it
-  /// is the answer to "not done yet".
+  /// is the answer to "not done yet" — and that case is why the new deadline is
+  /// measured from **now** rather than pushed out from the old one: the old
+  /// deadline is in the past, and adding a minute to it would buy nothing.
   void addMinute(String stepId) {
     final t = state.timers[stepId];
     if (t == null) return;
+    const minute = Duration(minutes: 1);
+    final balance = _remainingOf(t) + minute;
     _writeTimer(
       stepId,
       t.copyWith(
-        total: t.total + const Duration(minutes: 1),
-        remaining: t.remaining + const Duration(minutes: 1),
+        total: t.total + minute,
+        remaining: balance,
         running: true,
+        endsAt: _now().add(balance),
       ),
     );
     _dismissAlarm(stepId);
     _syncTicker();
+  }
+
+  /// What [t] has left on the wall clock: its stored balance when it is not
+  /// running, and the distance to its deadline when it is.
+  Duration _remainingOf(CookTimer t) {
+    if (!t.running || t.endsAt == null) return t.remaining;
+    final left = t.endsAt!.difference(_now());
+    return left.isNegative ? Duration.zero : left;
   }
 
   /// Acknowledges the alarm without touching the timer, so the step can still
@@ -194,6 +257,11 @@ class CookSessionNotifier extends FamilyNotifier<CookSessionState, String> {
     }
   }
 
+  /// One pass over every timer, reading the clock rather than counting ticks.
+  ///
+  /// The periodic is only a *prompt to look*: a tick that arrives late, or not
+  /// at all because the app was suspended, changes when the cook is told the
+  /// timer expired, never by how much.
   void _tick() {
     final next = <String, CookTimer>{};
     final ringing = {...state.ringing};
@@ -204,9 +272,13 @@ class CookSessionNotifier extends FamilyNotifier<CookSessionState, String> {
         next[entry.key] = t;
         continue;
       }
-      final remaining = t.remaining - const Duration(seconds: 1);
+      final remaining = _remainingOf(t);
       if (remaining <= Duration.zero) {
-        next[entry.key] = t.copyWith(remaining: Duration.zero, running: false);
+        next[entry.key] = t.copyWith(
+          remaining: Duration.zero,
+          running: false,
+          clearEndsAt: true,
+        );
         ringing.add(entry.key);
         rangNow = true;
       } else {

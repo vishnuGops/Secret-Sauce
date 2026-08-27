@@ -5,6 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:app/features/recipe_detail/cook_mode_model.dart';
+import 'package:app/features/recipe_detail/cook_mode_providers.dart';
+import 'package:app/features/recipe_detail/fork_action.dart';
+import 'package:app/features/recipe_detail/rating_actions.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/routing/app_router.dart';
 
@@ -44,8 +47,12 @@ class CookFinishView extends ConsumerWidget {
   /// what it measures: it includes the time the phone sat on the counter, and it
   /// is not the recipe's `total_minutes`. The comparison is only offered when the
   /// recipe carries an estimate at all.
-  String _summary() {
-    final elapsed = DateTime.now().difference(startedAt);
+  ///
+  /// Reads [cookClockProvider] rather than `DateTime.now()` for the same reason
+  /// the timers do — [startedAt] is stamped from that clock, and mixing the two
+  /// would measure this session against a different wall.
+  String _summary(WidgetRef ref) {
+    final elapsed = ref.read(cookClockProvider)().difference(startedAt);
     final elapsedMinutes = elapsed.inMinutes;
     final estimate = recipe.totalMinutes;
     final counted =
@@ -82,7 +89,7 @@ class CookFinishView extends ConsumerWidget {
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 Text(
-                  _summary(),
+                  _summary(ref),
                   style: textTheme.bodyLarge?.copyWith(
                     color: scheme.onSurfaceVariant,
                   ),
@@ -92,7 +99,7 @@ class CookFinishView extends ConsumerWidget {
                 const SizedBox(height: AppSpacing.lg),
                 if (!isOwner)
                   FilledButton.tonalIcon(
-                    onPressed: () => _fork(context, ref),
+                    onPressed: () => forkRecipe(context, ref, recipe.id),
                     icon: const Icon(Icons.call_split),
                     label: const Text('Fork with my changes'),
                   ),
@@ -112,23 +119,6 @@ class CookFinishView extends ConsumerWidget {
       ),
     );
   }
-
-  Future<void> _fork(BuildContext context, WidgetRef ref) async {
-    if (ref.read(currentUserIdProvider) == null) {
-      context.go(Routes.auth);
-      return;
-    }
-    try {
-      final newId = await ref.read(recipeRepositoryProvider).fork(recipe.id);
-      if (context.mounted) context.go(Routes.recipe(newId));
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not fork — ${friendlyError(e)}')),
-        );
-      }
-    }
-  }
 }
 
 /// "How did it turn out?" — the same three cases the reading page's rating block
@@ -141,27 +131,6 @@ class _FinishRating extends ConsumerWidget {
 
   final Recipe recipe;
   final bool isOwner;
-
-  Future<void> _save(BuildContext context, WidgetRef ref, double value) async {
-    try {
-      await ref.read(recipeRepositoryProvider).setRating(recipe.id, value);
-      ref.invalidate(myRatingProvider(recipe.id));
-      ref.invalidate(recipeProvider(recipe.id));
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Rated ${value.toStringAsFixed(1)} stars')),
-        );
-      }
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Could not save rating — ${friendlyError(e)}'),
-          ),
-        );
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -202,7 +171,7 @@ class _FinishRating extends ConsumerWidget {
             value: myRating,
             size: 40,
             onChanged: (_) {},
-            onChangeEnd: (v) => _save(context, ref, v),
+            onChangeEnd: (v) => saveRating(context, ref, recipe.id, v),
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(

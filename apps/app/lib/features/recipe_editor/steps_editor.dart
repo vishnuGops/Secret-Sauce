@@ -39,10 +39,14 @@ class StepsEditor extends StatelessWidget {
                       if (groups.length > 1)
                         IconButton(
                           icon: const Icon(Icons.delete_outline),
+                          // Remove, rebuild, then dispose — same order as
+                          // `IngredientsEditor` and for the same reason (32c4).
                           onPressed: () {
-                            groups[gi].dispose();
-                            groups.removeAt(gi);
+                            final removed = groups.removeAt(gi);
                             onChanged();
+                            WidgetsBinding.instance.addPostFrameCallback(
+                              (_) => removed.dispose(),
+                            );
                           },
                         ),
                     ],
@@ -53,9 +57,11 @@ class StepsEditor extends StatelessWidget {
                       number: si + 1,
                       onChanged: onChanged,
                       onRemove: () {
-                        groups[gi].steps[si].dispose();
-                        groups[gi].steps.removeAt(si);
+                        final removed = groups[gi].steps.removeAt(si);
                         onChanged();
+                        WidgetsBinding.instance.addPostFrameCallback(
+                          (_) => removed.dispose(),
+                        );
                       },
                     ),
                   Align(

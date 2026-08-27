@@ -2,10 +2,10 @@ import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:app/features/auth/auth_controller.dart';
 import 'package:app/routing/app_router.dart';
+import 'package:app/routing/pop_or_go.dart';
 
 /// Combined sign-in / sign-up screen with a mode toggle.
 class AuthScreen extends ConsumerStatefulWidget {
@@ -55,10 +55,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(friendlyError(state.error))));
-    } else if (context.canPop()) {
-      context.pop();
     } else {
-      context.go(Routes.discover);
+      // Signed in: back where they were if `/auth` was pushed over something,
+      // Discover if they landed here cold.
+      popOrGo(context, Routes.discover);
     }
   }
 

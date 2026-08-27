@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:app/features/recipe_detail/detail_chips.dart';
+import 'package:app/features/recipe_detail/detail_provenance.dart';
 import 'package:app/features/recipe_detail/rail_panel.dart';
 import 'package:app/features/recipe_detail/method_column.dart';
 import 'package:app/features/recipe_detail/rating_section.dart';
@@ -14,6 +15,7 @@ import 'package:app/features/recipe_detail/recipe_detail_expanded.dart'
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/features/recipe_detail/version_history_sheet.dart';
 import 'package:app/routing/app_router.dart';
+import 'package:app/routing/pop_or_go.dart';
 import 'package:app/widgets/share_dialog.dart';
 
 /// The v2 reading page below 1000px — the canvas's frame B, with frame F's owner
@@ -202,7 +204,7 @@ class _Cover extends ConsumerWidget {
                     icon: Icons.arrow_back,
                     tooltip: 'Back',
                     onCover: hasCover,
-                    onPressed: () => _leave(context),
+                    onPressed: () => popOrGo(context, Routes.discover),
                   ),
                   const Spacer(),
                   _ScrimButton(
@@ -260,14 +262,6 @@ class _Cover extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  void _leave(BuildContext context) {
-    if (Navigator.of(context).canPop()) {
-      Navigator.of(context).pop();
-    } else {
-      context.go(Routes.discover);
-    }
   }
 }
 
@@ -335,23 +329,10 @@ class _IdentityBand extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Lineage above the title (frame F). Naming the parent needs a second
-          // read the page does not make, so it says what it knows.
+          // Lineage above the title (frame F), full width — the expanded page
+          // draws the same mark beside the back button instead.
           if (recipe.isFork) ...[
-            Row(
-              children: [
-                Icon(Icons.call_split, size: 16, color: scheme.primary),
-                const SizedBox(width: 4),
-                Expanded(
-                  child: Text(
-                    'Forked recipe',
-                    style: textTheme.labelMedium?.copyWith(
-                      color: scheme.primary,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            const ForkedLabel(expand: true),
             const SizedBox(height: AppSpacing.xs),
           ],
           Text(recipe.title, style: textTheme.headlineSmall),
@@ -381,31 +362,7 @@ class _IdentityBand extends StatelessWidget {
           ],
           if ((recipe.attribution ?? '').isNotEmpty) ...[
             const SizedBox(height: AppSpacing.md),
-            Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: scheme.surfaceContainerLowest,
-                border: Border.all(color: scheme.outlineVariant),
-                borderRadius: BorderRadius.circular(AppRadii.card),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    Icons.auto_stories,
-                    size: 20,
-                    color: scheme.onSurfaceVariant,
-                  ),
-                  const SizedBox(width: AppSpacing.sm),
-                  Expanded(
-                    child: Text(
-                      recipe.attribution!,
-                      style: textTheme.bodyMedium,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            AttributionBlock(text: recipe.attribution!, boxed: true),
           ],
           const SizedBox(height: AppSpacing.md),
           FactsStrip(recipe: recipe, quad: true),

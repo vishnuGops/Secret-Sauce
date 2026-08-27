@@ -96,7 +96,8 @@ secret-sauce/
 │   │                          # (home/ retired 2026-08-20 — `/` redirects to /discover; the
 │   │                          #  dead screen file was deleted by OPT-A2)
 │   ├── lib/routing/           # app_router.dart (routes + redirect), app_shell.dart (picks the
-│   │                          #   chrome), top_nav_bar.dart (web), nav_destinations.dart (lists)
+│   │                          #   chrome), top_nav_bar.dart (web), nav_destinations.dart (lists),
+│   │                          #   pop_or_go.dart (leave a pushed screen: pop, else go — 32c5)
 │   ├── lib/widgets/           # app-level shared widgets — anything two features both reach:
 │   │                          #   recipe_grid.dart, recipe_async_grid.dart (the paged list every
 │   │                          #   browsing surface renders through — each exports a Sliver* twin
@@ -588,6 +589,13 @@ Four things about `/recipe/:id/cook` are load-bearing:
   accident: a 60-minute chill has to keep counting while the cook moves on to the next step, which
   is the only reason a step timer beats a kitchen timer. One ticker for all of them means one thing
   to cancel on dispose — a per-timer periodic is the classic `Timer is still pending` test failure.
+  **The tick is a prompt to look at the clock, not the thing that counts** (32c4): a running
+  `CookTimer` stores a wall-clock `endsAt` and `_tick` recomputes `remaining` from it, so an app
+  that was suspended for twenty minutes comes back twenty minutes down instead of where it left
+  off. The clock is `cookClockProvider`, and that indirection is load-bearing for the tests, not
+  decoration — `tester.pump(Duration(seconds: 1))` advances Flutter's fake timer queue and leaves
+  `DateTime.now()` where it was, so a deadline read from the real clock freezes every countdown
+  test. The suite overrides it with `tester.binding.clock.now`.
 - **The alarm is state, not an event.** `CookSessionState.ringing` holds step ids until
   acknowledged, so a bake that finishes while the cook is reading step 3 is still ringing when they
   look up. The chime itself is Flutter's own `SystemSound` + `HapticFeedback` — **no dependency,
@@ -600,11 +608,14 @@ Four things about `/recipe/:id/cook` are load-bearing:
   prose, whole-word, with a stop-word list. It is a hint and the UI says so; a step naming nothing
   hides the panel rather than showing an empty one. Don't promote it to a checklist without a real
   `step_ingredients` table.
-- **`cookSessionProvider` and the check-off providers are deliberately not `autoDispose`.** Backing
-  out of cook mode to look at the ingredient list must not throw away a running timer or the
-  checklist. Cook mode also reads the *same* `selectedServingsProvider` the reading page writes, so
-  a recipe scaled to 8 says 8 in both places — two surfaces printing different quantities for one
-  ingredient is the B066 class of bug.
+- **`cookSessionProvider`, the check-off providers and `selectedServingsProvider` are deliberately
+  not `autoDispose`.** Backing out of cook mode to look at the ingredient list must not throw away a
+  running timer, the checklist, or the servings scale. Cook mode reads the *same*
+  `selectedServingsProvider` the reading page writes, so a recipe scaled to 8 says 8 in both places
+  — two surfaces printing different quantities for one ingredient is the B066 class of bug. That
+  provider was `autoDispose` while this comment said otherwise until 32c3, which is exactly how the
+  scale silently reset on the way back from cook mode; if you make one of these three `autoDispose`,
+  you are choosing that behaviour, so say so here.
 
 ## Conventions
 

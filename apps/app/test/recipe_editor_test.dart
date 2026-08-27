@@ -10,11 +10,13 @@
 import 'package:app/features/recipe_editor/edit_models.dart';
 import 'package:app/features/recipe_editor/ingredients_editor.dart';
 import 'package:app/features/recipe_editor/recipe_editor_screen.dart';
+import 'package:app/routing/app_router.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
 /// A step that uses every column the schema gives it.
 const _fullStep = RecipeStep(
@@ -878,6 +880,125 @@ void main() {
       expect(save.onPressed, isNotNull);
     });
   });
+
+  // 32c2 / B085. The discard confirm hung off the close button alone, so a
+  // system back gesture dropped a half-written recipe without a word — and the
+  // inverse: closing an untouched editor asked about changes that did not
+  // exist. `handlePopRoute()` is the platform back button, routed through the
+  // same `maybePop` an Android gesture uses.
+  group('leaving the editor (32c2)', () {
+    testWidgets('an untouched editor closes without asking', (tester) async {
+      await tester.pumpWidget(_routedEditApp(_loadedRepo()));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byTooltip('Cancel'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Discard changes?'), findsNothing);
+      expect(find.text('RECIPE PAGE'), findsOneWidget);
+    });
+
+    testWidgets('an untouched editor pops on a system back', (tester) async {
+      await tester.pumpWidget(_routedEditApp(_loadedRepo()));
+      await tester.pumpAndSettle();
+
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+
+      expect(find.text('Discard changes?'), findsNothing);
+    });
+
+    testWidgets('an edited draft asks before a system back throws it away', (
+      tester,
+    ) async {
+      await tester.pumpWidget(_routedEditApp(_loadedRepo()));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find.widgetWithText(TextFormField, 'Loaded Recipe'),
+        'Loaded Recipe with a new name',
+      );
+      await tester.pumpAndSettle();
+
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.text('Discard changes?'), findsOneWidget);
+
+      // Keeping the edits leaves the cook exactly where they were.
+      await tester.tap(find.text('Keep editing'));
+      await tester.pumpAndSettle();
+      expect(find.text('Discard changes?'), findsNothing);
+      expect(find.text('RECIPE PAGE'), findsNothing);
+      expect(find.text('Loaded Recipe with a new name'), findsOneWidget);
+    });
+
+    testWidgets('discarding leaves for the recipe', (tester) async {
+      await tester.pumpWidget(_routedEditApp(_loadedRepo()));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find.widgetWithText(TextFormField, 'Loaded Recipe'),
+        'Half a thought',
+      );
+      await tester.pumpAndSettle();
+
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Discard'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('RECIPE PAGE'), findsOneWidget);
+    });
+
+    testWidgets('touching a field without changing its text is not an edit', (
+      tester,
+    ) async {
+      await tester.pumpWidget(_routedEditApp(_loadedRepo()));
+      await tester.pumpAndSettle();
+
+      // A `TextEditingController` notifies on **selection** changes too, so
+      // focusing Title or re-entering the same string moves the caret and fires
+      // every listener. If the flag trusted the notification rather than the
+      // text, this would nag about changes nobody made — the half of B085 this
+      // was supposed to remove.
+      final title = find.widgetWithText(TextFormField, 'Loaded Recipe');
+      await tester.tap(title);
+      await tester.pumpAndSettle();
+      await tester.enterText(title, 'Loaded Recipe');
+      await tester.pumpAndSettle();
+
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+
+      expect(find.text('Discard changes?'), findsNothing);
+    });
+
+    testWidgets('an edit anywhere in the draft counts, not just the fields', (
+      tester,
+    ) async {
+      await tester.pumpWidget(_routedEditApp(_loadedRepo()));
+      await tester.pumpAndSettle();
+
+      // The ingredients editor reports through `onChanged`, which is the other
+      // half of the dirty signal — a recipe can be changed without a keystroke
+      // in any of the seven text fields. It is far enough down the `ListView`
+      // that it is not built yet, hence the drag.
+      final add = find.widgetWithText(TextButton, 'Add ingredient');
+      await tester.dragUntilVisible(
+        add,
+        find.byType(ListView),
+        const Offset(0, -200),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(add);
+      await tester.pumpAndSettle();
+
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+
+      expect(find.text('Discard changes?'), findsOneWidget);
+    });
+  });
 }
 
 /// The editor in edit mode (`recipeId` non-null) over stub repositories.
@@ -900,6 +1021,46 @@ Widget _editApp(
           child: child!,
         ),
     home: const RecipeEditorScreen(recipeId: 'r1'),
+  ),
+);
+
+/// One loaded recipe with nothing exotic in it — the leaving tests only need a
+/// form with real content in its fields.
+_LoadedRecipeRepository _loadedRepo() => _LoadedRecipeRepository(
+  const Recipe(id: 'r1', ownerId: 'me', title: 'Loaded Recipe', servings: 4),
+);
+
+/// The editor behind a **real router**, which the leaving tests need twice
+/// over: `_leave()` calls `context.canPop()` (a GoRouter extension, so a bare
+/// `MaterialApp` throws), and "did it actually leave?" has to have somewhere to
+/// land. Entered at the edit route with nothing under it, which is the deep-link
+/// shape — so a discard `go`es to the recipe rather than popping.
+Widget _routedEditApp(RecipeRepository repo) => ProviderScope(
+  overrides: [
+    recipeRepositoryProvider.overrideWithValue(repo),
+    foodRepositoryProvider.overrideWithValue(_StubFoodRepository()),
+  ],
+  child: MaterialApp.router(
+    theme: AppTheme.light(),
+    routerConfig: GoRouter(
+      initialLocation: '/recipe/r1/edit',
+      routes: [
+        GoRoute(
+          path: Routes.editRecipePattern,
+          builder:
+              (_, state) =>
+                  RecipeEditorScreen(recipeId: state.pathParameters['id']),
+        ),
+        GoRoute(
+          path: Routes.recipePattern,
+          builder: (_, __) => const Scaffold(body: Text('RECIPE PAGE')),
+        ),
+        GoRoute(
+          path: Routes.myRecipes,
+          builder: (_, __) => const Scaffold(body: Text('MY RECIPES')),
+        ),
+      ],
+    ),
   ),
 );
 

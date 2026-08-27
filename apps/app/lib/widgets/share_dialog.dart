@@ -117,6 +117,12 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
       _busy = true;
       _error = null;
     });
+    // Captured before the write, and therefore before the `pop` below: once the
+    // dialog is popped this `context` is defunct, so `ScaffoldMessenger.of` on
+    // it has nothing to attach the confirmation to (the `recipe_async_grid.dart`
+    // pattern). The messenger itself belongs to the page underneath and outlives
+    // the dialog, which is why capturing it early is safe.
+    final messenger = ScaffoldMessenger.of(context);
     try {
       await ref
           .read(recipeRepositoryProvider)
@@ -127,7 +133,7 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
           );
       if (mounted) {
         Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
+        messenger.showSnackBar(
           SnackBar(content: Text('Shared with ${person.displayName}')),
         );
       }

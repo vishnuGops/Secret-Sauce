@@ -10,6 +10,7 @@ import 'dart:async';
 //    recipe_detail_v2_test.dart: pumping the page and asserting no exception is
 //    the overflow assertion.
 import 'package:app/features/recipe_detail/cook_mode_model.dart';
+import 'package:app/features/recipe_detail/cook_mode_providers.dart';
 import 'package:app/features/recipe_detail/cook_mode_screen.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:core/core.dart';
@@ -150,6 +151,13 @@ class _FakeRecipeRepository implements RecipeRepository {
   final Recipe recipe;
   final List<double> ratings = [];
 
+  /// Every recipe id `fork()` was asked to copy, and a switch to drive the
+  /// failure path. Both fork call sites share one handler now (32c1), so the
+  /// finish screen's button is tested here and the reading page's chip in
+  /// `recipe_detail_test.dart`.
+  final List<String> forkedFrom = [];
+  bool forkFails = false;
+
   @override
   Future<Recipe> getById(String id) async => recipe;
 
@@ -193,7 +201,11 @@ class _FakeRecipeRepository implements RecipeRepository {
   Future<void> delete(String id) => throw UnimplementedError();
 
   @override
-  Future<String> fork(String sourceRecipeId) => throw UnimplementedError();
+  Future<String> fork(String sourceRecipeId) async {
+    forkedFrom.add(sourceRecipeId);
+    if (forkFails) throw Exception('nope');
+    return 'r2';
+  }
 
   @override
   Future<List<Recipe>> listMine({
@@ -235,6 +247,7 @@ Future<_FakeRecipeRepository> _pump(
   Size size = const Size(390, 844),
   double textScale = 1,
   Recipe recipe = _recipe,
+  DateTime Function()? clock,
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
@@ -258,6 +271,12 @@ Future<_FakeRecipeRepository> _pump(
         path: Routes.auth,
         builder: (_, __) => const Scaffold(body: Text('AUTH SCREEN')),
       ),
+      GoRoute(
+        path: Routes.editRecipePattern,
+        builder:
+            (_, state) =>
+                Scaffold(body: Text('EDITOR ${state.pathParameters['id']}')),
+      ),
     ],
   );
 
@@ -266,6 +285,14 @@ Future<_FakeRecipeRepository> _pump(
       overrides: [
         recipeRepositoryProvider.overrideWithValue(repo),
         authRepositoryProvider.overrideWithValue(_FakeAuth(uid)),
+        // Cook mode's timers are deadlines on the wall clock (32c4), and
+        // `tester.pump(Duration(...))` moves the *fake* clock, not
+        // `DateTime.now()`. Pointing the session at the binding's clock is what
+        // keeps `pump(seconds: 1)` meaning "a second passed" — without it every
+        // countdown below would sit still while its ticks fired.
+        cookClockProvider.overrideWithValue(
+          clock ?? () => tester.binding.clock.now(),
+        ),
       ],
       child: MaterialApp.router(
         routerConfig: router,
@@ -281,6 +308,14 @@ Future<_FakeRecipeRepository> _pump(
   );
   await tester.pumpAndSettle();
   return repo;
+}
+
+/// Walks the four steps of [_recipe] to the finish screen (frame E).
+Future<void> _walkToFinish(WidgetTester tester) async {
+  for (var i = 0; i < 4; i++) {
+    await tester.tap(find.text(i == 3 ? 'Finish cooking' : 'Done — next step'));
+    await tester.pumpAndSettle();
+  }
 }
 
 void main() {
@@ -551,6 +586,31 @@ void main() {
       expect(find.textContaining('59:5'), findsOneWidget);
     });
 
+    // 32c4. The timers hold a deadline, not a counter a tick decrements, so
+    // what a backgrounded app loses is the *notification*, never the elapsed
+    // time. A hand-driven clock is the only way to say "no ticks arrived while
+    // this happened" — `tester.pump(d)` delivers every tick inside `d`.
+    testWidgets('a suspended app comes back with the time really gone', (
+      tester,
+    ) async {
+      final base = DateTime(2026, 8, 26, 18);
+      var offset = Duration.zero;
+      await _pump(tester, clock: () => base.add(offset));
+
+      // Step 2 is the 60-minute chill.
+      await tester.tap(find.text('Done — next step'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Start'));
+      await tester.pump();
+      expect(find.text('of 60:00'), findsOneWidget);
+
+      // Ten minutes of wall clock, no ticks. One tick on the way back is
+      // enough — a counter-based timer would still be reading 60:00 here.
+      offset = const Duration(minutes: 10);
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('50:00'), findsOneWidget);
+    });
+
     testWidgets('a finished timer rings until acknowledged, on any step', (
       tester,
     ) async {
@@ -656,6 +716,47 @@ void main() {
       expect(find.text('Sign in to rate it.'), findsOneWidget);
       expect(find.byType(StarRatingInput), findsNothing);
       expect(repo.ratings, isEmpty);
+    });
+
+    testWidgets('signed out, forking routes to /auth and writes nothing', (
+      tester,
+    ) async {
+      final repo = await _pump(tester);
+      await _walkToFinish(tester);
+
+      await tester.tap(find.text('Fork with my changes'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('AUTH SCREEN'), findsOneWidget);
+      expect(repo.forkedFrom, isEmpty);
+    });
+
+    // 32c1/B084. `fork()` threw `UnimplementedError` in every fake until now, so
+    // neither call site's flow had ever been driven — the reading page's chip
+    // fired the RPC while signed out and surfaced a Postgres denial. Both go
+    // through `forkRecipe` now; the reading page's half of this pair lives in
+    // `recipe_detail_test.dart`.
+    testWidgets('forking lands in the editor on the new copy', (tester) async {
+      final repo = await _pump(tester, uid: 'me');
+      await _walkToFinish(tester);
+
+      await tester.tap(find.text('Fork with my changes'));
+      await tester.pumpAndSettle();
+
+      expect(repo.forkedFrom, ['r1']);
+      expect(find.text('EDITOR r2'), findsOneWidget);
+    });
+
+    testWidgets('a failed fork says so and stays put', (tester) async {
+      final repo = await _pump(tester, uid: 'me');
+      repo.forkFails = true;
+      await _walkToFinish(tester);
+
+      await tester.tap(find.text('Fork with my changes'));
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('Could not fork'), findsOneWidget);
+      expect(find.text('EDITOR r2'), findsNothing);
     });
 
     testWidgets('"not done" goes back to the last step', (tester) async {

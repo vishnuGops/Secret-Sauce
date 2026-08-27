@@ -88,6 +88,41 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
   bool _loading = false;
   bool _saving = false;
 
+  /// Whether anything in the draft has been touched since it was loaded.
+  ///
+  /// The whole point of the confirm dialog is to protect *work*, and without
+  /// this it could not tell work from an untouched form: opening a recipe and
+  /// backing straight out asked "Discard changes?" over nothing (B085's inverse
+  /// half). A flag rather than a deep comparison of two drafts because every
+  /// mutation already reports itself — the editors call `onChanged`, the fields
+  /// have listeners — so the cheap answer is also the complete one.
+  bool _dirty = false;
+
+  /// What each of [_textFields] held when the draft was last known clean.
+  ///
+  /// The listener cannot simply treat a notification as an edit: a
+  /// `TextEditingController` is a `ValueNotifier<TextEditingValue>` and that
+  /// value carries the **selection**, so merely tapping into Title moves the
+  /// caret and notifies — which would make "opened the editor and looked at a
+  /// field" indistinguishable from "wrote something", and re-arm exactly the
+  /// nag this change removes. Comparing text against this baseline is what makes
+  /// focus not an edit, and it also lets a character typed and deleted again
+  /// come back clean.
+  late List<String> _baselineText = [for (final c in _textFields) c.text];
+
+  /// The single-line fields, in one place: `initState` listens to all of them
+  /// and `dispose` disposes all of them, and a field that appears in one list
+  /// but not the other is exactly how a leak or a missed edit gets in.
+  late final List<TextEditingController> _textFields = [
+    _title,
+    _description,
+    _cuisine,
+    _attribution,
+    _prep,
+    _cook,
+    _servings,
+  ];
+
   /// Why the existing recipe could not be loaded, or null. Non-null puts the
   /// screen into its error state instead of the form (B052).
   String? _loadError;
@@ -104,20 +139,15 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
   @override
   void initState() {
     super.initState();
+    for (final c in _textFields) {
+      c.addListener(_onFieldChanged);
+    }
     if (widget.isEditing) _load();
   }
 
   @override
   void dispose() {
-    for (final c in [
-      _title,
-      _description,
-      _cuisine,
-      _attribution,
-      _prep,
-      _cook,
-      _servings,
-    ]) {
+    for (final c in _textFields) {
       c.dispose();
     }
     for (final g in _ingredientGroups) {
@@ -129,6 +159,28 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
     _nutrition.dispose();
     _estimateDebounce?.cancel();
     super.dispose();
+  }
+
+  /// Records that the draft now differs from what was loaded.
+  ///
+  /// `setState` because [_dirty] decides `PopScope.canPop`, which is read at
+  /// build time: without the rebuild the first edit would leave the route still
+  /// freely poppable.
+  void _markDirty() {
+    if (_dirty) return;
+    setState(() => _dirty = true);
+  }
+
+  /// A text field notified. Dirty only if its **text** actually differs from
+  /// [_baselineText] — see that field for why a notification is not enough.
+  void _onFieldChanged() {
+    if (_dirty) return;
+    for (var i = 0; i < _textFields.length; i++) {
+      if (_textFields[i].text != _baselineText[i]) {
+        _markDirty();
+        return;
+      }
+    }
   }
 
   Future<void> _load() async {
@@ -192,7 +244,17 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       // filled.
       _loadError = friendlyError(e);
     } finally {
-      if (mounted) setState(() => _loading = false);
+      // The loaded recipe is the new clean state: re-baseline first, then drop
+      // the flag. Without this the fields would read as edits against the empty
+      // defaults they were created with, and a freshly opened recipe would nag
+      // on the way out over nothing the cook did.
+      if (mounted) {
+        _baselineText = [for (final c in _textFields) c.text];
+        setState(() {
+          _loading = false;
+          _dirty = false;
+        });
+      }
     }
   }
 
@@ -293,6 +355,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       row.foodId = hit.id;
       row.foodLabel = hit.displayName;
     });
+    _markDirty();
     unawaited(_refreshEstimate());
   }
 
@@ -329,6 +392,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       );
       if (replace != true || !mounted) return;
     }
+    _markDirty();
     setState(() {
       final previous = _nutritionMode;
       _nutritionMode = mode;
@@ -379,21 +443,34 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('That image is over 5 MB. Please pick a smaller one.'),
+            content: Text(
+              'That image is over 5 MB. Please pick a smaller one.',
+            ),
           ),
         );
       }
       return;
     }
     setState(() => _pendingCoverBytes = bytes);
+    _markDirty();
   }
 
   int _parseInt(TextEditingController c) => int.tryParse(c.text.trim()) ?? 0;
 
-  /// Navigate back to a sensible location, confirming first so in-progress
-  /// edits aren't lost by accident. The editor is reached via `go`, so there is
-  /// no back stack to pop.
+  /// Navigate back to a sensible location, confirming first when there is
+  /// something to lose. An untouched editor leaves without a word.
   Future<void> _cancel() async {
+    if (!_dirty) {
+      _leave();
+      return;
+    }
+    if (await _confirmDiscard() && mounted) _leave();
+  }
+
+  /// The one discard prompt. Both ways out of a dirty editor — the Cancel
+  /// button and a system back gesture — ask through here, so the two can never
+  /// answer the question differently (32c2).
+  Future<bool> _confirmDiscard() async {
     final discard = await showDialog<bool>(
       context: context,
       builder:
@@ -412,19 +489,19 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
             ],
           ),
     );
-    if (discard != true || !mounted) return;
-    _leave();
+    return discard == true;
   }
 
   /// Where the editor exits to. Reached via `go`, so there is usually no back
-  /// stack to pop.
+  /// stack to pop — and the `go` fallback differs by mode, which is why this is
+  /// not a bare `popOrGo` call.
   void _leave() {
     if (context.canPop()) {
       context.pop();
-    } else if (widget.isEditing) {
-      context.go(Routes.recipe(widget.recipeId!));
     } else {
-      context.go(Routes.myRecipes);
+      context.go(
+        widget.isEditing ? Routes.recipe(widget.recipeId!) : Routes.myRecipes,
+      );
     }
   }
 
@@ -538,7 +615,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
         ),
       );
     }
-    return Scaffold(
+    final form = Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.close),
@@ -688,10 +765,10 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                               ),
                             ),
                         ],
-                        onChanged:
-                            (v) => setState(
-                              () => _difficulty = v ?? Difficulty.easy,
-                            ),
+                        onChanged: (v) {
+                          setState(() => _difficulty = v ?? Difficulty.easy);
+                          _markDirty();
+                        },
                       ),
                     ),
                     const SizedBox(width: AppSpacing.md),
@@ -706,14 +783,16 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                 const SizedBox(height: AppSpacing.md),
                 SwitchListTile(
                   value: _visibility.isPublic,
-                  onChanged:
-                      (v) => setState(
-                        () =>
-                            _visibility =
-                                v
-                                    ? RecipeVisibility.public
-                                    : RecipeVisibility.private,
-                      ),
+                  onChanged: (v) {
+                    setState(
+                      () =>
+                          _visibility =
+                              v
+                                  ? RecipeVisibility.public
+                                  : RecipeVisibility.private,
+                    );
+                    _markDirty();
+                  },
                   title: const Text('Public'),
                   subtitle: const Text('Anyone can find this on Discover'),
                   contentPadding: EdgeInsets.zero,
@@ -737,7 +816,10 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                       () => setState(
                         () => _nutritionExpanded = !_nutritionExpanded,
                       ),
-                  onChanged: () => setState(() {}),
+                  onChanged: () {
+                    setState(() {});
+                    _markDirty();
+                  },
                   groups: _ingredientGroups,
                   servings: int.tryParse(_servings.text.trim()) ?? 1,
                   estimate: _estimate,
@@ -752,6 +834,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                   groups: _ingredientGroups,
                   onChanged: () {
                     setState(() {});
+                    _markDirty();
                     // Linking a food down here is what the Auto pane's own
                     // copy tells the cook to do, so the estimate has to follow.
                     _scheduleEstimate();
@@ -760,7 +843,10 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                 const Divider(height: AppSpacing.xl),
                 StepsEditor(
                   groups: _stepGroups,
-                  onChanged: () => setState(() {}),
+                  onChanged: () {
+                    setState(() {});
+                    _markDirty();
+                  },
                 ),
                 const SizedBox(height: AppSpacing.xxl),
               ],
@@ -768,6 +854,25 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
           ),
         ),
       ),
+    );
+
+    // B085: the discard confirm used to hang off the close button alone, so an
+    // Android back gesture or an iOS edge swipe threw a half-written recipe away
+    // without a word. `canPop` is the dirty flag, so an untouched editor still
+    // closes on the first gesture, and both routes out ask through
+    // `_confirmDiscard`.
+    //
+    // What this does **not** cover is the web browser's Back button: that
+    // arrives as new route information for the `Router`, not as a pop, and
+    // nothing consults `PopScope` on the way through. The honest scope of this
+    // guard is the platform back gesture and any `maybePop`.
+    return PopScope(
+      canPop: !_dirty,
+      onPopInvokedWithResult: (didPop, _) async {
+        if (didPop) return;
+        if (await _confirmDiscard() && mounted) _leave();
+      },
+      child: form,
     );
   }
 }

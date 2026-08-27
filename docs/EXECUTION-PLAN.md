@@ -597,47 +597,83 @@ so `recipe_tags_tag_idx` is reasoned-for, not measured: the three readers that k
 `3_sim_verify` green; the two dropped indexes confirmed absent and all nine new ones present. No
 `drop.sql` entries needed — indexes die with their tables. No Dart in the change.
 
-### 32c — App correctness
+### 32c — App correctness — DONE 2026-08-26
 
-- **32c1** — extract one fork handler (guard signed-out → `/auth`, call `fork()`, navigate to the
-  editor on success, `friendlyError` snackbar on failure) used by
-  [recipe_detail_screen.dart](../apps/app/lib/features/recipe_detail/recipe_detail_screen.dart)
-  and [cook_finish_view.dart](../apps/app/lib/features/recipe_detail/cook_finish_view.dart).
-  Make the suite fakes' `fork()` record instead of throw; test signed-out redirect, success
-  navigation, failure snackbar at both call sites.
-- **32c2** — `PopScope` on
-  [recipe_editor_screen.dart](../apps/app/lib/features/recipe_editor/recipe_editor_screen.dart)
-  routing through the existing `_cancel` confirm; add dirty tracking (a draft revision counter
-  bumped by the existing `onChanged` plumbing beats deep-comparing drafts) so an untouched editor
-  pops without asking. Tests: dirty → dialog, clean → no dialog, system back respects it.
-- **32c3** — decide `selectedServingsProvider` lifetime: the checklists
-  (`checkedIngredientsProvider`, `doneStepsProvider`) survive leaving detail deliberately, the
-  servings scale does not (`autoDispose`), and the comment in `cook_step_view.dart` claims
-  otherwise. Consistency argues plain `.family` (B066: two surfaces must not print different
-  quantities); memory argues `autoDispose` everywhere. **Recommended: plain `.family`**, matching
-  the checklists, with the same process-lifetime caveat they already carry. Fix the comment
-  either way; pin with a test that leaves and re-enters detail.
-- **32c4** — four small hardenings, one change set: try/catch around `_pickCover`'s
-  `pickImage` in
-  [recipe_editor_screen.dart](../apps/app/lib/features/recipe_editor/recipe_editor_screen.dart)
-  (snackbar on failure); [share_dialog.dart](../apps/app/lib/widgets/share_dialog.dart)
-  captures `ScaffoldMessenger.of(context)` **before** `Navigator.pop` (the
-  `recipe_async_grid.dart` pattern);
-  [ingredients_editor.dart](../apps/app/lib/features/recipe_editor/ingredients_editor.dart) /
-  [steps_editor.dart](../apps/app/lib/features/recipe_editor/steps_editor.dart) remove the row
-  from the list, call `setState`, **then** dispose controllers (today they dispose first and rely
-  on same-frame teardown tolerance); cook-mode timers store a `DateTime` deadline and derive
-  remaining on tick
-  instead of decrementing a counter — pure-model change in
-  [cook_mode_providers.dart](../apps/app/lib/features/recipe_detail/cook_mode_providers.dart),
-  existing timer tests keep passing (they pump virtual time; assert against the clock, not tick
-  counts).
-- **32c5** — dedupe: one rating-write handler (same snackbar copy + invalidations exist twice);
-  `popOrGo(context, fallback)` in `apps/app/lib/widgets/` replacing four copies; shared
-  attribution/fork-lineage widget for compact + expanded (verbatim duplicates today); cook rail's
-  hardcoded `SizedBox(width: 74)` gutter → `kIngredientQuantityGutter` × the same scale clamp the
-  reading rail uses, then re-run the cook envelope (Gotcha 26 — this *fixes* a real 2.0× wrap,
-  expect the envelope to catch the before-state).
+Five items, one change set, no SQL. What each turned out to be:
+
+**32c1 (B084) — one fork handler.** `forkRecipe(context, ref, recipeId)` in
+[fork_action.dart](../apps/app/lib/features/recipe_detail/fork_action.dart) is the only fork path
+now. The two call sites disagreed in three ways, not one: the finish screen guarded the signed-out
+case and the reading page fired the RPC and rendered the denial (B084); the finish screen navigated
+to the fork's *reading* page and the reading page to the editor; and the error copy differed. The
+merged handler takes the guard, the editor (a fork exists to be changed, and the copy is private
+until its owner says otherwise), and `Could not fork — …`. The messenger is captured **before** the
+`await`, because the success path `go`es away from the context that would have to show the snackbar.
+
+**32c2 (B085) — `PopScope`, and the half it cannot reach.** `canPop: !_dirty` over the editor's
+`Scaffold`, `onPopInvokedWithResult` and the close button both calling `_confirmDiscard()`. Dirt is
+a flag, not a diff: the seven text controllers get listeners in `initState` and every other mutation
+already reported itself through an `onChanged`. `_load()` re-baselines and resets it in its
+`finally` — filling the fields fires those listeners, so without that every freshly-opened recipe
+would arrive "edited".
+
+**The flag has to compare text, not trust the notification** — the review's catch. A
+`TextEditingController` is a `ValueNotifier<TextEditingValue>`, and that value carries the
+**selection**: tapping into Title moves the caret and fires every listener without a character
+changing. Trusting the callback would have reinstated the nag this item exists to remove, one step
+later in the story ("open a recipe, tap a field, read it, back out → Discard changes?"). So the
+listener diffs each field's text against a baseline captured at load, which also means a character
+typed and deleted again comes back clean. Its test enters the *same* string and asserts no dialog;
+pointing the listener back at the unconditional setter fails it, which is how the test was proven
+non-vacuous.
+**Web browser Back is deliberately not covered.** It arrives as new route information for the
+`Router`, not as a pop, so nothing consults `PopScope`; claiming B085 closed on web would have been
+false. Said in the code, the tracker and the ROADMAP.
+
+**32c3 — the servings scaler is session-scoped.** It was `StateProvider.autoDispose.family` while
+`cook_step_view.dart`'s comment said "the provider is not autoDispose precisely so the choice
+survives the navigation". The comment described the behaviour the product needs, so the declaration
+moved: plain `.family`, the lifetime `checkedIngredientsProvider` and `doneStepsProvider` already
+have. Concretely it was a **B066 instance** — scale to 8, walk into cook mode, come back to a page
+saying 4 while cook mode says 8.
+
+**32c4 — three hardenings (the fourth had already shipped).** The share dialog captures its
+`ScaffoldMessenger` before `Navigator.pop`; the two editors do remove → rebuild → dispose, with the
+dispose in a post-frame callback so the row's element is gone before its controllers die (disposing
+first worked only because the removal happened in the same frame); and cook-mode timers became
+**deadlines**. `_pickCover`'s try/catch landed with 32a4.
+
+The timer rework is the one with a trap in it. A deadline is read from a clock, and
+`tester.pump(Duration(seconds: 1))` advances Flutter's fake timer queue while `DateTime.now()` does
+not move — so a straight `DateTime.now()` deadline passes analysis, ships, and leaves every
+countdown test frozen. Hence `cookClockProvider`, defaulting to `DateTime.now` and overridden in the
+suite with `tester.binding.clock.now`, which the same pump *does* advance. Every existing timer test
+then passed unchanged, which is the evidence that the model change was behaviour-preserving; the new
+one drives a hand-rolled clock ten minutes forward while delivering a single tick — the case a
+counter cannot represent and a backgrounded app produces for real. `_tick` recomputes rather than
+subtracts, `pauseTimer` banks the exact balance, and `addMinute` re-stamps from **now** (adding a
+minute to a deadline already in the past buys nothing).
+
+**32c5 — four dedupes.** One rating handler
+([rating_actions.dart](../apps/app/lib/features/recipe_detail/rating_actions.dart)) for the reading
+page and the finish screen — same write, same two invalidations, same three strings, two files.
+`popOrGo(context, fallback)` replaced four copies of `canPop ? pop : go`; it lives in
+[routing/](../apps/app/lib/routing/pop_or_go.dart) rather than the `widgets/` the plan named,
+because it is not a widget, and it asks the **Navigator** rather than `GoRouter.canPop()` — the
+expanded detail header asks the same question during `build`, and a test that pumps a screen without
+a router must not throw there. `ForkedLabel` / `AttributionBlock`
+([detail_provenance.dart](../apps/app/lib/features/recipe_detail/detail_provenance.dart)) carry the
+two provenance blocks for both layouts, with the two real differences kept as parameters (`expand`,
+`boxed`) rather than flattened away. And the cook rail's `SizedBox(width: 74)` is now the reading
+rail's `kIngredientQuantityGutter × textScale.clamp(1.0, kDetailRailMaxScale)`; the hardcoded number
+did not grow with the type, so `1.25 cup` wrapped to three lines at 2.0× on the surface where the
+cook is holding a pan.
+
+**Verified:** `melos run analyze` — **No issues found** in all three packages;
+`melos run test --no-select` — **core 130 / design_system 119 / app 261, all passed** (app was 245
+before: +16). `melos run format` reformatted 5 files. New tests: fork ×3 on the reading page and ×3
+on the finish screen, the servings-lifetime round trip, six editor-leaving tests driven through
+`handlePopRoute()` (including the caret-move one above), and the suspended-clock timer. No SQL changed, so no `db:*` run was needed.
 
 ### 32d — Shared-package hygiene
 

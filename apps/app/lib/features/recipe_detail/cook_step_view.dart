@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app/features/recipe_detail/cook_mode_model.dart';
 import 'package:app/features/recipe_detail/cook_mode_providers.dart';
 import 'package:app/features/recipe_detail/detail_chips.dart';
+import 'package:app/features/recipe_detail/detail_layout.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 
 /// Width below which cook mode's web layout stacks its rail under the step
@@ -667,7 +668,14 @@ class _CookRail extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: 74,
+                          // The reading rail's gutter, on the reading rail's
+                          // terms (32c5): a bare 74 does not grow with the type,
+                          // so `1.25 cup` at 2.0× wrapped onto three lines here
+                          // while the same string sat on one line on the recipe
+                          // page. One constant, one clamp, two surfaces.
+                          width:
+                              kIngredientQuantityGutter *
+                              context.textScale.clamp(1.0, kDetailRailMaxScale),
                           child: Text(
                             ingredientQuantityLabel(ing, factor: factor),
                             style: textTheme.bodyMedium?.copyWith(

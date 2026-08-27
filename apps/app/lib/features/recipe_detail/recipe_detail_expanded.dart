@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:app/features/recipe_detail/detail_chips.dart';
 import 'package:app/features/recipe_detail/detail_layout.dart';
+import 'package:app/features/recipe_detail/detail_provenance.dart';
 import 'package:app/features/recipe_detail/rail_panel.dart';
 import 'package:app/features/recipe_detail/method_column.dart';
 import 'package:app/features/recipe_detail/rating_section.dart';
@@ -164,27 +165,9 @@ class _HeaderBand extends ConsumerWidget {
                               ),
                             ),
                           if (recipe.isFork)
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                right: AppSpacing.md,
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.call_split,
-                                    size: 16,
-                                    color: scheme.primary,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    'Forked recipe',
-                                    style: textTheme.labelMedium?.copyWith(
-                                      color: scheme.primary,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                            const Padding(
+                              padding: EdgeInsets.only(right: AppSpacing.md),
+                              child: ForkedLabel(),
                             ),
                           InkWell(
                             borderRadius: BorderRadius.circular(
@@ -234,25 +217,7 @@ class _HeaderBand extends ConsumerWidget {
                         const SizedBox(height: AppSpacing.md),
                         ConstrainedBox(
                           constraints: const BoxConstraints(maxWidth: 620),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.auto_stories,
-                                size: 20,
-                                color: scheme.onSurfaceVariant,
-                              ),
-                              const SizedBox(width: AppSpacing.sm),
-                              Expanded(
-                                child: Text(
-                                  recipe.attribution!,
-                                  style: textTheme.bodyMedium?.copyWith(
-                                    color: scheme.onSurfaceVariant,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                          child: AttributionBlock(text: recipe.attribution!),
                         ),
                       ],
                       const SizedBox(height: AppSpacing.md),
