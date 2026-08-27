@@ -380,12 +380,16 @@ non-vacuous, `melos run db:rls` + the Gotcha 6 upgrade path before anything reac
 
 ### 32a — SQL integrity & security (first)
 
-- [ ] **32a1 (B082, high) — close the fork-lineage forgery.** `forked_from_recipe_id` / `forked_from_version_id`
-      are client-writable on insert **and** update and pass through `save_recipe` unchecked, so any
-      user can mint fake "forks" and climb `MOST FORKED` (the one shelf ranked on that column), or
-      point lineage at an arbitrary uuid. Remove both from the UPDATE grant, make `save_recipe`'s
-      update branch preserve the row's stored values, require the insert-branch source to be
-      readable-or-null, and add matrix checks
+- [x] **32a1 (B082, high) — close the fork-lineage forgery — DONE 2026-08-26.** Lineage is now
+      server-owned end to end: out of **both** column-grant lists, `save_recipe` raises `42501` on a
+      create carrying it and preserves the stored value on update, and `_writablePayload` stops
+      sending it. Grants alone were not enough in two directions — `save_recipe` is `security
+      definer` and would have been the way around them, and `fork_recipe` legitimately forks your
+      own recipe, so **`recipes_most_forked` now counts distinct forkers other than the owner**
+      (Gotcha 10's distinct-actor rule, applied to lineage); `3_sim_verify.sql` G3 counts the same
+      way so the guard measures what the shelf measures. Five new matrix checks (B9b/B9c/B23b/B23c
+      + F11), **107 passed / 0 failed** (was 102), each proven non-vacuous — see BUG-TRACKER B082
+      for the second defect the ritual turned up
 - [ ] **32a2 — CHECK constraints + length caps** on client-writable columns: `servings >= 1`,
       `prep/cook_minutes >= 0`, `ingredients.quantity` null-or-positive, `char_length` caps on
       `title` / `display_name` / `bio` / `description`. Guarded adds; verify against seed + sim

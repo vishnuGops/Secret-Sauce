@@ -135,7 +135,7 @@ secret-sauce/
     │   ├── 3_sim_verify.sql      #   46 assertions — the only test coverage this SQL has
     │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
     ├── tests/rls_matrix.sql      # the RLS matrix as a SIGNED-IN user (BL-7, `db:rls`) —
-    │                             #   102 checks; makes its own users, then ROLLS BACK
+    │                             #   107 checks; makes its own users, then ROLLS BACK
     ├── tests/nutrition_estimate.sql  # the estimator's ONLY coverage (Phase 29c): fixture
     │                             #   foods/units/trees -> exact labels, then ROLLS BACK
     ├── tests/nutrition_fixtures.sql  # the other half (29d, `db:nutrition:verify`): the
@@ -283,7 +283,7 @@ melos run db:reset    # drop -> create -> nutrition -> seed -> recipes -> sim (~
 # The RLS acceptance matrix as a SIGNED-IN user (BL-7). Additive only in the sense that
 # it writes and then rolls back — it leaves no user, no recipe, no helper function.
 # Run it after ANY change to a policy, a `security definer` function, or the column grants.
-melos run db:rls      # 102 checks across anon / owner / shared-with / stranger
+melos run db:rls      # 107 checks across anon / owner / shared-with / stranger
 
 # Auto-nutrition SQL. Both roll back; run them after touching the estimator, the
 # backfill, nutritionData/, or an auto recipe's ingredients.
@@ -434,9 +434,16 @@ ingredient column must reach all of them in one change. `rls_matrix.sql` B22b pi
 
 Server-owned columns the client must **never** write (trigger-maintained; omitted from
 `_writablePayload` in `recipe_repository.dart`): on `recipes` — `like_count`, `save_count`,
-`view_count`, `rating_sum`, `rating_count`, `rating_avg`, `current_version_id`, `created_at`,
+`view_count`, `rating_sum`, `rating_count`, `rating_avg`, `current_version_id`,
+`forked_from_recipe_id`, `forked_from_version_id`, `created_at`,
 `updated_at`; on `profiles` — `chef_score`, `chef_tier`, `public_recipe_count`, `total_likes`,
-`total_saves`, `total_views` (omitted from `ProfileRepository.updateMine`). **This is enforced in the database (B050 fixed by OPT-S1):**
+`total_saves`, `total_views` (omitted from `ProfileRepository.updateMine`).
+**Fork lineage is on that list as of B082** and is not trigger-maintained but RPC-maintained:
+`fork_recipe` is its only writer, `save_recipe` raises `42501` on a create that carries it and
+ignores it on update (the client echoes the stored value back on every save, so refusing there
+would make forked recipes unsaveable). It matters because `recipes_most_forked` ranks on it — and
+for the same reason that shelf counts **distinct forkers other than the owner**, so a self-fork
+never ranks (Gotcha 10's rule, applied to lineage). **This is enforced in the database (B050 fixed by OPT-S1):**
 `recipes` and `profiles` hold **column-level** `insert`/`update` grants, not the blanket
 table-level one, because RLS filters rows and cannot filter columns. Two consequences: a
 `PATCH` of a server-owned column now fails `42501` even for the row's owner, and **a new
@@ -761,7 +768,7 @@ the `code-review` skill). The ones you need while _writing_ code:
     steps runs as `postgres`, which bypasses policies — so CI also runs
     [supabase/tests/rls_matrix.sql](supabase/tests/rls_matrix.sql) (**BL-7**, `melos run db:rls`),
     which is the only thing here that exercises RLS as a **signed-in** user. It switches to
-    `set local role authenticated`, runs 102 checks across anon / owner / shared-with / unrelated
+    `set local role authenticated`, runs 107 checks across anon / owner / shared-with / unrelated
     stranger, and rolls the whole transaction back. It closed the class B053 lived in and found
     B061 on its first complete run. **Run it, and add a check to it, whenever you touch a policy, a
     `security definer` function, or the column grants** — a new table with new policies that the

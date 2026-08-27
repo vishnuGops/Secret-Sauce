@@ -205,7 +205,13 @@ class SupabaseRecipeRepository implements RecipeRepository {
   }
 
   /// Only the columns a client is allowed to write. Server-managed columns
-  /// (timestamps, counters, current_version_id) are intentionally excluded.
+  /// (timestamps, counters, `current_version_id`) are intentionally excluded —
+  /// and since B082 that list includes `forked_from_recipe_id` /
+  /// `forked_from_version_id`: lineage is a claim about someone else's recipe
+  /// and `recipes_most_forked` ranks on it, so `fork_recipe` is its only
+  /// writer. `save_recipe` preserves the stored values on update and rejects a
+  /// non-null claim on insert, so sending them could only ever be a no-op or an
+  /// error.
   Map<String, dynamic> _writablePayload(Recipe recipe) => {
     'title': recipe.title,
     'description': recipe.description,
@@ -218,8 +224,6 @@ class SupabaseRecipeRepository implements RecipeRepository {
     'servings': recipe.servings,
     'visibility': recipe.visibility.name,
     'attribution': recipe.attribution,
-    'forked_from_recipe_id': recipe.forkedFromRecipeId,
-    'forked_from_version_id': recipe.forkedFromVersionId,
     // Always sent, `null` included — the key is how `save_recipe` learns the
     // label was cleared. On the SQL side that null arrives as `'null'::jsonb`,
     // not SQL NULL, which is why both branches wrap it in `nullif(…)`.

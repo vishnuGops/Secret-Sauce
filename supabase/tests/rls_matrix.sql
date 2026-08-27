@@ -107,6 +107,7 @@ declare
   n          bigint;
   i          int;
   v_json     jsonb;
+  v_lineage  uuid;
 
   -- results
   v_log      text[] := '{}';
@@ -299,6 +300,20 @@ begin
     'update recipes set nutrition = ''{"calories":10}''::jsonb where id = %L', v_private));
   v_log := v_log || format(E'%s\tB9a owner · update own nutrition (column grant)\t%s', v_err is null and v_n = 1, coalesce(v_err, v_n || ' row'));
 
+  -- B082: fork lineage is server-owned for the same reason a counter is — it is
+  -- a claim about someone else's recipe, and `recipes_most_forked` ranks on it.
+  -- The column grants are the first of two locks; `save_recipe` is the second
+  -- (B23b/B23c), and it needs to be, because a `security definer` function does
+  -- not see these grants at all.
+  select err into v_err from public.rls_matrix_do(format(
+    'update recipes set forked_from_recipe_id = %L where id = %L', v_public, v_private));
+  v_log := v_log || format(E'%s\tB9b owner · forge fork lineage by UPDATE must FAIL (B082)\t%s', v_err = '42501', coalesce(v_err, 'no error'));
+
+  select err into v_err from public.rls_matrix_do(format(
+    'insert into recipes (owner_id, title, servings, forked_from_recipe_id) '
+    'values (%L, ''BL-7 forged fork'', 1, %L)', v_owner, v_public));
+  v_log := v_log || format(E'%s\tB9c owner · forge fork lineage by INSERT must FAIL (B082)\t%s', v_err = '42501', coalesce(v_err, 'no error'));
+
   select err into v_err from public.rls_matrix_do(format(
     'update profiles set chef_score = 9999 where id = %L', v_owner));
   v_log := v_log || format(E'%s\tB10 owner · update own chef_score must FAIL (B050)\t%s', v_err = '42501', coalesce(v_err, 'no error'));
@@ -426,6 +441,40 @@ begin
   select nutrition into v_json from recipes where id = v_saved;
   v_log := v_log || format(E'%s\tB23a owner · save_recipe JSON-null nutrition lands as SQL NULL\t%s',
     v_err is null and v_json is null, coalesce(v_err, coalesce(v_json::text, 'null')));
+
+  -- B082's second lock. `save_recipe` is `security definer`, so B9b/B9c's column
+  -- grants do not constrain it — without these two the RPC is a way around them.
+  -- A **create** claiming lineage is refused outright: on that branch a non-null
+  -- value cannot have come from anywhere legitimate, since `fork_recipe` writes
+  -- its own row.
+  select err into v_err from public.rls_matrix_do(format(
+    'select save_recipe(null, ''{"title":"BL-7 forged create","servings":1,'
+    '"forked_from_recipe_id":"%s"}''::jsonb, ''[]''::jsonb, ''[]''::jsonb, ''BL-7'')', v_public));
+  v_log := v_log || format(E'%s\tB23b owner · save_recipe create claiming lineage must FAIL (B082)\t%s',
+    v_err = '42501', coalesce(v_err, 'no error'));
+
+  -- An **update** ignores the claim instead of refusing it, and the asymmetry is
+  -- deliberate: the client echoes the whole model back on every save, so a real
+  -- fork's real lineage rides in the payload of every edit it ever gets. What
+  -- must hold is that the STORED value wins — this forks a recipe, then saves
+  -- the fork with a payload pointing somewhere else, and reads the column back.
+  v_fork := fork_recipe(v_public);
+  select err into v_err from public.rls_matrix_do(format(
+    'select save_recipe(%L, ''{"title":"BL-7 fork edited",'
+    '"forked_from_recipe_id":"%s"}''::jsonb, ''[]''::jsonb, ''[]''::jsonb, ''BL-7'')',
+    v_fork, v_private));
+  select forked_from_recipe_id into v_lineage from recipes where id = v_fork;
+  v_log := v_log || format(E'%s\tB23c owner · save_recipe update keeps the STORED lineage (B082)\t%s',
+    v_err is null and v_lineage = v_public,
+    coalesce(v_err, coalesce(v_lineage::text, 'null')));
+
+  -- Publish that self-fork: it is the fixture F11 needs, and a *private* fork
+  -- would pass F11 for the wrong reason (the shelf counts public forks only).
+  -- Costs the owner one more public recipe and no engagement, so `chef_score`
+  -- and therefore F3/F6's tie are untouched.
+  perform save_recipe(v_fork,
+    '{"title":"BL-7 self fork","visibility":"public"}'::jsonb,
+    '[]'::jsonb, '[]'::jsonb, 'BL-7');
 
   -- `views_select` is `owns_recipe`, so only the owner reads the log — the
   -- fixture row was written by the sharee (see C15, which must see nothing).
@@ -823,6 +872,16 @@ begin
    where r.id = v_public;
   v_log := v_log || format(E'%s\tF10 anon · chef_trending_recipes is public-only and never empty\t%s private of %s expected row',
     n = 0 and v_n = 1, n, v_n);
+
+  -- F11 (B082): the half the column grants cannot reach. `fork_recipe` will
+  -- happily fork your own public recipe — legitimately, it is a real copy — so
+  -- without the self-exclusion a cook could fork themselves twenty times and
+  -- own the `03 MOST FORKED` shelf. Section B left exactly that fixture behind:
+  -- one PUBLIC fork of `v_public`, owned by `v_public`'s own owner, and no fork
+  -- by anybody else (the stranger's fork in §D is private, which the shelf
+  -- already ignores). So the source must not appear at all.
+  select count(*) into n from recipes_most_forked(100, 0) r where r.id = v_public;
+  v_log := v_log || format(E'%s\tF11 anon · a self-fork does not rank in MOST FORKED (B082)\t%s row', n = 0, n);
 
   -- ==========================================================================
   -- Report

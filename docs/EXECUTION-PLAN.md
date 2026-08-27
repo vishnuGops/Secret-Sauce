@@ -360,31 +360,46 @@ anything hosted.
 
 ### 32a — SQL integrity & security
 
-**32a1 — fork-lineage forgery.** Today `forked_from_recipe_id` / `forked_from_version_id` sit in
-both column-grant lists (`0001_init.sql` grants block) and `save_recipe` assigns them from the
-payload in both branches — so an owner can PATCH or save fake lineage, and `recipes_most_forked`
-ranks on it. Fix in one coordinated change, because the writable-column set lives in multiple
-copies (grants, `_writablePayload`, `save_recipe` — Gotcha 11):
+**32a1 — fork-lineage forgery — DONE 2026-08-26.** `forked_from_recipe_id` /
+`forked_from_version_id` sat in both column-grant lists and `save_recipe` assigned them from the
+payload in both branches, so an owner could PATCH or save fake lineage — and
+`recipes_most_forked` ranks on it. What shipped, and the two places it went further than this
+plan first called for:
 
-1. Remove both columns from the **update** grant list; keep insert (a legitimate fork's insert
-   goes through `fork_recipe`, which is `security definer`, but `save_recipe`'s insert branch also
-   writes them for client creates — decide: simplest correct shape is *server-owned on update,
-   validated on insert*).
-2. `save_recipe` update branch: preserve `r.forked_from_recipe_id` / `_version_id` (the row's
-   stored values), ignore the payload's.
-3. `save_recipe` / insert path: `p_payload` lineage must be null **or** reference a recipe the
-   caller can read (`can_read_recipe`) — else raise.
-4. `_writablePayload` in [recipe_repository.dart](../packages/core/lib/src/repositories/recipe_repository.dart):
-   keep the keys on create, and note the server now ignores them on update (comment, not code —
-   the payload shape is shared).
-5. Matrix: (a) owner PATCH of `forked_from_recipe_id` fails `42501`; (b) `save_recipe` update
-   carrying forged lineage leaves the stored value; (c) insert with unreadable lineage raises.
-   Non-vacuity: revert the grant removal, watch (a) go green-to-red.
+1. **Both** grant lists lost the columns, not just update. The plan said "keep insert"; there is
+   no legitimate client create carrying lineage, because `fork_recipe` (`security definer`,
+   unaffected by grants) writes its own row and the editor then *updates* it.
+2. `save_recipe` update branch: the two assignments are simply **gone from the SET list**, so the
+   row keeps what `fork_recipe` wrote. That also closed **B088** — the old unconditional
+   assignment erased lineage for any caller that omitted the keys.
+3. `save_recipe` insert branch: **raises `42501` on any non-null lineage**, rather than the
+   plan's "null or `can_read_recipe`". Readable-or-null was the wrong bar: your own public recipe
+   is readable, so it still permits self-fork farming — which is what item 5 handles instead.
+4. `_writablePayload` **drops both keys** (the plan said keep-and-comment). With the server
+   ignoring them on update and rejecting them on insert, sending them could only ever be a no-op
+   or an error. `recipe_repository_test.dart` pins their absence from a draft that carries a
+   non-null lineage, so the assertion is about dropping a value, not echoing a null.
+5. **`recipes_most_forked` counts distinct forkers other than the source's owner.** Grants cannot
+   reach this half: forking your own public recipe is honest behaviour, twenty times over is
+   farming, and a raw `count(*)` cannot tell them apart. Gotcha 10 / B012's distinct-signed-in-
+   actor rule, applied to lineage. `3_sim_verify.sql` **G3** was recounted the same way — a guard
+   that measures something the shelf does not is a guard on nothing.
+6. Matrix: **B9b** (PATCH lineage → 42501), **B9c** (INSERT lineage → 42501), **B23b**
+   (`save_recipe` create claiming lineage → 42501), **B23c** (update keeps the stored value, via a
+   real `fork_recipe` fork saved with a payload naming a different source), **F11** (a published
+   self-fork does not rank). 102 → **107 checks**.
 
-**Trap:** `seed_recipe_v2` and the sim's insert also write these columns as `postgres` — they are
-unaffected by grants, do not "fix" them. **Acceptance:** `db:rls` green with the three new checks;
-fork via `fork_recipe` still records lineage (F-section or a new check proves it); upgrade path
-green.
+**Trap that held:** `seed_recipe_v2` and the sim's insert write these columns as `postgres`, so
+they are unaffected by grants — they were correctly left alone.
+
+**Verified:** upgrade-path apply exit 0; `db:rls` **107 passed / 0 failed**; every new check proven
+non-vacuous — B9b/B9c/B23b/B23c against a schema with all four halves reverted, and **F11
+separately against its own clause**, because under the combined break the update branch also wiped
+lineage (B088) and F11 then passed for the wrong reason. `nutrition_estimate` /
+`nutrition_fixtures` green (the `save_recipe` edit is in their path), `3_sim_verify` ALL CHECKS
+PASSED with the shelf unchanged at 6 rows and 0 self-forks in the population — so the ranking
+change is a measured no-op on honest data. `melos run analyze` clean; `test --no-select` SUCCESS
+(core 130, app 246). Fresh apply left to CI: the change adds no new object, so B045 does not apply.
 
 **32a2 — CHECK constraints + length caps.** Add via the existing guarded `do $$ …
 pg_constraint` pattern (the deferred-FK block in 0001 is the template): `recipes_servings_min

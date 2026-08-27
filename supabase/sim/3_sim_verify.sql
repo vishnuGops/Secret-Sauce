@@ -484,10 +484,20 @@ begin
       -- not just 20 recipes tied at one. This is what sim.fork_bias() buys, and
       -- it is the assertion that fails if the weighting is ever flattened back
       -- to a uniform draw.
+      --
+      -- Counted the way `recipes_most_forked` counts since B082 — distinct
+      -- forkers, self-forks excluded — because a guard that measures something
+      -- the shelf does not is a guard on nothing. The sim never self-forks (a
+      -- source is always another owner's recipe), so this is the same number it
+      -- has always asserted unless one simulated cook forks one recipe twice.
       select coalesce(max(fork_count), 0) into n from (
-        select count(*) as fork_count
+        select count(distinct f.owner_id) as fork_count
         from recipes f
-        where f.forked_from_recipe_id is not null and f.visibility = 'public'
+        join recipes s on s.id = f.forked_from_recipe_id
+        where f.forked_from_recipe_id is not null
+          and f.visibility = 'public'
+          and s.visibility = 'public'
+          and f.owner_id <> s.owner_id
         group by f.forked_from_recipe_id
       ) x;
       if n < 3 then

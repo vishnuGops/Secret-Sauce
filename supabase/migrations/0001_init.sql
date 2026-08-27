@@ -1330,15 +1330,22 @@ begin
   -- rating_count, rating_avg, current_version_id, created_at, updated_at (all
   -- trigger-maintained), plus `id` (defaulted) and, on UPDATE, `owner_id`, so a
   -- recipe cannot be reassigned out from under `recipes_update`.
+  --
+  -- **`forked_from_recipe_id` / `forked_from_version_id` are server-owned too
+  -- (B082).** Lineage is a claim *about another user's recipe*, and
+  -- `recipes_most_forked` ranks on it — so a client that can write it can mint
+  -- forks that never happened and order a public shelf with them. The only
+  -- writer is `fork_recipe`, which is `security definer` and therefore
+  -- unaffected by this list; `save_recipe` refuses a forged claim on insert and
+  -- preserves the stored values on update. Same shape as `current_version_id`:
+  -- a column the client reads, and the server alone writes.
   grant insert (owner_id, title, description, cover_image_url, cuisine, category,
                 difficulty, prep_minutes, cook_minutes, servings, visibility,
-                attribution, forked_from_recipe_id, forked_from_version_id,
-                nutrition)
+                attribution, nutrition)
     on recipes to authenticated;
   grant update (title, description, cover_image_url, cuisine, category,
                 difficulty, prep_minutes, cook_minutes, servings, visibility,
-                attribution, forked_from_recipe_id, forked_from_version_id,
-                nutrition)
+                attribution, nutrition)
     on recipes to authenticated;
 
   -- profiles: NOT granted — chef_score, chef_tier, public_recipe_count,
@@ -1647,7 +1654,18 @@ $$;
 -- Aggregate first, then join back: the fork set is a small fraction of the
 -- table and `recipes_public_fork_source_idx` covers exactly those rows. A
 -- correlated `count(*)` per candidate would probe the fork index once per public
--- recipe instead of once.
+-- recipe instead of once. The join to the source row inside the CTE is by
+-- primary key over that same small set, so it is still one pass.
+--
+-- **The unit is a distinct *other* cook, not a fork row (B082).** Grants stop a
+-- client from writing lineage it did not earn, but they cannot stop the honest
+-- path being farmed: `fork_recipe` will happily fork your own public recipe,
+-- twenty times, and a raw `count(*)` would rank you first for it. So a fork
+-- counts only when the forker is not the source's owner, and each forker counts
+-- once — the same "distinct signed-in actor" rule `on_view_insert` applies to
+-- `view_count` for exactly the same reason (Gotcha 10 / B012). Self-forks stay
+-- in the data and still show their lineage on the recipe page; they just do not
+-- rank.
 --
 -- Ties are the normal case early on (most forked recipes have been forked once),
 -- so the tie-break carries real weight: saves + likes decide, which makes a tied
@@ -1658,10 +1676,14 @@ language sql
 stable
 as $$
   with forks as (
-    select f.forked_from_recipe_id as source_id, count(*)::int as fork_count
+    select f.forked_from_recipe_id          as source_id,
+           count(distinct f.owner_id)::int  as fork_count
     from recipes f
+    join recipes s on s.id = f.forked_from_recipe_id
     where f.forked_from_recipe_id is not null
       and f.visibility = 'public'
+      and s.visibility = 'public'
+      and f.owner_id <> s.owner_id
     group by f.forked_from_recipe_id
   )
   select r.*
@@ -2251,10 +2273,22 @@ begin
       );
     end if;
 
+    -- Lineage is server-owned (B082) and `fork_recipe` is its only writer, so a
+    -- create carrying one is a forged claim — the client's own `create()` path
+    -- sends null here for every new recipe. Raising rather than ignoring,
+    -- because on *this* branch a non-null value cannot have come from anywhere
+    -- legitimate; the update branch takes the opposite call, and the comment
+    -- there says why.
+    if p_payload->>'forked_from_recipe_id' is not null
+       or p_payload->>'forked_from_version_id' is not null then
+      raise exception 'fork lineage is set by fork_recipe, not by save_recipe'
+        using errcode = '42501';
+    end if;
+
     insert into recipes (
       owner_id, title, description, cover_image_url, cuisine, category,
       difficulty, prep_minutes, cook_minutes, servings, visibility, attribution,
-      forked_from_recipe_id, forked_from_version_id, nutrition
+      nutrition
     ) values (
       auth.uid(),
       p_payload->>'title',
@@ -2268,8 +2302,6 @@ begin
       coalesce((p_payload->>'servings')::int, 1),
       coalesce((p_payload->>'visibility')::recipe_visibility, 'private'),
       p_payload->>'attribution',
-      (p_payload->>'forked_from_recipe_id')::uuid,
-      (p_payload->>'forked_from_version_id')::uuid,
       v_nutrition
     )
     returning id into v_recipe;
@@ -2316,8 +2348,12 @@ begin
       servings               = coalesce((p_payload->>'servings')::int, servings),
       visibility             = coalesce((p_payload->>'visibility')::recipe_visibility, visibility),
       attribution            = p_payload->>'attribution',
-      forked_from_recipe_id  = (p_payload->>'forked_from_recipe_id')::uuid,
-      forked_from_version_id = (p_payload->>'forked_from_version_id')::uuid,
+      -- `forked_from_recipe_id` / `forked_from_version_id` are deliberately
+      -- absent (B082): server-owned, so the row keeps what `fork_recipe` wrote.
+      -- Ignored rather than rejected, unlike the insert branch — the client
+      -- echoes the whole model back on every save (`_writablePayload`), so a
+      -- fork's *legitimate* lineage arrives in the payload of every edit it
+      -- ever gets, and raising here would make forked recipes unsaveable.
       -- Nullable, so it is assigned straight through like the other nullable
       -- columns; extracted (and possibly recomputed) at the top of the
       -- function — see the declaration for the `->` + `nullif` reasoning.

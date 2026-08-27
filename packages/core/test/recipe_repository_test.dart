@@ -212,6 +212,11 @@ void main() {
           ownerId: _uid,
           title: 'Renamed',
           servings: 4,
+          // Set on purpose: the payload assertion below is about a *non-null*
+          // lineage being dropped, which is the B082 property. With null here
+          // the keys would be absent for an uninteresting reason.
+          forkedFromRecipeId: 'src1',
+          forkedFromVersionId: 'srcv1',
           ingredientGroups: [
             IngredientGroup(
               id: 'g1',
@@ -268,6 +273,13 @@ void main() {
         expect(payload.keys, isNot(contains('rating_avg')));
         expect(payload.keys, isNot(contains('current_version_id')));
         expect(payload.keys, isNot(contains('owner_id')));
+        // B082: lineage is server-owned. `save_recipe` ignores it on update and
+        // rejects it on insert, so a client that still sends it is either
+        // wasting a key or about to fail a create. The draft above carries a
+        // non-null lineage, so this asserts the payload builder *drops* it
+        // rather than merely echoing a null.
+        expect(payload.keys, isNot(contains('forked_from_recipe_id')));
+        expect(payload.keys, isNot(contains('forked_from_version_id')));
 
         // Content goes as arrays; position IS sort_order, so nothing sends one.
         final groups = body['p_ingredient_groups'] as List;

@@ -446,12 +446,24 @@ erDiagram
   the forged counter* and published to the leaderboard. `recipes` and `profiles` consequently
   drop the blanket `insert, update` grant and hold explicit column lists mirroring
   `_writablePayload` and `ProfileRepository.updateMine`; every server-owned column
-  (`like_count`, `save_count`, `view_count`, `rating_*`, `current_version_id`, `created_at`,
+  (`like_count`, `save_count`, `view_count`, `rating_*`, `current_version_id`,
+  `forked_from_recipe_id`, `forked_from_version_id` (B082, see below), `created_at`,
   `updated_at` / `chef_score`, `chef_tier`, `public_recipe_count`, `total_likes`, `total_saves`,
   `total_views`) is excluded, as is `owner_id`
   on UPDATE so a recipe cannot be reassigned. **A new client-writable column must be added to
   that list or the first save carrying it fails `42501`.** Nothing reached through a
   `security definer` function or run as `postgres` (seed, sim, triggers) is affected.
+- **fork lineage is server-owned too (B082)**: `forked_from_recipe_id` and
+  `forked_from_version_id` left both column-grant lists on 2026-08-26, because lineage is a claim
+  *about another user's recipe* and `recipes_most_forked` ranks on it — a client that can write it
+  can mint forks that never happened and order a public shelf with them. `fork_recipe` is the only
+  writer (`security definer`, so unaffected by grants). Grants alone are not enough, because
+  `save_recipe` is also a definer function and would be the way around them: it **raises 42501** on
+  a create carrying lineage (nothing legitimate can put it there) and **ignores** the payload on
+  update, keeping the stored value. The asymmetry is deliberate — the client echoes the whole model
+  back on every save, so a real fork's real lineage arrives in the payload of every edit it ever
+  gets, and refusing there would make forked recipes unsaveable. `rls_matrix.sql` B9b / B9c / B23b /
+  B23c pin all four halves.
 - **`current_version_id` is genuinely server-owned** as of OPT-S1: the
   `recipe_versions_set_current` trigger moves the pointer when a version row is appended. The
   repository used to PATCH it directly, which is why it could not stay out of the grant list
@@ -479,7 +491,7 @@ It creates three throwaway `auth.users` (an owner, someone the owner shares a pr
 an unrelated signed-in stranger) plus a private and a public recipe with content, re-runs the whole
 matrix under `set local role authenticated` + `request.jwt.claims`, and **rolls the transaction
 back** — so it leaves no user, no recipe and no helper function behind and is safe against any
-database. **102 checks** (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
+database. **107 checks** (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
 ingredient food link, in 29b; B22c and B22d, the auto-estimate source-smuggling guard and its
 nothing-counted case, in 29c — B22d found **B075** on its first run; **E10**, that
 `recompute_auto_nutrition()` is not callable as a signed-in user, in 29d — a whole-table rewrite
@@ -591,6 +603,13 @@ Four things about this are load-bearing:
   owner and for nobody else, and the same recipe would hold a different rank depending on who
   asked. It aggregates first and joins back (the fork set is small and
   `recipes_public_fork_source_idx` covers it) rather than running a correlated count per candidate.
+- **Its unit is a distinct _other_ cook, not a fork row (B082).** `fork_recipe` will fork your own
+  public recipe — legitimately; it is a real copy — so a raw count is farmable by one account. A
+  fork therefore counts only when the forker is not the source's owner, and each forker counts
+  once: the same "distinct signed-in actor" rule `on_view_insert` applies to `view_count`, for the
+  same reason (§4, B012). Self-forks stay in the data and still show their lineage on the recipe
+  page; they do not rank. `rls_matrix.sql` **F11** is the guard, and `3_sim_verify.sql` **G3**
+  counts the same way so the fork-tree assertion measures what the shelf measures.
 - **`site_rating_prior()`** is the `m = 5` prior above, hoisted out of `recipes_popular`'s inline
   CTE so `recipes_quick` shares one definition (Gotcha 19). It is cross-joined, i.e. evaluated once
   per query — as a per-row scalar it would re-scan every public recipe for every public recipe.
