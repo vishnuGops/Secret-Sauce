@@ -14,7 +14,8 @@ packages/core           # shared platform core: models, repositories, services
 packages/design_system  # shared UI: theme, RecipeCard, adaptive widgets
 apps/app                # the Flutter application (adaptive web + mobile)
 supabase/migrations     # numbered SQL migrations — schema, RLS, storage (0001 = baseline)
-docs/                   # ROADMAP · EXECUTION-PLAN · SDS · BUG-TRACKER
+docs/                   # ROADMAP · EXECUTION-PLAN · SDS · BUG-TRACKER (open work only;
+                        #   shipped-phase history is frozen under docs/archive/)
 ```
 
 ## Prerequisites

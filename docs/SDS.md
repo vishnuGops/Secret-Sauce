@@ -127,7 +127,7 @@ It is client-writable, so it appears in both column grant lists, in `_writablePa
 `recipe_snapshot` needed no change — it is `to_jsonb(r) - 'search_tsv'`, so version snapshots pick
 the column up on their own.
 
-### 3.1 Food registry (Phase 29a)
+### 3.2a Food registry (Phase 29a)
 
 Four **reference-data** tables behind auto nutrition, populated only by
 `supabase/nutrition_foods.sql` (generated from `nutritionData/` — see its README for the
@@ -479,11 +479,13 @@ It creates three throwaway `auth.users` (an owner, someone the owner shares a pr
 an unrelated signed-in stranger) plus a private and a public recipe with content, re-runs the whole
 matrix under `set local role authenticated` + `request.jwt.claims`, and **rolls the transaction
 back** — so it leaves no user, no recipe and no helper function behind and is safe against any
-database. 92 checks (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
+database. **102 checks** (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
 ingredient food link, in 29b; B22c and B22d, the auto-estimate source-smuggling guard and its
 nothing-counted case, in 29c — B22d found **B075** on its first run; **E10**, that
 `recompute_auto_nutrition()` is not callable as a signed-in user, in 29d — a whole-table rewrite
-whose only lock is a `revoke execute`); a failure names the check and what actually happened.
+whose only lock is a `revoke execute`; **§F**, `chef_standing` / `chefs_leaderboard` /
+`chef_top_recipes` / `chef_trending_recipes` F1–F10, in Phases 30–31); a failure names the check
+and what actually happened.
 
 Its one helper, `rls_matrix_do(text)`, executes an arbitrary string as the calling role, which is
 how a "must FAIL" check is written without aborting the run. That is also a PostgREST RPC shape
@@ -1138,10 +1140,11 @@ chefs_leaderboard(p_limit int default 50, p_offset int default 0)
   accounts). They still *have* a tier (`home_cook`) for badge purposes; they just don't occupy
   leaderboard rows.
 
-**Top recipes for one chef** (Phase 22), behind the expanded chef card:
+**Top recipes for one chef** (Phase 22; paged since Phase 31), behind `/chef/:id`'s **Popular**
+tab:
 
 ```sql
-chef_top_recipes(p_chef uuid, p_limit int default 3) returns setof recipes
+chef_top_recipes(p_chef uuid, p_limit int default 3, p_offset int default 0) returns setof recipes
   order by chef_score(like_count, save_count, view_count) desc,
            save_count desc, like_count desc, created_at desc, id
 ```
@@ -1150,12 +1153,54 @@ chef_top_recipes(p_chef uuid, p_limit int default 3) returns setof recipes
   `Recipe` model — no new decode path, and the owner embedding still rides along.
 - Ordered by the **same** `chef_score()` the leaderboard aggregates, so "top by points
   contributed" cannot drift from the score it explains. PostgREST cannot `order` by that
-  expression, which is why this is an RPC rather than a `.order()` on the table.
+  expression, which is why this is an RPC rather than a `.order()` on the table. Popular
+  deliberately does **not** borrow Discover's Bayesian rating: the score panel sitting directly
+  above this grid explains `chef_score`, and two definitions of "popular" on one page is the
+  Gotcha 19 shape.
 - `stable`, invoker-rights, `anon`-callable, and `visibility = 'public'` filtered explicitly —
-  same reasoning as `chefs_leaderboard`, including for the chef's own dialog.
-- **No caller since Phase 30.** It backed the expanded dialog's "Top recipes" list; `/chef/:id`
-  shows the chef's whole catalogue instead, so a top-3 section would print the same recipes twice.
-  Retained rather than dropped — it is the query shape Phase 25's signature dishes will want.
+  same reasoning as `chefs_leaderboard`, including for the chef viewing their own page.
+- **`p_offset` is Phase 31's addition**, and it is what makes the ordering's totality load-bearing
+  rather than cosmetic: a top-3 with no second page could never expose a partial order (Gotcha 24).
+  The previous `(uuid, int)` signature is dropped in the file that recreates the function, so a
+  2-argument call resolves through the default instead of failing `42725` (B024); `rls_matrix.sql`
+  **F9** asserts that rather than assuming it, and CI's upgrade-path smoke step makes the same
+  2-argument call on the one path where the old overload could still be alive.
+
+**One chef's recipes this week** (Phase 31), behind the **Trending** tab:
+
+```sql
+chef_trending_recipes(p_chef uuid, p_limit int default 20, p_offset int default 0)
+returns setof recipes
+  order by ( likes_in_last_7_days * 2 + distinct_signed_in_viewers_in_last_7_days ) desc,
+           created_at desc, id
+```
+
+The first ranking in the schema to read **dated engagement** — `recipe_likes.created_at` and
+`recipe_views.viewed_at` — rather than the undated lifetime counters on `recipes`.
+`recipe_likes_recipe_idx` is `(recipe_id, created_at desc)` for exactly this. Three deliberate
+differences from `recipes_trending`, each because this ranks *one chef's* catalogue:
+
+- **No `created_at` window.** The global shelf considers only recipes published in the last 30
+  days. A chef publishes across years — the sim spreads a career over 24 months — so that filter
+  would empty this tab for most of the board. The window belongs on the *engagement*, which is the
+  question the tab actually asks.
+- **Anonymous views do not count, and a viewer counts once** (`count(distinct v.user_id)` with
+  `user_id is not null`), matching what `on_view_insert` does to `recipes.view_count`. `anon` holds
+  `insert` on `recipe_views`, so ranking on raw rows would let an unauthenticated loop put any
+  recipe first — the hole the counter trigger was written to close (§10.8, Gotcha 10, B012), and
+  re-opening it in a *new* ranking would not register as a regression anywhere.
+- **A fall-through, not an empty state.** A chef with no engagement this week scores 0 on every
+  recipe and drops to `created_at desc, id` — their catalogue, newest first. That tie-break is also
+  the total order `p_offset` needs. `rls_matrix.sql` **F10** pins it on a fixture with no dated
+  engagement at all.
+
+Weighting is `likes × 2 + viewers`: a like is a deliberate act and a view is ambient, so a few
+likes outrank a wave of passers-by without erasing them.
+
+**Fixture reach.** `seed.sql` authors counters with no engagement rows behind them (§10.8), so on a
+seed-only database every recipe scores 0 for the week and Trending is indistinguishable from All.
+The simulated population is where this tab is demonstrable — the same limitation the windowed chef
+rails on `/chefs` are still waiting on.
 
 **One chef's standing by id** (Phase 30), behind `/chef/:id`:
 
@@ -1184,12 +1229,19 @@ chef_standing(p_chef uuid) returns table (…the chefs_leaderboard row shape…)
 - A **new function name**, never a `p_chef` argument added to `chefs_leaderboard` — that would
   leave the two-argument signature alive beside it and make any matching call fail `42725` (B024).
 
-**One chef's public recipes** is *not* an RPC: `RecipeRepository.listByChef` reads the table with
-`owner_id = :id and visibility = 'public'`, newest first, tie-broken on `id` (Gotcha 24), paged
-through the shared `PagedRecipesNotifier`. The `visibility` filter is **load-bearing, not a
-restatement of RLS**: `recipes_select` lets a signed-in owner read their own private rows, so
-without it a chef's public page would show them recipes no other visitor can see — the same
-"one recipe, two different answers" defect `chef_top_recipes`' explicit filter prevents.
+**One chef's public recipes**, the page's **All** tab, is *not* an RPC: `RecipeRepository.listByChef`
+reads the table with `owner_id = :id and visibility = 'public'`, newest first, tie-broken on `id`
+(Gotcha 24), paged through the shared `PagedRecipesNotifier`. The `visibility` filter is
+**load-bearing, not a restatement of RLS**: `recipes_select` lets a signed-in owner read their own
+private rows, so without it a chef's public page would show them recipes no other visitor can see —
+the same "one recipe, two different answers" defect `chef_top_recipes`' explicit filter prevents.
+
+The three tabs are a **sort, not a filter**: identical sets, three orders. `All` stays a table read
+because PostgREST can express its ordering and an RPC would buy nothing; the other two rank by
+expressions it cannot `order` by. One `ChefRecipesNotifier` serves all three and captures the
+selected sort in `firstPage()` the way it captures the chef, so a re-sort is a new build starting at
+offset 0 — carrying an offset across a re-sort pages one ordering's window against another
+ordering's rows, which is Gotcha 24 one level in.
 
 ### 10.5 Client data path
 
@@ -1498,7 +1550,7 @@ This replaced the two all-`10` placeholders Phase 28 shipped for inspectability.
 auto label is a snapshot**: nothing recomputes it at runtime, so changing an auto recipe's
 ingredients or anything in `nutritionData/` means regenerating and re-committing it —
 `supabase/tests/nutrition_fixtures.sql` is the gate that fails when someone doesn't, and
-`recompute_auto_nutrition()` (§3.1) is the fix for a database that already holds the recipe.
+`recompute_auto_nutrition()` (§3.2a) is the fix for a database that already holds the recipe.
 `simData`
 inherits all of this through its `$ref`, and **no dish authors one** — a label belongs to a recipe
 as published, not to the dish idea, and hand-authoring 120 of them would be busywork with no
@@ -1663,8 +1715,8 @@ recipe count.
 
 | Preset | Users | Engagement scale | Use |
 | --- | --- | --- | --- |
-| `tiny` | 60 | 0.5 | Screenshots and CI. Seconds. |
-| `small` | 250 | 0.8 | Safe on a hosted free tier. |
+| `tiny` | 60 | 0.5 | Screenshots. Seconds. Evaluates only 42 of the 46 assertions — see §12.7. |
+| `small` | 250 | 0.8 | **CI** (since 2026-08-26). The smallest size at which all 46 run. Safe on a hosted free tier. ~430 recipes, ~17k view rows. |
 | `medium` | 1,000 | 1.0 | **Default.** ~1,670 recipes, ~118k view rows, ~10s (Phase 24's recorded run — re-measure rather than re-quote). Breaks pagination, ranking and search assumptions. |
 | `large` | 8,000 | 1.2 | Stress test. **Never run** — `master_chef` is asserted at this size but unverified. |
 
@@ -1744,7 +1796,8 @@ exactly like one that worked. Seven groups:
 | **F** | The pre-existing seed is untouched while `engage_existing` is off — d1–d7 and the Kitchen's standings byte-identical |
 | **G** | Discover's shelves have something to rank (Phase 26), including the fork-depth check above |
 
-CI runs the whole sequence on a `tiny` population in `database.yml` — with the caveat below.
+CI runs the whole sequence on a **`small`** population in `database.yml` (raised from `tiny` on
+2026-08-26 — see below).
 
 **The count is 46, not the 43 quoted elsewhere in these docs until 2026-08-25.** 43 was correct when
 Phase 24 shipped; Phase 26 added group **G** and never updated the number. Recount it rather than
@@ -1757,10 +1810,17 @@ handles that two different ways, and the difference matters:
 
 **Scaled — the good shape.** `E9` asks how far up the tier ladder the exposure tail reaches, and
 scales what it demands to what the population can physically produce: `master_chef` at ≥ 5,000
-users, `head_chef` at ≥ 250, and below that the weaker but still real "some chef left `home_cook`".
-It always runs. This is the pattern to copy, and the alternative is named in its own comment: at 60
-users nobody can accumulate 1,000 points, so demanding `head_chef` there would only teach whoever
-tunes the model to inflate it until the number appears (B043).
+users, `head_chef` at ≥ 1,000, **`sous_chef` at ≥ 250**, and below that the weaker but still real
+"some chef left `home_cook`". It always runs. This is the pattern to copy, and the alternative is
+named in its own comment: at 60 users nobody can accumulate 1,000 points, so demanding `head_chef`
+there would only teach whoever tunes the model to inflate it until the number appears (B043).
+
+> The `sous_chef` rung is **B081**, and it is what a scaled threshold looks like when nobody has run
+> the preset it covers. `head_chef` used to start at 250 — a boundary copied from where `E3` and
+> group G start rather than derived from what 250 accounts can produce. They cannot produce it: a
+> single recipe caps near 2,000 points there, and the best simulated chef at `small` scores 3,078.
+> The assertion failed on the very first run of the preset. A threshold is only "scaled" if somebody
+> has actually stood at each rung.
 
 **Skipped — where no honest threshold exists.** Four checks do not run below **250** users, an
 exact constant, not a rule of thumb:
@@ -1771,14 +1831,15 @@ exact constant, not a rule of thumb:
   users, so at `tiny` every popular recipe saturates at 60 and the ratio is bounded by arithmetic
   whatever the distribution does.
 
-So a `tiny` run evaluates **42 of 46**, with `E9` in its weakest form. **CI runs `tiny`**
-(`database.yml` pins `preset = tiny`, `seed = 20260820`), which means **no automated run has ever
-evaluated G3** — the shelf ranking Phase 26 shipped is verified only when somebody runs `small` or
-larger by hand.
+So a `tiny` run evaluates **42 of 46**. CI used to pin `preset = tiny`, which meant **no automated
+run had ever evaluated G3** — the shelf ranking Phase 26 shipped was verified only when somebody ran
+`small` or larger by hand, and nobody had. Since 2026-08-26 `database.yml` seeds
+`preset = small, seed = 20260820`, so all four run and a green CI run means **46 of 46**.
 
 Every skip prints a `raise notice` naming itself, so the run is legible — but the final
 `ALL CHECKS PASSED` is unconditional. Read the notices, not just the last line. **The practical
-rule: after touching the generator or `sim.fork_bias`, run at least `small` locally.**
+rule: after touching the generator or `sim.fork_bias`, run at least `small` locally** — which is now
+also what CI does, so a mismatch between the two is a mismatch you introduced.
 
 ### 12.8 Safety
 

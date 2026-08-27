@@ -3,9 +3,11 @@
 Guidance for AI assistants (and humans) working in this repository. Read this first.
 
 Deep references: [docs/SDS.md](./docs/SDS.md) (data model, RLS, ranking, widget contracts) ·
-[docs/ROADMAP.md](./docs/ROADMAP.md) · [docs/EXECUTION-PLAN.md](./docs/EXECUTION-PLAN.md) ·
-[docs/BUG-TRACKER.md](./docs/BUG-TRACKER.md) (every rule below with a `Bxxx` tag is explained
-there) · [README.md](./README.md) (SDK install, release, troubleshooting).
+[docs/ROADMAP.md](./docs/ROADMAP.md) · [docs/EXECUTION-PLAN.md](./docs/EXECUTION-PLAN.md) (both
+carry **open work only** — shipped phases live in [docs/archive/](./docs/archive/), which is
+frozen history, never a work source) · [docs/BUG-TRACKER.md](./docs/BUG-TRACKER.md) (every rule
+below with a `Bxxx` tag is explained there) · [README.md](./README.md) (SDK install, release,
+troubleshooting).
 
 ## What this project is
 
@@ -48,6 +50,7 @@ secret-sauce/
 │                             # database.yml: schema/seed/sim on a real Postgres (OPT-T1) —
 │                             #   fresh + re-apply + upgrade path; NEVER give it a DB secret
 ├── docs/                      # ROADMAP · EXECUTION-PLAN · SDS · BUG-TRACKER (see "Docs–code sync")
+│   └── archive/               #   shipped-phase history (frozen — completed phases move here)
 ├── recipeData/                # THE Secret Sauce Kitchen's 14 recipes (content)
 │   ├── recipes/<slug>.json    #   one per file — the filename IS the identity
 │   ├── schema.json            #   the format, field by field, mapped to columns
@@ -132,7 +135,7 @@ secret-sauce/
     │   ├── 3_sim_verify.sql      #   46 assertions — the only test coverage this SQL has
     │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
     ├── tests/rls_matrix.sql      # the RLS matrix as a SIGNED-IN user (BL-7, `db:rls`) —
-    │                             #   98 checks; makes its own users, then ROLLS BACK
+    │                             #   102 checks; makes its own users, then ROLLS BACK
     ├── tests/nutrition_estimate.sql  # the estimator's ONLY coverage (Phase 29c): fixture
     │                             #   foods/units/trees -> exact labels, then ROLLS BACK
     ├── tests/nutrition_fixtures.sql  # the other half (29d, `db:nutrition:verify`): the
@@ -205,7 +208,7 @@ melos run test --no-select          # tests (any package with a test/ dir — cu
 melos run format                    # dart format . (tall style — safe since OPT-T4)
 
 # Run the app (env creds are wired in). Web-server is the most reliable device here;
-# Chrome isn't installed and Edge's debug auto-launch is flaky.
+# Chrome is installed (2026-08-22) but debug auto-launch is flaky, Edge's too.
 cd apps/app
 flutter run -d web-server --web-port 8080 --dart-define-from-file=env.local.json  # open http://localhost:8080
 flutter run -d windows --dart-define-from-file=env.local.json                     # native desktop
@@ -280,7 +283,7 @@ melos run db:reset    # drop -> create -> nutrition -> seed -> recipes -> sim (~
 # The RLS acceptance matrix as a SIGNED-IN user (BL-7). Additive only in the sense that
 # it writes and then rolls back — it leaves no user, no recipe, no helper function.
 # Run it after ANY change to a policy, a `security definer` function, or the column grants.
-melos run db:rls      # 98 checks across anon / owner / shared-with / stranger
+melos run db:rls      # 102 checks across anon / owner / shared-with / stranger
 
 # Auto-nutrition SQL. Both roll back; run them after touching the estimator, the
 # backfill, nutritionData/, or an auto recipe's ingredients.
@@ -522,8 +525,19 @@ the window**, because filtering inside it ranks a one-row set and returns `chef_
 chef — which looks right on whoever is top of the board; and it returns **zero rows**, not an
 error, for a profile with no public recipes, which the client turns into "not ranked yet" rather
 than a 404. `rls_matrix.sql` §F pins both, plus the `dense_rank` tie and the exclusion.
-`chef_top_recipes(chef, limit)` — `setof recipes`, ordered by `chef_score()` per recipe — backed
-the retired chef dialog and currently has **no caller**.
+Two more `setof recipes` RPCs rank **one chef's** catalogue, and they are `/chef/:id`'s Popular and
+Trending tabs (Phase 31): `chef_top_recipes(chef, limit, offset)` orders by `chef_score()` per
+recipe — the same formula the score panel above the grid explains, which is why Popular does *not*
+borrow Discover's Bayesian rating — and `chef_trending_recipes(chef, limit, offset)` orders by
+`likes × 2 + distinct signed-in viewers` **in the last seven days**, counted from `recipe_likes` /
+`recipe_views` rather than the undated lifetime counters. Three rules on the trending one: no
+`created_at` window (a chef publishes across years, so the global 30-day filter would empty the tab
+for most of the board), **anonymous views excluded and a viewer counted once** — `anon` holds
+`insert` on `recipe_views`, so ranking raw rows re-opens B012's inflation hole in a new place — and
+a fall-through to `created_at desc, id`, so a quiet week shows the catalogue instead of an empty
+page. `chef_top_recipes` gained `p_offset` in the same change, so its old `(uuid, int)` signature is
+dropped in the file that recreates it (B024) and `rls_matrix.sql` **F9** makes a deliberately 2-arg
+call to prove the drop worked.
 Details: [SDS §10](./docs/SDS.md#10-chefs-tiers--leaderboard).
 
 Five Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/models/enums.dart):
@@ -538,7 +552,7 @@ Five Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/m
 | `/auth`                           | `features/auth`          | `authControllerProvider` (AsyncNotifier); redirects to `/discover` when signed in; `?mode=signup` opens the sign-up side |
 | `/discover`                       | `features/discover`      | Masthead + search, three **shelves** (`01 UNDER 30` / `02 WEEKEND PROJECTS` / `03 MOST FORKED` — `discover_shelf.dart`), then one browse grid whose sort is the old Popular / Trending / Recent. No `AppBar` — the masthead is the title. Signed-out safe |
 | `/chefs`                          | `features/chefs`         | Web: `chefs_hero.dart` + a 404px leaderboard panel + rails of `ChefSpotlightCard`. Compact: the plain board. A row or card **navigates to `/chef/:id`** (Phase 30 retired the dialog — `chef_detail_sheet.dart` is deleted); signed-out safe |
-| `/chef/:id`                       | `features/chefs`         | **One chef's public page** (Phase 30). `chef_identity_header.dart` (profile + *optional* `ChefStanding`) → `ChefScorePanel` → paged `RecipeAsyncSliverGrid` of their public recipes. Root navigator, signed-out safe, **no nav destination** (Gotcha 18). Needs `chef_standing(p_chef)` because a URL carries only a uuid and `chef_rank` is a `dense_rank()` over the whole population |
+| `/chef/:id`                       | `features/chefs`         | **One chef's public page** (Phase 30). `chef_identity_header.dart` (profile + *optional* `ChefStanding`) → `ChefScorePanel` → **All / Popular / Trending** pill (`ChefPillTabs`, Phase 31) → paged `RecipeAsyncSliverGrid`. The tabs are a **sort, not a filter** — same set, three orders; `all` is a plain `listByChef` table read, the other two are RPCs. Root navigator, signed-out safe, **no nav destination** (Gotcha 18). Needs `chef_standing(p_chef)` because a URL carries only a uuid and `chef_rank` is a `dense_rank()` over the whole population |
 | `/my`                             | `features/my_recipes`    | My / Shared-with-me tabs, both paged. Sharing is `widgets/share_dialog.dart` (opened from recipe detail; it writes `recipe_shares`) |
 | `/recipe/:id`                     | `features/recipe_detail` | **Two v2 layouts, one `context.isExpanded` branch (Phase 27).** ≥1000: `recipe_detail_expanded.dart` — measured 1140px page, header band, facts strip. <1000 (compact **and** medium): `recipe_detail_compact.dart` — cover-first, facts quad, pinned jump bar, `Ready to cook?` bar. Both place `rail_panel.dart` (`bordered:` is the only difference) and `method_column.dart`. The v1 hero and `recipe_content_views.dart` are **deleted** — don't reintroduce a third layout for the 600–1000 band. `RailPanel` is the tab host (Phase 28): `servings_row.dart` on top, then `Ingredients` / `Nutrition` chips, then `ingredient_rail.dart` or `nutrition_tab.dart`. Rating, like/save, fork, version history; signed-out safe |
 | `/recipe/:id/cook`                | `features/recipe_detail` | **Cook mode** — full-screen, one step at a time, **always dark** (`AppTheme.dark()`, the only screen that overrides the theme; the phone is propped under kitchen lights). `cook_mode_screen.dart` (route + shortcuts) → `cook_step_view.dart` (compact frames C/D, web frame H) → `cook_finish_view.dart` (frame E). Pure derivations in `cook_mode_model.dart`, session + timers in `cook_mode_providers.dart`. Signed-out safe; **not** in `needsAuth`. See "Cook mode" below |
@@ -742,11 +756,12 @@ the `code-review` skill). The ones you need while _writing_ code:
     `http://127.0.0.1:54321` is the practical way to drive real repository code; delete it after,
     since no CI job serves PostgREST (`database.yml` starts the database container only).
     **CI now applies the SQL** (`database.yml`, OPT-T1): fresh apply, re-apply, and the Gotcha 6
-    upgrade path, plus the sim's 46 assertions on a `tiny` population. Every statement in *those*
+    upgrade path, plus the sim's 46 assertions on a **`small`** population — `tiny` gates four of
+    them off, including the only guard on `MOST FORKED` ranking anything (B081). Every statement in *those*
     steps runs as `postgres`, which bypasses policies — so CI also runs
     [supabase/tests/rls_matrix.sql](supabase/tests/rls_matrix.sql) (**BL-7**, `melos run db:rls`),
     which is the only thing here that exercises RLS as a **signed-in** user. It switches to
-    `set local role authenticated`, runs 98 checks across anon / owner / shared-with / unrelated
+    `set local role authenticated`, runs 102 checks across anon / owner / shared-with / unrelated
     stranger, and rolls the whole transaction back. It closed the class B053 lived in and found
     B061 on its first complete run. **Run it, and add a check to it, whenever you touch a policy, a
     `security definer` function, or the column grants** — a new table with new policies that the
@@ -922,7 +937,12 @@ first — it lists what the fixtures already cannot show (authored-vs-derived co
 
 Documentation and code must always be in sync. **The docs that must be kept current are:**
 `README.md`, `CLAUDE.md`, and everything under `docs/` (`ROADMAP.md`, `EXECUTION-PLAN.md`,
-`SDS.md`, `BUG-TRACKER.md`).
+`SDS.md`, `BUG-TRACKER.md`) — **except `docs/archive/`, which is frozen history and is never
+edited**. ROADMAP and EXECUTION-PLAN carry open work only: when a phase ships, move its full
+section into the archive files, add one row to ROADMAP's "Shipped phases" table, and carry any
+still-open items into the "Carried-over open items" register or the Backlog. Keeping these two
+files small is deliberate (they are read every session); do not let completed narrative
+re-accumulate in them.
 
 For **every** change, before it is considered done:
 
