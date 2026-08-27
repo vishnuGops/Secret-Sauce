@@ -664,6 +664,13 @@ the `code-review` skill). The ones you need while _writing_ code:
 4. **`GRANT` and RLS are both required.** A new table must be covered by the grants block at
    `0001_init.sql:565-581`, or every API call returns `permission denied for table …` (B013).
    RLS with no policy default-denies: reads return empty, not an error.
+   **A new FK column needs its own index, in the same change** (32b). Postgres indexes the
+   *referenced* side of a foreign key automatically and the referencing side **never**, so an
+   unindexed FK column turns every delete on the other table into a seq scan — once per cascaded
+   row, which is how one recipe delete became eighteen full scans of `recipes`. The cost never
+   shows up on the read that added the column; it shows up on a delete nobody profiles. A partial
+   `where … is not null` index does serve an FK check (verified), so use one when the column is
+   mostly null.
 5. **`0001_init.sql` is the whole schema, and it is editable *while the project is pre-release***
    (owner's call, 2026-08-23 — this reverses OPT-A9's freeze for now). A change goes into 0001,
    idempotently; Phase 26's shelf RPCs were folded back in and `0002_discover_shelves.sql` deleted.

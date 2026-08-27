@@ -486,6 +486,16 @@ erDiagram
   therefore dropped explicitly in the file that recreates it.
   `handle_new_user` **clamps** display_name with `left(…, 80)` because it runs inside the signup
   transaction, where a rejection would refuse the account rather than the name.
+- **indexing the referencing side of a foreign key (32b)**: Postgres creates an index for the
+  *referenced* side automatically and for the referencing side **never** — so an unindexed FK
+  column turns every delete on the other table into a seq scan, once per cascaded row. That is
+  `recipes.current_version_id` / `forked_from_version_id` (scanned per version a recipe delete
+  cascades), `recipe_versions.parent_version_id`, `recipe_views.user_id` (the account-deletion
+  path, over the largest table here), `recipe_tags.tag_id` and all three of
+  `recipe_suggestions`'. All are indexed as of 32b; `recipes_visibility_idx` and
+  `recipes_rating_idx` were dropped in the same change as maintained-but-unchosen. **A new FK
+  column needs an index in the same change**, and the cost of forgetting shows up on a delete
+  nobody profiles rather than on the read that added it.
 - **fork lineage is server-owned too (B082)**: `forked_from_recipe_id` and
   `forked_from_version_id` left both column-grant lists on 2026-08-26, because lineage is a claim
   *about another user's recipe* and `recipes_most_forked` ranks on it — a client that can write it
@@ -1242,8 +1252,12 @@ returns setof recipes
 
 The first ranking in the schema to read **dated engagement** — `recipe_likes.created_at` and
 `recipe_views.viewed_at` — rather than the undated lifetime counters on `recipes`.
-`recipe_likes_recipe_idx` is `(recipe_id, created_at desc)` for exactly this. Three deliberate
-differences from `recipes_trending`, each because this ranks *one chef's* catalogue:
+`recipe_likes_recipe_idx` is `(recipe_id, created_at desc)` for exactly this, and since **32b** the
+views half has its twin: `recipe_views_recipe_viewed_idx`, partial on `user_id is not null` because
+the ranking excludes anonymous rows anyway. Phase 31 indexed one side and missed the other, so
+every view row for a recipe was heap-fetched to read `viewed_at`; measured warm at sim `small`,
+adding it halves the call (0.62 → 0.32 ms). Three deliberate differences from `recipes_trending`,
+each because this ranks *one chef's* catalogue:
 
 - **No `created_at` window.** The global shelf considers only recipes published in the last 30
   days. A chef publishes across years — the sim spreads a career over 24 months — so that filter

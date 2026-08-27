@@ -176,9 +176,43 @@ alter table recipes add column if not exists rating_avg   numeric(3,2) not null 
 alter table recipes add column if not exists nutrition jsonb;
 
 create index if not exists recipes_owner_idx on recipes (owner_id);
-create index if not exists recipes_visibility_idx on recipes (visibility);
 create index if not exists recipes_forked_from_idx on recipes (forked_from_recipe_id);
-create index if not exists recipes_rating_idx on recipes (rating_avg desc, rating_count desc);
+
+-- 32b: the two columns of `recipes` that point INTO `recipe_versions`. Postgres
+-- indexes the referenced side of a foreign key automatically and the
+-- referencing side never — so deleting a version made the FK check seq-scan the
+-- whole of `recipes`, twice, **per version row**. A recipe delete cascades all
+-- of its versions, so a recipe with nine versions paid eighteen full scans of
+-- the recipes table to disappear. Measured before adding these (sim `small`,
+-- 455 recipes / 1,044 versions): the two triggers fired 9 times each on one
+-- delete. This is the class the audit called delete amplification, and it grows
+-- with the table rather than with the row being deleted.
+--
+-- The cost, since the benefit is stated: `current_version_id` was in no index
+-- before, so `recipe_versions_set_current`'s update of it was HOT-eligible and
+-- left no index churn. Every save now writes an index tuple and a dead one —
+-- cheap against a delete that was scanning the table, but not free. Its
+-- `is not null` predicate excludes nothing in practice (every recipe ends up
+-- with a current version); it covers the window between insert and trigger, and
+-- is not a space saving.
+create index if not exists recipes_current_version_idx
+  on recipes (current_version_id) where current_version_id is not null;
+create index if not exists recipes_forked_from_version_idx
+  on recipes (forked_from_version_id) where forked_from_version_id is not null;
+
+-- Dropped, deliberately (32b). `visibility` is a two-value column whose common
+-- value covers ~78% of the rows, so no reader is selective enough for an index
+-- scan on it to win — and plenty of readers *do* test it as a plain qual
+-- (`recipes_select`, the chef and shelf RPCs), which is the point: they test it
+-- and still would not use this. Maintained on every insert and every publish,
+-- chosen by nothing.
+-- `rating_avg` likewise: nothing orders by it — Discover's Popular ranks on the
+-- Bayesian expression, which no index on the raw average can serve — and it was
+-- re-maintained on every rating write, which is one of the hottest paths here.
+-- `drop index if exists` rather than a guard block: it is already idempotent,
+-- and naming them keeps the removal visible to anyone re-reading this file.
+drop index if exists recipes_visibility_idx;
+drop index if exists recipes_rating_idx;
 -- Discover's two date-ordered surfaces (OPT-P2). `recipes_trending` bounds its
 -- window to the last 30 days and Discover **Recent** orders by `created_at`
 -- desc; both filter to public, so a partial index on exactly that predicate
@@ -216,6 +250,15 @@ create table if not exists recipe_versions (
 -- leads with `recipe_id`, so a plain one is a second copy of the same B-tree
 -- prefix — maintained on every version insert and chosen by nothing (OPT-A6,
 -- same reasoning as the `recipe_views_recipe_idx` precedent).
+--
+-- 32b: `parent_version_id` is the other direction and does need one. It is a
+-- self-referencing FK with `on delete set null`, so deleting a version scans
+-- this table for children — and a recipe delete cascades *every* version, which
+-- makes it one scan per version. The lineage is a chain, so the vast majority of
+-- rows have a parent; the partial predicate exists to skip the v1 rows rather
+-- than to keep the index small.
+create index if not exists recipe_versions_parent_idx
+  on recipe_versions (parent_version_id) where parent_version_id is not null;
 drop index if exists recipe_versions_recipe_idx;
 
 -- Deferred FKs from recipes -> recipe_versions: they cannot be declared with the
@@ -403,6 +446,12 @@ create table if not exists recipe_tags (
   tag_id    uuid not null references tags (id) on delete cascade,
   primary key (recipe_id, tag_id)
 );
+-- 32b: the PK leads with `recipe_id`, so nothing served a lookup **by tag** —
+-- and three different things do one: the `tags_delete_orphan` policy's
+-- `not exists` probe (evaluated for every candidate row of a tag delete),
+-- `on_tags_search_change`'s join when a tag is renamed, and the FK check behind
+-- deleting a tag at all.
+create index if not exists recipe_tags_tag_idx on recipe_tags (tag_id);
 
 -- sharing
 create table if not exists recipe_shares (
@@ -451,6 +500,34 @@ create index if not exists recipe_views_recipe_user_idx
   on recipe_views (recipe_id, user_id);
 drop index if exists recipe_views_recipe_idx;
 
+-- 32b: `chef_trending_recipes` (Phase 31) counts distinct signed-in viewers of
+-- one chef's recipe **inside a seven-day window**, and the index above carries
+-- no date — so every view row for the recipe was heap-fetched to read
+-- `viewed_at`. The likes half of that same ranking got
+-- `recipe_likes_recipe_idx (recipe_id, created_at desc)` for exactly this
+-- reason and the views half was missed. Partial on `user_id is not null`
+-- because the ranking excludes anonymous rows anyway (Gotcha 10 / B012) — note
+-- that is ~81% of rows in the measured fixture, so it is a correctness match,
+-- not a size trick.
+--
+-- Write cost, since `logView()` is the highest-volume insert in the schema: a
+-- signed-in view now maintains four index entries instead of two. Measured at
+-- 1,000 inserts, the difference is **below the noise floor** — `on_view_insert`
+-- does a dedup probe, an advisory lock and a counter update per row, and that
+-- dominates so completely that the same batch ranged 115–307 ms in both
+-- configurations. Recorded as "not distinguishable", not as "free".
+create index if not exists recipe_views_recipe_viewed_idx
+  on recipe_views (recipe_id, viewed_at desc, user_id)
+  where user_id is not null;
+
+-- 32b: the FK that made deleting an account expensive. `user_id` is
+-- `on delete set null`, and both composites above lead with `recipe_id`, so
+-- neither can serve `user_id = $1` — removing one profile seq-scanned the
+-- busiest table in the schema (20,630 rows at sim `small`, unbounded in
+-- production). This is the GDPR-delete path.
+create index if not exists recipe_views_user_idx
+  on recipe_views (user_id) where user_id is not null;
+
 -- ratings: one row per (user, recipe); 0.5 .. 5.0 in half-star steps.
 create table if not exists recipe_ratings (
   user_id    uuid not null references profiles (id) on delete cascade,
@@ -474,6 +551,14 @@ create table if not exists recipe_suggestions (
   payload       jsonb,
   created_at    timestamptz not null default now()
 );
+-- 32b: three FK columns, zero indexes — and the table's emptiness is not the
+-- point. Its cascade fires on **every** recipe delete and its `set null` on
+-- every profile delete, so an unindexed referencing side makes each of those a
+-- seq scan of this table for as long as it stays empty and a growing one after.
+create index if not exists recipe_suggestions_recipe_idx on recipe_suggestions (recipe_id);
+create index if not exists recipe_suggestions_author_idx on recipe_suggestions (author_id);
+create index if not exists recipe_suggestions_from_recipe_idx
+  on recipe_suggestions (from_recipe_id) where from_recipe_id is not null;
 
 -- ============================================================================
 -- Food registry (Phase 29a) — reference data for auto nutrition

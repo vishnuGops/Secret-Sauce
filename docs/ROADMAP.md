@@ -447,15 +447,23 @@ non-vacuous, `melos run db:rls` + the Gotcha 6 upgrade path before anything reac
 
 ### 32b — SQL performance
 
-- [ ] **32b1 — five missing FK indexes** (delete amplification: every recipe/account delete seq-scans):
-      `recipe_versions(parent_version_id)`, `recipes(current_version_id)`,
-      `recipes(forked_from_version_id)`, `recipe_views(user_id)`, `recipe_tags(tag_id)`
-- [ ] **32b2 — index `chef_trending_recipes`' views window**: partial
-      `recipe_views (recipe_id, viewed_at desc, user_id) where user_id is not null` — the likes
-      half got its index in Phase 31, the views half was missed
-- [ ] **32b3 — drop two dead indexes**: `recipes_visibility_idx` (two-value column, partial
-      indexes serve every reader) and `recipes_rating_idx` (nothing orders by raw `rating_avg`;
-      maintained on every rating write)
+- [x] **32b — indexes, measured — DONE 2026-08-26.** Nine added, two dropped, every claim checked
+      with `explain analyze` against sim `small` rather than taken from the audit's prediction.
+      **Added:** the five FK columns Postgres never indexes for you — `recipes(current_version_id)`,
+      `recipes(forked_from_version_id)`, `recipe_versions(parent_version_id)`,
+      `recipe_views(user_id)`, `recipe_tags(tag_id)` — plus all three of
+      `recipe_suggestions`' (its cascade fires on every recipe delete however empty it is), and the
+      partial `recipe_views (recipe_id, viewed_at desc, user_id)` that `chef_trending_recipes` was
+      missing (Phase 31 gave the likes half its index and skipped the views half).
+      **Dropped:** `recipes_visibility_idx` (two values, and every reader is a *partial* index's
+      predicate) and `recipes_rating_idx` (nothing orders by the raw average — Popular ranks on the
+      Bayesian expression — and it was maintained on every rating write).
+      **Measured, warm, isolated:** deleting a 9-version recipe takes its three version-FK triggers
+      from 0.52 / 0.84 / 0.63 ms to 0.09 / 0.11 / 0.12; deleting a profile takes the
+      `recipe_views` FK check from 1.61 ms to 0.54; `chef_trending_recipes` goes 0.62 → 0.32 ms.
+      **A first pass said the opposite** — cold caches right after an index build made the profile
+      delete look 3× *slower*, which is exactly the reading that would have justified dropping the
+      right index. Re-measured warm with fresh `analyze` and A/B'd one index at a time
 
 ### 32c — App correctness (Flutter)
 

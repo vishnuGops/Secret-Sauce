@@ -560,17 +560,42 @@ case.
 true because nobody had driven an upload from outside the app. It has now been driven — what
 remains unexercised is the *app's* picker path, not the bucket contract.
 
-### 32b — SQL performance
+### 32b — SQL performance — DONE 2026-08-26
 
-One change set: five `create index if not exists` lines beside their tables
-(`recipe_versions(parent_version_id)`, `recipes(current_version_id)`,
-`recipes(forked_from_version_id)`, `recipe_views(user_id)`, `recipe_tags(tag_id)`); the partial
-`recipe_views (recipe_id, viewed_at desc, user_id) where user_id is not null` for
-`chef_trending_recipes`; `drop index if exists recipes_visibility_idx, recipes_rating_idx`.
-**Acceptance:** `explain analyze` on (a) a recipe delete at sim `medium` (before: seq scans on
-`recipes`/`recipe_versions`; after: index scans), (b) `chef_trending_recipes` for a busy chef
-(index-only on the views subquery). Both easy paths + upgrade path apply clean. No `drop.sql`
-entries needed — indexes die with their tables.
+Nine indexes added, two dropped. Postgres indexes the *referenced* side of a foreign key
+automatically and the *referencing* side never, so every unindexed FK column turns a delete on the
+other table into a seq scan — once per cascaded row. Added beside their own tables:
+`recipes(current_version_id)`, `recipes(forked_from_version_id)`,
+`recipe_versions(parent_version_id)`, `recipe_views(user_id)`, `recipe_tags(tag_id)`, all three of
+`recipe_suggestions`', and the partial `recipe_views (recipe_id, viewed_at desc, user_id)` behind
+`chef_trending_recipes`. Dropped: `recipes_visibility_idx` and `recipes_rating_idx`.
+
+**Measured, warm, one index at a time** (sim `small` — 455 recipes, 1,044 versions, 20,630 views):
+
+| Path | Before | After |
+| --- | --- | --- |
+| Delete a 9-version recipe — its three version-FK triggers | 0.52 / 0.84 / 0.63 ms | 0.09 / 0.11 / 0.12 ms |
+| Delete a profile — the `recipe_views` FK check | 1.61 ms | 0.54 ms |
+| `chef_trending_recipes`, busy chef, warm | 0.62–0.65 ms | 0.31–0.34 ms |
+
+**The first measurement said the opposite, and that is the part worth keeping.** Run immediately
+after building the indexes, the profile delete looked **3× slower** (32 ms vs 2.5 ms) — cold caches
+on a freshly built index, read as a regression. Acting on it would have removed the index that is
+in fact 3× faster once warm. Re-measured with `analyze` and repeated runs, and A/B'd the two
+`recipe_views` indexes separately, which is what separated "the trending index costs a little
+maintenance on set-null updates" (true, 0.54 → 0.84 ms with both) from "the user index is a
+regression" (false).
+
+**Two things this data cannot show, stated rather than implied.** `recipe_versions.parent_version_id`
+is **null on every row** in a generated population — the sim never chains versions, though
+`save_recipe` sets it — so its index is empty here and the 5.5× improvement above is the FK *check*
+becoming an index probe rather than a scan, not a lookup returning rows. And `recipe_tags` is empty,
+so `recipe_tags_tag_idx` is reasoned-for, not measured: the three readers that key by tag are the
+`tags_delete_orphan` policy probe, `on_tags_search_change`'s join, and the FK behind a tag delete.
+
+**Verified:** apply exit 0 twice; `db:rls` 127/0; `nutrition_estimate`, `nutrition_fixtures`,
+`3_sim_verify` green; the two dropped indexes confirmed absent and all nine new ones present. No
+`drop.sql` entries needed — indexes die with their tables. No Dart in the change.
 
 ### 32c — App correctness
 
