@@ -98,13 +98,30 @@ void main() {
   test('topRecipes asks for the owner embed with the FK hint', () async {
     final (:http, :repo) = _repo();
 
-    await repo.topRecipes('d1', limit: 5);
+    await repo.topRecipes('d1', limit: 5, offset: 20);
 
     final req = http.requests.single;
     expect(req.url.path, endsWith('/rpc/chef_top_recipes'));
-    expect(req.json, {'p_chef': 'd1', 'p_limit': 5});
+    // `p_offset` is Phase 31's addition — the Popular tab pages, and a page
+    // window that never leaves the client is the failure this pins.
+    expect(req.json, {'p_chef': 'd1', 'p_limit': 5, 'p_offset': 20});
     // `recipes` and `profiles` are related five ways, so the plain embed form
     // answers PGRST201 (Gotcha 17).
+    expect(req.select, contains('owner:profiles!recipes_owner_id_fkey'));
+  });
+
+  test('trendingRecipes hits its own RPC, paged and embedded', () async {
+    // Same shape, different ranking. Worth its own test rather than a parameter
+    // on the one above: the two share a private call site, so a mix-up sends the
+    // Trending tab to `chef_top_recipes` and every card still renders — the
+    // order is simply the wrong one, which no widget test can see.
+    final (:http, :repo) = _repo();
+
+    await repo.trendingRecipes('d1', limit: 20, offset: 40);
+
+    final req = http.requests.single;
+    expect(req.url.path, endsWith('/rpc/chef_trending_recipes'));
+    expect(req.json, {'p_chef': 'd1', 'p_limit': 20, 'p_offset': 40});
     expect(req.select, contains('owner:profiles!recipes_owner_id_fkey'));
   });
 
@@ -133,6 +150,7 @@ void main() {
       (200, jsonEncode([_row()])),
       (200, jsonEncode([_row()])),
       (200, jsonEncode(<Object>[])),
+      (200, jsonEncode(<Object>[])),
       (
         200,
         jsonEncode([
@@ -147,8 +165,9 @@ void main() {
     await repo.leaderboard();
     await repo.standing('d1');
     await repo.topRecipes('d1');
+    await repo.trendingRecipes('d1');
     await repo.tierCounts();
 
-    expect(http.requests, hasLength(4));
+    expect(http.requests, hasLength(5));
   });
 }

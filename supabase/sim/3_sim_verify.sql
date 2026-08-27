@@ -368,14 +368,28 @@ begin
   -- not describe a 1,000-user platform, so demanding it here would only teach
   -- whoever tunes this to inflate the exposure model until the number appears.
   -- See docs/BUG-TRACKER.md B043.
+  --
+  -- **There are four rungs here, not three, and the `small` one is B081.** The
+  -- head_chef claim used to start at 250 because that was where E3 and group G
+  -- start, not because 250 users can produce 5,000 points — nobody had run this
+  -- preset. They cannot: the best simulated chef at `small` scores 3,078, so the
+  -- assertion failed the first time CI was raised off `tiny`. One rung per
+  -- reachable ceiling, and the medium claim is untouched at `>= 1000`.
   if v_users >= 5000 then
     v_detail := 'master_chef'; m := 1;
     select count(*) into n from profiles p join sim.actor a on a.id = p.id
      where p.chef_tier = 'master_chef';
-  elsif v_users >= 250 then
+  elsif v_users >= 1000 then
     v_detail := 'head_chef'; m := 1;
     select count(*) into n from profiles p join sim.actor a on a.id = p.id
      where p.chef_tier in ('head_chef', 'master_chef');
+  elsif v_users >= 250 then
+    -- 250 accounts cap a single recipe near 2,000 points (250 likes × 3 + 250
+    -- saves × 5 + 250 views × 0.2), so sous_chef (1,000) is the top rung a
+    -- chef can actually climb to here across a handful of recipes.
+    v_detail := 'sous_chef'; m := 1;
+    select count(*) into n from profiles p join sim.actor a on a.id = p.id
+     where p.chef_tier in ('sous_chef', 'head_chef', 'master_chef');
   else
     -- 60 users cannot generate 1,000 points for anyone, so the strongest
     -- claim available at this size is that the tail exists at all.

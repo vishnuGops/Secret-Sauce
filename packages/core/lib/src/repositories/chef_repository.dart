@@ -26,9 +26,22 @@ abstract interface class ChefRepository {
   Future<ChefStanding?> standing(String chefId);
 
   /// A chef's public recipes, ordered by what each contributes to their score
-  /// (`chef_top_recipes`). Private recipes never appear, including for their
-  /// own owner — the RPC filters visibility explicitly.
-  Future<List<Recipe>> topRecipes(String chefId, {int limit});
+  /// (`chef_top_recipes`) — `/chef/:id`'s **Popular** tab. Private recipes never
+  /// appear, including for their own owner: the RPC filters visibility
+  /// explicitly.
+  ///
+  /// Paged since Phase 31. `offset` is only meaningful because the RPC's
+  /// `order by` is total (Gotcha 24) — it ends `created_at desc, id`.
+  Future<List<Recipe>> topRecipes(String chefId, {int limit, int offset});
+
+  /// The same recipes ranked by the engagement they earned in the **last seven
+  /// days** — `likes × 2 + distinct signed-in viewers`, counted from
+  /// `recipe_likes` / `recipe_views` rather than the undated lifetime counters
+  /// (`chef_trending_recipes`).
+  ///
+  /// Never empty for a chef who has any public recipe: a week with no
+  /// engagement scores every recipe 0 and the RPC falls through to newest-first.
+  Future<List<Recipe>> trendingRecipes(String chefId, {int limit, int offset});
 
   /// How many chefs sit on each rung — the five tiles across the chefs hero.
   ///
@@ -76,11 +89,40 @@ class SupabaseChefRepository implements ChefRepository {
   }
 
   @override
-  Future<List<Recipe>> topRecipes(String chefId, {int limit = 3}) async {
+  Future<List<Recipe>> topRecipes(
+    String chefId, {
+    int limit = 3,
+    int offset = 0,
+  }) {
+    return _chefRecipes('chef_top_recipes', chefId, limit, offset);
+  }
+
+  @override
+  Future<List<Recipe>> trendingRecipes(
+    String chefId, {
+    int limit = 20,
+    int offset = 0,
+  }) {
+    return _chefRecipes('chef_trending_recipes', chefId, limit, offset);
+  }
+
+  /// Both chef-scoped rankings take the same three arguments and return
+  /// `setof recipes`, so they share one call site — a second copy of the
+  /// `kRecipeSelect` embed is a second place for the FK hint to go missing
+  /// (Gotcha 17), and that failure is a `PGRST201` on every card at once.
+  Future<List<Recipe>> _chefRecipes(
+    String rpc,
+    String chefId,
+    int limit,
+    int offset,
+  ) async {
     // `setof recipes`, so the owner embedding rides along exactly as it does on
     // the Discover RPCs — one round-trip, no per-row profile lookup.
     final rows = await _client
-        .rpc('chef_top_recipes', params: {'p_chef': chefId, 'p_limit': limit})
+        .rpc(
+          rpc,
+          params: {'p_chef': chefId, 'p_limit': limit, 'p_offset': offset},
+        )
         .select(kRecipeSelect);
     return (rows as List)
         .map((r) => Recipe.fromJson(r as Map<String, dynamic>))

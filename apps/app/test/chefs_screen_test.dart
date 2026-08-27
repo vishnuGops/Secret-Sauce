@@ -43,8 +43,18 @@ class _FakeChefRepository implements ChefRepository {
   // Nothing on this screen calls it since Phase 30 replaced the expanded card —
   // which listed top recipes — with `/chef/:id`, which lists all of them.
   @override
-  Future<List<Recipe>> topRecipes(String chefId, {int limit = 3}) =>
-      throw UnimplementedError();
+  Future<List<Recipe>> topRecipes(
+    String chefId, {
+    int limit = 3,
+    int offset = 0,
+  }) => throw UnimplementedError();
+
+  @override
+  Future<List<Recipe>> trendingRecipes(
+    String chefId, {
+    int limit = 20,
+    int offset = 0,
+  }) => throw UnimplementedError();
 
   @override
   Future<ChefStanding?> standing(String chefId) async {

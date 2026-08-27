@@ -777,6 +777,53 @@ begin
   );
   v_log := v_log || format(E'%s\tF6  anon · tied chefs share the board''s rank\t%s of 2 agree', n = 2, n);
 
+  -- F7/F10: the two chef-scoped rankings behind `/chef/:id`'s Popular and
+  -- Trending tabs (Phase 31). Both are invoker-rights, so `visibility = 'public'`
+  -- is filtered inside the function rather than left to RLS, which would show a
+  -- chef their own private recipes on the page everyone else sees.
+  --
+  -- Counted as "no non-public row", not "exactly one row": by the time §F runs,
+  -- the owner holds more public recipes than the fixture block created —
+  -- section B's `save_recipe` checks each leave one behind, inside the same
+  -- transaction. An exact-count assertion here passes today and turns red the
+  -- next time a check above it saves a recipe, which is a test that fails for a
+  -- reason having nothing to do with what it claims to prove.
+  select count(*) into n from chef_top_recipes(v_owner, 50, 0) r
+   where r.visibility <> 'public';
+  select count(*) into v_n from chef_top_recipes(v_owner, 50, 0) r
+   where r.id = v_public;
+  v_log := v_log || format(E'%s\tF7  anon · chef_top_recipes is public-only\t%s private of %s expected row',
+    n = 0 and v_n = 1, n, v_n);
+
+  -- F8: `p_offset` is actually applied, not accepted and ignored — one page in
+  -- is where a dropped argument shows up as the duplicate row Gotcha 24
+  -- describes. Asserted as a *difference* rather than an absolute count, for the
+  -- same reason F7 is.
+  select count(*) into n from chef_top_recipes(v_owner, 50, 0);
+  select count(*) into v_n from chef_top_recipes(v_owner, 50, 1);
+  v_log := v_log || format(E'%s\tF8  anon · chef_top_recipes honours p_offset\t%s row, %s past offset 1',
+    v_n = n - 1, n, v_n);
+
+  -- F9: the B024 trap, asserted rather than hoped for. Phase 31 added a third
+  -- argument; if the old `(uuid, int)` overload survives the drop, a two-argument
+  -- call matches both and fails 42725 — and nothing else in this file would
+  -- notice, because every other call here passes three.
+  select err into v_err from public.rls_matrix_do(
+    format('select * from chef_top_recipes(%L::uuid, 3)', v_owner));
+  v_log := v_log || format(E'%s\tF9  anon · a 2-arg chef_top_recipes call is unambiguous (B024)\t%s',
+    v_err is null, coalesce(v_err, 'no error'));
+
+  -- F10: the trending tab. Same visibility claim, plus the fall-through: the
+  -- fixture has no like or view inside the seven-day window, so every recipe
+  -- scores 0 and the RPC must still return the catalogue newest-first. An empty
+  -- result here means a quiet week renders as an empty page.
+  select count(*) into n from chef_trending_recipes(v_owner, 50, 0) r
+   where r.visibility <> 'public';
+  select count(*) into v_n from chef_trending_recipes(v_owner, 50, 0) r
+   where r.id = v_public;
+  v_log := v_log || format(E'%s\tF10 anon · chef_trending_recipes is public-only and never empty\t%s private of %s expected row',
+    n = 0 and v_n = 1, n, v_n);
+
   -- ==========================================================================
   -- Report
   -- ==========================================================================

@@ -168,26 +168,74 @@ final chefPageProvider = FutureProvider.autoDispose.family<
 /// arbitrary chef, exactly as an empty search query does.
 final viewedChefIdProvider = Provider<String>((ref) => '');
 
+/// How `/chef/:id`'s recipe grid is ordered (Phase 31).
+///
+/// A **sort**, not a filter: all three show the same set — every public recipe
+/// this chef owns — in three orders. For a chef with fewer than one page of
+/// recipes the tabs only rearrange the same cards, which is exactly what
+/// Discover's [BrowseSort] does to the browse grid and is why the copy says
+/// nothing about narrowing anything down.
+///
+/// Unlike [BoardSort], every option here has data behind it, so none is
+/// disabled.
+enum ChefSort {
+  /// Newest first — the chef's catalogue, straight off the table.
+  all('All'),
+
+  /// `chef_score()` per recipe: the same function the score panel above the
+  /// grid explains, so the list cannot disagree with the number (Gotcha 19).
+  popular('Popular'),
+
+  /// `likes × 2 + distinct viewers` earned in the last seven days.
+  trending('Trending');
+
+  const ChefSort(this.label);
+
+  final String label;
+}
+
+/// The selected sort. **Overridden per page** alongside [viewedChefIdProvider]
+/// so two stacked chef pages cannot share one selection.
+final chefSortProvider = StateProvider.autoDispose<ChefSort>(
+  (ref) => ChefSort.all,
+);
+
 /// One chef's public recipes, paged — the grid on `/chef/:id`.
 class ChefRecipesNotifier extends PagedRecipesNotifier {
   /// The chef this build is serving. Captured once, so `Load more` cannot page
   /// one chef's offsets against another chef's results.
   String _chefId = '';
 
+  /// Likewise the sort: paging one ordering's offsets against another
+  /// ordering's results is the same defect one level down (Gotcha 24).
+  ChefSort _sort = ChefSort.all;
+
   @override
   Future<RecipePage> firstPage() {
     // Synchronous, before any `await`: this is the build phase, and it is what
-    // makes a new chef a new build.
+    // makes a new chef — or a new sort — a new build.
     _chefId = ref.watch(viewedChefIdProvider);
+    _sort = ref.watch(chefSortProvider);
     if (_chefId.isEmpty) return Future.value(const RecipePage());
     return super.firstPage();
   }
 
   @override
   Future<List<Recipe>> fetchPage({required int limit, required int offset}) {
-    return ref
-        .read(recipeRepositoryProvider)
-        .listByChef(_chefId, limit: limit, offset: offset);
+    // Two repositories on purpose. `all` is a plain table read that PostgREST
+    // can express, so it costs no RPC; the other two rank by an expression it
+    // cannot order by, which is what those RPCs exist for.
+    return switch (_sort) {
+      ChefSort.all => ref
+          .read(recipeRepositoryProvider)
+          .listByChef(_chefId, limit: limit, offset: offset),
+      ChefSort.popular => ref
+          .read(chefRepositoryProvider)
+          .topRecipes(_chefId, limit: limit, offset: offset),
+      ChefSort.trending => ref
+          .read(chefRepositoryProvider)
+          .trendingRecipes(_chefId, limit: limit, offset: offset),
+    };
   }
 }
 

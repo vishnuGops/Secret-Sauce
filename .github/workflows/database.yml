@@ -1,7 +1,7 @@
 name: Database
 
 # The SQL half of this repo had no automated coverage at all (OPT-T1). The
-# triggers, the RLS policies, the grants, the ranking RPCs and the 39 sim
+# triggers, the RLS policies, the grants, the ranking RPCs and the 46 sim
 # assertions were verified only by hand, on one machine, and recorded in
 # BUG-TRACKER.md afterwards — which is how B024 shipped through a green run of
 # both paths that are convenient to test locally.
@@ -113,7 +113,15 @@ jobs:
       - name: Nutrition fixtures — committed labels vs. the registry
         run: $PSQL "$DB_URL" -f supabase/tests/nutrition_fixtures.sql
 
-      - name: Simulated population (tiny) + assertions
+      # `small` (250 accounts), not `tiny` (60). Four assertions in
+      # 3_sim_verify.sql gate on `v_users >= 250` — E3 (the exposure tail) and
+      # the whole of group G, which includes **G3, the only automated guard on
+      # `sim.fork_bias` and therefore on MOST FORKED ranking anything at all**.
+      # At `tiny` the shelf RPCs were executed but their row counts never
+      # asserted, so `ALL CHECKS PASSED` here meant 42 of 46 and said nothing
+      # about it. Phase 26's shelves are a large part of what this job exists to
+      # protect; the extra population costs a couple of seconds per path.
+      - name: Simulated population (small) + assertions
         run: |
           $PSQL "$DB_URL" -f supabase/sim/0_sim_schema.sql
           # A no-op on a fresh runner, and deliberate anyway: the generator is
@@ -122,7 +130,7 @@ jobs:
           # (B054). Cheap insurance against a future reordering of this job.
           $PSQL "$DB_URL" -f supabase/sim/9_sim_teardown.sql
           $PSQL "$DB_URL" -f supabase/sim/1_sim_dishes.sql
-          $PSQL "$DB_URL" -c "insert into sim.config (key, value) values ('preset','tiny'),('seed','20260820') on conflict (key) do update set value = excluded.value;"
+          $PSQL "$DB_URL" -c "insert into sim.config (key, value) values ('preset','small'),('seed','20260820') on conflict (key) do update set value = excluded.value;"
           $PSQL "$DB_URL" -f supabase/sim/2_sim_generate.sql
           $PSQL "$DB_URL" -f supabase/sim/3_sim_verify.sql
 
@@ -172,6 +180,12 @@ jobs:
           $PSQL "$DB_URL" -c "select count(*) from chefs_leaderboard(5, 0);"
           $PSQL "$DB_URL" -c "select count(*) from chefs_tier_counts();"
           $PSQL "$DB_URL" -c "select count(*) from search_foods('butter', 5);"
+          # Deliberately a TWO-argument call on the path where the old overload
+          # would still be alive: Phase 31 added `p_offset`, and a `chef_top_recipes`
+          # whose previous signature survived today's baseline fails 42725 here
+          # rather than on a visitor's chef page (B024).
+          $PSQL "$DB_URL" -c "select count(*) from chef_top_recipes((select id from profiles order by id limit 1), 3);"
+          $PSQL "$DB_URL" -c "select count(*) from chef_trending_recipes((select id from profiles order by id limit 1), 5, 0);"
 
       # A failure above leaves the stack running; this frees the runner either
       # way and keeps the logs from ending on a Docker teardown error.

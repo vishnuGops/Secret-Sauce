@@ -84,7 +84,10 @@ drop function if exists chef_score(bigint, bigint, bigint) cascade;
 drop function if exists chef_tier_for(numeric) cascade;
 drop function if exists chefs_leaderboard(int, int) cascade;
 drop function if exists chefs_tier_counts() cascade;
+-- chef_top_recipes signatures, oldest first (B024): Phase 31 added `p_offset`.
 drop function if exists chef_top_recipes(uuid, int) cascade;
+drop function if exists chef_top_recipes(uuid, int, int) cascade;
+drop function if exists chef_trending_recipes(uuid, int, int) cascade;
 drop function if exists chef_standing(uuid) cascade;
 -- seed_recipe signatures, oldest first. Each parameter-list change leaves the
 -- previous overload behind, so every historical signature stays listed here.

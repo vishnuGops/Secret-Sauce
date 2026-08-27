@@ -1883,15 +1883,16 @@ end $$;
 
 -- A chef's own recipes, ranked by what each one contributes to their score.
 --
--- This is the "Top recipes" list in the expanded chef card, and the ordering is
--- the point: `chef_score(...)` per recipe is the same function the leaderboard
--- sums per chef, so the list cannot disagree with the number it explains.
--- PostgREST cannot `order` by that expression, which is why the client calls an
--- RPC instead of the table.
+-- This is `/chef/:id`'s **Popular** tab, and the ordering is the point:
+-- `chef_score(...)` per recipe is the same function the leaderboard sums per
+-- chef, so the list cannot disagree with the score panel sitting directly above
+-- it. One formula, not a second definition of popular (Gotcha 19's rule applied
+-- to a ranking rather than a constant). PostgREST cannot `order` by that
+-- expression, which is why the client calls an RPC instead of the table.
 --
 -- `setof recipes` like the three Discovery RPCs above, so the caller reuses
 -- `kRecipeSelect` (the `recipes_owner_id_fkey` embedding) and the same `Recipe`
--- decode path. `stable`, invoker-rights, `anon`-callable — the card is
+-- decode path. `stable`, invoker-rights, `anon`-callable — the page is
 -- signed-out safe like the board.
 --
 -- `visibility = 'public'` is filtered **explicitly** rather than left to RLS:
@@ -1899,11 +1900,22 @@ end $$;
 -- recipes here and read a different list than everyone else — the same trap
 -- documented on `chefs_leaderboard`.
 --
+-- `p_offset` (Phase 31) is what turned this from the dialog's fixed top-3 into a
+-- pageable tab. It also makes the ordering's totality load-bearing rather than
+-- cosmetic: `offset` over a partial order shows one recipe twice and hides
+-- another (Gotcha 24), which a top-3 with no second page could never expose.
+--
 -- Every historical signature must be dropped in the file that recreates the
 -- function (B024): `create or replace` cannot change a return type or an
--- argument list, and a survivor makes the call ambiguous (42725).
+-- argument list, and a survivor makes the call ambiguous (42725). The two-arg
+-- form below is exactly that survivor — a 2-argument call now resolves to this
+-- function through `p_offset`'s default, but only once the old one is gone.
 drop function if exists chef_top_recipes(uuid, int);
-create or replace function chef_top_recipes(p_chef uuid, p_limit int default 3)
+create or replace function chef_top_recipes(
+  p_chef uuid,
+  p_limit int default 3,
+  p_offset int default 0
+)
 returns setof recipes
 language sql
 stable
@@ -1919,13 +1931,82 @@ as $$
            r.like_count desc,
            r.created_at desc,
            r.id
-  limit p_limit;
+  limit p_limit offset p_offset;
 $$;
 
 do $$
 begin
   if exists (select 1 from pg_roles where rolname = 'anon') then
-    execute 'grant execute on function chef_top_recipes(uuid, int) to anon, authenticated';
+    execute 'grant execute on function chef_top_recipes(uuid, int, int) to anon, authenticated';
+  end if;
+end $$;
+
+-- The same chef's recipes, ranked by the engagement they earned in the **last
+-- seven days** — `/chef/:id`'s Trending tab (Phase 31).
+--
+-- Three deliberate differences from `recipes_trending`, and each one exists
+-- because this ranks *one chef's* catalogue rather than the whole vault:
+--
+--  1. **No `created_at` window.** The global shelf only considers recipes
+--     published in the last 30 days. A chef publishes across years — the sim
+--     spreads a career over 24 months — so that filter would empty this tab for
+--     most chefs on the board. The window here is on the *engagement*, not on
+--     the recipe, which is the question the tab actually asks.
+--  2. **Counted from the logs, not the counters.** `recipes.like_count` /
+--     `view_count` are lifetime totals with no date on them, so a window has to
+--     read `recipe_likes.created_at` and `recipe_views.viewed_at`. This is the
+--     first ranking in the schema to do that; `recipe_likes_recipe_idx` is
+--     `(recipe_id, created_at desc)` precisely for it.
+--  3. **Anonymous views do not count, and a viewer counts once.**
+--     `count(distinct v.user_id)` with `user_id is not null`, matching what
+--     `on_view_insert` does to `recipes.view_count` (Gotcha 10 / B012). `anon`
+--     holds `insert` on `recipe_views`, so counting raw rows would let an
+--     unauthenticated loop rank any recipe first — the exact hole the counter
+--     trigger was written to close, and re-opening it in a new ranking would
+--     not show up as a regression anywhere.
+--
+-- Weighting is `likes × 2 + viewers`: a like is a deliberate act and a view is
+-- ambient, so a handful of likes should outrank a wave of passers-by without
+-- drowning them out entirely.
+--
+-- **The ranking never empties the tab.** A chef with no engagement this week
+-- scores 0 on every recipe and falls through to `created_at desc, id` — their
+-- catalogue, newest first, which is a truthful "nothing is moving right now"
+-- rather than an empty state that reads like a broken page. That tie-break is
+-- also the total order `p_offset` needs (Gotcha 24).
+-- No B024 drop list yet — this signature is the first. Add one here the moment
+-- the argument list changes.
+create or replace function chef_trending_recipes(
+  p_chef uuid,
+  p_limit int default 20,
+  p_offset int default 0
+)
+returns setof recipes
+language sql
+stable
+as $$
+  select r.*
+  from recipes r
+  where r.owner_id = p_chef
+    and r.visibility = 'public'
+  order by (
+      (select count(*) from recipe_likes l
+        where l.recipe_id = r.id
+          and l.created_at >= now() - interval '7 days') * 2
+    + (select count(distinct v.user_id) from recipe_views v
+        where v.recipe_id = r.id
+          and v.user_id is not null
+          and v.viewed_at >= now() - interval '7 days')
+    ) desc,
+    r.created_at desc,
+    r.id
+  limit p_limit offset p_offset;
+$$;
+
+do $$
+begin
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'grant execute on function chef_trending_recipes(uuid, int, int) to anon, authenticated';
   end if;
 end $$;
 

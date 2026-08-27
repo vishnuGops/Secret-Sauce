@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +42,11 @@ class ChefPage extends StatelessWidget {
       overrides: [
         viewedChefIdProvider.overrideWithValue(chefId),
         chefRecipesProvider.overrideWith(ChefRecipesNotifier.new),
+        // Scoped for the same reason as the notifier: `/chef/:id` is pushed on
+        // the root navigator, so two chef pages can be on the stack at once and
+        // a root-level selection would have the one underneath silently
+        // re-sorting itself.
+        chefSortProvider.overrideWith((ref) => ChefSort.all),
       ],
       child: _ChefPageBody(chefId: chefId),
     );
@@ -154,11 +161,7 @@ class _Loaded extends StatelessWidget {
         SliverPadding(
           padding: EdgeInsets.fromLTRB(pad, pad, pad, AppSpacing.sm),
           sliver: SliverToBoxAdapter(
-            // `countOf` singularizes, so a one-recipe chef reads `1 public
-            // recipe` rather than B031's `1 public recipes`.
-            child: ChefKicker(
-              text: countOf(data.profile.publicRecipeCount, 'public recipes'),
-            ),
+            child: _CatalogueHeader(count: data.profile.publicRecipeCount),
           ),
         ),
         RecipeAsyncSliverGrid<ChefRecipesNotifier>(
@@ -177,6 +180,62 @@ class _Loaded extends StatelessWidget {
               message: 'When this chef publishes a recipe it will appear here.',
             ),
           ),
+        ),
+      ],
+    );
+  }
+}
+
+/// The count, and the sort the grid under it is in (Phase 31).
+///
+/// One empty state for all three tabs on purpose: the sorts are three orderings
+/// of the same set, so a chef whose Popular tab is empty has no public recipes
+/// at all — and `chef_trending_recipes` falls through to newest-first rather
+/// than returning nothing for a quiet week, so "nothing trending" is not a
+/// state this page can reach.
+class _CatalogueHeader extends ConsumerWidget {
+  const _CatalogueHeader({required this.count});
+
+  final int count;
+
+  /// Left to itself the pill would stretch across the whole 1140px of an
+  /// expanded page for three one-word segments. Scaled by text so the labels
+  /// still fit at 2.0× instead of all three ellipsising into `A… P… T…`.
+  static const double maxTabsWidth = 420;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sort = ref.watch(chefSortProvider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // `countOf` singularizes, so a one-recipe chef reads `1 public recipe`
+        // rather than B031's `1 public recipes`. It counts the catalogue, not
+        // the tab — all three tabs hold the same recipes.
+        ChefKicker(text: countOf(count, 'public recipes')),
+        const SizedBox(height: AppSpacing.sm),
+        // The `LayoutBuilder` sits here rather than inside the pill because
+        // this is the bounded position (Gotcha 25): the sliver hands its child
+        // the full cross-axis extent, and the pill's `Row` of `Expanded`
+        // segments needs a real width to divide.
+        LayoutBuilder(
+          builder:
+              (context, constraints) => SizedBox(
+                width: math.min(
+                  constraints.maxWidth,
+                  maxTabsWidth * context.textScale,
+                ),
+                child: ChefPillTabs<ChefSort>(
+                  options: ChefSort.values,
+                  selected: sort,
+                  labelOf: (option) => option.label,
+                  onSelected:
+                      (option) =>
+                          ref.read(chefSortProvider.notifier).state = option,
+                ),
+              ),
         ),
       ],
     );

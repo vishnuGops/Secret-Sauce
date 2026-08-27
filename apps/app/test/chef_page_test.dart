@@ -40,6 +40,11 @@ class _FakeChefRepository implements ChefRepository {
   final ChefStanding? result;
   final bool fail;
 
+  /// Every ranking the page asked for: which RPC, for whom, and the page
+  /// window. The two tabs are indistinguishable on screen — same cards, one
+  /// order apart — so the request is the only thing worth asserting.
+  final List<(String, String, int, int)> calls = [];
+
   @override
   Future<ChefStanding?> standing(String chefId) {
     if (fail) return Future.error(Exception('boom'));
@@ -51,8 +56,24 @@ class _FakeChefRepository implements ChefRepository {
       throw UnimplementedError();
 
   @override
-  Future<List<Recipe>> topRecipes(String chefId, {int limit = 3}) =>
-      throw UnimplementedError();
+  Future<List<Recipe>> topRecipes(
+    String chefId, {
+    int limit = 3,
+    int offset = 0,
+  }) async {
+    calls.add(('top', chefId, limit, offset));
+    return offset == 0 ? [_recipe('pop', 'Most Liked Thing')] : const [];
+  }
+
+  @override
+  Future<List<Recipe>> trendingRecipes(
+    String chefId, {
+    int limit = 20,
+    int offset = 0,
+  }) async {
+    calls.add(('trending', chefId, limit, offset));
+    return offset == 0 ? [_recipe('trend', 'Hot This Week')] : const [];
+  }
 
   @override
   Future<Map<ChefTier, int>> tierCounts() => throw UnimplementedError();
@@ -110,13 +131,14 @@ Widget _app({
   bool noProfile = false,
   List<List<Recipe>> pages = const [],
   _FakeRecipeRepository? recipes,
+  _FakeChefRepository? chefs,
   double textScale = 1.0,
   String chefId = 'ssk',
 }) {
   return ProviderScope(
     overrides: [
       chefRepositoryProvider.overrideWithValue(
-        _FakeChefRepository(result: standing, fail: standingFails),
+        chefs ?? _FakeChefRepository(result: standing, fail: standingFails),
       ),
       profileRepositoryProvider.overrideWithValue(
         _FakeProfileRepository(
@@ -270,6 +292,82 @@ void main() {
 
       // You are on their page; naming them on each of their own cards is noise.
       expect(find.byType(ChefBadge), findsNothing);
+    });
+  });
+
+  // Phase 31. All three tabs show the same recipes in three orders, so nothing
+  // on screen distinguishes them — the assertion has to be which read was made.
+  group('the sort tabs', () {
+    testWidgets('default to All, which is the plain table read', (
+      tester,
+    ) async {
+      _size(tester, 1000);
+      final chefs = _FakeChefRepository();
+      final recipes = _FakeRecipeRepository(
+        pages: [
+          [_recipe('r1', 'Newest Thing')],
+        ],
+      );
+      await tester.pumpWidget(_app(chefs: chefs, recipes: recipes));
+      await tester.pumpAndSettle();
+
+      expect(find.text('All'), findsOneWidget);
+      expect(find.text('Popular'), findsOneWidget);
+      expect(find.text('Trending'), findsOneWidget);
+
+      // `all` costs no RPC: PostgREST can order by `created_at` on its own.
+      expect(recipes.calls.single, ('ssk', kRecipePageSize, 0));
+      expect(chefs.calls, isEmpty);
+    });
+
+    testWidgets('send Popular and Trending to their own RPCs', (tester) async {
+      _size(tester, 1000);
+      final chefs = _FakeChefRepository();
+      await tester.pumpWidget(_app(chefs: chefs));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Popular'));
+      await tester.pumpAndSettle();
+      expect(chefs.calls.last, ('top', 'ssk', kRecipePageSize, 0));
+      expect(find.text('Most Liked Thing'), findsOneWidget);
+
+      await tester.tap(find.text('Trending'));
+      await tester.pumpAndSettle();
+      expect(chefs.calls.last, ('trending', 'ssk', kRecipePageSize, 0));
+      expect(find.text('Hot This Week'), findsOneWidget);
+      // The previous tab's rows are gone, not appended: a sort is a new list.
+      expect(find.text('Most Liked Thing'), findsNothing);
+    });
+
+    testWidgets('restart paging at offset 0 when the sort changes', (
+      tester,
+    ) async {
+      // Gotcha 24 one level in: carrying an offset across a re-sort pages one
+      // ordering's window against another ordering's rows, which shows a recipe
+      // twice and hides another with no error anywhere.
+      _size(tester, 1000);
+      final chefs = _FakeChefRepository();
+      final recipes = _FakeRecipeRepository(
+        pages: [
+          [for (var i = 0; i < kRecipePageSize; i++) _recipe('r$i', 'R$i')],
+          [_recipe('last', 'Last One')],
+        ],
+      );
+      await tester.pumpWidget(_app(chefs: chefs, recipes: recipes));
+      await tester.pumpAndSettle();
+
+      await tester.scrollUntilVisible(find.text('Load more'), 600);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Load more'));
+      await tester.pumpAndSettle();
+      expect(recipes.calls.last, ('ssk', kRecipePageSize, kRecipePageSize));
+
+      await tester.scrollUntilVisible(find.text('Popular'), -600);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Popular'));
+      await tester.pumpAndSettle();
+
+      expect(chefs.calls.single, ('top', 'ssk', kRecipePageSize, 0));
     });
   });
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:app/features/chefs/chef_detail_common.dart';
 import 'package:app/features/chefs/chefs_hero.dart';
 import 'package:app/features/chefs/chefs_providers.dart';
 import 'package:app/routing/app_router.dart';
@@ -303,6 +304,9 @@ class _PanelFooter extends ConsumerWidget {
 }
 
 /// Score / Momentum / New. Two of the three are disabled — see [BoardSort].
+///
+/// The pill itself moved to [ChefPillTabs] (Phase 31) so `/chef/:id` renders the
+/// same control rather than a look-alike.
 class _SortTabs extends StatelessWidget {
   const _SortTabs({required this.selected, required this.onSelected});
 
@@ -311,58 +315,13 @@ class _SortTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
-
-    return Container(
-      padding: const EdgeInsets.all(3),
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerHigh,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Row(
-        children: [
-          for (final sort in BoardSort.values)
-            Expanded(
-              child: notYetTooltip(
-                enabled: sort.enabled,
-                message: 'Needs a score history — not wired up yet',
-                child: InkWell(
-                  onTap: sort.enabled ? () => onSelected(sort) : null,
-                  borderRadius: BorderRadius.circular(999),
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    decoration: BoxDecoration(
-                      color:
-                          sort == selected
-                              ? scheme.surfaceContainerLowest
-                              : null,
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                    child: Text(
-                      sort.label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        fontWeight:
-                            sort == selected
-                                ? FontWeight.w800
-                                : FontWeight.w700,
-                        color:
-                            sort == selected
-                                ? scheme.onSurface
-                                : scheme.onSurfaceVariant.withValues(
-                                  alpha: sort.enabled ? 1 : 0.5,
-                                ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
+    return ChefPillTabs<BoardSort>(
+      options: BoardSort.values,
+      selected: selected,
+      labelOf: (sort) => sort.label,
+      onSelected: onSelected,
+      enabledOf: (sort) => sort.enabled,
+      disabledMessage: 'Needs a score history — not wired up yet',
     );
   }
 }

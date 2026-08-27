@@ -67,8 +67,18 @@ class _FakeChefRepository implements ChefRepository {
   // These tests only exercise the nav chrome; an empty board never reaches a
   // chef page, which is the only caller of either method.
   @override
-  Future<List<Recipe>> topRecipes(String chefId, {int limit = 3}) async =>
-      const [];
+  Future<List<Recipe>> topRecipes(
+    String chefId, {
+    int limit = 3,
+    int offset = 0,
+  }) async => const [];
+
+  @override
+  Future<List<Recipe>> trendingRecipes(
+    String chefId, {
+    int limit = 20,
+    int offset = 0,
+  }) async => const [];
 
   @override
   Future<ChefStanding?> standing(String chefId) async => null;
