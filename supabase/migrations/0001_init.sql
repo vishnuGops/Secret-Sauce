@@ -1547,6 +1547,41 @@ insert into storage.buckets (id, name, public)
 values ('avatars', 'avatars', true)
 on conflict (id) do nothing;
 
+-- 32a4: what may be put in them. The policies below decide *who* writes and
+-- *where*; until now nothing decided **what**, so a signed-in user could store
+-- an object of **unbounded size** and of **any declared content type** — a zip,
+-- a video, a 500 MB file — in a bucket that is world-readable by design.
+-- Storage enforces these two columns itself and refuses the upload at the API
+-- edge, which is the only layer that can: RLS sees an `objects` row, not the
+-- bytes or the declared type.
+--
+-- **What this does not close:** object *count*. A per-object limit bounds one
+-- upload, not a thousand of them, and nothing here caps per-user total bytes.
+-- Say so rather than letting the quota question read as settled.
+--
+-- 5 MB and three image types. Note what the app actually sends, because it is
+-- not what the allowlist implies: `StorageService` declares `image/jpeg` on
+-- **every** upload (its `contentType` default, which no call site overrides),
+-- and `uploadAvatar` has no callers at all — nothing in the app writes
+-- `avatars`. So the MIME allowlist cannot break the app path, and by the same
+-- token `image/png`/`image/webp` are entries for a client that does not exist
+-- yet; the allowlist is a check on a client-supplied header. **The size limit is
+-- the load-bearing half**, and it is reachable — `maxWidth` is honoured by the
+-- mobile pickers but ignored outright by the desktop ones, so the editor guards
+-- the byte count itself.
+--
+-- An `update`, not part of the insert: the buckets predate this and every
+-- database that already has them would otherwise keep the unbounded version
+-- (`on conflict do nothing`), which is the same silent-no-op shape 32a2's
+-- constraint guard fell into.
+update storage.buckets
+   set file_size_limit    = 5242880,
+       allowed_mime_types = array['image/jpeg', 'image/png', 'image/webp']
+ where id in ('recipe-images', 'avatars')
+   and (file_size_limit is distinct from 5242880
+        or allowed_mime_types is distinct from
+           array['image/jpeg', 'image/png', 'image/webp']);
+
 -- Anyone can read (public buckets); only authenticated users can write, and only
 -- within a folder prefixed by their own user id (e.g. "<uid>/cover.jpg").
 drop policy if exists "recipe images readable" on storage.objects;

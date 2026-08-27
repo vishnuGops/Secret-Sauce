@@ -430,9 +430,20 @@ non-vacuous, `melos run db:rls` + the Gotcha 6 upgrade path before anything reac
       every section-C refusal to "not even an `edit` share is a write right" is carried by a check
       rather than by a comment. Seven proven non-vacuous by breaking each lock in turn (**126
       checks** after the owner's-seat pair D32/D33 replaced a duplicate)
-- [ ] **32a4 — Storage bucket hardening**: set `file_size_limit` + `allowed_mime_types` on
-      `recipe-images` and `avatars` — today an authenticated user can fill the quota with
-      arbitrary files at public URLs
+- [x] **32a4 (B091) — Storage bucket hardening — DONE 2026-08-26.** Both buckets carry
+      `file_size_limit = 5 MB` and `allowed_mime_types = {image/jpeg, image/png, image/webp}`.
+      The policies decided *who* writes and *where*; nothing decided **what**, so a signed-in user
+      could store an object of unbounded size and any declared type in a world-readable bucket.
+      (Object *count* is untouched — a per-object limit is not a quota.) Written as an `update`,
+      not part of the bucket insert: `on conflict do nothing` would skip every database that
+      already has them, the silent-no-op shape 32a2 hit. **Exercised against the real Storage API**
+      (RLS sees an object row, not the bytes): 2 KB PNG `200`, 6 MB PNG `413`, `text/plain` `415`,
+      another user's folder `403` — with rows 2 and 3 each flipping to `200` when its own column is
+      cleared. `rls_matrix.sql` **S1** now asserts the *configuration* (a plain row read, which is
+      what drifts via a dashboard edit), and the editor guards bytes against `kMaxUploadBytes`
+      before uploading, because `maxWidth` is ignored by the desktop pickers and Android re-encodes
+      alpha picks as lossless PNG. Review also corrected the record: every app upload declares
+      `image/jpeg` and `uploadAvatar` has no callers, so the size limit is the load-bearing half
 
 ### 32b — SQL performance
 
@@ -644,10 +655,14 @@ designed onto data that does not exist. See the "Seed-data fit" gate in
 
 #### BL-6 — environment-dependent verification gaps
 
-Not code debt — things this machine cannot exercise. **Fork from the UI** and **Storage image
-upload** are still unexercised end-to-end; the **mobile/emulator** manual pass is blocked with no
-Android SDK installed. **Trigger:** a machine with the Android SDK, and a local-stack session for
-the two flows.
+Not code debt — things this machine cannot exercise. **Fork from the UI** is still unexercised
+end-to-end; the **mobile/emulator** manual pass is blocked with no Android SDK installed.
+**Trigger:** a machine with the Android SDK, and a local-stack session for the fork flow.
+
+**Storage upload came off this list on 2026-08-26** (32a4), partly: an upload was driven against
+the local stack's Storage API with a real signed-in JWT — the folder policy, the size limit and
+the MIME allowlist all answered correctly. What is still unexercised is the **app's** picker path
+(`image_picker` → `StorageService.uploadRecipeImage`), not the bucket contract it writes into.
 
 **Screenshots are no longer on this list.** Chrome was installed 2026-08-22, so the B028 procedure
 (release build + `npx serve` + Playwright) runs here; Phase 26 used it and Phase 23's outstanding
@@ -675,6 +690,7 @@ Closed: [supabase/tests/rls_matrix.sql](../supabase/tests/rls_matrix.sql) (`melo
 **102 checks** across anon / owner / shared-with / stranger, rolled back, wired into CI
 (`database.yml`). Found B061 on its first complete run. **Standing rule:** any change to a policy,
 a `security definer` function, or the column grants → run it, and add a check for any new surface
-in the same change. Still not covered: Storage bucket RLS (needs the storage container, not SQL)
+in the same change. Still not covered by the matrix: Storage bucket RLS (needs the storage
+container, not SQL — though 32a4 exercised the bucket contract itself against the real API)
 and the PostgREST edge (`packages/core/test/`'s recording client is the other half). Full history
 and the coverage table: [archive/ROADMAP-phases-0-31.md](./archive/ROADMAP-phases-0-31.md#bl-7--the-rls-acceptance-matrix-as-a-signed-in-user--done-2026-08-23).

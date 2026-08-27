@@ -346,12 +346,45 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
   }
 
   Future<void> _pickCover() async {
-    final picked = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 1600,
-    );
+    final ImagePicker picker = ImagePicker();
+    final XFile? picked;
+    try {
+      picked = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1600,
+        // Shrinks the common case before the size guard below ever fires. It is
+        // an optional complement, not the guard: the desktop pickers ignore
+        // every option they are given.
+        imageQuality: 85,
+      );
+    } catch (e) {
+      // A platform-channel failure (a denied permission, a missing entitlement)
+      // is a message, not an unhandled async error thrown past the widget.
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(friendlyError(e))));
+      }
+      return;
+    }
     if (picked == null) return;
     final bytes = await picked.readAsBytes();
+    // `file_size_limit` on the bucket is 5 MB (32a4) and `maxWidth` does not
+    // reliably keep us under it: the Windows/Linux pickers ignore their options
+    // outright, web skips the resize for gifs, and Android re-encodes an
+    // alpha-bearing pick as lossless PNG. Without this the refusal surfaces from
+    // inside `_save`, so the whole save appears to fail and the message names no
+    // size. Checked here, where the file was chosen.
+    if (bytes.length > kMaxUploadBytes) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('That image is over 5 MB. Please pick a smaller one.'),
+          ),
+        );
+      }
+      return;
+    }
     setState(() => _pendingCoverBytes = bytes);
   }
 

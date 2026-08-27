@@ -1061,6 +1061,19 @@ ran past the portrait edge at 3.0× (B039).
   read/insert/update/**delete** set, each scoped to a folder named for the uploader's uid — the
   avatars bucket was missing delete until OPT-A6, so every superseded avatar stayed readable at a
   guessable path in a public bucket.
+- **Bucket contents are bounded (32a4)**: `file_size_limit` 5 MB and `allowed_mime_types`
+  `{image/jpeg, image/png, image/webp}` on both. The policies say *who* may write and *where*;
+  only the bucket config says **what**, and without it a signed-in user could store an object of
+  unbounded size and of any declared type in a bucket that is world-readable by design. It does
+  **not** bound object count — a per-object limit is not a quota. Enforced by Storage at the API
+  edge (`413` / `415`); RLS cannot see the bytes or the declared type, so `rls_matrix.sql` **S1**
+  asserts the *configuration* (a plain row read — the thing a dashboard edit silently changes)
+  while the enforcement is verified by a real upload. Set by a guarded `update`, never inside the
+  bucket `insert`: `on conflict do nothing` would skip every database that already has them.
+  Note what the app actually sends: `StorageService` declares `image/jpeg` on every upload and
+  `uploadAvatar` has no call sites, so the MIME allowlist cannot break the app path and the size
+  limit is the half that bites. `kMaxUploadBytes` in `core` mirrors `file_size_limit` so the editor
+  can refuse an oversized pick with a sentence instead of a failed save — change both together.
 - **Error text is mapped, never dumped** (OPT-A4). Every user-facing failure goes through
   `friendlyError()` in `core`, which turns a `PostgrestException` into one actionable sentence and
   keeps the raw object in `debugPrint`. Screens used to render `e.toString()`, which put table

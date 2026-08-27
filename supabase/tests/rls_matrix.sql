@@ -214,6 +214,19 @@ begin
   insert into food_unit (spelling, unit_key, class, factor)
   values ('bl7-gram', 'bl7-gram', 'mass', 1);
 
+  -- S1 (32a4): the bucket contract. **Configuration, not enforcement** — Storage
+  -- applies these two columns at its own API edge, which no SQL here can reach,
+  -- and RLS never sees the bytes. But the config *is* a plain row, and it is the
+  -- part that realistically drifts: a dashboard edit on the hosted project, or a
+  -- change here that remembers one bucket and forgets the other. Read as
+  -- `postgres`, before the role switches, because `storage.buckets` is not
+  -- readable by the API roles.
+  select count(*) into n from storage.buckets
+   where id in ('recipe-images', 'avatars')
+     and file_size_limit = 5242880
+     and allowed_mime_types = array['image/jpeg', 'image/png', 'image/webp'];
+  v_log := v_log || format(E'%s\tS1  config · both buckets carry the 32a4 size + MIME limits\t%s of 2', n = 2, n);
+
   -- ==========================================================================
   -- A. anon — already proven in Phase 26; kept as a regression guard, and
   --    because a signed-in result only means something next to a signed-out one.

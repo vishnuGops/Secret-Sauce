@@ -513,12 +513,52 @@ the owner *can* move `status` — without which a change locking the owner out e
 every other check in the file. `nutrition_estimate`, `nutrition_fixtures`, `3_sim_verify` green.
 No Dart changed, so `analyze` and `test` were not re-run for this band.
 
-**32a4 — Storage hardening.** Set `file_size_limit` (suggest 5 MB) and `allowed_mime_types`
-(`image/jpeg`, `image/png`, `image/webp`) on both buckets — `update storage.buckets set …` in
-0001, idempotent. No matrix coverage possible (documented limit), and the app's upload flow is
-not headlessly drivable (BL-6) — so verify via the Storage **REST API** directly against the
-local stack: a `curl` POST of an oversized file and of a `text/plain` file with a signed-in JWT,
-both must be refused; a small png must land. Update SDS §9.
+**32a4 — Storage hardening — DONE 2026-08-26.** Both buckets carry `file_size_limit = 5242880`
+and `allowed_mime_types = {image/jpeg, image/png, image/webp}`, matching what the app actually
+sends (one image from `image_picker`). Written as a guarded `update storage.buckets`, **not** as
+part of the `insert … on conflict do nothing`: the buckets predate this, so folding it into the
+insert would land on a fresh database and silently skip every database that already has them —
+32a2's constraint-guard trap, one object type over.
+
+**Verified through the real Storage API**, which is the only layer that can enforce this: RLS sees
+an object row, not the bytes or the declared MIME type, so no `rls_matrix.sql` check can reach it.
+A throwaway signup against the local stack, then four uploads to `recipe-images/<uid>/`:
+
+| Upload | Result |
+| --- | --- |
+| 2 KB `image/png` | **200** — the normal path still works |
+| 6 MB `image/png` | **413** `Payload too large` |
+| 6 B `text/plain` | **415** `invalid_mime_type` |
+| valid png into another user's folder | **403** — the pre-existing folder policy |
+
+Non-vacuity, per lock rather than in aggregate: with both columns set back to null, **row 2 flips
+200** (the size limit is what refused it) and **row 3 flips 200** (the MIME allowlist is what
+refused that one). Row 1 was 200 either way and proves only that the normal path still works; row 4
+is the pre-existing folder policy and is unaffected by this change. The throwaway user and all
+three objects were removed afterwards — note `storage.objects` refuses a direct `delete` ("Use the
+Storage API instead"), so cleanup goes through the API with the service key.
+
+**Two things the review corrected about what this change is.** The threat it closes is *one object
+of unbounded size and any declared type* — **not** quota exhaustion: a per-object limit says
+nothing about object *count*, and nothing here caps per-user total bytes. And the app does not
+send what the allowlist implies: `StorageService` declares `image/jpeg` on **every** upload (a
+default no call site overrides) and `uploadAvatar` has no callers at all, so nothing in the app
+writes `avatars`. Two consequences worth keeping — the MIME allowlist cannot break the app path
+(and `image/png`/`image/webp` are entries for a client that does not exist yet), and **the size
+limit is the load-bearing half**.
+
+Which is why the editor now checks bytes itself against `kMaxUploadBytes` in `core` (the layer that
+knows the bucket, mirroring `file_size_limit` the way `ChefScoring` mirrors the score weights).
+`maxWidth: 1600` does not keep uploads under 5 MB on its own: the Windows and Linux `image_picker`
+implementations ignore their options outright, web skips the resize for gifs, and Android
+re-encodes an alpha-bearing pick as lossless PNG. Without the guard the refusal surfaces from
+inside `_save`, so the *save* appears to fail and the message names no size. `_pickCover` also
+gained the try/catch that 32c4 was going to add and an `imageQuality: 85` that shrinks the common
+case.
+
+**This also closes half of a standing BL-6 gap**: "Storage image upload unexercised end-to-end" was
+true because nobody had driven an upload from outside the app. It has now been driven — what
+remains unexercised is the *app's* picker path, not the bucket contract.
 
 ### 32b — SQL performance
 

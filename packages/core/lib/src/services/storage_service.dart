@@ -2,6 +2,19 @@ import 'dart:typed_data';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+/// The bucket's own `file_size_limit` (32a4), restated here because the client
+/// has to know it: Storage refuses a larger upload at the API edge with a `413`
+/// that reaches the app as a generic `StorageException`, and the picker cannot
+/// prevent it on its own — the desktop `image_picker` implementations ignore
+/// `maxWidth` outright, and Android re-encodes an alpha-bearing image as
+/// lossless PNG. A caller that checks this before uploading turns a failed save
+/// into a sentence about the file.
+///
+/// Mirrors `storage.buckets.file_size_limit` in `0001_init.sql` — change both
+/// together, the same obligation `ChefScoring` carries for the score weights
+/// (Gotcha 19).
+const int kMaxUploadBytes = 5 * 1024 * 1024;
+
 /// Handles image/file uploads to Supabase Storage.
 ///
 /// Files are stored under a per-user folder (`<uid>/...`) so that storage RLS
