@@ -58,9 +58,15 @@ secret-sauce/
 │   ├── recipes/<slug>.json    #   one per file — the filename IS the identity
 │   ├── schema.json            #   the format, field by field, mapped to columns
 │   └── README.md              #   authoring workflow
-├── simData/                   # simulation dish LIBRARY (Phase 24, 25/120 authored)
-│   ├── dishes/<slug>.json     #   owner-agnostic; NOT recipes until the generator runs
+├── simData/                   # everything the simulated population is authored from (Phase 24)
+│   ├── dishes/<slug>.json     #   the dish LIBRARY, 73/120. Owner-agnostic; NOT recipes until
+│   │                          #   the generator runs
+│   ├── people.json            #   17 locales x given/family names + bio templates. One locale
+│   │                          #   per actor, so a name is coherent (check H3)
+│   ├── vocab.json             #   66 tags + 40 title templates. ARRAY ORDER IS RANK — the only
+│   │                          #   weight there is; sim.rand_zipf() turns it into a draw
 │   ├── schema.json            #   the 2-key delta from recipeData's format
+│   ├── people.schema.json · vocab.schema.json   # the pool formats, rule by rule
 │   └── README.md              #   authoring workflow + directory coverage rules
 ├── nutritionData/             # food registry for auto nutrition (Phase 29a)
 │   ├── foods.json             #   curated foods: slug, fdc_id, aliases + machine-written
@@ -71,7 +77,7 @@ secret-sauce/
 │                              #   every supabase/migrations/*.sql in order)
 ├── tool/recipe_format.dart    # THE validator — shared by both generators below
 ├── tool/recipes.dart          # validates recipeData/ -> generates seed_recipes.sql
-├── tool/sim.dart              # validates simData/  -> generates sim/1_sim_dishes.sql
+├── tool/sim.dart              # validates ALL of simData/ -> generates the three 1_sim_*.sql
 ├── tool/fdc.dart              # EXTRACT: USDA CSV bundle (path by arg) -> foods.json values
 ├── tool/nutrition.dart        # GEN: nutritionData/ -> supabase/nutrition_foods.sql
 ├── packages/
@@ -136,11 +142,18 @@ secret-sauce/
     │   ├── 0_sim_schema.sql      #   config, personas, presets, registries, rand helpers,
     │   │                         #   nutrition_profile + nutrition_for() (Phase 28)
     │   ├── 1_sim_dishes.sql      #   GENERATED from simData/ — never hand-edit
+    │   ├── 1_sim_people.sql      #   GENERATED — name/bio pools. All three 1_ files are peers:
+    │   ├── 1_sim_vocab.sql       #   GENERATED — tags + title templates. The generator needs
+    │   │                         #   EVERY one of them; an empty sim.title_variant is a
+    │   │                         #   `cross join` against nothing, so it makes ZERO recipes
+    │   │                         #   and reports success (the preflight now refuses it)
     │   ├── 2_sim_generate.sql    #   the generator; counters DERIVED from the engagement log
-    │   ├── 3_sim_verify.sql      #   46 assertions — the only test coverage this SQL has
+    │   ├── 3_sim_verify.sql      #   53 assertions — the only test coverage this SQL has
+    │   ├── 4_sim_rls_smoke.sql   #   the policies per PERSONA as a signed-in sim actor
+    │   │                         #   (`db:sim:rls`) — writes, then rolls back. NOT in db:sim
     │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
     ├── tests/rls_matrix.sql      # the RLS matrix as a SIGNED-IN user (BL-7, `db:rls`) —
-    │                             #   127 checks; makes its own users, then ROLLS BACK
+    │                             #   137 checks; makes its own users, then ROLLS BACK
     ├── tests/nutrition_estimate.sql  # the estimator's ONLY coverage (Phase 29c): fixture
     │                             #   foods/units/trees -> exact labels, then ROLLS BACK
     ├── tests/nutrition_fixtures.sql  # the other half (29d, `db:nutrition:verify`): the
@@ -231,13 +244,13 @@ npx serve -l 8099 build/web            # http://localhost:8099/#/discover
 ```
 
 > **`env.local.json` decides which database you are looking at, and it is not always the hosted
-> one.** As of 2026-08-20 it points at the **local** stack (`http://127.0.0.1:54321`), with the
+> one.** As of 2026-08-20 it points at the **local** stack (`http://127.0.0.1:54621`), with the
 > hosted project's credentials preserved beside it in `apps/app/env.hosted.local.json` — swap the
 > two files to switch back. Both names are git-ignored (`env.local*` / `env.*.local*`); a plain
 > `env.hosted.json` would **not** be — that is exactly the glob B010 was widened to catch, so never
 > save credentials under that name. The local stack needs `supabase start`, and no account in it has
 > a password anyone knows: every seeded account gets a random one (B018), so sign up a fresh user
-> and collect the confirmation mail from Mailpit at `http://127.0.0.1:54324`, not a real inbox.
+> and collect the confirmation mail from Mailpit at `http://127.0.0.1:54624`, not a real inbox.
 
 > **`melos run format` is safe again (B027 fixed by OPT-T4).** It used to break
 > `melos run analyze`: `dart format` picks its style from the _package's_ language version, all
@@ -262,9 +275,13 @@ melos run recipes:check     # fail if that .sql is stale — CI runs this
 # recipeData (tool/recipe_format.dart) — a dish is promoted to curated content by
 # moving the file and deleting its `sim` block. Nothing here is a recipe until
 # supabase/sim/2_sim_generate.sql draws from it (see db:sim below).
-melos run sim:validate      # parse + lint + directory coverage rules
-melos run sim:gen           # regenerate supabase/sim/1_sim_dishes.sql (commit both)
-melos run sim:check         # fail if that .sql is stale — CI runs this
+# THREE sources, three generated loaders, one command each way:
+#   simData/dishes/*.json -> supabase/sim/1_sim_dishes.sql
+#   simData/people.json   -> supabase/sim/1_sim_people.sql
+#   simData/vocab.json    -> supabase/sim/1_sim_vocab.sql
+melos run sim:validate      # parse + lint + directory coverage rules, all three sources
+melos run sim:gen           # regenerate all three .sql files (commit them with the JSON)
+melos run sim:check         # fail if ANY of them is stale — CI runs this
 
 # Food registry (Phase 29). nutritionData/{foods,units}.json -> generated SQL,
 # same pattern as recipes:*. fdc:extract is the one authoring-time exception:
@@ -288,7 +305,7 @@ melos run db:reset    # drop -> create -> nutrition -> seed -> recipes -> sim (~
 # The RLS acceptance matrix as a SIGNED-IN user (BL-7). Additive only in the sense that
 # it writes and then rolls back — it leaves no user, no recipe, no helper function.
 # Run it after ANY change to a policy, a `security definer` function, or the column grants.
-melos run db:rls      # 127 checks across anon / owner / shared-with / stranger
+melos run db:rls      # 137 checks across anon / owner / shared-with / stranger
 
 # Auto-nutrition SQL. Both roll back; run them after touching the estimator, the
 # backfill, nutritionData/, or an auto recipe's ingredients.
@@ -301,9 +318,16 @@ melos run db:nutrition:verify    # 29d: the COMMITTED auto labels vs. the LOADED
 
 # Simulated population (Phase 24). Additive and idempotent; ~10s at the default
 # `medium` preset (1,000 accounts, ~1,670 recipes, ~118k view rows).
-melos run db:sim                          # schema -> dishes -> generate -> verify
+melos run db:sim                          # schema -> the 3 pools -> generate -> verify
 melos run db:sim -- --preset=small --seed=7
-melos run db:sim:verify                   # 46 assertions, read-only
+melos run db:sim:verify                   # 53 assertions, read-only
+# The policies per PERSONA, as a signed-in actor drawn from the sim.actor registry — the
+# gap between db:sim:verify (runs as `postgres`, bypasses every policy) and db:rls (builds
+# its own three-user fixture, where every seat is an owner/sharee/stranger by construction).
+# 79% of simulated accounts own no public recipe; this is the only thing that asks what
+# that account can do. Writes, then rolls back — so it is NOT part of db:sim, which runs
+# inside db:reset. Run it ALONGSIDE db:rls, never instead of it.
+melos run db:sim:rls                      # 130 checks + 6 skipped, 7 personas seated
 melos run db:sim:clean -- --yes           # DESTRUCTIVE: deletes the simulated auth.users
 
 # Backups (32f5, B087). Read-only, and the only undo the free tier gives you.
@@ -558,6 +582,28 @@ a fall-through to `created_at desc, id`, so a quiet week shows the catalogue ins
 page. `chef_top_recipes` gained `p_offset` in the same change, so its old `(uuid, int)` signature is
 dropped in the file that recreates it (B024) and `rls_matrix.sql` **F9** makes a deliberately 2-arg
 call to prove the drop worked.
+**`chef_trending_recipes` is `security definer` as of B092** — it reads `recipe_views` directly and
+`views_select` is `owns_recipe(recipe_id)`, so under invoker rights the viewer term counted zero
+for `anon` and every non-owner and the order silently degraded to likes alone: the chef saw a
+different Trending tab from their own readers. That is the rule for this whole family — **any
+cross-user aggregate over the engagement logs must be `security definer`, or it reads an empty
+table and reports a plausible number** (`saves_select` is `user_id = auth.uid()` too). It is safe
+here only because the function filters `visibility = 'public'` itself; if you write another, filter
+explicitly rather than leaning on the RLS you just removed. `rls_matrix.sql` **F20/F21** pin it as
+*anon and the owner get the same order*.
+
+**Windowed chef engagement (Phase 33)** is the dated half of the same idea and lives beside it:
+`chef_window_stats(days, since, chef)` is the **only** place a window is computed — likes / saves /
+views / ratings / new recipes since a boundary, scored through the real `chef_score()` — and
+`chefs_leaderboard_windowed(days, limit, offset, since)` ranks what it returns and adds no
+arithmetic. Both are `anon`-callable; the first is `security definer` for the reason above. Three
+things carry over to any caller: anonymous views are excluded and a viewer counts once per recipe
+(B012), `dense_rank()` is computed over the whole population with `limit`/`offset` applied outside
+it (Phase 30's lesson), and **`p_since` pins the boundary** — a window measured from `now()` moves
+between page 1 and page 2, which makes `offset` lie even over a total order (Gotcha 24, one level
+out). `chefs_leaderboard` and `chef_standing` gained `created_at` in the same change, in lockstep,
+because they share a return shape on purpose. **There is no client for any of this yet** — the
+Momentum tab, the Month/Week toggle and the `New` sort are still drawn and disabled.
 Details: [SDS §10](./docs/SDS.md#10-chefs-tiers--leaderboard).
 
 Five Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/models/enums.dart):
@@ -576,7 +622,7 @@ Five Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/m
 | `/my`                             | `features/my_recipes`    | My / Shared-with-me tabs, both paged. Sharing is `widgets/share_dialog.dart` (opened from recipe detail; it writes `recipe_shares`) |
 | `/recipe/:id`                     | `features/recipe_detail` | **Two v2 layouts, one `context.isExpanded` branch (Phase 27).** ≥1000: `recipe_detail_expanded.dart` — measured 1140px page, header band, facts strip. <1000 (compact **and** medium): `recipe_detail_compact.dart` — cover-first, facts quad, pinned jump bar, `Ready to cook?` bar. Both place `rail_panel.dart` (`bordered:` is the only difference) and `method_column.dart`. The v1 hero and `recipe_content_views.dart` are **deleted** — don't reintroduce a third layout for the 600–1000 band. `RailPanel` is the tab host (Phase 28): `servings_row.dart` on top, then `Ingredients` / `Nutrition` chips, then `ingredient_rail.dart` or `nutrition_tab.dart`. Rating, like/save, fork, version history; signed-out safe |
 | `/recipe/:id/cook`                | `features/recipe_detail` | **Cook mode** — full-screen, one step at a time, **always dark** (`AppTheme.dark()`, the only screen that overrides the theme; the phone is propped under kitchen lights). `cook_mode_screen.dart` (route + shortcuts) → `cook_step_view.dart` (compact frames C/D, web frame H) → `cook_finish_view.dart` (frame E). Pure derivations in `cook_mode_model.dart`, session + timers in `cook_mode_providers.dart`. Signed-out safe; **not** in `needsAuth`. See "Cook mode" below |
-| `/recipe/new`, `/recipe/:id/edit` | `features/recipe_editor` | `edit_models.dart` holds mutable draft types; save appends a version                                                     |
+| `/recipe/new`, `/recipe/:id/edit` | `features/recipe_editor` | `edit_models.dart` holds mutable draft types; save appends a version. Images — the cover and each step's photo (Phase 33) — go through the one `imagePickerProvider` pick and its 5 MB guard, are held as **bytes on the draft**, and are uploaded inside `_save`: an abandoned edit leaves no orphan object in the bucket |
 | `/profile`                        | `features/profile`       | Current user; reached from the bottom bar on mobile and the avatar menu on web (`myProfileProvider`)                     |
 
 Only `/discover`, `/chefs`, `/my`, `/profile` sit inside the `ShellRoute` (nav chrome); detail,
@@ -799,15 +845,17 @@ the `code-review` skill). The ones you need while _writing_ code:
     responses are fixtures, and RLS, triggers, and constraints are not in the loop. A green run proves
     your models decode; it proves nothing about what the database actually returns. For that,
     verify against a local stack — a throwaway harness under `apps/app/test/` pointed at
-    `http://127.0.0.1:54321` is the practical way to drive real repository code; delete it after,
+    `http://127.0.0.1:54621` is the practical way to drive real repository code; delete it after,
     since no CI job serves PostgREST (`database.yml` starts the database container only).
     **CI now applies the SQL** (`database.yml`, OPT-T1): fresh apply, re-apply, and the Gotcha 6
-    upgrade path, plus the sim's 46 assertions on a **`small`** population — `tiny` gates four of
-    them off, including the only guard on `MOST FORKED` ranking anything (B081). Every statement in *those*
+    upgrade path, plus the sim's 53 assertions on a **`small`** population — `tiny` gates five of
+    them off, including the only guard on `MOST FORKED` ranking anything (B081). CI also runs
+    `sim:rls`, the per-persona smoke, which is the policies as a **real account out of that
+    population** rather than a purpose-built fixture. Every statement in *those*
     steps runs as `postgres`, which bypasses policies — so CI also runs
     [supabase/tests/rls_matrix.sql](supabase/tests/rls_matrix.sql) (**BL-7**, `melos run db:rls`),
     which is the only thing here that exercises RLS as a **signed-in** user. It switches to
-    `set local role authenticated`, runs 127 checks across anon / owner / shared-with / unrelated
+    `set local role authenticated`, runs 137 checks across anon / owner / shared-with / unrelated
     stranger, and rolls the whole transaction back. It closed the class B053 lived in and found
     B061 on its first complete run. **Run it, and add a check to it, whenever you touch a policy, a
     `security definer` function, or the column grants** — a new table with new policies that the
@@ -863,7 +911,8 @@ recipe` lives on the My Recipes header and search in Discover's search bar; putt
     re-inserts the `Recipe` the editor handed it, so
     [edit_models.dart](apps/app/lib/features/recipe_editor/edit_models.dart) must mirror **every**
     column of `Ingredient` and `RecipeStep`, including ones with no input widget yet
-    (`steps.image_url` is carried through verbatim for that reason). It modelled a step as its text
+    (`steps.image_url` was carried through verbatim for years on exactly that basis, and grew its
+    picker in Phase 33 — the mirroring is what made that a UI change and not a migration). It modelled a step as its text
     alone, which both hid `temperature` / `duration_minutes` / `tip` from anyone creating a recipe
     *and* silently wiped them from the seeded recipes on any edit. Add a column to either model and
     you add it to the draft in the same change — `apps/app/test/recipe_editor_test.dart`'s

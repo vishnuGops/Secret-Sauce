@@ -279,14 +279,25 @@ measurement. New `design_system` widgets must be added to the `design_system.dar
 
 ## 8. Generated content and the simulation — High
 
-Two generators (`tool/recipes.dart` → `supabase/seed_recipes.sql`, `tool/sim.dart` →
-`supabase/sim/1_sim_dishes.sql`) and one in-database generator (`supabase/sim/2_sim_generate.sql`).
+Two generators (`tool/recipes.dart` → `supabase/seed_recipes.sql`, and `tool/sim.dart` → **three**
+outputs: `sim/1_sim_dishes.sql`, `sim/1_sim_people.sql`, `sim/1_sim_vocab.sql`) and one in-database
+generator (`supabase/sim/2_sim_generate.sql`).
 The failure modes here all shipped once already (B042–B045):
 
-- **Hand-edited generated SQL.** `seed_recipes.sql` and `sim/1_sim_dishes.sql` are outputs —
+- **Hand-edited generated SQL.** `seed_recipes.sql` and all three `sim/1_sim_*.sql` are outputs —
   flag any diff editing them without the matching `recipeData/`/`simData/` JSON change and a
   regen (`recipes:gen` / `sim:gen`). CI's `recipes:check`/`sim:check` catch staleness, but only
   after the fact.
+- **A pool the generator draws from must be non-empty and dense.** Every draw is
+  `rand_int(1, count)` or `rand_zipf(count)` against a 1..n index, so a gap is a silently skipped
+  row and an empty pool is a `cross join` against nothing — `sim.title_variant` empty generates
+  **zero recipes and reports success**, which is how a half-finished move of those rows out of
+  `0_sim_schema.sql` got as far as it did. Flag a new pool whose emptiness or density
+  `2_sim_generate.sql`'s preflight does not check by name.
+- **`sim.recipe.slug` is written once and goes stale (B093).** The registry insert is
+  `on conflict (n) do nothing`, so after a `db:drop` + regenerate against a changed library it
+  names a different dish from the one the recipe actually holds. Flag any new join through it;
+  the recipe's own columns cannot disagree with the recipe.
 - **Determinism (B044).** The sim's guarantee is same seed → same database. Flag any `now()`,
   `random()`, or `setseed()` introduced into `2_sim_generate.sql` — timestamps come from the
   pinned `sim.epoch_end()` in `sim.config`, and randomness from `sim.rand(key, stream)`
@@ -327,7 +338,7 @@ The failure modes here all shipped once already (B042–B045):
   schema, seed and sim on a real Postgres — fresh, re-applied, and on the upgrade path. Every
   statement in those steps runs as `postgres`, so **RLS is bypassed there** — but the job now also
   runs `supabase/tests/rls_matrix.sql` (BL-7), which switches to `authenticated` and asserts the
-  matrix (127 checks as of Phase 32; the file reports its own total), so a policy regression of the B053/B061 class does fail CI. What the matrix
+  matrix (137 checks as of Phase 33; the file reports its own total), so a policy regression of the B053/B061 class does fail CI. What the matrix
   covers is the tables and RPCs it names; a **new** table, policy, or `security definer` function
   needs a check added to it in the same change. Flag a diff that touches a policy, a definer
   function, or the column grants and neither changes `rls_matrix.sql` nor says which existing
@@ -348,7 +359,7 @@ same change set. Report misses as `⚠️ Potential issue`.
 | `melos.yaml`, `.github/workflows/**`, `tool/db.dart`, `apps/app/pubspec.yaml`, `env.example.json`, platform dirs (`android/`, `ios/`, `windows/`) | `README.md` **and** CLAUDE.md "Common commands" |
 | new/changed `design_system` widget | `docs/SDS.md` §8 (RecipeCard contract / rating widgets table) + barrel export |
 | `recipeData/**` | regenerated `supabase/seed_recipes.sql` in the same diff (`recipes:gen`) |
-| `simData/**`, `supabase/sim/**`, `tool/sim.dart`, `tool/recipe_format.dart` | regenerated `supabase/sim/1_sim_dishes.sql` when dishes changed (`sim:gen`); `docs/SDS.md` §12 (the simulation dataset — personas, distributions, invariants); ROADMAP Phase 24 status |
+| `simData/**`, `supabase/sim/**`, `tool/sim.dart`, `tool/recipe_format.dart` | the regenerated `supabase/sim/1_sim_*.sql` for whichever source changed (`sim:gen` rewrites all three); `docs/SDS.md` §12 (the simulation dataset — personas, distributions, invariants); ROADMAP Phase 24 status |
 
 ## Companion handoffs
 

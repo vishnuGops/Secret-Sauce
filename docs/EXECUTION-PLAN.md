@@ -7,7 +7,8 @@ files, and acceptance criteria. Kept in sync with the code.
 > **Shipped phases are archived.** Execution detail for completed Phases 0–23, 26–31 and
 > Phase OPT lives in [archive/EXECUTION-PLAN-phases-0-31.md](./archive/EXECUTION-PLAN-phases-0-31.md).
 > This file carries only work that is open: Phase 24 (in progress), Phase 25 (designed, not
-> started), Phase 32 (audit remediation), and the ops reference.
+> started), Phase 32 (audit remediation), Phase 33 (SQL shipped, client open), and the ops
+> reference.
 
 ---
 
@@ -17,10 +18,10 @@ Roadmap: [ROADMAP.md Phase 24](./ROADMAP.md#phase-24--simulated-population-a-rea
 Design: [SDS §12](./SDS.md#12-the-simulated-population) (written 2026-08-25)
 
 **Status: working end to end at the `medium` preset.** Built 2026-08-20: the shared validator,
-`tool/sim.dart`, `simData/` with **25 of 120** dishes, all five `supabase/sim/*.sql` files, the
+`tool/sim.dart`, `simData/` with **73 of 120** dishes, all eight `supabase/sim/*.sql` files, the
 `melos run sim:* / db:sim*` scripts, and the CI gate. `melos run db:reset` now rebuilds the whole
 thing — 1,694 recipes, 1,016 profiles, ~118k view rows — from an empty database in **~15 seconds**,
-and `3_sim_verify.sql` passes all 46 assertions.
+and `3_sim_verify.sql` passes all 53 assertions.
 
 **Two decisions below were reversed by what the build found**, and both are worth reading before
 trusting the rest of this section:
@@ -31,8 +32,29 @@ trusting the rest of this section:
 - **`master_chef` is not organically reachable at `medium`**, and that is a finding about the
   product rather than the generator — see B043 and "What the dataset proved" below.
 
-Still outstanding: 95 more dishes, `simData/people.json` and `vocab.json` (name pools are inline SQL
-arrays for now), the per-persona RLS smoke test, and a run at the `large` preset.
+**Phase 33 closed the content half** (2026-09-10). `simData/people.json` (17 locales, 544 names, 26
+bios) and `simData/vocab.json` (66 tags, 40 title templates) are authored, validated by the same
+`tool/sim.dart` that gates the dish library, and loaded by two new generated files — so the tool now
+has three sources, three outputs and one `sim:check`. `sim.rand_zipf` draws the tag vocabulary, the
+per-persona RLS smoke runs as `melos run db:sim:rls`, and `3_sim_verify.sql` grew group **H** (7
+checks) to cover all of it.
+
+Three things that move happened on the way, in ascending order of how quietly they would have gone
+wrong:
+
+- **The title templates moved out of `0_sim_schema.sql` and into `vocab.json`** — and the move was
+  left half-done, with the rows deleted from the schema file before the loader that replaces them
+  existed. `sim.title_variant` is `cross join`ed, so an empty pool generates **zero recipes and
+  reports success**. The generator's preflight now refuses every empty or non-dense pool by name.
+- **Names are drawn per locale, not per pool.** The old flat `array[…]` literals drew the given and
+  the family name independently across every tradition, so roughly fifteen names in sixteen were
+  two-culture collages. An actor now draws a locale once and the given name, the family name and
+  the bio's `{cuisine}` all read that row. Check **H3** asserts it as a property.
+- **B093.** `sim.recipe.slug` is written once (`on conflict (n) do nothing`) and goes stale when
+  the library changes; joining through it put `one-pot` on a Sauce. Check **H7** caught it on its
+  first run, on the fresh path only.
+
+Still outstanding: 47 more dishes and a run at the `large` preset.
 
 **Problem.** The database has 21 accounts and 23 recipes, and every engagement number in it was
 typed by a human into `seed.sql` or a `demo` block. `recipes.like_count` was authored; the
@@ -359,6 +381,59 @@ follow-ups to the bands but decisions nobody has taken:
   measure before building.
 - **Web browser Back in the recipe editor** — `PopScope` covers the platform gesture and nothing
   covers the browser's button (32c2). Closing it needs something Flutter does not expose today.
+
+## Phase 33 — The windowed leaderboard (SQL shipped 2026-09-10; client open)
+
+Roadmap: [ROADMAP.md Phase 33](./ROADMAP.md#phase-33--the-windowed-leaderboard-sql-built-client-not-started) ·
+Design: [SDS §10.9](./SDS.md#109-windowed-engagement-phase-33)
+
+**Problem.** `/chefs` is entirely all-time, because `profiles.chef_score` and the three totals
+beside it are lifetime counters with no date on them. Phase 23 drew a `Momentum` sort and a
+Month / Week hero toggle and shipped both **disabled**, because nothing in the schema could answer
+"who moved this month". Phase 24 then built a population whose engagement logs are dated, which is
+the input that was missing.
+
+**Shape.** One function computes the window (`chef_window_stats`), one ranks it
+(`chefs_leaderboard_windowed`) and adds no arithmetic. That split is the Gotcha 19 pattern: a
+Momentum board and a future per-chef momentum line cannot disagree if only one of them can do
+sums.
+
+**The three things that cost something.**
+
+1. **`security definer`, forced by RLS rather than chosen for convenience.** `saves_select` is
+   `user_id = auth.uid()` and `views_select` is `owns_recipe(recipe_id)`, so a cross-user aggregate
+   over those logs reads an *empty table* under invoker rights and returns a plausible, wrong
+   number. Under it, `anon` would have seen a board of zeros — indistinguishable from a quiet week.
+   Safe to elevate only because the function writes `visibility = 'public'` out explicitly; the
+   elevation removes a net nothing was standing on.
+2. **The same bug already existed in shipped code (B092).** `chef_trending_recipes` (Phase 31)
+   reads `recipe_views` directly and was invoker-rights, so for everyone except the chef the
+   distinct-viewer term counted zero and Trending silently degraded to a like ranking. Fixed here,
+   and pinned by `rls_matrix.sql` **F20/F21** on fixtures built so the wrong answer is a different
+   **order** rather than an error — then proven by reverting the function and watching both fail.
+   The neighbouring RPCs were audited at the same time: nothing else reads the logs.
+3. **A return-type change is as impossible for `create or replace` as an argument-list change.**
+   `created_at` was added to `chefs_leaderboard` (the `New` sort and the `Joined` line both need
+   it), so the `drop function if exists chefs_leaderboard(int, int)` line stopped being insurance
+   and became load-bearing — and it fails **only** on the upgrade path, which is Gotcha 6 in one
+   sentence. `database.yml` now runs `select count(created_at) from chefs_leaderboard(5, 0)` there
+   for exactly that reason.
+
+**Paging a moving window.** Gotcha 24 says `offset` needs a total order; a *windowed* surface adds
+that the boundary must also hold still, because a window measured from `now()` moves between page 1
+and page 2. `p_since` is the client's pin: read `window_start` off page 1, pass it back.
+
+**Verification.** `rls_matrix.sql` F12–F21 (as `anon`, which is the seat that would have seen the
+zeros), plus CI smoke calls on the upgrade path. Every expected value in §F is computed from the
+database rather than written as a literal, because sections A–E leave their own engagement rows on
+the same fixtures.
+
+**Open — the whole client.** `ChefWindowStanding` and its repository/provider, the `Momentum` sort,
+the Month / Week toggle, the `New` sort, the Trending/month rails, a per-chef momentum line, and a
+real empty state (a stale `sim.epoch_end()` anchor correctly returns an empty week; that must not
+render as a spinner). Two smaller pieces shipped alongside the SQL because they were carried-over
+items on the same surfaces: the per-step image picker (Ph 9 / B035) and a tappable `ChefBadge` on
+the recipe-card cover (Ph 30).
 
 ## Build, run & release (ops)
 

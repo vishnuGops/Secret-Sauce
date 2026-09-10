@@ -69,11 +69,16 @@ origin phase; detail is in the archive.
 **Product / UX**
 
 - [ ] Typography upgrade — Newsreader + Manrope via `google_fonts`, app-wide decision (Ph 20/23)
-- [ ] Per-step image upload picker — column already survives a save (Ph 9, B035)
-- [ ] Chefs windowed half: `chef_window_stats`, `chefs_leaderboard_windowed`, Momentum tab,
-      Month/Week hero toggle, Trending/month rails, and the `New` sort (needs `created_at` in the
-      leaderboard payload). Sim data now exists to rank; windowed views must exclude anonymous
-      rows (B012) (Ph 23)
+- [x] Per-step image upload picker (Ph 9, B035) — done in Phase 33. Bytes are held on the draft
+      and uploaded inside `_save`, exactly as the cover is, so an abandoned edit leaves no orphan
+      object in the bucket and nothing reaches the recipe outside the one `save_recipe` call
+      (Gotcha 11). One shared pick path (`imagePickerProvider`) means one 5 MB guard (32a4), not
+      two. Removing a photo deliberately leaves the stored object alone — a removal that is never
+      saved must not destroy the image the recipe still points at
+- [~] Chefs windowed half (Ph 23) — **now Phase 33**, which owns the remainder. The SQL half is
+      done and pinned (`chef_window_stats`, `chefs_leaderboard_windowed`, `created_at` on both
+      leaderboard RPCs, B012's exclusion); the Momentum tab, the Month/Week hero toggle, the
+      Trending/month rails and the `New` sort are still drawn and disabled
 - [ ] Spotlight card as a mobile sheet (draft 1f) + unused `large` 400×560 size (Ph 23)
 - [ ] Shelves do not page ("see all" route); no personalisation; fork count on card needs a
       denormalized `recipes.fork_count` (Ph 26)
@@ -86,8 +91,12 @@ origin phase; detail is in the archive.
       parent (Ph 27)
 - [ ] Micronutrients + per-100 g display (Ph 28/29); cooking yield/moisture disclosure (Ph 29)
 - [ ] Vocabulary mining loop for unlinked ingredient names; `simData` food links (Ph 29)
-- [ ] `ChefBadge.onTap` on the RecipeCard cover overlay (six surfaces); chef page cover art;
-      a Discover → chef link (Ph 30)
+- [x] `ChefBadge.onTap` on the RecipeCard cover overlay (Ph 30) — done in Phase 33. Wired once in
+      `SliverRecipeGrid` (so every paged surface inherits it) and again in `discover_shelf.dart`,
+      which builds its cards directly; null when the query embedded no owner, because an inert
+      badge beats one that swallows the card's tap. The scrim became a `Material` so the ripple
+      lands on the pill instead of under the cover photo. **Still open:** chef page cover art, and
+      a Discover → chef link that is not a card badge (Ph 30)
 - [ ] `recipes.notes` column (today appended to description); reverse-direction ingredient lint;
       retire `seed.sql` once there is real traffic (Ph 19)
 - [ ] Web: Chefs + My Recipes still stack their own `AppBar` under the top bar (Ph 21)
@@ -112,10 +121,12 @@ origin phase; detail is in the archive.
 
 ## Phase 24 — Simulated population: a realistic user + engagement dataset
 
-**Status: in progress — the machinery is done, the content is not.** The `sim` schema, the
-generator, its 46 assertions, and the CI wiring all shipped and run on every push; what remains
-open below is the dish library (25 of 120), `people.json` / `vocab.json` / `sim.rand_zipf`, the
-per-persona RLS smoke, and a `large`-preset run. Full design, distribution model, and the
+**Status: in progress — only the dish count and a `large` run are left.** The `sim` schema, the
+generator, its 53 assertions, and the CI wiring shipped in the first pass. Phase 33 closed the
+content half: `people.json` and `vocab.json` are authored and loaded, `sim.rand_zipf` draws the
+tag vocabulary, and the per-persona RLS smoke runs (`melos run db:sim:rls`). What remains open
+below is the dish library (73 of 120 — already past every coverage target) and a `large`-preset
+run. Full design, distribution model, and the
 edge-case catalogue in
 [EXECUTION-PLAN.md Phase 24](./EXECUTION-PLAN.md#phase-24--simulated-population-a-realistic-user--engagement-dataset).
 
@@ -140,18 +151,29 @@ denormalized counters derived from it (the reverse of how `seed.sql` works).
 
 ### Content — the dish library
 
-- [~] `simData/dishes/<slug>.json` — **25 of 120** authored dishes, same format as
+- [~] `simData/dishes/<slug>.json` — **73 of 120** authored dishes, same format as
   `recipeData/recipes/*.json` so a dish can be promoted into the curated set by moving the file.
-  Written fresh, not copied (ingredient lists are not copyrightable; step prose is). Batch 1 was
-  sequenced for **coverage before count** — all 7 targets below already pass at 25, so the
-  remaining 95 add variety to an already-valid library rather than being load-bearing
+  Written fresh, not copied (ingredient lists are not copyrightable; step prose is). Sequenced
+  for **coverage before count** — all 7 targets below passed at 25, so the remaining 47 add
+  variety to an already-valid library rather than being load-bearing. The validator's gate turns
+  from warning to error at 100 dishes
 - [x] Coverage targets, asserted by `tool/sim.dart` over the whole directory: all 10 `category`
       values, ≥ 24 cuisines (25 dishes, 25 distinct cuisines), the full `difficulty` spread, a
       no-cook dish (`cook_minutes` 0), an overnight step (`duration_minutes` > 480), a multi-group
       dish (SDS §11.1), and a dish serving ≥ 8. Warnings below 100 dishes, errors at or above it —
       a partial batch legitimately misses a category, a finished library does not
-- [ ] `simData/people.json` — given/family name pools across ~15 locales, bio templates
-- [ ] `simData/vocab.json` — the tag vocabulary (Zipf-weighted), title-variant templates
+- [x] `simData/people.json` — 17 locales, 544 given/family names, 26 bio templates. The locale is
+      drawn ONCE per actor and the given name, the family name and the bio's `{cuisine}` all read
+      that row, so a name is coherent rather than a two-culture collage — which is what the two
+      flat `array[…]` literals in `2_sim_generate.sql` produced about fifteen times in sixteen.
+      Asserted by check **H3**
+- [x] `simData/vocab.json` — 66 tags and 40 title-variant templates. **Array order is rank and
+      rank is the only weight**: `sim.rand_zipf()` turns it into a draw, so `quick` lands on 162
+      of 432 recipes at `small` and `smoked` on one. Eligible tags are re-ranked densely per
+      category, so a Dessert-only tag leaves no hole in a Soup's ladder (check **H7**). The title
+      templates **moved out of `0_sim_schema.sql`** in the same change, which is load-bearing:
+      `sim.title_variant` is `cross join`ed, so an empty pool generates ZERO recipes and reports
+      success — the generator's preflight now refuses it outright
 - [x] `simData/README.md` + `simData/schema.json` — authoring workflow and the format delta from
       `recipeData` (no `demo` block; an optional `sim` block of `weight` + `variant_titles`)
 
@@ -161,7 +183,7 @@ denormalized counters derived from it (the reverse of how `seed.sql` works).
       not `tool/lib/` — `tool/` is loose scripts, and a root `lib/` would have made the workspace
       package own it) so `recipeData` and `simData` cannot drift into two different definitions of a
       valid recipe. Proof the refactor is neutral: `recipes:check` still passes **byte-for-byte**
-- [x] `tool/sim.dart` (`validate` / `gen` / `check`) → `supabase/sim/1_sim_dishes.sql`, committed
+- [x] `tool/sim.dart` (`validate` / `gen` / `check`) → **three** generated loaders, committed
       and CI-gated exactly like `seed_recipes.sql`. Creates its own schema and table so it is
       standalone; **upserts** by slug (a library should push content edits, unlike `seed_recipe_v2`)
       and deletes rows whose source file is gone
@@ -194,7 +216,8 @@ denormalized counters derived from it (the reverse of how `seed.sql` works).
 - [x] `sim.persona`, `sim.preset`, `sim.config`, `sim.title_variant` — the distribution is data, so
       retuning a share is a one-row edit, not a rewrite
 - [x] `sim.counter_baseline` — only used when `engage_existing` is on
-- [ ] `sim.rand_zipf` — the tag vocabulary it was for is not built yet
+- [x] `sim.rand_zipf` — the general Zipf draw, plus the two exponents that key it
+      (`sim.tag_zipf()` 1.1, `sim.title_zipf()` 0.6) as `sim.config` rows rather than literals
 
 ### Generation
 
@@ -221,7 +244,7 @@ denormalized counters derived from it (the reverse of how `seed.sql` works).
 
 ### Verification
 
-- [x] `supabase/sim/3_sim_verify.sql` — 46 assertions that `raise exception` rather than print.
+- [x] `supabase/sim/3_sim_verify.sql` — 53 assertions that `raise exception` rather than print.
       This script _is_ the test suite for this phase — there is no other coverage of the generator —
       and it found all three defects in B044 plus B045. Written when nothing in CI ran SQL at all;
       **OPT-T1 now runs it there** on a `tiny` population, which is what turned it from an opt-in
@@ -241,7 +264,14 @@ denormalized counters derived from it (the reverse of how `seed.sql` works).
 - [x] Idempotency: generate twice → identical counts and identical `sum(chef_score)`
 - [x] `d1`–`d7` + Kitchen standings asserted unchanged (F1–F3)
 - [x] Wall-clock: `medium` generate ~10s; full `db:reset` from an empty database ~15s
-- [ ] RLS smoke test per persona with `set local role authenticated` — not written
+- [x] RLS smoke test per persona with `set local role authenticated` —
+      `supabase/sim/4_sim_rls_smoke.sql`, run by `melos run db:sim:rls`. Seats one REAL actor per
+      persona from the `sim.actor` registry: 130 passed / 6 skipped / 7 personas seated. It is the
+      gap between `db:sim:verify` (runs as `postgres`, bypasses every policy) and `db:rls` (builds
+      its own three-user fixture, where every seat is an owner, a sharee or a stranger by
+      construction). 79% of simulated accounts own no public recipe, and until this file nothing
+      had asked what that account can do while signed in. **Not** part of `db:sim` — it writes
+      before it rolls back, and `db:sim` runs inside `db:reset`
 - [ ] `large` preset never run; `master_chef` is asserted there but unverified
 - [x] **The assertion count was stale everywhere: 43 → 46.** 43 was right when Phase 24 shipped;
       Phase 26 added group **G** and no doc followed. Corrected in `CLAUDE.md`, this file, and
@@ -390,6 +420,95 @@ still owed.
 
 ---
 
+## Phase 33 — The windowed leaderboard (SQL built; client not started)
+
+**Status: `[~]`.** Everything on `/chefs` above this phase is **all-time**: `profiles.chef_score`
+and the three totals beside it are lifetime counters with no date on them, so nothing in the
+schema could answer *who moved this month*. That is why Phase 23's `Momentum` sort and the hero's
+Month / Week toggle shipped **drawn and disabled**. The engagement logs can answer it, so a
+windowed score is a query rather than a new snapshot table — and Phase 24's simulated population
+is what finally gave those logs anything to read (SDS §10.8 called this out as needing its own
+answer first).
+
+This phase built and pinned the SQL. **No Dart, no widget, no route** — the `Momentum` tab, the
+Month/Week toggle and the `New` sort are still drawn and disabled, and closing that is what
+remains.
+
+### Schema — `0001_init.sql` (done)
+
+- [x] `chef_window_stats(p_days, p_since, p_chef)` — the **only** place the window is computed.
+      Returns likes / saves / views / ratings / new recipes in the window plus a `window_score`
+      from the real `chef_score()` (Gotcha 19 — never a restated `3 / 5 / 0.2`). Zeros, not
+      missing rows, for a quiet chef, so the board can rank the whole population
+- [x] **`security definer`, and not for the usual reason.** Two of the four logs are not
+      world-readable — `saves_select` is `user_id = auth.uid()`, `views_select` is
+      `owns_recipe(recipe_id)` — so under invoker rights this computes a *different* board for
+      every caller: zeros for `anon`, their own numbers for a chef. Safe to elevate because it
+      takes no dynamic SQL, writes nothing, pins `search_path`, returns **counts only**, and
+      filters `visibility = 'public'` explicitly rather than leaning on RLS to do it
+- [x] **Anonymous views excluded, viewer counted once** (B012 / Gotcha 10). `anon` holds
+      `insert on recipe_views`, so counting raw rows would hand an unauthenticated loop the top of
+      the board. Measured on the local fixture: 3,878 of 20,630 view rows anonymous, and the
+      16,752 signed-in rows collapse to 10,083 distinct pairs — a 51% correction, not a rounding
+- [x] `chefs_leaderboard_windowed(p_days, p_limit, p_offset, p_since)` — ranks what that returns
+      and adds no arithmetic of its own. Same row shape as `chefs_leaderboard` plus the six window
+      columns, so one client model decodes both boards and Score / Momentum stay a **re-sort**
+- [x] `dense_rank()` over the whole population with `limit`/`offset` applied **outside** it
+      (Phase 30's `chef_standing` lesson), and a **total** order ending in `id` — the windowed
+      keys tie far more than `chef_score` (most of the board scores 0 in any week), so without it
+      `offset` would show one chef twice (Gotcha 24)
+- [x] `p_since` pins the boundary. A window measured from `now()` **moves**, which makes `offset`
+      lie even over a total order: fetch page 1, read `window_start` off any row, pass it back
+- [x] `created_at` added to `chefs_leaderboard` **and** `chef_standing` in lockstep — the `New`
+      sort and the `Joined <month year>` line both need it. This is a **return-type** change, which
+      `create or replace` refuses exactly as it refuses an argument-list change, so the
+      `drop function if exists chefs_leaderboard(int, int)` line went from insurance to
+      load-bearing — and it fails **only** on the upgrade path (Gotcha 6)
+- [x] Four dated indexes — `recipe_likes`/`recipe_saves`/`recipe_ratings` on `(created_at desc,
+      recipe_id)` and `recipe_views` on `(viewed_at desc, recipe_id, user_id) where user_id is not
+      null`. The existing composites all lead with `recipe_id`, so none could serve "every like on
+      the site in the last 7 days". The `recipe_views` write cost (a fifth index entry on the
+      highest-volume insert in the schema) is recorded as *expected* to be indistinguishable, not
+      as measured — 32b measured two→four as below the noise floor
+- [x] **B092 fixed in the same phase.** `chef_trending_recipes` (Phase 31) had the invoker-rights
+      version of this exact defect: it reads `recipe_views` directly, so for `anon` and every
+      signed-in non-owner the distinct-viewer term counted zero and the ordering silently degraded
+      to likes alone — the chef saw a different Trending tab from their own readers. Now
+      `security definer set search_path = public`; it already filtered `visibility = 'public'`
+      itself, so nothing was leaning on RLS. Audited the neighbours at the same time: no other
+      ranking RPC reads the logs (the Discover shelves and `chef_top_recipes` rank on the
+      denormalized counters), so this was the only instance
+
+### Verification (done)
+
+- [x] `rls_matrix.sql` **F12–F19** — the windowed board as `anon`, which is the role that would
+      have seen the zeros: reachability, the window as a real filter, B012's exclusion, the
+      public-only filter, `dense_rank` outside the paging, the total order, `created_at`, and
+      `p_since` overriding `p_days`
+- [x] `rls_matrix.sql` **F20–F21** — B092, pinned as *anon and the owner get the same order*, on
+      two fixtures that tie on likes and differ only in recent viewers, with the unread one
+      created last so the wrong answer is a different **order** rather than an error. Proven by
+      reverting the function to `security invoker`: both fail, F20 naming the cause
+- [x] `database.yml` smoke calls on the upgrade path, including `count(created_at)` from
+      `chefs_leaderboard` (which is what fails if the drop line is ever removed) and a
+      three-argument `chefs_leaderboard_windowed` call to exercise `p_since`'s default (B024)
+
+### Client — not started
+
+- [ ] `ChefWindowStanding` model + repository method + provider for
+      `chefs_leaderboard_windowed`; `created_at` decoded on the existing leaderboard model
+- [ ] `Momentum` sort on `/chefs` and the hero's Month / Week toggle — both already drawn and
+      disabled; the board must **pin `p_since` from page 1** for paging to be sound
+- [ ] The `New` sort, which is a different ordering and therefore a different query, not a
+      tie-break bolted onto `chefs_leaderboard`
+- [ ] Trending/month rails, and a per-chef momentum line on `/chef/:id` (`chef_window_stats`
+      already takes a `p_chef`)
+- [ ] A real **empty state**: a simulated database whose `sim.epoch_end()` anchor has gone stale
+      returns an empty week, correctly. That is old data, not a broken query, and it must not
+      render as a spinner
+
+---
+
 ## Backlog — deferred, not scheduled
 
 Everything here is **known, decided, and not being worked on**. An item is in the backlog because
@@ -399,8 +518,9 @@ forgotten. Each one names the condition that would pull it back into a phase.
 **What is open elsewhere in this document**, so the backlog is not mistaken for the whole picture:
 shipped phases (0–23, 26–31, OPT) are archived, and every open item they left behind now lives in
 the [Carried-over open items](#carried-over-open-items-from-archived-phases) register above;
-**Phase 24 is `[~]` in progress** — the generator and its 46 assertions are done, but the dish
-library is 25 of 120 and `people.json` / `vocab.json` / `sim.rand_zipf` are unwritten;
+**Phase 24 is `[~]` in progress** — everything but the dish count (73 of 120) and a `large`-preset
+run is done, Phase 33 having closed the content half; **Phase 33 is `[~]`** — the windowed
+leaderboard's SQL is built and pinned, its client is not;
 **Phase 25 is designed-not-started** behind one remaining prerequisite (B043's tier calibration —
 the public chef page and the SQL harness are both done); and **Phase 32** holds the 2026-08-26
 audit's remediation items.
@@ -539,7 +659,7 @@ up headlessly, so there are no DOM nodes to target and navigation has to be driv
 #### BL-7 — the RLS acceptance matrix as a _signed-in_ user — **DONE (2026-08-23)**
 
 Closed: [supabase/tests/rls_matrix.sql](../supabase/tests/rls_matrix.sql) (`melos run db:rls`) —
-**127 checks** as of Phase 32 (102 when BL-7 closed) across anon / owner / shared-with /
+**137 checks** as of Phase 33 (102 when BL-7 closed) across anon / owner / shared-with /
 stranger, rolled back, wired into CI
 (`database.yml`). Found B061 on its first complete run. **Standing rule:** any change to a policy,
 a `security definer` function, or the column grants → run it, and add a check for any new surface

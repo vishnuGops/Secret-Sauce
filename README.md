@@ -166,7 +166,7 @@ Supabase credentials are supplied via a local, git-ignored JSON file (never comm
    ```
 
    > On this machine `env.local.json` currently points at the **local** Supabase stack
-   > (`http://127.0.0.1:54321`, needs `supabase start`); the hosted project's values are kept in
+   > (`http://127.0.0.1:54621`, needs `supabase start`); the hosted project's values are kept in
    > `apps/app/env.hosted.local.json`. Swap the files to switch. Keep the `.local` in any such
    > filename — `env.local*` and `env.*.local*` are git-ignored, but `env.hosted.json` is **not**
    > (B010).
@@ -419,8 +419,8 @@ in it becomes a recipe on its own — the generator that draws from it is not bu
 
 ```powershell
 melos run sim:validate      # parse + lint + directory coverage rules
-melos run sim:gen           # regenerate supabase/sim/1_sim_dishes.sql — commit both
-melos run sim:check         # fail if that .sql is stale (CI runs this)
+melos run sim:gen           # regenerate all three supabase/sim/1_sim_*.sql — commit them
+melos run sim:check         # fail if ANY of them is stale (CI runs this)
 ```
 
 The **food registry** (`nutritionData/`, Phase 29) follows the same generated-SQL pattern —
@@ -457,9 +457,11 @@ reset brings everything back:
 
 ```powershell
 melos run db:reset                          # drop -> create -> nutrition -> seed -> recipes -> sim (~15s)
-melos run db:sim                            # just the sim: schema -> dishes -> generate -> verify
+melos run db:sim                            # schema -> the 3 pools -> generate -> verify
 melos run db:sim -- --preset=small --seed=7 # tiny | small | medium (default) | large
-melos run db:sim:verify                     # 39 assertions, read-only
+melos run db:sim:verify                     # 53 assertions, read-only
+melos run db:sim:rls                        # the policies per persona, as a signed-in sim
+                                            #   actor (writes, then rolls back)
 melos run db:sim:clean -- --yes             # DESTRUCTIVE: removes the simulated accounts
 ```
 

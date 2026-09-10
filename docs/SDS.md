@@ -534,7 +534,7 @@ It creates three throwaway `auth.users` (an owner, someone the owner shares a pr
 an unrelated signed-in stranger) plus a private and a public recipe with content, re-runs the whole
 matrix under `set local role authenticated` + `request.jwt.claims`, and **rolls the transaction
 back** — so it leaves no user, no recipe and no helper function behind and is safe against any
-database. **127 checks** (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
+database. **137 checks** (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
 ingredient food link, in 29b; B22c and B22d, the auto-estimate source-smuggling guard and its
 nothing-counted case, in 29c — B22d found **B075** on its first run; **E10**, that
 `recompute_auto_nutrition()` is not callable as a signed-in user, in 29d — a whole-table rewrite
@@ -1558,33 +1558,75 @@ signature is in `drop.sql` (Gotcha 5). Actual seeded standings:
   Score is not money — deferred, noted here so it isn't rediscovered as a "bug".
 - Tier thresholds are provisional product numbers; expect retuning once real data exists (the
   backfill-on-apply makes retuning a one-line change).
-- No chef-profile page yet. Since Phase 22 a board row opens the expanded chef card, but there is
-  still no route that lists one chef's public recipes, and the `ChefBadge` on a recipe card or on
-  recipe detail is still not tappable-to-navigate.
+- ~~No chef-profile page yet.~~ Closed: `/chef/:id` shipped in Phase 30 (the board row navigates
+  there, and the dialog was retired), and the `ChefBadge` on a recipe card's cover became tappable
+  in Phase 33. The badge on **recipe detail** is still not a link.
 - **The formula is public** as of Phase 22: the expanded card prints the multipliers. That is the
   point of the card — a chef could not otherwise tell what moves their score — but it also tells
   a would-be gamer that a save is worth 5× a view. Accepted alongside §10.8's self-engagement
   limit, which is the larger hole.
-- **There is no windowed score.** Every number on `/chefs` is all-time. The Trending and
-  best-of-the-month rails, the `Momentum` sort and the hero's Month / Week filter are drawn,
-  disabled, and tooltipped as not-yet-wired (Phase 23, decision D4).
-
-  The data exists — `recipe_likes.created_at`, `recipe_saves.created_at` and
-  `recipe_views.viewed_at` are all there, so a windowed score is a query, not a new snapshot table.
-  Two things must be true of whoever writes it:
-
-  1. **The windowed view term must not count anonymous rows.** `recipes.view_count` deliberately
-     ignores them because `anon` holds `insert` on `recipe_views` (B012); an aggregate over the raw
-     log reopens exactly that inflation vector, this time on a ranking nobody is auditing. Count
-     `distinct (recipe_id, user_id)` where `user_id is not null`.
-  2. **Points must come from `chef_score()`**, never a restated `3 / 5 / 0.2`, or the window and
-     the board drift (Gotcha 19).
-
-  Note also that the rails will look empty against the current database even once built: `seed.sql`
-  writes the counters directly and inserts almost no engagement rows. Seeding dated ones to fix
-  that would fire the counter triggers and move every `chef_score`, invalidating the standings
-  pinned in §10.7 — so the seed needs its own answer before the rails do.
+- **The windowed score exists in SQL, and nothing renders it yet** (Phase 33). Every number the
+  client shows on `/chefs` is still all-time: the Trending and best-of-the-month rails, the
+  `Momentum` sort and the hero's Month / Week filter remain drawn, disabled and tooltipped
+  (Phase 23, decision D4). What changed is that the query behind them is now built, tested and
+  callable — see §10.9.
 - Rank is recomputed per request (no caching); fine at current scale.
+
+### 10.9 Windowed engagement (Phase 33)
+
+`chef_window_stats(p_days, p_since, p_chef)` is the **only** place a window is computed;
+`chefs_leaderboard_windowed(p_days, p_limit, p_offset, p_since)` ranks what it returns and adds no
+arithmetic of its own, so the Momentum board and any future per-chef momentum line cannot drift
+apart the way two copies of a formula do (Gotcha 19's shape). It returns likes, saves, distinct
+viewers, ratings and new recipes inside the window, plus a `window_score`.
+
+Six rules, each of which cost something real:
+
+1. **Anonymous views do not count, and a viewer counts once per recipe.** `anon` holds `insert on
+   recipe_views` by design, so an aggregate over raw log rows hands an unauthenticated loop the top
+   of a ranking nobody audits — B012's hole in a new place. The term is `count(*)` over
+   `select distinct (recipe_id, user_id) where user_id is not null`. Measured on the local fixture:
+   3,878 of 20,630 view rows are anonymous and the 16,752 signed-in rows collapse to 10,083
+   distinct pairs — a 51% correction, not a rounding one.
+2. **Points come from `chef_score()`**, never a restated `3 / 5 / 0.2`. Ratings and new recipes are
+   reported *beside* the score and do not enter it, because `chef_score()` has no term for either
+   and inventing one here would be the second definition of the formula rule 2 exists to prevent.
+3. **Public recipes only, filtered explicitly.** `chef_window_stats` is `security definer`, so RLS
+   is not underneath it — that filter is the only thing keeping a private recipe's engagement out
+   of a world-readable number.
+4. **`security definer` is mandatory, and not for the usual reason.** Two of the four logs are not
+   world-readable: `saves_select` is `user_id = auth.uid()`, `views_select` is
+   `owns_recipe(recipe_id)`. Under invoker rights the function computes a *different* window per
+   caller — zeros for `anon`, their own numbers for a chef — and an under-count is
+   indistinguishable from a quiet week. The same defect was found and fixed in
+   `chef_trending_recipes` in the same phase (B092).
+5. **The window is `now()`-relative or caller-pinned, never a fixture anchor.** `sim.epoch_end()`
+   is a pinned instant in a schema that does not exist on a real deployment. A simulated database
+   whose anchor has gone stale therefore returns an EMPTY week — that is the data being old, not
+   the query being wrong, and it is why the client needs a real empty state rather than a spinner.
+6. **Self-engagement is still counted**, deliberately, because `recompute_chef_stats` counts it too
+   (§10.8's accepted limit). Closing that has to happen in both places, in one change.
+
+Paging a windowed board adds one rule to Gotcha 24: a window measured from `now()` is a **moving**
+boundary, so `offset` lies across calls even over a total order. `p_since` is how a client pins it —
+fetch page 1, read `window_start` off any row, pass it back for every later page. The ordering ends
+in `id` because most of the board scores exactly 0 in any given week, and the all-time score sits
+ahead of the join date so a quiet week degrades the Momentum board into the Score board rather than
+into a list of new accounts.
+
+`chefs_leaderboard` and `chef_standing` both gained `created_at` in the same change, in lockstep:
+they share a return shape so one client model decodes either, and the `New` sort and the
+`Joined <month year>` line both need the value. That is a **return-type** change, which
+`create or replace` refuses exactly as it refuses an argument-list change — so the
+`drop function if exists chefs_leaderboard(int, int)` line is load-bearing, and it only fails on
+the upgrade path (Gotcha 6).
+
+Four dated indexes back all of this: `(created_at desc, recipe_id)` on likes, saves and ratings,
+and `(viewed_at desc, recipe_id, user_id) where user_id is not null` on views. Every pre-existing
+composite leads with `recipe_id`, which cannot serve "every like on the site in the last 7 days".
+
+`rls_matrix.sql` §F pins the lot as `anon` — F12–F19 for the board, F20/F21 for B092.
+
 
 ## 11. Recipe content vs. demo data
 
@@ -1731,12 +1773,23 @@ population, and hand-authoring one is not possible at the sizes that matter.
 Five files under `supabase/sim/`, applied `0 → 1 → 2 → 3` by `melos run db:sim` and removed by
 `9_sim_teardown.sql`. **Nothing lives in `public`.**
 
+The pool tables are **declared in file 0 and populated in the `1_` files**, and the duplication is
+load-bearing rather than untidy: Postgres validates a `language sql` body at creation time, so
+`sim.pick_dish` cannot be created unless `sim.dish` already exists — and the run order is 0 then 1.
+Without the declaration the very first apply on a clean database fails with `relation "sim.dish"
+does not exist`, which is invisible on any machine where an earlier run already created it (B045's
+fourth path). Each generated loader re-declares its own tables with `if not exists`, so it also
+stands alone; whichever file runs first wins.
+
 | File | Role |
 | --- | --- |
-| `0_sim_schema.sql` | The `sim` schema: config, the deterministic draw functions, personas, presets, registries, nutrition profiles, title variants |
-| `1_sim_dishes.sql` | **Generated** from `simData/dishes/*.json` by `tool/sim.dart` — the dish library, owner-agnostic |
-| `2_sim_generate.sql` | The generator: population → recipes → content → versions → forks → shares → views → engagement → counters |
-| `3_sim_verify.sql` | **46** `raise exception` assertions in seven groups (A–G). The sim's entire test suite |
+| `0_sim_schema.sql` | The `sim` schema: config, the deterministic draw functions (including `rand_zipf`), personas, presets, registries, nutrition profiles, and the **declarations** of the four authored-pool tables the `1_` files fill |
+| `1_sim_dishes.sql` | **Generated** from `simData/dishes/*.json` — the dish library, owner-agnostic |
+| `1_sim_people.sql` | **Generated** from `simData/people.json` — locales, given/family names, bio templates |
+| `1_sim_vocab.sql` | **Generated** from `simData/vocab.json` — the tag vocabulary and the title templates. All three `1_` files are peers and the generator needs every one: an empty `sim.title_variant` is a `cross join` against nothing, so it produces **zero recipes and reports success** |
+| `2_sim_generate.sql` | The generator: population → recipes → content → tags → versions → forks → shares → views → engagement → counters |
+| `3_sim_verify.sql` | **53** `raise exception` assertions in eight groups (A–H). The sim's entire test suite |
+| `4_sim_rls_smoke.sql` | The policies exercised per **persona**, as a signed-in actor from the `sim.actor` registry. Writes, then rolls back — so it is not part of `db:sim` |
 | `9_sim_teardown.sql` | Registry-driven deletion, including the `auth.users` rows |
 
 ### 12.1 The one idea: counters are derived, never authored
@@ -1813,7 +1866,7 @@ recipe count.
 
 | Preset | Users | Engagement scale | Use |
 | --- | --- | --- | --- |
-| `tiny` | 60 | 0.5 | Screenshots. Seconds. Evaluates only 42 of the 46 assertions — see §12.7. |
+| `tiny` | 60 | 0.5 | Screenshots. Seconds. Evaluates only 48 of the 53 assertions — see §12.7. |
 | `small` | 250 | 0.8 | **CI** (since 2026-08-26). The smallest size at which all 46 run. Safe on a hosted free tier. ~430 recipes, ~17k view rows. |
 | `medium` | 1,000 | 1.0 | **Default.** ~1,670 recipes, ~118k view rows, ~10s (Phase 24's recorded run — re-measure rather than re-quote). Breaks pagination, ranking and search assumptions. |
 | `large` | 8,000 | 1.2 | Stress test. **Never run** — `master_chef` is asserted at this size but unverified. |
@@ -1851,6 +1904,17 @@ population means running the teardown first.
    like with no view is data no real session could produce, and it would quietly invalidate every
    windowed metric built on this later.
 9. **Counters** — the only place a counter is written (§12.1).
+
+Step 3 has a **3b**: tags. The vocabulary is `simData/vocab.json`, and **array order is rank —
+rank is the only weight there is**, because two ways to say how common a tag is drift apart.
+`sim.rand_zipf()` turns a rank into a draw against `sim.tag_zipf()` (1.1), which is what produces
+the shape nothing else could: at `small`, `quick` lands on 162 of 432 recipes and `smoked` on one.
+Three rules. Eligibility is **re-ranked densely per category**, so a Dessert-only tag leaves no hole
+in a Soup's ladder that would swallow a draw. Draws are folded through `select distinct`, so a
+recipe asking for four tags gets one to four — which is also how people tag. And eligibility keys
+off **`recipes.category`, never `sim.recipe.slug`**: that registry column is written once and goes
+stale the moment the dish library changes, which is B093 and which check H7 caught by putting
+`one-pot` on a Sauce.
 
 `sim.exposure_draw` is a function rather than an inline expression because **two passes need the
 same number for the same recipe** and they run at opposite ends of the generator: step 7 turns it
@@ -1920,19 +1984,22 @@ there would only teach whoever tunes the model to inflate it until the number ap
 > The assertion failed on the very first run of the preset. A threshold is only "scaled" if somebody
 > has actually stood at each rung.
 
-**Skipped — where no honest threshold exists.** Four checks do not run below **250** users, an
-exact constant, not a rule of thumb:
+**Skipped — where no honest threshold exists.** Five checks do not run below their population
+floor, an exact constant each, not a rule of thumb:
 
 - **`G1`, `G2`, `G3` — all of group G.** `G3` is the fork-depth check, and it is the only thing
   standing between `sim.fork_bias` and a `MOST FORKED` shelf that ranks nothing.
 - **`E3`**, the view-concentration tail: a recipe cannot have more distinct viewers than there are
   users, so at `tiny` every popular recipe saturates at 60 and the ratio is bounded by arithmetic
   whatever the distribution does.
+- **`H6`**, the tag head-vs-tail spread, below **200 recipes** — a tail cannot separate from a head
+  when there are barely more recipes than tags, and tuning the exponent until it did would be
+  fitting the model to the smallest preset.
 
-So a `tiny` run evaluates **42 of 46**. CI used to pin `preset = tiny`, which meant **no automated
+So a `tiny` run evaluates **48 of 53**. CI used to pin `preset = tiny`, which meant **no automated
 run had ever evaluated G3** — the shelf ranking Phase 26 shipped was verified only when somebody ran
 `small` or larger by hand, and nobody had. Since 2026-08-26 `database.yml` seeds
-`preset = small, seed = 20260820`, so all four run and a green CI run means **46 of 46**.
+`preset = small, seed = 20260820`, so all of them run and a green CI run means **53 of 53**.
 
 Every skip prints a `raise notice` naming itself, so the run is legible — but the final
 `ALL CHECKS PASSED` is unconditional. Read the notices, not just the last line. **The practical
@@ -1962,14 +2029,20 @@ also what CI does, so a mismatch between the two is a mismatch you introduced.
 
 ### 12.9 Gaps
 
-- The dish library is **25 of a planned 120**, so directory and category coverage is thin in places
-  — check `simData/README.md`'s coverage rules before assuming a category populates.
-- `simData/people.json` and `vocab.json` are unwritten, so names and the tag vocabulary are not yet
-  drawn from authored pools; `sim.rand_zipf` is unwritten for the same reason.
+- The dish library is **73 of a planned 120**. Every coverage target passes, but directory and
+  category depth is still thin in places — check `simData/README.md`'s coverage rules before
+  assuming a category populates.
+- ~~`simData/people.json` and `vocab.json` are unwritten.~~ Closed in Phase 33: 17 locales, 544
+  names, 26 bios, 66 tags, 40 title templates, drawn through `sim.rand_zipf`. Three sources, three
+  generated loaders, one `sim:check`.
 - `avatar_url` and `cover_image_url` are **null for every sim row**. There is no image asset behind
   the population, so any surface whose real appearance depends on a photo is unexercised at scale.
-- No RLS smoke test per persona — every statement in the sim and its verifier runs as `postgres`,
-  which bypasses policies entirely. `supabase/tests/rls_matrix.sql` (BL-7) is what covers that, and
-  it builds its own three users rather than using this population.
+- ~~No RLS smoke test per persona.~~ Closed in Phase 33: `supabase/sim/4_sim_rls_smoke.sql`
+  (`melos run db:sim:rls`) seats one real actor per persona from the `sim.actor` registry and
+  re-runs the policy claims as that signed-in user — 130 checks, 6 skipped, 7 personas. It is
+  deliberately **not** part of `db:sim`: it writes before it rolls back, and `db:sim` runs inside
+  `db:reset`. It does not replace `rls_matrix.sql`, which is the authority on policy *shape*; this
+  one asks what the two most common real users (ghost and lurker — 79% of accounts own no public
+  recipe) can actually do.
 - Ingredient `food_id` links are not drawn, so the sim contributes nothing to auto-nutrition
   coverage (§12.6).
