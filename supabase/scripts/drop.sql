@@ -89,6 +89,12 @@ drop function if exists chef_top_recipes(uuid, int) cascade;
 drop function if exists chef_top_recipes(uuid, int, int) cascade;
 drop function if exists chef_trending_recipes(uuid, int, int) cascade;
 drop function if exists chef_standing(uuid) cascade;
+-- Phase 23's windowed half. `chefs_leaderboard_windowed` first: it reads
+-- `chef_window_stats`, and dropping the callee first would leave a function
+-- whose body no longer resolves (harmless for a `language sql` string body,
+-- but the order costs nothing and says what depends on what).
+drop function if exists chefs_leaderboard_windowed(int, int, int, timestamptz) cascade;
+drop function if exists chef_window_stats(int, timestamptz, uuid) cascade;
 -- seed_recipe signatures, oldest first. Each parameter-list change leaves the
 -- previous overload behind, so every historical signature stays listed here.
 drop function if exists seed_recipe(uuid, text, text, text, text, difficulty, int, int, int, text, jsonb, jsonb, int, int, int) cascade;
@@ -115,6 +121,12 @@ drop function if exists seed_recipe_v2_ratings(uuid, jsonb) cascade;
 -- in `public` as a PostgREST RPC, so a copy that somehow reached a committed
 -- schema is exactly the surface Gotcha 3 is about.
 drop function if exists rls_matrix_do(text) cascade;
+
+-- The same three-lock arrangement for the per-persona RLS smoke's helper
+-- (supabase/sim/4_sim_rls_smoke.sql). Separate name on purpose: both files are
+-- created inside a transaction that rolls back, so neither may depend on — or
+-- redefine — the other's copy.
+drop function if exists sim_rls_do(text) cascade;
 
 -- Enums.
 drop type if exists difficulty cascade;

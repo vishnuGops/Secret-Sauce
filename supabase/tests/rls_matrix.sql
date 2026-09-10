@@ -109,6 +109,29 @@ declare
   v_json     jsonb;
   v_lineage  uuid;
 
+  -- Phase 23 (the windowed board). Every expected value F12-F19 compares
+  -- against is COMPUTED from the database rather than written as a literal:
+  -- by the time §F runs, sections A-E have left their own likes and views on
+  -- these same fixtures (A7's anonymous view, C16's like, D23's view), so an
+  -- absolute count would be a check that fails for a reason having nothing to
+  -- do with what it claims to prove. That is the F7 lesson, applied to
+  -- engagement rows instead of recipes.
+  v_since    timestamptz;
+  v_when     timestamptz;
+  v_raw      bigint;
+  v_pairs    bigint;
+  v_pub      bigint;
+  v_all      bigint;
+
+  -- B092 (F20/F21). Two public recipes of the owner's that tie on likes and
+  -- differ only in recent distinct viewers — created late, in §F, so nothing
+  -- in §A-§E has to know they exist.
+  v_trend_read   uuid;
+  v_trend_unread uuid;
+  v_trend_first  uuid;
+  v_trend_anon   uuid[];
+  v_trend_owner  uuid[];
+
   -- results
   v_log      text[] := '{}';
   v_pass     int := 0;
@@ -949,12 +972,82 @@ begin
   -- ==========================================================================
   execute 'reset role';
 
+  -- --------------------------------------------------------------------------
+  -- Phase 23 windowed-board fixtures. **They have to be written BEFORE the two
+  -- `update profiles` statements below**, and the ordering is load-bearing: a
+  -- like or a view fires `bump_count` -> `recipes_chef_stats` ->
+  -- `recompute_chef_stats`, which rewrites `chef_score` and
+  -- `public_recipe_count` from the recipe table and would undo the pinned
+  -- values F3/F6 exist to test. Written as `postgres` for the same reason the
+  -- pins are: §F tests what the RPCs do with the rows, not who may write them.
+  -- --------------------------------------------------------------------------
+
+  -- One like inside any window and one dated 90 days back, both on the PUBLIC
+  -- recipe, so F13 measures the window and not `visibility`. `v_owner` holds no
+  -- like on `v_public` yet: D17 tried to plant one and was refused.
+  insert into recipe_likes (user_id, recipe_id) values (v_sharee, v_public);
+  insert into recipe_likes (user_id, recipe_id) values (v_other,  v_public);
+  update recipe_likes set created_at = now() - interval '90 days'
+   where user_id = v_other and recipe_id = v_public;
+
+  -- B012's fixture, and the reason this block exists. Eight more rows land on
+  -- the owner's public recipe inside the window, behind only TWO distinct
+  -- signed-in viewers:
+  --   * five ANONYMOUS rows — `anon` holds `insert on recipe_views` (A7 proves
+  --     it), so this is exactly the loop an unauthenticated attacker can run;
+  --   * three rows from ONE viewer — `recipe_views` is an append-only log, so a
+  --     window that counted rows would let one enthusiast outrank a crowd.
+  -- A7 already left an anonymous row here and D23 left one signed-in row, which
+  -- is why F14 is written as a relationship rather than as `= 2`.
+  for i in 1..5 loop
+    insert into recipe_views (recipe_id, user_id) values (v_public, null);
+  end loop;
+  for i in 1..3 loop
+    insert into recipe_views (recipe_id, user_id) values (v_public, v_sharee);
+  end loop;
+
   -- Two chefs on the board with byte-identical scores, and one profile that is
   -- deliberately left off it.
   update profiles set chef_score = 4242, public_recipe_count = 2
    where id in (v_owner, v_sharee);
   update profiles set chef_score = 99999, public_recipe_count = 0
    where id = v_other;
+
+  -- What the window SHOULD say for the owner, read straight off the tables
+  -- while still `postgres` — `anon` cannot read `recipe_views` at all
+  -- (`views_select` is `owns_recipe`), which is the whole reason
+  -- `chef_window_stats` is `security definer` and the whole reason this has to
+  -- be measured here rather than inside the checks.
+  --
+  -- `now()` is fixed for the transaction, so this boundary and the one the RPC
+  -- computes are the same instant.
+  select count(*) into v_raw
+    from recipe_views v
+    join recipes r on r.id = v.recipe_id
+   where r.owner_id = v_owner and r.visibility = 'public'
+     and v.viewed_at >= now() - interval '30 days';
+
+  select count(*) into v_pairs
+    from (
+      select distinct v.recipe_id, v.user_id
+        from recipe_views v
+        join recipes r on r.id = v.recipe_id
+       where r.owner_id = v_owner and r.visibility = 'public'
+         and v.user_id is not null
+         and v.viewed_at >= now() - interval '30 days'
+    ) d;
+
+  -- The public-only claim, from both sides: C16 left a like on the owner's
+  -- PRIVATE recipe, so `v_all > v_pub` is what makes F15 non-vacuous.
+  select count(*) into v_pub
+    from recipe_likes l
+    join recipes r on r.id = l.recipe_id
+   where r.owner_id = v_owner and r.visibility = 'public';
+
+  select count(*) into v_all
+    from recipe_likes l
+    join recipes r on r.id = l.recipe_id
+   where r.owner_id = v_owner;
 
   execute 'set local role anon';
   perform set_config('request.jwt.claim.sub', '', true);
@@ -1058,6 +1151,216 @@ begin
   -- already ignores). So the source must not appear at all.
   select count(*) into n from recipes_most_forked(100, 0) r where r.id = v_public;
   v_log := v_log || format(E'%s\tF11 anon · a self-fork does not rank in MOST FORKED (B082)\t%s row', n = 0, n);
+
+  -- ==========================================================================
+  -- F12-F19: the WINDOWED board (Phase 23's deferred half). Still `anon`, and
+  -- deliberately so — `chef_window_stats` is the one `security definer` read on
+  -- this page, and the reason it has to be is that two of the four engagement
+  -- logs are not world-readable (`saves_select` is `user_id = auth.uid()`,
+  -- `views_select` is `owns_recipe`). Under invoker rights a signed-out visitor
+  -- would silently get a board of zeros, which is indistinguishable from a
+  -- quiet week. Every check below therefore has to run as the role that would
+  -- have seen the zeros.
+  -- ==========================================================================
+
+  -- F12: both new functions are reachable without a session, and the windowed
+  -- board covers exactly the population the all-time board does. The
+  -- `public_recipe_count > 0` filter is defined once, in `chef_window_stats`;
+  -- if the two ever disagree, `Score` and `Momentum` are two different boards
+  -- wearing one set of tabs.
+  select count(*) into n   from chef_window_stats(30);
+  select count(*) into v_n from chefs_leaderboard(100000, 0);
+  v_log := v_log || format(E'%s\tF12 anon · chef_window_stats covers the board''s population\t%s of %s',
+    n > 0 and n = v_n, n, v_n);
+
+  -- F13: the window is a FILTER, not decoration. One of the owner's two likes
+  -- is dated 90 days back, so a 30-day window must see strictly fewer of them
+  -- than a wide one. An inequality rather than a count, for the F7 reason —
+  -- and note this is the check that would still be green if `p_days` were
+  -- accepted and ignored the way F8 guards `p_offset`.
+  select w.window_likes into n   from chef_window_stats(30, null, v_owner) w;
+  select w.window_likes into v_n from chef_window_stats(3650, null, v_owner) w;
+  v_log := v_log || format(E'%s\tF13 anon · the window excludes older engagement\t%s',
+    v_n > n, format('%s like(s) in 30d vs %s in 3650d', n, v_n));
+
+  -- F14: **the check this block exists for** (B012, Gotcha 10). `anon` holds
+  -- `insert on recipe_views`, so a window that counted raw log rows would hand
+  -- an unauthenticated loop the top of the Momentum board — the exact hole
+  -- `on_view_insert` was written to close, re-opened in a ranking nobody is
+  -- auditing. `window_views` must equal the DISTINCT signed-in (recipe, viewer)
+  -- pairs, and `v_raw > v_pairs` is the half that makes it non-vacuous: without
+  -- it, a function that simply saw no anonymous rows would pass.
+  select w.window_views into n from chef_window_stats(30, null, v_owner) w;
+  v_log := v_log || format(E'%s\tF14 anon · window views drop anon rows + dedupe the viewer (B012)\t%s',
+    n = v_pairs and v_raw > v_pairs,
+    format('%s log rows -> %s viewers, rpc said %s', v_raw, v_pairs, n));
+
+  -- F15: public recipes only. `chef_window_stats` is `security definer`, so RLS
+  -- is not underneath this — the explicit `visibility = 'public'` filter is the
+  -- only thing keeping a private recipe's engagement out of a world-readable
+  -- number. C16's like on `v_private` is what `v_all > v_pub` is pointing at.
+  select w.window_likes into n from chef_window_stats(3650, null, v_owner) w;
+  v_log := v_log || format(E'%s\tF15 anon · private-recipe engagement never enters the window\t%s',
+    n = v_pub and v_all > v_pub,
+    format('%s public of %s total likes, rpc said %s', v_pub, v_all, n));
+
+  -- F16: `dense_rank()` is computed over the whole population and `limit` /
+  -- `offset` are applied OUTSIDE it, so a chef's rank does not depend on which
+  -- page they arrived on. Move the paging inside the window instead — the paged
+  -- form of Phase 30's trap that F3 pins — and page two ranks a two-row set and
+  -- comes back 1, 2.
+  --
+  -- Bounded to five two-row pages on purpose. This file is safe to run against
+  -- a populated database, and paging a 10,000-chef board two rows at a time
+  -- would re-aggregate the window 5,000 times.
+  select count(*) into n
+    from generate_series(0, 8, 2) g
+    cross join lateral chefs_leaderboard_windowed(30, 2, g) pp
+    join chefs_leaderboard_windowed(30, 10, 0) fb on fb.id = pp.id
+   where pp.chef_rank is distinct from fb.chef_rank;
+  v_log := v_log || format(E'%s\tF16 anon · a windowed rank is the same on any page\t%s row disagrees', n = 0, n);
+
+  -- F17: Gotcha 24. `offset` only means anything over an ordering with no ties,
+  -- and a windowed board is far more tie-prone than the all-time one — most of
+  -- the population scores exactly 0 in any given week. Without the unique tail
+  -- (`chef_score desc, created_at desc, id`) paging shows one chef twice and
+  -- hides another, silently, which is why this asserts BOTH halves: nothing
+  -- duplicated and nothing lost.
+  select count(*) into v_n from chefs_leaderboard_windowed(30, 10, 0);
+  select count(*), count(distinct pp.id) into n, i
+    from generate_series(0, 8, 2) g
+    cross join lateral chefs_leaderboard_windowed(30, 2, g) pp;
+  v_log := v_log || format(E'%s\tF17 anon · paging the windowed board loses and repeats nothing\t%s',
+    n = v_n and i = v_n, format('%s rows / %s distinct across 5 pages, %s in one', n, i, v_n));
+
+  -- F18: `created_at` reached the board (Phase 23) — the `New` sort and the
+  -- `Joined <month year>` line both need it. This is a RETURNS TABLE change,
+  -- which `create or replace` cannot make, so on a database that already held
+  -- the ten-column function the apply only succeeds because the
+  -- `drop function if exists chefs_leaderboard(int, int)` above it runs first
+  -- (B024). A fresh `db reset` cannot tell you that; this can.
+  --
+  -- `chef_standing` is checked in the same breath because the two share a row
+  -- shape deliberately: one client model decodes either, and a column added to
+  -- one and not the other is how that quietly stops being true.
+  select count(*) into n
+    from chefs_leaderboard(100000, 0) b
+    join profiles p on p.id = b.id
+   where b.created_at is not distinct from p.created_at;
+  select count(*) into v_n from chefs_leaderboard(100000, 0);
+  select count(*) into i
+    from chef_standing(v_owner) s
+    join profiles p on p.id = s.id
+   where s.created_at is not distinct from p.created_at;
+  v_log := v_log || format(E'%s\tF18 anon · chefs_leaderboard + chef_standing carry created_at\t%s',
+    n = v_n and n > 0 and i = 1,
+    format('%s of %s board rows match profiles, standing %s', n, v_n, i));
+
+  -- F19: `p_since` overrides `p_days`. Two things need it. A paged Momentum
+  -- board has to hold its boundary still across page requests — a window
+  -- measured from `now()` MOVES between calls, which makes `offset` lie even
+  -- over a total order (Gotcha 24, one level out). And a fixture whose
+  -- engagement is anchored in the past (the sim pins `sim.epoch_end()`, B044)
+  -- can only be crossed by naming an instant: on a simulated database that has
+  -- gone stale, a 7-day window is correctly EMPTY, and widening the default
+  -- would be fixing the query to suit the data.
+  v_since := now() - interval '3650 days';
+  select w.window_likes, w.window_start into v_n, v_when
+    from chef_window_stats(30, v_since, v_owner) w;
+  select w.window_likes into n from chef_window_stats(30, null, v_owner) w;
+  v_log := v_log || format(E'%s\tF19 anon · p_since overrides p_days and is echoed back\t%s',
+    v_n > n and v_when = v_since,
+    format('%s like(s) at 30d vs %s pinned, window_start echoed %s', n, v_n, v_when = v_since));
+
+  -- ==========================================================================
+  -- F20-F21: `chef_trending_recipes` gives every seat the SAME order (B092).
+  --
+  -- The Phase 31 RPC ranks a chef's catalogue on `likes x 2 + distinct
+  -- signed-in viewers` over seven days, reading `recipe_views` directly — and
+  -- it shipped invoker-rights, while `views_select` is `owns_recipe`. So the
+  -- viewer term counted zero for `anon` and for every signed-in non-owner, the
+  -- ordering silently degraded to likes alone, and the chef saw a different
+  -- Trending tab from their own readers. No error, anywhere.
+  --
+  -- Two fixtures make the check discriminating rather than decorative: two
+  -- public recipes that TIE on likes (zero each) and differ only in recent
+  -- distinct viewers, with the unread one created LAST. Ranked correctly, the
+  -- well-read older one leads; with the viewer term reading zero rows the two
+  -- tie and the documented fall-through (`created_at desc`) puts the unread
+  -- newer one first. The wrong answer is therefore a different order, not an
+  -- error — which is exactly why this needed a check and not an inspection.
+  -- ==========================================================================
+  execute 'reset role';
+  perform set_config('request.jwt.claims', '', true);
+
+  insert into recipes (owner_id, title, description, servings, visibility,
+                       prep_minutes, cook_minutes, created_at)
+  values (v_owner, 'BL-7 trending: read', 'older, well read', 2, 'public', 5, 5,
+          now() - interval '2 days')
+  returning id into v_trend_read;
+
+  insert into recipes (owner_id, title, description, servings, visibility,
+                       prep_minutes, cook_minutes, created_at)
+  values (v_owner, 'BL-7 trending: unread', 'newer, unread', 2, 'public', 5, 5,
+          now() - interval '1 day')
+  returning id into v_trend_unread;
+
+  -- Three DISTINCT signed-in viewers, inside the seven-day window. Distinct
+  -- because the RPC counts `count(distinct v.user_id)` — three rows from one
+  -- viewer would rank the same as one, which is B012's rule and is asserted
+  -- for the windowed board at F14.
+  insert into recipe_views (recipe_id, user_id, viewed_at) values
+    (v_trend_read, v_owner,  now() - interval '1 day'),
+    (v_trend_read, v_sharee, now() - interval '1 day'),
+    (v_trend_read, v_other,  now() - interval '1 day');
+
+  execute 'set local role anon';
+  perform set_config('request.jwt.claims', '', true);
+
+  -- F20: the premise. `anon` genuinely cannot read the view log — if this ever
+  -- stops being true the rest of this block proves nothing, because the bug it
+  -- guards against would have become unreachable for a different reason.
+  --
+  -- The claim is the RELATIVE order of the two fixtures, not the top of the
+  -- page: the owner also owns `v_public`, which sections A-E have left likes
+  -- on, and it outranks both. Comparing against `limit 1` would be asserting
+  -- something about a third recipe this check is not about.
+  select count(*) into n from recipe_views where recipe_id = v_trend_read;
+  select array_agg(id order by ord) into v_trend_anon
+    from (select id, row_number() over () as ord
+            from chef_trending_recipes(v_owner, 100, 0)) x;
+  i := array_position(v_trend_anon, v_trend_read);
+  v_n := array_position(v_trend_anon, v_trend_unread);
+  v_log := v_log || format(E'%s\tF20 anon · ranks on views it cannot itself read (B092)\t%s',
+    n = 0 and i is not null and v_n is not null and i < v_n,
+    format('anon sees %s view row(s); well-read at #%s, unread at #%s%s',
+           n, i, v_n,
+           case when i is not null and v_n is not null and i > v_n
+                then ' — the viewer term counted zero' else '' end));
+
+  -- F21: and it is the same order the owner gets. Compared as an ordered id
+  -- array rather than one row: "the top row agrees" is a weaker claim than
+  -- "the page agrees", and paging is what a reader actually scrolls.
+  select array_agg(id order by ord) into v_trend_anon
+    from (select id, row_number() over () as ord
+            from chef_trending_recipes(v_owner, 10, 0)) x;
+
+  execute 'set local role authenticated';
+  perform set_config('request.jwt.claims', json_build_object('sub', v_owner)::text, true);
+  select array_agg(id order by ord) into v_trend_owner
+    from (select id, row_number() over () as ord
+            from chef_trending_recipes(v_owner, 10, 0)) x;
+
+  execute 'set local role anon';
+  perform set_config('request.jwt.claims', '', true);
+  v_log := v_log || format(E'%s\tF21 anon and the owner get the same Trending order (B092)\t%s',
+    v_trend_anon is not null
+      and array_length(v_trend_anon, 1) >= 2
+      and v_trend_anon = v_trend_owner,
+    format('%s row(s) anon vs %s owner, identical: %s',
+           coalesce(array_length(v_trend_anon, 1), 0),
+           coalesce(array_length(v_trend_owner, 1), 0),
+           v_trend_anon is not distinct from v_trend_owner));
 
   -- ==========================================================================
   -- Report

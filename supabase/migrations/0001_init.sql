@@ -487,6 +487,17 @@ create table if not exists recipe_saves (
 create index if not exists recipe_likes_recipe_idx on recipe_likes (recipe_id, created_at desc);
 create index if not exists recipe_saves_recipe_idx on recipe_saves (recipe_id, created_at desc);
 
+-- Phase 23 (the windowed half): the two composites above lead with `recipe_id`,
+-- so neither can serve "every like on the site in the last 7 days" — the shape
+-- `chef_window_stats` reads. It aggregates the whole board in one pass rather
+-- than one recipe at a time, so its scan is date-first; without these it is a
+-- seq scan of the log on every request of an `anon`-callable page. `recipe_id`
+-- rides along as the second key so the join back to the chef's public recipes
+-- stays index-only. Cheap to maintain: unlike `recipe_views`, a like or a save
+-- is one row per (user, recipe) for the life of the account.
+create index if not exists recipe_likes_created_idx on recipe_likes (created_at desc, recipe_id);
+create index if not exists recipe_saves_created_idx on recipe_saves (created_at desc, recipe_id);
+
 create table if not exists recipe_views (
   id        uuid primary key default gen_random_uuid(),
   recipe_id uuid not null references recipes (id) on delete cascade,
@@ -520,6 +531,27 @@ create index if not exists recipe_views_recipe_viewed_idx
   on recipe_views (recipe_id, viewed_at desc, user_id)
   where user_id is not null;
 
+-- Phase 23: the same index rotated, because the windowed board asks the
+-- transposed question. `chef_trending_recipes` starts from ONE recipe and wants
+-- its last seven days, which the index above serves; `chef_window_stats` starts
+-- from a DATE and wants every signed-in viewer after it, which that index
+-- cannot serve at all — `recipe_id` leads it. Partial on `user_id is not null`
+-- for the same reason as its twin: the window excludes anonymous rows anyway
+-- (Gotcha 10 / B012), so this is a correctness match rather than a size trick,
+-- and it keeps ~19% of the local fixture's 20,630 rows out of the index.
+-- All three columns are here so the distinct-pair count is an index-only scan.
+--
+-- Write cost, since `logView()` is the highest-volume insert in the schema: a
+-- signed-in view now maintains five index entries instead of four. 32b measured
+-- the step from two to four as below the noise floor — `on_view_insert`'s dedup
+-- probe, advisory lock and counter update dominate so completely that a
+-- 1,000-row batch ranged 115-307 ms either way — and this adds a fifth to the
+-- same budget. Recorded as "expected to be indistinguishable", NOT as measured:
+-- the local fixture is a restored simulation and was not re-timed for it.
+create index if not exists recipe_views_viewed_idx
+  on recipe_views (viewed_at desc, recipe_id, user_id)
+  where user_id is not null;
+
 -- 32b: the FK that made deleting an account expensive. `user_id` is
 -- `on delete set null`, and both composites above lead with `recipe_id`, so
 -- neither can serve `user_id = $1` — removing one profile seq-scanned the
@@ -539,6 +571,9 @@ create table if not exists recipe_ratings (
   primary key (user_id, recipe_id)
 );
 create index if not exists recipe_ratings_recipe_idx on recipe_ratings (recipe_id);
+-- Phase 23: `chef_window_stats` counts ratings RECEIVED in the window, and the
+-- index above leads with `recipe_id`, so the date range had no support at all.
+create index if not exists recipe_ratings_created_idx on recipe_ratings (created_at desc, recipe_id);
 
 -- recipe_suggestions (RESERVED stub for future PR-like flow)
 create table if not exists recipe_suggestions (
@@ -2065,11 +2100,15 @@ $$;
 -- `language sql` function those names are in scope and would make `chef_score`
 -- / `display_name` / `id` ambiguous against the tables being read.
 --
--- The drop is not currently load-bearing — the signature has never changed — but
--- it is where the drop has to live when it does (B024), and adding it after an
--- ambiguous-overload failure means editing a database that already has two
--- (OPT-A6). Note that a **return type** change needs this too, not just an
--- argument-list change: `create or replace` refuses both.
+-- **The drop is load-bearing as of Phase 23's windowed half.** It used to be
+-- insurance — the argument list had never changed — but `created_at` was added
+-- to the RETURNS TABLE below, and a **return type** change is exactly as
+-- impossible for `create or replace` as an argument-list change is. Without
+-- this line every database that already holds the ten-column version fails the
+-- apply with `42P13 cannot change return type of existing function`, and the
+-- one that does *not* hold it (a fresh `db reset`) succeeds — so the upgrade
+-- path is the only place it shows (Gotcha 6). The drop keys on the ARGUMENT
+-- list, `(int, int)`, which is unchanged and is what makes one line enough.
 drop function if exists chefs_leaderboard(int, int);
 create or replace function chefs_leaderboard(p_limit int default 50, p_offset int default 0)
 returns table (
@@ -2082,7 +2121,12 @@ returns table (
   public_recipe_count int,
   total_likes         bigint,
   total_saves         bigint,
-  total_views         bigint
+  total_views         bigint,
+  -- The profile's join date (Phase 23). Two client surfaces need it and neither
+  -- can get it any other way without a second round trip: the board's `New`
+  -- sort, and the `Joined <month year>` line on a chef card the board itself
+  -- rendered. It is NOT part of the ordering here — see below.
+  created_at          timestamptz
 )
 language sql
 stable
@@ -2098,7 +2142,8 @@ as $$
       p.public_recipe_count as pcount,
       p.total_likes         as plikes,
       p.total_saves         as psaves,
-      p.total_views         as pviews
+      p.total_views         as pviews,
+      p.created_at          as pjoined
     from profiles p
     -- Chefs with no public recipes (tasters, private-only accounts, brand-new
     -- signups) still *have* a tier for badge purposes; they just don't occupy
@@ -2107,9 +2152,14 @@ as $$
   )
   select
     x.rnk, x.pid, x.pname, x.pavatar, x.ptier, x.pscore, x.pcount,
-    x.plikes, x.psaves, x.pviews
+    x.plikes, x.psaves, x.pviews, x.pjoined
   from ranked x
   -- Deterministic full ordering; dense_rank above lets tied scores share a rank.
+  -- `created_at` is deliberately NOT added here: this ordering is already total
+  -- (it ends in the primary key) and it is the one `profiles_leaderboard_idx`
+  -- was built to serve as an index scan, so a new sort key would put a sort back
+  -- on top of it. A `New` board is a different ordering and therefore a
+  -- different query, not a tie-break bolted onto this one.
   order by x.pscore desc, x.pcount desc, x.pname asc, x.pid asc
   limit p_limit offset p_offset;
 $$;
@@ -2120,6 +2170,343 @@ do $$
 begin
   if exists (select 1 from pg_roles where rolname = 'anon') then
     execute 'grant execute on function chefs_leaderboard(int, int) to anon, authenticated';
+  end if;
+end $$;
+
+-- ============================================================================
+-- Windowed chef engagement (Phase 23's deferred half — SDS §10.8, ROADMAP
+-- "Chefs windowed half").
+-- ============================================================================
+-- Everything on `/chefs` above this line is ALL-TIME. `profiles.chef_score` and
+-- the three totals beside it are lifetime counters with no date on them, so
+-- until now nothing in the schema could answer "who moved this month" — which
+-- is why the `Momentum` sort and the hero's Month / Week toggle shipped drawn
+-- and disabled. The engagement LOGS can answer it (`recipe_likes.created_at`,
+-- `recipe_saves.created_at`, `recipe_views.viewed_at`,
+-- `recipe_ratings.created_at`), so a windowed score is a query, not a new
+-- snapshot table.
+--
+-- `chef_window_stats` is the ONLY place the window is computed.
+-- `chefs_leaderboard_windowed` ranks what this returns and adds no arithmetic
+-- of its own, so the Momentum board and any future per-chef momentum line
+-- cannot drift apart the way two copies of a formula do (Gotcha 19's shape).
+--
+-- Five rules, each of which costs something real if broken:
+--
+--  1. **Anonymous views do not count, and a viewer counts once per recipe.**
+--     `anon` holds `insert on recipe_views` (the grants block above, and
+--     deliberately — a signed-out visitor reading a public recipe logs a view),
+--     so an unauthenticated loop can add view rows at will. `on_view_insert`
+--     refuses to move `recipes.view_count` for them (Gotcha 10 / B012) and this
+--     window has to refuse the same way, or the inflation hole reopens inside a
+--     ranking nobody is auditing. The clause is `where v.user_id is not null`
+--     over a `select distinct pub.pid, v.recipe_id, v.user_id` — SDS §10.8's
+--     rule 1 ("count distinct (recipe_id, user_id) where user_id is not null"),
+--     verbatim. Measured on the local fixture: 3,878 of 20,630 view rows are
+--     anonymous, and the 16,752 signed-in rows collapse to 10,083 distinct
+--     pairs — so this is a 51% correction, not a rounding one.
+--  2. **The points come from `chef_score()`**, never a restated `3 / 5 / 0.2`
+--     (Gotcha 19, SDS §10.8 rule 2). A windowed board that weighted a save
+--     differently from the all-time board would be two products on one page.
+--  3. **Public recipes only, filtered explicitly.** This function is
+--     `security definer`, so RLS is not in the loop at all — that filter is the
+--     only thing keeping a private recipe's engagement out of a world-readable
+--     number. It is the same claim `chefs_leaderboard` and `chef_top_recipes`
+--     make, with the safety net removed.
+--  4. **The window is `now()`-relative or caller-pinned — never a fixture
+--     anchor.** `sim.epoch_end()` is a pinned instant (B044) and lives in schema
+--     `sim`, which does not exist on a real deployment; keying off it would make
+--     the board work only on machines that had run the simulator. The visible
+--     consequence is that a simulated database whose anchor has gone stale
+--     returns an EMPTY week — that is the data being old, not the query being
+--     wrong, and it is why the client needs a real empty state here rather than
+--     a spinner.
+--  5. **Self-engagement is NOT excluded**, deliberately. `recompute_chef_stats`
+--     does not exclude it either (SDS §10.8 lists it as an accepted v1 limit),
+--     and a window that counted differently from the all-time score would put
+--     two numbers on one card that measure different things. If that limit is
+--     ever closed it has to close in both places, in one change.
+--
+-- **`security definer` is mandatory here, and not for the usual reason.** Three
+-- of the four logs are not world-readable: `saves_select` is
+-- `user_id = auth.uid()` (you see your own saves and nobody else's) and
+-- `views_select` is `owns_recipe(recipe_id)` (only a recipe's owner sees its
+-- view log). Under invoker rights this function would therefore compute a
+-- *different* window for every caller — zero saves and zero views for `anon`,
+-- a chef's own numbers for that chef — which is the "one page, two answers"
+-- defect `chefs_leaderboard`'s comment warns about, except silent, because an
+-- under-count is indistinguishable from a quiet week. Definer rights are what
+-- make every viewer read the same board.
+--
+-- Exposing a definer function to `anon` is safe here for reasons worth stating,
+-- because they are what a future edit has to preserve: it takes no dynamic SQL,
+-- writes nothing, pins `search_path`, returns COUNTS ONLY (never a user id,
+-- never a recipe id), and aggregates only recipes whose lifetime counters are
+-- already world-readable columns. A window is a strictly less revealing slice
+-- of data the API already serves.
+--
+-- Population: the board's own `public_recipe_count > 0` filter, so a chef with
+-- no public recipes holds no windowed row for the same reason they hold no rank
+-- (F4/F5 below). Every *other* ranked chef gets a row, zeros included — a quiet
+-- month is `0`, not a missing row, which is what lets the board rank the whole
+-- population instead of only the chefs who happened to be busy.
+--
+-- `p_days` is the client's control (the hero's Month = 30 / Week = 7).
+-- `p_since` overrides it with an explicit instant, for two reasons: a paged
+-- Momentum board should pin its boundary once rather than let `now()` drift
+-- between page 1 and page 2 (Gotcha 24's problem one level out — a moving
+-- window makes `offset` lie even over a total order), and a test has to be able
+-- to cross a fixture's stale anchor. `p_days` is clamped to 1..3650: zero or
+-- negative would be a future window that reads as "nothing happened", and the
+-- ceiling stops an anon caller from provoking an `interval` overflow.
+--
+-- New signatures, so there is no historical overload to drop yet — but the drop
+-- is written now, for the exact current argument list, because that is where it
+-- has to live the day the list changes (B024), and adding it after an
+-- ambiguous-overload failure means editing a database that already has two
+-- (OPT-A6). It also makes the next RETURN TYPE change free: `create or replace`
+-- refuses those too, which is the trap `chefs_leaderboard` just walked into.
+drop function if exists chef_window_stats(int, timestamptz, uuid);
+create or replace function chef_window_stats(
+  p_days  int         default 30,
+  p_since timestamptz default null,
+  p_chef  uuid        default null
+)
+returns table (
+  id             uuid,
+  window_start   timestamptz,
+  window_likes   bigint,
+  window_saves   bigint,
+  window_views   bigint,
+  window_ratings bigint,
+  window_recipes bigint,
+  window_score   numeric
+)
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  -- Internal aliases deliberately avoid every RETURNS TABLE column name: in a
+  -- `language sql` body those names are in scope as OUT parameters, and a bare
+  -- `id` would be ambiguous against four of the five tables read below. Same
+  -- reasoning, and the same `p*` convention, as `chefs_leaderboard`.
+  with bounds as (
+    select coalesce(
+             p_since,
+             now() - make_interval(days => least(greatest(coalesce(p_days, 30), 1), 3650))
+           ) as start_at
+  ),
+  chefs as (
+    select p.id as pid
+    from profiles p
+    where p.public_recipe_count > 0
+      and (p_chef is null or p.id = p_chef)
+  ),
+  -- Rule 3. Every aggregate below reaches the logs THROUGH this CTE, so there
+  -- is exactly one `visibility = 'public'` filter to get wrong.
+  pub as (
+    select r.id as rid, r.owner_id as pid, r.created_at as made_at
+    from recipes r
+    join chefs c on c.pid = r.owner_id
+    where r.visibility = 'public'
+  ),
+  likes as (
+    select pub.pid, count(*)::bigint as n
+    from recipe_likes l
+    join pub on pub.rid = l.recipe_id
+    cross join bounds b
+    where l.created_at >= b.start_at
+    group by pub.pid
+  ),
+  saves as (
+    select pub.pid, count(*)::bigint as n
+    from recipe_saves s
+    join pub on pub.rid = s.recipe_id
+    cross join bounds b
+    where s.created_at >= b.start_at
+    group by pub.pid
+  ),
+  -- Rule 1 — the single most important thing in this function. `select
+  -- distinct` over the pair, not `count(*)` over the rows: `recipe_views` is an
+  -- append-only log, so one enthusiastic reader would otherwise outrank a
+  -- hundred. `user_id is not null` is what keeps `anon`'s insert grant from
+  -- being a ranking lever (B012).
+  viewers as (
+    select d.pid, count(*)::bigint as n
+    from (
+      select distinct pub.pid, v.recipe_id, v.user_id
+      from recipe_views v
+      join pub on pub.rid = v.recipe_id
+      cross join bounds b
+      where v.user_id is not null
+        and v.viewed_at >= b.start_at
+    ) d
+    group by d.pid
+  ),
+  -- `created_at`, not `updated_at`: this counts ratings *received* in the
+  -- window, so re-scoring a recipe rated last year is not a new rating. The
+  -- distinction is the reason `recipe_ratings` carries both columns.
+  rated as (
+    select pub.pid, count(*)::bigint as n
+    from recipe_ratings rt
+    join pub on pub.rid = rt.recipe_id
+    cross join bounds b
+    where rt.created_at >= b.start_at
+    group by pub.pid
+  ),
+  fresh as (
+    select pub.pid, count(*)::bigint as n
+    from pub
+    cross join bounds b
+    where pub.made_at >= b.start_at
+    group by pub.pid
+  )
+  select
+    c.pid,
+    b.start_at,
+    coalesce(lk.n, 0),
+    coalesce(sv.n, 0),
+    coalesce(vw.n, 0),
+    coalesce(rt.n, 0),
+    coalesce(fr.n, 0),
+    -- Rule 2. Ratings and new recipes are reported BESIDE the score and do not
+    -- enter it: `chef_score()` has no term for either, and inventing one here
+    -- would be exactly the second definition of the formula that rule exists to
+    -- prevent. The windowed rank and the all-time rank weigh the same three
+    -- signals over different spans, which is the only reason they can be shown
+    -- next to each other.
+    chef_score(coalesce(lk.n, 0), coalesce(sv.n, 0), coalesce(vw.n, 0))
+  -- LEFT joins off `chefs`, so a chef with no activity comes back as zeros
+  -- rather than vanishing. `bounds` is a one-row cross join purely so
+  -- `window_start` can be echoed back to the caller.
+  from chefs c
+  cross join bounds b
+  left join likes   lk on lk.pid = c.pid
+  left join saves   sv on sv.pid = c.pid
+  left join viewers vw on vw.pid = c.pid
+  left join rated   rt on rt.pid = c.pid
+  left join fresh   fr on fr.pid = c.pid;
+$$;
+
+-- The leaderboard ranked by window activity — the `Momentum` sort, and the
+-- board behind the hero's Month / Week toggle.
+--
+-- Same row shape as `chefs_leaderboard` (including `created_at`, added in this
+-- same change) plus the six window columns, so one client model decodes both
+-- boards and Score / Momentum stay a re-sort rather than two screens.
+--
+-- All the arithmetic is `chef_window_stats`'; this function only ranks, orders
+-- and pages. It is invoker-rights on purpose even though its input is a definer
+-- function: everything IT reads is `profiles`, which is world-readable, so
+-- there is nothing here to elevate.
+--
+-- **`dense_rank()` is computed over the whole population, and nothing is
+-- filtered inside the window** — Phase 30's lesson (`chef_standing`, F3). There
+-- is no id filter here at all, and `limit`/`offset` are applied in the OUTER
+-- select, which is what makes rank 26 on page two say 26 instead of 1. Ties
+-- share a rank exactly as on the all-time board; on a quiet week that means
+-- every chef with no activity shares the last rank, which is the honest answer
+-- and not a bug.
+--
+-- **The ordering is total** (Gotcha 24), and it has to be: this is a paged
+-- surface, and the windowed keys are far more tie-prone than `chef_score` —
+-- most of the board scores exactly 0 in any given week, so without a unique
+-- tail `offset` would show one chef twice and hide another. The tail is
+-- `chef_score desc, created_at desc, id`, and `id` (the `profiles` primary key)
+-- is what actually makes it total; the two keys before it are there so the tie
+-- is broken by something a reader can see. The all-time score coming *before*
+-- the join date is deliberate: when nothing moved this week the Momentum board
+-- degrades into the Score board, rather than into a list of new accounts.
+--
+-- Note the second half of Gotcha 24 that a *windowed* paged surface adds: a
+-- window measured from `now()` is a MOVING boundary, so paging one is only
+-- sound while the boundary holds still across the calls. `p_since` is how a
+-- client pins it — fetch page 1, read `window_start` off any row, pass it back
+-- as `p_since` for every later page.
+--
+-- `stable`, `anon`-callable: `/chefs` is signed-out safe like Discover, and a
+-- windowed board is no more privileged than the all-time one.
+-- First signature; the drop is written now for the reason given above (B024).
+drop function if exists chefs_leaderboard_windowed(int, int, int, timestamptz);
+create or replace function chefs_leaderboard_windowed(
+  p_days   int         default 30,
+  p_limit  int         default 50,
+  p_offset int         default 0,
+  p_since  timestamptz default null
+)
+returns table (
+  chef_rank           bigint,
+  id                  uuid,
+  display_name        text,
+  avatar_url          text,
+  chef_tier           chef_tier,
+  chef_score          numeric,
+  public_recipe_count int,
+  total_likes         bigint,
+  total_saves         bigint,
+  total_views         bigint,
+  created_at          timestamptz,
+  window_start        timestamptz,
+  window_likes        bigint,
+  window_saves        bigint,
+  window_views        bigint,
+  window_ratings      bigint,
+  window_recipes      bigint,
+  window_score        numeric
+)
+language sql
+stable
+as $$
+  with ranked as (
+    select
+      dense_rank() over (order by w.window_score desc) as rnk,
+      p.id                  as pid,
+      p.display_name        as pname,
+      p.avatar_url          as pavatar,
+      p.chef_tier           as ptier,
+      p.chef_score          as pscore,
+      p.public_recipe_count as pcount,
+      p.total_likes         as plikes,
+      p.total_saves         as psaves,
+      p.total_views         as pviews,
+      p.created_at          as pjoined,
+      w.window_start        as wstart,
+      w.window_likes        as wlikes,
+      w.window_saves        as wsaves,
+      w.window_views        as wviews,
+      w.window_ratings      as wratings,
+      w.window_recipes      as wrecipes,
+      w.window_score        as wscore
+    -- No `p_chef`, so the CTE sees the whole ranked population — the input the
+    -- window function has to have. The `public_recipe_count > 0` filter is not
+    -- restated here: it lives in `chef_window_stats`, which makes this inner
+    -- join complete by construction and leaves one definition of "is a chef".
+    from chef_window_stats(p_days, p_since) w
+    join profiles p on p.id = w.id
+  )
+  select
+    x.rnk, x.pid, x.pname, x.pavatar, x.ptier, x.pscore, x.pcount,
+    x.plikes, x.psaves, x.pviews, x.pjoined,
+    x.wstart, x.wlikes, x.wsaves, x.wviews, x.wratings, x.wrecipes, x.wscore
+  from ranked x
+  order by x.wscore desc, x.wlikes desc, x.wsaves desc,
+           x.pscore desc, x.pjoined desc, x.pid
+  limit p_limit offset p_offset;
+$$;
+
+-- EXECUTE on a new function goes to `public` by default rather than to the API
+-- roles by name, so grant it explicitly (B013), the same way `chefs_leaderboard`
+-- does. Guarded on `anon` existing, because a bare Postgres has no Supabase
+-- roles. No `revoke ... from public` on the definer function: it is read-only,
+-- count-only and public-recipe-only (see its header), and every other
+-- `anon`-callable read in this file follows the same grant-without-revoke shape
+-- — the revokes here are for the functions that WRITE.
+do $$
+begin
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'grant execute on function chef_window_stats(int, timestamptz, uuid) to anon, authenticated';
+    execute 'grant execute on function chefs_leaderboard_windowed(int, int, int, timestamptz) to anon, authenticated';
   end if;
 end $$;
 
@@ -2161,7 +2548,13 @@ returns table (
   public_recipe_count int,
   total_likes         bigint,
   total_saves         bigint,
-  total_views         bigint
+  total_views         bigint,
+  -- Added in lockstep with `chefs_leaderboard` (Phase 23), and the lockstep is
+  -- the point: the two functions share a return shape precisely so one client
+  -- model decodes either, and a column on one and not the other is how that
+  -- stops being true. `/chef/:id` also renders the `Joined` line, so it needs
+  -- the value regardless.
+  created_at          timestamptz
 )
 language sql
 stable
@@ -2177,13 +2570,14 @@ as $$
       p.public_recipe_count as pcount,
       p.total_likes         as plikes,
       p.total_saves         as psaves,
-      p.total_views         as pviews
+      p.total_views         as pviews,
+      p.created_at          as pjoined
     from profiles p
     where p.public_recipe_count > 0
   )
   select
     x.rnk, x.pid, x.pname, x.pavatar, x.ptier, x.pscore, x.pcount,
-    x.plikes, x.psaves, x.pviews
+    x.plikes, x.psaves, x.pviews, x.pjoined
   from ranked x
   where x.pid = p_chef;
 $$;
@@ -2290,6 +2684,26 @@ end $$;
 -- also the total order `p_offset` needs (Gotcha 24).
 -- No B024 drop list yet — this signature is the first. Add one here the moment
 -- the argument list changes.
+-- **`security definer` (B092).** This function ranks on the LOGS, not on the
+-- denormalized counters, and that makes it the only ranking RPC in this file
+-- whose answer depended on who asked. `views_select` is `owns_recipe(recipe_id)`,
+-- so under invoker rights the distinct-viewer term counted zero rows for `anon`
+-- and for every signed-in non-owner: the ordering silently degraded to likes
+-- alone for everybody except the chef, who saw a different Trending tab from
+-- their own readers with no error raised anywhere. Shipped that way in Phase 31
+-- and found in Phase 33 while building `chef_window_stats`, which hit the same
+-- wall from the other side.
+--
+-- Safe to elevate for the same reasons `chef_window_stats` is, and they are
+-- what a future edit must preserve: no dynamic SQL, no writes, a pinned
+-- `search_path`, and — the load-bearing one — the `visibility = 'public'`
+-- filter below is written out explicitly, so removing RLS from the loop removes
+-- a safety net that was never the thing doing the filtering. The logs are read
+-- for COUNTS only; no viewer id leaves this function.
+--
+-- `rls_matrix.sql` F20/F21 pin it: `anon` and the owner must get the SAME
+-- order. The whole failure mode is that it looks correct from the one seat a
+-- developer usually tests from.
 create or replace function chef_trending_recipes(
   p_chef uuid,
   p_limit int default 20,
@@ -2298,6 +2712,8 @@ create or replace function chef_trending_recipes(
 returns setof recipes
 language sql
 stable
+security definer
+set search_path = public
 as $$
   select r.*
   from recipes r
