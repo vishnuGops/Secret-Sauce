@@ -1,0 +1,66 @@
+{
+  "slug": "swiss-rosti",
+  "title": "Rösti",
+  "description": "A single pan-sized potato cake, crisp on both faces and steamy in the middle. Made from potatoes boiled the day before, because cold cooked potato is the only kind that grates into strands.",
+  "cuisine": "Swiss",
+  "category": "Side",
+  "difficulty": "medium",
+  "prep_minutes": 15,
+  "cook_minutes": 50,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "A 24 cm heavy pan gives a cake about 2 cm thick, which is the depth that crisps properly. Thicker than that and the centre stays raw-tasting while the crust burns.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 900, "unit": "g", "name": "waxy potatoes", "note": "cooked the day before, skins on" },
+        { "quantity": 60, "unit": "g", "name": "butter", "note": "clarified if you can" },
+        { "quantity": 2, "unit": "Tbsp", "name": "neutral oil" },
+        { "quantity": 1.5, "unit": "tsp", "name": "salt" },
+        { "quantity": 0.5, "unit": "tsp", "name": "black pepper" },
+        { "quantity": 1, "unit": "pinch", "name": "nutmeg", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Boil the waxy potatoes in their skins until a knife meets clear resistance in the middle — under-done rather than done.",
+          "duration_minutes": 20
+        },
+        {
+          "text": "Drain, cool completely, and refrigerate uncovered overnight.",
+          "duration_minutes": 720,
+          "tip": "This is the step the whole recipe turns on. Cold potato grates into strands; warm potato grates into paste, and paste fries into a flat wet disc."
+        },
+        {
+          "text": "Peel the chilled potatoes with your thumb and grate them on the coarse side of a box grater into a wide bowl."
+        },
+        {
+          "text": "Season with the salt, black pepper, and nutmeg, lifting the strands with your fingertips rather than stirring."
+        },
+        {
+          "text": "Heat the butter with the neutral oil in a heavy pan and tip the potato in, spreading it out without pressing.",
+          "tip": "Loose is what lets steam escape from the middle. Press now and you have compacted it into a dumpling."
+        },
+        {
+          "text": "Fry over medium heat until the underside is one solid brown sheet that moves as a single piece when you shake the pan.",
+          "duration_minutes": 15,
+          "tip": "Press the cake down flat only in the last two minutes, once the crust has already formed."
+        },
+        {
+          "text": "Slide it onto a plate, invert the pan over it, turn the pair together, and fry the second side.",
+          "duration_minutes": 12
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.2,
+    "variant_titles": ["{title} with Bacon and Onion", "Cheesy {title}"]
+  }
+}

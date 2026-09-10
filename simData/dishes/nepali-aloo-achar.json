@@ -1,0 +1,67 @@
+{
+  "slug": "nepali-aloo-achar",
+  "title": "Aloo Achar",
+  "description": "Nepali potato salad, dressed with toasted sesame ground to a powder, lemon, and mustard oil tempered with fenugreek. Timur gives it the faint numbness that makes it read as Nepali rather than as any other potato salad.",
+  "cuisine": "Nepali",
+  "category": "Salad",
+  "difficulty": "easy",
+  "prep_minutes": 20,
+  "cook_minutes": 25,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Dress the potatoes while they are still warm so they drink the lemon, but fold in the cucumber only at the last moment or it weeps and thins the whole bowl.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 600, "unit": "g", "name": "waxy potatoes", "note": "scrubbed, skin on" },
+        { "quantity": 4, "unit": "Tbsp", "name": "sesame seeds", "note": "white" },
+        { "quantity": 3, "unit": "Tbsp", "name": "lemon juice" },
+        { "quantity": 3, "unit": "Tbsp", "name": "mustard oil" },
+        { "quantity": 1, "unit": "tsp", "name": "timur peppercorns", "note": "Sichuan peppercorns work; crush them coarsely" },
+        { "quantity": 0.5, "unit": "tsp", "name": "turmeric" },
+        { "quantity": 3, "unit": null, "name": "dried red chilies", "note": "snapped in half" },
+        { "quantity": 0.5, "unit": "tsp", "name": "fenugreek seeds" },
+        { "quantity": 1, "unit": null, "name": "cucumber", "note": "seeded and cut into batons" },
+        { "quantity": 1, "unit": null, "name": "green chili", "note": "sliced thin", "is_optional": true },
+        { "quantity": 3, "unit": "Tbsp", "name": "cilantro", "note": "chopped" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Boil the waxy potatoes whole in salted water until a knife slides in with no resistance, then drain and let the steam dry off them.",
+          "duration_minutes": 20,
+          "tip": "Whole and skin on. Cubed potatoes take on water and the dressing then slides off them."
+        },
+        {
+          "text": "Toast the sesame seeds in a dry pan until they smell nutty and begin to jump, then grind them to a coarse powder.",
+          "duration_minutes": 5
+        },
+        {
+          "text": "Crush the timur peppercorns and stir them into the sesame powder with the turmeric, lemon juice and salt to make a loose paste."
+        },
+        {
+          "text": "Heat the mustard oil until it just begins to smoke, drop in the fenugreek seeds and the dried red chilies, and pull the pan off the heat the second the fenugreek darkens.",
+          "duration_minutes": 2,
+          "tip": "Fenugreek goes from nutty to bitter in about five seconds and there is no rescuing it. Have the pan lid in your other hand."
+        },
+        {
+          "text": "Cube the still-warm potatoes into a wide bowl, pour over the sesame paste and then the hot oil, and turn everything over gently."
+        },
+        {
+          "text": "Fold through the cucumber, green chili and cilantro just before it goes to the table."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.2,
+    "variant_titles": ["{title} with Green Beans", "{title} for a Crowd", "Extra Sour {title}"]
+  }
+}

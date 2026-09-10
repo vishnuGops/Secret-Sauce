@@ -1,0 +1,70 @@
+{
+  "slug": "serbian-ajvar",
+  "title": "Ajvar",
+  "description": "Roasted red pepper relish cooked down until a spoon dragged through it leaves a track. An autumn job done in bulk — this makes roughly three jars, sixteen servings of a spoonful each on bread.",
+  "cuisine": "Serbian",
+  "category": "Sauce",
+  "difficulty": "medium",
+  "prep_minutes": 40,
+  "cook_minutes": 120,
+  "servings": 16,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Long red horn peppers have thick walls and low water, which is why they are worth hunting down. Bell peppers work but give a thinner, sweeter result and take longer to cook down.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 3, "unit": "kg", "name": "red peppers", "note": "long horn peppers if you can find them" },
+        { "quantity": 500, "unit": "g", "name": "aubergines" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "crushed to a paste" },
+        { "quantity": 150, "unit": "ml", "name": "sunflower oil" },
+        { "quantity": 3, "unit": "Tbsp", "name": "red wine vinegar" },
+        { "quantity": 1, "unit": "Tbsp", "name": "salt" },
+        { "quantity": 1, "unit": "tsp", "name": "sugar" },
+        { "quantity": 1, "unit": null, "name": "chilli", "note": "finely chopped", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Roast the red peppers and the aubergines whole in a hot oven, turning them, until the skins are blistered and black in patches all over.",
+          "duration_minutes": 40,
+          "temperature": "230°C / 450°F"
+        },
+        {
+          "text": "Tip the hot vegetables into a bowl, cover it, and leave them to steam themselves loose.",
+          "duration_minutes": 20,
+          "tip": "Steaming is what lets the skin slide off in sheets. Peel them straight from the oven and you spend an hour picking at scraps."
+        },
+        {
+          "text": "Peel, stem, and seed everything, then leave the flesh piled in a colander overnight to drain.",
+          "duration_minutes": 600,
+          "tip": "This is the step people skip and then wonder why their ajvar is soup. Drained flesh fries; wet flesh boils."
+        },
+        {
+          "text": "Chop the drained flesh coarsely by hand, or pulse it in short bursts — it should keep some body rather than become a purée."
+        },
+        {
+          "text": "Cook it in the sunflower oil over low heat, stirring often, until it darkens to brick red and a spoon dragged across the base leaves a channel that stays open.",
+          "duration_minutes": 75,
+          "tip": "The whole cook is just driving off water. Stop when the channel holds for a count of three — any further and it turns to paste on cooling."
+        },
+        {
+          "text": "Stir in the garlic, chilli, salt, sugar, and red wine vinegar and cook a few minutes more to take the raw edge off.",
+          "duration_minutes": 5
+        },
+        {
+          "text": "Pot it into warm sterilised jars while hot and float a thin film of oil over the surface of each."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.8,
+    "variant_titles": ["Hot {title}", "Smoky {title}"]
+  }
+}

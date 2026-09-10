@@ -14,8 +14,11 @@
 -- breaks. Every draw here is a pure function of the row's own key, so the same
 -- seed produces the same database no matter how Postgres decides to execute it.
 --
--- Run order:  0_sim_schema -> 1_sim_dishes -> 2_sim_generate -> 3_sim_verify
+-- Run order:  0_sim_schema -> 1_sim_dishes -> 1_sim_people -> 1_sim_vocab
+--             -> 2_sim_generate -> 3_sim_verify
 -- Teardown:   9_sim_teardown
+-- The three `1_*` loaders are GENERATED from simData/ and are independent of
+-- each other; only "after 0, before 2" matters.
 
 create extension if not exists "pgcrypto";
 create schema if not exists sim;
@@ -49,7 +52,23 @@ insert into sim.config (key, value) values
   -- How sharply forks concentrate on the recipes people actually read. 0 makes
   -- a fork source a uniform draw among everything older; 1 weights it by the
   -- recipe's own reach; 2 — the default — squares that. See sim.fork_bias().
-  ('fork_bias', '2.0')
+  ('fork_bias', '2.0'),
+  -- Zipf exponents. Both feed sim.rand_zipf(); they are separate knobs because
+  -- the two draws want opposite things and sharing one number would tie them
+  -- together for no reason.
+  --
+  --   tag_zipf   how head-heavy the tag vocabulary is. 1.1 is sharp enough that
+  --              `quick` lands on a large fraction of the population while the
+  --              tail of simData/vocab.json lands on one or two recipes — the
+  --              "a tag on 200 recipes and a tag on 1" case in the edge-case
+  --              catalogue. Flatten it to 0 and every tag is equally common,
+  --              which is the one shape no real tag cloud has.
+  --   title_zipf how strongly an owner's title templates rotate toward the head
+  --              of the pool. Deliberately MILDER: at 1.1 most owners would
+  --              start from the same template and Discover would read as one
+  --              dish repeated, which is the bug this rotation exists to fix.
+  ('tag_zipf', '1.1'),
+  ('title_zipf', '0.6')
 on conflict (key) do nothing;
 
 create or replace function sim.cfg(p_key text, p_default text default null)
@@ -83,6 +102,16 @@ $$;
 create or replace function sim.fork_bias()
 returns double precision language sql stable as $$
   select sim.cfg('fork_bias', '2.0')::double precision;
+$$;
+
+create or replace function sim.tag_zipf()
+returns double precision language sql stable as $$
+  select sim.cfg('tag_zipf', '1.1')::double precision;
+$$;
+
+create or replace function sim.title_zipf()
+returns double precision language sql stable as $$
+  select sim.cfg('title_zipf', '0.6')::double precision;
 $$;
 
 -- ============================================================================
@@ -121,6 +150,57 @@ create or replace function sim.rand_lognormal(
   p_key text, p_stream text, p_mu double precision, p_sigma double precision
 ) returns double precision language sql stable as $$
   select exp(p_mu + p_sigma * sim.rand_normal(p_key, p_stream));
+$$;
+
+-- A RANK in [1, p_n] under a power law: P(k) falls off like k^-p_s, so rank 1
+-- is the common case and the tail is rare. This is what a vocabulary looks
+-- like — a handful of tags on most recipes and a long tail on one each — and a
+-- uniform draw over the same list produces the one distribution no real tag
+-- cloud has ever had.
+--
+-- The caller supplies a DENSE rank space (1..n with no holes) and looks the
+-- rank up in its own ordered list; keeping the function ignorant of what the
+-- ranks mean is what lets both the tag draw and the title-template rotation use
+-- it. `p_s` is passed, never read from config here, for the same reason the
+-- rest of this family takes its parameters: the two call sites want different
+-- exponents (sim.tag_zipf() / sim.title_zipf()).
+--
+-- PURITY. One sim.rand() call, one arithmetic expression, no loop and no state:
+-- the result is a function of (key, stream, n, s) and the seed, exactly like
+-- every other draw here. That rules out the textbook rejection samplers, which
+-- are exact but consume a variable number of uniforms and therefore stop being
+-- reproducible the moment anything about evaluation order changes — the same
+-- objection that rules out setseed() + random() for the whole schema.
+--
+-- HOW. Inverse transform on the CONTINUOUS density x^-s over [1, n+1), then
+-- floor. The discrete probability that comes out is proportional to the
+-- integral of x^-s across [k, k+1) rather than to k^-s exactly — very slightly
+-- flatter at the head (at s = 1: P(1)/P(2) is ln2/ln1.5 = 1.71 where exact Zipf
+-- gives 2.00) and indistinguishable in the tail. That is the standard
+-- "Zipf-like" generator (Gray et al., 1994; the one YCSB uses), and the trade
+-- is deliberate: O(1) and pure, against an exact discrete inverse CDF that
+-- costs an O(n) generate_series **per draw** — ~60,000 draws × a 60-tag pool at
+-- the `large` preset, for a difference the shape assertions cannot see.
+--
+-- s = 1 is the singular case (the exponent 1/(1-s) divides by zero), and it is
+-- also the classic Zipf, so it gets its own branch rather than being nudged.
+create or replace function sim.rand_zipf(
+  p_key text, p_stream text, p_n int, p_s double precision
+) returns int language sql stable as $$
+  select case
+    when p_n <= 1 then 1
+    else least(p_n, greatest(1, floor(
+      case
+        when abs(1.0 - p_s) < 1e-9
+          then power((p_n + 1)::double precision, sim.rand(p_key, p_stream))
+        else power(
+               1.0 + sim.rand(p_key, p_stream)
+                     * (power((p_n + 1)::double precision, 1.0 - p_s) - 1.0),
+               1.0 / (1.0 - p_s)
+             )
+      end
+    )::int))
+  end;
 $$;
 
 -- How widely one recipe gets read, before any multiplier.
@@ -451,7 +531,77 @@ create table if not exists sim.counter_baseline (
 );
 
 -- ============================================================================
--- Title variants
+-- Authored pools — declared here, POPULATED by the generated loaders
+--
+-- Four tables below hold content that lives in simData/ as JSON and reaches the
+-- database through tool/sim.dart:
+--
+--   sim.dish                     <- simData/dishes/*.json  (1_sim_dishes.sql)
+--   sim.locale / sim.person_name / sim.bio
+--                                <- simData/people.json    (1_sim_people.sql)
+--   sim.title_variant / sim.vocab_tag
+--                                <- simData/vocab.json     (1_sim_vocab.sql)
+--
+-- The DDL is here and the rows are there, and the split is not redundancy to
+-- tidy away. Postgres validates a `language sql` function body at creation
+-- time, so sim.pick_dish below cannot be created unless sim.dish already
+-- exists — and the run order is 0 then 1. Without the declaration the very
+-- first apply on a clean database fails with `relation "sim.dish" does not
+-- exist`, which is invisible on any machine where an earlier run already
+-- created it (B045's fourth path). Declaring all four here keeps file 0 the one
+-- statement of what the schema IS; the generated loaders re-declare their own
+-- table with `if not exists` so each stays standalone, and whichever file runs
+-- first wins.
+--
+-- None of these are hand-editable. Edit the JSON, run `melos run sim:gen`, and
+-- commit both — `melos run sim:check` (CI) fails on a stale .sql, which matters
+-- because nothing reads the JSON at runtime, so drift is invisible until the
+-- wrong SQL is applied to a database (Gotcha 16).
+-- ============================================================================
+
+create table if not exists sim.dish (
+  slug text primary key,
+  doc  jsonb not null
+);
+
+-- Naming traditions. `n` is a dense 1..L draw index, so an actor picks a locale
+-- with one sim.rand_int() and no scan; `given_count` / `family_count` are
+-- carried here for the same reason — the alternative is an aggregate over
+-- sim.person_name once per actor.
+--
+-- `n` is NOT unique-constrained, and that is deliberate: the loaders upsert by
+-- the natural key (`code` here, `n` for the tag vocabulary) so a content edit
+-- propagates, and REORDERING simData/people.json swaps two rows' `n` inside one
+-- statement — which a unique index rejects mid-upsert, since it is checked per
+-- row and not at end of statement. Density and uniqueness are the validator's
+-- job (tool/sim.dart), and 2_sim_generate.sql re-checks both in its preflight
+-- block before it draws anything.
+create table if not exists sim.locale (
+  code         text primary key,
+  n            int  not null,
+  label        text not null,
+  cuisine      text not null,
+  given_count  int  not null,
+  family_count int  not null
+);
+
+create table if not exists sim.person_name (
+  locale text not null,
+  kind   text not null check (kind in ('given', 'family')),
+  n      int  not null,
+  name   text not null,
+  primary key (locale, kind, n)
+);
+
+-- Bio templates. `{cuisine}` is the only placeholder the generator substitutes,
+-- and it is filled from the actor's OWN locale, so the bio and the name above
+-- it come from the same tradition.
+create table if not exists sim.bio (
+  n        int primary key,
+  template text not null
+);
+
+-- Title variants.
 --
 -- One dish becomes many recipes, and `(owner_id, title)` is the import key — a
 -- collision within an owner silently collapses two recipes into one row
@@ -460,52 +610,22 @@ create table if not exists sim.counter_baseline (
 -- Collisions ACROSS owners are left alone: two people publishing their own take
 -- on the same dish is legitimate, and nothing in the database has ever
 -- contained that case.
--- ============================================================================
-
 create table if not exists sim.title_variant (
   n        int primary key,
   template text not null
 );
 
-insert into sim.title_variant (n, template) values
-  (1,  '{title}'),
-  (2,  'Weeknight {title}'),
-  (3,  'My {title}'),
-  (4,  'Grandmother''s {title}'),
-  (5,  '{title}, Simplified'),
-  (6,  'Slow {title}'),
-  (7,  '{title} for Two'),
-  (8,  '{title} for a Crowd'),
-  (9,  'Quick {title}'),
-  (10, 'Sunday {title}'),
-  (11, '{title} with a Twist'),
-  (12, 'Family {title}'),
-  (13, 'Spicy {title}'),
-  (14, 'Everyday {title}'),
-  (15, '{title}, Made Ahead'),
-  (16, 'One-Pot {title}'),
-  (17, '{title} the Long Way'),
-  (18, 'Budget {title}'),
-  (19, '{title}, Lightened Up'),
-  (20, 'Festival {title}'),
-  (21, 'Late-Night {title}'),
-  (22, '{title} from Memory'),
-  (23, 'Improved {title}'),
-  (24, '{title}, Second Attempt')
-on conflict (n) do update set template = excluded.template;
-
--- The dish library table is declared HERE as well as in the generated
--- 1_sim_dishes.sql, and that is not redundancy to tidy away. Postgres validates
--- a `language sql` function body at creation time, so sim.pick_dish below
--- cannot be created unless sim.dish already exists — and the run order is 0
--- then 1. Without this the very first apply on a clean database fails with
--- `relation "sim.dish" does not exist`, which is invisible on any machine where
--- an earlier run already created it. Both declarations are
--- `create table if not exists`, so whichever file runs first wins and the other
--- is a no-op.
-create table if not exists sim.dish (
-  slug text primary key,
-  doc  jsonb not null
+-- The tag vocabulary. `n` IS the Zipf rank — there is deliberately no weight
+-- column, because two ways to say how common a tag is would drift apart.
+-- `categories` empty means "any category"; otherwise the tag may only land on a
+-- recipe whose category is in the array (`no-bake` belongs on a Dessert, not on
+-- a Soup).
+-- `name` carries no unique index for the reason spelled out above sim.locale:
+-- reordering the vocabulary swaps names between two ranks inside one upsert.
+create table if not exists sim.vocab_tag (
+  n          int primary key,
+  name       text not null,
+  categories text[] not null default '{}'
 );
 
 -- Weighted draw over sim.dish, so an everyday dish appears more often than a
@@ -525,8 +645,16 @@ returns text language sql stable as $$
   limit 1;
 $$;
 
-do $$ begin raise notice 'sim schema ready (% personas, % presets, % title variants)',
+-- The pool counts are reported so an apply of file 0 ALONE reads as what it is:
+-- the machinery, with the authored content still to come from 1_sim_*.sql.
+do $$ begin raise notice
+  'sim schema ready (% personas, % presets — pools: % dishes, % locales, % names, % bios, % title variants, % tags)',
   (select count(*) from sim.persona),
   (select count(*) from sim.preset),
-  (select count(*) from sim.title_variant);
+  (select count(*) from sim.dish),
+  (select count(*) from sim.locale),
+  (select count(*) from sim.person_name),
+  (select count(*) from sim.bio),
+  (select count(*) from sim.title_variant),
+  (select count(*) from sim.vocab_tag);
 end $$;

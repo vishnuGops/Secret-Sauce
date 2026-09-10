@@ -1,0 +1,60 @@
+{
+  "slug": "bulgarian-shopska-salad",
+  "title": "Shopska Salad",
+  "description": "Tomato, cucumber, and pepper under a thick white drift of grated sirene. Nothing is cooked and nothing is complicated, which means the tomatoes have to be worth eating on their own.",
+  "cuisine": "Bulgarian",
+  "category": "Salad",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 0,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Sirene is a firm white brine cheese. Feta is the usual substitute, but rinse it first — feta is saltier and this salad has nowhere to hide it.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 4, "unit": null, "name": "tomatoes", "note": "ripe, cut into 2 cm chunks" },
+        { "quantity": 2, "unit": null, "name": "cucumbers", "note": "peeled in stripes, diced" },
+        { "quantity": 1, "unit": null, "name": "green pepper", "note": "seeded and diced" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "sliced into thin half moons" },
+        { "quantity": 200, "unit": "g", "name": "sirene", "note": "or a mild feta" },
+        { "quantity": 3, "unit": "Tbsp", "name": "sunflower oil" },
+        { "quantity": 1, "unit": "Tbsp", "name": "red wine vinegar" },
+        { "quantity": 1, "unit": "handful", "name": "parsley", "note": "chopped" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Slice the onion into thin half moons and leave them sitting in cold water while you cut everything else.",
+          "duration_minutes": 10,
+          "tip": "Ten minutes in water takes the burn out of a raw onion without turning it limp. Longer and it starts tasting of nothing."
+        },
+        {
+          "text": "Cut the tomatoes into rough chunks and the cucumbers into pieces of roughly the same size.",
+          "tip": "Matching the sizes is most of what makes this bowl look like the picture. It is also the only knife work in it."
+        },
+        {
+          "text": "Dice the green pepper and drain the onion thoroughly, shaking off every drop."
+        },
+        {
+          "text": "Toss it all together with the sunflower oil, red wine vinegar, salt, and most of the parsley."
+        },
+        {
+          "text": "Grate the sirene over the top in a thick even blanket and finish with the last of the parsley.",
+          "tip": "The cheese goes on top and stays on top. Tossed through, it dissolves into the dressing and the whole bowl goes cloudy."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.8,
+    "variant_titles": ["{title} with Roasted Peppers", "Summer {title}"]
+  }
+}

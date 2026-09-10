@@ -1,0 +1,111 @@
+{
+  "slug": "brazilian-coxinha",
+  "title": "Coxinha",
+  "description": "Shredded chicken bound in a soft cheese filling, wrapped in a cooked dough and fried into a teardrop. Makes about eighteen, which is fewer than you think once people find them.",
+  "cuisine": "Brazilian",
+  "category": "Appetizer",
+  "difficulty": "hard",
+  "prep_minutes": 50,
+  "cook_minutes": 40,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The dough is cooked in the pan like choux and shaped while it is still warm. Cold dough cracks along every fold and the filling escapes in the fryer.",
+  "ingredient_groups": [
+    {
+      "name": "Filling",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "chicken thighs", "note": "boneless" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "diced fine" },
+        { "quantity": 2, "unit": "cloves", "name": "garlic" },
+        { "quantity": 1, "unit": null, "name": "tomato", "note": "deseeded and diced" },
+        { "quantity": 150, "unit": "g", "name": "cream cheese", "note": "full fat, at room temperature" },
+        { "quantity": 2, "unit": "Tbsp", "name": "parsley" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" },
+        { "quantity": 0.5, "unit": "tsp", "name": "black pepper" }
+      ]
+    },
+    {
+      "name": "Dough",
+      "ingredients": [
+        { "quantity": 500, "unit": "ml", "name": "chicken broth", "note": "reserved from poaching" },
+        { "quantity": 250, "unit": "ml", "name": "milk" },
+        { "quantity": 40, "unit": "g", "name": "butter" },
+        { "quantity": 400, "unit": "g", "name": "plain flour" }
+      ]
+    },
+    {
+      "name": "Coating",
+      "ingredients": [
+        { "quantity": 2, "unit": null, "name": "eggs", "note": "beaten" },
+        { "quantity": 200, "unit": "g", "name": "breadcrumbs", "note": "fine and dry" },
+        { "quantity": 1, "unit": "L", "name": "neutral oil", "note": "for frying" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Filling",
+      "steps": [
+        {
+          "text": "Poach the chicken thighs in lightly seasoned water until they pull apart easily, then lift them out and keep every drop of the broth.",
+          "duration_minutes": 25,
+          "tip": "The poaching liquid becomes the dough. Throw it away and you are making a plain flour paste instead of a coxinha."
+        },
+        {
+          "text": "Soften the onion and garlic in a little oil, add the diced tomato, and cook it to a thick base with no free liquid left.",
+          "duration_minutes": 8
+        },
+        {
+          "text": "Shred the chicken, fold it into the base with the cream cheese and parsley, and season with the salt and black pepper. Spread it out to cool completely."
+        }
+      ]
+    },
+    {
+      "name": "Dough",
+      "steps": [
+        {
+          "text": "Bring the reserved chicken broth, milk, and butter to a rolling boil."
+        },
+        {
+          "text": "Tip in all the plain flour at once and beat it over the heat until it comes together in one lump that leaves the sides of the pan clean.",
+          "duration_minutes": 5,
+          "tip": "It will look wrong for about ninety seconds. Keep beating; it turns from paste to dough all at once."
+        },
+        {
+          "text": "Turn the dough onto a board and knead it while it is still hot until it is smooth and springs back.",
+          "duration_minutes": 5
+        },
+        {
+          "text": "Cover it and rest it only until it is cool enough to hold.",
+          "duration_minutes": 20
+        }
+      ]
+    },
+    {
+      "name": "Shaping and frying",
+      "steps": [
+        {
+          "text": "Flatten a walnut of dough in your palm, spoon filling into the middle, and close it into a teardrop with a point drawn out at the top."
+        },
+        {
+          "text": "Roll each one through the beaten eggs and then press it into the breadcrumbs."
+        },
+        {
+          "text": "Chill the shaped coxinhas so the dough firms up before it meets the fat.",
+          "duration_minutes": 60
+        },
+        {
+          "text": "Fry them in the neutral oil a few at a time, turning once, until deep golden all over, and drain them point-up.",
+          "duration_minutes": 7,
+          "temperature": "170°C / 340°F",
+          "tip": "Crowding the pan drops the heat and the dough drinks oil. Six at a time is faster than twelve."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.8,
+    "variant_titles": ["{title} with Extra Cheese", "Baked {title}", "Mini {title}"]
+  }
+}

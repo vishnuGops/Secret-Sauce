@@ -1,0 +1,88 @@
+{
+  "slug": "nigerian-jollof-rice",
+  "title": "Jollof Rice",
+  "description": "Long-grain rice braised down in a blended pepper base until every grain is stained red. The base is fried hard before the rice goes near it — that is the whole difference between jollof and tomato rice.",
+  "cuisine": "Nigerian",
+  "category": "Main",
+  "difficulty": "medium",
+  "prep_minutes": 25,
+  "cook_minutes": 60,
+  "servings": 8,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Parboiled long-grain rice is not a shortcut. It holds its shape through a long covered braise where basmati turns to porridge.",
+  "ingredient_groups": [
+    {
+      "name": "Pepper base",
+      "ingredients": [
+        { "quantity": 3, "unit": null, "name": "red bell peppers", "note": "seeds and ribs removed" },
+        { "quantity": 4, "unit": null, "name": "plum tomatoes", "note": "quartered" },
+        { "quantity": 1, "unit": null, "name": "scotch bonnet", "note": "stem removed; halve the heat by deseeding" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "half blended, half sliced" },
+        { "quantity": 3, "unit": "Tbsp", "name": "tomato paste" }
+      ]
+    },
+    {
+      "name": "Rice and finish",
+      "ingredients": [
+        { "quantity": 600, "unit": "g", "name": "parboiled long-grain rice" },
+        { "quantity": 120, "unit": "ml", "name": "groundnut oil" },
+        { "quantity": 700, "unit": "ml", "name": "chicken stock", "note": "warm" },
+        { "quantity": 1, "unit": "Tbsp", "name": "curry powder" },
+        { "quantity": 1, "unit": "tsp", "name": "dried thyme" },
+        { "quantity": 2, "unit": null, "name": "bay leaves" },
+        { "quantity": 2, "unit": "tsp", "name": "salt" },
+        { "quantity": 20, "unit": "g", "name": "butter" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "The base",
+      "steps": [
+        {
+          "text": "Blend the red bell peppers, plum tomatoes, scotch bonnet, and half the onion to a smooth purée.",
+          "tip": "Taste the raw purée before it goes in the pan. That is the only honest read you get on how hot the pot will be."
+        },
+        {
+          "text": "Pour the purée into a wide pan and boil it down hard, uncovered, until it darkens and stops smelling raw.",
+          "duration_minutes": 20
+        },
+        {
+          "text": "In a heavy pot, fry the sliced onion in the groundnut oil until golden, then add the tomato paste and cook it until it turns brick red.",
+          "duration_minutes": 6
+        },
+        {
+          "text": "Stir the reduced purée into the paste and keep frying until oil pools at the edges of the pot.",
+          "duration_minutes": 10,
+          "tip": "Wait for the oil to separate. Rice added to a wet base steams instead of frying, and it never catches up."
+        }
+      ]
+    },
+    {
+      "name": "The rice",
+      "steps": [
+        {
+          "text": "Rinse the parboiled rice in several changes of water until the water runs clear, then drain it well."
+        },
+        {
+          "text": "Add the chicken stock, curry powder, dried thyme, bay leaves, and salt to the base and bring it up to a hard boil."
+        },
+        {
+          "text": "Stir in the rice once, level it, seal the pot with foil under a tight lid, and cook on the lowest heat without lifting it.",
+          "duration_minutes": 30,
+          "temperature": "lowest",
+          "tip": "The foil is the recipe. Steam that escapes is water the top layer of rice never gets."
+        },
+        {
+          "text": "Dot the butter over the top, fork the grains through from the bottom up, and let the pot stand off the heat before serving.",
+          "duration_minutes": 5
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.4,
+    "variant_titles": ["Party {title}", "Smoky {title}", "One-Pot {title}"]
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "slug": "armenian-spas-soup",
+  "title": "Spas Yogurt Soup",
+  "description": "A soup made almost entirely of yogurt, held together with an egg and a spoonful of flour so it never splits, with barley for body and a spoon of mint butter stirred in at the end. Good hot in winter and cold in summer.",
+  "cuisine": "Armenian",
+  "category": "Soup",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 45,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Cold yogurt straight from the fridge is the usual cause of a curdled pot. Leave it out while the barley cooks and the tempering becomes almost foolproof.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 100, "unit": "g", "name": "pearl barley", "note": "rinsed" },
+        { "quantity": 1, "unit": "L", "name": "water" },
+        { "quantity": 700, "unit": "g", "name": "plain yogurt", "note": "full fat, at room temperature" },
+        { "quantity": 1, "unit": null, "name": "egg" },
+        { "quantity": 2, "unit": "Tbsp", "name": "all-purpose flour" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "finely diced" },
+        { "quantity": 30, "unit": "g", "name": "butter" },
+        { "quantity": 1, "unit": "Tbsp", "name": "dried mint" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" },
+        { "quantity": 3, "unit": "Tbsp", "name": "cilantro", "note": "chopped, to finish" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Simmer the pearl barley in the water until the grains are tender and have split slightly, then leave it in its cooking liquid.",
+          "duration_minutes": 30
+        },
+        {
+          "text": "Whisk the yogurt, egg and flour together in a large bowl until there is not a streak of flour left anywhere.",
+          "tip": "The egg and the flour are both insurance against splitting. Neither one alone is reliable in a pot this thin."
+        },
+        {
+          "text": "Ladle a cupful of the hot barley liquid into the yogurt while whisking hard, then a second, then a third. The bowl should feel warm rather than hot before it goes anywhere near the stove.",
+          "tip": "Going the other way — yogurt into the pot — is how it curdles. Always bring the hot to the cool."
+        },
+        {
+          "text": "Pour the tempered mixture back into the pot and bring it up to the laziest simmer, stirring in one direction the whole time. Never let it reach a rolling boil.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Meanwhile soften the onion in the butter in a small pan, then take it off the heat and stir in the dried mint.",
+          "duration_minutes": 8,
+          "tip": "Mint added to a hot pan goes dusty and grey. Off the heat it stays green and smells like mint."
+        },
+        {
+          "text": "Stir the mint butter through the soup, season with the salt, and finish each bowl with cilantro."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1,
+    "variant_titles": ["Chilled {title}", "{title} with Bulgur"]
+  }
+}

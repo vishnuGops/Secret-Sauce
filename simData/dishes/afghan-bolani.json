@@ -1,0 +1,103 @@
+{
+  "slug": "afghan-bolani",
+  "title": "Bolani",
+  "description": "Thin unleavened flatbreads folded over a potato and leek filling and cooked in a nearly dry pan until they blister. Eaten hot with garlic yogurt, cut into wedges. Makes six large breads.",
+  "cuisine": "Afghan",
+  "category": "Snack",
+  "difficulty": "medium",
+  "prep_minutes": 45,
+  "cook_minutes": 25,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The filling must be cold and dry before it meets the dough. Warm filling steams from the inside and splits the seam in the pan, which is the only real way this goes wrong.",
+  "ingredient_groups": [
+    {
+      "name": "Dough",
+      "ingredients": [
+        { "quantity": 350, "unit": "g", "name": "all-purpose flour" },
+        { "quantity": 220, "unit": "ml", "name": "water", "note": "warm" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" },
+        { "quantity": 1, "unit": "Tbsp", "name": "vegetable oil" }
+      ]
+    },
+    {
+      "name": "Potato and leek filling",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "potatoes", "note": "boiled and mashed dry, no butter" },
+        { "quantity": 2, "unit": null, "name": "leeks", "note": "white and pale green only, sliced very thin" },
+        { "quantity": 4, "unit": "Tbsp", "name": "cilantro", "note": "chopped" },
+        { "quantity": 1, "unit": null, "name": "green chili", "note": "seeded and finely chopped", "is_optional": true },
+        { "quantity": 1, "unit": "tsp", "name": "coriander", "note": "ground" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" },
+        { "quantity": 0.5, "unit": "tsp", "name": "black pepper" },
+        { "quantity": 2, "unit": "Tbsp", "name": "vegetable oil" }
+      ]
+    },
+    {
+      "name": "Garlic yogurt",
+      "ingredients": [
+        { "quantity": 250, "unit": "g", "name": "yogurt", "note": "plain" },
+        { "quantity": 1, "unit": "clove", "name": "garlic", "note": "crushed to a paste" },
+        { "quantity": 1, "unit": "tsp", "name": "dried mint" },
+        { "quantity": 0.25, "unit": "tsp", "name": "salt" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Dough",
+      "steps": [
+        {
+          "text": "Mix the flour and salt, work in the water and the oil, and knead until the dough is smooth and only just tacky.",
+          "duration_minutes": 8
+        },
+        {
+          "text": "Cover it and leave it on the counter to relax.",
+          "duration_minutes": 30,
+          "tip": "This rest is what lets you roll it thin enough to see the bench through. Skip it and the dough fights back at every pass."
+        }
+      ]
+    },
+    {
+      "name": "Filling",
+      "steps": [
+        {
+          "text": "Soften the leeks in the oil over a low heat until they collapse but keep their green.",
+          "duration_minutes": 8
+        },
+        {
+          "text": "Fold the leeks through the mashed potatoes with the cilantro, green chili, coriander, salt and black pepper, then spread it over a plate to cool completely."
+        }
+      ]
+    },
+    {
+      "name": "Rolling and frying",
+      "steps": [
+        {
+          "text": "Divide the dough into six, roll each piece into a thin round about 25 cm across, and spread the filling over one half only, leaving a clear border at the edge."
+        },
+        {
+          "text": "Fold the bare half over, press the rim flat with your fingertips, and seal it properly with the tines of a fork.",
+          "tip": "Any air trapped inside will find the weakest point of that seal and blow it open. Press from the fold outwards to push it out first."
+        },
+        {
+          "text": "Cook each one in a barely oiled pan over a medium heat until blistered and brown in patches on both sides.",
+          "duration_minutes": 4
+        }
+      ]
+    },
+    {
+      "name": "To serve",
+      "steps": [
+        {
+          "text": "Beat the yogurt with the garlic, dried mint and salt, and put it on the table with the bolani cut into wedges while they are still hot."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1,
+    "variant_titles": ["{title} with Pumpkin", "{title}, Baked Not Fried"]
+  }
+}

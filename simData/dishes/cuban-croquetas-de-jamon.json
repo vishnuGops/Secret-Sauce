@@ -1,0 +1,86 @@
+{
+  "slug": "cuban-croquetas-de-jamon",
+  "title": "Croquetas de Jamón",
+  "description": "A stiff béchamel worked through with finely chopped ham, chilled until it slices, then breaded and fried into short cylinders. Makes about twenty.",
+  "cuisine": "Cuban",
+  "category": "Snack",
+  "difficulty": "medium",
+  "prep_minutes": 30,
+  "cook_minutes": 25,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The paste must be cold and firm before you shape anything. No amount of extra flour will make a warm béchamel hold a cylinder.",
+  "ingredient_groups": [
+    {
+      "name": "The paste",
+      "ingredients": [
+        { "quantity": 60, "unit": "g", "name": "butter" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "grated on the coarse side" },
+        { "quantity": 90, "unit": "g", "name": "plain flour" },
+        { "quantity": 500, "unit": "ml", "name": "milk", "note": "warmed" },
+        { "quantity": 200, "unit": "g", "name": "serrano ham", "note": "chopped as fine as you have patience for" },
+        { "quantity": 1, "unit": "pinch", "name": "nutmeg" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt" },
+        { "quantity": 0.5, "unit": "tsp", "name": "white pepper" }
+      ]
+    },
+    {
+      "name": "Coating and frying",
+      "ingredients": [
+        { "quantity": 60, "unit": "g", "name": "plain flour", "note": "for dusting" },
+        { "quantity": 2, "unit": null, "name": "eggs", "note": "beaten" },
+        { "quantity": 150, "unit": "g", "name": "breadcrumbs", "note": "fine and dry" },
+        { "quantity": 750, "unit": "ml", "name": "neutral oil", "note": "for frying" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "The paste",
+      "steps": [
+        {
+          "text": "Sweat the onion in the butter over a low heat until it is soft and has taken no colour at all.",
+          "duration_minutes": 6
+        },
+        {
+          "text": "Stir in the plain flour and cook the raw taste out of it, then add the warm milk a splash at a time, beating it smooth before the next one goes in.",
+          "duration_minutes": 12,
+          "tip": "Add the milk faster than this and you will spend the rest of the evening chasing lumps around the pan."
+        },
+        {
+          "text": "Beat until the paste comes away from the sides in one mass, then fold through the serrano ham and season with the nutmeg, salt, and white pepper."
+        },
+        {
+          "text": "Spread it thin in a tray, press cling film onto the surface, and chill it until it is firm enough to cut.",
+          "duration_minutes": 180
+        }
+      ]
+    },
+    {
+      "name": "Shaping and frying",
+      "steps": [
+        {
+          "text": "Cut the cold paste into strips and roll each strip into a short cylinder between floured palms."
+        },
+        {
+          "text": "Pass each croqueta through the plain flour, then the beaten eggs, then the breadcrumbs, pressing the crumbs on firmly."
+        },
+        {
+          "text": "Chill the breaded croquetas again while the neutral oil comes up to temperature.",
+          "duration_minutes": 20,
+          "tip": "The second chill is what stops them splitting. A croqueta that bursts in the pan was warm going in."
+        },
+        {
+          "text": "Fry them a few at a time until they are deep gold, then drain them standing on end so the bottoms stay crisp.",
+          "duration_minutes": 7,
+          "temperature": "180°C / 355°F"
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.9,
+    "variant_titles": ["{title} with Chicken", "{title}, Party Size"]
+  }
+}

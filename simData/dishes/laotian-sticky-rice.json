@@ -1,0 +1,58 @@
+{
+  "slug": "laotian-sticky-rice",
+  "title": "Lao Sticky Rice",
+  "description": "Glutinous rice soaked overnight and steamed in a basket, not boiled. Comes out translucent and springy enough to roll into a ball with your fingers.",
+  "cuisine": "Laotian",
+  "category": "Side",
+  "difficulty": "easy",
+  "prep_minutes": 10,
+  "cook_minutes": 30,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Almost all the work is waiting. The soak is the recipe; the steaming is twenty-five minutes of nothing. Plan it the night before or accept a chalky centre.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "glutinous rice", "note": "long grain; sold as sweet or sticky rice, never as jasmine" },
+        { "quantity": null, "unit": null, "name": "water", "note": "enough to cover by a hand's width, plus more for the steamer" },
+        { "quantity": 1, "unit": null, "name": "banana leaf", "note": "to line the basket", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Rinse the glutinous rice in several changes of water until the water stops running white.",
+          "tip": "Four or five changes. The loose surface starch is what turns the finished rice into a gummy mass rather than separate grains."
+        },
+        {
+          "text": "Cover the rice with fresh water by a good few centimetres and leave it on the counter overnight.",
+          "duration_minutes": 720,
+          "tip": "This is the whole recipe. Under-soaked rice steams to a chalky core and there is no fixing it once it is in the basket."
+        },
+        {
+          "text": "Drain the rice thoroughly and leave it sitting in the sieve while the steamer comes up to a hard boil.",
+          "duration_minutes": 5
+        },
+        {
+          "text": "Line the basket with the banana leaf if you have one, tip the rice in, and steam it covered until it is translucent all the way through and springy to press.",
+          "duration_minutes": 25,
+          "temperature": "high",
+          "tip": "Flip the whole mass over halfway. The layer nearest the steam cooks fastest and turning it once evens the basket out."
+        },
+        {
+          "text": "Turn the rice out onto a board, spread it, and paddle it for a moment so the surface steam escapes before you pack it into a serving basket.",
+          "tip": "Skip the paddling and the outside stays wet, which is how sticky rice ends up sticking to everyone's hands instead of to itself."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.5,
+    "variant_titles": ["{title} in a Rice Cooker", "{title} with Toasted Sesame", "Coconut {title}"]
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "slug": "sri-lankan-ambul-thiyal",
+  "title": "Ambul Thiyal",
+  "description": "Sour fish curry with almost no sauce: cubes of tuna blackened with crushed pepper and goraka, then cooked down in a shallow pan until the liquid has gone and what is left clings to the fish. Keeps for days without a fridge, which is the whole point of it.",
+  "cuisine": "Sri Lankan",
+  "category": "Main",
+  "difficulty": "medium",
+  "prep_minutes": 20,
+  "cook_minutes": 45,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "It should taste sour first and hot second. If you are using tamarind instead of goraka, start with less than you think — tamarind is sharper and sweeter, and it can bully the pepper out of the dish.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 700, "unit": "g", "name": "tuna steaks", "note": "cut into 4 cm cubes" },
+        { "quantity": 8, "unit": "pieces", "name": "goraka", "note": "or 2 Tbsp thick tamarind paste" },
+        { "quantity": 2, "unit": "Tbsp", "name": "black peppercorns", "note": "coarsely crushed, not powdered" },
+        { "quantity": 1, "unit": "tsp", "name": "chili powder" },
+        { "quantity": 0.5, "unit": "tsp", "name": "turmeric" },
+        { "quantity": 1, "unit": "sprig", "name": "curry leaves" },
+        { "quantity": 1, "unit": "piece", "name": "pandan leaf", "note": "a 10 cm length" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "sliced" },
+        { "quantity": 1, "unit": "Tbsp", "name": "ginger", "note": "cut into fine strips" },
+        { "quantity": 1, "unit": "stick", "name": "cinnamon", "note": "a 5 cm piece" },
+        { "quantity": 1.5, "unit": "tsp", "name": "salt" },
+        { "quantity": 150, "unit": "ml", "name": "water" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Soak the goraka in warm water until the pieces soften, then pound them with the salt to a rough dark paste.",
+          "duration_minutes": 15
+        },
+        {
+          "text": "Turn the tuna cubes through the goraka paste with the crushed peppercorns, chili powder and turmeric until every face of every piece is coated black.",
+          "tip": "Use your hands and take a minute over it. Any bare patch will cook pale and taste of nothing."
+        },
+        {
+          "text": "Pack the fish into a single layer in a clay pot or a heavy shallow pan and tuck the garlic, ginger, cinnamon, pandan leaf and curry leaves into the gaps."
+        },
+        {
+          "text": "Pour in the water, cover, and cook at a bare simmer without stirring.",
+          "duration_minutes": 25,
+          "tip": "Shake the pan by the handle if you must move things. A spoon breaks the cubes and then it is fish paste, not ambul thiyal."
+        },
+        {
+          "text": "Take the lid off and cook on until barely any liquid is left and what remains is a dark glaze on the fish.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Let it stand off the heat before serving. It is better warm than hot, and better again the next day.",
+          "duration_minutes": 15
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.8,
+    "variant_titles": ["{title} with Kingfish", "Extra Hot {title}"]
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "slug": "burmese-coconut-chicken-noodles",
+  "title": "Ohn No Khao Swè",
+  "description": "Chicken in a coconut broth thickened with toasted chickpea flour, poured over egg noodles. Everything else goes on at the table, which is half the pleasure of it.",
+  "cuisine": "Burmese",
+  "category": "Main",
+  "difficulty": "medium",
+  "prep_minutes": 20,
+  "cook_minutes": 40,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The chickpea flour is what separates this from a coconut curry with noodles in it. It gives the broth a nutty body that fat alone never does, and it is the reason the soup clings to the noodles instead of sliding off them.",
+  "ingredient_groups": [
+    {
+      "name": "For the soup",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "chicken thighs", "note": "boneless, cut into bite-sized pieces" },
+        { "quantity": 3, "unit": "Tbsp", "name": "peanut oil" },
+        { "quantity": 2, "unit": null, "name": "onions", "note": "roughly cut" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic" },
+        { "quantity": 3, "unit": "cm", "name": "ginger" },
+        { "quantity": 1, "unit": "tsp", "name": "turmeric" },
+        { "quantity": 1, "unit": "tsp", "name": "paprika", "note": "for colour more than heat" },
+        { "quantity": 3, "unit": "Tbsp", "name": "chickpea flour" },
+        { "quantity": 400, "unit": "ml", "name": "coconut milk", "note": "full fat" },
+        { "quantity": 500, "unit": "ml", "name": "chicken stock" },
+        { "quantity": 2, "unit": "Tbsp", "name": "fish sauce" },
+        { "quantity": 400, "unit": "g", "name": "egg noodles" }
+      ]
+    },
+    {
+      "name": "For the table",
+      "ingredients": [
+        { "quantity": 2, "unit": null, "name": "eggs", "note": "hard boiled and quartered" },
+        { "quantity": 1, "unit": null, "name": "red onion", "note": "sliced paper thin" },
+        { "quantity": 3, "unit": "Tbsp", "name": "fried shallots" },
+        { "quantity": 1, "unit": null, "name": "lime", "note": "cut into wedges" },
+        { "quantity": 1, "unit": "handful", "name": "coriander" },
+        { "quantity": 1, "unit": "tsp", "name": "chilli flakes", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "The soup",
+      "steps": [
+        {
+          "text": "Blend the onions, garlic and ginger to a smooth paste with a splash of water."
+        },
+        {
+          "text": "Fry the paste in the peanut oil over a medium heat until it has darkened by two shades and no longer smells raw.",
+          "duration_minutes": 12,
+          "temperature": "medium",
+          "tip": "This is the longest twelve minutes in the recipe and the one everybody cuts short. Wait until the oil separates out at the edges of the pan."
+        },
+        {
+          "text": "Stir in the turmeric and paprika, then add the chicken thighs and turn them until every piece is coated and sealed.",
+          "duration_minutes": 5
+        },
+        {
+          "text": "Whisk the chickpea flour into the cold chicken stock until there is not a lump left, then pour it into the pan along with the coconut milk and the fish sauce.",
+          "tip": "Slurry first, every time. Chickpea flour dropped into hot liquid sets into pellets you will be fishing out all evening."
+        },
+        {
+          "text": "Simmer, stirring now and then, until the soup thickens enough to coat the back of a spoon.",
+          "duration_minutes": 15,
+          "temperature": "low"
+        }
+      ]
+    },
+    {
+      "name": "The bowl",
+      "steps": [
+        {
+          "text": "Boil the egg noodles, drain them hard, and divide them between deep bowls.",
+          "duration_minutes": 4,
+          "tip": "Drain them properly. Water left clinging to the noodles thins the soup right where you poured it."
+        },
+        {
+          "text": "Ladle the soup over the noodles and let everyone build their own bowl with the eggs, red onion, fried shallots, lime, coriander and chilli flakes."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1,
+    "variant_titles": ["{title} with Tofu", "Quick {title}", "{title}, Extra Coconut"]
+  }
+}

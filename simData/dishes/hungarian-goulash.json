@@ -1,0 +1,70 @@
+{
+  "slug": "hungarian-goulash",
+  "title": "Hungarian Beef Goulash",
+  "description": "A soup-thick stew built on collapsed onions and a lot of paprika, cooked long enough that the shin turns to gelatin. Makes a full pot and reheats better than it serves.",
+  "cuisine": "Hungarian",
+  "category": "Main",
+  "difficulty": "medium",
+  "prep_minutes": 25,
+  "cook_minutes": 150,
+  "servings": 8,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Paprika is the ingredient, not the seasoning — buy it fresh and in quantity. A tin that has been open since last winter tastes of dust and no amount of it will fix the pot.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 1.2, "unit": "kg", "name": "beef shin", "note": "cut into 4 cm cubes" },
+        { "quantity": 3, "unit": null, "name": "onions", "note": "sliced thin" },
+        { "quantity": 3, "unit": "Tbsp", "name": "lard", "note": "or a neutral oil" },
+        { "quantity": 4, "unit": "Tbsp", "name": "sweet paprika" },
+        { "quantity": 1, "unit": "tsp", "name": "hot paprika" },
+        { "quantity": 1, "unit": "Tbsp", "name": "caraway seeds", "note": "lightly crushed" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "crushed" },
+        { "quantity": 1, "unit": "L", "name": "beef stock" },
+        { "quantity": 2, "unit": null, "name": "green peppers", "note": "seeded, cut into strips" },
+        { "quantity": 2, "unit": null, "name": "tomatoes", "note": "roughly chopped" },
+        { "quantity": 3, "unit": null, "name": "potatoes", "note": "peeled, cut into large cubes" },
+        { "quantity": 2, "unit": "tsp", "name": "salt" },
+        { "quantity": 1, "unit": "tsp", "name": "black pepper" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Cook the sliced onions in the lard over low heat until they lose every trace of structure and slump into a soft golden mass.",
+          "duration_minutes": 30,
+          "tip": "Half an hour looks absurd for onions and it is not negotiable. This is the body of the finished stew — hurry it and you get flavoured water."
+        },
+        {
+          "text": "Pull the pot off the heat entirely. Stir the sweet paprika and the hot paprika through the onions away from the flame, then set it back on the lowest burner.",
+          "tip": "Paprika scorches at frying temperature in about ten seconds and the bitterness never cooks out."
+        },
+        {
+          "text": "Add the beef shin, caraway seeds, garlic, salt, and black pepper, and turn the meat until every cube is red."
+        },
+        {
+          "text": "Pour in enough beef stock to barely cover the meat, bring it to a lazy simmer, and cook covered until a cube gives way under a spoon.",
+          "duration_minutes": 90,
+          "tip": "Barely covered, not swimming. You want to end up with a thick pot, and you cannot boil liquid off a stew without overcooking the meat."
+        },
+        {
+          "text": "Add the green peppers, tomatoes, and potatoes and simmer uncovered until the potatoes are tender and the sauce has pulled together.",
+          "duration_minutes": 25
+        },
+        {
+          "text": "Rest the pot off the heat before serving, then taste again — it will take more salt cold than it did hot.",
+          "duration_minutes": 10
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.1,
+    "variant_titles": ["Slow Cooker {title}", "{title} with Pinched Noodles"]
+  }
+}

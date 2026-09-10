@@ -1,0 +1,109 @@
+{
+  "slug": "senegalese-thieboudienne",
+  "title": "Thieboudienne",
+  "description": "Fish stuffed with a pounded herb paste, simmered with root vegetables, and then rice cooked in that same broth until it has taken on everything. One pot, three stages, and it wants a Sunday.",
+  "cuisine": "Senegalese",
+  "category": "Main",
+  "difficulty": "hard",
+  "prep_minutes": 45,
+  "cook_minutes": 95,
+  "servings": 8,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The prized part is the toasted crust at the bottom of the pot. Scrape it up and serve it over the rice, not hidden underneath it.",
+  "ingredient_groups": [
+    {
+      "name": "Rof, the herb stuffing",
+      "ingredients": [
+        { "quantity": 1, "unit": "bunch", "name": "flat-leaf parsley", "note": "stems included" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic" },
+        { "quantity": 3, "unit": null, "name": "spring onions" },
+        { "quantity": 1, "unit": null, "name": "scotch bonnet", "note": "deseeded" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" }
+      ]
+    },
+    {
+      "name": "Fish and vegetables",
+      "ingredients": [
+        { "quantity": 1.2, "unit": "kg", "name": "grouper steaks", "note": "cut thick, on the bone" },
+        { "quantity": 120, "unit": "ml", "name": "peanut oil" },
+        { "quantity": 2, "unit": null, "name": "onions", "note": "sliced" },
+        { "quantity": 3, "unit": "Tbsp", "name": "tomato paste" },
+        { "quantity": 2, "unit": null, "name": "plum tomatoes", "note": "chopped" },
+        { "quantity": 2, "unit": "Tbsp", "name": "tamarind paste" },
+        { "quantity": 2, "unit": "L", "name": "water" },
+        { "quantity": 3, "unit": null, "name": "carrots", "note": "in thick lengths" },
+        { "quantity": 300, "unit": "g", "name": "cassava", "note": "peeled, in batons" },
+        { "quantity": 1, "unit": null, "name": "aubergine", "note": "quartered" },
+        { "quantity": 0.5, "unit": null, "name": "white cabbage", "note": "in wedges, core left on" },
+        { "quantity": 1, "unit": "tsp", "name": "black pepper" }
+      ]
+    },
+    {
+      "name": "Rice",
+      "ingredients": [
+        { "quantity": 600, "unit": "g", "name": "broken rice" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Rof and fish",
+      "steps": [
+        {
+          "text": "Pound the flat-leaf parsley, garlic, spring onions, scotch bonnet, and salt to a coarse green paste.",
+          "tip": "Pound it, do not blend it. A processor makes a smooth sauce that runs out of the fish the moment it hits the broth."
+        },
+        {
+          "text": "Cut a deep pocket into each grouper steak and pack the paste in, pressing it back into the flesh so nothing shows."
+        },
+        {
+          "text": "Leave the stuffed fish in the fridge while you start the broth.",
+          "duration_minutes": 30
+        }
+      ]
+    },
+    {
+      "name": "The broth",
+      "steps": [
+        {
+          "text": "Fry the onions in the peanut oil in a wide heavy pot until soft, then add the tomato paste and the plum tomatoes and cook them down to a dark jam.",
+          "duration_minutes": 12
+        },
+        {
+          "text": "Slide the fish in, pour over the water, stir in the tamarind paste, and simmer gently until the fish is just set, then lift each piece out and keep it warm.",
+          "duration_minutes": 20,
+          "tip": "The fish comes out before it is fully done. It goes back on top of a hot platter at the end and finishes there."
+        },
+        {
+          "text": "Cook the carrots, cassava, aubergine, and white cabbage in the broth in that order, pulling each one out the moment it gives to a knife.",
+          "duration_minutes": 25
+        },
+        {
+          "text": "Taste the broth and season it with black pepper until it is stronger than you would want to drink — the rice will take half of it away."
+        }
+      ]
+    },
+    {
+      "name": "The rice",
+      "steps": [
+        {
+          "text": "Rinse the broken rice, then stir it into the reduced broth and level the surface."
+        },
+        {
+          "text": "Cover and cook on a low heat without stirring, until the rice is tender and you can smell a crust forming underneath.",
+          "duration_minutes": 30,
+          "temperature": "low",
+          "tip": "Stirring is what turns this into a stew. Leave it alone and let the bottom toast."
+        },
+        {
+          "text": "Pile the rice onto a platter, arrange the fish and vegetables over it, and scrape the crust up and scatter it on top."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.5,
+    "variant_titles": ["Grand {title}", "{title} with Extra Rof"]
+  }
+}

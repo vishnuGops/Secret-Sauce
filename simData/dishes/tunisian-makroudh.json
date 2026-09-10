@@ -1,0 +1,100 @@
+{
+  "slug": "tunisian-makroudh",
+  "title": "Makroudh",
+  "description": "Semolina diamonds around a spiced date paste, fried until they set and dropped straight into warm honey. Makes about thirty pieces and they keep for a week in a tin.",
+  "cuisine": "Tunisian",
+  "category": "Dessert",
+  "difficulty": "hard",
+  "prep_minutes": 60,
+  "cook_minutes": 25,
+  "servings": 10,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Semolina dough has to rest before it can be rolled — the grains need time to drink. Skip the rest and it crumbles along every cut.",
+  "ingredient_groups": [
+    {
+      "name": "Semolina dough",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "coarse semolina" },
+        { "quantity": 150, "unit": "ml", "name": "olive oil", "note": "mild, not peppery" },
+        { "quantity": 1, "unit": "pinch", "name": "salt" },
+        { "quantity": 120, "unit": "ml", "name": "warm water" },
+        { "quantity": 1, "unit": "Tbsp", "name": "orange blossom water" }
+      ]
+    },
+    {
+      "name": "Date filling",
+      "ingredients": [
+        { "quantity": 400, "unit": "g", "name": "dates", "note": "pitted, soft" },
+        { "quantity": 1, "unit": "tsp", "name": "cinnamon" },
+        { "quantity": 1, "unit": "tsp", "name": "orange zest" },
+        { "quantity": 1, "unit": "Tbsp", "name": "butter", "note": "softened" }
+      ]
+    },
+    {
+      "name": "To finish",
+      "ingredients": [
+        { "quantity": 500, "unit": "ml", "name": "neutral oil", "note": "for frying" },
+        { "quantity": 300, "unit": "g", "name": "honey" },
+        { "quantity": 2, "unit": "Tbsp", "name": "sesame seeds", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "The dough",
+      "steps": [
+        {
+          "text": "Rub the olive oil into the coarse semolina with your fingertips until every grain is coated and the bowl smells nutty.",
+          "duration_minutes": 5,
+          "tip": "This is the only real technique in the recipe. Oil-coated grains give a short, sandy bite; under-rubbed ones go hard."
+        },
+        {
+          "text": "Sprinkle in the salt, warm water, and orange blossom water and press the mixture together without kneading it.",
+          "tip": "Semolina has no gluten worth developing. Kneading only compacts it — gather it, do not work it."
+        },
+        {
+          "text": "Cover the bowl and leave it alone while the semolina swells.",
+          "duration_minutes": 120
+        }
+      ]
+    },
+    {
+      "name": "The filling",
+      "steps": [
+        {
+          "text": "Work the pitted dates with the cinnamon, orange zest, and butter into a smooth, pliable paste."
+        }
+      ]
+    },
+    {
+      "name": "Shaping and frying",
+      "steps": [
+        {
+          "text": "Roll a third of the dough into a long rope, press a channel down its length with the side of your finger, and lay a rope of date paste into it."
+        },
+        {
+          "text": "Close the dough over the filling, flatten the log gently with your palm, and cut it on the diagonal into diamonds."
+        },
+        {
+          "text": "Fry the diamonds in the neutral oil at a moderate heat, turning once, until they are set and pale gold.",
+          "duration_minutes": 18,
+          "temperature": "160°C / 320°F",
+          "tip": "Too hot and the outside colours before the inside cooks; a makroudh should be dry-crumbed in the middle, never doughy."
+        },
+        {
+          "text": "Warm the honey in a wide pan and drop each piece in straight from the fryer, turning it until it is glossy.",
+          "duration_minutes": 5,
+          "tip": "Hot pastry into warm honey is the whole trick. Either one cold and the honey sits on the surface instead of soaking in."
+        },
+        {
+          "text": "Lift them onto a rack, scatter with the sesame seeds, and leave them to set before stacking."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.5,
+    "variant_titles": ["{title} with Almond Filling", "Baked {title}"]
+  }
+}

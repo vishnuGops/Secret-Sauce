@@ -73,6 +73,15 @@ delete from recipe_views   where user_id in (select id from sim.actor);
 -- is `on delete set null`, so the lineage is dropped, not the recipe.
 delete from recipes where id in (select id from sim.recipe);
 
+-- `public.tags` is shared and NOT sim-owned: the curated recipes write into it
+-- too, and it is unique by name, so the generator adds a name only when a draw
+-- used it and there is no registry of "tags the sim created". The cascade above
+-- took the `recipe_tags` rows and left the names behind, so what is safe to
+-- remove is exactly what nothing references any more — the same rule the
+-- `tags_delete_orphan` policy applies to a user deleting a tag.
+delete from tags t
+where not exists (select 1 from recipe_tags rt where rt.tag_id = t.id);
+
 -- Profiles cascade from auth.users, but delete them explicitly so the order is
 -- stated rather than relied upon.
 delete from profiles   where id in (select id from sim.actor);

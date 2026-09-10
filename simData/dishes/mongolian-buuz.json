@@ -1,0 +1,84 @@
+{
+  "slug": "mongolian-buuz",
+  "title": "Buuz",
+  "description": "Steamed lamb dumplings pleated closed with a small vent at the top. A stiff unleavened dough, a fatty filling loosened with water, and about twenty-five minutes of folding.",
+  "cuisine": "Mongolian",
+  "category": "Main",
+  "difficulty": "medium",
+  "prep_minutes": 60,
+  "cook_minutes": 25,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Lean mince makes a disappointing buuz. You want something around a fifth fat, because the fat melts into the water in the filling and becomes the mouthful of juice that the vent at the top is there to protect.",
+  "ingredient_groups": [
+    {
+      "name": "For the dough",
+      "ingredients": [
+        { "quantity": 400, "unit": "g", "name": "plain flour" },
+        { "quantity": 220, "unit": "ml", "name": "water", "note": "warm" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" }
+      ]
+    },
+    {
+      "name": "For the filling",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "minced lamb", "note": "fatty, around 20 per cent" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "diced as finely as you can manage" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic" },
+        { "quantity": 1, "unit": "tsp", "name": "caraway seeds", "note": "lightly crushed" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" },
+        { "quantity": 0.5, "unit": "tsp", "name": "black pepper" },
+        { "quantity": 3, "unit": "Tbsp", "name": "water", "note": "to loosen the filling" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Dough and filling",
+      "steps": [
+        {
+          "text": "Work the plain flour, salt and warm water into a stiff dough, then knead it on the bench until the surface goes smooth.",
+          "duration_minutes": 10,
+          "tip": "Stiffer than feels right. A soft dough tears open the moment you start pleating it."
+        },
+        {
+          "text": "Cover the dough and leave it to rest at room temperature.",
+          "duration_minutes": 30,
+          "tip": "Resting is not a formality here. Unrested gluten springs back as fast as you roll it and you will fight every round."
+        },
+        {
+          "text": "Chop the minced lamb further by hand if it looks pasty, then mix it with the onion, garlic, caraway seeds, salt, black pepper and the water.",
+          "tip": "Stir in one direction for a full minute. The filling turns tacky and holds itself together while you pleat, instead of sliding out of the round."
+        }
+      ]
+    },
+    {
+      "name": "Shaping and steaming",
+      "steps": [
+        {
+          "text": "Roll the dough into a rope, cut it into walnut-sized pieces, and roll each one into a round that is thick in the middle and thin at the rim.",
+          "duration_minutes": 25,
+          "tip": "The thick centre is structural. It is the only part carrying the weight of the filling once the buuz is standing up in the steamer."
+        },
+        {
+          "text": "Pleat each round closed around a heaped spoon of filling, leaving a small opening at the very top.",
+          "tip": "The gap is deliberate. It lets steam out so the dumpling does not split at the side and lose its juice into the tray."
+        },
+        {
+          "text": "Oil the steamer tray, stand the buuz on it without letting them touch, and steam over a hard boil until the dough is glossy and no longer tastes floury.",
+          "duration_minutes": 20,
+          "temperature": "high"
+        },
+        {
+          "text": "Let them sit for a minute before anyone picks one up.",
+          "tip": "Straight out of the steamer the juice inside is hotter than the dumpling looks. One minute is the difference between a good mouthful and a burnt palate."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.8,
+    "variant_titles": ["{title} with Beef", "{title}, Pan Fried", "Weekend {title}"]
+  }
+}

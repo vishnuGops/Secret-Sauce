@@ -1,0 +1,93 @@
+{
+  "slug": "australian-lamingtons",
+  "title": "Lamingtons",
+  "description": "Day-old sponge cut into cubes, dipped in a thin chocolate icing and rolled in coconut. Makes a 20 cm square tin's worth, which is sixteen generous squares.",
+  "cuisine": "Australian",
+  "category": "Dessert",
+  "difficulty": "medium",
+  "prep_minutes": 40,
+  "cook_minutes": 35,
+  "servings": 16,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The overnight rest is not about flavour. A fresh sponge is too tender to survive being dipped and it disintegrates into the icing bowl, which is by far the most common way this goes wrong.",
+  "ingredient_groups": [
+    {
+      "name": "For the sponge",
+      "ingredients": [
+        { "quantity": 4, "unit": null, "name": "eggs", "note": "at room temperature" },
+        { "quantity": 150, "unit": "g", "name": "caster sugar" },
+        { "quantity": 150, "unit": "g", "name": "self-raising flour", "note": "sifted twice" },
+        { "quantity": 60, "unit": "g", "name": "butter", "note": "melted and cooled" },
+        { "quantity": 60, "unit": "ml", "name": "milk", "note": "lukewarm" },
+        { "quantity": 1, "unit": "tsp", "name": "vanilla extract" }
+      ]
+    },
+    {
+      "name": "For the chocolate icing",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "icing sugar" },
+        { "quantity": 60, "unit": "g", "name": "cocoa powder" },
+        { "quantity": 30, "unit": "g", "name": "butter", "note": "melted" },
+        { "quantity": 200, "unit": "ml", "name": "boiling water" }
+      ]
+    },
+    {
+      "name": "To coat",
+      "ingredients": [
+        { "quantity": 250, "unit": "g", "name": "desiccated coconut", "note": "fine, not shredded" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "The sponge",
+      "steps": [
+        {
+          "text": "Beat the eggs and caster sugar until the mixture is pale and thick enough to hold a ribbon on the surface for three seconds.",
+          "duration_minutes": 8,
+          "tip": "Every bit of the rise comes from here. Under-whipped eggs give a flat, tight crumb and no amount of raising agent puts it back."
+        },
+        {
+          "text": "Fold in the self-raising flour in three additions, then the melted butter, the milk and the vanilla extract.",
+          "tip": "Fold, do not stir. Each stroke past the point where the flour disappears costs you height."
+        },
+        {
+          "text": "Pour into a lined square tin and bake until the sponge springs back when pressed in the middle.",
+          "duration_minutes": 30,
+          "temperature": "350°F"
+        },
+        {
+          "text": "Cool the sponge completely in the tin, then wrap it and leave it overnight.",
+          "duration_minutes": 720,
+          "tip": "A day-old sponge cuts into clean cubes and holds together in the icing. This step is the whole difference between neat lamingtons and a bowl of chocolate crumbs."
+        }
+      ]
+    },
+    {
+      "name": "Coating",
+      "steps": [
+        {
+          "text": "Trim the crusts and cut the sponge into sixteen even cubes."
+        },
+        {
+          "text": "Whisk the icing sugar, cocoa powder and melted butter with the boiling water until the icing runs off a spoon in a sheet.",
+          "tip": "Thinner than looks right. Thick icing drags the sponge apart and sets in ugly ridges."
+        },
+        {
+          "text": "Spread the desiccated coconut in a wide tray. Drop each cube into the icing, lift it out on two forks, let it drip, then roll it through the coconut.",
+          "tip": "Two forks, one cube at a time, and coconut-side hand kept dry. Wet fingers in the coconut tray turn it into a clumped mess within four cubes."
+        },
+        {
+          "text": "Set the coated cubes on a rack until the icing has firmed up.",
+          "duration_minutes": 60,
+          "tip": "If the icing thickens while you work, sit its bowl over a pan of hot water for a minute rather than adding more liquid."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.6,
+    "variant_titles": ["Raspberry {title}", "{title} with Cream", "Mini {title}"]
+  }
+}

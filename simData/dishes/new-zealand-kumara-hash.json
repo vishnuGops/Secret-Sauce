@@ -1,0 +1,69 @@
+{
+  "slug": "new-zealand-kumara-hash",
+  "title": "Kūmara and Bacon Hash",
+  "description": "Orange kūmara parboiled, then crisped in bacon fat and left alone long enough to build a crust. Eggs cooked in wells in the pan so it all comes to the table in one dish.",
+  "cuisine": "New Zealand",
+  "category": "Breakfast",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 30,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Kūmara has more sugar in it than a potato, so it colours faster and burns sooner. Keep the pan a shade below where you would run a potato hash and give it the time back instead.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 700, "unit": "g", "name": "kūmara", "note": "orange-fleshed sweet potato, peeled and cut into 2 cm dice" },
+        { "quantity": 200, "unit": "g", "name": "streaky bacon", "note": "cut into lardons" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "diced" },
+        { "quantity": 2, "unit": "Tbsp", "name": "butter" },
+        { "quantity": 1, "unit": "tsp", "name": "smoked paprika" },
+        { "quantity": 4, "unit": null, "name": "eggs" },
+        { "quantity": 2, "unit": "Tbsp", "name": "parsley", "note": "roughly chopped" },
+        { "quantity": 1, "unit": "pinch", "name": "flaky salt" },
+        { "quantity": 0.5, "unit": "tsp", "name": "black pepper" },
+        { "quantity": 0.5, "unit": null, "name": "lemon", "note": "for a squeeze at the end", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Parboil the kūmara in salted water for a few minutes until the edges are just yielding, then drain it and leave it to steam dry in the colander.",
+          "duration_minutes": 6,
+          "tip": "Steam-dried edges are what crisp later. Damp dice stew in the pan and never colour."
+        },
+        {
+          "text": "Fry the streaky bacon in a heavy pan until the fat has rendered out and the lardons are browning, then add the butter and the onion.",
+          "duration_minutes": 8,
+          "temperature": "medium"
+        },
+        {
+          "text": "Tip in the kūmara and the smoked paprika, season with flaky salt and black pepper, and press the lot into a single layer."
+        },
+        {
+          "text": "Leave the hash completely alone until a crust forms underneath, then turn it over in sections rather than stirring it.",
+          "duration_minutes": 10,
+          "temperature": "medium",
+          "tip": "Every stir resets the crust. Turn it three times in ten minutes and no more than that."
+        },
+        {
+          "text": "Make four wells in the hash, crack the eggs into them, cover the pan and cook until the whites have just set.",
+          "duration_minutes": 5,
+          "temperature": "low"
+        },
+        {
+          "text": "Scatter over the parsley and finish with a squeeze of lemon."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.3,
+    "variant_titles": ["{title} with Feta", "Weekend {title}", "{title} for Two"]
+  }
+}

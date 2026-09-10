@@ -1,0 +1,56 @@
+{
+  "slug": "hawaiian-ahi-poke",
+  "title": "Ahi Poke",
+  "description": "Cubed raw tuna dressed with soy, sesame and sweet onion, and given a short rest in the fridge so the seasoning takes. Nothing is cooked and nothing should be.",
+  "cuisine": "Hawaiian",
+  "category": "Appetizer",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 0,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Limu and inamona are what make this taste of the islands rather than of a soy dressing. Rehydrated wakame and crushed roasted macadamia are the usual mainland stand-ins and both are honest substitutions.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "sashimi-grade tuna", "note": "cut into 2 cm cubes" },
+        { "quantity": 3, "unit": "Tbsp", "name": "soy sauce" },
+        { "quantity": 1, "unit": "Tbsp", "name": "sesame oil", "note": "toasted" },
+        { "quantity": 0.5, "unit": null, "name": "sweet onion", "note": "sliced paper thin" },
+        { "quantity": 3, "unit": null, "name": "scallions", "note": "cut on the diagonal" },
+        { "quantity": 2, "unit": "tsp", "name": "sesame seeds", "note": "toasted" },
+        { "quantity": 1, "unit": "pinch", "name": "Hawaiian sea salt" },
+        { "quantity": 2, "unit": "Tbsp", "name": "limu", "note": "chopped seaweed; rehydrated wakame stands in", "is_optional": true },
+        { "quantity": 1, "unit": "tsp", "name": "inamona", "note": "roasted crushed kukui nut; macadamia is the common substitute", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Pat the tuna dry and cut it into even cubes with a sharp knife, drawing the blade through rather than pressing down.",
+          "tip": "A dull knife bruises the fish and you can see it — the cubes go cloudy exactly where they were crushed."
+        },
+        {
+          "text": "Toss the tuna with the soy sauce, sesame oil and Hawaiian sea salt until every cube is glossy."
+        },
+        {
+          "text": "Fold through the sweet onion, scallions, sesame seeds, limu and inamona with a light hand."
+        },
+        {
+          "text": "Chill for a quarter of an hour to let the seasoning take, then serve straight from the fridge.",
+          "duration_minutes": 15,
+          "tip": "Do not leave it much longer than an hour. The soy starts curing the outside of the cubes and the texture turns firm and slightly chalky."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.2,
+    "variant_titles": ["{title} with Avocado", "Spicy {title}", "{title} Bowl"]
+  }
+}

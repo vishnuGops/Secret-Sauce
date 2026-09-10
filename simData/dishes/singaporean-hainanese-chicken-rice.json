@@ -1,0 +1,131 @@
+{
+  "slug": "singaporean-hainanese-chicken-rice",
+  "title": "Hainanese Chicken Rice",
+  "description": "A whole bird poached below a simmer, shocked in ice water, and served at room temperature over rice cooked in its own broth and fat. Two sauces on the side, both mandatory.",
+  "cuisine": "Singaporean",
+  "category": "Main",
+  "difficulty": "hard",
+  "prep_minutes": 35,
+  "cook_minutes": 60,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Four components, and the rice is the one people underestimate. It is not a side — it carries the fat and the broth, and a dry, plain bowl of rice under good chicken is a failed plate.",
+  "ingredient_groups": [
+    {
+      "name": "For the chicken",
+      "ingredients": [
+        { "quantity": 1, "unit": null, "name": "whole chicken", "note": "about 1.6 kg, at room temperature" },
+        { "quantity": 3, "unit": "L", "name": "water" },
+        { "quantity": 5, "unit": "cm", "name": "ginger", "note": "sliced" },
+        { "quantity": 4, "unit": null, "name": "scallions", "note": "halved" },
+        { "quantity": 2, "unit": "Tbsp", "name": "salt" },
+        { "quantity": 1, "unit": "Tbsp", "name": "sesame oil", "note": "for brushing" },
+        { "quantity": null, "unit": null, "name": "ice water", "note": "a large bowlful, for the plunge" }
+      ]
+    },
+    {
+      "name": "For the rice",
+      "ingredients": [
+        { "quantity": 2, "unit": "cups", "name": "jasmine rice", "note": "rinsed until the water runs clear, then drained" },
+        { "quantity": 2, "unit": "Tbsp", "name": "chicken fat", "note": "trimmed from the cavity of the bird" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "finely chopped" },
+        { "quantity": 3, "unit": null, "name": "shallots", "note": "finely chopped" },
+        { "quantity": 2, "unit": null, "name": "pandan leaves", "note": "knotted", "is_optional": true },
+        { "quantity": 600, "unit": "ml", "name": "poaching broth" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" }
+      ]
+    },
+    {
+      "name": "For the ginger and scallion oil",
+      "ingredients": [
+        { "quantity": 60, "unit": "g", "name": "ginger", "note": "grated to a pulp" },
+        { "quantity": 4, "unit": null, "name": "scallions", "note": "sliced as thinly as you can" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt" },
+        { "quantity": 80, "unit": "ml", "name": "peanut oil" }
+      ]
+    },
+    {
+      "name": "For the chilli sauce",
+      "ingredients": [
+        { "quantity": 8, "unit": null, "name": "red chillies", "note": "seeds left in" },
+        { "quantity": 3, "unit": "cloves", "name": "garlic" },
+        { "quantity": 2, "unit": "cm", "name": "ginger" },
+        { "quantity": 2, "unit": "Tbsp", "name": "lime juice" },
+        { "quantity": 1, "unit": "tsp", "name": "sugar" },
+        { "quantity": 3, "unit": "Tbsp", "name": "poaching broth" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Poach the chicken",
+      "steps": [
+        {
+          "text": "Rub the whole chicken inside and out with the salt, then rinse it clean. Pull the pads of chicken fat out of the cavity and set them aside.",
+          "tip": "That fat is the entire point of the rice. Do not bin it."
+        },
+        {
+          "text": "Bring the water to a boil with the ginger and scallions, lower the bird in breast down, and immediately drop the heat until the surface stops moving.",
+          "duration_minutes": 3
+        },
+        {
+          "text": "Poach until the thickest part of the thigh is just done, turning the bird once halfway.",
+          "duration_minutes": 35,
+          "temperature": "low",
+          "tip": "The water must never bubble. If it does, the breast tightens and no amount of resting brings it back."
+        },
+        {
+          "text": "Lift the chicken out and plunge it into ice water until it is cold right through, then brush it all over with sesame oil.",
+          "duration_minutes": 10,
+          "tip": "The cold shock is what sets the slippery jelly layer under the skin that people queue for."
+        }
+      ]
+    },
+    {
+      "name": "Cook the rice",
+      "steps": [
+        {
+          "text": "Render the reserved chicken fat in a pan over low heat, then fry the garlic and shallots in it until pale gold.",
+          "duration_minutes": 6,
+          "temperature": "low"
+        },
+        {
+          "text": "Stir in the drained jasmine rice and toast it until every grain is coated and turning translucent at the edges.",
+          "duration_minutes": 3
+        },
+        {
+          "text": "Add the poaching broth, the pandan leaves and the salt, then cook the rice covered until the liquid is gone and the grains are separate.",
+          "duration_minutes": 15,
+          "tip": "Measure the broth rather than reusing your plain-rice ratio. The fat means it needs slightly less liquid than you expect."
+        }
+      ]
+    },
+    {
+      "name": "The two sauces",
+      "steps": [
+        {
+          "text": "Put the ginger, scallions and salt in a heatproof bowl. Heat the peanut oil until it shimmers and pour it straight over.",
+          "tip": "It should sizzle hard for a couple of seconds. If it does not, the oil was too cool and the ginger stays raw and hot."
+        },
+        {
+          "text": "Blend the red chillies, garlic, ginger, lime juice, sugar, salt and the poaching broth into a loose, pourable sauce."
+        }
+      ]
+    },
+    {
+      "name": "Serve",
+      "steps": [
+        {
+          "text": "Carve the chicken onto a plate at room temperature, serve the rice alongside, and put both sauces and a small bowl of the remaining broth on the table.",
+          "tip": "Room temperature, not fridge cold and not hot. Straight from the ice bath it tastes of nothing; reheated it may as well be a roast."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.6,
+    "variant_titles": ["{title} for a Crowd", "Weeknight {title}", "{title} with Extra Chilli"]
+  }
+}

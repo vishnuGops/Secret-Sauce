@@ -1,0 +1,121 @@
+{
+  "slug": "austrian-sachertorte",
+  "title": "Sachertorte",
+  "description": "A dense chocolate cake split and sealed with apricot jam, then poured over with a mirror glaze. Baked in a 23 cm springform and cut small, because it is very rich. Whipped cream on the side is not optional in Vienna.",
+  "cuisine": "Austrian",
+  "category": "Dessert",
+  "difficulty": "hard",
+  "prep_minutes": 45,
+  "cook_minutes": 55,
+  "servings": 12,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Three separate operations that each want your full attention — cake, jam seal, glaze. Bake a day ahead if you can; the crumb firms up overnight and slices far more cleanly.",
+  "ingredient_groups": [
+    {
+      "name": "For the cake",
+      "ingredients": [
+        { "quantity": 130, "unit": "g", "name": "dark chocolate", "note": "around 55%, chopped" },
+        { "quantity": 130, "unit": "g", "name": "butter", "note": "soft" },
+        { "quantity": 110, "unit": "g", "name": "icing sugar" },
+        { "quantity": 6, "unit": null, "name": "eggs", "note": "separated" },
+        { "quantity": 110, "unit": "g", "name": "caster sugar" },
+        { "quantity": 140, "unit": "g", "name": "plain flour", "note": "sifted" },
+        { "quantity": 1, "unit": "tsp", "name": "vanilla extract" },
+        { "quantity": 1, "unit": "pinch", "name": "salt" }
+      ]
+    },
+    {
+      "name": "For the apricot layer",
+      "ingredients": [
+        { "quantity": 200, "unit": "g", "name": "apricot jam" },
+        { "quantity": 2, "unit": "Tbsp", "name": "rum", "is_optional": true }
+      ]
+    },
+    {
+      "name": "For the glaze",
+      "ingredients": [
+        { "quantity": 200, "unit": "g", "name": "dark chocolate", "note": "chopped fine" },
+        { "quantity": 200, "unit": "g", "name": "caster sugar" },
+        { "quantity": 125, "unit": "ml", "name": "water" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Cake",
+      "steps": [
+        {
+          "text": "Melt the dark chocolate over a pan of steaming water and leave it to come down to barely warm.",
+          "duration_minutes": 8,
+          "tip": "Hot chocolate meeting soft butter seizes it into grains. Blood heat on the inside of your wrist is the test."
+        },
+        {
+          "text": "Beat the butter with the icing sugar and the vanilla extract until pale, then beat in the egg yolks one at a time.",
+          "duration_minutes": 6
+        },
+        {
+          "text": "Fold the cooled chocolate through the butter mixture."
+        },
+        {
+          "text": "Whip the egg whites with the salt to soft peaks, then rain in the caster sugar and whip to a meringue that flops over at the tip.",
+          "tip": "Stiff peaks tear rather than fold, and every tear is a streak of dry white in the finished crumb."
+        },
+        {
+          "text": "Slacken the batter with a third of the meringue, then alternate the rest of the meringue with the sifted plain flour in three additions."
+        },
+        {
+          "text": "Bake in a lined 23 cm springform until a skewer comes out with a few damp crumbs clinging to it.",
+          "duration_minutes": 50,
+          "temperature": "170°C / 340°F"
+        },
+        {
+          "text": "Cool in the tin for ten minutes, then turn out onto a rack and leave until stone cold.",
+          "duration_minutes": 60
+        }
+      ]
+    },
+    {
+      "name": "Assembly",
+      "steps": [
+        {
+          "text": "Slice the cold cake horizontally into two even layers."
+        },
+        {
+          "text": "Warm the apricot jam with the rum until it pours, then push it through a sieve to catch the fruit pieces."
+        },
+        {
+          "text": "Spread half the jam over the cut face, sandwich the cake back together, and paint the rest thinly over the top and sides. Leave it to set to a tacky film.",
+          "duration_minutes": 20,
+          "tip": "The jam is not a filling, it is a seal. Skip it and the glaze drags loose crumb around with it as it runs."
+        }
+      ]
+    },
+    {
+      "name": "Glaze",
+      "steps": [
+        {
+          "text": "Boil the caster sugar with the water to a light syrup.",
+          "duration_minutes": 5
+        },
+        {
+          "text": "Off the heat, stir the chopped dark chocolate into the syrup and let it cool until it ribbons off the spoon and coats the back of it.",
+          "temperature": "35°C / 95°F",
+          "tip": "Too hot and it runs off in a thin veil; too cool and it sets before it has covered the sides."
+        },
+        {
+          "text": "Stand the cake on a rack over a tray and pour the glaze onto the centre in one continuous movement, letting it find its own way down.",
+          "tip": "Never touch it with a palette knife. Every mark you make in a poured glaze is permanent."
+        },
+        {
+          "text": "Leave to set at room temperature — the fridge kills the shine.",
+          "duration_minutes": 120
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.4,
+    "variant_titles": ["{title} with Whipped Cream", "Miniature {title}"]
+  }
+}

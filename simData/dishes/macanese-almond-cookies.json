@@ -1,0 +1,67 @@
+{
+  "slug": "macanese-almond-cookies",
+  "title": "Macanese Almond Cookies",
+  "description": "Pressed rather than rolled, from toasted mung bean flour rubbed with cold lard. They come out sandy and dry and dissolve on the tongue. Makes about two dozen.",
+  "cuisine": "Macanese",
+  "category": "Snack",
+  "difficulty": "easy",
+  "prep_minutes": 25,
+  "cook_minutes": 20,
+  "servings": 24,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Mung bean flour is what gives these their particular chalky-in-a-good-way crumb; fine rice flour is the usual substitute and produces a slightly harder cookie. Lard is not negotiable if you want the texture — butter has water in it and water builds gluten.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 250, "unit": "g", "name": "mung bean flour" },
+        { "quantity": 120, "unit": "g", "name": "icing sugar", "note": "sifted" },
+        { "quantity": 80, "unit": "g", "name": "lard", "note": "chilled hard and cut into small cubes" },
+        { "quantity": 60, "unit": "g", "name": "almonds", "note": "half of them ground fine, half left as halves" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt" },
+        { "quantity": 1, "unit": "Tbsp", "name": "water", "note": "only if the mix will not hold together" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Toast the mung bean flour in a dry pan over a low heat until it smells nutty and has lost its raw edge, then spread it out and let it cool completely.",
+          "duration_minutes": 10,
+          "temperature": "low",
+          "tip": "Cool it properly before it meets the fat. Warm flour melts the lard on contact and the sandy crumb goes with it."
+        },
+        {
+          "text": "Rub the chilled lard into the flour, the icing sugar and the salt with your fingertips until it looks like damp sand, adding the water a few drops at a time only if it refuses to come together.",
+          "duration_minutes": 8,
+          "tip": "Judge it by squeezing, not by looking. A handful that holds its shape when you open your fist is done; one that falls apart wants a drop more."
+        },
+        {
+          "text": "Stir through the ground almonds and keep the halves back for the tops."
+        },
+        {
+          "text": "Pack the mixture hard into a mould or a small ring, press an almond half onto each top, and knock them out onto a lined tray.",
+          "duration_minutes": 15,
+          "tip": "Pack it far harder than feels reasonable. These are pressed, not rolled, and a loosely filled mould gives a cookie that slumps on the way to the oven."
+        },
+        {
+          "text": "Bake until the edges are set and the tops have barely taken any colour.",
+          "duration_minutes": 18,
+          "temperature": "300°F"
+        },
+        {
+          "text": "Leave them on the tray until they are stone cold before moving a single one.",
+          "duration_minutes": 30,
+          "tip": "They only become structurally sound once cool. Lift one warm and it falls through your fingers."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.1,
+    "variant_titles": ["{title} with Walnut", "{title}, Small Batch", "Sesame {title}"]
+  }
+}

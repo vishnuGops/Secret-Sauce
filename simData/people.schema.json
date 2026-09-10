@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://secret-sauce.local/schema/sim-people.json",
+  "title": "Secret Sauce simulation name pools",
+  "description": "simData/people.json — the given/family name pools and bio templates supabase/sim/2_sim_generate.sql draws every simulated profile from. Not read at runtime and not read by Postgres: tool/sim.dart validates this file and generates supabase/sim/1_sim_people.sql from it, and `melos run sim:check` fails when that .sql is stale. No JSON Schema library is in the toolchain, so every rule stated here is ALSO implemented in tool/sim.dart — change both. Design note: the locale mix is deliberately EVEN, because this pool exists to exercise rendering (diacritics, Cyrillic, right-to-left Arabic, single-word names) rather than to model a real user base.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["locales", "bios"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "note": {
+      "type": "string",
+      "description": "Free prose for whoever opens the file. Ignored by the generator."
+    },
+    "locales": {
+      "type": "array",
+      "minItems": 8,
+      "description": "One entry per naming tradition. Given and family names are drawn from the SAME locale for one actor, so a generated name reads as a coherent name rather than a two-culture collage. Array order is not significant — the locale itself is drawn uniformly.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "label", "cuisine", "given", "family"],
+        "properties": {
+          "code": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$",
+            "description": "Stable identifier and the primary key of sim.locale. Unique across the file."
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Human-readable name of the tradition, shown only in sim notices."
+          },
+          "cuisine": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Substituted into any bio containing the literal `{cuisine}`, so a bio and the name above it agree."
+          },
+          "given": {
+            "type": "array",
+            "minItems": 8,
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "family": {
+            "type": "array",
+            "minItems": 8,
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "bios": {
+      "type": "array",
+      "minItems": 8,
+      "uniqueItems": true,
+      "description": "Profile bio templates. `{cuisine}` is the ONLY placeholder the generator substitutes; any other `{...}` is a validation error, because an unsubstituted placeholder ships to the profile screen as literal braces.",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

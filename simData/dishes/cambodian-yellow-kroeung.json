@@ -1,0 +1,66 @@
+{
+  "slug": "cambodian-yellow-kroeung",
+  "title": "Yellow Kroeung",
+  "description": "The lemongrass and turmeric paste that sits under most Khmer cooking. Pounded, never blended, and made in a batch — this yields about a cupful, enough to season two curries.",
+  "cuisine": "Cambodian",
+  "category": "Sauce",
+  "difficulty": "medium",
+  "prep_minutes": 25,
+  "cook_minutes": 0,
+  "servings": 8,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "A food processor will give you something yellow and fragrant, and it will not be kroeung. Blades cut the lemongrass fibre into short splinters; a pestle crushes it open and releases the oil. If you must use a machine, pound the lemongrass by hand first and blitz the rest.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 6, "unit": null, "name": "lemongrass stalks", "note": "outer layers stripped, pale core only, sliced as thinly as possible" },
+        { "quantity": 8, "unit": "cloves", "name": "garlic" },
+        { "quantity": 4, "unit": null, "name": "shallots", "note": "quartered" },
+        { "quantity": 30, "unit": "g", "name": "galangal", "note": "peeled and sliced across the grain" },
+        { "quantity": 20, "unit": "g", "name": "turmeric", "note": "the fresh root, peeled; 2 tsp of the dried powder at a push" },
+        { "quantity": 4, "unit": null, "name": "makrut lime leaves", "note": "centre ribs torn out" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" },
+        { "quantity": 2, "unit": null, "name": "dried red chillies", "note": "soaked in warm water and drained", "is_optional": true },
+        { "quantity": 1, "unit": "Tbsp", "name": "shrimp paste", "note": "toasted in foil until it smells of the sea", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Slice the lemongrass stalks as thinly as your knife allows, working only with the pale core.",
+          "tip": "This is the difference between a smooth paste and one full of splinters. If a slice bends instead of snapping, it belongs in the stock pot."
+        },
+        {
+          "text": "Pound the lemongrass with the salt on its own until it collapses into a wet green pulp.",
+          "duration_minutes": 8,
+          "tip": "The salt is the abrasive. Pound the toughest thing first, with nothing soft to cushion it, and the mortar does the work instead of your shoulder."
+        },
+        {
+          "text": "Add the makrut lime leaves and the galangal and keep going until neither is recognisable in the pulp.",
+          "duration_minutes": 5
+        },
+        {
+          "text": "Work in the turmeric, then the shallots and the garlic, one at a time and never two together.",
+          "duration_minutes": 7,
+          "tip": "The order matters. Anything wet added early turns the mortar into a bowl of soup and the fibres never break down after that."
+        },
+        {
+          "text": "Pound in the dried red chillies and the shrimp paste last if you are using them, then rub a little of the paste between your fingers to check it is smooth."
+        },
+        {
+          "text": "Pack the kroeung into a jar, press the surface flat, and film it with a thin layer of oil.",
+          "tip": "A week in the fridge, or freeze it in tablespoon blobs. It darkens as it sits, which is oxidation and not spoilage."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.9,
+    "variant_titles": ["{title} for Fish", "Blender {title}", "Mild {title}"]
+  }
+}

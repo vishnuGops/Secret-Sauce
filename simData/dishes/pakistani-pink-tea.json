@@ -1,0 +1,77 @@
+{
+  "slug": "pakistani-pink-tea",
+  "title": "Kashmiri Pink Tea",
+  "description": "Green tea boiled down for the better part of an hour with baking soda, aerated by pouring it back on itself, shocked with iced water, and only then let anywhere near milk. The pink is a chemical trick, not a colouring.",
+  "cuisine": "Pakistani",
+  "category": "Drink",
+  "difficulty": "medium",
+  "prep_minutes": 5,
+  "cook_minutes": 80,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The concentrate keeps for a week in the fridge, which is how anyone drinks this on a weekday. Make a double batch of it and the tea itself takes ten minutes.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 3, "unit": "Tbsp", "name": "green tea leaves", "note": "Kashmiri or gunpowder" },
+        { "quantity": 1, "unit": "L", "name": "water" },
+        { "quantity": 0.5, "unit": "tsp", "name": "baking soda" },
+        { "quantity": 4, "unit": "pods", "name": "cardamom", "note": "cracked open" },
+        { "quantity": 1, "unit": "pinch", "name": "salt" },
+        { "quantity": 250, "unit": "ml", "name": "iced water" },
+        { "quantity": 500, "unit": "ml", "name": "whole milk" },
+        { "quantity": 3, "unit": "Tbsp", "name": "sugar", "note": "to taste" },
+        { "quantity": 2, "unit": "Tbsp", "name": "pistachios", "note": "slivered" },
+        { "quantity": 2, "unit": "Tbsp", "name": "almonds", "note": "slivered" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "The concentrate",
+      "steps": [
+        {
+          "text": "Boil the green tea leaves in half the water with the baking soda, the cardamom and the salt, uncovered.",
+          "duration_minutes": 5,
+          "tip": "The baking soda is the colour. Leave it out and you get a perfectly nice pot of grey tea."
+        },
+        {
+          "text": "Hold it at a rolling boil until the liquid has reduced by roughly two thirds and gone a deep reddish brown.",
+          "duration_minutes": 45
+        },
+        {
+          "text": "Ladle the liquid up and pour it back into the pot from as high as you can manage without redecorating the kitchen. Keep going for a few minutes.",
+          "duration_minutes": 5,
+          "tip": "Aeration is the other half of the colour. A pot that never gets air stays brown no matter how long it boils."
+        },
+        {
+          "text": "Pour in the iced water in one go — the shock is what fixes the pink — then bring it back to the boil.",
+          "duration_minutes": 5
+        },
+        {
+          "text": "Add the rest of the water, boil once more, then strain the concentrate and press the leaves before discarding them.",
+          "duration_minutes": 12
+        }
+      ]
+    },
+    {
+      "name": "Serving",
+      "steps": [
+        {
+          "text": "Heat the milk with the sugar in a clean pan, then stir in the concentrate a ladle at a time until the colour is the pink you want.",
+          "duration_minutes": 8,
+          "tip": "Roughly one part concentrate to two parts milk. Go further and it turns beige, which tastes fine and looks like nothing."
+        },
+        {
+          "text": "Pour into small cups and scatter the pistachios and almonds over the top."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.9,
+    "variant_titles": ["Salted {title}", "Everyday {title}", "{title} with Extra Cream"]
+  }
+}

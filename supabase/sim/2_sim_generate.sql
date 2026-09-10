@@ -93,8 +93,73 @@ begin
   if not exists (select 1 from sim.dish) then
     raise exception 'sim.dish is empty — apply supabase/sim/1_sim_dishes.sql first';
   end if;
-  raise notice 'sim: preset=% users=% seed=% dishes=%',
-    sim.cfg('preset'), sim.n_users(), sim.seed(), (select count(*) from sim.dish);
+  -- The other two pools, checked the same way and for a sharper reason: an
+  -- empty sim.dish fails loudly at the first draw, but an empty
+  -- sim.title_variant is a `cross join` against nothing, which generates ZERO
+  -- recipes and reports success. That is exactly what a half-finished move of
+  -- these rows out of this file and into simData/vocab.json produced.
+  if not exists (select 1 from sim.title_variant) then
+    raise exception 'sim.title_variant is empty — apply supabase/sim/1_sim_vocab.sql first';
+  end if;
+  if not exists (select 1 from sim.vocab_tag) then
+    raise exception 'sim.vocab_tag is empty — apply supabase/sim/1_sim_vocab.sql first';
+  end if;
+  if not exists (select 1 from sim.locale) or not exists (select 1 from sim.bio) then
+    raise exception 'sim.locale / sim.bio are empty — apply supabase/sim/1_sim_people.sql first';
+  end if;
+
+  -- Density and uniqueness of the draw indices. tool/sim.dart guarantees both
+  -- at authoring time, but the loaders upsert by natural key, so a database
+  -- that has taken two different versions of a pool file can hold a gap the
+  -- source file does not have. Every draw below is `rand_int(1, count)` or
+  -- `rand_zipf(count)`, so a gap is a silently skipped row — the actor whose
+  -- draw lands in the hole gets a null name, and the profile upsert fails a
+  -- not-null constraint 900 rows later with nothing pointing back here.
+  if exists (
+    select 1 from sim.locale
+    group by 1 = 1
+    having count(*) <> max(n) or count(*) <> count(distinct n) or min(n) <> 1
+  ) then
+    raise exception 'sim.locale.n is not dense 1..%  — re-apply supabase/sim/1_sim_people.sql',
+      (select count(*) from sim.locale);
+  end if;
+  if exists (
+    select 1 from sim.person_name p
+    join sim.locale l on l.code = p.locale
+    group by p.locale, p.kind
+    having count(*) <> max(p.n) or min(p.n) <> 1
+  ) then
+    raise exception 'sim.person_name.n is not dense within a (locale, kind) — re-apply supabase/sim/1_sim_people.sql';
+  end if;
+  -- A name row whose locale is gone is never drawn (the draw goes through
+  -- sim.locale), but it means the table and the source file disagree.
+  if exists (
+    select 1 from sim.person_name p
+    where not exists (select 1 from sim.locale l where l.code = p.locale)
+  ) then
+    raise exception 'sim.person_name holds an orphan locale — re-apply supabase/sim/1_sim_people.sql';
+  end if;
+  -- The three rank-indexed pools, same rule.
+  if exists (
+    select 1 from sim.bio group by 1 = 1
+    having count(*) <> max(n) or min(n) <> 1
+  ) or exists (
+    select 1 from sim.title_variant group by 1 = 1
+    having count(*) <> max(n) or min(n) <> 1
+  ) or exists (
+    select 1 from sim.vocab_tag group by 1 = 1
+    having count(*) <> max(n) or min(n) <> 1
+  ) then
+    raise exception 'a rank-indexed pool (bio / title_variant / vocab_tag) is not dense from 1 — re-apply the 1_sim_*.sql loaders';
+  end if;
+
+  raise notice 'sim: preset=% users=% seed=% dishes=% (pools: % locales, % names, % bios, % titles, % tags)',
+    sim.cfg('preset'), sim.n_users(), sim.seed(), (select count(*) from sim.dish),
+    (select count(*) from sim.locale),
+    (select count(*) from sim.person_name),
+    (select count(*) from sim.bio),
+    (select count(*) from sim.title_variant),
+    (select count(*) from sim.vocab_tag);
 end $$;
 
 -- ============================================================================
@@ -145,34 +210,11 @@ on conflict (n) do nothing;
 do $$
 declare
   v_hash text := crypt(gen_random_uuid()::text, gen_salt('bf'));
-  v_given text[] := array[
-    'Amara','Bruno','Chen','Dara','Elif','Farid','Greta','Hiroshi','Imani','Jonas',
-    'Kiran','Lucia','Mateo','Nadia','Omar','Priya','Quentin','Rosa','Sami','Tara',
-    'Ulla','Viktor','Wren','Xiomara','Yusuf','Zara','Aoife','Bogdan','Camila','Dmitri',
-    'Esther','Fatima','Gabriel','Hana','Ines','Jae','Kwame','Leila','Marek','Noor',
-    'Olga','Pedro','Rania','Soren','Thandiwe','Ubah','Vera','Wei'
-  ];
-  v_family text[] := array[
-    'Okonkwo','Castellani','Wei','Nilsson','Yilmaz','Haddad','Lindqvist','Tanaka','Mbeki','Berg',
-    'Sharma','Moreau','Alvarez','Petrova','Kaur','Novak','Fischer','Silva','Okafor','Rossi',
-    'Andersen','Baptiste','Chowdhury','Delgado','Eriksen','Farrell','Gruber','Hussain','Ivanov','Jensen',
-    'Kowalski','Larsen','Mendes','Nakamura','Oyelaran','Pereira','Quintana','Reyes','Sato','Toure',
-    'Ueda','Varga','Weber','Xu','Yamada','Zielinski','Adeyemi','Blanc'
-  ];
-  v_bios text[] := array[
-    'Cooking mostly for one, badly, happily.',
-    'Weeknight food. Nothing that takes longer than the rice.',
-    'Writing down what my parents never measured.',
-    'Baker by weekend, spreadsheet by weekday.',
-    'I chase texture more than flavour.',
-    'Trying to cook through one cookbook a year.',
-    'Fermenting things my flatmates have opinions about.',
-    'Here to read, not to post.',
-    'Feeding four people who agree on nothing.',
-    'Ex-restaurant. Recovering.',
-    'Everything in one pan or it does not happen.',
-    'Learning to cook at 41. It is going fine.'
-  ];
+  -- Pool sizes, read once. The draws below are `rand_int(1, n)` against a
+  -- dense index (checked in the preflight above), so the alternative is an
+  -- aggregate over sim.locale / sim.bio once per actor.
+  v_locales int := (select count(*) from sim.locale);
+  v_bios    int := (select count(*) from sim.bio);
 begin
   insert into auth.users (
     instance_id, id, aud, role, email,
@@ -195,28 +237,53 @@ begin
   -- Explicit upsert rather than relying on on_auth_user_created: after a
   -- `db:drop` the auth user survives and the trigger only fires on INSERT, so
   -- the profile would never be rebuilt (B015).
+  --
+  -- Names come from simData/people.json through sim.locale / sim.person_name,
+  -- and the joins below are what make one name COHERENT: an actor draws a
+  -- locale once, and the given name, the family name and the bio's `{cuisine}`
+  -- all read that same row. Drawing given and family independently across the
+  -- whole pool is what the two flat `array[…]` literals here used to do, and it
+  -- produced two-culture collages ("Hiroshi Okonkwo") at a rate of about
+  -- fifteen in sixteen.
   insert into profiles (id, display_name, bio, created_at)
   select
     a.id,
     case
       -- Deliberate edge cases, at fixed indices so they are always present.
       -- Every one of these is a rendering case no seeded account has ever
-      -- covered, and three of them are logged bugs (B031, B032).
+      -- covered, and three of them are logged bugs (B031, B032). The pools
+      -- make the same cases ORGANIC as well — Cyrillic, RTL and single-word
+      -- names are in simData/people.json — but organic means "at whatever rate
+      -- the draw gives", and `tiny` is 60 accounts.
       when a.n = 11 then ''                                              -- empty: monogram has nothing to use
       when a.n = 12 then 'Maximilian Alexander Featherstonehaugh-Cholmondeley'  -- must ellipsise, not overflow
       when a.n = 13 then 'Пётр Кузнецов'                                  -- non-Latin
       when a.n = 14 then 'مريم الحسيني'                                    -- right-to-left
       when a.n = 15 then 'Björk'                                          -- single word + diacritic
       when a.n = 16 then '🥕 CarrotTop'                                    -- leading emoji
-      else v_given[1 + (abs(hashtextextended('g' || a.n, sim.seed())) % array_length(v_given, 1))]
-           || ' ' ||
-           v_family[1 + (abs(hashtextextended('f' || a.n, sim.seed())) % array_length(v_family, 1))]
+      else g.name || ' ' || f.name
     end,
     case when sim.rand_bool('actor:' || a.n, 'hasbio', 0.55)
-      then v_bios[1 + (abs(hashtextextended('b' || a.n, sim.seed())) % array_length(v_bios, 1))]
+      -- `{cuisine}` is the only placeholder, and it is filled from the actor's
+      -- OWN locale, so the bio agrees with the name above it. A template
+      -- without the placeholder is passed through untouched.
+      then replace(b.template, '{cuisine}', l.cuisine)
       else null end,
     a.created_at
   from sim.actor a
+  -- One locale per actor, uniform: the pool exercises rendering rather than
+  -- modelling a real user base, so weighting it would only make the rare
+  -- scripts rarer.
+  join sim.locale l
+    on l.n = sim.rand_int('actor:' || a.n, 'locale', 1, v_locales)
+  join sim.person_name g
+    on g.locale = l.code and g.kind = 'given'
+   and g.n = sim.rand_int('actor:' || a.n, 'given', 1, l.given_count)
+  join sim.person_name f
+    on f.locale = l.code and f.kind = 'family'
+   and f.n = sim.rand_int('actor:' || a.n, 'family', 1, l.family_count)
+  join sim.bio b
+    on b.n = sim.rand_int('actor:' || a.n, 'bio', 1, v_bios)
   on conflict (id) do update
     set display_name = excluded.display_name,
         bio          = excluded.bio;
@@ -431,6 +498,96 @@ cross join lateral (
   from jsonb_array_elements(g.value -> 'steps') with ordinality
 ) s
 on conflict (id) do nothing;
+
+-- ----------------------------------------------------------------------------
+-- 3b. Tags
+--
+-- The tag vocabulary is simData/vocab.json, loaded into sim.vocab_tag, and
+-- ARRAY ORDER IS RANK — there is no weight column, because two ways to say how
+-- common a tag is drift apart. sim.rand_zipf() turns a rank into a draw, which
+-- is the whole reason that function exists.
+--
+-- What this gives the product that nothing else could: `quick` on hundreds of
+-- recipes and `smoked` on one or two, in the same database. Every tag surface
+-- (search, the tsv rebuild below, a future tag filter) had only the curated
+-- recipes' handful of tags to work against, so a tag that is *popular* had
+-- never been rendered at all — the "a tag on 200 recipes and a tag on 1" case
+-- in the Phase 24 edge-case catalogue.
+--
+-- Three rules:
+--
+--  1. **Eligibility is re-ranked densely per category.** `no-bake` is
+--     Dessert-only, so on a Soup it must not leave a hole in the ladder that
+--     swallows a draw — `dense_rank()` over the eligible set is what closes it.
+--  2. **Distinct by construction.** k draws can collide (that is what a Zipf
+--     draw does), so the insert is `select distinct`; a recipe drawing 4 gets
+--     between 1 and 4 tags, biased toward fewer, which is also how people tag.
+--  3. **Only tags that were actually drawn become `tags` rows.** The shared
+--     `public.tags` table is unique by name and is not sim-owned — the curated
+--     recipes write into it too — so this adds a name only when something uses
+--     it, and the teardown removes the ones it orphans.
+-- ----------------------------------------------------------------------------
+
+-- The eligible ladder, per category. Built once rather than per recipe: ten
+-- categories x ~66 tags is a few hundred rows, and the alternative is a
+-- correlated re-rank inside every draw.
+--
+-- The category list comes from the recipes about to be tagged rather than from
+-- a type: `recipes.category` is text with a check constraint, not a Postgres
+-- enum, so there is no `enum_range` to unnest. Taking it from the rows
+-- themselves (rather than from the dish library) means a recipe whose category
+-- the current library no longer produces still gets a ladder — otherwise the
+-- lateral count below is 0, `rand_zipf` returns rank 1, the join finds nothing,
+-- and that recipe silently ends up with no tags at all.
+create temporary table sim_tag_rank on commit drop as
+with cats as (
+  select distinct rr.category
+  from sim.recipe sr join recipes rr on rr.id = sr.id
+  where rr.category is not null
+)
+select
+  c.category,
+  dense_rank() over (partition by c.category order by t.n)::int as rank,
+  t.name
+from cats c
+cross join sim.vocab_tag t
+where cardinality(t.categories) = 0 or c.category = any (t.categories);
+
+create index on sim_tag_rank (category, rank);
+
+-- Eligibility keys off `recipes.category` — the row's OWN category — never off
+-- the dish the registry says it came from. `sim.recipe.slug` is written once
+-- (`on conflict (n) do nothing`) and is therefore stale the moment the library
+-- changes under an existing registry: a `db:drop` + regenerate rebuilds every
+-- `recipes` row from the CURRENT draw while the registry keeps the slug of the
+-- old one. Joining through it put `one-pot` on a Sauce and `no-cook` on a Soup
+-- in 36 cases here, which check H7 caught. The recipe's own column cannot
+-- disagree with the recipe.
+create temporary table sim_recipe_tag on commit drop as
+select distinct r.id as recipe_id, tr.name
+from sim.recipe r
+join recipes rr on rr.id = r.id
+cross join lateral (
+  -- 1..4 draws, skewed low: most recipes carry one or two tags once the
+  -- collisions above are folded out.
+  select generate_series(1, 1 + floor(power(sim.rand('recipe:' || r.n, 'ntags'), 1.6) * 4)::int) as j
+) k
+join lateral (
+  select count(*)::int as n from sim_tag_rank s where s.category = rr.category
+) c on true
+join sim_tag_rank tr
+  on tr.category = rr.category
+ and tr.rank = sim.rand_zipf('recipe:' || r.n || ':t' || k.j, 'tag', c.n, sim.tag_zipf());
+
+insert into tags (name)
+select distinct name from sim_recipe_tag
+on conflict (name) do nothing;
+
+insert into recipe_tags (recipe_id, tag_id)
+select rt.recipe_id, t.id
+from sim_recipe_tag rt
+join tags t on t.name = rt.name
+on conflict do nothing;
 
 -- ============================================================================
 -- 4. Version history

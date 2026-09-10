@@ -1,0 +1,77 @@
+{
+  "slug": "croatian-black-risotto",
+  "title": "Dalmatian Black Risotto",
+  "description": "Cuttlefish risotto stained through with its own ink. Everything about it is timing: the seafood and the rice have to finish in the same minute, and the ink goes in last so the colour is even.",
+  "cuisine": "Croatian",
+  "category": "Main",
+  "difficulty": "hard",
+  "prep_minutes": 30,
+  "cook_minutes": 40,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Ask the fishmonger to clean the cuttlefish and to keep the ink sacs for you. Sold separately, ink comes in 4 g sachets and two is right for this quantity.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 600, "unit": "g", "name": "cuttlefish", "note": "cleaned" },
+        { "quantity": 320, "unit": "g", "name": "arborio rice" },
+        { "quantity": 8, "unit": "g", "name": "squid ink" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "finely diced" },
+        { "quantity": 3, "unit": "cloves", "name": "garlic", "note": "finely chopped" },
+        { "quantity": 120, "unit": "ml", "name": "white wine", "note": "dry" },
+        { "quantity": 1.2, "unit": "L", "name": "fish stock" },
+        { "quantity": 3, "unit": "Tbsp", "name": "olive oil" },
+        { "quantity": 30, "unit": "g", "name": "butter", "note": "cold, cubed" },
+        { "quantity": 30, "unit": "g", "name": "Parmesan", "note": "finely grated", "is_optional": true },
+        { "quantity": 1, "unit": "handful", "name": "parsley", "note": "chopped" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" },
+        { "quantity": 0.5, "unit": "tsp", "name": "black pepper" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Cut the cleaned cuttlefish into strips about the width of a pencil.",
+          "tip": "Anything thicker cooks on a different clock than the rice and stays rubbery in a finished pan."
+        },
+        {
+          "text": "Bring the fish stock to a bare simmer in a second pan and keep it there for the whole cook.",
+          "tip": "Cold stock stalls the pan every time you ladle. The rice stops releasing starch and never comes back."
+        },
+        {
+          "text": "Sweat the onion and garlic in the olive oil until translucent, then add the cuttlefish and cook until it gives up its liquid and that liquid disappears again.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Stir in the arborio rice and toast it until the grains look glassy at the edges and chalky in the middle.",
+          "duration_minutes": 3
+        },
+        {
+          "text": "Pour in the white wine and let it cook away completely before any stock goes near the pan.",
+          "duration_minutes": 3
+        },
+        {
+          "text": "Add the hot stock a ladle at a time, stirring, waiting each time until the pan is almost dry before the next.",
+          "duration_minutes": 15
+        },
+        {
+          "text": "Whisk the squid ink into the final ladle of stock and stir that through the rice.",
+          "tip": "Ink dropped straight into the pan streaks and stays streaked. Diluted first, it colours the whole thing in one turn of the spoon."
+        },
+        {
+          "text": "Off the heat, beat in the cold butter and the Parmesan hard enough to make the risotto loose, season with salt and black pepper, and finish with parsley.",
+          "tip": "It should spread slowly on a tilted plate. If it holds a mound, it is too tight — another splash of stock."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.5,
+    "variant_titles": ["{title} with Squid", "{title} for Two"]
+  }
+}

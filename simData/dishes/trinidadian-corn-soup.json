@@ -1,0 +1,87 @@
+{
+  "slug": "trinidadian-corn-soup",
+  "title": "Trinidadian Corn Soup",
+  "description": "Split peas cooked to nothing, thickened with coconut milk, and loaded with corn on the cob and hand-rolled dumplings. Street food that gets made in a drum on a Saturday night.",
+  "cuisine": "Trinidadian",
+  "category": "Soup",
+  "difficulty": "medium",
+  "prep_minutes": 25,
+  "cook_minutes": 80,
+  "servings": 8,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The split peas have to collapse completely before anything else goes in. Half-cooked peas never catch up, and the soup stays thin around them.",
+  "ingredient_groups": [
+    {
+      "name": "The soup",
+      "ingredients": [
+        { "quantity": 300, "unit": "g", "name": "yellow split peas", "note": "picked over and rinsed" },
+        { "quantity": 2, "unit": "L", "name": "water" },
+        { "quantity": 4, "unit": null, "name": "corn on the cob", "note": "cut into thick rounds" },
+        { "quantity": 2, "unit": "Tbsp", "name": "coconut oil" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "diced" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic" },
+        { "quantity": 2, "unit": null, "name": "carrots", "note": "in coins" },
+        { "quantity": 4, "unit": "sprigs", "name": "thyme" },
+        { "quantity": 400, "unit": "ml", "name": "coconut milk" },
+        { "quantity": 1, "unit": null, "name": "scotch bonnet", "note": "left whole and unpierced" },
+        { "quantity": 2, "unit": "tsp", "name": "salt" }
+      ]
+    },
+    {
+      "name": "Dumplings",
+      "ingredients": [
+        { "quantity": 200, "unit": "g", "name": "plain flour" },
+        { "quantity": 0.5, "unit": "tsp", "name": "fine salt" },
+        { "quantity": 100, "unit": "ml", "name": "warm water" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "The soup",
+      "steps": [
+        {
+          "text": "Simmer the yellow split peas in the water with the thyme until they have lost their shape entirely.",
+          "duration_minutes": 40,
+          "tip": "Skim the grey foam in the first five minutes. It never dissolves and it dulls the finished pot."
+        },
+        {
+          "text": "Soften the onion, garlic, and carrots in the coconut oil, then tip the lot into the peas.",
+          "duration_minutes": 8
+        },
+        {
+          "text": "Add the corn on the cob rounds and lower the scotch bonnet in whole, and simmer until the corn gives to a fork.",
+          "duration_minutes": 15,
+          "tip": "Unpierced, the pepper perfumes the pot and nothing more. Burst it and the whole batch belongs to it."
+        },
+        {
+          "text": "Pour in the coconut milk and bring it back to a bare simmer, then season with the salt."
+        }
+      ]
+    },
+    {
+      "name": "Dumplings",
+      "steps": [
+        {
+          "text": "Rub the plain flour and fine salt together and add just enough of the warm water to make a stiff dough."
+        },
+        {
+          "text": "Rest the dough, then roll teaspoons of it between your palms into short tapered cigars.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Drop the dumplings into the simmering soup and cook them until they float and are no longer floury in the middle.",
+          "duration_minutes": 12
+        },
+        {
+          "text": "Fish the scotch bonnet out before you serve, and put the corn rounds in the bowls first so everybody gets one."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.1,
+    "variant_titles": ["{title} with Dumplings", "Saturday Night {title}"]
+  }
+}

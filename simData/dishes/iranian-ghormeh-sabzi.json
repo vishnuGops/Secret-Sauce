@@ -1,0 +1,117 @@
+{
+  "slug": "iranian-ghormeh-sabzi",
+  "title": "Ghormeh Sabzi",
+  "description": "The Iranian herb stew — parsley, cilantro and chives fried down until they turn almost black, then simmered slowly with lamb, kidney beans and dried limes until the whole pot tastes sour and deep. Cooks for three and a half hours, almost none of it hands-on.",
+  "cuisine": "Iranian",
+  "category": "Main",
+  "difficulty": "hard",
+  "prep_minutes": 40,
+  "cook_minutes": 210,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Every part of this is forgiving except the herbs. Frying them down properly is the dish; rush that step and you get a green soup that tastes of lawn.",
+  "ingredient_groups": [
+    {
+      "name": "Herbs",
+      "ingredients": [
+        { "quantity": 300, "unit": "g", "name": "parsley", "note": "leaves and thin stems, finely chopped" },
+        { "quantity": 200, "unit": "g", "name": "cilantro", "note": "leaves and thin stems, finely chopped" },
+        { "quantity": 150, "unit": "g", "name": "garlic chives", "note": "or the green tops of spring onions" },
+        { "quantity": 3, "unit": "Tbsp", "name": "dried fenugreek leaves", "note": "crumbled between your palms" },
+        { "quantity": 4, "unit": "Tbsp", "name": "vegetable oil", "note": "for the herbs" }
+      ]
+    },
+    {
+      "name": "The stew",
+      "ingredients": [
+        { "quantity": 250, "unit": "g", "name": "red kidney beans", "note": "dried" },
+        { "quantity": 700, "unit": "g", "name": "lamb shoulder", "note": "cut into 3 cm pieces, fat left on" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "finely diced" },
+        { "quantity": 1, "unit": "tsp", "name": "turmeric" },
+        { "quantity": 5, "unit": null, "name": "dried limes", "note": "pierced twice with a skewer" },
+        { "quantity": 3, "unit": "Tbsp", "name": "vegetable oil" },
+        { "quantity": 1.2, "unit": "L", "name": "water" },
+        { "quantity": 1.5, "unit": "tsp", "name": "salt" },
+        { "quantity": 0.5, "unit": "tsp", "name": "black pepper" },
+        { "quantity": 2, "unit": "Tbsp", "name": "lemon juice", "note": "only if the limes have not soured it enough", "is_optional": true }
+      ]
+    },
+    {
+      "name": "To serve",
+      "ingredients": [
+        { "quantity": 400, "unit": "g", "name": "basmati rice", "note": "steamed" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "The night before",
+      "steps": [
+        {
+          "text": "Cover the red kidney beans with cool water by two fingers and leave them on the counter overnight.",
+          "duration_minutes": 720,
+          "tip": "Unsoaked beans will still be chalky after three hours in an acidic pot. The limes make sure of that."
+        },
+        {
+          "text": "Drain the beans, cover them with clean water, and simmer until they give under a thumbnail but still hold their shape. Drain again.",
+          "duration_minutes": 50
+        }
+      ]
+    },
+    {
+      "name": "Frying the herbs",
+      "steps": [
+        {
+          "text": "Warm the oil in your widest pan over a low flame and add the parsley, cilantro and chives all at once. They will fill the pan; they will not stay that way."
+        },
+        {
+          "text": "Fry the herbs, stirring every few minutes, until the volume has collapsed by two thirds and the colour has gone from bright green to a dark, almost black green.",
+          "duration_minutes": 35,
+          "tip": "Low and slow. If the pan is loud or the edges are browning, the heat is too high and you are frying rather than melting them."
+        },
+        {
+          "text": "Stir the crumbled fenugreek leaves through for the last two minutes only.",
+          "duration_minutes": 2,
+          "tip": "Fenugreek turns bitter fast. It goes in at the end, never at the start."
+        }
+      ]
+    },
+    {
+      "name": "The stew",
+      "steps": [
+        {
+          "text": "In a heavy pot, soften the diced onion in the remaining oil, then add the turmeric and stir for half a minute until it smells warm.",
+          "duration_minutes": 8
+        },
+        {
+          "text": "Raise the heat and brown the lamb on every side, in two batches if the pot is crowded.",
+          "duration_minutes": 12,
+          "tip": "Crowded meat steams grey. Two batches costs five minutes and pays for itself in the finished colour."
+        },
+        {
+          "text": "Tip in the fried herbs and the drained beans, pour over the water, and bring it to a bare simmer."
+        },
+        {
+          "text": "Push the dried limes under the surface and leave the pot at the laziest simmer your hob will hold, lid ajar.",
+          "duration_minutes": 90,
+          "tip": "Fish the limes out if the stew starts to taste medicinal rather than sour. Three hours in, they can tip over."
+        },
+        {
+          "text": "Season with the salt and black pepper and cook on until a slick of oil rises to the surface and the stew is dark rather than green.",
+          "duration_minutes": 45
+        },
+        {
+          "text": "Taste. If it reads flat rather than sour, add the lemon juice a spoon at a time until it sharpens."
+        },
+        {
+          "text": "Serve in shallow bowls beside steamed basmati rice, with the limes left in for whoever wants to squash one."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.9,
+    "variant_titles": ["{title} with Beef", "My Mother's {title}"]
+  }
+}

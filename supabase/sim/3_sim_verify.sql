@@ -506,6 +506,111 @@ begin
     end if;
   end if;
 
+  -- -------------------------------------------------------------------------
+  -- H. The authored pools reached the population (Phase 24's content half).
+  --
+  -- Every check here would have passed vacuously before the pools existed,
+  -- which is the point: the names, bios and tags used to be `array[…]`
+  -- literals inside 2_sim_generate.sql, and nothing downstream could tell an
+  -- empty pool from a small one. H1 is the sharpest — an empty
+  -- sim.title_variant is a `cross join` against nothing, so it generates ZERO
+  -- recipes and reports success.
+  -- -------------------------------------------------------------------------
+
+  -- H1: every simulated recipe got a title from the pool, not from a fallback.
+  -- The generator's preflight refuses an empty pool outright; this asserts the
+  -- result, which is what a future change to the title logic would break.
+  select count(*) into n from sim.recipe r
+  join recipes rr on rr.id = r.id
+  where coalesce(rr.title, '') = '';
+  if n > 0 then
+    raise exception 'H1 % simulated recipe(s) have no title', n;
+  end if;
+
+  -- H2: the name pool is actually being drawn from. Six actors carry a
+  -- hard-coded edge-case name (indices 11-16), so the population must hold far
+  -- more distinct names than that — a broken join would collapse every other
+  -- account onto one name without failing anything.
+  select count(distinct p.display_name) into n
+  from profiles p join sim.actor a on a.id = p.id;
+  if n < least(20, (select count(*) from sim.actor) / 2) then
+    raise exception 'H2 only % distinct display names across % actors — the name pool is not being drawn from',
+      n, (select count(*) from sim.actor);
+  end if;
+
+  -- H3: names are COHERENT — given and family from the same locale. Checked as
+  -- a property rather than a rate: every non-edge-case actor's name must be
+  -- reconstructible from ONE locale's two pools. Drawing the two independently
+  -- (what the flat arrays did) fails this immediately.
+  select count(*) into n
+  from profiles p
+  join sim.actor a on a.id = p.id
+  where a.n not between 11 and 16
+    and not exists (
+      select 1
+      from sim.locale l
+      join sim.person_name g on g.locale = l.code and g.kind = 'given'
+      join sim.person_name f on f.locale = l.code and f.kind = 'family'
+      where p.display_name = g.name || ' ' || f.name
+    );
+  if n > 0 then
+    raise exception 'H3 % simulated name(s) mix two locales — given and family must be drawn from one tradition', n;
+  end if;
+
+  -- H4: bios are substituted, never shipped with a literal placeholder. A bio
+  -- reading "Cooking {cuisine} food" renders those braces on the profile
+  -- screen, and no other check looks at the text.
+  select count(*) into n from profiles p
+  join sim.actor a on a.id = p.id
+  where p.bio like '%{%}%';
+  if n > 0 then
+    raise exception 'H4 % simulated bio(s) still carry an unsubstituted {placeholder}', n;
+  end if;
+
+  -- H5: tags reached the recipes at all.
+  select count(distinct rt.recipe_id) into n
+  from recipe_tags rt join sim.recipe sr on sr.id = rt.recipe_id;
+  if n < (select count(*) from sim.recipe) / 2 then
+    raise exception 'H5 only % of % simulated recipes carry a tag', n, (select count(*) from sim.recipe);
+  end if;
+
+  -- H6: **the Zipf draw is a Zipf draw** — the head-vs-tail spread is the
+  -- whole reason sim.rand_zipf exists, and a uniform draw over the vocabulary
+  -- would pass H5 identically. The most-used tag must outrank the least-used
+  -- by a wide margin; anything near 1 means the exponent has been flattened.
+  -- Population-aware, like E3/E9: at `tiny` there are too few recipes for a
+  -- tail to separate, so it is skipped LOUDLY rather than tuned until it fits.
+  if (select count(*) from sim.recipe) >= 200 then
+    select coalesce(max(c), 0) / greatest(coalesce(min(c), 1), 1) into n from (
+      select count(*) as c
+      from recipe_tags rt
+      join sim.recipe sr on sr.id = rt.recipe_id
+      group by rt.tag_id
+    ) x;
+    if n < 10 then
+      raise exception 'H6 the most-used tag is only %x the least-used — the vocabulary is not Zipf-distributed (check sim.tag_zipf)', n;
+    end if;
+  else
+    raise notice 'H6 SKIPPED — % recipes is too few for a tag tail to separate',
+      (select count(*) from sim.recipe);
+  end if;
+
+  -- H7: a category-restricted tag never lands outside its categories. This is
+  -- the one rule the vocabulary states that the draw could silently ignore —
+  -- `no-bake` on a Soup reads as a data-quality bug in the product, not in the
+  -- simulator.
+  select count(*) into n
+  from recipe_tags rt
+  join sim.recipe sr on sr.id = rt.recipe_id
+  join recipes r on r.id = rt.recipe_id
+  join tags t on t.id = rt.tag_id
+  join sim.vocab_tag v on v.name = t.name
+  where cardinality(v.categories) > 0
+    and not (r.category = any (v.categories));
+  if n > 0 then
+    raise exception 'H7 % tag(s) landed on a category their vocabulary entry forbids', n;
+  end if;
+
   raise notice 'ALL CHECKS PASSED';
 end
 $verify$;

@@ -1,0 +1,63 @@
+{
+  "slug": "dutch-uitsmijter",
+  "title": "Uitsmijter",
+  "description": "Fried eggs over ham and melting cheese on buttered toast, eaten with a knife and fork. Ten minutes start to finish, and the only decision in it is how loose you want the yolks.",
+  "cuisine": "Dutch",
+  "category": "Breakfast",
+  "difficulty": "easy",
+  "prep_minutes": 5,
+  "cook_minutes": 8,
+  "servings": 2,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Two slices and two eggs per person is the standard portion. It is named for the bouncer who throws you out at closing time, which tells you roughly when it is meant to be eaten.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 4, "unit": "slices", "name": "sourdough bread", "note": "cut thick" },
+        { "quantity": 4, "unit": "slices", "name": "cooked ham" },
+        { "quantity": 60, "unit": "g", "name": "Gouda", "note": "young, sliced thin" },
+        { "quantity": 4, "unit": null, "name": "eggs" },
+        { "quantity": 30, "unit": "g", "name": "butter" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt" },
+        { "quantity": 0.25, "unit": "tsp", "name": "black pepper" },
+        { "quantity": 1, "unit": "Tbsp", "name": "chives", "note": "snipped", "is_optional": true },
+        { "quantity": 2, "unit": "tsp", "name": "mustard", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Spread half the butter over both faces of the sourdough bread and lay the slices in a wide cold pan."
+        },
+        {
+          "text": "Turn the heat to medium, toast one side to a light brown, and flip.",
+          "duration_minutes": 3
+        },
+        {
+          "text": "Lay the cooked ham over the toasted face and the Gouda on top of the ham, then cover the pan so the cheese slumps.",
+          "duration_minutes": 2,
+          "tip": "Cheese directly on the toast leaks fat into the crumb. Ham underneath keeps the base crisp and the cheese where you put it."
+        },
+        {
+          "text": "Fry the eggs in the rest of the butter in a second pan, spooning the hot fat over the whites until they set and the yolks are still loose.",
+          "duration_minutes": 3
+        },
+        {
+          "text": "Slide two eggs onto each slice, season with salt and black pepper, and scatter the chives over."
+        },
+        {
+          "text": "Put the mustard on the side and eat it straight away, while the yolk still runs."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.7,
+    "variant_titles": ["{title} with Roast Beef", "{title} on Rye"]
+  }
+}

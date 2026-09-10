@@ -1,0 +1,72 @@
+{
+  "slug": "czech-kulajda",
+  "title": "Kulajda",
+  "description": "A soured cream soup of potato, mushroom, and a great deal of dill, with a poached egg dropped into each bowl. It should taste sour first and sweet a moment later — that balance is the whole dish.",
+  "cuisine": "Czech",
+  "category": "Soup",
+  "difficulty": "medium",
+  "prep_minutes": 20,
+  "cook_minutes": 35,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Cut the dill stems in with the fronds. They carry more of the flavour and they soften completely in the pot.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 300, "unit": "g", "name": "potatoes", "note": "cut into 1 cm cubes" },
+        { "quantity": 200, "unit": "g", "name": "mushrooms", "note": "sliced; wild ones if you have them" },
+        { "quantity": 1, "unit": "L", "name": "vegetable stock" },
+        { "quantity": 200, "unit": "ml", "name": "sour cream", "note": "full fat" },
+        { "quantity": 2, "unit": "Tbsp", "name": "plain flour" },
+        { "quantity": 1, "unit": "bunch", "name": "dill", "note": "chopped, stems included" },
+        { "quantity": 2, "unit": "Tbsp", "name": "white wine vinegar" },
+        { "quantity": 4, "unit": null, "name": "eggs", "note": "as fresh as you can get" },
+        { "quantity": 1, "unit": "tsp", "name": "caraway seeds" },
+        { "quantity": 1, "unit": null, "name": "bay leaf" },
+        { "quantity": 1, "unit": "tsp", "name": "sugar" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" },
+        { "quantity": 0.5, "unit": "tsp", "name": "black pepper" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Simmer the potatoes with the bay leaf, caraway seeds, and salt in the vegetable stock until a cube is just short of tender.",
+          "duration_minutes": 12
+        },
+        {
+          "text": "Add the sliced mushrooms and cook until they darken and sink.",
+          "duration_minutes": 8
+        },
+        {
+          "text": "Whisk the plain flour into the sour cream until there is not a lump left, then slacken it with a ladleful of the hot broth.",
+          "tip": "Tempering is the whole trick. Cold cream straight into a simmering pot splits into curds and no amount of whisking gathers it back."
+        },
+        {
+          "text": "Stir the slackened cream into the pot and hold it just below a simmer — it must not boil again.",
+          "duration_minutes": 5
+        },
+        {
+          "text": "Fish out the bay leaf, then season with the white wine vinegar, sugar, and black pepper, adding the vinegar a spoon at a time.",
+          "tip": "Aim for sour on the front of the tongue and sweet behind it. If it lands flat, it is almost always short of vinegar rather than salt."
+        },
+        {
+          "text": "Poach the eggs in a separate pan of barely trembling water.",
+          "duration_minutes": 4
+        },
+        {
+          "text": "Stir most of the dill into the pot, ladle out, slide an egg into each bowl, and scatter the rest of the dill over."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1,
+    "variant_titles": ["Forager's {title}", "{title} with a Soft-Boiled Egg"]
+  }
+}

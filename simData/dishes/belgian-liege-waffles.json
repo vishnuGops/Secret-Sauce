@@ -1,0 +1,94 @@
+{
+  "slug": "belgian-liege-waffles",
+  "title": "Liège Waffles",
+  "description": "Not batter but a brioche dough, studded with pearl sugar that half melts into caramel against the iron. Makes ten waffles, and the dough has to rest overnight before it can be handled at all.",
+  "cuisine": "Belgian",
+  "category": "Dessert",
+  "difficulty": "hard",
+  "prep_minutes": 30,
+  "cook_minutes": 20,
+  "servings": 10,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Pearl sugar is the one thing with no substitute. Crushed sugar cubes dissolve, granulated sugar disappears entirely, and without those crunching pockets this is just a heavy waffle.",
+  "ingredient_groups": [
+    {
+      "name": "For the dough",
+      "ingredients": [
+        { "quantity": 250, "unit": "g", "name": "bread flour" },
+        { "quantity": 7, "unit": "g", "name": "instant yeast" },
+        { "quantity": 100, "unit": "ml", "name": "whole milk", "note": "lukewarm" },
+        { "quantity": 2, "unit": null, "name": "eggs" },
+        { "quantity": 30, "unit": "g", "name": "caster sugar" },
+        { "quantity": 175, "unit": "g", "name": "butter", "note": "very soft, cubed" },
+        { "quantity": 1, "unit": "tsp", "name": "vanilla extract" },
+        { "quantity": 0.5, "unit": "tsp", "name": "cinnamon", "is_optional": true },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt" }
+      ]
+    },
+    {
+      "name": "To finish",
+      "ingredients": [
+        { "quantity": 200, "unit": "g", "name": "pearl sugar" },
+        { "quantity": 2, "unit": "Tbsp", "name": "neutral oil", "note": "for the iron" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Dough",
+      "steps": [
+        {
+          "text": "Whisk the instant yeast into the lukewarm whole milk with a spoonful of the caster sugar and leave it until the surface foams.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Work the bread flour, the rest of the caster sugar, the salt, the cinnamon, and the eggs into the yeast milk, then knead until the dough comes cleanly off the side of the bowl.",
+          "duration_minutes": 8
+        },
+        {
+          "text": "Add the soft butter three or four cubes at a time, kneading each lot in completely before the next goes near it.",
+          "duration_minutes": 12,
+          "tip": "Around the halfway mark the dough will look curdled and hopeless. Keep going — it comes back together in about two minutes."
+        },
+        {
+          "text": "Beat in the vanilla extract, cover the bowl, and leave at room temperature until doubled.",
+          "duration_minutes": 90
+        },
+        {
+          "text": "Knock the dough back, cover it tightly, and refrigerate overnight.",
+          "duration_minutes": 720,
+          "tip": "The cold rest is what makes this dough portionable. At room temperature it is a butter slick you cannot get off your hands."
+        }
+      ]
+    },
+    {
+      "name": "Baking",
+      "steps": [
+        {
+          "text": "Divide the cold dough into ten pieces and knead the pearl sugar into each one by hand, roughly a heaped spoonful per piece.",
+          "tip": "Fold it in at the last moment. Mixed into the dough the night before, it dissolves, and dissolved pearl sugar is just sugar."
+        },
+        {
+          "text": "Leave the shaped pieces on the counter until they lose their chill and start to puff.",
+          "duration_minutes": 30
+        },
+        {
+          "text": "Heat the waffle iron to medium and brush it with the neutral oil."
+        },
+        {
+          "text": "Bake one piece at a time until the sugar that has run out to the edges has caramelised to a deep amber.",
+          "duration_minutes": 4,
+          "tip": "Wipe the iron between waffles. Burnt escaped caramel from the last one is the fastest way to make the next one bitter."
+        },
+        {
+          "text": "Lift each waffle onto a wire rack rather than a plate, so the caramel sets hard instead of steaming itself soft."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.5,
+    "variant_titles": ["{title} with Dark Chocolate", "Brown Butter {title}"]
+  }
+}

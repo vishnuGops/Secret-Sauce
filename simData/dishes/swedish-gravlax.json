@@ -1,0 +1,84 @@
+{
+  "slug": "swedish-gravlax",
+  "title": "Dill-Cured Gravlax",
+  "description": "A side of salmon buried in salt, sugar, and dill for two days. No heat touches it — the cure does all the work — and it keeps a week once sliced. Served as a starter for ten with a sweet mustard sauce.",
+  "cuisine": "Swedish",
+  "category": "Appetizer",
+  "difficulty": "medium",
+  "prep_minutes": 20,
+  "cook_minutes": 0,
+  "servings": 10,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The salt-to-sugar ratio is the recipe. Roughly equal by volume gives a cure that seasons rather than pickles; push the salt up and you get something closer to lox, which is a different thing entirely.",
+  "ingredient_groups": [
+    {
+      "name": "For the cure",
+      "ingredients": [
+        { "quantity": 1, "unit": "side", "name": "salmon fillet", "note": "skin on, about 1 kg, pin bones out" },
+        { "quantity": 90, "unit": "g", "name": "sea salt", "note": "coarse" },
+        { "quantity": 70, "unit": "g", "name": "sugar" },
+        { "quantity": 2, "unit": "tsp", "name": "white peppercorns", "note": "crushed, not powdered" },
+        { "quantity": 2, "unit": "bunches", "name": "dill", "note": "stems and all, chopped" },
+        { "quantity": 2, "unit": "Tbsp", "name": "aquavit", "is_optional": true }
+      ]
+    },
+    {
+      "name": "For the mustard sauce",
+      "ingredients": [
+        { "quantity": 3, "unit": "Tbsp", "name": "sweet mustard" },
+        { "quantity": 1, "unit": "tsp", "name": "Dijon mustard" },
+        { "quantity": 1, "unit": "Tbsp", "name": "white wine vinegar" },
+        { "quantity": 1, "unit": "Tbsp", "name": "sugar" },
+        { "quantity": 100, "unit": "ml", "name": "neutral oil" },
+        { "quantity": 2, "unit": "Tbsp", "name": "dill", "note": "finely chopped" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Cure",
+      "steps": [
+        {
+          "text": "Run a fingertip down the centre of the salmon fillet against the grain and pull out every pin bone you find with tweezers.",
+          "tip": "Do this before the cure, not after. Cured flesh tears where a bone comes out and the slices show it."
+        },
+        {
+          "text": "Mix the sea salt, sugar, and crushed white peppercorns, then work the chopped dill and the aquavit through until the whole lot is damp and green."
+        },
+        {
+          "text": "Lay the fillet skin down on a large sheet of cling film, pack the cure over every part of the flesh, and wrap it tightly enough that nothing can escape."
+        },
+        {
+          "text": "Set the parcel in a dish, weight it with a plate and two tins, and refrigerate. Turn it over once a day and pour off the liquid that collects.",
+          "duration_minutes": 2880,
+          "tip": "The pooled liquid is the cure working, not a leak. Leave the fish sitting in it and the surface goes soft and grey."
+        },
+        {
+          "text": "Unwrap, scrape the cure away with the back of a knife, and pat the surface dry."
+        }
+      ]
+    },
+    {
+      "name": "Sauce and serving",
+      "steps": [
+        {
+          "text": "Whisk the sweet mustard, Dijon mustard, white wine vinegar, and sugar together, then trickle in the neutral oil while whisking until it thickens to a pourable cream.",
+          "tip": "Trickle means trickle. Half the oil at once and the sauce splits into a slick you cannot bring back."
+        },
+        {
+          "text": "Stir the finely chopped dill through the sauce and leave it to sit while you slice.",
+          "duration_minutes": 15
+        },
+        {
+          "text": "Slice the cured side thinly on a long shallow angle, starting at the tail, leaving the skin behind on the board.",
+          "tip": "A long flexible blade and slices you can almost read a newspaper through. Thick gravlax just eats salty."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.7,
+    "variant_titles": ["{title} with Beetroot", "Juniper {title}"]
+  }
+}

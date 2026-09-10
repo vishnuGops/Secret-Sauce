@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://secret-sauce.local/schema/sim-vocab.json",
+  "title": "Secret Sauce simulation vocabulary",
+  "description": "simData/vocab.json — the tag vocabulary and the generic title-variant templates. Not read at runtime: tool/sim.dart validates this file and generates supabase/sim/1_sim_vocab.sql from it, and `melos run sim:check` fails when that .sql is stale. No JSON Schema library is in the toolchain, so every rule here is ALSO implemented in tool/sim.dart — change both.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["tags", "title_variants"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "note": {
+      "type": "string",
+      "description": "Free prose for whoever opens the file. Ignored by the generator."
+    },
+    "tags": {
+      "type": "array",
+      "minItems": 20,
+      "description": "ARRAY ORDER IS RANK, and rank is the only weight there is. The generator draws a rank with sim.rand_zipf(), so entry 1 lands on a large fraction of the population and the tail lands on one or two recipes. There is deliberately no per-tag `weight`: two ways to say how common a tag is would drift apart, and the Zipf draw is the one the roadmap asked for.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "maxLength": 32,
+            "description": "Lowercase, hyphenated. Becomes a row in the shared `public.tags` table (unique by name), so it is also what search matches on — `recipe_search_tsv` folds tag names into a recipe's document."
+          },
+          "categories": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "description": "Optional. When present, the tag may only land on a recipe whose `category` is in this list — `no-bake` belongs on a Dessert, not on a Soup. Absent means any category. The generator re-ranks the ELIGIBLE tags densely per category before drawing, so restricting a tag does not leave holes in the Zipf ladder.",
+            "items": {
+              "enum": [
+                "Appetizer",
+                "Breakfast",
+                "Main",
+                "Side",
+                "Salad",
+                "Soup",
+                "Dessert",
+                "Drink",
+                "Snack",
+                "Sauce"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "title_variants": {
+      "type": "array",
+      "minItems": 8,
+      "uniqueItems": true,
+      "description": "The GENERIC title templates, appended after a dish's own `sim.variant_titles` and de-duplicated against them. Each is indexed by an owner's occurrence of that dish, rotated by a Zipf-drawn offset, which is what keeps `(owner_id, title)` — the import key — unique within one owner (SDS §11.2, check D4).",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\{title\\}",
+        "description": "Must contain the literal `{title}` — it is a template, not a title."
+      }
+    }
+  }
+}

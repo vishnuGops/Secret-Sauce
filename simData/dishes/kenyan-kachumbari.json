@@ -1,0 +1,59 @@
+{
+  "slug": "kenyan-kachumbari",
+  "title": "Kachumbari",
+  "description": "A raw tomato and onion salad, sharp with lime and chilli. The onion is soaked first so it stays crisp without shouting over everything else on the plate.",
+  "cuisine": "Kenyan",
+  "category": "Salad",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 0,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Salt the tomatoes on their own and let them drain. Salt them in the bowl and you will be serving soup within ten minutes.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 4, "unit": null, "name": "plum tomatoes", "note": "deseeded and diced" },
+        { "quantity": 1, "unit": null, "name": "red onion", "note": "sliced as thin as you can manage" },
+        { "quantity": 1, "unit": null, "name": "green chilli", "note": "sliced into rings" },
+        { "quantity": 1, "unit": null, "name": "lime", "note": "juiced" },
+        { "quantity": 1, "unit": "handful", "name": "coriander", "note": "leaves and thin stems" },
+        { "quantity": 1, "unit": null, "name": "avocado", "note": "diced", "is_optional": true },
+        { "quantity": 1, "unit": "tsp", "name": "salt" },
+        { "quantity": 0.5, "unit": "tsp", "name": "black pepper" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Slice the red onion paper thin and drop it into a bowl of cold water while you cut everything else.",
+          "duration_minutes": 10,
+          "tip": "Ten minutes in water pulls the harsh sulphur edge off raw onion without softening it at all."
+        },
+        {
+          "text": "Deseed and dice the plum tomatoes, scatter the salt over them, and leave them in a sieve to drain.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Drain the onion and press it dry between two sheets of kitchen paper."
+        },
+        {
+          "text": "Toss the tomatoes and onion with the lime juice, green chilli, and coriander, then grind over the black pepper."
+        },
+        {
+          "text": "Fold the avocado through at the last moment and take it to the table straight away.",
+          "tip": "This is a salad with a fifteen-minute life. Dress it when the rest of the meal is already plated."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.7,
+    "variant_titles": ["{title} with Avocado", "{title}, Extra Chilli"]
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "slug": "taiwanese-beef-noodle-soup",
+  "title": "Taiwanese Beef Noodle Soup",
+  "description": "Shin braised for three hours in a broth built on fermented broad bean paste, tomatoes and whole spice. The bowl is assembled at the last minute so the noodles never sit in the soup.",
+  "cuisine": "Taiwanese",
+  "category": "Soup",
+  "difficulty": "hard",
+  "prep_minutes": 30,
+  "cook_minutes": 180,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "There is a clear-broth camp and a red-braised camp, and this is firmly the second. The tomatoes are not a shortcut — they thin the bean paste and give the broth a sweetness that sugar alone cannot.",
+  "ingredient_groups": [
+    {
+      "name": "For the broth",
+      "ingredients": [
+        { "quantity": 1.2, "unit": "kg", "name": "beef shin", "note": "cut into large chunks, sinew left on" },
+        { "quantity": 2, "unit": "Tbsp", "name": "beef tallow", "note": "or a neutral oil" },
+        { "quantity": 3, "unit": "Tbsp", "name": "doubanjiang", "note": "fermented broad bean chilli paste" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "halved" },
+        { "quantity": 6, "unit": "cloves", "name": "garlic", "note": "crushed flat" },
+        { "quantity": 5, "unit": "cm", "name": "ginger", "note": "sliced into coins" },
+        { "quantity": 4, "unit": null, "name": "scallions", "note": "cut into finger lengths" },
+        { "quantity": 2, "unit": null, "name": "tomatoes", "note": "quartered" },
+        { "quantity": 120, "unit": "ml", "name": "soy sauce" },
+        { "quantity": 60, "unit": "ml", "name": "Shaoxing wine" },
+        { "quantity": 2, "unit": "Tbsp", "name": "rock sugar" },
+        { "quantity": 2, "unit": null, "name": "star anise" },
+        { "quantity": 1, "unit": "stick", "name": "cinnamon" },
+        { "quantity": 2, "unit": null, "name": "bay leaves" },
+        { "quantity": 1, "unit": "tsp", "name": "Sichuan peppercorns" },
+        { "quantity": 2.5, "unit": "L", "name": "water" }
+      ]
+    },
+    {
+      "name": "For the bowls",
+      "ingredients": [
+        { "quantity": 600, "unit": "g", "name": "wheat noodles", "note": "thick and chewy, not thin egg noodles" },
+        { "quantity": 300, "unit": "g", "name": "baby bok choy", "note": "halved lengthways" },
+        { "quantity": 6, "unit": "Tbsp", "name": "pickled mustard greens", "note": "rinsed and chopped" },
+        { "quantity": 1, "unit": "handful", "name": "coriander" },
+        { "quantity": 2, "unit": "Tbsp", "name": "chilli oil", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "The broth",
+      "steps": [
+        {
+          "text": "Cover the beef shin with cold water in a large pot, bring it to a boil, then tip the whole lot into the sink. Rinse the meat and scrub the pot.",
+          "duration_minutes": 10,
+          "tip": "This blanch is not optional. It takes out the grey scum that would otherwise cloud the broth for the next three hours."
+        },
+        {
+          "text": "Melt the beef tallow in the dry pot and fry the doubanjiang over a low flame until the fat runs red and the paste smells toasted rather than sharp.",
+          "duration_minutes": 3,
+          "temperature": "low",
+          "tip": "Low and slow. Scorched bean paste tastes of ash and there is no rescuing the pot once it does."
+        },
+        {
+          "text": "Add the onion, garlic, ginger, scallions and tomatoes and cook until the tomatoes have collapsed into the paste.",
+          "duration_minutes": 8,
+          "temperature": "medium"
+        },
+        {
+          "text": "Return the beef, pour in the Shaoxing wine and soy sauce, and add the rock sugar, star anise, cinnamon, bay leaves and Sichuan peppercorns."
+        },
+        {
+          "text": "Pour in the water, bring it up to a bare simmer, and leave it barely moving until a spoon goes through the shin without resistance.",
+          "duration_minutes": 150,
+          "temperature": "low",
+          "tip": "A rolling boil emulsifies the fat and turns the broth cloudy for good. You want the surface to shiver, not bubble."
+        },
+        {
+          "text": "Fish out the aromatics and the whole spices, then taste and correct for salt and sweetness."
+        }
+      ]
+    },
+    {
+      "name": "The bowls",
+      "steps": [
+        {
+          "text": "Boil the wheat noodles in a separate pot of water and drop the baby bok choy in for the final minute.",
+          "duration_minutes": 5,
+          "tip": "Never cook the noodles in the broth. The starch they shed turns three hours of work gluey."
+        },
+        {
+          "text": "Divide the noodles between deep bowls, ladle over the broth and beef, and finish with pickled mustard greens, coriander and a spoonful of chilli oil."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.7,
+    "variant_titles": ["{title}, Slow Cooker", "Half-Spice {title}", "{title} with Tendon"]
+  }
+}

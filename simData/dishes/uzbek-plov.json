@@ -1,0 +1,83 @@
+{
+  "slug": "uzbek-plov",
+  "title": "Uzbek Plov",
+  "description": "One pot, built in layers and never stirred once the rice goes in: lamb browned hard, onions and matchstick carrots cooked down into a broth, then rice steamed on top until every grain is separate. Turned out onto a platter for eight.",
+  "cuisine": "Uzbek",
+  "category": "Main",
+  "difficulty": "medium",
+  "prep_minutes": 30,
+  "cook_minutes": 95,
+  "servings": 8,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Cut the carrots by hand. It is twenty tedious minutes and it is the difference between plov and orange rice pudding — a box grater turns them to mush in the broth.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "lamb shoulder", "note": "cut into 4 cm pieces" },
+        { "quantity": 100, "unit": "ml", "name": "sunflower oil" },
+        { "quantity": 2, "unit": null, "name": "onions", "note": "halved and sliced thin" },
+        { "quantity": 600, "unit": "g", "name": "carrots", "note": "cut by hand into matchsticks, never grated" },
+        { "quantity": 600, "unit": "g", "name": "long-grain rice", "note": "rinsed until the water runs clear" },
+        { "quantity": 1, "unit": "Tbsp", "name": "cumin seeds", "note": "whole" },
+        { "quantity": 1, "unit": "Tbsp", "name": "coriander seeds", "note": "lightly crushed" },
+        { "quantity": 2, "unit": "heads", "name": "garlic", "note": "papery outer skin rubbed off, left whole" },
+        { "quantity": 150, "unit": "g", "name": "chickpeas", "note": "drained, from a tin", "is_optional": true },
+        { "quantity": 50, "unit": "g", "name": "raisins", "is_optional": true },
+        { "quantity": 1.2, "unit": "L", "name": "water", "note": "boiling" },
+        { "quantity": 2, "unit": "tsp", "name": "salt" },
+        { "quantity": 1, "unit": "tsp", "name": "black pepper" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Heat the sunflower oil in a heavy casserole until it shimmers, then brown the lamb hard in two batches so the pan never cools.",
+          "duration_minutes": 12,
+          "tip": "This is the only part of the recipe that wants a loud pan. Everything after it is quiet."
+        },
+        {
+          "text": "Return all the meat, add the onions, and cook until they have gone golden and sweet at the edges.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Add the carrots and let them soften without much stirring — they should still be recognisable batons when the dish is finished.",
+          "duration_minutes": 8
+        },
+        {
+          "text": "Stir in the cumin seeds, coriander seeds, salt and black pepper, then pour over the boiling water and scatter in the chickpeas and raisins.",
+          "tip": "Boiling water, not cold. Cold water drops the pan out of the browning you just paid for."
+        },
+        {
+          "text": "Bury the whole garlic heads in the pan and let this base simmer uncovered until the liquid tastes strongly of everything in it and has reduced by about a third.",
+          "duration_minutes": 30
+        },
+        {
+          "text": "Level the rice over the top in an even layer. Do not stir it in — from here the two halves cook separately, one boiling and one steaming.",
+          "tip": "Add boiling water if needed so it sits about a finger's width above the rice, no more."
+        },
+        {
+          "text": "Cook uncovered until the surface liquid has gone, then poke five or six holes down to the base with the handle of a wooden spoon.",
+          "duration_minutes": 20,
+          "tip": "The holes let the steam up through the grain instead of pooling underneath and boiling the bottom layer."
+        },
+        {
+          "text": "Mound the rice into a dome, cover the pot tightly, and steam on the lowest heat you can manage.",
+          "duration_minutes": 25
+        },
+        {
+          "text": "Rest off the heat, then turn the whole thing out onto a wide platter, with the meat and the softened garlic sitting on top.",
+          "duration_minutes": 10
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.1,
+    "variant_titles": ["{title} with Beef", "Sunday {title}", "{title} for a Crowd"]
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "slug": "ghanaian-sobolo",
+  "title": "Sobolo",
+  "description": "Dried hibiscus steeped with ginger, spice, and pineapple skin, then left overnight and sweetened cold. Deep red, properly tart, and served in a jug with far too much ice.",
+  "cuisine": "Ghanaian",
+  "category": "Drink",
+  "difficulty": "easy",
+  "prep_minutes": 10,
+  "cook_minutes": 15,
+  "servings": 8,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Sweeten it cold, never hot. Sugar reads weaker in a hot pan and you will overshoot every single time.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 100, "unit": "g", "name": "dried hibiscus", "note": "sorrel calyces" },
+        { "quantity": 2, "unit": "L", "name": "water" },
+        { "quantity": 80, "unit": "g", "name": "ginger", "note": "peeled and sliced thin" },
+        { "quantity": 1, "unit": null, "name": "pineapple", "note": "skin and core only, scrubbed" },
+        { "quantity": 6, "unit": null, "name": "cloves" },
+        { "quantity": 1, "unit": null, "name": "cinnamon stick" },
+        { "quantity": 150, "unit": "g", "name": "sugar", "note": "adjust to the fruit" },
+        { "quantity": 2, "unit": null, "name": "limes", "note": "juiced" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Rinse the dried hibiscus in cold water and pick out any stalks or grit."
+        },
+        {
+          "text": "Bring the water to a boil with the ginger, cinnamon stick, cloves, and the scrubbed pineapple skin.",
+          "duration_minutes": 10,
+          "tip": "The pineapple skin is not a garnish. It carries most of the sweetness the drink has before any sugar goes in."
+        },
+        {
+          "text": "Take the pan off the heat, tip in the hibiscus, cover it, and let it steep until the colour is opaque.",
+          "duration_minutes": 20
+        },
+        {
+          "text": "Strain into a jug and refrigerate overnight so it settles and the flavour deepens.",
+          "duration_minutes": 720
+        },
+        {
+          "text": "Sweeten the cold drink with the sugar a spoonful at a time, then sharpen it with the lime juice until it makes you wince slightly."
+        },
+        {
+          "text": "Serve over more ice than seems reasonable — it is meant to dilute as you drink it."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.5,
+    "variant_titles": ["Spiced {title}", "{title} with Pineapple"]
+  }
+}

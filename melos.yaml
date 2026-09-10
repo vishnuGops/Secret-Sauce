@@ -202,6 +202,16 @@ scripts:
     description: Re-run the sim assertion suite. Read-only.
     run: dart run tool/db.dart sim:verify
 
+  # The per-persona RLS smoke (Phase 24's last open verification item). Seats one
+  # real actor per persona from the sim.actor registry and re-runs the policy
+  # claims as that SIGNED-IN user — the gap between db:sim:verify (which runs as
+  # `postgres` and bypasses every policy) and db:rls (which builds its own
+  # three-user fixture). Not part of db:sim: it writes before it rolls back, and
+  # db:sim runs inside db:reset. Run it alongside db:rls, never instead of it.
+  db:sim:rls:
+    description: RLS per persona, as a signed-in sim actor. Rolls back.
+    run: dart run tool/db.dart sim:rls
+
   db:sim:clean:
     description: Remove every simulated account and recipe. DESTRUCTIVE — needs --yes.
     run: dart run tool/db.dart sim:clean

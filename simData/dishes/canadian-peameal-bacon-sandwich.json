@@ -1,0 +1,84 @@
+{
+  "slug": "canadian-peameal-bacon-sandwich",
+  "title": "Peameal Bacon Sandwich",
+  "description": "Pork loin cured in brine for a day, rolled in cornmeal, and griddled in thick slices. Toronto's market breakfast, on a soft kaiser roll with a hard smear of mustard.",
+  "cuisine": "Canadian",
+  "category": "Breakfast",
+  "difficulty": "medium",
+  "prep_minutes": 25,
+  "cook_minutes": 12,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "This is a wet cure and not a smoke. The meat stays pale the whole way through and the cornmeal crust is the only colour on it until it hits the pan.",
+  "ingredient_groups": [
+    {
+      "name": "The cure",
+      "ingredients": [
+        { "quantity": 1, "unit": "kg", "name": "pork loin", "note": "trimmed of all but a thin fat cap" },
+        { "quantity": 1, "unit": "L", "name": "water" },
+        { "quantity": 80, "unit": "g", "name": "fine salt" },
+        { "quantity": 40, "unit": "g", "name": "sugar" },
+        { "quantity": 2, "unit": null, "name": "bay leaves" },
+        { "quantity": 1, "unit": "Tbsp", "name": "black peppercorns", "note": "cracked" },
+        { "quantity": 1, "unit": "tsp", "name": "curing salt", "note": "pink salt no. 1, for colour only", "is_optional": true }
+      ]
+    },
+    {
+      "name": "The sandwich",
+      "ingredients": [
+        { "quantity": 150, "unit": "g", "name": "cornmeal", "note": "medium grind" },
+        { "quantity": 2, "unit": "Tbsp", "name": "butter" },
+        { "quantity": 6, "unit": null, "name": "kaiser rolls" },
+        { "quantity": 3, "unit": "Tbsp", "name": "grainy mustard" },
+        { "quantity": 2, "unit": "Tbsp", "name": "maple syrup", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "The cure",
+      "steps": [
+        {
+          "text": "Dissolve the fine salt and sugar in the water with the bay leaves and cracked black peppercorns, stir in the curing salt if you are using it, and chill the brine until it is properly cold.",
+          "duration_minutes": 60,
+          "tip": "Warm brine on raw meat is the one genuinely unsafe thing you can do here. Cold all the way, no exceptions."
+        },
+        {
+          "text": "Submerge the pork loin in the brine and weigh it down with a plate so no part of it floats clear."
+        },
+        {
+          "text": "Refrigerate it for a full day, turning it once halfway through.",
+          "duration_minutes": 1440
+        },
+        {
+          "text": "Rinse the loin under cold water, pat it completely dry, and roll it hard in the cornmeal until it is coated on every face.",
+          "tip": "Dry meat takes cornmeal; damp meat takes a paste that slides off in the pan."
+        }
+      ]
+    },
+    {
+      "name": "The sandwich",
+      "steps": [
+        {
+          "text": "Cut the cured loin across into slices a good centimetre thick."
+        },
+        {
+          "text": "Griddle the slices in the butter over a medium heat, about three minutes a side, until the cornmeal has toasted and the meat is just cooked through.",
+          "duration_minutes": 12,
+          "temperature": "medium"
+        },
+        {
+          "text": "Brush them with the maple syrup for the last thirty seconds if you want the sweet edge on it."
+        },
+        {
+          "text": "Split and toast the kaiser rolls, spread them with the grainy mustard, and pile in three slices each while everything is still hot."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.7,
+    "variant_titles": ["{title} with Maple", "{title}, Market Style"]
+  }
+}

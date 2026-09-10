@@ -1,0 +1,61 @@
+{
+  "slug": "syrian-muhammara",
+  "title": "Muhammara",
+  "description": "Roasted red peppers and walnuts pounded into a coarse, brick-red dip, sharpened with pomegranate molasses and Aleppo pepper. Nothing is cooked — it is fifteen minutes and a food processor, and it is better made an hour ahead.",
+  "cuisine": "Syrian",
+  "category": "Appetizer",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 0,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Jarred peppers are what make this a no-cook dish. If you would rather roast your own, blacken and peel three large red peppers first and let them drain properly — the texture is better and the timing is no longer fifteen minutes.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 400, "unit": "g", "name": "roasted red peppers", "note": "from a jar, drained" },
+        { "quantity": 150, "unit": "g", "name": "walnuts" },
+        { "quantity": 40, "unit": "g", "name": "breadcrumbs", "note": "coarse and dry" },
+        { "quantity": 2, "unit": "Tbsp", "name": "pomegranate molasses" },
+        { "quantity": 4, "unit": "Tbsp", "name": "olive oil" },
+        { "quantity": 2, "unit": "cloves", "name": "garlic" },
+        { "quantity": 1, "unit": "tsp", "name": "cumin", "note": "ground" },
+        { "quantity": 1, "unit": "tsp", "name": "Aleppo pepper", "note": "or more, to taste" },
+        { "quantity": 1, "unit": "Tbsp", "name": "lemon juice" },
+        { "quantity": 0.75, "unit": "tsp", "name": "salt" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Drain the roasted red peppers and pat them dry between two tea towels until they stop leaving damp marks.",
+          "tip": "Wet peppers are the single reason muhammara turns into a puddle in the bowl. Take this further than feels necessary."
+        },
+        {
+          "text": "Pulse the walnuts and breadcrumbs together until they look like coarse wet sand.",
+          "tip": "Stop while you can still see individual pieces. Once it goes to paste the dip loses its grain and reads as hummus."
+        },
+        {
+          "text": "Add the peppers, garlic, cumin, Aleppo pepper, salt, pomegranate molasses and lemon juice, and pulse in short bursts until it comes together but stays rough."
+        },
+        {
+          "text": "With the motor running slowly, pour in the olive oil until the mixture turns glossy and holds a spoon mark."
+        },
+        {
+          "text": "Taste and push it one way or the other — more molasses for sweetness, more lemon for edge, more Aleppo for heat. Spread it into a shallow bowl and leave it to settle.",
+          "duration_minutes": 60,
+          "tip": "Straight out of the processor it tastes disjointed. An hour on the counter is what pulls it into one thing."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.3,
+    "variant_titles": ["{title} with Extra Chili", "Smoky {title}", "{title}, Walnut Free"]
+  }
+}

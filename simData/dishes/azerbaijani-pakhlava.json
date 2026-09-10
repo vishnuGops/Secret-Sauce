@@ -1,0 +1,118 @@
+{
+  "slug": "azerbaijani-pakhlava",
+  "title": "Baku Pakhlava",
+  "description": "The Azerbaijani version: a soft enriched dough rolled into eight thin sheets rather than bought filo, layered with cardamom walnuts, glazed with saffron, and drowned in syrup the moment it leaves the oven. Cuts into about twenty diamonds in a 30 cm tin.",
+  "cuisine": "Azerbaijani",
+  "category": "Dessert",
+  "difficulty": "hard",
+  "prep_minutes": 75,
+  "cook_minutes": 60,
+  "servings": 20,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "A project bake, and the long rest at the end is not optional — cut into it warm and the syrup is still sitting in the bottom of the tin instead of inside the layers.",
+  "ingredient_groups": [
+    {
+      "name": "Dough",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "all-purpose flour" },
+        { "quantity": 200, "unit": "g", "name": "butter", "note": "melted and cooled" },
+        { "quantity": 3, "unit": null, "name": "egg yolks" },
+        { "quantity": 150, "unit": "g", "name": "sour cream" },
+        { "quantity": 80, "unit": "ml", "name": "milk", "note": "lukewarm" },
+        { "quantity": 7, "unit": "g", "name": "active dry yeast" },
+        { "quantity": 1, "unit": "Tbsp", "name": "sugar" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt" }
+      ]
+    },
+    {
+      "name": "Walnut filling",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "walnuts", "note": "chopped to rubble, never powdered" },
+        { "quantity": 250, "unit": "g", "name": "sugar" },
+        { "quantity": 1, "unit": "tsp", "name": "cardamom", "note": "ground" }
+      ]
+    },
+    {
+      "name": "Syrup and finishing",
+      "ingredients": [
+        { "quantity": 250, "unit": "g", "name": "sugar" },
+        { "quantity": 150, "unit": "ml", "name": "water" },
+        { "quantity": 3, "unit": "Tbsp", "name": "honey" },
+        { "quantity": 1, "unit": "pinch", "name": "saffron threads", "note": "steeped in 2 Tbsp hot water" },
+        { "quantity": 60, "unit": "g", "name": "butter", "note": "melted, for brushing" },
+        { "quantity": 30, "unit": null, "name": "walnut halves", "note": "one for each diamond" },
+        { "quantity": 1, "unit": null, "name": "egg yolk", "note": "for the glaze" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "The dough",
+      "steps": [
+        {
+          "text": "Stir the yeast and the tablespoon of sugar into the lukewarm milk and leave it until the surface is foaming.",
+          "duration_minutes": 10,
+          "tip": "If nothing happens in ten minutes the yeast is dead and the whole afternoon is wasted. Find out now."
+        },
+        {
+          "text": "Work the flour, salt, melted butter, egg yolks and sour cream together with the yeast milk, then knead until the dough is soft and stops sticking to your hands.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Cover the bowl and rest it somewhere warm until the dough has relaxed and rolls without springing back.",
+          "duration_minutes": 60
+        }
+      ]
+    },
+    {
+      "name": "Layering",
+      "steps": [
+        {
+          "text": "Mix the walnuts with the sugar and the cardamom."
+        },
+        {
+          "text": "Divide the dough into eight, and roll each piece to the size of the tin and as thin as you dare.",
+          "tip": "Roll them all out before you start layering. A sheet left sitting under a towel stays workable; one left on the bench dries into a cracker."
+        },
+        {
+          "text": "Lay a sheet into the buttered tin, brush it with melted butter, and scatter over a seventh of the walnut mixture. Repeat until the sheets and the filling are used up."
+        },
+        {
+          "text": "Finish with the last sheet, brush the top generously with butter, and chill the tin so the layers firm up before you cut them.",
+          "duration_minutes": 30,
+          "tip": "Cold dough cuts cleanly. Warm dough drags, and the diamonds close up again in the oven."
+        }
+      ]
+    },
+    {
+      "name": "Baking and syrup",
+      "steps": [
+        {
+          "text": "Cut the tin into diamonds all the way down to the base with a long sharp knife, and press a walnut half into the centre of each one."
+        },
+        {
+          "text": "Whisk the remaining egg yolk with the steeped saffron and its liquid and paint it over the whole surface."
+        },
+        {
+          "text": "Bake until the top is a deep amber and the cuts have opened.",
+          "duration_minutes": 50,
+          "temperature": "180 C / 350 F"
+        },
+        {
+          "text": "While it bakes, boil the sugar, water and honey together into a light syrup and let it cool to just warm.",
+          "duration_minutes": 10,
+          "tip": "Warm syrup onto hot pastry is the pairing that soaks in. Two hot things together makes it soggy, two cold ones makes it sit on the surface."
+        },
+        {
+          "text": "Pour the syrup along every cut the moment the tin comes out of the oven, then leave it alone overnight before lifting out a single piece.",
+          "duration_minutes": 720
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.5,
+    "variant_titles": ["{title} with Pistachios", "Novruz {title}"]
+  }
+}

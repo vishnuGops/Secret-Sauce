@@ -1,0 +1,80 @@
+{
+  "slug": "puerto-rican-tostones",
+  "title": "Tostones with Garlic Mojo",
+  "description": "Green plantains fried once, smashed flat, and fried again so the edges shatter and the middle stays soft. The mojo alongside is raw — garlic, citrus, oil, nothing cooked.",
+  "cuisine": "Puerto Rican",
+  "category": "Side",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 15,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Green means green. A plantain with any yellow showing has started turning its starch to sugar, and it will brown long before it crisps.",
+  "ingredient_groups": [
+    {
+      "name": "Tostones",
+      "ingredients": [
+        { "quantity": 3, "unit": null, "name": "green plantains" },
+        { "quantity": 500, "unit": "ml", "name": "neutral oil", "note": "for frying" },
+        { "quantity": 500, "unit": "ml", "name": "warm water", "note": "for the dip between fries" },
+        { "quantity": 2, "unit": "tsp", "name": "salt" }
+      ]
+    },
+    {
+      "name": "Garlic mojo",
+      "ingredients": [
+        { "quantity": 4, "unit": "cloves", "name": "garlic" },
+        { "quantity": 3, "unit": "Tbsp", "name": "olive oil" },
+        { "quantity": 2, "unit": "Tbsp", "name": "orange juice" },
+        { "quantity": 1, "unit": "Tbsp", "name": "lime juice" },
+        { "quantity": 0.5, "unit": "tsp", "name": "dried oregano" },
+        { "quantity": 0.5, "unit": "tsp", "name": "sea salt" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Mojo",
+      "steps": [
+        {
+          "text": "Crush the garlic to a paste with the sea salt, then stir in the olive oil, orange juice, lime juice, and dried oregano."
+        },
+        {
+          "text": "Leave the mojo to sit while you fry, so the raw garlic loses its edge.",
+          "duration_minutes": 15,
+          "tip": "Crushing with salt does the work a blender cannot — it breaks the cell walls without whipping air into the oil."
+        }
+      ]
+    },
+    {
+      "name": "Tostones",
+      "steps": [
+        {
+          "text": "Score the skin of the green plantains along their ridges, peel them under running water, and cut them into thick coins."
+        },
+        {
+          "text": "Fry the coins in the neutral oil over a moderate heat until pale gold and just tender, then lift them onto paper.",
+          "duration_minutes": 8,
+          "temperature": "160°C / 320°F"
+        },
+        {
+          "text": "Smash each coin flat between two plates or a folded sheet of baking paper.",
+          "tip": "Smash them while they are hot. A cooled coin splits into three pieces instead of flattening."
+        },
+        {
+          "text": "Dip each flattened piece briefly in the warm water, shake it off hard, and fry it again in hotter oil until it is crisp at the rim.",
+          "duration_minutes": 7,
+          "temperature": "190°C / 375°F"
+        },
+        {
+          "text": "Drain them, hit them with the salt while they are still shining, and serve with the mojo."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.3,
+    "variant_titles": ["{title}, Double Fried", "{title} and Cilantro"]
+  }
+}
