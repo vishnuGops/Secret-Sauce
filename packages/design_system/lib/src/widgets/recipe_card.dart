@@ -90,12 +90,27 @@ class RecipeCard extends StatelessWidget {
     super.key,
     required this.recipe,
     this.onTap,
+    this.onChefTap,
     this.showVisibility = false,
     this.showChef = true,
   });
 
   final Recipe recipe;
   final VoidCallback? onTap;
+
+  /// Tapping the chef overlay on the cover, when one is drawn.
+  ///
+  /// `design_system` owns no routing, so the destination (`/chef/:id`) is the
+  /// app layer's business — the grids supply it. Null leaves the overlay inert
+  /// and the whole cover belongs to [onTap], which is what a surface that has
+  /// no chef page to send a reader to should do.
+  ///
+  /// When both are set the badge wins **its own hit area only**: it is deeper
+  /// in the hit-test path than the card's `InkWell`, so its recognizer enters
+  /// the gesture arena first and takes the sweep. Everywhere else on the card —
+  /// the rest of the cover included — still opens the recipe.
+  final VoidCallback? onChefTap;
+
   final bool showVisibility;
 
   /// Set false on surfaces where every card has the same owner (My Recipes),
@@ -140,7 +155,10 @@ class RecipeCard extends StatelessWidget {
                         bottom: AppSpacing.sm,
                         child: Align(
                           alignment: Alignment.centerRight,
-                          child: _ChefOverlay(owner: recipe.owner!),
+                          child: _ChefOverlay(
+                            owner: recipe.owner!,
+                            onTap: onChefTap,
+                          ),
                         ),
                       ),
                   ],
@@ -386,25 +404,41 @@ class _TitleBanner extends StatelessWidget {
 /// the badge's name and tier chip ellipsize instead of overflowing at
 /// `kRecipeCardMinWidth` or at 2.0x text scale; the `Align` pulls it to the
 /// right edge once it is narrower than that bound.
+///
+/// The scrim is a [Material] rather than the `Container` + `BoxDecoration` it
+/// was, and the swap is not cosmetic: [ChefBadge]'s tap uses an `InkWell`, and
+/// the nearest `Material` above this is the card's own `Card` — which paints
+/// its ink *under* the cover photo, so the ripple would land where nobody can
+/// see it. A local one puts the splash on the scrim, clipped to the pill.
+/// Geometry is unchanged: a [StadiumBorder] is what `AppRadii.pill` already
+/// rendered on a box this short, and the padding moved into a [Padding] of the
+/// same insets.
 class _ChefOverlay extends StatelessWidget {
-  const _ChefOverlay({required this.owner});
+  const _ChefOverlay({required this.owner, this.onTap});
 
   final Profile owner;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.sm,
-        vertical: AppSpacing.xs,
+    return Material(
+      // Scrim: cover photos are arbitrary, so the badge carries its own
+      // contrast rather than relying on the image being dark.
+      color: Colors.black.withValues(alpha: 0.55),
+      shape: const StadiumBorder(),
+      clipBehavior: Clip.antiAlias,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.sm,
+          vertical: AppSpacing.xs,
+        ),
+        child: ChefBadge.fromProfile(
+          owner,
+          compact: true,
+          onSurfaceImage: true,
+          onTap: onTap,
+        ),
       ),
-      decoration: BoxDecoration(
-        // Scrim: cover photos are arbitrary, so the badge carries its own
-        // contrast rather than relying on the image being dark.
-        color: Colors.black.withValues(alpha: 0.55),
-        borderRadius: BorderRadius.circular(AppRadii.pill),
-      ),
-      child: ChefBadge.fromProfile(owner, compact: true, onSurfaceImage: true),
     );
   }
 }

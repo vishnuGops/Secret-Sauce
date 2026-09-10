@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:core/core.dart';
 import 'package:flutter/widgets.dart';
 
@@ -290,9 +292,30 @@ class EditStep {
   final TextEditingController temperature;
   final TextEditingController tip;
 
-  /// Carried through untouched. There is no per-step image picker yet, but a
-  /// step that already has an image must not lose it on save (B035).
-  final String? imageUrl;
+  /// The step's stored photo. Mutable since the per-step picker landed: the
+  /// picker's control clears it, and `_save` writes the uploaded URL here
+  /// before `toModel()` reads it. A step that already has an image and is
+  /// never touched still carries it through untouched (B035).
+  String? imageUrl;
+
+  /// Bytes chosen but not uploaded yet — the step twin of the editor's
+  /// `_pendingCoverBytes`, and deliberately the same deferred shape: the
+  /// upload happens inside `_save`, so abandoning the editor cannot leave an
+  /// orphan object in the bucket. Rendered in preference to [imageUrl] while
+  /// set, and cleared by `_save` once the upload has produced a URL.
+  Uint8List? pendingImageBytes;
+
+  /// True when this step has a photo to show — a fresh pick or a stored one.
+  bool get hasImage =>
+      pendingImageBytes != null || (imageUrl != null && imageUrl!.isNotEmpty);
+
+  /// Drops the photo. The stored object is deliberately left in the bucket:
+  /// the cover picker does not delete either, and a removal that is never
+  /// saved must not destroy the image the recipe still points at.
+  void clearImage() {
+    imageUrl = null;
+    pendingImageBytes = null;
+  }
 
   /// Whether the time/temperature/tip block is revealed. Starts open when the
   /// loaded step already uses any of them.

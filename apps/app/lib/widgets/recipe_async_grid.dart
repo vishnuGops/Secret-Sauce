@@ -24,6 +24,7 @@ class RecipeAsyncGrid<N extends PagedRecipesNotifier> extends StatelessWidget {
     required this.empty,
     this.showVisibility = false,
     this.showChef = true,
+    this.onChefTap,
   });
 
   final AutoDisposeAsyncNotifierProvider<N, RecipePage> provider;
@@ -33,6 +34,10 @@ class RecipeAsyncGrid<N extends PagedRecipesNotifier> extends StatelessWidget {
 
   final bool showVisibility;
   final bool showChef;
+
+  /// What a tap on a card's chef badge does — see [RecipeGrid.onChefTap]. Null
+  /// keeps the default, which is `/chef/:id` on the root navigator.
+  final ValueChanged<Profile>? onChefTap;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +51,7 @@ class RecipeAsyncGrid<N extends PagedRecipesNotifier> extends StatelessWidget {
           empty: empty,
           showVisibility: showVisibility,
           showChef: showChef,
+          onChefTap: onChefTap,
         ),
       ],
     );
@@ -68,6 +74,7 @@ class RecipeAsyncSliverGrid<N extends PagedRecipesNotifier>
     this.padding = const EdgeInsets.all(AppSpacing.md),
     this.showVisibility = false,
     this.showChef = true,
+    this.onChefTap,
   });
 
   final AutoDisposeAsyncNotifierProvider<N, RecipePage> provider;
@@ -81,6 +88,9 @@ class RecipeAsyncSliverGrid<N extends PagedRecipesNotifier>
 
   final bool showVisibility;
   final bool showChef;
+
+  /// What a tap on a card's chef badge does — see [RecipeGrid.onChefTap].
+  final ValueChanged<Profile>? onChefTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -115,6 +125,7 @@ class RecipeAsyncSliverGrid<N extends PagedRecipesNotifier>
                     padding: padding,
                     showVisibility: showVisibility,
                     showChef: showChef,
+                    onChefTap: onChefTap,
                     footer:
                         page.hasMore
                             ? _LoadMoreButton(

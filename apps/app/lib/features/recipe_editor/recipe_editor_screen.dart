@@ -6,12 +6,12 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 
 import 'package:app/features/recipe_editor/cover_picker.dart';
 import 'package:app/features/recipe_editor/edit_models.dart';
 import 'package:app/features/recipe_editor/ingredients_editor.dart';
 import 'package:app/features/recipe_editor/nutrition_editor.dart';
+import 'package:app/features/recipe_editor/recipe_editor_providers.dart';
 import 'package:app/features/recipe_editor/steps_editor.dart';
 import 'package:app/routing/app_router.dart';
 
@@ -409,18 +409,18 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
     }
   }
 
-  Future<void> _pickCover() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? picked;
+  /// The one pick every image control in this editor goes through — the cover
+  /// tile and each step's photo button. Returns null when the reader backed
+  /// out, when the platform refused, or when the file is too big to store; the
+  /// last two have already been explained on screen by the time it returns.
+  ///
+  /// Shared rather than copied: the size guard below is the only thing between
+  /// a 12 MP phone photo and a save that fails with a sentence naming no size,
+  /// and a second copy of it is a second thing to forget.
+  Future<Uint8List?> _pickImageBytes() async {
+    final Uint8List? bytes;
     try {
-      picked = await picker.pickImage(
-        source: ImageSource.gallery,
-        maxWidth: 1600,
-        // Shrinks the common case before the size guard below ever fires. It is
-        // an optional complement, not the guard: the desktop pickers ignore
-        // every option they are given.
-        imageQuality: 85,
-      );
+      bytes = await ref.read(imagePickerProvider)();
     } catch (e) {
       // A platform-channel failure (a denied permission, a missing entitlement)
       // is a message, not an unhandled async error thrown past the widget.
@@ -429,16 +429,16 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
           context,
         ).showSnackBar(SnackBar(content: Text(friendlyError(e))));
       }
-      return;
+      return null;
     }
-    if (picked == null) return;
-    final bytes = await picked.readAsBytes();
-    // `file_size_limit` on the bucket is 5 MB (32a4) and `maxWidth` does not
-    // reliably keep us under it: the Windows/Linux pickers ignore their options
-    // outright, web skips the resize for gifs, and Android re-encodes an
-    // alpha-bearing pick as lossless PNG. Without this the refusal surfaces from
-    // inside `_save`, so the whole save appears to fail and the message names no
-    // size. Checked here, where the file was chosen.
+    if (bytes == null) return null;
+    // `file_size_limit` on the bucket is 5 MB (32a4) and the picker's own
+    // `maxWidth` does not reliably keep us under it: the Windows/Linux pickers
+    // ignore their options outright, web skips the resize for gifs, and Android
+    // re-encodes an alpha-bearing pick as lossless PNG. Without this the
+    // refusal surfaces from inside `_save` as a `StorageException`, so the
+    // whole save appears to fail and the message names no size. Checked here,
+    // where the file was chosen.
     if (bytes.length > kMaxUploadBytes) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -449,10 +449,62 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
           ),
         );
       }
-      return;
+      return null;
     }
+    return bytes;
+  }
+
+  Future<void> _pickCover() async {
+    final bytes = await _pickImageBytes();
+    if (bytes == null || !mounted) return;
     setState(() => _pendingCoverBytes = bytes);
     _markDirty();
+  }
+
+  /// The per-step twin. Holds the bytes on the draft exactly as the cover does
+  /// — nothing is uploaded until Save, so an abandoned edit leaves no orphan
+  /// object in the bucket, and nothing reaches the recipe outside the one
+  /// `save_recipe` call (Gotcha 11).
+  Future<void> _pickStepImage(EditStep step) async {
+    final bytes = await _pickImageBytes();
+    if (bytes == null || !mounted) return;
+    setState(() => step.pendingImageBytes = bytes);
+    _markDirty();
+  }
+
+  /// Uploads every step photo picked since the last save and writes the
+  /// resulting URL onto the draft, so the `toModel()` calls below carry it into
+  /// the same `save_recipe` call as the rest of the recipe.
+  ///
+  /// The pending bytes are dropped as each upload lands: a recipe write that
+  /// fails afterwards must not re-upload the same file on the retry, and the
+  /// URL is already valid whether or not that write succeeded.
+  ///
+  /// The filename carries an index as well as a timestamp — several steps
+  /// uploaded in one save land in the same millisecond, and `upsert: true`
+  /// would quietly overwrite one photo with another.
+  /// The empty case returns before touching [storageServiceProvider] on
+  /// purpose — the same guard the cover upload gets from its `!= null` check.
+  /// Reading it builds a `StorageService` over the live Supabase client, so a
+  /// save with no new photo would otherwise need a Storage stub to run at all.
+  Future<void> _uploadStepImages() async {
+    final pending = [
+      for (final group in _stepGroups)
+        for (final step in group.steps)
+          if (step.pendingImageBytes != null) step,
+    ];
+    if (pending.isEmpty) return;
+
+    final storage = ref.read(storageServiceProvider);
+    final stamp = DateTime.now().millisecondsSinceEpoch;
+    for (var i = 0; i < pending.length; i++) {
+      final step = pending[i];
+      step.imageUrl = await storage.uploadRecipeImage(
+        fileName: 'step_${stamp}_$i.jpg',
+        bytes: step.pendingImageBytes!,
+      );
+      step.pendingImageBytes = null;
+    }
   }
 
   int _parseInt(TextEditingController c) => int.tryParse(c.text.trim()) ?? 0;
@@ -537,6 +589,9 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
               bytes: _pendingCoverBytes!,
             );
       }
+      // The same, per step. Has to run before the `toModel()` calls below read
+      // `imageUrl` off the draft.
+      await _uploadStepImages();
 
       final base = Recipe(
         id: widget.recipeId ?? '',
@@ -847,6 +902,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                     setState(() {});
                     _markDirty();
                   },
+                  onPickImage: _pickStepImage,
                 ),
                 const SizedBox(height: AppSpacing.xxl),
               ],

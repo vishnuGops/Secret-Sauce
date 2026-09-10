@@ -8,10 +8,14 @@
 // dropped between the core model and the editor's mutable draft types. The
 // widget group covers the envelope the new inputs have to survive (Gotcha 13).
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:app/features/recipe_editor/edit_models.dart';
 import 'package:app/features/recipe_editor/ingredients_editor.dart';
+import 'package:app/features/recipe_editor/recipe_editor_providers.dart';
 import 'package:app/features/recipe_editor/recipe_editor_screen.dart';
+import 'package:app/features/recipe_editor/steps_editor.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
@@ -19,6 +23,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+
+/// A real 1x1 PNG. `Image.memory` decodes whatever the picker handed it, so the
+/// photo tests cannot get away with dummy bytes — an undecodable buffer is
+/// reported as a framework error and fails the pump that follows.
+final Uint8List _png = base64Decode(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk'
+  '+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+);
 
 /// A step that uses every column the schema gives it.
 const _fullStep = RecipeStep(
@@ -116,6 +128,33 @@ void main() {
       expect(out.steps.single.durationMinutes, _fullStep.durationMinutes);
       expect(out.steps.single.tip, _fullStep.tip);
       expect(out.steps.single.imageUrl, _fullStep.imageUrl);
+    });
+
+    // The per-step picker (Phase 9 carry-over). `image_url` was carried through
+    // verbatim because nothing could set it; now that the control exists, both
+    // directions have to survive the same round-trip.
+    test('a photo set on the draft reaches the saved step', () {
+      final draft = EditStep.fromModel(_fullStep);
+      expect(draft.hasImage, isTrue);
+
+      // What the preview's corner button does.
+      draft.clearImage();
+      expect(draft.hasImage, isFalse);
+      expect(draft.toModel(0).imageUrl, isNull);
+
+      // What `_uploadStepImages` writes back once the upload has landed.
+      draft.imageUrl = 'https://cdn.test/me/step_1.jpg';
+      expect(draft.hasImage, isTrue);
+      expect(draft.toModel(0).imageUrl, 'https://cdn.test/me/step_1.jpg');
+    });
+
+    test('a pending pick shows as an image but stores nothing on its own', () {
+      final draft = EditStep()..pendingImageBytes = _png;
+
+      expect(draft.hasImage, isTrue);
+      // Bytes are not a URL: the save uploads first, and a `toModel()` taken
+      // before that must not invent a link.
+      expect(draft.toModel(0).imageUrl, isNull);
     });
 
     test('empty detail fields round-trip to null, not empty strings', () {
@@ -837,6 +876,192 @@ void main() {
   // escaped as an unhandled future and the form rendered its empty defaults over
   // a recipe that still exists. Because `update()` replaces content wholesale,
   // one Save then deleted every ingredient and step group it had.
+  // Phase 9 carry-over: the per-step photo picker. The upload deliberately
+  // reuses the cover tile's shape — pick, hold the bytes on the draft, upload
+  // inside `_save`, write the URL into the same `save_recipe` call — so these
+  // tests assert that shape end to end with the platform channel and Storage
+  // faked out. Neither can be exercised for real on this machine.
+  group('step photo', () {
+    void sizeView(WidgetTester tester, double width) {
+      tester.view.physicalSize = Size(width, 4000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+    }
+
+    testWidgets('a pick is uploaded on save and its URL reaches the step', (
+      tester,
+    ) async {
+      sizeView(tester, 800);
+      final repo = _RecordingRecipeRepository();
+      final storage = _FakeStorageService();
+      await tester.pumpWidget(
+        _routedNewApp(repo, pick: () async => _png, storage: storage),
+      );
+      await tester.pumpAndSettle();
+
+      // Nothing to show, and nothing to remove, before a pick.
+      expect(find.byTooltip('Remove photo'), findsNothing);
+
+      await tester.enterText(_titleField, 'Suya-Spiced Lamb');
+      await tester.enterText(
+        find.widgetWithText(TextField, 'Step'),
+        'Sear the lamb hard on one side.',
+      );
+      await tester.tap(find.byTooltip('Step photo'));
+      await tester.pumpAndSettle();
+
+      // The pick is visible immediately — from memory, before any upload.
+      expect(find.byType(Image), findsWidgets);
+      expect(find.byTooltip('Remove photo'), findsOneWidget);
+      expect(storage.uploads, isEmpty, reason: 'upload belongs to the save');
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+      await tester.pumpAndSettle();
+
+      expect(storage.uploads, hasLength(1));
+      expect(storage.uploads.single.$1, startsWith('step_'));
+      expect(storage.uploads.single.$2, _png.length);
+
+      // The round-trip that matters: one `save_recipe` call, carrying the URL.
+      expect(repo.created, hasLength(1));
+      final saved = repo.created.single.stepGroups.single.steps.single;
+      expect(saved.text, 'Sear the lamb hard on one side.');
+      expect(saved.imageUrl, 'https://cdn.test/${storage.uploads.single.$1}');
+    });
+
+    testWidgets('removing a stored photo clears image_url on the next save', (
+      tester,
+    ) async {
+      sizeView(tester, 800);
+      final repo = _RecordingRecipeRepository(loaded: _recipeWithStepPhoto);
+      final storage = _FakeStorageService();
+      await tester.pumpWidget(_routedEditApp(repo, storage: storage));
+      await tester.pumpAndSettle();
+
+      expect(find.byTooltip('Remove photo'), findsOneWidget);
+      await tester.tap(find.byTooltip('Remove photo'));
+      await tester.pumpAndSettle();
+      expect(find.byTooltip('Remove photo'), findsNothing);
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+      await tester.pumpAndSettle();
+
+      expect(storage.uploads, isEmpty, reason: 'nothing new was picked');
+      expect(repo.updated, hasLength(1));
+      expect(
+        repo.updated.single.$1.stepGroups.single.steps.single.imageUrl,
+        isNull,
+      );
+    });
+
+    testWidgets('an untouched photo survives an edit that ignores it', (
+      tester,
+    ) async {
+      sizeView(tester, 800);
+      final repo = _RecordingRecipeRepository(loaded: _recipeWithStepPhoto);
+      await tester.pumpWidget(_routedEditApp(repo));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+      await tester.pumpAndSettle();
+
+      expect(
+        repo.updated.single.$1.stepGroups.single.steps.single.imageUrl,
+        'https://cdn.test/me/stored.jpg',
+      );
+    });
+
+    // The bucket refuses anything over `file_size_limit` (5 MB, 32a4) at the
+    // API edge, and the picker cannot prevent it — so the editor checks the
+    // byte count where the file was chosen. Without this the refusal surfaces
+    // from inside the save as "Save failed", naming no size.
+    testWidgets('an over-sized pick is refused before any upload', (
+      tester,
+    ) async {
+      sizeView(tester, 800);
+      final storage = _FakeStorageService();
+      await tester.pumpWidget(
+        _routedNewApp(
+          _RecordingRecipeRepository(),
+          pick: () async => Uint8List(kMaxUploadBytes + 1),
+          storage: storage,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byTooltip('Step photo'));
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('over 5 MB'), findsOneWidget);
+      expect(find.byTooltip('Remove photo'), findsNothing);
+      expect(storage.uploads, isEmpty);
+    });
+
+    // A denied gallery permission is a platform-channel throw. It has to read
+    // as a sentence, through `friendlyError` like every other error the editor
+    // shows — never a raw exception in a snackbar.
+    testWidgets('a refused pick says so in the mapper\'s words', (
+      tester,
+    ) async {
+      sizeView(tester, 800);
+      await tester.pumpWidget(
+        _routedNewApp(
+          _RecordingRecipeRepository(),
+          pick: () async => throw Exception('MissingPluginException'),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byTooltip('Step photo'));
+      await tester.pumpAndSettle();
+
+      expect(find.text(friendlyError(Exception('x'))), findsOneWidget);
+      expect(find.textContaining('MissingPluginException'), findsNothing);
+      expect(find.byTooltip('Remove photo'), findsNothing);
+    });
+
+    // Gotcha 13/26's envelope, re-run because the row gained a third icon
+    // button and the step gained a preview under it. 390 is the phone the
+    // control was designed against; 320 is the narrowest the suite carries.
+    for (final width in <double>[320, 360, 390, 600]) {
+      testWidgets('a step with a photo fits at ${width}px, textScale 2.0', (
+        tester,
+      ) async {
+        sizeView(tester, width);
+        final groups = [
+          EditStepGroup(
+            steps: [
+              EditStep(text: 'Sear the lamb hard on one side.')
+                ..pendingImageBytes = _png,
+            ],
+          ),
+        ];
+        addTearDown(() {
+          for (final g in groups) {
+            g.dispose();
+          }
+        });
+
+        await tester.pumpWidget(_stepsApp(groups, textScale: 2.0));
+        await tester.pumpAndSettle();
+        expect(
+          tester.takeException(),
+          isNull,
+          reason: 'step row + photo overflows at ${width}px @ 2.0x',
+        );
+
+        await tester.tap(find.byTooltip('Time, temperature & tip'));
+        await tester.pumpAndSettle();
+        expect(
+          tester.takeException(),
+          isNull,
+          reason: 'photo above the detail rows overflows at ${width}px @ 2.0x',
+        );
+      });
+    }
+  });
+
   group('failed load (B052)', () {
     testWidgets('renders ErrorView instead of an empty form', (tester) async {
       await tester.pumpWidget(_editApp(_ThrowingRecipeRepository()));
@@ -1146,13 +1371,19 @@ final Finder _titleField = find.ancestor(
 /// `getById` answers the same loaded recipe `_loadedRepo` uses, so one fake
 /// covers both the create and the edit path.
 class _RecordingRecipeRepository implements RecipeRepository {
-  _RecordingRecipeRepository({this.fail = false});
+  _RecordingRecipeRepository({this.fail = false, Recipe? loaded})
+    : loaded = loaded ?? _plain;
 
   final bool fail;
+
+  /// What the edit path loads. Overridable so one fake covers "the recipe
+  /// already has a step photo" as well as the plain case.
+  final Recipe loaded;
+
   final List<Recipe> created = [];
   final List<(Recipe, String)> updated = [];
 
-  static const _loaded = Recipe(
+  static const _plain = Recipe(
     id: 'r1',
     ownerId: 'me',
     title: 'Loaded Recipe',
@@ -1160,7 +1391,7 @@ class _RecordingRecipeRepository implements RecipeRepository {
   );
 
   @override
-  Future<Recipe> getById(String id) async => _loaded;
+  Future<Recipe> getById(String id) async => loaded;
 
   @override
   Future<Recipe> create(Recipe recipe) async {
@@ -1197,11 +1428,17 @@ class _HangingRecipeRepository implements RecipeRepository {
 
 /// The editor in **create** mode behind a real router, so `_save`'s
 /// `context.go(Routes.recipe(saved.id))` has somewhere to land.
-Widget _routedNewApp(RecipeRepository repo) => ProviderScope(
+Widget _routedNewApp(
+  RecipeRepository repo, {
+  ImagePickFn? pick,
+  StorageService? storage,
+}) => ProviderScope(
   overrides: [
     recipeRepositoryProvider.overrideWithValue(repo),
     authRepositoryProvider.overrideWithValue(_FakeAuth()),
     foodRepositoryProvider.overrideWithValue(_StubFoodRepository()),
+    if (pick != null) imagePickerProvider.overrideWithValue(pick),
+    if (storage != null) storageServiceProvider.overrideWithValue(storage),
   ],
   child: MaterialApp.router(
     theme: AppTheme.light(),
@@ -1236,11 +1473,17 @@ _LoadedRecipeRepository _loadedRepo() => _LoadedRecipeRepository(
 /// `MaterialApp` throws), and "did it actually leave?" has to have somewhere to
 /// land. Entered at the edit route with nothing under it, which is the deep-link
 /// shape — so a discard `go`es to the recipe rather than popping.
-Widget _routedEditApp(RecipeRepository repo) => ProviderScope(
+Widget _routedEditApp(
+  RecipeRepository repo, {
+  ImagePickFn? pick,
+  StorageService? storage,
+}) => ProviderScope(
   overrides: [
     recipeRepositoryProvider.overrideWithValue(repo),
     authRepositoryProvider.overrideWithValue(_FakeAuth()),
     foodRepositoryProvider.overrideWithValue(_StubFoodRepository()),
+    if (pick != null) imagePickerProvider.overrideWithValue(pick),
+    if (storage != null) storageServiceProvider.overrideWithValue(storage),
   ],
   child: MaterialApp.router(
     theme: AppTheme.light(),
@@ -1413,6 +1656,83 @@ class _ThrowingRecipeRepository implements RecipeRepository {
       title: 'Loaded Recipe',
       servings: 4,
     );
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) =>
+      throw UnimplementedError('${invocation.memberName} not stubbed');
+}
+
+/// `StepsEditor` on its own, the way the food-link group pumps
+/// `IngredientsEditor`: the envelope belongs to the row, and dragging the whole
+/// form (and its 16:9 cover tile) into every pump only adds noise.
+Widget _stepsApp(List<EditStepGroup> groups, {double textScale = 1.0}) =>
+    MaterialApp(
+      theme: AppTheme.light(),
+      builder:
+          (context, child) => MediaQuery(
+            data: MediaQuery.of(
+              context,
+            ).copyWith(textScaler: TextScaler.linear(textScale)),
+            child: child!,
+          ),
+      home: Scaffold(
+        body: StatefulBuilder(
+          builder:
+              (context, setState) => SingleChildScrollView(
+                padding: const EdgeInsets.all(AppSpacing.lg),
+                child: StepsEditor(
+                  groups: groups,
+                  onChanged: () => setState(() {}),
+                  onPickImage: (_) {},
+                ),
+              ),
+        ),
+      ),
+    );
+
+/// A loaded recipe whose only step already carries a photo — the "edit
+/// something that has one" half of the picker's cover.
+const Recipe _recipeWithStepPhoto = Recipe(
+  id: 'r1',
+  ownerId: 'me',
+  title: 'Loaded Recipe',
+  servings: 4,
+  stepGroups: [
+    StepGroup(
+      id: 'sg1',
+      recipeId: 'r1',
+      name: 'Method',
+      steps: [
+        RecipeStep(
+          id: 's1',
+          groupId: 'sg1',
+          stepOrder: 0,
+          sortOrder: 0,
+          text: 'Sear the lamb hard on one side.',
+          imageUrl: 'https://cdn.test/me/stored.jpg',
+        ),
+      ],
+    ),
+  ],
+);
+
+/// Records what the editor uploaded and hands back a public URL, the shape
+/// `StorageService` really returns. Implemented rather than subclassed: the
+/// real one needs a `SupabaseClient`, and its `_upload` is private, so the
+/// public surface is the whole contract a caller can see.
+class _FakeStorageService implements StorageService {
+  /// (fileName, byte length) per upload.
+  final List<(String, int)> uploads = [];
+
+  @override
+  Future<String> uploadRecipeImage({
+    required String fileName,
+    required List<int> bytes,
+    String contentType = 'image/jpeg',
+  }) async {
+    uploads.add((fileName, bytes.length));
+    return 'https://cdn.test/$fileName';
   }
 
   @override

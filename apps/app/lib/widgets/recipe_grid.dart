@@ -32,6 +32,7 @@ class SliverRecipeGrid extends StatelessWidget {
     this.padding = const EdgeInsets.all(AppSpacing.md),
     this.showVisibility = false,
     this.showChef = true,
+    this.onChefTap,
     this.footer,
   });
 
@@ -39,6 +40,9 @@ class SliverRecipeGrid extends StatelessWidget {
   final EdgeInsets padding;
   final bool showVisibility;
   final bool showChef;
+
+  /// What a tap on a card's chef badge does — see [RecipeGrid.onChefTap].
+  final ValueChanged<Profile>? onChefTap;
 
   /// Rendered below the last row, sharing the grid's gutter — see
   /// [RecipeGrid.footer].
@@ -79,11 +83,17 @@ class SliverRecipeGrid extends StatelessWidget {
                 itemCount: recipes.length,
                 itemBuilder: (context, i) {
                   final recipe = recipes[i];
+                  final owner = recipe.owner;
                   return RecipeCard(
                     recipe: recipe,
                     showVisibility: showVisibility,
                     showChef: showChef,
                     onTap: () => context.push(Routes.recipe(recipe.id)),
+                    // Null when the query did not embed an owner — there is no
+                    // id to route to, and an inert badge is better than one
+                    // that swallows the card's tap and does nothing.
+                    onChefTap:
+                        owner == null ? null : () => _openChef(context, owner),
                   );
                 },
               ),
@@ -104,6 +114,21 @@ class SliverRecipeGrid extends StatelessWidget {
       },
     );
   }
+
+  /// Hands the tap to [onChefTap], or falls back to the chef's public page.
+  ///
+  /// `context.push` is the right verb even from a shell tab: `/chef/:id`
+  /// declares `parentNavigatorKey: _rootKey`, so go_router puts it **over** the
+  /// nav chrome rather than inside it — the same thing the chefs board does
+  /// from the same position.
+  void _openChef(BuildContext context, Profile owner) {
+    final handler = onChefTap;
+    if (handler != null) {
+      handler(owner);
+      return;
+    }
+    context.push(Routes.chef(owner.id));
+  }
 }
 
 class RecipeGrid extends StatelessWidget {
@@ -113,6 +138,7 @@ class RecipeGrid extends StatelessWidget {
     this.padding = const EdgeInsets.all(AppSpacing.md),
     this.showVisibility = false,
     this.showChef = true,
+    this.onChefTap,
     this.footer,
   });
 
@@ -125,6 +151,14 @@ class RecipeGrid extends StatelessWidget {
   /// Overlay the owning chef on each card. Off on surfaces where every recipe
   /// has the same owner (My Recipes), where the badge is pure noise.
   final bool showChef;
+
+  /// What a tap on a card's chef badge does, given the embedded owner.
+  ///
+  /// Leave it null and the grid pushes `/chef/:id` on the root navigator, which
+  /// is what every browsing surface wants; pass one to send the tap somewhere
+  /// else. It is **not** the switch for turning the link off — [showChef] is,
+  /// and it removes the badge rather than leaving a dead one on the cover.
+  final ValueChanged<Profile>? onChefTap;
 
   /// Rendered below the last row, inside the same scroll view — the `Load more`
   /// control (OPT-P9). It has to scroll **with** the grid: a fixed bar under it
@@ -142,6 +176,7 @@ class RecipeGrid extends StatelessWidget {
           padding: padding,
           showVisibility: showVisibility,
           showChef: showChef,
+          onChefTap: onChefTap,
           footer: footer,
         ),
       ],

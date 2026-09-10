@@ -1,8 +1,10 @@
+import 'package:app/routing/app_router.dart';
 import 'package:app/widgets/recipe_grid.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
 const _recipes = <Recipe>[
   Recipe(id: '1', ownerId: 'u1', title: 'Chicken Tikka Masala'),
@@ -118,4 +120,127 @@ void main() {
     expect(_firstRow(tester).length, 2);
     expect(tester.takeException(), isNull);
   });
+
+  // Phase 30's carried-over item: a reader on any browsing surface can get from
+  // a recipe to the chef who wrote it. The grid is the one place every one of
+  // those surfaces goes through, so wiring it here is what gives Discover's
+  // browse grid, its search results, My Recipes and the chef page the link at
+  // once — none of those files says anything about chefs.
+  //
+  // Asserted on the rendered probe, not on `currentConfiguration.uri`: an
+  // imperative `push` nests a match list rather than replacing the outer one,
+  // so the router's own uri still reads `/` on top of a pushed page. Same
+  // reason `chefs_screen_test.dart` reads its destination off the screen.
+  group('chef badge link', () {
+    testWidgets('a card chef badge opens that chef', (tester) async {
+      _phone(tester);
+      await _pumpGrid(tester);
+
+      // The badge takes its own hit area only: it sits deeper in the hit-test
+      // path than the card's own `InkWell`, so its recognizer enters the
+      // gesture arena first and wins the sweep.
+      await tester.tap(find.byType(ChefBadge));
+      await tester.pumpAndSettle();
+
+      expect(find.text('CHEF PAGE d1'), findsOneWidget);
+      expect(find.text('RECIPE PAGE r1'), findsNothing);
+    });
+
+    testWidgets('the rest of the card still opens the recipe', (tester) async {
+      _phone(tester);
+      await _pumpGrid(tester);
+
+      // The title banner: on the card, nowhere near the cover overlay.
+      await tester.tap(find.text('Aglio e olio'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('RECIPE PAGE r1'), findsOneWidget);
+      expect(find.text('CHEF PAGE d1'), findsNothing);
+    });
+
+    testWidgets('a caller can redirect the tap somewhere else', (tester) async {
+      _phone(tester);
+      final taken = <String>[];
+      await _pumpGrid(tester, onChefTap: (chef) => taken.add(chef.id));
+
+      await tester.tap(find.byType(ChefBadge));
+      await tester.pumpAndSettle();
+
+      expect(taken, ['d1']);
+      expect(
+        find.text('CHEF PAGE d1'),
+        findsNothing,
+        reason: 'an override replaces the push, it does not run beside it',
+      );
+    });
+
+    testWidgets('a card with no embedded owner has no badge to tap', (
+      tester,
+    ) async {
+      _phone(tester);
+      await _pumpGrid(tester, recipes: _recipes.take(1).toList());
+
+      expect(find.byType(ChefBadge), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
+  });
+}
+
+/// One owned recipe, so the cover carries a chef badge at all.
+const _owned = <Recipe>[
+  Recipe(
+    id: 'r1',
+    ownerId: 'd1',
+    title: 'Aglio e olio',
+    owner: Profile(
+      id: 'd1',
+      displayName: 'Amara Okonkwo',
+      chefTier: ChefTier.masterChef,
+    ),
+  ),
+];
+
+void _phone(WidgetTester tester) {
+  tester.view.physicalSize = const Size(400, 900);
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(tester.view.reset);
+}
+
+/// The grid at `/`, with probes for the two destinations a card can reach.
+Future<void> _pumpGrid(
+  WidgetTester tester, {
+  List<Recipe> recipes = _owned,
+  ValueChanged<Profile>? onChefTap,
+}) async {
+  final router = GoRouter(
+    initialLocation: '/',
+    routes: [
+      GoRoute(
+        path: '/',
+        builder:
+            (context, state) => Scaffold(
+              body: RecipeGrid(recipes: recipes, onChefTap: onChefTap),
+            ),
+      ),
+      GoRoute(
+        path: Routes.recipePattern,
+        builder:
+            (context, state) => Scaffold(
+              body: Text('RECIPE PAGE ${state.pathParameters['id']}'),
+            ),
+      ),
+      GoRoute(
+        path: Routes.chefPattern,
+        builder:
+            (context, state) =>
+                Scaffold(body: Text('CHEF PAGE ${state.pathParameters['id']}')),
+      ),
+    ],
+  );
+  addTearDown(router.dispose);
+
+  await tester.pumpWidget(
+    MaterialApp.router(theme: AppTheme.light(), routerConfig: router),
+  );
+  await tester.pumpAndSettle();
 }

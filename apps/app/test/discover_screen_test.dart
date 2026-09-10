@@ -16,9 +16,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:go_router/go_router.dart';
+
 import 'package:app/features/discover/discover_masthead.dart';
 import 'package:app/features/discover/discover_providers.dart';
 import 'package:app/features/discover/discover_screen.dart';
+import 'package:app/routing/app_router.dart';
 
 Recipe _recipe(String id, String title) =>
     Recipe(id: id, ownerId: 'u1', title: title, prepMinutes: 10);
@@ -138,6 +141,52 @@ _FakeDiscover _stocked() => _FakeDiscover(
   quickRows: [_recipe('q1', 'Aglio e olio')],
   projectRows: [_recipe('w1', 'Overnight brisket')],
   forkedRows: [_recipe('f1', 'The house sauce')],
+);
+
+/// A shelf row with its owner embedded, so the card draws a chef badge.
+const _owned = Recipe(
+  id: 'q1',
+  ownerId: 'd1',
+  title: 'Aglio e olio',
+  owner: Profile(
+    id: 'd1',
+    displayName: 'Amara Okonkwo',
+    chefTier: ChefTier.masterChef,
+  ),
+);
+
+/// Discover behind a real router, with probes for the two destinations a shelf
+/// card can reach. `_app` above hangs the screen off `MaterialApp.home`, which
+/// is enough for everything that never navigates — `context.push` throws
+/// without a router.
+Widget _routedApp(_FakeDiscover repo) => ProviderScope(
+  overrides: [discoverRepositoryProvider.overrideWithValue(repo)],
+  child: MaterialApp.router(
+    theme: AppTheme.light(),
+    routerConfig: GoRouter(
+      initialLocation: Routes.discover,
+      routes: [
+        GoRoute(
+          path: Routes.discover,
+          builder: (context, state) => const DiscoverScreen(),
+        ),
+        GoRoute(
+          path: Routes.recipePattern,
+          builder:
+              (context, state) => Scaffold(
+                body: Text('RECIPE PAGE ${state.pathParameters['id']}'),
+              ),
+        ),
+        GoRoute(
+          path: Routes.chefPattern,
+          builder:
+              (context, state) => Scaffold(
+                body: Text('CHEF PAGE ${state.pathParameters['id']}'),
+              ),
+        ),
+      ],
+    ),
+  ),
 );
 
 void main() {
@@ -421,5 +470,56 @@ void main() {
         expect(find.text('UNDER 30'), findsOneWidget);
       }
     }
+  });
+
+  // Phase 30's carried-over item, Discover's half. The browse grid and the
+  // search results get the link from `SliverRecipeGrid`; the shelves build
+  // their cards directly, so they wire the same destination themselves and a
+  // test has to say so — the two must not disagree.
+  //
+  // Asserted on the rendered probe rather than the router's uri: an imperative
+  // `push` nests a match list instead of replacing the outer one, so
+  // `currentConfiguration.uri` still reads `/discover` on top of a pushed page.
+  group('a shelf card links to its chef', () {
+    testWidgets('the badge opens the chef, the card opens the recipe', (
+      tester,
+    ) async {
+      _size(tester, 1400);
+      await tester.pumpWidget(_routedApp(_FakeDiscover(quickRows: [_owned])));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(ChefBadge));
+      await tester.pumpAndSettle();
+      expect(find.text('CHEF PAGE d1'), findsOneWidget);
+      expect(find.text('RECIPE PAGE q1'), findsNothing);
+    });
+
+    testWidgets('the rest of the shelf card still opens the recipe', (
+      tester,
+    ) async {
+      _size(tester, 1400);
+      await tester.pumpWidget(_routedApp(_FakeDiscover(quickRows: [_owned])));
+      await tester.pumpAndSettle();
+
+      // The title banner, well clear of the cover overlay.
+      await tester.tap(find.text('Aglio e olio'));
+      await tester.pumpAndSettle();
+      expect(find.text('RECIPE PAGE q1'), findsOneWidget);
+      expect(find.text('CHEF PAGE d1'), findsNothing);
+    });
+
+    // The shelves render placeholders while a query is in flight, and a
+    // placeholder has no recipe behind it — reading `recipes[i]` on that branch
+    // is a range error, not a missing badge.
+    testWidgets('a loading shelf renders placeholders, not a crash', (
+      tester,
+    ) async {
+      _size(tester, 1400);
+      await tester.pumpWidget(_routedApp(_FakeDiscover(hangingShelf: 'quick')));
+      await tester.pump();
+
+      expect(find.byType(RecipeCardPlaceholder), findsWidgets);
+      expect(tester.takeException(), isNull);
+    });
   });
 }

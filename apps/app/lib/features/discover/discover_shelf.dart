@@ -107,19 +107,32 @@ class DiscoverShelf extends ConsumerWidget {
       // as a page change rather than a scroll.
       page: context.isCompact ? 1 : 3,
       itemCount: loading ? kShelfLength : recipes.length,
-      itemBuilder:
-          (context, i) => SizedBox(
-            // A horizontal ListView hands its child a tight height and an
-            // unbounded width, and `RecipeCard` does not fix its own.
-            width: cardWidth,
-            child:
-                loading
-                    ? const RecipeCardPlaceholder()
-                    : RecipeCard(
-                      recipe: recipes[i],
-                      onTap: () => context.push(Routes.recipe(recipes[i].id)),
-                    ),
-          ),
+      itemBuilder: (context, i) {
+        // Read once: `loading` renders placeholders, so `recipes[i]` is only
+        // valid on the other branch.
+        final recipe = loading ? null : recipes[i];
+        final owner = recipe?.owner;
+        return SizedBox(
+          // A horizontal ListView hands its child a tight height and an
+          // unbounded width, and `RecipeCard` does not fix its own.
+          width: cardWidth,
+          child:
+              recipe == null
+                  ? const RecipeCardPlaceholder()
+                  : RecipeCard(
+                    recipe: recipe,
+                    onTap: () => context.push(Routes.recipe(recipe.id)),
+                    // The shelves build their cards directly rather than
+                    // through `SliverRecipeGrid`, so they wire the same
+                    // destination themselves — a rail card and a browse-grid
+                    // card must not disagree about where a chef badge goes.
+                    onChefTap:
+                        owner == null
+                            ? null
+                            : () => context.push(Routes.chef(owner.id)),
+                  ),
+        );
+      },
     );
   }
 }

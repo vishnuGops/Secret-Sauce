@@ -253,6 +253,118 @@ void main() {
       });
     }
 
+    // Gotcha 26: a tappable badge is a *new caller* of the overlay, so the
+    // envelope is re-run rather than assumed. The tap must cost the card no
+    // intrinsic size — an `InkWell` and a `Material` scrim both size to their
+    // child, and the card is a fixed-height tile with one flexible band, so
+    // anything that grew here would come straight out of the cover.
+    for (final (width, scale) in <(double, double)>[
+      (kRecipeCardMinWidth, 1.0),
+      (kRecipeCardMaxWidth, 1.0),
+      (kRecipeCardMinWidth, 2.0),
+      (kRecipeCardMaxWidth, 2.0),
+    ]) {
+      testWidgets('a tappable badge fits at ${width}px, textScale $scale', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          _wrap(
+            RecipeCard(recipe: worstCase, onChefTap: () {}),
+            width: width,
+            scale: scale,
+          ),
+        );
+        expect(
+          tester.takeException(),
+          isNull,
+          reason: 'overflow at ${width}px @ ${scale}x with onChefTap set',
+        );
+      });
+
+      testWidgets('a tappable badge is the same size at ${width}px @ $scale', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          _wrap(
+            const RecipeCard(recipe: worstCase),
+            width: width,
+            scale: scale,
+          ),
+        );
+        final inert = tester.getRect(find.byType(ChefBadge));
+
+        await tester.pumpWidget(
+          _wrap(
+            RecipeCard(recipe: worstCase, onChefTap: () {}),
+            width: width,
+            scale: scale,
+          ),
+        );
+        expect(
+          tester.getRect(find.byType(ChefBadge)),
+          inert,
+          reason: 'the tap target must not move or resize the overlay',
+        );
+      });
+    }
+
+    // The card already navigates to the recipe. The badge takes precedence
+    // over **its own hit area only**: it sits deeper in the hit-test path than
+    // the card's `InkWell`, so its recognizer enters the gesture arena first
+    // and wins the sweep — everywhere else on the card still opens the recipe.
+    testWidgets('the badge takes its own hit area, not the whole card', (
+      tester,
+    ) async {
+      var cardTaps = 0;
+      var chefTaps = 0;
+      await tester.pumpWidget(
+        _wrap(
+          RecipeCard(
+            recipe: worstCase,
+            onTap: () => cardTaps++,
+            onChefTap: () => chefTaps++,
+          ),
+          width: kRecipeCardMaxWidth,
+        ),
+      );
+
+      await tester.tap(find.byType(ChefBadge));
+      await tester.pump();
+      expect(chefTaps, 1);
+      expect(cardTaps, 0, reason: 'the badge must not also open the recipe');
+
+      // The title banner: on the card, nowhere near the overlay.
+      await tester.tap(find.text('Slow-Braised Short Rib Ragu'));
+      await tester.pump();
+      expect(cardTaps, 1);
+      expect(chefTaps, 1, reason: 'the rest of the card is still the recipe');
+    });
+
+    testWidgets('without onChefTap the whole card is the recipe', (
+      tester,
+    ) async {
+      var cardTaps = 0;
+      await tester.pumpWidget(
+        _wrap(
+          RecipeCard(recipe: worstCase, onTap: () => cardTaps++),
+          width: kRecipeCardMaxWidth,
+        ),
+      );
+
+      expect(
+        find.descendant(
+          of: find.byType(ChefBadge),
+          matching: find.byType(InkWell),
+        ),
+        findsNothing,
+        reason: 'an inert badge must not add a tap target to the cover',
+      );
+
+      await tester.tap(find.byType(ChefBadge));
+      await tester.pump();
+      expect(cardTaps, 1, reason: 'the badge area still opens the recipe');
+    });
+
     testWidgets('renders the badge only when an owner is embedded', (
       tester,
     ) async {

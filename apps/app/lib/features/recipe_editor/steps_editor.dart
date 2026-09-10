@@ -6,11 +6,24 @@ import 'package:app/features/recipe_editor/edit_models.dart';
 /// The steps half of the editor — the other seam (OPT-A8). Same contract as
 /// `IngredientsEditor`: it renders the draft it is handed and reports every
 /// mutation through [onChanged].
+///
+/// The one exception is the photo picker: choosing a file needs a platform
+/// channel, a size guard and a snackbar, all of which live on the screen, so
+/// this asks for it through [onPickImage] instead. Removing a photo is a plain
+/// draft mutation and goes through [onChanged] like everything else.
 class StepsEditor extends StatelessWidget {
-  const StepsEditor({super.key, required this.groups, required this.onChanged});
+  const StepsEditor({
+    super.key,
+    required this.groups,
+    required this.onChanged,
+    required this.onPickImage,
+  });
 
   final List<EditStepGroup> groups;
   final VoidCallback onChanged;
+
+  /// Asks the screen to pick (and later upload) a photo for this step.
+  final void Function(EditStep step) onPickImage;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +69,7 @@ class StepsEditor extends StatelessWidget {
                       step: groups[gi].steps[si],
                       number: si + 1,
                       onChanged: onChanged,
+                      onPickImage: onPickImage,
                       onRemove: () {
                         final removed = groups[gi].steps.removeAt(si);
                         onChanged();
@@ -92,21 +106,27 @@ class StepsEditor extends StatelessWidget {
   }
 }
 
-/// One numbered instruction, plus the time / temperature / tip block that the
-/// recipe detail screen renders as chips. Those three are collapsed by default
-/// and revealed by the tune button; a step that already carries any of them
-/// opens expanded, so an edit can never hide (and then drop) them (B035).
+/// One numbered instruction, its optional photo, plus the time / temperature /
+/// tip block that the recipe detail screen renders as chips. Those three are
+/// collapsed by default and revealed by the tune button; a step that already
+/// carries any of them opens expanded, so an edit can never hide (and then
+/// drop) them (B035).
+///
+/// The photo is not behind that disclosure: it is the one piece of step content
+/// that has to be visible to be judged, so a step that has one always shows it.
 class _StepRow extends StatelessWidget {
   const _StepRow({
     required this.step,
     required this.number,
     required this.onChanged,
+    required this.onPickImage,
     required this.onRemove,
   });
 
   final EditStep step;
   final int number;
   final VoidCallback onChanged;
+  final void Function(EditStep step) onPickImage;
   final VoidCallback onRemove;
 
   @override
@@ -132,6 +152,12 @@ class _StepRow extends StatelessWidget {
                 ),
               ),
               IconButton(
+                icon: const Icon(Icons.add_a_photo_outlined, size: 18),
+                color: step.hasImage ? scheme.primary : null,
+                tooltip: 'Step photo',
+                onPressed: () => onPickImage(step),
+              ),
+              IconButton(
                 icon: const Icon(Icons.tune, size: 18),
                 color: step.hasDetails ? scheme.primary : null,
                 tooltip: 'Time, temperature & tip',
@@ -147,6 +173,25 @@ class _StepRow extends StatelessWidget {
               ),
             ],
           ),
+          if (step.hasImage)
+            Padding(
+              // Indented to the step field: the number bubble is 24 wide and
+              // the gap beside it is `sm`, the same sum the detail block below
+              // uses.
+              padding: const EdgeInsets.only(
+                left: AppSpacing.lg + AppSpacing.sm,
+                top: AppSpacing.xs,
+                bottom: AppSpacing.sm,
+              ),
+              child: _StepImage(
+                step: step,
+                onReplace: () => onPickImage(step),
+                onRemove: () {
+                  step.clearImage();
+                  onChanged();
+                },
+              ),
+            ),
           if (step.showDetails)
             Padding(
               padding: const EdgeInsets.only(
@@ -195,6 +240,89 @@ class _StepRow extends StatelessWidget {
             ),
         ],
       ),
+    );
+  }
+}
+
+/// The step's photo: the pending pick if there is one, otherwise the stored
+/// URL. Tapping it picks a replacement; the corner button drops it.
+///
+/// Sized by aspect ratio rather than by a width, so it cannot overflow at any
+/// text scale — the row it replaced in earlier drafts could. On anything wider
+/// than a phone it takes a fraction of the step column instead of all of it: a
+/// 720px editor with a full-bleed photo under every step reads as a gallery,
+/// not a method.
+class _StepImage extends StatelessWidget {
+  const _StepImage({
+    required this.step,
+    required this.onReplace,
+    required this.onRemove,
+  });
+
+  final EditStep step;
+  final VoidCallback onReplace;
+  final VoidCallback onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final bytes = step.pendingImageBytes;
+    final url = step.imageUrl;
+
+    final Widget image;
+    if (bytes != null) {
+      image = Image.memory(bytes, fit: BoxFit.cover);
+    } else if (url != null && url.isNotEmpty) {
+      image = Image.network(
+        url,
+        fit: BoxFit.cover,
+        // A stored photo whose object has gone (or whose network is down) is a
+        // placeholder, not a thrown error: without this the failure is reported
+        // as a framework exception under a form the cook is still editing.
+        errorBuilder:
+            (context, error, stack) => ColoredBox(
+              color: scheme.surfaceContainerHighest,
+              child: Center(
+                child: Icon(
+                  Icons.broken_image_outlined,
+                  color: scheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+      );
+    } else {
+      image = const SizedBox.shrink();
+    }
+
+    final tile = Stack(
+      children: [
+        InkWell(
+          onTap: onReplace,
+          borderRadius: BorderRadius.circular(AppRadii.card),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(AppRadii.card),
+            child: AspectRatio(aspectRatio: 16 / 9, child: image),
+          ),
+        ),
+        Positioned(
+          top: AppSpacing.xs,
+          right: AppSpacing.xs,
+          child: IconButton.filledTonal(
+            visualDensity: VisualDensity.compact,
+            icon: const Icon(Icons.close, size: 18),
+            tooltip: 'Remove photo',
+            onPressed: onRemove,
+          ),
+        ),
+      ],
+    );
+
+    return Align(
+      alignment: Alignment.centerLeft,
+      child:
+          context.isCompact
+              ? tile
+              : FractionallySizedBox(widthFactor: 0.6, child: tile),
     );
   }
 }
