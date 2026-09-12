@@ -126,6 +126,31 @@ first** — `melos run db:reset` and `config.toml` both order it that way. Appli
 round, the recipes are created and the ratings skipped, with a notice; re-run `db:recipes` after
 `db:seed` to backfill.
 
+## Unit spellings
+
+The app prints a unit **verbatim** beside its quantity — `formatText` in
+[formatting.dart](../packages/core/lib/src/formatting.dart) is `'$amount $unit'`, with no
+pluralisation and no normalisation anywhere between here and the screen. Whatever is in
+the JSON is what a cook reads. Two rules, and `schema.json` carries the full list:
+
+- **Abbreviation units are lowercase and invariant** — `g` `kg` `ml` `L` `tsp` `tbsp`
+  `oz` `lb`. Never `Tbsp`, `tablespoon`, `tablespoons`, `tbsps`, `teaspoon`, `teaspoons`,
+  `grams`, `ounces`, `pound`, `pounds`, `lbs`, `litres`. `L` is the one deliberate
+  departure from [units.json](../nutritionData/units.json)'s `l` key: a lowercase `l` at
+  recipe sizes reads as a `1`. Matching is case-insensitive, so it resolves the same.
+- **Word units keep the plural a cook would read** — `2 cups flour`, `3 cloves garlic`,
+  `5 slices bread`. Collapsing these to the singular registry key would render
+  `3 clove garlic`, and the estimator accepts both spellings anyway, so the singular buys
+  nothing and costs English.
+
+**The linter does not check any of this** — `unit` is free text in
+[tool/recipe_format.dart](../tool/recipe_format.dart) (it only asserts the type). The
+whole corpus was swept once; drift comes back one recipe at a time.
+
+A spelling that is not in `units.json` contributes **nothing** to an auto nutrition
+estimate, silently — `tbsps` was in 7 ingredients and had been resolving to zero grams.
+A genuinely new unit belongs in `units.json` first, then in a recipe.
+
 ## What the linter cannot check
 
 It warns when an ingredient no step mentions (the margarita's orphaned orange
@@ -134,3 +159,34 @@ the remaining ingredients"). It cannot check the other direction — a step
 calling for salt that the ingredient list never mentions — because that needs a
 lexicon. Read the steps against the list when you add a recipe; three of the
 nine defects in B025 were exactly that.
+
+## The scraped corpus in `recipes/<chefSlug>/` — and why it is invisible here
+
+Alongside the kitchen's own 14 recipes, `recipeData/` holds a **scraped corpus**: 158
+recipes from 15 real chefs, used to test the app against real-world data. It lives in
+per-chef subdirectories, with its tooling and reports beside it:
+
+```
+recipes/<chefSlug>/<recipeSlug>.json   the corpus — one directory per chef
+chefs.json · _tools/ · _state/ · _reports/
+```
+
+**None of it reaches the database through this pipeline, and that is deliberate.**
+`_load()` in [tool/recipe_format.dart](../tool/recipe_format.dart) calls
+`directory.listSync()` **without** `recursive: true` and then `.whereType<File>()`, so
+subdirectories are skipped. `melos run recipes:validate` reports 14 no matter how large
+the corpus grows.
+
+> **Adding `recursive: true` to that loader would turn every scraped recipe into seeded
+> content**, generated into `supabase/seed_recipes.sql` and owned by the Secret Sauce
+> Kitchen account, on every database. If you ever need the loader to recurse, exclude
+> `recipes/*/` explicitly at the same time.
+
+The corpus gets no validation from this tooling either — it has its own, in
+`_tools/`. See [_reports/PHASE1-CORPUS.md](_reports/PHASE1-CORPUS.md) for how it was
+captured and [_reports/PHASE2-ROUNDTRIP.md](_reports/PHASE2-ROUNDTRIP.md) for what
+ingesting it found.
+
+Recipe text belongs to its rights-holder. Each file stores functional content plus a
+link back to the source, for internal testing only — never redistributed, and never
+promoted into seed data.

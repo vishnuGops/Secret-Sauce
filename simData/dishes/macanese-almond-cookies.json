@@ -20,7 +20,7 @@
         { "quantity": 80, "unit": "g", "name": "lard", "note": "chilled hard and cut into small cubes" },
         { "quantity": 60, "unit": "g", "name": "almonds", "note": "half of them ground fine, half left as halves" },
         { "quantity": 0.5, "unit": "tsp", "name": "salt" },
-        { "quantity": 1, "unit": "Tbsp", "name": "water", "note": "only if the mix will not hold together" }
+        { "quantity": 1, "unit": "tbsp", "name": "water", "note": "only if the mix will not hold together" }
       ]
     }
   ],

@@ -161,13 +161,17 @@ void main() {
   group('listMine', () {
     test('asks for one page in a total order', () async {
       final (:http, :client, :repo) = _repo([
+        // Phase 35b: the identity RPC comes first now — the repository asks the
+        // database which `profiles` row this account is rather than assuming it
+        // is the auth uid.
+        (200, jsonEncode(_uid)),
         (200, jsonEncode([_recipeRow()])),
       ]);
       await signInAs(client, _uid);
 
       await repo.listMine();
 
-      final req = http.requests.single;
+      final req = http.requests.last;
       expect(req.param('owner_id'), 'eq.$_uid');
       // OPT-P9: `id` after `updated_at` is what makes `offset` meaningful — two
       // recipes saved in the same second are free to swap without it.
@@ -177,13 +181,16 @@ void main() {
     });
 
     test('a second page asks for the next window', () async {
-      final (:http, :client, :repo) = _repo([(200, jsonEncode(<Object>[]))]);
+      final (:http, :client, :repo) = _repo([
+        (200, jsonEncode(_uid)),
+        (200, jsonEncode(<Object>[])),
+      ]);
       await signInAs(client, _uid);
 
       await repo.listMine(limit: kRecipePageSize, offset: kRecipePageSize);
 
-      expect(http.requests.single.param('offset'), '20');
-      expect(http.requests.single.param('limit'), '20');
+      expect(http.requests.last.param('offset'), '20');
+      expect(http.requests.last.param('limit'), '20');
     });
 
     test('signed out, it throws before reaching the network', () async {
@@ -191,6 +198,47 @@ void main() {
 
       await expectLater(repo.listMine(), throwsA(isA<StateError>()));
       expect(http.requests, isEmpty);
+    });
+  });
+
+  // Phase 35b. `profiles.id` stopped being the auth uid for one person: a
+  // member who has claimed an imported chef page. These pin the two properties
+  // that make that person's writes land — the repository filters on the
+  // RESOLVED id, and it resolves it once.
+  group('profile identity (Phase 35b)', () {
+    const claimedProfile = '22222222-2222-2222-2222-222222222222';
+
+    test('writes key on the resolved profile id, not the auth uid', () async {
+      final (:http, :client, :repo) = _repo([
+        (200, jsonEncode(claimedProfile)),
+        (200, jsonEncode(<Object>[])),
+      ]);
+      await signInAs(client, _uid);
+
+      await repo.listMine();
+
+      expect(http.requests.first.url.path, endsWith('/rpc/current_profile_id'));
+      // The whole point: `_uid` would have been wrong here, and wrong in a way
+      // RLS answers with zero rows rather than an error (Gotcha 2).
+      expect(http.requests.last.param('owner_id'), 'eq.$claimedProfile');
+    });
+
+    test('resolves once per session and caches', () async {
+      final (:http, :client, :repo) = _repo([
+        (200, jsonEncode(claimedProfile)),
+        (200, jsonEncode(<Object>[])),
+        (200, jsonEncode(<Object>[])),
+      ]);
+      await signInAs(client, _uid);
+
+      await repo.listMine();
+      await repo.listMine();
+
+      final rpcs = http.requests.where(
+        (r) => r.url.path.endsWith('/rpc/current_profile_id'),
+      );
+      expect(rpcs, hasLength(1));
+      expect(http.requests, hasLength(3));
     });
   });
 

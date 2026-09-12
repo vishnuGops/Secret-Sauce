@@ -16,16 +16,16 @@
       "name": "",
       "ingredients": [
         { "quantity": 600, "unit": "g", "name": "waxy potatoes", "note": "scrubbed, skin on" },
-        { "quantity": 4, "unit": "Tbsp", "name": "sesame seeds", "note": "white" },
-        { "quantity": 3, "unit": "Tbsp", "name": "lemon juice" },
-        { "quantity": 3, "unit": "Tbsp", "name": "mustard oil" },
+        { "quantity": 4, "unit": "tbsp", "name": "sesame seeds", "note": "white" },
+        { "quantity": 3, "unit": "tbsp", "name": "lemon juice" },
+        { "quantity": 3, "unit": "tbsp", "name": "mustard oil" },
         { "quantity": 1, "unit": "tsp", "name": "timur peppercorns", "note": "Sichuan peppercorns work; crush them coarsely" },
         { "quantity": 0.5, "unit": "tsp", "name": "turmeric" },
         { "quantity": 3, "unit": null, "name": "dried red chilies", "note": "snapped in half" },
         { "quantity": 0.5, "unit": "tsp", "name": "fenugreek seeds" },
         { "quantity": 1, "unit": null, "name": "cucumber", "note": "seeded and cut into batons" },
         { "quantity": 1, "unit": null, "name": "green chili", "note": "sliced thin", "is_optional": true },
-        { "quantity": 3, "unit": "Tbsp", "name": "cilantro", "note": "chopped" },
+        { "quantity": 3, "unit": "tbsp", "name": "cilantro", "note": "chopped" },
         { "quantity": 1, "unit": "tsp", "name": "salt" }
       ]
     }

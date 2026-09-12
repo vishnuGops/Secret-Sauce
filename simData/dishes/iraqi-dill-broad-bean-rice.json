@@ -18,7 +18,7 @@
         { "quantity": 500, "unit": "g", "name": "basmati rice" },
         { "quantity": 400, "unit": "g", "name": "broad beans", "note": "podded; frozen work well" },
         { "quantity": 40, "unit": "g", "name": "dill", "note": "chopped, stalks and all" },
-        { "quantity": 4, "unit": "Tbsp", "name": "ghee" },
+        { "quantity": 4, "unit": "tbsp", "name": "ghee" },
         { "quantity": 4, "unit": "pods", "name": "cardamom", "note": "cracked open" },
         { "quantity": 1, "unit": null, "name": "bay leaf" },
         { "quantity": 2, "unit": "tsp", "name": "salt" },

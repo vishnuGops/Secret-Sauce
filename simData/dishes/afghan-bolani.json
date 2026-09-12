@@ -18,7 +18,7 @@
         { "quantity": 350, "unit": "g", "name": "all-purpose flour" },
         { "quantity": 220, "unit": "ml", "name": "water", "note": "warm" },
         { "quantity": 1, "unit": "tsp", "name": "salt" },
-        { "quantity": 1, "unit": "Tbsp", "name": "vegetable oil" }
+        { "quantity": 1, "unit": "tbsp", "name": "vegetable oil" }
       ]
     },
     {
@@ -26,12 +26,12 @@
       "ingredients": [
         { "quantity": 500, "unit": "g", "name": "potatoes", "note": "boiled and mashed dry, no butter" },
         { "quantity": 2, "unit": null, "name": "leeks", "note": "white and pale green only, sliced very thin" },
-        { "quantity": 4, "unit": "Tbsp", "name": "cilantro", "note": "chopped" },
+        { "quantity": 4, "unit": "tbsp", "name": "cilantro", "note": "chopped" },
         { "quantity": 1, "unit": null, "name": "green chili", "note": "seeded and finely chopped", "is_optional": true },
         { "quantity": 1, "unit": "tsp", "name": "coriander", "note": "ground" },
         { "quantity": 1, "unit": "tsp", "name": "salt" },
         { "quantity": 0.5, "unit": "tsp", "name": "black pepper" },
-        { "quantity": 2, "unit": "Tbsp", "name": "vegetable oil" }
+        { "quantity": 2, "unit": "tbsp", "name": "vegetable oil" }
       ]
     },
     {

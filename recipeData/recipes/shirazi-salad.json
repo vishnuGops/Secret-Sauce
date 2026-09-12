@@ -31,9 +31,9 @@
         { "quantity": 4, "unit": null, "name": "Persian cucumbers", "note": "1/2-inch dice; or 2 green cucumbers, peeled and seeded", "food": "cucumber" },
         { "quantity": 1, "unit": "pint", "name": "cherry tomatoes", "note": "quartered", "food": "cherry-tomatoes" },
         { "quantity": 0.5, "unit": "cup", "name": "red onion", "note": "chopped", "food": "onion" },
-        { "quantity": 2, "unit": "Tbsp", "name": "fresh dill", "note": "chopped; cilantro, parsley, mint, or basil all work", "food": "dill" },
-        { "quantity": 1, "unit": "Tbsp", "name": "olive oil", "food": "olive-oil" },
-        { "quantity": 1, "unit": "Tbsp", "name": "golden balsamic vinegar", "is_optional": true, "food": "balsamic-vinegar" },
+        { "quantity": 2, "unit": "tbsp", "name": "fresh dill", "note": "chopped; cilantro, parsley, mint, or basil all work", "food": "dill" },
+        { "quantity": 1, "unit": "tbsp", "name": "olive oil", "food": "olive-oil" },
+        { "quantity": 1, "unit": "tbsp", "name": "golden balsamic vinegar", "is_optional": true, "food": "balsamic-vinegar" },
         { "quantity": 1, "unit": null, "name": "lemon", "note": "zest and juice", "food": "lemon" },
         { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "large, smashed and minced", "food": "garlic" },
         { "quantity": null, "unit": null, "name": "salt and pepper", "note": "to taste" }

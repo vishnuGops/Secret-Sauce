@@ -5,6 +5,7 @@ import 'package:core/src/models/recipe.dart';
 import 'package:core/src/models/recipe_version.dart';
 import 'package:core/src/paging.dart';
 import 'package:core/src/repositories/content_payload.dart';
+import 'package:core/src/repositories/profile_id.dart';
 import 'package:core/src/repositories/recipe_queries.dart';
 import 'package:core/src/repositories/write_denied_exception.dart';
 
@@ -24,7 +25,8 @@ abstract interface class RecipeRepository {
   /// One chef's **public** recipes, newest first — the grid on `/chef/:id`.
   ///
   /// Signed-out safe (Gotcha 9): it takes the chef's id as an argument and never
-  /// touches `_uid`, so it cannot throw the signed-out `StateError`.
+  /// resolves the caller's own profile, so it cannot throw the signed-out
+  /// `StateError`.
   Future<List<Recipe>> listByChef(String chefId, {int limit, int offset});
 
   /// Create a new recipe (with nested groups) and its first version.
@@ -54,7 +56,7 @@ abstract interface class RecipeRepository {
 
   /// Whether the current user has liked / saved [recipeId]. Both return `false`
   /// when signed out — these sit on a signed-out-reachable screen (Gotcha 9),
-  /// so they use `currentUser?.id` rather than `_uid`.
+  /// so they use `ProfileIdResolver.currentOrNull` rather than `require`.
   Future<bool> myLiked(String recipeId);
   Future<bool> mySaved(String recipeId);
 
@@ -84,15 +86,19 @@ double snapRating(double rating) {
 }
 
 class SupabaseRecipeRepository implements RecipeRepository {
-  SupabaseRecipeRepository(this._client);
+  SupabaseRecipeRepository(this._client, {ProfileIdResolver? profileIds})
+    : _profileIds = profileIds ?? ProfileIdResolver(_client);
 
   final SupabaseClient _client;
 
-  String get _uid {
-    final id = _client.auth.currentUser?.id;
-    if (id == null) throw StateError('Not authenticated.');
-    return id;
-  }
+  /// Phase 35b: the signed-in account's `profiles.id`, which is no longer
+  /// guaranteed to be its auth uid. See [ProfileIdResolver] — one RPC per
+  /// session, cached, and the same function every RLS policy calls.
+  ///
+  /// Injected so the whole app shares **one** cache (`providers.dart` passes
+  /// the shared instance). The fallback exists for a test constructing this
+  /// repository directly; it is not the production path.
+  final ProfileIdResolver _profileIds;
 
   @override
   Future<Recipe> getById(String id) async {
@@ -145,7 +151,7 @@ class SupabaseRecipeRepository implements RecipeRepository {
     final rows = await _client
         .from('recipes')
         .select(kRecipeSelect)
-        .eq('owner_id', _uid)
+        .eq('owner_id', await _profileIds.require())
         .order('updated_at', ascending: false)
         .order('id', ascending: false)
         .range(offset, offset + limit - 1);
@@ -164,7 +170,7 @@ class SupabaseRecipeRepository implements RecipeRepository {
     final rows = await _client
         .from('recipe_shares')
         .select('recipes($kRecipeSelect)')
-        .eq('shared_with_user_id', _uid)
+        .eq('shared_with_user_id', await _profileIds.require())
         .order('created_at', ascending: false)
         .order('recipe_id', ascending: false)
         .range(offset, offset + limit - 1);
@@ -363,32 +369,34 @@ class SupabaseRecipeRepository implements RecipeRepository {
 
   @override
   Future<void> setLiked(String recipeId, {required bool liked}) async {
+    final me = await _profileIds.require();
     if (liked) {
       await _client.from('recipe_likes').upsert({
-        'user_id': _uid,
+        'user_id': me,
         'recipe_id': recipeId,
       });
     } else {
       await _client
           .from('recipe_likes')
           .delete()
-          .eq('user_id', _uid)
+          .eq('user_id', me)
           .eq('recipe_id', recipeId);
     }
   }
 
   @override
   Future<void> setSaved(String recipeId, {required bool saved}) async {
+    final me = await _profileIds.require();
     if (saved) {
       await _client.from('recipe_saves').upsert({
-        'user_id': _uid,
+        'user_id': me,
         'recipe_id': recipeId,
       });
     } else {
       await _client
           .from('recipe_saves')
           .delete()
-          .eq('user_id', _uid)
+          .eq('user_id', me)
           .eq('recipe_id', recipeId);
     }
   }
@@ -403,7 +411,7 @@ class SupabaseRecipeRepository implements RecipeRepository {
   /// exist for the current user? Signed out is not an error here — the detail
   /// screen is reachable without an account — so it answers `false`.
   Future<bool> _hasMyRow(String table, String recipeId) async {
-    final uid = _client.auth.currentUser?.id;
+    final uid = await _profileIds.currentOrNull();
     if (uid == null) return false;
     final row =
         await _client
@@ -419,13 +427,15 @@ class SupabaseRecipeRepository implements RecipeRepository {
   Future<void> logView(String recipeId) async {
     await _client.from('recipe_views').insert({
       'recipe_id': recipeId,
-      'user_id': _client.auth.currentUser?.id,
+      // Null for a signed-out visitor, which `views_insert` allows and
+      // `on_view_insert` deliberately does not count (B012).
+      'user_id': await _profileIds.currentOrNull(),
     });
   }
 
   @override
   Future<double?> myRating(String recipeId) async {
-    final uid = _client.auth.currentUser?.id;
+    final uid = await _profileIds.currentOrNull();
     if (uid == null) return null;
     final row =
         await _client
@@ -441,7 +451,7 @@ class SupabaseRecipeRepository implements RecipeRepository {
   @override
   Future<void> setRating(String recipeId, double rating) async {
     await _client.from('recipe_ratings').upsert({
-      'user_id': _uid,
+      'user_id': await _profileIds.require(),
       'recipe_id': recipeId,
       'rating': snapRating(rating),
     });
@@ -452,7 +462,7 @@ class SupabaseRecipeRepository implements RecipeRepository {
     await _client
         .from('recipe_ratings')
         .delete()
-        .eq('user_id', _uid)
+        .eq('user_id', await _profileIds.require())
         .eq('recipe_id', recipeId);
   }
 

@@ -27,6 +27,14 @@ drop table if exists
   ingredient_groups,
   recipe_versions,
   recipes,
+  -- Phase 35b. `profile_claims` and `entity_members` reference `profiles`, and
+  -- `entity_signature_dishes` references `recipes`; `cascade` would take them
+  -- anyway, but naming them keeps this list a readable inventory of what the
+  -- schema contains rather than a list of roots.
+  profile_claims,
+  entity_signature_dishes,
+  entity_members,
+  entities,
   profiles
 cascade;
 
@@ -50,6 +58,14 @@ drop function if exists on_recipe_tags_search_change() cascade;
 drop function if exists on_tags_search_change() cascade;
 drop function if exists can_read_recipe(uuid) cascade;
 drop function if exists owns_recipe(uuid) cascade;
+-- Phase 35b identity. `current_profile_id()` is referenced by every policy in
+-- the schema, but a quoted SQL body records no dependency, so `drop table
+-- ... cascade` above does not reach it (the B042 shape).
+drop function if exists current_profile_id() cascade;
+drop function if exists is_entity_member(uuid) cascade;
+drop function if exists is_entity_owner(uuid) cascade;
+drop function if exists approve_profile_claim(uuid) cascade;
+drop function if exists reject_profile_claim(uuid, text) cascade;
 -- Food registry typeahead (Phase 29a).
 drop function if exists search_foods(text, int) cascade;
 -- Auto-nutrition estimator + batched link candidates (Phase 29c) and the
@@ -134,3 +150,8 @@ drop type if exists recipe_visibility cascade;
 drop type if exists share_permission cascade;
 drop type if exists suggestion_status cascade;
 drop type if exists chef_tier cascade;
+-- Phase 35b.
+drop type if exists profile_kind cascade;
+drop type if exists entity_kind cascade;
+drop type if exists entity_role cascade;
+drop type if exists claim_status cascade;

@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app/features/auth/auth_controller.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:app/routing/pop_or_go.dart';
+import 'package:app/widgets/legal_footer.dart';
 
 /// Combined sign-in / sign-up screen with a mode toggle.
 class AuthScreen extends ConsumerStatefulWidget {
@@ -151,6 +152,33 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                           : "Don't have an account? Sign up",
                     ),
                   ),
+                  // Phase 35a. Two jobs, and they are different.
+                  //
+                  // The sentence is the consent point: the one moment in the
+                  // product where somebody agrees to the terms, so it says so
+                  // at the moment they do it rather than in a checkbox nobody
+                  // reads. It is plain text with the links directly beneath
+                  // rather than tappable spans inside it — an inline recogniser
+                  // needs a dispose that a StatelessWidget cannot give it, and
+                  // a leaked one is a real bug for a cosmetic gain.
+                  //
+                  // The footer is the access point, and it is here in BOTH
+                  // modes because on a phone this is the only signed-out screen
+                  // that can carry it: the web chrome has its own bar, and the
+                  // compact bottom slot belongs to the NavigationBar.
+                  if (_isSignUp) ...[
+                    const SizedBox(height: AppSpacing.md),
+                    Text(
+                      'By creating an account you agree to the Terms of '
+                      'Service and acknowledge the Privacy Policy.',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: AppSpacing.md),
+                  const LegalFooter(),
                 ],
               ),
             ),

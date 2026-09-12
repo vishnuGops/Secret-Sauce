@@ -17,7 +17,7 @@
       "ingredients": [
         { "quantity": 4, "unit": "cups", "name": "cooked rice", "note": "cold, from the day before, broken up by hand" },
         { "quantity": 12, "unit": "cloves", "name": "garlic", "note": "minced" },
-        { "quantity": 4, "unit": "Tbsp", "name": "neutral oil" },
+        { "quantity": 4, "unit": "tbsp", "name": "neutral oil" },
         { "quantity": 1, "unit": "tsp", "name": "salt" },
         { "quantity": 2, "unit": null, "name": "spring onions", "note": "sliced, to finish" },
         { "quantity": 4, "unit": null, "name": "eggs", "note": "fried, to serve", "is_optional": true }

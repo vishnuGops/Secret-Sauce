@@ -20,18 +20,18 @@
         { "quantity": 70, "unit": "g", "name": "sugar" },
         { "quantity": 2, "unit": "tsp", "name": "white peppercorns", "note": "crushed, not powdered" },
         { "quantity": 2, "unit": "bunches", "name": "dill", "note": "stems and all, chopped" },
-        { "quantity": 2, "unit": "Tbsp", "name": "aquavit", "is_optional": true }
+        { "quantity": 2, "unit": "tbsp", "name": "aquavit", "is_optional": true }
       ]
     },
     {
       "name": "For the mustard sauce",
       "ingredients": [
-        { "quantity": 3, "unit": "Tbsp", "name": "sweet mustard" },
+        { "quantity": 3, "unit": "tbsp", "name": "sweet mustard" },
         { "quantity": 1, "unit": "tsp", "name": "Dijon mustard" },
-        { "quantity": 1, "unit": "Tbsp", "name": "white wine vinegar" },
-        { "quantity": 1, "unit": "Tbsp", "name": "sugar" },
+        { "quantity": 1, "unit": "tbsp", "name": "white wine vinegar" },
+        { "quantity": 1, "unit": "tbsp", "name": "sugar" },
         { "quantity": 100, "unit": "ml", "name": "neutral oil" },
-        { "quantity": 2, "unit": "Tbsp", "name": "dill", "note": "finely chopped" }
+        { "quantity": 2, "unit": "tbsp", "name": "dill", "note": "finely chopped" }
       ]
     }
   ],

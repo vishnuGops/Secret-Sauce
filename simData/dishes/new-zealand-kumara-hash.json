@@ -18,10 +18,10 @@
         { "quantity": 700, "unit": "g", "name": "kūmara", "note": "orange-fleshed sweet potato, peeled and cut into 2 cm dice" },
         { "quantity": 200, "unit": "g", "name": "streaky bacon", "note": "cut into lardons" },
         { "quantity": 1, "unit": null, "name": "onion", "note": "diced" },
-        { "quantity": 2, "unit": "Tbsp", "name": "butter" },
+        { "quantity": 2, "unit": "tbsp", "name": "butter" },
         { "quantity": 1, "unit": "tsp", "name": "smoked paprika" },
         { "quantity": 4, "unit": null, "name": "eggs" },
-        { "quantity": 2, "unit": "Tbsp", "name": "parsley", "note": "roughly chopped" },
+        { "quantity": 2, "unit": "tbsp", "name": "parsley", "note": "roughly chopped" },
         { "quantity": 1, "unit": "pinch", "name": "flaky salt" },
         { "quantity": 0.5, "unit": "tsp", "name": "black pepper" },
         { "quantity": 0.5, "unit": null, "name": "lemon", "note": "for a squeeze at the end", "is_optional": true }

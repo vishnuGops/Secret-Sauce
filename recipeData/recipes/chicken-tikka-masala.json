@@ -30,17 +30,17 @@
       "ingredients": [
         { "quantity": 600, "unit": "g", "name": "boneless chicken thigh", "note": "cubed", "food": "chicken-thigh" },
         { "quantity": 150, "unit": "g", "name": "plain yoghurt", "food": "yogurt" },
-        { "quantity": 1, "unit": "Tbsp", "name": "tikka spice blend", "note": "half of the 2 Tbsp total" }
+        { "quantity": 1, "unit": "tbsp", "name": "tikka spice blend", "note": "half of the 2 Tbsp total" }
       ]
     },
     {
       "name": "Gravy",
       "ingredients": [
-        { "quantity": 2, "unit": "Tbsp", "name": "butter", "food": "butter" },
+        { "quantity": 2, "unit": "tbsp", "name": "butter", "food": "butter" },
         { "quantity": 1, "unit": null, "name": "onion", "note": "finely diced", "food": "onion" },
         { "quantity": 3, "unit": "cloves", "name": "garlic", "note": "minced", "food": "garlic" },
-        { "quantity": 1, "unit": "Tbsp", "name": "ginger", "note": "grated", "food": "ginger" },
-        { "quantity": 1, "unit": "Tbsp", "name": "tikka spice blend", "note": "the other half" },
+        { "quantity": 1, "unit": "tbsp", "name": "ginger", "note": "grated", "food": "ginger" },
+        { "quantity": 1, "unit": "tbsp", "name": "tikka spice blend", "note": "the other half" },
         { "quantity": 400, "unit": "g", "name": "tomato passata", "food": "tomato-passata" },
         { "quantity": 120, "unit": "ml", "name": "heavy cream", "food": "heavy-cream" }
       ]

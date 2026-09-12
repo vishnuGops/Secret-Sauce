@@ -18,8 +18,8 @@
         { "quantity": 300, "unit": "g", "name": "parsley", "note": "leaves and thin stems, finely chopped" },
         { "quantity": 200, "unit": "g", "name": "cilantro", "note": "leaves and thin stems, finely chopped" },
         { "quantity": 150, "unit": "g", "name": "garlic chives", "note": "or the green tops of spring onions" },
-        { "quantity": 3, "unit": "Tbsp", "name": "dried fenugreek leaves", "note": "crumbled between your palms" },
-        { "quantity": 4, "unit": "Tbsp", "name": "vegetable oil", "note": "for the herbs" }
+        { "quantity": 3, "unit": "tbsp", "name": "dried fenugreek leaves", "note": "crumbled between your palms" },
+        { "quantity": 4, "unit": "tbsp", "name": "vegetable oil", "note": "for the herbs" }
       ]
     },
     {
@@ -30,11 +30,11 @@
         { "quantity": 1, "unit": null, "name": "onion", "note": "finely diced" },
         { "quantity": 1, "unit": "tsp", "name": "turmeric" },
         { "quantity": 5, "unit": null, "name": "dried limes", "note": "pierced twice with a skewer" },
-        { "quantity": 3, "unit": "Tbsp", "name": "vegetable oil" },
+        { "quantity": 3, "unit": "tbsp", "name": "vegetable oil" },
         { "quantity": 1.2, "unit": "L", "name": "water" },
         { "quantity": 1.5, "unit": "tsp", "name": "salt" },
         { "quantity": 0.5, "unit": "tsp", "name": "black pepper" },
-        { "quantity": 2, "unit": "Tbsp", "name": "lemon juice", "note": "only if the limes have not soured it enough", "is_optional": true }
+        { "quantity": 2, "unit": "tbsp", "name": "lemon juice", "note": "only if the limes have not soured it enough", "is_optional": true }
       ]
     },
     {

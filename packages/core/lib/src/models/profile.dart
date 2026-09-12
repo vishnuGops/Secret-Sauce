@@ -21,6 +21,16 @@ class Profile with _$Profile {
     @Default(ChefTier.homeCook)
     ChefTier chefTier,
     @JsonKey(name: 'public_recipe_count') @Default(0) int publicRecipeCount,
+    // Phase 35b. `member` unless the row was written by the corpus importer.
+    // Server-owned: `kind` is absent from the column grants entirely, so a
+    // client PATCH of it fails 42501 (rls_matrix G16).
+    @JsonKey(name: 'kind', unknownEnumValue: ProfileKind.member)
+    @Default(ProfileKind.member)
+    ProfileKind kind,
+
+    /// When a real chef took over this imported page. Null for every member and
+    /// for every unclaimed imported profile.
+    @JsonKey(name: 'claimed_at') DateTime? claimedAt,
   }) = _Profile;
 
   factory Profile.fromJson(Map<String, dynamic> json) =>

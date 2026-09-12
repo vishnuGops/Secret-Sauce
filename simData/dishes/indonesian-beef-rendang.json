@@ -31,7 +31,7 @@
         { "quantity": 3, "unit": "stalks", "name": "lemongrass", "note": "bruised" },
         { "quantity": 6, "unit": null, "name": "kaffir lime leaves" },
         { "quantity": 2, "unit": null, "name": "turmeric leaves", "note": "tied in a knot", "is_optional": true },
-        { "quantity": 1, "unit": "Tbsp", "name": "palm sugar" },
+        { "quantity": 1, "unit": "tbsp", "name": "palm sugar" },
         { "quantity": 2, "unit": "tsp", "name": "salt" }
       ]
     }

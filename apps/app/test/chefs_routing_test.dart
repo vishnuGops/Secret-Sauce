@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:app/features/chefs/chefs_screen.dart';
+import 'package:app/features/legal/legal_document.dart';
+import 'package:app/features/legal/legal_screen.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
@@ -25,6 +27,11 @@ class _FakeAuth implements AuthRepository {
 
   @override
   String? get currentUserId => uid;
+
+  // Phase 35b: `profiles.id` and the auth uid are the same value for a member,
+  // which every fixture in this file is.
+  @override
+  Future<String?> currentProfileId() async => uid;
 
   @override
   Stream<AuthState> authStateChanges() => const Stream.empty();
@@ -162,5 +169,65 @@ void main() {
   testWidgets('a signed-in visitor reaches a guarded route', (tester) async {
     final router = await _pumpAt(tester, Routes.profile, uid: 'user-1');
     expect(_location(router), Routes.profile);
+  });
+
+  // Phase 35a. The web chrome carries the legal links in the shell's
+  // `bottomNavigationBar`, and this file is the only place that pumps the real
+  // shell at a wide width — `legal_screen_test.dart` opens the pages directly,
+  // which exercises a different navigator entirely.
+  //
+  // The mechanism worth pinning is the `push` out of the shell: the legal route
+  // declares `parentNavigatorKey: _rootKey`, so a tap inside the shell has to
+  // cross from the shell navigator to the root one. That either works or it
+  // does nothing at all, and nothing else here would notice.
+  //
+  // **These assert `state.matchedLocation`, not [_location].** An imperative
+  // `push` layers a route on top without moving the *base* configuration, so
+  // `currentConfiguration.uri` still reads `/chefs` while the pushed page is on
+  // screen. `_location` is the right probe for the redirect tests above, which
+  // are all declarative `go`s, and the wrong one here — it reports a pass as a
+  // failure, which cost one debugging round to find.
+  group('the legal footer in the web chrome (Phase 35a)', () {
+    testWidgets('is present on a shell screen', (tester) async {
+      await _pumpAt(tester, Routes.chefs);
+
+      for (final doc in LegalDoc.values) {
+        expect(
+          find.text(doc.shortLabel),
+          findsWidgets,
+          reason: '${doc.shortLabel} missing from the chrome',
+        );
+      }
+    });
+
+    testWidgets('tapping it leaves the shell for the document', (tester) async {
+      final router = await _pumpAt(tester, Routes.chefs);
+
+      await tester.tap(find.text(LegalDoc.privacy.shortLabel).last);
+      await tester.pumpAndSettle();
+
+      expect(router.state.matchedLocation, Routes.legal(LegalDoc.privacy.slug));
+      expect(find.byType(LegalScreen), findsOneWidget);
+      // That the shell SURVIVES underneath is asserted by the back test below,
+      // not here: the pushed route is opaque, so Flutter stops building the
+      // route beneath it and a finder for `ChefsScreen` legitimately sees
+      // nothing. Popping back is the observable form of the same claim.
+    });
+
+    testWidgets('and hands the reader back', (tester) async {
+      // `push`, not `go`: the point of a chrome link is that reading the terms
+      // does not cost you the page you were on.
+      final router = await _pumpAt(tester, Routes.chefs);
+
+      await tester.tap(find.text(LegalDoc.terms.shortLabel).last);
+      await tester.pumpAndSettle();
+      expect(router.state.matchedLocation, Routes.legal(LegalDoc.terms.slug));
+
+      await tester.tap(find.byIcon(Icons.arrow_back));
+      await tester.pumpAndSettle();
+
+      expect(router.state.matchedLocation, Routes.chefs);
+      expect(find.byType(LegalScreen), findsNothing);
+    });
   });
 }

@@ -21,7 +21,7 @@
         { "quantity": 150, "unit": "g", "name": "sour cream" },
         { "quantity": 80, "unit": "ml", "name": "milk", "note": "lukewarm" },
         { "quantity": 7, "unit": "g", "name": "active dry yeast" },
-        { "quantity": 1, "unit": "Tbsp", "name": "sugar" },
+        { "quantity": 1, "unit": "tbsp", "name": "sugar" },
         { "quantity": 0.5, "unit": "tsp", "name": "salt" }
       ]
     },
@@ -38,7 +38,7 @@
       "ingredients": [
         { "quantity": 250, "unit": "g", "name": "sugar" },
         { "quantity": 150, "unit": "ml", "name": "water" },
-        { "quantity": 3, "unit": "Tbsp", "name": "honey" },
+        { "quantity": 3, "unit": "tbsp", "name": "honey" },
         { "quantity": 1, "unit": "pinch", "name": "saffron threads", "note": "steeped in 2 Tbsp hot water" },
         { "quantity": 60, "unit": "g", "name": "butter", "note": "melted, for brushing" },
         { "quantity": 30, "unit": null, "name": "walnut halves", "note": "one for each diamond" },

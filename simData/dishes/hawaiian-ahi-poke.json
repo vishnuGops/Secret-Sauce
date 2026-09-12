@@ -16,13 +16,13 @@
       "name": "",
       "ingredients": [
         { "quantity": 500, "unit": "g", "name": "sashimi-grade tuna", "note": "cut into 2 cm cubes" },
-        { "quantity": 3, "unit": "Tbsp", "name": "soy sauce" },
-        { "quantity": 1, "unit": "Tbsp", "name": "sesame oil", "note": "toasted" },
+        { "quantity": 3, "unit": "tbsp", "name": "soy sauce" },
+        { "quantity": 1, "unit": "tbsp", "name": "sesame oil", "note": "toasted" },
         { "quantity": 0.5, "unit": null, "name": "sweet onion", "note": "sliced paper thin" },
         { "quantity": 3, "unit": null, "name": "scallions", "note": "cut on the diagonal" },
         { "quantity": 2, "unit": "tsp", "name": "sesame seeds", "note": "toasted" },
         { "quantity": 1, "unit": "pinch", "name": "Hawaiian sea salt" },
-        { "quantity": 2, "unit": "Tbsp", "name": "limu", "note": "chopped seaweed; rehydrated wakame stands in", "is_optional": true },
+        { "quantity": 2, "unit": "tbsp", "name": "limu", "note": "chopped seaweed; rehydrated wakame stands in", "is_optional": true },
         { "quantity": 1, "unit": "tsp", "name": "inamona", "note": "roasted crushed kukui nut; macadamia is the common substitute", "is_optional": true }
       ]
     }

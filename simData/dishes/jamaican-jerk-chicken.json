@@ -17,13 +17,13 @@
       "ingredients": [
         { "quantity": 4, "unit": null, "name": "scotch bonnet peppers", "note": "seeded for less heat" },
         { "quantity": 6, "unit": null, "name": "spring onions" },
-        { "quantity": 2, "unit": "Tbsp", "name": "allspice berries", "note": "freshly ground" },
-        { "quantity": 2, "unit": "Tbsp", "name": "thyme", "note": "leaves picked" },
+        { "quantity": 2, "unit": "tbsp", "name": "allspice berries", "note": "freshly ground" },
+        { "quantity": 2, "unit": "tbsp", "name": "thyme", "note": "leaves picked" },
         { "quantity": 4, "unit": "cloves", "name": "garlic" },
         { "quantity": 3, "unit": "cm", "name": "ginger" },
-        { "quantity": 3, "unit": "Tbsp", "name": "soy sauce" },
-        { "quantity": 2, "unit": "Tbsp", "name": "brown sugar" },
-        { "quantity": 2, "unit": "Tbsp", "name": "lime juice" },
+        { "quantity": 3, "unit": "tbsp", "name": "soy sauce" },
+        { "quantity": 2, "unit": "tbsp", "name": "brown sugar" },
+        { "quantity": 2, "unit": "tbsp", "name": "lime juice" },
         { "quantity": 1, "unit": "tsp", "name": "nutmeg", "note": "grated" },
         { "quantity": 1, "unit": "tsp", "name": "cinnamon", "note": "ground" }
       ]

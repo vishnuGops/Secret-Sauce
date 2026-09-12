@@ -7,8 +7,9 @@ files, and acceptance criteria. Kept in sync with the code.
 > **Shipped phases are archived.** Execution detail for completed Phases 0–23, 26–31 and
 > Phase OPT lives in [archive/EXECUTION-PLAN-phases-0-31.md](./archive/EXECUTION-PLAN-phases-0-31.md).
 > This file carries only work that is open: Phase 24 (in progress), Phase 25 (designed, not
-> started), Phase 32 (audit remediation), Phase 33 (SQL shipped, client open), and the ops
-> reference.
+> started — its schema is absorbed by Phase 35b), Phase 32 (audit remediation), Phase 33 (SQL
+> shipped, client open), Phase 35 (the corpus becomes product — 35a's legal pages and
+> 35b's identity decoupling are built, 35c designed), and the ops reference.
 
 ---
 
@@ -434,6 +435,336 @@ real empty state (a stale `sim.epoch_end()` anchor correctly returns an empty we
 render as a spinner). Two smaller pieces shipped alongside the SQL because they were carried-over
 items on the same surfaces: the per-step image picker (Ph 9 / B035) and a tappable `ChefBadge` on
 the recipe-card cover (Ph 30).
+
+## Phase 35 — The corpus becomes product (designed, nothing built)
+
+Roadmap: [ROADMAP.md Phase 35](./ROADMAP.md#phase-35--the-corpus-becomes-product-35a--35b-built-35c-designed) ·
+Depends on [Phase 34](./ROADMAP.md#phase-34--the-scraped-recipe-corpus-at-scale-in-progress) (the corpus) ·
+Absorbs [Phase 25](#phase-25--restaurants--signature-dishes) (its `restaurants` table becomes `entities`)
+
+Phase 34 harvested **558,604 recipes** from **560 publishers** with **19,681 named chefs** and the
+credit attached. Three things stand between that directory and a product, and they are **ordered** —
+each one's answer is the next one's input:
+
+- **35a — Rights, privacy and terms.** What may be shown, under what promise, on which page.
+- **35b — Identity.** A chef is a `profiles` row, and 19,681 of them cannot be 19,681 `auth.users`.
+- **35c — Ingestion.** The import itself, with every engagement counter at zero.
+
+Building 35c first is the failure mode to avoid: the import writes provenance and rights columns
+that 35a decides, and owner rows that 35b decides, so an import built first is an import rewritten
+twice.
+
+**Decided by the owner, 2026-09-12** — three questions that change what gets built, so they are
+recorded here rather than left to the band that trips over them:
+
+| Question | Decision |
+| --- | --- |
+| Import scope, against a 500 MB free-tier database | **A curated tier, hosted.** English-first, cover image present, high field coverage — order 20-50k recipes. The importer is tiered, so later tiers are additive. The full 558k stays local until storage is paid for |
+| Where imported content appears | **Its own browse surface, unranked.** `is_imported` is filtered out of every ranked Discover shelf; the corpus is reachable through its own surface, through search, and through chef/entity pages, ordered by `quality_score`. The Kitchen's 14 recipes and the sim population keep the front door |
+| Build order | **35b, then 35c, with 35a in parallel.** Identity decoupling is the hard dependency for ingestion; the legal pages touch nothing either band needs |
+
+The English-first tier also settles 35c's search question by construction: the curated tier is
+English, so `recipe_search_tsv` keeps its `'english'` config and the `language` column is not built.
+It becomes open again the first time a non-English tier is imported — which is a re-index of every
+row, so it is a tier decision, never an afterthought.
+
+---
+
+### 35a — Rights, privacy and terms
+
+**Status: BUILT 2026-09-12**, minus four facts only the owner can supply. Everything below is what
+the three pages now say. `LegalFacts` holds the entity, the governing law, the contact address and
+the hosting region as bracketed placeholders, and every document carries a red *Draft — not in
+force* banner until all four are filled in — deliberately, because a document missing its operator
+and its jurisdiction still reads like a finished document, and that is exactly how one gets
+published. Nothing was invented to fill a gap: a Terms page naming the wrong company is not a
+placeholder, it is a false statement.
+
+**One thing the plan got wrong, found while wiring it.** The plan put the compact-width links on the
+profile screen. `/profile` is in `needsAuth`, so that left a signed-out phone reader with **no route
+to any of the three pages** — the web chrome carries its own bar and the compact bottom slot belongs
+to the `NavigationBar`. The fix is the auth screen, which is where a signed-out reader on a phone
+actually ends up, and it is the better place anyway: the sign-up form is the one moment in the
+product where somebody agrees to the terms, so it now says so there.
+
+> **Not legal advice.** This records an engineering position and the reasoning behind it. The legal
+> entity, the governing jurisdiction and the contact address are the owner's to supply, and counsel
+> should read the three documents before the app is public with corpus content in it.
+
+**The position, in one line: store and show functional content, link everything expressive, never
+re-host a photograph.**
+
+Each layer below is a separate risk and they do **not** resolve the same way — which is why a single
+"is scraping legal" answer is useless here:
+
+| Layer | What is at stake | Position |
+| --- | --- | --- |
+| Ingredient lists | Not copyrightable — a list of ingredients is fact/procedure (17 U.S.C. §102(b); _Publications Int'l v. Meredith_, 88 F.3d 473 (7th Cir. 1996)) | Store and display |
+| Step prose | Thin but real: functional directions attract little protection, their _expression_ attracts some | Store; display as harvested. Rewrite-on-ingest is the escalation if a publisher objects |
+| Headnotes / descriptions | Squarely copyrightable editorial writing | **Not imported.** The harvested `description` stays in `corpus/` and never reaches `recipes.description` |
+| Photographs | Squarely copyrightable, and the largest single exposure — 556,926 covers | **Never copied into our Storage.** Hotlink the publisher's own URL (the _server test_, _Perfect 10 v. Amazon_, 508 F.3d 1146 (9th Cir. 2007)), or show nothing |
+| The corpus as a database | EU _sui generis_ database right (Dir. 96/9/EC) protects substantial extraction even from facts — 16,191 rows out of one community site is substantial | Per-source caps, a per-source kill switch, and takedown. This is why `rights_mode` exists at all |
+| Site terms of use | A contract, independent of copyright — `robots.txt` compliance does not satisfy it | Accepted knowingly: honour robots, honour objections on request, never disguise the client |
+| Named people | 19,681 real bylines, a large share of them in the EU — personal data under GDPR Art. 4 | Name, credit and link only. No invented bio, no invented avatar, and **no ranking** (35c) |
+
+**Images, in detail.** Hotlinking is not reproduction, but it spends a publisher's bandwidth and
+breaks the moment they send a referrer block. So: a per-source `image_mode` (`hotlink` | `none`),
+default `hotlink`, a placeholder on load failure, and `none` as the standing answer to any
+objection. **We do not proxy** — a proxy is a copy on our infrastructure wearing a link's clothes.
+
+**Takedown.** A named contact on the Rights page, a five-business-day target, and a **tombstone**:
+`import_blocklist(source_slug, url, reason, at)`. A removal without a tombstone undoes itself on the
+next harvest.
+
+**Three pages, one screen.** `/legal/privacy`, `/legal/terms`, `/legal/rights`, all served by one
+`LegalScreen` reading structured Dart consts — a small `LegalBlock` list (heading / paragraph /
+bullet / link), **no `flutter_markdown` dependency**. Each document carries a `lastUpdated` const;
+text moving without that date moving is the review failure to watch for. Signed-out safe, root
+navigator, absent from `needsAuth` and from both destination lists (Gotcha 18).
+
+**Where the footer goes — and why it is not a footer everywhere.** Discover, Chefs and My Recipes
+page forever, and a footer at the end of an infinite scroll is a footer nobody reaches.
+
+- **Web** (`!context.isCompact`): a slim persistent legal bar in `AppShell`'s `bottomNavigationBar`
+  slot — a copyright line plus Privacy / Terms / Rights. It is a `Wrap`; at 2.0x text scale it drops
+  the copyright line and keeps the three links. This is a fixed-height page region, so it is checked
+  at 600px x 2.0x like the nav pill and the card (Gotchas 13/18/22).
+- **Compact**: that slot is the `NavigationBar`. The same three links go at the end of the
+  **Profile** screen (finite scroll) and into recipe detail's attribution block.
+- Every legal page links to its two siblings.
+
+**Privacy has to describe _this_ app**, not a template. What we hold: Supabase Auth email + password
+hash; `profiles.display_name / avatar_url / bio`; recipe content; `recipe_likes` / `recipe_saves` /
+`recipe_ratings`; and `recipe_views` — a **behavioural log keyed to a user id**, the row most people
+would not guess we keep. Processor: Supabase (AWS region to be named). Session token in browser
+`localStorage`. Deletion: an `auth.users` delete cascades to `profiles` and every recipe, but
+`recipe_views.user_id` is `on delete set null`, so a deleted account **leaves anonymised view rows
+behind and the counter never falls** (Gotcha 10). Say that, because it is true.
+
+**Terms has to cover the two things this product does that a template does not:**
+
+- **Forking.** Publishing a recipe publicly grants every other user the right to fork it — a deep
+  copy that keeps lineage to the original. It is the core mechanic and it is currently promised
+  nowhere.
+- **Nutrition and food safety.** `estimate_nutrition` is an estimate over a 78-food registry, sim
+  labels are invented arithmetic (BL-5), imported labels are the publisher's. No allergen guarantee,
+  no dietary claim. This is the one paragraph with bodily-harm exposure behind it.
+
+**Seed-data fit:** none needed. The three documents are static Dart content and the footer renders
+on every screen with no fixture. The rights columns the importer writes are covered in 35c.
+
+**Owner decisions owed before this ships:** legal entity name, governing law / jurisdiction, contact
+address for privacy and takedown, Supabase region, and — the big one — **whether corpus content
+appears in the public app at all**, or only behind a flag until a licence position exists.
+
+---
+
+### 35b — Identity: `profiles` decoupled from `auth.users`, entities beside them
+
+**Status: the SQL and the client identity path are BUILT and verified (2026-09-12).** What is
+described below is what exists, not a proposal. Two items remain and are listed at the end of this
+section: the sim fixtures, and the `Entity` model plus the pages that read it.
+
+**The problem.** `profiles.id` is a foreign key to `auth.users(id)` and every RLS policy reads
+`= auth.uid()` against it. 19,681 scraped chefs cannot be 19,681 accounts — an account carries an
+email, a password reset and a login surface, none of which these people asked for.
+
+**The shape: one identity table, one nullable link.**
+
+```
+profiles
+  id            uuid primary key                    -- NO LONGER an FK to auth.users
+  auth_user_id  uuid unique null -> auth.users(id) on delete set null
+  kind          profile_kind not null default 'member'   -- member | imported
+  claimed_at    timestamptz null
+  merged_into   uuid null -> profiles(id)
+```
+
+**The migration is a no-op for every row that exists today** — which is the reason to pick this over
+an attribution side-table. Backfill `auth_user_id = id` for everyone; keep `handle_new_user` writing
+`id = new.id` for real signups, so for members `id` and the auth uid stay equal forever. Imported
+profiles take a random uuid and a null `auth_user_id`.
+
+Every policy predicate changes shape once:
+
+```sql
+create or replace function current_profile_id() returns uuid
+  language sql stable security definer set search_path = public as $$
+  select id from profiles where auth_user_id = auth.uid()
+$$;
+```
+
+`owner_id = auth.uid()` becomes `owner_id = current_profile_id()`. `security definer` because a user
+must resolve their own profile _before_ `profiles_select` is evaluated; `stable` so Postgres calls it
+once per statement. **This touched every policy in `0001_init.sql` and therefore all 137 checks in
+`rls_matrix.sql`** — the standing BL-7 rule doing its job, and what makes this change provable
+instead of hoped for. An unclaimed profile has no `auth_user_id`, so `current_profile_id()` never
+returns it and its recipes are immutable by construction: no extra policy required.
+
+**Entities — Phase 25's table, generalised.** The 560 publishers are not people, so they are not
+profiles:
+
+```
+entities                (id, slug unique, name, kind entity_kind, homepage, country,
+                         description, cover_image_url, created_by -> profiles null, ...)
+entity_members          (entity_id, profile_id, role, title)
+entity_signature_dishes (entity_id, recipe_id, sort_order)
+```
+
+`entity_kind` = `restaurant | brand | publication | community | chef_site`. **Phase 25's
+`restaurants` becomes `entities where kind = 'restaurant'`**, and its `restaurant_members` /
+`restaurant_signature_dishes` become the two tables above. Phase 25's ROADMAP checklist is rewritten
+against these names rather than duplicated — the attribution entity and the restaurant entity are
+the same table, and building both means writing the directory page twice.
+
+**Claiming.** A chef taking their page transfers ownership of thousands of rows, so it is never a
+self-service RLS write:
+
+```
+profile_claims (id, profile_id, claimant_auth_user_id, evidence_url,
+                status claim_status, created_at, decided_at, decided_by, note)
+```
+
+RLS: a signed-in user may insert a claim against an `imported` profile and read their own claims;
+nobody may update. Approval is a `security definer` RPC with `execute` revoked from
+`anon`/`authenticated` (Gotcha 3) — run by hand at first, by an admin role later.
+
+**The merge is the hard part, and it is why claiming is a design item and not a column.** The
+claimant already has a profile (id = their uid). Approving means, in one transaction:
+
+1. move `recipes.owner_id`, `recipe_likes`, `recipe_saves`, `recipe_ratings`, `recipe_shares` and
+   `recipe_views` from the old profile to the claimed one, each `on conflict do nothing` — a user
+   cannot like one recipe twice, and the merge is exactly where that collides;
+2. `update profiles set auth_user_id = null, merged_into = <claimed> where id = <old>`;
+3. set `auth_user_id`, `kind = 'member'`, `claimed_at` on the claimed row;
+4. `recompute_chef_stats()` on the target.
+
+`unique(auth_user_id)` is what makes a half-done merge impossible. A merged profile is a
+**tombstone, not a delete** — its id is in URLs someone has already shared.
+
+**An imported chef's identity is scoped to the publisher, never global.** `corpus/chefs.json` keys on
+a normalised name and its own README flags that as deliberately imperfect ("two people called Sarah
+on two blogs collapse into one row"). Collapsing two strangers into one identity is a far worse error
+than splitting one person into two rows, so the import key is `(source_slug, normalised_name)`, and
+merging across publishers is a later evidenced act rather than a side effect of a string match.
+
+**What was verified, and how.** The claim that this migration is behaviour-preserving is not an
+argument — it is 137 checks. `rls_matrix.sql` sections A-F were every one of them written against
+`= auth.uid()`, and every one of them passes unchanged against `= current_profile_id()`. Run on
+2026-09-12 against the local stack:
+
+| Path | Result |
+| --- | --- |
+| Upgrade (0001 applied over a Phase-33 database) | clean; `profiles_id_fkey` gone, 15 of 15 profiles linked |
+| Re-apply (idempotency) | clean, no errors |
+| Fresh (throwaway database, real `auth` + `storage` schemas restored into it) | clean; all four new tables, no stale FK |
+| `rls_matrix.sql` on both | **165 passed, 0 failed** (137 pre-existing + 28 new in §G) |
+| `db:sim` at `small` + `3_sim_verify` | 250 actors, 432 recipes, ALL CHECKS PASSED, 0 unlinked profiles |
+| `db:sim:rls` (signs in as real sim actors) | **130 passed, 0 failed, 7 personas seated** |
+| `melos run analyze` / `test --no-select` | SUCCESS / 152 core + 129 design_system + 300 app |
+
+Two things went wrong on the way and are worth keeping, because both are the same mistake:
+
+- **A blanket `user_id = auth.uid()` → `current_profile_id()` sweep also rewrote
+  `auth_user_id = auth.uid()`**, which is a substring of it — including inside
+  `current_profile_id()`'s own body, making the function call itself. It surfaced as `stack depth
+  limit exceeded` from every query in the matrix, not as anything resembling the edit that caused
+  it. The same substring caught `profiles_insert` one line later. A mechanical identifier rewrite
+  needs a word boundary or an eyeball on every hit; "13 replacements" was the count of a correct
+  sweep plus two silent corruptions.
+- **The PostgREST return shape was checked rather than assumed.** A scalar `security definer` RPC
+  returns a bare JSON string (`"7a8795..."`), not a one-element array, so `as String?` is right —
+  confirmed with a minted local JWT against the running stack. `packages/core/test` uses a canned
+  reply and would have agreed with a wrong guess.
+
+**Seed-data fit — the one piece NOT built.** The sim must generate **both** kinds:
+`2_sim_generate.sql` needs a small population of `imported` profiles with no auth row, plus a
+couple of entities with members, so the claim flow, the unclaimed chef page and the entity
+directory have something to render long before 558k rows exist. It is not a drop-in, which is why
+it is listed rather than half-done: the sim's safety mechanism is the **registry**
+(`9_sim_teardown.sql` deletes by `sim.actor` / `sim.recipe`, never by a pattern), and an imported
+profile has no `auth.users` row to delete it by — so it needs `sim.imported_profile` and
+`sim.entity` registries and their own teardown branch before a single row is generated.
+
+Until it lands, the coverage that exists is `rls_matrix.sql` §G, which builds its own imported
+profile, entity and claim inside the transaction and rolls them back — including the merge, end to
+end (G24-G28). That proves the policies and the function; it does not give a screen anything to
+render, which is what the sim work is for.
+
+---
+
+### 35c — Ingestion: the corpus into Postgres, every counter at zero
+
+**Owner's instruction: empty stats.** Imported recipes and chefs land with `like_count`,
+`save_count`, `view_count` and `rating_*` at zero, and `chef_score` / `chef_tier` / the three totals
+untouched. The scraped `aggregateRating` (403,529 recipes carry one) is **not** imported into
+`rating_avg`: those are our users' ratings, the trigger recomputes them from `recipe_ratings`, and an
+imported value would be silently wiped by the first real rating.
+
+**The leaderboard has to be told, or "empty stats" is not what happens.** `chefs_leaderboard` filters
+`public_recipe_count > 0` and orders `chef_score desc, public_recipe_count desc` — so 19,681 imported
+chefs would all tie at score 0 and then sort by recipe count _inside that tie_, putting a
+14,154-recipe publication bot above every other zero-score chef and burying the real board under the
+corpus. Both leaderboard RPCs and the `recompute_all_chef_stats` backfill gain `where kind =
+'member'`. An imported chef has a page and is browsable; they are **not ranked**. That is also the
+right answer to 35a's personal-data position: we do not rank a real person by engagement they never
+sought.
+
+**Discover has to be told too.** Every shelf RPC ends `created_at desc, id`, and `created_at` on an
+imported row is _import_ time — so 558k rows would bury the 14 kitchen recipes and the entire sim
+population on day one. Two new columns on `recipes`:
+
+- `is_imported boolean not null default false`, with a partial index; every ranked shelf filters it
+  out. Imported content is browsable and searchable, not ranked.
+- `quality_score smallint` — computed **once at import** from field coverage (cover image, servings,
+  prep/cook time, ingredient count in a sane band, step count, named chef). It is not engagement; it
+  exists because 558k rows with identical zero counters have **no total order**, and `offset` over a
+  tie is Gotcha 24's bug at scale. Corpus browsing orders `quality_score desc, id`.
+
+**Provenance columns**, which are also 35a's enforcement surface: `source_url`, `source_name`,
+`source_entity_id -> entities`, `imported_at`, `rights_mode` (`functional | link_only | blocked`),
+`image_mode` (`hotlink | none`). Each is client-unwritable and therefore needs its line in the
+**column-level grant block** and in `kRecipeSelect` (B050 / OPT-P1 — the obligation runs both ways).
+`description` is **not** imported (35a). `nutrition` is **not** imported in v1: the scraped block is
+strings (`"345 kcal"`), `estimate_nutrition` cannot read non-English ingredient names, and null is
+the honest label.
+
+**The importer** is `tool/corpus_import.dart`, beside the other `tool/*.dart` — **not** a generated
+`.sql` file. 558k recipes cannot become a committed seed script, and Gotcha 28's boundary stays
+physical: the importer reads `corpus/` and writes to a database, and nothing lands in `recipeData/`.
+Properties it needs:
+
+- **Idempotent and resumable** on `unique(source_entity_id, source_url)`; re-running a finished shard
+  inserts nothing.
+- **Triggers disabled for the load**, exactly as the sim does it. Live, every insert fires the
+  `search_tsv` trigger, the version trigger and a stats recompute. Re-enable and run one
+  `refresh_search_tsv` pass at the end.
+- **No `recipe_versions` row per import.** `save_recipe` appends a snapshot holding the whole recipe
+  as jsonb; 558k of those is a gigabyte of history nobody edited. An imported recipe starts with no
+  version row until its first edit.
+- **Tiered.** `--tier` selects a subset by source, language and quality, because the whole corpus
+  does not fit: ~6.15M ingredient rows and ~3.79M step rows put the loaded size around **3-4 GB**
+  before indexes, against a **500 MB free-tier database**. The first public cut is a curated tier
+  (order 20-50k recipes); the full corpus stays local until storage is paid for. This is an owner
+  decision with a bill attached, and the one number in this phase that cannot be engineered away.
+
+**Search is English-only and the corpus is not.** `recipe_search_tsv` hard-codes
+`to_tsvector('english', ...)`. Korean, Japanese, French, German, Italian and Dutch rows — a large
+share of the biggest sources — index as near-noise. Either the imported tier is English-first
+(simplest, and it aligns with the curated-tier decision above) or `recipes` gains a `language` column
+and the tsvector function takes a `regconfig`. **Decide before importing**: changing the config means
+re-indexing every row.
+
+**Deferred, explicitly.** Keyset pagination and BL-2's per-row `recompute_chef_stats` are _not_
+triggered by this phase — imported rows carry no engagement, so the recompute never fires for them,
+and ranked surfaces exclude them. Both come back the day corpus rows start collecting real
+engagement, which is the stats conversation the owner has deferred to a later session.
+
+**Seed-data fit:** 35b's sim additions, plus a **small committed fixture shard** under
+`corpus/_fixtures/` (the real shards are git-ignored and `index.jsonl` alone is 273 MB) so the
+importer, the provenance columns and the attribution UI have something to run against in CI.
+
+---
 
 ## Build, run & release (ops)
 

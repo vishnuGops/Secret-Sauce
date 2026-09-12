@@ -19,8 +19,8 @@
         { "quantity": 1, "unit": null, "name": "onion", "note": "sliced thin" },
         { "quantity": 4, "unit": null, "name": "eggs", "note": "beaten loosely, streaks left in" },
         { "quantity": 150, "unit": "ml", "name": "dashi" },
-        { "quantity": 2, "unit": "Tbsp", "name": "soy sauce" },
-        { "quantity": 2, "unit": "Tbsp", "name": "mirin" },
+        { "quantity": 2, "unit": "tbsp", "name": "soy sauce" },
+        { "quantity": 2, "unit": "tbsp", "name": "mirin" },
         { "quantity": 1, "unit": "tsp", "name": "sugar" },
         { "quantity": 2, "unit": "bowls", "name": "steamed rice", "note": "hot" },
         { "quantity": 2, "unit": null, "name": "spring onions", "note": "sliced, to finish" }

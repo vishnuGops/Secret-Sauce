@@ -1130,6 +1130,41 @@ void main() {
       expect(find.text('RECIPE PAGE'), findsOneWidget);
     });
 
+    // F001: `category` was written by `save_recipe` and sent by the repository,
+    // but the editor had no control for it — so `_save` built a Recipe with
+    // `category: null` and every edit silently deleted the value. The draft
+    // round-trip tests above could not catch it: the miss was on the top-level
+    // Recipe, not on the edit_models types they cover. All 14 authored recipes
+    // and all 108 corpus recipes carry a category, so this hit every save.
+    testWidgets('an edit preserves a category the editor loaded', (
+      tester,
+    ) async {
+      final repo = _RecordingRecipeRepository(
+        loaded: const Recipe(
+          id: 'r1',
+          ownerId: 'me',
+          title: 'Loaded Recipe',
+          servings: 4,
+          cuisine: 'Italian',
+          category: 'Main course',
+        ),
+      );
+      await tester.pumpWidget(_routedEditApp(repo));
+      await tester.pumpAndSettle();
+
+      // Change something unrelated, exactly as a user editing a typo would.
+      await tester.enterText(
+        find.widgetWithText(TextFormField, 'Loaded Recipe'),
+        'Loaded Recipe, revised',
+      );
+      await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+      await tester.pumpAndSettle();
+
+      expect(repo.updated, hasLength(1));
+      expect(repo.updated.single.$1.category, 'Main course');
+      expect(repo.updated.single.$1.cuisine, 'Italian');
+    });
+
     testWidgets('an edit goes through update, with a change summary', (
       tester,
     ) async {
@@ -1351,6 +1386,11 @@ Widget _editApp(
 class _FakeAuth implements AuthRepository {
   @override
   String? get currentUserId => 'me';
+
+  // Phase 35b: `profiles.id` and the auth uid are the same value for a member,
+  // which every fixture in this file is.
+  @override
+  Future<String?> currentProfileId() async => 'me';
 
   @override
   Stream<AuthState> authStateChanges() => const Stream.empty();

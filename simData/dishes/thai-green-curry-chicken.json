@@ -15,11 +15,11 @@
     {
       "name": "",
       "ingredients": [
-        { "quantity": 3, "unit": "Tbsp", "name": "green curry paste" },
+        { "quantity": 3, "unit": "tbsp", "name": "green curry paste" },
         { "quantity": 400, "unit": "ml", "name": "coconut milk", "note": "full fat; do not shake the tin" },
         { "quantity": 500, "unit": "g", "name": "chicken thighs", "note": "boneless, sliced" },
         { "quantity": 150, "unit": "g", "name": "Thai eggplant", "note": "quartered; or 1 regular eggplant, cubed" },
-        { "quantity": 2, "unit": "Tbsp", "name": "fish sauce" },
+        { "quantity": 2, "unit": "tbsp", "name": "fish sauce" },
         { "quantity": 1, "unit": "tsp", "name": "palm sugar" },
         { "quantity": 4, "unit": null, "name": "kaffir lime leaves", "note": "torn" },
         { "quantity": 1, "unit": "handful", "name": "Thai basil" },

@@ -30,7 +30,7 @@
       "name": "Dry",
       "ingredients": [
         { "quantity": 200, "unit": "g", "name": "all-purpose flour", "food": "all-purpose-flour" },
-        { "quantity": 2, "unit": "Tbsp", "name": "sugar", "food": "granulated-sugar" },
+        { "quantity": 2, "unit": "tbsp", "name": "sugar", "food": "granulated-sugar" },
         { "quantity": 1, "unit": "tsp", "name": "baking powder", "food": "baking-powder" },
         { "quantity": 0.5, "unit": "tsp", "name": "baking soda", "food": "baking-soda" },
         { "quantity": 0.5, "unit": "tsp", "name": "salt", "food": "kosher-salt" }

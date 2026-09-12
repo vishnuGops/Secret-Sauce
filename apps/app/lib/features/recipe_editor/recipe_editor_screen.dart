@@ -42,6 +42,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
   final _title = TextEditingController();
   final _description = TextEditingController();
   final _cuisine = TextEditingController();
+  final _category = TextEditingController();
   final _attribution = TextEditingController();
   final _prep = TextEditingController(text: '0');
   final _cook = TextEditingController(text: '0');
@@ -117,6 +118,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
     _title,
     _description,
     _cuisine,
+    _category,
     _attribution,
     _prep,
     _cook,
@@ -195,6 +197,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       _title.text = recipe.title;
       _description.text = recipe.description;
       _cuisine.text = recipe.cuisine ?? '';
+      _category.text = recipe.category ?? '';
       _attribution.text = recipe.attribution ?? '';
       _prep.text = recipe.prepMinutes.toString();
       _cook.text = recipe.cookMinutes.toString();
@@ -600,6 +603,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
         description: _description.text.trim(),
         coverImageUrl: coverUrl,
         cuisine: _cuisine.text.trim().isEmpty ? null : _cuisine.text.trim(),
+        category: _category.text.trim().isEmpty ? null : _category.text.trim(),
         attribution:
             _attribution.text.trim().isEmpty ? null : _attribution.text.trim(),
         difficulty: _difficulty,
@@ -834,6 +838,15 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(height: AppSpacing.md),
+                TextFormField(
+                  controller: _category,
+                  maxLength: 80,
+                  decoration: const InputDecoration(
+                    labelText: 'Category',
+                    counterText: '',
+                  ),
                 ),
                 const SizedBox(height: AppSpacing.md),
                 SwitchListTile(

@@ -16,13 +16,13 @@
       "name": "",
       "ingredients": [
         { "quantity": 1, "unit": "cup", "name": "flat-leaf parsley", "note": "packed, chopped fine by hand" },
-        { "quantity": 2, "unit": "Tbsp", "name": "dried oregano" },
+        { "quantity": 2, "unit": "tbsp", "name": "dried oregano" },
         { "quantity": 6, "unit": "cloves", "name": "garlic", "note": "minced" },
         { "quantity": 1, "unit": null, "name": "red chilli", "note": "minced; or 1 tsp chilli flakes" },
         { "quantity": 0.5, "unit": "cup", "name": "olive oil" },
-        { "quantity": 3, "unit": "Tbsp", "name": "red wine vinegar" },
+        { "quantity": 3, "unit": "tbsp", "name": "red wine vinegar" },
         { "quantity": 1, "unit": "tsp", "name": "salt" },
-        { "quantity": 2, "unit": "Tbsp", "name": "warm water" }
+        { "quantity": 2, "unit": "tbsp", "name": "warm water" }
       ]
     }
   ],

@@ -32,6 +32,7 @@ export 'src/repositories/auth_repository.dart';
 export 'src/repositories/recipe_repository.dart';
 export 'src/repositories/discover_repository.dart';
 export 'src/repositories/profile_repository.dart';
+export 'src/repositories/profile_id.dart';
 export 'src/repositories/chef_repository.dart';
 export 'src/repositories/food_repository.dart';
 

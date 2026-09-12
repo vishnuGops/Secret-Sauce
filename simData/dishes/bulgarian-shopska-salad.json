@@ -20,8 +20,8 @@
         { "quantity": 1, "unit": null, "name": "green pepper", "note": "seeded and diced" },
         { "quantity": 1, "unit": null, "name": "onion", "note": "sliced into thin half moons" },
         { "quantity": 200, "unit": "g", "name": "sirene", "note": "or a mild feta" },
-        { "quantity": 3, "unit": "Tbsp", "name": "sunflower oil" },
-        { "quantity": 1, "unit": "Tbsp", "name": "red wine vinegar" },
+        { "quantity": 3, "unit": "tbsp", "name": "sunflower oil" },
+        { "quantity": 1, "unit": "tbsp", "name": "red wine vinegar" },
         { "quantity": 1, "unit": "handful", "name": "parsley", "note": "chopped" },
         { "quantity": 1, "unit": "tsp", "name": "salt" }
       ]

@@ -18,8 +18,8 @@
         { "quantity": 1.6, "unit": "kg", "name": "chicken", "note": "jointed into eight pieces" },
         { "quantity": 750, "unit": "ml", "name": "red wine", "note": "a full bottle" },
         { "quantity": 150, "unit": "g", "name": "bacon lardons" },
-        { "quantity": 2, "unit": "Tbsp", "name": "all-purpose flour" },
-        { "quantity": 2, "unit": "Tbsp", "name": "tomato paste" },
+        { "quantity": 2, "unit": "tbsp", "name": "all-purpose flour" },
+        { "quantity": 2, "unit": "tbsp", "name": "tomato paste" },
         { "quantity": 3, "unit": "cloves", "name": "garlic", "note": "crushed" },
         { "quantity": 1, "unit": null, "name": "bouquet garni", "note": "thyme, bay, parsley stalks tied together" },
         { "quantity": 300, "unit": "ml", "name": "chicken stock" }

@@ -43,6 +43,27 @@ enum SuggestionStatus {
   rejected,
 }
 
+/// What kind of identity a `profiles` row is (Phase 35b).
+///
+/// `member` has an account behind it (`profiles.auth_user_id` is set) and is the
+/// only kind the leaderboard ranks. `imported` is a chef the corpus credits who
+/// has never signed up: world-readable, immutable by construction (nothing can
+/// resolve to it, because there is no account to resolve from), and claimable.
+///
+/// Decoded with `unknownEnumValue: ProfileKind.member` for the same reason
+/// [ChefTier] is: a client that predates a future kind should degrade rather
+/// than throw.
+enum ProfileKind {
+  @JsonValue('member')
+  member,
+  @JsonValue('imported')
+  imported;
+
+  /// True when nobody has claimed this page yet — what the chef page reads to
+  /// decide whether to offer "Is this you?".
+  bool get isImported => this == ProfileKind.imported;
+}
+
 /// A chef's standing, derived server-side from the engagement counters of the
 /// public recipes they own. Never written by the client — `chef_tier_for()` in
 /// `0001_init.sql` is the single source of truth for the thresholds.

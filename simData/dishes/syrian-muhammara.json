@@ -18,12 +18,12 @@
         { "quantity": 400, "unit": "g", "name": "roasted red peppers", "note": "from a jar, drained" },
         { "quantity": 150, "unit": "g", "name": "walnuts" },
         { "quantity": 40, "unit": "g", "name": "breadcrumbs", "note": "coarse and dry" },
-        { "quantity": 2, "unit": "Tbsp", "name": "pomegranate molasses" },
-        { "quantity": 4, "unit": "Tbsp", "name": "olive oil" },
+        { "quantity": 2, "unit": "tbsp", "name": "pomegranate molasses" },
+        { "quantity": 4, "unit": "tbsp", "name": "olive oil" },
         { "quantity": 2, "unit": "cloves", "name": "garlic" },
         { "quantity": 1, "unit": "tsp", "name": "cumin", "note": "ground" },
         { "quantity": 1, "unit": "tsp", "name": "Aleppo pepper", "note": "or more, to taste" },
-        { "quantity": 1, "unit": "Tbsp", "name": "lemon juice" },
+        { "quantity": 1, "unit": "tbsp", "name": "lemon juice" },
         { "quantity": 0.75, "unit": "tsp", "name": "salt" }
       ]
     }

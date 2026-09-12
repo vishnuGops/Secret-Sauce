@@ -110,6 +110,49 @@ scripts:
     run: dart run tool/recipes.dart check
 
   # ---------------------------------------------------------------------------
+  # Scraped recipe corpus (Phase 34). Plain node under recipeData/_tools/, data in
+  # corpus/. This never touches a database and never reaches seed SQL — see
+  # CLAUDE.md Gotcha 28. `corpus:harvest` fetches the public web, so it is the one
+  # script here that is not free to run.
+  # ---------------------------------------------------------------------------
+  corpus:discover:
+    description: Sitemap sweep for every registered source; cached, skips what it has.
+    run: node recipeData/_tools/harvest.mjs --discover --concurrency 10
+
+  corpus:harvest:
+    description: Fetch + extract pending recipes. Per-host delay, robots-aware, resumable.
+    run: node recipeData/_tools/harvest.mjs --concurrency 36 --limit 800 --discovered-only
+
+  corpus:status:
+    description: Per-source kept / done / discovered counts.
+    run: node recipeData/_tools/harvest.mjs --status
+
+  corpus:index:
+    description: Rebuild index.jsonl + chefs.json / groups.json / restaurants.json.
+    run: node recipeData/_tools/corpus_index.mjs
+
+  corpus:report:
+    description: Regenerate corpus/_reports/CORPUS.md from the shards.
+    run: node recipeData/_tools/report.mjs
+
+  corpus:stats:
+    description: Field coverage across the shards.
+    run: node recipeData/_tools/corpus_stats.mjs --fields
+
+  corpus:clean:
+    description: Collapse duplicates left by an interrupted harvest, then prune dead sources.
+    run: node recipeData/_tools/dedupe.mjs && node recipeData/_tools/prune.mjs
+
+  corpus:similar:
+    description: The same dish across different chefs — overlap the fork/version model needs.
+    run: node recipeData/_tools/similar.mjs
+
+  corpus:export:
+    description: Convert the corpus into the app's recipeData shape (staging only).
+    run: node recipeData/_tools/corpus_export.mjs
+
+
+  # ---------------------------------------------------------------------------
   # Simulation dish library. simData/dishes/*.json is an owner-agnostic LIBRARY —
   # nothing in it is a recipe until supabase/sim/2_sim_generate.sql draws from it,
   # assigns an owner and dates it. Same format and same validator as recipeData

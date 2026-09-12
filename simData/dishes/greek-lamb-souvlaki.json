@@ -16,9 +16,9 @@
       "name": "Lamb and marinade",
       "ingredients": [
         { "quantity": 800, "unit": "g", "name": "lamb shoulder", "note": "cut into 3cm cubes" },
-        { "quantity": 3, "unit": "Tbsp", "name": "olive oil" },
+        { "quantity": 3, "unit": "tbsp", "name": "olive oil" },
         { "quantity": 1, "unit": null, "name": "lemon", "note": "zest and juice" },
-        { "quantity": 1, "unit": "Tbsp", "name": "dried oregano" },
+        { "quantity": 1, "unit": "tbsp", "name": "dried oregano" },
         { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "crushed" },
         { "quantity": 1, "unit": "tsp", "name": "salt" }
       ]
@@ -29,8 +29,8 @@
         { "quantity": 300, "unit": "g", "name": "Greek yogurt", "note": "full fat" },
         { "quantity": 1, "unit": null, "name": "cucumber", "note": "coarsely grated" },
         { "quantity": 1, "unit": "clove", "name": "garlic", "note": "grated fine" },
-        { "quantity": 1, "unit": "Tbsp", "name": "red wine vinegar" },
-        { "quantity": 1, "unit": "Tbsp", "name": "dill", "note": "chopped" }
+        { "quantity": 1, "unit": "tbsp", "name": "red wine vinegar" },
+        { "quantity": 1, "unit": "tbsp", "name": "dill", "note": "chopped" }
       ]
     }
   ],

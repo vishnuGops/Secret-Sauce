@@ -132,6 +132,20 @@ declare
   v_trend_anon   uuid[];
   v_trend_owner  uuid[];
 
+  -- Phase 35b (§G). An imported profile has no `auth.users` row behind it at
+  -- all, which is the one shape sections A-F structurally cannot produce: every
+  -- fixture above starts from a signup.
+  v_imported     uuid;
+  v_imp_recipe   uuid;
+  v_merge_recipe uuid;
+  v_entity       uuid;
+  v_claim        uuid;
+  v_me           uuid;
+  v_merged       uuid;
+  v_claimed_link uuid;
+  v_err2         text;
+  s2             text;
+
   -- results
   v_log      text[] := '{}';
   v_pass     int := 0;
@@ -1361,6 +1375,304 @@ begin
            coalesce(array_length(v_trend_anon, 1), 0),
            coalesce(array_length(v_trend_owner, 1), 0),
            v_trend_anon is not distinct from v_trend_owner));
+
+  -- ==========================================================================
+  -- G1-G24: Phase 35b — identity decoupled from `auth.users`, entities, claims.
+  --
+  -- Sections A-F above are the proof that the decoupling is BEHAVIOUR-
+  -- PRESERVING: every one of them was written against `= auth.uid()` and every
+  -- one of them still passes against `= current_profile_id()`, because for a
+  -- member the two return the same uuid. That is the whole safety argument for
+  -- the migration, and it is worth stating that those 137 checks are the
+  -- evidence for it rather than a happy coincidence.
+  --
+  -- What follows is the part A-F cannot reach: a profile with NO account
+  -- behind it. Everything below is new surface, so the rule is the BL-7 one —
+  -- a policy with no check here is an unproven policy.
+  -- ==========================================================================
+  execute 'reset role';
+
+  -- An imported chef, exactly as the corpus importer will write one: a profile
+  -- row with no `auth_user_id`, and a public recipe credited to it.
+  insert into profiles (id, display_name, kind)
+  values (gen_random_uuid(), 'BL-7 imported chef', 'imported')
+  returning id into v_imported;
+
+  insert into recipes (owner_id, title, description, servings, visibility,
+                       prep_minutes, cook_minutes)
+  values (v_imported, 'BL-7 imported recipe', 'imported', 2, 'public', 5, 5)
+  returning id into v_imp_recipe;
+
+  -- G1: `current_profile_id()` is null without a session — the property every
+  -- `x = current_profile_id()` predicate depends on to be false for `anon`,
+  -- which is how `auth.uid()` behaved and therefore how A1-A7 keep passing.
+  execute 'set local role anon';
+  perform set_config('request.jwt.claims', '', true);
+  select current_profile_id() into v_me;
+  v_log := v_log || format(E'%s\tG1  anon · current_profile_id() is null\t%s',
+    v_me is null, coalesce(v_me::text, 'null'));
+
+  -- G2: and for a member it is exactly the id `auth.uid()` used to return.
+  -- This is the invariant `handle_new_user` maintains by writing `id = new.id`;
+  -- if it ever stops holding, the storage-bucket policies (still keyed on
+  -- `auth.uid()`) and every fixture in this file part company with the schema.
+  execute 'set local role authenticated';
+  perform set_config('request.jwt.claims', json_build_object('sub', v_owner)::text, true);
+  select current_profile_id() into v_me;
+  v_log := v_log || format(E'%s\tG2  owner · current_profile_id() = auth.uid() for a member\t%s',
+    v_me = v_owner, coalesce(v_me::text, 'null'));
+
+  -- G3: an imported chef's page is world-readable. It has to be — the credit is
+  -- the entire reason the row exists (Phase 35a), and a page nobody can load is
+  -- not attribution.
+  execute 'set local role anon';
+  perform set_config('request.jwt.claims', '', true);
+  select count(*) into n from profiles where id = v_imported;
+  v_log := v_log || format(E'%s\tG3  anon · an imported profile is readable\t%s row(s)', n = 1, n);
+
+  -- G4: and immutable. Not by a policy that names imported profiles, but
+  -- because `current_profile_id()` cannot return one — there is no account it
+  -- could resolve from. Asserted as ZERO ROWS, not as an error: an RLS-denied
+  -- UPDATE reports success (Gotcha 2), which is the failure mode this whole
+  -- file exists for.
+  execute 'set local role authenticated';
+  perform set_config('request.jwt.claims', json_build_object('sub', v_owner)::text, true);
+  select err, rows into v_err, n from rls_matrix_do(format(
+    'update profiles set display_name = ''hijacked'' where id = %L', v_imported));
+  v_log := v_log || format(E'%s\tG4  owner · update an imported profile touches 0 rows\t%s',
+    n = 0, coalesce(v_err, format('%s row(s)', n)));
+
+  -- G5: the exclusion that makes "empty stats" true in practice. The imported
+  -- chef above owns a public recipe, so `public_recipe_count > 0` alone would
+  -- seat it on the board — tied at score 0 with every other imported chef and
+  -- then ordered by recipe count, which at corpus scale means the board IS the
+  -- corpus. `kind = 'member'` is the only thing stopping that.
+  execute 'set local role anon';
+  perform set_config('request.jwt.claims', '', true);
+  select public_recipe_count into n from profiles where id = v_imported;
+  select count(*) into v_n from chefs_leaderboard(100000, 0) where id = v_imported;
+  v_log := v_log || format(E'%s\tG5  anon · an imported chef is NOT on the leaderboard\t%s',
+    v_n = 0 and n > 0,
+    format('%s public recipe(s), %s board row(s)', n, v_n));
+
+  -- G6: `chef_standing` has to agree with the board it is a row of, so an
+  -- imported chef gets zero rows there too — which the client already renders
+  -- as "not ranked yet" (Phase 30's empty case, reused unchanged).
+  select count(*) into n from chef_standing(v_imported);
+  v_log := v_log || format(E'%s\tG6  anon · chef_standing on an imported chef is empty\t%s row(s)',
+    n = 0, n);
+
+  -- G7: the windowed board is the same population, for the same reason.
+  select count(*) into n from chef_window_stats(30) w where w.id = v_imported;
+  v_log := v_log || format(E'%s\tG7  anon · chef_window_stats excludes imported chefs\t%s row(s)',
+    n = 0, n);
+
+  -- G8: their recipes are still browsable. The point of the exclusion is that
+  -- an imported chef is not RANKED, not that they are hidden — a corpus that
+  -- cannot be read is a corpus that was not worth importing.
+  select count(*) into n from recipes where id = v_imp_recipe;
+  v_log := v_log || format(E'%s\tG8  anon · an imported chef''s public recipe is readable\t%s row(s)',
+    n = 1, n);
+
+  -- ==========================================================================
+  -- G9-G14: claims
+  -- ==========================================================================
+  execute 'set local role authenticated';
+  perform set_config('request.jwt.claims', json_build_object('sub', v_owner)::text, true);
+
+  -- G9: a claim may only be filed against an IMPORTED profile. Without the
+  -- `kind` half of `claims_insert` a user could file against another member's
+  -- live profile — harmless while approval is manual, and a phishing surface
+  -- the moment it is not.
+  select err into v_err from rls_matrix_do(format(
+    'insert into profile_claims (profile_id, claimant_auth_user_id) values (%L, %L)',
+    v_other, v_owner));
+  v_log := v_log || format(E'%s\tG9  owner · claim another MEMBER''s profile must FAIL\t%s',
+    v_err = '42501', coalesce(v_err, 'no error'));
+
+  -- G10: and only on your own behalf.
+  select err into v_err from rls_matrix_do(format(
+    'insert into profile_claims (profile_id, claimant_auth_user_id) values (%L, %L)',
+    v_imported, v_other));
+  v_log := v_log || format(E'%s\tG10 owner · file a claim as somebody else must FAIL\t%s',
+    v_err = '42501', coalesce(v_err, 'no error'));
+
+  -- G11: the legitimate case.
+  select err into v_err from rls_matrix_do(format(
+    'insert into profile_claims (profile_id, claimant_auth_user_id, evidence_url)
+     values (%L, %L, ''https://example.test/proof'')', v_imported, v_owner));
+  select id into v_claim from profile_claims
+   where profile_id = v_imported and claimant_auth_user_id = v_owner;
+  v_log := v_log || format(E'%s\tG11 owner · file a claim on an imported profile\t%s',
+    v_err is null and v_claim is not null, coalesce(v_err, 'ok'));
+
+  -- G12: `status` is the reviewer's answer, so a claimant cannot pre-approve
+  -- their own. There is no update policy AND no update grant; the grant is what
+  -- answers first, which is why this is a 42501 and not a silent 0 rows.
+  select err, rows into v_err, n from rls_matrix_do(format(
+    'update profile_claims set status = ''approved'' where id = %L', v_claim));
+  v_log := v_log || format(E'%s\tG12 owner · approve your own claim must FAIL\t%s',
+    v_err = '42501', coalesce(v_err, format('%s row(s)', n)));
+
+  -- G13: claims are not public. "Who is trying to claim this chef" is not
+  -- something the directory should publish while it is still pending.
+  perform set_config('request.jwt.claims', json_build_object('sub', v_other)::text, true);
+  select count(*) into n from profile_claims where id = v_claim;
+  v_log := v_log || format(E'%s\tG13 stranger · cannot read somebody else''s claim\t%s row(s)',
+    n = 0, n);
+
+  -- G14: and the decision RPCs are not reachable from the API at all (Gotcha 3
+  -- — PostgREST exposes every function in `public`). This is the lock that
+  -- matters most in this section: the function transfers ownership of every
+  -- recipe on a profile.
+  perform set_config('request.jwt.claims', json_build_object('sub', v_owner)::text, true);
+  select err into v_err from rls_matrix_do(format(
+    'select approve_profile_claim(%L)', v_claim));
+  v_log := v_log || format(E'%s\tG14 owner · approve_profile_claim RPC must FAIL\t%s',
+    v_err = '42501', coalesce(v_err, 'no error'));
+  select err into v_err from rls_matrix_do(format(
+    'select reject_profile_claim(%L, null)', v_claim));
+  v_log := v_log || format(E'%s\tG15 owner · reject_profile_claim RPC must FAIL\t%s',
+    v_err = '42501', coalesce(v_err, 'no error'));
+
+  -- G16/G17: the two identity columns a client must never move. `kind` is
+  -- absent from the column grants entirely; `auth_user_id` is insert-only, so
+  -- an UPDATE of it fails at the privilege check before RLS is consulted. The
+  -- second is the one that would matter: an update grant there would let a
+  -- member re-point their profile at another account.
+  select err into v_err from rls_matrix_do(format(
+    'update profiles set kind = ''imported'' where id = %L', v_owner));
+  v_log := v_log || format(E'%s\tG16 owner · update own profiles.kind must FAIL\t%s',
+    v_err = '42501', coalesce(v_err, 'no error'));
+  select err into v_err from rls_matrix_do(format(
+    'update profiles set auth_user_id = %L where id = %L', v_other, v_owner));
+  v_log := v_log || format(E'%s\tG17 owner · update own profiles.auth_user_id must FAIL\t%s',
+    v_err = '42501', coalesce(v_err, 'no error'));
+
+  -- ==========================================================================
+  -- G18-G23: entities (Phase 25's table, generalised)
+  -- ==========================================================================
+
+  -- G18: provenance cannot be forged on creation.
+  select err into v_err from rls_matrix_do(format(
+    'insert into entities (slug, name, kind, created_by)
+     values (''bl7-forged'', ''Forged'', ''restaurant'', %L)', v_other));
+  v_log := v_log || format(E'%s\tG18 owner · create an entity attributed to someone else must FAIL\t%s',
+    v_err = '42501', coalesce(v_err, 'no error'));
+
+  -- G19: the legitimate create, plus the bootstrap seat. Without the
+  -- zero-members clause in `entity_members_insert` a newly created entity has
+  -- no owner and therefore can never gain one — the row would be permanently
+  -- unmanageable by anybody.
+  select err into v_err from rls_matrix_do(format(
+    'insert into entities (slug, name, kind, created_by)
+     values (''bl7-kitchen'', ''BL-7 Test Kitchen'', ''restaurant'', %L)', v_owner));
+  select id into v_entity from entities where slug = 'bl7-kitchen';
+  select err into v_err2 from rls_matrix_do(format(
+    'insert into entity_members (entity_id, profile_id, role) values (%L, %L, ''owner'')',
+    v_entity, v_owner));
+  v_log := v_log || format(E'%s\tG19 owner · create an entity and take the first owner seat\t%s',
+    v_err is null and v_err2 is null and v_entity is not null,
+    format('create %s, seat %s', coalesce(v_err, 'ok'), coalesce(v_err2, 'ok')));
+
+  -- G20: and the bootstrap does not stay open. A stranger cannot seat
+  -- themselves once the entity has a member.
+  perform set_config('request.jwt.claims', json_build_object('sub', v_other)::text, true);
+  select err into v_err from rls_matrix_do(format(
+    'insert into entity_members (entity_id, profile_id, role) values (%L, %L, ''owner'')',
+    v_entity, v_other));
+  v_log := v_log || format(E'%s\tG20 stranger · seat themselves on an owned entity must FAIL\t%s',
+    v_err = '42501', coalesce(v_err, 'no error'));
+
+  -- G21: a non-owner cannot edit the entity. Zero rows, not an error — the
+  -- Gotcha 2 shape again, and the column grants do not catch this one because
+  -- `name` is legitimately updatable by the right person.
+  select err, rows into v_err, n from rls_matrix_do(format(
+    'update entities set name = ''hijacked'' where id = %L', v_entity));
+  v_log := v_log || format(E'%s\tG21 stranger · update an entity touches 0 rows\t%s',
+    n = 0, coalesce(v_err, format('%s row(s)', n)));
+
+  -- G22: a PRIVATE recipe may never be a signature dish. The table is
+  -- world-readable, so listing one would publish its id and its existence —
+  -- the leak `entity_signature_write` says `visibility = 'public'` explicitly
+  -- to avoid, rather than leaning on `can_read_recipe` (true for the owner).
+  perform set_config('request.jwt.claims', json_build_object('sub', v_owner)::text, true);
+  select err into v_err from rls_matrix_do(format(
+    'insert into entity_signature_dishes (entity_id, recipe_id) values (%L, %L)',
+    v_entity, v_private));
+  v_log := v_log || format(E'%s\tG22 owner · list a PRIVATE recipe as a signature dish must FAIL\t%s',
+    v_err = '42501', coalesce(v_err, 'no error'));
+
+  -- G23: the public one is fine, and the whole directory reads back signed-out.
+  select err into v_err from rls_matrix_do(format(
+    'insert into entity_signature_dishes (entity_id, recipe_id) values (%L, %L)',
+    v_entity, v_public));
+  execute 'set local role anon';
+  perform set_config('request.jwt.claims', '', true);
+  select count(*) into n from entities where id = v_entity;
+  select count(*) into v_n from entity_members where entity_id = v_entity;
+  select count(*) into v_raw from entity_signature_dishes where entity_id = v_entity;
+  v_log := v_log || format(E'%s\tG23 anon · entity, roster and signature dishes are public\t%s',
+    v_err is null and n = 1 and v_n = 1 and v_raw = 1,
+    format('%s entity, %s member(s), %s dish(es), write %s',
+           n, v_n, v_raw, coalesce(v_err, 'ok')));
+
+  -- ==========================================================================
+  -- G24: the merge. The riskiest code in Phase 35b and the only thing here that
+  -- moves rows between principals, so it is exercised end to end rather than
+  -- argued about: a claimant with their own recipe and their own like takes
+  -- over an imported profile that already has one, and afterwards EVERYTHING
+  -- must sit on the claimed profile with the old one left as a tombstone.
+  --
+  -- Run as `postgres`, which is the only caller the revokes above permit.
+  -- ==========================================================================
+  execute 'reset role';
+
+  -- The claimant's own content, so the merge has something to move.
+  insert into recipes (owner_id, title, description, servings, visibility,
+                       prep_minutes, cook_minutes)
+  values (v_owner, 'BL-7 merge fixture', 'moves', 2, 'public', 5, 5)
+  returning id into v_merge_recipe;
+
+  select count(*) into v_raw from recipes where owner_id = v_owner;
+
+  perform approve_profile_claim(v_claim);
+
+  select count(*) into n      from recipes where owner_id = v_imported;
+  select count(*) into v_n    from recipes where owner_id = v_owner;
+  select auth_user_id, merged_into into v_me, v_merged from profiles where id = v_owner;
+  select auth_user_id into v_claimed_link from profiles where id = v_imported;
+  select kind::text into s2 from profiles where id = v_imported;
+
+  v_log := v_log || format(E'%s\tG24 merge · every recipe moves to the claimed profile\t%s',
+    n = v_raw + 1 and v_n = 0,
+    format('%s on claimed (was %s + 1 imported), %s left behind', n, v_raw, v_n));
+
+  v_log := v_log || format(E'%s\tG25 merge · the old profile is a tombstone, not a delete\t%s',
+    v_me is null and v_merged = v_imported,
+    format('link %s, merged_into %s',
+           coalesce(v_me::text, 'null'), coalesce(v_merged::text, 'null')));
+
+  v_log := v_log || format(E'%s\tG26 merge · the claimed profile becomes a member with the link\t%s',
+    v_claimed_link = v_owner and s2 = 'member',
+    format('link %s, kind %s', coalesce(v_claimed_link::text, 'null'), s2));
+
+  -- And the identity primitive follows the link, which is the point of the
+  -- whole exercise: the claimant signs in with the same account and is now the
+  -- imported chef.
+  execute 'set local role authenticated';
+  perform set_config('request.jwt.claims', json_build_object('sub', v_owner)::text, true);
+  select current_profile_id() into v_me;
+  v_log := v_log || format(E'%s\tG27 merge · current_profile_id() now resolves to the claimed profile\t%s',
+    v_me = v_imported, coalesce(v_me::text, 'null'));
+
+  -- The claim itself is closed, and `unique(auth_user_id)` held throughout —
+  -- exactly one profile points at this account.
+  execute 'reset role';
+  select count(*) into n from profiles where auth_user_id = v_owner;
+  select status::text into s2 from profile_claims where id = v_claim;
+  v_log := v_log || format(E'%s\tG28 merge · one profile holds the link, claim is approved\t%s',
+    n = 1 and s2 = 'approved', format('%s profile(s), status %s', n, s2));
 
   -- ==========================================================================
   -- Report

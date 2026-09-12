@@ -17,3 +17,4 @@ export 'src/widgets/tier_ladder.dart';
 export 'src/widgets/score_contribution_bar.dart';
 export 'src/widgets/nutrition_facts_label.dart';
 export 'src/widgets/not_yet_tooltip.dart';
+export 'src/widgets/site_footer.dart';

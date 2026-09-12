@@ -17,10 +17,10 @@
       "ingredients": [
         { "quantity": 1.2, "unit": "kg", "name": "beef shin", "note": "cut into 4 cm cubes" },
         { "quantity": 3, "unit": null, "name": "onions", "note": "sliced thin" },
-        { "quantity": 3, "unit": "Tbsp", "name": "lard", "note": "or a neutral oil" },
-        { "quantity": 4, "unit": "Tbsp", "name": "sweet paprika" },
+        { "quantity": 3, "unit": "tbsp", "name": "lard", "note": "or a neutral oil" },
+        { "quantity": 4, "unit": "tbsp", "name": "sweet paprika" },
         { "quantity": 1, "unit": "tsp", "name": "hot paprika" },
-        { "quantity": 1, "unit": "Tbsp", "name": "caraway seeds", "note": "lightly crushed" },
+        { "quantity": 1, "unit": "tbsp", "name": "caraway seeds", "note": "lightly crushed" },
         { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "crushed" },
         { "quantity": 1, "unit": "L", "name": "beef stock" },
         { "quantity": 2, "unit": null, "name": "green peppers", "note": "seeded, cut into strips" },

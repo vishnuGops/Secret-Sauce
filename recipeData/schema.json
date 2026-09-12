@@ -170,7 +170,7 @@
         },
         "unit": {
           "type": ["string", "null"],
-          "description": "ingredients.unit. Null for countable items ('2 eggs'). Keep spelling consistent across files: cup, tsp, Tbsp, oz, lb, g, ml, cloves, pinch, bunch, pkg, pint."
+          "description": "ingredients.unit. Null for countable items ('2 eggs'). The app prints this VERBATIM beside the quantity (formatting.dart: '$amount $unit'), so the spelling is user-visible and nothing pluralises it at render time. Two rules follow. ABBREVIATION units are lowercase and invariant at every quantity: g, kg, ml, L, tsp, tbsp, oz, lb - never Tbsp, tablespoon(s), teaspoon(s), tbsps, grams, ounces, pound(s), lbs, litres. L for litres is the one deliberate departure from nutritionData/units.json's `l` key, because a lowercase l reads as a 1; matching is case-insensitive so it resolves identically. WORD units keep the plural a cook would actually read, because nothing adds it later: cup/cups, clove/cloves, slice/slices, stick/sticks, stalk/stalks, bunch/bunches, pinch, handful, pkg, pouch, pint. Any spelling not listed in nutritionData/units.json contributes NOTHING to an auto nutrition estimate - silently - so a new unit belongs in that file first."
         },
         "name": {
           "type": "string",

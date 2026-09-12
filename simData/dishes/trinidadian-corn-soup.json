@@ -18,7 +18,7 @@
         { "quantity": 300, "unit": "g", "name": "yellow split peas", "note": "picked over and rinsed" },
         { "quantity": 2, "unit": "L", "name": "water" },
         { "quantity": 4, "unit": null, "name": "corn on the cob", "note": "cut into thick rounds" },
-        { "quantity": 2, "unit": "Tbsp", "name": "coconut oil" },
+        { "quantity": 2, "unit": "tbsp", "name": "coconut oil" },
         { "quantity": 1, "unit": null, "name": "onion", "note": "diced" },
         { "quantity": 4, "unit": "cloves", "name": "garlic" },
         { "quantity": 2, "unit": null, "name": "carrots", "note": "in coins" },

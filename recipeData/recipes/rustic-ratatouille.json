@@ -28,7 +28,7 @@
     {
       "name": "",
       "ingredients": [
-        { "quantity": 2, "unit": "Tbsp", "name": "olive oil", "note": "divided", "food": "olive-oil" },
+        { "quantity": 2, "unit": "tbsp", "name": "olive oil", "note": "divided", "food": "olive-oil" },
         { "quantity": 1, "unit": null, "name": "eggplant", "food": "eggplant" },
         { "quantity": 2, "unit": null, "name": "zucchini", "note": "small", "food": "zucchini" },
         { "quantity": 1, "unit": null, "name": "red bell pepper", "food": "red-bell-pepper" },

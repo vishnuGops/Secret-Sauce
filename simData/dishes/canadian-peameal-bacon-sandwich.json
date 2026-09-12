@@ -20,7 +20,7 @@
         { "quantity": 80, "unit": "g", "name": "fine salt" },
         { "quantity": 40, "unit": "g", "name": "sugar" },
         { "quantity": 2, "unit": null, "name": "bay leaves" },
-        { "quantity": 1, "unit": "Tbsp", "name": "black peppercorns", "note": "cracked" },
+        { "quantity": 1, "unit": "tbsp", "name": "black peppercorns", "note": "cracked" },
         { "quantity": 1, "unit": "tsp", "name": "curing salt", "note": "pink salt no. 1, for colour only", "is_optional": true }
       ]
     },
@@ -28,10 +28,10 @@
       "name": "The sandwich",
       "ingredients": [
         { "quantity": 150, "unit": "g", "name": "cornmeal", "note": "medium grind" },
-        { "quantity": 2, "unit": "Tbsp", "name": "butter" },
+        { "quantity": 2, "unit": "tbsp", "name": "butter" },
         { "quantity": 6, "unit": null, "name": "kaiser rolls" },
-        { "quantity": 3, "unit": "Tbsp", "name": "grainy mustard" },
-        { "quantity": 2, "unit": "Tbsp", "name": "maple syrup", "is_optional": true }
+        { "quantity": 3, "unit": "tbsp", "name": "grainy mustard" },
+        { "quantity": 2, "unit": "tbsp", "name": "maple syrup", "is_optional": true }
       ]
     }
   ],

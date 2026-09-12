@@ -60,17 +60,78 @@ flowchart TD
 - `share_permission`: `view` (reserved: `edit`)
 - `suggestion_status`: `open` \| `accepted` \| `rejected` (reserved for future PR flow)
 - `chef_tier`: `home_cook` \| `line_cook` \| `sous_chef` \| `head_chef` \| `master_chef`
+- `profile_kind` (35b): `member` \| `imported`
+- `entity_kind` (35b): `restaurant` \| `brand` \| `publication` \| `community` \| `chef_site`
+- `entity_role` (35b): `owner` \| `chef`
+- `claim_status` (35b): `pending` \| `approved` \| `rejected`
+
+The first five are mirrored in `enums.dart`. The last three are SQL-only for now — no Dart code
+reads them yet, and they gain their mirrors with the `Entity` model.
 
 ### 3.2 Tables
 
-**profiles** — 1:1 with `auth.users`
-`id (uuid, PK, = auth.uid)`, `display_name`, `avatar_url`, `bio`, `created_at`,
+**profiles** — the one identity table. **No longer 1:1 with `auth.users`** (Phase 35b)
+`id (uuid, PK)`, `auth_user_id (uuid, unique, nullable → auth.users on delete cascade)`,
+`kind (profile_kind)`, `claimed_at`, `merged_into (uuid → profiles)`,
+`display_name`, `avatar_url`, `bio`, `created_at`,
 `chef_score (numeric)`, `chef_tier (chef_tier)`, `public_recipe_count (int)`,
 `total_likes / total_saves / total_views (bigint)`.
-Created by the `on_auth_user_created` trigger. Every other table's `user_id` is an FK to
-**profiles**, not `auth.users`, so a missing profile row breaks rating/saving/view logging for
-that account — `0001_init.sql` therefore backfills profiles from `auth.users` on every apply
-(the trigger only fires on insert, so it cannot repair users that predate it; see B015).
+
+`id` used to be a foreign key to `auth.users(id)`, which made "a profile" and "an account" the same
+thing. Phase 34's corpus credits 19,681 named chefs who never signed up, and minting an account for
+each — with an email, a password reset and a login — is not something to do to people who did not
+ask. So the FK is gone and the link is a nullable column beside it:
+
+- `kind = 'member'` has an account (`auth_user_id` set) and is the only kind the leaderboard ranks.
+- `kind = 'imported'` is a chef the corpus credits: world-readable, **immutable by construction**
+  (nothing can resolve to a profile with no account, so no policy has to say so), and claimable.
+
+**The decoupling is a no-op for data that already existed.** `handle_new_user` still writes
+`id = new.id` for a real signup and 0001 backfills `auth_user_id = id`, so for every member the
+profile id and the auth uid remain the same uuid — which is why all 137 pre-existing RLS checks
+pass unchanged (§4.1). They differ for exactly one person: a member who has claimed an imported
+page. The cascade moved with the link, so deleting an `auth.users` row still deletes that member's
+profile and their recipes.
+
+`current_profile_id()` (`stable security definer set search_path = public`) is the one place that
+knows the mapping, and every policy predicate keyed on a profile id now calls it. `auth.uid()`
+survives in exactly three: the `is not null` signed-in guards, `profiles_insert` (the row being
+checked is the row that would make the lookup succeed, so the function returns null there), and the
+storage-bucket policies, whose folders are namespaced by the auth uid. The Dart side asks through
+`ProfileIdResolver` / `AuthRepository.currentProfileId()` — one cached RPC per session — because
+writing the auth uid for a claimed member is denied *silently* (Gotcha 2), not loudly.
+
+Every other table's `user_id` is an FK to **profiles**, not `auth.users`, so a missing profile row
+breaks rating/saving/view logging for that account — `0001_init.sql` therefore backfills profiles
+from `auth.users` on every apply (the trigger only fires on insert, so it cannot repair users that
+predate it; see B015). That backfill keys on `auth_user_id`, **not** `id`: after a claim the
+original profile survives as a `merged_into` tombstone still holding `id = u.id`, so the old test
+would find it, conclude the account had an identity, and leave `current_profile_id()` returning
+null forever — B015 again, in a shape the original fix does not cover.
+
+**entities / entity_members / entity_signature_dishes** (35b) — the group that *published* a
+recipe, and Phase 25's `restaurants` generalised: the corpus needs an attribution entity for 560
+publishers and the north star needs a restaurant entity, and they are one table with an
+`entity_kind`. An entity is **not a principal** — nobody signs in as one; it is a row managed by
+its `owner`-role members. `entity_members_insert` carries a deliberate bootstrap clause (the
+creator may take the first seat while the entity has zero members), without which a newly created
+entity could never gain an owner and would be permanently unmanageable. `entity_signature_write`
+requires `visibility = 'public'` **explicitly** rather than `can_read_recipe`, which is true for
+the owner: the table is world-readable, so listing a private recipe would publish its existence.
+
+**profile_claims** (35b) — `id`, `profile_id → profiles`, `claimant_auth_user_id → auth.users`,
+`evidence_url`, `status (claim_status)`, `note`, `created_at`, `decided_at`, `decided_by`. A
+claimant may file against an unclaimed `imported` profile and read their own claims; there is no
+update policy and no update grant, because the decision is the reviewer's. `approve_profile_claim()`
+is `security definer` with EXECUTE revoked from the API roles — approving transfers ownership of
+every recipe on the profile, which is not a thing to expose as a PATCH. It moves recipes, versions,
+suggestions, likes, saves, ratings, shares, views and memberships in one transaction (`on conflict
+do nothing`, because a person cannot like one recipe twice), deletes the self-ratings a merge can
+create, leaves the old profile as a `merged_into` **tombstone** rather than deleting an id already
+in URLs, and parks `recipes_chef_stats` for the duration — it fires on `owner_id`, so 3,000 recipes
+would otherwise mean 6,000 whole-catalogue aggregates. `claimant_auth_user_id` is the auth id
+rather than a profile id on purpose: the merge moves the link, so a profile id recorded there would
+point at a tombstone the moment the claim succeeded.
 
 The three `chef_*` columns and the three `total_*` columns are **denormalized aggregates** over
 the engagement counters of the profile's *public* recipes — never written by the client; the
@@ -429,7 +490,9 @@ erDiagram
 - **ratings**: readable by anyone who can read the recipe; a user may write only their own row
   (`user_id = auth.uid()`), only for a recipe they can read, and **never for a recipe they own** —
   self-rating is rejected by the `with check` clause, not just hidden in the UI.
-- **profiles**: readable by all; writable only by self. The `chef_*` columns are therefore
+- **profiles**: readable by all — including imported ones, because the credit is the whole reason
+  those rows exist — and writable only by self, which is now `id = current_profile_id()` so that a
+  member who claimed an imported page edits that page. The `chef_*` columns are therefore
   world-readable, which is why the chef score counts **public recipes only** — private-recipe
   engagement (reachable through `recipe_shares`) must not leak into a public number.
   `on_recipe_stats_change` is `security definer` for the same reason `on_like_change` is: the
@@ -534,13 +597,20 @@ It creates three throwaway `auth.users` (an owner, someone the owner shares a pr
 an unrelated signed-in stranger) plus a private and a public recipe with content, re-runs the whole
 matrix under `set local role authenticated` + `request.jwt.claims`, and **rolls the transaction
 back** — so it leaves no user, no recipe and no helper function behind and is safe against any
-database. **137 checks** (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
+database. **165 checks** (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
 ingredient food link, in 29b; B22c and B22d, the auto-estimate source-smuggling guard and its
 nothing-counted case, in 29c — B22d found **B075** on its first run; **E10**, that
 `recompute_auto_nutrition()` is not callable as a signed-in user, in 29d — a whole-table rewrite
 whose only lock is a `revoke execute`; **§F**, `chef_standing` / `chefs_leaderboard` /
-`chef_top_recipes` / `chef_trending_recipes` F1–F10, in Phases 30–31); a failure names the check
-and what actually happened.
+`chef_top_recipes` / `chef_trending_recipes` F1–F10, in Phases 30–31; **§G**, Phase 35b's
+imported profiles, entities, claims and the claim merge, 28 checks). A failure names the check and
+what actually happened.
+
+**§A–§F are also the proof that Phase 35b's identity decoupling changed no behaviour.** Every one
+of those 137 checks was written against `owner_id = auth.uid()`, and every one of them passes
+unchanged against `owner_id = current_profile_id()` — on a fresh apply, on the upgrade path, and
+with the simulated population loaded. That is the evidence for a migration whose failure mode would
+otherwise have been silent: RLS denying a signed-in user reports zero rows, not an error.
 
 Its one helper, `rls_matrix_do(text)`, executes an arbitrary string as the calling role, which is
 how a "must FAIL" check is written without aborting the run. That is also a PostgREST RPC shape
@@ -712,6 +782,43 @@ id desc`; `listSharedWithMe` `recipe_shares.created_at desc, recipe_id desc` (th
 | Recipe editor  | `/recipe/new`, `/recipe/:id/edit` | Structured create/edit                                                                |
 | Profile        | `/profile`                        | Current user                                                                          |
 
+### 7.0a Legal pages and the footer (Phase 35a)
+
+Three documents — Privacy Policy, Terms of Service, Content Rights & Attribution — behind one
+route pattern `/legal/:doc` and one `LegalScreen`. They are **Dart consts, not database rows**: a
+legal document is a release artifact, and "which words were in force on the 12th" has to be
+answerable from the repository rather than from a table with no history. A sealed `LegalBlock`
+(heading / paragraph / bullets) keeps the renderer's switch exhaustive, so adding a block type is a
+compile error rather than a silently unrendered paragraph, and no markdown dependency is taken —
+a renderer that accepts arbitrary markup will eventually be handed some.
+
+`LegalFacts` holds the four values only the owner can supply (operating entity, governing law,
+contact address, hosting region). They render verbatim as bracketed placeholders, and
+`LegalFacts.isComplete` drives a red **Draft — not in force** banner on every document until all
+four are filled in. That banner is the point: a document missing its operator and its jurisdiction
+still reads like a finished document.
+
+**Where the links live, and why it differs by width.** Discover, Chefs and My Recipes all end in an
+infinite paged grid (§6.1), so a footer appended to their scroll is a footer nobody reaches.
+
+| Width | Where | Why |
+| --- | --- | --- |
+| Wide (`!isCompact`) | `AppShell`'s `Scaffold.bottomNavigationBar`, as `LegalFooter(dense: true)` | Always reachable, costs one slim row, independent of how far anything scrolls |
+| Compact, signed in | End of the profile screen | Finite scroll; the bottom slot belongs to the `NavigationBar` |
+| Compact, signed out | Under the sign-up form | `/profile` is in `needsAuth`, so the profile screen alone leaves a signed-out phone reader no route at all. The sign-up form is also the one moment anybody actually agrees to the terms, so it carries the consent sentence too |
+| Any | Each legal page links its two siblings | A reader arriving by a shared link has no nav chrome around them — the screen deliberately has none |
+
+`SiteFooter` is a `Wrap`, so it never overflows; it grows taller, which in the chrome slot means
+eating viewport. Above `kSiteFooterCopyrightMaxScale` (1.6) it drops the copyright and keeps the
+links, which is the part a reader might need. Envelope-tested at 360/600/1000/1440 × 1.0/1.5/2.0.
+
+The documents describe **this** system rather than a template, and three passages exist because the
+schema made them true: Privacy names `recipe_views` as a behavioural log keyed to the account and
+states that deleting an account leaves those rows behind anonymised with the counters unmoved
+(Gotcha 10 / §4); Terms gives forking its own section, because publishing a recipe publicly grants
+every other user a right that cannot be withdrawn afterwards (§5); and Rights states the crawler's
+behaviour and the photograph position that Phase 35c's importer has to implement.
+
 ### 7.1 Recipe detail: the two layouts (Phase 27)
 
 `recipe_detail_screen.dart` branches on `context.isExpanded` and nothing else: expanded windows get
@@ -781,6 +888,13 @@ Things about the v2 page that are load-bearing and easy to undo by accident:
   unit with no number is a data defect worth seeing; the note then rides beside the name instead, so
   neither half is dropped. The note takes the gutter **only** when it is the one thing there, which
   is also the only case it is not repeated beside the name.
+- **The unit is printed verbatim, so its spelling is authored, not derived.** `formatText` is
+  `'$amount $unit'` — no normalisation, no pluralisation, nothing between the column and the
+  screen. The registry in [`nutritionData/units.json`](../nutritionData/units.json) is a *lookup*
+  table for the estimator (§5.4) and its keys are singular for that reason; it is **not** the
+  display form. Hence the corpus convention (B094): abbreviation units lowercase and invariant
+  (`g` `kg` `ml` `L` `tsp` `tbsp` `oz` `lb`), word units plural as a cook reads them (`3 cloves
+  garlic`). Nothing in the pipeline enforces it — `unit` is free text all the way down.
 - **The rail is bounded against text scale, not fixed.** `kDetailRailWidth` (352) and
   `kIngredientQuantityGutter` (86) are both multiplied by
   `context.textScale.clamp(1.0, kDetailRailMaxScale)` (1.4). At 2.0× a fixed rail turns every
@@ -1014,6 +1128,12 @@ shipping that is the app-wide typography decision (`google_fonts` + a `textTheme
 | --- | --- |
 | `NutritionFactsLabel` | The per-serving nutrition panel, drawn like the label on a store product: heavy outer rule, `Nutrition Facts` masthead, servings and per-serving lines, oversized Calories row, right-aligned `% Daily Value` column, sub-rows indented under fat / carbs / total sugars, and the 2,000-calorie footnote. Takes a `RecipeNutrition` plus the selected and base serving counts (`design_system` already depends on `core`, so it takes the model directly). Three properties are the contract: **a row with no value does not render** — a label carrying only calories is a short label, not a column of dashes; **no per-serving number is ever multiplied** — `servings` moves the servings line and the batch total only (§3.2); and there is **no hard-coded black** — ink is `onSurface` on `surface`, so dark mode holds and the label's weight comes from rule thickness and type weight instead. The %DV arithmetic and the value trimming live in `core/src/nutrition_facts.dart`, not here, because a future editor preview or export computes the same numbers (the OPT-A7 rule). Envelope pinned at {320, 358, 493} × {1.0, 2.0} — the widths the two detail rails actually hand it |
 
+### Site chrome widgets (`design_system`)
+
+| Widget | Contract |
+| --- | --- |
+| `SiteFooter` / `SiteFooterLink` | The Privacy / Terms / Rights row. A `Wrap`, so it never overflows — it grows taller, which in the web chrome slot means eating viewport, so above `kSiteFooterCopyrightMaxScale` (1.6) it drops the copyright and keeps the links. `dense: true` is the chrome form (own surface, top `BorderSide` on the content box rather than a sibling rule — B060, safe-area padding); `false` inherits the page it sits on. Takes callbacks, not routes: `design_system` knows nothing about `go_router`. Full placement rules in §7.0a; envelope-tested at 360/600/1000/1440 × 1.0/1.5/2.0 |
+
 ### Chef widgets (`design_system`)
 
 | Widget      | Use                                                                                    |
@@ -1187,10 +1307,26 @@ Follows the `recipes.rating_*` precedent exactly — denormalized aggregates, re
   this statement (the idempotent backfill, `sim/2_sim_generate.sql`'s bulk load with the trigger
   disabled, `sim/9_sim_teardown.sql` after deleting behind the triggers' backs) and all three used
   to restate it; one function is what keeps Gotcha 19 enforceable.
-- `profiles_leaderboard_idx` — partial index on `(chef_score desc, public_recipe_count desc,
-  display_name asc, id asc) where public_recipe_count > 0`: exactly the board's ordering over
-  exactly the board's rows. It replaced `profiles_chef_score_idx` (same leading columns, no
-  filter, no other reader).
+- `profiles_leaderboard_member_idx` — partial index on `(chef_score desc, public_recipe_count
+  desc, display_name asc, id asc) where public_recipe_count > 0 and kind = 'member'`: exactly the
+  board's ordering over exactly the board's rows. It replaced `profiles_chef_score_idx` (same
+  leading columns, no filter, no other reader) and then `profiles_leaderboard_idx` in Phase 35b.
+  The **rename** is the interesting part: `create index if not exists` keys on the name, so
+  narrowing a partial index's predicate in place applies to a fresh database and is a silent no-op
+  on every database that already has the old one — the index form of the constraint trap in
+  Gotcha 5. A new name plus a `drop index if exists` for the old one costs nothing on a re-apply.
+
+**Imported chefs are excluded from every ranked surface** (Phase 35b): `chefs_leaderboard`,
+`chefs_leaderboard_windowed`, `chef_standing`, `chefs_tier_counts`, `recompute_all_chef_stats` and
+the index above all carry `kind = 'member'`. Two reasons that happen to agree. Mechanically, an
+imported chef has no engagement, so `chef_score` is 0 for all of them — and the board's tie-break
+is `public_recipe_count desc`, so 19,681 tied rows would sort by catalogue size and put a
+14,154-recipe publication byline above every other zero-score chef. Ethically, these are real named
+people who never signed up, and ranking them by engagement they never sought is not something to do
+by accident. An imported chef keeps their page, their recipes and their honest `public_recipe_count`
+— `recompute_chef_stats(uuid)` is deliberately **not** filtered, because that count is a fact — they
+are simply not ranked. `chef_standing` returns zero rows for one, which the client already renders
+as "not ranked yet" (Phase 30's empty case, reused unchanged). Pinned by `rls_matrix.sql` G5–G7.
 - Trigger `on_recipe_stats_change` on `recipes`: `after insert or delete or update of like_count,
   save_count, view_count, rating_sum, rating_count, visibility, owner_id`, recomputing
   `new.owner_id` (and `old.owner_id` when it differs, and on delete). **Must be
@@ -1877,7 +2013,15 @@ Everything is additive and idempotent — nothing in `2_sim_generate.sql` delete
 population means running the teardown first.
 
 1. **Population** — persona by inverse CDF, signup date skewed toward recent, `auth.users` +
-   `profiles`, registered in `sim.actor`.
+   `profiles`, registered in `sim.actor`. Every simulated actor is a **member**, so the profile
+   insert writes `auth_user_id` explicitly (Phase 35b) — the trigger already sets it on a fresh
+   database, but the `on conflict` branch is the one that runs after a `db:drop`, and a profile
+   that lost its link resolves to nothing through `current_profile_id()` and is then denied by
+   every policy, silently. `db:sim:rls` signs in as one of these accounts, so it is the check that
+   would fail. **The sim generates no `imported` profiles and no entities yet** — that is the
+   remaining half of Phase 35b, and it needs `sim.imported_profile` / `sim.entity` registries plus
+   a teardown branch that does not key on `auth.users`, since an imported profile has no account
+   to delete it by.
 2. **Recipes** — a weighted draw over `sim.dish` (the author's own `weight`), titled through
    `sim.title_variant` indexed **by occurrence**, so one owner drawing the same dish twice cannot
    produce the same title twice. `(owner_id, title)` is the import key and a collision silently

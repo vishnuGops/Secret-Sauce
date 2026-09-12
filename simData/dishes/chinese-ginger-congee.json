@@ -20,7 +20,7 @@
         { "quantity": 1, "unit": "large piece", "name": "ginger", "note": "half sliced, half julienned" },
         { "quantity": 1, "unit": "tsp", "name": "salt" },
         { "quantity": 2, "unit": null, "name": "spring onions", "note": "sliced, to serve" },
-        { "quantity": 2, "unit": "Tbsp", "name": "soy sauce", "note": "to serve" },
+        { "quantity": 2, "unit": "tbsp", "name": "soy sauce", "note": "to serve" },
         { "quantity": 1, "unit": "tsp", "name": "sesame oil", "note": "to serve" },
         { "quantity": 4, "unit": null, "name": "eggs", "note": "soft boiled, to serve", "is_optional": true }
       ]

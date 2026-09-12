@@ -17,14 +17,14 @@
       "ingredients": [
         { "quantity": 1.5, "unit": "kg", "name": "beef short ribs", "note": "cut into 2-inch lengths" },
         { "quantity": 0.5, "unit": "cup", "name": "soy sauce" },
-        { "quantity": 3, "unit": "Tbsp", "name": "brown sugar" },
+        { "quantity": 3, "unit": "tbsp", "name": "brown sugar" },
         { "quantity": 1, "unit": null, "name": "Asian pear", "note": "peeled and grated; the enzyme is what tenderises" },
         { "quantity": 8, "unit": "cloves", "name": "garlic", "note": "smashed" },
-        { "quantity": 1, "unit": "Tbsp", "name": "ginger", "note": "grated" },
+        { "quantity": 1, "unit": "tbsp", "name": "ginger", "note": "grated" },
         { "quantity": 2, "unit": null, "name": "carrots", "note": "cut into large chunks" },
         { "quantity": 300, "unit": "g", "name": "daikon radish", "note": "cut into large chunks" },
         { "quantity": 100, "unit": "g", "name": "shiitake mushrooms", "note": "halved" },
-        { "quantity": 1, "unit": "Tbsp", "name": "sesame oil" },
+        { "quantity": 1, "unit": "tbsp", "name": "sesame oil" },
         { "quantity": 3, "unit": null, "name": "spring onions", "note": "sliced, to finish" }
       ]
     }

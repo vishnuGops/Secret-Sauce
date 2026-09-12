@@ -30,14 +30,14 @@
       "ingredients": [
         { "quantity": 1.25, "unit": "cup", "name": "organic unbleached wheat flour", "food": "unbleached-flour" },
         { "quantity": 0.5, "unit": "tsp", "name": "kosher salt", "food": "kosher-salt" },
-        { "quantity": 6, "unit": "Tbsp", "name": "butter", "note": "cold, cut into 1/2-inch cubes", "food": "butter" },
-        { "quantity": 3, "unit": "Tbsp", "name": "ice water", "note": "start with 2 Tbsp and add as needed", "food": "water" }
+        { "quantity": 6, "unit": "tbsp", "name": "butter", "note": "cold, cut into 1/2-inch cubes", "food": "butter" },
+        { "quantity": 3, "unit": "tbsp", "name": "ice water", "note": "start with 2 Tbsp and add as needed", "food": "water" }
       ]
     },
     {
       "name": "Filling",
       "ingredients": [
-        { "quantity": 2, "unit": "Tbsp", "name": "butter", "food": "butter" },
+        { "quantity": 2, "unit": "tbsp", "name": "butter", "food": "butter" },
         { "quantity": 1, "unit": null, "name": "yellow onion", "note": "chopped", "food": "onion" },
         { "quantity": 1, "unit": null, "name": "leek", "note": "large, thinly sliced, tough leaves removed", "food": "leek" },
         { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "smashed and minced", "food": "garlic" },
@@ -55,7 +55,7 @@
     {
       "name": "To assemble",
       "ingredients": [
-        { "quantity": 1, "unit": "Tbsp", "name": "Dijon mustard", "food": "dijon-mustard" },
+        { "quantity": 1, "unit": "tbsp", "name": "Dijon mustard", "food": "dijon-mustard" },
         { "quantity": 0.5, "unit": "bunch", "name": "asparagus", "note": "trimmed", "food": "asparagus" }
       ]
     }

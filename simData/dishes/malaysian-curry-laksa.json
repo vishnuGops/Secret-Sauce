@@ -20,7 +20,7 @@
         { "quantity": 4, "unit": "cloves", "name": "garlic" },
         { "quantity": 2, "unit": "stalks", "name": "lemongrass", "note": "white part only" },
         { "quantity": 2, "unit": "cm", "name": "turmeric", "note": "fresh, or 1 tsp ground" },
-        { "quantity": 1, "unit": "Tbsp", "name": "belacan", "note": "shrimp paste, toasted" },
+        { "quantity": 1, "unit": "tbsp", "name": "belacan", "note": "shrimp paste, toasted" },
         { "quantity": 30, "unit": "g", "name": "candlenuts", "note": "or macadamias" }
       ]
     },
@@ -33,7 +33,7 @@
         { "quantity": 200, "unit": "g", "name": "prawns", "note": "peeled" },
         { "quantity": 8, "unit": null, "name": "tofu puffs", "note": "halved" },
         { "quantity": 100, "unit": "g", "name": "bean sprouts" },
-        { "quantity": 1, "unit": "Tbsp", "name": "fish sauce" },
+        { "quantity": 1, "unit": "tbsp", "name": "fish sauce" },
         { "quantity": 1, "unit": "handful", "name": "Vietnamese mint", "note": "to serve" },
         { "quantity": 1, "unit": null, "name": "lime", "note": "cut into wedges, to serve" }
       ]

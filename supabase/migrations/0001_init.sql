@@ -52,20 +52,184 @@ do $$ begin
     create type chef_tier as enum
       ('home_cook', 'line_cook', 'sous_chef', 'head_chef', 'master_chef');
   end if;
+  -- Phase 35b. A `profiles` row is no longer 1:1 with `auth.users`: an
+  -- `imported` profile is a chef credited by the corpus who has never signed up
+  -- and has no account to sign in with. `member` is everyone who did.
+  if not exists (select 1 from pg_type where typname = 'profile_kind') then
+    create type profile_kind as enum ('member', 'imported');
+  end if;
+  -- Phase 35b. The group that PUBLISHED a recipe, as opposed to the person who
+  -- cooked it. This is Phase 25's `restaurants` generalised: the corpus needs an
+  -- attribution entity for 560 publishers and the north star needs a restaurant
+  -- entity, and they are the same table with a discriminator.
+  if not exists (select 1 from pg_type where typname = 'entity_kind') then
+    create type entity_kind as enum
+      ('restaurant', 'brand', 'publication', 'community', 'chef_site');
+  end if;
+  -- Phase 35b. A real chef asking to take over the `imported` profile that
+  -- credits them.
+  if not exists (select 1 from pg_type where typname = 'claim_status') then
+    create type claim_status as enum ('pending', 'approved', 'rejected');
+  end if;
+  -- Phase 35b. Who may act on an entity. Deliberately the same two values
+  -- Phase 25 designed for `restaurant_role`, under the generalised name.
+  if not exists (select 1 from pg_type where typname = 'entity_role') then
+    create type entity_role as enum ('owner', 'chef');
+  end if;
 end $$;
 
 -- ============================================================================
 -- Tables
 -- ============================================================================
 
--- profiles (1:1 with auth.users)
+-- profiles — the ONE identity table. **No longer 1:1 with `auth.users`**
+-- (Phase 35b).
+--
+-- It used to be: `id` was a foreign key to `auth.users(id)`, so a profile could
+-- not exist without an account and every RLS policy in this file could compare
+-- `owner_id = auth.uid()` directly. That equality is what had to give. The
+-- corpus credits 19,681 named chefs who never signed up, and turning each into
+-- an `auth.users` row would mint 19,681 accounts — with an email address, a
+-- password-reset surface and a login — for people who did not ask for one.
+--
+-- The replacement is one nullable link, `auth_user_id`, and the migration is a
+-- **no-op for every row that already exists**: the backfill below sets
+-- `auth_user_id = id` for everyone, and `handle_new_user` keeps writing
+-- `id = new.id` for real signups, so for a member the profile id and the auth
+-- uid stay equal forever. Only imported profiles have an id that is not an auth
+-- uid, and they have no `auth_user_id` at all.
+--
+-- The cascade moved with the link rather than being dropped: deleting an
+-- `auth.users` row still deletes that member's profile and, through it, their
+-- recipes. That is the promise the privacy policy makes (Phase 35a) and it
+-- survives the decoupling unchanged. An imported profile has no auth row, so
+-- nothing upstream can delete it — removal is a takedown, handled explicitly.
 create table if not exists profiles (
-  id           uuid primary key references auth.users (id) on delete cascade,
+  id           uuid primary key default gen_random_uuid(),
   display_name text not null default '',
   avatar_url   text,
   bio          text,
   created_at   timestamptz not null default now()
 );
+
+-- The Phase 35b columns, added via `alter` so a database built by an earlier
+-- apply of this file picks them up on a re-run (Gotcha 5).
+alter table profiles add column if not exists auth_user_id uuid;
+alter table profiles add column if not exists kind profile_kind not null default 'member';
+alter table profiles add column if not exists claimed_at timestamptz;
+alter table profiles add column if not exists merged_into uuid;
+
+-- Drop the old `profiles.id -> auth.users(id)` foreign key if this database
+-- still has it. Guarded by catalogue lookup rather than name alone, because the
+-- whole point is that the constraint must be GONE — a rename would not save us,
+-- and unlike the `check` constraints below (Gotcha 5's constraint form) there is
+-- no predicate here to widen, only a link to remove.
+do $$
+declare
+  c record;
+begin
+  for c in
+    select con.conname
+    from pg_constraint con
+    join pg_class rel on rel.oid = con.conrelid
+    join pg_namespace nsp on nsp.oid = rel.relnamespace
+    where nsp.nspname = 'public'
+      and rel.relname = 'profiles'
+      and con.contype = 'f'
+      and con.conkey = array[
+            (select attnum from pg_attribute
+              where attrelid = con.conrelid and attname = 'id')
+          ]::smallint[]
+  loop
+    execute format('alter table public.profiles drop constraint %I', c.conname);
+  end loop;
+end $$;
+
+-- `auth_user_id` is the link, and `unique` on it is load-bearing twice over: it
+-- is what `current_profile_id()` relies on to return exactly one row, and it is
+-- what makes a half-finished claim merge impossible (`approve_profile_claim`
+-- moves the link, and the second half of a merge cannot silently leave two
+-- profiles pointing at one account).
+do $$ begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'profiles_auth_user_id_fkey'
+  ) then
+    alter table profiles
+      add constraint profiles_auth_user_id_fkey
+      foreign key (auth_user_id) references auth.users (id) on delete cascade;
+  end if;
+  if not exists (
+    select 1 from pg_constraint where conname = 'profiles_merged_into_fkey'
+  ) then
+    alter table profiles
+      add constraint profiles_merged_into_fkey
+      foreign key (merged_into) references profiles (id) on delete set null;
+  end if;
+end $$;
+
+-- Partial, because only members carry a link and `unique` would otherwise treat
+-- every imported profile's null as distinct anyway — the partial index says so
+-- out loud and stays small as the corpus grows.
+create unique index if not exists profiles_auth_user_id_key
+  on profiles (auth_user_id) where auth_user_id is not null;
+
+-- A new FK column needs its own index in the same change (Gotcha 4). `kind` is
+-- in the index because every ranked surface filters on it (Phase 35c) and every
+-- claim lookup starts from it.
+create index if not exists profiles_merged_into_idx
+  on profiles (merged_into) where merged_into is not null;
+create index if not exists profiles_kind_idx on profiles (kind);
+
+-- Backfill the link for every profile that predates Phase 35b. Idempotent, and
+-- the reason the decoupling is invisible to existing data: after this runs,
+-- `current_profile_id()` returns for every signed-in user exactly the id that
+-- `auth.uid()` used to return directly.
+update profiles set auth_user_id = id
+ where auth_user_id is null
+   and kind = 'member'
+   and exists (select 1 from auth.users u where u.id = profiles.id);
+
+-- ----------------------------------------------------------------------------
+-- current_profile_id() — the Phase 35b primitive
+-- ----------------------------------------------------------------------------
+-- Every policy in this file used to read `= auth.uid()`. They now read
+-- `= current_profile_id()`, and this is the one place that knows how an account
+-- maps to an identity.
+--
+-- Three properties, each of which a wrong answer breaks something different:
+--
+--   `security definer` — a policy on `profiles` cannot be allowed to decide
+--   whether the caller may look up their own profile. Under invoker rights this
+--   function would be filtered by `profiles_select`, which is `using (true)`
+--   today and therefore fine — but the moment that policy is narrowed, every
+--   other policy in the schema would start returning null for everybody, at
+--   once, with no error anywhere. Definer rights make it independent of that.
+--
+--   `stable` — Postgres may then evaluate it once per statement instead of once
+--   per row. On a `select` over a 500-row page, the difference is 1 lookup
+--   against 500.
+--
+--   `set search_path = public` — mandatory on every definer function here
+--   (Gotcha 3); without it the function resolves `profiles` against the
+--   caller's search_path.
+--
+-- It returns null for an anonymous caller, which is exactly what `auth.uid()`
+-- did, so every `x = current_profile_id()` predicate is false for `anon` the
+-- same way it used to be. It also returns null for a member whose profile row
+-- is missing — see the B015 backfill below, which is what stops that happening.
+--
+-- Deliberately left callable as an RPC (no revoke): it discloses the caller's
+-- own profile id and nothing else, and the client has a legitimate use for it
+-- once claiming exists.
+create or replace function current_profile_id()
+returns uuid
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select p.id from profiles p where p.auth_user_id = auth.uid();
+$$;
 
 -- 32a2: `display_name` is embedded in `kRecipeSelect`, so it ships on every card
 -- of every grid — an unbounded one is a payload amplifier aimed at every other
@@ -126,9 +290,18 @@ alter table profiles add column if not exists total_views bigint not null defaul
 -- a sort on top, and a sort has to read every row before it can return the
 -- first. Partial on `public_recipe_count > 0` because that is the board's own
 -- "is a chef at all" filter, which excludes ~83% of profiles at sim `medium`.
-create index if not exists profiles_leaderboard_idx
+--
+-- Phase 35b narrowed the predicate to members, and did it under a NEW NAME
+-- rather than editing this one. `create index if not exists` keys on the name,
+-- so changing a partial index's predicate in place applies to a fresh database
+-- and is a silent no-op on every database that already has it — Gotcha 5's
+-- constraint trap, in its index form. Dropping the superseded name explicitly
+-- is the fix, and `drop ... if exists` + `create ... if not exists` means a
+-- re-apply pays for neither.
+drop index if exists profiles_leaderboard_idx;
+create index if not exists profiles_leaderboard_member_idx
   on profiles (chef_score desc, public_recipe_count desc, display_name asc, id asc)
-  where public_recipe_count > 0;
+  where public_recipe_count > 0 and kind = 'member';
 
 -- Superseded by the partial index above: same leading columns, no filter, and
 -- the only query that ever ordered by chef_score is the board. Dropped rather
@@ -674,6 +847,117 @@ alter table ingredients add column if not exists food_id text
 -- Serves the FK's `on delete set null` scan and 29c's estimation join.
 create index if not exists ingredients_food_idx on ingredients (food_id);
 
+-- ----------------------------------------------------------------------------
+-- Entities (Phase 35b) — the group that PUBLISHED a recipe
+-- ----------------------------------------------------------------------------
+-- Phase 25 designed a `restaurants` table. The corpus needs an attribution
+-- entity for 560 publishers — brands, magazines, community sites, a handful of
+-- actual restaurants — and the north star needs a restaurant entity. They are
+-- the same table with a discriminator, and building both would mean writing the
+-- directory page twice, so `restaurants` becomes `entities where kind =
+-- 'restaurant'`.
+--
+-- An entity is **not a principal**, exactly as Phase 25 decided: nobody signs
+-- in as one. It is a row managed by its `owner`-role members, so auth, RLS and
+-- the engagement model are untouched. It also collects no engagement of its
+-- own — it reads its numbers through its members and its signature dishes.
+create table if not exists entities (
+  id              uuid primary key default gen_random_uuid(),
+  -- The stable identity. The corpus already keys every source on a slug
+  -- (`corpus/sources.json`), so an import is idempotent on this column.
+  slug            text not null unique,
+  name            text not null,
+  kind            entity_kind not null,
+  homepage        text,
+  country         text,
+  description     text,
+  cover_image_url text,
+  -- Null for an imported entity: nobody on this service created it. `set null`
+  -- rather than cascade, because deleting the member who registered a
+  -- restaurant must not delete the restaurant.
+  created_by      uuid references profiles (id) on delete set null,
+  created_at      timestamptz not null default now(),
+  updated_at      timestamptz not null default now()
+);
+
+-- Gotcha 4: Postgres indexes the referenced side of a foreign key and never the
+-- referencing side, so every FK column below gets its own index in the same
+-- change that creates it.
+create index if not exists entities_created_by_idx
+  on entities (created_by) where created_by is not null;
+create index if not exists entities_kind_idx on entities (kind);
+
+-- Same treatment as `profiles_text_lengths`: `name` is embedded wherever an
+-- entity is credited, so an unbounded one is a payload amplifier. Guarded by
+-- NAME, and therefore subject to Gotcha 5's constraint trap — widening this
+-- predicate later means dropping the constraint explicitly in this file.
+do $$ begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'entities_text_lengths'
+  ) then
+    alter table entities
+      add constraint entities_text_lengths
+      check (char_length(name) <= 120
+             and (description is null or char_length(description) <= 1000));
+  end if;
+end $$;
+
+-- Association is optional by construction: a profile with zero rows here is the
+-- normal case, and always will be.
+create table if not exists entity_members (
+  entity_id  uuid not null references entities (id) on delete cascade,
+  profile_id uuid not null references profiles (id) on delete cascade,
+  role       entity_role not null default 'chef',
+  title      text,                                  -- free text, e.g. 'Head Chef'
+  created_at timestamptz not null default now(),
+  primary key (entity_id, profile_id)
+);
+-- The PK already serves `entity_id`; `profile_id` is the unindexed half.
+create index if not exists entity_members_profile_idx on entity_members (profile_id);
+
+-- Signature dishes point at existing recipes. No second recipe system.
+create table if not exists entity_signature_dishes (
+  entity_id  uuid not null references entities (id) on delete cascade,
+  recipe_id  uuid not null references recipes (id) on delete cascade,
+  sort_order int  not null default 0,
+  created_at timestamptz not null default now(),
+  primary key (entity_id, recipe_id)
+);
+create index if not exists entity_signature_recipe_idx
+  on entity_signature_dishes (recipe_id);
+
+-- ----------------------------------------------------------------------------
+-- profile_claims (Phase 35b) — a real chef asking for their imported page
+-- ----------------------------------------------------------------------------
+-- Approving a claim transfers ownership of every recipe on the claimed profile,
+-- so it is never a self-service RLS write. A claimant may file and read; the
+-- decision arrives through `approve_profile_claim()` / `reject_profile_claim()`,
+-- which have EXECUTE revoked from the API roles.
+--
+-- `claimant_auth_user_id` is the AUTH id rather than a profile id on purpose:
+-- the merge moves the claimant's link, so a profile id recorded here would be
+-- pointing at a tombstone the moment the claim succeeded.
+create table if not exists profile_claims (
+  id                    uuid primary key default gen_random_uuid(),
+  profile_id            uuid not null references profiles (id) on delete cascade,
+  claimant_auth_user_id uuid not null references auth.users (id) on delete cascade,
+  evidence_url          text,
+  status                claim_status not null default 'pending',
+  note                  text,
+  created_at            timestamptz not null default now(),
+  decided_at            timestamptz,
+  decided_by            uuid references profiles (id) on delete set null
+);
+create index if not exists profile_claims_profile_idx on profile_claims (profile_id);
+create index if not exists profile_claims_claimant_idx on profile_claims (claimant_auth_user_id);
+create index if not exists profile_claims_decided_by_idx
+  on profile_claims (decided_by) where decided_by is not null;
+-- One live claim per claimant per profile. Partial, so a rejected claim can be
+-- re-filed with better evidence instead of being blocked forever by its own
+-- history.
+create unique index if not exists profile_claims_one_pending_idx
+  on profile_claims (profile_id, claimant_auth_user_id) where status = 'pending';
+
 -- ============================================================================
 -- Functions & triggers
 -- ============================================================================
@@ -691,8 +975,21 @@ begin
   -- refuse a display name, it refuses the **account**. The metadata is
   -- unvalidated client input and 80 is far past any real name, so clamping is
   -- the honest failure mode — same spirit as the `on conflict do nothing` below.
-  insert into public.profiles (id, display_name)
-  values (new.id, left(coalesce(new.raw_user_meta_data ->> 'display_name', ''), 80))
+  --
+  -- `id = new.id` is kept deliberately after the Phase 35b decoupling. The FK is
+  -- gone and `profiles.id` now defaults to a fresh uuid, so this could be any
+  -- value — but writing the auth uid keeps `profiles.id = auth.uid()` true for
+  -- every member, which is what makes the decoupling a no-op for existing data,
+  -- existing URLs, existing fixtures and the storage-bucket policies (which
+  -- still key folders on `auth.uid()`). Only imported profiles and claimed ones
+  -- have an id that is not an auth uid.
+  insert into public.profiles (id, auth_user_id, display_name, kind)
+  values (
+    new.id,
+    new.id,
+    left(coalesce(new.raw_user_meta_data ->> 'display_name', ''), 80),
+    'member'
+  )
   on conflict (id) do nothing;   -- never block a signup on an existing profile
   return new;
 end;
@@ -707,11 +1004,32 @@ create trigger on_auth_user_created
 -- row to a `db:drop`, which drops `profiles` while auth.users survives). Without
 -- this, such a user is signed in but has no profile, and every FK to profiles
 -- fails: rating, saving, and even logging a view (B015).
-insert into public.profiles (id, display_name)
-select u.id, left(coalesce(u.raw_user_meta_data ->> 'display_name', ''), 80)
+--
+-- **The test is `auth_user_id`, not `id`** (Phase 35b). Those were the same
+-- question before the decoupling and are not any more: a member who has claimed
+-- an imported chef page has their link on the CLAIMED profile, while the
+-- original row survives as a `merged_into` tombstone still holding
+-- `id = u.id`. Keying on `id` would find that tombstone, conclude the user has
+-- an identity, and leave `current_profile_id()` returning null forever — B015
+-- back again, wearing a shape the original fix does not cover.
+--
+-- The `case` in the id column is the other half of the same edge: if a tombstone
+-- already occupies `u.id`, the new row takes a fresh uuid instead of colliding
+-- with it. On every ordinary database that branch is never taken.
+insert into public.profiles (id, auth_user_id, display_name, kind)
+select
+  case
+    when exists (select 1 from public.profiles x where x.id = u.id)
+      then gen_random_uuid()
+    else u.id
+  end,
+  u.id,
+  left(coalesce(u.raw_user_meta_data ->> 'display_name', ''), 80),
+  'member'
 from auth.users u
-left join public.profiles p on p.id = u.id
-where p.id is null;
+where not exists (
+  select 1 from public.profiles p where p.auth_user_id = u.id
+);
 
 -- Denormalized counters.
 --
@@ -1015,6 +1333,16 @@ returns void language sql as $$
       from profiles pr
       left join recipes r
         on r.owner_id = pr.id and r.visibility = 'public'
+      -- Phase 35b/c: members only. An imported chef's stat columns stay at
+      -- their zero defaults — deliberately, and for two reasons that happen to
+      -- agree. Product: the corpus arrives with no engagement, so any score
+      -- computed over it is a score of zero dressed up as a measurement.
+      -- Ethics: these are real named people who never signed up, and ranking
+      -- them by engagement they never sought is not something to do by
+      -- accident. It also keeps this whole-table pass proportional to the
+      -- MEMBER count rather than to the corpus, which is what stops every
+      -- apply of this file getting slower as the import grows.
+      where pr.kind = 'member'
       group by pr.id
     ) a
   ) s
@@ -1297,10 +1625,10 @@ as $$
     where r.id = p_recipe
       and (
         r.visibility = 'public'
-        or r.owner_id = auth.uid()
+        or r.owner_id = current_profile_id()
         or exists (
           select 1 from recipe_shares s
-          where s.recipe_id = r.id and s.shared_with_user_id = auth.uid()
+          where s.recipe_id = r.id and s.shared_with_user_id = current_profile_id()
         )
       )
   );
@@ -1313,7 +1641,7 @@ stable
 security definer
 set search_path = public
 as $$
-  select exists (select 1 from recipes r where r.id = p_recipe and r.owner_id = auth.uid());
+  select exists (select 1 from recipes r where r.id = p_recipe and r.owner_id = current_profile_id());
 $$;
 
 -- Enable RLS
@@ -1336,14 +1664,40 @@ alter table food                enable row level security;
 alter table food_alias          enable row level security;
 alter table food_portion        enable row level security;
 alter table food_unit           enable row level security;
+alter table entities                enable row level security;
+alter table entity_members          enable row level security;
+alter table entity_signature_dishes enable row level security;
+alter table profile_claims          enable row level security;
 
 -- profiles: world-readable, self-writable
+--
+-- World-readable covers imported profiles too, and that is the intent: a chef
+-- the corpus credits has a public page exactly like a member's, because the
+-- credit is the whole reason the row exists (Phase 35a).
 drop policy if exists profiles_select on profiles;
 create policy profiles_select on profiles for select using (true);
+
+-- `current_profile_id()`, not `auth.uid()` — so a member who has CLAIMED an
+-- imported chef page edits that page, which is the point of claiming. An
+-- imported profile has no `auth_user_id`, so `current_profile_id()` never
+-- returns it and it is immutable by construction: no extra policy, no extra
+-- predicate, nothing to forget.
 drop policy if exists profiles_update on profiles;
-create policy profiles_update on profiles for update using (id = auth.uid());
+create policy profiles_update on profiles for update using (id = current_profile_id());
+
+-- Insert is the one identity predicate that CANNOT use `current_profile_id()`:
+-- the row this statement is checking is the row that would make the lookup
+-- succeed, so the function returns null and every insert would fail. It stays
+-- on `auth.uid()` and pins the link in the same breath — a client may create
+-- only its own self-linked `member` profile, and `unique(auth_user_id)` stops a
+-- second one. `kind` is absent from the column grants, so it resolves to its
+-- `member` default and the predicate re-states that rather than trusting it.
+--
+-- This path is vestigial in practice (`handle_new_user` and the B015 backfill
+-- are the real writers) and is kept as the self-heal it has always been.
 drop policy if exists profiles_insert on profiles;
-create policy profiles_insert on profiles for insert with check (id = auth.uid());
+create policy profiles_insert on profiles for insert
+  with check (id = auth.uid() and auth_user_id = auth.uid() and kind = 'member');
 
 -- recipes
 --
@@ -1356,24 +1710,24 @@ create policy profiles_insert on profiles for insert with check (id = auth.uid()
 -- security policy" before the owner test could ever pass. Comparing the row's own
 -- columns has no such problem: `visibility` / `owner_id` resolve against the new
 -- row directly. It is also cheaper — no `security definer` call per row scanned.
--- `shares_self_select` (`shared_with_user_id = auth.uid()`) is what keeps the
+-- `shares_self_select` (`shared_with_user_id = current_profile_id()`) is what keeps the
 -- shares subquery working under invoker rights. `can_read_recipe(uuid)` stays for
 -- the child tables, which pass a *parent* recipe id that genuinely needs a lookup.
 drop policy if exists recipes_select on recipes;
 create policy recipes_select on recipes for select using (
   visibility = 'public'
-  or owner_id = auth.uid()
+  or owner_id = current_profile_id()
   or exists (
     select 1 from recipe_shares s
-    where s.recipe_id = recipes.id and s.shared_with_user_id = auth.uid()
+    where s.recipe_id = recipes.id and s.shared_with_user_id = current_profile_id()
   )
 );
 drop policy if exists recipes_insert on recipes;
-create policy recipes_insert on recipes for insert with check (owner_id = auth.uid());
+create policy recipes_insert on recipes for insert with check (owner_id = current_profile_id());
 drop policy if exists recipes_update on recipes;
-create policy recipes_update on recipes for update using (owner_id = auth.uid());
+create policy recipes_update on recipes for update using (owner_id = current_profile_id());
 drop policy if exists recipes_delete on recipes;
-create policy recipes_delete on recipes for delete using (owner_id = auth.uid());
+create policy recipes_delete on recipes for delete using (owner_id = current_profile_id());
 
 -- recipe_versions: readable if parent recipe readable; writable by owner
 drop policy if exists versions_select on recipe_versions;
@@ -1448,7 +1802,7 @@ create policy shares_owner_all on recipe_shares for all
   using (owns_recipe(recipe_id)) with check (owns_recipe(recipe_id));
 drop policy if exists shares_self_select on recipe_shares;
 create policy shares_self_select on recipe_shares for select
-  using (shared_with_user_id = auth.uid());
+  using (shared_with_user_id = current_profile_id());
 
 -- likes / saves: a user manages their own rows, and may only add one to a recipe
 -- they can actually read.
@@ -1458,7 +1812,7 @@ create policy shares_self_select on recipe_shares for select
 -- private recipe's uuid cannot like it into an inflated `like_count` that the
 -- owner then publishes — the hole `ratings_write` and `views_insert` were already
 -- closed against and these two were not. `using` governs SELECT/UPDATE/DELETE and
--- stays `user_id = auth.uid()` alone, so an existing like can always be removed:
+-- stays `user_id = current_profile_id()` alone, so an existing like can always be removed:
 -- adding the read test there would strand every liker's row the moment an owner
 -- flipped a recipe to private, and unliking would then match 0 rows and report
 -- success (Gotcha 2).
@@ -1466,15 +1820,15 @@ drop policy if exists likes_select on recipe_likes;
 create policy likes_select on recipe_likes for select using (can_read_recipe(recipe_id));
 drop policy if exists likes_write on recipe_likes;
 create policy likes_write on recipe_likes for all
-  using (user_id = auth.uid())
-  with check (user_id = auth.uid() and can_read_recipe(recipe_id));
+  using (user_id = current_profile_id())
+  with check (user_id = current_profile_id() and can_read_recipe(recipe_id));
 
 drop policy if exists saves_select on recipe_saves;
-create policy saves_select on recipe_saves for select using (user_id = auth.uid());
+create policy saves_select on recipe_saves for select using (user_id = current_profile_id());
 drop policy if exists saves_write on recipe_saves;
 create policy saves_write on recipe_saves for all
-  using (user_id = auth.uid())
-  with check (user_id = auth.uid() and can_read_recipe(recipe_id));
+  using (user_id = current_profile_id())
+  with check (user_id = current_profile_id() and can_read_recipe(recipe_id));
 
 -- ratings: readable with the recipe; a user writes only their own row, only for a
 -- recipe they can read, and never for their own recipe (no self-rating).
@@ -1482,9 +1836,9 @@ drop policy if exists ratings_select on recipe_ratings;
 create policy ratings_select on recipe_ratings for select using (can_read_recipe(recipe_id));
 drop policy if exists ratings_write on recipe_ratings;
 create policy ratings_write on recipe_ratings for all
-  using (user_id = auth.uid())
+  using (user_id = current_profile_id())
   with check (
-    user_id = auth.uid()
+    user_id = current_profile_id()
     and can_read_recipe(recipe_id)
     and not owns_recipe(recipe_id)
   );
@@ -1497,7 +1851,7 @@ drop policy if exists views_insert on recipe_views;
 create policy views_insert on recipe_views for insert
   with check (
     can_read_recipe(recipe_id)
-    and (user_id is null or user_id = auth.uid())
+    and (user_id is null or user_id = current_profile_id())
   );
 drop policy if exists views_select on recipe_views;
 create policy views_select on recipe_views for select using (owns_recipe(recipe_id));
@@ -1505,10 +1859,10 @@ create policy views_select on recipe_views for select using (owns_recipe(recipe_
 -- suggestions (reserved): author or target-recipe owner can read; author can create
 drop policy if exists suggestions_select on recipe_suggestions;
 create policy suggestions_select on recipe_suggestions for select
-  using (author_id = auth.uid() or owns_recipe(recipe_id));
+  using (author_id = current_profile_id() or owns_recipe(recipe_id));
 drop policy if exists suggestions_insert on recipe_suggestions;
 create policy suggestions_insert on recipe_suggestions for insert
-  with check (author_id = auth.uid());
+  with check (author_id = current_profile_id());
 drop policy if exists suggestions_update on recipe_suggestions;
 -- 32a3: `using` decides which rows an UPDATE may *touch*; `with check` decides
 -- what they may be turned *into*, and this policy had only the first — so the
@@ -1551,6 +1905,150 @@ create policy food_portion_select on food_portion for select
 drop policy if exists food_unit_select on food_unit;
 create policy food_unit_select on food_unit for select
   using (auth.uid() is not null);
+
+-- ----------------------------------------------------------------------------
+-- entities / entity_members / entity_signature_dishes (Phase 35b)
+-- ----------------------------------------------------------------------------
+-- Membership predicates. `security definer` for the same reason
+-- `can_read_recipe` is: a policy on `entity_members` must not decide whether
+-- the caller may find out that they are a member. `stable` so Postgres
+-- evaluates them once per statement, not once per row. Both are read-only and
+-- disclose only the caller's own membership, so — like `can_read_recipe` —
+-- EXECUTE is deliberately not revoked; the policies below need the API roles to
+-- hold it.
+create or replace function is_entity_member(p_entity uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1 from entity_members m
+    where m.entity_id = p_entity and m.profile_id = current_profile_id()
+  );
+$$;
+
+create or replace function is_entity_owner(p_entity uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1 from entity_members m
+    where m.entity_id = p_entity
+      and m.profile_id = current_profile_id()
+      and m.role = 'owner'
+  );
+$$;
+
+-- A public directory: world-readable, exactly like `profiles`.
+drop policy if exists entities_select on entities;
+create policy entities_select on entities for select using (true);
+
+-- Anyone signed in may register an entity, and `created_by` is pinned so the
+-- provenance cannot be forged. The creator does NOT become an owner by this
+-- policy alone — `entity_members_insert` below is what seats them, and it is
+-- deliberately written so the first seat on a brand-new entity is available to
+-- its creator (otherwise no entity could ever gain its first owner).
+drop policy if exists entities_insert on entities;
+create policy entities_insert on entities for insert
+  with check (created_by = current_profile_id());
+
+drop policy if exists entities_update on entities;
+create policy entities_update on entities for update
+  using (is_entity_owner(id)) with check (is_entity_owner(id));
+
+drop policy if exists entities_delete on entities;
+create policy entities_delete on entities for delete using (is_entity_owner(id));
+
+-- The roster is public: an entity that lists its chefs is the whole point.
+drop policy if exists entity_members_select on entity_members;
+create policy entity_members_select on entity_members for select using (true);
+
+-- Two ways in, and the second is not a convenience: an entity with no members
+-- has no owner, so without the bootstrap clause nobody could ever add one and
+-- every newly created entity would be permanently unmanageable. The clause is
+-- narrow — it applies only while the entity has zero members, and only to the
+-- profile that created it.
+drop policy if exists entity_members_insert on entity_members;
+create policy entity_members_insert on entity_members for insert
+  with check (
+    is_entity_owner(entity_id)
+    or (
+      not exists (select 1 from entity_members m where m.entity_id = entity_members.entity_id)
+      and profile_id = current_profile_id()
+      and exists (
+        select 1 from entities e
+        where e.id = entity_members.entity_id and e.created_by = current_profile_id()
+      )
+    )
+  );
+
+-- Membership changes are an owner action. A member leaving is the one thing a
+-- non-owner may do to this table, and it is a delete of their own row.
+drop policy if exists entity_members_update on entity_members;
+create policy entity_members_update on entity_members for update
+  using (is_entity_owner(entity_id)) with check (is_entity_owner(entity_id));
+
+drop policy if exists entity_members_delete on entity_members;
+create policy entity_members_delete on entity_members for delete
+  using (is_entity_owner(entity_id) or profile_id = current_profile_id());
+
+-- Signature dishes are public, and a private recipe may never be one: the table
+-- is world-readable, so listing a private recipe here would leak its existence
+-- and its id to everybody. The `with check` says `public` explicitly rather
+-- than leaning on `can_read_recipe`, which would be true for the owner.
+drop policy if exists entity_signature_select on entity_signature_dishes;
+create policy entity_signature_select on entity_signature_dishes for select using (true);
+
+drop policy if exists entity_signature_write on entity_signature_dishes;
+create policy entity_signature_write on entity_signature_dishes for all
+  using (is_entity_member(entity_id))
+  with check (
+    is_entity_member(entity_id)
+    and exists (
+      select 1 from recipes r
+      join entity_members m
+        on m.entity_id = entity_signature_dishes.entity_id
+       and m.profile_id = r.owner_id
+      where r.id = entity_signature_dishes.recipe_id
+        and r.visibility = 'public'
+    )
+  );
+
+-- ----------------------------------------------------------------------------
+-- profile_claims (Phase 35b)
+-- ----------------------------------------------------------------------------
+-- A claimant sees their own claims and nothing else. Claims are not public:
+-- "who is trying to claim this chef" is not a fact the directory should publish
+-- while it is still pending.
+drop policy if exists claims_select on profile_claims;
+create policy claims_select on profile_claims for select
+  using (claimant_auth_user_id = auth.uid());
+
+-- Filing a claim: for yourself, against an `imported` profile that nobody has
+-- claimed yet. Both halves matter — without the `kind` test a user could file a
+-- claim against another member's live profile, which is a phishing surface even
+-- though approval is manual.
+drop policy if exists claims_insert on profile_claims;
+create policy claims_insert on profile_claims for insert
+  with check (
+    claimant_auth_user_id = auth.uid()
+    and exists (
+      select 1 from profiles p
+      where p.id = profile_claims.profile_id
+        and p.kind = 'imported'
+        and p.auth_user_id is null
+    )
+  );
+
+-- No update policy and no delete policy, deliberately. The decision is the
+-- reviewer's and arrives through `approve_profile_claim()` /
+-- `reject_profile_claim()`; a claimant who changes their mind files nothing,
+-- and RLS with no policy default-denies.
 
 -- ============================================================================
 -- Table grants for the PostgREST roles
@@ -1619,9 +2117,39 @@ begin
 
   -- profiles: NOT granted — chef_score, chef_tier, public_recipe_count,
   -- total_likes, total_saves, total_views, created_at. `id` is insert-only
-  -- (`profiles_insert` pins it to auth.uid()).
-  grant insert (id, display_name, avatar_url, bio) on profiles to authenticated;
-  grant update (display_name, avatar_url, bio)     on profiles to authenticated;
+  -- (`profiles_insert` pins both `id` and `auth_user_id` to auth.uid()).
+  --
+  -- Phase 35b adds four columns and grants exactly one of them, on insert only.
+  -- `auth_user_id` is grantable there because `profiles_insert`'s `with check`
+  -- pins it to `auth.uid()` in the same statement, so the worst a client can do
+  -- is assert a link to its own account — and `profiles_auth_user_id_key` stops
+  -- it asserting a second one. It is **not** grantable on update: an update
+  -- grant would let a member re-point their profile at another account, or
+  -- detach an imported profile from the member who claimed it. `kind`,
+  -- `claimed_at` and `merged_into` are written only by
+  -- `approve_profile_claim()`, which is `security definer`.
+  grant insert (id, auth_user_id, display_name, avatar_url, bio) on profiles to authenticated;
+  grant update (display_name, avatar_url, bio)                   on profiles to authenticated;
+
+  -- entities (Phase 35b): a world-readable directory. Writes go through the
+  -- member policies below, and the three server-owned columns (`slug` is
+  -- identity, `created_by` is provenance, `created_at`) stay off the update
+  -- list for the same reason `recipes.owner_id` does — a row must not be
+  -- reassigned out from under the policy that admitted the write.
+  revoke insert, update on entities from authenticated;
+  grant insert (slug, name, kind, homepage, country, description, cover_image_url,
+                created_by)
+    on entities to authenticated;
+  grant update (name, homepage, country, description, cover_image_url)
+    on entities to authenticated;
+
+  -- profile_claims: a claimant files one and reads their own. `status`,
+  -- `decided_at`, `decided_by` and `note` are the reviewer's answer, not the
+  -- claimant's, so nothing may update this table from a client at all — the
+  -- decision arrives through `approve_profile_claim()` / `reject_profile_claim()`.
+  revoke insert, update, delete on profile_claims from authenticated;
+  grant insert (profile_id, claimant_auth_user_id, evidence_url)
+    on profile_claims to authenticated;
 
   -- recipe_suggestions (32a3): the reserved PR-flow stub. A suggestion is a
   -- claim about **who** proposed **what** against **which** recipe, so the only
@@ -2067,6 +2595,7 @@ as $$
   left join profiles p
     on p.chef_tier = t.tier
    and p.public_recipe_count > 0
+   and p.kind = 'member'      -- the same population the board ranks (Phase 35b/c)
   group by t.tier
   order by t.tier;
 $$;
@@ -2081,7 +2610,7 @@ $$;
 --
 -- `dense_rank()` ranks over the whole filtered set rather than the page, which
 -- is what makes rank 26 on page two say 26. It does not force a full read: the
--- window's ordering is a prefix of `profiles_leaderboard_idx`, so the plan
+-- window's ordering is a prefix of `profiles_leaderboard_member_idx`, so the plan
 -- streams index scan → WindowAgg → incremental sort → limit and stops at
 -- `p_offset + p_limit` rows. At sim `medium` the planner still picks a seq scan
 -- (172 chefs in 26 pages — cheaper than random heap fetches); the index takes
@@ -2147,8 +2676,15 @@ as $$
     from profiles p
     -- Chefs with no public recipes (tasters, private-only accounts, brand-new
     -- signups) still *have* a tier for badge purposes; they just don't occupy
-    -- leaderboard rows. Also the predicate of `profiles_leaderboard_idx`.
+    -- leaderboard rows. Also half the predicate of `profiles_leaderboard_member_idx`.
     where p.public_recipe_count > 0
+      -- Phase 35b/c. Without this the board IS the corpus. Every imported chef
+      -- ties at `chef_score = 0`, and the order below breaks that tie on
+      -- `public_recipe_count desc` — so a 14,000-recipe publication byline
+      -- would sit above every other zero-score chef, and 19,681 imported rows
+      -- would fill the board behind the handful of real ones. An imported chef
+      -- has a page and is browsable; they are not ranked.
+      and p.kind = 'member'
   )
   select
     x.rnk, x.pid, x.pname, x.pavatar, x.ptier, x.pscore, x.pcount,
@@ -2156,7 +2692,7 @@ as $$
   from ranked x
   -- Deterministic full ordering; dense_rank above lets tied scores share a rank.
   -- `created_at` is deliberately NOT added here: this ordering is already total
-  -- (it ends in the primary key) and it is the one `profiles_leaderboard_idx`
+  -- (it ends in the primary key) and it is the one `profiles_leaderboard_member_idx`
   -- was built to serve as an index scan, so a new sort key would put a sort back
   -- on top of it. A `New` board is a different ordering and therefore a
   -- different query, not a tie-break bolted onto this one.
@@ -2229,7 +2765,7 @@ end $$;
 --
 -- **`security definer` is mandatory here, and not for the usual reason.** Three
 -- of the four logs are not world-readable: `saves_select` is
--- `user_id = auth.uid()` (you see your own saves and nobody else's) and
+-- `user_id = current_profile_id()` (you see your own saves and nobody else's) and
 -- `views_select` is `owns_recipe(recipe_id)` (only a recipe's owner sees its
 -- view log). Under invoker rights this function would therefore compute a
 -- *different* window for every caller — zero saves and zero views for `anon`,
@@ -2301,6 +2837,7 @@ as $$
     select p.id as pid
     from profiles p
     where p.public_recipe_count > 0
+      and p.kind = 'member'        -- Phase 35b/c, as `chefs_leaderboard`
       and (p_chef is null or p.id = p_chef)
   ),
   -- Rule 3. Every aggregate below reaches the logs THROUGH this CTE, so there
@@ -2573,7 +3110,13 @@ as $$
       p.total_views         as pviews,
       p.created_at          as pjoined
     from profiles p
+    -- Same population as `chefs_leaderboard`, and it has to be the same or the
+    -- rank this returns would not match the board it is a row of (Phase 35b/c).
+    -- An imported chef therefore gets ZERO ROWS here, which the client already
+    -- renders as "not ranked yet" — the behaviour Phase 30 built for a profile
+    -- with no public recipes, reused unchanged.
     where p.public_recipe_count > 0
+      and p.kind = 'member'
   )
   select
     x.rnk, x.pid, x.pname, x.pavatar, x.ptier, x.pscore, x.pcount,
@@ -2755,6 +3298,7 @@ declare
   v_sg record;
   v_new_sg uuid;
   v_version uuid;
+  v_me uuid;
 begin
   -- Authentication first, and explicitly (OPT-S6). An anonymous call used to
   -- get as far as the INSERT and die on `owner_id`'s not-null constraint — an
@@ -2763,6 +3307,17 @@ begin
   -- revoked from `anon` below, so this is the second of two locks.
   if auth.uid() is null then
     raise exception 'must be signed in to fork a recipe';
+  end if;
+
+  -- Phase 35b: the OWNER of the new recipe is a `profiles` id, and that is no
+  -- longer the same value as `auth.uid()` for a member who has claimed an
+  -- imported chef page. A signed-in caller always has one (`handle_new_user`
+  -- plus the B015 backfill), so a null here means the database is in the broken
+  -- state that backfill exists to repair — say so rather than failing later on
+  -- a not-null constraint, which is the exact accident OPT-S6 removed above.
+  v_me := current_profile_id();
+  if v_me is null then
+    raise exception 'no profile for the current account';
   end if;
 
   if not can_read_recipe(p_source) then
@@ -2776,7 +3331,7 @@ begin
     prep_minutes, cook_minutes, servings, visibility, attribution,
     forked_from_recipe_id, forked_from_version_id, nutrition
   ) values (
-    auth.uid(), v_src.title, v_src.description, v_src.cover_image_url, v_src.cuisine,
+    v_me, v_src.title, v_src.description, v_src.cover_image_url, v_src.cuisine,
     v_src.category, v_src.difficulty, v_src.prep_minutes, v_src.cook_minutes, v_src.servings,
     'private', v_src.attribution, v_src.id, v_src.current_version_id, v_src.nutrition
   )
@@ -2816,7 +3371,7 @@ begin
   -- created, and no caller can reach `fork_recipe` before the apply finishes.
   insert into recipe_versions (recipe_id, version_number, author_id, change_summary, content_snapshot)
   values (
-    v_new_recipe, 1, auth.uid(), 'Forked from source recipe',
+    v_new_recipe, 1, v_me, 'Forked from source recipe',
     recipe_snapshot(v_new_recipe)
   )
   returning id into v_version;
@@ -2948,9 +3503,17 @@ declare
   v_parent    uuid;
   v_servings  int;
   v_nutrition jsonb;
+  v_me        uuid;
 begin
   if auth.uid() is null then
     raise exception 'must be signed in to save a recipe' using errcode = '42501';
+  end if;
+
+  -- Phase 35b: `owner_id` and `author_id` are `profiles` ids, which stopped
+  -- being `auth.uid()` the moment a member could claim an imported chef page.
+  v_me := current_profile_id();
+  if v_me is null then
+    raise exception 'no profile for the current account' using errcode = '42501';
   end if;
 
   -- `->` (jsonb), never `->>` (text): there is no implicit text→jsonb cast,
@@ -2998,7 +3561,7 @@ begin
       difficulty, prep_minutes, cook_minutes, servings, visibility, attribution,
       nutrition
     ) values (
-      auth.uid(),
+      v_me,
       p_payload->>'title',
       coalesce(p_payload->>'description', ''),
       p_payload->>'cover_image_url',
@@ -3154,7 +3717,7 @@ begin
     v_recipe,
     v_next,
     v_parent,
-    auth.uid(),
+    v_me,
     coalesce(nullif(p_change_summary, ''), 'Updated'),
     recipe_snapshot(v_recipe)
   );
@@ -3539,3 +4102,200 @@ end $$;
 -- `seed_recipes.sql` labels stand — which is why those have to be regenerated
 -- and committed alongside a `nutritionData/` change (recipeData/README.md).
 select recompute_auto_nutrition();
+
+-- ============================================================================
+-- Profile claims (Phase 35b) — a real chef taking over their imported page
+-- ============================================================================
+-- Approving a claim moves every recipe, every version, every like, save, rating
+-- and share from the claimant's own profile onto the claimed one, then moves
+-- the account link. It is the only operation in this schema that changes who
+-- owns existing content, which is why it is a `security definer` function with
+-- EXECUTE revoked from the API roles rather than anything RLS could express:
+-- there is no set of row predicates that makes "transfer 3,000 recipes" safe to
+-- offer as a PATCH.
+--
+-- Run by hand for now (`select approve_profile_claim('<claim uuid>')` as
+-- `postgres`). An admin role and a review UI are a later change; the point of
+-- landing the function now is that the claim story is *complete* — an imported
+-- chef page is not a dead end with a promise attached.
+--
+-- Three things about the shape:
+--
+--   **The whole thing is one transaction, by construction.** A half-finished
+--   merge would leave recipes on one profile and the account link on another,
+--   and `unique(auth_user_id)` is what makes that impossible to persist rather
+--   than merely unlikely.
+--
+--   **The stats trigger is parked for the duration.** `recipes_chef_stats`
+--   fires `after update of ... owner_id`, and `on_recipe_stats_change` then
+--   recomputes BOTH profiles — so moving 3,000 recipes would run 6,000
+--   whole-catalogue aggregates. Disabling it and recomputing twice at the end
+--   is the same pattern `2_sim_generate.sql` uses for its bulk load. The
+--   `alter table` takes an ACCESS EXCLUSIVE lock on `recipes` until commit,
+--   which is a real cost and the reason this is an administrative action rather
+--   than something a user triggers from a button.
+--
+--   **Engagement rows are moved, not merged.** `recipe_likes`, `recipe_saves`
+--   and `recipe_ratings` are all keyed `(user_id, recipe_id)`, so a row whose
+--   target already exists cannot be moved — a person cannot like one recipe
+--   twice. Those rows are dropped rather than duplicated, which is the only
+--   answer the key allows and also the correct one.
+create or replace function approve_profile_claim(p_claim uuid)
+returns uuid
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_claim  profile_claims%rowtype;
+  v_target profiles%rowtype;
+  v_old    uuid;
+begin
+  select * into v_claim from profile_claims where id = p_claim for update;
+  if v_claim.id is null then
+    raise exception 'claim % not found', p_claim using errcode = '42704';
+  end if;
+  if v_claim.status <> 'pending' then
+    raise exception 'claim % is already %', p_claim, v_claim.status using errcode = '42501';
+  end if;
+
+  select * into v_target from profiles where id = v_claim.profile_id for update;
+  if v_target.id is null then
+    raise exception 'claimed profile no longer exists' using errcode = '42704';
+  end if;
+  -- Re-checked here and not merely in `claims_insert`: that policy was
+  -- evaluated when the claim was FILED, and two claims on one profile can both
+  -- be pending at once.
+  if v_target.auth_user_id is not null then
+    raise exception 'profile % is already claimed', v_target.id using errcode = '42501';
+  end if;
+
+  -- The claimant's existing identity, if they have one. A claimant who has
+  -- never signed in has no profile and there is nothing to merge.
+  select p.id into v_old
+  from profiles p where p.auth_user_id = v_claim.claimant_auth_user_id;
+
+  if v_old is not null and v_old <> v_target.id then
+    alter table recipes disable trigger recipes_chef_stats;
+
+    update recipes            set owner_id  = v_target.id where owner_id  = v_old;
+    update recipe_versions    set author_id = v_target.id where author_id = v_old;
+    update recipe_suggestions set author_id = v_target.id where author_id = v_old;
+
+    -- `(user_id, recipe_id)` primary keys: move what can move, drop the rest.
+    update recipe_likes l set user_id = v_target.id
+     where l.user_id = v_old
+       and not exists (select 1 from recipe_likes x
+                        where x.user_id = v_target.id and x.recipe_id = l.recipe_id);
+    delete from recipe_likes where user_id = v_old;
+
+    update recipe_saves s set user_id = v_target.id
+     where s.user_id = v_old
+       and not exists (select 1 from recipe_saves x
+                        where x.user_id = v_target.id and x.recipe_id = s.recipe_id);
+    delete from recipe_saves where user_id = v_old;
+
+    update recipe_ratings rt set user_id = v_target.id
+     where rt.user_id = v_old
+       and not exists (select 1 from recipe_ratings x
+                        where x.user_id = v_target.id and x.recipe_id = rt.recipe_id);
+    delete from recipe_ratings where user_id = v_old;
+
+    -- `(recipe_id, shared_with_user_id)`, same treatment.
+    update recipe_shares sh set shared_with_user_id = v_target.id
+     where sh.shared_with_user_id = v_old
+       and not exists (select 1 from recipe_shares x
+                        where x.recipe_id = sh.recipe_id
+                          and x.shared_with_user_id = v_target.id);
+    delete from recipe_shares where shared_with_user_id = v_old;
+    -- A share of a recipe the target now owns is meaningless; owning it is
+    -- strictly more than being shared it.
+    delete from recipe_shares sh using recipes r
+     where r.id = sh.recipe_id and r.owner_id = sh.shared_with_user_id;
+
+    -- `recipe_views` is an append-only log with no uniqueness, so every row
+    -- moves. Two rows for one (user, recipe) pair are fine there by design —
+    -- `on_view_insert` only ever counted the first, and `view_count` is
+    -- monotonic (Gotcha 10), so nothing downstream reads the log as a count.
+    update recipe_views set user_id = v_target.id where user_id = v_old;
+
+    update entity_members m set profile_id = v_target.id
+     where m.profile_id = v_old
+       and not exists (select 1 from entity_members x
+                        where x.entity_id = m.entity_id and x.profile_id = v_target.id);
+    delete from entity_members where profile_id = v_old;
+
+    update entities set created_by = v_target.id where created_by = v_old;
+
+    -- `ratings_write` forbids rating your own recipe. The merge can create one
+    -- anyway — the claimant may have rated a recipe that is now theirs — and a
+    -- self-rating would inflate the chef's own average, so it is removed here
+    -- rather than left for a table constraint that does not exist.
+    delete from recipe_ratings rt using recipes r
+     where r.id = rt.recipe_id and r.owner_id = rt.user_id;
+
+    -- The old profile becomes a TOMBSTONE, not a delete: its id is in URLs
+    -- somebody has already shared, and `merged_into` is what lets a future
+    -- redirect resolve them.
+    update profiles
+       set auth_user_id = null,
+           merged_into  = v_target.id
+     where id = v_old;
+
+    alter table recipes enable trigger recipes_chef_stats;
+  end if;
+
+  update profiles
+     set auth_user_id = v_claim.claimant_auth_user_id,
+         kind         = 'member',
+         claimed_at   = now()
+   where id = v_target.id;
+
+  update profile_claims
+     set status = 'approved', decided_at = now()
+   where id = p_claim;
+
+  -- Any other pending claim on this profile is now unanswerable — the profile
+  -- has an owner. Closed here rather than left pending forever.
+  update profile_claims
+     set status = 'rejected',
+         decided_at = now(),
+         note = concat_ws(' ', note, '(superseded: profile was claimed)')
+   where profile_id = v_target.id and status = 'pending' and id <> p_claim;
+
+  perform recompute_chef_stats(v_target.id);
+  if v_old is not null and v_old <> v_target.id then
+    perform recompute_chef_stats(v_old);
+  end if;
+
+  return v_target.id;
+end;
+$$;
+
+create or replace function reject_profile_claim(p_claim uuid, p_note text default null)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  update profile_claims
+     set status = 'rejected', decided_at = now(), note = coalesce(p_note, note)
+   where id = p_claim and status = 'pending';
+  if not found then
+    raise exception 'no pending claim %', p_claim using errcode = '42704';
+  end if;
+end;
+$$;
+
+-- Gotcha 3: PostgREST exposes every function in `public` as an RPC, and these
+-- two decide who owns content. Neither is callable by an API role.
+do $$
+begin
+  execute 'revoke execute on function approve_profile_claim(uuid) from public';
+  execute 'revoke execute on function reject_profile_claim(uuid, text) from public';
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'revoke execute on function approve_profile_claim(uuid) from anon, authenticated';
+    execute 'revoke execute on function reject_profile_claim(uuid, text) from anon, authenticated';
+  end if;
+end $$;

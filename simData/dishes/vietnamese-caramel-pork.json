@@ -16,8 +16,8 @@
       "name": "",
       "ingredients": [
         { "quantity": 700, "unit": "g", "name": "pork belly", "note": "skin on, cut into 3cm pieces" },
-        { "quantity": 4, "unit": "Tbsp", "name": "sugar" },
-        { "quantity": 3, "unit": "Tbsp", "name": "fish sauce" },
+        { "quantity": 4, "unit": "tbsp", "name": "sugar" },
+        { "quantity": 3, "unit": "tbsp", "name": "fish sauce" },
         { "quantity": 400, "unit": "ml", "name": "coconut water" },
         { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "sliced" },
         { "quantity": 2, "unit": null, "name": "shallots", "note": "sliced" },

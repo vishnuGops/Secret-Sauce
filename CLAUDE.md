@@ -68,6 +68,12 @@ secret-sauce/
 │   ├── schema.json            #   the 2-key delta from recipeData's format
 │   ├── people.schema.json · vocab.schema.json   # the pool formats, rule by rule
 │   └── README.md              #   authoring workflow + directory coverage rules
+├── corpus/                    # SCRAPED recipe corpus (Phase 34) — attribution-first, at scale
+│   ├── sources.json           #   the registry: every site the harvester may crawl, with
+│   │                          #   kind = chef | restaurant | brand | publication | community
+│   ├── recipes/<slug>.jsonl   #   one append-only JSONL shard per source (git-ignored)
+│   ├── _state/                #   resume state + the cached sitemap sweep
+│   └── README.md              #   layout, politeness rules, the rights position
 ├── nutritionData/             # food registry for auto nutrition (Phase 29a)
 │   ├── foods.json             #   curated foods: slug, fdc_id, aliases + machine-written
 │   │                          #   `extracted` blocks (per-100g values, parsed portions)
@@ -87,7 +93,9 @@ secret-sauce/
 │   │   │                          # + chef_scoring.dart, formatting.dart, paging.dart,
 │   │   │                          #   nutrition_facts.dart (FDA %DV constants + helpers),
 │   │   │                          #   repositories/content_payload.dart (the ingredient/step
-│   │   │                          #   tree encoder shared by save_recipe + estimate_nutrition)
+│   │   │                          #   tree encoder shared by save_recipe + estimate_nutrition),
+│   │   │                          #   repositories/profile_id.dart (ProfileIdResolver — the
+│   │   │                          #   account -> profiles.id lookup, Phase 35b)
 │   │   └── ../test/               # models + pure helpers + REPOSITORIES (OPT-T2), the last
 │   │                              # via test/support/fake_supabase.dart — a recording
 │   │                              # http.BaseClient under a real SupabaseClient
@@ -99,7 +107,8 @@ secret-sauce/
 │                                  # nutrition_facts_label_test.dart
 ├── apps/app/
 │   ├── lib/features/          # auth, discover, chefs, my_recipes, recipe_detail,
-│   │                          # recipe_editor, profile — screen + *_providers.dart per feature,
+│   │                          # recipe_editor, profile, legal (35a: three documents as Dart
+│   │                          #   consts + one screen) — screen + *_providers.dart per feature,
 │   │                          # plus that feature's own panels (OPT-A8 split the three big
 │   │                          # screens: editor 880->418, detail 629->311, chef sheet 597->231)
 │   │                          # (home/ retired 2026-08-20 — `/` redirects to /discover; the
@@ -108,6 +117,8 @@ secret-sauce/
 │   │                          #   chrome), top_nav_bar.dart (web), nav_destinations.dart (lists),
 │   │                          #   pop_or_go.dart (leave a pushed screen: pop, else go — 32c5)
 │   ├── lib/widgets/           # app-level shared widgets — anything two features both reach:
+│   │                          #   legal_footer.dart (the Privacy/Terms/Rights links, reached by
+│   │                          #   the shell, profile, auth and the legal pages themselves),
 │   │                          #   recipe_grid.dart, recipe_async_grid.dart (the paged list every
 │   │                          #   browsing surface renders through — each exports a Sliver* twin
 │   │                          #   for pages that own their scroll), share_dialog.dart
@@ -153,7 +164,9 @@ secret-sauce/
     │   │                         #   (`db:sim:rls`) — writes, then rolls back. NOT in db:sim
     │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
     ├── tests/rls_matrix.sql      # the RLS matrix as a SIGNED-IN user (BL-7, `db:rls`) —
-    │                             #   137 checks; makes its own users, then ROLLS BACK
+    │                             #   165 checks; makes its own users, then ROLLS BACK.
+    │                             #   §G is Phase 35b: imported profiles, entities, claims,
+    │                             #   and the claim MERGE end to end
     ├── tests/nutrition_estimate.sql  # the estimator's ONLY coverage (Phase 29c): fixture
     │                             #   foods/units/trees -> exact labels, then ROLLS BACK
     ├── tests/nutrition_fixtures.sql  # the other half (29d, `db:nutrition:verify`): the
@@ -291,6 +304,38 @@ melos run nutrition:gen       # regenerate supabase/nutrition_foods.sql (commit 
 melos run nutrition:check     # fail if that .sql is stale — CI runs this
 melos run fdc:extract -- --bundle="C:\path\to\FoodData_Central_csv_2026-04-30"
 
+# Scraped corpus (Phase 34). No credentials, and this data never reaches a database. Tools live in recipeData/_tools/, data in corpus/.
+# Politeness is not optional here: robots.mjs evaluates each host's real robots.txt
+# per URL, honours Crawl-delay, treats an unreachable robots.txt as DISALLOW, and
+# backs the WHOLE source off on a 429/503 (B098's neighbour). Concurrency is per HOST.
+melos run corpus:discover      # sitemap sweep, cached
+melos run corpus:harvest       # fetch + extract everything pending (resumable)
+melos run corpus:status        # kept / done / discovered per source
+melos run corpus:index         # index.jsonl + chefs/groups/restaurants.json
+melos run corpus:report        # corpus/_reports/CORPUS.md
+melos run corpus:clean         # dedupe + prune dead sources
+melos run corpus:similar       # the same dish across different chefs (fork-model evidence)
+
+# The same tools directly, for the flags the melos scripts fix:
+cd recipeData/_tools
+node probe_batch.mjs candidates/tier1-brands.json   # qualify candidates, one line each
+node promote.mjs ../_reports/probes/tier1-brands.json --batch tier1   # -> corpus/sources.json
+node harvest.mjs --discover                  # sitemap sweep per source, cached
+node harvest.mjs --concurrency 18            # fetch + extract everything pending
+node harvest.mjs --only king-arthur --limit 50
+node harvest.mjs --status                    # kept / done / discovered per source
+node corpus_stats.mjs --fields               # what the shards actually contain
+node dedupe.mjs --dry                        # duplicates from an interrupted run (B098)
+node corpus_query.mjs --chain "Olive Garden"  # ask index.jsonl a question
+node corpus_export.mjs --files 3             # corpus -> the app's recipeData shape
+node corpus_index.mjs                        # chefs.json / groups.json / restaurants.json
+node report.mjs                              # -> corpus/_reports/CORPUS.md (generated)
+node prune.mjs --dry                         # sources spending requests and keeping nothing
+node repair_state.mjs --dry                  # URLs a 429 closed out without an answer (B099)
+node retag.mjs --reparse                     # re-parse ingredient lines that failed (B101)
+node retag.mjs --reparse-all                 # re-run the parser over EVERY line (B105)
+
+
 # DB tasks — need `psql` on PATH and $env:SUPABASE_DB_URL. See the warning under Gotchas.
 # Every step below except the sim runs under `psql -1` — one transaction per file, so a failure
 # part-way through rolls that file back instead of leaving half a schema (OPT-T6).
@@ -305,7 +350,7 @@ melos run db:reset    # drop -> create -> nutrition -> seed -> recipes -> sim (~
 # The RLS acceptance matrix as a SIGNED-IN user (BL-7). Additive only in the sense that
 # it writes and then rolls back — it leaves no user, no recipe, no helper function.
 # Run it after ANY change to a policy, a `security definer` function, or the column grants.
-melos run db:rls      # 137 checks across anon / owner / shared-with / stranger
+melos run db:rls      # 165 checks across anon / owner / shared-with / stranger / imported
 
 # Auto-nutrition SQL. Both roll back; run them after touching the estimator, the
 # backfill, nutritionData/, or an auto recipe's ingredients.
@@ -474,7 +519,11 @@ Server-owned columns the client must **never** write (trigger-maintained; omitte
 `view_count`, `rating_sum`, `rating_count`, `rating_avg`, `current_version_id`,
 `forked_from_recipe_id`, `forked_from_version_id`, `created_at`,
 `updated_at`; on `profiles` — `chef_score`, `chef_tier`, `public_recipe_count`, `total_likes`,
-`total_saves`, `total_views` (omitted from `ProfileRepository.updateMine`).
+`total_saves`, `total_views`, plus Phase 35b's `kind`, `claimed_at` and `merged_into` (omitted
+from `ProfileRepository.updateMine`). `profiles.auth_user_id` is **insert-only** — granted on
+insert because `profiles_insert`'s `with check` pins it to `auth.uid()` in the same statement,
+never on update, because an update grant would let a member re-point their profile at another
+account (`rls_matrix.sql` G16/G17).
 **Fork lineage is on that list as of B082** and is not trigger-maintained but RPC-maintained:
 `fork_recipe` is its only writer, `save_recipe` raises `42501` on a create that carries it and
 ignores it on update (the client echoes the stored value back on every save, so refusing there
@@ -606,9 +655,46 @@ because they share a return shape on purpose. **There is no client for any of th
 Momentum tab, the Month/Week toggle and the `New` sort are still drawn and disabled.
 Details: [SDS §10](./docs/SDS.md#10-chefs-tiers--leaderboard).
 
-Five Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/models/enums.dart):
-`difficulty`, `recipe_visibility`, `share_permission` (`edit` reserved, unused),
-`suggestion_status`, `chef_tier`.
+**Identity: `profiles.id` is no longer `auth.uid()` (Phase 35b).** `profiles` used to be 1:1 with
+`auth.users` — its `id` was a foreign key — and every RLS policy compared `owner_id = auth.uid()`
+directly. The corpus credits 19,681 named chefs who never signed up, so the FK is gone and the link
+moved to a nullable `profiles.auth_user_id` with `kind` = `member` | `imported` beside it. Four
+rules follow, and the first is what makes the rest safe:
+
+- **The two values still agree for every member.** `handle_new_user` keeps writing `id = new.id`,
+  and 0001 backfills `auth_user_id = id`, so the migration is a no-op for every row that already
+  existed — all 137 pre-existing `rls_matrix.sql` checks pass unchanged, which is the evidence.
+  They part company for exactly one person: a member who has **claimed** an imported chef page.
+- **SQL asks `current_profile_id()`, never `auth.uid()`,** for anything keyed on a `profiles` id.
+  It is `stable security definer set search_path = public` and returns null when signed out, so
+  every predicate stays false for `anon` the way it always was. `auth.uid()` remains correct in
+  exactly three places: the `is not null` signed-in guards, `profiles_insert` (the row being
+  checked is the row that would make the lookup succeed, so the function returns null there), and
+  the **storage bucket policies**, whose folders are namespaced by the auth uid.
+- **Dart asks [ProfileIdResolver](packages/core/lib/src/repositories/profile_id.dart)** — one
+  cached RPC per session, behind `AuthRepository.currentProfileId()` and `currentProfileIdProvider`.
+  `currentUserIdProvider` is still the right answer for "is anyone signed in" and for Storage.
+  Writing the auth uid into a `user_id` column for a claimed member is denied silently by RLS
+  (Gotcha 2), which is why the client asks rather than assumes.
+- **Imported profiles are world-readable, immutable and unranked.** Immutable by construction —
+  nothing can resolve to a profile with no account, so no extra policy exists. Unranked by an
+  explicit `kind = 'member'` filter in `chefs_leaderboard`, `chefs_leaderboard_windowed`,
+  `chef_standing`, `chefs_tier_counts`, `profiles_leaderboard_member_idx` and
+  `recompute_all_chef_stats`; without it 19,681 zero-score chefs tie and then sort by
+  `public_recipe_count desc`, and the board becomes the corpus.
+
+Claiming is `approve_profile_claim()` — `security definer`, EXECUTE revoked from the API roles, run
+by hand. It moves recipes, versions, likes, saves, ratings, shares, views and memberships onto the
+claimed profile (`on conflict do nothing`, because a person cannot like one recipe twice), leaves
+the old profile as a `merged_into` **tombstone** rather than deleting an id that is already in
+URLs, and parks the `recipes_chef_stats` trigger for the duration the way the sim's bulk load does.
+`rls_matrix.sql` §G exercises all of it, merge included.
+
+Nine Postgres enums now exist; four are mirrored in
+[enums.dart](packages/core/lib/src/models/enums.dart): `difficulty`, `recipe_visibility`,
+`share_permission` (`edit` reserved, unused), `suggestion_status`, `chef_tier`, and Phase 35b's
+`profile_kind`. `entity_kind`, `entity_role` and `claim_status` exist in SQL only — nothing in Dart
+reads them yet, and they gain their mirrors with the entity model.
 
 ## Feature map
 
@@ -624,9 +710,19 @@ Five Postgres enums are mirrored exactly in [enums.dart](packages/core/lib/src/m
 | `/recipe/:id/cook`                | `features/recipe_detail` | **Cook mode** — full-screen, one step at a time, **always dark** (`AppTheme.dark()`, the only screen that overrides the theme; the phone is propped under kitchen lights). `cook_mode_screen.dart` (route + shortcuts) → `cook_step_view.dart` (compact frames C/D, web frame H) → `cook_finish_view.dart` (frame E). Pure derivations in `cook_mode_model.dart`, session + timers in `cook_mode_providers.dart`. Signed-out safe; **not** in `needsAuth`. See "Cook mode" below |
 | `/recipe/new`, `/recipe/:id/edit` | `features/recipe_editor` | `edit_models.dart` holds mutable draft types; save appends a version. Images — the cover and each step's photo (Phase 33) — go through the one `imagePickerProvider` pick and its 5 MB guard, are held as **bytes on the draft**, and are uploaded inside `_save`: an abandoned edit leaves no orphan object in the bucket |
 | `/profile`                        | `features/profile`       | Current user; reached from the bottom bar on mobile and the avatar menu on web (`myProfileProvider`)                     |
+| `/legal/:doc`                     | `features/legal`         | **Privacy / Terms / Rights** (Phase 35a). One `LegalScreen` over a sealed `LegalBlock` list of Dart consts — no `flutter_markdown`. `LegalDoc.fromSlug` validates; an unknown slug falls back to Privacy rather than 404ing. Root navigator, signed-out safe, **no nav destination**. The four owner-supplied facts live in `LegalFacts`, and a red draft banner shows while any is still a placeholder |
 
 Only `/discover`, `/chefs`, `/my`, `/profile` sit inside the `ShellRoute` (nav chrome); detail,
-editor, and cook mode are pushed on the root navigator. `/profile` is in the shell but is **not** a web
+editor, cook mode, and the legal pages are pushed on the root navigator.
+
+**The legal links are chrome on web and page content on compact, and that split is load-bearing**
+(Phase 35a). Discover, Chefs and My Recipes all end in an infinite paged grid, so a footer appended
+to their scroll is a footer nobody reaches — the web shell therefore carries `LegalFooter(dense:
+true)` in `Scaffold.bottomNavigationBar`. On compact that slot is the `NavigationBar`, so the same
+links sit on the **profile screen** (signed in) and under the **sign-up form** (signed out). Both
+are needed: `/profile` is in `needsAuth`, so the profile screen alone leaves a signed-out phone
+reader with no route to any of the three pages. `apps/app/test/legal_screen_test.dart` pins that
+`/legal/*` stays out of `needsAuth` — the three routes nearest it in the router are all guarded. `/profile` is in the shell but is **not** a web
 destination, so the top bar's pill highlights nothing there — see Gotcha 18.
 
 **Discover is the front door; `/` is a redirect, not a page.** The landing screen was retired
@@ -834,6 +930,12 @@ the `code-review` skill). The ones you need while _writing_ code:
     `AdaptiveLayout` instead.
 14. **New `design_system` widget → export it from `design_system.dart`**, or `apps/app` cannot
     import it.
+    **A widget that has to be reachable is not the same as a widget that is rendered** (Phase 35a).
+    `SiteFooter` is a `Wrap`, so it cannot overflow — it grows taller instead, and in the web
+    chrome it grows into the viewport. Its envelope test therefore checks a *height* behaviour
+    (the copyright drops above `kSiteFooterCopyrightMaxScale`) rather than only `takeException()`,
+    because the failure mode here is a bar that quietly eats three rows of the page instead of one
+    and never throws.
 15. **`packages/core`'s tests do not touch a database — know what that buys.**
     `packages/core/test/` covers pure JSON→model decoding (enum wire values, column-name
     mappings, `numeric` handling) — no `SupabaseClient` needed, so that blocker never applied
@@ -855,8 +957,8 @@ the `code-review` skill). The ones you need while _writing_ code:
     steps runs as `postgres`, which bypasses policies — so CI also runs
     [supabase/tests/rls_matrix.sql](supabase/tests/rls_matrix.sql) (**BL-7**, `melos run db:rls`),
     which is the only thing here that exercises RLS as a **signed-in** user. It switches to
-    `set local role authenticated`, runs 137 checks across anon / owner / shared-with / unrelated
-    stranger, and rolls the whole transaction back. It closed the class B053 lived in and found
+    `set local role authenticated`, runs 165 checks across anon / owner / shared-with / unrelated
+    stranger / imported chef, and rolls the whole transaction back. It closed the class B053 lived in and found
     B061 on its first complete run. **Run it, and add a check to it, whenever you touch a policy, a
     `security definer` function, or the column grants** — a new table with new policies that the
     matrix does not name is still unproven. What it does *not* cover: Storage bucket policies, and
@@ -871,6 +973,18 @@ the `code-review` skill). The ones you need while _writing_ code:
     rising, marinating) is a step's `duration_minutes`, not `prep_minutes`. `seed_recipe_v2` is
     **not an upsert** — it returns early on an existing `(owner_id, title)`, so re-applying never
     pushes a content edit to a database that already has the recipe.
+    **`unit` is free text that the app prints verbatim, and the validator does not check it**
+    (B094). `formatText` is `'$amount $unit'` — nothing normalises or pluralises between the JSON
+    and the screen — so the spelling in the file is the spelling a cook reads. Canon, swept across
+    `recipeData/` **and** `simData/` on 2026-09-11: abbreviation units lowercase and invariant
+    (`g` `kg` `ml` `L` `tsp` `tbsp` `oz` `lb` — never `Tbsp`, `tablespoon(s)`, `teaspoon(s)`,
+    `grams`, `pound(s)`), word units keeping the plural a cook would read (`3 cloves garlic`, never
+    `3 clove garlic` — the singular is `units.json`'s lookup *key*, not a display form). `L` is a
+    deliberate departure from that file's `l` key, because a lowercase `l` reads as a `1`;
+    resolution is case-insensitive, so it costs nothing. A spelling absent from
+    `nutritionData/units.json` contributes **nothing** to an auto nutrition estimate and raises no
+    error, so a new unit goes in that file first. Nothing enforces any of this yet — see ROADMAP
+    BL-8.
 17. **Embedding `profiles` into a recipe query needs the FK hint.** `recipes` and `profiles` are
     related five ways (`owner_id`, plus many-to-many through likes/ratings/saves/shares), so the
     obvious `owner:profiles(...)` fails with `PGRST201: Could not embed because more than one
@@ -1002,6 +1116,23 @@ recipe` lives on the My Recipes header and search in Discover's search bar; putt
     with `RenderParagraph.didExceedMaxLines` as an *implication* (`value clipped ⇒ count clipped`),
     never as a pixel width: `flutter test`'s fixed-width font is far wider than Roboto, so a width
     assertion pins the harness while an implication survives the font swap.
+
+28. **The scraped corpus is not content, and the boundary is physical.** `corpus/` holds
+    recipes harvested from the public web (Phase 34) with the credit attached — `entity`
+    is the group that published it, `attribution.chef` the person named on the page, and
+    neither is inferred from the other. It is **separate from `recipeData/` on purpose**:
+    `tool/recipe_format.dart` reads `recipeData/recipes/*.json` and compiles it into
+    `supabase/seed_recipes.sql`, so anything that lands in that tree is one `recursive:
+    true` away from being applied to every database under the Secret Sauce Kitchen's
+    name. Three rules follow. Nothing in `corpus/` is promoted to seed data. A copycat
+    recipe's `attribution.restaurantMentioned` is a **mention**, never the publisher —
+    Olive Garden did not publish a blogger's reconstruction of its soup, and writing the
+    chain into `group` would put words in a brand's mouth. And the harvester asks
+    permission per URL from the host's real `robots.txt` (`recipeData/_tools/robots.mjs`),
+    treats an **unreachable** `robots.txt` as disallow, honours `Crawl-delay`, and backs
+    the whole source off on a 429 — a site that says no is a site that gets no requests,
+    and that is not a knob to turn up when a source looks valuable.
+
 
 ## Seed-data fit (MANDATORY)
 

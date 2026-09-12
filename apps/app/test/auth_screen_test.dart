@@ -29,6 +29,11 @@ class _FakeAuth implements AuthRepository {
   @override
   String? get currentUserId => null;
 
+  // Phase 35b: `profiles.id` and the auth uid are the same value for a member,
+  // which every fixture in this file is.
+  @override
+  Future<String?> currentProfileId() async => null;
+
   @override
   Stream<AuthState> authStateChanges() => const Stream.empty();
 

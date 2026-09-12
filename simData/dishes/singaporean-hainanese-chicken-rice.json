@@ -19,8 +19,8 @@
         { "quantity": 3, "unit": "L", "name": "water" },
         { "quantity": 5, "unit": "cm", "name": "ginger", "note": "sliced" },
         { "quantity": 4, "unit": null, "name": "scallions", "note": "halved" },
-        { "quantity": 2, "unit": "Tbsp", "name": "salt" },
-        { "quantity": 1, "unit": "Tbsp", "name": "sesame oil", "note": "for brushing" },
+        { "quantity": 2, "unit": "tbsp", "name": "salt" },
+        { "quantity": 1, "unit": "tbsp", "name": "sesame oil", "note": "for brushing" },
         { "quantity": null, "unit": null, "name": "ice water", "note": "a large bowlful, for the plunge" }
       ]
     },
@@ -28,7 +28,7 @@
       "name": "For the rice",
       "ingredients": [
         { "quantity": 2, "unit": "cups", "name": "jasmine rice", "note": "rinsed until the water runs clear, then drained" },
-        { "quantity": 2, "unit": "Tbsp", "name": "chicken fat", "note": "trimmed from the cavity of the bird" },
+        { "quantity": 2, "unit": "tbsp", "name": "chicken fat", "note": "trimmed from the cavity of the bird" },
         { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "finely chopped" },
         { "quantity": 3, "unit": null, "name": "shallots", "note": "finely chopped" },
         { "quantity": 2, "unit": null, "name": "pandan leaves", "note": "knotted", "is_optional": true },
@@ -51,9 +51,9 @@
         { "quantity": 8, "unit": null, "name": "red chillies", "note": "seeds left in" },
         { "quantity": 3, "unit": "cloves", "name": "garlic" },
         { "quantity": 2, "unit": "cm", "name": "ginger" },
-        { "quantity": 2, "unit": "Tbsp", "name": "lime juice" },
+        { "quantity": 2, "unit": "tbsp", "name": "lime juice" },
         { "quantity": 1, "unit": "tsp", "name": "sugar" },
-        { "quantity": 3, "unit": "Tbsp", "name": "poaching broth" },
+        { "quantity": 3, "unit": "tbsp", "name": "poaching broth" },
         { "quantity": 0.5, "unit": "tsp", "name": "salt" }
       ]
     }

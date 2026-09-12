@@ -19,7 +19,7 @@
         { "quantity": 400, "unit": "ml", "name": "warm water" },
         { "quantity": 150, "unit": "g", "name": "queso fresco", "note": "crumbled; mozzarella works" },
         { "quantity": 1, "unit": "tsp", "name": "salt" },
-        { "quantity": 2, "unit": "Tbsp", "name": "butter", "note": "for the griddle" }
+        { "quantity": 2, "unit": "tbsp", "name": "butter", "note": "for the griddle" }
       ]
     }
   ],

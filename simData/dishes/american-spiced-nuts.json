@@ -16,9 +16,9 @@
       "name": "",
       "ingredients": [
         { "quantity": 500, "unit": "g", "name": "mixed nuts", "note": "unsalted — pecans, cashews, almonds" },
-        { "quantity": 2, "unit": "Tbsp", "name": "butter", "note": "melted" },
-        { "quantity": 2, "unit": "Tbsp", "name": "rosemary", "note": "chopped fine" },
-        { "quantity": 1, "unit": "Tbsp", "name": "brown sugar" },
+        { "quantity": 2, "unit": "tbsp", "name": "butter", "note": "melted" },
+        { "quantity": 2, "unit": "tbsp", "name": "rosemary", "note": "chopped fine" },
+        { "quantity": 1, "unit": "tbsp", "name": "brown sugar" },
         { "quantity": 2, "unit": "tsp", "name": "salt" },
         { "quantity": 0.5, "unit": "tsp", "name": "cayenne", "note": "adjust to taste" }
       ]

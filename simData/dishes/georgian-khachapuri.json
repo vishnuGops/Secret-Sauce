@@ -20,7 +20,7 @@
         { "quantity": 7, "unit": "g", "name": "instant yeast" },
         { "quantity": 1, "unit": "tsp", "name": "sugar" },
         { "quantity": 1, "unit": "tsp", "name": "salt" },
-        { "quantity": 2, "unit": "Tbsp", "name": "olive oil" }
+        { "quantity": 2, "unit": "tbsp", "name": "olive oil" }
       ]
     },
     {

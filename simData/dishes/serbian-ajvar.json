@@ -19,8 +19,8 @@
         { "quantity": 500, "unit": "g", "name": "aubergines" },
         { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "crushed to a paste" },
         { "quantity": 150, "unit": "ml", "name": "sunflower oil" },
-        { "quantity": 3, "unit": "Tbsp", "name": "red wine vinegar" },
-        { "quantity": 1, "unit": "Tbsp", "name": "salt" },
+        { "quantity": 3, "unit": "tbsp", "name": "red wine vinegar" },
+        { "quantity": 1, "unit": "tbsp", "name": "salt" },
         { "quantity": 1, "unit": "tsp", "name": "sugar" },
         { "quantity": 1, "unit": null, "name": "chilli", "note": "finely chopped", "is_optional": true }
       ]

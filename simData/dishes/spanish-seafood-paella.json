@@ -25,7 +25,7 @@
         { "quantity": 3, "unit": "cloves", "name": "garlic", "note": "minced" },
         { "quantity": 2, "unit": null, "name": "tomatoes", "note": "grated, skins discarded" },
         { "quantity": 1, "unit": "tsp", "name": "sweet paprika" },
-        { "quantity": 4, "unit": "Tbsp", "name": "olive oil" },
+        { "quantity": 4, "unit": "tbsp", "name": "olive oil" },
         { "quantity": 1, "unit": null, "name": "lemon", "note": "cut into wedges, to serve" }
       ]
     }

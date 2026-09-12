@@ -222,8 +222,9 @@ begin
       '00000000-0000-0000-0000-000000000000', v_id, 'authenticated', 'authenticated',
       'taster' || v_i || '@secretsauce.local',
       -- Unguessable, never recorded: these accounts exist only to own rows in
-      -- recipe_ratings (profiles.id is an FK to auth.users, so a rating needs a
-      -- real auth user). Nobody signs in as a taster, and the seed is documented
+      -- recipe_ratings (a rating is FK'd to `profiles`, and a demo taster is a
+      -- MEMBER — so it needs a real auth user behind it; Phase 35b's
+      -- account-free profiles are imported chefs, which a taster is not). Nobody signs in as a taster, and the seed is documented
       -- as safe to run against the hosted project — a literal password here
       -- would be a live, publicly-known credential on production.
       crypt(gen_random_uuid()::text, gen_salt('bf')),
@@ -235,9 +236,16 @@ begin
 
     -- Explicit upsert: after a `db:drop` the auth user survives, so the
     -- on_auth_user_created trigger will not re-create the profile row.
-    insert into profiles (id, display_name)
-    values (v_id, 'Taster ' || v_i)
-    on conflict (id) do update set display_name = excluded.display_name;
+    -- `auth_user_id` is written explicitly (Phase 35b). The trigger already
+    -- set it on a fresh database, so the `on conflict` branch is what matters:
+    -- a profile that lost its link would resolve to nothing through
+    -- `current_profile_id()`, and every policy would then deny this account
+    -- silently.
+    insert into profiles (id, auth_user_id, display_name)
+    values (v_id, v_id, 'Taster ' || v_i)
+    on conflict (id) do update
+      set display_name = excluded.display_name,
+          auth_user_id = coalesce(profiles.auth_user_id, excluded.auth_user_id);
   end loop;
 end $$;
 
@@ -265,14 +273,17 @@ begin
     '', '', '', ''
   ) on conflict (id) do nothing;
 
-  insert into profiles (id, display_name, bio)
+  insert into profiles (id, auth_user_id, display_name, bio)
   values (
+    v_owner,
     v_owner,
     'Secret Sauce Kitchen',
     'Curated classics from the Secret Sauce test kitchen.'
   )
   on conflict (id) do update
-    set display_name = excluded.display_name, bio = excluded.bio;
+    set display_name = excluded.display_name,
+        bio          = excluded.bio,
+        auth_user_id = coalesce(profiles.auth_user_id, excluded.auth_user_id);
 
   -- The Kitchen's recipes are NOT seeded here any more. They live in
   -- recipeData/recipes/*.json and are applied by supabase/seed_recipes.sql
@@ -352,10 +363,12 @@ begin
 
     -- Explicit upsert: after a `db:drop` the auth user survives, so the
     -- on_auth_user_created trigger will not re-create the profile row.
-    insert into profiles (id, display_name, bio)
-    values (v_id, v_names[v_i], v_bios[v_i])
+    insert into profiles (id, auth_user_id, display_name, bio)
+    values (v_id, v_id, v_names[v_i], v_bios[v_i])
     on conflict (id) do update
-      set display_name = excluded.display_name, bio = excluded.bio;
+      set display_name = excluded.display_name,
+          bio          = excluded.bio,
+          auth_user_id = coalesce(profiles.auth_user_id, excluded.auth_user_id);
   end loop;
 end $$;
 

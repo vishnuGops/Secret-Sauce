@@ -23,7 +23,7 @@
         { "quantity": 4, "unit": null, "name": "makrut lime leaves", "note": "centre ribs torn out" },
         { "quantity": 1, "unit": "tsp", "name": "salt" },
         { "quantity": 2, "unit": null, "name": "dried red chillies", "note": "soaked in warm water and drained", "is_optional": true },
-        { "quantity": 1, "unit": "Tbsp", "name": "shrimp paste", "note": "toasted in foil until it smells of the sea", "is_optional": true }
+        { "quantity": 1, "unit": "tbsp", "name": "shrimp paste", "note": "toasted in foil until it smells of the sea", "is_optional": true }
       ]
     }
   ],

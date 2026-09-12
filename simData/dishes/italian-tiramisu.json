@@ -19,9 +19,9 @@
         { "quantity": 100, "unit": "g", "name": "sugar" },
         { "quantity": 500, "unit": "g", "name": "mascarpone", "note": "cold" },
         { "quantity": 300, "unit": "ml", "name": "espresso", "note": "strong, cooled" },
-        { "quantity": 3, "unit": "Tbsp", "name": "marsala", "is_optional": true },
+        { "quantity": 3, "unit": "tbsp", "name": "marsala", "is_optional": true },
         { "quantity": 300, "unit": "g", "name": "savoiardi", "note": "hard ladyfingers, not soft sponge" },
-        { "quantity": 3, "unit": "Tbsp", "name": "cocoa powder", "note": "to finish" }
+        { "quantity": 3, "unit": "tbsp", "name": "cocoa powder", "note": "to finish" }
       ]
     }
   ],

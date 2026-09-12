@@ -23,8 +23,8 @@
         { "quantity": 1, "unit": "cup", "name": "flat-leaf parsley", "note": "leaves picked" },
         { "quantity": 0.5, "unit": "cup", "name": "mint", "note": "leaves picked" },
         { "quantity": 2, "unit": "tsp", "name": "sumac" },
-        { "quantity": 1, "unit": "Tbsp", "name": "pomegranate molasses" },
-        { "quantity": 4, "unit": "Tbsp", "name": "olive oil" },
+        { "quantity": 1, "unit": "tbsp", "name": "pomegranate molasses" },
+        { "quantity": 4, "unit": "tbsp", "name": "olive oil" },
         { "quantity": 1, "unit": null, "name": "lemon", "note": "juiced" }
       ]
     }

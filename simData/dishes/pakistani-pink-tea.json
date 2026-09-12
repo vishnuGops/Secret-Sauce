@@ -15,16 +15,16 @@
     {
       "name": "",
       "ingredients": [
-        { "quantity": 3, "unit": "Tbsp", "name": "green tea leaves", "note": "Kashmiri or gunpowder" },
+        { "quantity": 3, "unit": "tbsp", "name": "green tea leaves", "note": "Kashmiri or gunpowder" },
         { "quantity": 1, "unit": "L", "name": "water" },
         { "quantity": 0.5, "unit": "tsp", "name": "baking soda" },
         { "quantity": 4, "unit": "pods", "name": "cardamom", "note": "cracked open" },
         { "quantity": 1, "unit": "pinch", "name": "salt" },
         { "quantity": 250, "unit": "ml", "name": "iced water" },
         { "quantity": 500, "unit": "ml", "name": "whole milk" },
-        { "quantity": 3, "unit": "Tbsp", "name": "sugar", "note": "to taste" },
-        { "quantity": 2, "unit": "Tbsp", "name": "pistachios", "note": "slivered" },
-        { "quantity": 2, "unit": "Tbsp", "name": "almonds", "note": "slivered" }
+        { "quantity": 3, "unit": "tbsp", "name": "sugar", "note": "to taste" },
+        { "quantity": 2, "unit": "tbsp", "name": "pistachios", "note": "slivered" },
+        { "quantity": 2, "unit": "tbsp", "name": "almonds", "note": "slivered" }
       ]
     }
   ],

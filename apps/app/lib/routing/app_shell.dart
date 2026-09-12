@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:app/routing/nav_destinations.dart';
 import 'package:app/routing/top_nav_bar.dart';
+import 'package:app/widgets/legal_footer.dart';
 
 /// Responsive shell: bottom navigation on compact screens, the web
 /// [TopNavBar] on wider ones. A single codebase serves both.
@@ -36,6 +37,13 @@ class AppShell extends ConsumerWidget {
           height: TopNavBar.heightFor(context),
         ),
         body: child,
+        // Phase 35a. The legal links live in the chrome on web because every
+        // shell screen pages forever — Discover, Chefs and My Recipes all end
+        // in an infinite grid, so a footer appended to their scroll is a footer
+        // nobody reaches. It costs one slim row of viewport and is always
+        // there. On compact this slot is the NavigationBar, so the same links
+        // appear on the profile screen and under the sign-up form instead.
+        bottomNavigationBar: const LegalFooter(dense: true),
       );
     }
 

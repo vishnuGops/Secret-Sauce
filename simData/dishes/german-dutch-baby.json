@@ -18,11 +18,11 @@
         { "quantity": 3, "unit": null, "name": "eggs", "note": "room temperature" },
         { "quantity": 0.5, "unit": "cup", "name": "milk", "note": "room temperature" },
         { "quantity": 0.5, "unit": "cup", "name": "all-purpose flour" },
-        { "quantity": 1, "unit": "Tbsp", "name": "sugar" },
+        { "quantity": 1, "unit": "tbsp", "name": "sugar" },
         { "quantity": 0.25, "unit": "tsp", "name": "salt" },
-        { "quantity": 3, "unit": "Tbsp", "name": "butter" },
+        { "quantity": 3, "unit": "tbsp", "name": "butter" },
         { "quantity": 1, "unit": null, "name": "lemon", "note": "to serve" },
-        { "quantity": 2, "unit": "Tbsp", "name": "powdered sugar", "note": "to serve" }
+        { "quantity": 2, "unit": "tbsp", "name": "powdered sugar", "note": "to serve" }
       ]
     }
   ],

@@ -133,14 +133,17 @@ begin
     '', '', '', ''
   ) on conflict (id) do nothing;
 
-  insert into profiles (id, display_name, bio)
+  insert into profiles (id, auth_user_id, display_name, bio)
   values (
+    v_owner,
     v_owner,
     'Secret Sauce Kitchen',
     'Curated classics from the Secret Sauce test kitchen.'
   )
   on conflict (id) do update
-    set display_name = excluded.display_name, bio = excluded.bio;
+    set display_name = excluded.display_name,
+        bio          = excluded.bio,
+        auth_user_id = coalesce(profiles.auth_user_id, excluded.auth_user_id);
 end \$owner\$;
 ''';
 

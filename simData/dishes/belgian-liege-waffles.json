@@ -30,7 +30,7 @@
       "name": "To finish",
       "ingredients": [
         { "quantity": 200, "unit": "g", "name": "pearl sugar" },
-        { "quantity": 2, "unit": "Tbsp", "name": "neutral oil", "note": "for the iron" }
+        { "quantity": 2, "unit": "tbsp", "name": "neutral oil", "note": "for the iron" }
       ]
     }
   ],

@@ -17,13 +17,13 @@
       "ingredients": [
         { "quantity": 700, "unit": "g", "name": "tuna steaks", "note": "cut into 4 cm cubes" },
         { "quantity": 8, "unit": "pieces", "name": "goraka", "note": "or 2 Tbsp thick tamarind paste" },
-        { "quantity": 2, "unit": "Tbsp", "name": "black peppercorns", "note": "coarsely crushed, not powdered" },
+        { "quantity": 2, "unit": "tbsp", "name": "black peppercorns", "note": "coarsely crushed, not powdered" },
         { "quantity": 1, "unit": "tsp", "name": "chili powder" },
         { "quantity": 0.5, "unit": "tsp", "name": "turmeric" },
         { "quantity": 1, "unit": "sprig", "name": "curry leaves" },
         { "quantity": 1, "unit": "piece", "name": "pandan leaf", "note": "a 10 cm length" },
         { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "sliced" },
-        { "quantity": 1, "unit": "Tbsp", "name": "ginger", "note": "cut into fine strips" },
+        { "quantity": 1, "unit": "tbsp", "name": "ginger", "note": "cut into fine strips" },
         { "quantity": 1, "unit": "stick", "name": "cinnamon", "note": "a 5 cm piece" },
         { "quantity": 1.5, "unit": "tsp", "name": "salt" },
         { "quantity": 150, "unit": "ml", "name": "water" }

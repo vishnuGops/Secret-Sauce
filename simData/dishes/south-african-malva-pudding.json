@@ -17,11 +17,11 @@
       "ingredients": [
         { "quantity": 200, "unit": "g", "name": "sugar" },
         { "quantity": 2, "unit": null, "name": "eggs" },
-        { "quantity": 2, "unit": "Tbsp", "name": "apricot jam" },
+        { "quantity": 2, "unit": "tbsp", "name": "apricot jam" },
         { "quantity": 220, "unit": "g", "name": "all-purpose flour" },
         { "quantity": 1, "unit": "tsp", "name": "baking soda" },
         { "quantity": 200, "unit": "ml", "name": "milk" },
-        { "quantity": 1, "unit": "Tbsp", "name": "white vinegar" },
+        { "quantity": 1, "unit": "tbsp", "name": "white vinegar" },
         { "quantity": 30, "unit": "g", "name": "butter", "note": "melted" }
       ]
     },

@@ -22,7 +22,7 @@
         { "quantity": 3, "unit": "cloves", "name": "garlic", "note": "finely chopped" },
         { "quantity": 120, "unit": "ml", "name": "white wine", "note": "dry" },
         { "quantity": 1.2, "unit": "L", "name": "fish stock" },
-        { "quantity": 3, "unit": "Tbsp", "name": "olive oil" },
+        { "quantity": 3, "unit": "tbsp", "name": "olive oil" },
         { "quantity": 30, "unit": "g", "name": "butter", "note": "cold, cubed" },
         { "quantity": 30, "unit": "g", "name": "Parmesan", "note": "finely grated", "is_optional": true },
         { "quantity": 1, "unit": "handful", "name": "parsley", "note": "chopped" },

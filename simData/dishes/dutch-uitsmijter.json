@@ -22,7 +22,7 @@
         { "quantity": 30, "unit": "g", "name": "butter" },
         { "quantity": 0.5, "unit": "tsp", "name": "salt" },
         { "quantity": 0.25, "unit": "tsp", "name": "black pepper" },
-        { "quantity": 1, "unit": "Tbsp", "name": "chives", "note": "snipped", "is_optional": true },
+        { "quantity": 1, "unit": "tbsp", "name": "chives", "note": "snipped", "is_optional": true },
         { "quantity": 2, "unit": "tsp", "name": "mustard", "is_optional": true }
       ]
     }

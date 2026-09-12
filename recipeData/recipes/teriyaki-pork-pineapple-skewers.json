@@ -32,20 +32,20 @@
         { "quantity": 0.5, "unit": "cup", "name": "mirin" },
         { "quantity": 0.5, "unit": "cup", "name": "pineapple juice", "note": "orange juice also works", "food": "pineapple-juice" },
         { "quantity": 0.25, "unit": "cup", "name": "tamari", "food": "tamari" },
-        { "quantity": 3, "unit": "Tbsp", "name": "honey", "food": "honey" },
-        { "quantity": 1, "unit": "Tbsp", "name": "rice vinegar", "food": "rice-vinegar" },
+        { "quantity": 3, "unit": "tbsp", "name": "honey", "food": "honey" },
+        { "quantity": 1, "unit": "tbsp", "name": "rice vinegar", "food": "rice-vinegar" },
         { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "grated", "food": "garlic" },
         { "quantity": 1, "unit": "inch", "name": "fresh ginger", "note": "grated", "food": "ginger" },
         { "quantity": 1, "unit": "tsp", "name": "red pepper flakes", "note": "or to taste", "food": "red-pepper-flakes" },
         { "quantity": 1, "unit": "tsp", "name": "cornstarch", "food": "cornstarch" },
-        { "quantity": 1, "unit": "Tbsp", "name": "water", "food": "water" }
+        { "quantity": 1, "unit": "tbsp", "name": "water", "food": "water" }
       ]
     },
     {
       "name": "Pork and skewers",
       "ingredients": [
         { "quantity": 1, "unit": "lb", "name": "pork", "note": "cut for kabobs", "food": "pork-tenderloin" },
-        { "quantity": 1, "unit": "Tbsp", "name": "olive oil", "food": "olive-oil" },
+        { "quantity": 1, "unit": "tbsp", "name": "olive oil", "food": "olive-oil" },
         { "quantity": 2, "unit": "tsp", "name": "tamari", "food": "tamari" },
         { "quantity": 1, "unit": "tsp", "name": "smoked paprika", "food": "smoked-paprika" },
         { "quantity": null, "unit": null, "name": "salt and black pepper", "note": "to taste" },

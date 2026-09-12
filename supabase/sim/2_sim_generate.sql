@@ -245,8 +245,13 @@ begin
   -- whole pool is what the two flat `array[…]` literals here used to do, and it
   -- produced two-culture collages ("Hiroshi Okonkwo") at a rate of about
   -- fifteen in sixteen.
-  insert into profiles (id, display_name, bio, created_at)
+  insert into profiles (id, auth_user_id, display_name, bio, created_at)
   select
+    a.id,
+    -- Phase 35b: every simulated actor is a MEMBER and therefore carries the
+    -- link. Without it `current_profile_id()` returns null for the account and
+    -- `db:sim:rls` — which signs in as one of these — would find every policy
+    -- denying a seat it is supposed to hold.
     a.id,
     case
       -- Deliberate edge cases, at fixed indices so they are always present.
@@ -286,7 +291,8 @@ begin
     on b.n = sim.rand_int('actor:' || a.n, 'bio', 1, v_bios)
   on conflict (id) do update
     set display_name = excluded.display_name,
-        bio          = excluded.bio;
+        bio          = excluded.bio,
+        auth_user_id = coalesce(profiles.auth_user_id, excluded.auth_user_id);
 end $$;
 
 -- ============================================================================

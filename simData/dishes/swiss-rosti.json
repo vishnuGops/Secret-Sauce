@@ -17,7 +17,7 @@
       "ingredients": [
         { "quantity": 900, "unit": "g", "name": "waxy potatoes", "note": "cooked the day before, skins on" },
         { "quantity": 60, "unit": "g", "name": "butter", "note": "clarified if you can" },
-        { "quantity": 2, "unit": "Tbsp", "name": "neutral oil" },
+        { "quantity": 2, "unit": "tbsp", "name": "neutral oil" },
         { "quantity": 1.5, "unit": "tsp", "name": "salt" },
         { "quantity": 0.5, "unit": "tsp", "name": "black pepper" },
         { "quantity": 1, "unit": "pinch", "name": "nutmeg", "is_optional": true }

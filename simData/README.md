@@ -27,6 +27,15 @@ Exactly two keys differ:
 | `demo` | allowed | **rejected** | Engagement is *generated* from a modelled history, never authored. A hand-typed `like_count` is the thing Phase 24 exists to stop doing |
 | `sim` | rejected | allowed | Generation hints — see below |
 
+### Unit spellings are shared too
+
+Because the format is shared, so is the unit convention, and it is not something the linter
+enforces — `unit` is free text. Abbreviation units are lowercase and invariant (`g` `kg` `ml`
+`L` `tsp` `tbsp` `oz` `lb`, never `Tbsp` or `tablespoons`); word units keep the plural a cook
+would read (`3 cloves garlic`, not `3 clove garlic`). The app prints the unit verbatim, so the
+spelling in this file is what a reader sees. Full rules and the reasoning:
+[recipeData/README.md](../recipeData/README.md#unit-spellings).
+
 ### Don't author `nutrition` here
 
 The format allows it (simData inherits `recipeData/schema.json` by `$ref`), but **no dish uses

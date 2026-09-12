@@ -16,8 +16,8 @@
       "name": "For the broth",
       "ingredients": [
         { "quantity": 1.2, "unit": "kg", "name": "beef shin", "note": "cut into large chunks, sinew left on" },
-        { "quantity": 2, "unit": "Tbsp", "name": "beef tallow", "note": "or a neutral oil" },
-        { "quantity": 3, "unit": "Tbsp", "name": "doubanjiang", "note": "fermented broad bean chilli paste" },
+        { "quantity": 2, "unit": "tbsp", "name": "beef tallow", "note": "or a neutral oil" },
+        { "quantity": 3, "unit": "tbsp", "name": "doubanjiang", "note": "fermented broad bean chilli paste" },
         { "quantity": 1, "unit": null, "name": "onion", "note": "halved" },
         { "quantity": 6, "unit": "cloves", "name": "garlic", "note": "crushed flat" },
         { "quantity": 5, "unit": "cm", "name": "ginger", "note": "sliced into coins" },
@@ -25,7 +25,7 @@
         { "quantity": 2, "unit": null, "name": "tomatoes", "note": "quartered" },
         { "quantity": 120, "unit": "ml", "name": "soy sauce" },
         { "quantity": 60, "unit": "ml", "name": "Shaoxing wine" },
-        { "quantity": 2, "unit": "Tbsp", "name": "rock sugar" },
+        { "quantity": 2, "unit": "tbsp", "name": "rock sugar" },
         { "quantity": 2, "unit": null, "name": "star anise" },
         { "quantity": 1, "unit": "stick", "name": "cinnamon" },
         { "quantity": 2, "unit": null, "name": "bay leaves" },
@@ -38,9 +38,9 @@
       "ingredients": [
         { "quantity": 600, "unit": "g", "name": "wheat noodles", "note": "thick and chewy, not thin egg noodles" },
         { "quantity": 300, "unit": "g", "name": "baby bok choy", "note": "halved lengthways" },
-        { "quantity": 6, "unit": "Tbsp", "name": "pickled mustard greens", "note": "rinsed and chopped" },
+        { "quantity": 6, "unit": "tbsp", "name": "pickled mustard greens", "note": "rinsed and chopped" },
         { "quantity": 1, "unit": "handful", "name": "coriander" },
-        { "quantity": 2, "unit": "Tbsp", "name": "chilli oil", "is_optional": true }
+        { "quantity": 2, "unit": "tbsp", "name": "chilli oil", "is_optional": true }
       ]
     }
   ],

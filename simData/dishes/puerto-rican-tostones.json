@@ -25,9 +25,9 @@
       "name": "Garlic mojo",
       "ingredients": [
         { "quantity": 4, "unit": "cloves", "name": "garlic" },
-        { "quantity": 3, "unit": "Tbsp", "name": "olive oil" },
-        { "quantity": 2, "unit": "Tbsp", "name": "orange juice" },
-        { "quantity": 1, "unit": "Tbsp", "name": "lime juice" },
+        { "quantity": 3, "unit": "tbsp", "name": "olive oil" },
+        { "quantity": 2, "unit": "tbsp", "name": "orange juice" },
+        { "quantity": 1, "unit": "tbsp", "name": "lime juice" },
         { "quantity": 0.5, "unit": "tsp", "name": "dried oregano" },
         { "quantity": 0.5, "unit": "tsp", "name": "sea salt" }
       ]

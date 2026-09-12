@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:app/routing/app_router.dart';
+import 'package:app/widgets/legal_footer.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -84,6 +85,13 @@ class ProfileScreen extends ConsumerWidget {
                 icon: const Icon(Icons.logout),
                 label: const Text('Sign out'),
               ),
+              // Phase 35a. On compact this is the only screen a signed-in
+              // reader can reach the legal documents from — the web chrome
+              // carries them in its own bar, and the phone's bottom slot
+              // belongs to the NavigationBar. A signed-out phone reader gets
+              // them from the sign-up form instead.
+              const SizedBox(height: AppSpacing.xl),
+              const LegalFooter(),
             ],
           );
         },

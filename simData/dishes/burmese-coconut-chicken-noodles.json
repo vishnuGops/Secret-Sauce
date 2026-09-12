@@ -16,16 +16,16 @@
       "name": "For the soup",
       "ingredients": [
         { "quantity": 500, "unit": "g", "name": "chicken thighs", "note": "boneless, cut into bite-sized pieces" },
-        { "quantity": 3, "unit": "Tbsp", "name": "peanut oil" },
+        { "quantity": 3, "unit": "tbsp", "name": "peanut oil" },
         { "quantity": 2, "unit": null, "name": "onions", "note": "roughly cut" },
         { "quantity": 4, "unit": "cloves", "name": "garlic" },
         { "quantity": 3, "unit": "cm", "name": "ginger" },
         { "quantity": 1, "unit": "tsp", "name": "turmeric" },
         { "quantity": 1, "unit": "tsp", "name": "paprika", "note": "for colour more than heat" },
-        { "quantity": 3, "unit": "Tbsp", "name": "chickpea flour" },
+        { "quantity": 3, "unit": "tbsp", "name": "chickpea flour" },
         { "quantity": 400, "unit": "ml", "name": "coconut milk", "note": "full fat" },
         { "quantity": 500, "unit": "ml", "name": "chicken stock" },
-        { "quantity": 2, "unit": "Tbsp", "name": "fish sauce" },
+        { "quantity": 2, "unit": "tbsp", "name": "fish sauce" },
         { "quantity": 400, "unit": "g", "name": "egg noodles" }
       ]
     },
@@ -34,7 +34,7 @@
       "ingredients": [
         { "quantity": 2, "unit": null, "name": "eggs", "note": "hard boiled and quartered" },
         { "quantity": 1, "unit": null, "name": "red onion", "note": "sliced paper thin" },
-        { "quantity": 3, "unit": "Tbsp", "name": "fried shallots" },
+        { "quantity": 3, "unit": "tbsp", "name": "fried shallots" },
         { "quantity": 1, "unit": null, "name": "lime", "note": "cut into wedges" },
         { "quantity": 1, "unit": "handful", "name": "coriander" },
         { "quantity": 1, "unit": "tsp", "name": "chilli flakes", "is_optional": true }

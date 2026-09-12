@@ -22,8 +22,8 @@
         { "quantity": 1, "unit": null, "name": "onion", "note": "diced" },
         { "quantity": 300, "unit": "g", "name": "white cabbage", "note": "shredded" },
         { "quantity": 3, "unit": null, "name": "potatoes", "note": "cubed" },
-        { "quantity": 2, "unit": "Tbsp", "name": "tomato paste" },
-        { "quantity": 2, "unit": "Tbsp", "name": "red wine vinegar" },
+        { "quantity": 2, "unit": "tbsp", "name": "tomato paste" },
+        { "quantity": 2, "unit": "tbsp", "name": "red wine vinegar" },
         { "quantity": 3, "unit": "cloves", "name": "garlic", "note": "crushed" },
         { "quantity": 1, "unit": "bunch", "name": "dill", "note": "chopped, to finish" },
         { "quantity": 200, "unit": "g", "name": "sour cream", "note": "to serve" }

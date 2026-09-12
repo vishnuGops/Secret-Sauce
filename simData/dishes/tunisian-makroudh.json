@@ -19,7 +19,7 @@
         { "quantity": 150, "unit": "ml", "name": "olive oil", "note": "mild, not peppery" },
         { "quantity": 1, "unit": "pinch", "name": "salt" },
         { "quantity": 120, "unit": "ml", "name": "warm water" },
-        { "quantity": 1, "unit": "Tbsp", "name": "orange blossom water" }
+        { "quantity": 1, "unit": "tbsp", "name": "orange blossom water" }
       ]
     },
     {
@@ -28,7 +28,7 @@
         { "quantity": 400, "unit": "g", "name": "dates", "note": "pitted, soft" },
         { "quantity": 1, "unit": "tsp", "name": "cinnamon" },
         { "quantity": 1, "unit": "tsp", "name": "orange zest" },
-        { "quantity": 1, "unit": "Tbsp", "name": "butter", "note": "softened" }
+        { "quantity": 1, "unit": "tbsp", "name": "butter", "note": "softened" }
       ]
     },
     {
@@ -36,7 +36,7 @@
       "ingredients": [
         { "quantity": 500, "unit": "ml", "name": "neutral oil", "note": "for frying" },
         { "quantity": 300, "unit": "g", "name": "honey" },
-        { "quantity": 2, "unit": "Tbsp", "name": "sesame seeds", "is_optional": true }
+        { "quantity": 2, "unit": "tbsp", "name": "sesame seeds", "is_optional": true }
       ]
     }
   ],

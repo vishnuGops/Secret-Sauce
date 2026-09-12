@@ -19,7 +19,7 @@
         { "quantity": 4, "unit": null, "name": "plum tomatoes", "note": "quartered" },
         { "quantity": 1, "unit": null, "name": "scotch bonnet", "note": "stem removed; halve the heat by deseeding" },
         { "quantity": 1, "unit": null, "name": "onion", "note": "half blended, half sliced" },
-        { "quantity": 3, "unit": "Tbsp", "name": "tomato paste" }
+        { "quantity": 3, "unit": "tbsp", "name": "tomato paste" }
       ]
     },
     {
@@ -28,7 +28,7 @@
         { "quantity": 600, "unit": "g", "name": "parboiled long-grain rice" },
         { "quantity": 120, "unit": "ml", "name": "groundnut oil" },
         { "quantity": 700, "unit": "ml", "name": "chicken stock", "note": "warm" },
-        { "quantity": 1, "unit": "Tbsp", "name": "curry powder" },
+        { "quantity": 1, "unit": "tbsp", "name": "curry powder" },
         { "quantity": 1, "unit": "tsp", "name": "dried thyme" },
         { "quantity": 2, "unit": null, "name": "bay leaves" },
         { "quantity": 2, "unit": "tsp", "name": "salt" },

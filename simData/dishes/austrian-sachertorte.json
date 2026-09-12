@@ -29,7 +29,7 @@
       "name": "For the apricot layer",
       "ingredients": [
         { "quantity": 200, "unit": "g", "name": "apricot jam" },
-        { "quantity": 2, "unit": "Tbsp", "name": "rum", "is_optional": true }
+        { "quantity": 2, "unit": "tbsp", "name": "rum", "is_optional": true }
       ]
     },
     {

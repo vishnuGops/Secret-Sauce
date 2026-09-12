@@ -9,6 +9,8 @@ import 'package:app/features/auth/auth_screen.dart';
 import 'package:app/features/chefs/chef_page.dart';
 import 'package:app/features/chefs/chefs_screen.dart';
 import 'package:app/features/discover/discover_screen.dart';
+import 'package:app/features/legal/legal_document.dart';
+import 'package:app/features/legal/legal_screen.dart';
 import 'package:app/features/my_recipes/my_recipes_screen.dart';
 import 'package:app/features/profile/profile_screen.dart';
 import 'package:app/features/recipe_detail/cook_mode_screen.dart';
@@ -63,6 +65,20 @@ class Routes {
   /// recipes, exactly like Discover and recipe detail.
   static String chef(String id) => '/chef/$id';
   static const chefPattern = '/chef/:id';
+
+  /// The three legal documents (Phase 35a), one screen behind one pattern.
+  ///
+  /// `/legal/<slug>` rather than three top-level paths so the namespace stays
+  /// out of the way of a future `/:something` and so the footer can build a
+  /// link from a [LegalDoc] without a switch. The slug is validated by the
+  /// route builder — an unknown one falls back to Privacy rather than 404ing,
+  /// because the worst outcome of a mistyped legal URL is a reader who does not
+  /// find the policy.
+  ///
+  /// Signed-out safe and deliberately absent from `needsAuth`: a Terms page you
+  /// have to sign in to read is not a Terms page.
+  static String legal(String slug) => '/legal/$slug';
+  static const legalPattern = '/legal/:doc';
 }
 
 final _rootKey = GlobalKey<NavigatorState>();
@@ -141,6 +157,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: _rootKey,
         builder:
             (context, state) => ChefPage(chefId: state.pathParameters['id']!),
+      ),
+      // Root navigator, like recipe detail and the chef page: a document
+      // reached from a link, not a tab. It is opened with `push` from the
+      // footer so it hands the reader back where they were.
+      GoRoute(
+        path: Routes.legalPattern,
+        parentNavigatorKey: _rootKey,
+        builder:
+            (context, state) => LegalScreen(
+              doc:
+                  LegalDoc.fromSlug(state.pathParameters['doc']) ??
+                  LegalDoc.privacy,
+            ),
       ),
       ShellRoute(
         navigatorKey: _shellKey,

@@ -26,7 +26,7 @@
       "ingredients": [
         { "quantity": 700, "unit": "g", "name": "tomato passata" },
         { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "minced" },
-        { "quantity": 2, "unit": "Tbsp", "name": "white vinegar" },
+        { "quantity": 2, "unit": "tbsp", "name": "white vinegar" },
         { "quantity": 1, "unit": "tsp", "name": "cumin", "note": "ground" },
         { "quantity": 0.5, "unit": "tsp", "name": "chilli flakes" }
       ]

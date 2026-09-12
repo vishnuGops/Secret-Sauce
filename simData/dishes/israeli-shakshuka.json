@@ -15,7 +15,7 @@
     {
       "name": "",
       "ingredients": [
-        { "quantity": 3, "unit": "Tbsp", "name": "olive oil" },
+        { "quantity": 3, "unit": "tbsp", "name": "olive oil" },
         { "quantity": 1, "unit": null, "name": "onion", "note": "diced" },
         { "quantity": 2, "unit": null, "name": "red bell peppers", "note": "sliced" },
         { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "sliced" },

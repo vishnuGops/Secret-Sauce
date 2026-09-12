@@ -17,7 +17,7 @@
       "ingredients": [
         { "quantity": 500, "unit": "g", "name": "all-purpose flour" },
         { "quantity": 250, "unit": "ml", "name": "water", "note": "warm" },
-        { "quantity": 2, "unit": "Tbsp", "name": "butter", "note": "melted" },
+        { "quantity": 2, "unit": "tbsp", "name": "butter", "note": "melted" },
         { "quantity": 1, "unit": "tsp", "name": "salt" }
       ]
     },

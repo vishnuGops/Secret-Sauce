@@ -19,12 +19,12 @@
         { "quantity": 1, "unit": "L", "name": "water" },
         { "quantity": 700, "unit": "g", "name": "plain yogurt", "note": "full fat, at room temperature" },
         { "quantity": 1, "unit": null, "name": "egg" },
-        { "quantity": 2, "unit": "Tbsp", "name": "all-purpose flour" },
+        { "quantity": 2, "unit": "tbsp", "name": "all-purpose flour" },
         { "quantity": 1, "unit": null, "name": "onion", "note": "finely diced" },
         { "quantity": 30, "unit": "g", "name": "butter" },
-        { "quantity": 1, "unit": "Tbsp", "name": "dried mint" },
+        { "quantity": 1, "unit": "tbsp", "name": "dried mint" },
         { "quantity": 1, "unit": "tsp", "name": "salt" },
-        { "quantity": 3, "unit": "Tbsp", "name": "cilantro", "note": "chopped, to finish" }
+        { "quantity": 3, "unit": "tbsp", "name": "cilantro", "note": "chopped, to finish" }
       ]
     }
   ],

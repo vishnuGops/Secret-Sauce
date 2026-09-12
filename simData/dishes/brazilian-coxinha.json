@@ -20,7 +20,7 @@
         { "quantity": 2, "unit": "cloves", "name": "garlic" },
         { "quantity": 1, "unit": null, "name": "tomato", "note": "deseeded and diced" },
         { "quantity": 150, "unit": "g", "name": "cream cheese", "note": "full fat, at room temperature" },
-        { "quantity": 2, "unit": "Tbsp", "name": "parsley" },
+        { "quantity": 2, "unit": "tbsp", "name": "parsley" },
         { "quantity": 1, "unit": "tsp", "name": "salt" },
         { "quantity": 0.5, "unit": "tsp", "name": "black pepper" }
       ]
