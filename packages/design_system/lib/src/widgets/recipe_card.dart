@@ -147,7 +147,13 @@ class RecipeCard extends StatelessWidget {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    _CoverImage(url: recipe.coverImageUrl, scheme: scheme),
+                    // `displayCoverImageUrl` honours the publisher's
+                    // image policy (Phase 35c); the null path is the
+                    // placeholder this card already draws.
+                    _CoverImage(
+                      url: recipe.displayCoverImageUrl,
+                      scheme: scheme,
+                    ),
                     if (showChef && recipe.owner != null)
                       Positioned(
                         left: AppSpacing.sm,

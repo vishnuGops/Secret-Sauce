@@ -8,8 +8,8 @@ files, and acceptance criteria. Kept in sync with the code.
 > Phase OPT lives in [archive/EXECUTION-PLAN-phases-0-31.md](./archive/EXECUTION-PLAN-phases-0-31.md).
 > This file carries only work that is open: Phase 24 (in progress), Phase 25 (designed, not
 > started — its schema is absorbed by Phase 35b), Phase 32 (audit remediation), Phase 33 (SQL
-> shipped, client open), Phase 35 (the corpus becomes product — 35a and 35b are
-> done, 35c designed), and the ops reference.
+> shipped, client open), Phase 35 (the corpus becomes product — shipped
+> 2026-09-12), and the ops reference.
 
 ---
 
@@ -438,7 +438,7 @@ the recipe-card cover (Ph 30).
 
 ## Phase 35 — The corpus becomes product (designed, nothing built)
 
-Roadmap: [ROADMAP.md Phase 35](./ROADMAP.md#phase-35--the-corpus-becomes-product-35a--35b-done-35c-designed) ·
+Roadmap: [ROADMAP.md Phase 35](./ROADMAP.md#phase-35--the-corpus-becomes-product-shipped-2026-09-12) ·
 Depends on [Phase 34](./ROADMAP.md#phase-34--the-scraped-recipe-corpus-at-scale-in-progress) (the corpus) ·
 Absorbs [Phase 25](#phase-25--restaurants--signature-dishes) (its `restaurants` table becomes `entities`)
 
@@ -707,6 +707,44 @@ dishes.
 ---
 
 ### 35c — Ingestion: the corpus into Postgres, every counter at zero
+
+**Status: SHIPPED 2026-09-12.** 21,334 recipes, 1,284 imported chefs and 546 publishers are in the
+local database, drawn from 543 sources at 40 per source. Total database size **260 MB**, which fits
+the free tier — the 3-4 GB estimate was for the whole 558k corpus, and the tier is what avoided it.
+
+**The architecture that mattered: the write path is SQL, not Dart.** `import_recipe(jsonb)` holds
+the blocklist check, the idempotency key, the quality score and every deliberate omission;
+`tool/corpus_import.dart` maps a corpus record to a document and connects to nothing. The same split
+`tool/recipes.dart` uses with `seed_recipe_v2`, and it earns its keep twice over — a rule written in
+Dart is a rule the database cannot see, and a tool that reads 8.6 GB of scraped data never holds a
+superuser credential (Gotcha 7).
+
+**What the first real run found**, none of which a fixture would have:
+
+- **`profiles.id` had no default on any database that predates Phase 35b** (B109). The `create table`
+  carries `default gen_random_uuid()`, but `create table if not exists` does nothing when the table
+  exists — and every existing writer supplies an id (`handle_new_user` the auth uid, the seeds fixed
+  uuids, the sim `sim.uid(...)`), so nothing noticed for two commits. `import_recipe` is the first
+  caller that wants the database to mint one. It failed on the upgrade path while passing on a fresh
+  one: Gotcha 6, exactly.
+- **A scraped `datePublished` is not a timestamp.** `Thu, 01/06/2022 - 15:47` aborted a batch of 500.
+  Now filtered in the tool *and* caught by an exception block in SQL — an unparseable date is an
+  unknown date, and one bad string must not cost 500 good recipes.
+- **Scraped text overruns the length constraints.** `cuisine` and `category` are trimmed to 80; an
+  over-long cover URL is **dropped rather than trimmed**, because a truncated URL is a broken image
+  and null is honest.
+- **Check D4 was asserting something false about the corpus.** `(owner_id, title)` is the import key
+  for *authored* content, so a collision there is a real bug — but a captured recipe is keyed on
+  `(source_entity_id, source_url)`, and one cook posting one title at two URLs is a thing the open
+  web contains (ten in the first 21,000). D4 is now scoped to non-imported rows and **D4b asserts
+  the imported key**, so neither population is merely unchecked. The same shape as D3's narrowing in
+  35b: narrowing an assertion without asserting the other side is how a check quietly stops covering
+  anything.
+
+**Measured after the import**, as anon: 0 imported rows across all five ranked shelves, 200 of 200
+on `recipes_corpus`, 0 imported chefs on the leaderboard (63 real ones still ranked), and 13 of 50
+search hits imported — searchable, as designed. `rls_matrix` 175/0, `3_sim_verify` all passed,
+`db:sim:rls` 130/0.
 
 **Owner's instruction: empty stats.** Imported recipes and chefs land with `like_count`,
 `save_count`, `view_count` and `rating_*` at zero, and `chef_score` / `chef_tier` / the three totals

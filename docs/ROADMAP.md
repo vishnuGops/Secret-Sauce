@@ -331,7 +331,7 @@ A restaurant is an **entity managed by profiles**, never a second principal: nob
 a restaurant", so auth, RLS, and the engagement model stay exactly as they are. Signature dishes
 are rows pointing at existing `recipes` — no second recipe system.
 
-> **The schema checklist below is superseded by [Phase 35b](#phase-35--the-corpus-becomes-product-35a--35b-done-35c-designed).**
+> **The schema checklist below is superseded by [Phase 35b](#phase-35--the-corpus-becomes-product-shipped-2026-09-12).**
 > The corpus needs an attribution entity for 560 publishers and this phase needs a restaurant
 > entity; they are the same table, so `restaurants` becomes `entities` with an `entity_kind`
 > (`restaurant | brand | publication | community | chef_site`) and the two child tables become
@@ -591,14 +591,14 @@ a hand-written corpus total is wrong the moment the next source finishes.
       nothing — decide per site, do not guess
 - [~] Decide where this data lives beyond a local directory. The shards are git-ignored today,
       which is a deferral, not an answer. **Answered in part by
-      [Phase 35](#phase-35--the-corpus-becomes-product-35a--35b-done-35c-designed)**: a curated tier is
+      [Phase 35](#phase-35--the-corpus-becomes-product-shipped-2026-09-12)**: a curated tier is
       imported into Postgres (35c), the rest stays local until storage is paid for, and a small
       committed fixture shard under `corpus/_fixtures/` gives CI something to run against
 
 ---
 
 
-## Phase 35 — The corpus becomes product (35a + 35b done; 35c designed)
+## Phase 35 — The corpus becomes product (SHIPPED 2026-09-12)
 
 Design, reasoning and the decisions behind every line here:
 [EXECUTION-PLAN.md Phase 35](./EXECUTION-PLAN.md#phase-35--the-corpus-becomes-product-designed-nothing-built).
@@ -722,36 +722,46 @@ that reopens the day a non-English tier is imported, and it is a re-index of eve
       strangers is worse than splitting one person (`corpus/README.md` flags the same limit).
       **Belongs to the importer (35c)**; nothing writes a real imported profile yet
 
-### 35c — Ingestion, with every counter at zero
+### 35c — Ingestion, with every counter at zero — **DONE 2026-09-12**
 
-- [ ] `recipes`: `is_imported boolean not null default false` (+ partial index; every ranked shelf
-      filters it out), `quality_score smallint` computed once at import from field coverage — 558k
-      rows with identical zero counters have **no total order**, which is Gotcha 24 at scale
-- [ ] `recipes` provenance: `source_url`, `source_name`, `source_entity_id`, `imported_at`,
-      `rights_mode` (`functional|link_only|blocked`), `image_mode` (`hotlink|none`). Each needs its
-      line in the **column-level grant block** and in `kRecipeSelect` — the obligation runs both
-      ways (B050 / OPT-P1 / B086)
+**21,334 recipes, 1,284 chefs and 546 publishers are in the local database**, from 543 sources,
+at 260 MB. Every guarantee below was checked against that, not against a fixture.
+
+- [x] `recipes`: `is_imported` (+ two partial indexes, one per population — after an import the
+      two differ by three orders of magnitude and each query wants only its own side),
+      `quality_score smallint` computed once at import from field coverage. Measured: average 97,
+      range 35-100 across the imported tier
+- [x] `recipes` provenance: `source_url`, `source_name`, `source_entity_id`, `imported_at`,
+      `rights_mode`, `image_mode`, plus `import_blocklist` — the permanent record 35a's Rights page
+      promises, so a takedown cannot be undone by the next crawl. All six reach `kRecipeSelect` and
+      `Recipe`; none reaches a client grant, and `rls_matrix.sql` H5-H8 proves an owner cannot
+      write any of them. `image_mode` is honoured through **one** getter
+      (`Recipe.displayCoverImageUrl`) rather than at each of the five places that render a cover
 - [x] **The `kind = 'member'` ranking exclusion — done in 35b**, because that is where `kind`
       starts existing and a half-filtered board is worse than an unfiltered one. Without it 19,681
       imported chefs tie at score 0 and then sort by `public_recipe_count desc` inside the tie — a
       14,154-recipe publication bot above every real zero-score chef. An imported chef is
       browsable, never ranked (`rls_matrix.sql` G5-G7)
-- [ ] Scraped `aggregateRating` is **not** imported (the trigger recomputes `rating_*` from
-      `recipe_ratings` and would wipe it); `description` is **not** imported (35a); `nutrition` is
-      **not** imported in v1 (strings like `"345 kcal"`, and the estimator cannot read non-English
-      ingredient names)
-- [ ] `tool/corpus_import.dart` — idempotent/resumable on `unique(source_entity_id, source_url)`,
-      **triggers disabled for the load** then one `refresh_search_tsv` pass, **no `recipe_versions`
-      row per import** (558k whole-recipe jsonb snapshots nobody edited), `--tier` selection
-- [ ] **Decide the search config before importing.** `recipe_search_tsv` hard-codes
-      `to_tsvector('english', …)`; Korean/Japanese/French/German/Italian/Dutch rows index as
-      near-noise. Either an English-first tier or a `language` column + `regconfig` parameter —
-      changing it later means re-indexing every row
-- [ ] **Owner decision with a bill attached:** ~6.15M ingredient rows + ~3.79M step rows put the
-      full corpus at **3-4 GB** before indexes, against a **500 MB free-tier database**. First
-      public cut is a curated tier (order 20-50k recipes); the rest stays local until storage is paid
-- [ ] Committed fixture shard under `corpus/_fixtures/` (the real shards are git-ignored;
-      `index.jsonl` alone is 273 MB) so the importer and the attribution UI have CI coverage
+- [x] Scraped `aggregateRating`, `description` and `nutrition` are all **not** imported, and the
+      omissions are in `import_recipe` rather than in the tool — a rule written in Dart is a rule
+      the database cannot see
+- [x] `import_recipe(jsonb)` in SQL holds the whole write path — blocklist, idempotency key,
+      quality score, the omissions — and `tool/corpus_import.dart` is a JSON transformer that
+      connects to nothing. It writes batched `select import_recipe(...)` files; applying them is a
+      separate manual psql step, which keeps a tool that reads 8.6 GB of scraped data away from a
+      superuser credential (Gotcha 7). Verified idempotent: re-applying a batch left the count
+      unchanged. **No `recipe_versions` row per import**, as designed
+- [x] **Settled by the tier.** `_isEnglishSource` excludes the ~10 sources that declare a
+      non-English language, so `recipe_search_tsv` keeps its `'english'` config and no `language`
+      column is built. It reopens the day a non-English tier is imported — which is a re-index of
+      every row, so it stays a tier decision
+- [x] The curated tier came in at **260 MB total database** — 21,334 recipes, 243k ingredient
+      rows, 158k step rows — which fits the free tier with room to spare. The 3-4 GB figure was for
+      the whole 558k corpus and still is; the tier is what avoided it
+- [ ] Committed fixture shard under `corpus/_fixtures/` so the **importer** has CI coverage. The
+      SQL half is covered (`rls_matrix.sql` §H, `3_sim_verify.sql` group I) and the app half is
+      covered (`explore_screen_test.dart`, the repository tests); what is not is the JSON→document
+      transform in `tool/corpus_import.dart`, which today is proven only by having been run
 - [ ] **Decide the `entities.slug` namespace before the importer runs** (found reviewing 35b).
       `entities_insert` lets any signed-in member create an entity with any slug, and the column is
       `unique` — so a user can take `king-arthur` today and the importer either fails on the
@@ -784,8 +794,8 @@ run is done, Phase 33 having closed the content half; **Phase 33 is `[~]`** — 
 leaderboard's SQL is built and pinned, its client is not;
 **Phase 25 is designed-not-started** behind one remaining prerequisite (B043's tier calibration —
 the public chef page and the SQL harness are both done) **and its schema is now superseded by
-Phase 35b's `entities`**; **Phase 35 is two-thirds built** — 35a's legal pages and 35b's
-identity layer both landed 2026-09-12; 35c is designed; and **Phase 32** holds the 2026-08-26 audit's remediation items.
+Phase 35b's `entities`**; **Phase 35 shipped 2026-09-12** — the legal pages, the identity
+layer and the import, with 21,334 recipes in the local database; and **Phase 32** holds the 2026-08-26 audit's remediation items.
 
 #### BL-1 — OPT-S8 (B018) — rotate the hosted seed passwords (owner action)
 
@@ -921,8 +931,8 @@ up headlessly, so there are no DOM nodes to target and navigation has to be driv
 #### BL-7 — the RLS acceptance matrix as a _signed-in_ user — **DONE (2026-08-23)**
 
 Closed: [supabase/tests/rls_matrix.sql](../supabase/tests/rls_matrix.sql) (`melos run db:rls`) —
-**165 checks** as of Phase 35b (102 when BL-7 closed, 137 after Phase 33) across anon / owner /
-shared-with / stranger / imported chef, rolled back, wired into CI
+**177 checks** as of Phase 35c (102 when BL-7 closed, 137 after Phase 33, 165 after 35b) across
+anon / owner / shared-with / stranger / imported chef, rolled back, wired into CI
 (`database.yml`). Found B061 on its first complete run. **Standing rule:** any change to a policy,
 a `security definer` function, or the column grants → run it, and add a check for any new surface
 in the same change. Still not covered by the matrix: Storage bucket RLS (needs the storage

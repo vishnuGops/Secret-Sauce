@@ -1081,7 +1081,11 @@ update recipes r
 -- ============================================================================
 
 insert into sim.entity (id, n, slug)
-select sim.uid('entity', i), i, 'sim-entity-' || i
+-- `src:` prefixed, like the importer's (Phase 35c): these stand in for
+-- imported publishers, and `entities_slug_namespace` reserves that prefix for
+-- exactly them. A fixture that sits outside the namespace it is imitating is a
+-- fixture that cannot catch a namespace bug.
+select sim.uid('entity', i), i, 'src:sim-entity-' || i
 from generate_series(1, greatest(3, sim.n_users() / 80)) i
 on conflict (n) do nothing;
 
@@ -1132,15 +1136,19 @@ join lateral (
 ) a on true
 on conflict (entity_id, profile_id) do nothing;
 
+-- Driven from the IMPORTED side, not the entity side, so **every** imported
+-- chef lands on exactly one entity. Iterating entities instead seats one chef
+-- each and leaves the rest publisher-less, which is a state the real corpus
+-- cannot produce: an imported recipe always came from somewhere, and 2d below
+-- derives its provenance through this membership.
 insert into entity_members (entity_id, profile_id, role, title, created_at)
 select e.id, ip.id, 'chef'::entity_role, null, sim.epoch_start()
-from sim.entity e
+from sim.imported_profile ip
 join lateral (
-  select p.id from sim.imported_profile p
-  where p.n = 1 + (abs(hashtextextended('entity-imported:' || e.n, sim.seed()))
-                   % (select count(*)::int from sim.imported_profile))
+  select en.id, en.n from sim.entity en
+  where en.n = 1 + (ip.n % (select count(*)::int from sim.entity))
   limit 1
-) ip on true
+) e on true
 on conflict (entity_id, profile_id) do nothing;
 
 -- Signature dishes: a member's own PUBLIC recipe, which is what
@@ -1148,6 +1156,38 @@ on conflict (entity_id, profile_id) do nothing;
 -- `postgres`), so the filter is written out rather than relied upon — a fixture
 -- that only satisfies the policy by accident is a fixture that stops
 -- satisfying it silently.
+-- ----------------------------------------------------------------------------
+-- 2d. Provenance on the imported recipes (Phase 35c)
+-- ----------------------------------------------------------------------------
+-- Written as an UPDATE after the fact rather than as columns on the insert
+-- above, because that insert is shared with the 452 actor-owned recipes and
+-- adding six always-null columns to it would put the provenance vocabulary in
+-- front of every reader of the main pipeline.
+--
+-- This is what makes the fixture a preview of 35c rather than a decoration:
+-- `is_imported` is what every ranked shelf filters on and what `recipes_corpus`
+-- selects, and with it unset the exclusion could be deleted from all five
+-- shelves without a single check failing.
+--
+-- `quality_score` is a stand-in here — the importer computes it from real field
+-- coverage, and the sim has no missing fields to measure, so it draws a spread
+-- instead. The spread is the part that matters for a fixture: a constant score
+-- would hide exactly the tie `recipes_corpus` ends in `id` to survive.
+update recipes r
+set is_imported      = true,
+    imported_at      = sim.epoch_end(),
+    quality_score    = sim.rand_int('irecipe:' || r.id::text, 'quality', 35, 100),
+    source_url       = 'https://example.test/' || e.slug || '/' || r.id,
+    source_name      = e.name,
+    source_entity_id = e.id,
+    rights_mode      = 'functional',
+    image_mode       = 'hotlink'
+from sim.imported_profile ip
+join entity_members m on m.profile_id = ip.id
+join entities e on e.id = m.entity_id
+where r.owner_id = ip.id
+  and not r.is_imported;
+
 insert into entity_signature_dishes (entity_id, recipe_id, sort_order, created_at)
 select e.id, r.id, (row_number() over (partition by e.id order by r.id))::int - 1,
        sim.epoch_start()

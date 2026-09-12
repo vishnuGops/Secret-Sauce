@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
@@ -88,6 +89,87 @@ class AttributionBlock extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadii.card),
       ),
       child: row,
+    );
+  }
+}
+
+/// Where an imported recipe came from (Phase 35c).
+///
+/// This is not decoration and it is not optional. The rights position the app
+/// states — store and show the functional part of a recipe, link everything
+/// expressive — only holds because the credit and the link travel with the
+/// content. A captured recipe rendered without them is the same bytes making a
+/// different, and indefensible, claim.
+///
+/// Rendered for imported recipes only. A member's own recipe is credited by its
+/// owner badge like every other, and a second credit line under it would read
+/// as a second author.
+class SourceCredit extends StatelessWidget {
+  const SourceCredit({super.key, required this.recipe});
+
+  final Recipe recipe;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!recipe.isImported) return const SizedBox.shrink();
+
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final publisher = recipe.sourceName;
+    final url = recipe.sourceUrl;
+
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(AppRadii.card),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.link, size: 20, color: scheme.onSurfaceVariant),
+              const SizedBox(width: AppSpacing.sm),
+              // The icon is the non-flex child and the text takes what is left
+              // (Gotcha 21). A publisher name is unbounded, so nothing here may
+              // be intrinsically sized beside it.
+              Expanded(
+                child: Text(
+                  publisher == null || publisher.isEmpty
+                      ? 'Published elsewhere'
+                      : 'Published by $publisher',
+                  style: theme.textTheme.titleSmall,
+                ),
+              ),
+            ],
+          ),
+          if (url != null && url.isNotEmpty) ...[
+            const SizedBox(height: AppSpacing.sm),
+            // Printed rather than launched, for now. Which outbound links open
+            // and how is a decision (target, `noopener`, whether a tap leaves
+            // the app at all), and printing the address already does the job the
+            // rights position needs: a reader can go and read the original.
+            SelectableText(
+              url,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+          if (!recipe.showsContent) ...[
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              'This publisher asked us to link rather than reproduce, so the '
+              'method is on their page.',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 }

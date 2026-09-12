@@ -43,6 +43,47 @@ enum SuggestionStatus {
   rejected,
 }
 
+/// How much of an imported recipe may be shown (Phase 35c).
+///
+/// Per row rather than per source, so honouring a publisher's objection is a
+/// data change rather than a deploy.
+enum RightsMode {
+  /// Ingredients, steps, the credit and the link. The default, and the position
+  /// the Rights page states: functional content is shown, expressive content is
+  /// linked.
+  @JsonValue('functional')
+  functional,
+
+  /// The title and the link, nothing else.
+  @JsonValue('link_only')
+  linkOnly,
+
+  /// Not rendered at all. `recipes_corpus` filters these out, so the app should
+  /// never see one — the value exists so a takedown can be honoured without
+  /// deleting the row that records it.
+  @JsonValue('blocked')
+  blocked;
+
+  bool get showsContent => this == RightsMode.functional;
+}
+
+/// Whether an imported recipe's cover may be shown (Phase 35c).
+///
+/// **There is deliberately no third value.** A proxy would be a copy on our own
+/// infrastructure wearing a link's clothes, and an enum with no word for it is
+/// a decision enforced rather than remembered.
+enum ImageMode {
+  /// Shown from the publisher's own address.
+  @JsonValue('hotlink')
+  hotlink,
+
+  /// Not shown. The answer to any publisher who would rather we did not.
+  @JsonValue('none')
+  none;
+
+  bool get showsImage => this == ImageMode.hotlink;
+}
+
 /// What kind of group published a recipe (Phase 35b).
 ///
 /// Phase 25 designed a `restaurant_role`/`restaurants` pair; this is that,

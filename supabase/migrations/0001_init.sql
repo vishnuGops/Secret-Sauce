@@ -76,6 +76,21 @@ do $$ begin
   if not exists (select 1 from pg_type where typname = 'entity_role') then
     create type entity_role as enum ('owner', 'chef');
   end if;
+  -- Phase 35c. How much of an imported recipe may be shown, per row, so a
+  -- publisher's objection is a data change rather than a deploy. `functional`
+  -- is ingredients + steps + credit + link; `link_only` is the title and the
+  -- link and nothing else; `blocked` is not rendered at all and exists so a
+  -- takedown can be honoured without deleting the row that records it.
+  if not exists (select 1 from pg_type where typname = 'rights_mode') then
+    create type rights_mode as enum ('functional', 'link_only', 'blocked');
+  end if;
+  -- Phase 35c. Whether the cover may be shown from the publisher's own address.
+  -- There is deliberately no `copy` or `proxy` value: a proxy is a copy on our
+  -- infrastructure wearing a link's clothes, and an enum with no word for it is
+  -- a decision enforced rather than remembered.
+  if not exists (select 1 from pg_type where typname = 'image_mode') then
+    create type image_mode as enum ('hotlink', 'none');
+  end if;
 end $$;
 
 -- ============================================================================
@@ -111,6 +126,17 @@ create table if not exists profiles (
   bio          text,
   created_at   timestamptz not null default now()
 );
+
+-- `default gen_random_uuid()` on an EXISTING database (B109). The create above
+-- carries it, but `create table if not exists` does nothing when the table is
+-- already there — so on every database built before Phase 35b, `profiles.id`
+-- still has no default and any insert that does not name an id fails
+-- `not-null`. Nothing noticed for two commits because every existing writer
+-- supplies an id: `handle_new_user` writes the auth uid, the seed files write
+-- fixed uuids, the sim writes `sim.uid(...)`. `import_recipe` is the first
+-- caller that legitimately wants the database to mint one, and it failed on the
+-- upgrade path while passing on a fresh one — Gotcha 6, exactly.
+alter table profiles alter column id set default gen_random_uuid();
 
 -- The Phase 35b columns, added via `alter` so a database built by an earlier
 -- apply of this file picks them up on a re-run (Gotcha 5).
@@ -891,6 +917,30 @@ create index if not exists entities_kind_idx on entities (kind);
 -- entity is credited, so an unbounded one is a payload amplifier. Guarded by
 -- NAME, and therefore subject to Gotcha 5's constraint trap — widening this
 -- predicate later means dropping the constraint explicitly in this file.
+-- The importer's slug namespace (Phase 35c).
+--
+-- `entities.slug` is unique, and `import_recipe` finds-or-creates a publisher
+-- by it. Without a reserved prefix, any signed-in member could create an entity
+-- with the slug a publisher is going to need — `king-arthur` — and the
+-- importer's `on conflict (slug) do nothing` would then attach that
+-- publisher's recipes to a row a stranger created and still owns
+-- (`entities_update` is `is_entity_owner`). Not hypothetical once an import
+-- runs: it is a free land-grab on 560 names.
+--
+-- So imported entities live under `src:` and members may not write that prefix.
+-- The slug never appears in a URL — `/entity/:id` takes the uuid — so the
+-- namespace costs a reader nothing.
+do $$ begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'entities_slug_namespace'
+  ) then
+    alter table entities
+      add constraint entities_slug_namespace
+      check (created_by is null or slug not like 'src:%')
+      not valid;
+  end if;
+end $$;
+
 do $$ begin
   if not exists (
     select 1 from pg_constraint where conname = 'entities_text_lengths'
@@ -925,6 +975,106 @@ create table if not exists entity_signature_dishes (
 );
 create index if not exists entity_signature_recipe_idx
   on entity_signature_dishes (recipe_id);
+
+-- ----------------------------------------------------------------------------
+-- Provenance, and the imported flag (Phase 35c)
+-- ----------------------------------------------------------------------------
+-- `alter table` down here rather than columns in the `recipes` create above,
+-- because `source_entity_id` references `entities` and `recipes` is created
+-- some seven hundred lines earlier — an inline reference would fail every fresh
+-- apply, which is the B045 trap `ingredients.food_id` already documents.
+--
+-- Every column here is **server-owned**. The importer writes them, no client
+-- grant includes any of them (so a `PATCH` carrying one fails 42501 the way a
+-- forged counter does), and `save_recipe` does not touch them — which is what
+-- stops a member who has claimed an imported page from silently clearing its
+-- credit by editing the recipe.
+--
+-- `is_imported` is a column rather than a join to `profiles.kind`, for two
+-- reasons. Every ranked shelf filters on it on every page, and the alternative
+-- is a join per shelf per page to answer something the row already knows. And
+-- it is not the same question: a chef who claims their page becomes a `member`
+-- while the recipes they were credited for stay imported.
+alter table recipes add column if not exists is_imported boolean not null default false;
+
+-- What corpus browsing orders by. 558k rows arrive with identical zero
+-- counters, so there is **no total order** among them — and `offset` over a tie
+-- shows one row twice and hides another, silently (Gotcha 24). Computed once at
+-- import from field coverage (cover image, servings, times, a sane ingredient
+-- count, steps, a named chef). Deliberately **not** engagement: nothing updates
+-- it and nothing should, or it becomes a ranking by another name.
+alter table recipes add column if not exists quality_score smallint;
+
+alter table recipes add column if not exists source_url text;
+alter table recipes add column if not exists source_name text;
+alter table recipes add column if not exists source_entity_id uuid;
+alter table recipes add column if not exists imported_at timestamptz;
+alter table recipes add column if not exists rights_mode rights_mode not null default 'functional';
+alter table recipes add column if not exists image_mode image_mode not null default 'hotlink';
+
+do $$ begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'recipes_source_entity_id_fkey'
+  ) then
+    alter table recipes
+      add constraint recipes_source_entity_id_fkey
+      foreign key (source_entity_id) references entities (id) on delete set null;
+  end if;
+  if not exists (
+    select 1 from pg_constraint where conname = 'recipes_quality_score_range'
+  ) then
+    -- `not valid`: the table may already hold rows, and this is the cheap shape
+    -- (no rescan) `recipes_text_lengths` uses for the same reason.
+    alter table recipes
+      add constraint recipes_quality_score_range
+      check (quality_score is null or (quality_score between 0 and 100))
+      not valid;
+  end if;
+end $$;
+
+-- The importer's idempotency key: a re-run of a finished shard inserts nothing,
+-- which is what makes an import resumable in the same sense the crawl is.
+-- Partial, because every member-authored recipe has a null `source_url` and
+-- there will always be more of those than the unique index needs to carry.
+create unique index if not exists recipes_source_url_key
+  on recipes (source_entity_id, source_url)
+  where source_url is not null;
+
+-- Gotcha 4: the referencing side of a foreign key is never indexed
+-- automatically, so deleting an entity would seq-scan `recipes` once per
+-- cascaded row.
+create index if not exists recipes_source_entity_idx
+  on recipes (source_entity_id) where source_entity_id is not null;
+
+-- Corpus browsing's exact ordering over exactly its rows, and the complement
+-- for the ranked shelves, which all filter `is_imported = false`. Two partial
+-- indexes rather than one whole-table index because after an import the two
+-- populations differ by three orders of magnitude, and each query wants only
+-- its own side.
+create index if not exists recipes_imported_quality_idx
+  on recipes (quality_score desc, id)
+  where is_imported and visibility = 'public';
+create index if not exists recipes_not_imported_idx
+  on recipes (created_at desc, id) where not is_imported;
+
+-- ----------------------------------------------------------------------------
+-- import_blocklist (Phase 35a's promise, kept in 35c)
+-- ----------------------------------------------------------------------------
+-- The Rights page says a removal is recorded permanently rather than simply
+-- deleted, so a later crawl cannot quietly bring the same page back. This is
+-- that record. It is keyed on the URL rather than on a recipe id because the
+-- row it refers to is usually gone by the time anyone reads this table — the
+-- point is to refuse the *next* import, not to describe the last one.
+--
+-- Not world-readable: it names who asked and why.
+create table if not exists import_blocklist (
+  url         text primary key,
+  source_slug text,
+  reason      text,
+  created_at  timestamptz not null default now()
+);
+create index if not exists import_blocklist_source_idx
+  on import_blocklist (source_slug) where source_slug is not null;
 
 -- ----------------------------------------------------------------------------
 -- profile_claims (Phase 35b) — a real chef asking for their imported page
@@ -1668,6 +1818,7 @@ alter table entities                enable row level security;
 alter table entity_members          enable row level security;
 alter table entity_signature_dishes enable row level security;
 alter table profile_claims          enable row level security;
+alter table import_blocklist        enable row level security;
 
 -- profiles: world-readable, self-writable
 --
@@ -2050,6 +2201,17 @@ create policy claims_insert on profile_claims for insert
 -- `reject_profile_claim()`; a claimant who changes their mind files nothing,
 -- and RLS with no policy default-denies.
 
+-- ----------------------------------------------------------------------------
+-- import_blocklist (Phase 35c)
+-- ----------------------------------------------------------------------------
+-- RLS on, and **no policy at all**, which default-denies every API role for
+-- every command. That is the intent rather than an omission: the table records
+-- who asked for something to be taken down and why, and it is read by the
+-- importer running as `postgres`. Nothing on the client has any business
+-- seeing it. The blanket grants below still apply, which is exactly why the
+-- policy-free state matters — a grant without a policy returns empty, not an
+-- error (Gotcha 4).
+
 -- ============================================================================
 -- Table grants for the PostgREST roles
 --
@@ -2331,6 +2493,13 @@ as $$
   select r.*
   from recipes r
   where r.visibility = 'public'
+    -- Phase 35c. Imported content is browsable and searchable; it is not
+    -- RANKED. It arrives with every counter at zero, so a ranked shelf
+    -- would order 558k identical rows by whatever the tie-break happens to
+    -- be and bury the recipes people here actually wrote. `recipes_corpus`
+    -- is the surface that does show it, ordered by something that is not
+    -- engagement.
+    and not r.is_imported
     and r.created_at > now() - interval '30 days'
   order by
     (r.like_count + r.view_count)::numeric
@@ -2387,6 +2556,13 @@ as $$
   select r.*
   from recipes r cross join site_rating_prior() p
   where r.visibility = 'public'
+    -- Phase 35c. Imported content is browsable and searchable; it is not
+    -- RANKED. It arrives with every counter at zero, so a ranked shelf
+    -- would order 558k identical rows by whatever the tie-break happens to
+    -- be and bury the recipes people here actually wrote. `recipes_corpus`
+    -- is the surface that does show it, ordered by something that is not
+    -- engagement.
+    and not r.is_imported
   order by
     ((r.rating_sum + p.m * p.mean) / (r.rating_count + p.m)) desc,
     r.rating_count desc,
@@ -2461,6 +2637,13 @@ as $$
   select r.*
   from recipes r cross join site_rating_prior() p
   where r.visibility = 'public'
+    -- Phase 35c. Imported content is browsable and searchable; it is not
+    -- RANKED. It arrives with every counter at zero, so a ranked shelf
+    -- would order 558k identical rows by whatever the tie-break happens to
+    -- be and bury the recipes people here actually wrote. `recipes_corpus`
+    -- is the surface that does show it, ordered by something that is not
+    -- engagement.
+    and not r.is_imported
     and r.prep_minutes + r.cook_minutes between 1 and 30
   order by
     ((r.rating_sum + p.m * p.mean) / (r.rating_count + p.m)) desc,
@@ -2487,6 +2670,13 @@ as $$
   select r.*
   from recipes r
   where r.visibility = 'public'
+    -- Phase 35c. Imported content is browsable and searchable; it is not
+    -- RANKED. It arrives with every counter at zero, so a ranked shelf
+    -- would order 558k identical rows by whatever the tie-break happens to
+    -- be and bury the recipes people here actually wrote. `recipes_corpus`
+    -- is the surface that does show it, ordered by something that is not
+    -- engagement.
+    and not r.is_imported
     and r.prep_minutes + r.cook_minutes > 0
     and (r.prep_minutes + r.cook_minutes >= 120 or r.difficulty = 'hard')
   order by
@@ -2545,6 +2735,13 @@ as $$
   from recipes r
   join forks on forks.source_id = r.id
   where r.visibility = 'public'
+    -- Phase 35c. Imported content is browsable and searchable; it is not
+    -- RANKED. It arrives with every counter at zero, so a ranked shelf
+    -- would order 558k identical rows by whatever the tie-break happens to
+    -- be and bury the recipes people here actually wrote. `recipes_corpus`
+    -- is the surface that does show it, ordered by something that is not
+    -- engagement.
+    and not r.is_imported
   order by
     forks.fork_count desc,
     (r.save_count + r.like_count) desc,
@@ -4102,6 +4299,346 @@ end $$;
 -- `seed_recipes.sql` labels stand — which is why those have to be regenerated
 -- and committed alongside a `nutritionData/` change (recipeData/README.md).
 select recompute_auto_nutrition();
+
+-- ============================================================================
+-- recipes_corpus (Phase 35c) — the surface imported content DOES appear on
+-- ============================================================================
+-- Everything ranked filters `is_imported` out, so this is the one query that
+-- lets a reader at the corpus. Same contract as the shelves: `setof recipes` so
+-- the caller reuses `kRecipeSelect` and its owner embed, `stable`,
+-- invoker-rights, `anon`-callable.
+--
+-- **The ordering is the whole design problem.** Imported rows arrive with every
+-- counter at zero and an `imported_at` that is the same minute for tens of
+-- thousands of them, so there is no engagement to rank by and no meaningful
+-- recency either. `quality_score` is what the importer computed once from field
+-- coverage — does it have a cover image, a servings count, timings, a plausible
+-- number of ingredients, steps, a named chef — and it is a property of the
+-- *capture*, not of the dish or the cook. It ends in `id` because a score out of
+-- 100 over 558k rows ties constantly, and `offset` over a tie shows one recipe
+-- twice and hides another, silently (Gotcha 24).
+--
+-- `p_cuisine` is a filter rather than a second function: the alternative is one
+-- RPC per facet, and each would restate this ordering.
+create or replace function recipes_corpus(
+  p_limit   int  default 20,
+  p_offset  int  default 0,
+  p_cuisine text default null
+)
+returns setof recipes
+language sql
+stable
+as $$
+  select r.*
+  from recipes r
+  where r.visibility = 'public'
+    and r.is_imported
+    -- A takedown is honoured on read as well as on import, so removing one
+    -- recipe from view does not need a deploy or a delete.
+    and r.rights_mode <> 'blocked'
+    and (p_cuisine is null or r.cuisine = p_cuisine)
+  order by r.quality_score desc nulls last, r.id
+  limit greatest(p_limit, 0) offset greatest(p_offset, 0);
+$$;
+
+do $$
+begin
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'grant execute on function recipes_corpus(int, int, text) to anon, authenticated';
+  end if;
+end $$;
+
+-- ============================================================================
+-- import_recipe (Phase 35c) — one captured recipe into the database
+-- ============================================================================
+-- The importer's whole write path, in SQL, so `tool/corpus_import.dart` is a
+-- JSON transformer and nothing else. The same split `seed_recipe_v2` uses, and
+-- for the same reason: the rules about what an import may write belong next to
+-- the constraints that enforce them, not in a language that cannot see them.
+--
+-- Takes one normalised document and returns the recipe id, or **null** when it
+-- declined — which it does for three reasons, all of them ordinary:
+--
+--   * the URL is on `import_blocklist` (a takedown, honoured on the way in);
+--   * the recipe is already here (the unique index on
+--     `(source_entity_id, source_url)` is the idempotency key, so re-running a
+--     finished shard is free);
+--   * the document has no ingredients or no steps, which a capture sometimes
+--     produces and which is not worth a row.
+--
+-- Null rather than an exception for all three: an import of 40,000 recipes that
+-- aborts on the first blocked URL is an import nobody can run.
+--
+-- `security definer` because it writes `profiles` and `entities` rows that no
+-- caller owns, and EXECUTE is revoked from every API role below — this is an
+-- administrative tool, not an endpoint. It is the Gotcha 3 pattern, with the
+-- authorization check replaced by "only `postgres` can call it at all".
+--
+-- **What it deliberately does NOT write** (Phase 35a's position, in code):
+--   * `description` — the publisher's editorial prose. Captured, never imported.
+--   * any engagement counter, and no `recipe_versions` row. An imported recipe
+--     arrives with no history and no numbers; 558k version snapshots of edits
+--     nobody made would be a gigabyte of fiction.
+--   * `nutrition` — the captured block is strings ("345 kcal") and the
+--     estimator cannot read non-English ingredient names. Null is honest.
+create or replace function import_recipe(p_doc jsonb)
+returns uuid
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_entity   uuid;
+  v_chef     uuid;
+  v_recipe   uuid;
+  v_published timestamptz;
+  v_url      text := p_doc ->> 'source_url';
+  v_slug     text := p_doc ->> 'entity_slug';
+  v_chefname text := nullif(trim(coalesce(p_doc ->> 'chef_name', '')), '');
+  v_quality  int;
+  v_group    uuid;
+  v_g        jsonb;
+  v_i        jsonb;
+  v_gord     int;
+  v_iord     int;
+begin
+  if v_url is null or v_slug is null or (p_doc ->> 'title') is null then
+    return null;
+  end if;
+
+  -- A takedown is honoured before anything is written, and the blocklist row
+  -- outlives the recipe precisely so this check has something to read.
+  if exists (select 1 from import_blocklist b where b.url = v_url) then
+    return null;
+  end if;
+
+  -- A capture with no ingredients or no steps is not a recipe. Checked before
+  -- the entity and the profile are created, so a shard of empty captures does
+  -- not leave a directory full of publishers crediting nothing.
+  if coalesce(jsonb_array_length(p_doc -> 'ingredient_groups'), 0) = 0
+     or coalesce(jsonb_array_length(p_doc -> 'step_groups'), 0) = 0 then
+    return null;
+  end if;
+
+  -- ---- the publisher -------------------------------------------------------
+  -- `created_by` stays null: nobody on this service registered it, which is
+  -- what `Entity.isImported` reads and what the page says out loud.
+  -- `src:` namespaced, per `entities_slug_namespace` above: a member cannot
+  -- have taken this name, so the find-or-create below cannot attach a
+  -- publisher's catalogue to a squatter's row.
+  v_slug := 'src:' || v_slug;
+
+  insert into entities (slug, name, kind, homepage, country, created_by)
+  values (
+    v_slug,
+    coalesce(nullif(p_doc ->> 'entity_name', ''), v_slug),
+    coalesce((p_doc ->> 'entity_kind')::entity_kind, 'publication'),
+    p_doc ->> 'entity_homepage',
+    p_doc ->> 'entity_country',
+    null
+  )
+  on conflict (slug) do nothing;
+  select e.id into v_entity from entities e where e.slug = v_slug;
+
+  -- ---- the chef ------------------------------------------------------------
+  -- **Identity is scoped to the publisher, never global.** Two people called
+  -- Sarah on two blogs are two chefs; the corpus roll-up keys on a normalised
+  -- name globally and its own README flags that as deliberately imperfect.
+  -- Collapsing two strangers into one identity is a far worse error than
+  -- splitting one person into two rows, and only one of them is correctable
+  -- later.
+  --
+  -- No byline means the recipe is credited to the publisher alone, which is the
+  -- honest reading of a page that names nobody.
+  if v_chefname is not null then
+    select p.id into v_chef
+    from profiles p
+    join entity_members m on m.profile_id = p.id and m.entity_id = v_entity
+    where p.kind = 'imported' and p.display_name = v_chefname
+    limit 1;
+
+    if v_chef is null then
+      insert into profiles (display_name, kind)
+      values (left(v_chefname, 80), 'imported')
+      returning id into v_chef;
+
+      insert into entity_members (entity_id, profile_id, role)
+      values (v_entity, v_chef, 'chef')
+      on conflict (entity_id, profile_id) do nothing;
+    end if;
+  else
+    -- The publisher-as-author case. One profile per entity, reused.
+    select p.id into v_chef
+    from profiles p
+    join entity_members m on m.profile_id = p.id and m.entity_id = v_entity
+    where p.kind = 'imported'
+      and p.display_name = coalesce(nullif(p_doc ->> 'entity_name', ''), v_slug)
+    limit 1;
+
+    if v_chef is null then
+      insert into profiles (display_name, kind)
+      values (left(coalesce(nullif(p_doc ->> 'entity_name', ''), v_slug), 80), 'imported')
+      returning id into v_chef;
+
+      insert into entity_members (entity_id, profile_id, role)
+      values (v_entity, v_chef, 'chef')
+      on conflict (entity_id, profile_id) do nothing;
+    end if;
+  end if;
+
+  -- ---- the quality score ---------------------------------------------------
+  -- Computed here rather than in Dart so there is one definition of it, and
+  -- computed at all because 558k rows with identical zero counters have no
+  -- total order — `offset` over a tie shows one row twice and hides another
+  -- (Gotcha 24). It measures the CAPTURE, not the dish: how complete the record
+  -- is, not how good the food is. Nothing updates it afterwards.
+  v_quality :=
+      case when nullif(p_doc ->> 'cover_image_url', '') is not null then 25 else 0 end
+    + case when coalesce((p_doc ->> 'servings')::int, 0) > 0 then 15 else 0 end
+    + case when coalesce((p_doc ->> 'prep_minutes')::int, 0)
+               + coalesce((p_doc ->> 'cook_minutes')::int, 0) > 0 then 15 else 0 end
+    + case when v_chefname is not null then 15 else 0 end
+    + case when nullif(p_doc ->> 'cuisine', '') is not null then 5 else 0 end
+    + case when nullif(p_doc ->> 'category', '') is not null then 5 else 0 end
+    -- A recipe with two ingredients or ninety is usually a bad capture rather
+    -- than an unusual dish, so the band is rewarded and the tails are not.
+    + case when (
+        select count(*) from jsonb_array_elements(p_doc -> 'ingredient_groups') g
+        cross join jsonb_array_elements(g -> 'ingredients') i
+      ) between 3 and 40 then 10 else 0 end
+    + case when (
+        select count(*) from jsonb_array_elements(p_doc -> 'step_groups') g
+        cross join jsonb_array_elements(g -> 'steps') st
+      ) between 2 and 40 then 10 else 0 end;
+
+  -- A scraped `datePublished` is whatever the page put in the attribute, and at
+  -- 21,000 records that includes `Thu, 01/06/2022 - 15:47`. The cast is
+  -- therefore attempted and abandoned rather than trusted: an unparseable date
+  -- is an unknown date, and one bad string must not abort a batch of 500 good
+  -- recipes. `tool/corpus_import.dart` filters these out too — this is the
+  -- second lock, for any other caller.
+  begin
+    v_published := (p_doc ->> 'published_at')::timestamptz;
+  exception when others then
+    v_published := null;
+  end;
+
+  -- ---- the recipe ----------------------------------------------------------
+  -- `description` is absent on purpose (Phase 35a): the captured one is the
+  -- publisher's editorial writing, which we link rather than reproduce.
+  insert into recipes (
+    owner_id, title, description, cover_image_url, cuisine, category,
+    difficulty, prep_minutes, cook_minutes, servings, visibility,
+    is_imported, quality_score, source_url, source_name, source_entity_id,
+    imported_at, rights_mode, image_mode, created_at, updated_at
+  ) values (
+    v_chef,
+    left(p_doc ->> 'title', 200),
+    '',
+    -- `recipes_text_lengths` caps the URL at 2048, and a truncated URL is a
+    -- broken image rather than a shorter one — so an over-long cover is
+    -- dropped, not trimmed. Cuisine and category ARE trimmed, because a
+    -- scraped page occasionally puts a sentence in the field and the first 80
+    -- characters of it are still the right answer.
+    case
+      when char_length(coalesce(p_doc ->> 'cover_image_url', '')) between 1 and 2048
+        then p_doc ->> 'cover_image_url'
+      else null
+    end,
+    left(nullif(p_doc ->> 'cuisine', ''), 80),
+    left(nullif(p_doc ->> 'category', ''), 80),
+    coalesce((p_doc ->> 'difficulty')::difficulty, 'medium'),
+    greatest(coalesce((p_doc ->> 'prep_minutes')::int, 0), 0),
+    greatest(coalesce((p_doc ->> 'cook_minutes')::int, 0), 0),
+    greatest(coalesce((p_doc ->> 'servings')::int, 1), 1),
+    'public',
+    true,
+    v_quality,
+    v_url,
+    coalesce(nullif(p_doc ->> 'entity_name', ''), v_slug),
+    v_entity,
+    now(),
+    coalesce((p_doc ->> 'rights_mode')::rights_mode, 'functional'),
+    coalesce((p_doc ->> 'image_mode')::image_mode, 'hotlink'),
+    coalesce(v_published, now()),
+    now()
+  )
+  on conflict (source_entity_id, source_url) where source_url is not null
+  do nothing
+  returning id into v_recipe;
+
+  -- Already here. The unique index did its job and this run has nothing to do.
+  if v_recipe is null then
+    return null;
+  end if;
+
+  -- ---- content -------------------------------------------------------------
+  -- Numbered from 0 WITHIN each group, matching `_persistContent` — numbering
+  -- continuously across groups looks right until the first edit re-persists
+  -- per group and silently renumbers everything (the B022 failure mode).
+  v_gord := 0;
+  for v_g in select * from jsonb_array_elements(p_doc -> 'ingredient_groups') loop
+    insert into ingredient_groups (recipe_id, name, sort_order)
+    values (v_recipe, coalesce(v_g ->> 'name', ''), v_gord)
+    returning id into v_group;
+
+    v_iord := 0;
+    for v_i in select * from jsonb_array_elements(v_g -> 'ingredients') loop
+      insert into ingredients (group_id, quantity, unit, name, note, is_optional, sort_order)
+      values (
+        v_group,
+        -- A captured quantity is whatever the page said; a negative one is a
+        -- parse fault, and `ingredients_quantity_positive` would abort the
+        -- whole batch over it.
+        nullif(greatest(coalesce((v_i ->> 'quantity')::numeric, 0), 0), 0),
+        nullif(v_i ->> 'unit', ''),
+        left(coalesce(nullif(v_i ->> 'name', ''), 'ingredient'), 200),
+        left(nullif(v_i ->> 'note', ''), 500),
+        coalesce((v_i ->> 'is_optional')::boolean, false),
+        v_iord
+      );
+      v_iord := v_iord + 1;
+    end loop;
+    v_gord := v_gord + 1;
+  end loop;
+
+  v_gord := 0;
+  for v_g in select * from jsonb_array_elements(p_doc -> 'step_groups') loop
+    insert into step_groups (recipe_id, name, sort_order)
+    values (v_recipe, coalesce(v_g ->> 'name', ''), v_gord)
+    returning id into v_group;
+
+    v_iord := 0;
+    for v_i in select * from jsonb_array_elements(v_g -> 'steps') loop
+      insert into steps (group_id, step_order, text, image_url, duration_minutes, temperature, tip, sort_order)
+      values (
+        v_group, v_iord,
+        coalesce(nullif(v_i ->> 'text', ''), ''),
+        nullif(v_i ->> 'image_url', ''),
+        (v_i ->> 'duration_minutes')::int,
+        nullif(v_i ->> 'temperature', ''),
+        nullif(v_i ->> 'tip', ''),
+        v_iord
+      );
+      v_iord := v_iord + 1;
+    end loop;
+    v_gord := v_gord + 1;
+  end loop;
+
+  return v_recipe;
+end;
+$$;
+
+-- Gotcha 3: PostgREST exposes every function in `public` as an RPC, and this
+-- one creates profiles and entities and writes provenance no client may touch.
+-- `postgres` only.
+do $$
+begin
+  execute 'revoke execute on function import_recipe(jsonb) from public';
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'revoke execute on function import_recipe(jsonb) from anon, authenticated';
+  end if;
+end $$;
 
 -- ============================================================================
 -- Profile claims (Phase 35b) — a real chef taking over their imported page

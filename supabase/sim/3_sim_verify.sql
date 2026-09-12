@@ -233,12 +233,34 @@ begin
    where r.current_version_id is null;
   if n > 0 then raise exception 'D3 % recipes with no current_version_id', n; end if;
 
-  -- (owner_id, title) is the import key; a collision silently collapses two
+  -- (owner_id, title) is the import key for AUTHORED content — `seed_recipe_v2`
+  -- returns early on an existing pair, so a collision silently collapses two
   -- recipes into one row on any re-import (SDS §11.2).
+  --
+  -- **Scoped to non-imported recipes since Phase 35c**, and the narrowing is a
+  -- statement rather than a concession. A captured recipe is keyed on
+  -- `(source_entity_id, source_url)` — a unique index, not a convention — so
+  -- its title is not its identity, and two posts by one cook under one title at
+  -- two URLs is a thing the open web genuinely contains. Ten of them turned up
+  -- in the first 21,000 imported. Asserting otherwise would be asserting
+  -- something false about the corpus in order to keep a check that was about
+  -- something else.
   select count(*) into n from (
-    select owner_id, title from recipes group by owner_id, title having count(*) > 1
+    select owner_id, title from recipes
+    where not is_imported
+    group by owner_id, title having count(*) > 1
   ) x;
   if n > 0 then raise exception 'D4 % (owner_id, title) collisions', n; end if;
+
+  -- The imported half of the same question, against the key that IS theirs. A
+  -- duplicate here would mean the unique index is not doing its job, which
+  -- would make a re-import add rows instead of skipping them.
+  select count(*) into n from (
+    select source_entity_id, source_url from recipes
+    where is_imported and source_url is not null
+    group by source_entity_id, source_url having count(*) > 1
+  ) x;
+  if n > 0 then raise exception 'D4b % (source_entity_id, source_url) collisions', n; end if;
 
   -- Phase 28. `sim.nutrition_for` builds the label from a calorie draw rather
   -- than field by field, so the interesting failure is not "is it null" — it is
@@ -717,6 +739,42 @@ begin
   join sim.imported_profile ip on ip.id = w.id;
   if n > 0 then
     raise exception 'I6 % imported chef(s) appear in the windowed stats', n;
+  end if;
+
+  -- I6b: their recipes carry the 35c provenance, and `is_imported` in
+  -- particular. Without it the exclusion could be deleted from all five ranked
+  -- shelves and every other check here would still pass — the flag is what the
+  -- shelves filter on and what `recipes_corpus` selects.
+  select count(*) into n
+  from recipes r
+  join sim.imported_profile ip on ip.id = r.owner_id
+  where not r.is_imported
+     or r.quality_score is null
+     or r.source_url is null
+     or r.source_entity_id is null;
+  if n > 0 then
+    raise exception 'I6b % imported recipe(s) are missing their provenance', n;
+  end if;
+
+  -- I6c: and the ranked shelves do not show them, while `recipes_corpus` does.
+  -- Asserted as a pair, because either half alone is satisfiable by a shelf
+  -- that returns nothing at all.
+  select
+    (select count(*) from recipes_quick(1000000, 0) q
+      join sim.imported_profile ip on ip.id = q.owner_id)
+  + (select count(*) from recipes_popular(1000000, 0) po
+      join sim.imported_profile ip on ip.id = po.owner_id)
+  + (select count(*) from recipes_trending(1000000, 0) t
+      join sim.imported_profile ip on ip.id = t.owner_id)
+  + (select count(*) from recipes_projects(1000000, 0) pr
+      join sim.imported_profile ip on ip.id = pr.owner_id)
+  into n;
+  if n > 0 then
+    raise exception 'I6c imported recipes appear % time(s) across the ranked shelves', n;
+  end if;
+  select count(*) into n from recipes_corpus(1000000, 0);
+  if n = 0 then
+    raise exception 'I6c recipes_corpus returned nothing — the corpus surface shows no corpus';
   end if;
 
   -- I7: entities exist, carry both kinds of member, and their signature dishes

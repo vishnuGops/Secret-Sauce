@@ -61,6 +61,19 @@ class _FakeAuth implements AuthRepository {
 /// Discover is where a successful submit lands, so it has to resolve — with
 /// nothing in it, since this test is about the door, not the room.
 class _FakeDiscover implements DiscoverRepository {
+  // Phase 35c: the corpus surface. Empty in every fixture here — these tests are
+  // about Discover and the ranked shelves, which exclude imported content by
+  // construction.
+  @override
+  Future<List<Recipe>> corpus({
+    int limit = kRecipePageSize,
+    int offset = 0,
+    String? cuisine,
+  }) async => const [];
+
+  @override
+  Future<int> corpusCount() async => 0;
+
   @override
   Future<List<Recipe>> popular({
     int limit = kRecipePageSize,

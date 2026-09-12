@@ -137,6 +137,12 @@ declare
   -- fixture above starts from a signup.
   v_imported     uuid;
   v_imp_recipe   uuid;
+
+  -- Phase 35c (§H). A second imported fixture, with provenance on it — §G's is
+  -- about identity, this one is about where a recipe came from.
+  v_publisher    uuid;
+  v_imp2         uuid;
+  v_imp_recipe2  uuid;
   v_merge_recipe uuid;
   v_entity       uuid;
   v_claim        uuid;
@@ -1673,6 +1679,151 @@ begin
   select status::text into s2 from profile_claims where id = v_claim;
   v_log := v_log || format(E'%s\tG28 merge · one profile holds the link, claim is approved\t%s',
     n = 1 and s2 = 'approved', format('%s profile(s), status %s', n, s2));
+
+  -- ==========================================================================
+  -- H1-H8: Phase 35c — provenance, the corpus surface, and the blocklist.
+  --
+  -- The columns here are the second set in this schema that a client must never
+  -- write, and they fail differently from the first: a forged counter changes a
+  -- number, a forged `source_url` changes **who a recipe is credited to**. The
+  -- checks below are the only thing proving the grant lists exclude them.
+  -- ==========================================================================
+  execute 'reset role';
+
+  -- An imported fixture: public, flagged, with provenance and a publisher.
+  insert into entities (id, slug, name, kind, created_by)
+  values (gen_random_uuid(), 'bl7-publisher', 'BL-7 Publisher', 'publication', null)
+  returning id into v_publisher;
+
+  insert into profiles (id, display_name, kind)
+  values (gen_random_uuid(), 'BL-7 imported byline', 'imported')
+  returning id into v_imp2;
+
+  insert into recipes (
+    owner_id, title, description, servings, visibility, prep_minutes,
+    cook_minutes, is_imported, quality_score, source_url, source_name,
+    source_entity_id, imported_at
+  ) values (
+    v_imp2, 'BL-7 imported fixture', 'imported', 2, 'public', 5, 5,
+    true, 90, 'https://example.test/bl7/imported-fixture', 'BL-7 Publisher',
+    v_publisher, now()
+  )
+  returning id into v_imp_recipe2;
+
+  -- H1: it is readable signed out. The corpus is browsable — the point of the
+  -- exclusion elsewhere is that it is not RANKED, not that it is hidden.
+  execute 'set local role anon';
+  perform set_config('request.jwt.claims', '', true);
+  select count(*) into n from recipes where id = v_imp_recipe2;
+  v_log := v_log || format(E'%s\tH1  anon · an imported recipe is readable\t%s row(s)', n = 1, n);
+
+  -- H2: and it reaches the one surface that shows it.
+  select count(*) into n from recipes_corpus(1000000, 0) c where c.id = v_imp_recipe2;
+  v_log := v_log || format(E'%s\tH2  anon · recipes_corpus returns it\t%s row(s)', n = 1, n);
+
+  -- H3: while every RANKED shelf excludes it. Checked as a sum across all
+  -- five, because one shelf keeping the filter proves nothing about the others
+  -- — and the filter was added to five separate function bodies.
+  select
+    (select count(*) from recipes_quick(1000000, 0) x where x.id = v_imp_recipe2)
+  + (select count(*) from recipes_popular(1000000, 0) x where x.id = v_imp_recipe2)
+  + (select count(*) from recipes_trending(1000000, 0) x where x.id = v_imp_recipe2)
+  + (select count(*) from recipes_projects(1000000, 0) x where x.id = v_imp_recipe2)
+  + (select count(*) from recipes_most_forked(1000000, 0) x where x.id = v_imp_recipe2)
+  into n;
+  v_log := v_log || format(E'%s\tH3  anon · no ranked shelf shows it\t%s hit(s) across 5 shelves',
+    n = 0, n);
+
+  -- H4: a `blocked` row leaves the corpus surface. This is what makes a
+  -- takedown a data change rather than a deploy, and it is honoured on READ so
+  -- the row that records the takedown can survive it.
+  execute 'reset role';
+  update recipes set rights_mode = 'blocked' where id = v_imp_recipe2;
+  execute 'set local role anon';
+  perform set_config('request.jwt.claims', '', true);
+  select count(*) into n from recipes_corpus(1000000, 0) c where c.id = v_imp_recipe2;
+  v_log := v_log || format(E'%s\tH4  anon · a blocked recipe leaves recipes_corpus\t%s row(s)',
+    n = 0, n);
+  execute 'reset role';
+  update recipes set rights_mode = 'functional' where id = v_imp_recipe2;
+
+  -- H5-H7: the provenance columns are server-owned. The owner of a recipe is
+  -- the strongest principal there is here, and even they cannot write these —
+  -- a claimed chef editing their imported recipe must not be able to clear its
+  -- credit or promote it into the ranked shelves.
+  execute 'set local role authenticated';
+  perform set_config('request.jwt.claims', json_build_object('sub', v_owner)::text, true);
+  select err into v_err from rls_matrix_do(format(
+    'update recipes set is_imported = false where id = %L', v_public));
+  v_log := v_log || format(E'%s\tH5  owner · update own recipes.is_imported must FAIL\t%s',
+    v_err = '42501', coalesce(v_err, 'no error'));
+
+  select err into v_err from rls_matrix_do(format(
+    'update recipes set source_url = ''https://evil.test/'' where id = %L', v_public));
+  v_log := v_log || format(E'%s\tH6  owner · update own recipes.source_url must FAIL\t%s',
+    v_err = '42501', coalesce(v_err, 'no error'));
+
+  select err into v_err from rls_matrix_do(format(
+    'update recipes set quality_score = 100 where id = %L', v_public));
+  v_log := v_log || format(E'%s\tH7  owner · update own recipes.quality_score must FAIL\t%s',
+    v_err = '42501', coalesce(v_err, 'no error'));
+
+  -- And on INSERT, where a client could otherwise mint a row that claims to
+  -- have come from a publisher it has nothing to do with.
+  select err into v_err from rls_matrix_do(format(
+    'insert into recipes (owner_id, title, servings, visibility, source_name) '
+    'values (%L, ''forged'', 1, ''public'', ''BBC Good Food'')', v_owner));
+  v_log := v_log || format(E'%s\tH8  owner · insert claiming a source_name must FAIL\t%s',
+    v_err = '42501', coalesce(v_err, 'no error'));
+
+  -- H8b: a member cannot take a slug in the importer's namespace. Without the
+  -- reserved prefix, creating `king-arthur` before an import runs would hand
+  -- that publisher's whole catalogue to whoever got there first —
+  -- `import_recipe` finds-or-creates by slug, and `entities_update` is
+  -- `is_entity_owner`. A free land-grab on 560 names, closed by a `check`.
+  --
+  -- `current_profile_id()` rather than `v_owner`: **§G's merge moved this
+  -- account's link** (G24-G28), so `v_owner` is a tombstone by the time §H runs
+  -- and `entities_insert` refuses the row on `created_by` before the constraint
+  -- ever sees it. The check then passes for the wrong reason, which is the
+  -- failure mode a "must FAIL" assertion is most prone to — it reported 42501
+  -- from the policy while claiming to prove 23514 from the namespace.
+  select err into v_err from rls_matrix_do(
+    'insert into entities (slug, name, kind, created_by) '
+    'values (''src:king-arthur'', ''Forged'', ''brand'', current_profile_id())');
+  v_log := v_log || format(E'%s\tH8b owner · create an entity under `src:` must FAIL\t%s',
+    v_err = '23514', coalesce(v_err, 'no error'));
+
+  -- And the same insert OUTSIDE the namespace succeeds, so H8b is refusing the
+  -- prefix rather than refusing everything.
+  select err into v_err from rls_matrix_do(
+    'insert into entities (slug, name, kind, created_by) '
+    'values (''bl7-ordinary-entity'', ''Ordinary'', ''brand'', current_profile_id())');
+  v_log := v_log || format(E'%s\tH8c owner · the same insert outside `src:` succeeds\t%s',
+    v_err is null, coalesce(v_err, 'ok'));
+
+  -- H9: `import_blocklist` is readable by nobody. RLS is enabled with no policy
+  -- at all, which default-denies — and the blanket grants below the policies
+  -- are exactly why that has to be asserted: a grant with no policy returns
+  -- EMPTY, not an error, so a missing policy and a working one look identical
+  -- until somebody checks.
+  execute 'reset role';
+  insert into import_blocklist (url, source_slug, reason)
+  values ('https://example.test/bl7/taken-down', 'bl7-publisher', 'BL-7 fixture')
+  on conflict (url) do nothing;
+
+  execute 'set local role authenticated';
+  perform set_config('request.jwt.claims', json_build_object('sub', v_owner)::text, true);
+  select count(*) into n from import_blocklist;
+  v_log := v_log || format(E'%s\tH9  signed-in · import_blocklist reads empty\t%s row(s)', n = 0, n);
+
+  execute 'set local role anon';
+  perform set_config('request.jwt.claims', '', true);
+  select count(*) into v_n from import_blocklist;
+  select err into v_err from rls_matrix_do(
+    'insert into import_blocklist (url) values (''https://example.test/forged'')');
+  v_log := v_log || format(E'%s\tH10 anon · cannot read or write import_blocklist\t%s row(s), write %s',
+    v_n = 0 and v_err is not null, v_n, coalesce(v_err, 'SUCCEEDED'));
 
   -- ==========================================================================
   -- Report

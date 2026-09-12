@@ -10,6 +10,7 @@ import 'package:app/features/chefs/chef_page.dart';
 import 'package:app/features/chefs/chefs_screen.dart';
 import 'package:app/features/discover/discover_screen.dart';
 import 'package:app/features/entities/entity_page.dart';
+import 'package:app/features/explore/explore_screen.dart';
 import 'package:app/features/legal/legal_document.dart';
 import 'package:app/features/legal/legal_screen.dart';
 import 'package:app/features/my_recipes/my_recipes_screen.dart';
@@ -90,6 +91,14 @@ class Routes {
   /// that needs an account is not a directory.
   static String entity(String id) => '/entity/$id';
   static const entityPattern = '/entity/:id';
+
+  /// The corpus — recipes captured from the public web (Phase 35c).
+  ///
+  /// Its own page rather than a fourth sort on Discover: imported recipes carry
+  /// no engagement, so they cannot share a ranking with the rest, and a
+  /// collection of other people's work has to introduce itself before its first
+  /// card. Reached from Discover; **not** a nav destination (Gotcha 18).
+  static const explore = '/explore';
 }
 
 final _rootKey = GlobalKey<NavigatorState>();
@@ -168,6 +177,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: _rootKey,
         builder:
             (context, state) => ChefPage(chefId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: Routes.explore,
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) => const ExploreScreen(),
       ),
       // Root navigator like the chef page, and reached the same way: from a
       // chip on a chef page or a badge on a card, never from a nav tab.

@@ -538,3 +538,27 @@ Launcher icon (uses `flutter_launcher_icons`):
 
 Every change updates the relevant docs in `docs/` in the same commit. See the rule in
 [CLAUDE.md](./CLAUDE.md#docscode-sync-mandatory).
+
+## The scraped corpus, and importing it (Phase 35)
+
+`corpus/` holds recipes harvested from the public web with the credit attached. It is not app
+content and the boundary is physical — nothing there is compiled into `supabase/seed_recipes.sql`.
+Phase 35c added one deliberate path from it into a database:
+
+```powershell
+melos run corpus:import:plan   # what the curated English-first tier would import (no database)
+melos run corpus:import:gen    # -> corpus/_import/*.sql (git-ignored), 500 recipes per file
+```
+
+Applying those files is a **separate, manual** step, so the tool that reads the corpus never holds
+a database credential:
+
+```powershell
+docker cp corpus/_import/0001.sql supabase_db_secret-sauce:/tmp/i.sql
+docker exec supabase_db_secret-sauce psql -U postgres -d postgres -v ON_ERROR_STOP=1 -1 -f /tmp/i.sql
+```
+
+It is idempotent — `unique(source_entity_id, source_url)` means re-applying a file inserts nothing —
+so a run can be stopped and resumed at any point. Imported recipes are marked `is_imported`, carry
+their publisher and source URL, are excluded from every ranked surface, and appear on `/explore`.
+The rights position they are shown under is in the app's own Rights page (`/legal/rights`).

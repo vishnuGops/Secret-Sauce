@@ -1,10 +1,12 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:app/features/discover/discover_masthead.dart';
 import 'package:app/features/discover/discover_providers.dart';
 import 'package:app/features/discover/discover_shelf.dart';
+import 'package:app/routing/app_router.dart';
 import 'package:app/widgets/recipe_async_grid.dart';
 
 /// Public discovery: a masthead, three numbered shelves, then everything else.
@@ -114,6 +116,14 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
               _BrowseGrid(
                 sort: ref.watch(browseSortProvider),
                 padding: gridPadding,
+              ),
+              // The way into the corpus (Phase 35c). A link rather than a
+              // fourth sort above, and below the grid rather than above it,
+              // because the recipes people here wrote come first — this page
+              // is the front door to Secret-Sauce, not to the web.
+              SliverPadding(
+                padding: gutter.copyWith(top: AppSpacing.xl),
+                sliver: const SliverToBoxAdapter(child: _ExploreLink()),
               ),
             ],
 
@@ -354,3 +364,63 @@ EmptyView _empty(String title) => EmptyView(
   icon: Icons.local_dining_outlined,
   message: 'Public recipes will appear here.',
 );
+
+/// The link to `/explore` (Phase 35c).
+///
+/// It names what is on the other side rather than saying "see more": the
+/// difference between a recipe somebody here wrote and one captured from
+/// somewhere else is the whole point of keeping them on separate pages, and a
+/// link that hides the distinction undoes that in one tap.
+class _ExploreLink extends StatelessWidget {
+  const _ExploreLink();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+
+    return Material(
+      color: scheme.surfaceContainerHighest,
+      borderRadius: BorderRadius.circular(AppRadii.card),
+      child: InkWell(
+        onTap: () => context.push(Routes.explore),
+        borderRadius: BorderRadius.circular(AppRadii.card),
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: Row(
+            children: [
+              Icon(
+                Icons.travel_explore_outlined,
+                color: scheme.onSurfaceVariant,
+              ),
+              const SizedBox(width: AppSpacing.md),
+              // The icons are the non-flex children; the text takes what is
+              // left (Gotcha 21).
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'From around the web',
+                      style: theme.textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      'Recipes published elsewhere, kept with their credit and '
+                      'a link back.',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Icon(Icons.chevron_right, color: scheme.onSurfaceVariant),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

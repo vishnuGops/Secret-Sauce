@@ -81,6 +81,9 @@ secret-sauce/
 │   └── README.md              #   authoring workflow + the known vocabulary gaps
 ├── tool/db.dart               # psql wrapper behind the melos db:* scripts (db:create applies
 │                              #   every supabase/migrations/*.sql in order)
+├── tool/corpus_import.dart    # corpus/ -> batched `select import_recipe(...)` SQL (35c). A JSON
+│                              #   transformer only: the write path lives in `import_recipe(jsonb)`
+│                              #   in 0001, and this tool connects to no database
 ├── tool/recipe_format.dart    # THE validator — shared by both generators below
 ├── tool/recipes.dart          # validates recipeData/ -> generates seed_recipes.sql
 ├── tool/sim.dart              # validates ALL of simData/ -> generates the three 1_sim_*.sql
@@ -108,7 +111,8 @@ secret-sauce/
 ├── apps/app/
 │   ├── lib/features/          # auth, discover, chefs, my_recipes, recipe_detail,
 │   │                          # recipe_editor, profile, legal (35a: three documents as Dart
-│   │                          #   consts + one screen), entities (35b: /entity/:id) — screen +
+│   │                          #   consts + one screen), entities (35b: /entity/:id),
+│   │                          #   explore (35c: the corpus) — screen +
 │   │                          #   *_providers.dart per feature,
 │   │                          # plus that feature's own panels (OPT-A8 split the three big
 │   │                          # screens: editor 880->418, detail 629->311, chef sheet 597->231)
@@ -165,9 +169,10 @@ secret-sauce/
     │   │                         #   (`db:sim:rls`) — writes, then rolls back. NOT in db:sim
     │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
     ├── tests/rls_matrix.sql      # the RLS matrix as a SIGNED-IN user (BL-7, `db:rls`) —
-    │                             #   165 checks; makes its own users, then ROLLS BACK.
-    │                             #   §G is Phase 35b: imported profiles, entities, claims,
-    │                             #   and the claim MERGE end to end
+    │                             #   177 checks; makes its own users, then ROLLS BACK.
+    │                             #   §G is Phase 35b (imported profiles, entities, claims, and
+    │                             #   the claim MERGE end to end); §H is 35c (provenance is
+    │                             #   server-owned, the corpus surface, the blocklist)
     ├── tests/nutrition_estimate.sql  # the estimator's ONLY coverage (Phase 29c): fixture
     │                             #   foods/units/trees -> exact labels, then ROLLS BACK
     ├── tests/nutrition_fixtures.sql  # the other half (29d, `db:nutrition:verify`): the
@@ -305,7 +310,8 @@ melos run nutrition:gen       # regenerate supabase/nutrition_foods.sql (commit 
 melos run nutrition:check     # fail if that .sql is stale — CI runs this
 melos run fdc:extract -- --bundle="C:\path\to\FoodData_Central_csv_2026-04-30"
 
-# Scraped corpus (Phase 34). No credentials, and this data never reaches a database. Tools live in recipeData/_tools/, data in corpus/.
+# Scraped corpus (Phase 34). No credentials. Tools live in recipeData/_tools/, data in corpus/.
+# Phase 35c added the one path that DOES reach a database — see `corpus:import:*` below.
 # Politeness is not optional here: robots.mjs evaluates each host's real robots.txt
 # per URL, honours Crawl-delay, treats an unreachable robots.txt as DISALLOW, and
 # backs the WHOLE source off on a 429/503 (B098's neighbour). Concurrency is per HOST.
@@ -316,6 +322,18 @@ melos run corpus:index         # index.jsonl + chefs/groups/restaurants.json
 melos run corpus:report        # corpus/_reports/CORPUS.md
 melos run corpus:clean         # dedupe + prune dead sources
 melos run corpus:similar       # the same dish across different chefs (fork-model evidence)
+
+# Corpus -> database (Phase 35c). `plan` touches no database and no files; `gen`
+# writes corpus/_import/*.sql (git-ignored — 71 MB for a 21k tier). APPLYING them
+# is deliberately manual and separate, so a tool that reads 8.6 GB of scraped data
+# never holds a superuser credential (Gotcha 7):
+melos run corpus:import:plan   # what the curated English-first tier would import
+melos run corpus:import:gen    # -> corpus/_import/*.sql, 500 recipes per file
+#   then, per file:
+#   docker cp corpus/_import/0001.sql supabase_db_secret-sauce:/tmp/i.sql
+#   docker exec supabase_db_secret-sauce psql -U postgres -d postgres \
+#     -v ON_ERROR_STOP=1 -1 -f /tmp/i.sql
+# Idempotent: `unique(source_entity_id, source_url)` makes a re-apply insert nothing.
 
 # The same tools directly, for the flags the melos scripts fix:
 cd recipeData/_tools
@@ -351,7 +369,7 @@ melos run db:reset    # drop -> create -> nutrition -> seed -> recipes -> sim (~
 # The RLS acceptance matrix as a SIGNED-IN user (BL-7). Additive only in the sense that
 # it writes and then rolls back — it leaves no user, no recipe, no helper function.
 # Run it after ANY change to a policy, a `security definer` function, or the column grants.
-melos run db:rls      # 165 checks across anon / owner / shared-with / stranger / imported
+melos run db:rls      # 177 checks across anon / owner / shared-with / stranger / imported
 
 # Auto-nutrition SQL. Both roll back; run them after touching the estimator, the
 # backfill, nutritionData/, or an auto recipe's ingredients.
@@ -710,6 +728,7 @@ All nine Postgres enums are mirrored in
 | `/recipe/:id/cook`                | `features/recipe_detail` | **Cook mode** — full-screen, one step at a time, **always dark** (`AppTheme.dark()`, the only screen that overrides the theme; the phone is propped under kitchen lights). `cook_mode_screen.dart` (route + shortcuts) → `cook_step_view.dart` (compact frames C/D, web frame H) → `cook_finish_view.dart` (frame E). Pure derivations in `cook_mode_model.dart`, session + timers in `cook_mode_providers.dart`. Signed-out safe; **not** in `needsAuth`. See "Cook mode" below |
 | `/recipe/new`, `/recipe/:id/edit` | `features/recipe_editor` | `edit_models.dart` holds mutable draft types; save appends a version. Images — the cover and each step's photo (Phase 33) — go through the one `imagePickerProvider` pick and its 5 MB guard, are held as **bytes on the draft**, and are uploaded inside `_save`: an abandoned edit leaves no orphan object in the bucket |
 | `/profile`                        | `features/profile`       | Current user; reached from the bottom bar on mobile and the avatar menu on web (`myProfileProvider`)                     |
+| `/explore`                        | `features/explore`       | **The corpus** (Phase 35c) — recipes captured from the public web, paged over `recipes_corpus` and ordered by `quality_score` because they carry no engagement. A preamble states what the collection is *above the first card* and links to the Rights page; that introduction is the point of the separate page, not decoration. Reached from a link **below** Discover's browse grid — Discover is the front door to Secret-Sauce, not to the web. Root navigator, signed-out safe, no nav destination |
 | `/entity/:id`                     | `features/entities`      | **One publisher's page** (Phase 35b) — a brand, restaurant, magazine or community site. Header (name, kind, country, homepage, description) → roster of member chefs, each row linking to `/chef/:id` → signature dishes as a `SliverRecipeGrid`. An entity is **not a principal**: no score, no tier, no engagement of its own. Root navigator, signed-out safe, **no nav destination** (Gotcha 18). An empty roster or signature list is a state; only a missing entity is a 404 |
 | `/legal/:doc`                     | `features/legal`         | **Privacy / Terms / Rights** (Phase 35a). One `LegalScreen` over a sealed `LegalBlock` list of Dart consts — no `flutter_markdown`. `LegalDoc.fromSlug` validates; an unknown slug falls back to Privacy rather than 404ing. Root navigator, signed-out safe, **no nav destination**. The four owner-supplied facts live in `LegalFacts`, and a red draft banner shows while any is still a placeholder |
 
@@ -958,7 +977,7 @@ the `code-review` skill). The ones you need while _writing_ code:
     steps runs as `postgres`, which bypasses policies — so CI also runs
     [supabase/tests/rls_matrix.sql](supabase/tests/rls_matrix.sql) (**BL-7**, `melos run db:rls`),
     which is the only thing here that exercises RLS as a **signed-in** user. It switches to
-    `set local role authenticated`, runs 165 checks across anon / owner / shared-with / unrelated
+    `set local role authenticated`, runs 177 checks across anon / owner / shared-with / unrelated
     stranger / imported chef, and rolls the whole transaction back. It closed the class B053 lived in and found
     B061 on its first complete run. **Run it, and add a check to it, whenever you touch a policy, a
     `security definer` function, or the column grants** — a new table with new policies that the
@@ -1118,7 +1137,9 @@ recipe` lives on the My Recipes header and search in Discover's search bar; putt
     never as a pixel width: `flutter test`'s fixed-width font is far wider than Roboto, so a width
     assertion pins the harness while an implication survives the font swap.
 
-28. **The scraped corpus is not content, and the boundary is physical.** `corpus/` holds
+28. **The scraped corpus is not content, and the boundary is physical.** *(Phase 35c added one
+    deliberate door through it — `import_recipe(jsonb)`, described at the end of this entry. The
+    rule below is unchanged: what it forbids is corpus data becoming **seed** data.)* `corpus/` holds
     recipes harvested from the public web (Phase 34) with the credit attached — `entity`
     is the group that published it, `attribution.chef` the person named on the page, and
     neither is inferred from the other. It is **separate from `recipeData/` on purpose**:
@@ -1133,6 +1154,16 @@ recipe` lives on the My Recipes header and search in Discover's search bar; putt
     treats an **unreachable** `robots.txt` as disallow, honours `Crawl-delay`, and backs
     the whole source off on a 429 — a site that says no is a site that gets no requests,
     and that is not a knob to turn up when a source looks valuable.
+
+    **The one door (Phase 35c).** `import_recipe(jsonb)` writes a captured recipe into
+    `recipes` with `is_imported = true` and its provenance attached. That is not the
+    same as promotion to seed data and does not weaken the rule: the rows are marked,
+    excluded from every ranked surface, credited on screen, and removable through
+    `import_blocklist`. What still never happens is a corpus file landing in
+    `recipeData/` and being compiled into `seed_recipes.sql` under the Kitchen's name.
+    The importer also **declines the publisher's prose**: `description` is captured but
+    never imported, because that is the expressive half the rights position links
+    rather than reproduces.
 
 
 ## Seed-data fit (MANDATORY)

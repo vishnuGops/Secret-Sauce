@@ -340,6 +340,15 @@ void main() {
         'rating_count',
         'rating_avg',
         'nutrition',
+        // Phase 35c provenance. Server-owned like the counters, and read for
+        // the same reason: the credit line, its link and the image decision are
+        // all rendered.
+        'is_imported',
+        'source_url',
+        'source_name',
+        'source_entity_id',
+        'rights_mode',
+        'image_mode',
       ];
       // Only the base-row part: the embed carries its own `id`/`avatar_url`.
       final base = kRecipeSelect.substring(0, kRecipeSelect.indexOf(',owner:'));

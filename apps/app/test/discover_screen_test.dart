@@ -29,6 +29,19 @@ Recipe _recipe(String id, String title) =>
 /// Answers each shelf with one recognisable card, and records every call so a
 /// test can prove which query a row came from.
 class _FakeDiscover implements DiscoverRepository {
+  // Phase 35c: the corpus surface. Empty in every fixture here — these tests are
+  // about Discover and the ranked shelves, which exclude imported content by
+  // construction.
+  @override
+  Future<List<Recipe>> corpus({
+    int limit = kRecipePageSize,
+    int offset = 0,
+    String? cuisine,
+  }) async => const [];
+
+  @override
+  Future<int> corpusCount() async => 0;
+
   _FakeDiscover({
     this.quickRows = const [],
     this.projectRows = const [],

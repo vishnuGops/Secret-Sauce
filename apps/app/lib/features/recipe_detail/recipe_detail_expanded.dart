@@ -212,6 +212,10 @@ class _HeaderBand extends ConsumerWidget {
                           ),
                         ),
                       ],
+                      if (recipe.isImported) ...[
+                        const SizedBox(height: AppSpacing.md),
+                        SourceCredit(recipe: recipe),
+                      ],
                       if (recipe.attribution != null &&
                           recipe.attribution!.isNotEmpty) ...[
                         const SizedBox(height: AppSpacing.md),
@@ -281,7 +285,9 @@ class _HeaderBand extends ConsumerWidget {
                     ],
                   ),
                 ),
-                if (recipe.coverImageUrl != null) ...[
+                // See `Recipe.displayCoverImageUrl` — Phase 35c's image
+                // policy, applied once in the model rather than here.
+                if (recipe.displayCoverImageUrl != null) ...[
                   const SizedBox(width: AppSpacing.xl),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(AppRadii.card),
@@ -289,7 +295,7 @@ class _HeaderBand extends ConsumerWidget {
                       width: 400,
                       height: 280,
                       child: CachedNetworkImage(
-                        imageUrl: recipe.coverImageUrl!,
+                        imageUrl: recipe.displayCoverImageUrl!,
                         fit: BoxFit.cover,
                       ),
                     ),

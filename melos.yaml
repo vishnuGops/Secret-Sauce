@@ -147,6 +147,16 @@ scripts:
     description: The same dish across different chefs — overlap the fork/version model needs.
     run: node recipeData/_tools/similar.mjs
 
+  corpus:import:plan:
+    run: dart run tool/corpus_import.dart plan
+    description: What the curated English-first tier would import (no database).
+
+  corpus:import:gen:
+    run: dart run tool/corpus_import.dart gen --per-source=40
+    description: >
+      Corpus -> corpus/_import/*.sql, one `import_recipe()` call per recipe.
+      Applying them is a separate, manual psql step — see tool/corpus_import.dart.
+
   corpus:export:
     description: Convert the corpus into the app's recipeData shape (staging only).
     run: node recipeData/_tools/corpus_export.mjs

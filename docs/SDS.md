@@ -64,9 +64,10 @@ flowchart TD
 - `entity_kind` (35b): `restaurant` \| `brand` \| `publication` \| `community` \| `chef_site`
 - `entity_role` (35b): `owner` \| `chef`
 - `claim_status` (35b): `pending` \| `approved` \| `rejected`
+- `rights_mode` (35c): `functional` \| `link_only` \| `blocked`
+- `image_mode` (35c): `hotlink` \| `none` — there is deliberately no third value
 
-The first five are mirrored in `enums.dart`. The last three are SQL-only for now — no Dart code
-reads them yet, and they gain their mirrors with the `Entity` model.
+All eleven are mirrored in `enums.dart`.
 
 ### 3.2 Tables
 
@@ -597,13 +598,14 @@ It creates three throwaway `auth.users` (an owner, someone the owner shares a pr
 an unrelated signed-in stranger) plus a private and a public recipe with content, re-runs the whole
 matrix under `set local role authenticated` + `request.jwt.claims`, and **rolls the transaction
 back** — so it leaves no user, no recipe and no helper function behind and is safe against any
-database. **165 checks** (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
+database. **177 checks** (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
 ingredient food link, in 29b; B22c and B22d, the auto-estimate source-smuggling guard and its
 nothing-counted case, in 29c — B22d found **B075** on its first run; **E10**, that
 `recompute_auto_nutrition()` is not callable as a signed-in user, in 29d — a whole-table rewrite
 whose only lock is a `revoke execute`; **§F**, `chef_standing` / `chefs_leaderboard` /
 `chef_top_recipes` / `chef_trending_recipes` F1–F10, in Phases 30–31; **§G**, Phase 35b's
-imported profiles, entities, claims and the claim merge, 28 checks). A failure names the check and
+imported profiles, entities, claims and the claim merge, 28 checks; **§H**, Phase 35c's
+provenance columns, the corpus surface and the blocklist, 12 checks). A failure names the check and
 what actually happened.
 
 **§A–§F are also the proof that Phase 35b's identity decoupling changed no behaviour.** Every one
@@ -818,6 +820,35 @@ states that deleting an account leaves those rows behind anonymised with the cou
 (Gotcha 10 / §4); Terms gives forking its own section, because publishing a recipe publicly grants
 every other user a right that cannot be withdrawn afterwards (§5); and Rights states the crawler's
 behaviour and the photograph position that Phase 35c's importer has to implement.
+
+### 7.0c `/explore` — the corpus (Phase 35c)
+
+Recipes captured from the public web, on their own page rather than as a fourth sort on Discover.
+Two reasons, and the second is the one that decides it:
+
+- **They cannot share a ranking.** An imported recipe arrives with every counter at zero, so mixing
+  them into Popular or Trending would order 21,000 identical scores by whatever the tie-break
+  happens to be, and bury the recipes people here actually wrote. `recipes_corpus` orders by
+  `quality_score` — how complete the *capture* is, computed once at import and never updated —
+  ending in `id`, because a score out of 100 over 21,000 rows ties constantly and `offset` over a
+  tie shows one row twice (Gotcha 24).
+- **The collection has to introduce itself.** These are other people's recipes. A grid that looks
+  exactly like Discover's has misled the reader whatever the individual cards say, so the page
+  states what this is, how big it is, and what is and is not copied, above the first card, with a
+  link to the Rights page. `explore_screen_test.dart` pins that preamble — it is the part most
+  likely to be dropped for space.
+
+Reached from a link below Discover's browse grid, deliberately *below* it: Discover is the front
+door to Secret-Sauce, not to the web. Root navigator, signed-out safe, no nav destination
+(Gotcha 18).
+
+**Provenance is rendered, not just stored.** `SourceCredit` on both recipe-detail layouts names the
+publisher and prints the source URL, and it is not decoration: the rights position only holds
+because the credit and the link travel with the content. The image policy is enforced through a
+single getter — `Recipe.displayCoverImageUrl` returns null when `image_mode` is `none` — rather than
+at each of the five places that render a cover, because the sixth is the one that would get it
+wrong and a picture shown against a publisher's wishes is the most expensive mistake in the whole
+position.
 
 ### 7.0b The entity page and the unclaimed chef (Phase 35b)
 

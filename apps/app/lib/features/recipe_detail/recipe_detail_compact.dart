@@ -174,7 +174,11 @@ class _Cover extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scheme = Theme.of(context).colorScheme;
-    final hasCover = recipe.coverImageUrl != null;
+    // `displayCoverImageUrl`, not `coverImageUrl`: an imported recipe
+    // whose publisher asked for no images has one and must not show it
+    // (Phase 35c). The whole layout branches on this, so reading the raw
+    // column here would put the picture back in a cover-first design.
+    final hasCover = recipe.displayCoverImageUrl != null;
     // Bounded against text scale like every other fixed-height region here: the
     // bar of icon buttons on top of it grows with the type (Gotcha 22).
     final height =
@@ -187,7 +191,7 @@ class _Cover extends ConsumerWidget {
         children: [
           if (hasCover)
             CachedNetworkImage(
-              imageUrl: recipe.coverImageUrl!,
+              imageUrl: recipe.displayCoverImageUrl!,
               fit: BoxFit.cover,
             )
           else
@@ -359,6 +363,13 @@ class _IdentityBand extends StatelessWidget {
           if (recipe.description.isNotEmpty) ...[
             const SizedBox(height: AppSpacing.md),
             Text(recipe.description, style: textTheme.bodyMedium),
+          ],
+          // Before the cook's own story, because "who published this" is the
+          // question a reader of an imported recipe has first — and because the
+          // credit is what makes showing the rest of the page defensible.
+          if (recipe.isImported) ...[
+            const SizedBox(height: AppSpacing.md),
+            SourceCredit(recipe: recipe),
           ],
           if ((recipe.attribution ?? '').isNotEmpty) ...[
             const SizedBox(height: AppSpacing.md),

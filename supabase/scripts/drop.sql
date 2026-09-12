@@ -31,6 +31,7 @@ drop table if exists
   -- `entity_signature_dishes` references `recipes`; `cascade` would take them
   -- anyway, but naming them keeps this list a readable inventory of what the
   -- schema contains rather than a list of roots.
+  import_blocklist,
   profile_claims,
   entity_signature_dishes,
   entity_members,
@@ -66,6 +67,9 @@ drop function if exists is_entity_member(uuid) cascade;
 drop function if exists is_entity_owner(uuid) cascade;
 drop function if exists approve_profile_claim(uuid) cascade;
 drop function if exists reject_profile_claim(uuid, text) cascade;
+-- Phase 35c.
+drop function if exists recipes_corpus(int, int, text) cascade;
+drop function if exists import_recipe(jsonb) cascade;
 -- Food registry typeahead (Phase 29a).
 drop function if exists search_foods(text, int) cascade;
 -- Auto-nutrition estimator + batched link candidates (Phase 29c) and the
@@ -155,3 +159,6 @@ drop type if exists profile_kind cascade;
 drop type if exists entity_kind cascade;
 drop type if exists entity_role cascade;
 drop type if exists claim_status cascade;
+-- Phase 35c.
+drop type if exists rights_mode cascade;
+drop type if exists image_mode cascade;

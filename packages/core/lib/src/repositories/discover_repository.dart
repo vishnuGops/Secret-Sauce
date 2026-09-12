@@ -40,6 +40,22 @@ abstract interface class DiscoverRepository {
   /// a private fork would count for its owner alone.
   Future<List<Recipe>> mostForked({int limit, int offset});
 
+  /// **The corpus** — public recipes captured from the web (Phase 35c).
+  ///
+  /// The one surface that shows imported content. Every shelf above filters it
+  /// out, because it arrives with every counter at zero and a ranked list of
+  /// 21,000 identical scores is not a ranking — so this orders by
+  /// `quality_score`, which measures how complete the *capture* is and is not
+  /// engagement by another name.
+  ///
+  /// `blocked` rows are excluded by the RPC, so a takedown is honoured on read
+  /// as well as on import.
+  Future<List<Recipe>> corpus({int limit, int offset, String? cuisine});
+
+  /// How many imported recipes exist — the corpus page's one statistic, and
+  /// the honest way to say how big this collection is.
+  Future<int> corpusCount();
+
   /// How many public recipes exist — the masthead's one statistic.
   ///
   /// A `HEAD` request with an exact count: no rows cross the wire.
@@ -135,6 +151,38 @@ class SupabaseDiscoverRepository implements DiscoverRepository {
       .from('recipes')
       .count(CountOption.exact)
       .eq('visibility', 'public');
+
+  @override
+  Future<List<Recipe>> corpus({
+    int limit = kRecipePageSize,
+    int offset = 0,
+    String? cuisine,
+  }) async {
+    final rows = await _client
+        .rpc(
+          'recipes_corpus',
+          params: {
+            'p_limit': limit,
+            'p_offset': offset,
+            // Named explicitly rather than omitted: the RPC has three
+            // parameters and PostgREST matches an overload by the names it is
+            // given, so leaving it out would look for a two-argument
+            // `recipes_corpus` that does not exist.
+            'p_cuisine': cuisine,
+          },
+        )
+        .select(kRecipeSelect);
+    return (rows as List)
+        .map((r) => Recipe.fromJson(r as Map<String, dynamic>))
+        .toList();
+  }
+
+  @override
+  Future<int> corpusCount() => _client
+      .from('recipes')
+      .count(CountOption.exact)
+      .eq('visibility', 'public')
+      .eq('is_imported', true);
 
   @override
   Future<List<Recipe>> search(

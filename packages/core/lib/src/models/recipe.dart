@@ -70,6 +70,42 @@ class Recipe with _$Recipe {
     // query that does not ask for the embedding — surfaces render no badge
     // rather than failing.
     @JsonKey(includeToJson: false) Profile? owner,
+
+    // ---- Phase 35c: provenance -------------------------------------------
+    // Server-owned, every one of them: the importer writes them and no client
+    // grant includes any, so a save that carried one would fail 42501. They are
+    // here because they are *rendered* — the credit, its link, and whether the
+    // cover may be shown.
+    /// True when this recipe was captured from the public web rather than
+    /// written here. Not the same question as the owner's [ProfileKind]: a chef
+    /// who claims their page becomes a member while their imported recipes stay
+    /// imported.
+    @JsonKey(name: 'is_imported') @Default(false) bool isImported,
+
+    /// Where it was published. The credit line links here, and it is the thing
+    /// that makes showing the functional content defensible at all.
+    @JsonKey(name: 'source_url') String? sourceUrl,
+
+    /// The publisher's name, denormalised onto the row so a card can print the
+    /// credit without a join.
+    @JsonKey(name: 'source_name') String? sourceName,
+
+    /// The publisher as an entity, when we have one — what the credit chip
+    /// links to.
+    @JsonKey(name: 'source_entity_id') String? sourceEntityId,
+
+    /// How much of this recipe may be shown. `blocked` rows never reach a
+    /// client (`recipes_corpus` filters them), so this is effectively
+    /// `functional` or `linkOnly` in the app.
+    @JsonKey(name: 'rights_mode', unknownEnumValue: RightsMode.functional)
+    @Default(RightsMode.functional)
+    RightsMode rightsMode,
+
+    /// Whether the cover may be shown from the publisher's own address. There
+    /// is no third value: we never copy an image and never proxy one.
+    @JsonKey(name: 'image_mode', unknownEnumValue: ImageMode.hotlink)
+    @Default(ImageMode.hotlink)
+    ImageMode imageMode,
   }) = _Recipe;
 
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
@@ -78,6 +114,31 @@ class Recipe with _$Recipe {
   int get totalMinutes => prepMinutes + cookMinutes;
 
   bool get isFork => forkedFromRecipeId != null;
+
+  /// The cover a widget may render, as opposed to the one the row holds.
+  ///
+  /// Phase 35c. An imported recipe whose publisher asked for no images still
+  /// *has* a `coverImageUrl` — the crawl captured it — and must not show it.
+  /// The rule lives here rather than in each of the five places that render a
+  /// cover, because the sixth one is the one that would get it wrong, and a
+  /// picture shown against a publisher's wishes is the single most expensive
+  /// mistake in the whole rights position (Phase 35a).
+  String? get displayCoverImageUrl =>
+      imageMode.showsImage ? coverImageUrl : null;
+
+  /// Whether the ingredients and steps may be shown.
+  ///
+  /// False only for `link_only` rows — a publisher who would rather we sent
+  /// readers to them than reproduced the method. `blocked` never reaches a
+  /// client at all (`recipes_corpus` filters it), so it is not a case the UI
+  /// has to render.
+  bool get showsContent => rightsMode.showsContent;
+
+  /// The one-line credit, when there is somebody to credit.
+  ///
+  /// Null for a member's own recipe, which is credited by its owner badge like
+  /// every other.
+  String? get sourceCredit => isImported ? sourceName : null;
 
   /// Whether anyone has rated this recipe yet.
   bool get hasRatings => ratingCount > 0;

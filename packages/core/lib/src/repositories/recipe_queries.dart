@@ -40,7 +40,16 @@ const _kRecipeColumns =
     'category,difficulty,prep_minutes,cook_minutes,servings,visibility,'
     'attribution,forked_from_recipe_id,forked_from_version_id,'
     'current_version_id,like_count,save_count,view_count,created_at,updated_at,'
-    'rating_count,rating_avg,nutrition';
+    'rating_count,rating_avg,nutrition,'
+    // Phase 35c provenance. Read-only for the client in the strongest sense —
+    // none of these is in a column grant, so a PATCH carrying one fails 42501
+    // (rls_matrix H5-H8) — but every one of them is *rendered*: the credit line
+    // and its link, the entity chip, and whether the cover may be shown at all.
+    //
+    // `quality_score` and `imported_at` are deliberately absent. Nothing on the
+    // client reads either, and requesting a column with no field behind it is
+    // the B086 half of this obligation.
+    'is_imported,source_url,source_name,source_entity_id,rights_mode,image_mode';
 
 const kRecipeSelect =
     '$_kRecipeColumns,'

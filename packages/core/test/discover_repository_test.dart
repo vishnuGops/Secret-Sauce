@@ -96,6 +96,47 @@ void main() {
     expect(req.headers['Prefer'], contains('count=exact'));
   });
 
+  // Phase 35c. The corpus is the one Discover read that returns imported rows,
+  // and the parameters are the whole contract: the ordering lives in SQL.
+  test('corpus passes the page and names every parameter', () async {
+    final (:http, :repo) = _repo();
+
+    await repo.corpus(limit: 20, offset: 40);
+
+    final req = http.requests.single;
+    expect(req.url.path, endsWith('/rpc/recipes_corpus'));
+    expect(req.json['p_limit'], 20);
+    expect(req.json['p_offset'], 40);
+    // Named even when null. PostgREST resolves an overload by the argument
+    // names it is given, so omitting this would look for a two-argument
+    // `recipes_corpus` — which does not exist, and fails as a 404 rather than
+    // as anything that mentions parameters.
+    expect(req.json.containsKey('p_cuisine'), isTrue);
+    expect(req.json['p_cuisine'], isNull);
+    // The owner embed rides along, so a corpus card renders its chef badge
+    // without a second round trip — same contract as every other shelf.
+    expect(
+      req.param('select'),
+      contains('owner:profiles!recipes_owner_id_fkey'),
+    );
+    expect(req.param('select'), contains('is_imported'));
+  });
+
+  test('corpusCount asks for a count, not for rows', () async {
+    final http = RecordingHttpClient(
+      [(200, jsonEncode(<Object>[]))],
+      headers: {'content-range': '0-0/21334'},
+    );
+    final repo = SupabaseDiscoverRepository(fakeSupabase(http));
+
+    expect(await repo.corpusCount(), 21334);
+
+    final req = http.requests.single;
+    expect(req.method, 'HEAD');
+    expect(req.param('visibility'), 'eq.public');
+    expect(req.param('is_imported'), 'eq.true');
+  });
+
   test('recent reads the table in a total order, one page at a time', () async {
     final (:http, :repo) = _repo();
 
