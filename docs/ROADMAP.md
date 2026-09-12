@@ -718,9 +718,13 @@ that reopens the day a non-English tier is imported, and it is a re-index of eve
       and the affiliation chips. All four repository queries were verified against the real
       PostgREST, not just the recording client: an embed that trips `PGRST201` is exactly what the
       canned-reply test cannot see
-- [ ] Imported chef identity keyed `(source_slug, normalised_name)`, never global — collapsing two
-      strangers is worse than splitting one person (`corpus/README.md` flags the same limit).
-      **Belongs to the importer (35c)**; nothing writes a real imported profile yet
+- [x] Imported chef identity is keyed to the **publisher**, never global — `import_recipe` looks a
+      chef up by `(entity, display_name)` and creates one per entity otherwise. Collapsing two
+      strangers into one identity is a far worse error than splitting one person into two rows, and
+      only one of the two is correctable later. `corpus/chefs.json` keys on a normalised name
+      globally and its own README flags that as deliberately imperfect; the database does not
+      inherit it. A page with no byline is credited to the publisher alone, which is the honest
+      reading of a page that names nobody
 
 ### 35c — Ingestion, with every counter at zero — **DONE 2026-09-12**
 
@@ -762,13 +766,14 @@ at 260 MB. Every guarantee below was checked against that, not against a fixture
       SQL half is covered (`rls_matrix.sql` §H, `3_sim_verify.sql` group I) and the app half is
       covered (`explore_screen_test.dart`, the repository tests); what is not is the JSON→document
       transform in `tool/corpus_import.dart`, which today is proven only by having been run
-- [ ] **Decide the `entities.slug` namespace before the importer runs** (found reviewing 35b).
-      `entities_insert` lets any signed-in member create an entity with any slug, and the column is
-      `unique` — so a user can take `king-arthur` today and the importer either fails on the
-      constraint or silently attaches a publisher's corpus recipes to a row a stranger created and
-      still owns. Cheapest shape is an importer-owned prefix (the corpus already keys sources as
-      `src_<slug>`); a reserved-slug list is the alternative. Either way it is a 35c decision,
-      because 35c is what creates the collision
+- [x] **The `entities.slug` namespace** — closed in 35c, and it had stopped being theoretical the
+      moment an import could run. `entities_insert` lets any signed-in member create an entity with
+      any slug and the column is `unique`, so taking `king-arthur` before an import would have
+      handed that publisher's whole catalogue to whoever got there first (`import_recipe`
+      finds-or-creates by slug; `entities_update` is `is_entity_owner`). Imported entities now live
+      under a reserved `src:` prefix that `entities_slug_namespace` forbids a member to write.
+      Pinned by `rls_matrix.sql` **H8b** (the prefix is refused, 23514) and **H8c** (the same insert
+      outside it succeeds, so H8b is not refusing everything)
 - [ ] **Bound claim filing** (same review). `claims_insert` allows one pending claim per
       (profile, claimant) and nothing caps the number of profiles one account may file against, so
       a script can open 19,681 claims. Harmless while approval is manual SQL and the table is
