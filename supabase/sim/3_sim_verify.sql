@@ -220,7 +220,16 @@ begin
   ) x;
   if n > 0 then raise exception 'D2 % step groups whose step_order does not restart at 0 (B022)', n; end if;
 
-  select count(*) into n from sim.recipe sr join recipes r on r.id = sr.id
+  -- Scoped to ACTOR-owned recipes since Phase 35b, and the narrowing is
+  -- deliberate rather than a tuned assertion: `current_version_id` is a property
+  -- of a recipe created through `save_recipe`, and an imported recipe is not —
+  -- it is a capture of something already published, and 35c's importer declines
+  -- to write 558k version snapshots nobody made. Check I5 asserts the other
+  -- side, so neither state is merely unchecked.
+  select count(*) into n
+  from sim.recipe sr
+  join recipes r on r.id = sr.id
+  join sim.actor a on a.id = sr.owner_id
    where r.current_version_id is null;
   if n > 0 then raise exception 'D3 % recipes with no current_version_id', n; end if;
 
@@ -609,6 +618,141 @@ begin
     and not (r.category = any (v.categories));
   if n > 0 then
     raise exception 'H7 % tag(s) landed on a category their vocabulary entry forbids', n;
+  end if;
+
+  -- ==========================================================================
+  -- I. Imported chefs and entities (Phase 35b)
+  --
+  -- The half of the identity model no account can produce. Every check here is
+  -- a property the fixture has to keep for a *screen* to be worth building
+  -- against it — an imported chef carrying engagement, or ranked, would make
+  -- the empty state impossible to see and the exclusion impossible to trust.
+  -- ==========================================================================
+
+  -- I1: they exist, and none of them has an account. The second half is the
+  -- whole point: `current_profile_id()` resolves through `auth_user_id`, so a
+  -- link here would make an imported profile editable by whoever holds it.
+  select count(*) into n from sim.imported_profile;
+  if n = 0 then
+    raise exception 'I1 no imported chefs were generated';
+  end if;
+  select count(*) into n
+  from profiles p
+  join sim.imported_profile ip on ip.id = p.id
+  where p.auth_user_id is not null or p.kind <> 'imported';
+  if n > 0 then
+    raise exception 'I1 % imported profile(s) carry an account link or the wrong kind', n;
+  end if;
+
+  -- I2: and no auth.users row exists for any of them. Asserted separately from
+  -- I1 because they fail differently: I1 catches a bad insert, this catches an
+  -- id collision with a real account, which would make the teardown delete
+  -- somebody's login.
+  select count(*) into n
+  from auth.users u join sim.imported_profile ip on ip.id = u.id;
+  if n > 0 then
+    raise exception 'I2 % imported profile id(s) collide with an auth.users row', n;
+  end if;
+
+  -- I3: they own public recipes — otherwise the chef page has nothing to
+  -- render and the fixture proves nothing.
+  select count(*) into n
+  from recipes r join sim.imported_profile ip on ip.id = r.owner_id
+  where r.visibility = 'public';
+  if n = 0 then
+    raise exception 'I3 imported chefs own no public recipes';
+  end if;
+
+  -- I4: **and no engagement whatsoever.** This is the assertion that would
+  -- catch the fixture drifting back into the ordinary pipeline — which it would
+  -- do silently, because engagement is added by joins to `sim.actor` and
+  -- nothing anywhere says "except these".
+  select
+    (select count(*) from recipe_likes l
+      join recipes r on r.id = l.recipe_id
+      join sim.imported_profile ip on ip.id = r.owner_id)
+  + (select count(*) from recipe_saves sv
+      join recipes r on r.id = sv.recipe_id
+      join sim.imported_profile ip on ip.id = r.owner_id)
+  + (select count(*) from recipe_ratings rt
+      join recipes r on r.id = rt.recipe_id
+      join sim.imported_profile ip on ip.id = r.owner_id)
+  + (select count(*) from recipe_views v
+      join recipes r on r.id = v.recipe_id
+      join sim.imported_profile ip on ip.id = r.owner_id)
+  into n;
+  if n > 0 then
+    raise exception 'I4 imported chefs carry % engagement row(s) — they must arrive with none', n;
+  end if;
+
+  -- I5: no version history either, and therefore no `current_version_id`. The
+  -- pair is what makes D3's narrowing above a statement rather than a hole:
+  -- actor recipes must have one, imported recipes must not.
+  select count(*) into n
+  from recipe_versions rv
+  join recipes r on r.id = rv.recipe_id
+  join sim.imported_profile ip on ip.id = r.owner_id;
+  if n > 0 then
+    raise exception 'I5 imported recipes carry % version row(s)', n;
+  end if;
+  select count(*) into n
+  from recipes r
+  join sim.imported_profile ip on ip.id = r.owner_id
+  where r.current_version_id is not null;
+  if n > 0 then
+    raise exception 'I5 % imported recipe(s) carry a current_version_id', n;
+  end if;
+
+  -- I6: none of them is ranked, on either board, despite owning public
+  -- recipes. The `kind = 'member'` filter is the only thing stopping it, and
+  -- this is the check that would notice it being dropped.
+  select count(*) into n
+  from chefs_leaderboard(1000000, 0) cl
+  join sim.imported_profile ip on ip.id = cl.id;
+  if n > 0 then
+    raise exception 'I6 % imported chef(s) appear on the all-time leaderboard', n;
+  end if;
+  select count(*) into n
+  from chef_window_stats(3650) w
+  join sim.imported_profile ip on ip.id = w.id;
+  if n > 0 then
+    raise exception 'I6 % imported chef(s) appear in the windowed stats', n;
+  end if;
+
+  -- I7: entities exist, carry both kinds of member, and their signature dishes
+  -- are all public. The mixed roster is the case the entity page has to render
+  -- and the one no other fixture produces; the visibility rule is what
+  -- `entity_signature_write` enforces for a real client, and a fixture that
+  -- broke it would be a fixture RLS would refuse to reproduce.
+  select count(*) into n from sim.entity;
+  if n = 0 then
+    raise exception 'I7 no entities were generated';
+  end if;
+  select count(*) into n
+  from sim.entity e
+  where not exists (
+    select 1 from entity_members m
+    join sim.imported_profile ip on ip.id = m.profile_id
+    where m.entity_id = e.id
+  );
+  if n > 0 then
+    raise exception 'I7 % entity(s) have no imported chef on the roster', n;
+  end if;
+  select count(*) into n
+  from sim.entity e
+  where not exists (
+    select 1 from entity_members m where m.entity_id = e.id and m.role = 'owner'
+  );
+  if n > 0 then
+    raise exception 'I7 % entity(s) have no owner — nobody could ever manage them', n;
+  end if;
+  select count(*) into n
+  from entity_signature_dishes sd
+  join sim.entity e on e.id = sd.entity_id
+  join recipes r on r.id = sd.recipe_id
+  where r.visibility <> 'public';
+  if n > 0 then
+    raise exception 'I7 % signature dish(es) point at a private recipe', n;
   end if;
 
   raise notice 'ALL CHECKS PASSED';

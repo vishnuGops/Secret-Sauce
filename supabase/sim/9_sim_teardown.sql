@@ -82,13 +82,26 @@ delete from recipes where id in (select id from sim.recipe);
 delete from tags t
 where not exists (select 1 from recipe_tags rt where rt.tag_id = t.id);
 
+-- Phase 35b. Entities first: `entity_signature_dishes` points at recipes and
+-- `entity_members` at profiles, and both cascade — but naming them keeps this
+-- file an inventory of what the sim creates rather than a list of roots, which
+-- is what makes a missing teardown visible in review.
+delete from entities where id in (select id from sim.entity);
+
 -- Profiles cascade from auth.users, but delete them explicitly so the order is
 -- stated rather than relied upon.
 delete from profiles   where id in (select id from sim.actor);
 delete from auth.users where id in (select id from sim.actor);
 
+-- Imported chefs have NO auth.users row, so the line above reaches none of
+-- them — this registry is the only thing that can. Their recipes went with the
+-- `sim.recipe` delete above, which is why this comes after it.
+delete from profiles where id in (select id from sim.imported_profile);
+
 delete from sim.recipe;
 delete from sim.actor;
+delete from sim.entity;
+delete from sim.imported_profile;
 
 -- Release the pinned time anchor so the next build dates itself to today. While
 -- data exists the anchor must NOT move — every timestamp is drawn relative to
@@ -103,8 +116,9 @@ select recompute_all_chef_stats();
 
 do $$
 begin
-  raise notice 'sim teardown complete — % recipes and % profiles remain (non-sim)',
-    (select count(*) from recipes), (select count(*) from profiles);
+  raise notice 'sim teardown complete — % recipes, % profiles and % entities remain (non-sim)',
+    (select count(*) from recipes), (select count(*) from profiles),
+    (select count(*) from entities);
 end $$;
 
 commit;

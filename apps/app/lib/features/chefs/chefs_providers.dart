@@ -103,12 +103,29 @@ final chefCountProvider = FutureProvider.autoDispose<int>((ref) async {
 /// (private-only, brand-new, no public recipe), which is a state the page
 /// renders rather than an error.
 class ChefPageData {
-  const ChefPageData({required this.profile, this.standing});
+  const ChefPageData({
+    required this.profile,
+    this.standing,
+    this.entities = const [],
+  });
 
   final Profile profile;
 
   /// Null when this profile is not on the board — see [ChefRepository.standing].
   final ChefStanding? standing;
+
+  /// The groups this chef is listed under (Phase 35b). Empty is the normal
+  /// case: most profiles never join one, and the affiliation line is simply
+  /// absent rather than showing "no affiliations".
+  final List<Entity> entities;
+
+  /// A chef page for somebody who has never signed up — a name the corpus
+  /// credits, with no account behind it.
+  ///
+  /// Read off `kind` rather than inferred from a null standing: an imported
+  /// chef is *also* unranked, but so is a brand-new member, and the two pages
+  /// have to say different things.
+  bool get isUnclaimed => profile.kind.isImported;
 }
 
 /// Profile + standing for one chef.
@@ -136,9 +153,13 @@ final chefPageProvider = FutureProvider.autoDispose.family<
   // for the same exception. `Future.wait` subscribes to both up front and
   // rethrows the first failure, which keeps the parallelism without the
   // window.
+  // The affiliation read joins the same pattern: three independent requests,
+  // all started before any is awaited.
+  final entities = ref.watch(entityRepositoryProvider);
   final results = await Future.wait<Object?>([
     profiles.getById(chefId),
     chefs.standing(chefId),
+    entities.forProfile(chefId),
   ]);
 
   final profile = results[0] as Profile?;
@@ -147,7 +168,11 @@ final chefPageProvider = FutureProvider.autoDispose.family<
     // standing* is not this — see [ChefPageData].
     throw StateError('No chef with id $chefId');
   }
-  return ChefPageData(profile: profile, standing: results[1] as ChefStanding?);
+  return ChefPageData(
+    profile: profile,
+    standing: results[1] as ChefStanding?,
+    entities: results[2] as List<Entity>,
+  );
 });
 
 /// Which chef `/chef/:id` is showing — the argument [ChefRecipesNotifier] pages

@@ -79,6 +79,23 @@ class _FakeChefRepository implements ChefRepository {
   Future<Map<ChefTier, int>> tierCounts() => throw UnimplementedError();
 }
 
+/// Phase 35b: `/chef/:id` now also reads the chef's entity affiliations, so the
+/// page needs this override or the provider reaches for the real Supabase
+/// client. Empty by default — most profiles belong to no entity, and the
+/// affiliation row is absent rather than empty when they do not.
+class _FakeEntityRepository implements EntityRepository {
+  _FakeEntityRepository({this.entities = const []});
+
+  final List<Entity> entities;
+
+  @override
+  Future<List<Entity>> forProfile(String profileId) async => entities;
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) =>
+      throw UnimplementedError('${invocation.memberName} not stubbed');
+}
+
 class _FakeProfileRepository implements ProfileRepository {
   _FakeProfileRepository({this.profile});
 
@@ -134,9 +151,16 @@ Widget _app({
   _FakeChefRepository? chefs,
   double textScale = 1.0,
   String chefId = 'ssk',
+
+  /// Phase 35b: the groups this chef is listed under. Empty for every existing
+  /// case, which is the normal state — most profiles never join one.
+  List<Entity> entities = const [],
 }) {
   return ProviderScope(
     overrides: [
+      entityRepositoryProvider.overrideWithValue(
+        _FakeEntityRepository(entities: entities),
+      ),
       chefRepositoryProvider.overrideWithValue(
         chefs ?? _FakeChefRepository(result: standing, fail: standingFails),
       ),
@@ -462,4 +486,116 @@ void main() {
       });
     }
   }
+
+  // Phase 35b. A chef page for somebody who never signed up. The distinction
+  // that matters is not "unranked" — a brand-new member is unranked too — it is
+  // that there is no account behind this page at all, and the two states have
+  // to say different things.
+  group('an unclaimed chef', () {
+    Profile imported({String name = 'Aurelie Fontaine'}) => Profile(
+      id: 'ssk',
+      displayName: name,
+      kind: ProfileKind.imported,
+      createdAt: DateTime(2025, 3, 14),
+      publicRecipeCount: 4,
+    );
+
+    testWidgets('says the page is a credit, not an account', (tester) async {
+      _size(tester, 1000);
+      await tester.pumpWidget(
+        _app(standing: null, profile: imported(), pages: const [[]]),
+      );
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('This page is a credit, not an account'),
+        findsOneWidget,
+      );
+      expect(
+        find.textContaining('has not signed up for Secret-Sauce'),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('does not show the brand-new-member note instead', (
+      tester,
+    ) async {
+      // The two notes occupy the same slot, so the wrong branch is a silent
+      // substitution rather than a missing widget.
+      _size(tester, 1000);
+      await tester.pumpWidget(
+        _app(standing: null, profile: imported(), pages: const [[]]),
+      );
+      await tester.pumpAndSettle();
+
+      expect(
+        find.textContaining('has no public recipes yet'),
+        findsNothing,
+        reason: 'an imported chef got the unranked-member copy',
+      );
+    });
+
+    testWidgets('offers the claim button, disabled', (tester) async {
+      // Claiming is a security definer RPC with EXECUTE revoked from every API
+      // role, so there is nothing for this button to call. Enabled, it would
+      // silently do nothing — which is worse than no button at all.
+      _size(tester, 1000);
+      await tester.pumpWidget(
+        _app(standing: null, profile: imported(), pages: const [[]]),
+      );
+      await tester.pumpAndSettle();
+
+      final button = tester.widget<FilledButton>(
+        find.ancestor(
+          of: find.text('Is this you?'),
+          matching: find.byType(FilledButton),
+        ),
+      );
+      expect(button.onPressed, isNull);
+      expect(find.byType(Tooltip), findsWidgets);
+    });
+
+    testWidgets('a ranked member never gets the unclaimed note', (
+      tester,
+    ) async {
+      _size(tester, 1000);
+      await tester.pumpWidget(_app(pages: const [[]]));
+      await tester.pumpAndSettle();
+
+      expect(find.text('This page is a credit, not an account'), findsNothing);
+    });
+  });
+
+  group('entity affiliations (Phase 35b)', () {
+    const bakery = Entity(
+      id: 'e1',
+      slug: 'northern-bakehouse',
+      name: 'Northern Bakehouse',
+      kind: EntityKind.brand,
+    );
+
+    testWidgets('are absent when the chef belongs to none', (tester) async {
+      // Absent, not an empty state: most profiles never join one, and
+      // "No affiliations" is a sentence nobody needs.
+      _size(tester, 1000, 2000);
+      await tester.pumpWidget(_app(pages: const [[]]));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Appears in'), findsNothing);
+    });
+
+    testWidgets('render as chips when they exist', (tester) async {
+      // Tall: the chips sit below the score panel, and a finder for something
+      // below the fold of a CustomScrollView fails for a reason that has
+      // nothing to do with what is being tested.
+      _size(tester, 1000, 2000);
+      await tester.pumpWidget(
+        _app(pages: const [[]], entities: const [bakery]),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Appears in'), findsOneWidget);
+      expect(find.text('Northern Bakehouse'), findsOneWidget);
+    });
+  });
 }

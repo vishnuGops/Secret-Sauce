@@ -819,6 +819,28 @@ states that deleting an account leaves those rows behind anonymised with the cou
 every other user a right that cannot be withdrawn afterwards (§5); and Rights states the crawler's
 behaviour and the photograph position that Phase 35c's importer has to implement.
 
+### 7.0b The entity page and the unclaimed chef (Phase 35b)
+
+`/entity/:id` is one publisher's page and it copies `/chef/:id`'s shape deliberately: root
+navigator, signed-out safe, no nav destination (Gotcha 18 — a fifth costs the web pill its
+labels), and its own single-row fetch because a URL carries a uuid and nothing else. Header →
+roster → signature dishes. **An entity has no numbers of its own** — no score, no tier, no
+engagement — which is the Phase 25 decision this page is the payoff for: it reads its standing
+through its members and its dishes. Only a missing entity is a 404; an empty roster and an empty
+signature list are states a new entity is in on its first day.
+
+`/chef/:id` gains a third state. It already distinguished *profile missing* (a 404) from *profile
+present, no rank* (a real page for a private-only or brand-new account). Phase 35b adds **profile
+present, no account**: a chef the corpus credits. The distinction matters because "unranked" is
+true of both a new member and an imported chef, and the two pages have to say different things.
+The imported one says the page is a credit rather than an account, names where the recipes came
+from, and explains that the absence of a rank is deliberate rather than pending.
+
+Its claim button is **disabled**, behind `notYetTooltip`. `approve_profile_claim()` is a
+`security definer` RPC with EXECUTE revoked from every API role — an administrator runs it by
+hand — so there is nothing for a button to call. An enabled one would silently do nothing, which
+is worse than no button; the tooltip carries the contact address from `LegalFacts` instead.
+
 ### 7.1 Recipe detail: the two layouts (Phase 27)
 
 `recipe_detail_screen.dart` branches on `context.isExpanded` and nothing else: expanded windows get
@@ -2003,7 +2025,7 @@ recipe count.
 | Preset | Users | Engagement scale | Use |
 | --- | --- | --- | --- |
 | `tiny` | 60 | 0.5 | Screenshots. Seconds. Evaluates only 48 of the 53 assertions — see §12.7. |
-| `small` | 250 | 0.8 | **CI** (since 2026-08-26). The smallest size at which all 46 run. Safe on a hosted free tier. ~430 recipes, ~17k view rows. |
+| `small` | 250 | 0.8 | **CI** (since 2026-08-26). The smallest size at which every check runs. Safe on a hosted free tier. ~430 recipes, ~17k view rows. |
 | `medium` | 1,000 | 1.0 | **Default.** ~1,670 recipes, ~118k view rows, ~10s (Phase 24's recorded run — re-measure rather than re-quote). Breaks pagination, ranking and search assumptions. |
 | `large` | 8,000 | 1.2 | Stress test. **Never run** — `master_chef` is asserted at this size but unverified. |
 
@@ -2018,10 +2040,15 @@ population means running the teardown first.
    database, but the `on conflict` branch is the one that runs after a `db:drop`, and a profile
    that lost its link resolves to nothing through `current_profile_id()` and is then denied by
    every policy, silently. `db:sim:rls` signs in as one of these accounts, so it is the check that
-   would fail. **The sim generates no `imported` profiles and no entities yet** — that is the
-   remaining half of Phase 35b, and it needs `sim.imported_profile` / `sim.entity` registries plus
-   a teardown branch that does not key on `auth.users`, since an imported profile has no account
-   to delete it by.
+   would fail.
+1b. **Imported chefs and entities** (Phase 35b) — a handful of `profiles` rows with no
+   `auth.users` behind them, drawn from the same name pools, plus the groups that publish. They
+   are deliberately **not** `sim.actor` rows: every engagement step below joins `sim.actor` to
+   find an owner's persona, so a recipe owned by an imported chef is skipped by construction
+   rather than by a filter somebody has to remember. Their recipes are appended to `sim_titled`,
+   so one piece of code still knows how a dish becomes a recipe. Registered in
+   `sim.imported_profile` / `sim.entity`, because the teardown deletes by registry and these rows
+   have no account to be deleted by. Group **I** asserts the properties.
 2. **Recipes** — a weighted draw over `sim.dish` (the author's own `weight`), titled through
    `sim.title_variant` indexed **by occurrence**, so one owner drawing the same dish twice cannot
    produce the same title twice. `(owner_id, title)` is the import key and a collision silently
@@ -2090,7 +2117,7 @@ touches them — correct, but it means the backfill has no sim coverage;
 
 `3_sim_verify.sql` is read-only, safe against a database where the sim was never applied, and is
 **the entire test suite for the sim** — a generator that produced garbage would otherwise look
-exactly like one that worked. Seven groups:
+exactly like one that worked. Nine groups:
 
 | | What it asserts |
 | --- | --- |
@@ -2101,16 +2128,19 @@ exactly like one that worked. Seven groups:
 | **E** | Shape — is this the dataset that was designed? Persona mix, private/public split, the funnel's subset property |
 | **F** | The pre-existing seed is untouched while `engage_existing` is off — d1–d7 and the Kitchen's standings byte-identical |
 | **G** | Discover's shelves have something to rank (Phase 26), including the fork-depth check above |
+| **H** | The authored pools (Phase 33) — titles come from `vocab.json`, names are locale-coherent, tags are Zipf-drawn and never land on a category their entry forbids |
+| **I** | Imported chefs and entities (Phase 35b) — they exist, hold **no** `auth_user_id` and no colliding `auth.users` row, own public recipes, carry **zero** engagement and zero versions, appear on neither board, and every entity has an owner, a mixed roster and only public signature dishes |
 
 CI runs the whole sequence on a **`small`** population in `database.yml` (raised from `tiny` on
 2026-08-26 — see below).
 
-**The count is 46, not the 43 quoted elsewhere in these docs until 2026-08-25.** 43 was correct when
-Phase 24 shipped; Phase 26 added group **G** and never updated the number. Recount it rather than
-copying it — a stale assertion count reads as "this is still the suite I reviewed" and is exactly
-the kind of claim that decays without anything failing.
+**Recount the assertions rather than copying a number from here.** This paragraph has been wrong
+twice: 43 was correct when Phase 24 shipped and Phase 26 added group **G** without updating it; 46
+was correct until Phase 33 added **H** and Phase 35b added **I**. A stale count reads as "this is
+still the suite I reviewed" and is exactly the kind of claim that decays without anything failing,
+so the file reports its own total and this text deliberately does not restate one.
 
-**`ALL CHECKS PASSED` does not mean all 46 ran.** Some checks depend on population size, because a
+**`ALL CHECKS PASSED` does not mean every check ran.** Some checks depend on population size, because a
 distribution assertion at 60 users measures the *viewer cap* rather than the distribution. The file
 handles that two different ways, and the difference matters:
 

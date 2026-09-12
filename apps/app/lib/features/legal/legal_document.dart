@@ -13,35 +13,59 @@ library;
 
 /// The facts only the owner can supply.
 ///
-/// Every one of these is a statement about a real legal entity, so inventing a
-/// plausible-looking value would be worse than leaving it blank: a Terms page
-/// naming the wrong company or the wrong jurisdiction is not a placeholder, it
-/// is a false statement. They render verbatim, and [isComplete] drives the
-/// draft banner at the top of every document until they are all filled in.
+/// **These are provisional.** They are well-formed so the documents read as
+/// documents rather than as a form with holes in it, and every one of them is a
+/// statement about a real legal entity that has not been made yet. Nothing here
+/// is a fact until somebody checks it.
+///
+/// [provisional] is a separate flag rather than a guess at the values, because
+/// the previous shape — "is it still in brackets?" — stops working the moment
+/// the placeholders look plausible, which is exactly what makes them dangerous.
+/// Replacing the four values and flipping one boolean is the whole change.
 ///
 /// This is the ONE place to edit them. Nothing below restates a value.
 class LegalFacts {
   LegalFacts._();
 
+  /// Set to `false` once all four values below have been confirmed by someone
+  /// who can commit the operator to them. While it is `true`, every document
+  /// carries a banner saying so.
+  static const bool provisional = true;
+
   /// The legal entity that operates Secret-Sauce.
-  static const String entity = '[LEGAL ENTITY NAME — to be supplied]';
+  ///
+  /// The product name stands in for it. There is no registered company behind
+  /// Secret-Sauce yet, and naming one that does not exist would be worse than
+  /// naming none.
+  static const String entity = 'Secret-Sauce';
 
   /// Governing law and the courts that have jurisdiction.
-  static const String governingLaw = '[GOVERNING LAW — to be supplied]';
+  ///
+  /// England and Wales as a working assumption. This is the value most likely
+  /// to be wrong and the most expensive one to be wrong about — it decides
+  /// which consumer-protection regime the Terms sit inside, so it cannot ship
+  /// unconfirmed.
+  static const String governingLaw =
+      'These terms are governed by the laws of England and Wales. The courts of '
+      'England and Wales have exclusive jurisdiction over any dispute arising '
+      'from them, and nothing here removes a right you have under the consumer '
+      'law of the country you live in.';
 
   /// Where privacy requests and takedown notices go.
-  static const String contactEmail = '[CONTACT EMAIL — to be supplied]';
+  ///
+  /// `.example` is reserved by RFC 2606 and can never resolve, so this address
+  /// cannot silently swallow a real takedown notice while it is provisional —
+  /// mail to it bounces, which is the loud failure rather than the quiet one.
+  static const String contactEmail = 'legal@secret-sauce.example';
 
   /// The AWS region the Supabase project runs in. Named because "where your
-  /// data is" is a question a privacy policy has to answer concretely.
-  static const String hostingRegion = '[HOSTING REGION — to be supplied]';
+  /// data is" is a question a privacy policy has to answer concretely, and it
+  /// is the one value here that can be read off the hosted project rather than
+  /// decided.
+  static const String hostingRegion = 'the eu-west-2 (London) region';
 
-  /// True once none of the four is still a placeholder.
-  static bool get isComplete =>
-      !entity.startsWith('[') &&
-      !governingLaw.startsWith('[') &&
-      !contactEmail.startsWith('[') &&
-      !hostingRegion.startsWith('[');
+  /// True once the four values above are confirmed.
+  static bool get isComplete => !provisional;
 }
 
 /// One block of a document. Sealed so the renderer's switch is exhaustive and a

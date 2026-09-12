@@ -8,8 +8,8 @@ files, and acceptance criteria. Kept in sync with the code.
 > Phase OPT lives in [archive/EXECUTION-PLAN-phases-0-31.md](./archive/EXECUTION-PLAN-phases-0-31.md).
 > This file carries only work that is open: Phase 24 (in progress), Phase 25 (designed, not
 > started — its schema is absorbed by Phase 35b), Phase 32 (audit remediation), Phase 33 (SQL
-> shipped, client open), Phase 35 (the corpus becomes product — 35a's legal pages and
-> 35b's identity decoupling are built, 35c designed), and the ops reference.
+> shipped, client open), Phase 35 (the corpus becomes product — 35a and 35b are
+> done, 35c designed), and the ops reference.
 
 ---
 
@@ -438,7 +438,7 @@ the recipe-card cover (Ph 30).
 
 ## Phase 35 — The corpus becomes product (designed, nothing built)
 
-Roadmap: [ROADMAP.md Phase 35](./ROADMAP.md#phase-35--the-corpus-becomes-product-35a--35b-built-35c-designed) ·
+Roadmap: [ROADMAP.md Phase 35](./ROADMAP.md#phase-35--the-corpus-becomes-product-35a--35b-done-35c-designed) ·
 Depends on [Phase 34](./ROADMAP.md#phase-34--the-scraped-recipe-corpus-at-scale-in-progress) (the corpus) ·
 Absorbs [Phase 25](#phase-25--restaurants--signature-dishes) (its `restaurants` table becomes `entities`)
 
@@ -677,19 +677,32 @@ Two things went wrong on the way and are worth keeping, because both are the sam
   confirmed with a minted local JWT against the running stack. `packages/core/test` uses a canned
   reply and would have agreed with a wrong guess.
 
-**Seed-data fit — the one piece NOT built.** The sim must generate **both** kinds:
-`2_sim_generate.sql` needs a small population of `imported` profiles with no auth row, plus a
-couple of entities with members, so the claim flow, the unclaimed chef page and the entity
-directory have something to render long before 558k rows exist. It is not a drop-in, which is why
-it is listed rather than half-done: the sim's safety mechanism is the **registry**
-(`9_sim_teardown.sql` deletes by `sim.actor` / `sim.recipe`, never by a pattern), and an imported
-profile has no `auth.users` row to delete it by — so it needs `sim.imported_profile` and
-`sim.entity` registries and their own teardown branch before a single row is generated.
+**Seed-data fit — built.** `2_sim_generate.sql` now produces both kinds, and the shape it took is
+worth recording because the obvious one is wrong. The imported chefs are **not** `sim.actor` rows.
+Everything downstream that adds engagement — the fork weighting (§5), the shares (§6), the reach
+table (§7) — joins `sim.actor` to find an owner's persona, so a recipe whose owner is not an actor
+is skipped **by construction**, with no filter written anywhere and nothing to forget when a ninth
+engagement step is added. Their recipes still ride the ordinary pipeline by being appended to
+`sim_titled`, so there is exactly one place that knows how a dish document becomes a recipe.
 
-Until it lands, the coverage that exists is `rls_matrix.sql` §G, which builds its own imported
-profile, entity and claim inside the transaction and rolls them back — including the merge, end to
-end (G24-G28). That proves the policies and the function; it does not give a screen anything to
-render, which is what the sim work is for.
+Two consequences that needed deciding rather than defaulting:
+
+- **They carry no version history**, so `sim_version` gained a `join sim.actor`. That made check
+  **D3** ("every recipe has a `current_version_id`") false, and the right answer was to narrow D3
+  to actor-owned recipes *and* add the opposite assertion in **I5** — an imported recipe must have
+  none. Narrowing an assertion without asserting the other side is how a check quietly stops
+  covering anything.
+- **Teardown needed its own registry.** `9_sim_teardown.sql`'s safety rule is that every delete is
+  driven by `sim.actor` / `sim.recipe` and never by a pattern, and
+  `delete from auth.users where id in (select id from sim.actor)` reaches none of these rows —
+  they have no account. Hence `sim.imported_profile` and `sim.entity`, and a teardown branch that
+  deletes profiles directly.
+
+`rls_matrix.sql` §G still proves the policies and the merge end to end (G24-G28) on fixtures it
+builds and rolls back; group **I** (7 checks) proves the *population* — that imported chefs exist,
+hold no account, own public recipes, carry **zero** engagement and zero versions, appear on
+neither board, and that every entity has an owner, a mixed roster and only public signature
+dishes.
 
 ---
 

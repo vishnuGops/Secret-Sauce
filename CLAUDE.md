@@ -108,7 +108,8 @@ secret-sauce/
 ├── apps/app/
 │   ├── lib/features/          # auth, discover, chefs, my_recipes, recipe_detail,
 │   │                          # recipe_editor, profile, legal (35a: three documents as Dart
-│   │                          #   consts + one screen) — screen + *_providers.dart per feature,
+│   │                          #   consts + one screen), entities (35b: /entity/:id) — screen +
+│   │                          #   *_providers.dart per feature,
 │   │                          # plus that feature's own panels (OPT-A8 split the three big
 │   │                          # screens: editor 880->418, detail 629->311, chef sheet 597->231)
 │   │                          # (home/ retired 2026-08-20 — `/` redirects to /discover; the
@@ -690,11 +691,10 @@ the old profile as a `merged_into` **tombstone** rather than deleting an id that
 URLs, and parks the `recipes_chef_stats` trigger for the duration the way the sim's bulk load does.
 `rls_matrix.sql` §G exercises all of it, merge included.
 
-Nine Postgres enums now exist; four are mirrored in
+All nine Postgres enums are mirrored in
 [enums.dart](packages/core/lib/src/models/enums.dart): `difficulty`, `recipe_visibility`,
 `share_permission` (`edit` reserved, unused), `suggestion_status`, `chef_tier`, and Phase 35b's
-`profile_kind`. `entity_kind`, `entity_role` and `claim_status` exist in SQL only — nothing in Dart
-reads them yet, and they gain their mirrors with the entity model.
+`profile_kind`, `entity_kind`, `entity_role` and `claim_status`.
 
 ## Feature map
 
@@ -710,6 +710,7 @@ reads them yet, and they gain their mirrors with the entity model.
 | `/recipe/:id/cook`                | `features/recipe_detail` | **Cook mode** — full-screen, one step at a time, **always dark** (`AppTheme.dark()`, the only screen that overrides the theme; the phone is propped under kitchen lights). `cook_mode_screen.dart` (route + shortcuts) → `cook_step_view.dart` (compact frames C/D, web frame H) → `cook_finish_view.dart` (frame E). Pure derivations in `cook_mode_model.dart`, session + timers in `cook_mode_providers.dart`. Signed-out safe; **not** in `needsAuth`. See "Cook mode" below |
 | `/recipe/new`, `/recipe/:id/edit` | `features/recipe_editor` | `edit_models.dart` holds mutable draft types; save appends a version. Images — the cover and each step's photo (Phase 33) — go through the one `imagePickerProvider` pick and its 5 MB guard, are held as **bytes on the draft**, and are uploaded inside `_save`: an abandoned edit leaves no orphan object in the bucket |
 | `/profile`                        | `features/profile`       | Current user; reached from the bottom bar on mobile and the avatar menu on web (`myProfileProvider`)                     |
+| `/entity/:id`                     | `features/entities`      | **One publisher's page** (Phase 35b) — a brand, restaurant, magazine or community site. Header (name, kind, country, homepage, description) → roster of member chefs, each row linking to `/chef/:id` → signature dishes as a `SliverRecipeGrid`. An entity is **not a principal**: no score, no tier, no engagement of its own. Root navigator, signed-out safe, **no nav destination** (Gotcha 18). An empty roster or signature list is a state; only a missing entity is a 404 |
 | `/legal/:doc`                     | `features/legal`         | **Privacy / Terms / Rights** (Phase 35a). One `LegalScreen` over a sealed `LegalBlock` list of Dart consts — no `flutter_markdown`. `LegalDoc.fromSlug` validates; an unknown slug falls back to Privacy rather than 404ing. Root navigator, signed-out safe, **no nav destination**. The four owner-supplied facts live in `LegalFacts`, and a red draft banner shows while any is still a placeholder |
 
 Only `/discover`, `/chefs`, `/my`, `/profile` sit inside the `ShellRoute` (nav chrome); detail,

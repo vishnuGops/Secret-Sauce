@@ -396,6 +396,102 @@ select
   ) as title
 from sim_new_recipe r;
 
+-- ============================================================================
+-- 2b. Imported chefs and entities (Phase 35b)
+--
+-- The fixture for the half of the identity model no account can produce: a
+-- `profiles` row with NO `auth.users` row behind it, credited for recipes it
+-- did not publish here, and the entity that did publish them.
+--
+-- **These are not actors.** They are deliberately absent from `sim.actor`, and
+-- that single fact is what keeps them out of every engagement step downstream
+-- without a filter being written anywhere: §5's fork weighting, §6's shares and
+-- §7's reach all join `sim.actor` to find an owner's persona, so a recipe whose
+-- owner is not one is skipped by construction. That is the fixture being
+-- honest — an imported recipe arrives with no engagement at all (Phase 35c), so
+-- one carrying likes here would make the empty-state impossible to see.
+--
+-- They ARE registered, in `sim.imported_profile` and `sim.entity`, because the
+-- teardown's safety rule is the registry and nothing else (9_sim_teardown.sql).
+-- An imported profile has no `auth.users` row to delete it by, which is exactly
+-- why guessing at a pattern would be the wrong answer here.
+insert into sim.imported_profile (id, n)
+select sim.uid('imported', i), i
+from generate_series(1, greatest(3, sim.n_users() / 50)) i
+on conflict (n) do nothing;
+
+-- Same name pools as the population, drawn the same way: one locale per chef,
+-- so the name is coherent (check H3's property, applied to a second table).
+insert into profiles (id, auth_user_id, kind, display_name, bio, created_at)
+select
+  ip.id,
+  null,                                   -- the whole point: no account
+  'imported'::profile_kind,
+  g.name || ' ' || f.name,
+  -- No invented biography (Phase 35a): an imported chef's page carries a name,
+  -- a credit and a link, and anything else would be words we put in their
+  -- mouth. Null here is a rendering case too — the profile screen's empty bio.
+  null,
+  sim.rand_ts('imported:' || ip.n, 'created', sim.epoch_start(), sim.epoch_end(), 1.0)
+from sim.imported_profile ip
+join sim.locale l
+  on l.n = sim.rand_int('imported:' || ip.n, 'locale', 1, (select count(*)::int from sim.locale))
+join sim.person_name g
+  on g.locale = l.code and g.kind = 'given'
+ and g.n = sim.rand_int('imported:' || ip.n, 'given', 1, l.given_count)
+join sim.person_name f
+  on f.locale = l.code and f.kind = 'family'
+ and f.n = sim.rand_int('imported:' || ip.n, 'family', 1, l.family_count)
+on conflict (id) do update
+  set display_name = excluded.display_name,
+      kind         = 'imported',
+      auth_user_id = null;
+
+-- Their recipes ride the ordinary pipeline by being appended to `sim_titled`,
+-- which is what §3 reads for content and what the `recipes` insert above reads
+-- for the row. Doing it this way rather than writing a second recipe inserter
+-- means there is exactly one place that knows how a dish document becomes a
+-- recipe — the alternative is two, and the second one goes stale.
+--
+-- The `n` space starts at 2,000,000 so it cannot collide with an actor's
+-- `owner_n * 1000 + i`, which tops out near 1,001,000 at every preset.
+insert into sim_titled (
+  id, n, owner_id, owner_n, persona, slug, created_at, doc, visibility,
+  occurrence, title
+)
+select
+  sim.uid('recipe', 2000000 + (ip.n * 100 + k.i)),
+  2000000 + (ip.n * 100 + k.i),
+  ip.id,
+  ip.n,
+  -- Not a real persona. Nothing reads it for an imported chef (that is the
+  -- point — no join to `sim.persona` ever reaches these rows), and the column
+  -- is `not null` in the temp table.
+  'lurker',
+  d.slug,
+  sim.rand_ts('irecipe:' || ip.n || ':' || k.i, 'created',
+              sim.epoch_start(), sim.epoch_end(), 1.0),
+  d.doc,
+  -- Always public. An imported recipe is one somebody already published on the
+  -- open web; there is no such thing as a private one.
+  'public'::recipe_visibility,
+  k.i,
+  (d.doc ->> 'title') || ' — ' || (select p.display_name from profiles p where p.id = ip.id)
+from sim.imported_profile ip
+cross join lateral generate_series(
+  1, 2 + sim.rand_int('imported:' || ip.n, 'nrecipes', 0, 3)
+) k(i)
+-- The same weighted draw the population uses (`sim.pick_dish`), not a uniform
+-- index: `sim.dish` has no dense `n`, and a second way of choosing a dish would
+-- be a second distribution to keep in step with the first.
+join lateral (
+  select dd.slug, dd.doc
+  from sim.dish dd
+  where dd.slug = sim.pick_dish(sim.rand('irecipe:' || ip.n || ':' || k.i, 'dish'))
+  limit 1
+) d on true;
+
+
 insert into recipes (
   id, owner_id, title, description, cuisine, category, difficulty,
   prep_minutes, cook_minutes, servings, visibility, attribution,
@@ -610,6 +706,11 @@ select
   r.created_at + ((v.i - 1) * interval '1 day'
     * (1 + floor(sim.rand('recipe:' || r.n || ':v' || v.i, 'vgap') * 30))) as ts
 from sim.recipe r
+-- Phase 35b: actors only. An imported recipe is a capture of something already
+-- published elsewhere, so it has no edit history here until somebody claims the
+-- page and edits it — the same rule 35c's importer follows when it declines to
+-- write 558k version snapshots nobody made.
+join sim.actor a on a.id = r.owner_id
 cross join lateral generate_series(
   1,
   1 + floor(power(sim.rand('recipe:' || r.n, 'nversions'), 4.0) * 9)::int
@@ -968,6 +1069,99 @@ update recipes r
    set search_tsv = recipe_search_tsv(r.id, r.title, r.description)
  where r.search_tsv is null;
 
+-- ============================================================================
+-- 2c. Entities — the group that published a recipe (Phase 35b)
+--
+-- `created_by` is null on every one of them, which is the imported case: nobody
+-- on this service registered it. An entity a member creates carries their
+-- profile id there, and the bootstrap clause in `entity_members_insert` is what
+-- lets them take the first seat — neither path is exercised here, because both
+-- need a signed-in actor and this file runs as `postgres`. `db:sim:rls` is
+-- where a real session touches them.
+-- ============================================================================
+
+insert into sim.entity (id, n, slug)
+select sim.uid('entity', i), i, 'sim-entity-' || i
+from generate_series(1, greatest(3, sim.n_users() / 80)) i
+on conflict (n) do nothing;
+
+insert into entities (id, slug, name, kind, homepage, country, description, created_by)
+select
+  e.id,
+  e.slug,
+  -- Named off the locale pool so the directory does not read as `Entity 3`.
+  l.cuisine || ' ' || k.label,
+  k.kind,
+  'https://example.test/' || e.slug,
+  -- Null, not `l.code`. The locale pool models naming TRADITIONS, not
+  -- countries — its codes read `french`, `japanese` — so deriving a country
+  -- from one would print an invented fact on the page. A publisher with no
+  -- stated country is also the case the header has to render, and nothing else
+  -- in the fixtures produces it.
+  null,
+  'A simulated ' || k.label || ' used to exercise the entity directory.',
+  null
+from sim.entity e
+join lateral (
+  select
+    (array['restaurant', 'brand', 'publication', 'community', 'chef_site'])
+      [1 + (e.n % 5)]::entity_kind as kind,
+    (array['Kitchen', 'Foods', 'Magazine', 'Collective', 'Table'])
+      [1 + (e.n % 5)] as label
+) k on true
+join sim.locale l
+  on l.n = 1 + (e.n % (select count(*)::int from sim.locale))
+on conflict (id) do nothing;
+
+-- Members: two actors and one imported chef per entity, so the roster shows
+-- both kinds side by side — which is the case the page has to render and the
+-- one no other fixture can produce. The first actor holds `owner`, because an
+-- entity with no owner is unmanageable (the reason the bootstrap clause exists).
+insert into entity_members (entity_id, profile_id, role, title, created_at)
+select e.id, a.id,
+       case when g.i = 1 then 'owner' else 'chef' end::entity_role,
+       case when g.i = 1 then 'Head Chef' else null end,
+       sim.epoch_start()
+from sim.entity e
+cross join generate_series(1, 2) g(i)
+join lateral (
+  select act.id from sim.actor act
+  where act.n = 1 + (abs(hashtextextended('entity:' || e.n || ':' || g.i, sim.seed()))
+                     % sim.n_users())
+  limit 1
+) a on true
+on conflict (entity_id, profile_id) do nothing;
+
+insert into entity_members (entity_id, profile_id, role, title, created_at)
+select e.id, ip.id, 'chef'::entity_role, null, sim.epoch_start()
+from sim.entity e
+join lateral (
+  select p.id from sim.imported_profile p
+  where p.n = 1 + (abs(hashtextextended('entity-imported:' || e.n, sim.seed()))
+                   % (select count(*)::int from sim.imported_profile))
+  limit 1
+) ip on true
+on conflict (entity_id, profile_id) do nothing;
+
+-- Signature dishes: a member's own PUBLIC recipe, which is what
+-- `entity_signature_write` requires. RLS is bypassed here (this file runs as
+-- `postgres`), so the filter is written out rather than relied upon — a fixture
+-- that only satisfies the policy by accident is a fixture that stops
+-- satisfying it silently.
+insert into entity_signature_dishes (entity_id, recipe_id, sort_order, created_at)
+select e.id, r.id, (row_number() over (partition by e.id order by r.id))::int - 1,
+       sim.epoch_start()
+from sim.entity e
+join entity_members m on m.entity_id = e.id
+join recipes r on r.owner_id = m.profile_id and r.visibility = 'public'
+where r.id in (
+  select r2.id from recipes r2
+  where r2.owner_id = m.profile_id and r2.visibility = 'public'
+  order by r2.id
+  limit 2
+)
+on conflict (entity_id, recipe_id) do nothing;
+
 -- Counts are scoped to sim.recipe on purpose. Reporting global totals would
 -- fold in the 64 taster ratings from seed.sql and make the funnel look wrong
 -- (more ratings than likes), which is exactly the kind of number someone
@@ -982,8 +1176,11 @@ begin
   select count(*) into v_likes   from recipe_likes   l  join sim.recipe sr on sr.id = l.recipe_id;
   select count(*) into v_saves   from recipe_saves   s  join sim.recipe sr on sr.id = s.recipe_id;
   select count(*) into v_ratings from recipe_ratings rt join sim.recipe sr on sr.id = rt.recipe_id;
-  raise notice 'sim complete (sim-owned rows only): % actors, % recipes, % views (+% anon), % likes, % saves, % ratings',
-    (select count(*) from sim.actor), (select count(*) from sim.recipe),
+  raise notice 'sim complete (sim-owned rows only): % actors (+% imported chefs), % recipes, % entities, % views (+% anon), % likes, % saves, % ratings',
+    (select count(*) from sim.actor),
+    (select count(*) from sim.imported_profile),
+    (select count(*) from sim.recipe),
+    (select count(*) from sim.entity),
     v_views, v_anon, v_likes, v_saves, v_ratings;
 end $$;
 

@@ -331,7 +331,7 @@ A restaurant is an **entity managed by profiles**, never a second principal: nob
 a restaurant", so auth, RLS, and the engagement model stay exactly as they are. Signature dishes
 are rows pointing at existing `recipes` — no second recipe system.
 
-> **The schema checklist below is superseded by [Phase 35b](#phase-35--the-corpus-becomes-product-35a--35b-built-35c-designed).**
+> **The schema checklist below is superseded by [Phase 35b](#phase-35--the-corpus-becomes-product-35a--35b-done-35c-designed).**
 > The corpus needs an attribution entity for 560 publishers and this phase needs a restaurant
 > entity; they are the same table, so `restaurants` becomes `entities` with an `entity_kind`
 > (`restaurant | brand | publication | community | chef_site`) and the two child tables become
@@ -591,14 +591,14 @@ a hand-written corpus total is wrong the moment the next source finishes.
       nothing — decide per site, do not guess
 - [~] Decide where this data lives beyond a local directory. The shards are git-ignored today,
       which is a deferral, not an answer. **Answered in part by
-      [Phase 35](#phase-35--the-corpus-becomes-product-35a--35b-built-35c-designed)**: a curated tier is
+      [Phase 35](#phase-35--the-corpus-becomes-product-35a--35b-done-35c-designed)**: a curated tier is
       imported into Postgres (35c), the rest stays local until storage is paid for, and a small
       committed fixture shard under `corpus/_fixtures/` gives CI something to run against
 
 ---
 
 
-## Phase 35 — The corpus becomes product (35a + 35b built; 35c designed)
+## Phase 35 — The corpus becomes product (35a + 35b done; 35c designed)
 
 Design, reasoning and the decisions behind every line here:
 [EXECUTION-PLAN.md Phase 35](./EXECUTION-PLAN.md#phase-35--the-corpus-becomes-product-designed-nothing-built).
@@ -660,7 +660,7 @@ that reopens the day a non-English tier is imported, and it is a re-index of eve
       attribute until 35c lands; and a screenshot pass — the chrome bar sits in a `Scaffold` slot,
       which is exactly the class Gotcha 23 says widget tests do not see
 
-### 35b — Identity: `profiles` decoupled from `auth.users` — **SQL + client identity done 2026-09-12**
+### 35b — Identity: `profiles` decoupled from `auth.users` — **DONE 2026-09-12**
 
 - [x] `profile_kind` enum (`member` | `imported`); `profiles.auth_user_id uuid unique null`,
       `kind`, `claimed_at`, `merged_into`; **the `auth.users` FK on `profiles.id` is dropped** —
@@ -701,18 +701,26 @@ that reopens the day a non-English tier is imported, and it is a re-index of eve
       `Profile.kind` / `Profile.claimedAt`; `SupabaseRecipeRepository` keys every write on the
       resolved id. Verified through the recording client **and** against the real PostgREST edge,
       where a scalar RPC returns a bare JSON string
+- [x] Sim generates both kinds: `sim.imported_profile` and `sim.entity` registries, imported
+      chefs drawn from the same name pools with **no auth row and no bio** (no invented
+      biography — Phase 35a), their recipes riding the ordinary pipeline by being appended to
+      `sim_titled`, and entities with a mixed roster of actors and imported chefs. The engagement
+      steps skip them **by construction rather than by a filter**: §5, §6 and §7 all join
+      `sim.actor` to find an owner's persona, so a recipe whose owner is not one is never reached.
+      `9_sim_teardown.sql` deletes both registries — the imported half matters because those rows
+      have no `auth.users` row to be deleted by, which is the registry rule the file already
+      states. `3_sim_verify.sql` group **I** (7 checks) pins all of it, and **D3 was narrowed** to
+      actor-owned recipes with I5 asserting the other side, so neither state is merely unchecked
+- [x] core/app: `Entity` / `EntityMember` models, `EntityKind` / `EntityRole` / `ClaimStatus`
+      enums, `EntityRepository` + provider, `/entity/:id` (root navigator, signed-out safe, no nav
+      destination), the unclaimed-chef note on `/chef/:id` with a **disabled** claim button behind
+      `notYetTooltip` (claiming is an admin RPC — an enabled button would silently do nothing),
+      and the affiliation chips. All four repository queries were verified against the real
+      PostgREST, not just the recording client: an embed that trips `PGRST201` is exactly what the
+      canned-reply test cannot see
 - [ ] Imported chef identity keyed `(source_slug, normalised_name)`, never global — collapsing two
       strangers is worse than splitting one person (`corpus/README.md` flags the same limit).
-      **Belongs to the importer (35c)**; nothing writes an imported profile yet
-- [ ] Sim generates both kinds: `imported` profiles with no auth row + a couple of entities with
-      members, so the claim flow, the unclaimed chef page and the entity directory render before
-      558k rows exist. Needs `sim.imported_profile` / `sim.entity` registries **and** a teardown
-      that does not key on `auth.users` — an imported profile has no account to delete it by,
-      which is exactly the registry rule 9_sim_teardown already states. New `3_sim_verify.sql`
-      assertions for both
-- [ ] core/app: `Entity` model + repository (FK hints from day one — `entities` and `profiles` are
-      related two ways at birth, Gotcha 17), unclaimed-chef page state ("Is this you? Claim this
-      page" + "Request removal"), `/entity/:id` directory
+      **Belongs to the importer (35c)**; nothing writes a real imported profile yet
 
 ### 35c — Ingestion, with every counter at zero
 
@@ -776,8 +784,8 @@ run is done, Phase 33 having closed the content half; **Phase 33 is `[~]`** — 
 leaderboard's SQL is built and pinned, its client is not;
 **Phase 25 is designed-not-started** behind one remaining prerequisite (B043's tier calibration —
 the public chef page and the SQL harness are both done) **and its schema is now superseded by
-Phase 35b's `entities`**; **Phase 35 is partly built** — 35b's identity decoupling and 35a's
-legal pages landed 2026-09-12; 35c is designed; and **Phase 32** holds the 2026-08-26 audit's remediation items.
+Phase 35b's `entities`**; **Phase 35 is two-thirds built** — 35a's legal pages and 35b's
+identity layer both landed 2026-09-12; 35c is designed; and **Phase 32** holds the 2026-08-26 audit's remediation items.
 
 #### BL-1 — OPT-S8 (B018) — rotate the hosted seed passwords (owner action)
 

@@ -8,6 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app/features/chefs/chef_detail_common.dart';
 import 'package:app/features/chefs/chef_identity_header.dart';
 import 'package:app/features/chefs/chef_score_panel.dart';
+import 'package:app/features/chefs/entity_affiliations.dart';
+import 'package:app/features/chefs/unclaimed_chef_note.dart';
 import 'package:app/features/chefs/chefs_providers.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:app/routing/pop_or_go.dart';
@@ -138,6 +140,11 @@ class _Loaded extends StatelessWidget {
               ),
             ),
           )
+        else if (data.isUnclaimed)
+          SliverPadding(
+            padding: EdgeInsets.fromLTRB(pad, pad, pad, 0),
+            sliver: SliverToBoxAdapter(child: UnclaimedChefNote(data: data)),
+          )
         else
           SliverPadding(
             padding: EdgeInsets.fromLTRB(pad, pad, pad, 0),
@@ -147,6 +154,13 @@ class _Loaded extends StatelessWidget {
                     'This chef has no public recipes yet, so they do not hold '
                     'a rank. Private recipes never count toward score or rank.',
               ),
+            ),
+          ),
+        if (data.entities.isNotEmpty)
+          SliverPadding(
+            padding: EdgeInsets.fromLTRB(pad, pad, pad, 0),
+            sliver: SliverToBoxAdapter(
+              child: EntityAffiliations(entities: data.entities),
             ),
           ),
         SliverPadding(

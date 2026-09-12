@@ -12,6 +12,7 @@ export 'src/models/recipe_version.dart';
 export 'src/models/recipe_nutrition.dart';
 export 'src/models/recipe.dart';
 export 'src/models/chef_standing.dart';
+export 'src/models/entity.dart';
 export 'src/models/food_hit.dart';
 export 'src/models/nutrition_estimate.dart';
 
@@ -33,6 +34,7 @@ export 'src/repositories/recipe_repository.dart';
 export 'src/repositories/discover_repository.dart';
 export 'src/repositories/profile_repository.dart';
 export 'src/repositories/profile_id.dart';
+export 'src/repositories/entity_repository.dart';
 export 'src/repositories/chef_repository.dart';
 export 'src/repositories/food_repository.dart';
 

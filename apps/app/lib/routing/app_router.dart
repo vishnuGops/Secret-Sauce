@@ -9,6 +9,7 @@ import 'package:app/features/auth/auth_screen.dart';
 import 'package:app/features/chefs/chef_page.dart';
 import 'package:app/features/chefs/chefs_screen.dart';
 import 'package:app/features/discover/discover_screen.dart';
+import 'package:app/features/entities/entity_page.dart';
 import 'package:app/features/legal/legal_document.dart';
 import 'package:app/features/legal/legal_screen.dart';
 import 'package:app/features/my_recipes/my_recipes_screen.dart';
@@ -79,6 +80,16 @@ class Routes {
   /// have to sign in to read is not a Terms page.
   static String legal(String slug) => '/legal/$slug';
   static const legalPattern = '/legal/:doc';
+
+  /// One publisher's page (Phase 35b) — a brand, a restaurant, a magazine, a
+  /// community site. Singular `/entity/`, like `/chef/`, and for the same
+  /// reason: it takes a uuid and there is no plural directory route yet.
+  ///
+  /// Signed-out safe and absent from `needsAuth`: `entities`, `entity_members`
+  /// and `entity_signature_dishes` are all world-readable, because a directory
+  /// that needs an account is not a directory.
+  static String entity(String id) => '/entity/$id';
+  static const entityPattern = '/entity/:id';
 }
 
 final _rootKey = GlobalKey<NavigatorState>();
@@ -157,6 +168,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: _rootKey,
         builder:
             (context, state) => ChefPage(chefId: state.pathParameters['id']!),
+      ),
+      // Root navigator like the chef page, and reached the same way: from a
+      // chip on a chef page or a badge on a card, never from a nav tab.
+      GoRoute(
+        path: Routes.entityPattern,
+        parentNavigatorKey: _rootKey,
+        builder:
+            (context, state) =>
+                EntityPage(entityId: state.pathParameters['id']!),
       ),
       // Root navigator, like recipe detail and the chef page: a document
       // reached from a link, not a tab. It is opened with `push` from the

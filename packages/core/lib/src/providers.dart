@@ -5,6 +5,7 @@ import 'package:core/src/models/profile.dart';
 import 'package:core/src/repositories/auth_repository.dart';
 import 'package:core/src/repositories/chef_repository.dart';
 import 'package:core/src/repositories/discover_repository.dart';
+import 'package:core/src/repositories/entity_repository.dart';
 import 'package:core/src/repositories/food_repository.dart';
 import 'package:core/src/repositories/profile_id.dart';
 import 'package:core/src/repositories/profile_repository.dart';
@@ -54,6 +55,10 @@ final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
 
 final chefRepositoryProvider = Provider<ChefRepository>((ref) {
   return SupabaseChefRepository(ref.watch(supabaseClientProvider));
+});
+
+final entityRepositoryProvider = Provider<EntityRepository>((ref) {
+  return SupabaseEntityRepository(ref.watch(supabaseClientProvider));
 });
 
 final foodRepositoryProvider = Provider<FoodRepository>((ref) {

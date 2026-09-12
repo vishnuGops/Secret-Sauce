@@ -520,6 +520,26 @@ create table if not exists sim.recipe (
   created_at timestamptz not null
 );
 
+-- Phase 35b. An imported chef is a `profiles` row with NO `auth.users` row
+-- behind it, so the teardown has nothing upstream to delete it by. That is the
+-- whole reason this registry exists: `9_sim_teardown.sql`'s safety rule is that
+-- every delete is driven by a registry and never by a pattern, and the usual
+-- `delete from auth.users where id in (select id from sim.actor)` reaches none
+-- of these rows.
+create table if not exists sim.imported_profile (
+  id uuid primary key,
+  n  int not null unique
+);
+
+-- The groups that publish recipes. Deliberately a separate registry from
+-- `sim.actor` for the same reason — an entity is not a principal and has no
+-- account either.
+create table if not exists sim.entity (
+  id   uuid primary key,
+  n    int  not null unique,
+  slug text not null
+);
+
 -- Only used when config.engage_existing is true: the pre-sim counter values of
 -- recipes the sim did not create, captured once so `counter = baseline +
 -- generated` stays idempotent across re-runs.

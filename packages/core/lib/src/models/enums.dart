@@ -43,6 +43,66 @@ enum SuggestionStatus {
   rejected,
 }
 
+/// What kind of group published a recipe (Phase 35b).
+///
+/// Phase 25 designed a `restaurant_role`/`restaurants` pair; this is that,
+/// generalised, because the corpus's 560 publishers and the north star's
+/// restaurants are the same table with a discriminator.
+enum EntityKind {
+  @JsonValue('restaurant')
+  restaurant,
+  @JsonValue('brand')
+  brand,
+  @JsonValue('publication')
+  publication,
+  @JsonValue('community')
+  community,
+  @JsonValue('chef_site')
+  chefSite;
+
+  String get label => switch (this) {
+    EntityKind.restaurant => 'Restaurant',
+    EntityKind.brand => 'Brand',
+    EntityKind.publication => 'Publication',
+    EntityKind.community => 'Community',
+    EntityKind.chefSite => 'Chef',
+  };
+}
+
+/// What a member may do to an entity (Phase 35b). An `owner` manages the row
+/// and its roster; a `chef` is listed on it and may curate signature dishes.
+enum EntityRole {
+  @JsonValue('owner')
+  owner,
+  @JsonValue('chef')
+  chef;
+
+  String get label => switch (this) {
+    EntityRole.owner => 'Owner',
+    EntityRole.chef => 'Chef',
+  };
+}
+
+/// Where a chef's request to take over an imported page has got to (Phase 35b).
+///
+/// The decision is never a client write — `approve_profile_claim()` is
+/// `security definer` with EXECUTE revoked from the API roles, because
+/// approving transfers ownership of every recipe on the profile.
+enum ClaimStatus {
+  @JsonValue('pending')
+  pending,
+  @JsonValue('approved')
+  approved,
+  @JsonValue('rejected')
+  rejected;
+
+  String get label => switch (this) {
+    ClaimStatus.pending => 'Pending review',
+    ClaimStatus.approved => 'Approved',
+    ClaimStatus.rejected => 'Not approved',
+  };
+}
+
 /// What kind of identity a `profiles` row is (Phase 35b).
 ///
 /// `member` has an account behind it (`profiles.auth_user_id` is set) and is the

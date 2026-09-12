@@ -77,11 +77,12 @@ class LegalScreen extends StatelessWidget {
   }
 }
 
-/// Shown until [LegalFacts] is filled in.
+/// Shown while [LegalFacts.provisional] is set.
 ///
-/// Loud on purpose. A legal document that is missing its operator and its
-/// jurisdiction still *reads* like a legal document, and the failure mode this
-/// guards against is somebody shipping it because it looked finished.
+/// Loud on purpose, and it became *more* necessary when the placeholders stopped
+/// looking like placeholders: a document carrying a plausible company name and a
+/// plausible jurisdiction reads as finished, and the failure mode this guards
+/// against is somebody shipping it for that reason.
 class _DraftNotice extends StatelessWidget {
   const _DraftNotice();
 
@@ -101,10 +102,11 @@ class _DraftNotice extends StatelessWidget {
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Text(
-              'Draft — not in force. This document is missing the operating '
-              'entity, the governing law, a contact address or the hosting '
-              'region, which appear below as bracketed placeholders. It must '
-              'not be published in this state.',
+              'Draft — not in force. The operating entity, the governing law, '
+              'the contact address and the hosting region in this document are '
+              'placeholders. They read like real values, which is exactly why '
+              'this notice is here: confirm all four and clear '
+              'LegalFacts.provisional before publishing.',
               style: Theme.of(
                 context,
               ).textTheme.bodySmall?.copyWith(color: scheme.onErrorContainer),
