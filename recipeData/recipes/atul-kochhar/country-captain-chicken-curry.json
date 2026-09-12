@@ -1,0 +1,440 @@
+{
+  "schemaVersion": 1,
+  "id": "atul-kochhar/country-captain-chicken-curry",
+  "slug": "country-captain-chicken-curry",
+  "chefId": "chef_atul-kochhar",
+  "chefSlug": "atul-kochhar",
+  "chefName": "Atul Kochhar",
+  "title": "Country captain chicken curry",
+  "description": "BBC Food",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/countrycaptainchicke_84737",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/countrycaptainchicke_84737",
+    "retrievedAt": "2026-09-11T00:28:17.661Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Atul Kochhar"
+    ],
+    "datePublished": "2014-11-02T11:50:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "e978333dc7059a6b1491b2569bcb87efe2dcb3a653d8982f989c732fb730fd24",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Indian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "chicken",
+    "gluten free",
+    "pregnancy friendly",
+    "2007-16"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1 large roasting chicken, cut into 8 pieces",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "large roasting chicken, cut into 8 pieces",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "120g/4oz butter",
+          "quantity": 120,
+          "quantityText": "120",
+          "unit": "g",
+          "name": "/4oz butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 large onions, thinly sliced",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "large onions",
+          "note": "thinly sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "2 garlic cloves, finely chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp grated fresh ginger root",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "grated fresh ginger root",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 cloves",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "cloves",
+          "name": "2 cloves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 bay leaves",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "bay leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2.5cm/1in cassia stick",
+          "quantity": 2.5,
+          "quantityText": "2.5",
+          "unit": null,
+          "name": "cm/1in cassia stick",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp turmeric",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "turmeric",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp freshly ground black pepper",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¾ tbsp finely chopped fresh green/red chilli",
+          "quantity": 0.75,
+          "quantityText": "¾",
+          "unit": "tbsp",
+          "name": "finely chopped fresh green/red chilli",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "200ml/7fl oz chicken stock",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "ml",
+          "name": "/7fl oz chicken stock",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ lemon, juice only",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "lemon, juice only",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "fresh coriander leaves, to garnish",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "fresh coriander leaves",
+          "note": "to garnish",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To serve",
+      "items": [
+        {
+          "raw": "200g/7oz rice, cooked according to packet instructions",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "g",
+          "name": "/7oz rice, cooked according to packet instructions",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "red onion, sliced into rings",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "red onion",
+          "note": "sliced into rings",
+          "isOptional": false
+        },
+        {
+          "raw": "bacon, cut into thin strips and fried until crisp",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "bacon, cut into thin strips and fried until crisp",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "fresh coconut, grated",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "fresh coconut",
+          "note": "grated",
+          "isOptional": false
+        },
+        {
+          "raw": "peanuts",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "peanuts",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 free-range egg, hard-boiled and chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "free-range egg",
+          "note": "hard-boiled and chopped",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Heat a large frying pan until hot then add half of the butter and all of the chicken pieces. Fry the chicken, stirring frequently, until golden-brown on all sides, then remove from the pan and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat a large frying pan until hot then add half of the butter and all of the chicken pieces. Fry the chicken, stirring frequently, until golden-brown on all sides, then remove from the pan and set aside."
+    },
+    {
+      "order": 2,
+      "text": "Melt the remaining butter in another large frying pan over a medium heat. Add the onion and fry for 3-4 minutes, until softened and golden-brown.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Melt the remaining butter in another large frying pan over a medium heat. Add the onion and fry for 3-4 minutes, until softened and golden-brown."
+    },
+    {
+      "order": 3,
+      "text": "Add the ginger and garlic and fry for one minute.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the ginger and garlic and fry for one minute. "
+    },
+    {
+      "order": 4,
+      "text": "Add the cloves, bay leaves, cassia stick, turmeric, black pepper and chillies and fry for 1-2 minutes to release the flavours.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the cloves, bay leaves, cassia stick, turmeric, black pepper and chillies and fry for 1-2 minutes to release the flavours."
+    },
+    {
+      "order": 5,
+      "text": "Add the chicken pieces and half of the stock. Reduce the heat and simmer for about 20 minutes until the chicken is tender and completely cooked through. (If necessary, add more stock during cooking to prevent the chicken from sticking to the pan.)",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the chicken pieces and half of the stock. Reduce the heat and simmer for about 20 minutes until the chicken is tender and completely cooked through. (If necessary, add more stock during cooking to prevent the chicken from sticking to the pan.)"
+    },
+    {
+      "order": 6,
+      "text": "Add the lemon juice, season, to taste, with salt and freshly ground black pepper and garnish with chopped coriander leaves.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the lemon juice, season, to taste, with salt and freshly ground black pepper and garnish with chopped coriander leaves."
+    },
+    {
+      "order": 7,
+      "text": "To serve, place a spoonful of cooked rice onto each of four plates and spoon the curry alongside. Sprinkle with red onion rings, crispy bacon, coconut, peanuts and hard-boiled egg.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To serve, place a spoonful of cooked rice onto each of four plates and spoon the curry alongside. Sprinkle with red onion rings, crispy bacon, coconut, peanuts and hard-boiled egg."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 4,
+      "ratingValue": 4.5
+    },
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "BBC Food",
+    "headline": "Country captain chicken curry",
+    "image": null,
+    "name": "Country captain chicken curry",
+    "author": {
+      "@type": "Person",
+      "name": "Atul Kochhar"
+    },
+    "datePublished": "2014-11-02T11:50:00.000Z",
+    "dateModified": "2018-07-27T11:30:42.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 4,
+      "ratingValue": 4.5
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT1H",
+    "keywords": "chicken, gluten free, pregnancy friendly, 2007-16",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Indian",
+    "recipeIngredient": [
+      "1 large roasting chicken, cut into 8 pieces",
+      "120g/4oz butter",
+      "3 large onions, thinly sliced",
+      "2 garlic cloves, finely chopped",
+      "1 tbsp grated fresh ginger root",
+      "2 cloves",
+      "2 bay leaves",
+      "2.5cm/1in cassia stick",
+      "1 tsp turmeric",
+      "2 tsp freshly ground black pepper",
+      "¾ tbsp finely chopped fresh green/red chilli",
+      "200ml/7fl oz chicken stock",
+      "½ lemon, juice only",
+      "salt and freshly ground black pepper",
+      "fresh coriander leaves, to garnish",
+      "200g/7oz rice, cooked according to packet instructions",
+      "red onion, sliced into rings",
+      "bacon, cut into thin strips and fried until crisp",
+      "fresh coconut, grated",
+      "peanuts",
+      "1 free-range egg, hard-boiled and chopped"
+    ],
+    "recipeInstructions": [
+      "Heat a large frying pan until hot then add half of the butter and all of the chicken pieces. Fry the chicken, stirring frequently, until golden-brown on all sides, then remove from the pan and set aside.",
+      "Melt the remaining butter in another large frying pan over a medium heat. Add the onion and fry for 3-4 minutes, until softened and golden-brown.",
+      "Add the ginger and garlic and fry for one minute. ",
+      "Add the cloves, bay leaves, cassia stick, turmeric, black pepper and chillies and fry for 1-2 minutes to release the flavours.",
+      "Add the chicken pieces and half of the stock. Reduce the heat and simmer for about 20 minutes until the chicken is tender and completely cooked through. (If necessary, add more stock during cooking to prevent the chicken from sticking to the pan.)",
+      "Add the lemon juice, season, to taste, with salt and freshly ground black pepper and garnish with chopped coriander leaves.",
+      "To serve, place a spoonful of cooked rice onto each of four plates and spoon the curry alongside. Sprinkle with red onion rings, crispy bacon, coconut, peanuts and hard-boiled egg."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:6",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

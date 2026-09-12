@@ -1,0 +1,347 @@
+{
+  "schemaVersion": 1,
+  "id": "chef-lola/easy-scrambled-tofu",
+  "slug": "easy-scrambled-tofu",
+  "chefId": "chef_chef-lola",
+  "chefSlug": "chef-lola",
+  "chefName": "Chef Lola",
+  "title": "Easy Scrambled Tofu",
+  "description": "Easy Scrambled Tofu – This surprisingly addictive scrambled tofu is made with just a few ingredients. It’s very flavorful, easy to make, and it’s perfect for a simple but filling breakfast.",
+  "source": {
+    "sourceUrl": "https://cheflolaskitchen.com/easy-scrambled-tofu/",
+    "finalUrl": "https://cheflolaskitchen.com/easy-scrambled-tofu/",
+    "retrievedAt": "2026-09-11T02:47:22.111Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2019-12-04T09:18:08+00:00",
+    "rights": "Chef Lola's Kitchen. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "d82009808d5b9411eafaba940cd570a9fb63e3d81ed7b06d7e6d8e529bebf6df",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "allows recipe paths; /wp-admin/, /wp-json/ and query URLs disallowed"
+  },
+  "yield": {
+    "raw": [
+      "3",
+      "3 people"
+    ],
+    "servings": 3
+  },
+  "timing": {
+    "prepMinutes": 5,
+    "cookMinutes": 10,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "African",
+    "Asian"
+  ],
+  "category": [
+    "Breakfast"
+  ],
+  "keywords": [
+    "easy"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "14 oz tofu (firm)",
+          "quantity": 14,
+          "quantityText": "14",
+          "unit": "oz",
+          "name": "tofu (firm)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 red onion (diced (small))",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "red onion (diced (small))",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/4 cup red bell pepper",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/4 cup red bell pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 Tbsp Jalapeño pepper (minced )",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "Jalapeño pepper (minced )",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 Tbsp Nutritional yeast (optional)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "Nutritional yeast (optional)",
+          "note": null,
+          "isOptional": true
+        },
+        {
+          "raw": "2 cloves garlic",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "cloves",
+          "name": "garlic",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1-2 tsp Olive Oil",
+          "quantity": 1,
+          "quantityText": "1-2",
+          "unit": "tsp",
+          "name": "Olive Oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 tsp turmeric",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 tsp turmeric",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 tsp salt (more or less to your taste)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 tsp salt (more or less to your taste)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/4 tsp black pepper",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/4 tsp black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Drain out as much water as possible from the tofu and crumble it with your fingers or use a fork and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Drain out as much water as possible from the tofu and crumble it with your fingers or use a fork and set aside.",
+        "name": "Drain out as much water as possible from the tofu and crumble it with your fingers or use a fork and set aside.",
+        "url": "https://cheflolaskitchen.com/easy-scrambled-tofu/#wprm-recipe-13208-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Heat a pan or skillet to medium-high heat and sauté onion, bell peppers, and Jalapeno peppers for about 2 to 3 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Heat a pan or skillet to medium-high heat and sauté onion, bell peppers, and Jalapeno peppers for about 2 to 3 minutes.",
+        "name": "Heat a pan or skillet to medium-high heat and sauté onion, bell peppers, and Jalapeno peppers for about 2 to 3 minutes.",
+        "url": "https://cheflolaskitchen.com/easy-scrambled-tofu/#wprm-recipe-13208-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Stir in the tofu, turmeric, salt, pepper, and nutritional yeast (if using) Use a wooden spoon or spatula to mix and crumble the tofu while cooking it and leave to cook for about 5 to 8 minutes or until tofu is well heated through and has absorbed all the flavors.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Stir in the tofu, turmeric, salt, pepper, and nutritional yeast (if using) Use a wooden spoon or spatula to mix and crumble the tofu while cooking it and leave to cook for about 5 to 8 minutes or until tofu is well heated through and has absorbed all the flavors.",
+        "name": "Stir in the tofu, turmeric, salt, pepper, and nutritional yeast (if using) Use a wooden spoon or spatula to mix and crumble the tofu while cooking it and leave to cook for about 5 to 8 minutes or until tofu is well heated through and has absorbed all the flavors.",
+        "url": "https://cheflolaskitchen.com/easy-scrambled-tofu/#wprm-recipe-13208-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Serve hot",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Serve hot",
+        "name": "Serve hot",
+        "url": "https://cheflolaskitchen.com/easy-scrambled-tofu/#wprm-recipe-13208-step-0-3"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "147 kcal",
+    "carbohydrateContent": "10 g",
+    "proteinContent": "14 g",
+    "fatContent": "6 g",
+    "saturatedFatContent": "1 g",
+    "sodiumContent": "421 mg",
+    "fiberContent": "3 g",
+    "sugarContent": "3 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2019/12/DSC0272-How-to-make-Breakfast-Tofu-Scramble.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2019/12/DSC0272-How-to-make-Breakfast-Tofu-Scramble-500x500.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2019/12/DSC0272-How-to-make-Breakfast-Tofu-Scramble-500x375.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2019/12/DSC0272-How-to-make-Breakfast-Tofu-Scramble-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "1"
+    }
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Easy Scrambled Tofu",
+    "author": {
+      "@id": "https://cheflolaskitchen.com/#/schema/person/210ab4ab02cd92f770d27cf2a114f9a5"
+    },
+    "description": "Easy Scrambled Tofu – This surprisingly addictive scrambled tofu is made with just a few ingredients. It’s very flavorful, easy to make, and it’s perfect for a simple but filling breakfast.",
+    "datePublished": "2019-12-04T09:18:08+00:00",
+    "image": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2019/12/DSC0272-How-to-make-Breakfast-Tofu-Scramble.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2019/12/DSC0272-How-to-make-Breakfast-Tofu-Scramble-500x500.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2019/12/DSC0272-How-to-make-Breakfast-Tofu-Scramble-500x375.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2019/12/DSC0272-How-to-make-Breakfast-Tofu-Scramble-480x270.jpg"
+    ],
+    "recipeYield": [
+      "3",
+      "3 people"
+    ],
+    "prepTime": "PT5M",
+    "cookTime": "PT10M",
+    "recipeIngredient": [
+      "14 oz  tofu (firm)",
+      "1   red onion (diced (small))",
+      "1/4 cup red bell pepper",
+      "1 Tbsp Jalapeño pepper (minced )",
+      "1 Tbsp Nutritional yeast (optional)",
+      "2 cloves garlic",
+      "1-2 tsp Olive Oil",
+      "1/2 tsp turmeric",
+      "1/2 tsp salt (more or less to your taste)",
+      "1/4 tsp black pepper"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Drain out as much water as possible from the tofu and crumble it with your fingers or use a fork and set aside.",
+        "name": "Drain out as much water as possible from the tofu and crumble it with your fingers or use a fork and set aside.",
+        "url": "https://cheflolaskitchen.com/easy-scrambled-tofu/#wprm-recipe-13208-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Heat a pan or skillet to medium-high heat and sauté onion, bell peppers, and Jalapeno peppers for about 2 to 3 minutes.",
+        "name": "Heat a pan or skillet to medium-high heat and sauté onion, bell peppers, and Jalapeno peppers for about 2 to 3 minutes.",
+        "url": "https://cheflolaskitchen.com/easy-scrambled-tofu/#wprm-recipe-13208-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Stir in the tofu, turmeric, salt, pepper, and nutritional yeast (if using) Use a wooden spoon or spatula to mix and crumble the tofu while cooking it and leave to cook for about 5 to 8 minutes or until tofu is well heated through and has absorbed all the flavors.",
+        "name": "Stir in the tofu, turmeric, salt, pepper, and nutritional yeast (if using) Use a wooden spoon or spatula to mix and crumble the tofu while cooking it and leave to cook for about 5 to 8 minutes or until tofu is well heated through and has absorbed all the flavors.",
+        "url": "https://cheflolaskitchen.com/easy-scrambled-tofu/#wprm-recipe-13208-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Serve hot",
+        "name": "Serve hot",
+        "url": "https://cheflolaskitchen.com/easy-scrambled-tofu/#wprm-recipe-13208-step-0-3"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "1"
+    },
+    "recipeCategory": [
+      "Breakfast"
+    ],
+    "recipeCuisine": [
+      "African",
+      "Asian"
+    ],
+    "keywords": "easy",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "147 kcal",
+      "carbohydrateContent": "10 g",
+      "proteinContent": "14 g",
+      "fatContent": "6 g",
+      "saturatedFatContent": "1 g",
+      "sodiumContent": "421 mg",
+      "fiberContent": "3 g",
+      "sugarContent": "3 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://cheflolaskitchen.com/easy-scrambled-tofu/#recipe",
+    "isPartOf": {
+      "@id": "https://cheflolaskitchen.com/easy-scrambled-tofu/#article"
+    },
+    "mainEntityOfPage": "https://cheflolaskitchen.com/easy-scrambled-tofu/"
+  },
+  "audit": [
+    "range-quantity:1",
+    "unmapped:aggregateRating"
+  ]
+}

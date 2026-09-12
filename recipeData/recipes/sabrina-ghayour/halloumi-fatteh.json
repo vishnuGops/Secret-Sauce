@@ -1,0 +1,370 @@
+{
+  "schemaVersion": 1,
+  "id": "sabrina-ghayour/halloumi-fatteh",
+  "slug": "halloumi-fatteh",
+  "chefId": "chef_sabrina-ghayour",
+  "chefSlug": "sabrina-ghayour",
+  "chefName": "Sabrina Ghayour",
+  "title": "Halloumi fatteh",
+  "description": "Fatteh is a popular Middle Eastern dish that can be made with various ingredients, but Sabrina Ghayour's version combines beef mince and fried halloumi. It's a great way to use up leftover pitta breads or flatbreads. Perfect for brunch, lunch or dinner.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/halloumi_fatteh_66326",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/halloumi_fatteh_66326",
+    "retrievedAt": "2026-09-11T00:28:22.273Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Sabrina Ghayour"
+    ],
+    "datePublished": "2022-08-05T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "9f13c66db49aca46f44e6ffd4ef20743d15f09eedea06f7809fa87a376cfbd6a",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Turkish and Middle Eastern"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "calcium rich",
+    "mezze",
+    "middle eastern feasts",
+    "more ways with mince",
+    "persian",
+    "sharing plates",
+    "beef mince",
+    "halloumi",
+    "pomegranate",
+    "pregnancy friendly",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the halloumi fatteh",
+      "items": [
+        {
+          "raw": "vegetable oil",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "vegetable oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "250g/9oz beef mince",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "/9oz beef mince",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground cumin",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground cumin",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp paprika",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "paprika",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp garlic granules",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "garlic granules",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "250g/9oz halloumi",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "/9oz halloumi",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "sea salt flakes and freshly and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "sea salt flakes and freshly and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the tahini yoghurt",
+      "items": [
+        {
+          "raw": "150g/5½oz Greek-style yoghurt",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "g",
+          "name": "/5½oz Greek-style yoghurt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp tahini",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "tahini",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 garlic clove, crushed",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "garlic clove",
+          "note": "crushed",
+          "isOptional": false
+        },
+        {
+          "raw": "½ lemon, juice only",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "lemon, juice only",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To serve",
+      "items": [
+        {
+          "raw": "2 tbsp pomegranate molasses",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "pomegranate molasses",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "handful pomegranate seeds",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "handful",
+          "name": "pomegranate seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "handful chopped fresh coriander",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "handful",
+          "name": "chopped fresh coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "flatbreads",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "flatbreads",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the fatteh, heat the oil in a frying pan over a medium-high heat. Add the minced beef and immediately break it up as finely as you can to prevent it cooking in clumps, adding the spices and garlic granules as you do so. Season generously with salt and pepper and cook until the meat is well browned, then set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the fatteh, heat the oil in a frying pan over a medium-high heat. Add the minced beef and immediately break it up as finely as you can to prevent it cooking in clumps, adding the spices and garlic granules as you do so. Season generously with salt and pepper and cook until the meat is well browned, then set aside."
+    },
+    {
+      "order": 2,
+      "text": "Heat another frying pan over a medium heat, pour in about 1cm vegetable oil and bring to a gentle frying temperature. To test the temperature, add a breadcrumb to the oil. If it bubbles nicely without sizzling too much, the oil is hot enough. (CAUTION: Hot oil can be dangerous. Do not leave unattended.)",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat another frying pan over a medium heat, pour in about 1cm vegetable oil and bring to a gentle frying temperature. To test the temperature, add a breadcrumb to the oil. If it bubbles nicely without sizzling too much, the oil is hot enough. (CAUTION: Hot oil can be dangerous. Do not leave unattended.)"
+    },
+    {
+      "order": 3,
+      "text": "Line a plate with a double layer of kitchen paper. Cut the block of halloumi in half lengthways, then cut each piece into 4 equal fingers. Cut each finger into 3 equal chunks. Add the halloumi to the hot oil and fry until a deep golden-brown on all sides. Once the halloumi is cooked, remove from the pan with a slotted spoon and transfer to the paper-lined plate to drain.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Line a plate with a double layer of kitchen paper. Cut the block of halloumi in half lengthways, then cut each piece into 4 equal fingers. Cut each finger into 3 equal chunks. Add the halloumi to the hot oil and fry until a deep golden-brown on all sides. Once the halloumi is cooked, remove from the pan with a slotted spoon and transfer to the paper-lined plate to drain."
+    },
+    {
+      "order": 4,
+      "text": "To make the tahini yoghurt, place a small saucepan over a gentle heat, add the ingredients with a generous amount of salt and pepper and stir until well combined. If necessary, add some lukewarm water to thin it down to the consistency of thick double cream. Warm through, then remove from the heat.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the tahini yoghurt, place a small saucepan over a gentle heat, add the ingredients with a generous amount of salt and pepper and stir until well combined. If necessary, add some lukewarm water to thin it down to the consistency of thick double cream. Warm through, then remove from the heat."
+    },
+    {
+      "order": 5,
+      "text": "To serve, arrange the halloumi on the plate first, then top with the beef, followed by the tahini yoghurt, pomegranate molasses and seeds and the coriander. Serve immediately with the flatbreads.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To serve, arrange the halloumi on the plate first, then top with the beef, followed by the tahini yoghurt, pomegranate molasses and seeds and the coriander. Serve immediately with the flatbreads."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/halloumi_fatteh_66326_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 24,
+      "ratingValue": 4.75
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Fatteh is a popular Middle Eastern dish that can be made with various ingredients, but Sabrina Ghayour's version combines beef mince and fried halloumi. It's a great way to use up leftover pitta breads or flatbreads. Perfect for brunch, lunch or dinner. ",
+    "headline": "Halloumi fatteh",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/halloumi_fatteh_66326_16x9.jpg"
+    },
+    "name": "Halloumi fatteh",
+    "author": {
+      "@type": "Person",
+      "name": "Sabrina Ghayour"
+    },
+    "datePublished": "2022-08-05T00:00:00.000Z",
+    "dateModified": "2026-07-29T10:45:16.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 24,
+      "ratingValue": 4.75
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, calcium rich, mezze, middle eastern feasts, more ways with mince, persian, sharing plates, beef mince, halloumi, pomegranate, pregnancy friendly, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Turkish and Middle Eastern",
+    "recipeIngredient": [
+      "vegetable oil",
+      "250g/9oz beef mince",
+      "1 tsp ground cumin",
+      "1 tsp paprika",
+      "1 tsp garlic granules",
+      "250g/9oz halloumi",
+      "sea salt flakes and freshly and freshly ground black pepper",
+      "150g/5½oz Greek-style yoghurt",
+      "2 tbsp tahini",
+      "1 garlic clove, crushed ",
+      "½ lemon, juice only",
+      "2 tbsp pomegranate molasses",
+      "handful pomegranate seeds",
+      "handful chopped fresh coriander",
+      "<a href=\"http://www.bbc.co.uk/food/recipes/yoghurt_marjoram_and_pul_11168\">flatbreads</a>"
+    ],
+    "recipeInstructions": [
+      "To make the fatteh, heat the oil in a frying pan over a medium-high heat. Add the minced beef and immediately break it up as finely as you can to prevent it cooking in clumps, adding the spices and garlic granules as you do so. Season generously with salt and pepper and cook until the meat is well browned, then set aside.",
+      "Heat another frying pan over a medium heat, pour in about 1cm vegetable oil and bring to a gentle frying temperature. To test the temperature, add a breadcrumb to the oil. If it bubbles nicely without sizzling too much, the oil is hot enough. (CAUTION: Hot oil can be dangerous. Do not leave unattended.)",
+      "Line a plate with a double layer of kitchen paper. Cut the block of halloumi in half lengthways, then cut each piece into 4 equal fingers. Cut each finger into 3 equal chunks. Add the halloumi to the hot oil and fry until a deep golden-brown on all sides. Once the halloumi is cooked, remove from the pan with a slotted spoon and transfer to the paper-lined plate to drain.",
+      "To make the tahini yoghurt, place a small saucepan over a gentle heat, add the ingredients with a generous amount of salt and pepper and stir until well combined. If necessary, add some lukewarm water to thin it down to the consistency of thick double cream. Warm through, then remove from the heat.",
+      "To serve, arrange the halloumi on the plate first, then top with the beef, followed by the tahini yoghurt, pomegranate molasses and seeds and the coriander. Serve immediately with the flatbreads."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:5",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

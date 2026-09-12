@@ -1,0 +1,477 @@
+{
+  "schemaVersion": 1,
+  "id": "raymond-blanc/chocolate-macarons",
+  "slug": "chocolate-macarons",
+  "chefId": "chef_raymond-blanc",
+  "chefSlug": "raymond-blanc",
+  "chefName": "Raymond Blanc",
+  "title": "Chocolate macarons",
+  "description": "Raymond Blanc reveals the secrets to the perfect macaron, one of the benchmarks by which a good pâtisserie is measured. You may need a little practice to get them right but, as M Blanc says, “every mistake will still be delicious. Trust me; I know!”\n\nEquipment and preparation: You will need a kitchen mixer, a sugar thermometer and a piping bag fitted with an 8mm/¼in nozzle.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/chocolate_macaroons_19613",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/chocolate_macaroons_19613",
+    "retrievedAt": "2026-09-11T00:27:29.813Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Raymond Blanc"
+    ],
+    "datePublished": "2011-02-28T21:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "81d51422b3d850551c7f268a095427efb83a454c14707841efa9b3ce7857e9cb",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups",
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Makes 30 macaroons"
+    ],
+    "servings": 30
+  },
+  "timing": {
+    "prepMinutes": 60,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "French"
+  ],
+  "category": [
+    "Cakes and baking"
+  ],
+  "keywords": [
+    "classic french desserts",
+    "excellent easter chocolate",
+    "afternoon tea",
+    "macaron",
+    "chocolate",
+    "vegetarian",
+    "Raymond Blanc's Kitchen Secrets"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the pâté à macaron",
+      "items": [
+        {
+          "raw": "60g/2½oz unsweetened chocolate, ideally 100% cocoa solids",
+          "quantity": 60,
+          "quantityText": "60",
+          "unit": "g",
+          "name": "/2½oz unsweetened chocolate, ideally 100% cocoa solids",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "185g/6½oz icing sugar, sifted",
+          "quantity": 185,
+          "quantityText": "185",
+          "unit": "g",
+          "name": "/6½oz icing sugar, sifted",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "185g/6½oz ground almonds",
+          "quantity": 185,
+          "quantityText": "185",
+          "unit": "g",
+          "name": "/6½oz ground almonds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 medium free-range egg whites",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "medium free-range egg whites",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the Italian meringue",
+      "items": [
+        {
+          "raw": "2 medium free-range egg whites",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "medium free-range egg whites",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 drop lemon juice – do not be tempted to use more than this or the egg whites will become too stiff",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "drop lemon juice – do not be tempted to use more than this or the egg whites will become too stiff",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "185g/6½oz caster sugar",
+          "quantity": 185,
+          "quantityText": "185",
+          "unit": "g",
+          "name": "/6½oz caster sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp water",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "water",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the ganache filling",
+      "items": [
+        {
+          "raw": "100ml/4fl oz whipping cream",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "ml",
+          "name": "/4fl oz whipping cream",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g/4oz dark chocolate, or white chocolate if you wish",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/4oz dark chocolate, or white chocolate if you wish",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Heat the oven to 170C/325F/Gas 3 and place two unlined baking trays on the middle shelves.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat the oven to 170C/325F/Gas 3 and place two unlined baking trays on the middle shelves. "
+    },
+    {
+      "order": 2,
+      "text": "For the pâté à macaron, melt the chocolate in a bowl suspended over a pan of simmering water – do not let the bottom of the bowl touch the water.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the pâté à macaron, melt the chocolate in a bowl suspended over a pan of simmering water – do not let the bottom of the bowl touch the water."
+    },
+    {
+      "order": 3,
+      "text": "In a large bowl, mix the icing sugar, ground almonds and egg whites to form a paste.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "In a large bowl, mix the icing sugar, ground almonds and egg whites to form a paste."
+    },
+    {
+      "order": 4,
+      "text": "Fold in the melted chocolate and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Fold in the melted chocolate and set aside."
+    },
+    {
+      "order": 5,
+      "text": "For the Italian meringue, whisk the egg whites and lemon juice in a kitchen mixer on a medium speed.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the Italian meringue, whisk the egg whites and lemon juice in a kitchen mixer on a medium speed."
+    },
+    {
+      "order": 6,
+      "text": "Meanwhile, place the sugar and water in a small pan and cook over a high heat until it has reached 117C/242F or the ‘soft ball’ stage.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, place the sugar and water in a small pan and cook over a high heat until it has reached 117C/242F or the ‘soft ball’ stage."
+    },
+    {
+      "order": 7,
+      "text": "Reduce the speed on the mixer to its lowest setting and pour the sugar syrup onto the firmly whipped egg whites. Take extreme care when you do this as the syrup will be very hot and will burn your skin if it splashes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Reduce the speed on the mixer to its lowest setting and pour the sugar syrup onto the firmly whipped egg whites. Take extreme care when you do this as the syrup will be very hot and will burn your skin if it splashes."
+    },
+    {
+      "order": 8,
+      "text": "Increase the speed to high and continue to whisk for 2-3 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Increase the speed to high and continue to whisk for 2-3 minutes."
+    },
+    {
+      "order": 9,
+      "text": "Fold the Italian meringue mixture into the pâté à macaron until it reaches the ribbon stage – this is when a spoonful of the mixture poured back into the bowl sits like a ribbon on the surface. Do not over-mix or the macaron will crack when cooked.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Fold the Italian meringue mixture into the pâté à macaron until it reaches the ribbon stage – this is when a spoonful of the mixture poured back into the bowl sits like a ribbon on the surface. Do not over-mix or the macaron will crack when cooked."
+    },
+    {
+      "order": 10,
+      "text": "Place the mixture in a piping bag fitted with a 8mm/¼in nozzle.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place the mixture in a piping bag fitted with a 8mm/¼in nozzle."
+    },
+    {
+      "order": 11,
+      "text": "Line two baking trays with greaseproof paper and pipe on 3cm/1in discs, at least 2cm/¾in apart.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Line two baking trays with greaseproof paper and pipe on 3cm/1in discs, at least 2cm/¾in apart."
+    },
+    {
+      "order": 12,
+      "text": "Remove the heated baking sheets from the oven and carefully slide the greaseproof paper with the piped macarons onto them (pre-heating the baking trays kick-starts the cooking and forms the distinctive 'collarette' on the base of the macaroons).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove the heated baking sheets from the oven and carefully slide the greaseproof paper with the piped macarons onto them (pre-heating the baking trays kick-starts the cooking and forms the distinctive 'collarette' on the base of the macaroons)."
+    },
+    {
+      "order": 13,
+      "text": "Bake in the oven for eight minutes and then leave on a cooling rack until completely cold.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Bake in the oven for eight minutes and then leave on a cooling rack until completely cold."
+    },
+    {
+      "order": 14,
+      "text": "For the ganache, place the cream in a small pan and bring to a boil.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the ganache, place the cream in a small pan and bring to a boil."
+    },
+    {
+      "order": 15,
+      "text": "Remove the pan from the heat and whisk in the chocolate until the mixture is smooth then place the in a piping bag fitted with a 8mm/¼in nozzle.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove the pan from the heat and whisk in the chocolate until the mixture is smooth then place the in a piping bag fitted with a 8mm/¼in nozzle."
+    },
+    {
+      "order": 16,
+      "text": "Pipe about one teaspoon of ganache onto the flat side of a cooled macaron and top with another macaroon to make a sandwich.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pipe about one teaspoon of ganache onto the flat side of a cooled macaron and top with another macaroon to make a sandwich. "
+    },
+    {
+      "order": 17,
+      "text": "Repeat with the remaining ganache and macarons and store in a single layer in an airtight container in the fridge.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Repeat with the remaining ganache and macarons and store in a single layer in an airtight container in the fridge. "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/chocolate_macaroons_19613_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "The ganache filling and the macarons are best made a day in advance and kept in the fridge in an airtight container. They actually improve if frozen – just defrost 2-3 hours before serving. Try these flavour variations by omitting the chocolate from the pâté à macaron and the ganache and replacing it with the following: lemon (25 drops yellow food colouring and 160g/5½oz lemon curd for the filling), raspberry (25 drops red food colouring and 150g/5oz raspberry jam for the filling), pistachio (15 drops green food colouring and 150g/5oz pistachio paste for the filling), vanilla (2 tbsp vanilla syrup and 150g/5oz vanilla butter cream for the filling or use vanilla ice cream and store the filled macarons in the freezer until you are ready to serve them), anise (add 1 crushed star anise to the sugar and ground almonds, leave to infuse overnight then sift the star anise out of the mixture before you make the pâté à macaron and use 150g/5oz good orange marmalade for the filling)."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 6,
+      "ratingValue": 3.8333333333333335
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Raymond Blanc reveals the secrets to the perfect macaron, one of the benchmarks by which a good pâtisserie is measured. You may need a little practice to get them right but, as M Blanc says, “every mistake will still be delicious. Trust me; I know!” \r\n\r\nEquipment and preparation: You will need a kitchen mixer, a sugar thermometer and a piping bag fitted with an 8mm/¼in nozzle.",
+    "headline": "Chocolate macarons",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/chocolate_macaroons_19613_16x9.jpg"
+    },
+    "name": "Chocolate macarons",
+    "author": {
+      "@type": "Person",
+      "name": "Raymond Blanc"
+    },
+    "datePublished": "2011-02-28T21:00:00.000Z",
+    "dateModified": "2024-06-26T15:04:05.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 6,
+      "ratingValue": 3.8333333333333335
+    },
+    "prepTime": "PT1H",
+    "cookTime": "PT30M",
+    "keywords": "classic french desserts, excellent easter chocolate , afternoon tea, macaron, chocolate, vegetarian, Raymond Blanc's Kitchen Secrets",
+    "recipeCategory": "Cakes and baking",
+    "recipeCuisine": "French",
+    "recipeIngredient": [
+      "60g/2½oz unsweetened chocolate, ideally 100% cocoa solids",
+      "185g/6½oz icing sugar, sifted",
+      "185g/6½oz ground almonds",
+      "2 medium free-range egg whites",
+      "2 medium free-range egg whites",
+      "1 drop lemon juice – do not be tempted to use more than this or the egg whites will become too stiff",
+      "185g/6½oz caster sugar",
+      "3 tbsp water",
+      "100ml/4fl oz whipping cream",
+      "100g/4oz dark chocolate, or white chocolate if you wish"
+    ],
+    "recipeInstructions": [
+      "Heat the oven to 170C/325F/Gas 3 and place two unlined baking trays on the middle shelves. ",
+      "For the pâté à macaron, melt the chocolate in a bowl suspended over a pan of simmering water – do not let the bottom of the bowl touch the water.",
+      "In a large bowl, mix the icing sugar, ground almonds and egg whites to form a paste.",
+      "Fold in the melted chocolate and set aside.",
+      "For the Italian meringue, whisk the egg whites and lemon juice in a kitchen mixer on a medium speed.",
+      "Meanwhile, place the sugar and water in a small pan and cook over a high heat until it has reached 117C/242F or the ‘soft ball’ stage.",
+      "Reduce the speed on the mixer to its lowest setting and pour the sugar syrup onto the firmly whipped egg whites. Take extreme care when you do this as the syrup will be very hot and will burn your skin if it splashes.",
+      "Increase the speed to high and continue to whisk for 2-3 minutes.",
+      "Fold the Italian meringue mixture into the pâté à macaron until it reaches the ribbon stage – this is when a spoonful of the mixture poured back into the bowl sits like a ribbon on the surface. Do not over-mix or the macaron will crack when cooked.",
+      "Place the mixture in a piping bag fitted with a 8mm/¼in nozzle.",
+      "Line two baking trays with greaseproof paper and pipe on 3cm/1in discs, at least 2cm/¾in apart.",
+      "Remove the heated baking sheets from the oven and carefully slide the greaseproof paper with the piped macarons onto them (pre-heating the baking trays kick-starts the cooking and forms the distinctive 'collarette' on the base of the macaroons).",
+      "Bake in the oven for eight minutes and then leave on a cooling rack until completely cold.",
+      "For the ganache, place the cream in a small pan and bring to a boil.",
+      "Remove the pan from the heat and whisk in the chocolate until the mixture is smooth then place the in a piping bag fitted with a 8mm/¼in nozzle.",
+      "Pipe about one teaspoon of ganache onto the flat side of a cooled macaron and top with another macaroon to make a sandwich. ",
+      "Repeat with the remaining ganache and macarons and store in a single layer in an airtight container in the fridge. "
+    ],
+    "recipeYield": "Makes 30 macaroons",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

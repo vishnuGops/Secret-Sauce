@@ -1,0 +1,453 @@
+{
+  "schemaVersion": 1,
+  "id": "nigella-lawson/oven-cooked-chicken-shawarma",
+  "slug": "oven-cooked-chicken-shawarma",
+  "chefId": "chef_nigella-lawson",
+  "chefSlug": "nigella-lawson",
+  "chefName": "Nigella Lawson",
+  "title": "Oven-cooked chicken shawarma",
+  "description": "Chicken shawarma is usually cooked on a spit, but this is roasted in the oven. Here, I’ve served it modestly, on a pile of shredded iceberg, with some warmed pitta, lemon wedges and a tahini sauce. When I make this for groups of friends, or for a family lunch or supper, I slice up some fresh tomatoes sprinkled with mint, and cut some cucumbers into wedged slices, and macerate some red onions, cut into half-moons, with red wine vinegar or lime – in which case it will serve up to 10 people.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/oven-cooked_chicken_04728",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/oven-cooked_chicken_04728",
+    "retrievedAt": "2026-09-11T00:26:21.942Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Nigella Lawson"
+    ],
+    "datePublished": "2015-11-30T16:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "5f1bfaad71448170d84c53dcb0103117b4b9575ed4ddd92df4fb7f852ca5e32b",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups",
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 6"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 120,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Turkish and Middle Eastern"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "best chicken",
+    "easy dinner party",
+    "easy father’s day",
+    "easy impressive dinners",
+    "easy marinades",
+    "fakeaway",
+    "simple dinners for get-togethers",
+    "make-ahead dinner party",
+    "make-ahead summer party food",
+    "make ahead chicken dinners",
+    "middle-eastern chicken",
+    "modern middle east",
+    "nigella's nye party food",
+    "olympic snacks",
+    "sports snacks and dinners",
+    "best chicken thigh",
+    "wraps",
+    "chicken thigh",
+    "egg free",
+    "nut free",
+    "pregnancy friendly",
+    "Simply Nigella"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "12 skinless and boneless chicken thighs",
+          "quantity": 12,
+          "quantityText": "12",
+          "unit": null,
+          "name": "skinless and boneless chicken thighs",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 unwaxed lemons",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "unwaxed lemons",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100ml/3½fl oz olive oil",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "ml",
+          "name": "/3½fl oz olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 fat or 6 smaller garlic cloves, finely grated or minced",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "fat or 6 smaller garlic cloves",
+          "note": "finely grated or minced",
+          "isOptional": false
+        },
+        {
+          "raw": "2 dried or fresh bay leaves",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "dried or fresh bay leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp paprika",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "paprika",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp ground cumin",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "ground cumin",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground coriander",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp dried chilli flakes",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "dried chilli flakes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ tsp ground cinnamon",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "tsp",
+          "name": "ground cinnamon",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ tsp freshly grated nutmeg",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "tsp",
+          "name": "freshly grated nutmeg",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp sea salt flakes",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "sea salt flakes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "lettuce leaves, to serve",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "lettuce leaves",
+          "note": "to serve",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the shawarma sauce",
+      "items": [
+        {
+          "raw": "250g/9oz plain yoghurt",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "/9oz plain yoghurt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 tbsp tahini",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "tahini",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 fat or 2 smaller garlic cloves, finely grated or minced",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "fat or 2 smaller garlic cloves",
+          "note": "finely grated or minced",
+          "isOptional": false
+        },
+        {
+          "raw": "fat pinch salt, or to taste",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "fat pinch salt",
+          "note": "or to taste",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp pomegranate seeds",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "pomegranate seeds",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Take a large resealable freezer bag and put the chicken thighs in it. Using a fine grater, preferably a microplane, grate in the lemon zest. Squeeze the lemons and add the juice. Pour in the olive oil and add the garlic, then add all the remaining ingredients.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Take a large resealable freezer bag and put the chicken thighs in it. Using a fine grater, preferably a microplane, grate in the lemon zest. Squeeze the lemons and add the juice. Pour in the olive oil and add the garlic, then add all the remaining ingredients."
+    },
+    {
+      "order": 2,
+      "text": "Squish everything about together, then seal the bag, place it on a plate or in a dish, and refrigerate for at least 6 hours, or up to 1 day.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Squish everything about together, then seal the bag, place it on a plate or in a dish, and refrigerate for at least 6 hours, or up to 1 day."
+    },
+    {
+      "order": 3,
+      "text": "When you’re ready to cook, preheat the oven to 220C/200C Fan/Gas 7. Remove the chicken from the fridge and allow it to reach room temperature.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "When you’re ready to cook, preheat the oven to 220C/200C Fan/Gas 7. Remove the chicken from the fridge and allow it to reach room temperature."
+    },
+    {
+      "order": 4,
+      "text": "Tip the contents of the freezer bag into a shallow roasting tin – mine measures 44x34x1.5cm/17x13x½in – and make sure all the chicken thighs are lying flat and not on top of one another (if possible) before roasting in the hot oven for 30 minutes, by which time they should be cooked through (though obviously you must check) and golden on top.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Tip the contents of the freezer bag into a shallow roasting tin – mine measures 44x34x1.5cm/17x13x½in – and make sure all the chicken thighs are lying flat and not on top of one another (if possible) before roasting in the hot oven for 30 minutes, by which time they should be cooked through (though obviously you must check) and golden on top."
+    },
+    {
+      "order": 5,
+      "text": "When the chicken’s more or less cooked, make the sauce simply by combining the yoghurt with the tahini and garlic, stir and salt to taste, and sprinkle with a few pomegranate seeds.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "When the chicken’s more or less cooked, make the sauce simply by combining the yoghurt with the tahini and garlic, stir and salt to taste, and sprinkle with a few pomegranate seeds."
+    },
+    {
+      "order": 6,
+      "text": "Line a platter or a couple of plates with crisp lettuce, shredded or torn into pieces, and then top with the piping hot chicken, pouring the oily juices over them, unless you are, for some inexplicable reason, anti-oily-juices. If you wanted to make the chicken go further, you could cut the thighs into chunky slices rather than leaving them whole. And please do add any of the suggested accompaniments, itemized in my introduction.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Line a platter or a couple of plates with crisp lettuce, shredded or torn into pieces, and then top with the piping hot chicken, pouring the oily juices over them, unless you are, for some inexplicable reason, anti-oily-juices. If you wanted to make the chicken go further, you could cut the thighs into chunky slices rather than leaving them whole. And please do add any of the suggested accompaniments, itemized in my introduction."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/oven-cooked_chicken_04728_16x9.jpg"
+    ],
+    "video": [
+      {
+        "description": "Chicken shawarma is usually cooked on a spit, but this is roasted in the oven. Here, I¹ve served it modestly, on a pile of shredded iceberg, with some warmed pitta, lemon wedges and a tahini sauce, as made below. When I make this for groups of friends, or for a family lunch or supper, I slice up some fresh tomatoes sprinkled with mint, and cut some cucumbers into wedged slices, and macerate some red onions, cut into half-moons, with red wine vinegar or lime ­ in which case it will serve up to 10 people.",
+        "duration": "PT4M50S",
+        "name": "Oven-cooked chicken shawarma",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/oven-cooked_chicken_04728_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:38:10.000Z"
+      }
+    ]
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "The chicken can be marinated 1 day ahead. Store in fridge until needed. The chicken can be frozen in its marinade – as long as the meat has not been previously frozen – for up to 3 months. Leftover chicken can also be frozen, in airtight containers or resealable bags, for up to 2 months. Defrost overnight in fridge before using."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 116,
+      "ratingValue": 4.827586206896552
+    },
+    "suitableForDiet": [],
+    "video": [
+      {
+        "description": "Chicken shawarma is usually cooked on a spit, but this is roasted in the oven. Here, I¹ve served it modestly, on a pile of shredded iceberg, with some warmed pitta, lemon wedges and a tahini sauce, as made below. When I make this for groups of friends, or for a family lunch or supper, I slice up some fresh tomatoes sprinkled with mint, and cut some cucumbers into wedged slices, and macerate some red onions, cut into half-moons, with red wine vinegar or lime ­ in which case it will serve up to 10 people.",
+        "duration": "PT4M50S",
+        "name": "Oven-cooked chicken shawarma",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/oven-cooked_chicken_04728_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:38:10.000Z"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Chicken shawarma is usually cooked on a spit, but this is roasted in the oven. Here, I’ve served it modestly, on a pile of shredded iceberg, with some warmed pitta, lemon wedges and a tahini sauce. When I make this for groups of friends, or for a family lunch or supper, I slice up some fresh tomatoes sprinkled with mint, and cut some cucumbers into wedged slices, and macerate some red onions, cut into half-moons, with red wine vinegar or lime – in which case it will serve up to 10 people.",
+    "headline": "Oven-cooked chicken shawarma",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/oven-cooked_chicken_04728_16x9.jpg"
+    },
+    "name": "Oven-cooked chicken shawarma",
+    "author": {
+      "@type": "Person",
+      "name": "Nigella Lawson"
+    },
+    "datePublished": "2015-11-30T16:00:00.000Z",
+    "dateModified": "2025-01-28T09:48:14.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 116,
+      "ratingValue": 4.827586206896552
+    },
+    "prepTime": "PT2H",
+    "cookTime": "PT1H",
+    "keywords": "best chicken, easy dinner party, easy father’s day, easy impressive dinners, easy marinades, fakeaway, simple dinners for get-togethers, make-ahead dinner party, make-ahead summer party food, make ahead chicken dinners, middle-eastern chicken, modern middle east, nigella's nye party food, olympic snacks, sports snacks and dinners, best chicken thigh, wraps, chicken thigh, egg free, nut free, pregnancy friendly, Simply Nigella",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Turkish and Middle Eastern",
+    "recipeIngredient": [
+      "12 skinless and boneless chicken thighs",
+      "2 unwaxed lemons",
+      "100ml/3½fl oz olive oil",
+      "4 fat or 6 smaller garlic cloves, finely grated or minced",
+      "2 dried or fresh bay leaves",
+      "2 tsp paprika",
+      "2 tsp ground cumin",
+      "1 tsp ground coriander",
+      "1 tsp dried chilli flakes",
+      "¼ tsp ground cinnamon",
+      "¼ tsp freshly grated nutmeg",
+      "2 tsp sea salt flakes",
+      "lettuce leaves, to serve",
+      "250g/9oz plain yoghurt",
+      "4 tbsp tahini",
+      "1 fat or 2 smaller garlic cloves, finely grated or minced",
+      "fat pinch salt, or to taste",
+      "1 tbsp pomegranate seeds"
+    ],
+    "recipeInstructions": [
+      "Take a large resealable freezer bag and put the chicken thighs in it. Using a fine grater, preferably a microplane, grate in the lemon zest. Squeeze the lemons and add the juice. Pour in the olive oil and add the garlic, then add all the remaining ingredients.",
+      "Squish everything about together, then seal the bag, place it on a plate or in a dish, and refrigerate for at least 6 hours, or up to 1 day.",
+      "When you’re ready to cook, preheat the oven to 220C/200C Fan/Gas 7. Remove the chicken from the fridge and allow it to reach room temperature.",
+      "Tip the contents of the freezer bag into a shallow roasting tin – mine measures 44x34x1.5cm/17x13x½in – and make sure all the chicken thighs are lying flat and not on top of one another (if possible) before roasting in the hot oven for 30 minutes, by which time they should be cooked through (though obviously you must check) and golden on top.",
+      "When the chicken’s more or less cooked, make the sauce simply by combining the yoghurt with the tahini and garlic, stir and salt to taste, and sprinkle with a few pomegranate seeds.",
+      "Line a platter or a couple of plates with crisp lettuce, shredded or torn into pieces, and then top with the piping hot chicken, pouring the oily juices over them, unless you are, for some inexplicable reason, anti-oily-juices. If you wanted to make the chicken go further, you could cut the thighs into chunky slices rather than leaving them whole. And please do add any of the suggested accompaniments, itemized in my introduction."
+    ],
+    "recipeYield": "Serves 6",
+    "suitableForDiet": [],
+    "video": [
+      {
+        "description": "Chicken shawarma is usually cooked on a spit, but this is roasted in the oven. Here, I¹ve served it modestly, on a pile of shredded iceberg, with some warmed pitta, lemon wedges and a tahini sauce, as made below. When I make this for groups of friends, or for a family lunch or supper, I slice up some fresh tomatoes sprinkled with mint, and cut some cucumbers into wedged slices, and macerate some red onions, cut into half-moons, with red wine vinegar or lime ­ in which case it will serve up to 10 people.",
+        "duration": "PT4M50S",
+        "name": "Oven-cooked chicken shawarma",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/oven-cooked_chicken_04728_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:38:10.000Z"
+      }
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet|video"
+  ]
+}

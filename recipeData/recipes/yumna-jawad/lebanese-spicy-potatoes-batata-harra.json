@@ -1,0 +1,561 @@
+{
+  "schemaVersion": 1,
+  "id": "yumna-jawad/lebanese-spicy-potatoes-batata-harra",
+  "slug": "lebanese-spicy-potatoes-batata-harra",
+  "chefId": "chef_yumna-jawad",
+  "chefSlug": "yumna-jawad",
+  "chefName": "Yumna Jawad",
+  "title": "Lebanese Spicy Potatoes (Batata Harra)",
+  "description": "Batata Harra is a Lebanese spicy potatoes side dish that's full of flavor. Easy to make and perfect to serve as part of a mezze or with grilled meat dishes!",
+  "source": {
+    "sourceUrl": "https://feelgoodfoodie.net/recipe/spicy-potatoes/",
+    "finalUrl": "https://feelgoodfoodie.net/recipe/spicy-potatoes/",
+    "retrievedAt": "2026-09-11T02:46:52.373Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2019-12-28T08:22:23+00:00",
+    "rights": "Feel Good Foodie. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "eb22f4a1b5cc214e13d3ef866f3b5d0962e40c448508e5b3d89ee47013c0b611",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": [
+        "equipment-from-html: 2"
+      ]
+    },
+    "robots": "allows recipe paths; /wp-admin/ and /signup/ disallowed"
+  },
+  "yield": {
+    "raw": [
+      "8",
+      "8 servings"
+    ],
+    "servings": 8
+  },
+  "timing": {
+    "prepMinutes": 10,
+    "cookMinutes": 35,
+    "totalMinutes": 45,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Lebanese",
+    "Mediterranean",
+    "Middle Eastern"
+  ],
+  "category": [
+    "Side Dish"
+  ],
+  "keywords": [
+    "Batata Harra",
+    "Lebanese Potatoes",
+    "Spicy Potatoes"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "8 medium gold potatoes (peeled and cut into cubes)",
+          "quantity": 8,
+          "quantityText": "8",
+          "unit": null,
+          "name": "medium gold potatoes (peeled and cut into cubes)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tablespoons olive oil (divided)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "olive oil (divided)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ teaspoon salt",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 garlic cloves (minced)",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "garlic cloves (minced)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 teaspoons crushed red pepper (divided)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "crushed red pepper (divided)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 cup chopped cilantro (divided)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "cup",
+          "name": "chopped cilantro (divided)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Lemon wedges (for serving)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Lemon wedges (for serving)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 450°F and line a sheet pan with parchment paper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": "450°F",
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 450°F and line a sheet pan with parchment paper.",
+        "name": "Preheat the oven to 450°F and line a sheet pan with parchment paper.",
+        "url": "https://feelgoodfoodie.net/recipe/spicy-potatoes/#wprm-recipe-16608-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Place the potatoes on the baking sheet in one layer, drizzle 1 tablespoon olive oil on top and season with salt. Roast until the potatoes reach a golden brown color and crisp, about 30 minutes, flipping halfway through.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Place the potatoes on the baking sheet in one layer, drizzle 1 tablespoon olive oil on top and season with salt. Roast until the potatoes reach a golden brown color and crisp, about 30 minutes, flipping halfway through.",
+        "name": "Place the potatoes on the baking sheet in one layer, drizzle 1 tablespoon olive oil on top and season with salt. Roast until the potatoes reach a golden brown color and crisp, about 30 minutes, flipping halfway through.",
+        "url": "https://feelgoodfoodie.net/recipe/spicy-potatoes/#wprm-recipe-16608-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Meanwhile, heat the remaining 1 tablespoon olive oil in a small pan. Add the garlic, 1 teaspoon of the crushed red pepper and half the cilantro. Sauté until the garlic is golden in color, about 2 minutes; remove from heat and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Meanwhile, heat the remaining 1 tablespoon olive oil in a small pan. Add the garlic, 1 teaspoon of the crushed red pepper and half the cilantro. Sauté until the garlic is golden in color, about 2 minutes; remove from heat and set aside.",
+        "name": "Meanwhile, heat the remaining 1 tablespoon olive oil in a small pan. Add the garlic, 1 teaspoon of the crushed red pepper and half the cilantro. Sauté until the garlic is golden in color, about 2 minutes; remove from heat and set aside.",
+        "url": "https://feelgoodfoodie.net/recipe/spicy-potatoes/#wprm-recipe-16608-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Once the potatoes are roasted, transfer the garlic mixture on top of the potatoes and toss with the remaining cilantro and the red pepper flakes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Once the potatoes are roasted, transfer the garlic mixture on top of the potatoes and toss with the remaining cilantro and the red pepper flakes.",
+        "name": "Once the potatoes are roasted, transfer the garlic mixture on top of the potatoes and toss with the remaining cilantro and the red pepper flakes.",
+        "url": "https://feelgoodfoodie.net/recipe/spicy-potatoes/#wprm-recipe-16608-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Serve hot or warm with a squeeze of lemon juice on top, if desired",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Serve hot or warm with a squeeze of lemon juice on top, if desired",
+        "name": "Serve hot or warm with a squeeze of lemon juice on top, if desired",
+        "url": "https://feelgoodfoodie.net/recipe/spicy-potatoes/#wprm-recipe-16608-step-0-4"
+      }
+    }
+  ],
+  "equipment": [
+    "Aluminum Sheet Pans",
+    "Ceramic Nonstick Cookware Set"
+  ],
+  "supplies": [],
+  "nutrition": {
+    "calories": "133 kcal",
+    "carbohydrateContent": "22 g",
+    "proteinContent": "5 g",
+    "fatContent": "4 g",
+    "saturatedFatContent": "1 g",
+    "sodiumContent": "168 mg",
+    "fiberContent": "4 g",
+    "sugarContent": "1 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/12/Lebanese-Spicy-Potatoes-Batata-Harra-5.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/12/Lebanese-Spicy-Potatoes-Batata-Harra-5-500x500.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/12/Lebanese-Spicy-Potatoes-Batata-Harra-5-500x375.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/12/Lebanese-Spicy-Potatoes-Batata-Harra-5-480x270.jpg"
+    ],
+    "video": {
+      "name": "Lebanese Spicy Potatoes (Batata Harra)",
+      "description": "Batata Harra is a Lebanese spicy potatoes side dish that's full of flavor. Easy to make and perfect to serve as part of a mezze or with grilled meat dishes!",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/5wCDrDuI-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/5wCDrDuI.mp4",
+      "uploadDate": "2021-02-19T17:33:49.000Z",
+      "@type": "VideoObject"
+    }
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "video": {
+      "name": "Lebanese Spicy Potatoes (Batata Harra)",
+      "description": "Batata Harra is a Lebanese spicy potatoes side dish that's full of flavor. Easy to make and perfect to serve as part of a mezze or with grilled meat dishes!",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/5wCDrDuI-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/5wCDrDuI.mp4",
+      "uploadDate": "2021-02-19T17:33:49.000Z",
+      "@type": "VideoObject"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "437",
+      "reviewCount": "7"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "oh my, these Batata Harra!\r\n\r\nGenerally a potato lover anyway, this one moved to the top, along with lemony potatoes (of which I do believe you offer a version as well)\r\nTry remain an inspiration!\r\nThanks!",
+        "author": {
+          "@type": "Person",
+          "name": "Ingrid Toth"
+        },
+        "datePublished": "2026-03-23"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I had a few potatoes that were begging to be used, and I'm so glad I chose this recipe! This dish was so delicious, simple, and authentic. I adore Lebanese food - this was a perfect complement to my plate of hummus, muhammara, baba, grape leaves, greens, and tahini sauce. I used super hot red pepper flakes, and the spice was perfectly balanced by the salt and lemon. Will definitely make again and again!",
+        "author": {
+          "@type": "Person",
+          "name": "Dina"
+        },
+        "datePublished": "2026-02-15"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "These were really good!",
+        "author": {
+          "@type": "Person",
+          "name": "Anna k"
+        },
+        "datePublished": "2025-04-26"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "These are absolutely delicious! Have made them via the oven method twice in the last month. I use a little more olive oil than the recipe calls for. My husband is not a fan of cilantro, so I’ve used half parsley and half cilantro in the cooked portion of the sauce and no added cilantro in the fresh herb toss at the end. He couldn’t tell.",
+        "author": {
+          "@type": "Person",
+          "name": "Chris"
+        },
+        "datePublished": "2025-04-04"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Best side I’ve ever had!!",
+        "author": {
+          "@type": "Person",
+          "name": "Sandra Bolan"
+        },
+        "datePublished": "2024-09-04"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "It is a great recipe! My husband is from Syria, we live in Canada, but I got used to cooking Arabic food mainly as I love it so much myself (Ukrainian by origin). I loved it how my mother-in-law used to buy chili paste from Syrian shops in Dubai and cook it that way. It's so similar! I love how you add lemon to it, and I drink it with kefir! I don't need any meat if I have this! Thank you for another great addition to our meals.",
+        "author": {
+          "@type": "Person",
+          "name": "Sandra"
+        },
+        "datePublished": "2024-08-11"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I have made these and used them in wraps with shishtawook and garlic sauce and hummus. Also added red onion and red cabbage. These are delicious. I'm hoping to try to make homemade garlic sauce(toum) soon. These recipes are so easy to follow my success is almost guaranteed.",
+        "author": {
+          "@type": "Person",
+          "name": "Jack"
+        },
+        "datePublished": "2024-04-24"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Lebanese Spicy Potatoes (Batata Harra)",
+    "author": {
+      "@id": "https://feelgoodfoodie.net/#/schema/person/7a5a734de72932611fa5814fce8c12d5"
+    },
+    "description": "Batata Harra is a Lebanese spicy potatoes side dish that&#x27;s full of flavor. Easy to make and perfect to serve as part of a mezze or with grilled meat dishes!",
+    "datePublished": "2019-12-28T08:22:23+00:00",
+    "image": [
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/12/Lebanese-Spicy-Potatoes-Batata-Harra-5.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/12/Lebanese-Spicy-Potatoes-Batata-Harra-5-500x500.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/12/Lebanese-Spicy-Potatoes-Batata-Harra-5-500x375.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/12/Lebanese-Spicy-Potatoes-Batata-Harra-5-480x270.jpg"
+    ],
+    "video": {
+      "name": "Lebanese Spicy Potatoes (Batata Harra)",
+      "description": "Batata Harra is a Lebanese spicy potatoes side dish that's full of flavor. Easy to make and perfect to serve as part of a mezze or with grilled meat dishes!",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/5wCDrDuI-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/5wCDrDuI.mp4",
+      "uploadDate": "2021-02-19T17:33:49.000Z",
+      "@type": "VideoObject"
+    },
+    "recipeYield": [
+      "8",
+      "8 servings"
+    ],
+    "prepTime": "PT10M",
+    "cookTime": "PT35M",
+    "totalTime": "PT45M",
+    "recipeIngredient": [
+      "8  medium gold potatoes (peeled and cut into cubes)",
+      "2 tablespoons olive oil (divided)",
+      "½ teaspoon salt",
+      "3  garlic cloves (minced)",
+      "2 teaspoons crushed red pepper (divided)",
+      "1 cup chopped cilantro (divided)",
+      "Lemon wedges (for serving)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 450°F and line a sheet pan with parchment paper.",
+        "name": "Preheat the oven to 450°F and line a sheet pan with parchment paper.",
+        "url": "https://feelgoodfoodie.net/recipe/spicy-potatoes/#wprm-recipe-16608-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Place the potatoes on the baking sheet in one layer, drizzle 1 tablespoon olive oil on top and season with salt. Roast until the potatoes reach a golden brown color and crisp, about 30 minutes, flipping halfway through.",
+        "name": "Place the potatoes on the baking sheet in one layer, drizzle 1 tablespoon olive oil on top and season with salt. Roast until the potatoes reach a golden brown color and crisp, about 30 minutes, flipping halfway through.",
+        "url": "https://feelgoodfoodie.net/recipe/spicy-potatoes/#wprm-recipe-16608-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Meanwhile, heat the remaining 1 tablespoon olive oil in a small pan. Add the garlic, 1 teaspoon of the crushed red pepper and half the cilantro. Sauté until the garlic is golden in color, about 2 minutes; remove from heat and set aside.",
+        "name": "Meanwhile, heat the remaining 1 tablespoon olive oil in a small pan. Add the garlic, 1 teaspoon of the crushed red pepper and half the cilantro. Sauté until the garlic is golden in color, about 2 minutes; remove from heat and set aside.",
+        "url": "https://feelgoodfoodie.net/recipe/spicy-potatoes/#wprm-recipe-16608-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Once the potatoes are roasted, transfer the garlic mixture on top of the potatoes and toss with the remaining cilantro and the red pepper flakes.",
+        "name": "Once the potatoes are roasted, transfer the garlic mixture on top of the potatoes and toss with the remaining cilantro and the red pepper flakes.",
+        "url": "https://feelgoodfoodie.net/recipe/spicy-potatoes/#wprm-recipe-16608-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Serve hot or warm with a squeeze of lemon juice on top, if desired",
+        "name": "Serve hot or warm with a squeeze of lemon juice on top, if desired",
+        "url": "https://feelgoodfoodie.net/recipe/spicy-potatoes/#wprm-recipe-16608-step-0-4"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "437",
+      "reviewCount": "7"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "oh my, these Batata Harra!\r\n\r\nGenerally a potato lover anyway, this one moved to the top, along with lemony potatoes (of which I do believe you offer a version as well)\r\nTry remain an inspiration!\r\nThanks!",
+        "author": {
+          "@type": "Person",
+          "name": "Ingrid Toth"
+        },
+        "datePublished": "2026-03-23"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I had a few potatoes that were begging to be used, and I'm so glad I chose this recipe! This dish was so delicious, simple, and authentic. I adore Lebanese food - this was a perfect complement to my plate of hummus, muhammara, baba, grape leaves, greens, and tahini sauce. I used super hot red pepper flakes, and the spice was perfectly balanced by the salt and lemon. Will definitely make again and again!",
+        "author": {
+          "@type": "Person",
+          "name": "Dina"
+        },
+        "datePublished": "2026-02-15"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "These were really good!",
+        "author": {
+          "@type": "Person",
+          "name": "Anna k"
+        },
+        "datePublished": "2025-04-26"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "These are absolutely delicious! Have made them via the oven method twice in the last month. I use a little more olive oil than the recipe calls for. My husband is not a fan of cilantro, so I’ve used half parsley and half cilantro in the cooked portion of the sauce and no added cilantro in the fresh herb toss at the end. He couldn’t tell.",
+        "author": {
+          "@type": "Person",
+          "name": "Chris"
+        },
+        "datePublished": "2025-04-04"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Best side I’ve ever had!!",
+        "author": {
+          "@type": "Person",
+          "name": "Sandra Bolan"
+        },
+        "datePublished": "2024-09-04"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "It is a great recipe! My husband is from Syria, we live in Canada, but I got used to cooking Arabic food mainly as I love it so much myself (Ukrainian by origin). I loved it how my mother-in-law used to buy chili paste from Syrian shops in Dubai and cook it that way. It's so similar! I love how you add lemon to it, and I drink it with kefir! I don't need any meat if I have this! Thank you for another great addition to our meals.",
+        "author": {
+          "@type": "Person",
+          "name": "Sandra"
+        },
+        "datePublished": "2024-08-11"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I have made these and used them in wraps with shishtawook and garlic sauce and hummus. Also added red onion and red cabbage. These are delicious. I'm hoping to try to make homemade garlic sauce(toum) soon. These recipes are so easy to follow my success is almost guaranteed.",
+        "author": {
+          "@type": "Person",
+          "name": "Jack"
+        },
+        "datePublished": "2024-04-24"
+      }
+    ],
+    "recipeCategory": [
+      "Side Dish"
+    ],
+    "recipeCuisine": [
+      "Lebanese",
+      "Mediterranean",
+      "Middle Eastern"
+    ],
+    "keywords": "Batata Harra, Lebanese Potatoes, Spicy Potatoes",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "133 kcal",
+      "carbohydrateContent": "22 g",
+      "proteinContent": "5 g",
+      "fatContent": "4 g",
+      "saturatedFatContent": "1 g",
+      "sodiumContent": "168 mg",
+      "fiberContent": "4 g",
+      "sugarContent": "1 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://feelgoodfoodie.net/recipe/spicy-potatoes/#recipe",
+    "isPartOf": {
+      "@id": "https://feelgoodfoodie.net/recipe/spicy-potatoes/#article"
+    },
+    "mainEntityOfPage": "https://feelgoodfoodie.net/recipe/spicy-potatoes/"
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:video|aggregateRating|review"
+  ]
+}

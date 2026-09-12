@@ -1,0 +1,523 @@
+{
+  "schemaVersion": 1,
+  "id": "sabrina-ghayour/crispy-cod-wraps-with-salsa-and-harissa-lime-mayo",
+  "slug": "crispy-cod-wraps-with-salsa-and-harissa-lime-mayo",
+  "chefId": "chef_sabrina-ghayour",
+  "chefSlug": "sabrina-ghayour",
+  "chefName": "Sabrina Ghayour",
+  "title": "Crispy cod wraps with salsa and harissa lime mayo",
+  "description": "These fish wraps are a delight. Throw in sweet potato, za’atar and garlic chips, salsa and a spicy lime mayo and you have a tasty family dinner.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/crispy_cod_wraps_64457",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/crispy_cod_wraps_64457",
+    "retrievedAt": "2026-09-11T00:28:25.341Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Sabrina Ghayour"
+    ],
+    "datePublished": "2021-03-20T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "a252f201c9de268f35d539883e61789da9994b8d4ba91fc949d31340f0c2445c",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 4 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 6"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "best fish",
+    "crispy crunchy",
+    "easy fish",
+    "fish and chip makeover",
+    "wrap it up",
+    "party food",
+    "summer dinner",
+    "summer party",
+    "wraps",
+    "cod",
+    "dairy free",
+    "pregnancy friendly",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the salsa",
+      "items": [
+        {
+          "raw": "2 tomatoes, very finely diced",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "tomatoes",
+          "note": "very finely diced",
+          "isOptional": false
+        },
+        {
+          "raw": "½ onion, very finely diced",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "onion",
+          "note": "very finely diced",
+          "isOptional": false
+        },
+        {
+          "raw": "15g/½oz fresh dill, roughly chopped",
+          "quantity": 15,
+          "quantityText": "15",
+          "unit": "g",
+          "name": "/½oz fresh dill",
+          "note": "roughly chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "drizzle olive oil",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "drizzle olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp caster sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "caster sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "flaky sea salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "flaky sea salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the baked sweet potato, za’atar and garlic chips",
+      "items": [
+        {
+          "raw": "3 tbsp quick-cook polenta",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "quick-cook polenta",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp za’atar",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "za’atar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 heaped tbsp garlic granules",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "heaped tbsp garlic granules",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 sweet potatoes, peeled and cut into 1cm/½in thick chips",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "sweet potatoes",
+          "note": "peeled and cut into 1cm/½in thick chips",
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp olive oil",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "flaky sea salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "flaky sea salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the harissa lime mayo",
+      "items": [
+        {
+          "raw": "3 tbsp mayonnaise",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "mayonnaise",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp rose harissa",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "rose harissa",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 lime, finely grated zest and juice of ½ lime",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "lime",
+          "note": "finely grated zest and juice of ½ lime",
+          "isOptional": false
+        },
+        {
+          "raw": "flaky sea salt",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "flaky sea salt",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the crispy cod wraps",
+      "items": [
+        {
+          "raw": "2 free-range eggs, beaten",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "free-range eggs",
+          "note": "beaten",
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz plain flour",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz plain flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp garlic granules",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "garlic granules",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp English mustard powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "English mustard powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp ground paprika",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "ground paprika",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp cayenne pepper",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "cayenne pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground turmeric",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground turmeric",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "vegetable oil, for frying",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "vegetable oil, for frying",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "500g/1lb 2oz cod loins, cut into 2.5cm/1in chunks",
+          "quantity": 500,
+          "quantityText": "500",
+          "unit": "g",
+          "name": "/1lb 2oz cod loins, cut into 2.5cm/1in chunks",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 mini tortilla wraps",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": null,
+          "name": "mini tortilla wraps",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "flaky sea salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "flaky sea salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the salsa, combine the tomatoes, onion, and dill in a bowl. Add the olive oil and sugar and season well with salt and pepper. Mix together and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the salsa, combine the tomatoes, onion, and dill in a bowl. Add the olive oil and sugar and season well with salt and pepper. Mix together and set aside."
+    },
+    {
+      "order": 2,
+      "text": "To make the baked sweet potato, za’atar and garlic chips, preheat the oven to 220C/200C Fan/Gas 7.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the baked sweet potato, za’atar and garlic chips, preheat the oven to 220C/200C Fan/Gas 7."
+    },
+    {
+      "order": 3,
+      "text": "Line your largest baking tray with baking paper. Mix the polenta, za’atar, garlic granules and a generous amount of salt and pepper together in a small bowl. Place the sweet potato chips on the prepared baking tray, drizzle over the olive oil and use your hands to mix until the chips are well coated in the oil. Sprinkle with the polenta mixture and toss to coat the chips evenly. Bake the sweet potato chips for 30 minutes or so, until the chips are soft in the middle and browning around the edges.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Line your largest baking tray with baking paper. Mix the polenta, za’atar, garlic granules and a generous amount of salt and pepper together in a small bowl. Place the sweet potato chips on the prepared baking tray, drizzle over the olive oil and use your hands to mix until the chips are well coated in the oil. Sprinkle with the polenta mixture and toss to coat the chips evenly. Bake the sweet potato chips for 30 minutes or so, until the chips are soft in the middle and browning around the edges."
+    },
+    {
+      "order": 4,
+      "text": "To make the harissa lime mayo, mix the mayonnaise ingredients together in a small bowl and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the harissa lime mayo, mix the mayonnaise ingredients together in a small bowl and set aside."
+    },
+    {
+      "order": 5,
+      "text": "To make the crispy cod wraps, mix the eggs with a pinch of salt and pepper. Mix the flour, garlic granules, mustard powder and spices into a separate small shallow bowl, and season very generously with salt and pepper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the crispy cod wraps, mix the eggs with a pinch of salt and pepper. Mix the flour, garlic granules, mustard powder and spices into a separate small shallow bowl, and season very generously with salt and pepper."
+    },
+    {
+      "order": 6,
+      "text": "Pour enough vegetable oil into a deep-frying pan to fill a depth of 2cm/¾in. Heat the oil over a medium-high heat and bring to frying temperature. (CAUTION: hot oil can be dangerous. Do not leave unattended.) Line a plate with kitchen paper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pour enough vegetable oil into a deep-frying pan to fill a depth of 2cm/¾in. Heat the oil over a medium-high heat and bring to frying temperature. (CAUTION: hot oil can be dangerous. Do not leave unattended.) Line a plate with kitchen paper."
+    },
+    {
+      "order": 7,
+      "text": "Coat each piece of fish evenly in the flour mixture, then dip into the beaten egg to coat, and finely dip once more in the flour mixture, ensuring each piece is well coated. When the oil is ready, fry the fish in batches for about 2–3 minutes, or until the batter is crispy and deep golden-brown. Transfer to the paper-lined plate to drain. Serve in tortilla wraps with the mayo and top with a little of the salsa. Serve the sweet potato chips on the side.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Coat each piece of fish evenly in the flour mixture, then dip into the beaten egg to coat, and finely dip once more in the flour mixture, ensuring each piece is well coated. When the oil is ready, fry the fish in batches for about 2–3 minutes, or until the batter is crispy and deep golden-brown. Transfer to the paper-lined plate to drain. Serve in tortilla wraps with the mayo and top with a little of the salsa. Serve the sweet potato chips on the side."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/crispy_cod_wraps_64457_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 39,
+      "ratingValue": 4.666666666666667
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "These fish wraps are a delight. Throw in sweet potato, za’atar and garlic chips, salsa and a spicy lime mayo and you have a tasty family dinner.",
+    "headline": "Crispy cod wraps with salsa and harissa lime mayo",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/crispy_cod_wraps_64457_16x9.jpg"
+    },
+    "name": "Crispy cod wraps with salsa and harissa lime mayo",
+    "author": {
+      "@type": "Person",
+      "name": "Sabrina Ghayour"
+    },
+    "datePublished": "2021-03-20T00:00:00.000Z",
+    "dateModified": "2026-04-08T13:41:58.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 39,
+      "ratingValue": 4.666666666666667
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT1H",
+    "keywords": "best fish,  crispy crunchy, easy fish, fish and chip makeover, wrap it up, party food, summer dinner, summer party, wraps, cod, dairy free, pregnancy friendly, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeIngredient": [
+      "2 tomatoes, very finely diced",
+      "½ onion, very finely diced",
+      "15g/½oz fresh dill, roughly chopped",
+      "drizzle olive oil",
+      "1 tsp caster sugar",
+      "flaky sea salt and freshly ground black pepper",
+      "3 tbsp quick-cook polenta",
+      "3 tbsp za’atar",
+      "1 heaped tbsp garlic granules",
+      "4 sweet potatoes, peeled and cut into 1cm/½in thick chips",
+      "3 tbsp olive oil",
+      "flaky sea salt and freshly ground black pepper",
+      "3 tbsp mayonnaise",
+      "1 tbsp rose harissa",
+      "1 lime, finely grated zest and juice of ½ lime",
+      "flaky sea salt",
+      "2 free-range eggs, beaten",
+      "100g/3½oz plain flour",
+      "1 tbsp garlic granules",
+      "1 tbsp English mustard powder",
+      "2 tsp ground paprika",
+      "1 tsp cayenne pepper",
+      "1 tsp ground turmeric",
+      "vegetable oil, for frying ",
+      "500g/1lb 2oz cod loins, cut into 2.5cm/1in chunks",
+      "6 mini tortilla wraps",
+      "flaky sea salt and freshly ground black pepper"
+    ],
+    "recipeInstructions": [
+      "To make the salsa, combine the tomatoes, onion, and dill in a bowl. Add the olive oil and sugar and season well with salt and pepper. Mix together and set aside.",
+      "To make the baked sweet potato, za’atar and garlic chips, preheat the oven to 220C/200C Fan/Gas 7.",
+      "Line your largest baking tray with baking paper. Mix the polenta, za’atar, garlic granules and a generous amount of salt and pepper together in a small bowl. Place the sweet potato chips on the prepared baking tray, drizzle over the olive oil and use your hands to mix until the chips are well coated in the oil. Sprinkle with the polenta mixture and toss to coat the chips evenly. Bake the sweet potato chips for 30 minutes or so, until the chips are soft in the middle and browning around the edges.",
+      "To make the harissa lime mayo, mix the mayonnaise ingredients together in a small bowl and set aside.",
+      "To make the crispy cod wraps, mix the eggs with a pinch of salt and pepper. Mix the flour, garlic granules, mustard powder and spices into a separate small shallow bowl, and season very generously with salt and pepper.",
+      "Pour enough vegetable oil into a deep-frying pan to fill a depth of 2cm/¾in. Heat the oil over a medium-high heat and bring to frying temperature. (CAUTION: hot oil can be dangerous. Do not leave unattended.) Line a plate with kitchen paper.",
+      "Coat each piece of fish evenly in the flour mixture, then dip into the beaten egg to coat, and finely dip once more in the flour mixture, ensuring each piece is well coated. When the oil is ready, fry the fish in batches for about 2–3 minutes, or until the batter is crispy and deep golden-brown. Transfer to the paper-lined plate to drain. Serve in tortilla wraps with the mayo and top with a little of the salsa. Serve the sweet potato chips on the side."
+    ],
+    "recipeYield": "Serves 6",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:6",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

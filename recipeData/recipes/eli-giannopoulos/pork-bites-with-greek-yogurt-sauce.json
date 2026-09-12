@@ -1,0 +1,331 @@
+{
+  "schemaVersion": 1,
+  "id": "eli-giannopoulos/pork-bites-with-greek-yogurt-sauce",
+  "slug": "pork-bites-with-greek-yogurt-sauce",
+  "chefId": "chef_eli-giannopoulos",
+  "chefSlug": "eli-giannopoulos",
+  "chefName": "Eli K. Giannopoulos",
+  "title": "Pork bites with Greek Yogurt sauce",
+  "description": "Deliciously light with a creamy, wine flavoured sauce, these little pork bites with yogurt will amaze you! Discover this refreshing, mid-week 40 minute or less recipe here!",
+  "source": {
+    "sourceUrl": "https://www.mygreekdish.com/recipe/shepherds-pork/",
+    "finalUrl": "https://www.mygreekdish.com/recipe/shepherds-pork/",
+    "retrievedAt": "2026-09-11T02:48:14.242Z",
+    "publisher": null,
+    "authorRaw": [
+      "Eli K. Giannopoulos"
+    ],
+    "datePublished": "2013-05-15",
+    "rights": "My Greek Dish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "da0127f42eadac8998f4835825d894093d1082554d354e136e8488754950af30",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "4",
+      "4-5 portions"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 5,
+    "cookMinutes": 30,
+    "totalMinutes": 35,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Greek"
+  ],
+  "category": [
+    "Main"
+  ],
+  "keywords": [
+    "pork with yogurt sauce"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1 kg pork loins (35 ounces)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "kg",
+          "name": "pork loins (35 ounces)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 cup olive oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "cup",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 cup of dry white wine",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "cup",
+          "name": "of dry white wine",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 teaspoon dry rosemary",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "dry rosemary",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 cup of low fat Greek yogurt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 cup of low fat Greek yogurt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and pepper to taste",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and pepper to taste",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 twig of fresh rosemary (garnish)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "twig of fresh rosemary (garnish)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Heat up the olive oil in a large pan, dice the pork in cubes and sizzle until golden brown.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Heat up the olive oil in a large pan, dice the pork in cubes and sizzle until golden brown.",
+        "url": "https://www.mygreekdish.com/recipe/shepherds-pork/#instruction-step-1"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Pour in the wine and add salt and pepper and half a cup of water. Cover the pan, lower the heat and let it simmer.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Pour in the wine and add salt and pepper and half a cup of water. Cover the pan, lower the heat and let it simmer.",
+        "url": "https://www.mygreekdish.com/recipe/shepherds-pork/#instruction-step-2"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Right before the sauce thickens, add the dry rosemary, stir and cover the pan.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Right before the sauce thickens, add the dry rosemary, stir and cover the pan.",
+        "url": "https://www.mygreekdish.com/recipe/shepherds-pork/#instruction-step-3"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Once the sauce thickens, remove pan from the stove and remove the meat, while leaving the sauce in the pan. Let it cool down for a few minutes before adding the yogurt.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Once the sauce thickens, remove pan from the stove and remove the meat, while leaving the sauce in the pan. Let it cool down for a few minutes before adding the yogurt.",
+        "url": "https://www.mygreekdish.com/recipe/shepherds-pork/#instruction-step-4"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Slowly add the yogurt while stirring with a whisk till creamy. Re-add the meat and stir until fully covered in the sauce.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Slowly add the yogurt while stirring with a whisk till creamy. Re-add the meat and stir until fully covered in the sauce.",
+        "url": "https://www.mygreekdish.com/recipe/shepherds-pork/#instruction-step-5"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Serve with some rice and a twig of fresh rosemary.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Serve with some rice and a twig of fresh rosemary.",
+        "url": "https://www.mygreekdish.com/recipe/shepherds-pork/#instruction-step-6"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Pork-bites-with-Greek-Yogurt-sauce-scaled-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Pork-bites-with-Greek-Yogurt-sauce-scaled-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Pork-bites-with-Greek-Yogurt-sauce-scaled-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Pork-bites-with-Greek-Yogurt-sauce-scaled.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "cookingMethod": "Fried",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "472",
+      "ratingValue": "4.9"
+    }
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org/",
+    "@type": "Recipe",
+    "name": "Pork bites with Greek Yogurt sauce",
+    "description": "Deliciously light with a creamy, wine flavoured sauce, these little pork bites with yogurt will amaze you! Discover this refreshing, mid-week 40 minute or less recipe here!",
+    "author": {
+      "@type": "Person",
+      "name": "Eli K. Giannopoulos"
+    },
+    "keywords": "pork with yogurt sauce",
+    "image": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Pork-bites-with-Greek-Yogurt-sauce-scaled-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Pork-bites-with-Greek-Yogurt-sauce-scaled-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Pork-bites-with-Greek-Yogurt-sauce-scaled-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Pork-bites-with-Greek-Yogurt-sauce-scaled.jpg"
+    ],
+    "url": "https://www.mygreekdish.com/recipe/shepherds-pork/",
+    "recipeIngredient": [
+      "1 kg pork loins (35 ounces)",
+      "1 cup olive oil",
+      "1 cup of dry white wine",
+      "1 teaspoon dry rosemary",
+      "1/2 cup of low fat Greek yogurt",
+      "salt and pepper to taste",
+      "1 twig of fresh rosemary (garnish)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Heat up the olive oil in a large pan, dice the pork in cubes and sizzle until golden brown.",
+        "url": "https://www.mygreekdish.com/recipe/shepherds-pork/#instruction-step-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Pour in the wine and add salt and pepper and half a cup of water. Cover the pan, lower the heat and let it simmer.",
+        "url": "https://www.mygreekdish.com/recipe/shepherds-pork/#instruction-step-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Right before the sauce thickens, add the dry rosemary, stir and cover the pan.",
+        "url": "https://www.mygreekdish.com/recipe/shepherds-pork/#instruction-step-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Once the sauce thickens, remove pan from the stove and remove the meat, while leaving the sauce in the pan. Let it cool down for a few minutes before adding the yogurt.",
+        "url": "https://www.mygreekdish.com/recipe/shepherds-pork/#instruction-step-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Slowly add the yogurt while stirring with a whisk till creamy. Re-add the meat and stir until fully covered in the sauce.",
+        "url": "https://www.mygreekdish.com/recipe/shepherds-pork/#instruction-step-5"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Serve with some rice and a twig of fresh rosemary.",
+        "url": "https://www.mygreekdish.com/recipe/shepherds-pork/#instruction-step-6"
+      }
+    ],
+    "prepTime": "PT5M",
+    "cookTime": "PT30M",
+    "totalTime": "PT35M",
+    "recipeYield": [
+      "4",
+      "4-5 portions"
+    ],
+    "recipeCategory": "Main",
+    "cookingMethod": "Fried",
+    "recipeCuisine": "Greek",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "472",
+      "ratingValue": "4.9"
+    },
+    "datePublished": "2013-05-15",
+    "@id": "https://www.mygreekdish.com/recipe/shepherds-pork/#recipe",
+    "isPartOf": {
+      "@id": "https://www.mygreekdish.com/recipe/shepherds-pork/#article"
+    },
+    "mainEntityOfPage": "https://www.mygreekdish.com/recipe/shepherds-pork/"
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:cookingMethod|aggregateRating"
+  ]
+}

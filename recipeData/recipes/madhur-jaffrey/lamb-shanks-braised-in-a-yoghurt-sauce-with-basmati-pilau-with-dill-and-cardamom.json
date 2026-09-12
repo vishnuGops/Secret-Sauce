@@ -1,0 +1,590 @@
+{
+  "schemaVersion": 1,
+  "id": "madhur-jaffrey/lamb-shanks-braised-in-a-yoghurt-sauce-with-basmati-pilau-with-dill-and-cardamom",
+  "slug": "lamb-shanks-braised-in-a-yoghurt-sauce-with-basmati-pilau-with-dill-and-cardamom",
+  "chefId": "chef_madhur-jaffrey",
+  "chefSlug": "madhur-jaffrey",
+  "chefName": "Madhur Jaffrey",
+  "title": "Lamb shanks braised in a yoghurt sauce with basmati pilau with dill and cardamom",
+  "description": "Slow cooked lamb shanks are meltingly tender, in a rich spiced yoghurt sauce.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/lambshanksbraisedina_91037",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/lambshanksbraisedina_91037",
+    "retrievedAt": "2026-09-11T00:26:52.749Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Madhur Jaffrey"
+    ],
+    "datePublished": "2009-03-06T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "c5d619d2f65d9ff75bb9d65fc371a9f016f7168576e2f58630d89c40360cd225",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 60,
+    "cookMinutes": 120,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Indian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "egg free",
+    "gluten free",
+    "pregnancy friendly",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the lamb shanks",
+      "items": [
+        {
+          "raw": "4 lamb shanks",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "lamb shanks",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp salt",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "13cm/5in piece fresh ginger, peeled and coarsely chopped",
+          "quantity": 13,
+          "quantityText": "13",
+          "unit": null,
+          "name": "cm/5in piece fresh ginger",
+          "note": "peeled and coarsely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "8 garlic cloves, peeled and coarsely chopped",
+          "quantity": 8,
+          "quantityText": "8",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "peeled and coarsely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "525ml/18fl oz cold water",
+          "quantity": 525,
+          "quantityText": "525",
+          "unit": "ml",
+          "name": "/18fl oz cold water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "8 tsp olive oil or corn oil",
+          "quantity": 8,
+          "quantityText": "8",
+          "unit": "tsp",
+          "name": "olive oil or corn oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp cumin seeds, left whole",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "cumin seeds, left whole",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp cloves, left whole",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "cloves, left whole",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 medium-sized cinnamon sticks",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "medium-sized cinnamon sticks",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp black peppercorns, left whole",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "black peppercorns, left whole",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "475ml/16fl oz full-fat plain yoghurt, stirred until smooth",
+          "quantity": 475,
+          "quantityText": "475",
+          "unit": "ml",
+          "name": "/16fl oz full-fat plain yoghurt, stirred until smooth",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 tsp coriander seeds, ground to a coarse powder in a mortar and pestle",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tsp",
+          "name": "coriander seeds, ground to a coarse powder in a mortar and pestle",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1½ tsp coarsely ground pure chilli powder or cayenne pepper",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tsp coarsely ground pure chilli powder or cayenne pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp ground turmeric",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "ground turmeric",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the basmati pilau with dill and cardamom",
+      "items": [
+        {
+          "raw": "basmati rice, measured to the 500ml/17fl oz level in a measuring jug",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "basmati rice, measured to the 500ml/17fl oz level in a measuring jug",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp corn oil, peanut oil or olive oil",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "corn oil, peanut oil or olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 medium-sized cinnamon stick",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "medium-sized cinnamon stick",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "5 cardamom pods, left whole but lightly crushed",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": null,
+          "name": "cardamom pods",
+          "note": "left whole but lightly crushed",
+          "isOptional": false
+        },
+        {
+          "raw": "2 bay leaves",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "bay leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "85g/2½oz onion slices, sliced into fine half rings",
+          "quantity": 85,
+          "quantityText": "85",
+          "unit": "g",
+          "name": "/2½oz onion slices",
+          "note": "sliced into fine half rings",
+          "isOptional": false
+        },
+        {
+          "raw": "25g/1oz finely chopped fresh dill",
+          "quantity": 25,
+          "quantityText": "25",
+          "unit": "g",
+          "name": "/1oz finely chopped fresh dill",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "650ml/1 pint 4fl oz chicken stock",
+          "quantity": 650,
+          "quantityText": "650",
+          "unit": "ml",
+          "name": "/1 pint 4fl oz chicken stock",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "For the lamb shanks, preheat the oven to 160C/325F/Gas 3.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the lamb shanks, preheat the oven to 160C/325F/Gas 3."
+    },
+    {
+      "order": 2,
+      "text": "Season the lamb shanks all over with ½ tsp of the salt and freshly ground black pepper, to taste. Pat the seasoning into the meat.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Season the lamb shanks all over with ½ tsp of the salt and freshly ground black pepper, to taste. Pat the seasoning into the meat."
+    },
+    {
+      "order": 3,
+      "text": "In a food processor, blend the ginger, garlic and four tablespoons of the water to a smooth paste. Set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "In a food processor, blend the ginger, garlic and four tablespoons of the water to a smooth paste. Set aside."
+    },
+    {
+      "order": 4,
+      "text": "Heat the oil in a large, non-stick, ovenproof pan over a high heat. (NB: You will need to use a pan with a tight-fitting lid.) When the oil is smoking, add the lamb shanks and fry for 3-4 minutes, turning regularly, or until lightly browned on all sides. Remove the lamb shanks from the pan and set aside on a warm plate.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat the oil in a large, non-stick, ovenproof pan over a high heat. (NB: You will need to use a pan with a tight-fitting lid.) When the oil is smoking, add the lamb shanks and fry for 3-4 minutes, turning regularly, or until lightly browned on all sides. Remove the lamb shanks from the pan and set aside on a warm plate."
+    },
+    {
+      "order": 5,
+      "text": "Add the cumin, cloves, cinnamon and peppercorns to the hot oil in the pan the lamb shanks were cooked in. Fry for 10-15 seconds, or until fragrant.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the cumin, cloves, cinnamon and peppercorns to the hot oil in the pan the lamb shanks were cooked in. Fry for 10-15 seconds, or until fragrant."
+    },
+    {
+      "order": 6,
+      "text": "Add the ginger and garlic paste and stir well. Fry for 5-6 minutes, or until lightly browned.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the ginger and garlic paste and stir well. Fry for 5-6 minutes, or until lightly browned."
+    },
+    {
+      "order": 7,
+      "text": "Remove the pan from the heat and allow the contents to cool slightly, then add the yoghurt. Stir until well combined, then add the remaining water and stir again until well combined.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove the pan from the heat and allow the contents to cool slightly, then add the yoghurt. Stir until well combined, then add the remaining water and stir again until well combined."
+    },
+    {
+      "order": 8,
+      "text": "Return the pan to the heat, then add the ground coriander, chilli powder or cayenne pepper, ground turmeric and the remaining one and a half teaspoons of salt. Stir well until combined.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Return the pan to the heat, then add the ground coriander, chilli powder or cayenne pepper, ground turmeric and the remaining one and a half teaspoons of salt. Stir well until combined."
+    },
+    {
+      "order": 9,
+      "text": "Return the lamb shanks to the pan so that they are covered in the yoghurt mixture. Bring the mixture to the boil, then cover the pan with aluminium foil and place the lid on top.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Return the lamb shanks to the pan so that they are covered in the yoghurt mixture. Bring the mixture to the boil, then cover the pan with aluminium foil and place the lid on top."
+    },
+    {
+      "order": 10,
+      "text": "Transfer the pan to the oven and bake slowly for three hours, turning the shanks over every 30 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Transfer the pan to the oven and bake slowly for three hours, turning the shanks over every 30 minutes."
+    },
+    {
+      "order": 11,
+      "text": "Remove the pan from the oven and remove the lid and aluminium foil. Place the pan over a high heat and bring the yoghurt mixture to the boil. Reduce the heat until the mixture is simmering, then simmer the remaining liquid for 6-7 minutes, or until the volume of liquid has reduced and the sauce has thickened. Baste the lamb shanks regularly with the remaining sauce as you simmer it.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove the pan from the oven and remove the lid and aluminium foil. Place the pan over a high heat and bring the yoghurt mixture to the boil. Reduce the heat until the mixture is simmering, then simmer the remaining liquid for 6-7 minutes, or until the volume of liquid has reduced and the sauce has thickened. Baste the lamb shanks regularly with the remaining sauce as you simmer it."
+    },
+    {
+      "order": 12,
+      "text": "Meanwhile, for the basmati pilau with dill and cardamom, rinse the rice in several changes of water. Drain well, then place the drained rice into a bowl and cover generously with fresh water. Set aside for 30 minutes to soak, then drain well again.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, for the basmati pilau with dill and cardamom, rinse the rice in several changes of water. Drain well, then place the drained rice into a bowl and cover generously with fresh water. Set aside for 30 minutes to soak, then drain well again. "
+    },
+    {
+      "order": 13,
+      "text": "Heat the oil in a heavy-based pan over a medium heat. (NB: You'll need a pan with a tight-fitting lid.) When the oil is hot, add the cinnamon stick, cardamom pods and bay leaves and fry for 5-10 seconds, stirring well.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat the oil in a heavy-based pan over a medium heat. (NB: You'll need a pan with a tight-fitting lid.) When the oil is hot, add the cinnamon stick, cardamom pods and bay leaves and fry for 5-10 seconds, stirring well."
+    },
+    {
+      "order": 14,
+      "text": "Add the onions and fry for 4-5 minutes, stirring regularly, or until coloured.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the onions and fry for 4-5 minutes, stirring regularly, or until coloured. "
+    },
+    {
+      "order": 15,
+      "text": "Add the soaked, drained basmati rice and the chopped dill and stir well. Reduce the heat slightly and cook the rice for 2-3 minutes, stirring well, or until the rice is coated in the oil and has begun to cook.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the soaked, drained basmati rice and the chopped dill and stir well. Reduce the heat slightly and cook the rice for 2-3 minutes, stirring well, or until the rice is coated in the oil and has begun to cook."
+    },
+    {
+      "order": 16,
+      "text": "Add the stock and bring to the boil. Season, to taste, with up to a teaspoon of salt if necessary, then cover with a lid. Reduce the heat to its lowest setting and cook the rice for 20-25 minutes, or until tender.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the stock and bring to the boil. Season, to taste, with up to a teaspoon of salt if necessary, then cover with a lid. Reduce the heat to its lowest setting and cook the rice for 20-25 minutes, or until tender."
+    },
+    {
+      "order": 17,
+      "text": "To serve, divide the rice equally among four serving plates. Place one lamb shank alongside each.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To serve, divide the rice equally among four serving plates. Place one lamb shank alongside each."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 3,
+      "ratingValue": 5
+    },
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Slow cooked lamb shanks are meltingly tender, in a rich spiced yoghurt sauce. ",
+    "headline": "Lamb shanks braised in a yoghurt sauce with basmati pilau with dill and cardamom",
+    "image": null,
+    "name": "Lamb shanks braised in a yoghurt sauce with basmati pilau with dill and cardamom",
+    "author": {
+      "@type": "Person",
+      "name": "Madhur Jaffrey"
+    },
+    "datePublished": "2009-03-06T00:00:00.000Z",
+    "dateModified": "2020-02-27T16:02:56.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 3,
+      "ratingValue": 5
+    },
+    "prepTime": "PT1H",
+    "cookTime": "PT2H",
+    "keywords": "egg free, gluten free, pregnancy friendly, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Indian",
+    "recipeIngredient": [
+      "4 lamb shanks",
+      "2 tsp salt",
+      "freshly ground black pepper",
+      "13cm/5in piece fresh ginger, peeled and coarsely chopped",
+      "8 garlic cloves, peeled and coarsely chopped",
+      "525ml/18fl oz cold water",
+      "8 tsp olive oil or corn oil",
+      "2 tsp cumin seeds, left whole",
+      "1 tsp cloves, left whole",
+      "4 medium-sized cinnamon sticks",
+      "2 tsp black peppercorns, left whole",
+      "475ml/16fl oz full-fat plain yoghurt, stirred until smooth",
+      "4 tsp coriander seeds, ground to a coarse powder in a mortar and pestle",
+      "1½ tsp coarsely ground pure chilli powder or cayenne pepper",
+      "½ tsp ground turmeric",
+      "basmati rice, measured to the 500ml/17fl oz level in a measuring jug",
+      "3 tbsp corn oil, peanut oil or olive oil",
+      "1 medium-sized cinnamon stick",
+      "5 cardamom pods, left whole but lightly crushed",
+      "2 bay leaves",
+      "85g/2½oz onion slices, sliced into fine half rings",
+      "25g/1oz finely chopped fresh dill",
+      "650ml/1 pint 4fl oz chicken stock"
+    ],
+    "recipeInstructions": [
+      "For the lamb shanks, preheat the oven to 160C/325F/Gas 3.",
+      "Season the lamb shanks all over with ½ tsp of the salt and freshly ground black pepper, to taste. Pat the seasoning into the meat.",
+      "In a food processor, blend the ginger, garlic and four tablespoons of the water to a smooth paste. Set aside.",
+      "Heat the oil in a large, non-stick, ovenproof pan over a high heat. (NB: You will need to use a pan with a tight-fitting lid.) When the oil is smoking, add the lamb shanks and fry for 3-4 minutes, turning regularly, or until lightly browned on all sides. Remove the lamb shanks from the pan and set aside on a warm plate.",
+      "Add the cumin, cloves, cinnamon and peppercorns to the hot oil in the pan the lamb shanks were cooked in. Fry for 10-15 seconds, or until fragrant.",
+      "Add the ginger and garlic paste and stir well. Fry for 5-6 minutes, or until lightly browned.",
+      "Remove the pan from the heat and allow the contents to cool slightly, then add the yoghurt. Stir until well combined, then add the remaining water and stir again until well combined.",
+      "Return the pan to the heat, then add the ground coriander, chilli powder or cayenne pepper, ground turmeric and the remaining one and a half teaspoons of salt. Stir well until combined.",
+      "Return the lamb shanks to the pan so that they are covered in the yoghurt mixture. Bring the mixture to the boil, then cover the pan with aluminium foil and place the lid on top.",
+      "Transfer the pan to the oven and bake slowly for three hours, turning the shanks over every 30 minutes.",
+      "Remove the pan from the oven and remove the lid and aluminium foil. Place the pan over a high heat and bring the yoghurt mixture to the boil. Reduce the heat until the mixture is simmering, then simmer the remaining liquid for 6-7 minutes, or until the volume of liquid has reduced and the sauce has thickened. Baste the lamb shanks regularly with the remaining sauce as you simmer it.",
+      "Meanwhile, for the basmati pilau with dill and cardamom, rinse the rice in several changes of water. Drain well, then place the drained rice into a bowl and cover generously with fresh water. Set aside for 30 minutes to soak, then drain well again. ",
+      "Heat the oil in a heavy-based pan over a medium heat. (NB: You'll need a pan with a tight-fitting lid.) When the oil is hot, add the cinnamon stick, cardamom pods and bay leaves and fry for 5-10 seconds, stirring well.",
+      "Add the onions and fry for 4-5 minutes, stirring regularly, or until coloured. ",
+      "Add the soaked, drained basmati rice and the chopped dill and stir well. Reduce the heat slightly and cook the rice for 2-3 minutes, stirring well, or until the rice is coated in the oil and has begun to cook.",
+      "Add the stock and bring to the boil. Season, to taste, with up to a teaspoon of salt if necessary, then cover with a lid. Reduce the heat to its lowest setting and cook the rice for 20-25 minutes, or until tender.",
+      "To serve, divide the rice equally among four serving plates. Place one lamb shank alongside each."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

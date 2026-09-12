@@ -1,0 +1,346 @@
+{
+  "schemaVersion": 1,
+  "id": "ken-hom/dan-dan-noodles",
+  "slug": "dan-dan-noodles",
+  "chefId": "chef_ken-hom",
+  "chefSlug": "ken-hom",
+  "chefName": "Ken Hom",
+  "title": "Dan dan noodles",
+  "description": "Dan dan noodles is a Sichuan classic, with nutty, salty and spicy flavours and crisp pork mince. It's a power-house of a meal that's made in minutes.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/spicy_sichuan_noodles_79051",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/spicy_sichuan_noodles_79051",
+    "retrievedAt": "2026-09-11T00:27:00.473Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Ken Hom"
+    ],
+    "datePublished": "2014-04-25T14:47:27.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "87b88078293af9da20b816ef9e38ed7e617a437f6abaa1a2370f60fe7bb427a0",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": []
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 2-3"
+    ],
+    "servings": 2
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Chinese"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "authentic chinese",
+    "chinese-style dinner party",
+    "chinese fakeaway",
+    "easy chinese",
+    "making the most of mince",
+    "midweek meal ideas",
+    "noodles for students",
+    "noodle bowls",
+    "oodles of noodles",
+    "easy peanut butter dinner",
+    "quick pork",
+    "spicy",
+    "spicy chinese",
+    "summer noodles",
+    "takeaway favourites",
+    "lunar new year",
+    "stir-fry",
+    "pork mince",
+    "dairy free",
+    "pregnancy friendly",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "225g/8oz pork mince",
+          "quantity": 225,
+          "quantityText": "225",
+          "unit": "g",
+          "name": "/8oz pork mince",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp soy sauce",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "soy sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "225ml/8fl oz groundnut or vegetable oil",
+          "quantity": 225,
+          "quantityText": "225",
+          "unit": "ml",
+          "name": "/8fl oz groundnut or vegetable oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp finely chopped garlic",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "finely chopped garlic",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp finely chopped root ginger",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "finely chopped root ginger",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "5 tbsp finely chopped spring onions",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": "tbsp",
+          "name": "finely chopped spring onions",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp sesame paste, tahini or peanut butter",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "sesame paste, tahini or peanut butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp soy sauce",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "soy sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp chilli oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "chilli oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "225ml/8fl oz chicken stock",
+          "quantity": 225,
+          "quantityText": "225",
+          "unit": "ml",
+          "name": "/8fl oz chicken stock",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "350g/12oz fresh Chinese thin egg noodles (or dry Chinese thin egg noodles)",
+          "quantity": 350,
+          "quantityText": "350",
+          "unit": "g",
+          "name": "/12oz fresh Chinese thin egg noodles (or dry Chinese thin egg noodles)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp Sichuan peppercorns, roasted and ground",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "Sichuan peppercorns, roasted and ground",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 red hot chilli, seeds removed, finely chopped, for garnish (optional)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "red hot chilli",
+          "note": "seeds removed, finely chopped, for garnish (optional)",
+          "isOptional": true
+        },
+        {
+          "raw": "roughly chopped coriander",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "roughly chopped coriander",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Combine the pork, soy sauce and salt in a small bowl and mix well. Heat a wok or sauté pan until it is hot. Add the oil and deep-fry the pork, stirring with a spatula to break it into small pieces (Caution: hot oil can be dangerous. Do not leave unattended). When the pork is crispy and dry, after about 5-6 minutes, remove it with a slotted spoon and drain on a plate lined with kitchen paper. Carefully strain and reserve the oil. You can also roast the pork mince in the oven at 200C/180C Fan/Gas 6 for 20 minutes or until browned, if preferred.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Combine the pork, soy sauce and salt in a small bowl and mix well. Heat a wok or sauté pan until it is hot. Add the oil and deep-fry the pork, stirring with a spatula to break it into small pieces (Caution: hot oil can be dangerous. Do not leave unattended). When the pork is crispy and dry, after about 5-6 minutes, remove it with a slotted spoon and drain on a plate lined with kitchen paper. Carefully strain and reserve the oil. You can also roast the pork mince in the oven at 200C/180C Fan/Gas 6 for 20 minutes or until browned, if preferred. "
+    },
+    {
+      "order": 2,
+      "text": "Pour two tablespoons of the pork oil back in the wok over a medium-high heat. Stir-fry the garlic, ginger and spring onions for 30 seconds. Add the sesame paste (tahini or peanut butter), soy sauce, chilli oil, salt and chicken stock and simmer for 4 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pour two tablespoons of the pork oil back in the wok over a medium-high heat. Stir-fry the garlic, ginger and spring onions for 30 seconds. Add the sesame paste (tahini or peanut butter), soy sauce, chilli oil, salt and chicken stock and simmer for 4 minutes."
+    },
+    {
+      "order": 3,
+      "text": "Cook the noodles in a large pan of salted boiling water for 2 minutes if they are fresh, or 5 minutes if they are dried. Drain the noodles well in a colander. Divide the noodles into individual bowls. Ladle over the sauce, garnish with the fried pork, Sichuan peppercorns, chopped chilli (if using) and coriander, and serve at once.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Cook the noodles in a large pan of salted boiling water for 2 minutes if they are fresh, or 5 minutes if they are dried. Drain the noodles well in a colander. Divide the noodles into individual bowls. Ladle over the sauce, garnish with the fried pork, Sichuan peppercorns, chopped chilli (if using) and coriander, and serve at once."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/spicy_sichuan_noodles_79051_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 58,
+      "ratingValue": 4.086206896551724
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Dan dan noodles is a Sichuan classic, with nutty, salty and spicy flavours and crisp pork mince. It's a power-house of a meal that's made in minutes.",
+    "headline": "Dan dan noodles ",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/spicy_sichuan_noodles_79051_16x9.jpg"
+    },
+    "name": "Dan dan noodles ",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Hom"
+    },
+    "datePublished": "2014-04-25T14:47:27.000Z",
+    "dateModified": "2026-05-12T10:30:55.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 58,
+      "ratingValue": 4.086206896551724
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, authentic chinese, chinese-style dinner party, chinese fakeaway, easy chinese, making the most of mince, midweek meal ideas, noodles for students, noodle bowls, oodles of noodles, easy peanut butter dinner, quick pork, spicy, spicy chinese, summer noodles, takeaway favourites, lunar new year, stir-fry, pork mince, dairy free, pregnancy friendly, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Chinese",
+    "recipeIngredient": [
+      "225g/8oz pork mince",
+      "1 tbsp soy sauce",
+      "1 tsp salt",
+      "225ml/8fl oz groundnut or vegetable oil",
+      "3 tbsp finely chopped garlic",
+      "2 tbsp finely chopped root ginger",
+      "5 tbsp finely chopped spring onions",
+      "2 tbsp sesame paste, tahini or peanut butter",
+      "2 tbsp soy sauce",
+      "2 tbsp chilli oil",
+      "225ml/8fl oz chicken stock",
+      "350g/12oz fresh Chinese thin egg noodles (or dry Chinese thin egg noodles)",
+      "1 tbsp Sichuan peppercorns, roasted and ground",
+      "1 red hot chilli, seeds removed, finely chopped, for garnish (optional)",
+      "roughly chopped coriander "
+    ],
+    "recipeInstructions": [
+      "Combine the pork, soy sauce and salt in a small bowl and mix well. Heat a wok or sauté pan until it is hot. Add the oil and deep-fry the pork, stirring with a spatula to break it into small pieces (Caution: hot oil can be dangerous. Do not leave unattended). When the pork is crispy and dry, after about 5-6 minutes, remove it with a slotted spoon and drain on a plate lined with kitchen paper. Carefully strain and reserve the oil. You can also roast the pork mince in the oven at 200C/180C Fan/Gas 6 for 20 minutes or until browned, if preferred. ",
+      "Pour two tablespoons of the pork oil back in the wok over a medium-high heat. Stir-fry the garlic, ginger and spring onions for 30 seconds. Add the sesame paste (tahini or peanut butter), soy sauce, chilli oil, salt and chicken stock and simmer for 4 minutes.",
+      "Cook the noodles in a large pan of salted boiling water for 2 minutes if they are fresh, or 5 minutes if they are dried. Drain the noodles well in a colander. Divide the noodles into individual bowls. Ladle over the sauce, garnish with the fried pork, Sichuan peppercorns, chopped chilli (if using) and coriander, and serve at once."
+    ],
+    "recipeYield": "Serves 2-3",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

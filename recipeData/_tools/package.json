@@ -1,0 +1,9 @@
+{
+  "name": "secret-sauce-corpus-tools",
+  "private": true,
+  "type": "module",
+  "description": "Corpus scraper + Playwright ingestion harness. Not part of the Flutter build.",
+  "dependencies": {
+    "playwright": "^1.63.0"
+  }
+}

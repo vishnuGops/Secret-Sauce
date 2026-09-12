@@ -1,0 +1,536 @@
+{
+  "schemaVersion": 1,
+  "id": "eli-giannopoulos/greek-diples-recipe-christmas-greek-pastry-with-honey",
+  "slug": "greek-diples-recipe-christmas-greek-pastry-with-honey",
+  "chefId": "chef_eli-giannopoulos",
+  "chefSlug": "eli-giannopoulos",
+  "chefName": "Eli K. Giannopoulos",
+  "title": "Greek Diples Recipe (Christmas Greek Pastry with Honey)",
+  "description": "Christmas on a platter, drizzled with syrup and walnuts! Diples / Thiples are Christmas Greek pastries with honey and are named by the Greek word for “fold”",
+  "source": {
+    "sourceUrl": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/",
+    "finalUrl": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/",
+    "retrievedAt": "2026-09-11T02:48:03.657Z",
+    "publisher": null,
+    "authorRaw": [
+      "Eli K. Giannopoulos"
+    ],
+    "datePublished": "2013-11-30",
+    "rights": "My Greek Dish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "f5beae029165667b91c13bb1634b40816e98f4720aadd395bc1ab6ed0c9f0d44",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "30",
+      "30 pieces"
+    ],
+    "servings": 30
+  },
+  "timing": {
+    "prepMinutes": 60,
+    "cookMinutes": 30,
+    "totalMinutes": 90,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Greek"
+  ],
+  "category": [
+    "Dessert"
+  ],
+  "keywords": [
+    "Diples",
+    "Christmas Greek honey pastry",
+    "Greek Thiples recipe"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "2 flat tbsps sugar",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "flat tbsps sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 flat tbsps baking soda",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "flat tbsps baking soda",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "350-400g all-purpose flour (12-14 ounces)",
+          "quantity": 350,
+          "quantityText": "350-400",
+          "unit": "g",
+          "name": "all-purpose flour (12-14 ounces)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "5 eggs (divided into yolks and whites)",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": null,
+          "name": "eggs (divided into yolks and whites)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "juice of 1 lemon",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "juice of 1 lemon",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "juice of 1 orange",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "juice of 1 orange",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp white wine vinegar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "white wine vinegar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 cup corn oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 cup corn oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "a pinch of salt",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "a pinch of salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "vegetable oil for frying",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "vegetable oil for frying",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/4 of a cup sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/4 of a cup sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/4 of a cup water",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/4 of a cup water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 cup honey",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 cup honey",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "juice of 1/2 lemon",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "juice of 1/2 lemon",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 cinnamon stick",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "cinnamon stick",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "150g chopped walnuts, for garnish (5 ounces)",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "g",
+          "name": "chopped walnuts, for garnish (5 ounces)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Place the egg whites into the bowl of the electric mixer, along with a pinch of salt. Make sure your egg whites, bowl and whisk attachments are clean and free of any water. Whisk the egg whites until the mixture is very thick and glossy and a long trailing peak forms when the whisk is lifted (meringues).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Place the egg whites into the bowl of the electric mixer, along with a pinch of salt. Make sure your egg whites, bowl and whisk attachments are clean and free of any water. Whisk the egg whites until the mixture is very thick and glossy and a long trailing peak forms when the whisk is lifted (meringues).",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-1"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Add the egg yolks one at a time, whilst mixing; wait for each one to be absorbed, before adding another. In a cup add the orange and lemon juice and baking soda and blend, until dissolved and pour in the egg mixture. Add the white wine vinegar and the sugar and mix.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add the egg yolks one at a time, whilst mixing; wait for each one to be absorbed, before adding another. In a cup add the orange and lemon juice and baking soda and blend, until dissolved and pour in the egg mixture. Add the white wine vinegar and the sugar and mix.",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-2"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Pour the mixture in a large bowl or basin and sift in the flour; add the oil and knead the dough using your hands, until smooth and elastic, and not sticky (if it is sticky, add some more flour).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Pour the mixture in a large bowl or basin and sift in the flour; add the oil and knead the dough using your hands, until smooth and elastic, and not sticky (if it is sticky, add some more flour).",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-3"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Separate the dough in four pieces, cover with some plastic wrap and let it rest for 30 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Separate the dough in four pieces, cover with some plastic wrap and let it rest for 30 minutes.",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-4"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Using a rolling pin, roll out each part of the dough into thin rectangle sheets. Now you have to make a decision, whether you want to go the easy or the hard way!",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Using a rolling pin, roll out each part of the dough into thin rectangle sheets. Now you have to make a decision, whether you want to go the easy or the hard way!",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-5"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Diples get their name from the Greek word for “fold”. This means that you have to fold them.. So if you have the time, go for the traditional version. Using a rolling cutter, cut the rolled out dough into rectangular pieces (approx. 12×25 cm). Heat the oil in a deep frying pan, until shimmering but not smoking hot. Place a cut dough sheet in the hot oil. Using two large cooking forks and placing the edge between the tines of the fork, hold the end furthest away from you and roll the sheet away from you. Hold it a little with the fork in the oil, until coloured and place on some kitchen paper to drain. Repeat with the rest. (It’s best to cut all the diples before you begin frying.)",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Diples get their name from the Greek word for &#8220;fold&#8221;. This means that you have to fold them.. So if you have the time, go for the traditional version. Using a rolling cutter, cut the rolled out dough into rectangular pieces (approx. 12&#215;25 cm). Heat the oil in a deep frying pan, until shimmering but not smoking hot. Place a cut dough sheet in the hot oil. Using two large cooking forks and placing the edge between the tines of the fork, hold the end furthest away from you and roll the sheet away from you. Hold it a little with the fork in the oil, until coloured and place on some kitchen paper to drain. Repeat with the rest. (It&#8217;s best to cut all the diples before you begin frying.)",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-6"
+      }
+    },
+    {
+      "order": 7,
+      "text": "For the easy version, using a rolling cutter, cut the rolled out dough into rectangular pieces (approx. 10x5cm) or square pieces (8×8 cm). Heat the oil in a large frying pan, and deep fry the diples in batches of 3-4 at a time, depending on the how large is the pan, pushing them down with a fork and flipping them sides, until coloured. Place on some kitchen paper to drain and repeat with the rest.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "For the easy version, using a rolling cutter, cut the rolled out dough into rectangular pieces (approx. 10x5cm) or square pieces (8&#215;8 cm). Heat the oil in a large frying pan, and deep fry the diples in batches of 3-4 at a time, depending on the how large is the pan, pushing them down with a fork and flipping them sides, until coloured. Place on some kitchen paper to drain and repeat with the rest.",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-7"
+      }
+    },
+    {
+      "order": 8,
+      "text": "Prepare the syrup for the diples. Pour in a pot all the syrup ingredients and bring to the boil; boil for 5 minutes, until the sugar has dissolved (do not stir the syrup).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Prepare the syrup for the diples. Pour in a pot all the syrup ingredients and bring to the boil; boil for 5 minutes, until the sugar has dissolved (do not stir the syrup).",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-8"
+      }
+    },
+    {
+      "order": 9,
+      "text": "Place the diples on a serving platter and drizzle with the syrup (or if you like them extra syrupy, soak each one in the syrup for a few seconds). Sprinkle with ground walnuts and cinnamon.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Place the diples on a serving platter and drizzle with the syrup (or if you like them extra syrupy, soak each one in the syrup for a few seconds). Sprinkle with ground walnuts and cinnamon.",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-9"
+      }
+    },
+    {
+      "order": 10,
+      "text": "Alternatively, just warm up the honey, drizzle the diples and garnish with chopped walnuts. Enjoy!",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Alternatively, just warm up the honey, drizzle the diples and garnish with chopped walnuts. Enjoy!",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-10"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "servingSize": "1 piece",
+    "calories": "153kcal",
+    "sugarContent": "7.8g",
+    "sodiumContent": "340.5mg",
+    "fatContent": "8.3g",
+    "saturatedFatContent": "1.5g",
+    "unsaturatedFatContent": "6.4g",
+    "transFatContent": "0g",
+    "carbohydrateContent": "17.8g",
+    "fiberContent": "0.7g",
+    "proteinContent": "3g",
+    "cholesterolContent": "27.3mg"
+  },
+  "media": {
+    "coverImages": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Traditional-Greek-Diples-Recipe-Greek-Christmas-Pastries-with-Honey-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Traditional-Greek-Diples-Recipe-Greek-Christmas-Pastries-with-Honey-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Traditional-Greek-Diples-Recipe-Greek-Christmas-Pastries-with-Honey-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Traditional-Greek-Diples-Recipe-Greek-Christmas-Pastries-with-Honey.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "cookingMethod": "Fried",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "542",
+      "ratingValue": "4.9"
+    }
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org/",
+    "@type": "Recipe",
+    "name": "Greek Diples Recipe (Christmas Greek Pastry with Honey)",
+    "description": "Christmas on a platter, drizzled with syrup and walnuts! Diples / Thiples are Christmas Greek pastries with honey and are named by the Greek word for “fold”",
+    "author": {
+      "@type": "Person",
+      "name": "Eli K. Giannopoulos"
+    },
+    "keywords": "Diples, Christmas Greek honey pastry, Greek Thiples recipe",
+    "image": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Traditional-Greek-Diples-Recipe-Greek-Christmas-Pastries-with-Honey-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Traditional-Greek-Diples-Recipe-Greek-Christmas-Pastries-with-Honey-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Traditional-Greek-Diples-Recipe-Greek-Christmas-Pastries-with-Honey-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Traditional-Greek-Diples-Recipe-Greek-Christmas-Pastries-with-Honey.jpg"
+    ],
+    "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/",
+    "recipeIngredient": [
+      "2 flat tbsps sugar",
+      "2 flat tbsps baking soda",
+      "350-400g all-purpose flour (12-14 ounces)",
+      "5 eggs (divided into yolks and whites)",
+      "juice of 1 lemon",
+      "juice of 1 orange",
+      "1 tbsp white wine vinegar",
+      "1/2 cup corn oil",
+      "a pinch of salt",
+      "vegetable oil for frying",
+      "1/4 of a cup sugar",
+      "1/4 of a cup water",
+      "1/2 cup honey",
+      "juice of 1/2 lemon",
+      "1 cinnamon stick",
+      "150g chopped walnuts, for garnish (5 ounces)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Place the egg whites into the bowl of the electric mixer, along with a pinch of salt. Make sure your egg whites, bowl and whisk attachments are clean and free of any water. Whisk the egg whites until the mixture is very thick and glossy and a long trailing peak forms when the whisk is lifted (meringues).",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Add the egg yolks one at a time, whilst mixing; wait for each one to be absorbed, before adding another. In a cup add the orange and lemon juice and baking soda and blend, until dissolved and pour in the egg mixture. Add the white wine vinegar and the sugar and mix.",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Pour the mixture in a large bowl or basin and sift in the flour; add the oil and knead the dough using your hands, until smooth and elastic, and not sticky (if it is sticky, add some more flour).",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Separate the dough in four pieces, cover with some plastic wrap and let it rest for 30 minutes.",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Using a rolling pin, roll out each part of the dough into thin rectangle sheets. Now you have to make a decision, whether you want to go the easy or the hard way!",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-5"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Diples get their name from the Greek word for &#8220;fold&#8221;. This means that you have to fold them.. So if you have the time, go for the traditional version. Using a rolling cutter, cut the rolled out dough into rectangular pieces (approx. 12&#215;25 cm). Heat the oil in a deep frying pan, until shimmering but not smoking hot. Place a cut dough sheet in the hot oil. Using two large cooking forks and placing the edge between the tines of the fork, hold the end furthest away from you and roll the sheet away from you. Hold it a little with the fork in the oil, until coloured and place on some kitchen paper to drain. Repeat with the rest. (It&#8217;s best to cut all the diples before you begin frying.)",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-6"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "For the easy version, using a rolling cutter, cut the rolled out dough into rectangular pieces (approx. 10x5cm) or square pieces (8&#215;8 cm). Heat the oil in a large frying pan, and deep fry the diples in batches of 3-4 at a time, depending on the how large is the pan, pushing them down with a fork and flipping them sides, until coloured. Place on some kitchen paper to drain and repeat with the rest.",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-7"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Prepare the syrup for the diples. Pour in a pot all the syrup ingredients and bring to the boil; boil for 5 minutes, until the sugar has dissolved (do not stir the syrup).",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-8"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Place the diples on a serving platter and drizzle with the syrup (or if you like them extra syrupy, soak each one in the syrup for a few seconds). Sprinkle with ground walnuts and cinnamon.",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-9"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Alternatively, just warm up the honey, drizzle the diples and garnish with chopped walnuts. Enjoy!",
+        "url": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#instruction-step-10"
+      }
+    ],
+    "prepTime": "PT1H",
+    "cookTime": "PT30M",
+    "totalTime": "PT1H30M",
+    "recipeYield": [
+      "30",
+      "30 pieces"
+    ],
+    "recipeCategory": "Dessert",
+    "cookingMethod": "Fried",
+    "recipeCuisine": "Greek",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "542",
+      "ratingValue": "4.9"
+    },
+    "nutrition": {
+      "servingSize": "1 piece",
+      "calories": "153kcal",
+      "sugarContent": "7.8g",
+      "sodiumContent": "340.5mg",
+      "fatContent": "8.3g",
+      "saturatedFatContent": "1.5g",
+      "unsaturatedFatContent": "6.4g",
+      "transFatContent": "0g",
+      "carbohydrateContent": "17.8g",
+      "fiberContent": "0.7g",
+      "proteinContent": "3g",
+      "cholesterolContent": "27.3mg",
+      "@type": "nutritionInformation"
+    },
+    "datePublished": "2013-11-30",
+    "@id": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#recipe",
+    "isPartOf": {
+      "@id": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/#article"
+    },
+    "mainEntityOfPage": "https://www.mygreekdish.com/recipe/diples-greek-christmas-pastries-honey/"
+  },
+  "audit": [
+    "unparsed-quantity:5",
+    "range-quantity:1",
+    "unmapped:cookingMethod|aggregateRating"
+  ]
+}

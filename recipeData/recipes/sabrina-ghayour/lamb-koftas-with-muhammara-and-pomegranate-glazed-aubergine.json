@@ -1,0 +1,639 @@
+{
+  "schemaVersion": 1,
+  "id": "sabrina-ghayour/lamb-koftas-with-muhammara-and-pomegranate-glazed-aubergine",
+  "slug": "lamb-koftas-with-muhammara-and-pomegranate-glazed-aubergine",
+  "chefId": "chef_sabrina-ghayour",
+  "chefSlug": "sabrina-ghayour",
+  "chefName": "Sabrina Ghayour",
+  "title": "Lamb koftas with muhammara and pomegranate-glazed aubergine",
+  "description": "This Middle Eastern-style dish serves spicy lamb koftas with a red pepper dip and sticky aubergine.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/lamb_koftas_with_14022",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/lamb_koftas_with_14022",
+    "retrievedAt": "2026-09-11T00:28:31.530Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Sabrina Ghayour"
+    ],
+    "datePublished": "2022-11-26T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "f1ed9ff95ffff762e1d218d078d7d4e224b0e3b2f6c5430378ef1597ee245d6f",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 4 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Turkish and Middle Eastern"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "kofta",
+    "lamb mince",
+    "pregnancy friendly",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the pomegranate-glazed aubergine",
+      "items": [
+        {
+          "raw": "2 large aubergines, peeled and cut into 2.5cm/1in thick slices",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "large aubergines",
+          "note": "peeled and cut into 2.5cm/1in thick slices",
+          "isOptional": false
+        },
+        {
+          "raw": "3–4 tbsp olive oil",
+          "quantity": 3,
+          "quantityText": "3–4",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp pomegranate molasses",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "pomegranate molasses",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp runny honey or maple syrup",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "runny honey or maple syrup",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 spring onion, thinly sliced diagonally from root to tip",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "spring onion",
+          "note": "thinly sliced diagonally from root to tip",
+          "isOptional": false
+        },
+        {
+          "raw": "generous handful salted peanuts, toasted and roughly chopped",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "generous handful salted peanuts",
+          "note": "toasted and roughly chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "sea salt flakes",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "sea salt flakes",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the koftas",
+      "items": [
+        {
+          "raw": "500g/1lb 2oz lamb mince (20% fat)",
+          "quantity": 500,
+          "quantityText": "500",
+          "unit": "g",
+          "name": "/1lb 2oz lamb mince (20% fat)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 spring onions, thinly sliced from root to tip",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "spring onions",
+          "note": "thinly sliced from root to tip",
+          "isOptional": false
+        },
+        {
+          "raw": "1 heaped tbsp dried wild oregano",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "heaped tbsp dried wild oregano",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp dried barberries",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "dried barberries",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp pul biber chilli flakes",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "pul biber chilli flakes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp cumin seeds",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "cumin seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground coriander",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 garlic cloves, crushed",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "crushed",
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz pine nuts",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz pine nuts",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp bicarbonate of soda",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "bicarbonate of soda",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "sea salt flakes and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "sea salt flakes and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the muhammara",
+      "items": [
+        {
+          "raw": "480–500g jar roasted red peppers in brine",
+          "quantity": 480,
+          "quantityText": "480–500",
+          "unit": "g",
+          "name": "jar roasted red peppers in brine",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz hazelnuts, roasted and chopped",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz hazelnuts",
+          "note": "roasted and chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2 garlic cloves, minced",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "minced",
+          "isOptional": false
+        },
+        {
+          "raw": "½ slice white bread, torn into small chunks",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "slice",
+          "name": "white bread",
+          "note": "torn into small chunks",
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp olive oil, plus extra for drizzling",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "olive oil, plus extra for drizzling",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp chilli flakes",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "chilli flakes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ lemon, juice only",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "lemon, juice only",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 small packet (about 30g/1oz) fresh flatleaf parsley, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "small packet (about 30g/1oz) fresh flatleaf parsley",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "sea salt flakes and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "sea salt flakes and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To serve",
+      "items": [
+        {
+          "raw": "2 mini baguettes",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "mini baguettes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "pickled cucumbers, sliced",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "pickled cucumbers",
+          "note": "sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "spring onions, thinly sliced",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "spring onions",
+          "note": "thinly sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "handful pomegranate seeds",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "handful",
+          "name": "pomegranate seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "dill sprigs",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "dill sprigs",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "mixed salad leaves",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "mixed salad leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Greek-style yoghurt",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Greek-style yoghurt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "toasted mini pitta breads",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "toasted mini pitta breads",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the aubergine, preheat the oven to 220C/200C Fan/Gas 7. Line a large roasting tin with baking paper. Brush both sides of the aubergine slices with the oil and arrange in a single layer in the tin. Roast for 22–25 minutes until cooked through but not browned.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the aubergine, preheat the oven to 220C/200C Fan/Gas 7. Line a large roasting tin with baking paper. Brush both sides of the aubergine slices with the oil and arrange in a single layer in the tin. Roast for 22–25 minutes until cooked through but not browned."
+    },
+    {
+      "order": 2,
+      "text": "Mix the pomegranate molasses and honey together in a small bowl until evenly combined. Use a pastry brush to brush the mixture evenly over the aubergines on both sides, then sprinkle with a little salt.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Mix the pomegranate molasses and honey together in a small bowl until evenly combined. Use a pastry brush to brush the mixture evenly over the aubergines on both sides, then sprinkle with a little salt. "
+    },
+    {
+      "order": 3,
+      "text": "Roast for another 5–6 minutes until the glaze is thick and sticky. Scatter with the spring onion and peanuts. Keep warm.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Roast for another 5–6 minutes until the glaze is thick and sticky. Scatter with the spring onion and peanuts. Keep warm. "
+    },
+    {
+      "order": 4,
+      "text": "To make the koftas, preheat the oven to 240C/220C Fan/Gas 9. Line a baking tray with baking paper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the koftas, preheat the oven to 240C/220C Fan/Gas 9. Line a baking tray with baking paper. "
+    },
+    {
+      "order": 5,
+      "text": "Place all of the ingredients in a large bowl and season with a generous amount of salt and pepper. Using your hands, work the ingredients together really well for a couple of minutes until there is an evenly combined paste.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place all of the ingredients in a large bowl and season with a generous amount of salt and pepper. Using your hands, work the ingredients together really well for a couple of minutes until there is an evenly combined paste. "
+    },
+    {
+      "order": 6,
+      "text": "Divide the meat mixture into eight portions (to be as precise as possible, weigh the mixture and then divide it). Shape each into an even-shaped sausage about 9–10cm/3½–4in long.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Divide the meat mixture into eight portions (to be as precise as possible, weigh the mixture and then divide it). Shape each into an even-shaped sausage about 9–10cm/3½–4in long. "
+    },
+    {
+      "order": 7,
+      "text": "Place on the baking tray and bake for 12–14 minutes, until browned on top.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place on the baking tray and bake for 12–14 minutes, until browned on top."
+    },
+    {
+      "order": 8,
+      "text": "To make the muhammara, drain the roasted peppers well and pat dry with kitchen paper to remove as much excess liquid as possible. Put the hazelnuts, garlic and peppers into a small food processor and blend together.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the muhammara, drain the roasted peppers well and pat dry with kitchen paper to remove as much excess liquid as possible. Put the hazelnuts, garlic and peppers into a small food processor and blend together. "
+    },
+    {
+      "order": 9,
+      "text": "Add the bread, olive oil and chilli flakes and season with a generous amount of salt and pepper. Blend again until smooth.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the bread, olive oil and chilli flakes and season with a generous amount of salt and pepper. Blend again until smooth. "
+    },
+    {
+      "order": 10,
+      "text": "Decant the mixture into a bowl, add the lemon juice and parsley and mix well. Season to taste again and drizzle with some olive oil.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Decant the mixture into a bowl, add the lemon juice and parsley and mix well. Season to taste again and drizzle with some olive oil. "
+    },
+    {
+      "order": 11,
+      "text": "To serve, place the lamb koftas on a large platter with the sides, muhammara dip and glazed aubergines alongside in bowls.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To serve, place the lamb koftas on a large platter with the sides, muhammara dip and glazed aubergines alongside in bowls. "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 6,
+      "ratingValue": 4.166666666666667
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "This Middle Eastern-style dish serves spicy lamb koftas with a red pepper dip and sticky aubergine. \r\n",
+    "headline": "Lamb koftas with muhammara and pomegranate-glazed aubergine",
+    "image": null,
+    "name": "Lamb koftas with muhammara and pomegranate-glazed aubergine",
+    "author": {
+      "@type": "Person",
+      "name": "Sabrina Ghayour"
+    },
+    "datePublished": "2022-11-26T00:00:00.000Z",
+    "dateModified": "2025-11-26T16:16:50.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 6,
+      "ratingValue": 4.166666666666667
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT1H",
+    "keywords": "kofta, lamb mince, pregnancy friendly, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Turkish and Middle Eastern",
+    "recipeIngredient": [
+      "2 large aubergines, peeled and cut into 2.5cm/1in thick slices",
+      "3–4 tbsp olive oil",
+      "2 tbsp pomegranate molasses",
+      "3 tbsp runny honey or maple syrup",
+      "1 spring onion, thinly sliced diagonally from root to tip",
+      "generous handful salted peanuts, toasted and roughly chopped",
+      "sea salt flakes",
+      "500g/1lb 2oz lamb mince (20% fat)",
+      "4 spring onions, thinly sliced from root to tip",
+      "1 heaped tbsp dried wild oregano",
+      "2 tbsp dried barberries",
+      "2 tsp pul biber chilli flakes",
+      "1 tsp cumin seeds",
+      "1 tsp ground coriander",
+      "2 garlic cloves, crushed",
+      "50g/1¾oz pine nuts",
+      "½ tsp bicarbonate of soda",
+      "sea salt flakes and freshly ground black pepper",
+      "480–500g jar roasted red peppers in brine",
+      "100g/3½oz hazelnuts, roasted and chopped",
+      "2 garlic cloves, minced",
+      "½ slice white bread, torn into small chunks",
+      "3 tbsp olive oil, plus extra for drizzling",
+      "1 tsp chilli flakes",
+      "½ lemon, juice only",
+      "1 small packet (about 30g/1oz) fresh flatleaf parsley, finely chopped",
+      "sea salt flakes and freshly ground black pepper",
+      "2 mini baguettes",
+      "pickled cucumbers, sliced",
+      "spring onions, thinly sliced",
+      "handful pomegranate seeds",
+      "dill sprigs",
+      "mixed salad leaves",
+      "Greek-style yoghurt",
+      " toasted mini pitta breads"
+    ],
+    "recipeInstructions": [
+      "To make the aubergine, preheat the oven to 220C/200C Fan/Gas 7. Line a large roasting tin with baking paper. Brush both sides of the aubergine slices with the oil and arrange in a single layer in the tin. Roast for 22–25 minutes until cooked through but not browned.",
+      "Mix the pomegranate molasses and honey together in a small bowl until evenly combined. Use a pastry brush to brush the mixture evenly over the aubergines on both sides, then sprinkle with a little salt. ",
+      "Roast for another 5–6 minutes until the glaze is thick and sticky. Scatter with the spring onion and peanuts. Keep warm. ",
+      "To make the koftas, preheat the oven to 240C/220C Fan/Gas 9. Line a baking tray with baking paper. ",
+      "Place all of the ingredients in a large bowl and season with a generous amount of salt and pepper. Using your hands, work the ingredients together really well for a couple of minutes until there is an evenly combined paste. ",
+      "Divide the meat mixture into eight portions (to be as precise as possible, weigh the mixture and then divide it). Shape each into an even-shaped sausage about 9–10cm/3½–4in long. ",
+      "Place on the baking tray and bake for 12–14 minutes, until browned on top.",
+      "To make the muhammara, drain the roasted peppers well and pat dry with kitchen paper to remove as much excess liquid as possible. Put the hazelnuts, garlic and peppers into a small food processor and blend together. ",
+      "Add the bread, olive oil and chilli flakes and season with a generous amount of salt and pepper. Blend again until smooth. ",
+      "Decant the mixture into a bowl, add the lemon juice and parsley and mix well. Season to taste again and drizzle with some olive oil. ",
+      "To serve, place the lamb koftas on a large platter with the sides, muhammara dip and glazed aubergines alongside in bowls. "
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:11",
+    "range-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

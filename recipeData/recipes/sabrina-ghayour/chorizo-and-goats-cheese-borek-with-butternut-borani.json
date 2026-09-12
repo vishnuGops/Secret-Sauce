@@ -1,0 +1,447 @@
+{
+  "schemaVersion": 1,
+  "id": "sabrina-ghayour/chorizo-and-goats-cheese-borek-with-butternut-borani",
+  "slug": "chorizo-and-goats-cheese-borek-with-butternut-borani",
+  "chefId": "chef_sabrina-ghayour",
+  "chefSlug": "sabrina-ghayour",
+  "chefName": "Sabrina Ghayour",
+  "title": "Chorizo and goats' cheese borek with butternut borani",
+  "description": "Treat yourself to a Persian feast with this chorizo and goats’ cheese filo pie served with a creamy butternut squash dip and flatbreads.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/chorizo_borek_butternut_33550",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/chorizo_borek_butternut_33550",
+    "retrievedAt": "2026-09-11T00:28:29.987Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Sabrina Ghayour"
+    ],
+    "datePublished": "2020-12-03T16:25:14.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "5de939ea7953cce4bbdc614ad07fd9eb6d099883eda6b8c309fdf06eeebf999e",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4–6"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 120,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "butternut squash",
+    "chorizo",
+    "pregnancy friendly",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the butternut borani",
+      "items": [
+        {
+          "raw": "1.2kg/2lb 12oz butternut squash, halved lengthways, seeds discarded",
+          "quantity": 1.2,
+          "quantityText": "1.2",
+          "unit": "kg",
+          "name": "/2lb 12oz butternut squash",
+          "note": "halved lengthways, seeds discarded",
+          "isOptional": false
+        },
+        {
+          "raw": "olive oil, for drizzling",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "olive oil, for drizzling",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 garlic cloves, finely chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "300g/10½ oz Greek yoghurt",
+          "quantity": 300,
+          "quantityText": "300",
+          "unit": "g",
+          "name": "/10½ oz Greek yoghurt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp pul biber chilli flakes (also known as aleppo pepper)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "pul biber chilli flakes (also known as aleppo pepper)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "about 15g/½oz fresh dill, very finely chopped",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "about 15g/½oz fresh dill",
+          "note": "very finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "handful walnut pieces",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "handful",
+          "name": "walnut pieces",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "sea salt flakes and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "sea salt flakes and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the chorizo, goats’ cheese and cumin borek",
+      "items": [
+        {
+          "raw": "2 tsp cumin seeds",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "cumin seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 x 200g/7oz cured chorizo sausages (not cooking chorizo), skinned and cut into chunks",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "x 200g/7oz cured chorizo sausages (not cooking chorizo), skinned and cut into chunks",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "350g/12fl oz rindless soft goats’ cheese, broken into pieces",
+          "quantity": 350,
+          "quantityText": "350",
+          "unit": "g",
+          "name": "/12fl oz rindless soft goats’ cheese, broken into pieces",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "vegetable oil, for oiling",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "vegetable oil, for oiling",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 sheets filo pastry (each about 48 x 25cm/19 x10in)",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": "sheets",
+          "name": "filo pastry (each about 48 x 25cm/19 x10in)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp full-fat milk or water",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "full-fat milk or water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 free-range egg, beaten, to glaze",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "free-range egg",
+          "note": "beaten, to glaze",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp nigella seeds",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "nigella seeds",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To serve",
+      "items": [
+        {
+          "raw": "flatbreads, cut into slices",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "flatbreads, cut into slices",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "30g/1oz runny honey (optional)",
+          "quantity": 30,
+          "quantityText": "30",
+          "unit": "g",
+          "name": "/1oz runny honey (optional)",
+          "note": null,
+          "isOptional": true
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the butternut borani, preheat the oven to 220C/200C/Gas 7 and line a baking tray with baking paper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the butternut borani, preheat the oven to 220C/200C/Gas 7 and line a baking tray with baking paper. "
+    },
+    {
+      "order": 2,
+      "text": "Place the squash halves cut side up on the prepared baking tray and rub the exposed flesh with a drizzle of olive oil. Roast for about 45–50 minutes, then insert a knife into the thickest part of the flesh to check if it’s soft and cooked through. When the squash is cooked, remove from the oven and leave until cool enough to handle.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place the squash halves cut side up on the prepared baking tray and rub the exposed flesh with a drizzle of olive oil. Roast for about 45–50 minutes, then insert a knife into the thickest part of the flesh to check if it’s soft and cooked through. When the squash is cooked, remove from the oven and leave until cool enough to handle."
+    },
+    {
+      "order": 3,
+      "text": "To make the chorizo, goats’ cheese and cumin borek, preheat the oven to 200C/180C Fan/Gas 6. Dry fry the cumin seeds in a frying pan until aromatic. Remove from the heat.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the chorizo, goats’ cheese and cumin borek, preheat the oven to 200C/180C Fan/Gas 6. Dry fry the cumin seeds in a frying pan until aromatic. Remove from the heat."
+    },
+    {
+      "order": 4,
+      "text": "Put the chunks of chorizo into a food processor and process until they are minced as finely as possible. Transfer to a mixing bowl, add the cooled cumin seeds and goats’ cheese and mix together until evenly combined.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put the chunks of chorizo into a food processor and process until they are minced as finely as possible. Transfer to a mixing bowl, add the cooled cumin seeds and goats’ cheese and mix together until evenly combined."
+    },
+    {
+      "order": 5,
+      "text": "Brush the base of a 24cm/9½in round ovenproof dish or cake tin with a little vegetable oil. Lay a pastry sheet lengthways in the dish or tin with the ends overhanging the sides, then lay another pastry sheet widthways in the same way. Divide the chorizo filling in half. Add one half to the filo base and smooth it right to the edges to cover the base evenly.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Brush the base of a 24cm/9½in round ovenproof dish or cake tin with a little vegetable oil. Lay a pastry sheet lengthways in the dish or tin with the ends overhanging the sides, then lay another pastry sheet widthways in the same way. Divide the chorizo filling in half. Add one half to the filo base and smooth it right to the edges to cover the base evenly. "
+    },
+    {
+      "order": 6,
+      "text": "Fold another pastry sheet in half to create a double thickness and lay it over the filling, then repeat with a second pastry sheet to form a thick pastry layer. Brush the pastry with the milk or water, then top with the remaining filling, pushing and patting it into place to evenly coat the pastry layer. Fold the overhanging pastry into the centre, then gently crumple up the remaining 2 pastry sheets and arrange them on top.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Fold another pastry sheet in half to create a double thickness and lay it over the filling, then repeat with a second pastry sheet to form a thick pastry layer. Brush the pastry with the milk or water, then top with the remaining filling, pushing and patting it into place to evenly coat the pastry layer. Fold the overhanging pastry into the centre, then gently crumple up the remaining 2 pastry sheets and arrange them on top."
+    },
+    {
+      "order": 7,
+      "text": "Brush all the exposed pastry and edges with beaten egg and sprinkle over the nigella seeds. Bake for 25–30 minutes, or until deep golden-brown.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Brush all the exposed pastry and edges with beaten egg and sprinkle over the nigella seeds. Bake for 25–30 minutes, or until deep golden-brown. "
+    },
+    {
+      "order": 8,
+      "text": "While the borek is cooking, continue the butternut borani. Using a spoon, scoop all the squash flesh out of the skins into a mixing bowl, then mash with a potato masher. Add the garlic, a drizzle of olive oil and a generous amount of salt and pepper, followed by the yoghurt, and give everything a good stir.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "While the borek is cooking, continue the butternut borani. Using a spoon, scoop all the squash flesh out of the skins into a mixing bowl, then mash with a potato masher. Add the garlic, a drizzle of olive oil and a generous amount of salt and pepper, followed by the yoghurt, and give everything a good stir. "
+    },
+    {
+      "order": 9,
+      "text": "Check and adjust the seasoning, then transfer the borani to a plate, spread it right to the edges and smooth over with the back of the spoon. Drizzle with olive oil and scatter over the pul biber, dill and, finally, the walnuts before serving with flatbread.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Check and adjust the seasoning, then transfer the borani to a plate, spread it right to the edges and smooth over with the back of the spoon. Drizzle with olive oil and scatter over the pul biber, dill and, finally, the walnuts before serving with flatbread."
+    },
+    {
+      "order": 10,
+      "text": "Serve the borek immediately, drizzled with the honey (if using) with the borani and with flatbreads for dipping.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Serve the borek immediately, drizzled with the honey (if using) with the borani and with flatbreads for dipping."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 8,
+      "ratingValue": 4.5
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Treat yourself to a Persian feast with this chorizo and goats’ cheese filo pie served with a creamy butternut squash dip and flatbreads.\r\n \r\n",
+    "headline": "Chorizo and goats' cheese borek with butternut borani",
+    "image": null,
+    "name": "Chorizo and goats' cheese borek with butternut borani",
+    "author": {
+      "@type": "Person",
+      "name": "Sabrina Ghayour"
+    },
+    "datePublished": "2020-12-03T16:25:14.000Z",
+    "dateModified": "2025-12-12T10:51:39.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 8,
+      "ratingValue": 4.5
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT2H",
+    "keywords": "butternut squash, chorizo, pregnancy friendly, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeIngredient": [
+      "1.2kg/2lb 12oz butternut squash, halved lengthways, seeds discarded",
+      "olive oil, for drizzling",
+      "2 garlic cloves, finely chopped",
+      "300g/10½ oz Greek yoghurt",
+      "1 tsp pul biber chilli flakes (also known as aleppo pepper)",
+      "about 15g/½oz fresh dill, very finely chopped",
+      "handful walnut pieces ",
+      "sea salt flakes and freshly ground black pepper ",
+      "2 tsp cumin seeds ",
+      "2 x 200g/7oz cured chorizo sausages (not cooking chorizo), skinned and cut into chunks",
+      "350g/12fl oz rindless soft goats’ cheese, broken into pieces",
+      "vegetable oil, for oiling",
+      "6 sheets filo pastry (each about 48 x 25cm/19 x10in) ",
+      "1 tbsp full-fat milk or water ",
+      "1 free-range egg, beaten, to glaze",
+      "1 tsp nigella seeds",
+      "flatbreads, cut into slices ",
+      "30g/1oz runny honey (optional)"
+    ],
+    "recipeInstructions": [
+      "To make the butternut borani, preheat the oven to 220C/200C/Gas 7 and line a baking tray with baking paper. ",
+      "Place the squash halves cut side up on the prepared baking tray and rub the exposed flesh with a drizzle of olive oil. Roast for about 45–50 minutes, then insert a knife into the thickest part of the flesh to check if it’s soft and cooked through. When the squash is cooked, remove from the oven and leave until cool enough to handle.",
+      "To make the chorizo, goats’ cheese and cumin borek, preheat the oven to 200C/180C Fan/Gas 6. Dry fry the cumin seeds in a frying pan until aromatic. Remove from the heat.",
+      "Put the chunks of chorizo into a food processor and process until they are minced as finely as possible. Transfer to a mixing bowl, add the cooled cumin seeds and goats’ cheese and mix together until evenly combined.",
+      "Brush the base of a 24cm/9½in round ovenproof dish or cake tin with a little vegetable oil. Lay a pastry sheet lengthways in the dish or tin with the ends overhanging the sides, then lay another pastry sheet widthways in the same way. Divide the chorizo filling in half. Add one half to the filo base and smooth it right to the edges to cover the base evenly. ",
+      "Fold another pastry sheet in half to create a double thickness and lay it over the filling, then repeat with a second pastry sheet to form a thick pastry layer. Brush the pastry with the milk or water, then top with the remaining filling, pushing and patting it into place to evenly coat the pastry layer. Fold the overhanging pastry into the centre, then gently crumple up the remaining 2 pastry sheets and arrange them on top.",
+      "Brush all the exposed pastry and edges with beaten egg and sprinkle over the nigella seeds. Bake for 25–30 minutes, or until deep golden-brown. ",
+      "While the borek is cooking, continue the butternut borani. Using a spoon, scoop all the squash flesh out of the skins into a mixing bowl, then mash with a potato masher. Add the garlic, a drizzle of olive oil and a generous amount of salt and pepper, followed by the yoghurt, and give everything a good stir. ",
+      "Check and adjust the seasoning, then transfer the borani to a plate, spread it right to the edges and smooth over with the back of the spoon. Drizzle with olive oil and scatter over the pul biber, dill and, finally, the walnuts before serving with flatbread.",
+      "Serve the borek immediately, drizzled with the honey (if using) with the borani and with flatbreads for dipping."
+    ],
+    "recipeYield": "Serves 4–6",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:6",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

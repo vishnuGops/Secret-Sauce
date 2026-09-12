@@ -1,0 +1,394 @@
+{
+  "schemaVersion": 1,
+  "id": "ken-hom/chinese-five-spice-spare-ribs",
+  "slug": "chinese-five-spice-spare-ribs",
+  "chefId": "chef_ken-hom",
+  "chefSlug": "ken-hom",
+  "chefName": "Ken Hom",
+  "title": "Chinese five-spice spare ribs",
+  "description": "Ken Hom shows you how to make thse melt-in-your-mouth Chinese spare ribs with a sticky, sweet sauce.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/fivespicespareribs_70976",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/fivespicespareribs_70976",
+    "retrievedAt": "2026-09-11T00:27:08.196Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Ken Hom"
+    ],
+    "datePublished": "2010-10-28T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "f7e9614f7f6753827649004ed3ef3a02d8b3bec0515fe0b4b574550b51876280",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 60,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Chinese"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "chinese-style dinner party",
+    "mouth-watering marinades",
+    "olympic snacks",
+    "barbecue",
+    "lunar new year",
+    "pork ribs",
+    "pork spare rib",
+    "dairy free",
+    "egg free",
+    "Saturday Kitchen"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the spareribs",
+      "items": [
+        {
+          "raw": "750g/1½lb pork spareribs",
+          "quantity": 750,
+          "quantityText": "750",
+          "unit": "g",
+          "name": "/1½lb pork spareribs",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "600ml/1 pint groundnut (peanut) oil",
+          "quantity": 600,
+          "quantityText": "600",
+          "unit": "ml",
+          "name": "/1 pint groundnut (peanut) oil",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the marinade",
+      "items": [
+        {
+          "raw": "1 tbsp Shaoxing rice wine or dry sherry",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "Shaoxing rice wine or dry sherry",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1½ tbsp light soy sauce",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tbsp light soy sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp Chinese black rice vinegar or cider vinegar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "Chinese black rice vinegar or cider vinegar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp sesame oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "sesame oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp cornflour",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "cornflour",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the sauce",
+      "items": [
+        {
+          "raw": "2 tbsp finely chopped garlic",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "finely chopped garlic",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp five-spice powder",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "five-spice powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp finely chopped spring onions",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "finely chopped spring onions",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp Chinese rock sugar or granulated sugar",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "Chinese rock sugar or granulated sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp Shaoxing rice wine or dry sherry",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "Shaoxing rice wine or dry sherry",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "150ml/5fl oz chicken stock",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "ml",
+          "name": "/5fl oz chicken stock",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1½ tbsp light soy sauce",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tbsp light soy sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp dried grated orange peel",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "dried grated orange peel",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "85ml/3fl oz Chinese black rice vinegar or cider vinegar",
+          "quantity": 85,
+          "quantityText": "85",
+          "unit": "ml",
+          "name": "/3fl oz Chinese black rice vinegar or cider vinegar",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Have your butcher separate the spareribs into individual ribs and then into chunks which are approximately 7.5cm/3in long. Alternatively do this yourself using a heavy sharp cleaver that can cut through the bones.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Have your butcher separate the spareribs into individual ribs and then into chunks which are approximately 7.5cm/3in long.  Alternatively do this yourself using a heavy sharp cleaver that can cut through the bones.  "
+    },
+    {
+      "order": 2,
+      "text": "Mix the marinade ingredients together in a bowl and steep the spareribs in the marinade for about 25 minutes at room temperature. Remove the spareribs from the marinade with a slotted spoon.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Mix the marinade ingredients together in a bowl and steep the spareribs in the marinade for about 25 minutes at room temperature.  Remove the spareribs from the marinade with a slotted spoon."
+    },
+    {
+      "order": 3,
+      "text": "Heat the oil in a deep-fat fryer or large wok. When the oil is very hot and slightly smoking, slowly brown the marinated spareribs in several batches until they are brown. Drain each cooked batch on kitchen paper. (Leave the cooking oil to cool. Strain it through a filter if you want to re-use it when cooking pork.)",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat the oil in a deep-fat fryer or large wok.  When the oil is very hot and slightly smoking, slowly brown the marinated spareribs in several batches until they are brown.  Drain each cooked batch on kitchen paper.  (Leave the cooking oil to cool.  Strain it through a filter if you want to re-use it when cooking pork.)"
+    },
+    {
+      "order": 4,
+      "text": "Put the sauce ingredients into a clean wok or frying pan.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put the sauce ingredients into a clean wok or frying pan.  "
+    },
+    {
+      "order": 5,
+      "text": "Bring the sauce to the boil and then reduce the heat. Add the spareribs, cover and simmer gently for about 40 minutes, stirring occasionally.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Bring the sauce to the boil and then reduce the heat.  Add the spareribs, cover and simmer gently for about 40 minutes, stirring occasionally.  "
+    },
+    {
+      "order": 6,
+      "text": "If necessary, add a little water to the sauce to prevent the spareribs from drying up. Skim off any surface fat, turn onto a warm serving plate and serve at once.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "If necessary, add a little water to the sauce to prevent the spareribs from drying up.  Skim off any surface fat, turn onto a warm serving plate and serve at once."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/fivespicespareribs_70976_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 17,
+      "ratingValue": 3.8823529411764706
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Ken Hom shows you how to make thse melt-in-your-mouth Chinese spare ribs with a sticky, sweet sauce.",
+    "headline": "Chinese five-spice spare ribs",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/fivespicespareribs_70976_16x9.jpg"
+    },
+    "name": "Chinese five-spice spare ribs",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Hom"
+    },
+    "datePublished": "2010-10-28T00:00:00.000Z",
+    "dateModified": "2022-02-16T10:39:10.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 17,
+      "ratingValue": 3.8823529411764706
+    },
+    "prepTime": "PT1H",
+    "cookTime": "PT1H",
+    "keywords": "chinese-style dinner party, mouth-watering marinades, olympic snacks, barbecue, lunar new year, pork ribs, pork spare rib, dairy free, egg free, Saturday Kitchen",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Chinese",
+    "recipeIngredient": [
+      "750g/1½lb pork spareribs",
+      "600ml/1 pint groundnut (peanut) oil",
+      "1 tbsp Shaoxing rice wine or dry sherry",
+      "1 tbsp light soy sauce",
+      "1 tbsp Chinese black rice vinegar or cider vinegar",
+      "2 tsp sesame oil",
+      "1 tbsp cornflour",
+      "2 tbsp finely chopped garlic",
+      "2 tsp five-spice powder",
+      "3 tbsp finely chopped spring onions",
+      "3 tbsp Chinese rock sugar or granulated sugar",
+      "3 tbsp Shaoxing rice wine or dry sherry",
+      "150ml/5fl oz chicken stock",
+      "1½ tbsp light soy sauce",
+      "2 tbsp dried grated orange peel",
+      "85ml/3fl oz Chinese black rice vinegar or cider vinegar"
+    ],
+    "recipeInstructions": [
+      "Have your butcher separate the spareribs into individual ribs and then into chunks which are approximately 7.5cm/3in long.  Alternatively do this yourself using a heavy sharp cleaver that can cut through the bones.  ",
+      "Mix the marinade ingredients together in a bowl and steep the spareribs in the marinade for about 25 minutes at room temperature.  Remove the spareribs from the marinade with a slotted spoon.",
+      "Heat the oil in a deep-fat fryer or large wok.  When the oil is very hot and slightly smoking, slowly brown the marinated spareribs in several batches until they are brown.  Drain each cooked batch on kitchen paper.  (Leave the cooking oil to cool.  Strain it through a filter if you want to re-use it when cooking pork.)",
+      "Put the sauce ingredients into a clean wok or frying pan.  ",
+      "Bring the sauce to the boil and then reduce the heat.  Add the spareribs, cover and simmer gently for about 40 minutes, stirring occasionally.  ",
+      "If necessary, add a little water to the sauce to prevent the spareribs from drying up.  Skim off any surface fat, turn onto a warm serving plate and serve at once."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ]
+  },
+  "audit": [
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

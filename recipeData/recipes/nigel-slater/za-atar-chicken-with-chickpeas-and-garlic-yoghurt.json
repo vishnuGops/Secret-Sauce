@@ -1,0 +1,324 @@
+{
+  "schemaVersion": 1,
+  "id": "nigel-slater/za-atar-chicken-with-chickpeas-and-garlic-yoghurt",
+  "slug": "za-atar-chicken-with-chickpeas-and-garlic-yoghurt",
+  "chefId": "chef_nigel-slater",
+  "chefSlug": "nigel-slater",
+  "chefName": "Nigel Slater",
+  "title": "Za’atar chicken with chickpeas and garlic yoghurt",
+  "description": "A quick and easy chicken supper using the Middle Eastern spice blend, za’atar and a sprinkling of sesame seeds on chicken thighs.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/zaatar_chicken_with_26334",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/zaatar_chicken_with_26334",
+    "retrievedAt": "2026-09-11T00:28:37.709Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Nigel Slater"
+    ],
+    "datePublished": "2018-01-26T15:19:59.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "c7bf02614326f7d1062f6ad57b29eb91c272bd0ee0330e128b3f478546fe9ed4",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": []
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Turkish and Middle Eastern"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "easy chickpea",
+    "easy chicken traybakes",
+    "gluten-free picnic",
+    "luxury weeknight meals",
+    "middle-eastern chicken",
+    "middle eastern feasts",
+    "recipes for iftar",
+    "spring chicken recipes",
+    "super seeds",
+    "best chicken thigh",
+    "father's day",
+    "summer dinner",
+    "baked chicken",
+    "chicken thigh",
+    "egg free",
+    "gluten free",
+    "nut free",
+    "pregnancy friendly",
+    "Nigel Slater's Middle East"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "3 tbsp za’atar",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "za’atar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 tbsp olive oil",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 chicken thighs",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "chicken thighs",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp sesame seeds",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "sesame seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 x 400g tins chickpeas, drained and rinsed",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "x 400g tins chickpeas",
+          "note": "drained and rinsed",
+          "isOptional": false
+        },
+        {
+          "raw": "6 garlic cloves, peeled",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "peeled",
+          "isOptional": false
+        },
+        {
+          "raw": "250ml/9fl oz thick plain yoghurt",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "ml",
+          "name": "/9fl oz thick plain yoghurt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "20 small mint leaves",
+          "quantity": 20,
+          "quantityText": "20",
+          "unit": null,
+          "name": "small mint leaves",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 220C/200C Fan/Gas 7.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 220C/200C Fan/Gas 7."
+    },
+    {
+      "order": 2,
+      "text": "Mix the za’atar with the oil in a small bowl.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Mix the za’atar with the oil in a small bowl."
+    },
+    {
+      "order": 3,
+      "text": "Put the chicken in a deep roasting tray, brush with the za’atar glaze and scatter over the sesame seeds. Add the chickpeas and garlic and bake for 30–40 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put the chicken in a deep roasting tray, brush with the za’atar glaze and scatter over the sesame seeds. Add the chickpeas and garlic and bake for 30–40 minutes."
+    },
+    {
+      "order": 4,
+      "text": "Remove the tray from the oven, take the garlic out and set aside. Brush the chicken with the za’atar oil that has gathered at the bottom of the tray.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove the tray from the oven, take the garlic out and set aside. Brush the chicken with the za’atar oil that has gathered at the bottom of the tray."
+    },
+    {
+      "order": 5,
+      "text": "Return the chicken to the oven for a further 15–20 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Return the chicken to the oven for a further 15–20 minutes."
+    },
+    {
+      "order": 6,
+      "text": "Pound the roasted garlic into a paste using a mortar and pestle. Scrape the garlic paste into a bowl, then mix in the yoghurt.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pound the roasted garlic into a paste using a mortar and pestle. Scrape the garlic paste into a bowl, then mix in the yoghurt."
+    },
+    {
+      "order": 7,
+      "text": "Serve the chicken on bed of chickpeas, with the garlic yoghurt trickled over and the mint leaves scattered on top.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Serve the chicken on bed of chickpeas, with the garlic yoghurt trickled over and the mint leaves scattered on top."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/zaatar_chicken_with_26334_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 45,
+      "ratingValue": 3.6666666666666665
+    },
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "A quick and easy chicken supper using the Middle Eastern spice blend, za’atar and a sprinkling of sesame seeds on chicken thighs.",
+    "headline": "Za’atar chicken with chickpeas and garlic yoghurt",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/zaatar_chicken_with_26334_16x9.jpg"
+    },
+    "name": "Za’atar chicken with chickpeas and garlic yoghurt",
+    "author": {
+      "@type": "Person",
+      "name": "Nigel Slater"
+    },
+    "datePublished": "2018-01-26T15:19:59.000Z",
+    "dateModified": "2026-01-07T16:59:13.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 45,
+      "ratingValue": 3.6666666666666665
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT1H",
+    "keywords": "easy chickpea, easy chicken traybakes, gluten-free picnic , luxury weeknight meals, middle-eastern chicken, middle eastern feasts, recipes for iftar, spring chicken recipes , super seeds, best chicken thigh, father's day, summer dinner, baked chicken, chicken thigh, egg free, gluten free, nut free, pregnancy friendly, Nigel Slater's Middle East",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Turkish and Middle Eastern",
+    "recipeIngredient": [
+      "3 tbsp za’atar",
+      "6 tbsp olive oil",
+      "4 chicken thighs ",
+      "2 tbsp sesame seeds",
+      "2 x 400g tins chickpeas, drained and rinsed",
+      "6 garlic cloves, peeled",
+      "250ml/9fl oz thick plain yoghurt ",
+      "20 small mint leaves"
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 220C/200C Fan/Gas 7.",
+      "Mix the za’atar with the oil in a small bowl.",
+      "Put the chicken in a deep roasting tray, brush with the za’atar glaze and scatter over the sesame seeds. Add the chickpeas and garlic and bake for 30–40 minutes.",
+      "Remove the tray from the oven, take the garlic out and set aside. Brush the chicken with the za’atar oil that has gathered at the bottom of the tray.",
+      "Return the chicken to the oven for a further 15–20 minutes.",
+      "Pound the roasted garlic into a paste using a mortar and pestle. Scrape the garlic paste into a bowl, then mix in the yoghurt.",
+      "Serve the chicken on bed of chickpeas, with the garlic yoghurt trickled over and the mint leaves scattered on top."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "audit": [
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

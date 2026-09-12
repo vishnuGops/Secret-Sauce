@@ -1,0 +1,461 @@
+{
+  "schemaVersion": 1,
+  "id": "chef-lola/instant-stir-fry-noodles-with-shrimps-and-vegetables",
+  "slug": "instant-stir-fry-noodles-with-shrimps-and-vegetables",
+  "chefId": "chef_chef-lola",
+  "chefSlug": "chef-lola",
+  "chefName": "Chef Lola",
+  "title": "Instant Stir fry Noodles with Shrimps and Vegetables",
+  "description": "This hearty ramen noodle stir fry is chock-full of healthy veggies, making for a very satisfying meal. This comfort food is so delicious and takes only about 15 minutes to put together. It will fast become your favorite!",
+  "source": {
+    "sourceUrl": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/",
+    "finalUrl": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/",
+    "retrievedAt": "2026-09-11T02:47:27.049Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2019-09-28T17:19:12+00:00",
+    "rights": "Chef Lola's Kitchen. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "389051ca1379ec91f1310747c6a5140514cee5c1b6c2717a3a5427c20f3f69fe",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "allows recipe paths; /wp-admin/, /wp-json/ and query URLs disallowed"
+  },
+  "yield": {
+    "raw": [
+      "5",
+      "5 People"
+    ],
+    "servings": 5
+  },
+  "timing": {
+    "prepMinutes": 10,
+    "cookMinutes": 15,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Global"
+  ],
+  "category": [
+    "Main"
+  ],
+  "keywords": [
+    "homemade",
+    "noodles",
+    "stir fry recipe"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "2 packs instant noodles",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "packs instant noodles",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Large pot of boiling water",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Large pot of boiling water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 cup onions (diced)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 cup onions (diced)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/4 Cup Carrots (Grated )",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/4 Cup Carrots (Grated )",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Salt (optional)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Salt (optional)",
+          "note": null,
+          "isOptional": true
+        },
+        {
+          "raw": "Black Pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Black Pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/4 cup Red Bell peppers (diced )",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/4 cup Red Bell peppers (diced )",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/4 cup green bell peppers (diced )",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/4 cup green bell peppers (diced )",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 diced Tomato diced",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "diced Tomato diced",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 Tsp seasoning powder (or the seasoning packets that came with the noodles)",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tsp",
+          "name": "seasoning powder (or the seasoning packets that came with the noodles)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "5 white button mushrooms (sliced)",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": null,
+          "name": "white button mushrooms (sliced)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp Olive Oil",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "Olive Oil",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "In a large pot of boiling water, cook the ramen noodles till the block of noodles separates inside the water. About 1 to 2 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a large pot of boiling water, cook the ramen noodles till the block of noodles separates inside the water. About 1 to 2 minutes.",
+        "name": "In a large pot of boiling water, cook the ramen noodles till the block of noodles separates inside the water. About 1 to 2 minutes.",
+        "url": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/#wprm-recipe-12525-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Remove from heat and drain the hot water. Run some cold tap water over the noodles to stop the cooking process. Set aside",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Remove from heat and drain the hot water. Run some cold tap water over the noodles to stop the cooking process. Set aside",
+        "name": "Remove from heat and drain the hot water. Run some cold tap water over the noodles to stop the cooking process. Set aside",
+        "url": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/#wprm-recipe-12525-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Season the shrimps with salt and black pepper. Heat the olive oil in a skillet over medium-high and arrange the shrimp in a single layer and cook for 2 minutes. Flip and cook for another 2 minutes. Remove from heat and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Season the shrimps with salt and black pepper. Heat the olive oil in a skillet over medium-high and arrange the shrimp in a single layer and cook for 2 minutes. Flip and cook for another 2 minutes. Remove from heat and set aside.",
+        "name": "Season the shrimps with salt and black pepper. Heat the olive oil in a skillet over medium-high and arrange the shrimp in a single layer and cook for 2 minutes. Flip and cook for another 2 minutes. Remove from heat and set aside.",
+        "url": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/#wprm-recipe-12525-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "In the same pan, add about a tablespoon of oil if needed. Add the onions and saute till the onions become translucent.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In the same pan, add about a tablespoon of oil if needed. Add the onions and saute till the onions become translucent.",
+        "name": "In the same pan, add about a tablespoon of oil if needed. Add the onions and saute till the onions become translucent.",
+        "url": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/#wprm-recipe-12525-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Add the mushrooms and cook for about 3 minutes. (Add a splash of water if it becomes too dry)",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add the mushrooms and cook for about 3 minutes. (Add a splash of water if it becomes too dry)",
+        "name": "Add the mushrooms and cook for about 3 minutes. (Add a splash of water if it becomes too dry)",
+        "url": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/#wprm-recipe-12525-step-0-4"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Throw in the Bell peppers, Tomatoes and carrots. Season with seasoning powder and salt - optional (please read the note above and let). cook for about 2 to 3 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Throw in the Bell peppers, Tomatoes and carrots. Season with seasoning powder and salt - optional (please read the note above and let). cook for about 2 to 3 minutes.",
+        "name": "Throw in the Bell peppers, Tomatoes and carrots. Season with seasoning powder and salt - optional (please read the note above and let). cook for about 2 to 3 minutes.",
+        "url": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/#wprm-recipe-12525-step-0-5"
+      }
+    },
+    {
+      "order": 7,
+      "text": "Stir in the cooked noodles and the shrimps and cook until heated through. About 2 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Stir in the cooked noodles and the shrimps and cook until heated through. About 2 minutes.",
+        "name": "Stir in the cooked noodles and the shrimps and cook until heated through. About 2 minutes.",
+        "url": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/#wprm-recipe-12525-step-0-6"
+      }
+    },
+    {
+      "order": 8,
+      "text": "Remove from heat and enjoy immediately",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Remove from heat and enjoy immediately",
+        "name": "Remove from heat and enjoy immediately",
+        "url": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/#wprm-recipe-12525-step-0-7"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "servingSize": "4 people",
+    "calories": "212 kcal",
+    "carbohydrateContent": "37 g",
+    "proteinContent": "10 g",
+    "fatContent": "6 g",
+    "saturatedFatContent": "1 g",
+    "cholesterolContent": "1 mg",
+    "sodiumContent": "2595 mg",
+    "fiberContent": "10 g",
+    "sugarContent": "20 g"
+  },
+  "media": {
+    "coverImages": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Stir-fry-Noodles-with-Shrimps-and-vegetables.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Stir-fry-Noodles-with-Shrimps-and-vegetables-500x500.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Stir-fry-Noodles-with-Shrimps-and-vegetables-500x375.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Stir-fry-Noodles-with-Shrimps-and-vegetables-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "1"
+    }
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Instant Stir fry Noodles with Shrimps and Vegetables",
+    "author": {
+      "@id": "https://cheflolaskitchen.com/#/schema/person/210ab4ab02cd92f770d27cf2a114f9a5"
+    },
+    "description": "This hearty ramen noodle stir fry is chock-full of healthy veggies, making for a very satisfying meal. This comfort food is so delicious and takes only about 15 minutes to put together. It will fast become your favorite!",
+    "datePublished": "2019-09-28T17:19:12+00:00",
+    "image": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Stir-fry-Noodles-with-Shrimps-and-vegetables.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Stir-fry-Noodles-with-Shrimps-and-vegetables-500x500.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Stir-fry-Noodles-with-Shrimps-and-vegetables-500x375.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Stir-fry-Noodles-with-Shrimps-and-vegetables-480x270.jpg"
+    ],
+    "recipeYield": [
+      "5",
+      "5 People"
+    ],
+    "prepTime": "PT10M",
+    "cookTime": "PT15M",
+    "recipeIngredient": [
+      "2 packs  instant noodles",
+      "Large pot of boiling water",
+      "1/2 cup  onions (diced)",
+      "1/4 Cup Carrots (Grated )",
+      "Salt (optional)",
+      "Black Pepper",
+      "1/4 cup Red Bell peppers (diced )",
+      "1/4 cup green bell peppers  (diced )",
+      "1  diced Tomato diced",
+      "3 Tsp seasoning powder (or the seasoning packets that came with the noodles)",
+      "5  white button mushrooms  (sliced)",
+      "3 tbsp Olive Oil"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "In a large pot of boiling water, cook the ramen noodles till the block of noodles separates inside the water. About 1 to 2 minutes.",
+        "name": "In a large pot of boiling water, cook the ramen noodles till the block of noodles separates inside the water. About 1 to 2 minutes.",
+        "url": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/#wprm-recipe-12525-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Remove from heat and drain the hot water. Run some cold tap water over the noodles to stop the cooking process. Set aside",
+        "name": "Remove from heat and drain the hot water. Run some cold tap water over the noodles to stop the cooking process. Set aside",
+        "url": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/#wprm-recipe-12525-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Season the shrimps with salt and black pepper. Heat the olive oil in a skillet over medium-high and arrange the shrimp in a single layer and cook for 2 minutes. Flip and cook for another 2 minutes. Remove from heat and set aside.",
+        "name": "Season the shrimps with salt and black pepper. Heat the olive oil in a skillet over medium-high and arrange the shrimp in a single layer and cook for 2 minutes. Flip and cook for another 2 minutes. Remove from heat and set aside.",
+        "url": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/#wprm-recipe-12525-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "In the same pan, add about a tablespoon of oil if needed. Add the onions and saute till the onions become translucent.",
+        "name": "In the same pan, add about a tablespoon of oil if needed. Add the onions and saute till the onions become translucent.",
+        "url": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/#wprm-recipe-12525-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Add the mushrooms and cook for about 3 minutes. (Add a splash of water if it becomes too dry)",
+        "name": "Add the mushrooms and cook for about 3 minutes. (Add a splash of water if it becomes too dry)",
+        "url": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/#wprm-recipe-12525-step-0-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Throw in the Bell peppers, Tomatoes and carrots. Season with seasoning powder and salt - optional (please read the note above and let). cook for about 2 to 3 minutes.",
+        "name": "Throw in the Bell peppers, Tomatoes and carrots. Season with seasoning powder and salt - optional (please read the note above and let). cook for about 2 to 3 minutes.",
+        "url": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/#wprm-recipe-12525-step-0-5"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Stir in the cooked noodles and the shrimps and cook until heated through. About 2 minutes.",
+        "name": "Stir in the cooked noodles and the shrimps and cook until heated through. About 2 minutes.",
+        "url": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/#wprm-recipe-12525-step-0-6"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Remove from heat and enjoy immediately",
+        "name": "Remove from heat and enjoy immediately",
+        "url": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/#wprm-recipe-12525-step-0-7"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "1"
+    },
+    "recipeCategory": [
+      "Main"
+    ],
+    "recipeCuisine": [
+      "Global"
+    ],
+    "keywords": "homemade, noodles, stir fry recipe",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "servingSize": "4 people",
+      "calories": "212 kcal",
+      "carbohydrateContent": "37 g",
+      "proteinContent": "10 g",
+      "fatContent": "6 g",
+      "saturatedFatContent": "1 g",
+      "cholesterolContent": "1 mg",
+      "sodiumContent": "2595 mg",
+      "fiberContent": "10 g",
+      "sugarContent": "20 g"
+    },
+    "@id": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/#recipe",
+    "isPartOf": {
+      "@id": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/#article"
+    },
+    "mainEntityOfPage": "https://cheflolaskitchen.com/instant-stir-fry-noodles-recipe/"
+  },
+  "audit": [
+    "unparsed-quantity:3",
+    "unmapped:aggregateRating"
+  ]
+}

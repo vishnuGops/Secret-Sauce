@@ -1,0 +1,303 @@
+{
+  "schemaVersion": 1,
+  "id": "nigella-lawson/herbed-leg-of-lamb",
+  "slug": "herbed-leg-of-lamb",
+  "chefId": "chef_nigella-lawson",
+  "chefSlug": "nigella-lawson",
+  "chefName": "Nigella Lawson",
+  "title": "Herbed leg of lamb",
+  "description": "Recipes come into being in strange ways. The fabulous Brazilian pit master and chef, André Lima de Luca, told me about a way he had for slow-cooking a shoulder of pork with (among many other ingredients) oregano, rosemary, orange and lemon. The thought and flavours percolated at the back of my mind for a while – and then I tried cooking a leg of lamb with them last Easter.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/herbed_leg_of_lamb_63592",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/herbed_leg_of_lamb_63592",
+    "retrievedAt": "2026-09-11T00:26:20.406Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Nigella Lawson"
+    ],
+    "datePublished": "2017-11-13T16:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "a7a401e26af5989b6bb6ba03d01cdc7e00a426895a91794dd0cf7d3b01128101",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 6–8"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 60,
+    "cookMinutes": 120,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "alternative christmas dinner",
+    "classic sunday roasts",
+    "easter at nigella's table",
+    "easter dinner made easy",
+    "easy father’s day",
+    "nigella's christmas",
+    "passover food ideas",
+    "the best roast dinner",
+    "easter",
+    "mother's day",
+    "passover",
+    "roast dinner",
+    "spring recipes",
+    "roast lamb",
+    "leg of lamb",
+    "dairy free",
+    "egg free",
+    "gluten free",
+    "nut free",
+    "Nigella: At My Table"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1 x 2kg/4lb 8oz leg of lamb",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "x 2kg/4lb 8oz leg of lamb",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "small bunch oregano, leaves picked",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "small bunch oregano, leaves picked",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp rosemary leaves",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "rosemary leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 garlic cloves, halved",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "halved",
+          "isOptional": false
+        },
+        {
+          "raw": "1 lemon, zest and juice",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "lemon, zest and juice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 orange, zest and juice",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "orange, zest and juice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp olive oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp sea salt flakes",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "sea salt flakes",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 180C/160C Fan/Gas 4.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 180C/160C Fan/Gas 4. "
+    },
+    {
+      "order": 2,
+      "text": "Sit the lamb in a large roasting tin, skin-side up, and use the tip of a sharp knife to make many incisions all over the skin.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Sit the lamb in a large roasting tin, skin-side up, and use the tip of a sharp knife to make many incisions all over the skin. "
+    },
+    {
+      "order": 3,
+      "text": "Put the oregano, rosemary, garlic, lemon and orange zest, 2 tablespoons of lemon juice, 2 tablespoons orange juice, olive oil and salt in a bowl and blend using a stick blender (alternatively, use a small food processor). Spoon this over the lamb and rub in well. Leave at room temperature for 45 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put the oregano, rosemary, garlic, lemon and orange zest, 2 tablespoons of lemon juice, 2 tablespoons orange juice, olive oil and salt in a bowl and blend using a stick blender (alternatively, use a small food processor). Spoon this over the lamb and rub in well. Leave at room temperature for 45 minutes. "
+    },
+    {
+      "order": 4,
+      "text": "Pour ½cm freshly boiled water into the bottom of the roasting tin and roast for 1 hour 40 minutes. Check after an hour to add more water if needed and cover with foil if the meat is beginning to catch. Just before the time is up, remove the lamb from the oven and check it is done to your liking, either using a probe and the temperatures listed in the tips below or piercing with a knife and taking a peek.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pour ½cm freshly boiled water into the bottom of the roasting tin and roast for 1 hour 40 minutes. Check after an hour to add more water if needed and cover with foil if the meat is beginning to catch. Just before the time is up, remove the lamb from the oven and check it is done to your liking, either using a probe and the temperatures listed in the tips below or piercing with a knife and taking a peek. "
+    },
+    {
+      "order": 5,
+      "text": "Remove the cooked lamb from the oven, cover loosely with foil, and rest for 15–30 minutes, checking every now and again, before transferring to a board to carve.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove the cooked lamb from the oven, cover loosely with foil, and rest for 15–30 minutes, checking every now and again, before transferring to a board to carve. "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/herbed_leg_of_lamb_63592_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "The timing is based on your cooking a 2kg leg for 20 minutes per 500g plus 20 minutes, which will give you medium, that’s to say, pink lamb; if you want well-cooked lamb, then give it 30 minutes per 500g plus 30 minutes. However, ovens do vary, and it’s wise to use a temperature probe. I resisted for a long time, but now I get my probe out at every possible opportunity. But I don’t cook the meat to the temperature that I want it to be (for pink lamb, that would be 60C; for well done, 71C) because I find that the meat carries on cooking as it rests, and I’m always nervous of overcooking it. If you want your meat well-done, then this isn’t going to be a worry, but for pink meat I suggest that you take the lamb out when it reads 55C, and rest it, covered loosely in foil out of a draught for 15–30 minutes, testing with your probe to make sure you don’t carve it until it’s as you want it. But keep an eye, so it doesn’t go over, either. You don’t exactly get a gravy out of the liquid at the bottom of the tin (the water stops the tin from burning and keeps the meat gorgeously tender) but taste it once the lamb’s rested, to see if you want to add a little freshly boiled water, and possibly a drop or two of honey, to give you some juices to pour over the carved meat."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 15,
+      "ratingValue": 4.066666666666666
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Recipes come into being in strange ways. The fabulous Brazilian pit master and chef, André Lima de Luca, told me about a way he had for slow-cooking a shoulder of pork with (among many other ingredients) oregano, rosemary, orange and lemon. The thought and flavours percolated at the back of my mind for a while – and then I tried cooking a leg of lamb with them last Easter. ",
+    "headline": "Herbed leg of lamb ",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/herbed_leg_of_lamb_63592_16x9.jpg"
+    },
+    "name": "Herbed leg of lamb ",
+    "author": {
+      "@type": "Person",
+      "name": "Nigella Lawson"
+    },
+    "datePublished": "2017-11-13T16:00:00.000Z",
+    "dateModified": "2025-02-14T09:41:31.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 15,
+      "ratingValue": 4.066666666666666
+    },
+    "prepTime": "PT1H",
+    "cookTime": "PT2H",
+    "keywords": "alternative christmas dinner, classic sunday roasts, easter at nigella's table, easter dinner made easy, easy father’s day, nigella's christmas, passover food ideas , the best roast dinner, easter, mother's day, passover, roast dinner, spring recipes , roast lamb, leg of lamb, dairy free, egg free, gluten free, nut free, Nigella: At My Table",
+    "recipeCategory": "Main course",
+    "recipeIngredient": [
+      "1 x 2kg/4lb 8oz leg of lamb ",
+      "small bunch oregano, leaves picked ",
+      "1 tbsp rosemary leaves ",
+      "4 garlic cloves, halved ",
+      "1 lemon, zest and juice ",
+      "1 orange, zest and juice ",
+      "2 tbsp olive oil ",
+      "2 tsp sea salt flakes "
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 180C/160C Fan/Gas 4. ",
+      "Sit the lamb in a large roasting tin, skin-side up, and use the tip of a sharp knife to make many incisions all over the skin. ",
+      "Put the oregano, rosemary, garlic, lemon and orange zest, 2 tablespoons of lemon juice, 2 tablespoons orange juice, olive oil and salt in a bowl and blend using a stick blender (alternatively, use a small food processor). Spoon this over the lamb and rub in well. Leave at room temperature for 45 minutes. ",
+      "Pour ½cm freshly boiled water into the bottom of the roasting tin and roast for 1 hour 40 minutes. Check after an hour to add more water if needed and cover with foil if the meat is beginning to catch. Just before the time is up, remove the lamb from the oven and check it is done to your liking, either using a probe and the temperatures listed in the tips below or piercing with a knife and taking a peek. ",
+      "Remove the cooked lamb from the oven, cover loosely with foil, and rest for 15–30 minutes, checking every now and again, before transferring to a board to carve. "
+    ],
+    "recipeYield": "Serves 6–8",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

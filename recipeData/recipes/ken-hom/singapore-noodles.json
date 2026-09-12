@@ -1,0 +1,469 @@
+{
+  "schemaVersion": 1,
+  "id": "ken-hom/singapore-noodles",
+  "slug": "singapore-noodles",
+  "chefId": "chef_ken-hom",
+  "chefSlug": "ken-hom",
+  "chefName": "Ken Hom",
+  "title": "Singapore noodles",
+  "description": "Singapore rice noodles are a delicious and easy dinner option made with store cupboard staples. Use up loads of leftovers and bits and bobs from the fridge, too.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/singapore_noodles_81196",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/singapore_noodles_81196",
+    "retrievedAt": "2026-09-11T00:27:12.824Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Ken Hom"
+    ],
+    "datePublished": "2015-02-21T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "350c69286f63997f56b89ab2cbeaacd92e13ee100cad3ba210c0de9b7ff83386",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4-6"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 10,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Chinese"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "chinese-style dinner party",
+    "fakeaway",
+    "noodle bowls",
+    "using curry paste",
+    "spring recipes",
+    "winter",
+    "stir-fry",
+    "rice noodles",
+    "2007-16"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the Singapore noodles",
+      "items": [
+        {
+          "raw": "225g/8oz thin rice noodles",
+          "quantity": 225,
+          "quantityText": "225",
+          "unit": "g",
+          "name": "/8oz thin rice noodles",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz Shiitake mushrooms",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz Shiitake mushrooms",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "175g/6oz frozen peas (defrosted)",
+          "quantity": 175,
+          "quantityText": "175",
+          "unit": "g",
+          "name": "/6oz frozen peas (defrosted)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 medium free-range eggs, beaten",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "medium free-range eggs",
+          "note": "beaten",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp sesame oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "sesame oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp groundnut oil",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "groundnut oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp freshly ground white pepper",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "freshly ground white pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1½ tbsp finely chopped garlic",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tbsp finely chopped garlic",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp finely chopped fresh ginger",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "finely chopped fresh ginger",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 fresh red or green chillies, de-seeded and finely shredded",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": null,
+          "name": "fresh red or green chillies",
+          "note": "de-seeded and finely shredded",
+          "isOptional": false
+        },
+        {
+          "raw": "6 tinned water chestnuts",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": null,
+          "name": "tinned water chestnuts",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz Chinese barbecue pork (or cooked ham), finely shredded",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz Chinese barbecue pork (or cooked ham)",
+          "note": "finely shredded",
+          "isOptional": false
+        },
+        {
+          "raw": "3 spring onions, finely shredded",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "spring onions",
+          "note": "finely shredded",
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz small cooked prawns, shelled",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz small cooked prawns, shelled",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "fresh coriander leaves, to garnish",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "fresh coriander leaves",
+          "note": "to garnish",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the sauce",
+      "items": [
+        {
+          "raw": "2 tbsp light soy sauce",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "light soy sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp Indian Madras curry paste or powder",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "Indian Madras curry paste or powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp Shaoxing rice wine or dry sherry",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "Shaoxing rice wine or dry sherry",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp freshly ground black pepper",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "250ml/9fl oz coconut milk",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "ml",
+          "name": "/9fl oz coconut milk",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Soak the rice noodles in a bowl of warm water for 25 minutes. Drain and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Soak the rice noodles in a bowl of warm water for 25 minutes. Drain and set aside. "
+    },
+    {
+      "order": 2,
+      "text": "Soak the mushrooms in warm water for 20 minutes. Drain and squeeze out the excess liquid. Remove and discard the stems and finely shred the caps into thin strips.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Soak the mushrooms in warm water for 20 minutes. Drain and squeeze out the excess liquid. Remove and discard the stems and finely shred the caps into thin strips."
+    },
+    {
+      "order": 3,
+      "text": "Beat the eggs with sesame oil, salt and pepper. Set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Beat the eggs with sesame oil, salt and pepper. Set aside. "
+    },
+    {
+      "order": 4,
+      "text": "Mix together all the sauce ingredients in a bowl and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Mix together all the sauce ingredients in a bowl and set aside."
+    },
+    {
+      "order": 5,
+      "text": "Heat a wok or large frying-pan over high heat until hot. Add the groundnut oil, and when very hot and smoking, add the garlic, ginger and chillies and stir-fry for 30 seconds. Add the water chestnuts, mushrooms, pork and spring onions and stir-fry for 1 minute. Add the rice noodles, prawns and peas, and stir-fry for 2 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat a wok or large frying-pan over high heat until hot. Add the groundnut oil, and when very hot and smoking, add the garlic, ginger and chillies and stir-fry for 30 seconds. Add the water chestnuts, mushrooms, pork and spring onions and stir-fry for 1 minute. Add the rice noodles, prawns and peas, and stir-fry for 2 minutes. "
+    },
+    {
+      "order": 6,
+      "text": "Add the sauce and cook over high heat for another 5 minutes or until most of the liquid has evaporated. Pour the egg mixture over the noodles. Stir-fry constantly until the egg has set.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the sauce and cook over high heat for another 5 minutes or until most of the liquid has evaporated. Pour the egg mixture over the noodles. Stir-fry constantly until the egg has set."
+    },
+    {
+      "order": 7,
+      "text": "Turn onto a large platter, garnish with coriander leaves and serve.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Turn onto a large platter, garnish with coriander leaves and serve."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/singapore_noodles_81196_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 25,
+      "ratingValue": 4.36
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Singapore rice noodles are a delicious and easy dinner option made with store cupboard staples. Use up loads of leftovers and bits and bobs from the fridge, too.",
+    "headline": "Singapore noodles",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/singapore_noodles_81196_16x9.jpg"
+    },
+    "name": "Singapore noodles",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Hom"
+    },
+    "datePublished": "2015-02-21T00:00:00.000Z",
+    "dateModified": "2021-11-23T15:18:42.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 25,
+      "ratingValue": 4.36
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT10M",
+    "keywords": "quick, chinese-style dinner party, fakeaway, noodle bowls, using curry paste, spring recipes , winter, stir-fry, rice noodles, 2007-16",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Chinese",
+    "recipeIngredient": [
+      "225g/8oz thin rice noodles",
+      "50g/1¾oz Shiitake mushrooms",
+      "175g/6oz frozen peas (defrosted)",
+      "4 medium free-range eggs, beaten",
+      "1 tbsp sesame oil",
+      "3 tbsp groundnut oil ",
+      "1 tsp salt",
+      "½ tsp freshly ground white pepper ",
+      "1½ tbsp finely chopped garlic",
+      "1 tsp finely chopped fresh ginger",
+      "6 fresh red or green chillies, de-seeded and finely shredded",
+      "6 tinned water chestnuts",
+      "100g/3½oz Chinese barbecue pork (or cooked ham), finely shredded",
+      "3 spring onions, finely shredded",
+      "100g/3½oz small cooked prawns, shelled",
+      "fresh coriander leaves, to garnish",
+      "2 tbsp light soy sauce",
+      "3 tbsp Indian Madras curry paste or powder",
+      "2 tbsp Shaoxing rice wine or dry sherry",
+      "1 tbsp sugar",
+      "1 tsp salt",
+      "1 tsp freshly ground black pepper",
+      "250ml/9fl oz coconut milk"
+    ],
+    "recipeInstructions": [
+      "Soak the rice noodles in a bowl of warm water for 25 minutes. Drain and set aside. ",
+      "Soak the mushrooms in warm water for 20 minutes. Drain and squeeze out the excess liquid. Remove and discard the stems and finely shred the caps into thin strips.",
+      "Beat the eggs with sesame oil, salt and pepper. Set aside. ",
+      "Mix together all the sauce ingredients in a bowl and set aside.",
+      "Heat a wok or large frying-pan over high heat until hot. Add the groundnut oil, and when very hot and smoking, add the garlic, ginger and chillies and stir-fry for 30 seconds. Add the water chestnuts, mushrooms, pork and spring onions and stir-fry for 1 minute. Add the rice noodles, prawns and peas, and stir-fry for 2 minutes. ",
+      "Add the sauce and cook over high heat for another 5 minutes or until most of the liquid has evaporated. Pour the egg mixture over the noodles. Stir-fry constantly until the egg has set.",
+      "Turn onto a large platter, garnish with coriander leaves and serve."
+    ],
+    "recipeYield": "Serves 4-6",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

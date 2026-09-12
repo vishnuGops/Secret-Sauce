@@ -1,0 +1,1041 @@
+{
+  "schemaVersion": 1,
+  "id": "huy-vu/guava-cheese-strudel-pastelitos-de-guayaba-y-queso",
+  "slug": "guava-cheese-strudel-pastelitos-de-guayaba-y-queso",
+  "chefId": "chef_huy-vu",
+  "chefSlug": "huy-vu",
+  "chefName": "Huy Vu",
+  "title": "Guava & Cheese Strudel (Pastelitos De Guayaba Y Queso)",
+  "description": "Flakey, gooey, and buttery homemade guava and cheese strudels are easier to make than you would imagine. Follow this recipe to learn how to make your own guava jam, shortcut puff pastry, and cheese filling!",
+  "source": {
+    "sourceUrl": "https://www.hungryhuy.com/guava-cheese-pastries/",
+    "finalUrl": "https://www.hungryhuy.com/guava-cheese-pastries/",
+    "retrievedAt": "2026-09-11T03:14:27.527Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2020-10-26T11:48:35+00:00",
+    "rights": "Hungry Huy. Functional content plus a link, for internal app testing. Not redistributed.",
+    "pageTitle": "Pastelitos De Guayaba Y Queso (Cuban Guava & Cheese Pastries)",
+    "htmlSha256": "50ad1ee76f9ce602dcf448d0fb882adda474eb02bc94799ffbd8fd545e7caaf7",
+    "jsonLdBlockCount": 2,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": [
+        "ingredient-html-only: ▢ 1 &frac12; lb ( 680.4 g ) pink guava",
+        "ingredient-html-only: ▢ 4 oz ( 1/2 c ) water",
+        "ingredient-html-only: ▢ 250 g ( 1.5 c ) white granulated sugar",
+        "ingredient-html-only: ▢ 420 g ( 3 c ) all purpose flour",
+        "ingredient-html-only: ▢ 16 g ( 2 tbsp ) powdered sugar",
+        "ingredient-html-only: ▢ 6 g ( 1 tsp ) salt",
+        "ingredient-html-only: ▢ 400 g ( 28 tbsp ) cold unsalted butter cut into 1-inch cubes",
+        "ingredient-html-only: ▢ 25 g ( 2 tbsp ) sugar",
+        "ingredient-html-only: ▢ 1 g ( 1/8 tsp ) salt",
+        "ingredient-jsonld-only: 9",
+        "regrouped-from-html: 4 groups"
+      ]
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "12",
+      "12 pastries"
+    ],
+    "servings": 12
+  },
+  "timing": {
+    "prepMinutes": 45,
+    "cookMinutes": 30,
+    "totalMinutes": 100,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Cuban"
+  ],
+  "category": [
+    "Dessert"
+  ],
+  "keywords": [
+    "guava and cheese pastry",
+    "guava jam",
+    "pastelitos",
+    "strudels"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "Guava jam",
+      "items": [
+        {
+          "raw": "▢ 1 &frac12; lb ( 680.4 g ) pink guava",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 1 &frac12; lb ( 680.4 g ) pink guava",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "▢ 4 oz ( 1/2 c ) water",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 4 oz ( 1/2 c ) water",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "▢ 250 g ( 1.5 c ) white granulated sugar",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 250 g ( 1.5 c ) white granulated sugar",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        }
+      ]
+    },
+    {
+      "name": "Puff pastry from scratch (or buy frozen)",
+      "items": [
+        {
+          "raw": "▢ 420 g ( 3 c ) all purpose flour",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 420 g ( 3 c ) all purpose flour",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "▢ 16 g ( 2 tbsp ) powdered sugar",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 16 g ( 2 tbsp ) powdered sugar",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "▢ 6 g ( 1 tsp ) salt",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 6 g ( 1 tsp ) salt",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "▢ 400 g ( 28 tbsp ) cold unsalted butter cut into 1-inch cubes",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 400 g ( 28 tbsp ) cold unsalted butter cut into 1-inch cubes",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "8 oz sour cream",
+          "quantity": 8,
+          "quantityText": "8",
+          "unit": "oz",
+          "name": "sour cream",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "Cream cheese filling",
+      "items": [
+        {
+          "raw": "5 oz cream cheese (chilled from the fridge)",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": "oz",
+          "name": "cream cheese (chilled from the fridge)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "▢ 25 g ( 2 tbsp ) sugar",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 25 g ( 2 tbsp ) sugar",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "1 egg",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "egg",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "▢ 1 g ( 1/8 tsp ) salt",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 1 g ( 1/8 tsp ) salt",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        }
+      ]
+    },
+    {
+      "name": "Assembly",
+      "items": [
+        {
+          "raw": "1 beaten egg (for egg wash)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "beaten egg (for egg wash)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "turbinado sugar (optional)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "turbinado sugar (optional)",
+          "note": null,
+          "isOptional": true
+        }
+      ]
+    },
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1 ½ lb pink guava",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ lb pink guava",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 oz water",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "oz",
+          "name": "water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "250 g white granulated sugar",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "white granulated sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "420 g all purpose flour",
+          "quantity": 420,
+          "quantityText": "420",
+          "unit": "g",
+          "name": "all purpose flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "16 g powdered sugar",
+          "quantity": 16,
+          "quantityText": "16",
+          "unit": "g",
+          "name": "powdered sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 g salt",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": "g",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "400 g cold unsalted butter (cut into 1-inch cubes)",
+          "quantity": 400,
+          "quantityText": "400",
+          "unit": "g",
+          "name": "cold unsalted butter (cut into 1-inch cubes)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "25 g sugar",
+          "quantity": 25,
+          "quantityText": "25",
+          "unit": "g",
+          "name": "sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 g salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "g",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Clean the guava under running water. Cut the stems off and cut the guava in half.",
+      "stepGroup": "Guava jam",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cutting-guava.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Clean the guava under running water. Cut the stems off and cut the guava in half.",
+        "name": "Clean the guava under running water. Cut the stems off and cut the guava in half.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-0-0",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cutting-guava.jpg"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Use a spoon to scoop out the seeds and put the seeds into a bowl with the water. Chop the guava flesh into quarters and put into a blender. Repeat until all guava is prepped. The guava flesh should measure to be around one pound at this point.",
+      "stepGroup": "Guava jam",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/removing-seeds.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Use a spoon to scoop out the seeds and put the seeds into a bowl with the water. Chop the guava flesh into quarters and put into a blender. Repeat until all guava is prepped. The guava flesh should measure to be around one pound at this point.",
+        "name": "Use a spoon to scoop out the seeds and put the seeds into a bowl with the water. Chop the guava flesh into quarters and put into a blender. Repeat until all guava is prepped. The guava flesh should measure to be around one pound at this point.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-0-1",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/removing-seeds.jpg"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Strain the seeds and water over a glass bowl and use a spatula or your hands to push the excess guava flesh through the strainer. This may be a bit slimy. You should end up with around ¾ cup of guava liquid if you started with 1.5 lb guava.",
+      "stepGroup": "Guava jam",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/straining-out-seeds.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Strain the seeds and water over a glass bowl and use a spatula or your hands to push the excess guava flesh through the strainer. This may be a bit slimy. You should end up with around ¾ cup of guava liquid if you started with 1.5 lb guava.",
+        "name": "Strain the seeds and water over a glass bowl and use a spatula or your hands to push the excess guava flesh through the strainer. This may be a bit slimy. You should end up with around ¾ cup of guava liquid if you started with 1.5 lb guava.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-0-2",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/straining-out-seeds.jpg"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Pour the water and guava liquid into the blender with the chopped guava and blend until the guava is puréed completely.",
+      "stepGroup": "Guava jam",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Pour the water and guava liquid into the blender with the chopped guava and blend until the guava is puréed completely.",
+        "name": "Pour the water and guava liquid into the blender with the chopped guava and blend until the guava is puréed completely.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "In a saucepan over medium-high heat, add the pureed guava and sugar. Use a wooden spoon or spatula to incorporate the sugar completely. Bring the mixture to a boil.",
+      "stepGroup": "Guava jam",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/starting-jam.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a saucepan over medium-high heat, add the pureed guava and sugar. Use a wooden spoon or spatula to incorporate the sugar completely. Bring the mixture to a boil.",
+        "name": "In a saucepan over medium-high heat, add the pureed guava and sugar. Use a wooden spoon or spatula to incorporate the sugar completely. Bring the mixture to a boil.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-0-4",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/starting-jam.jpg"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Lower the heat to medium and simmer the mixture for about 15 minutes or until the guava mixture has reduced by about half. If you find the simmer is too strong, you can lower the heat to medium-low. The final consistency should be similar to a thin pudding. Remove it from the heat and let cool in the pot. The final consistency will be thicker as it cools (see photo).",
+      "stepGroup": "Guava jam",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/finished-paste-consistency.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Lower the heat to medium and simmer the mixture for about 15 minutes or until the guava mixture has reduced by about half. If you find the simmer is too strong, you can lower the heat to medium-low. The final consistency should be similar to a thin pudding. Remove it from the heat and let cool in the pot. The final consistency will be thicker as it cools (see photo).",
+        "name": "Lower the heat to medium and simmer the mixture for about 15 minutes or until the guava mixture has reduced by about half. If you find the simmer is too strong, you can lower the heat to medium-low. The final consistency should be similar to a thin pudding. Remove it from the heat and let cool in the pot. The final consistency will be thicker as it cools (see photo).",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-0-5",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/finished-paste-consistency.jpg"
+      }
+    },
+    {
+      "order": 7,
+      "text": "In a food processor, add the flour, powdered sugar, salt, and butter. Pulse a few times until the butter is the size of peas.",
+      "stepGroup": "Puff pastry from scratch (or buy frozen)",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/blended-dough-texture.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a food processor, add the flour, powdered sugar, salt, and butter. Pulse a few times until the butter is the size of peas.",
+        "name": "In a food processor, add the flour, powdered sugar, salt, and butter. Pulse a few times until the butter is the size of peas.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-1-0",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/blended-dough-texture.jpg"
+      }
+    },
+    {
+      "order": 8,
+      "text": "Transfer to a large bowl and add the sour cream and stir gently so that the sour cream is incorporated. I like to use my hands towards the end so that I know the butter doesn’t crumble too much. The dough should begin to take on a shaggy texture.",
+      "stepGroup": "Puff pastry from scratch (or buy frozen)",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Transfer to a large bowl and add the sour cream and stir gently so that the sour cream is incorporated. I like to use my hands towards the end so that I know the butter doesn’t crumble too much. The dough should begin to take on a shaggy texture.",
+        "name": "Transfer to a large bowl and add the sour cream and stir gently so that the sour cream is incorporated. I like to use my hands towards the end so that I know the butter doesn’t crumble too much. The dough should begin to take on a shaggy texture.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-1-1"
+      }
+    },
+    {
+      "order": 9,
+      "text": "Transfer the shaggy dough onto a parchment sheet and form the dough into a ball. To make the dough easier to work with, cut the dough in half.",
+      "stepGroup": "Puff pastry from scratch (or buy frozen)",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Transfer the shaggy dough onto a parchment sheet and form the dough into a ball. To make the dough easier to work with, cut the dough in half.",
+        "name": "Transfer the shaggy dough onto a parchment sheet and form the dough into a ball. To make the dough easier to work with, cut the dough in half.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-1-2"
+      }
+    },
+    {
+      "order": 10,
+      "text": "Take another parchment sheet and lay it on top of each ball of dough and then roll out your dough into a rectangle that’s 12 x 7 inches with about ¼-½ inch thickness. Repeat with the other half of dough. NOTE: if at any time you find the dough becoming too soft or warm, place it in the freezer for 10 minutes to cool down.",
+      "stepGroup": "Puff pastry from scratch (or buy frozen)",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/rolling-with-pin.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Take another parchment sheet and lay it on top of each ball of dough and then roll out your dough into a rectangle that’s 12 x 7 inches with about ¼-½ inch thickness. Repeat with the other half of dough. NOTE: if at any time you find the dough becoming too soft or warm, place it in the freezer for 10 minutes to cool down.",
+        "name": "Take another parchment sheet and lay it on top of each ball of dough and then roll out your dough into a rectangle that’s 12 x 7 inches with about ¼-½ inch thickness. Repeat with the other half of dough. NOTE: if at any time you find the dough becoming too soft or warm, place it in the freezer for 10 minutes to cool down.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-1-3",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/rolling-with-pin.jpg"
+      }
+    },
+    {
+      "order": 11,
+      "text": "Unwrap the top layer of parchment and make a tri-fold by taking the right side of the dough and folding it ⅓ of the way to the center. Then, take the left side and fold over the first fold. You should end up with a smaller rectangle. Cover the dough with the parchment paper. Repeat with the other half of the dough.",
+      "stepGroup": "Puff pastry from scratch (or buy frozen)",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/folding-yet-again.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Unwrap the top layer of parchment and make a tri-fold by taking the right side of the dough and folding it ⅓ of the way to the center. Then, take the left side and fold over the first fold. You should end up with a smaller rectangle. Cover the dough with the parchment paper. Repeat with the other half of the dough.",
+        "name": "Unwrap the top layer of parchment and make a tri-fold by taking the right side of the dough and folding it ⅓ of the way to the center. Then, take the left side and fold over the first fold. You should end up with a smaller rectangle. Cover the dough with the parchment paper. Repeat with the other half of the dough.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-1-4",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/folding-yet-again.jpg"
+      }
+    },
+    {
+      "order": 12,
+      "text": "Chill the dough pieces in the freezer for 15 minutes. Don’t leave them in the freezer for too long or it will freeze and become too hard.",
+      "stepGroup": "Puff pastry from scratch (or buy frozen)",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Chill the dough pieces in the freezer for 15 minutes. Don’t leave them in the freezer for too long or it will freeze and become too hard.",
+        "name": "Chill the dough pieces in the freezer for 15 minutes. Don’t leave them in the freezer for too long or it will freeze and become too hard.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-1-5"
+      }
+    },
+    {
+      "order": 13,
+      "text": "Once chilled and slightly hard, roll out the dough pieces again to a larger rectangle that measures around 12 x 7 inches again and make a tri-fold one more time. Then chill in the freezer for 15 minutes before making your pastries.",
+      "stepGroup": "Puff pastry from scratch (or buy frozen)",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/folding-again.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Once chilled and slightly hard, roll out the dough pieces again to a larger rectangle that measures around 12 x 7 inches again and make a tri-fold one more time. Then chill in the freezer for 15 minutes before making your pastries.",
+        "name": "Once chilled and slightly hard, roll out the dough pieces again to a larger rectangle that measures around 12 x 7 inches again and make a tri-fold one more time. Then chill in the freezer for 15 minutes before making your pastries.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-1-6",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/folding-again.jpg"
+      }
+    },
+    {
+      "order": 14,
+      "text": "Whisk the fridge temp cream cheese, salt, and sugar together in a medium sized bowl. Then mix in the egg. Try not to overmix the cream cheese or it will become too liquidy. If the mixture becomes too soft, you can pop it in the freezer for 5-10 minutes to harden it.",
+      "stepGroup": "Cream cheese filling",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cheese-ingredients.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Whisk the fridge temp cream cheese, salt, and sugar together in a medium sized bowl. Then mix in the egg. Try not to overmix the cream cheese or it will become too liquidy. If the mixture becomes too soft, you can pop it in the freezer for 5-10 minutes to harden it.",
+        "name": "Whisk the fridge temp cream cheese, salt, and sugar together in a medium sized bowl. Then mix in the egg. Try not to overmix the cream cheese or it will become too liquidy. If the mixture becomes too soft, you can pop it in the freezer for 5-10 minutes to harden it.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-2-0",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cheese-ingredients.jpg"
+      }
+    },
+    {
+      "order": 15,
+      "text": "Preheat the oven to 400 °F.",
+      "stepGroup": "Assembly",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": "400 °F",
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 400 °F.",
+        "name": "Preheat the oven to 400 °F.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-3-0"
+      }
+    },
+    {
+      "order": 16,
+      "text": "Roll out each of the dough pieces into a long rectangle of about 14 by 10 inches with a thickness of ¼ inch. Divide each of the rectangles into 6 pieces (if you want large strudels) or 12 pieces (if you want medium sized strudels). Place half of these rectangles in a parchment paper lined sheet pan with at least one inch space between them.",
+      "stepGroup": "Assembly",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cutting-pastry.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Roll out each of the dough pieces into a long rectangle of about 14 by 10 inches with a thickness of ¼ inch. Divide each of the rectangles into 6 pieces (if you want large strudels) or 12 pieces (if you want medium sized strudels). Place half of these rectangles in a parchment paper lined sheet pan with at least one inch space between them.",
+        "name": "Roll out each of the dough pieces into a long rectangle of about 14 by 10 inches with a thickness of ¼ inch. Divide each of the rectangles into 6 pieces (if you want large strudels) or 12 pieces (if you want medium sized strudels). Place half of these rectangles in a parchment paper lined sheet pan with at least one inch space between them.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-3-1",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cutting-pastry.jpg"
+      }
+    },
+    {
+      "order": 17,
+      "text": "In a small bowl, beat one egg. Brush the egg wash on the edges of half of the rectangles (the bottom halves of your pastries), about ¼” thick around the perimeter.",
+      "stepGroup": "Assembly",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/egg-wash-edges.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a small bowl, beat one egg. Brush the egg wash on the edges of half of the rectangles (the bottom halves of your pastries), about ¼” thick around the perimeter.",
+        "name": "In a small bowl, beat one egg. Brush the egg wash on the edges of half of the rectangles (the bottom halves of your pastries), about ¼” thick around the perimeter.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-3-2",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/egg-wash-edges.jpg"
+      }
+    },
+    {
+      "order": 18,
+      "text": "Spread the cheese filling in the center of the egg-washed rectangles.",
+      "stepGroup": "Assembly",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/adding-cheese.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Spread the cheese filling in the center of the egg-washed rectangles.",
+        "name": "Spread the cheese filling in the center of the egg-washed rectangles.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-3-3",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/adding-cheese.jpg"
+      }
+    },
+    {
+      "order": 19,
+      "text": "Add guava jam on top, both spread evenly close to but not touching the egg wash.",
+      "stepGroup": "Assembly",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/adding-guava-paste.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add guava jam on top, both spread evenly close to but not touching the egg wash.",
+        "name": "Add guava jam on top, both spread evenly close to but not touching the egg wash.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-3-4",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/adding-guava-paste.jpg"
+      }
+    },
+    {
+      "order": 20,
+      "text": "For the untouched rectangles, these are the pastry tops. Cut 2-3 slits in the center for venting and added design. Then carefully take one of these rectangles and place it on top of a filled guava and cheese piece. Carefully press the edges and seal them using a fork.",
+      "stepGroup": "Assembly",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/adding-top-layer.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "For the untouched rectangles, these are the pastry tops. Cut 2-3 slits in the center for venting and added design. Then carefully take one of these rectangles and place it on top of a filled guava and cheese piece. Carefully press the edges and seal them using a fork.",
+        "name": "For the untouched rectangles, these are the pastry tops. Cut 2-3 slits in the center for venting and added design. Then carefully take one of these rectangles and place it on top of a filled guava and cheese piece. Carefully press the edges and seal them using a fork.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-3-5",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/adding-top-layer.jpg"
+      }
+    },
+    {
+      "order": 21,
+      "text": "Brush more egg wash on top. Optional: sprinkle some turbinado sugar on top for extra texture. Repeat with the rest of the strudels.",
+      "stepGroup": "Assembly",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/egg-washing-top.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Brush more egg wash on top. Optional: sprinkle some turbinado sugar on top for extra texture. Repeat with the rest of the strudels.",
+        "name": "Brush more egg wash on top. Optional: sprinkle some turbinado sugar on top for extra texture. Repeat with the rest of the strudels.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-3-6",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/egg-washing-top.jpg"
+      }
+    },
+    {
+      "order": 22,
+      "text": "Place the sheet pan and strudels in the middle rack of the oven and bake for 20-30 minutes. I would recommend checking the pastries at 15 minutes to check on them. Remove from the oven when they are puffy and golden brown at the edges and top.",
+      "stepGroup": "Assembly",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/guava-cheese-pastry-tray.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Place the sheet pan and strudels in the middle rack of the oven and bake for 20-30 minutes. I would recommend checking the pastries at 15 minutes to check on them. Remove from the oven when they are puffy and golden brown at the edges and top.",
+        "name": "Place the sheet pan and strudels in the middle rack of the oven and bake for 20-30 minutes. I would recommend checking the pastries at 15 minutes to check on them. Remove from the oven when they are puffy and golden brown at the edges and top.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-3-7",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/guava-cheese-pastry-tray.jpg"
+      }
+    },
+    {
+      "order": 23,
+      "text": "Place them on a cooling rack for about five minutes so you don’t burn yourself while eating. Serve them immediately or move them into the fridge and they will last for at least 3-5 days.",
+      "stepGroup": "Assembly",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Place them on a cooling rack for about five minutes so you don’t burn yourself while eating. Serve them immediately or move them into the fridge and they will last for at least 3-5 days.",
+        "name": "Place them on a cooling rack for about five minutes so you don’t burn yourself while eating. Serve them immediately or move them into the fridge and they will last for at least 3-5 days.",
+        "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-3-8"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "580.9 kcal",
+    "carbohydrateContent": "60.1 g",
+    "proteinContent": "6.9 g",
+    "fatContent": "36 g",
+    "saturatedFatContent": "21.9 g",
+    "cholesterolContent": "108.1 mg",
+    "sodiumContent": "290.6 mg",
+    "fiberContent": "4 g",
+    "sugarContent": "30.3 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/guava-cheese-pastry-sq.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/guava-cheese-pastry-sq-500x500.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/guava-cheese-pastry-sq-500x375.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/guava-cheese-pastry-sq-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "4",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Soooo yummy and very easy to make, especially if you use frozen puff pastry and guava jam (I used Bonne Maman's). I'm sure it'd be even better if you make both yourself. It ended up tasting exactly like Porto's Refugiado's (arguably better) and they were super delicious!!",
+        "author": {
+          "@type": "Person",
+          "name": "Alyssa"
+        },
+        "datePublished": "2024-11-10"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Guava & Cheese Strudel (Pastelitos De Guayaba Y Queso)",
+    "author": {
+      "@id": "https://www.hungryhuy.com/#/schema/person/77ba703312129b3930232d1c829f0ff0"
+    },
+    "description": "Flakey, gooey, and buttery homemade guava and cheese strudels are easier to make than you would imagine. Follow this recipe to learn how to make your own guava jam, shortcut puff pastry, and cheese filling!",
+    "datePublished": "2020-10-26T11:48:35+00:00",
+    "image": [
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/guava-cheese-pastry-sq.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/guava-cheese-pastry-sq-500x500.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/guava-cheese-pastry-sq-500x375.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/guava-cheese-pastry-sq-480x270.jpg"
+    ],
+    "recipeYield": [
+      "12",
+      "12 pastries"
+    ],
+    "prepTime": "PT45M",
+    "cookTime": "PT30M",
+    "totalTime": "PT100M",
+    "recipeIngredient": [
+      "1 ½ lb pink guava",
+      "4 oz water",
+      "250 g white granulated sugar",
+      "420 g all purpose flour",
+      "16 g powdered sugar",
+      "6 g salt",
+      "400 g cold unsalted butter (cut into 1-inch cubes)",
+      "8 oz sour cream",
+      "5 oz cream cheese (chilled from the fridge)",
+      "25 g sugar",
+      "1  egg",
+      "1 g salt",
+      "1  beaten egg (for egg wash)",
+      "turbinado sugar (optional)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToSection",
+        "name": "Guava jam",
+        "itemListElement": [
+          {
+            "@type": "HowToStep",
+            "text": "Clean the guava under running water. Cut the stems off and cut the guava in half.",
+            "name": "Clean the guava under running water. Cut the stems off and cut the guava in half.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-0-0",
+            "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cutting-guava.jpg"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Use a spoon to scoop out the seeds and put the seeds into a bowl with the water. Chop the guava flesh into quarters and put into a blender. Repeat until all guava is prepped. The guava flesh should measure to be around one pound at this point.",
+            "name": "Use a spoon to scoop out the seeds and put the seeds into a bowl with the water. Chop the guava flesh into quarters and put into a blender. Repeat until all guava is prepped. The guava flesh should measure to be around one pound at this point.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-0-1",
+            "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/removing-seeds.jpg"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Strain the seeds and water over a glass bowl and use a spatula or your hands to push the excess guava flesh through the strainer. This may be a bit slimy. You should end up with around ¾ cup of guava liquid if you started with 1.5 lb guava.",
+            "name": "Strain the seeds and water over a glass bowl and use a spatula or your hands to push the excess guava flesh through the strainer. This may be a bit slimy. You should end up with around ¾ cup of guava liquid if you started with 1.5 lb guava.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-0-2",
+            "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/straining-out-seeds.jpg"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Pour the water and guava liquid into the blender with the chopped guava and blend until the guava is puréed completely.",
+            "name": "Pour the water and guava liquid into the blender with the chopped guava and blend until the guava is puréed completely.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-0-3"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "In a saucepan over medium-high heat, add the pureed guava and sugar. Use a wooden spoon or spatula to incorporate the sugar completely. Bring the mixture to a boil.",
+            "name": "In a saucepan over medium-high heat, add the pureed guava and sugar. Use a wooden spoon or spatula to incorporate the sugar completely. Bring the mixture to a boil.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-0-4",
+            "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/starting-jam.jpg"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Lower the heat to medium and simmer the mixture for about 15 minutes or until the guava mixture has reduced by about half. If you find the simmer is too strong, you can lower the heat to medium-low. The final consistency should be similar to a thin pudding. Remove it from the heat and let cool in the pot. The final consistency will be thicker as it cools (see photo).",
+            "name": "Lower the heat to medium and simmer the mixture for about 15 minutes or until the guava mixture has reduced by about half. If you find the simmer is too strong, you can lower the heat to medium-low. The final consistency should be similar to a thin pudding. Remove it from the heat and let cool in the pot. The final consistency will be thicker as it cools (see photo).",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-0-5",
+            "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/finished-paste-consistency.jpg"
+          }
+        ]
+      },
+      {
+        "@type": "HowToSection",
+        "name": "Puff pastry from scratch (or buy frozen)",
+        "itemListElement": [
+          {
+            "@type": "HowToStep",
+            "text": "In a food processor, add the flour, powdered sugar, salt, and butter. Pulse a few times until the butter is the size of peas.",
+            "name": "In a food processor, add the flour, powdered sugar, salt, and butter. Pulse a few times until the butter is the size of peas.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-1-0",
+            "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/blended-dough-texture.jpg"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Transfer to a large bowl and add the sour cream and stir gently so that the sour cream is incorporated. I like to use my hands towards the end so that I know the butter doesn’t crumble too much. The dough should begin to take on a shaggy texture.",
+            "name": "Transfer to a large bowl and add the sour cream and stir gently so that the sour cream is incorporated. I like to use my hands towards the end so that I know the butter doesn’t crumble too much. The dough should begin to take on a shaggy texture.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-1-1"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Transfer the shaggy dough onto a parchment sheet and form the dough into a ball. To make the dough easier to work with, cut the dough in half.",
+            "name": "Transfer the shaggy dough onto a parchment sheet and form the dough into a ball. To make the dough easier to work with, cut the dough in half.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-1-2"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Take another parchment sheet and lay it on top of each ball of dough and then roll out your dough into a rectangle that’s 12 x 7 inches with about ¼-½ inch thickness. Repeat with the other half of dough. NOTE: if at any time you find the dough becoming too soft or warm, place it in the freezer for 10 minutes to cool down.",
+            "name": "Take another parchment sheet and lay it on top of each ball of dough and then roll out your dough into a rectangle that’s 12 x 7 inches with about ¼-½ inch thickness. Repeat with the other half of dough. NOTE: if at any time you find the dough becoming too soft or warm, place it in the freezer for 10 minutes to cool down.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-1-3",
+            "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/rolling-with-pin.jpg"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Unwrap the top layer of parchment and make a tri-fold by taking the right side of the dough and folding it ⅓ of the way to the center. Then, take the left side and fold over the first fold. You should end up with a smaller rectangle. Cover the dough with the parchment paper. Repeat with the other half of the dough.",
+            "name": "Unwrap the top layer of parchment and make a tri-fold by taking the right side of the dough and folding it ⅓ of the way to the center. Then, take the left side and fold over the first fold. You should end up with a smaller rectangle. Cover the dough with the parchment paper. Repeat with the other half of the dough.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-1-4",
+            "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/folding-yet-again.jpg"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Chill the dough pieces in the freezer for 15 minutes. Don’t leave them in the freezer for too long or it will freeze and become too hard.",
+            "name": "Chill the dough pieces in the freezer for 15 minutes. Don’t leave them in the freezer for too long or it will freeze and become too hard.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-1-5"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Once chilled and slightly hard, roll out the dough pieces again to a larger rectangle that measures around 12 x 7 inches again and make a tri-fold one more time. Then chill in the freezer for 15 minutes before making your pastries.",
+            "name": "Once chilled and slightly hard, roll out the dough pieces again to a larger rectangle that measures around 12 x 7 inches again and make a tri-fold one more time. Then chill in the freezer for 15 minutes before making your pastries.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-1-6",
+            "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/folding-again.jpg"
+          }
+        ]
+      },
+      {
+        "@type": "HowToSection",
+        "name": "Cream cheese filling",
+        "itemListElement": [
+          {
+            "@type": "HowToStep",
+            "text": "Whisk the fridge temp cream cheese, salt, and sugar together in a medium sized bowl. Then mix in the egg. Try not to overmix the cream cheese or it will become too liquidy. If the mixture becomes too soft, you can pop it in the freezer for 5-10 minutes to harden it.",
+            "name": "Whisk the fridge temp cream cheese, salt, and sugar together in a medium sized bowl. Then mix in the egg. Try not to overmix the cream cheese or it will become too liquidy. If the mixture becomes too soft, you can pop it in the freezer for 5-10 minutes to harden it.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-2-0",
+            "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cheese-ingredients.jpg"
+          }
+        ]
+      },
+      {
+        "@type": "HowToSection",
+        "name": "Assembly",
+        "itemListElement": [
+          {
+            "@type": "HowToStep",
+            "text": "Preheat the oven to 400 °F.",
+            "name": "Preheat the oven to 400 °F.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-3-0"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Roll out each of the dough pieces into a long rectangle of about 14 by 10 inches with a thickness of ¼ inch. Divide each of the rectangles into 6 pieces (if you want large strudels) or 12 pieces (if you want medium sized strudels). Place half of these rectangles in a parchment paper lined sheet pan with at least one inch space between them.",
+            "name": "Roll out each of the dough pieces into a long rectangle of about 14 by 10 inches with a thickness of ¼ inch. Divide each of the rectangles into 6 pieces (if you want large strudels) or 12 pieces (if you want medium sized strudels). Place half of these rectangles in a parchment paper lined sheet pan with at least one inch space between them.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-3-1",
+            "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cutting-pastry.jpg"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "In a small bowl, beat one egg. Brush the egg wash on the edges of half of the rectangles (the bottom halves of your pastries), about ¼” thick around the perimeter.",
+            "name": "In a small bowl, beat one egg. Brush the egg wash on the edges of half of the rectangles (the bottom halves of your pastries), about ¼” thick around the perimeter.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-3-2",
+            "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/egg-wash-edges.jpg"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Spread the cheese filling in the center of the egg-washed rectangles.",
+            "name": "Spread the cheese filling in the center of the egg-washed rectangles.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-3-3",
+            "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/adding-cheese.jpg"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Add guava jam on top, both spread evenly close to but not touching the egg wash.",
+            "name": "Add guava jam on top, both spread evenly close to but not touching the egg wash.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-3-4",
+            "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/adding-guava-paste.jpg"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "For the untouched rectangles, these are the pastry tops. Cut 2-3 slits in the center for venting and added design. Then carefully take one of these rectangles and place it on top of a filled guava and cheese piece. Carefully press the edges and seal them using a fork.",
+            "name": "For the untouched rectangles, these are the pastry tops. Cut 2-3 slits in the center for venting and added design. Then carefully take one of these rectangles and place it on top of a filled guava and cheese piece. Carefully press the edges and seal them using a fork.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-3-5",
+            "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/adding-top-layer.jpg"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Brush more egg wash on top. Optional: sprinkle some turbinado sugar on top for extra texture. Repeat with the rest of the strudels.",
+            "name": "Brush more egg wash on top. Optional: sprinkle some turbinado sugar on top for extra texture. Repeat with the rest of the strudels.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-3-6",
+            "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/egg-washing-top.jpg"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Place the sheet pan and strudels in the middle rack of the oven and bake for 20-30 minutes. I would recommend checking the pastries at 15 minutes to check on them. Remove from the oven when they are puffy and golden brown at the edges and top.",
+            "name": "Place the sheet pan and strudels in the middle rack of the oven and bake for 20-30 minutes. I would recommend checking the pastries at 15 minutes to check on them. Remove from the oven when they are puffy and golden brown at the edges and top.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-3-7",
+            "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/guava-cheese-pastry-tray.jpg"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Place them on a cooling rack for about five minutes so you don’t burn yourself while eating. Serve them immediately or move them into the fridge and they will last for at least 3-5 days.",
+            "name": "Place them on a cooling rack for about five minutes so you don’t burn yourself while eating. Serve them immediately or move them into the fridge and they will last for at least 3-5 days.",
+            "url": "https://www.hungryhuy.com/guava-cheese-pastries/#wprm-recipe-9830-step-3-8"
+          }
+        ]
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "4",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Soooo yummy and very easy to make, especially if you use frozen puff pastry and guava jam (I used Bonne Maman's). I'm sure it'd be even better if you make both yourself. It ended up tasting exactly like Porto's Refugiado's (arguably better) and they were super delicious!!",
+        "author": {
+          "@type": "Person",
+          "name": "Alyssa"
+        },
+        "datePublished": "2024-11-10"
+      }
+    ],
+    "recipeCategory": [
+      "Dessert"
+    ],
+    "recipeCuisine": [
+      "Cuban"
+    ],
+    "keywords": "guava and cheese pastry, guava jam, pastelitos, strudels",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "580.9 kcal",
+      "carbohydrateContent": "60.1 g",
+      "proteinContent": "6.9 g",
+      "fatContent": "36 g",
+      "saturatedFatContent": "21.9 g",
+      "cholesterolContent": "108.1 mg",
+      "sodiumContent": "290.6 mg",
+      "fiberContent": "4 g",
+      "sugarContent": "30.3 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://www.hungryhuy.com/guava-cheese-pastries/#recipe",
+    "isPartOf": {
+      "@id": "https://www.hungryhuy.com/guava-cheese-pastries/#article"
+    },
+    "mainEntityOfPage": "https://www.hungryhuy.com/guava-cheese-pastries/"
+  },
+  "audit": [
+    "unparsed-quantity:10",
+    "unmapped:aggregateRating|review"
+  ]
+}

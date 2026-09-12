@@ -1,0 +1,400 @@
+{
+  "schemaVersion": 1,
+  "id": "raymond-blanc/perfect-roast-turkey",
+  "slug": "perfect-roast-turkey",
+  "chefId": "chef_raymond-blanc",
+  "chefSlug": "raymond-blanc",
+  "chefName": "Raymond Blanc",
+  "title": "Perfect roast turkey",
+  "description": "Raymond Blanc has the best roast turkey recipe. It's easy to cook, tender and juicy. It's the perfect recipe for a stress-free Christmas turkey dinner. Get exact roast turkey cooking times with our roast calculator.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/the_perfect_roast_turkey_01155",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/the_perfect_roast_turkey_01155",
+    "retrievedAt": "2026-09-11T00:27:20.561Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Raymond Blanc"
+    ],
+    "datePublished": "2014-12-12T16:30:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "d57d17d0e6c3969b0c335619194b9497b8a65e125bcf2559397ea0c0fe119fea",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 8-10"
+    ],
+    "servings": 8
+  },
+  "timing": {
+    "prepMinutes": 60,
+    "cookMinutes": 120,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "British"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "christmas dinner",
+    "christmas for over 6",
+    "classic christmas menu",
+    "christmas",
+    "thanksgiving",
+    "roast turkey",
+    "turkey",
+    "egg free",
+    "gluten free",
+    "nut free",
+    "pregnancy friendly",
+    "autumn",
+    "winter",
+    "Christmas Kitchen"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "20ml/¾fl oz rapeseed oil",
+          "quantity": 20,
+          "quantityText": "20",
+          "unit": "ml",
+          "name": "/¾fl oz rapeseed oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 x 5kg/11lb good-quality free-range turkey, preferably organically reared, wishbone removed (ask your butcher to remove the wings and neck and chop them into 2.5cm/1in pieces to use in the dish)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "x 5kg/11lb good-quality free-range turkey, preferably organically reared, wishbone removed (ask your butcher to remove the wings and neck and chop them into 2.5cm/1in pieces to use in the dish)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "40g/1½oz unsalted butter, softened to room temperature",
+          "quantity": 40,
+          "quantityText": "40",
+          "unit": "g",
+          "name": "/1½oz unsalted butter",
+          "note": "softened to room temperature",
+          "isOptional": false
+        },
+        {
+          "raw": "2 pinches sea salt flakes",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "pinches",
+          "name": "sea salt flakes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 pinches freshly ground white pepper",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "pinches",
+          "name": "freshly ground white pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "200ml/7fl oz water",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "ml",
+          "name": "/7fl oz water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1-2 tsp ground arrowroot (depending on how thick you like your gravy), dissolved in 1 tbsp cold water",
+          "quantity": 1,
+          "quantityText": "1-2",
+          "unit": "tsp",
+          "name": "ground arrowroot (depending on how thick you like your gravy), dissolved in 1 tbsp cold water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "roast potatoes and steamed seasonal vegetables, to serve",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "roast potatoes and steamed seasonal vegetables",
+          "note": "to serve",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Remove the turkey from the fridge and bring to room temperature - this will take at least an hour. When you are ready to cook, preheat the oven to 230C/220C Fan/Gas 8.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove the turkey from the fridge and bring to room temperature - this will take at least an hour. When you are ready to cook, preheat the oven to 230C/220C Fan/Gas 8. "
+    },
+    {
+      "order": 2,
+      "text": "Heat the rapeseed oil in a large, heavy-based roasting tray on the stove top. Add the chopped turkey wings and neck and fry for 8-10 minutes, turning the pieces over every 2-3 minutes, or until evenly browned all over.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat the rapeseed oil in a large, heavy-based roasting tray on the stove top. Add the chopped turkey wings and neck and fry for 8-10 minutes, turning the pieces over every 2-3 minutes, or until evenly browned all over."
+    },
+    {
+      "order": 3,
+      "text": "Meanwhile, in a small bowl, soften the butter with the back of a dessert spoon, then season with the salt and freshly ground white pepper. Using a pastry brush or your hands, smear the seasoned butter all over the turkey. Add any remaining butter to the roasting tray once the chopped wings and neck have browned.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, in a small bowl, soften the butter with the back of a dessert spoon, then season  with the salt and freshly ground white pepper. Using a pastry brush or your hands, smear the seasoned butter all over the turkey. Add any remaining butter to the roasting tray once the chopped wings and neck have browned."
+    },
+    {
+      "order": 4,
+      "text": "Place the turkey on top of the wing and neck pieces, then roast in the oven for 30 minutes. Remove the turkey from the oven and baste all over with the cooking juices.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place the turkey on top of the wing and neck pieces, then roast in the oven for 30 minutes. Remove the turkey from the oven and baste all over with the cooking juices."
+    },
+    {
+      "order": 5,
+      "text": "Reduce the oven temperature to 160C/150C Fan/Gas 3.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Reduce the oven temperature to 160C/150C Fan/Gas 3."
+    },
+    {
+      "order": 6,
+      "text": "Pour the water into the roasting tray, then return the turkey to the oven and continue to cook for a further 1 hour, basting the bird with the cooking juices every 20 minutes (do this quickly to prevent the heat escaping from the oven).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pour the water into the roasting tray, then return the turkey to the oven and continue to cook for a further 1 hour, basting the bird with the cooking juices every 20 minutes (do this quickly to prevent the heat escaping from the oven)."
+    },
+    {
+      "order": 7,
+      "text": "At the end of the cooking time, test that the turkey is cooked through by inserting a skewer or roasting fork into the thickest part of its thigh; if the juices run clear, the meat is cooked. Alternatively, use a meat thermometer; if cooked, the temperature should be 65C for 10 minutes, or up to 74C for 2 minutes. If the turkey is not fully cooked, return it to the oven until the juices run clear.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "At the end of the cooking time, test that the turkey is cooked through by inserting a skewer or roasting fork into the thickest part of its thigh; if the juices run clear, the meat is cooked. Alternatively, use a meat thermometer; if cooked, the temperature should be 65C for 10 minutes, or up to 74C for 2 minutes. If the turkey is not fully cooked, return it to the oven until the juices run clear."
+    },
+    {
+      "order": 8,
+      "text": "Remove the turkey from the oven and transfer the bird to a large, deep-sided tray, reserving the roasting tray the turkey was cooked in along with the cooking juices. Set the turkey aside to rest for a minimum of 30 minutes and up to 1½ hours. While the turkey is resting, cook your roast potatoes and vegetable dishes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove the turkey from the oven and transfer the bird to a large, deep-sided tray, reserving the roasting tray the turkey was cooked in along with the cooking juices. Set the turkey aside to rest for a minimum of 30 minutes and up to 1½ hours. While the turkey is resting, cook your roast potatoes and vegetable dishes. "
+    },
+    {
+      "order": 9,
+      "text": "When you’re almost ready to serve the meal, return the roasting tray used to cook the turkey to the stove top. Bring the cooking juices to the boil over a medium heat, scraping up any burned bits from the bottom of the tray using a wooden spoon.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "When you’re almost ready to serve the meal, return the roasting tray used to cook the turkey to the stove top. Bring the cooking juices to the boil over a medium heat, scraping up any burned bits from the bottom of the tray using a wooden spoon. "
+    },
+    {
+      "order": 10,
+      "text": "Collect the juices released by the turkey as it was resting and add them to the gravy. Season, to taste, with salt and freshly ground black pepper, if needed.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Collect the juices released by the turkey as it was resting and add them to the gravy. Season, to taste, with salt and freshly ground black pepper, if needed."
+    },
+    {
+      "order": 11,
+      "text": "Reduce the heat until the gravy is simmering, then stir in the dissolved arrowroot and cook until the gravy has thickened. Strain the gravy through a fine sieve into a warmed jug. Keep warm.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Reduce the heat until the gravy is simmering, then stir in the dissolved arrowroot and cook until the gravy has thickened. Strain the gravy through a fine sieve into a warmed jug. Keep warm."
+    },
+    {
+      "order": 12,
+      "text": "To serve, bring the turkey to the table and carve into slices. Serve with the roast potatoes and vegetables. Pour over the gravy.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To serve, bring the turkey to the table and carve into slices. Serve with the roast potatoes and vegetables. Pour over the gravy."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/the_perfect_roast_turkey_01155_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "Tip 1: As is so often the way when it comes to cooking, buying the best quality ingredients that you can afford is key to making this dish taste spectacular. If you are unable to use a fresh turkey, ensure that your frozen turkey is thoroughly defrosted before you start. Whether you’re using a fresh or frozen bird, allow it to return to room temperature for before cooking. Tip 2: Resting the turkey is an important process which allows the meat to become tender and succulent as the juices inside the meat become more evenly distributed throughout the bird - so don’t skip this stage! Tip 3: You may be a little concerned about the cooking time (or lack of it). Believe me, it has been tried, tested and tried again. During the cooking process the turkey will absorb the heat from the oven and this absorbed heat will continue to cook the bird as it rests which can increase the internal temperature by up to 10C, depending on the size of the turkey. It is important to use a good-quality turkey (as specified in the recipe) because they tend to cook faster."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 39,
+      "ratingValue": 4.615384615384615
+    },
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Raymond Blanc has the best roast turkey recipe. It's easy to cook, tender and juicy. It's the perfect recipe for a stress-free Christmas turkey dinner. Get exact <a href=\"https://www.bbc.co.uk/food/articles/roast-calculator\">roast turkey cooking times</a> with our roast calculator.\r\n",
+    "headline": "Perfect roast turkey",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/the_perfect_roast_turkey_01155_16x9.jpg"
+    },
+    "name": "Perfect roast turkey",
+    "author": {
+      "@type": "Person",
+      "name": "Raymond Blanc"
+    },
+    "datePublished": "2014-12-12T16:30:00.000Z",
+    "dateModified": "2025-12-11T12:13:15.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 39,
+      "ratingValue": 4.615384615384615
+    },
+    "prepTime": "PT1H",
+    "cookTime": "PT2H",
+    "keywords": "christmas dinner, christmas for over 6, classic christmas menu, christmas, thanksgiving, roast turkey, turkey, egg free, gluten free, nut free, pregnancy friendly, autumn, winter, Christmas Kitchen",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "British",
+    "recipeIngredient": [
+      "20ml/¾fl oz rapeseed oil",
+      "1 x 5kg/11lb good-quality free-range turkey, preferably organically reared, wishbone removed (ask your butcher to remove the wings and neck and chop them into 2.5cm/1in pieces to use in the dish)",
+      "40g/1½oz unsalted butter, softened to room temperature",
+      "2 pinches sea salt flakes",
+      "2 pinches freshly ground white pepper",
+      "200ml/7fl oz water",
+      "salt and freshly ground black pepper",
+      "1-2 tsp ground arrowroot (depending on how thick you like your gravy), dissolved in 1 tbsp cold water",
+      "roast potatoes and steamed seasonal vegetables, to serve"
+    ],
+    "recipeInstructions": [
+      "Remove the turkey from the fridge and bring to room temperature - this will take at least an hour. When you are ready to cook, preheat the oven to 230C/220C Fan/Gas 8. ",
+      "Heat the rapeseed oil in a large, heavy-based roasting tray on the stove top. Add the chopped turkey wings and neck and fry for 8-10 minutes, turning the pieces over every 2-3 minutes, or until evenly browned all over.",
+      "Meanwhile, in a small bowl, soften the butter with the back of a dessert spoon, then season  with the salt and freshly ground white pepper. Using a pastry brush or your hands, smear the seasoned butter all over the turkey. Add any remaining butter to the roasting tray once the chopped wings and neck have browned.",
+      "Place the turkey on top of the wing and neck pieces, then roast in the oven for 30 minutes. Remove the turkey from the oven and baste all over with the cooking juices.",
+      "Reduce the oven temperature to 160C/150C Fan/Gas 3.",
+      "Pour the water into the roasting tray, then return the turkey to the oven and continue to cook for a further 1 hour, basting the bird with the cooking juices every 20 minutes (do this quickly to prevent the heat escaping from the oven).",
+      "At the end of the cooking time, test that the turkey is cooked through by inserting a skewer or roasting fork into the thickest part of its thigh; if the juices run clear, the meat is cooked. Alternatively, use a meat thermometer; if cooked, the temperature should be 65C for 10 minutes, or up to 74C for 2 minutes. If the turkey is not fully cooked, return it to the oven until the juices run clear.",
+      "Remove the turkey from the oven and transfer the bird to a large, deep-sided tray, reserving the roasting tray the turkey was cooked in along with the cooking juices. Set the turkey aside to rest for a minimum of 30 minutes and up to 1½ hours. While the turkey is resting, cook your roast potatoes and vegetable dishes. ",
+      "When you’re almost ready to serve the meal, return the roasting tray used to cook the turkey to the stove top. Bring the cooking juices to the boil over a medium heat, scraping up any burned bits from the bottom of the tray using a wooden spoon. ",
+      "Collect the juices released by the turkey as it was resting and add them to the gravy. Season, to taste, with salt and freshly ground black pepper, if needed.",
+      "Reduce the heat until the gravy is simmering, then stir in the dissolved arrowroot and cook until the gravy has thickened. Strain the gravy through a fine sieve into a warmed jug. Keep warm.",
+      "To serve, bring the turkey to the table and carve into slices. Serve with the roast potatoes and vegetables. Pour over the gravy."
+    ],
+    "recipeYield": "Serves 8-10",
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "range-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

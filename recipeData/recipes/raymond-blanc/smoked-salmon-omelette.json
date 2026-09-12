@@ -1,0 +1,283 @@
+{
+  "schemaVersion": 1,
+  "id": "raymond-blanc/smoked-salmon-omelette",
+  "slug": "smoked-salmon-omelette",
+  "chefId": "chef_raymond-blanc",
+  "chefSlug": "raymond-blanc",
+  "chefName": "Raymond Blanc",
+  "title": "Smoked salmon omelette",
+  "description": "Raymond Blanc shows you how to make a perfect omelette with smoked salmon in only three minutes.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/smokedsalmonomelette_93229",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/smokedsalmonomelette_93229",
+    "retrievedAt": "2026-09-11T00:27:31.356Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Raymond Blanc"
+    ],
+    "datePublished": "2010-04-06T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "4b25d00d7a6889c751b900c469e9e02d195a019b046e5ba904c41fc33fd0eda8",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": []
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 1"
+    ],
+    "servings": 1
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 10,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "French"
+  ],
+  "category": [
+    "Brunch"
+  ],
+  "keywords": [
+    "quick",
+    "our best brunch",
+    "gluten-free breakfasts",
+    "best salmon",
+    "exam day breakfasts",
+    "christmas breakfasts",
+    "easy omelettes",
+    "foods to help you feel better",
+    "low-fodmap lunches",
+    "low fodmap",
+    "the best brunch",
+    "breakfast",
+    "lunch",
+    "valentine's day",
+    "omelette",
+    "egg",
+    "smoked salmon",
+    "gluten free",
+    "nut free",
+    "Raymond Blanc's Kitchen Secrets"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "3 free-range eggs",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "free-range eggs",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "15g/½oz unsalted butter",
+          "quantity": 15,
+          "quantityText": "15",
+          "unit": "g",
+          "name": "/½oz unsalted butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "40g/1½oz smoked salmon, roughly chopped",
+          "quantity": 40,
+          "quantityText": "40",
+          "unit": "g",
+          "name": "/1½oz smoked salmon",
+          "note": "roughly chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp olive oil",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Gently beat the eggs together in a mixing bowl and season with salt and freshly ground black pepper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Gently beat the eggs together in a mixing bowl and season with salt and freshly ground black pepper."
+    },
+    {
+      "order": 2,
+      "text": "Heat the butter in an omelette pan until foaming. Pour in the beaten eggs and cook for a few seconds, until the bottom of the omelette is lightly set.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat the butter in an omelette pan until foaming. Pour in the beaten eggs and cook for a few seconds, until the bottom of the omelette is lightly set."
+    },
+    {
+      "order": 3,
+      "text": "Push the set parts of the omelette into the uncooked centre of the omelette. Cook again, until the omelette has set further, then push the set parts into the centre of the omelette again.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Push the set parts of the omelette into the uncooked centre of the omelette. Cook again, until the omelette has set further, then push the set parts into the centre of the omelette again. "
+    },
+    {
+      "order": 4,
+      "text": "Repeat the process until the eggs have just set but the omelette is still soft in the centre.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Repeat the process until the eggs have just set but the omelette is still soft in the centre."
+    },
+    {
+      "order": 5,
+      "text": "Place half of the smoked salmon into the centre of the omelette and cook for 30 seconds.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place half of the smoked salmon into the centre of the omelette and cook for 30 seconds."
+    },
+    {
+      "order": 6,
+      "text": "Remove from the heat and tilt the pan slightly to move the omelette to the edge of the pan. Slide the omelette onto a serving plate, rolling it up as you go. Brush the omelette with melted butter, add a few slices of smoked salmon along the top. Sprinkle with chopped chives and serve.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove from the heat and tilt the pan slightly to move the omelette to the edge of the pan. Slide the omelette onto a serving plate, rolling it up as you go. Brush the omelette with melted butter, add a few slices of smoked salmon along the top. Sprinkle with chopped chives and serve."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/smokedsalmonomelette_93229_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 13,
+      "ratingValue": 4.538461538461538
+    },
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Raymond Blanc shows you how to make a perfect omelette with smoked salmon in only three minutes.",
+    "headline": "Smoked salmon omelette",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/smokedsalmonomelette_93229_16x9.jpg"
+    },
+    "name": "Smoked salmon omelette",
+    "author": {
+      "@type": "Person",
+      "name": "Raymond Blanc"
+    },
+    "datePublished": "2010-04-06T00:00:00.000Z",
+    "dateModified": "2023-07-11T11:30:30.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 13,
+      "ratingValue": 4.538461538461538
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT10M",
+    "keywords": "quick, our best brunch, gluten-free breakfasts, best salmon, exam day breakfasts, christmas breakfasts, easy omelettes, foods to help you feel better, low-fodmap lunches, low fodmap, the best brunch, breakfast, lunch, valentine's day, omelette, egg, smoked salmon, gluten free, nut free, Raymond Blanc's Kitchen Secrets",
+    "recipeCategory": "Brunch",
+    "recipeCuisine": "French",
+    "recipeIngredient": [
+      "3 free-range eggs",
+      "Salt and freshly ground black pepper",
+      "15g/½oz unsalted butter",
+      "40g/1½oz smoked salmon, roughly chopped",
+      "½ tsp olive oil"
+    ],
+    "recipeInstructions": [
+      "Gently beat the eggs together in a mixing bowl and season with salt and freshly ground black pepper.",
+      "Heat the butter in an omelette pan until foaming. Pour in the beaten eggs and cook for a few seconds, until the bottom of the omelette is lightly set.",
+      "Push the set parts of the omelette into the uncooked centre of the omelette. Cook again, until the omelette has set further, then push the set parts into the centre of the omelette again. ",
+      "Repeat the process until the eggs have just set but the omelette is still soft in the centre.",
+      "Place half of the smoked salmon into the centre of the omelette and cook for 30 seconds.",
+      "Remove from the heat and tilt the pan slightly to move the omelette to the edge of the pan. Slide the omelette onto a serving plate, rolling it up as you go. Brush the omelette with melted butter, add a few slices of smoked salmon along the top. Sprinkle with chopped chives and serve."
+    ],
+    "recipeYield": "Serves 1",
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

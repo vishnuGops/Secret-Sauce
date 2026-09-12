@@ -1,0 +1,596 @@
+{
+  "schemaVersion": 1,
+  "id": "huy-vu/homemade-udon-noodles",
+  "slug": "homemade-udon-noodles",
+  "chefId": "chef_huy-vu",
+  "chefSlug": "huy-vu",
+  "chefName": "Huy Vu",
+  "title": "Homemade Udon Noodles",
+  "description": "Fresh, plump, and chewy udon noodles made from scratch are just as delicious as the restaurant with this recipe.",
+  "source": {
+    "sourceUrl": "https://www.hungryhuy.com/udon-noodles/",
+    "finalUrl": "https://www.hungryhuy.com/udon-noodles/",
+    "retrievedAt": "2026-09-11T03:14:24.989Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2020-07-16T19:54:31+00:00",
+    "rights": "Hungry Huy. Functional content plus a link, for internal app testing. Not redistributed.",
+    "pageTitle": "How To Make Udon Noodles From Scratch - Hungry Huy",
+    "htmlSha256": "1d8a57f1e8e5200d6a9257db2a5a05071f092b4499cca1a1e93a9d09bd10162e",
+    "jsonLdBlockCount": 2,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": [
+        "equipment-from-html: 2",
+        "ingredient-html-only: ▢ 111 g or &frac12; c boiling water",
+        "ingredient-html-only: ▢ 30 g or &frac14; c tapioca starch",
+        "ingredient-jsonld-only: 2",
+        "regrouped-from-html: 2 groups"
+      ]
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "2",
+      "2 (or 300 g udon noodles)"
+    ],
+    "servings": 2
+  },
+  "timing": {
+    "prepMinutes": 10,
+    "cookMinutes": 30,
+    "totalMinutes": 190,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Japanese"
+  ],
+  "category": [
+    "Main Course"
+  ],
+  "keywords": [
+    "noodles",
+    "udon"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "▢ 111 g or &frac12; c boiling water",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 111 g or &frac12; c boiling water",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "10 g or 2 tsp salt",
+          "quantity": 10,
+          "quantityText": "10",
+          "unit": "g",
+          "name": "or 2 tsp salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "190 g or 1 ⅓ c all purpose flour",
+          "quantity": 190,
+          "quantityText": "190",
+          "unit": "g",
+          "name": "or 1 ⅓ c all purpose flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "▢ 30 g or &frac14; c tapioca starch",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 30 g or &frac14; c tapioca starch",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "cornstarch (for sprinkling)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "cornstarch (for sprinkling)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "Cooking udon",
+      "items": [
+        {
+          "raw": "8 c water (for boiling)",
+          "quantity": 8,
+          "quantityText": "8",
+          "unit": null,
+          "name": "c water (for boiling)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "10 g or 2 tsp salt",
+          "quantity": 10,
+          "quantityText": "10",
+          "unit": "g",
+          "name": "or 2 tsp salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "ice",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "ice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "water (for ice bath)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "water (for ice bath)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "111 g or ½ c boiling water",
+          "quantity": 111,
+          "quantityText": "111",
+          "unit": "g",
+          "name": "or ½ c boiling water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "30 g or ¼ c tapioca starch",
+          "quantity": 30,
+          "quantityText": "30",
+          "unit": "g",
+          "name": "or ¼ c tapioca starch",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Boil water in a kettle or over the stove top and measure out your salt. Combine both in a measuring cup and stir until it dissolves.",
+      "stepGroup": "Making udon noodles",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Boil water in a kettle or over the stove top and measure out your salt. Combine both in a measuring cup and stir until it dissolves.",
+        "name": "Boil water in a kettle or over the stove top and measure out your salt. Combine both in a measuring cup and stir until it dissolves.",
+        "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "In a separate large mixing bowl, sift the all purpose flour and tapioca starch over the bowl.",
+      "stepGroup": "Making udon noodles",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a separate large mixing bowl, sift the all purpose flour and tapioca starch over the bowl.",
+        "name": "In a separate large mixing bowl, sift the all purpose flour and tapioca starch over the bowl.",
+        "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Carefully add the water mixture over the sifted dry ingredients and use chopsticks or a wooden spoon to mix together until it turns into a shaggy dough.",
+      "stepGroup": "Making udon noodles",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Carefully add the water mixture over the sifted dry ingredients and use chopsticks or a wooden spoon to mix together until it turns into a shaggy dough.",
+        "name": "Carefully add the water mixture over the sifted dry ingredients and use chopsticks or a wooden spoon to mix together until it turns into a shaggy dough.",
+        "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Use your hands to combine the shaggy dough and turn it into a ball of dough; It’s okay if there are some lumps in the texture. Transfer the dough onto a clean surface and try to knead for about three to five minutes to combine any loose parts of dough. Don’t worry if your dough is still lumpy at the end because you will finish kneading it later. The dough should not be sticky, but if you need extra flour sprinkle in a little while kneading.",
+      "stepGroup": "Making udon noodles",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Use your hands to combine the shaggy dough and turn it into a ball of dough; It’s okay if there are some lumps in the texture. Transfer the dough onto a clean surface and try to knead for about three to five minutes to combine any loose parts of dough. Don’t worry if your dough is still lumpy at the end because you will finish kneading it later. The dough should not be sticky, but if you need extra flour sprinkle in a little while kneading.",
+        "name": "Use your hands to combine the shaggy dough and turn it into a ball of dough; It’s okay if there are some lumps in the texture. Transfer the dough onto a clean surface and try to knead for about three to five minutes to combine any loose parts of dough. Don’t worry if your dough is still lumpy at the end because you will finish kneading it later. The dough should not be sticky, but if you need extra flour sprinkle in a little while kneading.",
+        "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Place the dough into a one gallon resealable bag (if you are doubling this recipe, you need to use a large five gallon bag). Press out all the air and leave it to rest for 30 minutes on the counter.",
+      "stepGroup": "Making udon noodles",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Place the dough into a one gallon resealable bag (if you are doubling this recipe, you need to use a large five gallon bag). Press out all the air and leave it to rest for 30 minutes on the counter.",
+        "name": "Place the dough into a one gallon resealable bag (if you are doubling this recipe, you need to use a large five gallon bag). Press out all the air and leave it to rest for 30 minutes on the counter.",
+        "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-4"
+      }
+    },
+    {
+      "order": 6,
+      "text": "After resting, place a dish towel on the floor, put the dough bag on the towel, and place another dish towel on top.",
+      "stepGroup": "Making udon noodles",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "After resting, place a dish towel on the floor, put the dough bag on the towel, and place another dish towel on top.",
+        "name": "After resting, place a dish towel on the floor, put the dough bag on the towel, and place another dish towel on top.",
+        "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-5"
+      }
+    },
+    {
+      "order": 7,
+      "text": "Carefully, step on the dough to flatten it until it turns into an even disk. This should take about 30 steps to turn from a ball into a flat disk. Remove the disk and fold it back into a ball and transfer it to the plastic bag. Repeat the foot kneading two more times for a total of about 90 steps. Test for doneness by slightly pinching the dough with your thumb and pointer finger, but don’t break it off. The end result should give you very smooth and soft dough that has a similar softness as an earlobe. After your third time foot stomping, fold into a ball again, transfer back into the bag and rest on the counter for two hours.",
+      "stepGroup": "Making udon noodles",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Carefully, step on the dough to flatten it until it turns into an even disk. This should take about 30 steps to turn from a ball into a flat disk. Remove the disk and fold it back into a ball and transfer it to the plastic bag. Repeat the foot kneading two more times for a total of about 90 steps. Test for doneness by slightly pinching the dough with your thumb and pointer finger, but don’t break it off. The end result should give you very smooth and soft dough that has a similar softness as an earlobe. After your third time foot stomping, fold into a ball again, transfer back into the bag and rest on the counter for two hours.",
+        "name": "Carefully, step on the dough to flatten it until it turns into an even disk. This should take about 30 steps to turn from a ball into a flat disk. Remove the disk and fold it back into a ball and transfer it to the plastic bag. Repeat the foot kneading two more times for a total of about 90 steps. Test for doneness by slightly pinching the dough with your thumb and pointer finger, but don’t break it off. The end result should give you very smooth and soft dough that has a similar softness as an earlobe. After your third time foot stomping, fold into a ball again, transfer back into the bag and rest on the counter for two hours.",
+        "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-6"
+      }
+    },
+    {
+      "order": 8,
+      "text": "Rolling option 1 - Pasta machine: Transfer the dough onto a clean surface and use your hands to flatten it into a small oval so that it can go through the pasta machine on the lowest setting, mine is setting 0. Pass the dough through the lowest setting at least two or three times or until it becomes smooth. Continue to move up until setting 2 or about 3.5 or 4 millimeters in thickness.",
+      "stepGroup": "Making udon noodles",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Rolling option 1 - Pasta machine: Transfer the dough onto a clean surface and use your hands to flatten it into a small oval so that it can go through the pasta machine on the lowest setting, mine is setting 0. Pass the dough through the lowest setting at least two or three times or until it becomes smooth. Continue to move up until setting 2 or about 3.5 or 4 millimeters in thickness.",
+        "name": "Rolling option 1 - Pasta machine: Transfer the dough onto a clean surface and use your hands to flatten it into a small oval so that it can go through the pasta machine on the lowest setting, mine is setting 0. Pass the dough through the lowest setting at least two or three times or until it becomes smooth. Continue to move up until setting 2 or about 3.5 or 4 millimeters in thickness.",
+        "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-7"
+      }
+    },
+    {
+      "order": 9,
+      "text": "Rolling option 2 - Rolling pin: Use your rolling pin to flatten out the dough in a rectangle until it reaches 3.5 or 4 millimeters in thickness.",
+      "stepGroup": "Making udon noodles",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Rolling option 2 - Rolling pin: Use your rolling pin to flatten out the dough in a rectangle until it reaches 3.5 or 4 millimeters in thickness.",
+        "name": "Rolling option 2 - Rolling pin: Use your rolling pin to flatten out the dough in a rectangle until it reaches 3.5 or 4 millimeters in thickness.",
+        "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-8"
+      }
+    },
+    {
+      "order": 10,
+      "text": "Cutting: Sprinkle some cornstarch on both sides of the dough and fold about ¼ of one side towards the middle. Continue this fold until you reach the other end. Position your folded dough so that it sits horizontally on the surface. Use a very sharp knife to cut vertical slices that are 3 millimeters in thickness in width. Remember that the udon noodles will get slightly larger while boiling (about 20-30% bigger) so you don’t want to cut pieces that are too thick. Sprinkle more cornstarch over the cut noodles and use your fingers to detangle them. Cook them immediately or freeze them in nests in an airtight bag.",
+      "stepGroup": "Making udon noodles",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Cutting: Sprinkle some cornstarch on both sides of the dough and fold about ¼ of one side towards the middle. Continue this fold until you reach the other end. Position your folded dough so that it sits horizontally on the surface. Use a very sharp knife to cut vertical slices that are 3 millimeters in thickness in width. Remember that the udon noodles will get slightly larger while boiling (about 20-30% bigger) so you don’t want to cut pieces that are too thick. Sprinkle more cornstarch over the cut noodles and use your fingers to detangle them. Cook them immediately or freeze them in nests in an airtight bag.",
+        "name": "Cutting: Sprinkle some cornstarch on both sides of the dough and fold about ¼ of one side towards the middle. Continue this fold until you reach the other end. Position your folded dough so that it sits horizontally on the surface. Use a very sharp knife to cut vertical slices that are 3 millimeters in thickness in width. Remember that the udon noodles will get slightly larger while boiling (about 20-30% bigger) so you don’t want to cut pieces that are too thick. Sprinkle more cornstarch over the cut noodles and use your fingers to detangle them. Cook them immediately or freeze them in nests in an airtight bag.",
+        "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-9"
+      }
+    },
+    {
+      "order": 11,
+      "text": "Add water in a large pot and bring to a boil. Add salt and swirl until it dissolves. Add about half of the noodles into the water and swirl them around to prevent them from sticking. Continue to boil the noodles for about 12-15 minutes for fresh noodles (or 20-25 minutes if frozen) or until they are soft throughout with a slight chewy texture.",
+      "stepGroup": "Cooking udon noodles",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add water in a large pot and bring to a boil. Add salt and swirl until it dissolves. Add about half of the noodles into the water and swirl them around to prevent them from sticking. Continue to boil the noodles for about 12-15 minutes for fresh noodles (or 20-25 minutes if frozen) or until they are soft throughout with a slight chewy texture.",
+        "name": "Add water in a large pot and bring to a boil. Add salt and swirl until it dissolves. Add about half of the noodles into the water and swirl them around to prevent them from sticking. Continue to boil the noodles for about 12-15 minutes for fresh noodles (or 20-25 minutes if frozen) or until they are soft throughout with a slight chewy texture.",
+        "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-1-0"
+      }
+    },
+    {
+      "order": 12,
+      "text": "Remove the noodles when they’re done and straight into an ice bath for about one minute to stop the cooking.",
+      "stepGroup": "Cooking udon noodles",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Remove the noodles when they’re done and straight into an ice bath for about one minute to stop the cooking.",
+        "name": "Remove the noodles when they’re done and straight into an ice bath for about one minute to stop the cooking.",
+        "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-1-1"
+      }
+    },
+    {
+      "order": 13,
+      "text": "Add the noodles into a soup or stir fry them in a yaki udon recipe, and enjoy!",
+      "stepGroup": "Cooking udon noodles",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add the noodles into a soup or stir fry them in a yaki udon recipe, and enjoy!",
+        "name": "Add the noodles into a soup or stir fry them in a yaki udon recipe, and enjoy!",
+        "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-1-2"
+      }
+    }
+  ],
+  "equipment": [
+    "pasta machine &ndash; Marcato &ndash; Atlas 150",
+    "rolling pin"
+  ],
+  "supplies": [],
+  "nutrition": {
+    "calories": "395.75 kcal",
+    "carbohydrateContent": "85.55 g",
+    "proteinContent": "9.81 g",
+    "fatContent": "0.93 g",
+    "saturatedFatContent": "0.14 g",
+    "sodiumContent": "3927.8 mg",
+    "fiberContent": "2.56 g",
+    "sugarContent": "0.26 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cut-udon-sq.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cut-udon-sq-500x500.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cut-udon-sq-500x375.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cut-udon-sq-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "3"
+    }
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Homemade Udon Noodles",
+    "author": {
+      "@id": "https://www.hungryhuy.com/#/schema/person/77ba703312129b3930232d1c829f0ff0"
+    },
+    "description": "Fresh, plump, and chewy udon noodles made from scratch are just as delicious as the restaurant with this recipe.",
+    "datePublished": "2020-07-16T19:54:31+00:00",
+    "image": [
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cut-udon-sq.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cut-udon-sq-500x500.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cut-udon-sq-500x375.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cut-udon-sq-480x270.jpg"
+    ],
+    "recipeYield": [
+      "2",
+      "2 (or 300 g udon noodles)"
+    ],
+    "prepTime": "PT10M",
+    "cookTime": "PT30M",
+    "totalTime": "PT190M",
+    "recipeIngredient": [
+      "111 g or ½ c boiling water",
+      "10 g or 2 tsp salt",
+      "190 g or 1 ⅓ c all purpose flour",
+      "30 g or ¼ c tapioca starch",
+      "cornstarch (for sprinkling)",
+      "8 c water (for boiling)",
+      "10 g or 2 tsp salt",
+      "ice",
+      "water (for ice bath)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToSection",
+        "name": "Making udon noodles",
+        "itemListElement": [
+          {
+            "@type": "HowToStep",
+            "text": "Boil water in a kettle or over the stove top and measure out your salt. Combine both in a measuring cup and stir until it dissolves.",
+            "name": "Boil water in a kettle or over the stove top and measure out your salt. Combine both in a measuring cup and stir until it dissolves.",
+            "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-0"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "In a separate large mixing bowl, sift the all purpose flour and tapioca starch over the bowl.",
+            "name": "In a separate large mixing bowl, sift the all purpose flour and tapioca starch over the bowl.",
+            "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-1"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Carefully add the water mixture over the sifted dry ingredients and use chopsticks or a wooden spoon to mix together until it turns into a shaggy dough.",
+            "name": "Carefully add the water mixture over the sifted dry ingredients and use chopsticks or a wooden spoon to mix together until it turns into a shaggy dough.",
+            "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-2"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Use your hands to combine the shaggy dough and turn it into a ball of dough; It’s okay if there are some lumps in the texture. Transfer the dough onto a clean surface and try to knead for about three to five minutes to combine any loose parts of dough. Don’t worry if your dough is still lumpy at the end because you will finish kneading it later. The dough should not be sticky, but if you need extra flour sprinkle in a little while kneading.",
+            "name": "Use your hands to combine the shaggy dough and turn it into a ball of dough; It’s okay if there are some lumps in the texture. Transfer the dough onto a clean surface and try to knead for about three to five minutes to combine any loose parts of dough. Don’t worry if your dough is still lumpy at the end because you will finish kneading it later. The dough should not be sticky, but if you need extra flour sprinkle in a little while kneading.",
+            "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-3"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Place the dough into a one gallon resealable bag (if you are doubling this recipe, you need to use a large five gallon bag). Press out all the air and leave it to rest for 30 minutes on the counter.",
+            "name": "Place the dough into a one gallon resealable bag (if you are doubling this recipe, you need to use a large five gallon bag). Press out all the air and leave it to rest for 30 minutes on the counter.",
+            "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-4"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "After resting, place a dish towel on the floor, put the dough bag on the towel, and place another dish towel on top.",
+            "name": "After resting, place a dish towel on the floor, put the dough bag on the towel, and place another dish towel on top.",
+            "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-5"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Carefully, step on the dough to flatten it until it turns into an even disk. This should take about 30 steps to turn from a ball into a flat disk. Remove the disk and fold it back into a ball and transfer it to the plastic bag. Repeat the foot kneading two more times for a total of about 90 steps. Test for doneness by slightly pinching the dough with your thumb and pointer finger, but don’t break it off. The end result should give you very smooth and soft dough that has a similar softness as an earlobe. After your third time foot stomping, fold into a ball again, transfer back into the bag and rest on the counter for two hours.",
+            "name": "Carefully, step on the dough to flatten it until it turns into an even disk. This should take about 30 steps to turn from a ball into a flat disk. Remove the disk and fold it back into a ball and transfer it to the plastic bag. Repeat the foot kneading two more times for a total of about 90 steps. Test for doneness by slightly pinching the dough with your thumb and pointer finger, but don’t break it off. The end result should give you very smooth and soft dough that has a similar softness as an earlobe. After your third time foot stomping, fold into a ball again, transfer back into the bag and rest on the counter for two hours.",
+            "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-6"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Rolling option 1 - Pasta machine: Transfer the dough onto a clean surface and use your hands to flatten it into a small oval so that it can go through the pasta machine on the lowest setting, mine is setting 0. Pass the dough through the lowest setting at least two or three times or until it becomes smooth. Continue to move up until setting 2 or about 3.5 or 4 millimeters in thickness.",
+            "name": "Rolling option 1 - Pasta machine: Transfer the dough onto a clean surface and use your hands to flatten it into a small oval so that it can go through the pasta machine on the lowest setting, mine is setting 0. Pass the dough through the lowest setting at least two or three times or until it becomes smooth. Continue to move up until setting 2 or about 3.5 or 4 millimeters in thickness.",
+            "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-7"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Rolling option 2 - Rolling pin: Use your rolling pin to flatten out the dough in a rectangle until it reaches 3.5 or 4 millimeters in thickness.",
+            "name": "Rolling option 2 - Rolling pin: Use your rolling pin to flatten out the dough in a rectangle until it reaches 3.5 or 4 millimeters in thickness.",
+            "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-8"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Cutting: Sprinkle some cornstarch on both sides of the dough and fold about ¼ of one side towards the middle. Continue this fold until you reach the other end. Position your folded dough so that it sits horizontally on the surface. Use a very sharp knife to cut vertical slices that are 3 millimeters in thickness in width. Remember that the udon noodles will get slightly larger while boiling (about 20-30% bigger) so you don’t want to cut pieces that are too thick. Sprinkle more cornstarch over the cut noodles and use your fingers to detangle them. Cook them immediately or freeze them in nests in an airtight bag.",
+            "name": "Cutting: Sprinkle some cornstarch on both sides of the dough and fold about ¼ of one side towards the middle. Continue this fold until you reach the other end. Position your folded dough so that it sits horizontally on the surface. Use a very sharp knife to cut vertical slices that are 3 millimeters in thickness in width. Remember that the udon noodles will get slightly larger while boiling (about 20-30% bigger) so you don’t want to cut pieces that are too thick. Sprinkle more cornstarch over the cut noodles and use your fingers to detangle them. Cook them immediately or freeze them in nests in an airtight bag.",
+            "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-0-9"
+          }
+        ]
+      },
+      {
+        "@type": "HowToSection",
+        "name": "Cooking udon noodles",
+        "itemListElement": [
+          {
+            "@type": "HowToStep",
+            "text": "Add water in a large pot and bring to a boil. Add salt and swirl until it dissolves. Add about half of the noodles into the water and swirl them around to prevent them from sticking. Continue to boil the noodles for about 12-15 minutes for fresh noodles (or 20-25 minutes if frozen) or until they are soft throughout with a slight chewy texture.",
+            "name": "Add water in a large pot and bring to a boil. Add salt and swirl until it dissolves. Add about half of the noodles into the water and swirl them around to prevent them from sticking. Continue to boil the noodles for about 12-15 minutes for fresh noodles (or 20-25 minutes if frozen) or until they are soft throughout with a slight chewy texture.",
+            "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-1-0"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Remove the noodles when they’re done and straight into an ice bath for about one minute to stop the cooking.",
+            "name": "Remove the noodles when they’re done and straight into an ice bath for about one minute to stop the cooking.",
+            "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-1-1"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Add the noodles into a soup or stir fry them in a yaki udon recipe, and enjoy!",
+            "name": "Add the noodles into a soup or stir fry them in a yaki udon recipe, and enjoy!",
+            "url": "https://www.hungryhuy.com/udon-noodles/#wprm-recipe-8279-step-1-2"
+          }
+        ]
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "3"
+    },
+    "recipeCategory": [
+      "Main Course"
+    ],
+    "recipeCuisine": [
+      "Japanese"
+    ],
+    "keywords": "noodles, udon",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "395.75 kcal",
+      "carbohydrateContent": "85.55 g",
+      "proteinContent": "9.81 g",
+      "fatContent": "0.93 g",
+      "saturatedFatContent": "0.14 g",
+      "sodiumContent": "3927.8 mg",
+      "fiberContent": "2.56 g",
+      "sugarContent": "0.26 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://www.hungryhuy.com/udon-noodles/#recipe",
+    "isPartOf": {
+      "@id": "https://www.hungryhuy.com/udon-noodles/#article"
+    },
+    "mainEntityOfPage": "https://www.hungryhuy.com/udon-noodles/"
+  },
+  "audit": [
+    "unparsed-quantity:5",
+    "unmapped:aggregateRating"
+  ]
+}

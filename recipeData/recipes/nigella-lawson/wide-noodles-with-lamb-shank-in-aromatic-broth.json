@@ -1,0 +1,387 @@
+{
+  "schemaVersion": 1,
+  "id": "nigella-lawson/wide-noodles-with-lamb-shank-in-aromatic-broth",
+  "slug": "wide-noodles-with-lamb-shank-in-aromatic-broth",
+  "chefId": "chef_nigella-lawson",
+  "chefSlug": "nigella-lawson",
+  "chefName": "Nigella Lawson",
+  "title": "Wide noodles with lamb shank in aromatic broth",
+  "description": "While I could never have a recipe in any book I wrote that I didn’t love inordinately, this is just one of those special ones that fills me with a sense of glad-hearted awe. It’s not too much to claim for it: it’s almost ridiculously easy to make – I relish the quiet ceremony of its slow-cooking preparation – and it’s both comforting and enlivening to eat.\n\nYou do need to plan for it, as the gorgeous broth has to be made a day in advance (longer if you want), but it’s a very straightforward procedure once you’ve got the key ingredients in stock.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/wide_noodles_with_lamb_03003",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/wide_noodles_with_lamb_03003",
+    "retrievedAt": "2026-09-11T00:26:06.178Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Nigella Lawson"
+    ],
+    "datePublished": "2020-11-09T15:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "c604cfed91a1dbd40f87c3b76558ae293d4c7006baa85a664d6cb6055e6a194f",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 2"
+    ],
+    "servings": 2
+  },
+  "timing": {
+    "prepMinutes": 720,
+    "cookMinutes": 120,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "brothy bowls",
+    "instagram",
+    "lovely lamb",
+    "noodle bowls",
+    "pasta soup",
+    "pasta with a twist",
+    "recipes to impress",
+    "romantic",
+    "slow cooked lamb",
+    "spicy comfort food",
+    "spicy soup",
+    "weekend dinner ideas",
+    "winter",
+    "noodle soup",
+    "lamb shank",
+    "pappardelle",
+    "dairy free",
+    "egg free",
+    "nut free",
+    "pregnancy friendly",
+    "autumn",
+    "Nigella’s Cook",
+    "Eat",
+    "Repeat"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1 tbsp gochujang paste",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "gochujang paste",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp sea salt flakes (or 1 tsp fine sea salt), plus extra for cooking",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "sea salt flakes (or 1 tsp fine sea salt), plus extra for cooking",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp allspice berries",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "allspice berries",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp cumin seeds",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "cumin seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 star anise",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "star anise",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 lamb shank",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "lamb shank",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "25g/1oz piece fresh root ginger, peeled if preferred and cut into coins",
+          "quantity": 25,
+          "quantityText": "25",
+          "unit": "g",
+          "name": "/1oz piece fresh root ginger",
+          "note": "peeled if preferred and cut into coins",
+          "isOptional": false
+        },
+        {
+          "raw": "1 carrot, peeled if preferred and cut into 4 pieces",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "carrot",
+          "note": "peeled if preferred and cut into 4 pieces",
+          "isOptional": false
+        },
+        {
+          "raw": "2 large garlic cloves, bruised with the flat of a wide-bladed knife",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "large garlic cloves, bruised with the flat of a wide-bladed knife",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "70g/2½oz banana shallots, cut in half or or ½ onion, roughly chopped",
+          "quantity": 70,
+          "quantityText": "70",
+          "unit": "g",
+          "name": "/2½oz banana shallots",
+          "note": "cut in half or or ½ onion, roughly chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "175g/6oz dried pappardelle (not egg pappardelle) or other wide noodles",
+          "quantity": 175,
+          "quantityText": "175",
+          "unit": "g",
+          "name": "/6oz dried pappardelle (not egg pappardelle) or other wide noodles",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "200g/7oz Savoy cabbage, shredded",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "g",
+          "name": "/7oz Savoy cabbage",
+          "note": "shredded",
+          "isOptional": false
+        },
+        {
+          "raw": "crispy chilli oil, to serve",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "crispy chilli oil",
+          "note": "to serve",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 150C/130C Fan/Gas 2. Pour 1 litre/1¾ pint of cold water into a small casserole with a tightly fitting lid and stir in the gochujang paste until dissolved. Add the salt, allspice, cumin seeds and star anise. Now add the lamb shank to the pot and place over a medium heat.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 150C/130C Fan/Gas 2. Pour 1 litre/1¾ pint of cold water into a small casserole with a tightly fitting lid and stir in the gochujang paste until dissolved. Add the salt, allspice, cumin seeds and star anise. Now add the lamb shank to the pot and place over a medium heat."
+    },
+    {
+      "order": 2,
+      "text": "Add the ginger, carrot, garlic and shallots to the pot. Once everything’s in the pot, the lamb shank should be just covered. If it isn’t, add some more water. Bring to the boil then clamp on the lid and cook in the oven for 2–2½ hours, by which time the meat should be very tender indeed and ready to fall off the bone. Using tongs, transfer the lamb shank to a large bowl, then strain the liquid into a separate bowl, discarding the vegetables. Leave both the lamb and the stock to cool then chill in the fridge overnight.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the ginger, carrot, garlic and shallots to the pot. Once everything’s in the pot, the lamb shank should be just covered. If it isn’t, add some more water. Bring to the boil then clamp on the lid and cook in the oven for 2–2½ hours, by which time the meat should be very tender indeed and ready to fall off the bone. Using tongs, transfer the lamb shank to a large bowl, then strain the liquid into a separate bowl, discarding the vegetables. Leave both the lamb and the stock to cool then chill in the fridge overnight."
+    },
+    {
+      "order": 3,
+      "text": "The next day, remove the solidified fat from the top of the liquid and shred the meat – not too finely, you don’t want stringiness. Place the meat in a small saucepan and pour over the liquid. Place the lamb mixture over a very low heat so that it warms gently, though you do want it to be piping hot by the time the pasta and cabbage are cooked.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "The next day, remove the solidified fat from the top of the liquid and shred the meat – not too finely, you don’t want stringiness. Place the meat in a small saucepan and pour over the liquid. Place the lamb mixture over a very low heat so that it warms gently, though you do want it to be piping hot by the time the pasta and cabbage are cooked. "
+    },
+    {
+      "order": 4,
+      "text": "Meanwhile, bring some water to the boil in a large saucepan. When the water is boiling, add salt. Add the pappardelle and when it’s 3 minutes away from its full cooking time (check the packet for instructions), add the cabbage and stir well. When both cabbage and pasta are cooked, drain and divide between 2 noodle bowls.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, bring some water to the boil in a large saucepan. When the water is boiling, add salt. Add the pappardelle and when it’s 3 minutes away from its full cooking time (check the packet for instructions), add the cabbage and stir well. When both cabbage and pasta are cooked, drain and divide between 2 noodle bowls."
+    },
+    {
+      "order": 5,
+      "text": "Using a slotted spoon, lift out the hot lamb and share between the two bowls, then ladle the broth on top. Add 1 teaspoon of crispy chilli oil to each bowl and take both bowls to the table, making sure you come back for the chilli oil so you can add more as you eat.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Using a slotted spoon, lift out the hot lamb and share between the two bowls, then ladle the broth on top. Add 1 teaspoon of crispy chilli oil to each bowl and take both bowls to the table, making sure you come back for the chilli oil so you can add more as you eat."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/wide_noodles_with_lamb_03003_16x9.jpg"
+    ],
+    "video": [
+      {
+        "description": "Nigella explains that there is more to her Korean chilli paste than just heat and how she'll use it to make lamb shanks with wide noodles.",
+        "duration": "PT57S",
+        "name": "Chilli Paste",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/wide_noodles_with_lamb_03003_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-08T03:11:23.000Z"
+      }
+    ]
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "If you can’t get hold of gochujang, I dare say a teaspoon of dried chilli flakes would serve as a stand-in; it certainly would bring the heat (stir miso into the broth before eating). Should you need to feed more, then bulk up as needed; though while I often double the amount of lamb shanks if all three of us are home and also double the liquid, gochujang, and most other of the ingredients, I just add one and a half times the spices."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 29,
+      "ratingValue": 3.4827586206896552
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ],
+    "video": [
+      {
+        "description": "Nigella explains that there is more to her Korean chilli paste than just heat and how she'll use it to make lamb shanks with wide noodles.",
+        "duration": "PT57S",
+        "name": "Chilli Paste",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/wide_noodles_with_lamb_03003_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-08T03:11:23.000Z"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "While I could never have a recipe in any book I wrote that I didn’t love inordinately, this is just one of those special ones that fills me with a sense of glad-hearted awe. It’s not too much to claim for it: it’s almost ridiculously easy to make – I relish the quiet ceremony of its slow-cooking preparation – and it’s both comforting and enlivening to eat.\r\n\r\nYou do need to plan for it, as the gorgeous broth has to be made a day in advance (longer if you want), but it’s a very straightforward procedure once you’ve got the key ingredients in stock.",
+    "headline": "Wide noodles with lamb shank in aromatic broth",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/wide_noodles_with_lamb_03003_16x9.jpg"
+    },
+    "name": "Wide noodles with lamb shank in aromatic broth",
+    "author": {
+      "@type": "Person",
+      "name": "Nigella Lawson"
+    },
+    "datePublished": "2020-11-09T15:00:00.000Z",
+    "dateModified": "2026-08-18T15:07:20.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 29,
+      "ratingValue": 3.4827586206896552
+    },
+    "prepTime": "PT12H",
+    "cookTime": "PT2H",
+    "keywords": "brothy bowls, instagram, lovely lamb, noodle bowls, pasta soup, pasta with a twist , recipes to impress, romantic, slow cooked lamb, spicy comfort food, spicy soup, weekend dinner ideas, winter, noodle soup, lamb shank, pappardelle, dairy free, egg free, nut free, pregnancy friendly, autumn, Nigella’s Cook, Eat, Repeat",
+    "recipeCategory": "Main course",
+    "recipeIngredient": [
+      "1 tbsp gochujang paste",
+      "2 tsp sea salt flakes (or 1 tsp fine sea salt), plus extra for cooking",
+      "1 tsp allspice berries",
+      "1 tsp cumin seeds",
+      "1 star anise",
+      "1 lamb shank",
+      "25g/1oz piece fresh root ginger, peeled if preferred and cut into coins",
+      "1 carrot, peeled if preferred and cut into 4 pieces",
+      "2 large garlic cloves, bruised with the flat of a wide-bladed knife",
+      "70g/2½oz banana shallots, cut in half or or ½ onion, roughly chopped",
+      "175g/6oz dried pappardelle (not egg pappardelle) or other wide noodles",
+      "200g/7oz Savoy cabbage, shredded",
+      "crispy chilli oil, to serve"
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 150C/130C Fan/Gas 2. Pour 1 litre/1¾ pint of cold water into a small casserole with a tightly fitting lid and stir in the gochujang paste until dissolved. Add the salt, allspice, cumin seeds and star anise. Now add the lamb shank to the pot and place over a medium heat.",
+      "Add the ginger, carrot, garlic and shallots to the pot. Once everything’s in the pot, the lamb shank should be just covered. If it isn’t, add some more water. Bring to the boil then clamp on the lid and cook in the oven for 2–2½ hours, by which time the meat should be very tender indeed and ready to fall off the bone. Using tongs, transfer the lamb shank to a large bowl, then strain the liquid into a separate bowl, discarding the vegetables. Leave both the lamb and the stock to cool then chill in the fridge overnight.",
+      "The next day, remove the solidified fat from the top of the liquid and shred the meat – not too finely, you don’t want stringiness. Place the meat in a small saucepan and pour over the liquid. Place the lamb mixture over a very low heat so that it warms gently, though you do want it to be piping hot by the time the pasta and cabbage are cooked. ",
+      "Meanwhile, bring some water to the boil in a large saucepan. When the water is boiling, add salt. Add the pappardelle and when it’s 3 minutes away from its full cooking time (check the packet for instructions), add the cabbage and stir well. When both cabbage and pasta are cooked, drain and divide between 2 noodle bowls.",
+      "Using a slotted spoon, lift out the hot lamb and share between the two bowls, then ladle the broth on top. Add 1 teaspoon of crispy chilli oil to each bowl and take both bowls to the table, making sure you come back for the chilli oil so you can add more as you eat."
+    ],
+    "recipeYield": "Serves 2",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ],
+    "video": [
+      {
+        "description": "Nigella explains that there is more to her Korean chilli paste than just heat and how she'll use it to make lamb shanks with wide noodles.",
+        "duration": "PT57S",
+        "name": "Chilli Paste",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/wide_noodles_with_lamb_03003_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-08T03:11:23.000Z"
+      }
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet|video"
+  ]
+}

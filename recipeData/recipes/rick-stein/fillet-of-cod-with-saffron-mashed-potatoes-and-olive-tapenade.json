@@ -1,0 +1,899 @@
+{
+  "schemaVersion": 1,
+  "id": "rick-stein/fillet-of-cod-with-saffron-mashed-potatoes-and-olive-tapenade",
+  "slug": "fillet-of-cod-with-saffron-mashed-potatoes-and-olive-tapenade",
+  "chefId": "chef_rick-stein",
+  "chefSlug": "rick-stein",
+  "chefName": "Rick Stein",
+  "title": "Fillet of cod with saffron mashed potatoes and olive tapenade",
+  "description": "This fish supper is elevated with saffron-infused potatoes and a spicy white wine sauce to create something fitting for any special occasion.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/fillet_of_cod_with_69341",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/fillet_of_cod_with_69341",
+    "retrievedAt": "2026-09-11T00:26:25.022Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Rick Stein"
+    ],
+    "datePublished": "2026-06-06T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "d0082cfae10e14b77b063c060f6a133e4fc972f1d36d4bcf253fa8527c72ca04",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 6 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "cod",
+    "nut free",
+    "Saturday Kitchen"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the roasted fish stock",
+      "items": [
+        {
+          "raw": "25g/1oz unsalted butter",
+          "quantity": 25,
+          "quantityText": "25",
+          "unit": "g",
+          "name": "/1oz unsalted butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1kg/2lb 4oz fish bones, such as lemon sole, brill or plaice",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "kg",
+          "name": "/2lb 4oz fish bones, such as lemon sole, brill or plaice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz onions, chopped",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz onions",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz celery, chopped",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz celery",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz carrots, peeled and chopped",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz carrots",
+          "note": "peeled and chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp chopped fresh thyme",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "chopped fresh thyme",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the olive oil mayonnaise",
+      "items": [
+        {
+          "raw": "1 free-range egg (if making with a food processor) or 2 free-range egg yolks (if making by hand)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "free-range egg (if making with a food processor) or 2 free-range egg yolks (if making by hand)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp white wine vinegar",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "white wine vinegar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp salt",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "300ml/10fl oz olive oil",
+          "quantity": 300,
+          "quantityText": "300",
+          "unit": "ml",
+          "name": "/10fl oz olive oil",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the sauce",
+      "items": [
+        {
+          "raw": "1 tbsp olive oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz carrot, peeled and finely chopped",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz carrot",
+          "note": "peeled and finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz onion, finely chopped",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz onion",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "½ red chilli, seeds removed and finely chopped",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "red chilli",
+          "note": "seeds removed and finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "5cm/2in piece pared orange zest",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": null,
+          "name": "cm/2in piece pared orange zest",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ orange, juice only",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "orange, juice only",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "50ml/2fl oz white wine",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "ml",
+          "name": "/2fl oz white wine",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tomato, chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "tomato",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "600ml/20fl oz roasted fish stock (see above)",
+          "quantity": 600,
+          "quantityText": "600",
+          "unit": "ml",
+          "name": "/20fl oz roasted fish stock (see above)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 tbsp olive oil mayonnaise (see above)",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "olive oil mayonnaise (see above)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and white pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and white pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the saffron mashed potatoes",
+      "items": [
+        {
+          "raw": "900g/2lb floury potatoes, peeled and cut into chunks",
+          "quantity": 900,
+          "quantityText": "900",
+          "unit": "g",
+          "name": "/2lb floury potatoes",
+          "note": "peeled and cut into chunks",
+          "isOptional": false
+        },
+        {
+          "raw": "good pinch saffron",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "good pinch saffron",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ garlic clove, crushed",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "garlic clove",
+          "note": "crushed",
+          "isOptional": false
+        },
+        {
+          "raw": "50ml/2fl oz olive oil",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "ml",
+          "name": "/2fl oz olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "25ml/1fl oz double cream",
+          "quantity": 25,
+          "quantityText": "25",
+          "unit": "ml",
+          "name": "/1fl oz double cream",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the cod",
+      "items": [
+        {
+          "raw": "4 thick pieces cod fillet, approximately 175g/6oz each, skin on",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "thick pieces cod fillet, approximately 175g/6oz each, skin on",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 tbsp olive oil, for brushing and greasing",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "olive oil, for brushing and greasing",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "coarse sea salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "coarse sea salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tomatoes, skin removed, seeds removed and finely chopped, to garnish",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "tomatoes",
+          "note": "skin removed, seeds removed and finely chopped, to garnish",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp chopped fresh flatleaf parsley, to garnish",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "chopped fresh flatleaf parsley",
+          "note": "to garnish",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the tapenade",
+      "items": [
+        {
+          "raw": "150g/5½oz black olives, stones removed",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "g",
+          "name": "/5½oz black olives, stones removed",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "8 anchovy fillets",
+          "quantity": 8,
+          "quantityText": "8",
+          "unit": null,
+          "name": "anchovy fillets",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp capers",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "capers",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 lemon, juice only",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "lemon, juice only",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp cognac",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "cognac",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp Dijon mustard",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "Dijon mustard",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp olive oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the fish stock, preheat the oven to 200C/180C Fan/Gas 6.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the fish stock, preheat the oven to 200C/180C Fan/Gas 6."
+    },
+    {
+      "order": 2,
+      "text": "Melt the butter in a large roasting tin. Add the fish bones, vegetables and thyme and turn until everything evenly coated. Roast for 30 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Melt the butter in a large roasting tin. Add the fish bones, vegetables and thyme and turn until everything evenly coated. Roast for 30 minutes."
+    },
+    {
+      "order": 3,
+      "text": "Transfer everything to a large saucepan, add 2.25 litres/4 pints water and bring just to the boil.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Transfer everything to a large saucepan, add 2.25 litres/4 pints water and bring just to the boil."
+    },
+    {
+      "order": 4,
+      "text": "Simmer for 20 minutes, then strain through a muslin-lined sieve into a clean saucepan.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Simmer for 20 minutes, then strain through a muslin-lined sieve into a clean saucepan."
+    },
+    {
+      "order": 5,
+      "text": "Return to the heat and boil until reduced to approximately 1.2 litres/2 pints. Set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Return to the heat and boil until reduced to approximately 1.2 litres/2 pints. Set aside. "
+    },
+    {
+      "order": 6,
+      "text": "To make the mayonnaise in a food processor or blender, place the egg, vinegar and salt in a food processor or blender.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the mayonnaise in a food processor or blender, place the egg, vinegar and salt in a food processor or blender."
+    },
+    {
+      "order": 7,
+      "text": "With the motor running, gradually add the oil until a thick emulsion forms.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "With the motor running, gradually add the oil until a thick emulsion forms."
+    },
+    {
+      "order": 8,
+      "text": "To make by hand, ensure all of the ingredients are at room temperature.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make by hand, ensure all of the ingredients are at room temperature."
+    },
+    {
+      "order": 9,
+      "text": "Place the egg yolks, vinegar and salt in a bowl and whisk continuously while adding the oil a few drops at a time.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place the egg yolks, vinegar and salt in a bowl and whisk continuously while adding the oil a few drops at a time."
+    },
+    {
+      "order": 10,
+      "text": "Once the mixture begins to emulsify, gradually increase the rate at which the oil is added until fully incorporated. Set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Once the mixture begins to emulsify, gradually increase the rate at which the oil is added until fully incorporated. Set aside. "
+    },
+    {
+      "order": 11,
+      "text": "To make the sauce, heat the oil in a saucepan and fry the carrot, onion, chilli and orange zest for 5 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the sauce, heat the oil in a saucepan and fry the carrot, onion, chilli and orange zest for 5 minutes."
+    },
+    {
+      "order": 12,
+      "text": "Add the orange juice, wine, tomato and 600ml/20fl oz roasted fish stock and simmer for 20 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the orange juice, wine, tomato and 600ml/20fl oz roasted fish stock and simmer for 20 minutes. "
+    },
+    {
+      "order": 13,
+      "text": "Season with salt and white pepper, then strain the sauce through a sieve into a jug.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Season with salt and white pepper, then strain the sauce through a sieve into a jug."
+    },
+    {
+      "order": 14,
+      "text": "Place 4 tablespoons olive oil mayonnaise in a small saucepan over a low heat and gradually whisk in the strained sauce.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place 4 tablespoons olive oil mayonnaise in a small saucepan over a low heat and gradually whisk in the strained sauce."
+    },
+    {
+      "order": 15,
+      "text": "Cook gently until the sauce thickens enough to coat the back of a spoon. Do not allow it to boil. Keep warm.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Cook gently until the sauce thickens enough to coat the back of a spoon. Do not allow it to boil. Keep warm."
+    },
+    {
+      "order": 16,
+      "text": "To make the mashed potatoes, place the potatoes in a saucepan and barely cover with cold water.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the mashed potatoes, place the potatoes in a saucepan and barely cover with cold water."
+    },
+    {
+      "order": 17,
+      "text": "Add the saffron and a pinch of salt. Bring to the boil and cook for approximately 20 minutes, or until tender.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the saffron and a pinch of salt. Bring to the boil and cook for approximately 20 minutes, or until tender."
+    },
+    {
+      "order": 18,
+      "text": "Drain the cooking liquid into a clean small saucepan and boil rapidly until reduced to 4–6 tablespoons.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Drain the cooking liquid into a clean small saucepan and boil rapidly until reduced to 4–6 tablespoons."
+    },
+    {
+      "order": 19,
+      "text": "Mash the potatoes until smooth.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Mash the potatoes until smooth."
+    },
+    {
+      "order": 20,
+      "text": "Beat in the reduced cooking liquid, garlic, oil and cream. Season with salt and pepper. Keep warm.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Beat in the reduced cooking liquid, garlic, oil and cream. Season with salt and pepper. Keep warm."
+    },
+    {
+      "order": 21,
+      "text": "To make the cod, preheat the grill to high and oil the grill rack.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the cod, preheat the grill to high and oil the grill rack. "
+    },
+    {
+      "order": 22,
+      "text": "Brush both sides of the cod with the oil and season with coarse sea salt and pepper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Brush both sides of the cod with the oil and season with coarse sea salt and pepper."
+    },
+    {
+      "order": 23,
+      "text": "Place the cod on the grill rack, skin-side up, and cook for 8 minutes, or until cooked through.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place the cod on the grill rack, skin-side up, and cook for 8 minutes, or until cooked through. "
+    },
+    {
+      "order": 24,
+      "text": "To make the tapenade, mix all of the ingredients together in a blender and blend to a purée.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the tapenade, mix all of the ingredients together in a blender and blend to a purée. "
+    },
+    {
+      "order": 25,
+      "text": "To serve, spoon the saffron mashed potatoes into the centre of four warmed plates.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To serve, spoon the saffron mashed potatoes into the centre of four warmed plates."
+    },
+    {
+      "order": 26,
+      "text": "Place a piece of cod on top of each mound of potato. Pour the sauce evenly around the edge of the plates.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place a piece of cod on top of each mound of potato. Pour the sauce evenly around the edge of the plates."
+    },
+    {
+      "order": 27,
+      "text": "Garnish with the tomatoes and parsley. Add 2 teaspoons of tapenade to each plate and serve immediately.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Garnish with the tomatoes and parsley. Add 2 teaspoons of tapenade to each plate and serve immediately."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/fillet_of_cod_with_69341_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 1,
+      "ratingValue": 5
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "This fish supper is elevated with saffron-infused potatoes and a spicy white wine sauce to create something fitting for any special occasion. ",
+    "headline": "Fillet of cod with saffron mashed potatoes and olive tapenade",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/fillet_of_cod_with_69341_16x9.jpg"
+    },
+    "name": "Fillet of cod with saffron mashed potatoes and olive tapenade",
+    "author": {
+      "@type": "Person",
+      "name": "Rick Stein"
+    },
+    "datePublished": "2026-06-06T00:00:00.000Z",
+    "dateModified": "2026-06-17T16:13:06.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 1,
+      "ratingValue": 5
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT1H",
+    "keywords": "cod, nut free, Saturday Kitchen",
+    "recipeCategory": "Main course",
+    "recipeIngredient": [
+      "25g/1oz unsalted butter",
+      "1kg/2lb 4oz fish bones, such as lemon sole, brill or plaice",
+      "100g/3½oz onions, chopped",
+      "100g/3½oz celery, chopped",
+      "100g/3½oz carrots, peeled and chopped",
+      "1 tsp chopped fresh thyme",
+      "1 free-range egg (if making with a food processor) or 2 free-range egg yolks (if making by hand)",
+      "2 tsp white wine vinegar",
+      "½ tsp salt",
+      "300ml/10fl oz olive oil",
+      "1 tbsp olive oil",
+      "50g/1¾oz carrot, peeled and finely chopped",
+      "50g/1¾oz onion, finely chopped",
+      "½ red chilli, seeds removed and finely chopped",
+      "5cm/2in piece pared orange zest",
+      "½ orange, juice only",
+      "50ml/2fl oz white wine",
+      "1 tomato, chopped",
+      "600ml/20fl oz roasted fish stock (see above) ",
+      "4 tbsp olive oil mayonnaise (see above)",
+      "salt and white pepper",
+      "900g/2lb floury potatoes, peeled and cut into chunks",
+      "good pinch saffron",
+      "½ garlic clove, crushed",
+      "50ml/2fl oz olive oil",
+      "25ml/1fl oz double cream",
+      "salt and freshly ground black pepper",
+      "4 thick pieces cod fillet, approximately 175g/6oz each, skin on",
+      "4 tbsp olive oil, for brushing and greasing",
+      "coarse sea salt and freshly ground black pepper",
+      "2 tomatoes, skin removed, seeds removed and finely chopped, to garnish",
+      "1 tbsp chopped fresh flatleaf parsley, to garnish",
+      "150g/5½oz black olives, stones removed",
+      "8 anchovy fillets",
+      "2 tbsp capers",
+      "1 lemon, juice only",
+      "2 tbsp cognac",
+      "½ tsp Dijon mustard",
+      "2 tbsp olive oil"
+    ],
+    "recipeInstructions": [
+      "To make the fish stock, preheat the oven to 200C/180C Fan/Gas 6.",
+      "Melt the butter in a large roasting tin. Add the fish bones, vegetables and thyme and turn until everything evenly coated. Roast for 30 minutes.",
+      "Transfer everything to a large saucepan, add 2.25 litres/4 pints water and bring just to the boil.",
+      "Simmer for 20 minutes, then strain through a muslin-lined sieve into a clean saucepan.",
+      "Return to the heat and boil until reduced to approximately 1.2 litres/2 pints. Set aside. ",
+      "To make the mayonnaise in a food processor or blender, place the egg, vinegar and salt in a food processor or blender.",
+      "With the motor running, gradually add the oil until a thick emulsion forms.",
+      "To make by hand, ensure all of the ingredients are at room temperature.",
+      "Place the egg yolks, vinegar and salt in a bowl and whisk continuously while adding the oil a few drops at a time.",
+      "Once the mixture begins to emulsify, gradually increase the rate at which the oil is added until fully incorporated. Set aside. ",
+      "To make the sauce, heat the oil in a saucepan and fry the carrot, onion, chilli and orange zest for 5 minutes.",
+      "Add the orange juice, wine, tomato and 600ml/20fl oz roasted fish stock and simmer for 20 minutes. ",
+      "Season with salt and white pepper, then strain the sauce through a sieve into a jug.",
+      "Place 4 tablespoons olive oil mayonnaise in a small saucepan over a low heat and gradually whisk in the strained sauce.",
+      "Cook gently until the sauce thickens enough to coat the back of a spoon. Do not allow it to boil. Keep warm.",
+      "To make the mashed potatoes, place the potatoes in a saucepan and barely cover with cold water.",
+      "Add the saffron and a pinch of salt. Bring to the boil and cook for approximately 20 minutes, or until tender.",
+      "Drain the cooking liquid into a clean small saucepan and boil rapidly until reduced to 4–6 tablespoons.",
+      "Mash the potatoes until smooth.",
+      "Beat in the reduced cooking liquid, garlic, oil and cream. Season with salt and pepper. Keep warm.",
+      "To make the cod, preheat the grill to high and oil the grill rack. ",
+      "Brush both sides of the cod with the oil and season with coarse sea salt and pepper.",
+      "Place the cod on the grill rack, skin-side up, and cook for 8 minutes, or until cooked through. ",
+      "To make the tapenade, mix all of the ingredients together in a blender and blend to a purée. ",
+      "To serve, spoon the saffron mashed potatoes into the centre of four warmed plates.",
+      "Place a piece of cod on top of each mound of potato. Pour the sauce evenly around the edge of the plates.",
+      "Garnish with the tomatoes and parsley. Add 2 teaspoons of tapenade to each plate and serve immediately."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:4",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

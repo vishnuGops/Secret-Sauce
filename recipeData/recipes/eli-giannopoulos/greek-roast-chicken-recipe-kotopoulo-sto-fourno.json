@@ -1,0 +1,330 @@
+{
+  "schemaVersion": 1,
+  "id": "eli-giannopoulos/greek-roast-chicken-recipe-kotopoulo-sto-fourno",
+  "slug": "greek-roast-chicken-recipe-kotopoulo-sto-fourno",
+  "chefId": "chef_eli-giannopoulos",
+  "chefSlug": "eli-giannopoulos",
+  "chefName": "Eli K. Giannopoulos",
+  "title": "Greek Roast Chicken recipe (Kotopoulo sto fourno)",
+  "description": "A super easy Greek roast chicken recipe (kotopoulo sto fourno) for a hearty meal! Take your roast chicken to the next level with this Greek recipe with a twist!",
+  "source": {
+    "sourceUrl": "https://www.mygreekdish.com/recipe/greek-style-roast-chicken/",
+    "finalUrl": "https://www.mygreekdish.com/recipe/greek-style-roast-chicken/",
+    "retrievedAt": "2026-09-11T02:48:12.063Z",
+    "publisher": null,
+    "authorRaw": [
+      "Eli K. Giannopoulos"
+    ],
+    "datePublished": "2013-05-13",
+    "rights": "My Greek Dish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "96dc63751f4f502d6f089666459e1d302db1d0c1c406b32d0fe7a52e41e3edbf",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "4",
+      "4 portions"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 15,
+    "cookMinutes": 80,
+    "totalMinutes": 95,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Greek"
+  ],
+  "category": [
+    "Main"
+  ],
+  "keywords": [
+    "kotopoulo sto fourno",
+    "greek roast chicken"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1 medium sized chicken",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "medium sized chicken",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1kg potatoes, cut into wedges (35 ounces)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "kg",
+          "name": "potatoes, cut into wedges (35 ounces)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp onion powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "onion powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 tbsp oregano",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 tbsp oregano",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "a knob butter",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "a knob butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3/4 of a can beer",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "/4 of a can beer",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsps olive oil",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp mustard",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "mustard",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp honey",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "honey",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 clove of garlic, crushed",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "clove",
+          "name": "of garlic",
+          "note": "crushed",
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Into a bowl, add 1 tbsp of salt and pepper, the garlic powder, the onion powder, 1/2tbsp oregano and a knob of butter and mix with your hands. Stuff the mixture under the skin of the chicken and place into a large pan. Season with salt and freshly ground pepper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Into a bowl, add 1 tbsp of salt and pepper, the garlic powder, the onion powder, 1/2tbsp oregano and a knob of butter and mix with your hands. Stuff the mixture under the skin of the chicken and place into a large pan. Season with salt and freshly ground pepper.",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-roast-chicken/#instruction-step-1"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Use a knife to peel and cut the potatoes into wedges; add the potatoes into the pan.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Use a knife to peel and cut the potatoes into wedges; add the potatoes into the pan.",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-roast-chicken/#instruction-step-2"
+      }
+    },
+    {
+      "order": 3,
+      "text": "In a large bowl, pour the beer, add the mustard, honey, garlic, olive oil, oregano, salt and pepper. With a spoon, mix the ingredients and pour the sauce over the chicken and potatoes. Season with some extra salt and pepper, if you like.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a large bowl, pour the beer, add the mustard, honey, garlic, olive oil, oregano, salt and pepper. With a spoon, mix the ingredients and pour the sauce over the chicken and potatoes. Season with some extra salt and pepper, if you like.",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-roast-chicken/#instruction-step-3"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Bake in a preheated oven at 180 for 75-90 minutes (depending on the size of the chicken), until the potatoes are tender and the chicken golden brown. Half time through cooking, turn the chicken upside down. Enjoy!",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Bake in a preheated oven at 180 for 75-90 minutes (depending on the size of the chicken), until the potatoes are tender and the chicken golden brown. Half time through cooking, turn the chicken upside down. Enjoy!",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-roast-chicken/#instruction-step-4"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Greek-Roast-Chicken-recipe-Kotopoulo-sto-fourno-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Greek-Roast-Chicken-recipe-Kotopoulo-sto-fourno-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Greek-Roast-Chicken-recipe-Kotopoulo-sto-fourno-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Greek-Roast-Chicken-recipe-Kotopoulo-sto-fourno.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "cookingMethod": "Baked",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "730",
+      "ratingValue": "4.8"
+    }
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org/",
+    "@type": "Recipe",
+    "name": "Greek Roast Chicken recipe (Kotopoulo sto fourno)",
+    "description": "A super easy Greek roast chicken recipe (kotopoulo sto fourno) for a hearty meal! Take your roast chicken to the next level with this Greek recipe with a twist!",
+    "author": {
+      "@type": "Person",
+      "name": "Eli K. Giannopoulos"
+    },
+    "keywords": "kotopoulo sto fourno, greek roast chicken",
+    "image": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Greek-Roast-Chicken-recipe-Kotopoulo-sto-fourno-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Greek-Roast-Chicken-recipe-Kotopoulo-sto-fourno-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Greek-Roast-Chicken-recipe-Kotopoulo-sto-fourno-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Greek-Roast-Chicken-recipe-Kotopoulo-sto-fourno.jpg"
+    ],
+    "url": "https://www.mygreekdish.com/recipe/greek-style-roast-chicken/",
+    "recipeIngredient": [
+      "1 medium sized chicken",
+      "1kg potatoes, cut into wedges (35 ounces)",
+      "1 tbsp onion powder",
+      "1/2 tbsp oregano",
+      "a knob butter",
+      "3/4 of a can beer",
+      "3 tbsps olive oil",
+      "1 tbsp mustard",
+      "1 tbsp honey",
+      "1 clove of garlic, crushed",
+      "salt and freshly ground pepper"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Into a bowl, add 1 tbsp of salt and pepper, the garlic powder, the onion powder, 1/2tbsp oregano and a knob of butter and mix with your hands. Stuff the mixture under the skin of the chicken and place into a large pan. Season with salt and freshly ground pepper.",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-roast-chicken/#instruction-step-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Use a knife to peel and cut the potatoes into wedges; add the potatoes into the pan.",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-roast-chicken/#instruction-step-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "In a large bowl, pour the beer, add the mustard, honey, garlic, olive oil, oregano, salt and pepper. With a spoon, mix the ingredients and pour the sauce over the chicken and potatoes. Season with some extra salt and pepper, if you like.",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-roast-chicken/#instruction-step-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Bake in a preheated oven at 180 for 75-90 minutes (depending on the size of the chicken), until the potatoes are tender and the chicken golden brown. Half time through cooking, turn the chicken upside down. Enjoy!",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-roast-chicken/#instruction-step-4"
+      }
+    ],
+    "prepTime": "PT15M",
+    "cookTime": "PT1H20M",
+    "totalTime": "PT1H35M",
+    "recipeYield": [
+      "4",
+      "4 portions"
+    ],
+    "recipeCategory": "Main",
+    "cookingMethod": "Baked",
+    "recipeCuisine": "Greek",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "730",
+      "ratingValue": "4.8"
+    },
+    "datePublished": "2013-05-13",
+    "@id": "https://www.mygreekdish.com/recipe/greek-style-roast-chicken/#recipe",
+    "isPartOf": {
+      "@id": "https://www.mygreekdish.com/recipe/greek-style-roast-chicken/#article"
+    },
+    "mainEntityOfPage": "https://www.mygreekdish.com/recipe/greek-style-roast-chicken/"
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:cookingMethod|aggregateRating"
+  ]
+}

@@ -1,0 +1,444 @@
+{
+  "schemaVersion": 1,
+  "id": "atul-kochhar/southern-indian-fried-chicken",
+  "slug": "southern-indian-fried-chicken",
+  "chefId": "chef_atul-kochhar",
+  "chefSlug": "atul-kochhar",
+  "chefName": "Atul Kochhar",
+  "title": "Southern Indian fried chicken",
+  "description": "A South Indian fried chicken recipe that would taste amazing in a paratha with homemade tomato chutney .",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/southern_indian_spice_65935",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/southern_indian_spice_65935",
+    "retrievedAt": "2026-09-11T00:28:09.957Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Atul Kochhar"
+    ],
+    "datePublished": "2014-11-07T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "cf02ebbcc8a4f732301a63d74caa98fd6149d730578a3fbfd725a17bd3d59c74",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4-5"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 120,
+    "cookMinutes": 10,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Indian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "fantastic fried chicken",
+    "diwali",
+    "fried chicken",
+    "chicken thigh",
+    "tomato",
+    "egg free",
+    "pregnancy friendly",
+    "Saturday Kitchen"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the spiced fried chicken",
+      "items": [
+        {
+          "raw": "600g/1lb 5oz boneless, skinless chicken thighs, cut into 2.5cm/1in cubes",
+          "quantity": 600,
+          "quantityText": "600",
+          "unit": "g",
+          "name": "/1lb 5oz boneless, skinless chicken thighs, cut into 2.5cm/1in cubes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp ginger and garlic paste (equal parts)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "ginger and garlic paste (equal parts)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 lemons, juice only",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "lemons, juice only",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp chilli powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "chilli powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "20 fresh curry leaves, chopped",
+          "quantity": 20,
+          "quantityText": "20",
+          "unit": null,
+          "name": "fresh curry leaves",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "75g/2¾oz gram flour",
+          "quantity": 75,
+          "quantityText": "75",
+          "unit": "g",
+          "name": "/2¾oz gram flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "150g/5½oz rice flour",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "g",
+          "name": "/5½oz rice flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz plain flour",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz plain flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp red chilli powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "red chilli powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "vegetable oil, for deep frying",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "vegetable oil, for deep frying",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp South Indian garam masala",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "South Indian garam masala",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the tomato chutney",
+      "items": [
+        {
+          "raw": "8 curry leaves",
+          "quantity": 8,
+          "quantityText": "8",
+          "unit": null,
+          "name": "curry leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 garlic cloves, chopped",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp chopped coriander",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "chopped coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 banana shallot, chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "banana shallot",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp chilli powder",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "chilli powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp cumin seeds",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "cumin seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 large tomatoes, cut into wedges",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "large tomatoes, cut into wedges",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 lemon, juice only",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "lemon, juice only",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Marinate the chicken in the salt, ginger and garlic paste, lemon juice, one teaspoon of the red chilli powder and the curry leaves. Cover the chicken and place in the fridge for an hour.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Marinate the chicken in the salt, ginger and garlic paste, lemon juice, one teaspoon of the red chilli powder and the curry leaves. Cover the chicken and place in the fridge for an hour."
+    },
+    {
+      "order": 2,
+      "text": "Meanwhile in a mixing bowl add gram flour, rice flour, plain flour, the remaining red chilli powder and salt.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile in a mixing bowl add gram flour, rice flour, plain flour, the remaining red chilli powder and salt."
+    },
+    {
+      "order": 3,
+      "text": "Heat a deep fat fryer to 180C/350F (CAUTION: hot oil can be dangerous. Do not leave unattended.) Dust the marinated chicken cubes in the seasoned flour mixture, then deep-fry the chicken until crisp and cooked through. Sprinkle the chicken with garam masala.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat a deep fat fryer to 180C/350F (CAUTION: hot oil can be dangerous. Do not leave unattended.) Dust the marinated chicken cubes in the seasoned flour mixture, then deep-fry the chicken until crisp and cooked through. Sprinkle the chicken with garam masala."
+    },
+    {
+      "order": 4,
+      "text": "For the tomato chutney, heat some oil in a small frying pan and lightly sauté the curry leaves. Drain on kitchen paper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the tomato chutney, heat some oil in a small frying pan and lightly sauté the curry leaves. Drain on kitchen paper. "
+    },
+    {
+      "order": 5,
+      "text": "Place the curry leaves, garlic, coriander, shallot, salt, chilli powder, cumin seeds in a stone pestle and mortar. Crush the mixture gently. Add tomato wedges and lemon juice, blending them in to the mixture. Season to taste with more salt and lemon juice.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place the curry leaves, garlic, coriander, shallot, salt, chilli powder, cumin seeds in a stone pestle and mortar. Crush the mixture gently. Add tomato wedges and lemon juice, blending them in to the mixture. Season to taste with more salt and lemon juice."
+    },
+    {
+      "order": 6,
+      "text": "Place the fried chicken on a serving plate with the chutney alongside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place the fried chicken on a serving plate with the chutney alongside."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/southern_indian_spice_65935_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 4,
+      "ratingValue": 4
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "A South Indian fried chicken recipe that would taste amazing in a <a href=\"https://www.bbc.co.uk/food/paratha\">paratha</a> with homemade <a href=\"https://www.bbc.co.uk/food/recipes/tomatochutney_75669\">tomato chutney</a>.\r\n",
+    "headline": "Southern Indian fried chicken",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/southern_indian_spice_65935_16x9.jpg"
+    },
+    "name": "Southern Indian fried chicken",
+    "author": {
+      "@type": "Person",
+      "name": "Atul Kochhar"
+    },
+    "datePublished": "2014-11-07T00:00:00.000Z",
+    "dateModified": "2019-11-19T10:18:27.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 4,
+      "ratingValue": 4
+    },
+    "prepTime": "PT2H",
+    "cookTime": "PT10M",
+    "keywords": "fantastic fried chicken, diwali, fried chicken, chicken thigh, tomato, egg free, pregnancy friendly, Saturday Kitchen",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Indian",
+    "recipeIngredient": [
+      "600g/1lb 5oz boneless, skinless chicken thighs, cut into 2.5cm/1in cubes",
+      "1 tsp salt ",
+      "2 tsp ginger and garlic paste  (equal parts)",
+      "2 lemons, juice only",
+      "1 tbsp chilli powder",
+      "20 fresh curry leaves, chopped",
+      "75g/2¾oz gram flour ",
+      "150g/5½oz rice flour ",
+      "50g/1¾oz plain flour ",
+      "1 tsp red chilli powder ",
+      "1 tsp salt \t\t",
+      "vegetable oil, for deep frying",
+      "2 tsp South Indian garam masala ",
+      "8 curry leaves ",
+      "3 garlic cloves, chopped",
+      "2 tbsp chopped coriander",
+      "1 banana shallot, chopped",
+      "1 tsp salt",
+      "½ tsp chilli powder",
+      "1 tsp cumin seeds",
+      "2 large tomatoes, cut into wedges",
+      "1 lemon, juice only"
+    ],
+    "recipeInstructions": [
+      "Marinate the chicken in the salt, ginger and garlic paste, lemon juice, one teaspoon of the red chilli powder and the curry leaves. Cover the chicken and place in the fridge for an hour.",
+      "Meanwhile in a mixing bowl add gram flour, rice flour, plain flour, the remaining red chilli powder and salt.",
+      "Heat a deep fat fryer to 180C/350F (CAUTION: hot oil can be dangerous. Do not leave unattended.) Dust the marinated chicken cubes in the seasoned flour mixture, then deep-fry the chicken until crisp and cooked through. Sprinkle the chicken with garam masala.",
+      "For the tomato chutney, heat some oil in a small frying pan and lightly sauté the curry leaves. Drain on kitchen paper. ",
+      "Place the curry leaves, garlic, coriander, shallot, salt, chilli powder, cumin seeds in a stone pestle and mortar. Crush the mixture gently. Add tomato wedges and lemon juice, blending them in to the mixture. Season to taste with more salt and lemon juice.",
+      "Place the fried chicken on a serving plate with the chutney alongside."
+    ],
+    "recipeYield": "Serves 4-5",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

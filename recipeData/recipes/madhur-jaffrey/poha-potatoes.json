@@ -1,0 +1,371 @@
+{
+  "schemaVersion": 1,
+  "id": "madhur-jaffrey/poha-potatoes",
+  "slug": "poha-potatoes",
+  "chefId": "chef_madhur-jaffrey",
+  "chefSlug": "madhur-jaffrey",
+  "chefName": "Madhur Jaffrey",
+  "title": "Poha potatoes",
+  "description": "This is a simple, spicy Indian lunch or brunch made with rice and potatoes. Perfect as a side dish with curry, too.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/flattened_rice_with_poha_64857",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/flattened_rice_with_poha_64857",
+    "retrievedAt": "2026-09-11T00:26:49.671Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Madhur Jaffrey"
+    ],
+    "datePublished": "2014-10-11T10:15:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "3a38491cd3730fee0776327e03361a9cc44459de020b4343da387a7ed9928bbf",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 2"
+    ],
+    "servings": 2
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Indian"
+  ],
+  "category": [
+    "Light meals & snacks"
+  ],
+  "keywords": [
+    "quick",
+    "diwali feasts",
+    "holi",
+    "indian vegetarian",
+    "recipes for eid al-adha",
+    "recipes for iftar",
+    "vegan curry",
+    "diwali",
+    "eid al-fitr",
+    "vaisakhi",
+    "veganuary",
+    "waxy potato",
+    "dairy free",
+    "egg free",
+    "gluten free",
+    "nut free",
+    "pregnancy friendly",
+    "vegan",
+    "vegetarian",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "4 medium waxy potatoes (such as Charlotte or Jersey Royal)",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "medium waxy potatoes (such as Charlotte or Jersey Royal)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "140g/5oz thick poha rice (also called flaked rice or thick flattened rice)",
+          "quantity": 140,
+          "quantityText": "140",
+          "unit": "g",
+          "name": "/5oz thick poha rice (also called flaked rice or thick flattened rice)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp olive oil",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "generous pinch of ground asafoetida",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "generous pinch of ground asafoetida",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp urid dal",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "urid dal",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp black mustard seeds",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "black mustard seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp cumin seeds",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "cumin seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 fresh red chilli, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "fresh red chilli",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "10-15 fresh curry leaves, lightly crushed",
+          "quantity": 10,
+          "quantityText": "10-15",
+          "unit": null,
+          "name": "fresh curry leaves",
+          "note": "lightly crushed",
+          "isOptional": false
+        },
+        {
+          "raw": "½ onion, chopped",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "onion",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "salt",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2-3 tbsp chopped fresh coriander, to garnish",
+          "quantity": 2,
+          "quantityText": "2-3",
+          "unit": "tbsp",
+          "name": "chopped fresh coriander",
+          "note": "to garnish",
+          "isOptional": false
+        },
+        {
+          "raw": "4 wedges of lime, to serve",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "wedges of lime",
+          "note": "to serve",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Boil the potatoes until cooked. Drain and set aside to cool, then peel and cut into 1cm/½in cubes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Boil the potatoes until cooked. Drain and set aside to cool, then peel and cut into 1cm/½in cubes."
+    },
+    {
+      "order": 2,
+      "text": "Put the rice in a sieve and wash gently but thoroughly under cold running water. Empty it into a bowl, cover generously with water and leave to soak for two minutes. Drain and leave in the sieve set over a bowl.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put the rice in a sieve and wash gently but thoroughly under cold running water. Empty it into a bowl, cover generously with water and leave to soak for two minutes. Drain and leave in the sieve set over a bowl. "
+    },
+    {
+      "order": 3,
+      "text": "Put the oil in a large, non-stick frying pan and set it over a medium-high heat. When hot, add the asafoetida and the urad dal. As soon as the dal starts to pick up a little colour, add the mustard seeds, cumin seeds and chilli (whatever type you are using). As soon as the mustard seeds start to pop, a matter of seconds, add the curry leaves (take care as they will splutter), then the onion and potatoes. Lower to a medium heat and fry, stirring now and again, for 3-4 minutes or until the onion and potatoes are slightly browned. Sprinkle a pinch of salt over the top and stir.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put the oil in a large, non-stick frying pan and set it over a medium-high heat. When hot, add the asafoetida and the urad dal. As soon as the dal starts to pick up a little colour, add the mustard seeds, cumin seeds and chilli (whatever type you are using). As soon as the mustard seeds start to pop, a matter of seconds, add the curry leaves (take care as they will splutter), then the onion and potatoes. Lower to a medium heat and fry, stirring now and again, for 3-4 minutes or until the onion and potatoes are slightly browned. Sprinkle a pinch of salt over the top and stir."
+    },
+    {
+      "order": 4,
+      "text": "Add the poha rice, gently breaking up any lumps, and sprinkle ½ teaspoon of salt and the sugar over the top. Cook on a low heat for 3-4 minutes, tossing frequently by lifting all the ingredients from the bottom of the pan with a flat spatula and folding them over, until the poha is heated through. Cover and set aside until you are ready to eat.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the poha rice, gently breaking up any lumps, and sprinkle ½ teaspoon of salt and the sugar over the top. Cook on a low heat for 3-4 minutes, tossing frequently by lifting all the ingredients from the bottom of the pan with a flat spatula and folding them over, until the poha is heated through. Cover and set aside until you are ready to eat. "
+    },
+    {
+      "order": 5,
+      "text": "To serve, garnish the poha potatoes with fresh coriander and serve with lime or lemon wedges.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To serve, garnish the poha potatoes with fresh coriander and serve with lime or lemon wedges. "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/flattened_rice_with_poha_64857_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "Serve with fresh salad and/or raita."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 3,
+      "ratingValue": 4.666666666666667
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/GlutenFreeDiet",
+      "http://schema.org/VeganDiet",
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "This is a simple, spicy Indian lunch or brunch made with rice and potatoes. Perfect as a side dish with curry, too.",
+    "headline": "Poha potatoes",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/flattened_rice_with_poha_64857_16x9.jpg"
+    },
+    "name": "Poha potatoes",
+    "author": {
+      "@type": "Person",
+      "name": "Madhur Jaffrey"
+    },
+    "datePublished": "2014-10-11T10:15:00.000Z",
+    "dateModified": "2021-07-28T09:11:33.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 3,
+      "ratingValue": 4.666666666666667
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, diwali feasts, holi, indian vegetarian, recipes for eid al-adha, recipes for iftar, vegan curry, diwali, eid al-fitr, vaisakhi, veganuary, waxy potato, dairy free, egg free, gluten free, nut free, pregnancy friendly, vegan, vegetarian, Saturday Kitchen Best Bites",
+    "recipeCategory": "Light meals & snacks",
+    "recipeCuisine": "Indian",
+    "recipeIngredient": [
+      "4 medium waxy potatoes (such as Charlotte or Jersey Royal)",
+      "140g/5oz thick poha rice (also called flaked rice or thick flattened rice)",
+      "3 tbsp olive oil",
+      "generous pinch of ground asafoetida ",
+      "1 tsp urid dal",
+      "1 tsp black mustard seeds",
+      "1 tsp cumin seeds",
+      "1 fresh red chilli, finely chopped",
+      "10-15 fresh curry leaves, lightly crushed",
+      "½ onion, chopped",
+      "salt",
+      "1 tsp sugar",
+      "2-3 tbsp chopped fresh coriander, to garnish",
+      "4 wedges of lime, to serve"
+    ],
+    "recipeInstructions": [
+      "Boil the potatoes until cooked. Drain and set aside to cool, then peel and cut into 1cm/½in cubes.",
+      "Put the rice in a sieve and wash gently but thoroughly under cold running water. Empty it into a bowl, cover generously with water and leave to soak for two minutes. Drain and leave in the sieve set over a bowl. ",
+      "Put the oil in a large, non-stick frying pan and set it over a medium-high heat. When hot, add the asafoetida and the urad dal. As soon as the dal starts to pick up a little colour, add the mustard seeds, cumin seeds and chilli (whatever type you are using). As soon as the mustard seeds start to pop, a matter of seconds, add the curry leaves (take care as they will splutter), then the onion and potatoes. Lower to a medium heat and fry, stirring now and again, for 3-4 minutes or until the onion and potatoes are slightly browned. Sprinkle a pinch of salt over the top and stir.",
+      "Add the poha rice, gently breaking up any lumps, and sprinkle ½ teaspoon of salt and the sugar over the top. Cook on a low heat for 3-4 minutes, tossing frequently by lifting all the ingredients from the bottom of the pan with a flat spatula and folding them over, until the poha is heated through. Cover and set aside until you are ready to eat. ",
+      "To serve, garnish the poha potatoes with fresh coriander and serve with lime or lemon wedges. "
+    ],
+    "recipeYield": "Serves 2",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/GlutenFreeDiet",
+      "http://schema.org/VeganDiet",
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "range-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

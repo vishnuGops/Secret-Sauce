@@ -1,0 +1,366 @@
+{
+  "schemaVersion": 1,
+  "id": "rick-stein/lamb-stuffed-aubergines-with-moorish-spices-and-manchego",
+  "slug": "lamb-stuffed-aubergines-with-moorish-spices-and-manchego",
+  "chefId": "chef_rick-stein",
+  "chefSlug": "rick-stein",
+  "chefName": "Rick Stein",
+  "title": "Lamb-stuffed aubergines with Moorish spices and Manchego",
+  "description": "These soft and tender aubergines filled with lamb ragu and topped with Manchego are really delicious.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/lamb-stuffed_aubergines_99219",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/lamb-stuffed_aubergines_99219",
+    "retrievedAt": "2026-09-11T00:26:34.263Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Rick Stein"
+    ],
+    "datePublished": "2011-12-22T12:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "92d0f98d5a54f0591d66d47e7bf210e20a6effa711faf5a013050e55ceba686c",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Spanish"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "making the most of mince",
+    "more ways with mince",
+    "our best aubergine",
+    "aubergine",
+    "lamb mince",
+    "egg free",
+    "gluten free",
+    "nut free",
+    "pregnancy friendly"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "4 aubergines",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "aubergines",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 tbsp olive oil",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 onion, chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "onion",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "4 garlic cloves, finely chopped",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 large red pepper, seeds removed, chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "large red pepper",
+          "note": "seeds removed, chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1½ tsp freshly ground cumin seeds",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tsp freshly ground cumin seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground cinnamon",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground cinnamon",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp freshly grated nutmeg",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "freshly grated nutmeg",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp smoked paprika",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "smoked paprika",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "large pinch of crushed dried chillies",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "large pinch of crushed dried chillies",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "500g/1lb 2oz lamb mince",
+          "quantity": 500,
+          "quantityText": "500",
+          "unit": "g",
+          "name": "/1lb 2oz lamb mince",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 tbsp tomato sauce (see Top recipe tip below)",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": "tbsp",
+          "name": "tomato sauce (see Top recipe tip below)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz Manchego, coarsely grated",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz Manchego",
+          "note": "coarsely grated",
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 200C/400F/Gas 6.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 200C/400F/Gas 6. "
+    },
+    {
+      "order": 2,
+      "text": "Cut each aubergine lengthways through the stalk, then score the flesh in a tight criss-cross pattern, taking the knife through the flesh down to the skin, but taking care not to cut through the skin. Place them side by side on a baking tray and drizzle each half with half a tablespoon of the oil, season with salt and bake for 30-40 minutes or until the flesh is soft and tender but not browned.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Cut each aubergine lengthways through the stalk, then score the flesh in a tight criss-cross pattern, taking the knife through the flesh down to the skin, but taking care not to cut through the skin. Place them side by side on a baking tray and drizzle each half with half a tablespoon of the oil, season with salt and bake for 30-40 minutes or until the flesh is soft and tender but not browned."
+    },
+    {
+      "order": 3,
+      "text": "Meanwhile, heat the remaining two tablespoons of oil in a large non-stick frying pan. Add the onion, garlic, red pepper and spices and fry gently for 10 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, heat the remaining two tablespoons of oil in a large non-stick frying pan. Add the onion, garlic, red pepper and spices and fry gently for 10 minutes. "
+    },
+    {
+      "order": 4,
+      "text": "Add the lamb mince and fry for 3–4 minutes or until all the meat is lightly browned. Stir in the tomato sauce and simmer for 5 more minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the lamb mince and fry for 3–4 minutes or until all the meat is lightly browned. Stir in the tomato sauce and simmer for 5 more minutes. "
+    },
+    {
+      "order": 5,
+      "text": "Remove the aubergines from the oven and increase the temperature to 220C/425F/Gas 7. Carefully scoop most of the flesh out of the baked aubergine halves, leaving the skins with a layer of flesh about 1cm/½in thick.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove the aubergines from the oven and increase the temperature to 220C/425F/Gas 7. Carefully scoop most of the flesh out of the baked aubergine halves, leaving the skins with a layer of flesh about 1cm/½in thick. "
+    },
+    {
+      "order": 6,
+      "text": "Stir the scooped-out flesh into the lamb mixture with half a teaspoon of salt and some pepper to taste. Spoon the mixture into each aubergine shell and sprinkle with the grated cheese. Bake in the oven for 8–10 minutes, or until the cheese is bubbling and golden-brown.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Stir the scooped-out flesh into the lamb mixture with half a teaspoon of salt and some pepper to taste. Spoon the mixture into each aubergine shell and sprinkle with the grated cheese. Bake in the oven for 8–10 minutes, or until the cheese is bubbling and golden-brown. "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/lamb-stuffed_aubergines_99219_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "Use Rick Stein's Simple tomato sauce for this recipe."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 27,
+      "ratingValue": 4.814814814814815
+    },
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "These soft and tender aubergines filled with lamb ragu and topped with Manchego are really delicious. ",
+    "headline": "Lamb-stuffed aubergines with Moorish spices and Manchego ",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/lamb-stuffed_aubergines_99219_16x9.jpg"
+    },
+    "name": "Lamb-stuffed aubergines with Moorish spices and Manchego ",
+    "author": {
+      "@type": "Person",
+      "name": "Rick Stein"
+    },
+    "datePublished": "2011-12-22T12:00:00.000Z",
+    "dateModified": "2025-10-29T14:58:31.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 27,
+      "ratingValue": 4.814814814814815
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT1H",
+    "keywords": "making the most of mince, more ways with mince, our best aubergine, aubergine, lamb mince, egg free, gluten free, nut free, pregnancy friendly",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Spanish",
+    "recipeIngredient": [
+      "4 aubergines",
+      "6 tbsp olive oil",
+      "1 onion, chopped",
+      "4 garlic cloves, finely chopped",
+      "1 large red pepper, seeds removed, chopped",
+      "1½ tsp freshly ground cumin seeds",
+      "1 tsp ground cinnamon",
+      "½ tsp freshly grated nutmeg",
+      "1 tsp smoked paprika",
+      "large pinch of crushed dried chillies",
+      "500g/1lb 2oz lamb mince",
+      "6 tbsp tomato sauce (see Top recipe tip below)",
+      "100g/3½oz Manchego, coarsely grated",
+      "salt and freshly ground black pepper"
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 200C/400F/Gas 6. ",
+      "Cut each aubergine lengthways through the stalk, then score the flesh in a tight criss-cross pattern, taking the knife through the flesh down to the skin, but taking care not to cut through the skin. Place them side by side on a baking tray and drizzle each half with half a tablespoon of the oil, season with salt and bake for 30-40 minutes or until the flesh is soft and tender but not browned.",
+      "Meanwhile, heat the remaining two tablespoons of oil in a large non-stick frying pan. Add the onion, garlic, red pepper and spices and fry gently for 10 minutes. ",
+      "Add the lamb mince and fry for 3–4 minutes or until all the meat is lightly browned. Stir in the tomato sauce and simmer for 5 more minutes. ",
+      "Remove the aubergines from the oven and increase the temperature to 220C/425F/Gas 7. Carefully scoop most of the flesh out of the baked aubergine halves, leaving the skins with a layer of flesh about 1cm/½in thick. ",
+      "Stir the scooped-out flesh into the lamb mixture with half a teaspoon of salt and some pepper to taste. Spoon the mixture into each aubergine shell and sprinkle with the grated cheese. Bake in the oven for 8–10 minutes, or until the cheese is bubbling and golden-brown. "
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

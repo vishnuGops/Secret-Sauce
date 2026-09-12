@@ -65,3 +65,42 @@ env.local*
 # would not be consulted for anything staged from outside it.
 corpus/_import/
 corpus/_import_*/
+
+# ---------------------------------------------------------------------------
+# The scraped corpus and its tooling (Phases 34-35)
+# ---------------------------------------------------------------------------
+# What is tracked is the SOURCE: the scraper scripts, the hand-curated source
+# registry, the chef registry, the authored fixtures and the READMEs. What is
+# not is everything a command can reproduce, plus the machine state that a
+# command rewrites every time it runs.
+#
+# The distinction is worth stating because both halves live in the same two
+# directories, so "is this directory in git" is the wrong question — the right
+# one is "did a person write this, or did a script".
+
+# Dependencies.
+recipeData/_tools/node_modules/
+
+# Generated roll-ups. `corpus/README.md` says it plainly: delete them and re-run
+# `corpus_index.mjs`. 11 MB of chefs.json is the largest single file in the tree
+# and the most completely re-derivable.
+corpus/chefs.json
+corpus/groups.json
+corpus/restaurants.json
+
+# Generated reports. `report.mjs` writes CORPUS.md and says "do not edit,
+# re-run it" in its own header; the probe reports are one file per candidate
+# batch and exist to be read once, then promoted from.
+corpus/_reports/
+corpus/export/
+recipeData/_reports/
+
+# Harvester and ingest state. This is the one entry that overrides an earlier
+# intention rather than restating it: `corpus/.gitignore` says "keep the
+# resume state", and at the scale the harvest actually reached that is 592
+# files and ~50 MB that the harvester rewrites on **every run**. Tracking it
+# would put a 50 MB diff behind each harvest for state that is worthless on any
+# machine but the one that produced it — and it is not a loss, because the
+# state's only job is to let an interrupted run resume in place.
+corpus/_state/
+recipeData/_state/

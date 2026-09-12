@@ -1,0 +1,492 @@
+{
+  "schemaVersion": 1,
+  "id": "yumna-jawad/aloe-vera-smoothie",
+  "slug": "aloe-vera-smoothie",
+  "chefId": "chef_yumna-jawad",
+  "chefSlug": "yumna-jawad",
+  "chefName": "Yumna Jawad",
+  "title": "Aloe Vera Smoothie",
+  "description": "This Aloe Vera Smoothie packs in all the benefits of the superfood aloe plant in one healthy drink. It can help you boost your immunity & hydrate your skin!",
+  "source": {
+    "sourceUrl": "https://feelgoodfoodie.net/recipe/aloe-vera-smoothie/",
+    "finalUrl": "https://feelgoodfoodie.net/recipe/aloe-vera-smoothie/",
+    "retrievedAt": "2026-09-11T02:46:45.948Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2019-02-19T23:05:10+00:00",
+    "rights": "Feel Good Foodie. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "6f24580bcef48c38334a75d6fb759f22ec2790e9ef7d02f3dde4f7d263c1b230",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": [
+        "equipment-from-html: 1"
+      ]
+    },
+    "robots": "allows recipe paths; /wp-admin/ and /signup/ disallowed"
+  },
+  "yield": {
+    "raw": [
+      "2",
+      "2 servings"
+    ],
+    "servings": 2
+  },
+  "timing": {
+    "prepMinutes": 5,
+    "cookMinutes": null,
+    "totalMinutes": 5,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "American"
+  ],
+  "category": [
+    "Beverages"
+  ],
+  "keywords": [
+    "aloe vera",
+    "breakfast",
+    "healthy",
+    "morning",
+    "Smoothies",
+    "Vegan",
+    "Vegetarian"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "¼ cup filleted aloe vera gel",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "cup",
+          "name": "filleted aloe vera gel",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 banana",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "banana",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ cup strawberries",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "cup",
+          "name": "strawberries",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ cup ice",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "cup",
+          "name": "ice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 ½ cup coconut milk",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ cup coconut milk",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Place all the ingredients in a blender.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Place all the ingredients in a blender.",
+        "name": "Place all the ingredients in a blender.",
+        "url": "https://feelgoodfoodie.net/recipe/aloe-vera-smoothie/#wprm-recipe-8767-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Blend the ingredients in a high-speed blender for 2-3 minutes until you get a smooth and creamy texture.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Blend the ingredients in a high-speed blender for 2-3 minutes until you get a smooth and creamy texture.",
+        "name": "Blend the ingredients in a high-speed blender for 2-3 minutes until you get a smooth and creamy texture.",
+        "url": "https://feelgoodfoodie.net/recipe/aloe-vera-smoothie/#wprm-recipe-8767-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Taste the smoothie, adding more coconut milk if it is too thick or adding a sweetener of choice if it's not sweet enough for you.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Taste the smoothie, adding more coconut milk if it is too thick or adding a sweetener of choice if it's not sweet enough for you.",
+        "name": "Taste the smoothie, adding more coconut milk if it is too thick or adding a sweetener of choice if it's not sweet enough for you.",
+        "url": "https://feelgoodfoodie.net/recipe/aloe-vera-smoothie/#wprm-recipe-8767-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Pour into a cup or mason jar. Add fresh fruit topping or shredded coconut for garnish, if desired. Enjoy cold immediately, or store in fridge for up to 24 hours.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Pour into a cup or mason jar. Add fresh fruit topping or shredded coconut for garnish, if desired. Enjoy cold immediately, or store in fridge for up to 24 hours.",
+        "name": "Pour into a cup or mason jar. Add fresh fruit topping or shredded coconut for garnish, if desired. Enjoy cold immediately, or store in fridge for up to 24 hours.",
+        "url": "https://feelgoodfoodie.net/recipe/aloe-vera-smoothie/#wprm-recipe-8767-step-0-3"
+      }
+    }
+  ],
+  "equipment": [
+    "High Speed Blender"
+  ],
+  "supplies": [],
+  "nutrition": {
+    "calories": "99 kcal",
+    "carbohydrateContent": "18 g",
+    "fatContent": "3 g",
+    "sodiumContent": "143 mg",
+    "fiberContent": "2 g",
+    "sugarContent": "9 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/02/Aloe-Vera-Smoothie-7.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/02/Aloe-Vera-Smoothie-7-500x500.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/02/Aloe-Vera-Smoothie-7-500x375.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/02/Aloe-Vera-Smoothie-7-480x270.jpg"
+    ],
+    "video": {
+      "name": "Aloe Vera Smoothie",
+      "description": "This Aloe Vera Smoothie packs in all the benefits of the superfood aloe plant in one healthy drink. It can help you boost your immunity & hydrate your skin!",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/fEsULKJH-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/fEsULKJH.mp4",
+      "uploadDate": "2019-02-20T05:06:47.000Z",
+      "@type": "VideoObject"
+    }
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "video": {
+      "name": "Aloe Vera Smoothie",
+      "description": "This Aloe Vera Smoothie packs in all the benefits of the superfood aloe plant in one healthy drink. It can help you boost your immunity & hydrate your skin!",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/fEsULKJH-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/fEsULKJH.mp4",
+      "uploadDate": "2019-02-20T05:06:47.000Z",
+      "@type": "VideoObject"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "262",
+      "reviewCount": "6"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Just a little tip - soaked in cold water aloe pulp and washed after that will help remove unwanted flavour and scent 😊🙏🏻",
+        "author": {
+          "@type": "Person",
+          "name": "Kat"
+        },
+        "datePublished": "2024-05-29"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thank you for teaching us about aloe vera.  I made the strawberry smoothie with frozen strawberries, frozen banana, and frozen aloe.  I also added greens to the mix.   Although it wasn't pretty and pink, it was delicious!",
+        "author": {
+          "@type": "Person",
+          "name": "Barb Pierce"
+        },
+        "datePublished": "2022-11-02"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This is such a fun idea!",
+        "author": {
+          "@type": "Person",
+          "name": "Macie P."
+        },
+        "datePublished": "2021-06-04"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This was great! Thanks",
+        "author": {
+          "@type": "Person",
+          "name": "Blake"
+        },
+        "datePublished": "2021-01-15"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This was really great and loved the tips. Thank you.",
+        "author": {
+          "@type": "Person",
+          "name": "Sumit J."
+        },
+        "datePublished": "2020-12-25"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Really enjoyed this smoothie. Thanks!",
+        "author": {
+          "@type": "Person",
+          "name": "irshad"
+        },
+        "datePublished": "2020-12-12"
+      }
+    ],
+    "suitableForDiet": [
+      "https://schema.org/VeganDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Aloe Vera Smoothie",
+    "author": {
+      "@id": "https://feelgoodfoodie.net/#/schema/person/7a5a734de72932611fa5814fce8c12d5"
+    },
+    "description": "This Aloe Vera Smoothie packs in all the benefits of the superfood aloe plant in one healthy drink. It can help you boost your immunity &amp; hydrate your skin!",
+    "datePublished": "2019-02-19T23:05:10+00:00",
+    "image": [
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/02/Aloe-Vera-Smoothie-7.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/02/Aloe-Vera-Smoothie-7-500x500.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/02/Aloe-Vera-Smoothie-7-500x375.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/02/Aloe-Vera-Smoothie-7-480x270.jpg"
+    ],
+    "video": {
+      "name": "Aloe Vera Smoothie",
+      "description": "This Aloe Vera Smoothie packs in all the benefits of the superfood aloe plant in one healthy drink. It can help you boost your immunity & hydrate your skin!",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/fEsULKJH-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/fEsULKJH.mp4",
+      "uploadDate": "2019-02-20T05:06:47.000Z",
+      "@type": "VideoObject"
+    },
+    "recipeYield": [
+      "2",
+      "2 servings"
+    ],
+    "prepTime": "PT5M",
+    "totalTime": "PT5M",
+    "recipeIngredient": [
+      "¼ cup filleted aloe vera gel",
+      "1  banana",
+      "½ cup strawberries",
+      "¼ cup ice",
+      "1 ½ cup coconut milk"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Place all the ingredients in a blender.",
+        "name": "Place all the ingredients in a blender.",
+        "url": "https://feelgoodfoodie.net/recipe/aloe-vera-smoothie/#wprm-recipe-8767-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Blend the ingredients in a high-speed blender for 2-3 minutes until you get a smooth and creamy texture.",
+        "name": "Blend the ingredients in a high-speed blender for 2-3 minutes until you get a smooth and creamy texture.",
+        "url": "https://feelgoodfoodie.net/recipe/aloe-vera-smoothie/#wprm-recipe-8767-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Taste the smoothie, adding more coconut milk if it is too thick or adding a sweetener of choice if it's not sweet enough for you.",
+        "name": "Taste the smoothie, adding more coconut milk if it is too thick or adding a sweetener of choice if it's not sweet enough for you.",
+        "url": "https://feelgoodfoodie.net/recipe/aloe-vera-smoothie/#wprm-recipe-8767-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Pour into a cup or mason jar. Add fresh fruit topping or shredded coconut for garnish, if desired. Enjoy cold immediately, or store in fridge for up to 24 hours.",
+        "name": "Pour into a cup or mason jar. Add fresh fruit topping or shredded coconut for garnish, if desired. Enjoy cold immediately, or store in fridge for up to 24 hours.",
+        "url": "https://feelgoodfoodie.net/recipe/aloe-vera-smoothie/#wprm-recipe-8767-step-0-3"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "262",
+      "reviewCount": "6"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Just a little tip - soaked in cold water aloe pulp and washed after that will help remove unwanted flavour and scent 😊🙏🏻",
+        "author": {
+          "@type": "Person",
+          "name": "Kat"
+        },
+        "datePublished": "2024-05-29"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thank you for teaching us about aloe vera.  I made the strawberry smoothie with frozen strawberries, frozen banana, and frozen aloe.  I also added greens to the mix.   Although it wasn't pretty and pink, it was delicious!",
+        "author": {
+          "@type": "Person",
+          "name": "Barb Pierce"
+        },
+        "datePublished": "2022-11-02"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This is such a fun idea!",
+        "author": {
+          "@type": "Person",
+          "name": "Macie P."
+        },
+        "datePublished": "2021-06-04"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This was great! Thanks",
+        "author": {
+          "@type": "Person",
+          "name": "Blake"
+        },
+        "datePublished": "2021-01-15"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This was really great and loved the tips. Thank you.",
+        "author": {
+          "@type": "Person",
+          "name": "Sumit J."
+        },
+        "datePublished": "2020-12-25"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Really enjoyed this smoothie. Thanks!",
+        "author": {
+          "@type": "Person",
+          "name": "irshad"
+        },
+        "datePublished": "2020-12-12"
+      }
+    ],
+    "recipeCategory": [
+      "Beverages"
+    ],
+    "recipeCuisine": [
+      "American"
+    ],
+    "suitableForDiet": [
+      "https://schema.org/VeganDiet"
+    ],
+    "keywords": "aloe vera, breakfast, healthy, morning, Smoothies, Vegan, Vegetarian",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "99 kcal",
+      "carbohydrateContent": "18 g",
+      "fatContent": "3 g",
+      "sodiumContent": "143 mg",
+      "fiberContent": "2 g",
+      "sugarContent": "9 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://feelgoodfoodie.net/recipe/aloe-vera-smoothie/#recipe",
+    "isPartOf": {
+      "@id": "https://feelgoodfoodie.net/recipe/aloe-vera-smoothie/#article"
+    },
+    "mainEntityOfPage": "https://feelgoodfoodie.net/recipe/aloe-vera-smoothie/"
+  },
+  "audit": [
+    "no-cook-time",
+    "unmapped:video|aggregateRating|review|suitableForDiet"
+  ]
+}

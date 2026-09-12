@@ -1,0 +1,320 @@
+{
+  "schemaVersion": 1,
+  "id": "rick-stein/moules-mariniere-with-cream-garlic-and-parsley",
+  "slug": "moules-mariniere-with-cream-garlic-and-parsley",
+  "chefId": "chef_rick-stein",
+  "chefSlug": "rick-stein",
+  "chefName": "Rick Stein",
+  "title": "Moules marinière with cream, garlic and parsley",
+  "description": "Cook Rick Stein's impressive moules marinière in six simple steps. This is a simple dinner party dish that cooks in minutes once the mussels are prepped. Or scale it back for a romantic dinner for two.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/moulesmarinierewithc_71787",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/moulesmarinierewithc_71787",
+    "retrievedAt": "2026-09-11T00:26:40.443Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Rick Stein"
+    ],
+    "datePublished": "2004-03-10T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "13a84fc17575840adec1c22656ae1653985738d70a59617becbe770d126b854e",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4-6"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "French"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "best mussel",
+    "continental classics",
+    "easy luxurious",
+    "good mood food",
+    "proper pub grub",
+    "rainy day food",
+    "dinner party",
+    "valentine's day",
+    "winter",
+    "moules marinière",
+    "mussels",
+    "egg free",
+    "nut free",
+    "spring",
+    "autumn",
+    "Rick Stein's Cornwall"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1.75kg/4lb mussels",
+          "quantity": 1.75,
+          "quantityText": "1.75",
+          "unit": "kg",
+          "name": "/4lb mussels",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 garlic clove, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "garlic clove",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2 shallots, finely chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "shallots",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "15g/½oz butter",
+          "quantity": 15,
+          "quantityText": "15",
+          "unit": "g",
+          "name": "/½oz butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "a bouquet garni of parsley, thyme and bay leaves",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "a bouquet garni of parsley, thyme and bay leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100ml/3½fl oz dry white wine or cider",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "ml",
+          "name": "/3½fl oz dry white wine or cider",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "120ml/4fl oz double cream",
+          "quantity": 120,
+          "quantityText": "120",
+          "unit": "ml",
+          "name": "/4fl oz double cream",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "handful of parsley leaves, roughly chopped",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "handful",
+          "name": "of parsley leaves",
+          "note": "roughly chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "crusty bread, to serve",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "crusty bread",
+          "note": "to serve",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Wash the mussels under plenty of cold, running water. Discard any open ones that won't close when lightly squeezed.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Wash the mussels under plenty of cold, running water. Discard any open ones that won't close when lightly squeezed."
+    },
+    {
+      "order": 2,
+      "text": "Pull out any tough, fibrous beards protruding from between the tightly closed shells and then knock off any barnacles with a large knife. Give the mussels another quick rinse to remove any little pieces of shell.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pull out any tough, fibrous beards protruding from between the tightly closed shells and then knock off any barnacles with a large knife. Give the mussels another quick rinse to remove any little pieces of shell. "
+    },
+    {
+      "order": 3,
+      "text": "In a very large pan (ideally big enough to take all the mussels and only be half full), gently fry the garlic and shallots in the butter with the bouquet garni. Cook over a low heat until the shallots are soft and translucent.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "In a very large pan (ideally big enough to take all the mussels and only be half full), gently fry the garlic and shallots in the butter with the bouquet garni. Cook over a low heat until the shallots are soft and translucent."
+    },
+    {
+      "order": 4,
+      "text": "Add the mussels and wine (or cider). Turn up the heat, then cover with a lid and steam for 3–4 minutes. Give the pan a good shake every now and then. The mussels should open, discard any that stay closed.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the mussels and wine (or cider). Turn up the heat, then cover with a lid and steam for 3–4 minutes. Give the pan a good shake every now and then. The mussels should open, discard any that stay closed."
+    },
+    {
+      "order": 5,
+      "text": "Remove the bouquet garni. Add the cream and chopped parsley and remove from the heat.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove the bouquet garni. Add the cream and chopped parsley and remove from the heat."
+    },
+    {
+      "order": 6,
+      "text": "Spoon into four large warmed bowls and serve with lots of crusty bread for mopping up the delicious sauce.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Spoon into four large warmed bowls and serve with lots of crusty bread for mopping up the delicious sauce."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/moulesmarinierewithc_71787_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "If you are unsure how to prepare mussels, watch the technique video for lots of tips. In the UK mussels are best from October to March but they are available year round. When shopping, look for mussels with tightly closed shells (no broken shells) and that smell fresh (like the sea)."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 77,
+      "ratingValue": 4.935064935064935
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Cook Rick Stein's impressive moules marinière in six simple steps. This is a simple dinner party dish that cooks in minutes once the mussels are prepped. Or scale it back for a romantic dinner for two.",
+    "headline": "Moules marinière with cream, garlic and parsley",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/moulesmarinierewithc_71787_16x9.jpg"
+    },
+    "name": "Moules marinière with cream, garlic and parsley",
+    "author": {
+      "@type": "Person",
+      "name": "Rick Stein"
+    },
+    "datePublished": "2004-03-10T00:00:00.000Z",
+    "dateModified": "2025-07-15T15:16:34.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 77,
+      "ratingValue": 4.935064935064935
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, best mussel, continental classics, easy luxurious, good mood food, proper pub grub, rainy day food, dinner party, valentine's day, winter, moules marinière, mussels, egg free, nut free, spring, autumn, Rick Stein's Cornwall",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "French",
+    "recipeIngredient": [
+      "1.75kg/4lb mussels",
+      "1 garlic clove, finely chopped",
+      "2 shallots, finely chopped",
+      "15g/½oz butter",
+      "a bouquet garni of parsley, thyme and bay leaves",
+      "100ml/3½fl oz dry white wine or cider",
+      "120ml/4fl oz double cream",
+      "handful of parsley leaves, roughly chopped",
+      "crusty bread, to serve"
+    ],
+    "recipeInstructions": [
+      "Wash the mussels under plenty of cold, running water. Discard any open ones that won't close when lightly squeezed.",
+      "Pull out any tough, fibrous beards protruding from between the tightly closed shells and then knock off any barnacles with a large knife. Give the mussels another quick rinse to remove any little pieces of shell. ",
+      "In a very large pan (ideally big enough to take all the mussels and only be half full), gently fry the garlic and shallots in the butter with the bouquet garni. Cook over a low heat until the shallots are soft and translucent.",
+      "Add the mussels and wine (or cider). Turn up the heat, then cover with a lid and steam for 3–4 minutes. Give the pan a good shake every now and then. The mussels should open, discard any that stay closed.",
+      "Remove the bouquet garni. Add the cream and chopped parsley and remove from the heat.",
+      "Spoon into four large warmed bowls and serve with lots of crusty bread for mopping up the delicious sauce."
+    ],
+    "recipeYield": "Serves 4-6",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:3",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

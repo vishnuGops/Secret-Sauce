@@ -1,0 +1,392 @@
+{
+  "schemaVersion": 1,
+  "id": "mary-berry/strawberry-meringue-roulade",
+  "slug": "strawberry-meringue-roulade",
+  "chefId": "chef_mary-berry",
+  "chefSlug": "mary-berry",
+  "chefName": "Mary Berry",
+  "title": "Strawberry meringue roulade",
+  "description": "Mary Berry's strawberry meringue roulade recipe has just 6 ingredients and can be made in under an hour. It's the perfect barbecue pudding.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/strawberrymeringuero_74824",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/strawberrymeringuero_74824",
+    "retrievedAt": "2026-09-11T00:27:37.534Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Mary Berry"
+    ],
+    "datePublished": "2005-06-24T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "9594a513aff57041af80372d330d0c27facf1db4e1bcfb0e3ddc7adb9b8ac548",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 8"
+    ],
+    "servings": 8
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "British"
+  ],
+  "category": [
+    "Desserts"
+  ],
+  "keywords": [
+    "quick",
+    "strawberry desserts",
+    "british summer fruit",
+    "creative bakes",
+    "flour-free baking",
+    "make-ahead summer desserts",
+    "mary berry's christmas desserts",
+    "strawberries and cream",
+    "summer baking",
+    "best strawberry",
+    "summer dessert",
+    "wimbledon nibbles",
+    "barbecue",
+    "dinner party",
+    "summer party",
+    "swiss rolls and roulades",
+    "egg white",
+    "double cream",
+    "strawberry",
+    "pregnancy friendly",
+    "vegetarian",
+    "spring",
+    "summer",
+    "Saturday Kitchen"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "5 egg whites",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": null,
+          "name": "egg whites",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "275g/10oz caster sugar",
+          "quantity": 275,
+          "quantityText": "275",
+          "unit": "g",
+          "name": "/10oz caster sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "20g/2oz flaked almonds",
+          "quantity": 20,
+          "quantityText": "20",
+          "unit": "g",
+          "name": "/2oz flaked almonds",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the filling",
+      "items": [
+        {
+          "raw": "150ml/5fl oz double cream",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "ml",
+          "name": "/5fl oz double cream",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "200ml/7fl oz Greek-style yoghurt",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "ml",
+          "name": "/7fl oz Greek-style yoghurt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "225g/8oz strawberries, hulled",
+          "quantity": 225,
+          "quantityText": "225",
+          "unit": "g",
+          "name": "/8oz strawberries, hulled",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "icing sugar, for dusting",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "icing sugar, for dusting",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 200C/180C Fan/Gas 6.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 200C/180C Fan/Gas 6."
+    },
+    {
+      "order": 2,
+      "text": "Grease a 33cm x 23cm/13in x 10in Swiss roll tin and line with baking paper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Grease a 33cm x 23cm/13in x 10in Swiss roll tin and line with baking paper."
+    },
+    {
+      "order": 3,
+      "text": "Whisk the egg whites in a clean, large bowl with an electric mixer on high-speed until very stiff.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Whisk the egg whites in a clean, large bowl with an electric mixer on high-speed until very stiff."
+    },
+    {
+      "order": 4,
+      "text": "Gradually add the sugar, 1 teaspoon at a time and, keeping the mixer on a high-speed, whisk well between each addition. Whisk until very, very stiff and glossy and all the sugar has been added.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Gradually add the sugar, 1 teaspoon at a time and, keeping the mixer on a high-speed, whisk well between each addition. Whisk until very, very stiff and glossy and all the sugar has been added."
+    },
+    {
+      "order": 5,
+      "text": "Spread the meringue mixture into the lined tin and sprinkle with the almonds. Put the tin in the oven and bake for about 8 minutes until golden.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Spread the meringue mixture into the lined tin and sprinkle with the almonds. Put the tin in the oven and bake for about 8 minutes until golden.  "
+    },
+    {
+      "order": 6,
+      "text": "Lower the temperature to 160C/140C Fan/Gas 3 and bake for a further 15 minutes, until crisp and firm to the touch.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Lower the temperature to 160C/140C Fan/Gas 3 and bake for a further 15 minutes, until crisp and firm to the touch."
+    },
+    {
+      "order": 7,
+      "text": "Remove the meringue from the oven and turn almond-side down onto a sheet of baking paper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove the meringue from the oven and turn almond-side down onto a sheet of baking paper."
+    },
+    {
+      "order": 8,
+      "text": "Remove the paper from the base of the cooked meringue and allow to cool for 10 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove the paper from the base of the cooked meringue and allow to cool for 10 minutes."
+    },
+    {
+      "order": 9,
+      "text": "Lightly whip the cream and mix with the yoghurt. Spread evenly over the meringue.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Lightly whip the cream and mix with the yoghurt. Spread evenly over the meringue."
+    },
+    {
+      "order": 10,
+      "text": "Cut the strawberries into quarters and sprinkle over the cream mixture.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Cut the strawberries into quarters and sprinkle over the cream mixture."
+    },
+    {
+      "order": 11,
+      "text": "Roll up the meringue firmly, using the paper to help you, from the long end of the roulade. It is essential you keep the roll very tight. Wrap in baking paper and chill before serving.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Roll up the meringue firmly, using the paper to help you, from the long end of the roulade. It is essential you keep the roll very tight. Wrap in baking paper and chill before serving."
+    },
+    {
+      "order": 12,
+      "text": "When you are ready to serve, dust with icing sugar and cut into slices.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "When you are ready to serve, dust with icing sugar and cut into slices. "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/strawberrymeringuero_74824_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 26,
+      "ratingValue": 4.961538461538462
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Mary Berry's strawberry meringue roulade recipe has just 6 ingredients and can be made in under an hour. It's the perfect barbecue pudding.",
+    "headline": "Strawberry meringue roulade",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/strawberrymeringuero_74824_16x9.jpg"
+    },
+    "name": "Strawberry meringue roulade",
+    "author": {
+      "@type": "Person",
+      "name": "Mary Berry"
+    },
+    "datePublished": "2005-06-24T00:00:00.000Z",
+    "dateModified": "2026-08-05T13:46:03.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 26,
+      "ratingValue": 4.961538461538462
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, strawberry desserts, british summer fruit, creative bakes, flour-free baking, make-ahead summer desserts, mary berry's christmas desserts, strawberries and cream, summer baking, best strawberry, summer dessert, wimbledon nibbles, barbecue, dinner party, summer party, swiss rolls and roulades, egg white, double cream, strawberry, pregnancy friendly, vegetarian, spring, summer, Saturday Kitchen",
+    "recipeCategory": "Desserts",
+    "recipeCuisine": "British",
+    "recipeIngredient": [
+      "5 egg whites",
+      "275g/10oz caster sugar",
+      "20g/2oz flaked almonds ",
+      "150ml/5fl oz double cream",
+      "200ml/7fl oz Greek-style yoghurt",
+      "225g/8oz strawberries, hulled ",
+      "icing sugar, for dusting"
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 200C/180C Fan/Gas 6.",
+      "Grease a 33cm x 23cm/13in x 10in Swiss roll tin and line with baking paper.",
+      "Whisk the egg whites in a clean, large bowl with an electric mixer on high-speed until very stiff.",
+      "Gradually add the sugar, 1 teaspoon at a time and, keeping the mixer on a high-speed, whisk well between each addition. Whisk until very, very stiff and glossy and all the sugar has been added.",
+      "Spread the meringue mixture into the lined tin and sprinkle with the almonds. Put the tin in the oven and bake for about 8 minutes until golden.  ",
+      "Lower the temperature to 160C/140C Fan/Gas 3 and bake for a further 15 minutes, until crisp and firm to the touch.",
+      "Remove the meringue from the oven and turn almond-side down onto a sheet of baking paper.",
+      "Remove the paper from the base of the cooked meringue and allow to cool for 10 minutes.",
+      "Lightly whip the cream and mix with the yoghurt. Spread evenly over the meringue.",
+      "Cut the strawberries into quarters and sprinkle over the cream mixture.",
+      "Roll up the meringue firmly, using the paper to help you, from the long end of the roulade. It is essential you keep the roll very tight. Wrap in baking paper and chill before serving.",
+      "When you are ready to serve, dust with icing sugar and cut into slices. "
+    ],
+    "recipeYield": "Serves 8",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

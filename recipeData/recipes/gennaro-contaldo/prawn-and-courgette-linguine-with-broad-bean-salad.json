@@ -1,0 +1,437 @@
+{
+  "schemaVersion": 1,
+  "id": "gennaro-contaldo/prawn-and-courgette-linguine-with-broad-bean-salad",
+  "slug": "prawn-and-courgette-linguine-with-broad-bean-salad",
+  "chefId": "chef_gennaro-contaldo",
+  "chefSlug": "gennaro-contaldo",
+  "chefName": "Gennaro Contaldo",
+  "title": "Prawn and courgette linguine with broad bean salad",
+  "description": "This simple summery courgette and prawn pasta dish by Gennaro is a quick dinner for when you don't want to slave away in a hot kitchen. The courgettes cook down into a creamy sauce that's flavoured with garlic and anchovy. Get ahead by making the salad early.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/prawn_and_courgette_24794",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/prawn_and_courgette_24794",
+    "retrievedAt": "2026-09-11T00:27:59.145Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Gennaro Contaldo"
+    ],
+    "datePublished": "2018-04-21T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "37001a876547fc860539a3f4353e4b3a6cc9949bcf0bea9cc668ad8a4114ea18",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Italian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "celebrating early summer",
+    "date night pasta",
+    "best courgette",
+    "summer dinner party",
+    "summer pasta",
+    "dinner party",
+    "spring recipes",
+    "summer dinner",
+    "pasta",
+    "courgette",
+    "prawn",
+    "egg free",
+    "pregnancy friendly",
+    "spring",
+    "summer",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the prawn linguine",
+      "items": [
+        {
+          "raw": "400g/14oz fresh or dried linguine",
+          "quantity": 400,
+          "quantityText": "400",
+          "unit": "g",
+          "name": "/14oz fresh or dried linguine",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "600g/1lb 5oz courgettes, roughly grated",
+          "quantity": 600,
+          "quantityText": "600",
+          "unit": "g",
+          "name": "/1lb 5oz courgettes",
+          "note": "roughly grated",
+          "isOptional": false
+        },
+        {
+          "raw": "5 tbsp extra virgin olive oil",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": "tbsp",
+          "name": "extra virgin olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 garlic cloves, finely chopped",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "4 anchovy fillets",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "anchovy fillets",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "300g/10½oz peeled prawns",
+          "quantity": 300,
+          "quantityText": "300",
+          "unit": "g",
+          "name": "/10½oz peeled prawns",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "handful of basil leaves",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "handful",
+          "name": "of basil leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ lemon, juice only, to serve",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "lemon",
+          "note": "juice only, to serve",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the broad bean salad",
+      "items": [
+        {
+          "raw": "100g/3½oz frozen broad beans",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz frozen broad beans",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "20g/¾oz pine nuts",
+          "quantity": 20,
+          "quantityText": "20",
+          "unit": "g",
+          "name": "/¾oz pine nuts",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "150g/5½oz artichoke hearts preserved in oil, drained",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "g",
+          "name": "/5½oz artichoke hearts preserved in oil",
+          "note": "drained",
+          "isOptional": false
+        },
+        {
+          "raw": "2 handfuls of rocket",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "handfuls",
+          "name": "of rocket",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "30g/1oz Parmesan, shaved",
+          "quantity": 30,
+          "quantityText": "30",
+          "unit": "g",
+          "name": "/1oz Parmesan, shaved",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the salad dressing",
+      "items": [
+        {
+          "raw": "2 tbsp extra virgin olive oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "extra virgin olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ lemon, juice only",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "lemon, juice only",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "sea salt",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "sea salt",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Bring a large saucepan of salted water to the boil and cook the pasta according to the packet instructions or until al dente.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Bring a large saucepan of salted water to the boil and cook the pasta according to the packet instructions or until al dente. "
+    },
+    {
+      "order": 2,
+      "text": "Meanwhile, take handfuls of the grated courgette, squeeze out the excess water and set aside to drain on kitchen paper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, take handfuls of the grated courgette, squeeze out the excess water and set aside to drain on kitchen paper. "
+    },
+    {
+      "order": 3,
+      "text": "Heat the oil in a large frying pan over a low–medium heat. Add the garlic and anchovy fillets and gently fry for a minute, or until the anchovies have disintegrated. Add the courgette and stir-fry for 2–3 minutes, or until softened.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat the oil in a large frying pan over a low–medium heat. Add the garlic and anchovy fillets and gently fry for a minute, or until the anchovies have disintegrated. Add the courgette and stir-fry for 2–3 minutes, or until softened."
+    },
+    {
+      "order": 4,
+      "text": "Season with salt to taste. Stir in the prawns and continue to cook for a further 2 minutes, or until the prawns have turned pink and are cooked through.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Season with salt to taste. Stir in the prawns and continue to cook for a further 2 minutes, or until the prawns have turned pink and are cooked through. "
+    },
+    {
+      "order": 5,
+      "text": "Drain the pasta, reserving a little of the cooking water, and add to the mixture in the pan, tossing together to combine. Stir in the basil and continue to cook for a minute, adding a little of the pasta cooking water if necessary.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Drain the pasta, reserving a little of the cooking water, and add to the mixture in the pan, tossing together to combine. Stir in the basil and continue to cook for a minute, adding a little of the pasta cooking water if necessary. "
+    },
+    {
+      "order": 6,
+      "text": "To make the salad, bring a small saucepan of water to the boil. Add the broad beans, bring back to the boil and cook for 3 minutes. Drain the broad beans in a colander and rinse them in cold water. Drain and place the beans in a bowl, together with the artichokes, rocket and Parmesan shavings.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the salad, bring a small saucepan of water to the boil. Add the broad beans, bring back to the boil and cook for 3 minutes. Drain the broad beans in a colander and rinse them in cold water. Drain and place the beans in a bowl, together with the artichokes, rocket and Parmesan shavings. "
+    },
+    {
+      "order": 7,
+      "text": "Heat a small frying pan over a medium heat and toast the pine nuts for 3 minutes, or until golden. Remove from the heat and set aside to cool. Scatter over the salad.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat a small frying pan over a medium heat and toast the pine nuts for 3 minutes, or until golden. Remove from the heat and set aside to cool. Scatter over the salad."
+    },
+    {
+      "order": 8,
+      "text": "To make the dressing, combine all of the dressing ingredients in a small bowl. Pour over the salad and mix well.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the dressing, combine all of the dressing ingredients in a small bowl. Pour over the salad and mix well. \r\n"
+    },
+    {
+      "order": 9,
+      "text": "Serve the linguine with a squeeze of lemon on top and the salad on the side.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Serve the linguine with a squeeze of lemon on top and the salad on the side. "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/prawn_and_courgette_24794_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 14,
+      "ratingValue": 5
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "This simple summery courgette and prawn pasta dish by Gennaro is a quick dinner for when you don't want to slave away in a hot kitchen. The courgettes cook down into a creamy sauce that's flavoured with garlic and anchovy. Get ahead by making the salad early. ",
+    "headline": "Prawn and courgette linguine with broad bean salad",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/prawn_and_courgette_24794_16x9.jpg"
+    },
+    "name": "Prawn and courgette linguine with broad bean salad",
+    "author": {
+      "@type": "Person",
+      "name": "Gennaro Contaldo"
+    },
+    "datePublished": "2018-04-21T00:00:00.000Z",
+    "dateModified": "2025-04-14T08:12:19.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 14,
+      "ratingValue": 5
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, celebrating early summer, date night pasta , best courgette, summer dinner party, summer pasta, dinner party, spring recipes , summer dinner, pasta, courgette, prawn, egg free, pregnancy friendly, spring, summer, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Italian",
+    "recipeIngredient": [
+      "400g/14oz fresh or dried linguine ",
+      "600g/1lb 5oz courgettes, roughly grated",
+      "5 tbsp extra virgin olive oil ",
+      "3 garlic cloves, finely chopped",
+      "4 anchovy fillets",
+      "300g/10½oz peeled prawns ",
+      "handful of basil leaves",
+      "½ lemon, juice only, to serve ",
+      "100g/3½oz frozen broad beans ",
+      "20g/¾oz pine nuts ",
+      "150g/5½oz artichoke hearts preserved in oil, drained",
+      "2 handfuls of rocket",
+      "30g/1oz Parmesan, shaved ",
+      "2 tbsp extra virgin olive oil",
+      "½ lemon, juice only",
+      "sea salt "
+    ],
+    "recipeInstructions": [
+      "Bring a large saucepan of salted water to the boil and cook the pasta according to the packet instructions or until al dente. ",
+      "Meanwhile, take handfuls of the grated courgette, squeeze out the excess water and set aside to drain on kitchen paper. ",
+      "Heat the oil in a large frying pan over a low–medium heat. Add the garlic and anchovy fillets and gently fry for a minute, or until the anchovies have disintegrated. Add the courgette and stir-fry for 2–3 minutes, or until softened.",
+      "Season with salt to taste. Stir in the prawns and continue to cook for a further 2 minutes, or until the prawns have turned pink and are cooked through. ",
+      "Drain the pasta, reserving a little of the cooking water, and add to the mixture in the pan, tossing together to combine. Stir in the basil and continue to cook for a minute, adding a little of the pasta cooking water if necessary. ",
+      "To make the salad, bring a small saucepan of water to the boil. Add the broad beans, bring back to the boil and cook for 3 minutes. Drain the broad beans in a colander and rinse them in cold water. Drain and place the beans in a bowl, together with the artichokes, rocket and Parmesan shavings. ",
+      "Heat a small frying pan over a medium heat and toast the pine nuts for 3 minutes, or until golden. Remove from the heat and set aside to cool. Scatter over the salad.",
+      "To make the dressing, combine all of the dressing ingredients in a small bowl. Pour over the salad and mix well. \r\n",
+      "Serve the linguine with a squeeze of lemon on top and the salad on the side. "
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

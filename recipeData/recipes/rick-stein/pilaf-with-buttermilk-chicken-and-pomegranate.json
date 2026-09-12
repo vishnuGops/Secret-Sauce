@@ -1,0 +1,340 @@
+{
+  "schemaVersion": 1,
+  "id": "rick-stein/pilaf-with-buttermilk-chicken-and-pomegranate",
+  "slug": "pilaf-with-buttermilk-chicken-and-pomegranate",
+  "chefId": "chef_rick-stein",
+  "chefSlug": "rick-stein",
+  "chefName": "Rick Stein",
+  "title": "Pilaf with buttermilk chicken and pomegranate",
+  "description": "Try Rick Stein’s simple but flavoursome rice pilaf with marinated chicken for an impressively low-effort family dinner.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/pilaf_buttermilk_chicken_04448",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/pilaf_buttermilk_chicken_04448",
+    "retrievedAt": "2026-09-11T00:26:29.643Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Rick Stein"
+    ],
+    "datePublished": "2023-11-23T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "d4940493238c566b60a0a2e35c3ac45af4065b24fe6e0f6f5f4bcfe90bbefd70",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": []
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 120,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "pilaf",
+    "chicken breast",
+    "egg free",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "2 large boneless chicken breasts, skin on",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "large boneless chicken breasts, skin on",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz buttermilk",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz buttermilk",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 garlic clove, crushed",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "garlic clove",
+          "note": "crushed",
+          "isOptional": false
+        },
+        {
+          "raw": "large pinch saffron strands",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "large pinch saffron strands",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp olive oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 onion, sliced",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "onion",
+          "note": "sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "300g/10½oz basmati rice",
+          "quantity": 300,
+          "quantityText": "300",
+          "unit": "g",
+          "name": "/10½oz basmati rice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "450ml/16fl oz chicken stock",
+          "quantity": 450,
+          "quantityText": "450",
+          "unit": "ml",
+          "name": "/16fl oz chicken stock",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp za'atar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "za'atar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "handful fresh parsley, chopped",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "handful",
+          "name": "fresh parsley",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp pine nuts",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "pine nuts",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 pomegranate, seeds only",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "pomegranate, seeds only",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "About 2–4 hours before cooking, put the chicken breasts in a bowl with the buttermilk and garlic, cover and leave in the fridge to marinate.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "About 2–4 hours before cooking, put the chicken breasts in a bowl with the buttermilk and garlic, cover and leave in the fridge to marinate. "
+    },
+    {
+      "order": 2,
+      "text": "About 30 minutes before cooking, put the saffron in a bowl, pour over 2–3 tbsp hot water and leave it to bloom.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "About 30 minutes before cooking, put the saffron in a bowl, pour over 2–3 tbsp hot water and leave it to bloom. "
+    },
+    {
+      "order": 3,
+      "text": "In a saucepan with a lid, over medium heat, add the oil and fry the onion until soft. Add the rice and stir it into the oil. Add the saffron water and stock, then season with ½ teaspoon of salt and some black pepper. Put a lid on the pan, turn down the heat and simmer the rice for 10–12 minutes until the liquid has been absorbed.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "In a saucepan with a lid, over medium heat, add the oil and fry the onion until soft. Add the rice and stir it into the oil. Add the saffron water and stock, then season with ½ teaspoon of salt and some black pepper. Put a lid on the pan, turn down the heat and simmer the rice for 10–12 minutes until the liquid has been absorbed. "
+    },
+    {
+      "order": 4,
+      "text": "Preheat the oven to 220C/200C Fan/Gas 7. Remove the chicken from the marinade, put it in a baking dish and sprinkle with salt and the za'atar.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 220C/200C Fan/Gas 7. Remove the chicken from the marinade, put it in a baking dish and sprinkle with salt and the za'atar."
+    },
+    {
+      "order": 5,
+      "text": "Cook the chicken for 20–25 minutes, depending on the thickness of the breasts, or until cooked through.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Cook the chicken for 20–25 minutes, depending on the thickness of the breasts, or until cooked through."
+    },
+    {
+      "order": 6,
+      "text": "To serve, stir the parsley and pine nuts into the rice. Slice the chicken and place it on top of the rice with the pomegranate seeds.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To serve, stir the parsley and pine nuts into the rice. Slice the chicken and place it on top of the rice with the pomegranate seeds. "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/pilaf_buttermilk_chicken_04448_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 6,
+      "ratingValue": 3.5
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Try Rick Stein’s simple but flavoursome rice pilaf with marinated chicken for an impressively low-effort family dinner.",
+    "headline": "Pilaf with buttermilk chicken and pomegranate",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/pilaf_buttermilk_chicken_04448_16x9.jpg"
+    },
+    "name": "Pilaf with buttermilk chicken and pomegranate",
+    "author": {
+      "@type": "Person",
+      "name": "Rick Stein"
+    },
+    "datePublished": "2023-11-23T00:00:00.000Z",
+    "dateModified": "2026-01-07T16:57:11.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 6,
+      "ratingValue": 3.5
+    },
+    "prepTime": "PT2H",
+    "cookTime": "PT1H",
+    "keywords": "pilaf, chicken breast, egg free, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeIngredient": [
+      "2 large boneless chicken breasts, skin on ",
+      "100g/3½oz buttermilk ",
+      "1 garlic clove, crushed ",
+      "large pinch saffron strands ",
+      "2 tbsp olive oil ",
+      "1 onion, sliced ",
+      "300g/10½oz basmati rice ",
+      "450ml/16fl oz chicken stock ",
+      "1 tbsp za'atar ",
+      "handful fresh parsley, chopped",
+      "2 tbsp pine nuts ",
+      "1 pomegranate, seeds only ",
+      "salt and freshly ground black pepper "
+    ],
+    "recipeInstructions": [
+      "About 2–4 hours before cooking, put the chicken breasts in a bowl with the buttermilk and garlic, cover and leave in the fridge to marinate. ",
+      "About 30 minutes before cooking, put the saffron in a bowl, pour over 2–3 tbsp hot water and leave it to bloom. ",
+      "In a saucepan with a lid, over medium heat, add the oil and fry the onion until soft. Add the rice and stir it into the oil. Add the saffron water and stock, then season with ½ teaspoon of salt and some black pepper. Put a lid on the pan, turn down the heat and simmer the rice for 10–12 minutes until the liquid has been absorbed. ",
+      "Preheat the oven to 220C/200C Fan/Gas 7. Remove the chicken from the marinade, put it in a baking dish and sprinkle with salt and the za'atar.",
+      "Cook the chicken for 20–25 minutes, depending on the thickness of the breasts, or until cooked through.",
+      "To serve, stir the parsley and pine nuts into the rice. Slice the chicken and place it on top of the rice with the pomegranate seeds. "
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:3",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

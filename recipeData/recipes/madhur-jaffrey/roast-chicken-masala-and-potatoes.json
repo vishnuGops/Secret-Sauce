@@ -1,0 +1,540 @@
+{
+  "schemaVersion": 1,
+  "id": "madhur-jaffrey/roast-chicken-masala-and-potatoes",
+  "slug": "roast-chicken-masala-and-potatoes",
+  "chefId": "chef_madhur-jaffrey",
+  "chefSlug": "madhur-jaffrey",
+  "chefName": "Madhur Jaffrey",
+  "title": "Roast chicken masala and potatoes",
+  "description": "This whole chicken is marinated in spices before being roasted to a juicy, succulent dish served with spicy potatoes.\n\nEach serving provides 569kcal, 73g protein, 47g carbohydrate (of which 2g sugars), 9 fat (of which 2g saturates), 5g fibre and 1.3g salt.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/whole_roasted_masala_77631",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/whole_roasted_masala_77631",
+    "retrievedAt": "2026-09-11T00:26:55.833Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Madhur Jaffrey"
+    ],
+    "datePublished": "2013-08-24T10:30:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "790470ae13634e755cd1cfb63c5b69a58391aea32e2d38c00c6d1571863e882f",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups",
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 60,
+    "cookMinutes": 120,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Indian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "best roast chicken",
+    "spice up your roast",
+    "spice up roast chicken",
+    "roast dinner",
+    "roast chicken",
+    "chicken",
+    "potato",
+    "dairy free",
+    "egg free",
+    "healthy",
+    "pregnancy friendly",
+    "2007-16"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the marinade",
+      "items": [
+        {
+          "raw": "4 tbsp lemon juice",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "lemon juice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp peeled, finely chopped root ginger",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "peeled",
+          "note": "finely chopped root ginger",
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp finely chopped or crushed garlic",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "finely chopped or crushed garlic",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 hot green chillies, finely chopped",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "hot green chillies",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp salt",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground coriander",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp garam masala",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "garam masala",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the chicken",
+      "items": [
+        {
+          "raw": "1.75kg (3lb 14oz) whole chicken, skin removed",
+          "quantity": 1.75,
+          "quantityText": "1.75",
+          "unit": "kg",
+          "name": "(3lb 14oz) whole chicken, skin removed",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp chilli powder",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "chilli powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¾ tsp freshly ground black pepper",
+          "quantity": 0.75,
+          "quantityText": "¾",
+          "unit": "tsp",
+          "name": "freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the roasted masala potatoes",
+      "items": [
+        {
+          "raw": "2 tbsp olive or sunflower oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "olive or sunflower oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "5 medium potatoes, peeled, halved lengthways, and cut into 5x4cm/2x1½in chunks",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": null,
+          "name": "medium potatoes",
+          "note": "peeled, halved lengthways, and cut into 5x4cm/2x1½in chunks",
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp of salt",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "of salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¾ tsp freshly ground black pepper",
+          "quantity": 0.75,
+          "quantityText": "¾",
+          "unit": "tsp",
+          "name": "freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground coriander",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground cumin",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground cumin",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp turmeric",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "turmeric",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp Kashmiri (mild) chilli powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "Kashmiri (mild) chilli powder",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 200C/400F/Gas 6.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 200C/400F/Gas 6."
+    },
+    {
+      "order": 2,
+      "text": "Place all the marinade ingredients into a blender and process to a paste.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place all the marinade ingredients into a blender and process to a paste."
+    },
+    {
+      "order": 3,
+      "text": "Using a sharp knife, make two deep, diagonal cuts into each breast of the chicken, going all the way down to the bone. Make two equally deep slashes in the thighs and two in the drumsticks as well.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Using a sharp knife, make two deep, diagonal cuts into each breast of the chicken, going all the way down to the bone. Make two equally deep slashes in the thighs and two in the drumsticks as well. "
+    },
+    {
+      "order": 4,
+      "text": "Place the chicken, breast side up, on a roasting tray lined with enough foil to cover the bird completely.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place the chicken, breast side up, on a roasting tray lined with enough foil to cover the bird completely. "
+    },
+    {
+      "order": 5,
+      "text": "Pour the marinade paste over the chicken, rubbing it well into all the cuts. Set aside for 30 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pour the marinade paste over the chicken, rubbing it well into all the cuts. Set aside for 30 minutes. "
+    },
+    {
+      "order": 6,
+      "text": "Sprinkle the chilli powder and black pepper over the chicken evenly. Wrap up the chicken in the foil so it is completely covered, with the tightly closed seam at the top.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Sprinkle the chilli powder and black pepper over the chicken evenly. Wrap up the chicken in the foil so it is completely covered, with the tightly closed seam at the top. "
+    },
+    {
+      "order": 7,
+      "text": "Bake in the middle of the hot oven for one hour.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Bake in the middle of the hot oven for one hour. "
+    },
+    {
+      "order": 8,
+      "text": "Unwrap, without letting the juices run out, and cook, uncovered, for 15 minutes, basting two or three times with the juices.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Unwrap, without letting the juices run out, and cook, uncovered, for 15 minutes, basting two or three times with the juices. "
+    },
+    {
+      "order": 9,
+      "text": "Check the chicken is cooked by inserting a skewer into the thickest part of the thigh, between the leg and the body. If the juices run clear with no trace of pink, it is cooked. Continue to cook for a little longer if needed.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Check the chicken is cooked by inserting a skewer into the thickest part of the thigh, between the leg and the body. If the juices run clear with no trace of pink, it is cooked. Continue to cook for a little longer if needed."
+    },
+    {
+      "order": 10,
+      "text": "Preheat the oven to 180C/350F/Gas 4.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 180C/350F/Gas 4."
+    },
+    {
+      "order": 11,
+      "text": "Meanwhile, for the roasted masala potatoes, pour the oil into a large bowl. Add the potatoes and sprinkle in the salt and pepper. Ensure the potatoes are well coated, then transfer to a baking tray in a single layer. Place in the middle of the oven and roast for 20 mins.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, for the roasted masala potatoes, pour the oil into a large bowl. Add the potatoes and sprinkle in the salt and pepper. Ensure the potatoes are well coated, then transfer to a baking tray in a single layer. Place in the middle of the oven and roast for 20 mins."
+    },
+    {
+      "order": 12,
+      "text": "Spoon the coriander, cumin, turmeric and chilli powder on to a plate and mix well. Remove the potatoes from the oven. Using tongs, roll the potatoes in the spice mix, making sure all sides are covered.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Spoon the coriander, cumin, turmeric and chilli powder on to a plate and mix well. Remove the potatoes from the oven. Using tongs, roll the potatoes in the spice mix, making sure all sides are covered. "
+    },
+    {
+      "order": 13,
+      "text": "Return them to the oven for a further 20 minutes, or until lightly browned and tender all the way through when pierced with a knife.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Return them to the oven for a further 20 minutes, or until lightly browned and tender all the way through when pierced with a knife."
+    },
+    {
+      "order": 14,
+      "text": "Set the chicken in a warm place to rest for 10-15 minutes, then carve and serve with the roasted masala potatoes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Set the chicken in a warm place to rest for 10-15 minutes, then carve and serve with the roasted masala potatoes."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "569kcal",
+    "proteinContent": "73g",
+    "carbohydrateContent": "47g",
+    "fiberContent": "5g",
+    "saturatedFatContent": "2g",
+    "sugarContent": "2g"
+  },
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/whole_roasted_masala_77631_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "Buy the best chicken you can, preferably organic, and it will be lower in fat."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 17,
+      "ratingValue": 4.882352941176471
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/LowCalorieDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "This whole chicken is marinated in spices before being roasted to a juicy, succulent dish served with spicy potatoes.\r\n\r\nEach serving provides 569kcal, 73g protein, 47g carbohydrate (of which 2g sugars),\t9 fat (of which 2g saturates), 5g fibre and 1.3g salt.",
+    "headline": "Roast chicken masala and potatoes",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/whole_roasted_masala_77631_16x9.jpg"
+    },
+    "name": "Roast chicken masala and potatoes",
+    "author": {
+      "@type": "Person",
+      "name": "Madhur Jaffrey"
+    },
+    "datePublished": "2013-08-24T10:30:00.000Z",
+    "dateModified": "2019-06-05T15:45:35.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 17,
+      "ratingValue": 4.882352941176471
+    },
+    "prepTime": "PT1H",
+    "cookTime": "PT2H",
+    "keywords": "best roast chicken, spice up your roast, spice up roast chicken, roast dinner, roast chicken, chicken, potato, dairy free, egg free, healthy, pregnancy friendly, 2007-16",
+    "nutrition": {
+      "calories": "569kcal",
+      "proteinContent": "73g",
+      "carbohydrateContent": "47g",
+      "fiberContent": "5g",
+      "saturatedFatContent": "2g",
+      "sugarContent": "2g"
+    },
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Indian",
+    "recipeIngredient": [
+      "4 tbsp lemon juice\t\t ",
+      "2 tbsp peeled, finely chopped root ginger\t",
+      "2 tbsp finely chopped or crushed garlic\t\t ",
+      "3 hot green chillies, finely chopped",
+      "½ tsp salt",
+      "1 tsp ground coriander",
+      "1 tsp garam masala",
+      "1.75kg (3lb 14oz) whole chicken, skin removed",
+      "½ tsp chilli powder",
+      "½ tsp freshly ground black pepper",
+      "2 tbsp olive or sunflower oil",
+      "5 medium potatoes, peeled, halved lengthways, and cut into 5x4cm/2x1½in chunks",
+      "½ tsp of salt",
+      "¾ tsp freshly ground black pepper",
+      "1 tsp ground coriander ",
+      "1 tsp ground cumin",
+      "½ tsp turmeric",
+      "1 tsp Kashmiri (mild) chilli powder"
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 200C/400F/Gas 6.",
+      "Place all the marinade ingredients into a blender and process to a paste.",
+      "Using a sharp knife, make two deep, diagonal cuts into each breast of the chicken, going all the way down to the bone. Make two equally deep slashes in the thighs and two in the drumsticks as well. ",
+      "Place the chicken, breast side up, on a roasting tray lined with enough foil to cover the bird completely. ",
+      "Pour the marinade paste over the chicken, rubbing it well into all the cuts. Set aside for 30 minutes. ",
+      "Sprinkle the chilli powder and black pepper over the chicken evenly. Wrap up the chicken in the foil so it is completely covered, with the tightly closed seam at the top. ",
+      "Bake in the middle of the hot oven for one hour. ",
+      "Unwrap, without letting the juices run out, and cook, uncovered, for 15 minutes, basting two or three times with the juices. ",
+      "Check the chicken is cooked by inserting a skewer into the thickest part of the thigh, between the leg and the body. If the juices run clear with no trace of pink, it is cooked. Continue to cook for a little longer if needed.",
+      "Preheat the oven to 180C/350F/Gas 4.",
+      "Meanwhile, for the roasted masala potatoes, pour the oil into a large bowl. Add the potatoes and sprinkle in the salt and pepper. Ensure the potatoes are well coated, then transfer to a baking tray in a single layer. Place in the middle of the oven and roast for 20 mins.",
+      "Spoon the coriander, cumin, turmeric and chilli powder on to a plate and mix well. Remove the potatoes from the oven. Using tongs, roll the potatoes in the spice mix, making sure all sides are covered. ",
+      "Return them to the oven for a further 20 minutes, or until lightly browned and tender all the way through when pierced with a knife.",
+      "Set the chicken in a warm place to rest for 10-15 minutes, then carve and serve with the roasted masala potatoes."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/LowCalorieDiet"
+    ]
+  },
+  "audit": [
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

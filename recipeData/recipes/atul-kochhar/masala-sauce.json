@@ -1,0 +1,436 @@
+{
+  "schemaVersion": 1,
+  "id": "atul-kochhar/masala-sauce",
+  "slug": "masala-sauce",
+  "chefId": "chef_atul-kochhar",
+  "chefSlug": "atul-kochhar",
+  "chefName": "Atul Kochhar",
+  "title": "Masala sauce",
+  "description": "This delicious masala sauce will give your curries real depth of flavour. The secret to the rich taste is cooking the onions slowly until they are very dark. Add pan-fried chicken, meat, prawns or vegetables for a delicious quick curry.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/onion_masala_sauce_45651",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/onion_masala_sauce_45651",
+    "retrievedAt": "2026-09-11T00:28:13.040Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Atul Kochhar"
+    ],
+    "datePublished": "2014-03-01T11:30:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "39c1023dc18bd56711311ee35d3c162c27ba854c9dfed3e41c5a4b6a4927ce21",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups",
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Makes about 500g/1lb 2oz of sauce"
+    ],
+    "servings": 500
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Indian"
+  ],
+  "category": [
+    "Other"
+  ],
+  "keywords": [
+    "quick",
+    "curry base",
+    "holi",
+    "no added sugar sauces",
+    "ultra processed food swaps that won’t cost the earth",
+    "two for one dinners",
+    "vegan curry",
+    "veganuary",
+    "curry paste",
+    "dairy free",
+    "egg free",
+    "nut free",
+    "pregnancy friendly",
+    "vegan",
+    "vegetarian",
+    "Saturday Kitchen"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the ginger garlic paste",
+      "items": [
+        {
+          "raw": "30g/1oz root ginger, peeled",
+          "quantity": 30,
+          "quantityText": "30",
+          "unit": "g",
+          "name": "/1oz root ginger",
+          "note": "peeled",
+          "isOptional": false
+        },
+        {
+          "raw": "30g/1oz garlic cloves, peeled",
+          "quantity": 30,
+          "quantityText": "30",
+          "unit": "g",
+          "name": "/1oz garlic cloves",
+          "note": "peeled",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the masala sauce",
+      "items": [
+        {
+          "raw": "2 tbsp vegetable oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "vegetable oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 black cardamom",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "black cardamom",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "10 black peppercorns",
+          "quantity": 10,
+          "quantityText": "10",
+          "unit": null,
+          "name": "black peppercorns",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 cloves",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "cloves",
+          "name": "3 cloves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 green cardamom",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "green cardamom",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp cumin seeds",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "cumin seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 cinnamon sticks",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "cinnamon sticks",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 bay leaf",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "bay leaf",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "500g/1lb 2oz onions, chopped",
+          "quantity": 500,
+          "quantityText": "500",
+          "unit": "g",
+          "name": "/1lb 2oz onions",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp ginger garlic paste (from above)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "ginger garlic paste (from above)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground turmeric",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground turmeric",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp red chilli powder",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "red chilli powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp ground coriander",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "ground coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp garam masala",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "garam masala",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt, to taste",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt",
+          "note": "to taste",
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp tomato purée",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "tomato purée",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "First prepare the ginger garlic paste. Blend the ginger and garlic with a teaspoon of water in a blender. Store any you don’t use for this recipe in the fridge.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "First prepare the ginger garlic paste. Blend the ginger and garlic with a teaspoon of water in a blender. Store any you don’t use for this recipe in the fridge."
+    },
+    {
+      "order": 2,
+      "text": "To make the masala sauce, heat the oil in a large frying pan. Add the whole spices (black cardamom, peppercorns, cloves, green cardamom, cumin seeds, cinnamon and bay leaf) and fry until they start to crackle, then add the onions.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the masala sauce, heat the oil in a large frying pan. Add the whole spices (black cardamom, peppercorns, cloves, green cardamom, cumin seeds, cinnamon and bay leaf) and fry until they start to crackle, then add the onions.   "
+    },
+    {
+      "order": 3,
+      "text": "Cook the onions gently and slowly until caramelised and very dark brown.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Cook the onions gently and slowly until caramelised and very dark brown."
+    },
+    {
+      "order": 4,
+      "text": "Add a tablespoon of the ginger garlic paste and fry gently for 3-4 minutes. Taste to make sure the ginger and garlic are well cooked otherwise their flavour will be too strong.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add a tablespoon of the ginger garlic paste and fry gently for 3-4 minutes. Taste to make sure the ginger and garlic are well cooked otherwise their flavour will be too strong."
+    },
+    {
+      "order": 5,
+      "text": "Add all the powdered spices and mix well.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add all the powdered spices and mix well. "
+    },
+    {
+      "order": 6,
+      "text": "Add 100-150ml/3½-5fl oz water if the sauce is too thick.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add 100-150ml/3½-5fl oz water if the sauce is too thick.  "
+    },
+    {
+      "order": 7,
+      "text": "Finally add the tomato purée and cook until the oil comes to the surface of the sauce.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Finally add the tomato purée and cook until the oil comes to the surface of the sauce."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/onion_masala_sauce_45651_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "Store the sauce in the fridge up to two weeks, or it can be frozen for up to three months."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 33,
+      "ratingValue": 4.03030303030303
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/VeganDiet",
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "This delicious masala sauce will give your curries real depth of flavour. The secret to the rich taste is cooking the onions slowly until they are very dark. Add pan-fried chicken, meat, prawns or vegetables for a delicious quick curry.",
+    "headline": "Masala sauce",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/onion_masala_sauce_45651_16x9.jpg"
+    },
+    "name": "Masala sauce",
+    "author": {
+      "@type": "Person",
+      "name": "Atul Kochhar"
+    },
+    "datePublished": "2014-03-01T11:30:00.000Z",
+    "dateModified": "2018-12-18T11:59:20.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 33,
+      "ratingValue": 4.03030303030303
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, curry base, holi, no added sugar sauces, ultra processed food swaps that won’t cost the earth, two for one dinners, vegan curry, veganuary, curry paste, dairy free, egg free, nut free, pregnancy friendly, vegan, vegetarian, Saturday Kitchen",
+    "recipeCategory": "Other",
+    "recipeCuisine": "Indian",
+    "recipeIngredient": [
+      "30g/1oz root ginger, peeled",
+      "30g/1oz garlic cloves, peeled",
+      "2 tbsp vegetable oil",
+      "2 black cardamom ",
+      "10 black peppercorns ",
+      "3 cloves",
+      "4 green cardamom",
+      "2 tsp cumin seeds",
+      "2 cinnamon sticks",
+      "1 bay leaf",
+      "500g/1lb 2oz onions, chopped",
+      "1 tbsp ginger garlic paste (from above)",
+      "1 tsp ground turmeric",
+      "½ tsp red chilli powder",
+      "1 tbsp ground coriander",
+      "1 tsp garam masala ",
+      "salt, to taste",
+      "2 tbsp tomato purée"
+    ],
+    "recipeInstructions": [
+      "First prepare the ginger garlic paste. Blend the ginger and garlic with a teaspoon of water in a blender. Store any you don’t use for this recipe in the fridge.",
+      "To make the masala sauce, heat the oil in a large frying pan. Add the whole spices (black cardamom, peppercorns, cloves, green cardamom, cumin seeds, cinnamon and bay leaf) and fry until they start to crackle, then add the onions.   ",
+      "Cook the onions gently and slowly until caramelised and very dark brown.",
+      "Add a tablespoon of the ginger garlic paste and fry gently for 3-4 minutes. Taste to make sure the ginger and garlic are well cooked otherwise their flavour will be too strong.",
+      "Add all the powdered spices and mix well. ",
+      "Add 100-150ml/3½-5fl oz water if the sauce is too thick.  ",
+      "Finally add the tomato purée and cook until the oil comes to the surface of the sauce."
+    ],
+    "recipeYield": "Makes about 500g/1lb 2oz of sauce",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/VeganDiet",
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

@@ -1,0 +1,361 @@
+{
+  "schemaVersion": 1,
+  "id": "nigella-lawson/rice-bowl-with-ginger-radish-and-avocado",
+  "slug": "rice-bowl-with-ginger-radish-and-avocado",
+  "chefId": "chef_nigella-lawson",
+  "chefSlug": "nigella-lawson",
+  "chefName": "Nigella Lawson",
+  "title": "Rice bowl with ginger, radish and avocado",
+  "description": "A rice bowl is a wondrous thing, but often – despite the simplicity of its title – a rather cluttered and complicated one. Here, I have pared it back, to make a gorgeously seasoned rice bowl, with nothing more than a few seeds, herbs and radishes stirred through it, and an avocado to top it. It’s a simple take on an inspiringly expansive idea. So please use this as a starting point only. It’s very much a non-recipe recipe, and every time I make it, I add something different, depending on what’s to hand.\n\nEach serving provides 498 kcal, 13g protein, 61g carbohydrate (of which 4.1g sugars), 21g fat (of which 4g saturates), 6.1g fibre and 1.9g salt.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/rice_bowl_with_ginger_58307",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/rice_bowl_with_ginger_58307",
+    "retrievedAt": "2026-09-11T00:26:14.210Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Nigella Lawson"
+    ],
+    "datePublished": "2015-11-16T16:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "487a7302258db6dd1bf7a8d1ef8cff4a17703ec508b06026ca62b16e43e81bce",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 2"
+    ],
+    "servings": 2
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "30 minute meals for two",
+    "grains for mains",
+    "bowl food",
+    "easy healthy lunch ideas",
+    "easy rice",
+    "easy vegan",
+    "eat within eight hours",
+    "vegan dinner",
+    "healthy lunches for work",
+    "healthy lunch ideas",
+    "healthy lunches",
+    "healthy recipes for two",
+    "healthy rice",
+    "light dinner ideas",
+    "nigella's vegetarian favourites",
+    "nutritious rice bowls",
+    "quick rice",
+    "sleep-friendly",
+    "summery vegan",
+    "summer bowl food",
+    "super seeds",
+    "vegan rice",
+    "veggie lunchbox ideas",
+    "wholemeal rice",
+    "pasta and flour",
+    "healthy diet plans",
+    "lunch",
+    "veganuary",
+    "brown rice",
+    "avocado",
+    "dairy free",
+    "egg free",
+    "healthy",
+    "pregnancy friendly",
+    "vegan",
+    "vegetarian",
+    "Simply Nigella"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "150g/5½oz short grain brown rice",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "g",
+          "name": "/5½oz short grain brown rice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "5cm/2in piece fresh root ginger, peeled",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": null,
+          "name": "cm/2in piece fresh root ginger",
+          "note": "peeled",
+          "isOptional": false
+        },
+        {
+          "raw": "4–6 radishes, cut into quarters or eighths lengthways, depending on their size.",
+          "quantity": 4,
+          "quantityText": "4–6",
+          "unit": null,
+          "name": "radishes, cut into quarters or eighths lengthways, depending on their size.",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1½ tbsp tamari or soy sauce",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tbsp tamari or soy sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp cloudy apple cider vinegar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "cloudy apple cider vinegar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 tbsp mixed seeds, such as pumpkin, sunflower, sesame",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "mixed seeds, such as pumpkin, sunflower, sesame",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3–4 tbsp chopped fresh coriander",
+          "quantity": 3,
+          "quantityText": "3–4",
+          "unit": "tbsp",
+          "name": "chopped fresh coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 small ripe avocado",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "small ripe avocado",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Put the rice and 1 cup (250ml/9fl oz) cold water in a heavy-based saucepan that comes with a tight-fitting lid, and bring to the boil. Once it’s bubbling, clamp on the lid, turn the heat down very low and simmer for 25 minutes. Then turn off the heat, leaving the lid on, and let it stand for a further 5 minutes, by which time the rice will be cooked – but still nutty – and the water absorbed.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put the rice and 1 cup (250ml/9fl oz) cold water in a heavy-based saucepan that comes with a tight-fitting lid, and bring to the boil. Once it’s bubbling, clamp on the lid, turn the heat down very low and simmer for 25 minutes. Then turn off the heat, leaving the lid on, and let it stand for a further 5 minutes, by which time the rice will be cooked – but still nutty – and the water absorbed."
+    },
+    {
+      "order": 2,
+      "text": "While the rice is cooking, use a vegetable peeler to shave the ginger into very thin strips.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "While the rice is cooking, use a vegetable peeler to shave the ginger into very thin strips. "
+    },
+    {
+      "order": 3,
+      "text": "When the rice is cooked, spoon into a mixing bowl. Add the tamari or soy sauce and the cider vinegar to the bowl and toss with a fork to combine, and then do the same with the ginger shavings, radishes and seeds. Stir all but a little of the chopped coriander into the rice, still using a fork.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "When the rice is cooked, spoon into a mixing bowl. Add the tamari or soy sauce and the cider vinegar to the bowl and toss with a fork to combine, and then do the same with the ginger shavings, radishes and seeds. Stir all but a little of the chopped coriander into the rice, still using a fork."
+    },
+    {
+      "order": 4,
+      "text": "Divide between 2 smallish bowls and top with avocado, cut either into gondola shaped slices or chunks, as wished. Sprinkle each with the remaining coriander, and eat serenely.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Divide between 2 smallish bowls and top with avocado, cut either into gondola shaped slices or chunks, as wished. Sprinkle each with the remaining coriander, and eat serenely."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "498kcal",
+    "proteinContent": "13g",
+    "carbohydrateContent": "61g",
+    "fatContent": "21g",
+    "fiberContent": "6.1g",
+    "saturatedFatContent": "4g",
+    "sugarContent": "4.1g"
+  },
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/rice_bowl_with_ginger_58307_16x9.jpg"
+    ],
+    "video": [
+      {
+        "description": "A rice bowl is a wondrous thing, but often – despite the simplicity of its title – a rather cluttered and complicated one. Here, I have pared it back, to make a gorgeously seasoned rice bowl, with nothing more than a few seeds, herbs and radishes stirred through it, and an avocado to top it. It’s a simple take on an inspiringly expansive idea. So please use this as a starting point only. It’s very much a non-recipe recipe, and every time I make it, I add something different, depending on what’s to hand.",
+        "duration": "PT5M9S",
+        "name": "Rice bowl with ginger, radish and avocado",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/rice_bowl_with_ginger_58307_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:38:09.000Z"
+      }
+    ]
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "I cannot get enough of short grain brown rice – so much more nubbly and delicious than regular wholegrain rice or white rice – but I find it doesn’t cook quite like rice does normally. That’s to say, usually the unswerving rule when cooking rice is 1 part rice to 2 parts water. I have found that with short grain brown rice it is 1 part rice to 1½ parts water (despite what it says on the packet). Anyway, whatever rice you’re using, I find it much simpler to use cups rather than weights – though I’ve given those, too – as it is ratio of volumes that is crucial."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 25,
+      "ratingValue": 4.16
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/LowCalorieDiet",
+      "http://schema.org/VeganDiet",
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "A rice bowl is a wondrous thing, but often – despite the simplicity of its title – a rather cluttered and complicated one. Here, I have pared it back, to make a gorgeously seasoned rice bowl, with nothing more than a few seeds, herbs and radishes stirred through it, and an avocado to top it. It’s a simple take on an inspiringly expansive idea. So please use this as a starting point only. It’s very much a non-recipe recipe, and every time I make it, I add something different, depending on what’s to hand.",
+        "duration": "PT5M9S",
+        "name": "Rice bowl with ginger, radish and avocado",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/rice_bowl_with_ginger_58307_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:38:09.000Z"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "A rice bowl is a wondrous thing, but often – despite the simplicity of its title – a rather cluttered and complicated one. Here, I have pared it back, to make a gorgeously seasoned rice bowl, with nothing more than a few seeds, herbs and radishes stirred through it, and an avocado to top it. It’s a simple take on an inspiringly expansive idea. So please use this as a starting point only. It’s very much a non-recipe recipe, and every time I make it, I add something different, depending on what’s to hand.\r\n\r\nEach serving provides 498 kcal, 13g protein, 61g carbohydrate (of which 4.1g sugars), 21g fat (of which 4g saturates), 6.1g fibre and 1.9g salt.",
+    "headline": "Rice bowl with ginger, radish and avocado",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/rice_bowl_with_ginger_58307_16x9.jpg"
+    },
+    "name": "Rice bowl with ginger, radish and avocado",
+    "author": {
+      "@type": "Person",
+      "name": "Nigella Lawson"
+    },
+    "datePublished": "2015-11-16T16:00:00.000Z",
+    "dateModified": "2025-10-29T11:47:33.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 25,
+      "ratingValue": 4.16
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, 30 minute meals for two, grains for mains, bowl food, easy healthy lunch ideas, easy rice, easy vegan, eat within eight hours, vegan dinner, healthy lunches for work, healthy lunch ideas, healthy lunches, healthy recipes for two, healthy rice, light dinner ideas, nigella's vegetarian favourites, nutritious rice bowls, quick rice, sleep-friendly, summery vegan, summer bowl food, super seeds, vegan rice, veggie lunchbox ideas , wholemeal rice, pasta and flour, healthy diet plans, lunch, veganuary, brown rice, avocado, dairy free, egg free, healthy, pregnancy friendly, vegan, vegetarian, Simply Nigella",
+    "nutrition": {
+      "calories": "498kcal",
+      "proteinContent": "13g",
+      "carbohydrateContent": "61g",
+      "fatContent": "21g",
+      "fiberContent": "6.1g",
+      "saturatedFatContent": "4g",
+      "sugarContent": "4.1g"
+    },
+    "recipeCategory": "Main course",
+    "recipeIngredient": [
+      "150g/5½oz short grain brown rice",
+      "5cm/2in piece fresh root ginger, peeled",
+      "4–6 radishes, cut into quarters or eighths lengthways, depending on their size.",
+      "1½ tbsp tamari or soy sauce",
+      "1 tsp cloudy apple cider vinegar",
+      "4 tbsp mixed seeds, such as pumpkin, sunflower, sesame",
+      "3–4 tbsp chopped fresh coriander",
+      "1 small ripe avocado"
+    ],
+    "recipeInstructions": [
+      "Put the rice and 1 cup (250ml/9fl oz) cold water in a heavy-based saucepan that comes with a tight-fitting lid, and bring to the boil. Once it’s bubbling, clamp on the lid, turn the heat down very low and simmer for 25 minutes. Then turn off the heat, leaving the lid on, and let it stand for a further 5 minutes, by which time the rice will be cooked – but still nutty – and the water absorbed.",
+      "While the rice is cooking, use a vegetable peeler to shave the ginger into very thin strips. ",
+      "When the rice is cooked, spoon into a mixing bowl. Add the tamari or soy sauce and the cider vinegar to the bowl and toss with a fork to combine, and then do the same with the ginger shavings, radishes and seeds. Stir all but a little of the chopped coriander into the rice, still using a fork.",
+      "Divide between 2 smallish bowls and top with avocado, cut either into gondola shaped slices or chunks, as wished. Sprinkle each with the remaining coriander, and eat serenely."
+    ],
+    "recipeYield": "Serves 2",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/LowCalorieDiet",
+      "http://schema.org/VeganDiet",
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "A rice bowl is a wondrous thing, but often – despite the simplicity of its title – a rather cluttered and complicated one. Here, I have pared it back, to make a gorgeously seasoned rice bowl, with nothing more than a few seeds, herbs and radishes stirred through it, and an avocado to top it. It’s a simple take on an inspiringly expansive idea. So please use this as a starting point only. It’s very much a non-recipe recipe, and every time I make it, I add something different, depending on what’s to hand.",
+        "duration": "PT5M9S",
+        "name": "Rice bowl with ginger, radish and avocado",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/rice_bowl_with_ginger_58307_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:38:09.000Z"
+      }
+    ]
+  },
+  "audit": [
+    "range-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet|video"
+  ]
+}

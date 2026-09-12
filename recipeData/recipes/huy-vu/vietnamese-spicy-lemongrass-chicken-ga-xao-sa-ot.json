@@ -1,0 +1,734 @@
+{
+  "schemaVersion": 1,
+  "id": "huy-vu/vietnamese-spicy-lemongrass-chicken-ga-xao-sa-ot",
+  "slug": "vietnamese-spicy-lemongrass-chicken-ga-xao-sa-ot",
+  "chefId": "chef_huy-vu",
+  "chefSlug": "huy-vu",
+  "chefName": "Huy Vu",
+  "title": "Vietnamese Spicy Lemongrass Chicken (Gà Xào Sả Ớt)",
+  "description": "Spicy lemongrass chicken is an aromatic and easy, one-pot recipe that is perfect for a shared family meal.",
+  "source": {
+    "sourceUrl": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/",
+    "finalUrl": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/",
+    "retrievedAt": "2026-09-11T03:14:39.479Z",
+    "publisher": null,
+    "authorRaw": [
+      "Hungry Huy"
+    ],
+    "datePublished": "2020-03-27T22:52:40+00:00",
+    "rights": "Hungry Huy. Functional content plus a link, for internal app testing. Not redistributed.",
+    "pageTitle": "Vietnamese Spicy Lemongrass Chicken (Gà Xào Sả Ớt) - Hungry Huy",
+    "htmlSha256": "9335eced5a6d6a1364588193fbf6e810890fa4e4a89f5fce82d876d18abcf2cf",
+    "jsonLdBlockCount": 2,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": [
+        "ingredient-html-only: ▢ &frac12; c coconut juice or lemon-lime soda, or water",
+        "ingredient-html-only: ▢ &frac12; medium onion cut into slivers optional",
+        "ingredient-jsonld-only: 2",
+        "regrouped-from-html: 4 groups"
+      ]
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "2"
+    ],
+    "servings": 2
+  },
+  "timing": {
+    "prepMinutes": 10,
+    "cookMinutes": 15,
+    "totalMinutes": 25,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Vietnamese"
+  ],
+  "category": [
+    "Dinner"
+  ],
+  "keywords": [
+    "lemongrass chicken",
+    "spicy chicken",
+    "Vietnamese lemongrass chicken"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "Chicken & marinade",
+      "items": [
+        {
+          "raw": "1 lb chicken (cut into bit-sized pieces)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "lb",
+          "name": "chicken (cut into bit-sized pieces)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp sugar",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "⅓ tsp MSG or chicken bouillon (optional)",
+          "quantity": 0.3333,
+          "quantityText": "⅓",
+          "unit": "tsp",
+          "name": "MSG or chicken bouillon (optional)",
+          "note": null,
+          "isOptional": true
+        }
+      ]
+    },
+    {
+      "name": "Aromatics",
+      "items": [
+        {
+          "raw": "4 tbsp neutral cooking oil",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "neutral cooking oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp shallots (minced)",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "shallots (minced)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp garlic (minced)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "garlic (minced)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4-5 tbsp lemongrass (minced)",
+          "quantity": 4,
+          "quantityText": "4-5",
+          "unit": "tbsp",
+          "name": "lemongrass (minced)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "Chile Sauce",
+      "items": [
+        {
+          "raw": "2 tbsp fish sauce",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "fish sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp sambal",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "sambal",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "▢ &frac12; c coconut juice or lemon-lime soda, or water",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ &frac12; c coconut juice or lemon-lime soda, or water",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        }
+      ]
+    },
+    {
+      "name": "Garnish",
+      "items": [
+        {
+          "raw": "▢ &frac12; medium onion cut into slivers optional",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ &frac12; medium onion cut into slivers optional",
+          "note": null,
+          "isOptional": true,
+          "htmlOnly": true
+        },
+        {
+          "raw": "1 stalk green onion cut into 2 inch pieces (optional)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "stalk green onion cut into 2 inch pieces (optional)",
+          "note": null,
+          "isOptional": true
+        }
+      ]
+    },
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "½ c coconut juice (or lemon-lime soda, or water)",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "c coconut juice (or lemon-lime soda, or water)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ medium onion cut into slivers (optional)",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "medium onion cut into slivers (optional)",
+          "note": null,
+          "isOptional": true
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Marinade: Combine chicken and marinade ingredients, and let it sit to marinate for 15 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Marinade: Combine chicken and marinade ingredients, and let it sit to marinate for 15 minutes.",
+        "name": "Marinade: Combine chicken and marinade ingredients, and let it sit to marinate for 15 minutes.",
+        "url": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/#wprm-recipe-5070-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Mince aromatics: Clean the lemongrass, remove the outer layers of rough leaves and find the yellow leaves inside. Slice the lemongrass roots into ⅛” slices first, then add to a food processor to finely mince and set aside. Mince/process the garlic then set aside. Mince/process shallots and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Mince aromatics: Clean the lemongrass, remove the outer layers of rough leaves and find the yellow leaves inside. Slice the lemongrass roots into ⅛” slices first, then add to a food processor to finely mince and set aside. Mince/process the garlic then set aside. Mince/process shallots and set aside.",
+        "name": "Mince aromatics: Clean the lemongrass, remove the outer layers of rough leaves and find the yellow leaves inside. Slice the lemongrass roots into ⅛” slices first, then add to a food processor to finely mince and set aside. Mince/process the garlic then set aside. Mince/process shallots and set aside.",
+        "url": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/#wprm-recipe-5070-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Make the chile sauce: Combine fish sauce, sambal, and coconut juice and mix to combine.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Make the chile sauce: Combine fish sauce, sambal, and coconut juice and mix to combine.",
+        "name": "Make the chile sauce: Combine fish sauce, sambal, and coconut juice and mix to combine.",
+        "url": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/#wprm-recipe-5070-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Pat dry your chicken, cut into bite size pieces.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Pat dry your chicken, cut into bite size pieces.",
+        "name": "Pat dry your chicken, cut into bite size pieces.",
+        "url": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/#wprm-recipe-5070-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "In a pan over medium-high heat, add four tbsp of oil and add the shallots and saute until light brown. Add the garlic and saute until light brown. Add lemongrass and stir until fragrant. Add the chicken and brown it a little.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a pan over medium-high heat, add four tbsp of oil and add the shallots and saute until light brown. Add the garlic and saute until light brown. Add lemongrass and stir until fragrant. Add the chicken and brown it a little.",
+        "name": "In a pan over medium-high heat, add four tbsp of oil and add the shallots and saute until light brown. Add the garlic and saute until light brown. Add lemongrass and stir until fragrant. Add the chicken and brown it a little.",
+        "url": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/#wprm-recipe-5070-step-0-4"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Lower to medium heat, add the Chile Sauce. Stir to mix, taste and adjust as necessary, then cover with a lid. After about five minutes, stir a bit, retaste and reseason if necessary, add more cooking time if needed.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Lower to medium heat, add the Chile Sauce. Stir to mix, taste and adjust as necessary, then cover with a lid. After about five minutes, stir a bit, retaste and reseason if necessary, add more cooking time if needed.",
+        "name": "Lower to medium heat, add the Chile Sauce. Stir to mix, taste and adjust as necessary, then cover with a lid. After about five minutes, stir a bit, retaste and reseason if necessary, add more cooking time if needed.",
+        "url": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/#wprm-recipe-5070-step-0-5"
+      }
+    },
+    {
+      "order": 7,
+      "text": "Add the garnish about 1-2 minutes before the chicken finishes cooking to soften a bit. The dish is done once the chicken reaches an internal temp of 165 °F, or until the center of the chicken is no longer pink.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": "165 °F",
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add the garnish about 1-2 minutes before the chicken finishes cooking to soften a bit. The dish is done once the chicken reaches an internal temp of 165 °F, or until the center of the chicken is no longer pink.",
+        "name": "Add the garnish about 1-2 minutes before the chicken finishes cooking to soften a bit. The dish is done once the chicken reaches an internal temp of 165 °F, or until the center of the chicken is no longer pink.",
+        "url": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/#wprm-recipe-5070-step-0-6"
+      }
+    },
+    {
+      "order": 8,
+      "text": "Serve with a side of rice.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Serve with a side of rice.",
+        "name": "Serve with a side of rice.",
+        "url": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/#wprm-recipe-5070-step-0-7"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "556 kcal",
+    "carbohydrateContent": "17 g",
+    "proteinContent": "23 g",
+    "fatContent": "45 g",
+    "saturatedFatContent": "7 g",
+    "cholesterolContent": "82 mg",
+    "sodiumContent": "2892 mg",
+    "fiberContent": "2 g",
+    "sugarContent": "9 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/ga-xa-ot.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/ga-xa-ot-500x500.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/ga-xa-ot-500x375.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/ga-xa-ot-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.88",
+      "ratingCount": "25",
+      "reviewCount": "8"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Excellent dish - I enjoy cooking various ethnic foods to mix up our menu.",
+        "author": {
+          "@type": "Person",
+          "name": "Holly"
+        },
+        "datePublished": "2026-02-22"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Made this tonight and my family loved it! We drizzled some ****'s Hot Honey over bowls and sprinkled some peanuts (I'm sure that's not authentic :) but it was delicious. Thank you! Will be putting this on the rotation.",
+        "author": {
+          "@type": "Person",
+          "name": "Jen"
+        },
+        "datePublished": "2025-04-28"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4"
+        },
+        "reviewBody": "Thank you for sharing your recipes. Each recipe I have tried so far has come out great. I didn't have the Sambal, so I substituted with Sirachra. It was very good. For my taste, I would use 1/2 teaspoon of salt per pound.",
+        "author": {
+          "@type": "Person",
+          "name": "K Yoshida"
+        },
+        "datePublished": "2025-01-08"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "My husband is Vietnamese, and I have no idea how to cook any Vietnamese food.  Please upload more Vietnamese home cooking like this.  I have cooked some of your recipes, and he really likes it!  I am looking forward new recipes from you.",
+        "author": {
+          "@type": "Person",
+          "name": "May"
+        },
+        "datePublished": "2021-01-12"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4"
+        },
+        "reviewBody": "Very good website, so glad I found you!!",
+        "author": {
+          "@type": "Person",
+          "name": "Gretchen"
+        },
+        "datePublished": "2020-12-28"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This rocks. Excellent lemon grass flavor with the saltiness of fish sauce.",
+        "author": {
+          "@type": "Person",
+          "name": "Phil"
+        },
+        "datePublished": "2020-12-04"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "It's amazing how some Vietnamese recipes can be labor intensive and time consuming. But then there are recipes like this one which can be made with minimal effort in minutes instead of hours. The end result is still magical though! This is such a great recipe if you want to eat well but are pressed for time. To save even more time, keep a tube of lemongrass in your fridge.",
+        "author": {
+          "@type": "Person",
+          "name": "Alisha C Nguyen"
+        },
+        "datePublished": "2020-07-16"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4"
+        },
+        "reviewBody": "We like the flavor a lot, however; we doubled the recipe and the sauces but next time we’ll add less fish sauce or msg. Great with a side of broccoli and the spiciness is more on the mild medium. Definitely wouldn’t let someone who is sensitive to spice eat a lot of this because they may think it’s spicy level 10! Thanks again for the recipe Bryan! Until the next recipe",
+        "author": {
+          "@type": "Person",
+          "name": "Abithy"
+        },
+        "datePublished": "2020-04-01"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Vietnamese Spicy Lemongrass Chicken (Gà Xào Sả Ớt)",
+    "author": {
+      "@type": "Person",
+      "name": "Hungry Huy"
+    },
+    "description": "Spicy lemongrass chicken is an aromatic and easy, one-pot recipe that is perfect for a shared family meal.",
+    "datePublished": "2020-03-27T22:52:40+00:00",
+    "image": [
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/ga-xa-ot.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/ga-xa-ot-500x500.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/ga-xa-ot-500x375.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/ga-xa-ot-480x270.jpg"
+    ],
+    "recipeYield": [
+      "2"
+    ],
+    "prepTime": "PT10M",
+    "cookTime": "PT15M",
+    "totalTime": "PT25M",
+    "recipeIngredient": [
+      "1 lb chicken (cut into bit-sized pieces)",
+      "1 tsp salt",
+      "2 tsp sugar",
+      "⅓ tsp MSG or chicken bouillon (optional)",
+      "4 tbsp neutral cooking oil",
+      "3 tbsp shallots (minced)",
+      "1 tbsp garlic  (minced)",
+      "4-5 tbsp lemongrass (minced)",
+      "2 tbsp fish sauce",
+      "1 tbsp  sambal",
+      "½ c coconut juice (or lemon-lime soda, or water)",
+      "½ medium onion cut into slivers (optional)",
+      "1 stalk green onion cut into 2 inch pieces (optional)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Marinade: Combine chicken and marinade ingredients, and let it sit to marinate for 15 minutes.",
+        "name": "Marinade: Combine chicken and marinade ingredients, and let it sit to marinate for 15 minutes.",
+        "url": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/#wprm-recipe-5070-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Mince aromatics: Clean the lemongrass, remove the outer layers of rough leaves and find the yellow leaves inside. Slice the lemongrass roots into ⅛” slices first, then add to a food processor to finely mince and set aside. Mince/process the garlic then set aside. Mince/process shallots and set aside.",
+        "name": "Mince aromatics: Clean the lemongrass, remove the outer layers of rough leaves and find the yellow leaves inside. Slice the lemongrass roots into ⅛” slices first, then add to a food processor to finely mince and set aside. Mince/process the garlic then set aside. Mince/process shallots and set aside.",
+        "url": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/#wprm-recipe-5070-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Make the chile sauce: Combine fish sauce, sambal, and coconut juice and mix to combine.",
+        "name": "Make the chile sauce: Combine fish sauce, sambal, and coconut juice and mix to combine.",
+        "url": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/#wprm-recipe-5070-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Pat dry your chicken, cut into bite size pieces.",
+        "name": "Pat dry your chicken, cut into bite size pieces.",
+        "url": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/#wprm-recipe-5070-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "In a pan over medium-high heat, add four tbsp of oil and add the shallots and saute until light brown. Add the garlic and saute until light brown. Add lemongrass and stir until fragrant. Add the chicken and brown it a little.",
+        "name": "In a pan over medium-high heat, add four tbsp of oil and add the shallots and saute until light brown. Add the garlic and saute until light brown. Add lemongrass and stir until fragrant. Add the chicken and brown it a little.",
+        "url": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/#wprm-recipe-5070-step-0-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Lower to medium heat, add the Chile Sauce. Stir to mix, taste and adjust as necessary, then cover with a lid. After about five minutes, stir a bit, retaste and reseason if necessary, add more cooking time if needed.",
+        "name": "Lower to medium heat, add the Chile Sauce. Stir to mix, taste and adjust as necessary, then cover with a lid. After about five minutes, stir a bit, retaste and reseason if necessary, add more cooking time if needed.",
+        "url": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/#wprm-recipe-5070-step-0-5"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Add the garnish about 1-2 minutes before the chicken finishes cooking to soften a bit. The dish is done once the chicken reaches an internal temp of 165 °F, or until the center of the chicken is no longer pink.",
+        "name": "Add the garnish about 1-2 minutes before the chicken finishes cooking to soften a bit. The dish is done once the chicken reaches an internal temp of 165 °F, or until the center of the chicken is no longer pink.",
+        "url": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/#wprm-recipe-5070-step-0-6"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Serve with a side of rice.",
+        "name": "Serve with a side of rice.",
+        "url": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/#wprm-recipe-5070-step-0-7"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.88",
+      "ratingCount": "25",
+      "reviewCount": "8"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Excellent dish - I enjoy cooking various ethnic foods to mix up our menu.",
+        "author": {
+          "@type": "Person",
+          "name": "Holly"
+        },
+        "datePublished": "2026-02-22"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Made this tonight and my family loved it! We drizzled some ****'s Hot Honey over bowls and sprinkled some peanuts (I'm sure that's not authentic :) but it was delicious. Thank you! Will be putting this on the rotation.",
+        "author": {
+          "@type": "Person",
+          "name": "Jen"
+        },
+        "datePublished": "2025-04-28"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4"
+        },
+        "reviewBody": "Thank you for sharing your recipes. Each recipe I have tried so far has come out great. I didn't have the Sambal, so I substituted with Sirachra. It was very good. For my taste, I would use 1/2 teaspoon of salt per pound.",
+        "author": {
+          "@type": "Person",
+          "name": "K Yoshida"
+        },
+        "datePublished": "2025-01-08"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "My husband is Vietnamese, and I have no idea how to cook any Vietnamese food.  Please upload more Vietnamese home cooking like this.  I have cooked some of your recipes, and he really likes it!  I am looking forward new recipes from you.",
+        "author": {
+          "@type": "Person",
+          "name": "May"
+        },
+        "datePublished": "2021-01-12"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4"
+        },
+        "reviewBody": "Very good website, so glad I found you!!",
+        "author": {
+          "@type": "Person",
+          "name": "Gretchen"
+        },
+        "datePublished": "2020-12-28"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This rocks. Excellent lemon grass flavor with the saltiness of fish sauce.",
+        "author": {
+          "@type": "Person",
+          "name": "Phil"
+        },
+        "datePublished": "2020-12-04"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "It's amazing how some Vietnamese recipes can be labor intensive and time consuming. But then there are recipes like this one which can be made with minimal effort in minutes instead of hours. The end result is still magical though! This is such a great recipe if you want to eat well but are pressed for time. To save even more time, keep a tube of lemongrass in your fridge.",
+        "author": {
+          "@type": "Person",
+          "name": "Alisha C Nguyen"
+        },
+        "datePublished": "2020-07-16"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4"
+        },
+        "reviewBody": "We like the flavor a lot, however; we doubled the recipe and the sauces but next time we’ll add less fish sauce or msg. Great with a side of broccoli and the spiciness is more on the mild medium. Definitely wouldn’t let someone who is sensitive to spice eat a lot of this because they may think it’s spicy level 10! Thanks again for the recipe Bryan! Until the next recipe",
+        "author": {
+          "@type": "Person",
+          "name": "Abithy"
+        },
+        "datePublished": "2020-04-01"
+      }
+    ],
+    "recipeCategory": [
+      "Dinner"
+    ],
+    "recipeCuisine": [
+      "Vietnamese"
+    ],
+    "keywords": "lemongrass chicken, spicy chicken, Vietnamese lemongrass chicken",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "556 kcal",
+      "carbohydrateContent": "17 g",
+      "proteinContent": "23 g",
+      "fatContent": "45 g",
+      "saturatedFatContent": "7 g",
+      "cholesterolContent": "82 mg",
+      "sodiumContent": "2892 mg",
+      "fiberContent": "2 g",
+      "sugarContent": "9 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/#recipe",
+    "isPartOf": {
+      "@id": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/#article"
+    },
+    "mainEntityOfPage": "https://www.hungryhuy.com/vietnamese-lemongrass-chicken/"
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "range-quantity:1",
+    "unmapped:aggregateRating|review"
+  ]
+}

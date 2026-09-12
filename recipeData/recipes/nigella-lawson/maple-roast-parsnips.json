@@ -1,0 +1,240 @@
+{
+  "schemaVersion": 1,
+  "id": "nigella-lawson/maple-roast-parsnips",
+  "slug": "maple-roast-parsnips",
+  "chefId": "chef_nigella-lawson",
+  "chefSlug": "nigella-lawson",
+  "chefName": "Nigella Lawson",
+  "title": "Maple-roast parsnips",
+  "description": "Nigella's easy roast parsnips taste even sweeter with a generous glug of maple syrup. This is a wonderful Christmas dinner side, and so easy to make.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/mapleroastparsnips_84758",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/mapleroastparsnips_84758",
+    "retrievedAt": "2026-09-11T00:26:12.656Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Nigella Lawson"
+    ],
+    "datePublished": "2010-10-28T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "db2abf6134e00390a80262dd602073bfe9c5c6f5758a7dd4dd6422ddcb3ff2bf",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": []
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 8"
+    ],
+    "servings": 8
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Side dishes"
+  ],
+  "keywords": [
+    "christmas essentials",
+    "christmas dinner",
+    "christmas for over 6",
+    "christmas sides",
+    "dairy-free christmas side dishes",
+    "easy christmas",
+    "friendmas",
+    "gluten-free roast dinner",
+    "nigella's christmas favourites",
+    "nigella's christmas",
+    "roasted root vegetable",
+    "sunday roast",
+    "roast goose menu",
+    "vegan christmas",
+    "vegan roast dinner",
+    "vegetarian christmas side dishes",
+    "vegan easter ideas",
+    "winter warmer menu",
+    "christmas",
+    "dinner party",
+    "roast dinner",
+    "thanksgiving",
+    "roasted vegetables",
+    "parsnip",
+    "dairy free",
+    "egg free",
+    "gluten free",
+    "nut free",
+    "pregnancy friendly",
+    "vegan",
+    "vegetarian",
+    "winter",
+    "autumn",
+    "Nigella's Christmas Kitchen"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1kg/2¼lb parsnips",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "kg",
+          "name": "/2¼lb parsnips",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "125ml/4fl oz vegetable oil",
+          "quantity": 125,
+          "quantityText": "125",
+          "unit": "ml",
+          "name": "/4fl oz vegetable oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "80ml/3½fl oz maple syrup",
+          "quantity": 80,
+          "quantityText": "80",
+          "unit": "ml",
+          "name": "/3½fl oz maple syrup",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 200C/180C Fan/Gas 6.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 200C/180C Fan/Gas 6."
+    },
+    {
+      "order": 2,
+      "text": "Peel the parsnips and then halve them crosswise, then halve or quarter each piece lengthwise. Place the parsnips into a roasting tin.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Peel the parsnips and then halve them crosswise, then halve or quarter each piece lengthwise. Place the parsnips into a roasting tin. "
+    },
+    {
+      "order": 3,
+      "text": "Pour the oil over the parsnips and mix them well so that the oil covers all of the pieces. Pour the maple syrup over the parsnips and roast for 35 minutes, or until they are tender and golden-brown. To serve place on a clean serving dish.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pour the oil over the parsnips and mix them well so that the oil covers all of the pieces. Pour the maple syrup over the parsnips and roast for 35 minutes, or until they are tender and golden-brown. To serve place on a clean serving dish."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/mapleroastparsnips_84758_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 28,
+      "ratingValue": 4.642857142857143
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/GlutenFreeDiet",
+      "http://schema.org/VeganDiet",
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Nigella's easy roast parsnips taste even sweeter with a generous glug of maple syrup. This is a wonderful Christmas dinner side, and so easy to make. ",
+    "headline": "Maple-roast parsnips",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/mapleroastparsnips_84758_16x9.jpg"
+    },
+    "name": "Maple-roast parsnips",
+    "author": {
+      "@type": "Person",
+      "name": "Nigella Lawson"
+    },
+    "datePublished": "2010-10-28T00:00:00.000Z",
+    "dateModified": "2025-12-19T16:35:01.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 28,
+      "ratingValue": 4.642857142857143
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT1H",
+    "keywords": "christmas essentials, christmas dinner, christmas for over 6, christmas sides, dairy-free christmas side dishes, easy christmas, friendmas, gluten-free roast dinner, nigella's christmas favourites, nigella's christmas, roasted root vegetable, sunday roast, roast goose menu, vegan christmas, vegan roast dinner, vegetarian christmas side dishes, vegan easter ideas, winter warmer menu, christmas, dinner party, roast dinner, thanksgiving, roasted vegetables, parsnip, dairy free, egg free, gluten free, nut free, pregnancy friendly, vegan, vegetarian, winter, autumn, Nigella's Christmas Kitchen",
+    "recipeCategory": "Side dishes",
+    "recipeIngredient": [
+      "1kg/2¼lb parsnips",
+      "125ml/4fl oz vegetable oil",
+      "80ml/3½fl oz maple syrup"
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 200C/180C Fan/Gas 6.",
+      "Peel the parsnips and then halve them crosswise, then halve or quarter each piece lengthwise. Place the parsnips into a roasting tin. ",
+      "Pour the oil over the parsnips and mix them well so that the oil covers all of the pieces. Pour the maple syrup over the parsnips and roast for 35 minutes, or until they are tender and golden-brown. To serve place on a clean serving dish."
+    ],
+    "recipeYield": "Serves 8",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/GlutenFreeDiet",
+      "http://schema.org/VeganDiet",
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

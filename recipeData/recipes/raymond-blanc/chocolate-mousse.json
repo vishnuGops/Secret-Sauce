@@ -1,0 +1,313 @@
+{
+  "schemaVersion": 1,
+  "id": "raymond-blanc/chocolate-mousse",
+  "slug": "chocolate-mousse",
+  "chefId": "chef_raymond-blanc",
+  "chefSlug": "raymond-blanc",
+  "chefName": "Raymond Blanc",
+  "title": "Chocolate mousse",
+  "description": "Raymond Blanc shows you how to make chocolate mousse in this classic recipe that only uses 4 ingredients and can be made up to a day ahead. Perfect for a dinner party or special occasion.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/basicchocolatemousse_93648",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/basicchocolatemousse_93648",
+    "retrievedAt": "2026-09-11T00:27:23.652Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Raymond Blanc"
+    ],
+    "datePublished": "2010-10-28T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "8d7ff19ce4828fbc1c19270f412fedb329113e450fd13bdea6632bb5efa76679",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 120,
+    "cookMinutes": 10,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "French"
+  ],
+  "category": [
+    "Desserts"
+  ],
+  "keywords": [
+    "easy pudding",
+    "classic french desserts",
+    "dairy-free christmas desserts",
+    "dark chocolate treats",
+    "decadent dessert",
+    "make ahead christmas",
+    "our best chocolate",
+    "recipes for chocolate lovers",
+    "summer dessert",
+    "the best chocolate dessert",
+    "valentine’s day dessert ideas",
+    "christmas",
+    "dinner party",
+    "father's day",
+    "mother's day",
+    "new year and hogmanay",
+    "valentine's day",
+    "chocolate mousse",
+    "dark chocolate",
+    "gluten free",
+    "nut free",
+    "vegetarian",
+    "Raymond Blanc's Kitchen Secrets"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "170g/6oz good-quality dark chocolate, minimum 60 per cent cocoa solids, roughly chopped (dairy free, if necessary)",
+          "quantity": 170,
+          "quantityText": "170",
+          "unit": "g",
+          "name": "/6oz good-quality dark chocolate",
+          "note": "minimum 60 per cent cocoa solids, roughly chopped (dairy free, if necessary)",
+          "isOptional": false
+        },
+        {
+          "raw": "7 free-range egg whites (use pasteurised egg white from a carton if you have concerns about raw eggs)",
+          "quantity": 7,
+          "quantityText": "7",
+          "unit": null,
+          "name": "free-range egg whites (use pasteurised egg white from a carton if you have concerns about raw eggs)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ tsp lemon juice",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "tsp",
+          "name": "lemon juice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "40g/1½oz caster sugar",
+          "quantity": 40,
+          "quantityText": "40",
+          "unit": "g",
+          "name": "/1½oz caster sugar",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Melt the chocolate in a heatproof bowl set over a pan of simmering water (do not allow the base of the bowl to touch the water).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Melt the chocolate in a heatproof bowl set over a pan of simmering water (do not allow the base of the bowl to touch the water). "
+    },
+    {
+      "order": 2,
+      "text": "Whisk the egg whites and lemon juice in a large, clean bowl until they form soft peaks. The lemon juice will stabilise the egg whites, make them easier to work with and help to prevent over-whisking.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Whisk the egg whites and lemon juice in a large, clean bowl until they form soft peaks. The lemon juice will stabilise the egg whites, make them easier to work with and help to prevent over-whisking."
+    },
+    {
+      "order": 3,
+      "text": "Add the sugar and continue to whisk until firm peaks form when the whisk is removed. Do not whisk beyond this stage – the egg whites will start to collapse and separate into dry froth and runny liquid, and you'll lose all the air that you've whisked in.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the sugar and continue to whisk until firm peaks form when the whisk is removed. Do not whisk beyond this stage – the egg whites will start to collapse and separate into dry froth and runny liquid, and you'll lose all the air that you've whisked in."
+    },
+    {
+      "order": 4,
+      "text": "When the chocolate has melted, remove the bowl from the heat. Whisk one-third of the egg whites into the hot chocolate quickly and vigorously, until thick and well combined. If you add the egg whites in too slowly, their cold temperature can make the hot chocolate seize, solidify and result in a lumpy mousse.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "When the chocolate has melted, remove the bowl from the heat. Whisk one-third of the egg whites into the hot chocolate quickly and vigorously, until thick and well combined. If you add the egg whites in too slowly, their cold temperature can make the hot chocolate seize, solidify and result in a lumpy mousse. "
+    },
+    {
+      "order": 5,
+      "text": "Fold the remaining egg whites into the chocolate mixture, using a spatula, until all of the egg white has been completely incorporated into the chocolate. Don't overmix at this stage as you'll knock out the air bubbles and the mousse will be dense.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Fold the remaining egg whites into the chocolate mixture, using a spatula, until all of the egg white has been completely incorporated into the chocolate. Don't overmix at this stage as you'll knock out the air bubbles and the mousse will be dense. "
+    },
+    {
+      "order": 6,
+      "text": "Spoon the mousse mixture into four Martini glasses. Chill in the fridge for 2–3 hours, or until set.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Spoon the mousse mixture into four Martini glasses. Chill in the fridge for 2–3 hours, or until set. "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/basicchocolatemousse_93648_16x9.jpg"
+    ],
+    "video": [
+      {
+        "description": "Raymond Blanc makes a simple mousse from melted chocolate, sugar and whipped egg whites.",
+        "duration": "PT3M21S",
+        "name": "Raymond Blanc's basic chocolate mousse",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/basicchocolatemousse_93648_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:49:23.000Z"
+      }
+    ]
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "This chocolate mousse can be made up to 24 hours ahead. Instead of chilling the mousse, you can make a hot chocolate soup. Preheat the oven to 180C/160C Fan/Gas 4. Divide the mousse among four small ovenproof pudding bowls or ramekins. Place the pudding bowls into the oven and bake the chocolate mousses for 3–5 minutes, or until puffed slightly and warmed through."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 52,
+      "ratingValue": 4.653846153846154
+    },
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet",
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "Raymond Blanc makes a simple mousse from melted chocolate, sugar and whipped egg whites.",
+        "duration": "PT3M21S",
+        "name": "Raymond Blanc's basic chocolate mousse",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/basicchocolatemousse_93648_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:49:23.000Z"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Raymond Blanc shows you how to make chocolate mousse in this classic recipe that only uses 4 ingredients and can be made up to a day ahead. Perfect for a dinner party or special occasion.",
+    "headline": "Chocolate mousse",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/basicchocolatemousse_93648_16x9.jpg"
+    },
+    "name": "Chocolate mousse",
+    "author": {
+      "@type": "Person",
+      "name": "Raymond Blanc"
+    },
+    "datePublished": "2010-10-28T00:00:00.000Z",
+    "dateModified": "2025-01-21T09:11:41.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 52,
+      "ratingValue": 4.653846153846154
+    },
+    "prepTime": "PT2H",
+    "cookTime": "PT10M",
+    "keywords": "easy pudding, classic french desserts, dairy-free christmas desserts, dark chocolate treats, decadent dessert, make ahead christmas, our best chocolate, recipes for chocolate lovers, summer dessert, the best chocolate dessert, valentine’s day dessert ideas, christmas, dinner party, father's day, mother's day, new year and hogmanay, valentine's day, chocolate mousse, dark chocolate, gluten free, nut free, vegetarian, Raymond Blanc's Kitchen Secrets",
+    "recipeCategory": "Desserts",
+    "recipeCuisine": "French",
+    "recipeIngredient": [
+      "170g/6oz good-quality dark chocolate, minimum 60 per cent cocoa solids, roughly chopped (dairy free, if necessary)",
+      "7 free-range egg whites (use pasteurised egg white from a carton if you have concerns about raw eggs)",
+      "¼ tsp lemon juice",
+      "40g/1½oz caster sugar"
+    ],
+    "recipeInstructions": [
+      "Melt the chocolate in a heatproof bowl set over a pan of simmering water (do not allow the base of the bowl to touch the water). ",
+      "Whisk the egg whites and lemon juice in a large, clean bowl until they form soft peaks. The lemon juice will stabilise the egg whites, make them easier to work with and help to prevent over-whisking.",
+      "Add the sugar and continue to whisk until firm peaks form when the whisk is removed. Do not whisk beyond this stage – the egg whites will start to collapse and separate into dry froth and runny liquid, and you'll lose all the air that you've whisked in.",
+      "When the chocolate has melted, remove the bowl from the heat. Whisk one-third of the egg whites into the hot chocolate quickly and vigorously, until thick and well combined. If you add the egg whites in too slowly, their cold temperature can make the hot chocolate seize, solidify and result in a lumpy mousse. ",
+      "Fold the remaining egg whites into the chocolate mixture, using a spatula, until all of the egg white has been completely incorporated into the chocolate. Don't overmix at this stage as you'll knock out the air bubbles and the mousse will be dense. ",
+      "Spoon the mousse mixture into four Martini glasses. Chill in the fridge for 2–3 hours, or until set. "
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet",
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "Raymond Blanc makes a simple mousse from melted chocolate, sugar and whipped egg whites.",
+        "duration": "PT3M21S",
+        "name": "Raymond Blanc's basic chocolate mousse",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/basicchocolatemousse_93648_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:49:23.000Z"
+      }
+    ]
+  },
+  "audit": [
+    "unmapped:aggregateRating|suitableForDiet|video"
+  ]
+}

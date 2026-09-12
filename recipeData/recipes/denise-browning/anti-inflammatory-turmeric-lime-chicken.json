@@ -1,0 +1,546 @@
+{
+  "schemaVersion": 1,
+  "id": "denise-browning/anti-inflammatory-turmeric-lime-chicken",
+  "slug": "anti-inflammatory-turmeric-lime-chicken",
+  "chefId": "chef_denise-browning",
+  "chefSlug": "denise-browning",
+  "chefName": "Denise Browning",
+  "title": "Anti-Inflammatory Turmeric Lime Chicken",
+  "description": "Turmeric Lime Chicken is an easy and quick anti-inflammatory dinner dish made from breaded pan-fried chicken that can be served with fresh mango salsa, vegetables, or in a sandwich.",
+  "source": {
+    "sourceUrl": "https://www.easyanddelish.com/turmeric-lime-chicken/",
+    "finalUrl": "https://www.easyanddelish.com/turmeric-lime-chicken/",
+    "retrievedAt": "2026-09-11T02:47:48.730Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2018-08-07T10:21:54+00:00",
+    "rights": "Easy and Delish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "f65ee802e067a02961a1394a4a80c47d2550e80e82373d27cc5e75daf078fd3f",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "6"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 20,
+    "cookMinutes": null,
+    "totalMinutes": 20,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "American"
+  ],
+  "category": [
+    "Main Course"
+  ],
+  "keywords": [
+    "chicken breast",
+    "turmeric"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "6 skinless, boneless chicken breasts (NOT thick) (You can buy 3 thick breasts, butterfly and cut in half each to get 6. )",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": null,
+          "name": "skinless, boneless chicken breasts (NOT thick) (You can buy 3 thick breasts, butterfly and cut in half each to get 6. )",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 juicy limes, halved",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "juicy limes",
+          "note": "halved",
+          "isOptional": false
+        },
+        {
+          "raw": "salt and pepper to taste (Use about 1 teaspoon salt per pound of chicken)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and pepper to taste (Use about 1 teaspoon salt per pound of chicken)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 garlic cloves, minced",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "minced",
+          "isOptional": false
+        },
+        {
+          "raw": "2 TBSP cilantro (or parsley if desired)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "cilantro (or parsley if desired)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 large eggs, lightly beaten",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "large eggs",
+          "note": "lightly beaten",
+          "isOptional": false
+        },
+        {
+          "raw": "1 TBSP turmeric",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "turmeric",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 cups Japanese Panko (or bread crumbs)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "cups",
+          "name": "Japanese Panko (or bread crumbs)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4-5 TBSP vegetable oil",
+          "quantity": 4,
+          "quantityText": "4-5",
+          "unit": "tbsp",
+          "name": "vegetable oil",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Start by making 4 small cuts on the top of each chicken breast and season with salt and pepper on both sides. This will help the flavors of the marinade penetrate quicker into the meat and allow the chicken breasts to cook faster and more uniformly.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Start by making 4 small cuts on the top of each chicken breast and season with salt and pepper on both sides. This will help the flavors of the marinade penetrate quicker into the meat and allow the chicken breasts to cook faster and more uniformly.&nbsp;",
+        "name": "Start by making 4 small cuts on the top of each chicken breast and season with salt and pepper on both sides. This will help the flavors of the marinade penetrate quicker into the meat and allow the chicken breasts to cook faster and more uniformly.&nbsp;",
+        "url": "https://www.easyanddelish.com/turmeric-lime-chicken/#wprm-recipe-47932-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Then, mix fresh lime juice, minced garlic and chopped cilantro in a large bowl and place the chicken breasts into the marinade. Cover the bowl and let sit for about 30 minutes at room temperature.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Then, mix fresh lime juice, minced garlic and chopped cilantro in a large bowl and place the chicken breasts into the marinade. Cover the bowl and let sit for about 30 minutes at room temperature.&nbsp; &nbsp;",
+        "name": "Then, mix fresh lime juice, minced garlic and chopped cilantro in a large bowl and place the chicken breasts into the marinade. Cover the bowl and let sit for about 30 minutes at room temperature.&nbsp; &nbsp;",
+        "url": "https://www.easyanddelish.com/turmeric-lime-chicken/#wprm-recipe-47932-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Beat the eggs in a bowl using a fork. In another bowl, combine both turmeric powder and panko or bread crumbs",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Beat the eggs in a bowl using a fork. In another bowl, combine both turmeric powder and panko or bread crumbs",
+        "name": "Beat the eggs in a bowl using a fork. In another bowl, combine both turmeric powder and panko or bread crumbs",
+        "url": "https://www.easyanddelish.com/turmeric-lime-chicken/#wprm-recipe-47932-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Place each chicken breast in the beaten egg bowl and turn to cover in egg. Then, coat both sides of each chicken breast with the turmeric/bread crumb mixture.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Place each chicken breast  in the beaten egg bowl and turn to cover in egg. Then, coat both sides of each chicken breast with the turmeric/bread crumb mixture.&nbsp;",
+        "name": "Place each chicken breast  in the beaten egg bowl and turn to cover in egg. Then, coat both sides of each chicken breast with the turmeric/bread crumb mixture.&nbsp;",
+        "url": "https://www.easyanddelish.com/turmeric-lime-chicken/#wprm-recipe-47932-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Pan-fry the chicken breasts in a large no stick skillet using half the amount of vegetable oil over medium heat for about 6-10 minutes per side If necessary, clean skillet carefully with paper towel between batches to avoid burned bread crumbs. It's important to cook in batches in order to avoid overcrowding the skillet and lowering the temperature.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Pan-fry the chicken breasts in a large no stick skillet using half the amount of vegetable oil over medium heat for about 6-10 minutes per side&nbsp; If necessary, clean skillet carefully with paper towel between batches to avoid burned bread crumbs. It's important to cook in batches in order to avoid overcrowding the skillet and lowering the temperature.&nbsp;",
+        "name": "Pan-fry the chicken breasts in a large no stick skillet using half the amount of vegetable oil over medium heat for about 6-10 minutes per side&nbsp; If necessary, clean skillet carefully with paper towel between batches to avoid burned bread crumbs. It's important to cook in batches in order to avoid overcrowding the skillet and lowering the temperature.&nbsp;",
+        "url": "https://www.easyanddelish.com/turmeric-lime-chicken/#wprm-recipe-47932-step-0-4"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Once chicken is cooked through (with no sign of pink), place onto a large plate lined with double paper towel to absorb some of the oil. Serve topped with a fresh mango salsa, roasted or steamed vegetables of your choice, or in a sandwich.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Once chicken is cooked through (with no sign of pink), place onto a large plate lined with double paper towel to absorb some of the oil. Serve topped with a fresh mango salsa, roasted or steamed vegetables of&nbsp; your choice, or in a sandwich.",
+        "name": "Once chicken is cooked through (with no sign of pink), place onto a large plate lined with double paper towel to absorb some of the oil. Serve topped with a fresh mango salsa, roasted or steamed vegetables of&nbsp; your choice, or in a sandwich.",
+        "url": "https://www.easyanddelish.com/turmeric-lime-chicken/#wprm-recipe-47932-step-0-5"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "326 kcal",
+    "carbohydrateContent": "20 g",
+    "proteinContent": "29 g",
+    "fatContent": "14 g",
+    "saturatedFatContent": "8 g",
+    "cholesterolContent": "126 mg",
+    "sodiumContent": "299 mg",
+    "fiberContent": "2 g",
+    "sugarContent": "2 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://www.easyanddelish.com/wp-content/uploads/2018/08/Turmeric-Lime-Chicken-hero.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2018/08/Turmeric-Lime-Chicken-hero-441x500.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2018/08/Turmeric-Lime-Chicken-hero-441x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2018/08/Turmeric-Lime-Chicken-hero-441x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.88",
+      "ratingCount": "8",
+      "reviewCount": "6"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4"
+        },
+        "reviewBody": "delicious recipe! i omitted the breadcrumbs because they are not part of an anti inflammatory diet!",
+        "author": {
+          "@type": "Person",
+          "name": "Jay"
+        },
+        "datePublished": "2024-01-04"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Excellent and easy. Used lemon and garlic powder and coriander substitutions and they worked perfectly. Made about a pound of chicken, two lemons, about 1 t of garlic powder and  1 t of coriander.  And about 2 T of turmeric in  1 cup of Pablo crumbs. Did relieve a little of my pain. That is what I am doing seeking out anti-inflammatory recipes and ingredients .",
+        "author": {
+          "@type": "Person",
+          "name": "Donna Richards"
+        },
+        "datePublished": "2022-10-05"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This  Anti-Inflammatory Turmeric Lime Chicken was super delish.",
+        "author": {
+          "@type": "Person",
+          "name": "Love Ledenbach"
+        },
+        "datePublished": "2020-02-15"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This recipe seems a masterpiece. Definitely deserves a try from my end..",
+        "author": {
+          "@type": "Person",
+          "name": "David E."
+        },
+        "datePublished": "2018-08-19"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I was looking for some new chicken recipes for my new diet list. Your Turmeric Lime Chicken seems so mouthwatering to me. Hope it will be really delicious. Thanks for the nice addition.",
+        "author": {
+          "@type": "Person",
+          "name": "Andrea Lewis"
+        },
+        "datePublished": "2018-08-09"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I never thought of adding turmeric to breaded fried chicken, and I love too the lime you added, sounds terrific as usual, Denise!",
+        "author": {
+          "@type": "Person",
+          "name": "Hadia"
+        },
+        "datePublished": "2018-08-07"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Anti-Inflammatory Turmeric Lime Chicken",
+    "author": {
+      "@id": "https://www.easyanddelish.com/#/schema/person/4aa289bf19bceaa733ca6900648cfc47"
+    },
+    "description": "Turmeric Lime Chicken is an easy and quick anti-inflammatory dinner dish made from breaded pan-fried chicken that can be served with fresh mango salsa, vegetables, or in a sandwich.&nbsp;&nbsp;",
+    "datePublished": "2018-08-07T10:21:54+00:00",
+    "image": [
+      "https://www.easyanddelish.com/wp-content/uploads/2018/08/Turmeric-Lime-Chicken-hero.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2018/08/Turmeric-Lime-Chicken-hero-441x500.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2018/08/Turmeric-Lime-Chicken-hero-441x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2018/08/Turmeric-Lime-Chicken-hero-441x270.jpg"
+    ],
+    "recipeYield": [
+      "6"
+    ],
+    "prepTime": "PT20M",
+    "totalTime": "PT20M",
+    "recipeIngredient": [
+      "6  skinless, boneless chicken breasts (NOT thick) (You can buy 3 thick breasts, butterfly and cut in half each to get 6. )",
+      "4  juicy limes, halved",
+      "salt and pepper to taste (Use about 1 teaspoon salt per pound of chicken)",
+      "3  garlic cloves, minced",
+      "2 TBSP cilantro (or parsley if desired)",
+      "2  large eggs, lightly beaten",
+      "1 TBSP turmeric",
+      "2 cups Japanese Panko (or bread crumbs)",
+      "4-5 TBSP vegetable oil"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Start by making 4 small cuts on the top of each chicken breast and season with salt and pepper on both sides. This will help the flavors of the marinade penetrate quicker into the meat and allow the chicken breasts to cook faster and more uniformly.&nbsp;",
+        "name": "Start by making 4 small cuts on the top of each chicken breast and season with salt and pepper on both sides. This will help the flavors of the marinade penetrate quicker into the meat and allow the chicken breasts to cook faster and more uniformly.&nbsp;",
+        "url": "https://www.easyanddelish.com/turmeric-lime-chicken/#wprm-recipe-47932-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Then, mix fresh lime juice, minced garlic and chopped cilantro in a large bowl and place the chicken breasts into the marinade. Cover the bowl and let sit for about 30 minutes at room temperature.&nbsp; &nbsp;",
+        "name": "Then, mix fresh lime juice, minced garlic and chopped cilantro in a large bowl and place the chicken breasts into the marinade. Cover the bowl and let sit for about 30 minutes at room temperature.&nbsp; &nbsp;",
+        "url": "https://www.easyanddelish.com/turmeric-lime-chicken/#wprm-recipe-47932-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Beat the eggs in a bowl using a fork. In another bowl, combine both turmeric powder and panko or bread crumbs",
+        "name": "Beat the eggs in a bowl using a fork. In another bowl, combine both turmeric powder and panko or bread crumbs",
+        "url": "https://www.easyanddelish.com/turmeric-lime-chicken/#wprm-recipe-47932-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Place each chicken breast  in the beaten egg bowl and turn to cover in egg. Then, coat both sides of each chicken breast with the turmeric/bread crumb mixture.&nbsp;",
+        "name": "Place each chicken breast  in the beaten egg bowl and turn to cover in egg. Then, coat both sides of each chicken breast with the turmeric/bread crumb mixture.&nbsp;",
+        "url": "https://www.easyanddelish.com/turmeric-lime-chicken/#wprm-recipe-47932-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Pan-fry the chicken breasts in a large no stick skillet using half the amount of vegetable oil over medium heat for about 6-10 minutes per side&nbsp; If necessary, clean skillet carefully with paper towel between batches to avoid burned bread crumbs. It's important to cook in batches in order to avoid overcrowding the skillet and lowering the temperature.&nbsp;",
+        "name": "Pan-fry the chicken breasts in a large no stick skillet using half the amount of vegetable oil over medium heat for about 6-10 minutes per side&nbsp; If necessary, clean skillet carefully with paper towel between batches to avoid burned bread crumbs. It's important to cook in batches in order to avoid overcrowding the skillet and lowering the temperature.&nbsp;",
+        "url": "https://www.easyanddelish.com/turmeric-lime-chicken/#wprm-recipe-47932-step-0-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Once chicken is cooked through (with no sign of pink), place onto a large plate lined with double paper towel to absorb some of the oil. Serve topped with a fresh mango salsa, roasted or steamed vegetables of&nbsp; your choice, or in a sandwich.",
+        "name": "Once chicken is cooked through (with no sign of pink), place onto a large plate lined with double paper towel to absorb some of the oil. Serve topped with a fresh mango salsa, roasted or steamed vegetables of&nbsp; your choice, or in a sandwich.",
+        "url": "https://www.easyanddelish.com/turmeric-lime-chicken/#wprm-recipe-47932-step-0-5"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.88",
+      "ratingCount": "8",
+      "reviewCount": "6"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4"
+        },
+        "reviewBody": "delicious recipe! i omitted the breadcrumbs because they are not part of an anti inflammatory diet!",
+        "author": {
+          "@type": "Person",
+          "name": "Jay"
+        },
+        "datePublished": "2024-01-04"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Excellent and easy. Used lemon and garlic powder and coriander substitutions and they worked perfectly. Made about a pound of chicken, two lemons, about 1 t of garlic powder and  1 t of coriander.  And about 2 T of turmeric in  1 cup of Pablo crumbs. Did relieve a little of my pain. That is what I am doing seeking out anti-inflammatory recipes and ingredients .",
+        "author": {
+          "@type": "Person",
+          "name": "Donna Richards"
+        },
+        "datePublished": "2022-10-05"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This  Anti-Inflammatory Turmeric Lime Chicken was super delish.",
+        "author": {
+          "@type": "Person",
+          "name": "Love Ledenbach"
+        },
+        "datePublished": "2020-02-15"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This recipe seems a masterpiece. Definitely deserves a try from my end..",
+        "author": {
+          "@type": "Person",
+          "name": "David E."
+        },
+        "datePublished": "2018-08-19"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I was looking for some new chicken recipes for my new diet list. Your Turmeric Lime Chicken seems so mouthwatering to me. Hope it will be really delicious. Thanks for the nice addition.",
+        "author": {
+          "@type": "Person",
+          "name": "Andrea Lewis"
+        },
+        "datePublished": "2018-08-09"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I never thought of adding turmeric to breaded fried chicken, and I love too the lime you added, sounds terrific as usual, Denise!",
+        "author": {
+          "@type": "Person",
+          "name": "Hadia"
+        },
+        "datePublished": "2018-08-07"
+      }
+    ],
+    "recipeCategory": [
+      "Main Course"
+    ],
+    "recipeCuisine": [
+      "American"
+    ],
+    "keywords": "chicken breast, turmeric",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "326 kcal",
+      "carbohydrateContent": "20 g",
+      "proteinContent": "29 g",
+      "fatContent": "14 g",
+      "saturatedFatContent": "8 g",
+      "cholesterolContent": "126 mg",
+      "sodiumContent": "299 mg",
+      "fiberContent": "2 g",
+      "sugarContent": "2 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://www.easyanddelish.com/turmeric-lime-chicken/#recipe",
+    "isPartOf": {
+      "@id": "https://www.easyanddelish.com/turmeric-lime-chicken/#article"
+    },
+    "mainEntityOfPage": "https://www.easyanddelish.com/turmeric-lime-chicken/"
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "range-quantity:1",
+    "no-cook-time",
+    "unmapped:aggregateRating|review"
+  ]
+}

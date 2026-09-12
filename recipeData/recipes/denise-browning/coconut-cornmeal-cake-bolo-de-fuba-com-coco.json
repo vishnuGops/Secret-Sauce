@@ -1,0 +1,415 @@
+{
+  "schemaVersion": 1,
+  "id": "denise-browning/coconut-cornmeal-cake-bolo-de-fuba-com-coco",
+  "slug": "coconut-cornmeal-cake-bolo-de-fuba-com-coco",
+  "chefId": "chef_denise-browning",
+  "chefSlug": "denise-browning",
+  "chefName": "Denise Browning",
+  "title": "Coconut Cornmeal Cake (Bolo de Fubá com Coco)",
+  "description": "An easy to make coconut cornmeal cake with a creamy center that it is to die for. It is basically prepared in the blender and baked. So comforting!",
+  "source": {
+    "sourceUrl": "https://www.easyanddelish.com/coconut-cornmeal-cake/",
+    "finalUrl": "https://www.easyanddelish.com/coconut-cornmeal-cake/",
+    "retrievedAt": "2026-09-11T02:47:42.242Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2012-03-26T10:23:01+00:00",
+    "rights": "Easy and Delish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "0f9844633192e520fd1e0d93f4ee22c764e11898ffae40591e8ee25dbf9d4026",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "8"
+    ],
+    "servings": 8
+  },
+  "timing": {
+    "prepMinutes": 15,
+    "cookMinutes": 45,
+    "totalMinutes": 60,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Brazilian"
+  ],
+  "category": [
+    "Dessert",
+    "Snack"
+  ],
+  "keywords": [
+    "Bolo de Fubá com Coco",
+    "Brazilian Corn Cake",
+    "Coconut Cornmeal Cake"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "2 cups milk",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "cups",
+          "name": "milk",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 large eggs (at room temperature)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "large eggs (at room temperature)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1-1/2 cup sugar",
+          "quantity": 1,
+          "quantityText": "1-1",
+          "unit": null,
+          "name": "/2 cup sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tablespoon butter (softened)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "butter (softened)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/4 cup corn starch",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/4 cup corn starch",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 cup cornmeal",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 cup cornmeal",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1-1/2 tablespoon all purpose flour",
+          "quantity": 1,
+          "quantityText": "1-1",
+          "unit": null,
+          "name": "/2 tablespoon all purpose flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/4 cup grated parmesan cheese",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/4 cup grated parmesan cheese",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3/4 cup shredded coconut",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "/4 cup shredded coconut",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 tablespoon baking powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 tablespoon baking powder",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 350 F (180º C).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 350 F (180º C).",
+        "name": "Preheat the oven to 350 F (180º C).",
+        "url": "https://www.easyanddelish.com/coconut-cornmeal-cake/#wprm-recipe-47618-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Grease and flour a medium round baking pan. Mix all the ingredients in the blender until well blended and homogeneous. Pour batter into the pan.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Grease and flour a medium round baking pan. Mix all the ingredients in the blender until well blended and homogeneous. Pour batter into the pan.",
+        "name": "Grease and flour a medium round baking pan. Mix all the ingredients in the blender until well blended and homogeneous. Pour batter into the pan.",
+        "url": "https://www.easyanddelish.com/coconut-cornmeal-cake/#wprm-recipe-47618-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Bake for about 45 -50 minutes (half way, cover loosely with a sheet of aluminum foil to avoid a dark top).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Bake for about 45 -50 minutes (half way, cover loosely with a sheet of aluminum foil to avoid a dark top).",
+        "name": "Bake for about 45 -50 minutes (half way, cover loosely with a sheet of aluminum foil to avoid a dark top).",
+        "url": "https://www.easyanddelish.com/coconut-cornmeal-cake/#wprm-recipe-47618-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Let cool for a while on a wire rack and plate when slightly warm.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Let cool for a while on a wire rack and plate when slightly warm.",
+        "name": "Let cool for a while on a wire rack and plate when slightly warm.",
+        "url": "https://www.easyanddelish.com/coconut-cornmeal-cake/#wprm-recipe-47618-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Serve decorated with either coconut flakes or powdered sugar on top.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Serve decorated with either coconut flakes or powdered sugar on top.",
+        "name": "Serve decorated with either coconut flakes or powdered sugar on top.",
+        "url": "https://www.easyanddelish.com/coconut-cornmeal-cake/#wprm-recipe-47618-step-0-4"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "servingSize": "1 serving",
+    "calories": "290 kcal"
+  },
+  "media": {
+    "coverImages": [
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_0460-2.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_0460-2-500x500.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_0460-2-500x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_0460-2-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "4",
+      "reviewCount": "2"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "We were served this cake in Brasilia one time and it was delicious. I woke up with a craving for it, 8 years later, and had to make it! Glad I found your recipe, which was  way easier than most others I found. I cut the sugar in half and it was still too sweet for me, but otherwise delicious and a wonderful texture. Next time I’ll make with 1/4 of the sugar. Thank you!!!",
+        "author": {
+          "@type": "Person",
+          "name": "Adrienne"
+        },
+        "datePublished": "2022-11-30"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Really enjoyed making this. Stumbled upon the recipe when I was educating myself on ‘Coconut Chess Pie’ which is apparently an American Southern recipe. From comparing the two recipes, they have similarities, as a custard-like pie, but differ in that the Chess Pie has a pre-baked crust, and this one makes it’s own crust. Also, the other doesn’t have the cheese, which is a great reason to try this one! I feel this is the better of the two (for me) as it is very tasty but not overly sweet. Exactly the kind of dessert I was looking for!",
+        "author": {
+          "@type": "Person",
+          "name": "Karen"
+        },
+        "datePublished": "2022-07-27"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Coconut Cornmeal Cake (Bolo de Fubá com Coco)",
+    "author": {
+      "@id": "https://www.easyanddelish.com/#/schema/person/4aa289bf19bceaa733ca6900648cfc47"
+    },
+    "description": "An easy to make coconut cornmeal cake with a creamy center that it is to die for. It is basically prepared in the blender and baked. So comforting!",
+    "datePublished": "2012-03-26T10:23:01+00:00",
+    "image": [
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_0460-2.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_0460-2-500x500.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_0460-2-500x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_0460-2-480x270.jpg"
+    ],
+    "recipeYield": [
+      "8"
+    ],
+    "prepTime": "PT15M",
+    "cookTime": "PT45M",
+    "totalTime": "PT60M",
+    "recipeIngredient": [
+      "2 cups milk",
+      "2  large eggs (at room temperature)",
+      "1-1/2 cup sugar",
+      "1 tablespoon butter (softened)",
+      "1/4 cup corn starch",
+      "1/2 cup cornmeal",
+      "1-1/2 tablespoon all purpose flour",
+      "1/4 cup grated parmesan cheese",
+      "3/4 cup shredded coconut",
+      "1/2 tablespoon baking powder"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 350 F (180º C).",
+        "name": "Preheat the oven to 350 F (180º C).",
+        "url": "https://www.easyanddelish.com/coconut-cornmeal-cake/#wprm-recipe-47618-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Grease and flour a medium round baking pan. Mix all the ingredients in the blender until well blended and homogeneous. Pour batter into the pan.",
+        "name": "Grease and flour a medium round baking pan. Mix all the ingredients in the blender until well blended and homogeneous. Pour batter into the pan.",
+        "url": "https://www.easyanddelish.com/coconut-cornmeal-cake/#wprm-recipe-47618-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Bake for about 45 -50 minutes (half way, cover loosely with a sheet of aluminum foil to avoid a dark top).",
+        "name": "Bake for about 45 -50 minutes (half way, cover loosely with a sheet of aluminum foil to avoid a dark top).",
+        "url": "https://www.easyanddelish.com/coconut-cornmeal-cake/#wprm-recipe-47618-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Let cool for a while on a wire rack and plate when slightly warm.",
+        "name": "Let cool for a while on a wire rack and plate when slightly warm.",
+        "url": "https://www.easyanddelish.com/coconut-cornmeal-cake/#wprm-recipe-47618-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Serve decorated with either coconut flakes or powdered sugar on top.",
+        "name": "Serve decorated with either coconut flakes or powdered sugar on top.",
+        "url": "https://www.easyanddelish.com/coconut-cornmeal-cake/#wprm-recipe-47618-step-0-4"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "4",
+      "reviewCount": "2"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "We were served this cake in Brasilia one time and it was delicious. I woke up with a craving for it, 8 years later, and had to make it! Glad I found your recipe, which was  way easier than most others I found. I cut the sugar in half and it was still too sweet for me, but otherwise delicious and a wonderful texture. Next time I’ll make with 1/4 of the sugar. Thank you!!!",
+        "author": {
+          "@type": "Person",
+          "name": "Adrienne"
+        },
+        "datePublished": "2022-11-30"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Really enjoyed making this. Stumbled upon the recipe when I was educating myself on ‘Coconut Chess Pie’ which is apparently an American Southern recipe. From comparing the two recipes, they have similarities, as a custard-like pie, but differ in that the Chess Pie has a pre-baked crust, and this one makes it’s own crust. Also, the other doesn’t have the cheese, which is a great reason to try this one! I feel this is the better of the two (for me) as it is very tasty but not overly sweet. Exactly the kind of dessert I was looking for!",
+        "author": {
+          "@type": "Person",
+          "name": "Karen"
+        },
+        "datePublished": "2022-07-27"
+      }
+    ],
+    "recipeCategory": [
+      "Dessert",
+      "Snack"
+    ],
+    "recipeCuisine": [
+      "Brazilian"
+    ],
+    "keywords": "Bolo de Fubá com Coco, Brazilian Corn Cake, Coconut Cornmeal Cake",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "servingSize": "1 serving",
+      "calories": "290 kcal"
+    },
+    "@id": "https://www.easyanddelish.com/coconut-cornmeal-cake/#recipe",
+    "isPartOf": {
+      "@id": "https://www.easyanddelish.com/coconut-cornmeal-cake/#article"
+    },
+    "mainEntityOfPage": "https://www.easyanddelish.com/coconut-cornmeal-cake/"
+  },
+  "audit": [
+    "range-quantity:2",
+    "unmapped:aggregateRating|review"
+  ]
+}

@@ -1,0 +1,116 @@
+[
+  {
+    "name": "adventuresincooking.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://adventuresincooking.com/"
+  },
+  {
+    "name": "theseasonalhomestead.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://theseasonalhomestead.com/"
+  },
+  {
+    "name": "healthyseasonalrecipes.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://healthyseasonalrecipes.com/"
+  },
+  {
+    "name": "seasonsandsuppers.ca",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://seasonsandsuppers.ca/"
+  },
+  {
+    "name": "simpleseasonal.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://simpleseasonal.com/"
+  },
+  {
+    "name": "sproutedkitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://sproutedkitchen.com/"
+  },
+  {
+    "name": "brooklynsupper.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://brooklynsupper.com/"
+  },
+  {
+    "name": "oursaltykitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://oursaltykitchen.com/"
+  },
+  {
+    "name": "heartbeetkitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://heartbeetkitchen.com/"
+  },
+  {
+    "name": "tastefullygrace.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://tastefullygrace.com/"
+  },
+  {
+    "name": "vibrantplate.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://vibrantplate.com/"
+  },
+  {
+    "name": "uglyducklingbakery.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://uglyducklingbakery.com/"
+  },
+  {
+    "name": "cakewhiz.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://cakewhiz.com/"
+  },
+  {
+    "name": "bsugarmama.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://bsugarmama.com/"
+  },
+  {
+    "name": "lucismorsels.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://lucismorsels.com/"
+  },
+  {
+    "name": "overtimecook.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://overtimecook.com/"
+  },
+  {
+    "name": "sugarandsparrow.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://sugarandsparrow.com/"
+  },
+  {
+    "name": "withspice.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://withspice.com/"
+  },
+  {
+    "name": "rootsandcook.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://rootsandcook.com/"
+  }
+]

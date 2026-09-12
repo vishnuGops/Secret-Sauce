@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 1,
+  "id": "nigel-slater/carrot-and-coriander-fritters",
+  "slug": "carrot-and-coriander-fritters",
+  "chefId": "chef_nigel-slater",
+  "chefSlug": "nigel-slater",
+  "chefName": "Nigel Slater",
+  "title": "Carrot and coriander fritters",
+  "description": "These carrot fritters are perfect for a quick lunch, especially with a watercress salad on the side. They combine the classic carrot and coriander flavours into a hot, crisp alternative to soup.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/carrotandcorianderfr_92488",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/carrotandcorianderfr_92488",
+    "retrievedAt": "2026-09-11T00:28:48.501Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Nigel Slater"
+    ],
+    "datePublished": "2010-10-28T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "f6eb3b1c361ee95125dd5529b7d2981b4e1bd65190b9da4986580ab35c994c54",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": []
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 2–3"
+    ],
+    "servings": 2
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 10,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Light meals & snacks"
+  ],
+  "keywords": [
+    "quick",
+    "fritter",
+    "heavenly herbs",
+    "nut-free lunchbox fillers",
+    "quick lunch",
+    "hanukkah",
+    "lunch",
+    "winter",
+    "fritters",
+    "carrot",
+    "nut free",
+    "pregnancy friendly",
+    "vegetarian",
+    "Nigel Slater's Simple Suppers"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "a good handful carrots, about 6, trimmed and washed",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "a good handful carrots",
+          "note": "about 6, trimmed and washed",
+          "isOptional": false
+        },
+        {
+          "raw": "3–4 spring onions, both green and white parts, sliced",
+          "quantity": 3,
+          "quantityText": "3–4",
+          "unit": null,
+          "name": "spring onions",
+          "note": "both green and white parts, sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "a good handful fresh coriander, roughly chopped, plus extra to serve",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "a good handful fresh coriander",
+          "note": "roughly chopped, plus extra to serve",
+          "isOptional": false
+        },
+        {
+          "raw": "2 large free-range eggs, beaten",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "large free-range eggs",
+          "note": "beaten",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp or so plain flour",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "or so plain flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 handful freshly grated Parmesan (or alternative vegetarian cheese)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "handful",
+          "name": "freshly grated Parmesan (or alternative vegetarian cheese)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "a few glugs double cream",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "a few glugs double cream",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "a few good glugs fruity olive oil",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "a few good glugs fruity olive oil",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Grate the carrots in a food processor, then place into a large bowl with the spring onions and as much coriander as you like.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Grate the carrots in a food processor, then place into a large bowl with the spring onions and as much coriander as you like. "
+    },
+    {
+      "order": 2,
+      "text": "Add in the eggs and the flour to bind everything together, followed by the Parmesan (it will melt and again will help to hold the fritter together) and, for a touch of luxury, some cream and stir well, seasoning to taste with salt and freshly ground black pepper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add in the eggs and the flour to bind everything together, followed by the Parmesan (it will melt and again will help to hold the fritter together) and, for a touch of luxury, some cream and stir well, seasoning to taste with salt and freshly ground black pepper. "
+    },
+    {
+      "order": 3,
+      "text": "Just before you fry it's worth squeezing some of the mixture together in your hands to ensure it won't fall apart when cooking. If you think it will, add either a little more beaten egg or flour, only just enough to stick them together.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Just before you fry it's worth squeezing some of the mixture together in your hands to ensure it won't fall apart when cooking. If you think it will, add either a little more beaten egg or flour, only just enough to stick them together."
+    },
+    {
+      "order": 4,
+      "text": "Heat a large frying pan, add in the oil and form the mixture into thin fritters, so they will cook quickly. Fry for 4–6 minutes until golden-brown on both sides. Remember the golden rule of frying – don't play with the food too much, let the fritters form a crust before you turn them over. Serve straightaway scattered with more coriander.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat a large frying pan, add in the oil and form the mixture into thin fritters, so they will cook quickly. Fry for 4–6 minutes until golden-brown on both sides. Remember the golden rule of frying – don't play with the food too much, let the fritters form a crust before you turn them over. Serve straightaway scattered with more coriander."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/carrotandcorianderfr_92488_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 19,
+      "ratingValue": 4.7368421052631575
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "These carrot fritters are perfect for a quick lunch, especially with a watercress salad on the side. They combine the classic carrot and coriander flavours into a hot, crisp alternative to soup.",
+    "headline": "Carrot and coriander fritters",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/carrotandcorianderfr_92488_16x9.jpg"
+    },
+    "name": "Carrot and coriander fritters",
+    "author": {
+      "@type": "Person",
+      "name": "Nigel Slater"
+    },
+    "datePublished": "2010-10-28T00:00:00.000Z",
+    "dateModified": "2025-03-27T14:16:37.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 19,
+      "ratingValue": 4.7368421052631575
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT10M",
+    "keywords": "quick, fritter, heavenly herbs, nut-free lunchbox fillers, quick lunch, hanukkah, lunch, winter, fritters, carrot, nut free, pregnancy friendly, vegetarian, Nigel Slater's Simple Suppers",
+    "recipeCategory": "Light meals & snacks",
+    "recipeIngredient": [
+      "a good handful carrots, about 6, trimmed and washed",
+      "3–4 spring onions, both green and white parts, sliced",
+      "a good handful fresh coriander, roughly chopped, plus extra to serve",
+      "2 large free-range eggs, beaten ",
+      "1 tbsp or so plain flour",
+      "1 handful freshly grated Parmesan (or alternative vegetarian cheese)",
+      "a few glugs double cream",
+      "salt and freshly ground black pepper",
+      "a few good glugs fruity olive oil"
+    ],
+    "recipeInstructions": [
+      "Grate the carrots in a food processor, then place into a large bowl with the spring onions and as much coriander as you like. ",
+      "Add in the eggs and the flour to bind everything together, followed by the Parmesan (it will melt and again will help to hold the fritter together) and, for a touch of luxury, some cream and stir well, seasoning to taste with salt and freshly ground black pepper. ",
+      "Just before you fry it's worth squeezing some of the mixture together in your hands to ensure it won't fall apart when cooking. If you think it will, add either a little more beaten egg or flour, only just enough to stick them together.",
+      "Heat a large frying pan, add in the oil and form the mixture into thin fritters, so they will cook quickly. Fry for 4–6 minutes until golden-brown on both sides. Remember the golden rule of frying – don't play with the food too much, let the fritters form a crust before you turn them over. Serve straightaway scattered with more coriander."
+    ],
+    "recipeYield": "Serves 2–3",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:5",
+    "range-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

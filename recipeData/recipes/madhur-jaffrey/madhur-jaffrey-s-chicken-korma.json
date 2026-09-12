@@ -1,0 +1,448 @@
+{
+  "schemaVersion": 1,
+  "id": "madhur-jaffrey/madhur-jaffrey-s-chicken-korma",
+  "slug": "madhur-jaffrey-s-chicken-korma",
+  "chefId": "chef_madhur-jaffrey",
+  "chefSlug": "madhur-jaffrey",
+  "chefName": "Madhur Jaffrey",
+  "title": "Madhur Jaffrey's chicken korma",
+  "description": "No relation to the yellow takeaway korma, Madhur Jaffrey's chicken korma is heady with spices and rich with just a drop of cream.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/creamychickenkormawi_90196",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/creamychickenkormawi_90196",
+    "retrievedAt": "2026-09-11T00:26:51.210Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Madhur Jaffrey"
+    ],
+    "datePublished": "2008-11-06T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "24a215c115874a753af0eec0cf8e119d29e19f2cd480bd9f036afe323040615a",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": []
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4-6"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Indian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "diwali",
+    "eid al-fitr",
+    "winter",
+    "chicken curry",
+    "chicken",
+    "egg free",
+    "pregnancy friendly"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "5-6 garlic cloves, coarsely chopped",
+          "quantity": 5,
+          "quantityText": "5-6",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "coarsely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2.5cm/1in piece fresh root ginger, chopped",
+          "quantity": 2.5,
+          "quantityText": "2.5",
+          "unit": null,
+          "name": "cm/1in piece fresh root ginger",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "50g/2oz flaked almonds",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/2oz flaked almonds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "150ml/¼ pint water",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "ml",
+          "name": "/¼ pint water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "5 tbsp olive or groundnut oil",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": "tbsp",
+          "name": "olive or groundnut oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 bay leaves",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "bay leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "8 cardamom pods, lightly crushed",
+          "quantity": 8,
+          "quantityText": "8",
+          "unit": null,
+          "name": "cardamom pods",
+          "note": "lightly crushed",
+          "isOptional": false
+        },
+        {
+          "raw": "4 cloves",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "cloves",
+          "name": "4 cloves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2.5cm/1in piece cinnamon stick",
+          "quantity": 2.5,
+          "quantityText": "2.5",
+          "unit": null,
+          "name": "cm/1in piece cinnamon stick",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 onion, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "onion",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp ground cumin",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "ground cumin",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp ground coriander",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "ground coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ tsp chilli powder",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "tsp",
+          "name": "chilli powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp tomato purée",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "tomato purée",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1¼ tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "¼ tsp salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tbsp garam masala",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tbsp",
+          "name": "garam masala",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp double cream",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "double cream",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1.5kg/3lb chicken pieces, skinned and cut into serving portions (breast cut in half across the centre)",
+          "quantity": 1.5,
+          "quantityText": "1.5",
+          "unit": "kg",
+          "name": "/3lb chicken pieces, skinned and cut into serving portions (breast cut in half across the centre)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Put the garlic, ginger and almonds into the bowl of a food processor.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put the garlic, ginger and almonds into the bowl of a food processor."
+    },
+    {
+      "order": 2,
+      "text": "Turn on the food processor and pour six tablespoons of the water through the funnel and blend to a smooth paste (if your food processor doesn't have a funnel, just add the water before blending).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Turn on the food processor and pour six tablespoons of the water through the funnel and blend to a smooth paste (if your food processor doesn't have a funnel, just add the water before blending)."
+    },
+    {
+      "order": 3,
+      "text": "Heat the oil in a wide pan set over a high heat. When it's very hot, add the bay leaves, cardamom pods, cloves and cinnamon stick and stir for ten seconds (take care because they may spit when they hit the oil).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat the oil in a wide pan set over a high heat. When it's very hot, add the bay leaves, cardamom pods, cloves and cinnamon stick and stir for ten seconds (take care because they may spit when they hit the oil)."
+    },
+    {
+      "order": 4,
+      "text": "Add the onion and cook for several minutes, stirring, until it's a medium-brown colour. Reduce the heat to medium-high once the onion begins to brown.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the onion and cook for several minutes, stirring, until it's a medium-brown colour. Reduce the heat to medium-high once the onion begins to brown."
+    },
+    {
+      "order": 5,
+      "text": "Add the paste from the food processor and stir. Cook, stirring, for 3-4 minutes or until lightly browned.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the paste from the food processor and stir. Cook, stirring, for 3-4 minutes or until lightly browned."
+    },
+    {
+      "order": 6,
+      "text": "Add the cumin, coriander and chilli powder and cook, stirring, for 30 seconds. Add the tomato puree and stir for a minute longer.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the cumin, coriander and chilli powder and cook, stirring, for 30 seconds. Add the tomato puree and stir for a minute longer."
+    },
+    {
+      "order": 7,
+      "text": "Add the salt, garam masala, cream and remaining water and stir together.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the salt, garam masala, cream and remaining water and stir together."
+    },
+    {
+      "order": 8,
+      "text": "Add the chicken pieces and stir to coat them with the spice paste.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the chicken pieces and stir to coat them with the spice paste."
+    },
+    {
+      "order": 9,
+      "text": "Bring to a simmer, then cover the pan, turn the heat to low and simmer gently for 25 minutes, or until the chicken is cooked through, turning the chicken pieces over several times during cooking.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Bring to a simmer, then cover the pan, turn the heat to low and simmer gently for 25 minutes, or until the chicken is cooked through, turning the chicken pieces over several times during cooking."
+    },
+    {
+      "order": 10,
+      "text": "Transfer to a serving dish and serve with your choice of Indian breads and chutneys, rice or vegetables.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Transfer to a serving dish and serve with your choice of Indian breads and chutneys, rice or vegetables."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/creamychickenkormawi_90196_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 11,
+      "ratingValue": 4.636363636363637
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "No relation to the yellow takeaway korma, Madhur Jaffrey's chicken korma is heady with spices and rich with just a drop of cream.",
+    "headline": "Madhur Jaffrey's chicken korma",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/creamychickenkormawi_90196_16x9.jpg"
+    },
+    "name": "Madhur Jaffrey's chicken korma",
+    "author": {
+      "@type": "Person",
+      "name": "Madhur Jaffrey"
+    },
+    "datePublished": "2008-11-06T00:00:00.000Z",
+    "dateModified": "2020-09-11T10:09:47.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 11,
+      "ratingValue": 4.636363636363637
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT1H",
+    "keywords": "diwali, eid al-fitr, winter, chicken curry, chicken, egg free, pregnancy friendly",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Indian",
+    "recipeIngredient": [
+      "5-6 garlic cloves, coarsely chopped",
+      "2.5cm/1in piece fresh root ginger, chopped",
+      "50g/2oz flaked almonds",
+      "150ml/¼ pint water",
+      "5 tbsp olive or groundnut oil",
+      "2 bay leaves",
+      "8 cardamom pods, lightly crushed",
+      "4 cloves",
+      "2.5cm/1in piece cinnamon stick",
+      "1 onion, finely chopped",
+      "1 tbsp ground cumin",
+      "1 tbsp ground coriander",
+      "¼ tsp chilli powder",
+      "1 tbsp tomato purée",
+      "1¼ tsp salt",
+      "½ tbsp garam masala",
+      "3 tbsp double cream",
+      "1.5kg/3lb chicken pieces, skinned and cut into serving portions (breast cut in half across the centre)"
+    ],
+    "recipeInstructions": [
+      "Put the garlic, ginger and almonds into the bowl of a food processor.",
+      "Turn on the food processor and pour six tablespoons of the water through the funnel and blend to a smooth paste (if your food processor doesn't have a funnel, just add the water before blending).",
+      "Heat the oil in a wide pan set over a high heat. When it's very hot, add the bay leaves, cardamom pods, cloves and cinnamon stick and stir for ten seconds (take care because they may spit when they hit the oil).",
+      "Add the onion and cook for several minutes, stirring, until it's a medium-brown colour. Reduce the heat to medium-high once the onion begins to brown.",
+      "Add the paste from the food processor and stir. Cook, stirring, for 3-4 minutes or until lightly browned.",
+      "Add the cumin, coriander and chilli powder and cook, stirring, for 30 seconds. Add the tomato puree and stir for a minute longer.",
+      "Add the salt, garam masala, cream and remaining water and stir together.",
+      "Add the chicken pieces and stir to coat them with the spice paste.",
+      "Bring to a simmer, then cover the pan, turn the heat to low and simmer gently for 25 minutes, or until the chicken is cooked through, turning the chicken pieces over several times during cooking.",
+      "Transfer to a serving dish and serve with your choice of Indian breads and chutneys, rice or vegetables."
+    ],
+    "recipeYield": "Serves 4-6",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "range-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

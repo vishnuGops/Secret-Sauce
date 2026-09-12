@@ -1,0 +1,354 @@
+{
+  "schemaVersion": 1,
+  "id": "rick-stein/cornish-steak-pasty",
+  "slug": "cornish-steak-pasty",
+  "chefId": "chef_rick-stein",
+  "chefSlug": "rick-stein",
+  "chefName": "Rick Stein",
+  "title": "Cornish steak pasty",
+  "description": "Rick Stein’s perfect Cornish pasty: buttery, flaky pastry with a well-seasoned filling of steak, potatoes, swede and onions.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/cornish_steak_pasty_32086",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/cornish_steak_pasty_32086",
+    "retrievedAt": "2026-09-11T00:26:32.730Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Rick Stein"
+    ],
+    "datePublished": "2022-01-21T15:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "f813d0f9edb5cfebfc6da7389790badbe6ba419774c5a59915451ab88d1de08c",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups",
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Makes 6-8 large pasties"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 120,
+    "cookMinutes": 120,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "British"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "bar snack",
+    "bonfire night snacks",
+    "coronation party",
+    "english regional classics",
+    "february",
+    "football pies",
+    "hot buffet",
+    "retro british",
+    "classic savoury pies",
+    "street party",
+    "bonfire night",
+    "father's day",
+    "lunch",
+    "st george's day",
+    "pasty",
+    "steak",
+    "nut free",
+    "pregnancy friendly",
+    "Rick Stein's Cornwall"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the pastry",
+      "items": [
+        {
+          "raw": "500g/1lb 2oz plain flour, plus extra for dusting",
+          "quantity": 500,
+          "quantityText": "500",
+          "unit": "g",
+          "name": "/1lb 2oz plain flour, plus extra for dusting",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "250g/9oz cold butter, cut into 2cm/¾in cubes",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "/9oz cold butter, cut into 2cm/¾in cubes",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the filling",
+      "items": [
+        {
+          "raw": "150g/5½oz swede, peeled and sliced into 1cm/½in thick chips",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "g",
+          "name": "/5½oz swede",
+          "note": "peeled and sliced into 1cm/½in thick chips",
+          "isOptional": false
+        },
+        {
+          "raw": "250g/9oz floury potatoes, peeled and sliced into 1cm/½in thick chips",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "/9oz floury potatoes",
+          "note": "peeled and sliced into 1cm/½in thick chips",
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz onion, chopped",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz onion",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "400g/14oz skirt steak, cut into 1cm/½in pieces",
+          "quantity": 400,
+          "quantityText": "400",
+          "unit": "g",
+          "name": "/14oz skirt steak, cut into 1cm/½in pieces",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 free-range egg, beaten, to glaze",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "free-range egg",
+          "note": "beaten, to glaze",
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the pastry, sift the flour and salt into a bowl, add half the butter and rub it in using your fingertips until the mixture resembles fine crumbs. Stir in the rest of the butter and 150ml/5½fl oz ice cold water and bring it together to form a soft dough.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the pastry, sift the flour and salt into a bowl, add half the butter and rub it in using your fingertips until the mixture resembles fine crumbs. Stir in the rest of the butter and 150ml/5½fl oz ice cold water and bring it together to form a soft dough. "
+    },
+    {
+      "order": 2,
+      "text": "Knead briefly until smooth, then roll out into a rough rectangle. Fold up the bottom third of the dough, then fold down the top third. Wrap and chill for 30 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Knead briefly until smooth, then roll out into a rough rectangle. Fold up the bottom third of the dough, then fold down the top third. Wrap and chill for 30 minutes."
+    },
+    {
+      "order": 3,
+      "text": "Unwrap the dough and roll it out on a lightly floured surface to form a rectangle, as in step 1. Fold up the bottom third and then fold down the top third and roll out once more; you should no longer be able to see the pieces of butter. Fold up the dough once more, wrap and chill for another 30 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Unwrap the dough and roll it out on a lightly floured surface to form a rectangle, as in step 1. Fold up the bottom third and then fold down the top third and roll out once more; you should no longer be able to see the pieces of butter. Fold up the dough once more, wrap and chill for another 30 minutes. "
+    },
+    {
+      "order": 4,
+      "text": "Roll out the dough on a floured surface until it is 3mm/⅛in thick and cut out four 20cm/8in discs. Spoon equal amounts of the filling into the centre of each pastry disc and lightly brush the edge of one half of each disc with water.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Roll out the dough on a floured surface until it is 3mm/⅛in thick and cut out four 20cm/8in discs. Spoon equal amounts of the filling into the centre of each pastry disc and lightly brush the edge of one half of each disc with water. "
+    },
+    {
+      "order": 5,
+      "text": "Preheat the oven to 180C/160C Fan/Gas 4.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 180C/160C Fan/Gas 4. "
+    },
+    {
+      "order": 6,
+      "text": "Bring the edges together over the top of the filling and press together well. Then, working from left to right, fold in the corner of the pasty and fold 2.5cm/1in of the edge inwards.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Bring the edges together over the top of the filling and press together well. Then, working from left to right, fold in the corner of the pasty and fold 2.5cm/1in of the edge inwards. "
+    },
+    {
+      "order": 7,
+      "text": "Fold over the next 2.5cm/1in and continue like this along the edge, to create a rope-like design which will seal the pasty. Put the pasties onto a greased baking sheet and brush them with beaten egg. Chill for 1 hour.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Fold over the next 2.5cm/1in and continue like this along the edge, to create a rope-like design which will seal the pasty. Put the pasties onto a greased baking sheet and brush them with beaten egg. Chill for 1 hour."
+    },
+    {
+      "order": 8,
+      "text": "Bake the pasties for 1 hour, turning the tray around after 30 minutes so they brown evenly. Serve warm.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Bake the pasties for 1 hour, turning the tray around after 30 minutes so they brown evenly. Serve warm."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/cornish_steak_pasty_32086_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "You can make four large pasties, or more smaller ones."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 60,
+      "ratingValue": 2.75
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Rick Stein’s perfect Cornish pasty: buttery, flaky pastry with a well-seasoned filling of steak, potatoes, swede and onions.",
+    "headline": "Cornish steak pasty",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/cornish_steak_pasty_32086_16x9.jpg"
+    },
+    "name": "Cornish steak pasty",
+    "author": {
+      "@type": "Person",
+      "name": "Rick Stein"
+    },
+    "datePublished": "2022-01-21T15:00:00.000Z",
+    "dateModified": "2025-11-05T08:33:38.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 60,
+      "ratingValue": 2.75
+    },
+    "prepTime": "PT2H",
+    "cookTime": "PT2H",
+    "keywords": "bar snack, bonfire night snacks, coronation party, english regional classics , february, football pies, hot buffet, retro british, classic savoury pies, street party, bonfire night, father's day, lunch, st george's day, pasty, steak, nut free, pregnancy friendly, Rick Stein's Cornwall",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "British",
+    "recipeIngredient": [
+      "500g/1lb 2oz plain flour, plus extra for dusting",
+      "1 tsp salt",
+      "250g/9oz cold butter, cut into 2cm/¾in cubes",
+      "150g/5½oz swede, peeled and sliced into 1cm/½in thick chips",
+      "250g/9oz floury potatoes, peeled and sliced into 1cm/½in thick chips",
+      "100g/3½oz onion, chopped",
+      "400g/14oz skirt steak, cut into 1cm/½in pieces",
+      "1 free-range egg, beaten, to glaze",
+      "salt and freshly ground black pepper"
+    ],
+    "recipeInstructions": [
+      "To make the pastry, sift the flour and salt into a bowl, add half the butter and rub it in using your fingertips until the mixture resembles fine crumbs. Stir in the rest of the butter and 150ml/5½fl oz ice cold water and bring it together to form a soft dough. ",
+      "Knead briefly until smooth, then roll out into a rough rectangle. Fold up the bottom third of the dough, then fold down the top third. Wrap and chill for 30 minutes.",
+      "Unwrap the dough and roll it out on a lightly floured surface to form a rectangle, as in step 1. Fold up the bottom third and then fold down the top third and roll out once more; you should no longer be able to see the pieces of butter. Fold up the dough once more, wrap and chill for another 30 minutes. ",
+      "Roll out the dough on a floured surface until it is 3mm/⅛in thick and cut out four 20cm/8in discs. Spoon equal amounts of the filling into the centre of each pastry disc and lightly brush the edge of one half of each disc with water. ",
+      "Preheat the oven to 180C/160C Fan/Gas 4. ",
+      "Bring the edges together over the top of the filling and press together well. Then, working from left to right, fold in the corner of the pasty and fold 2.5cm/1in of the edge inwards. ",
+      "Fold over the next 2.5cm/1in and continue like this along the edge, to create a rope-like design which will seal the pasty. Put the pasties onto a greased baking sheet and brush them with beaten egg. Chill for 1 hour.",
+      "Bake the pasties for 1 hour, turning the tray around after 30 minutes so they brown evenly. Serve warm."
+    ],
+    "recipeYield": "Makes 6-8 large pasties",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

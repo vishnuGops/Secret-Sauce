@@ -1,0 +1,380 @@
+{
+  "schemaVersion": 1,
+  "id": "eli-giannopoulos/greek-style-pancakes-with-honey-and-walnuts-tiganites",
+  "slug": "greek-style-pancakes-with-honey-and-walnuts-tiganites",
+  "chefId": "chef_eli-giannopoulos",
+  "chefSlug": "eli-giannopoulos",
+  "chefName": "Eli K. Giannopoulos",
+  "title": "Greek-style Pancakes with Honey and Walnuts (Tiganites)",
+  "description": "Make these delicious and fluffy Greek-style pancakes (tiganites) from scratch, in less than 30 minutes with ingredients you already have! Some Greeks believe the popular breakfast dish 'tiganites' was the first documented pancake in the world. I don't really know if it was the first, but it surely is the easiest!",
+  "source": {
+    "sourceUrl": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/",
+    "finalUrl": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/",
+    "retrievedAt": "2026-09-11T02:47:55.237Z",
+    "publisher": null,
+    "authorRaw": [
+      "Eli K. Giannopoulos"
+    ],
+    "datePublished": "2013-12-15",
+    "rights": "My Greek Dish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "c1bba0f816fa3c6e3ab55769dc30d6c3658472326b62e013f8c9e0ce3156fce2",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "15"
+    ],
+    "servings": 15
+  },
+  "timing": {
+    "prepMinutes": 15,
+    "cookMinutes": 10,
+    "totalMinutes": 25,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Greek"
+  ],
+  "category": [
+    "Breakfast"
+  ],
+  "keywords": [
+    "Tiganites",
+    "Greek Pancakes",
+    "Tiganites Recipe",
+    "Greek Style Pancakes",
+    "Ancient Greek Pancakes"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "2 cups all-purpose flour",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "cups",
+          "name": "all-purpose flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp dry yeast",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "dry yeast",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 tsp salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 cups of lukewarm water",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "cups",
+          "name": "of lukewarm water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 cup warm honey",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 cup warm honey",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "some chopped walnuts",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "some chopped walnuts",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Pour in a large bowl the water and yeast. Stir with a fork, so that the yeast dissolves completely.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Pour in a large bowl the water and yeast. Stir with a fork, so that the yeast dissolves completely.",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/#instruction-step-1"
+      }
+    },
+    {
+      "order": 2,
+      "text": "In the same bowl add the rest of the ingredients for the pancakes and whisk to form a smooth batter.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In the same bowl add the rest of the ingredients for the pancakes and whisk to form a smooth batter.",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/#instruction-step-2"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Cover with some plastic wrap and leave aside for 15-20 minutes, until the batter starts to bubble.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Cover with some plastic wrap and leave aside for 15-20 minutes, until the batter starts to bubble.",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/#instruction-step-3"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Heat a nonstick large skillet or griddle pan over medium heat and pour in enough corn oil to cover the bottom of the pan (approx. 2 tbsps).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Heat a nonstick large skillet or griddle pan over medium heat and pour in enough corn oil to cover the bottom of the pan (approx. 2 tbsps).",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/#instruction-step-4"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Spoon 1-2 tbsps of the batter (depending on how large you want them) in the hot oil. Don’t overcrowd the pan; fry the pancakes in batches (3-4 at a time). Fry until nicely coloured, flipping them occasionally.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Spoon 1-2 tbsps of the batter (depending on how large you want them) in the hot oil. Don&#8217;t overcrowd the pan; fry the pancakes in batches (3-4 at a time). Fry until nicely coloured, flipping them occasionally.",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/#instruction-step-5"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Transfer to some kitchen paper, to absorb the oil and repeat with the rest.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Transfer to some kitchen paper, to absorb the oil and repeat with the rest.",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/#instruction-step-6"
+      }
+    },
+    {
+      "order": 7,
+      "text": "Serve while still warm with a drizzle of warm honey and sprinkle with chopped walnuts. Enjoy!",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Serve while still warm with a drizzle of warm honey and sprinkle with chopped walnuts. Enjoy!",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/#instruction-step-7"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "servingSize": "1 pancake",
+    "calories": "119 calories",
+    "sugarContent": "9.7g",
+    "sodiumContent": "79.8mg",
+    "fatContent": "2.4g",
+    "saturatedFatContent": "0.2g",
+    "unsaturatedFatContent": "1.9g",
+    "transFatContent": "0g",
+    "carbohydrateContent": "22.9g",
+    "fiberContent": "0.8",
+    "proteinContent": "2.4g",
+    "cholesterolContent": "0mg"
+  },
+  "media": {
+    "coverImages": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Greek-style-Pancakes-with-Honey-and-Walnuts-Tiganites-2-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Greek-style-Pancakes-with-Honey-and-Walnuts-Tiganites-2-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Greek-style-Pancakes-with-Honey-and-Walnuts-Tiganites-2-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Greek-style-Pancakes-with-Honey-and-Walnuts-Tiganites-2.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "cookingMethod": "Fried",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "531",
+      "ratingValue": "4.8"
+    }
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org/",
+    "@type": "Recipe",
+    "name": "Greek-style Pancakes with Honey and Walnuts (Tiganites)",
+    "description": "Make these delicious and fluffy Greek-style pancakes (tiganites) from scratch, in less than 30 minutes with ingredients you already have! Some Greeks believe the popular breakfast dish 'tiganites' was the first documented pancake in the world. I don't really know if it was the first, but it surely is the easiest!",
+    "author": {
+      "@type": "Person",
+      "name": "Eli K. Giannopoulos"
+    },
+    "keywords": "Tiganites, Greek Pancakes, Tiganites Recipe, Greek Style Pancakes, Ancient Greek Pancakes",
+    "image": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Greek-style-Pancakes-with-Honey-and-Walnuts-Tiganites-2-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Greek-style-Pancakes-with-Honey-and-Walnuts-Tiganites-2-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Greek-style-Pancakes-with-Honey-and-Walnuts-Tiganites-2-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Greek-style-Pancakes-with-Honey-and-Walnuts-Tiganites-2.jpg"
+    ],
+    "url": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/",
+    "recipeIngredient": [
+      "2 cups all-purpose flour",
+      "1 tsp dry yeast",
+      "1/2 tsp salt",
+      "1 tsp sugar",
+      "2 cups of lukewarm water",
+      "1/2 cup warm honey",
+      "some chopped walnuts"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Pour in a large bowl the water and yeast. Stir with a fork, so that the yeast dissolves completely.",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/#instruction-step-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "In the same bowl add the rest of the ingredients for the pancakes and whisk to form a smooth batter.",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/#instruction-step-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Cover with some plastic wrap and leave aside for 15-20 minutes, until the batter starts to bubble.",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/#instruction-step-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Heat a nonstick large skillet or griddle pan over medium heat and pour in enough corn oil to cover the bottom of the pan (approx. 2 tbsps).",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/#instruction-step-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Spoon 1-2 tbsps of the batter (depending on how large you want them) in the hot oil. Don&#8217;t overcrowd the pan; fry the pancakes in batches (3-4 at a time). Fry until nicely coloured, flipping them occasionally.",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/#instruction-step-5"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Transfer to some kitchen paper, to absorb the oil and repeat with the rest.",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/#instruction-step-6"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Serve while still warm with a drizzle of warm honey and sprinkle with chopped walnuts. Enjoy!",
+        "url": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/#instruction-step-7"
+      }
+    ],
+    "prepTime": "PT15M",
+    "cookTime": "PT10M",
+    "totalTime": "PT25M",
+    "recipeYield": "15",
+    "recipeCategory": "Breakfast",
+    "cookingMethod": "Fried",
+    "recipeCuisine": "Greek",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "531",
+      "ratingValue": "4.8"
+    },
+    "nutrition": {
+      "servingSize": "1 pancake",
+      "calories": "119 calories",
+      "sugarContent": "9.7g",
+      "sodiumContent": "79.8mg",
+      "fatContent": "2.4g",
+      "saturatedFatContent": "0.2g",
+      "unsaturatedFatContent": "1.9g",
+      "transFatContent": "0g",
+      "carbohydrateContent": "22.9g",
+      "fiberContent": "0.8",
+      "proteinContent": "2.4g",
+      "cholesterolContent": "0mg",
+      "@type": "nutritionInformation"
+    },
+    "datePublished": "2013-12-15",
+    "@id": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/#recipe",
+    "isPartOf": {
+      "@id": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/#article"
+    },
+    "mainEntityOfPage": "https://www.mygreekdish.com/recipe/greek-style-pancakes-honey-walnuts-tiganites/"
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:cookingMethod|aggregateRating"
+  ]
+}

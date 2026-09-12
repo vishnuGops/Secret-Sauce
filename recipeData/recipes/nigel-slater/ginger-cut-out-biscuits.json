@@ -1,0 +1,386 @@
+{
+  "schemaVersion": 1,
+  "id": "nigel-slater/ginger-cut-out-biscuits",
+  "slug": "ginger-cut-out-biscuits",
+  "chefId": "chef_nigel-slater",
+  "chefSlug": "nigel-slater",
+  "chefName": "Nigel Slater",
+  "title": "Ginger cut-out biscuits",
+  "description": "The plentiful spices in these grown-up ginger biscuits will stop them becoming too sweet, even when iced.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/ginger_biscuits_87673",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/ginger_biscuits_87673",
+    "retrievedAt": "2026-09-11T00:28:51.575Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Nigel Slater"
+    ],
+    "datePublished": "2014-12-24T11:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "66111704194063d8db113949e36e633808509f0aa45da53def90a1942328ac8c",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": []
+    }
+  },
+  "yield": {
+    "raw": [
+      "Makes 10-12 biscuits"
+    ],
+    "servings": 10
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Cakes and baking"
+  ],
+  "keywords": [
+    "quick",
+    "baking with spice",
+    "best iced biscuits",
+    "christmas biscuit",
+    "christmas",
+    "ginger biscuit",
+    "ground ginger",
+    "nut free",
+    "pregnancy friendly",
+    "vegetarian",
+    "Nigel Slater's 12 Tastes of Christmas"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "70g/2½oz butter",
+          "quantity": 70,
+          "quantityText": "70",
+          "unit": "g",
+          "name": "/2½oz butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "80g/2¾oz light muscovado sugar",
+          "quantity": 80,
+          "quantityText": "80",
+          "unit": "g",
+          "name": "/2¾oz light muscovado sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp black treacle or molasses",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "black treacle or molasses",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "8 cardamom pods",
+          "quantity": 8,
+          "quantityText": "8",
+          "unit": null,
+          "name": "cardamom pods",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "250g/9oz plain flour",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "/9oz plain flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp bicarbonate of soda",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "bicarbonate of soda",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp ground cinnamon",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "ground cinnamon",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground ginger",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground ginger",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 free-range egg, yolk only",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "free-range egg, yolk only",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "around 2 tbsp milk",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "around 2 tbsp milk",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp icing sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "icing sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 lemon, juice only",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "lemon, juice only",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 180C/350F/Gas 4. Lightly butter a baking tray.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 180C/350F/Gas 4. Lightly butter a baking tray."
+    },
+    {
+      "order": 2,
+      "text": "Cream the butter and sugar together in a bowl with an electric mixer until light and fluffy. Beat in the black treacle or molasses.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Cream the butter and sugar together in a bowl with an electric mixer until light and fluffy. Beat in the black treacle or molasses."
+    },
+    {
+      "order": 3,
+      "text": "Break the cardamom pods open and crush the seeds finely. Add them to the mixture with the flour, bicarbonate of soda, cinnamon, ginger and egg yolk.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Break the cardamom pods open and crush the seeds finely. Add them to the mixture with the flour, bicarbonate of soda, cinnamon, ginger and egg yolk. "
+    },
+    {
+      "order": 4,
+      "text": "Beat in a couple of tablespoons of milk and then bring it all together to form a dough.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Beat in a couple of tablespoons of milk and then bring it all together to form a dough."
+    },
+    {
+      "order": 5,
+      "text": "Roll the dough out on a floured surface to a £1 coin thickness. Cut into your desired shapes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Roll the dough out on a floured surface to a £1 coin thickness. Cut into your desired shapes."
+    },
+    {
+      "order": 6,
+      "text": "Lay the biscuits on the buttered baking tray and bake for 12-14 minutes. Remove from the oven and cool on cooling rack. Repeat with the remaining dough.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Lay the biscuits on the buttered baking tray and bake for 12-14 minutes. Remove from the oven and cool on cooling rack. Repeat with the remaining dough."
+    },
+    {
+      "order": 7,
+      "text": "Combine the icing sugar and the lemon juice in a bowl until smooth. Ice the biscuits with a pattern of your choosing.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Combine the icing sugar and the lemon juice in a bowl until smooth. Ice the biscuits with a pattern of your choosing."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/ginger_biscuits_87673_16x9.jpg"
+    ],
+    "video": [
+      {
+        "description": "The plentiful spices in these grown-up ginger biscuits will stop them becoming too sweet, even when iced.",
+        "duration": "PT3M36S",
+        "name": "Ginger biscuits",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/ginger_biscuits_87673_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:15:54.000Z"
+      }
+    ]
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 9,
+      "ratingValue": 4.666666666666667
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "The plentiful spices in these grown-up ginger biscuits will stop them becoming too sweet, even when iced.",
+        "duration": "PT3M36S",
+        "name": "Ginger biscuits",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/ginger_biscuits_87673_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:15:54.000Z"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "The plentiful spices in these grown-up ginger biscuits will stop them becoming too sweet, even when iced. ",
+    "headline": "Ginger cut-out biscuits",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/ginger_biscuits_87673_16x9.jpg"
+    },
+    "name": "Ginger cut-out biscuits",
+    "author": {
+      "@type": "Person",
+      "name": "Nigel Slater"
+    },
+    "datePublished": "2014-12-24T11:00:00.000Z",
+    "dateModified": "2025-01-22T11:59:47.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 9,
+      "ratingValue": 4.666666666666667
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, baking with spice, best iced biscuits, christmas biscuit, christmas, ginger biscuit, ground ginger, nut free, pregnancy friendly, vegetarian, Nigel Slater's 12 Tastes of Christmas",
+    "recipeCategory": "Cakes and baking",
+    "recipeIngredient": [
+      "70g/2½oz butter",
+      "80g/2¾oz light muscovado sugar",
+      "2 tbsp black treacle or molasses",
+      "8 cardamom pods",
+      "250g/9oz plain flour",
+      "½ tsp bicarbonate of soda",
+      "2 tsp ground cinnamon",
+      "1 tsp ground ginger",
+      "1 free-range egg, yolk only",
+      "around 2 tbsp milk",
+      "1 tbsp icing sugar",
+      "1 lemon, juice only"
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 180C/350F/Gas 4. Lightly butter a baking tray.",
+      "Cream the butter and sugar together in a bowl with an electric mixer until light and fluffy. Beat in the black treacle or molasses.",
+      "Break the cardamom pods open and crush the seeds finely. Add them to the mixture with the flour, bicarbonate of soda, cinnamon, ginger and egg yolk. ",
+      "Beat in a couple of tablespoons of milk and then bring it all together to form a dough.",
+      "Roll the dough out on a floured surface to a £1 coin thickness. Cut into your desired shapes.",
+      "Lay the biscuits on the buttered baking tray and bake for 12-14 minutes. Remove from the oven and cool on cooling rack. Repeat with the remaining dough.",
+      "Combine the icing sugar and the lemon juice in a bowl until smooth. Ice the biscuits with a pattern of your choosing."
+    ],
+    "recipeYield": "Makes 10-12 biscuits",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "The plentiful spices in these grown-up ginger biscuits will stop them becoming too sweet, even when iced.",
+        "duration": "PT3M36S",
+        "name": "Ginger biscuits",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/ginger_biscuits_87673_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:15:54.000Z"
+      }
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet|video"
+  ]
+}

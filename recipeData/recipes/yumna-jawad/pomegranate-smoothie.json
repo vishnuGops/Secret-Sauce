@@ -1,0 +1,338 @@
+{
+  "schemaVersion": 1,
+  "id": "yumna-jawad/pomegranate-smoothie",
+  "slug": "pomegranate-smoothie",
+  "chefId": "chef_yumna-jawad",
+  "chefSlug": "yumna-jawad",
+  "chefName": "Yumna Jawad",
+  "title": "Pomegranate Smoothie",
+  "description": "Simple, fast, nutrient dense, and an amazing shade of pink, this pomegranate smoothie is made with only 5 ingredients that are easy to find throughout the winter!",
+  "source": {
+    "sourceUrl": "https://feelgoodfoodie.net/recipe/healthy-orange-pomegranate-paradise-smoothie/",
+    "finalUrl": "https://feelgoodfoodie.net/recipe/healthy-orange-pomegranate-paradise-smoothie/",
+    "retrievedAt": "2026-09-11T02:46:58.669Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2020-11-27T23:09:00+00:00",
+    "rights": "Feel Good Foodie. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "8808a3bd88e397c090063c5b55d7f799f95e55ae4d45e33f3f22b655724ae435",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": [
+        "equipment-from-html: 1"
+      ]
+    },
+    "robots": "allows recipe paths; /wp-admin/ and /signup/ disallowed"
+  },
+  "yield": {
+    "raw": [
+      "1",
+      "1 serving"
+    ],
+    "servings": 1
+  },
+  "timing": {
+    "prepMinutes": 5,
+    "cookMinutes": null,
+    "totalMinutes": 5,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "American"
+  ],
+  "category": [
+    "Beverages"
+  ],
+  "keywords": [
+    "how to make pomegranate smoothie",
+    "Orange Smoothie",
+    "pomegranate seed smoothie",
+    "Pomegranate Smoothie",
+    "pomegranate smoothie recipe",
+    "pomegranate smoothie with yogurt",
+    "tropical smoothie"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "2 cups orange juice",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "cups",
+          "name": "orange juice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 cup strawberries",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "cup",
+          "name": "strawberries",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 banana",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "banana",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ cup Greek yogurt",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "cup",
+          "name": "Greek yogurt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ cup pomegranate arils (plus more for serving)",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "cup",
+          "name": "pomegranate arils (plus more for serving)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Place all the ingredients in a high-speed blender, blend for 60-120 seconds until you get a smooth and creamy texture.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Place all the ingredients in a high-speed blender, blend for 60-120 seconds until you get a smooth and creamy texture.",
+        "name": "Place all the ingredients in a high-speed blender, blend for 60-120 seconds until you get a smooth and creamy texture.",
+        "url": "https://feelgoodfoodie.net/recipe/healthy-orange-pomegranate-paradise-smoothie/#wprm-recipe-6169-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Taste the smoothie, adding milk if it's too thick or a sweetener if it’s not sweet enough for you. Pour into a cup or mason jar. Enjoy immediately, or store in fridge for up to 24 hours.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Taste the smoothie, adding milk if it&#39;s too thick or a sweetener if it’s not sweet enough for you. Pour into a cup or mason jar. Enjoy immediately, or store in fridge for up to 24 hours.",
+        "name": "Taste the smoothie, adding milk if it&#39;s too thick or a sweetener if it’s not sweet enough for you. Pour into a cup or mason jar. Enjoy immediately, or store in fridge for up to 24 hours.",
+        "url": "https://feelgoodfoodie.net/recipe/healthy-orange-pomegranate-paradise-smoothie/#wprm-recipe-6169-step-0-1"
+      }
+    }
+  ],
+  "equipment": [
+    "High Speed Blender"
+  ],
+  "supplies": [],
+  "nutrition": {
+    "servingSize": "1 glass",
+    "calories": "300 kcal",
+    "carbohydrateContent": "72 g",
+    "proteinContent": "4 g",
+    "fatContent": "2 g",
+    "sodiumContent": "6 mg",
+    "fiberContent": "9 g",
+    "sugarContent": "47 g"
+  },
+  "media": {
+    "coverImages": [
+      "https://feelgoodfoodie.net/wp-content/uploads/2016/10/Pomegranate-Smoothie-5.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2016/10/Pomegranate-Smoothie-5-500x500.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2016/10/Pomegranate-Smoothie-5-500x375.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2016/10/Pomegranate-Smoothie-5-480x270.jpg"
+    ],
+    "video": {
+      "name": "Pomegranate Smoothie",
+      "description": "Simple, fast, nutrient dense and an amazing shade of pink, this healthy Pomegranate Smoothie is made with only 5 ingredients- easy to whip up",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/2EIPUkkU-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/2EIPUkkU.mp4",
+      "uploadDate": "2021-12-17T21:33:56.000Z",
+      "@type": "VideoObject"
+    }
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "video": {
+      "name": "Pomegranate Smoothie",
+      "description": "Simple, fast, nutrient dense and an amazing shade of pink, this healthy Pomegranate Smoothie is made with only 5 ingredients- easy to whip up",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/2EIPUkkU-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/2EIPUkkU.mp4",
+      "uploadDate": "2021-12-17T21:33:56.000Z",
+      "@type": "VideoObject"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.97",
+      "ratingCount": "65",
+      "reviewCount": "2"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "3"
+        },
+        "reviewBody": "It’s ok. A little too orangey tasting for our liking. Next time I’ll use 1/2 the juice and add some ice.",
+        "author": {
+          "@type": "Person",
+          "name": "Gold"
+        },
+        "datePublished": "2025-08-23"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thanks for sharing awesome article. I'll surely make it on this weekend with the help of my newly purchased hand blender. It's now pretty clear that we can make smoothie even by combination of more than two fruits. You deserve 5 Stars.",
+        "author": {
+          "@type": "Person",
+          "name": "Shailesha Bhaduroya"
+        },
+        "datePublished": "2021-03-15"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Pomegranate Smoothie",
+    "author": {
+      "@id": "https://feelgoodfoodie.net/#/schema/person/7a5a734de72932611fa5814fce8c12d5"
+    },
+    "description": "Simple, fast, nutrient dense, and an amazing shade of pink, this pomegranate smoothie is made with only 5 ingredients that are easy to find throughout the winter!",
+    "datePublished": "2020-11-27T23:09:00+00:00",
+    "image": [
+      "https://feelgoodfoodie.net/wp-content/uploads/2016/10/Pomegranate-Smoothie-5.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2016/10/Pomegranate-Smoothie-5-500x500.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2016/10/Pomegranate-Smoothie-5-500x375.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2016/10/Pomegranate-Smoothie-5-480x270.jpg"
+    ],
+    "video": {
+      "name": "Pomegranate Smoothie",
+      "description": "Simple, fast, nutrient dense and an amazing shade of pink, this healthy Pomegranate Smoothie is made with only 5 ingredients- easy to whip up",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/2EIPUkkU-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/2EIPUkkU.mp4",
+      "uploadDate": "2021-12-17T21:33:56.000Z",
+      "@type": "VideoObject"
+    },
+    "recipeYield": [
+      "1",
+      "1 serving"
+    ],
+    "prepTime": "PT5M",
+    "totalTime": "PT5M",
+    "recipeIngredient": [
+      "2 cups orange juice",
+      "1 cup strawberries",
+      "1  banana",
+      "½ cup Greek yogurt",
+      "½ cup pomegranate arils (plus more for serving)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Place all the ingredients in a high-speed blender, blend for 60-120 seconds until you get a smooth and creamy texture.",
+        "name": "Place all the ingredients in a high-speed blender, blend for 60-120 seconds until you get a smooth and creamy texture.",
+        "url": "https://feelgoodfoodie.net/recipe/healthy-orange-pomegranate-paradise-smoothie/#wprm-recipe-6169-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Taste the smoothie, adding milk if it&#39;s too thick or a sweetener if it’s not sweet enough for you. Pour into a cup or mason jar. Enjoy immediately, or store in fridge for up to 24 hours.",
+        "name": "Taste the smoothie, adding milk if it&#39;s too thick or a sweetener if it’s not sweet enough for you. Pour into a cup or mason jar. Enjoy immediately, or store in fridge for up to 24 hours.",
+        "url": "https://feelgoodfoodie.net/recipe/healthy-orange-pomegranate-paradise-smoothie/#wprm-recipe-6169-step-0-1"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.97",
+      "ratingCount": "65",
+      "reviewCount": "2"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "3"
+        },
+        "reviewBody": "It’s ok. A little too orangey tasting for our liking. Next time I’ll use 1/2 the juice and add some ice.",
+        "author": {
+          "@type": "Person",
+          "name": "Gold"
+        },
+        "datePublished": "2025-08-23"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thanks for sharing awesome article. I'll surely make it on this weekend with the help of my newly purchased hand blender. It's now pretty clear that we can make smoothie even by combination of more than two fruits. You deserve 5 Stars.",
+        "author": {
+          "@type": "Person",
+          "name": "Shailesha Bhaduroya"
+        },
+        "datePublished": "2021-03-15"
+      }
+    ],
+    "recipeCategory": [
+      "Beverages"
+    ],
+    "recipeCuisine": [
+      "American"
+    ],
+    "keywords": "how to make pomegranate smoothie, Orange Smoothie, pomegranate seed smoothie, Pomegranate Smoothie, pomegranate smoothie recipe, pomegranate smoothie with yogurt, tropical smoothie",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "servingSize": "1 glass",
+      "calories": "300 kcal",
+      "carbohydrateContent": "72 g",
+      "proteinContent": "4 g",
+      "fatContent": "2 g",
+      "sodiumContent": "6 mg",
+      "fiberContent": "9 g",
+      "sugarContent": "47 g"
+    },
+    "@id": "https://feelgoodfoodie.net/recipe/healthy-orange-pomegranate-paradise-smoothie/#recipe",
+    "isPartOf": {
+      "@id": "https://feelgoodfoodie.net/recipe/healthy-orange-pomegranate-paradise-smoothie/#article"
+    },
+    "mainEntityOfPage": "https://feelgoodfoodie.net/recipe/healthy-orange-pomegranate-paradise-smoothie/"
+  },
+  "audit": [
+    "no-cook-time",
+    "unmapped:video|aggregateRating|review"
+  ]
+}

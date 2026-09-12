@@ -1,0 +1,367 @@
+{
+  "schemaVersion": 1,
+  "id": "denise-browning/30-minute-cheese-stuffed-garlic-bread-rolls",
+  "slug": "30-minute-cheese-stuffed-garlic-bread-rolls",
+  "chefId": "chef_denise-browning",
+  "chefSlug": "denise-browning",
+  "chefName": "Denise Browning",
+  "title": "30-Minute Cheese Stuffed Garlic Bread Rolls",
+  "description": "Quick Garlic Bread Rolls packed with pockets of melty, gooey mozzarella cheese brushed on top with garlic-herb butter. One of the best skillet breads ever!",
+  "source": {
+    "sourceUrl": "https://www.easyanddelish.com/cheese-stuffed-garlic-bread-rolls/",
+    "finalUrl": "https://www.easyanddelish.com/cheese-stuffed-garlic-bread-rolls/",
+    "retrievedAt": "2026-09-11T02:47:53.048Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2019-03-04T23:13:12+00:00",
+    "rights": "Easy and Delish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "76cef83401dc039134461f0643102d7add8e4c627cb47024484f51c998a60b5d",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "24"
+    ],
+    "servings": 24
+  },
+  "timing": {
+    "prepMinutes": 10,
+    "cookMinutes": 20,
+    "totalMinutes": 30,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "American"
+  ],
+  "category": [
+    "Appetizer",
+    "Side Dish"
+  ],
+  "keywords": [
+    "garlic bread rolls"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "16 oz crescent rolls ((I used Pillsbury -- Original))",
+          "quantity": 16,
+          "quantityText": "16",
+          "unit": "oz",
+          "name": "crescent rolls ((I used Pillsbury -- Original))",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "8 mozzarella sticks",
+          "quantity": 8,
+          "quantityText": "8",
+          "unit": null,
+          "name": "mozzarella sticks",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/4 cup grated Parmesan cheese",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/4 cup grated Parmesan cheese",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp unsalted butter, melted",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "unsalted butter",
+          "note": "melted",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp olive oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp chopped parsley",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "chopped parsley",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp Italian seasoning",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "Italian seasoning",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp garlic powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "garlic powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 tsp salt",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat oven to 375 degrees F. Spray a 10-inch cast-iron skillet with cooking spray; set aside. Unroll refrigerated dough over lightly floured surface.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Preheat oven to 375 degrees F. Spray a 10-inch cast-iron skillet with cooking spray; set aside.&nbsp;Unroll refrigerated dough over lightly floured surface.&nbsp;",
+        "name": "Preheat oven to 375 degrees F. Spray a 10-inch cast-iron skillet with cooking spray; set aside.&nbsp;Unroll refrigerated dough over lightly floured surface.&nbsp;",
+        "url": "https://www.easyanddelish.com/cheese-stuffed-garlic-bread-rolls/#wprm-recipe-49844-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Using a 2 1/2-inch round cutter, cut dough into 24 rounds, re-rolling scraps as necessary. Place 1 (1-inch) piece of mozzarella into the center of each round and wrap dough around cheese, pinching seam to seal.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Using a 2 1/2-inch round cutter, cut dough into 24 rounds, re-rolling scraps as necessary.  Place 1 (1-inch) piece of mozzarella into the center of each round and wrap dough around cheese, pinching seam to seal.",
+        "name": "Using a 2 1/2-inch round cutter, cut dough into 24 rounds, re-rolling scraps as necessary.  Place 1 (1-inch) piece of mozzarella into the center of each round and wrap dough around cheese, pinching seam to seal.",
+        "url": "https://www.easyanddelish.com/cheese-stuffed-garlic-bread-rolls/#wprm-recipe-49844-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Arrange balls/rolls in prepared skillet, seam side down. In addition, place 3/8-inch pieces of mozzarella between rolls. Bake for 15 minutes, or until golden brown. Then sprinkle with Parmesan and bake an additional 5 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Arrange balls/rolls in prepared skillet, seam side down. In addition, place 3/8-inch pieces of mozzarella between rolls. Bake for 15 minutes, or until golden brown. Then sprinkle with Parmesan and bake an additional 5 minutes.&nbsp;",
+        "name": "Arrange balls/rolls in prepared skillet, seam side down. In addition, place 3/8-inch pieces of mozzarella between rolls. Bake for 15 minutes, or until golden brown. Then sprinkle with Parmesan and bake an additional 5 minutes.&nbsp;",
+        "url": "https://www.easyanddelish.com/cheese-stuffed-garlic-bread-rolls/#wprm-recipe-49844-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Meanwhile, stir together melted butter, olive oil, chopped parsley, Italian seasoning, garlic powder, and 1/2 tsp salt in a small bowl. Brush rolls with butter mixture as soon as they come out of the oven. Serve immediately and enjoy!",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Meanwhile, stir together melted butter, olive oil, chopped parsley, Italian seasoning, garlic powder, and 1/2 tsp salt in a small bowl. Brush rolls with butter mixture as soon as they come out of the oven. Serve immediately and enjoy!",
+        "name": "Meanwhile, stir together melted butter, olive oil, chopped parsley, Italian seasoning, garlic powder, and 1/2 tsp salt in a small bowl. Brush rolls with butter mixture as soon as they come out of the oven. Serve immediately and enjoy!",
+        "url": "https://www.easyanddelish.com/cheese-stuffed-garlic-bread-rolls/#wprm-recipe-49844-step-0-3"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "111 kcal",
+    "carbohydrateContent": "8 g",
+    "proteinContent": "3 g",
+    "fatContent": "7 g",
+    "saturatedFatContent": "3 g",
+    "cholesterolContent": "9 mg",
+    "sodiumContent": "291 mg",
+    "sugarContent": "1 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://www.easyanddelish.com/wp-content/uploads/2019/02/Cheese-stuffed-garlic-bread-rolls-featured.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2019/02/Cheese-stuffed-garlic-bread-rolls-featured-500x500.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2019/02/Cheese-stuffed-garlic-bread-rolls-featured-500x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2019/02/Cheese-stuffed-garlic-bread-rolls-featured-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "1",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Bread rolls is one of my favorites, I think there is something in it that makes it so interesting to my taste buds.  But I can’t remember when I tasted anything like this cheese stuffed bread rolls. I immediately grab the chance and bake it myself, and it’s really good! I might have something to sell this time of pandemic!",
+        "author": {
+          "@type": "Person",
+          "name": "Cole Beasley"
+        },
+        "datePublished": "2020-05-08"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "30-Minute Cheese Stuffed Garlic Bread Rolls",
+    "author": {
+      "@id": "https://www.easyanddelish.com/#/schema/person/4aa289bf19bceaa733ca6900648cfc47"
+    },
+    "description": "Quick Garlic Bread Rolls packed with pockets of melty, gooey mozzarella cheese brushed on top with garlic-herb butter. One of the best skillet breads ever!",
+    "datePublished": "2019-03-04T23:13:12+00:00",
+    "image": [
+      "https://www.easyanddelish.com/wp-content/uploads/2019/02/Cheese-stuffed-garlic-bread-rolls-featured.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2019/02/Cheese-stuffed-garlic-bread-rolls-featured-500x500.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2019/02/Cheese-stuffed-garlic-bread-rolls-featured-500x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2019/02/Cheese-stuffed-garlic-bread-rolls-featured-480x270.jpg"
+    ],
+    "recipeYield": [
+      "24"
+    ],
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "totalTime": "PT30M",
+    "recipeIngredient": [
+      "16 oz crescent rolls ((I used Pillsbury -- Original))",
+      "8  mozzarella sticks",
+      "1/4 cup grated Parmesan cheese",
+      "3 tbsp unsalted butter, melted",
+      "1 tbsp olive oil",
+      "2 tbsp chopped parsley",
+      "1 tsp Italian seasoning",
+      "1 tsp garlic powder",
+      "1/2 tsp salt"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Preheat oven to 375 degrees F. Spray a 10-inch cast-iron skillet with cooking spray; set aside.&nbsp;Unroll refrigerated dough over lightly floured surface.&nbsp;",
+        "name": "Preheat oven to 375 degrees F. Spray a 10-inch cast-iron skillet with cooking spray; set aside.&nbsp;Unroll refrigerated dough over lightly floured surface.&nbsp;",
+        "url": "https://www.easyanddelish.com/cheese-stuffed-garlic-bread-rolls/#wprm-recipe-49844-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Using a 2 1/2-inch round cutter, cut dough into 24 rounds, re-rolling scraps as necessary.  Place 1 (1-inch) piece of mozzarella into the center of each round and wrap dough around cheese, pinching seam to seal.",
+        "name": "Using a 2 1/2-inch round cutter, cut dough into 24 rounds, re-rolling scraps as necessary.  Place 1 (1-inch) piece of mozzarella into the center of each round and wrap dough around cheese, pinching seam to seal.",
+        "url": "https://www.easyanddelish.com/cheese-stuffed-garlic-bread-rolls/#wprm-recipe-49844-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Arrange balls/rolls in prepared skillet, seam side down. In addition, place 3/8-inch pieces of mozzarella between rolls. Bake for 15 minutes, or until golden brown. Then sprinkle with Parmesan and bake an additional 5 minutes.&nbsp;",
+        "name": "Arrange balls/rolls in prepared skillet, seam side down. In addition, place 3/8-inch pieces of mozzarella between rolls. Bake for 15 minutes, or until golden brown. Then sprinkle with Parmesan and bake an additional 5 minutes.&nbsp;",
+        "url": "https://www.easyanddelish.com/cheese-stuffed-garlic-bread-rolls/#wprm-recipe-49844-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Meanwhile, stir together melted butter, olive oil, chopped parsley, Italian seasoning, garlic powder, and 1/2 tsp salt in a small bowl. Brush rolls with butter mixture as soon as they come out of the oven. Serve immediately and enjoy!",
+        "name": "Meanwhile, stir together melted butter, olive oil, chopped parsley, Italian seasoning, garlic powder, and 1/2 tsp salt in a small bowl. Brush rolls with butter mixture as soon as they come out of the oven. Serve immediately and enjoy!",
+        "url": "https://www.easyanddelish.com/cheese-stuffed-garlic-bread-rolls/#wprm-recipe-49844-step-0-3"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "1",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Bread rolls is one of my favorites, I think there is something in it that makes it so interesting to my taste buds.  But I can’t remember when I tasted anything like this cheese stuffed bread rolls. I immediately grab the chance and bake it myself, and it’s really good! I might have something to sell this time of pandemic!",
+        "author": {
+          "@type": "Person",
+          "name": "Cole Beasley"
+        },
+        "datePublished": "2020-05-08"
+      }
+    ],
+    "recipeCategory": [
+      "Appetizer",
+      "Side Dish"
+    ],
+    "recipeCuisine": [
+      "American"
+    ],
+    "keywords": "garlic bread rolls",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "111 kcal",
+      "carbohydrateContent": "8 g",
+      "proteinContent": "3 g",
+      "fatContent": "7 g",
+      "saturatedFatContent": "3 g",
+      "cholesterolContent": "9 mg",
+      "sodiumContent": "291 mg",
+      "sugarContent": "1 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://www.easyanddelish.com/cheese-stuffed-garlic-bread-rolls/#recipe",
+    "isPartOf": {
+      "@id": "https://www.easyanddelish.com/cheese-stuffed-garlic-bread-rolls/#article"
+    },
+    "mainEntityOfPage": "https://www.easyanddelish.com/cheese-stuffed-garlic-bread-rolls/"
+  },
+  "audit": [
+    "unmapped:aggregateRating|review"
+  ]
+}

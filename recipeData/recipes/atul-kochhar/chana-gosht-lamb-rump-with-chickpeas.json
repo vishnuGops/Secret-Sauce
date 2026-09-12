@@ -1,0 +1,628 @@
+{
+  "schemaVersion": 1,
+  "id": "atul-kochhar/chana-gosht-lamb-rump-with-chickpeas",
+  "slug": "chana-gosht-lamb-rump-with-chickpeas",
+  "chefId": "chef_atul-kochhar",
+  "chefSlug": "atul-kochhar",
+  "chefName": "Atul Kochhar",
+  "title": "Chana gosht (lamb rump with chickpeas)",
+  "description": "A wonderful feast of spiced lamb and richly flavoured chickpea sauce. Serve with quick naan breads .",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/chana_gosht_-_lamb_rump_99176",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/chana_gosht_-_lamb_rump_99176",
+    "retrievedAt": "2026-09-11T00:28:11.505Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Atul Kochhar"
+    ],
+    "datePublished": "2015-06-06T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "15ddcac9daf524db3e916774845cf8014826bc7eff9f2949ab8752090d749e97",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 5 groups",
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 720,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Indian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "curry",
+    "chickpea",
+    "lamb rump",
+    "pregnancy friendly",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the Punjabi garam masala",
+      "items": [
+        {
+          "raw": "4 tbsp cumin seeds",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "cumin seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp coriander seeds",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "coriander seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "10 green cardamom pods, bruised",
+          "quantity": 10,
+          "quantityText": "10",
+          "unit": null,
+          "name": "green cardamom pods, bruised",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 black cardamom pods, bruised",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "black cardamom pods, bruised",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "8 cloves",
+          "quantity": 8,
+          "quantityText": "8",
+          "unit": "cloves",
+          "name": "8 cloves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp nutmeg powder",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "nutmeg powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 blades of mace",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "blades of mace",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp black pepper",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 star anise",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "star anise",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 bay leaves",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "bay leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 dried red chilli",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "dried red chilli",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the chickpeas",
+      "items": [
+        {
+          "raw": "150g/5½oz dry chickpeas, soaked in water overnight",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "g",
+          "name": "/5½oz dry chickpeas, soaked in water overnight",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 bay leaf",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "bay leaf",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 black cardamom pod",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "black cardamom pod",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 clove",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "clove",
+          "name": "1 clove",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the sauce",
+      "items": [
+        {
+          "raw": "100ml/3½fl oz vegetable",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "ml",
+          "name": "/3½fl oz vegetable",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 cloves",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": "cloves",
+          "name": "6 cloves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 bay leaves",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "bay leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 black cardamom pods",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "black cardamom pods",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "200g/7oz onions, sliced",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "g",
+          "name": "/7oz onions",
+          "note": "sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "15g ginger-garlic paste",
+          "quantity": 15,
+          "quantityText": "15",
+          "unit": "g",
+          "name": "ginger-garlic paste",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp coriander powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "coriander powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp mild red chilli powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "mild red chilli powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp cumin powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "cumin powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "200g/7oz tomatoes, chopped",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "g",
+          "name": "/7oz tomatoes",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp coriander leaves, chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "coriander leaves",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp Punjabi garam masala",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "Punjabi garam masala",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the lamb rump",
+      "items": [
+        {
+          "raw": "4 x 100g/3½oz lamb rump steaks",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "x 100g/3½oz lamb rump steaks",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1½ tbsp Punjabi garam masala",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tbsp Punjabi garam masala",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt, to taste",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt",
+          "note": "to taste",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the garnish",
+      "items": [
+        {
+          "raw": "1 red onion, sliced",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "red onion",
+          "note": "sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz baby plum tomatoes, sliced",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz baby plum tomatoes",
+          "note": "sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "¼ cucumber, sliced",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": null,
+          "name": "cucumber",
+          "note": "sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp chopped fresh coriander leaves",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "chopped fresh coriander leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 lime, juice only",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "lime, juice only",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the garam masala, put all the ingredients in a dry pan over medium heat, shaking the pan to toast the spices evenly.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the garam masala, put all the ingredients in a dry pan over medium heat, shaking the pan to toast the spices evenly."
+    },
+    {
+      "order": 2,
+      "text": "Cool the spices for a minute and tip them into an electric blender and grind to fine powder, or use a pestle and mortar. Pass through a sieve and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Cool the spices for a minute and tip them into an electric blender and grind to fine powder, or use a pestle and mortar. Pass through a sieve and set aside."
+    },
+    {
+      "order": 3,
+      "text": "To cook the chickpeas, drain away the soaking water. Put the chickpeas in a pan of clean water with the bay leaf, cardamom, clove and salt and boil until cooked. Set aside until required.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To cook the chickpeas, drain away the soaking water. Put the chickpeas in a pan of clean water with the bay leaf, cardamom, clove and salt and boil until cooked. Set aside until required."
+    },
+    {
+      "order": 4,
+      "text": "For the sauce, in a clean pan heat the oil and gently fry the cloves, bay leaf and black cardamom. Add the onions and cook until translucent. Add the ginger-garlic paste and cook well. Add dried powdered spices, salt, tomatoes and enough water to cover the mixture add the chickpeas and simmer for 30 minutes, or until the gravy thickens.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the sauce, in a clean pan heat the oil and gently fry the cloves, bay leaf and black cardamom. Add the onions and cook until translucent. Add the ginger-garlic paste and cook well. Add dried powdered spices, salt, tomatoes and enough water to cover the mixture add the chickpeas and simmer for 30 minutes, or until the gravy thickens."
+    },
+    {
+      "order": 5,
+      "text": "For the lamb, turn the oven down to 200C/180C Fan/Gas 6.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the lamb, turn the oven down to 200C/180C Fan/Gas 6."
+    },
+    {
+      "order": 6,
+      "text": "Sear the rump on a hot pan to colour it on all sides. Dust the rump with the garam masala mixed with salt. Roast in the oven for 5-7 minutes, remove and rest for 3-4 minutes then slice.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Sear the rump on a hot pan to colour it on all sides. Dust the rump with the garam masala mixed with salt. Roast in the oven for 5-7 minutes, remove and rest for 3-4 minutes then slice."
+    },
+    {
+      "order": 7,
+      "text": "In a bowl, mix together the garnish ingredients.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "In a bowl, mix together the garnish ingredients."
+    },
+    {
+      "order": 8,
+      "text": "Put the chickpeas on a serving dish and sit the sliced lamb on top. Top with the garnish and serve hot with naan bread.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put the chickpeas on a serving dish and sit the sliced lamb on top. Top with the garnish and serve hot with naan bread."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "The recipe makes more Punjabi garam masala spice mix than you will need, but the extra can be kept sealed in a jar for 2–3 weeks."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 1,
+      "ratingValue": 5
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "A wonderful feast of spiced lamb and richly flavoured chickpea sauce. Serve with <a href=\"https://www.bbc.co.uk/food/recipes/quick_naan_bread_13358\">quick naan breads</a>.",
+    "headline": "Chana gosht (lamb rump with chickpeas)",
+    "image": null,
+    "name": "Chana gosht (lamb rump with chickpeas)",
+    "author": {
+      "@type": "Person",
+      "name": "Atul Kochhar"
+    },
+    "datePublished": "2015-06-06T00:00:00.000Z",
+    "dateModified": "2019-06-10T16:17:02.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 1,
+      "ratingValue": 5
+    },
+    "prepTime": "PT12H",
+    "cookTime": "PT1H",
+    "keywords": "curry, chickpea, lamb rump, pregnancy friendly, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Indian",
+    "recipeIngredient": [
+      "4 tbsp cumin seeds",
+      "2 tbsp coriander seeds",
+      "10 green cardamom pods, bruised",
+      "4 black cardamom pods, bruised",
+      "8 cloves",
+      "½ tsp nutmeg powder",
+      "4 blades of mace",
+      "1 tbsp black pepper",
+      "2 star anise",
+      "4 bay leaves",
+      "1 dried red chilli ",
+      "150g/5½oz dry chickpeas, soaked in water overnight",
+      "1 bay leaf",
+      "1 black cardamom pod",
+      "1 clove",
+      "1 tsp salt",
+      "100ml/3½fl oz vegetable",
+      "6 cloves",
+      "2 bay leaves",
+      "3 black cardamom pods",
+      "200g/7oz onions, sliced",
+      "15g ginger-garlic paste",
+      "1 tbsp coriander powder",
+      "1 tsp mild red chilli powder",
+      "1 tsp cumin powder",
+      "1 tsp salt",
+      "200g/7oz tomatoes, chopped",
+      "2 tbsp coriander leaves, chopped",
+      "½ tsp Punjabi garam masala",
+      "4 x 100g/3½oz lamb rump steaks ",
+      "1½ tbsp Punjabi garam masala ",
+      "salt, to taste",
+      "1 red onion, sliced",
+      "100g/3½oz baby plum tomatoes, sliced",
+      "¼ cucumber, sliced ",
+      "2 tbsp chopped fresh coriander leaves",
+      "1 lime, juice only"
+    ],
+    "recipeInstructions": [
+      "To make the garam masala, put all the ingredients in a dry pan over medium heat, shaking the pan to toast the spices evenly.",
+      "Cool the spices for a minute and tip them into an electric blender and grind to fine powder, or use a pestle and mortar. Pass through a sieve and set aside.",
+      "To cook the chickpeas, drain away the soaking water. Put the chickpeas in a pan of clean water with the bay leaf, cardamom, clove and salt and boil until cooked. Set aside until required.",
+      "For the sauce, in a clean pan heat the oil and gently fry the cloves, bay leaf and black cardamom. Add the onions and cook until translucent. Add the ginger-garlic paste and cook well. Add dried powdered spices, salt, tomatoes and enough water to cover the mixture add the chickpeas and simmer for 30 minutes, or until the gravy thickens.",
+      "For the lamb, turn the oven down to 200C/180C Fan/Gas 6.",
+      "Sear the rump on a hot pan to colour it on all sides. Dust the rump with the garam masala mixed with salt. Roast in the oven for 5-7 minutes, remove and rest for 3-4 minutes then slice.",
+      "In a bowl, mix together the garnish ingredients.",
+      "Put the chickpeas on a serving dish and sit the sliced lamb on top. Top with the garnish and serve hot with naan bread."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

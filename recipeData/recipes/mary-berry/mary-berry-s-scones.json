@@ -1,0 +1,418 @@
+{
+  "schemaVersion": 1,
+  "id": "mary-berry/mary-berry-s-scones",
+  "slug": "mary-berry-s-scones",
+  "chefId": "chef_mary-berry",
+  "chefSlug": "mary-berry",
+  "chefName": "Mary Berry",
+  "title": "Mary Berry's scones",
+  "description": "Mary Berry's scone recipe makes the perfect easy tea-time treat, whether jam-and-cream-topped (in whichever order you like), plain or packed with sultanas. Read the recipe tips for some pointers to make sure your scones are the best ever.\n\nFor this recipe you will need a fluted 5cm/2in cutter. If you use a larger cutter, you will get fewer scones and they'll take a little longer to cook.\n\nEach scone provides 167 kcal, 3.7g protein, 23.6g carbohydrate (of which 3.3g sugars), 6.2g fat (of which 3.5g saturates), 1.1g fibre and 0.42g salt.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/tea_time_scones_77839",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/tea_time_scones_77839",
+    "retrievedAt": "2026-09-11T00:27:46.807Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Mary Berry"
+    ],
+    "datePublished": "2017-12-06T16:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "fd771b439c5228f7b4ed51da0531101b56b2de6c76163f5776109de682c785e7",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups",
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Makes 16 small scones"
+    ],
+    "servings": 16
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "British"
+  ],
+  "category": [
+    "Cakes and baking"
+  ],
+  "keywords": [
+    "quick",
+    "back to basics",
+    "baking therapy",
+    "british bakes",
+    "cheap lunch ideas",
+    "easy afternoon tea",
+    "easy british",
+    "easy picnic bakes",
+    "easy picnic",
+    "easy picnic snacks",
+    "easy snack",
+    "england's finest",
+    "english baking",
+    "eurovision party ideas",
+    "kids' picnic",
+    "learning the basics for kids",
+    "little treats",
+    "mary berry's classic afternoon tea menu",
+    "mary berry favourites",
+    "platinum jubilee",
+    "proms picnic",
+    "retro baking",
+    "coronation cakes and bakes",
+    "simple pleasures",
+    "mother's day afternoon tea ideas",
+    "street party",
+    "summer baking",
+    "teatime treats",
+    "valentine's day baking",
+    "ve day baking",
+    "wimbledon nibbles",
+    "wimbledon feasts",
+    "afternoon tea",
+    "birthday party",
+    "mother's day",
+    "party food",
+    "picnic",
+    "scones",
+    "butter",
+    "nut free",
+    "pregnancy friendly",
+    "vegetarian",
+    "Mary Berry's Fantastic Feasts"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "450g/1lb self-raising flour",
+          "quantity": 450,
+          "quantityText": "450",
+          "unit": "g",
+          "name": "/1lb self-raising flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 level tsp baking powder",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "level tsp baking powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz caster sugar",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz caster sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz butter, slightly softened, cut into pieces",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz butter",
+          "note": "slightly softened, cut into pieces",
+          "isOptional": false
+        },
+        {
+          "raw": "2 free-range eggs",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "free-range eggs",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "a little milk",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "a little milk",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "handful sultanas (optional)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "handful",
+          "name": "sultanas (optional)",
+          "note": null,
+          "isOptional": true
+        }
+      ]
+    },
+    {
+      "name": "To serve",
+      "items": [
+        {
+          "raw": "strawberry jam",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "strawberry jam",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "clotted cream",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "clotted cream",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 220C/200C Fan/Gas 7. Lightly grease two large baking trays.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 220C/200C Fan/Gas 7. Lightly grease two large baking trays."
+    },
+    {
+      "order": 2,
+      "text": "Put the flour, baking powder and sugar in a large bowl. Add the butter and rub in with your fingertips until the mixture resembles fine breadcrumbs (watch the How-to video, below, if you are unsure).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put the flour, baking powder and sugar in a large bowl. Add the butter and rub in with your fingertips until the mixture resembles fine breadcrumbs (watch the How-to video, below, if you are unsure)."
+    },
+    {
+      "order": 3,
+      "text": "Crack the eggs into a measuring jug, then add enough milk to make the total liquid 300ml/10fl oz. Using a fork or round-tipped knife, stir the egg and milk into the flour – you may not need it all – and mix to a soft, sticky dough.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Crack the eggs into a measuring jug, then add enough milk to make the total liquid 300ml/10fl oz. Using a fork or round-tipped knife, stir the egg and milk into the flour – you may not need it all – and mix to a soft, sticky dough. "
+    },
+    {
+      "order": 4,
+      "text": "Turn out onto a lightly floured work surface, knead lightly and work in the sultanas, if using. Roll out to a rectangle about 2cm/¾in thick.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Turn out onto a lightly floured work surface, knead lightly and work in the sultanas, if using. Roll out to a rectangle about 2cm/¾in thick. "
+    },
+    {
+      "order": 5,
+      "text": "Cut into as many rounds as possible using a fluted 5cm/2in cutter. Place them on the prepared baking trays and brush the tops of the scones with a little extra milk (or any egg and milk left in the jug).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Cut into as many rounds as possible using a fluted 5cm/2in cutter. Place them on the prepared baking trays and brush the tops of the scones with a little extra milk (or any egg and milk left in the jug)."
+    },
+    {
+      "order": 6,
+      "text": "Bake for 12–15 minutes, or until the scones are well risen and a pale, golden-brown colour. Lift onto a wire rack to cool.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Bake for 12–15 minutes, or until the scones are well risen and a pale, golden-brown colour. Lift onto a wire rack to cool. "
+    },
+    {
+      "order": 7,
+      "text": "To serve, split the scones and serve with strawberry jam along with a good dollop of clotted cream. Scones are best eaten when fresh from the oven (see the recipe tips for storing instructions).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To serve, split the scones and serve with strawberry jam along with a good dollop of clotted cream. Scones are best eaten when fresh from the oven (see the recipe tips for storing instructions)."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "167kcal",
+    "proteinContent": "3.7g",
+    "carbohydrateContent": "23.6g",
+    "fatContent": "6.2g",
+    "fiberContent": "1.1g",
+    "saturatedFatContent": "3.5g",
+    "sugarContent": "3.3g"
+  },
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/tea_time_scones_77839_16x9.jpg"
+    ],
+    "video": [
+      {
+        "description": "Make the perfect scones using this easy method",
+        "duration": "PT1M35S",
+        "name": "How to make scones",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/tea_time_scones_77839_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-10T20:27:48.000Z"
+      }
+    ]
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "Once the scones are cool, they can be frozen. To eat, defrost at room temperature and then reheat in a hot oven for 10 minutes. To refresh stale scones, warm them through in a low oven for a few minutes. They'll be much more enjoyable. Want to know the secret to making good scones? Here are our 6 top tips. 1. It helps to sieve the flour and baking powder together to ensure the rising agent is evenly distributed. If you prefer, you can mix them together using a whisk. 2. Keep the mixture cool by not handling it too much and using fridge-cold milk and eggs. Mary uses softened butter for ease, but it should be just soft enough to squash the pieces easily between your fingers – you don’t want it on the verge of melting. 3. Don’t overwork the dough – once it comes together the less you handle it the better. 4. The dough should be soft and slightly sticky. Too much flour will make your scones heavy, so don’t add a lot of flour when rolling out the dough (you need just enough to stop the dough sticking to your worksurface). 5. When cutting out the scones, the dough should be about 2cm/¾in thick. If you roll it out too thin your scones will be flat; too thick and they are likely to lean to one side when baking. 6. To help scones rise evenly, always cut the scones straight down and up, without twisting the cutter. It helps to rub the cutter in flour first and remove any sticky bits of dough that become attached when cutting. When brushing the tops take care to ensure there are no dribbles down the sides as this will affect the rise. Is it better to make scones with butter or oil? Butter is traditional and adds to the flavour of your finished scones. Also, oils are 100% fat whereas butter is about 80% fat (the remaining 20% is mainly water which creates steam as the scones cook and helps to make them fluffy and light), so using oil will change the texture as well as the flavour of scones. This isn’t necessarily a bad thing, but you can’t use oils and butter interchangeably. Should you chill scone dough before baking? No, there is no need to chill your dough before baking. Should scone dough rest before baking? Not in this recipe, but some recipes use strong bread flour which will require resting because of the higher gluten content. Should I use beaten egg or milk to glaze the scones? Both work, but egg gives a much deeper colour (nice for cheese scones, but less traditional for sweet scones). You can also use buttermilk which gives a colour somewhere in between milk and eggs."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 502,
+      "ratingValue": 4.50996015936255
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "Make the perfect scones using this easy method",
+        "duration": "PT1M35S",
+        "name": "How to make scones",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/tea_time_scones_77839_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-10T20:27:48.000Z"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Mary Berry's scone recipe makes the perfect easy tea-time treat, whether jam-and-cream-topped (in whichever order you like), plain or packed with sultanas. Read the recipe tips for some pointers to make sure your scones are the best ever.\r\n \r\nFor this recipe you will need a fluted 5cm/2in cutter. If you use a larger cutter, you will get fewer scones and they'll take a little longer to cook.\r\n\r\nEach scone provides 167 kcal, 3.7g protein, 23.6g carbohydrate (of which 3.3g sugars), 6.2g fat (of which 3.5g saturates), 1.1g fibre and 0.42g salt.",
+    "headline": "Mary Berry's scones",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/tea_time_scones_77839_16x9.jpg"
+    },
+    "name": "Mary Berry's scones",
+    "author": {
+      "@type": "Person",
+      "name": "Mary Berry"
+    },
+    "datePublished": "2017-12-06T16:00:00.000Z",
+    "dateModified": "2026-07-14T08:19:06.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 502,
+      "ratingValue": 4.50996015936255
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, back to basics, baking therapy, british bakes , cheap lunch ideas, easy afternoon tea, easy british, easy picnic bakes, easy picnic, easy picnic snacks, easy snack, england's finest, english baking, eurovision party ideas, kids' picnic, learning the basics for kids, little treats, mary berry's classic afternoon tea menu, mary berry favourites, platinum jubilee, proms picnic, retro baking, coronation cakes and bakes, simple pleasures, mother's day afternoon tea ideas, street party, summer baking, teatime treats, valentine's day baking, ve day baking, wimbledon nibbles, wimbledon feasts, afternoon tea, birthday party, mother's day, party food, picnic, scones, butter, nut free, pregnancy friendly, vegetarian, Mary Berry's Fantastic Feasts",
+    "nutrition": {
+      "calories": "167kcal",
+      "proteinContent": "3.7g",
+      "carbohydrateContent": "23.6g",
+      "fatContent": "6.2g",
+      "fiberContent": "1.1g",
+      "saturatedFatContent": "3.5g",
+      "sugarContent": "3.3g"
+    },
+    "recipeCategory": "Cakes and baking",
+    "recipeCuisine": "British",
+    "recipeIngredient": [
+      "450g/1lb self-raising flour",
+      "2 level tsp baking powder",
+      "50g/1¾oz caster sugar",
+      "100g/3½oz butter, slightly softened, cut into pieces",
+      "2 free-range eggs",
+      "a little milk",
+      "handful sultanas (optional)",
+      "strawberry jam",
+      "clotted cream"
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 220C/200C Fan/Gas 7. Lightly grease two large baking trays.",
+      "Put the flour, baking powder and sugar in a large bowl. Add the butter and rub in with your fingertips until the mixture resembles fine breadcrumbs (watch the How-to video, below, if you are unsure).",
+      "Crack the eggs into a measuring jug, then add enough milk to make the total liquid 300ml/10fl oz. Using a fork or round-tipped knife, stir the egg and milk into the flour – you may not need it all – and mix to a soft, sticky dough. ",
+      "Turn out onto a lightly floured work surface, knead lightly and work in the sultanas, if using. Roll out to a rectangle about 2cm/¾in thick. ",
+      "Cut into as many rounds as possible using a fluted 5cm/2in cutter. Place them on the prepared baking trays and brush the tops of the scones with a little extra milk (or any egg and milk left in the jug).",
+      "Bake for 12–15 minutes, or until the scones are well risen and a pale, golden-brown colour. Lift onto a wire rack to cool. ",
+      "To serve, split the scones and serve with strawberry jam along with a good dollop of clotted cream. Scones are best eaten when fresh from the oven (see the recipe tips for storing instructions)."
+    ],
+    "recipeYield": "Makes 16 small scones",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "Make the perfect scones using this easy method",
+        "duration": "PT1M35S",
+        "name": "How to make scones",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/tea_time_scones_77839_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-10T20:27:48.000Z"
+      }
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:4",
+    "unmapped:aggregateRating|suitableForDiet|video"
+  ]
+}

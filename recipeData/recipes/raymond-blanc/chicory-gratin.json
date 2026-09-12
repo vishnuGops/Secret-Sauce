@@ -1,0 +1,396 @@
+{
+  "schemaVersion": 1,
+  "id": "raymond-blanc/chicory-gratin",
+  "slug": "chicory-gratin",
+  "chefId": "chef_raymond-blanc",
+  "chefSlug": "raymond-blanc",
+  "chefName": "Raymond Blanc",
+  "title": "Chicory gratin",
+  "description": "A beloved classic of Belgian cooking; this is a simple, rustic family dish. The Comté cheese can be replaced by any British cheese. And, of course, omit the ham for a vegetarian version.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/chicory_gratin_84963",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/chicory_gratin_84963",
+    "retrievedAt": "2026-09-11T00:27:17.457Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Raymond Blanc"
+    ],
+    "datePublished": "2015-04-06T00:14:30.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "6b87de13caa260aab685b86bf070e99ed8b5697c17524f09e5e54b3a664693b3",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 4 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 2"
+    ],
+    "servings": 2
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 120,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "gratin",
+    "chicory",
+    "Swiss chard",
+    "egg free",
+    "nut free",
+    "pregnancy friendly",
+    "Kew on a Plate"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the chicory",
+      "items": [
+        {
+          "raw": "4 heads yellow chicory",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "heads yellow chicory",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp lemon juice",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "lemon juice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 large pinches sea salt",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "large pinches sea salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 white peppercorns",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": null,
+          "name": "white peppercorns",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the chard",
+      "items": [
+        {
+          "raw": "10g unsalted butter",
+          "quantity": 10,
+          "quantityText": "10",
+          "unit": "g",
+          "name": "unsalted butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 small Swiss chard stalks with leaves, stalks chopped into 1cm pieces; leaves roughly chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "small Swiss chard stalks with leaves",
+          "note": "stalks chopped into 1cm pieces; leaves roughly chopped",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the cheese sauce",
+      "items": [
+        {
+          "raw": "35g/1¼oz unsalted butter",
+          "quantity": 35,
+          "quantityText": "35",
+          "unit": "g",
+          "name": "/1¼oz unsalted butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "35g/1¼oz plain flour",
+          "quantity": 35,
+          "quantityText": "35",
+          "unit": "g",
+          "name": "/1¼oz plain flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "450ml/16fl oz whole milk",
+          "quantity": 450,
+          "quantityText": "450",
+          "unit": "ml",
+          "name": "/16fl oz whole milk",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz Comté cheese, finely grated",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz Comté cheese",
+          "note": "finely grated",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp Dijon mustard",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "Dijon mustard",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "pinch sea salt",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "pinch",
+          "name": "sea salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "pinch freshly ground white pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "pinch",
+          "name": "freshly ground white pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To assemble the gratin",
+      "items": [
+        {
+          "raw": "4 slices cooked ham",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "slices",
+          "name": "cooked ham",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz Comté cheese, finely grated",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz Comté cheese",
+          "note": "finely grated",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "For the chicory, put it in a medium saucepan and add the lemon juice, sugar, salt, peppercorns and enough water to barely cover. Place on a medium heat and cover with a circle of baking paper and a lid smaller than the diameter of the pan (this is to keep the chicory submerged). Bring to the boil, then simmer for 45–60 minutes. It is important to cook the chicory slowly to remove most of its bitterness.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the chicory, put it in a medium saucepan and add the lemon juice, sugar, salt, peppercorns and enough water to barely cover. Place on a medium heat and cover with a circle of baking paper and a lid smaller than the diameter of the pan (this is to keep the chicory submerged). Bring to the boil, then simmer for 45–60 minutes. It is important to cook the chicory slowly to remove most of its bitterness. "
+    },
+    {
+      "order": 2,
+      "text": "Lift the chicory onto a wire rack to drain and cool. Once cool, gently press out any extra moisture with a tea towel.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Lift the chicory onto a wire rack to drain and cool. Once cool, gently press out any extra moisture with a tea towel."
+    },
+    {
+      "order": 3,
+      "text": "Preheat the oven to 190C/170C Fan/Gas 5.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 190C/170C Fan/Gas 5."
+    },
+    {
+      "order": 4,
+      "text": "For the chard, put the butter and 100ml/3½fl oz water in a saucepan on a high heat. Cook the stalks for 20 minutes, adding more water if necessary. Once tender, lift them out and cook the leaves for 3 minutes in the same water. Strain, mix the stalks and leaves and arrange in a small gratin dish.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the chard, put the butter and 100ml/3½fl oz water in a saucepan on a high heat. Cook the stalks for 20 minutes, adding more water if necessary. Once tender, lift them out and cook the leaves for 3 minutes in the same water. Strain, mix the stalks and leaves and arrange in a small gratin dish."
+    },
+    {
+      "order": 5,
+      "text": "Meanwhile, make the cheese sauce. In a small saucepan on a medium heat, melt the butter. Add the flour, whisk until smooth and cook to a nutty blonde colour. Take the pan off the heat, whisk in the milk and return to the heat. Cook for at least 4 minutes, stirring constantly with the whisk until the sauce thickens.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, make the cheese sauce. In a small saucepan on a medium heat, melt the butter. Add the flour, whisk until smooth and cook to a nutty blonde colour. Take the pan off the heat, whisk in the milk and return to the heat. Cook for at least 4 minutes, stirring constantly with the whisk until the sauce thickens. "
+    },
+    {
+      "order": 6,
+      "text": "Add the cheese and mustard and cook for 3 minutes, stirring, until the cheese has fully melted. Remove from the heat, taste and season if required.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the cheese and mustard and cook for 3 minutes, stirring, until the cheese has fully melted. Remove from the heat, taste and season if required."
+    },
+    {
+      "order": 7,
+      "text": "To assemble the gratin, fold the ham slices in half and arrange one chicory head on each slice. Pack tightly in the gratin dish on top of the chard. Spoon over the cheese sauce and sprinkle with the remaining cheese. Bake in the top of the oven for 25 minutes until golden-brown.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To assemble the gratin, fold the ham slices in half and arrange one chicory head on each slice. Pack tightly in the gratin dish on top of the chard. Spoon over the cheese sauce and sprinkle with the remaining cheese. Bake in the top of the oven for 25 minutes until golden-brown."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 5,
+      "ratingValue": 4.6
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "A beloved classic of Belgian cooking; this is a simple, rustic family dish. The Comté cheese can be replaced by any British cheese. And, of course, omit the ham for a vegetarian version.",
+    "headline": "Chicory gratin",
+    "image": null,
+    "name": "Chicory gratin",
+    "author": {
+      "@type": "Person",
+      "name": "Raymond Blanc"
+    },
+    "datePublished": "2015-04-06T00:14:30.000Z",
+    "dateModified": "2026-05-01T13:38:46.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 5,
+      "ratingValue": 4.6
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT2H",
+    "keywords": "gratin, chicory, Swiss chard, egg free, nut free, pregnancy friendly, Kew on a Plate",
+    "recipeCategory": "Main course",
+    "recipeIngredient": [
+      "4 heads yellow chicory",
+      "1 tbsp lemon juice",
+      "1 tbsp sugar",
+      "2 large pinches sea salt",
+      "6 white peppercorns",
+      "10g unsalted butter",
+      "2 small Swiss chard stalks with leaves, stalks chopped into 1cm pieces; leaves roughly chopped",
+      "35g/1¼oz unsalted butter",
+      "35g/1¼oz plain flour",
+      "450ml/16fl oz whole milk",
+      "100g/3½oz Comté cheese, finely grated",
+      "1 tbsp Dijon mustard",
+      "pinch sea salt",
+      "pinch freshly ground white pepper",
+      "4 slices cooked ham",
+      "50g/1¾oz Comté cheese, finely grated"
+    ],
+    "recipeInstructions": [
+      "For the chicory, put it in a medium saucepan and add the lemon juice, sugar, salt, peppercorns and enough water to barely cover. Place on a medium heat and cover with a circle of baking paper and a lid smaller than the diameter of the pan (this is to keep the chicory submerged). Bring to the boil, then simmer for 45–60 minutes. It is important to cook the chicory slowly to remove most of its bitterness. ",
+      "Lift the chicory onto a wire rack to drain and cool. Once cool, gently press out any extra moisture with a tea towel.",
+      "Preheat the oven to 190C/170C Fan/Gas 5.",
+      "For the chard, put the butter and 100ml/3½fl oz water in a saucepan on a high heat. Cook the stalks for 20 minutes, adding more water if necessary. Once tender, lift them out and cook the leaves for 3 minutes in the same water. Strain, mix the stalks and leaves and arrange in a small gratin dish.",
+      "Meanwhile, make the cheese sauce. In a small saucepan on a medium heat, melt the butter. Add the flour, whisk until smooth and cook to a nutty blonde colour. Take the pan off the heat, whisk in the milk and return to the heat. Cook for at least 4 minutes, stirring constantly with the whisk until the sauce thickens. ",
+      "Add the cheese and mustard and cook for 3 minutes, stirring, until the cheese has fully melted. Remove from the heat, taste and season if required.",
+      "To assemble the gratin, fold the ham slices in half and arrange one chicory head on each slice. Pack tightly in the gratin dish on top of the chard. Spoon over the cheese sauce and sprinkle with the remaining cheese. Bake in the top of the oven for 25 minutes until golden-brown."
+    ],
+    "recipeYield": "Serves 2",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

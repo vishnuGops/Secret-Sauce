@@ -1,0 +1,435 @@
+{
+  "schemaVersion": 1,
+  "id": "gennaro-contaldo/boozy-baked-chicken-with-peppers",
+  "slug": "boozy-baked-chicken-with-peppers",
+  "chefId": "chef_gennaro-contaldo",
+  "chefSlug": "gennaro-contaldo",
+  "chefName": "Gennaro Contaldo",
+  "title": "Boozy baked chicken with peppers",
+  "description": "Pollo ubriaco con peperoni is a simply delicious one-pan chicken dish that makes cooking and clean-up so much easier!",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/boozy_baked_chicken_with_68515",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/boozy_baked_chicken_with_68515",
+    "retrievedAt": "2026-09-11T00:27:54.501Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Gennaro Contaldo"
+    ],
+    "datePublished": "2025-01-10T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "0b733592e3d8ef180c8ac208e17c72dae79022604fd9b225203b7fc5eceeaa1c",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 120,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Italian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "baked chicken",
+    "chicken thigh",
+    "egg free",
+    "nut free",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the mustard wine",
+      "items": [
+        {
+          "raw": "150ml/5fl oz dry white wine",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "ml",
+          "name": "/5fl oz dry white wine",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp English mustard",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "English mustard",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the chicken",
+      "items": [
+        {
+          "raw": "850g/1lb 14oz chicken thighs and drumsticks",
+          "quantity": 850,
+          "quantityText": "850",
+          "unit": "g",
+          "name": "/1lb 14oz chicken thighs and drumsticks",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz prosciutto, roughly chopped",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz prosciutto",
+          "note": "roughly chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "10 baby onions or round shallots, peeled",
+          "quantity": 10,
+          "quantityText": "10",
+          "unit": null,
+          "name": "baby onions or round shallots",
+          "note": "peeled",
+          "isOptional": false
+        },
+        {
+          "raw": "225g/8oz baby vine tomatoes, cut in half",
+          "quantity": 225,
+          "quantityText": "225",
+          "unit": "g",
+          "name": "/8oz baby vine tomatoes, cut in half",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 yellow pepper, thinly sliced",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "yellow pepper",
+          "note": "thinly sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "1 red pepper, thinly sliced",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "red pepper",
+          "note": "thinly sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "2 garlic cloves, finely chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp port",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "port",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp brandy",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "brandy",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp extra virgin olive oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "extra virgin olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp chopped fresh flatleaf parsley, to garnish",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "chopped fresh flatleaf parsley",
+          "note": "to garnish",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the polenta",
+      "items": [
+        {
+          "raw": "200g/7oz quick-cook polenta",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "g",
+          "name": "/7oz quick-cook polenta",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz unsalted butter",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz unsalted butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz Parmesan cheese, finely grated",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz Parmesan cheese",
+          "note": "finely grated",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the mustard wine, combine the wine and mustard in a small bowl and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the mustard wine, combine the wine and mustard in a small bowl and set aside."
+    },
+    {
+      "order": 2,
+      "text": "To make the chicken, put the chicken in a large roasting tin with the prosciutto, onions, tomatoes, peppers and garlic. Season with salt and pepper and toss together.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the chicken, put the chicken in a large roasting tin with the prosciutto, onions, tomatoes, peppers and garlic. Season with salt and pepper and toss together."
+    },
+    {
+      "order": 3,
+      "text": "Pour over the mustard wine mixture, then pour over the port, brandy and oil. Toss again.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pour over the mustard wine mixture, then pour over the port, brandy and oil. Toss again."
+    },
+    {
+      "order": 4,
+      "text": "Cover with kitchen foil and set aside for the flavours to infuse for 20 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Cover with kitchen foil and set aside for the flavours to infuse for 20 minutes."
+    },
+    {
+      "order": 5,
+      "text": "Preheat the oven to 190C/170C Fan/Gas 5.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 190C/170C Fan/Gas 5."
+    },
+    {
+      "order": 6,
+      "text": "Bake for 1 hour, basting from time to time.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Bake for 1 hour, basting from time to time."
+    },
+    {
+      "order": 7,
+      "text": "Remove the foil and continue to cook for another 30 minutes, or until the chicken is cooked through. The chicken is cooked through when the juices run clear with no trace of pink when the thickest part of the leg, between the drumstick and the thigh, is pierced with a skewer.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove the foil and continue to cook for another 30 minutes, or until the chicken is cooked through. The chicken is cooked through when the juices run clear with no trace of pink when the thickest part of the leg, between the drumstick and the thigh, is pierced with a skewer."
+    },
+    {
+      "order": 8,
+      "text": "To make the polenta, cook the polenta according to the packet instructions. Whilst hot add the butter and Parmesan and mix to combine.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the polenta, cook the polenta according to the packet instructions. Whilst hot add the butter and Parmesan and mix to combine."
+    },
+    {
+      "order": 9,
+      "text": "Garnish the chicken with the parsley and serve family-style with the polenta.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Garnish the chicken with the parsley and serve family-style with the polenta."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/boozy_baked_chicken_with_68515_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 4,
+      "ratingValue": 5
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Pollo ubriaco con peperoni is a simply delicious one-pan chicken dish that makes cooking and clean-up so much easier!  ",
+    "headline": "Boozy baked chicken with peppers",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/boozy_baked_chicken_with_68515_16x9.jpg"
+    },
+    "name": "Boozy baked chicken with peppers",
+    "author": {
+      "@type": "Person",
+      "name": "Gennaro Contaldo"
+    },
+    "datePublished": "2025-01-10T00:00:00.000Z",
+    "dateModified": "2026-01-14T15:51:32.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 4,
+      "ratingValue": 5
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT2H",
+    "keywords": "baked chicken, chicken thigh, egg free, nut free, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Italian",
+    "recipeIngredient": [
+      "150ml/5fl oz dry white wine",
+      "1 tbsp English mustard",
+      "850g/1lb 14oz chicken thighs and drumsticks",
+      "100g/3½oz prosciutto, roughly chopped",
+      "10 baby onions or round shallots, peeled",
+      "225g/8oz baby vine tomatoes, cut in half",
+      "1 yellow pepper, thinly sliced",
+      "1 red pepper, thinly sliced",
+      "2 garlic cloves, finely chopped",
+      "2 tbsp port",
+      "2 tbsp brandy",
+      "2 tbsp extra virgin olive oil",
+      "salt and freshly ground black pepper",
+      "1 tbsp chopped fresh flatleaf parsley, to garnish",
+      "200g/7oz quick-cook polenta",
+      "100g/3½oz unsalted butter",
+      "100g/3½oz Parmesan cheese, finely grated"
+    ],
+    "recipeInstructions": [
+      "To make the mustard wine, combine the wine and mustard in a small bowl and set aside.",
+      "To make the chicken, put the chicken in a large roasting tin with the prosciutto, onions, tomatoes, peppers and garlic. Season with salt and pepper and toss together.",
+      "Pour over the mustard wine mixture, then pour over the port, brandy and oil. Toss again.",
+      "Cover with kitchen foil and set aside for the flavours to infuse for 20 minutes.",
+      "Preheat the oven to 190C/170C Fan/Gas 5.",
+      "Bake for 1 hour, basting from time to time.",
+      "Remove the foil and continue to cook for another 30 minutes, or until the chicken is cooked through. The chicken is cooked through when the juices run clear with no trace of pink when the thickest part of the leg, between the drumstick and the thigh, is pierced with a skewer.",
+      "To make the polenta, cook the polenta according to the packet instructions. Whilst hot add the butter and Parmesan and mix to combine.",
+      "Garnish the chicken with the parsley and serve family-style with the polenta."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

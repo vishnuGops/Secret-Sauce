@@ -1,0 +1,320 @@
+{
+  "schemaVersion": 1,
+  "id": "nigel-slater/strawberry-mascarpone-tart",
+  "slug": "strawberry-mascarpone-tart",
+  "chefId": "chef_nigel-slater",
+  "chefSlug": "nigel-slater",
+  "chefName": "Nigel Slater",
+  "title": "Strawberry mascarpone tart",
+  "description": "Nigel Slater's no-bake strawberry tart is exceptionally simple to make, with a biscuit base that can survive a hot kitchen.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/strawberrymascarpone_88973",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/strawberrymascarpone_88973",
+    "retrievedAt": "2026-09-11T00:28:50.038Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Nigel Slater"
+    ],
+    "datePublished": "2008-05-20T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "5d3834f52032c347fc0eaba343ba0cefc00d9bbe0f96a3410aab7bf2b519b17d",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups",
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 6–8"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 60,
+    "cookMinutes": 10,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Desserts"
+  ],
+  "keywords": [
+    "strawberry desserts",
+    "make-ahead summer desserts",
+    "strawberries and cream",
+    "best strawberry",
+    "sweet tarts",
+    "father's day",
+    "party food",
+    "picnic",
+    "summer party",
+    "tarts",
+    "mascarpone",
+    "strawberry",
+    "pregnancy friendly",
+    "vegetarian",
+    "spring",
+    "summer",
+    "autumn",
+    "A Taste of My Life"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the crumb case",
+      "items": [
+        {
+          "raw": "75g/3oz butter",
+          "quantity": 75,
+          "quantityText": "75",
+          "unit": "g",
+          "name": "/3oz butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "250g/9oz almond, orange or sweet oat biscuits",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "/9oz almond, orange or sweet oat biscuits",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the filling",
+      "items": [
+        {
+          "raw": "1 large free-range egg, separated",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "large free-range egg",
+          "note": "separated",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp caster sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "caster sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "250g/9oz mascarpone",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "/9oz mascarpone",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 drops vanilla extract",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "drops vanilla extract",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "250g/9oz fresh strawberries, hulled, thinly sliced",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "/9oz fresh strawberries",
+          "note": "hulled, thinly sliced",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the crumb case, melt the butter in a small saucepan. Place the biscuits in a food processor and process to fine crumbs (alternatively, place in a plastic bag and bash with a rolling pin, taking care not to split the bag).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the crumb case, melt the butter in a small saucepan. Place the biscuits in a food processor and process to fine crumbs (alternatively, place in a plastic bag and bash with a rolling pin, taking care not to split the bag)."
+    },
+    {
+      "order": 2,
+      "text": "Mix the crumbs thoroughly with the melted butter and spoon into a 25cm/10in diameter loose-bottomed flan tin. Press the crumbs firmly over the base and up the sides of the tin to cover completely. Transfer to the fridge to chill until firm.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Mix the crumbs thoroughly with the melted butter and spoon into a 25cm/10in diameter loose-bottomed flan tin. Press the crumbs firmly over the base and up the sides of the tin to cover completely. Transfer to the fridge to chill until firm."
+    },
+    {
+      "order": 3,
+      "text": "To make the filling, put the egg yolk into a bowl with the caster sugar and beat for a few seconds until thoroughly mixed.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the filling, put the egg yolk into a bowl with the caster sugar and beat for a few seconds until thoroughly mixed."
+    },
+    {
+      "order": 4,
+      "text": "Add the mascarpone and beat until thoroughly combined. Stir in the vanilla extract.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the mascarpone and beat until thoroughly combined. Stir in the vanilla extract."
+    },
+    {
+      "order": 5,
+      "text": "In a separate bowl, beat the egg white with a clean whisk until stiff peaks form when the whisk is removed from the bowl. Gently fold the egg white into the mascarpone mixture.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "In a separate bowl, beat the egg white with a clean whisk until stiff peaks form when the whisk is removed from the bowl. Gently fold the egg white into the mascarpone mixture."
+    },
+    {
+      "order": 6,
+      "text": "Remove the biscuit crumb case from the fridge. Spoon the mascarpone mixture into the case and gently smooth the top with a spatula. Arrange the sliced strawberries on top of the mascarpone.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove the biscuit crumb case from the fridge. Spoon the mascarpone mixture into the case and gently smooth the top with a spatula. Arrange the sliced strawberries on top of the mascarpone."
+    },
+    {
+      "order": 7,
+      "text": "Transfer to the fridge and chill. Remove the tart from the fridge 20 minutes before serving.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Transfer to the fridge and chill. Remove the tart from the fridge 20 minutes before serving."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/strawberrymascarpone_88973_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "You can easily make this with gluten-free biscuits for a gluten-free strawberry tart."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 21,
+      "ratingValue": 4.333333333333333
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Nigel Slater's no-bake strawberry tart is exceptionally simple to make, with a biscuit base that can survive a hot kitchen.",
+    "headline": "Strawberry mascarpone tart",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/strawberrymascarpone_88973_16x9.jpg"
+    },
+    "name": "Strawberry mascarpone tart",
+    "author": {
+      "@type": "Person",
+      "name": "Nigel Slater"
+    },
+    "datePublished": "2008-05-20T00:00:00.000Z",
+    "dateModified": "2025-03-26T16:37:09.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 21,
+      "ratingValue": 4.333333333333333
+    },
+    "prepTime": "PT1H",
+    "cookTime": "PT10M",
+    "keywords": "strawberry desserts, make-ahead summer desserts, strawberries and cream, best strawberry, sweet tarts, father's day, party food, picnic, summer party, tarts, mascarpone, strawberry, pregnancy friendly, vegetarian, spring, summer, autumn, A Taste of My Life",
+    "recipeCategory": "Desserts",
+    "recipeIngredient": [
+      "75g/3oz butter",
+      "250g/9oz almond, orange or sweet oat biscuits",
+      "1 large free-range egg, separated",
+      "1 tbsp caster sugar",
+      "250g/9oz mascarpone ",
+      "2 drops vanilla extract",
+      "250g/9oz fresh strawberries, hulled, thinly sliced"
+    ],
+    "recipeInstructions": [
+      "To make the crumb case, melt the butter in a small saucepan. Place the biscuits in a food processor and process to fine crumbs (alternatively, place in a plastic bag and bash with a rolling pin, taking care not to split the bag).",
+      "Mix the crumbs thoroughly with the melted butter and spoon into a 25cm/10in diameter loose-bottomed flan tin. Press the crumbs firmly over the base and up the sides of the tin to cover completely. Transfer to the fridge to chill until firm.",
+      "To make the filling, put the egg yolk into a bowl with the caster sugar and beat for a few seconds until thoroughly mixed.",
+      "Add the mascarpone and beat until thoroughly combined. Stir in the vanilla extract.",
+      "In a separate bowl, beat the egg white with a clean whisk until stiff peaks form when the whisk is removed from the bowl. Gently fold the egg white into the mascarpone mixture.",
+      "Remove the biscuit crumb case from the fridge. Spoon the mascarpone mixture into the case and gently smooth the top with a spatula. Arrange the sliced strawberries on top of the mascarpone.",
+      "Transfer to the fridge and chill. Remove the tart from the fridge 20 minutes before serving."
+    ],
+    "recipeYield": "Serves 6–8",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

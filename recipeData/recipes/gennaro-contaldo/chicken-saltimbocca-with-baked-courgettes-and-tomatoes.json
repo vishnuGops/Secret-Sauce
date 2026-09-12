@@ -1,0 +1,504 @@
+{
+  "schemaVersion": 1,
+  "id": "gennaro-contaldo/chicken-saltimbocca-with-baked-courgettes-and-tomatoes",
+  "slug": "chicken-saltimbocca-with-baked-courgettes-and-tomatoes",
+  "chefId": "chef_gennaro-contaldo",
+  "chefSlug": "gennaro-contaldo",
+  "chefName": "Gennaro Contaldo",
+  "title": "Chicken saltimbocca with baked courgettes and tomatoes",
+  "description": "This dish originates from Rome and contains layers of pan-fried chicken, cheese and prosciutto in a white wine sauce. For this recipe, you will need two long wooden skewers.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/chicken_saltimbocca_with_60049",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/chicken_saltimbocca_with_60049",
+    "retrievedAt": "2026-09-11T00:27:51.428Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Gennaro Contaldo"
+    ],
+    "datePublished": "2026-06-06T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "05e896b011b626f9f559949ee1075c95735d273c824eaaddd60d3bfb7d661c81",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 2"
+    ],
+    "servings": 2
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Italian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "chicken breast",
+    "egg free",
+    "nut free",
+    "Saturday Kitchen"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the chicken saltimbocca",
+      "items": [
+        {
+          "raw": "1 chicken breast, skin removed and boneless, cut in half lengthways",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "chicken breast, skin removed and boneless, cut in half lengthways",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 slices fontina cheese, 3mm thick and same length as the chicken piece",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "slices",
+          "name": "fontina cheese, 3mm thick and same length as the chicken piece",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 x 30g/1oz slices prosciutto, 2mm thick and same length as the chicken piece",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "x 30g/1oz slices prosciutto, 2mm thick and same length as the chicken piece",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 fresh sage leaves",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "fresh sage leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "40g/1½ oz plain flour, for dusting",
+          "quantity": 40,
+          "quantityText": "40",
+          "unit": "g",
+          "name": "/1½ oz plain flour, for dusting",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz unsalted butter",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz unsalted butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp olive oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100ml/3½fl oz white wine",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "ml",
+          "name": "/3½fl oz white wine",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the baked courgettes and tomatoes",
+      "items": [
+        {
+          "raw": "3 tbsp extra virgin olive oil",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "extra virgin olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 courgettes, cut into 6mm/¼in round slices",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "courgettes, cut into 6mm/¼in round slices",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tomatoes, cut into 6mm/¼in round slices",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "tomatoes, cut into 6mm/¼in round slices",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 marjoram sprigs, leaves picked",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "marjoram sprigs, leaves picked",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp freshly grated Parmesan",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "freshly grated Parmesan",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp panko breadcrumbs",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "panko breadcrumbs",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the chicken, flatten the chicken pieces slightly, then season with salt and pepper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the chicken, flatten the chicken pieces slightly, then season with salt and pepper."
+    },
+    {
+      "order": 2,
+      "text": "Place one slice of fontina on top of each chicken piece, followed by a prosciutto slice and 2 sage leaves.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place one slice of fontina on top of each chicken piece, followed by a prosciutto slice and 2 sage leaves."
+    },
+    {
+      "order": 3,
+      "text": "Secure each chicken piece with a wooden skewer.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Secure each chicken piece with a wooden skewer.   "
+    },
+    {
+      "order": 4,
+      "text": "Dust the chicken sides with the flour, shaking off any excess.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Dust the chicken sides with the flour, shaking off any excess.  "
+    },
+    {
+      "order": 5,
+      "text": "Heat half the butter and oil in a frying pan then add the meat pieces, chicken-side down, and cook over a medium heat for about 2 minutes or until sealed.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat half the butter and oil in a frying pan then add the meat pieces, chicken-side down, and cook over a medium heat for about 2 minutes or until sealed.  "
+    },
+    {
+      "order": 6,
+      "text": "Turn over and cook for 1 minute on the prosciutto sides.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Turn over and cook for 1 minute on the prosciutto sides.  "
+    },
+    {
+      "order": 7,
+      "text": "Turn over again, add the wine and reduce by half.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Turn over again, add the wine and reduce by half."
+    },
+    {
+      "order": 8,
+      "text": "Check the chicken is cooked through – the juices should run clear with no trace of pink when the thickest part is pierced with a skewer. Transfer the chicken to a plate and keep the pan over the heat.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Check the chicken is cooked through – the juices should run clear with no trace of pink when the thickest part is pierced with a skewer. Transfer the chicken to a plate and keep the pan over the heat. "
+    },
+    {
+      "order": 9,
+      "text": "Add the remaining butter to the pan with the wine and chicken juices, and melt to thicken the sauce.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the remaining butter to the pan with the wine and chicken juices, and melt to thicken the sauce. "
+    },
+    {
+      "order": 10,
+      "text": "Pour the sauce over the chicken and keep the chicken warm.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pour the sauce over the chicken and keep the chicken warm. "
+    },
+    {
+      "order": 11,
+      "text": "To make the baked courgettes and tomatoes, preheat the oven to 250C/230C Fan/Gas 9.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the baked courgettes and tomatoes, preheat the oven to 250C/230C Fan/Gas 9."
+    },
+    {
+      "order": 12,
+      "text": "Drizzle 1 tablespoon oil in a small ovenproof dish.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Drizzle 1 tablespoon oil in a small ovenproof dish."
+    },
+    {
+      "order": 13,
+      "text": "Arrange alternate slices of courgette and tomato, overlapping each other, in the dish. Season with salt and pepper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Arrange alternate slices of courgette and tomato, overlapping each other, in the dish. Season with salt and pepper."
+    },
+    {
+      "order": 14,
+      "text": "Drizzle with another 1 tablespoon olive oil, sprinkle with the marjoram and top with the Parmesan and panko breadcrumbs.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Drizzle with another 1 tablespoon olive oil, sprinkle with the marjoram and top with the Parmesan and panko breadcrumbs."
+    },
+    {
+      "order": 15,
+      "text": "Bake for 4–5 minutes until the cheese begins to turn golden.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Bake for 4–5 minutes until the cheese begins to turn golden."
+    },
+    {
+      "order": 16,
+      "text": "Remove and drizzle with the remaining oil before serving with the chicken saltimbocca.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove and drizzle with the remaining oil before serving with the chicken saltimbocca. "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 6,
+      "ratingValue": 4.333333333333333
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "This dish originates from Rome and contains layers of pan-fried chicken, cheese and prosciutto in a white wine sauce. For this recipe, you will need two long wooden skewers. ",
+    "headline": "Chicken saltimbocca with baked courgettes and tomatoes",
+    "image": null,
+    "name": "Chicken saltimbocca with baked courgettes and tomatoes",
+    "author": {
+      "@type": "Person",
+      "name": "Gennaro Contaldo"
+    },
+    "datePublished": "2026-06-06T00:00:00.000Z",
+    "dateModified": "2026-06-05T14:36:32.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 6,
+      "ratingValue": 4.333333333333333
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, chicken breast, egg free, nut free, Saturday Kitchen",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Italian",
+    "recipeIngredient": [
+      "1 chicken breast, skin removed and boneless, cut in half lengthways \t",
+      "2 slices fontina cheese, 3mm thick and same length as the chicken piece",
+      "2 x 30g/1oz slices prosciutto, 2mm thick and same length as the chicken piece",
+      "4 fresh sage leaves",
+      "40g/1½ oz plain flour, for dusting ",
+      "50g/1¾oz unsalted butter",
+      "2 tbsp olive oil ",
+      "100ml/3½fl oz white wine ",
+      "salt and freshly ground black pepper ",
+      "3 tbsp extra virgin olive oil ",
+      "2 courgettes, cut into 6mm/¼in round slices ",
+      "2 tomatoes, cut into 6mm/¼in round slices  ",
+      "2 marjoram sprigs, leaves picked",
+      "2 tbsp freshly grated Parmesan ",
+      "2 tbsp panko breadcrumbs",
+      "salt and freshly ground black pepper "
+    ],
+    "recipeInstructions": [
+      "To make the chicken, flatten the chicken pieces slightly, then season with salt and pepper.",
+      "Place one slice of fontina on top of each chicken piece, followed by a prosciutto slice and 2 sage leaves.",
+      "Secure each chicken piece with a wooden skewer.   ",
+      "Dust the chicken sides with the flour, shaking off any excess.  ",
+      "Heat half the butter and oil in a frying pan then add the meat pieces, chicken-side down, and cook over a medium heat for about 2 minutes or until sealed.  ",
+      "Turn over and cook for 1 minute on the prosciutto sides.  ",
+      "Turn over again, add the wine and reduce by half.",
+      "Check the chicken is cooked through – the juices should run clear with no trace of pink when the thickest part is pierced with a skewer. Transfer the chicken to a plate and keep the pan over the heat. ",
+      "Add the remaining butter to the pan with the wine and chicken juices, and melt to thicken the sauce. ",
+      "Pour the sauce over the chicken and keep the chicken warm. ",
+      "To make the baked courgettes and tomatoes, preheat the oven to 250C/230C Fan/Gas 9.",
+      "Drizzle 1 tablespoon oil in a small ovenproof dish.",
+      "Arrange alternate slices of courgette and tomato, overlapping each other, in the dish. Season with salt and pepper.",
+      "Drizzle with another 1 tablespoon olive oil, sprinkle with the marjoram and top with the Parmesan and panko breadcrumbs.",
+      "Bake for 4–5 minutes until the cheese begins to turn golden.",
+      "Remove and drizzle with the remaining oil before serving with the chicken saltimbocca. "
+    ],
+    "recipeYield": "Serves 2",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

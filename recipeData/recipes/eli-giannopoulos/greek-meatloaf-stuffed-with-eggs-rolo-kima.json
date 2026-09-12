@@ -1,0 +1,415 @@
+{
+  "schemaVersion": 1,
+  "id": "eli-giannopoulos/greek-meatloaf-stuffed-with-eggs-rolo-kima",
+  "slug": "greek-meatloaf-stuffed-with-eggs-rolo-kima",
+  "chefId": "chef_eli-giannopoulos",
+  "chefSlug": "eli-giannopoulos",
+  "chefName": "Eli K. Giannopoulos",
+  "title": "Greek Meatloaf stuffed with Eggs (Rolo Kima)",
+  "description": "Juicy and moist with a nicely browned thick crust and a hidden surprise in the middle.. Try out this easy, no-fail recipe for 'Rolo Kima' (Greek meatloaf stuffed with eggs) and amaze your friends and family!",
+  "source": {
+    "sourceUrl": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/",
+    "finalUrl": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/",
+    "retrievedAt": "2026-09-11T02:48:07.882Z",
+    "publisher": null,
+    "authorRaw": [
+      "Eli K. Giannopoulos"
+    ],
+    "datePublished": "2013-12-08",
+    "rights": "My Greek Dish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "32be5ae5dcd92aaa2209cf32dd4543eefde4dff722bb1fbed185c923263b4c3d",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "10",
+      "10 portions"
+    ],
+    "servings": 10
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 90,
+    "totalMinutes": 120,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Greek"
+  ],
+  "category": [
+    "Main"
+  ],
+  "keywords": [
+    "Greek meatloaf",
+    "rolo kima recipe",
+    "meatloaf with eggs"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1.2 kg mince beef (40 ounces)",
+          "quantity": 1.2,
+          "quantityText": "1.2",
+          "unit": "kg",
+          "name": "mince beef (40 ounces)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "800 mince pork (30 ounces)",
+          "quantity": 800,
+          "quantityText": "800",
+          "unit": null,
+          "name": "mince pork (30 ounces)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g breadcrumbs (3.5 oz.)",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "breadcrumbs (3.5 oz.)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 large red onions, grated",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "large red onions",
+          "note": "grated",
+          "isOptional": false
+        },
+        {
+          "raw": "3 cloves of garlic, mashed",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "cloves",
+          "name": "of garlic, mashed",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tomatoes, grated",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "tomatoes",
+          "note": "grated",
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 tsp powdered all-spice berries",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 tsp powdered all-spice berries",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 eggs, hard-boiled",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "eggs, hard-boiled",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "8-10 potatoes, cut into wedges",
+          "quantity": 8,
+          "quantityText": "8-10",
+          "unit": null,
+          "name": "potatoes, cut into wedges",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "500-700 ml beef stock (2-3 cups)",
+          "quantity": 500,
+          "quantityText": "500-700",
+          "unit": "ml",
+          "name": "beef stock (2-3 cups)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp tomato paste",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "tomato paste",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 cup olive oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 cup olive oil",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To prepare the mixture for this impressive Greek meatloaf, add into a large bowl or basin the minced beef and pork along with the onions, garlic, tomatoes, the powdered all-spice berries, breadcrumbs and season well with salt and pepper. Mix thoroughly with your hands; it is important to knead the mix for at least 5-10 minutes so that all the ingredients combine and the meat absorbs all the wonderful flavours. Cover with some plastic wrap and let rest in the fridge for 20 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "To prepare the mixture for this impressive Greek meatloaf, add into a large bowl or basin the minced beef and pork along with the onions, garlic, tomatoes, the powdered all-spice berries, breadcrumbs and season well with salt and pepper. Mix thoroughly with your hands; it is important to knead the mix for at least 5-10 minutes so that all the ingredients combine and the meat absorbs all the wonderful flavours. Cover with some plastic wrap and let rest in the fridge for 20 minutes.",
+        "url": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/#instruction-step-1"
+      }
+    },
+    {
+      "order": 2,
+      "text": "In the meantime boil the eggs, for the stuffing and prepare the stock.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In the meantime boil the eggs, for the stuffing and prepare the stock.",
+        "url": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/#instruction-step-2"
+      }
+    },
+    {
+      "order": 3,
+      "text": "On a working surface line a big piece of parchment paper and arrange half of the meat mixture as a base. Arrange the hard-boiled eggs side by side along the length mixture; cover with the rest of theÂ mixture and roll the parchment paper, forming a roll, so that it is curved down over the eggs in an arc.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "On a working surface line a big piece of parchment paper and arrange half of the meat mixture as a base. Arrange the hard-boiled eggs side by side along the length mixture; cover with the rest of theÂ mixture and roll the parchment paper, forming a roll, so that it is curved down over the eggs in an arc.",
+        "url": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/#instruction-step-3"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Unroll carefully the meatloaf in a large, deep baking pan and add the potatoes (cut into wedges).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Unroll carefully the meatloaf in a large, deep baking pan and add the potatoes (cut into wedges).",
+        "url": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/#instruction-step-4"
+      }
+    },
+    {
+      "order": 5,
+      "text": "In a bowl, mix the stock, the tomato paste and olive oil; pour 2/3 of the mixture over the meatloaf and potatoes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a bowl, mix the stock, the tomato paste and olive oil; pour 2/3 of the mixture over the meatloaf and potatoes.",
+        "url": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/#instruction-step-5"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Bake in preheated oven (at both top and bottom heating elements) at 180C, on the bottom grill of the oven for 1 hour 30 minutes. If the meatloaf starts getting coloured to quickly, cover up with aluminium foil or lid. After an hour, check if all of the liquid has been absorbed and the pan appears to be getting dry and add the remaining stock mixture (warm), before the potatoes have fully browned.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Bake in preheated oven (at both top and bottom heating elements) at 180C, on the bottom grill of the oven for 1 hour 30 minutes. If the meatloaf starts getting coloured to quickly, cover up with aluminium foil or lid. After an hour, check if all of the liquid has been absorbed and the pan appears to be getting dry and add the remaining stock mixture (warm), before the potatoes have fully browned.",
+        "url": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/#instruction-step-6"
+      }
+    },
+    {
+      "order": 7,
+      "text": "Once the meatloaf is out of the oven let it rest for 15 minutes, to make it easier to slice. Slice into generous portions and pour over some of the delicious meat juices. Enjoy!",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Once the meatloaf is out of the oven let it rest for 15 minutes, to make it easier to slice. Slice into generous portions and pour over some of the delicious meat juices. Enjoy!",
+        "url": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/#instruction-step-7"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Greek-Meatloaf-stuffed-with-Eggs-Rolo-Kima-2-scaled-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Greek-Meatloaf-stuffed-with-Eggs-Rolo-Kima-2-scaled-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Greek-Meatloaf-stuffed-with-Eggs-Rolo-Kima-2-scaled-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Greek-Meatloaf-stuffed-with-Eggs-Rolo-Kima-2-scaled.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "cookingMethod": "Baked",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "673",
+      "ratingValue": "4.9"
+    }
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org/",
+    "@type": "Recipe",
+    "name": "Greek Meatloaf stuffed with Eggs (Rolo Kima)",
+    "description": "Juicy and moist with a nicely browned thick crust and a hidden surprise in the middle.. Try out this easy, no-fail recipe for 'Rolo Kima' (Greek meatloaf stuffed with eggs) and amaze your friends and family!",
+    "author": {
+      "@type": "Person",
+      "name": "Eli K. Giannopoulos"
+    },
+    "keywords": "Greek meatloaf, rolo kima recipe, meatloaf with eggs",
+    "image": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Greek-Meatloaf-stuffed-with-Eggs-Rolo-Kima-2-scaled-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Greek-Meatloaf-stuffed-with-Eggs-Rolo-Kima-2-scaled-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Greek-Meatloaf-stuffed-with-Eggs-Rolo-Kima-2-scaled-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Greek-Meatloaf-stuffed-with-Eggs-Rolo-Kima-2-scaled.jpg"
+    ],
+    "url": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/",
+    "recipeIngredient": [
+      "1.2 kg mince beef (40 ounces)",
+      "800 mince pork (30 ounces)",
+      "100g breadcrumbs (3.5 oz.)",
+      "2 large red onions, grated",
+      "3 cloves of garlic, mashed",
+      "2 tomatoes, grated",
+      "1/2 tsp powdered all-spice berries",
+      "salt and freshly ground pepper",
+      "4 eggs, hard-boiled",
+      "8-10 potatoes, cut into wedges",
+      "500-700 ml beef stock (2-3 cups)",
+      "1 tbsp tomato paste",
+      "1/2 cup olive oil"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "To prepare the mixture for this impressive Greek meatloaf, add into a large bowl or basin the minced beef and pork along with the onions, garlic, tomatoes, the powdered all-spice berries, breadcrumbs and season well with salt and pepper. Mix thoroughly with your hands; it is important to knead the mix for at least 5-10 minutes so that all the ingredients combine and the meat absorbs all the wonderful flavours. Cover with some plastic wrap and let rest in the fridge for 20 minutes.",
+        "url": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/#instruction-step-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "In the meantime boil the eggs, for the stuffing and prepare the stock.",
+        "url": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/#instruction-step-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "On a working surface line a big piece of parchment paper and arrange half of the meat mixture as a base. Arrange the hard-boiled eggs side by side along the length mixture; cover with the rest of theÂ mixture and roll the parchment paper, forming a roll, so that it is curved down over the eggs in an arc.",
+        "url": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/#instruction-step-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Unroll carefully the meatloaf in a large, deep baking pan and add the potatoes (cut into wedges).",
+        "url": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/#instruction-step-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "In a bowl, mix the stock, the tomato paste and olive oil; pour 2/3 of the mixture over the meatloaf and potatoes.",
+        "url": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/#instruction-step-5"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Bake in preheated oven (at both top and bottom heating elements) at 180C, on the bottom grill of the oven for 1 hour 30 minutes. If the meatloaf starts getting coloured to quickly, cover up with aluminium foil or lid. After an hour, check if all of the liquid has been absorbed and the pan appears to be getting dry and add the remaining stock mixture (warm), before the potatoes have fully browned.",
+        "url": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/#instruction-step-6"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Once the meatloaf is out of the oven let it rest for 15 minutes, to make it easier to slice. Slice into generous portions and pour over some of the delicious meat juices. Enjoy!",
+        "url": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/#instruction-step-7"
+      }
+    ],
+    "prepTime": "PT30M",
+    "cookTime": "PT1H30M",
+    "totalTime": "PT2H",
+    "recipeYield": [
+      "10",
+      "10 portions"
+    ],
+    "recipeCategory": "Main",
+    "cookingMethod": "Baked",
+    "recipeCuisine": "Greek",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "673",
+      "ratingValue": "4.9"
+    },
+    "datePublished": "2013-12-08",
+    "@id": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/#recipe",
+    "isPartOf": {
+      "@id": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/#article"
+    },
+    "mainEntityOfPage": "https://www.mygreekdish.com/recipe/greek-meatloaf-stuffed-eggs-rolo-kima/"
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "range-quantity:2",
+    "unmapped:cookingMethod|aggregateRating"
+  ]
+}

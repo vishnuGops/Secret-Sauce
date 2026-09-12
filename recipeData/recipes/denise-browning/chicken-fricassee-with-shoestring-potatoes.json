@@ -1,0 +1,366 @@
+{
+  "schemaVersion": 1,
+  "id": "denise-browning/chicken-fricassee-with-shoestring-potatoes",
+  "slug": "chicken-fricassee-with-shoestring-potatoes",
+  "chefId": "chef_denise-browning",
+  "chefSlug": "denise-browning",
+  "chefName": "Denise Browning",
+  "title": "Chicken Fricassée with Shoestring Potatoes",
+  "description": "Shredded chicken, quickly heated in a blended, creamy mixture of heavy cream, cream cheese, and corn, topped with cheese and shoestring potatoes, and then baked.",
+  "source": {
+    "sourceUrl": "https://www.easyanddelish.com/chicken-fricassee-shoestring-potatoes/",
+    "finalUrl": "https://www.easyanddelish.com/chicken-fricassee-shoestring-potatoes/",
+    "retrievedAt": "2026-09-11T02:47:50.855Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2016-03-14T14:30:58+00:00",
+    "rights": "Easy and Delish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "507a62ee95c1d02a62813c5f90466d93215ab01dc7d09497f98208509756d1f2",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "6"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 20,
+    "totalMinutes": 50,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Brazilian",
+    "French"
+  ],
+  "category": [
+    "Main Course"
+  ],
+  "keywords": [
+    "Brazilian Frango ao Molho",
+    "Chicken Fricassée",
+    "Shoestring Potato Chicken"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "2.2 lbs chicken thighs (or 1 kg)",
+          "quantity": 2.2,
+          "quantityText": "2.2",
+          "unit": "lb",
+          "name": "chicken thighs (or 1 kg)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 cup heavy whipping cream",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "cup",
+          "name": "heavy whipping cream",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 can whole corn kernel (drained, 15.25 oz or 432 g)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "can",
+          "name": "whole corn kernel (drained, 15.25 oz or 432 g)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 package cream cheese (softened, 8 oz)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "package cream cheese (softened, 8 oz)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 to 3/4 sliced green olives",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 to 3/4 sliced green olives",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Salt and ground black pepper to taste",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Salt and ground black pepper to taste",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 cups shredded mozzarella or other melting cheese of your choice",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "cups",
+          "name": "shredded mozzarella or other melting cheese of your choice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Store-bought shoestring potatoes (enough to form a single layer)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Store-bought shoestring potatoes (enough to form a single layer)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat to 350 degrees F.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Preheat to 350 degrees F.",
+        "name": "Preheat to 350 degrees F.",
+        "url": "https://www.easyanddelish.com/chicken-fricassee-shoestring-potatoes/#wprm-recipe-47214-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Boil chicken in either chicken stock or water with salt and ground black pepper until fully cooked. Remove from the liquid, let cool enough to handle, and roughly shred. Place into a medium pot and reserve.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Boil chicken in either chicken stock or water with salt and ground black pepper until fully cooked. Remove from the liquid, let cool enough to handle, and roughly shred. Place into a medium pot and reserve.",
+        "name": "Boil chicken in either chicken stock or water with salt and ground black pepper until fully cooked. Remove from the liquid, let cool enough to handle, and roughly shred. Place into a medium pot and reserve.",
+        "url": "https://www.easyanddelish.com/chicken-fricassee-shoestring-potatoes/#wprm-recipe-47214-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Blend heavy cream, corn, and cream cheese in a blender until obtaining a thick, creamy, homogeneous mixture. You may need to stop blender more than once and stir. Pour over the chicken, add the sliced olives, salt and pepper to taste, and cook mixture on medium heat, stirring, for 2-4 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Blend heavy cream, corn, and cream cheese in a blender until obtaining a thick, creamy, homogeneous mixture. You may need to stop blender more than once and stir. Pour over the chicken, add the sliced olives, salt and pepper to taste, and cook mixture on medium heat, stirring, for 2-4 minutes.",
+        "name": "Blend heavy cream, corn, and cream cheese in a blender until obtaining a thick, creamy, homogeneous mixture. You may need to stop blender more than once and stir. Pour over the chicken, add the sliced olives, salt and pepper to taste, and cook mixture on medium heat, stirring, for 2-4 minutes.",
+        "url": "https://www.easyanddelish.com/chicken-fricassee-shoestring-potatoes/#wprm-recipe-47214-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Place mixture into a medium baking dish, top evenly with the shredded cheese, and bake for about 20 minutes. Remove from the oven and top with the shoestring potatoes. Serve by itself, with white rice, or a fresh salad. Enjoy!",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Place mixture into a medium baking dish, top evenly with the shredded cheese, and bake for about 20 minutes. Remove from the oven and top with the shoestring potatoes. Serve by itself, with white rice, or a fresh salad. Enjoy!",
+        "name": "Place mixture into a medium baking dish, top evenly with the shredded cheese, and bake for about 20 minutes. Remove from the oven and top with the shoestring potatoes. Serve by itself, with white rice, or a fresh salad. Enjoy!",
+        "url": "https://www.easyanddelish.com/chicken-fricassee-shoestring-potatoes/#wprm-recipe-47214-step-0-3"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "servingSize": "1 serving",
+    "calories": "629.3 kcal",
+    "carbohydrateContent": "11 g",
+    "proteinContent": "39.2 g",
+    "fatContent": "47.2 g",
+    "saturatedFatContent": "20.7 g",
+    "transFatContent": "0.1 g",
+    "cholesterolContent": "217.4 mg",
+    "sodiumContent": "695.5 mg",
+    "fiberContent": "0.01 g",
+    "sugarContent": "3.6 g",
+    "unsaturatedFatContent": "22.2 g"
+  },
+  "media": {
+    "coverImages": [
+      "https://www.easyanddelish.com/wp-content/uploads/2016/03/Brazilian-Chicken-Fricassee-with-Shoestring-Potatoes.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2016/03/Brazilian-Chicken-Fricassee-with-Shoestring-Potatoes-500x384.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2016/03/Brazilian-Chicken-Fricassee-with-Shoestring-Potatoes-500x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2016/03/Brazilian-Chicken-Fricassee-with-Shoestring-Potatoes-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "2",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This was simple yet tasty.  I removed  1/2 cup of corn from the can, used the remaining in the blender and then added the whole corn to the sauce.  \r\n\r\nMy mozzarella was starting to mold, so I omitted that and I found the dish rich enough without it.  I will try the mozzarella next time though.",
+        "author": {
+          "@type": "Person",
+          "name": "Diana"
+        },
+        "datePublished": "2025-02-19"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Chicken Fricassée with Shoestring Potatoes",
+    "author": {
+      "@id": "https://www.easyanddelish.com/#/schema/person/4aa289bf19bceaa733ca6900648cfc47"
+    },
+    "description": "Shredded chicken, quickly heated in a blended, creamy mixture of heavy cream, cream cheese, and corn, topped with cheese and shoestring potatoes, and then baked.",
+    "datePublished": "2016-03-14T14:30:58+00:00",
+    "image": [
+      "https://www.easyanddelish.com/wp-content/uploads/2016/03/Brazilian-Chicken-Fricassee-with-Shoestring-Potatoes.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2016/03/Brazilian-Chicken-Fricassee-with-Shoestring-Potatoes-500x384.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2016/03/Brazilian-Chicken-Fricassee-with-Shoestring-Potatoes-500x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2016/03/Brazilian-Chicken-Fricassee-with-Shoestring-Potatoes-480x270.jpg"
+    ],
+    "recipeYield": [
+      "6"
+    ],
+    "prepTime": "PT30M",
+    "cookTime": "PT20M",
+    "totalTime": "PT50M",
+    "recipeIngredient": [
+      "2.2 lbs chicken thighs (or 1 kg)",
+      "1 cup heavy whipping cream",
+      "1 can whole corn kernel (drained, 15.25 oz or 432 g)",
+      "1  package cream cheese (softened, 8 oz)",
+      "1/2 to 3/4   sliced green olives",
+      "Salt and ground black pepper to taste",
+      "2 cups shredded mozzarella or other melting cheese of your choice",
+      "Store-bought shoestring potatoes (enough to form a single layer)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Preheat to 350 degrees F.",
+        "name": "Preheat to 350 degrees F.",
+        "url": "https://www.easyanddelish.com/chicken-fricassee-shoestring-potatoes/#wprm-recipe-47214-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Boil chicken in either chicken stock or water with salt and ground black pepper until fully cooked. Remove from the liquid, let cool enough to handle, and roughly shred. Place into a medium pot and reserve.",
+        "name": "Boil chicken in either chicken stock or water with salt and ground black pepper until fully cooked. Remove from the liquid, let cool enough to handle, and roughly shred. Place into a medium pot and reserve.",
+        "url": "https://www.easyanddelish.com/chicken-fricassee-shoestring-potatoes/#wprm-recipe-47214-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Blend heavy cream, corn, and cream cheese in a blender until obtaining a thick, creamy, homogeneous mixture. You may need to stop blender more than once and stir. Pour over the chicken, add the sliced olives, salt and pepper to taste, and cook mixture on medium heat, stirring, for 2-4 minutes.",
+        "name": "Blend heavy cream, corn, and cream cheese in a blender until obtaining a thick, creamy, homogeneous mixture. You may need to stop blender more than once and stir. Pour over the chicken, add the sliced olives, salt and pepper to taste, and cook mixture on medium heat, stirring, for 2-4 minutes.",
+        "url": "https://www.easyanddelish.com/chicken-fricassee-shoestring-potatoes/#wprm-recipe-47214-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Place mixture into a medium baking dish, top evenly with the shredded cheese, and bake for about 20 minutes. Remove from the oven and top with the shoestring potatoes. Serve by itself, with white rice, or a fresh salad. Enjoy!",
+        "name": "Place mixture into a medium baking dish, top evenly with the shredded cheese, and bake for about 20 minutes. Remove from the oven and top with the shoestring potatoes. Serve by itself, with white rice, or a fresh salad. Enjoy!",
+        "url": "https://www.easyanddelish.com/chicken-fricassee-shoestring-potatoes/#wprm-recipe-47214-step-0-3"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "2",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This was simple yet tasty.  I removed  1/2 cup of corn from the can, used the remaining in the blender and then added the whole corn to the sauce.  \r\n\r\nMy mozzarella was starting to mold, so I omitted that and I found the dish rich enough without it.  I will try the mozzarella next time though.",
+        "author": {
+          "@type": "Person",
+          "name": "Diana"
+        },
+        "datePublished": "2025-02-19"
+      }
+    ],
+    "recipeCategory": [
+      "Main Course"
+    ],
+    "recipeCuisine": [
+      "Brazilian",
+      "French"
+    ],
+    "keywords": "Brazilian Frango ao Molho, Chicken Fricassée, Shoestring Potato Chicken",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "servingSize": "1 serving",
+      "calories": "629.3 kcal",
+      "carbohydrateContent": "11 g",
+      "proteinContent": "39.2 g",
+      "fatContent": "47.2 g",
+      "saturatedFatContent": "20.7 g",
+      "transFatContent": "0.1 g",
+      "cholesterolContent": "217.4 mg",
+      "sodiumContent": "695.5 mg",
+      "fiberContent": "0.01 g",
+      "sugarContent": "3.6 g",
+      "unsaturatedFatContent": "22.2 g"
+    },
+    "@id": "https://www.easyanddelish.com/chicken-fricassee-shoestring-potatoes/#recipe",
+    "isPartOf": {
+      "@id": "https://www.easyanddelish.com/chicken-fricassee-shoestring-potatoes/#article"
+    },
+    "mainEntityOfPage": "https://www.easyanddelish.com/chicken-fricassee-shoestring-potatoes/"
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:aggregateRating|review"
+  ]
+}

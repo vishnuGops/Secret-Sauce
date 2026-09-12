@@ -1,0 +1,503 @@
+{
+  "schemaVersion": 1,
+  "id": "huy-vu/che-bap-recipe-vietnamese-corn-pudding-dessert",
+  "slug": "che-bap-recipe-vietnamese-corn-pudding-dessert",
+  "chefId": "chef_huy-vu",
+  "chefSlug": "huy-vu",
+  "chefName": "Huy Vu",
+  "title": "Chè Bắp Recipe (Vietnamese Corn Pudding Dessert)",
+  "description": "Some of my favorite southeast Asian flavors coming together into a wonderul rice-based Vietnamese 'pudding'. We have glutinous rice paired with sweet corn, balanced with pandan aroma and a rich coconut cream topping.",
+  "source": {
+    "sourceUrl": "https://www.hungryhuy.com/che-bap-recipe/",
+    "finalUrl": "https://www.hungryhuy.com/che-bap-recipe/",
+    "retrievedAt": "2026-09-11T03:14:41.812Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2019-07-20T16:09:59+00:00",
+    "rights": "Hungry Huy. Functional content plus a link, for internal app testing. Not redistributed.",
+    "pageTitle": "Chè Bắp Recipe (Vietnamese Corn Pudding Dessert) - Hungry Huy",
+    "htmlSha256": "caecdbac217c34336f2f6512995fc4747fc3cc1f8b09fa901ef3da8bf7695c75",
+    "jsonLdBlockCount": 2,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": [
+        "equipment-from-html: 4",
+        "regrouped-from-html: 5 groups"
+      ]
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "8",
+      "8 small bowls"
+    ],
+    "servings": 8
+  },
+  "timing": {
+    "prepMinutes": 10,
+    "cookMinutes": 32,
+    "totalMinutes": 42,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Vietnamese"
+  ],
+  "category": [
+    "Dessert"
+  ],
+  "keywords": [
+    "coconut",
+    "corn",
+    "glutinous rice",
+    "pandan",
+    "rice"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "Pandan Water",
+      "items": [
+        {
+          "raw": "12 pandan leaves (washed & scrubbed thoroughly)",
+          "quantity": 12,
+          "quantityText": "12",
+          "unit": null,
+          "name": "pandan leaves (washed & scrubbed thoroughly)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 cup water",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "cup",
+          "name": "water",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "Rice",
+      "items": [
+        {
+          "raw": "2/3 cup glutinous rice (rinsed and drained)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "/3 cup glutinous rice (rinsed and drained)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 cups water",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "cups",
+          "name": "water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 tsp salt",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "Supporting Cast",
+      "items": [
+        {
+          "raw": "500 grams yellow corn kernels (raw (~2-3 cups))",
+          "quantity": 500,
+          "quantityText": "500",
+          "unit": "g",
+          "name": "yellow corn kernels (raw (~2-3 cups))",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100 grams sugar",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "200 ml coconut cream (~1/2 can)",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "ml",
+          "name": "coconut cream (~1/2 can)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp vanilla extract or powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "vanilla extract or powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 pandan leaves (tied into ~3\" large knots so it fits in the pot without cutting)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "pandan leaves (tied into ~3\" large knots so it fits in the pot without cutting)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "Thickener",
+      "items": [
+        {
+          "raw": "1 tbsp tapioca or corn starch",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "tapioca or corn starch",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp water",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "water",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "Coconut Cream Topping",
+      "items": [
+        {
+          "raw": "200 ml coconut cream (remaining ~1/2 can)",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "ml",
+          "name": "coconut cream (remaining ~1/2 can)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp sugar",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/3 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/3 tsp salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 tbsp tapioca or corn starch",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 tbsp tapioca or corn starch",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 tsp vanilla extract or powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 tsp vanilla extract or powder",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Thoroughly wash and scrub pandan leaves, then blend with water until very finely blended. Strain and add pandan water into a thick, medium sized pot.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Thoroughly wash and scrub pandan leaves, then blend with water until very finely blended. Strain and add pandan water into a thick, medium sized pot.",
+        "name": "Thoroughly wash and scrub pandan leaves, then blend with water until very finely blended. Strain and add pandan water into a thick, medium sized pot.",
+        "url": "https://www.hungryhuy.com/che-bap-recipe/#wprm-recipe-3688-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Add remaining Rice ingredients, bring to a boil on high, then lower heat to medium low and cover with a lid to maintain a low boil. Cook for 15-20 minutes until glutinous rice is cooked all the way through, and no longer powdery or tough (test by eating a grain, or smashing a grain between your fingers). We want to aim for fully cooked past 'al dente' but not as soft as rice porridge. Stir the pot only once at the ~9 minute mark since stirring too often will release too much starch.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add remaining Rice ingredients, bring to a boil on high, then lower heat to medium low and cover with a lid to maintain a low boil. Cook for 15-20 minutes until glutinous rice is cooked all the way through, and no longer powdery or tough (test by eating a grain, or smashing a grain between your fingers). We want to aim for fully cooked past &#039;al dente&#039; but not as soft as rice porridge. Stir the pot only once at the ~9 minute mark since stirring too often will release too much starch.",
+        "name": "Add remaining Rice ingredients, bring to a boil on high, then lower heat to medium low and cover with a lid to maintain a low boil. Cook for 15-20 minutes until glutinous rice is cooked all the way through, and no longer powdery or tough (test by eating a grain, or smashing a grain between your fingers). We want to aim for fully cooked past &#039;al dente&#039; but not as soft as rice porridge. Stir the pot only once at the ~9 minute mark since stirring too often will release too much starch.",
+        "url": "https://www.hungryhuy.com/che-bap-recipe/#wprm-recipe-3688-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Add all Supporting Cast ingredients, turn heat to high and bring to a boil. Once it hits a boil, lower to medium to maintain a low boil for ~10 minutes until the corn is fully cooked.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add all Supporting Cast ingredients, turn heat to high and bring to a boil. Once it hits a boil, lower to medium to maintain a low boil for ~10 minutes until the corn is fully cooked.",
+        "name": "Add all Supporting Cast ingredients, turn heat to high and bring to a boil. Once it hits a boil, lower to medium to maintain a low boil for ~10 minutes until the corn is fully cooked.",
+        "url": "https://www.hungryhuy.com/che-bap-recipe/#wprm-recipe-3688-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "In a small bowl mix Thickener ingredients until fully combined, then add to the pot. Turn heat to high and continuously stir. When it hits a boil shut the heat off. This step is optional based on your thickness preference (or how much starch from the rice was released)--you can scale up or down as needed, but note that thickening properties of the starch don't take effect until after this hits a boil.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a small bowl mix Thickener ingredients until fully combined, then add to the pot. Turn heat to high and continuously stir. When it hits a boil shut the heat off. This step is optional based on your thickness preference (or how much starch from the rice was released)--you can scale up or down as needed, but note that thickening properties of the starch don&#039;t take effect until after this hits a boil.",
+        "name": "In a small bowl mix Thickener ingredients until fully combined, then add to the pot. Turn heat to high and continuously stir. When it hits a boil shut the heat off. This step is optional based on your thickness preference (or how much starch from the rice was released)--you can scale up or down as needed, but note that thickening properties of the starch don&#039;t take effect until after this hits a boil.",
+        "url": "https://www.hungryhuy.com/che-bap-recipe/#wprm-recipe-3688-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Using a small sauce pan, combine Coconut Cream Topping ingredients and heat on high continuously stirring. When it hits a boil, shut the heat off. Keep a lid on this afterwards until ready to serve to prevent the top layer from thickening.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Using a small sauce pan, combine Coconut Cream Topping ingredients and heat on high continuously stirring. When it hits a boil, shut the heat off. Keep a lid on this afterwards until ready to serve to prevent the top layer from thickening.",
+        "name": "Using a small sauce pan, combine Coconut Cream Topping ingredients and heat on high continuously stirring. When it hits a boil, shut the heat off. Keep a lid on this afterwards until ready to serve to prevent the top layer from thickening.",
+        "url": "https://www.hungryhuy.com/che-bap-recipe/#wprm-recipe-3688-step-0-4"
+      }
+    }
+  ],
+  "equipment": [
+    "blender",
+    "medium size pot, thicker is better",
+    "small mixing bowl",
+    "small sauce pan"
+  ],
+  "supplies": [],
+  "nutrition": {
+    "calories": "339 kcal",
+    "carbohydrateContent": "44 g",
+    "proteinContent": "4 g",
+    "fatContent": "18 g",
+    "saturatedFatContent": "15 g",
+    "sodiumContent": "368 mg",
+    "fiberContent": "3 g",
+    "sugarContent": "17 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://www.hungryhuy.com/wp-content/uploads/landscape-pot-of-che-bap.jpg",
+      "https://www.hungryhuy.com/wp-content/uploads/landscape-pot-of-che-bap-500x500.jpg",
+      "https://www.hungryhuy.com/wp-content/uploads/landscape-pot-of-che-bap-500x375.jpg",
+      "https://www.hungryhuy.com/wp-content/uploads/landscape-pot-of-che-bap-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "3",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Hi Huy - this recipe looks great and I want to try it.  My dad doesn't like coconut in che` so can I skip the coconut in the supporting cast? I'm thinking of cooking everything and adding the supporting cast coconut at the end after I set a side a bowl for him. Would that change the che` much?  Thanks!",
+        "author": {
+          "@type": "Person",
+          "name": "Ngoc"
+        },
+        "datePublished": "2025-05-08"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Chè Bắp Recipe (Vietnamese Corn Pudding Dessert)",
+    "author": {
+      "@id": "https://www.hungryhuy.com/#/schema/person/77ba703312129b3930232d1c829f0ff0"
+    },
+    "description": "Some of my favorite southeast Asian flavors coming together into a wonderul rice-based Vietnamese &#x27;pudding&#x27;. We have glutinous rice paired with sweet corn, balanced with pandan aroma and a rich coconut cream topping.",
+    "datePublished": "2019-07-20T16:09:59+00:00",
+    "image": [
+      "https://www.hungryhuy.com/wp-content/uploads/landscape-pot-of-che-bap.jpg",
+      "https://www.hungryhuy.com/wp-content/uploads/landscape-pot-of-che-bap-500x500.jpg",
+      "https://www.hungryhuy.com/wp-content/uploads/landscape-pot-of-che-bap-500x375.jpg",
+      "https://www.hungryhuy.com/wp-content/uploads/landscape-pot-of-che-bap-480x270.jpg"
+    ],
+    "recipeYield": [
+      "8",
+      "8 small bowls"
+    ],
+    "prepTime": "PT10M",
+    "cookTime": "PT32M",
+    "totalTime": "PT42M",
+    "recipeIngredient": [
+      "12  pandan leaves (washed &amp; scrubbed thoroughly)",
+      "1 cup water",
+      "2/3 cup glutinous rice (rinsed and drained)",
+      "3 cups water",
+      "1/2 tsp salt",
+      "500 grams yellow corn kernels (raw (~2-3 cups))",
+      "100 grams sugar",
+      "200 ml coconut cream (~1/2 can)",
+      "1 tsp vanilla extract or powder",
+      "2  pandan leaves (tied into ~3&quot; large knots so it fits in the pot without cutting)",
+      "1 tbsp tapioca or corn starch",
+      "2 tbsp water",
+      "200 ml coconut cream (remaining ~1/2 can)",
+      "2 tbsp sugar",
+      "1/3 tsp salt",
+      "1/2 tbsp tapioca or corn starch",
+      "1/2 tsp vanilla extract or powder"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Thoroughly wash and scrub pandan leaves, then blend with water until very finely blended. Strain and add pandan water into a thick, medium sized pot.",
+        "name": "Thoroughly wash and scrub pandan leaves, then blend with water until very finely blended. Strain and add pandan water into a thick, medium sized pot.",
+        "url": "https://www.hungryhuy.com/che-bap-recipe/#wprm-recipe-3688-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Add remaining Rice ingredients, bring to a boil on high, then lower heat to medium low and cover with a lid to maintain a low boil. Cook for 15-20 minutes until glutinous rice is cooked all the way through, and no longer powdery or tough (test by eating a grain, or smashing a grain between your fingers). We want to aim for fully cooked past &#039;al dente&#039; but not as soft as rice porridge. Stir the pot only once at the ~9 minute mark since stirring too often will release too much starch.",
+        "name": "Add remaining Rice ingredients, bring to a boil on high, then lower heat to medium low and cover with a lid to maintain a low boil. Cook for 15-20 minutes until glutinous rice is cooked all the way through, and no longer powdery or tough (test by eating a grain, or smashing a grain between your fingers). We want to aim for fully cooked past &#039;al dente&#039; but not as soft as rice porridge. Stir the pot only once at the ~9 minute mark since stirring too often will release too much starch.",
+        "url": "https://www.hungryhuy.com/che-bap-recipe/#wprm-recipe-3688-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Add all Supporting Cast ingredients, turn heat to high and bring to a boil. Once it hits a boil, lower to medium to maintain a low boil for ~10 minutes until the corn is fully cooked.",
+        "name": "Add all Supporting Cast ingredients, turn heat to high and bring to a boil. Once it hits a boil, lower to medium to maintain a low boil for ~10 minutes until the corn is fully cooked.",
+        "url": "https://www.hungryhuy.com/che-bap-recipe/#wprm-recipe-3688-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "In a small bowl mix Thickener ingredients until fully combined, then add to the pot. Turn heat to high and continuously stir. When it hits a boil shut the heat off. This step is optional based on your thickness preference (or how much starch from the rice was released)--you can scale up or down as needed, but note that thickening properties of the starch don&#039;t take effect until after this hits a boil.",
+        "name": "In a small bowl mix Thickener ingredients until fully combined, then add to the pot. Turn heat to high and continuously stir. When it hits a boil shut the heat off. This step is optional based on your thickness preference (or how much starch from the rice was released)--you can scale up or down as needed, but note that thickening properties of the starch don&#039;t take effect until after this hits a boil.",
+        "url": "https://www.hungryhuy.com/che-bap-recipe/#wprm-recipe-3688-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Using a small sauce pan, combine Coconut Cream Topping ingredients and heat on high continuously stirring. When it hits a boil, shut the heat off. Keep a lid on this afterwards until ready to serve to prevent the top layer from thickening.",
+        "name": "Using a small sauce pan, combine Coconut Cream Topping ingredients and heat on high continuously stirring. When it hits a boil, shut the heat off. Keep a lid on this afterwards until ready to serve to prevent the top layer from thickening.",
+        "url": "https://www.hungryhuy.com/che-bap-recipe/#wprm-recipe-3688-step-0-4"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "3",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Hi Huy - this recipe looks great and I want to try it.  My dad doesn't like coconut in che` so can I skip the coconut in the supporting cast? I'm thinking of cooking everything and adding the supporting cast coconut at the end after I set a side a bowl for him. Would that change the che` much?  Thanks!",
+        "author": {
+          "@type": "Person",
+          "name": "Ngoc"
+        },
+        "datePublished": "2025-05-08"
+      }
+    ],
+    "recipeCategory": [
+      "Dessert"
+    ],
+    "recipeCuisine": [
+      "Vietnamese"
+    ],
+    "keywords": "coconut, corn, glutinous rice, pandan, rice",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "339 kcal",
+      "carbohydrateContent": "44 g",
+      "proteinContent": "4 g",
+      "fatContent": "18 g",
+      "saturatedFatContent": "15 g",
+      "sodiumContent": "368 mg",
+      "fiberContent": "3 g",
+      "sugarContent": "17 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://www.hungryhuy.com/che-bap-recipe/#recipe",
+    "isPartOf": {
+      "@id": "https://www.hungryhuy.com/che-bap-recipe/#article"
+    },
+    "mainEntityOfPage": "https://www.hungryhuy.com/che-bap-recipe/"
+  },
+  "audit": [
+    "unmapped:aggregateRating|review"
+  ]
+}

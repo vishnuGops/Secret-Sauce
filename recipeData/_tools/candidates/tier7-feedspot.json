@@ -1,0 +1,500 @@
+[
+  {
+    "name": "101cookbooks.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://101cookbooks.com/"
+  },
+  {
+    "name": "joythebaker.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://joythebaker.com/"
+  },
+  {
+    "name": "iamafoodblog.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://iamafoodblog.com/"
+  },
+  {
+    "name": "somuchfoodblog.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://somuchfoodblog.com/"
+  },
+  {
+    "name": "eater.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://eater.com/"
+  },
+  {
+    "name": "inspiredtaste.net",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://inspiredtaste.net/"
+  },
+  {
+    "name": "spoonforkbacon.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://spoonforkbacon.com/"
+  },
+  {
+    "name": "vietworldkitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://vietworldkitchen.com/"
+  },
+  {
+    "name": "thefirstmess.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thefirstmess.com/"
+  },
+  {
+    "name": "thefullhelping.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thefullhelping.com/"
+  },
+  {
+    "name": "homesicktexan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://homesicktexan.com/"
+  },
+  {
+    "name": "twopeasandtheirpod.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://twopeasandtheirpod.com/"
+  },
+  {
+    "name": "alexandracooks.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://alexandracooks.com/"
+  },
+  {
+    "name": "acozykitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://acozykitchen.com/"
+  },
+  {
+    "name": "theroastedroot.net",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://theroastedroot.net/"
+  },
+  {
+    "name": "closetcooking.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://closetcooking.com/"
+  },
+  {
+    "name": "notquitenigella.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://notquitenigella.com/"
+  },
+  {
+    "name": "honestcooking.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://honestcooking.com/"
+  },
+  {
+    "name": "elanaspantry.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://elanaspantry.com/"
+  },
+  {
+    "name": "kalynskitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://kalynskitchen.com/"
+  },
+  {
+    "name": "nourishedkitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://nourishedkitchen.com/"
+  },
+  {
+    "name": "sweetpotatosoul.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://sweetpotatosoul.com/"
+  },
+  {
+    "name": "runningonrealfood.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://runningonrealfood.com/"
+  },
+  {
+    "name": "eatyourselfskinny.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://eatyourselfskinny.com/"
+  },
+  {
+    "name": "afamilyfeast.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://afamilyfeast.com/"
+  },
+  {
+    "name": "culinaryhill.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://culinaryhill.com/"
+  },
+  {
+    "name": "familyfreshmeals.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://familyfreshmeals.com/"
+  },
+  {
+    "name": "iheartnaptime.net",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://iheartnaptime.net/"
+  },
+  {
+    "name": "the-girl-who-ate-everything.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://the-girl-who-ate-everything.com/"
+  },
+  {
+    "name": "shugarysweets.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://shugarysweets.com/"
+  },
+  {
+    "name": "cookiesandcups.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://cookiesandcups.com/"
+  },
+  {
+    "name": "spicysouthernkitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://spicysouthernkitchen.com/"
+  },
+  {
+    "name": "myfussyeater.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://myfussyeater.com/"
+  },
+  {
+    "name": "joyfulhealthyeats.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://joyfulhealthyeats.com/"
+  },
+  {
+    "name": "foodfaithfitness.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://foodfaithfitness.com/"
+  },
+  {
+    "name": "skinnyms.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://skinnyms.com/"
+  },
+  {
+    "name": "100daysofrealfood.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://100daysofrealfood.com/"
+  },
+  {
+    "name": "theendlessmeal.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://theendlessmeal.com/"
+  },
+  {
+    "name": "kitchentreaty.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://kitchentreaty.com/"
+  },
+  {
+    "name": "platingsandpairings.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://platingsandpairings.com/"
+  },
+  {
+    "name": "tinyurbankitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://tinyurbankitchen.com/"
+  },
+  {
+    "name": "lavenderandlovage.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://lavenderandlovage.com/"
+  },
+  {
+    "name": "drizzleanddip.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://drizzleanddip.com/"
+  },
+  {
+    "name": "cookrepublic.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://cookrepublic.com/"
+  },
+  {
+    "name": "greatcurryrecipes.net",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://greatcurryrecipes.net/"
+  },
+  {
+    "name": "rakskitchen.net",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://rakskitchen.net/"
+  },
+  {
+    "name": "topwithcinnamon.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://topwithcinnamon.com/"
+  },
+  {
+    "name": "greedygourmet.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://greedygourmet.com/"
+  },
+  {
+    "name": "elizabethskitchendiary.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://elizabethskitchendiary.co.uk/"
+  },
+  {
+    "name": "fabfood4all.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://fabfood4all.co.uk/"
+  },
+  {
+    "name": "orwhateveryoudo.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://orwhateveryoudo.com/"
+  },
+  {
+    "name": "chewoutloud.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://chewoutloud.com/"
+  },
+  {
+    "name": "crunchycreamysweet.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://crunchycreamysweet.com/"
+  },
+  {
+    "name": "errenskitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://errenskitchen.com/"
+  },
+  {
+    "name": "thecafesucrefarine.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thecafesucrefarine.com/"
+  },
+  {
+    "name": "laurenslatest.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://laurenslatest.com/"
+  },
+  {
+    "name": "homecookingadventure.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://homecookingadventure.com/"
+  },
+  {
+    "name": "leitesculinaria.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://leitesculinaria.com/"
+  },
+  {
+    "name": "tastecooking.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://tastecooking.com/"
+  },
+  {
+    "name": "feastingathome.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://feastingathome.com/"
+  },
+  {
+    "name": "dadcooksdinner.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://dadcooksdinner.com/"
+  },
+  {
+    "name": "crunchtimekitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://crunchtimekitchen.com/"
+  },
+  {
+    "name": "simplyscratch.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://simplyscratch.com/"
+  },
+  {
+    "name": "reluctantgourmet.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://reluctantgourmet.com/"
+  },
+  {
+    "name": "prouditaliancook.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://prouditaliancook.com/"
+  },
+  {
+    "name": "manusmenu.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://manusmenu.com/"
+  },
+  {
+    "name": "fromvalerieskitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://fromvalerieskitchen.com/"
+  },
+  {
+    "name": "rachelcooks.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://rachelcooks.com/"
+  },
+  {
+    "name": "mommyshomecooking.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://mommyshomecooking.com/"
+  },
+  {
+    "name": "savorysimple.net",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://savorysimple.net/"
+  },
+  {
+    "name": "thecookingjar.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thecookingjar.com/"
+  },
+  {
+    "name": "juliasalbum.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://juliasalbum.com/"
+  },
+  {
+    "name": "kitchennostalgia.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://kitchennostalgia.com/"
+  },
+  {
+    "name": "foodologygeek.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://foodologygeek.com/"
+  },
+  {
+    "name": "mydiasporakitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://mydiasporakitchen.com/"
+  },
+  {
+    "name": "cookingwithsapana.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://cookingwithsapana.com/"
+  },
+  {
+    "name": "foodieandwine.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://foodieandwine.com/"
+  },
+  {
+    "name": "ohsweetbasil.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://ohsweetbasil.com/"
+  },
+  {
+    "name": "cookingwithnanaling.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://cookingwithnanaling.com/"
+  },
+  {
+    "name": "recipefairy.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://recipefairy.com/"
+  },
+  {
+    "name": "rootsandradishes.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://rootsandradishes.com/"
+  },
+  {
+    "name": "callmepmc.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://callmepmc.com/"
+  },
+  {
+    "name": "thesouthernladycooks.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thesouthernladycooks.com/"
+  }
+]

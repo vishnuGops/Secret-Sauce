@@ -1,0 +1,296 @@
+{
+  "schemaVersion": 1,
+  "id": "rick-stein/rick-stein-s-spaghetti-alla-carbonara",
+  "slug": "rick-stein-s-spaghetti-alla-carbonara",
+  "chefId": "chef_rick-stein",
+  "chefSlug": "rick-stein",
+  "chefName": "Rick Stein",
+  "title": "Rick Stein's spaghetti alla carbonara",
+  "description": "Rick Stein's going out on a limb and including two ingredients beyond the classic Roman recipe of eggs, guanciale and pecorino. It's not authentic (at least there's no cream) but it's still very delicious.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/spaghettiallacarbona_86763",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/spaghettiallacarbona_86763",
+    "retrievedAt": "2026-09-11T00:26:26.565Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Rick Stein"
+    ],
+    "datePublished": "2013-02-17T15:30:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "2546c4f03661e7d94164550510baa5716f4b1103a3413382f1f07b53d5985ac9",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Italian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "our best family favourites",
+    "easy spaghetti dinners",
+    "creamy pasta",
+    "italian family meals",
+    "pasta sauce",
+    "quick italian",
+    "simple pleasures",
+    "autumn",
+    "easy family dinners",
+    "valentine's day",
+    "winter",
+    "spaghetti carbonara",
+    "spaghetti",
+    "nut free",
+    "Rick Stein's Mediterranean Escapes"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "400g/14oz spaghetti",
+          "quantity": 400,
+          "quantityText": "400",
+          "unit": "g",
+          "name": "/14oz spaghetti",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "175g/6oz piece smoked pancetta, rind removed (or use 150g/5oz pancetta cubes)",
+          "quantity": 175,
+          "quantityText": "175",
+          "unit": "g",
+          "name": "/6oz piece smoked pancetta, rind removed (or use 150g/5oz pancetta cubes)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp extra virgin olive oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "extra virgin olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 garlic cloves, finely chopped",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "handful fresh flatleaf parsley leaves, finely chopped",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "handful",
+          "name": "fresh flatleaf parsley leaves",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "3 large free-range eggs, beaten",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "large free-range eggs",
+          "note": "beaten",
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz pecorino sardo maturo (mature Sardinian pecorino), finely grated",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz pecorino sardo maturo (mature Sardinian pecorino)",
+          "note": "finely grated",
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Bring 4.5 litres/8 pints water to the boil in a large saucepan with 8 teaspoons of salt. Add the spaghetti and cook for 9 minutes, or until al dente.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Bring 4.5 litres/8 pints water to the boil in a large saucepan with 8 teaspoons of salt. Add the spaghetti and cook for 9 minutes, or until al dente."
+    },
+    {
+      "order": 2,
+      "text": "Meanwhile, cut the pancetta into lardons (short little strips), about 6mm/¼in wide.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, cut the pancetta into lardons (short little strips), about 6mm/¼in wide. "
+    },
+    {
+      "order": 3,
+      "text": "Heat a large, deep frying pan over a medium–high heat, add the oil and the pancetta and fry until lightly golden. Add the garlic and parsley and cook for a few seconds, then remove from the heat and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat a large, deep frying pan over a medium–high heat, add the oil and the pancetta and fry until lightly golden. Add the garlic and parsley and cook for a few seconds, then remove from the heat and set aside."
+    },
+    {
+      "order": 4,
+      "text": "Drain the spaghetti well and tip into the frying pan with the pancetta, garlic and parsley. Add the beaten eggs and half the cheese and toss together well.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Drain the spaghetti well and tip into the frying pan with the pancetta, garlic and parsley. Add the beaten eggs and half the cheese and toss together well."
+    },
+    {
+      "order": 5,
+      "text": "Season to taste with salt and pepper. The heat from the spaghetti will be sufficient to partly cook the egg, but still leave it moist and creamy. Take to the table and serve in warmed pasta bowls, sprinkled with the rest of the cheese.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Season to taste with salt and pepper. The heat from the spaghetti will be sufficient to partly cook the egg, but still leave it moist and creamy. Take to the table and serve in warmed pasta bowls, sprinkled with the rest of the cheese."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/spaghettiallacarbona_86763_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "By all means, use guanciale instead of pancetta if you can find it. If you don't have pancetta, use smoked bacon lardons instead. This recipe can be easily halved to serve 2."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 189,
+      "ratingValue": 3.671957671957672
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Rick Stein's going out on a limb and including two ingredients beyond the classic Roman recipe of eggs, guanciale and pecorino. It's not authentic (at least there's no cream) but it's still very delicious. ",
+    "headline": "Rick Stein's spaghetti alla carbonara",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/spaghettiallacarbona_86763_16x9.jpg"
+    },
+    "name": "Rick Stein's spaghetti alla carbonara",
+    "author": {
+      "@type": "Person",
+      "name": "Rick Stein"
+    },
+    "datePublished": "2013-02-17T15:30:00.000Z",
+    "dateModified": "2026-05-12T15:55:04.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 189,
+      "ratingValue": 3.671957671957672
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, our best family favourites, easy spaghetti dinners, creamy pasta, italian family meals, pasta sauce, quick italian, simple pleasures, autumn, easy family dinners, valentine's day, winter, spaghetti carbonara, spaghetti, nut free, Rick Stein's Mediterranean Escapes",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Italian",
+    "recipeIngredient": [
+      "400g/14oz spaghetti",
+      "175g/6oz piece smoked pancetta, rind removed (or use 150g/5oz pancetta cubes)",
+      "2 tbsp extra virgin olive oil",
+      "3 garlic cloves, finely chopped",
+      "handful fresh flatleaf parsley leaves, finely chopped",
+      "3 large free-range eggs, beaten",
+      "50g/1¾oz pecorino sardo maturo (mature Sardinian pecorino), finely grated",
+      "salt and freshly ground black pepper"
+    ],
+    "recipeInstructions": [
+      "Bring 4.5 litres/8 pints water to the boil in a large saucepan with 8 teaspoons of salt. Add the spaghetti and cook for 9 minutes, or until al dente.",
+      "Meanwhile, cut the pancetta into lardons (short little strips), about 6mm/¼in wide. ",
+      "Heat a large, deep frying pan over a medium–high heat, add the oil and the pancetta and fry until lightly golden. Add the garlic and parsley and cook for a few seconds, then remove from the heat and set aside.",
+      "Drain the spaghetti well and tip into the frying pan with the pancetta, garlic and parsley. Add the beaten eggs and half the cheese and toss together well.",
+      "Season to taste with salt and pepper. The heat from the spaghetti will be sufficient to partly cook the egg, but still leave it moist and creamy. Take to the table and serve in warmed pasta bowls, sprinkled with the rest of the cheese."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

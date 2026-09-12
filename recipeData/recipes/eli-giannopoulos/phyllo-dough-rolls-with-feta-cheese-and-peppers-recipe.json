@@ -1,0 +1,419 @@
+{
+  "schemaVersion": 1,
+  "id": "eli-giannopoulos/phyllo-dough-rolls-with-feta-cheese-and-peppers-recipe",
+  "slug": "phyllo-dough-rolls-with-feta-cheese-and-peppers-recipe",
+  "chefId": "chef_eli-giannopoulos",
+  "chefSlug": "eli-giannopoulos",
+  "chefName": "Eli K. Giannopoulos",
+  "title": "Phyllo-dough Rolls with Feta Cheese and Peppers Recipe",
+  "description": "Discover this amazing phyllo and feta cheese rolls recipe, perfect as an appetiser or side dish for a hearty family meal! And remember, make a few extra! Your loved ones will be coming back for more!",
+  "source": {
+    "sourceUrl": "https://www.mygreekdish.com/recipe/rollakia/",
+    "finalUrl": "https://www.mygreekdish.com/recipe/rollakia/",
+    "retrievedAt": "2026-09-11T02:47:57.423Z",
+    "publisher": null,
+    "authorRaw": [
+      "Eli K. Giannopoulos"
+    ],
+    "datePublished": "2013-05-15",
+    "rights": "My Greek Dish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "4484ce7ff98129d3361ee1859448f717754aed55eaffdd98414d11553d795ac2",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "9"
+    ],
+    "servings": 9
+  },
+  "timing": {
+    "prepMinutes": 10,
+    "cookMinutes": 30,
+    "totalMinutes": 40,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Greek"
+  ],
+  "category": [
+    "Appetizer"
+  ],
+  "keywords": [
+    "phyllo and feta cheese rolls",
+    "cheese roll",
+    "greek cheese pie"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "6 sheets of phyllo dough",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": "sheets",
+          "name": "of phyllo dough",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp mayonnaise",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "mayonnaise",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "200g feta cheese (7 ounces)",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "g",
+          "name": "feta cheese (7 ounces)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g graviera or kefalotyri, or any hard yellow cheese (3.5 ounces)",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "graviera or kefalotyri, or any hard yellow cheese (3.5 ounces)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 long green pepper, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "long green pepper",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 egg",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "egg",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "a pinch of dry oregano",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "a pinch of dry oregano",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "120g melted butter (4-5 ounces)",
+          "quantity": 120,
+          "quantityText": "120",
+          "unit": "g",
+          "name": "melted butter (4-5 ounces)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp fresh dill, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "fresh dill",
+          "note": "finely chopped",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Crush the feta cheese with your hands, into a large bowl and add the grated cheese, the chopped pepper, the egg, the mayonnaise, the oregano and the fresh dill . Mix well with a spoon to combine the ingredients.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Crush the feta cheese with your hands, into a large bowl and add the grated cheese, the chopped pepper, the egg, the mayonnaise, the oregano and the fresh dill . Mix well with a spoon to combine the ingredients.",
+        "url": "https://www.mygreekdish.com/recipe/rollakia/#instruction-step-1"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Preheat the oven at 180C and start preparing the rolls.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Preheat the oven at 180C and start preparing the rolls.",
+        "url": "https://www.mygreekdish.com/recipe/rollakia/#instruction-step-2"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Spread one sheet of the phyllo dough on the kitchen counter and with a cooking brush drizzle with some melted butter. Spread one more sheet on top and drizzle with some more butter.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Spread one sheet of the phyllo dough on the kitchen counter and with a cooking brush drizzle with some melted butter. Spread one more sheet on top and drizzle with some more butter.",
+        "url": "https://www.mygreekdish.com/recipe/rollakia/#instruction-step-3"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Cut the sheets into three lanes. At the end of each lane add one tablespoon of the filling.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Cut the sheets into three lanes. At the end of each lane add one tablespoon of the filling.",
+        "url": "https://www.mygreekdish.com/recipe/rollakia/#instruction-step-4"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Wrap each lane into rolls, by folding the edges inwards.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Wrap each lane into rolls, by folding the edges inwards.",
+        "url": "https://www.mygreekdish.com/recipe/rollakia/#instruction-step-5"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Repeat the same procedure with the rest of the phyllo sheets and filling.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Repeat the same procedure with the rest of the phyllo sheets and filling.",
+        "url": "https://www.mygreekdish.com/recipe/rollakia/#instruction-step-6"
+      }
+    },
+    {
+      "order": 7,
+      "text": "Oil the bottom of a large baking tray, place the rolls and butter them with some melted butter on top. Bake in preheated oven at 180C for 30-35 minutes, until golden and crispy. Enjoy!",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Oil the bottom of a large baking tray, place the rolls and butter them with some melted butter on top. Bake in preheated oven at 180C for 30-35 minutes, until golden and crispy. Enjoy!",
+        "url": "https://www.mygreekdish.com/recipe/rollakia/#instruction-step-7"
+      }
+    },
+    {
+      "order": 8,
+      "text": "You can make as many rolls as you like and store them in the freezer (before baking them).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "You can make as many rolls as you like and store them in the freezer (before baking them).",
+        "url": "https://www.mygreekdish.com/recipe/rollakia/#instruction-step-8"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "servingSize": "1 roll",
+    "calories": "248kcal",
+    "sugarContent": "1.5g",
+    "sodiumContent": "396.5mg",
+    "fatContent": "18.3g",
+    "saturatedFatContent": "10.7g",
+    "unsaturatedFatContent": "6.7g",
+    "transFatContent": "0g",
+    "carbohydrateContent": "12.2g",
+    "fiberContent": "0.9g",
+    "proteinContent": "8.9g",
+    "cholesterolContent": "69.3mg"
+  },
+  "media": {
+    "coverImages": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Phyllo-dough-Rolls-with-Feta-cheese-and-Peppers-2-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Phyllo-dough-Rolls-with-Feta-cheese-and-Peppers-2-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Phyllo-dough-Rolls-with-Feta-cheese-and-Peppers-2-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Phyllo-dough-Rolls-with-Feta-cheese-and-Peppers-2.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "cookingMethod": "Baked",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "491",
+      "ratingValue": "4.9"
+    }
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org/",
+    "@type": "Recipe",
+    "name": "Phyllo-dough Rolls with Feta Cheese and Peppers Recipe",
+    "description": "Discover this amazing phyllo and feta cheese rolls recipe, perfect as an appetiser or side dish for a hearty family meal! And remember, make a few extra! Your loved ones will be coming back for more!",
+    "author": {
+      "@type": "Person",
+      "name": "Eli K. Giannopoulos"
+    },
+    "keywords": "phyllo and feta cheese rolls, cheese roll, greek cheese pie",
+    "image": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Phyllo-dough-Rolls-with-Feta-cheese-and-Peppers-2-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Phyllo-dough-Rolls-with-Feta-cheese-and-Peppers-2-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Phyllo-dough-Rolls-with-Feta-cheese-and-Peppers-2-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/05/Phyllo-dough-Rolls-with-Feta-cheese-and-Peppers-2.jpg"
+    ],
+    "url": "https://www.mygreekdish.com/recipe/rollakia/",
+    "recipeIngredient": [
+      "6 sheets of phyllo dough",
+      "1 tbsp mayonnaise",
+      "200g feta cheese (7 ounces)",
+      "100g graviera or kefalotyri, or any hard yellow cheese (3.5 ounces)",
+      "1 long green pepper, finely chopped",
+      "1 egg",
+      "a pinch of dry oregano",
+      "120g melted butter (4-5 ounces)",
+      "1 tbsp fresh dill, finely chopped"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Crush the feta cheese with your hands, into a large bowl and add the grated cheese, the chopped pepper, the egg, the mayonnaise, the oregano and the fresh dill . Mix well with a spoon to combine the ingredients.",
+        "url": "https://www.mygreekdish.com/recipe/rollakia/#instruction-step-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Preheat the oven at 180C and start preparing the rolls.",
+        "url": "https://www.mygreekdish.com/recipe/rollakia/#instruction-step-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Spread one sheet of the phyllo dough on the kitchen counter and with a cooking brush drizzle with some melted butter. Spread one more sheet on top and drizzle with some more butter.",
+        "url": "https://www.mygreekdish.com/recipe/rollakia/#instruction-step-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Cut the sheets into three lanes. At the end of each lane add one tablespoon of the filling.",
+        "url": "https://www.mygreekdish.com/recipe/rollakia/#instruction-step-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Wrap each lane into rolls, by folding the edges inwards.",
+        "url": "https://www.mygreekdish.com/recipe/rollakia/#instruction-step-5"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Repeat the same procedure with the rest of the phyllo sheets and filling.",
+        "url": "https://www.mygreekdish.com/recipe/rollakia/#instruction-step-6"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Oil the bottom of a large baking tray, place the rolls and butter them with some melted butter on top. Bake in preheated oven at 180C for 30-35 minutes, until golden and crispy. Enjoy!",
+        "url": "https://www.mygreekdish.com/recipe/rollakia/#instruction-step-7"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "You can make as many rolls as you like and store them in the freezer (before baking them).",
+        "url": "https://www.mygreekdish.com/recipe/rollakia/#instruction-step-8"
+      }
+    ],
+    "prepTime": "PT10M",
+    "cookTime": "PT30M",
+    "totalTime": "PT40M",
+    "recipeYield": "9",
+    "recipeCategory": "Appetizer",
+    "cookingMethod": "Baked",
+    "recipeCuisine": "Greek",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "491",
+      "ratingValue": "4.9"
+    },
+    "nutrition": {
+      "servingSize": "1 roll",
+      "calories": "248kcal",
+      "sugarContent": "1.5g",
+      "sodiumContent": "396.5mg",
+      "fatContent": "18.3g",
+      "saturatedFatContent": "10.7g",
+      "unsaturatedFatContent": "6.7g",
+      "transFatContent": "0g",
+      "carbohydrateContent": "12.2g",
+      "fiberContent": "0.9g",
+      "proteinContent": "8.9g",
+      "cholesterolContent": "69.3mg",
+      "@type": "nutritionInformation"
+    },
+    "datePublished": "2013-05-15",
+    "@id": "https://www.mygreekdish.com/recipe/rollakia/#recipe",
+    "isPartOf": {
+      "@id": "https://www.mygreekdish.com/recipe/rollakia/#article"
+    },
+    "mainEntityOfPage": "https://www.mygreekdish.com/recipe/rollakia/"
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:cookingMethod|aggregateRating"
+  ]
+}

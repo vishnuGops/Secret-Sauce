@@ -1,0 +1,531 @@
+{
+  "schemaVersion": 1,
+  "id": "atul-kochhar/pineapple-prawn-and-scallop-curry",
+  "slug": "pineapple-prawn-and-scallop-curry",
+  "chefId": "chef_atul-kochhar",
+  "chefSlug": "atul-kochhar",
+  "chefName": "Atul Kochhar",
+  "title": "Pineapple, prawn and scallop curry",
+  "description": "Coconut and pineapple add a sweet note to this flavour-packed dish made with Laotian curry paste.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/pinapple_prawn_and_02199",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/pinapple_prawn_and_02199",
+    "retrievedAt": "2026-09-11T00:28:16.123Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Atul Kochhar"
+    ],
+    "datePublished": "2013-03-23T11:30:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "acf0abcc2b3e7e5c5acd7f9c52e69631eb64082bea40f8d2e84c651673e6e744",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Thai and South-East Asian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "curry",
+    "prawn",
+    "egg free",
+    "gluten free",
+    "2007-16"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the Laotian curry paste",
+      "items": [
+        {
+          "raw": "1 tsp cumin seeds, lightly toasted",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "cumin seeds, lightly toasted",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp coriander seeds, lightly toasted",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "coriander seeds, lightly toasted",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 lemongrass stalk, hard outer leaves removed, chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "lemongrass stalk",
+          "note": "hard outer leaves removed, chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp chopped galangal",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "chopped galangal",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 lime (preferably kaffir), grated zest and juice only",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "lime (preferably kaffir)",
+          "note": "grated zest and juice only",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp finely chopped garlic",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "finely chopped garlic",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 large shallot, chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "large shallot",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp chopped coriander root (alternatively use coriander stems)",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "chopped coriander root (alternatively use coriander stems)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp chopped fresh turmeric",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "chopped fresh turmeric",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground turmeric",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground turmeric",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp chopped fresh ginger",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "chopped fresh ginger",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 red Thai or bird’s-eye chillies",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "red Thai or bird’s-eye chillies",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp kaapi (dried shrimp paste)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "kaapi (dried shrimp paste)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp medium curry powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "medium curry powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp vegetable oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "vegetable oil",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the pineapple, prawn and scallop curry",
+      "items": [
+        {
+          "raw": "2 tbsp groundnut or vegetable oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "groundnut or vegetable oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp Laotian curry paste (from above)",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "Laotian curry paste (from above)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "300g/10oz raw prawns, peeled, cleaned and deveined",
+          "quantity": 300,
+          "quantityText": "300",
+          "unit": "g",
+          "name": "/10oz raw prawns",
+          "note": "peeled, cleaned and deveined",
+          "isOptional": false
+        },
+        {
+          "raw": "200g/7oz scallops, coral removed",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "g",
+          "name": "/7oz scallops, coral removed",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp fish sauce",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "fish sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 kaffir lime leaves",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "kaffir lime leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "500ml/18fl oz coconut milk",
+          "quantity": 500,
+          "quantityText": "500",
+          "unit": "ml",
+          "name": "/18fl oz coconut milk",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 small pineapple, peeled and diced",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "small pineapple",
+          "note": "peeled and diced",
+          "isOptional": false
+        },
+        {
+          "raw": "4 spring onions, cut into 2.5cm/1in pieces",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "spring onions, cut into 2.5cm/1in pieces",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "handful of holy basil or ordinary basil leaves, plus extra to garnish",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "handful",
+          "name": "of holy basil or ordinary basil leaves",
+          "note": "plus extra to garnish",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the salad",
+      "items": [
+        {
+          "raw": "250g/9oz cherry tomatoes, halved",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "/9oz cherry tomatoes",
+          "note": "halved",
+          "isOptional": false
+        },
+        {
+          "raw": "1 cucumber, sliced",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "cucumber",
+          "note": "sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "1 bunch spring onions, finely sliced",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "bunch",
+          "name": "spring onions",
+          "note": "finely sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "1 red chilli, sliced into long strips",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "red chilli",
+          "note": "sliced into long strips",
+          "isOptional": false
+        },
+        {
+          "raw": "1 iceberg lettuce, sliced",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "iceberg lettuce",
+          "note": "sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "1 lemon, juice only",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "lemon, juice only",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "For the Laotian curry paste, blend or pound all the ingredients together with a small quantity of water to make a smooth paste. It can be kept, tightly covered, in the fridge for 3-4 days or frozen in ice cube trays.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the Laotian curry paste, blend or pound all the ingredients together with a small quantity of water to make a smooth paste. It can be kept, tightly covered, in the fridge for 3-4 days or frozen in ice cube trays. "
+    },
+    {
+      "order": 2,
+      "text": "For the pineapple, prawn and scallop curry, heat the oil in a wok and gently fry the curry paste for a minute until fragrant. Add the prawns and scallops. Cook for 2-3 minutes, then add the fish sauce, sugar and kaffir lime leaves. Stir for a minute. Use a slotted spoon to remove the seafood from the wok and keep warm.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the pineapple, prawn and scallop curry, heat the oil in a wok and gently fry the curry paste for a minute until fragrant. Add the prawns and scallops. Cook for 2-3 minutes, then add the fish sauce, sugar and kaffir lime leaves. Stir for a minute. Use a slotted spoon to remove the seafood from the wok and keep warm."
+    },
+    {
+      "order": 3,
+      "text": "Add the coconut milk to the wok and bring to the boil, then simmer for 2-3 minutes. Add the pineapple and simmer for five minutes. Return the seafood to the wok and add the spring onions and basil leaves. Cook, stirring, for a couple of minutes, then transfer to serving bowls.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the coconut milk to the wok and bring to the boil, then simmer for 2-3 minutes. Add the pineapple and simmer for five minutes. Return the seafood to the wok and add the spring onions and basil leaves. Cook, stirring, for a couple of minutes, then transfer to serving bowls. "
+    },
+    {
+      "order": 4,
+      "text": "For the salad, place all the ingredients in a large bowl and gently toss.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the salad, place all the ingredients in a large bowl and gently toss."
+    },
+    {
+      "order": 5,
+      "text": "To serve, garnish each bowl of curry with a sprig of basil and serve with the salad.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To serve, garnish each bowl of curry with a sprig of basil and serve with the salad."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 2,
+      "ratingValue": 4.5
+    },
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Coconut and pineapple add a sweet note to this flavour-packed dish made with Laotian curry paste.",
+    "headline": "Pineapple, prawn and scallop curry",
+    "image": null,
+    "name": "Pineapple, prawn and scallop curry",
+    "author": {
+      "@type": "Person",
+      "name": "Atul Kochhar"
+    },
+    "datePublished": "2013-03-23T11:30:00.000Z",
+    "dateModified": "2018-09-11T12:17:56.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 2,
+      "ratingValue": 4.5
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, curry, prawn, egg free, gluten free, 2007-16",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Thai and South-East Asian",
+    "recipeIngredient": [
+      "1 tsp cumin seeds, lightly toasted",
+      "2 tsp coriander seeds, lightly toasted",
+      "1 lemongrass stalk, hard outer leaves removed, chopped",
+      "1 tbsp chopped galangal",
+      "1 lime (preferably kaffir), grated zest and juice only",
+      "1 tbsp finely chopped garlic ",
+      "1 large shallot, chopped",
+      "3 tbsp chopped coriander root (alternatively use coriander stems)",
+      "1 tbsp chopped fresh turmeric",
+      "1 tsp ground turmeric",
+      "1 tbsp chopped fresh ginger",
+      "4 red Thai or bird’s-eye chillies",
+      "2 tsp kaapi (dried shrimp paste)",
+      "1 tbsp medium curry powder",
+      "2 tbsp vegetable oil",
+      "2 tbsp groundnut or vegetable oil",
+      "3 tbsp Laotian curry paste (from above)",
+      "300g/10oz raw prawns, peeled, cleaned and deveined",
+      "200g/7oz scallops, coral removed",
+      "2 tbsp fish sauce",
+      "1 tbsp sugar",
+      "4 kaffir lime leaves",
+      "500ml/18fl oz coconut milk",
+      "1 small pineapple, peeled and diced",
+      "4 spring onions, cut into 2.5cm/1in pieces",
+      "handful of holy basil or ordinary basil leaves, plus extra to garnish",
+      "250g/9oz cherry tomatoes, halved",
+      "1 cucumber, sliced",
+      "1 bunch spring onions, finely sliced",
+      "1 red chilli, sliced into long strips",
+      "1 iceberg lettuce, sliced",
+      "1 lemon, juice only"
+    ],
+    "recipeInstructions": [
+      "For the Laotian curry paste, blend or pound all the ingredients together with a small quantity of water to make a smooth paste. It can be kept, tightly covered, in the fridge for 3-4 days or frozen in ice cube trays. ",
+      "For the pineapple, prawn and scallop curry, heat the oil in a wok and gently fry the curry paste for a minute until fragrant. Add the prawns and scallops. Cook for 2-3 minutes, then add the fish sauce, sugar and kaffir lime leaves. Stir for a minute. Use a slotted spoon to remove the seafood from the wok and keep warm.",
+      "Add the coconut milk to the wok and bring to the boil, then simmer for 2-3 minutes. Add the pineapple and simmer for five minutes. Return the seafood to the wok and add the spring onions and basil leaves. Cook, stirring, for a couple of minutes, then transfer to serving bowls. ",
+      "For the salad, place all the ingredients in a large bowl and gently toss.",
+      "To serve, garnish each bowl of curry with a sprig of basil and serve with the salad."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

@@ -1,0 +1,285 @@
+{
+  "schemaVersion": 1,
+  "id": "eli-giannopoulos/yogurt-balls-with-fresh-herbs",
+  "slug": "yogurt-balls-with-fresh-herbs",
+  "chefId": "chef_eli-giannopoulos",
+  "chefSlug": "eli-giannopoulos",
+  "chefName": "Eli K. Giannopoulos",
+  "title": "Yogurt Balls with fresh Herbs",
+  "description": "Cool, creamy and full of flavors! These refreshing little yogurt balls will become your favorite light snack! Try them with a drizzle of extra virgin olive and some cherry tomatoes or as a spread on top of salty crackers. Enjoy!",
+  "source": {
+    "sourceUrl": "https://www.mygreekdish.com/recipe/yogurt-balls-fresh-herbs/",
+    "finalUrl": "https://www.mygreekdish.com/recipe/yogurt-balls-fresh-herbs/",
+    "retrievedAt": "2026-09-11T02:48:01.575Z",
+    "publisher": null,
+    "authorRaw": [
+      "Eli K. Giannopoulos"
+    ],
+    "datePublished": "2013-11-19",
+    "rights": "My Greek Dish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "c448e1f89956108b7e8b7dbcfc16490dda5179168952060e7905aa687f6a55ae",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "20"
+    ],
+    "servings": 20
+  },
+  "timing": {
+    "prepMinutes": 180,
+    "cookMinutes": 10,
+    "totalMinutes": 190,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Greek"
+  ],
+  "category": [
+    "Starter"
+  ],
+  "keywords": [
+    "yogurt balls",
+    "tomato and yogurt starter",
+    "Greek antipasti"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1kg strained, thick yogurt (35 ounces)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "kg",
+          "name": "strained, thick yogurt (35 ounces)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "zest of 1 lemon",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "zest of 1 lemon",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "zest of 1 lime",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "zest of 1 lime",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp pepper",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "5-6 tbsps of fresh herbs (basil, mint, parsley)",
+          "quantity": 5,
+          "quantityText": "5-6",
+          "unit": "tbsp",
+          "name": "of fresh herbs (basil, mint, parsley)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To prepare these amazing yogurt balls, you need to drain all the excess water from the yogurt. Lay a piece of muslin (loosely woven cotton fabric) on a workbench and place the yogurt in the centre. Gather up the muslin sides and tie with string; place on a drainer over a large bowl and leave to drain in the fridge for 12-14 hours.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "To prepare these amazing yogurt balls, you need to drain all the excess water from the yogurt. Lay a piece of muslin (loosely woven cotton fabric) on a workbench and place the yogurt in the centre. Gather up the muslin sides and tie with string; place on a drainer over a large bowl and leave to drain in the fridge for 12-14 hours.",
+        "url": "https://www.mygreekdish.com/recipe/yogurt-balls-fresh-herbs/#instruction-step-1"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Remove the muslin and place the yogurt in a large bowl. Add the fresh herbs, the lemon zest and lime zest and blend. Roll the yogurt into golf-sized balls, lay on a baking tray and put them in the fridge for another 2-3 hours.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Remove the muslin and place the yogurt in a large bowl. Add the fresh herbs, the lemon zest and lime zest and blend. Roll the yogurt into golf-sized balls, lay on a baking tray and put them in the fridge for another 2-3 hours.",
+        "url": "https://www.mygreekdish.com/recipe/yogurt-balls-fresh-herbs/#instruction-step-2"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Drizzle with extra virgin olive oil and serve with some cherry tomatoes and crackers aside as a delicious snack. Enjoy!",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Drizzle with extra virgin olive oil and serve with some cherry tomatoes and crackers aside as a delicious snack. Enjoy!",
+        "url": "https://www.mygreekdish.com/recipe/yogurt-balls-fresh-herbs/#instruction-step-3"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "servingSize": "1 ball",
+    "calories": "50kcal",
+    "sugarContent": "2.1g",
+    "sodiumContent": "133.9mg",
+    "fatContent": "2.5g",
+    "saturatedFatContent": "1.2g",
+    "unsaturatedFatContent": "1.3g",
+    "transFatContent": "0g",
+    "carbohydrateContent": "2.5g",
+    "fiberContent": "0.2g",
+    "proteinContent": "4.5g",
+    "cholesterolContent": "6.5mg"
+  },
+  "media": {
+    "coverImages": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Yogurt-Balls-with-fresh-Herbs1-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Yogurt-Balls-with-fresh-Herbs1-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Yogurt-Balls-with-fresh-Herbs1-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Yogurt-Balls-with-fresh-Herbs1-scaled.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "cookingMethod": "Fridge",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "707",
+      "ratingValue": "4.9"
+    }
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org/",
+    "@type": "Recipe",
+    "name": "Yogurt Balls with fresh Herbs",
+    "description": "Cool, creamy and full of flavors! These refreshing little yogurt balls will become your favorite light snack! Try them with a drizzle of extra virgin olive and some cherry tomatoes or as a spread on top of salty crackers. Enjoy!",
+    "author": {
+      "@type": "Person",
+      "name": "Eli K. Giannopoulos"
+    },
+    "keywords": "yogurt balls, tomato and yogurt starter, Greek antipasti",
+    "image": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Yogurt-Balls-with-fresh-Herbs1-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Yogurt-Balls-with-fresh-Herbs1-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Yogurt-Balls-with-fresh-Herbs1-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Yogurt-Balls-with-fresh-Herbs1-scaled.jpg"
+    ],
+    "url": "https://www.mygreekdish.com/recipe/yogurt-balls-fresh-herbs/",
+    "recipeIngredient": [
+      "1kg strained, thick yogurt (35 ounces)",
+      "zest of 1 lemon",
+      "zest of 1 lime",
+      "1 tsp salt",
+      "1 tsp pepper",
+      "5-6 tbsps of fresh herbs (basil, mint, parsley)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "To prepare these amazing yogurt balls, you need to drain all the excess water from the yogurt. Lay a piece of muslin (loosely woven cotton fabric) on a workbench and place the yogurt in the centre. Gather up the muslin sides and tie with string; place on a drainer over a large bowl and leave to drain in the fridge for 12-14 hours.",
+        "url": "https://www.mygreekdish.com/recipe/yogurt-balls-fresh-herbs/#instruction-step-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Remove the muslin and place the yogurt in a large bowl. Add the fresh herbs, the lemon zest and lime zest and blend. Roll the yogurt into golf-sized balls, lay on a baking tray and put them in the fridge for another 2-3 hours.",
+        "url": "https://www.mygreekdish.com/recipe/yogurt-balls-fresh-herbs/#instruction-step-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Drizzle with extra virgin olive oil and serve with some cherry tomatoes and crackers aside as a delicious snack. Enjoy!",
+        "url": "https://www.mygreekdish.com/recipe/yogurt-balls-fresh-herbs/#instruction-step-3"
+      }
+    ],
+    "prepTime": "PT3H",
+    "cookTime": "PT10M",
+    "totalTime": "PT3H10M",
+    "recipeYield": "20",
+    "recipeCategory": "Starter",
+    "cookingMethod": "Fridge",
+    "recipeCuisine": "Greek",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "707",
+      "ratingValue": "4.9"
+    },
+    "nutrition": {
+      "servingSize": "1 ball",
+      "calories": "50kcal",
+      "sugarContent": "2.1g",
+      "sodiumContent": "133.9mg",
+      "fatContent": "2.5g",
+      "saturatedFatContent": "1.2g",
+      "unsaturatedFatContent": "1.3g",
+      "transFatContent": "0g",
+      "carbohydrateContent": "2.5g",
+      "fiberContent": "0.2g",
+      "proteinContent": "4.5g",
+      "cholesterolContent": "6.5mg",
+      "@type": "nutritionInformation"
+    },
+    "datePublished": "2013-11-19",
+    "@id": "https://www.mygreekdish.com/recipe/yogurt-balls-fresh-herbs/#recipe",
+    "isPartOf": {
+      "@id": "https://www.mygreekdish.com/recipe/yogurt-balls-fresh-herbs/#article"
+    },
+    "mainEntityOfPage": "https://www.mygreekdish.com/recipe/yogurt-balls-fresh-herbs/"
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "range-quantity:1",
+    "unmapped:cookingMethod|aggregateRating"
+  ]
+}

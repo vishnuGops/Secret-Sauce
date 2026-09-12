@@ -1,0 +1,547 @@
+{
+  "schemaVersion": 1,
+  "id": "huy-vu/how-to-make-boba-from-scratch-aka-tapioca-pearls-for-bubble-tea",
+  "slug": "how-to-make-boba-from-scratch-aka-tapioca-pearls-for-bubble-tea",
+  "chefId": "chef_huy-vu",
+  "chefSlug": "huy-vu",
+  "chefName": "Huy Vu",
+  "title": "How to Make Boba from Scratch (aka Tapioca Pearls) for Bubble Tea",
+  "description": "This tapioca pearl recipe will help teach you how to make tapioca pearls (boba) from scratch! Soon, you'll have extra chewy and fresh boba at home.",
+  "source": {
+    "sourceUrl": "https://www.hungryhuy.com/tapioca-pearls/",
+    "finalUrl": "https://www.hungryhuy.com/tapioca-pearls/",
+    "retrievedAt": "2026-09-11T03:14:32.787Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2020-05-30T17:17:50+00:00",
+    "rights": "Hungry Huy. Functional content plus a link, for internal app testing. Not redistributed.",
+    "pageTitle": "How to Make Boba from Scratch (aka Tapioca Pearls) for Bubble Tea",
+    "htmlSha256": "407517c2702a0880bacf28230863468df8f63f6050610b80cdd14f4079b8632c",
+    "jsonLdBlockCount": 2,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": [
+        "ingredient-html-only: ▢ 60 ml or &frac14; c water",
+        "ingredient-html-only: ▢ 95 g or &frac34; c tapioca starch or flour",
+        "ingredient-jsonld-only: 2",
+        "regrouped-from-html: 2 groups"
+      ]
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "2"
+    ],
+    "servings": 2
+  },
+  "timing": {
+    "prepMinutes": 10,
+    "cookMinutes": 65,
+    "totalMinutes": 105,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Asian"
+  ],
+  "category": [
+    "Beverage"
+  ],
+  "keywords": [
+    "Boba",
+    "milk tea",
+    "Tapioca pearls"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "40 g or 3 tbsp dark brown sugar",
+          "quantity": 40,
+          "quantityText": "40",
+          "unit": "g",
+          "name": "or 3 tbsp dark brown sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "▢ 60 ml or &frac14; c water",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 60 ml or &frac14; c water",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "▢ 95 g or &frac34; c tapioca starch or flour",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 95 g or &frac34; c tapioca starch or flour",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        }
+      ]
+    },
+    {
+      "name": "Sweetener",
+      "items": [
+        {
+          "raw": "13 g or 2 tbsp dark brown sugar or honey (optional )",
+          "quantity": 13,
+          "quantityText": "13",
+          "unit": "g",
+          "name": "or 2 tbsp dark brown sugar or honey (optional )",
+          "note": null,
+          "isOptional": true
+        }
+      ]
+    },
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "60 ml or ¼ c water",
+          "quantity": 60,
+          "quantityText": "60",
+          "unit": "ml",
+          "name": "or ¼ c water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "95 g or ¾ c tapioca starch or flour",
+          "quantity": 95,
+          "quantityText": "95",
+          "unit": "g",
+          "name": "or ¾ c tapioca starch or flour",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "In a saucepan over medium-high heat, add 40 grams of dark brown sugar and 60 milliliters of water and stir until the sugar is fully dissolved. Remove the pan from heat and make sure there are no bubbles any longer.",
+      "stepGroup": "Making dough",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a saucepan over medium-high heat, add 40 grams of dark brown sugar and 60 milliliters of water and stir until the sugar is fully dissolved. Remove the pan from heat and make sure there are no bubbles any longer.",
+        "name": "In a saucepan over medium-high heat, add 40 grams of dark brown sugar and 60 milliliters of water and stir until the sugar is fully dissolved. Remove the pan from heat and make sure there are no bubbles any longer.",
+        "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Add about 1 tablespoon of tapioca starch and mix in quickly before it gets too lumpy. Add the pan back onto the stove on medium-low heat and stir constantly until it begins to thicken. Once you start seeing the mixture thicken on the bottom of the pan, remove it from the stove and begin to stir until the entire mixture thickens.",
+      "stepGroup": "Making dough",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add about 1 tablespoon of tapioca starch and mix in quickly before it gets too lumpy. Add the pan back onto the stove on medium-low heat and stir constantly until it begins to thicken. Once you start seeing the mixture thicken on the bottom of the pan, remove it from the stove and begin to stir until the entire mixture thickens.",
+        "name": "Add about 1 tablespoon of tapioca starch and mix in quickly before it gets too lumpy. Add the pan back onto the stove on medium-low heat and stir constantly until it begins to thicken. Once you start seeing the mixture thicken on the bottom of the pan, remove it from the stove and begin to stir until the entire mixture thickens.",
+        "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Add the rest of the tapioca starch into the pan and continue to stir constantly until you incorporate all the starch into the mixture. It should become slightly sticky and thicker to stir.",
+      "stepGroup": "Making dough",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add the rest of the tapioca starch into the pan and continue to stir constantly until you incorporate all the starch into the mixture. It should become slightly sticky and thicker to stir.",
+        "name": "Add the rest of the tapioca starch into the pan and continue to stir constantly until you incorporate all the starch into the mixture. It should become slightly sticky and thicker to stir.",
+        "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Sprinkle tapioca starch onto a clean surface and transfer your dough. Sprinkle more tapioca starch on top of the dough and carefully knead until it's smooth and you get a less sticky texture. I knead for about two minutes and add more tapioca starch if the dough still feels too sticky. Pull the dough apart and if it snaps in the middle, then your dough is done kneading.",
+      "stepGroup": "Making dough",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Sprinkle tapioca starch onto a clean surface and transfer your dough. Sprinkle more tapioca starch on top of the dough and carefully knead until it&#039;s smooth and you get a less sticky texture. I knead for about two minutes and add more tapioca starch if the dough still feels too sticky. Pull the dough apart and if it snaps in the middle, then your dough is done kneading.",
+        "name": "Sprinkle tapioca starch onto a clean surface and transfer your dough. Sprinkle more tapioca starch on top of the dough and carefully knead until it&#039;s smooth and you get a less sticky texture. I knead for about two minutes and add more tapioca starch if the dough still feels too sticky. Pull the dough apart and if it snaps in the middle, then your dough is done kneading.",
+        "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Cut the dough into quarters and place three of the quarters under cling wrap to prevent them from drying out.",
+      "stepGroup": "Making dough",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Cut the dough into quarters and place three of the quarters under cling wrap to prevent them from drying out.",
+        "name": "Cut the dough into quarters and place three of the quarters under cling wrap to prevent them from drying out.",
+        "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-0-4"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Take one quarter and roll it into a long rope with ¼ of an inch diameter. Cut small pieces of about ¼ of an inch sections along the rope. Take one piece and roll it between the palm of your hands to form small balls. Add some tapioca starch into a bowl or sheet pan to prevent the balls from sticking. You want to move pretty quickly because you don’t want to dry out the dough. Repeat until you have formed all the boba balls.",
+      "stepGroup": "Making dough",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Take one quarter and roll it into a long rope with ¼ of an inch diameter. Cut small pieces of about ¼ of an inch sections along the rope. Take one piece and roll it between the palm of your hands to form small balls. Add some tapioca starch into a bowl or sheet pan to prevent the balls from sticking. You want to move pretty quickly because you don’t want to dry out the dough. Repeat until you have formed all the boba balls.",
+        "name": "Take one quarter and roll it into a long rope with ¼ of an inch diameter. Cut small pieces of about ¼ of an inch sections along the rope. Take one piece and roll it between the palm of your hands to form small balls. Add some tapioca starch into a bowl or sheet pan to prevent the balls from sticking. You want to move pretty quickly because you don’t want to dry out the dough. Repeat until you have formed all the boba balls.",
+        "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-0-5"
+      }
+    },
+    {
+      "order": 7,
+      "text": "Once you have enough balls you can start to cook them.",
+      "stepGroup": "Making dough",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Once you have enough balls you can start to cook them.",
+        "name": "Once you have enough balls you can start to cook them.",
+        "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-0-6"
+      }
+    },
+    {
+      "order": 8,
+      "text": "Boil 10 cups of water in a large pot. Once it hits a boil, add ½ cup of boba. Wait for the boba to float and then lower to medium heat. Continue to cook on a simmer for 20 minutes.",
+      "stepGroup": "Cooking boba",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Boil 10 cups of water in a large pot. Once it hits a boil, add ½ cup of boba. Wait for the boba to float and then lower to medium heat. Continue to cook on a simmer for 20 minutes.",
+        "name": "Boil 10 cups of water in a large pot. Once it hits a boil, add ½ cup of boba. Wait for the boba to float and then lower to medium heat. Continue to cook on a simmer for 20 minutes.",
+        "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-1-0"
+      }
+    },
+    {
+      "order": 9,
+      "text": "Then move the pot off the stove, cover with a lid, and rest on the counter for an additional 20 minutes.",
+      "stepGroup": "Cooking boba",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Then move the pot off the stove, cover with a lid, and rest on the counter for an additional 20 minutes.",
+        "name": "Then move the pot off the stove, cover with a lid, and rest on the counter for an additional 20 minutes.",
+        "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-1-1"
+      }
+    },
+    {
+      "order": 10,
+      "text": "Strain the pearls and run them under cold water to stop the cooking process and remove the starchy outer layer.",
+      "stepGroup": "Cooking boba",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Strain the pearls and run them under cold water to stop the cooking process and remove the starchy outer layer.",
+        "name": "Strain the pearls and run them under cold water to stop the cooking process and remove the starchy outer layer.",
+        "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-1-2"
+      }
+    },
+    {
+      "order": 11,
+      "text": "If you want to sweeten your boba, put them in a bowl and mix in two tablespoons of dark brown sugar. Marinate for 10 minutes and serve with your favorite milk tea!",
+      "stepGroup": "Cooking boba",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "If you want to sweeten your boba, put them in a bowl and mix in two tablespoons of dark brown sugar. Marinate for 10 minutes and serve with your favorite milk tea!",
+        "name": "If you want to sweeten your boba, put them in a bowl and mix in two tablespoons of dark brown sugar. Marinate for 10 minutes and serve with your favorite milk tea!",
+        "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-1-3"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "258.9 kcal",
+    "carbohydrateContent": "67.3 g",
+    "proteinContent": "0.1 g",
+    "sodiumContent": "8.9 mg",
+    "sugarContent": "25.7 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cooked-pearls-sq.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cooked-pearls-sq-500x500.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cooked-pearls-sq-500x375.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cooked-pearls-sq-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "6",
+      "reviewCount": "2"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "The pearls can last overnight with a light coat of honey, covered and either in the cooler or in a cool place. Also, the boba (pre boil) could have a longer shelf life in the freezer, and cut the process time in half?",
+        "author": {
+          "@type": "Person",
+          "name": "Christian Copeland"
+        },
+        "datePublished": "2022-04-02"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Hey, thanks for the detailed recipe. I plan to try this soon. I was wondering, do you think that I should adjust the water content if I plan to omit the brown sugar?",
+        "author": {
+          "@type": "Person",
+          "name": "Alexa"
+        },
+        "datePublished": "2021-12-20"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "How to Make Boba from Scratch (aka Tapioca Pearls) for Bubble Tea",
+    "author": {
+      "@id": "https://www.hungryhuy.com/#/schema/person/77ba703312129b3930232d1c829f0ff0"
+    },
+    "description": "This tapioca pearl recipe will help teach you how to make tapioca pearls (boba) from scratch! Soon, you&#039;ll have extra chewy and fresh boba at home.",
+    "datePublished": "2020-05-30T17:17:50+00:00",
+    "image": [
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cooked-pearls-sq.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cooked-pearls-sq-500x500.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cooked-pearls-sq-500x375.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cooked-pearls-sq-480x270.jpg"
+    ],
+    "recipeYield": [
+      "2"
+    ],
+    "prepTime": "PT10M",
+    "cookTime": "PT65M",
+    "totalTime": "PT105M",
+    "recipeIngredient": [
+      "40 g or 3 tbsp dark brown sugar",
+      "60 ml or ¼ c water",
+      "95 g or ¾ c tapioca starch or flour",
+      "13 g or 2 tbsp dark brown sugar or honey (optional )"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToSection",
+        "name": "Making dough",
+        "itemListElement": [
+          {
+            "@type": "HowToStep",
+            "text": "In a saucepan over medium-high heat, add 40 grams of dark brown sugar and 60 milliliters of water and stir until the sugar is fully dissolved. Remove the pan from heat and make sure there are no bubbles any longer.",
+            "name": "In a saucepan over medium-high heat, add 40 grams of dark brown sugar and 60 milliliters of water and stir until the sugar is fully dissolved. Remove the pan from heat and make sure there are no bubbles any longer.",
+            "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-0-0"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Add about 1 tablespoon of tapioca starch and mix in quickly before it gets too lumpy. Add the pan back onto the stove on medium-low heat and stir constantly until it begins to thicken. Once you start seeing the mixture thicken on the bottom of the pan, remove it from the stove and begin to stir until the entire mixture thickens.",
+            "name": "Add about 1 tablespoon of tapioca starch and mix in quickly before it gets too lumpy. Add the pan back onto the stove on medium-low heat and stir constantly until it begins to thicken. Once you start seeing the mixture thicken on the bottom of the pan, remove it from the stove and begin to stir until the entire mixture thickens.",
+            "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-0-1"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Add the rest of the tapioca starch into the pan and continue to stir constantly until you incorporate all the starch into the mixture. It should become slightly sticky and thicker to stir.",
+            "name": "Add the rest of the tapioca starch into the pan and continue to stir constantly until you incorporate all the starch into the mixture. It should become slightly sticky and thicker to stir.",
+            "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-0-2"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Sprinkle tapioca starch onto a clean surface and transfer your dough. Sprinkle more tapioca starch on top of the dough and carefully knead until it&#039;s smooth and you get a less sticky texture. I knead for about two minutes and add more tapioca starch if the dough still feels too sticky. Pull the dough apart and if it snaps in the middle, then your dough is done kneading.",
+            "name": "Sprinkle tapioca starch onto a clean surface and transfer your dough. Sprinkle more tapioca starch on top of the dough and carefully knead until it&#039;s smooth and you get a less sticky texture. I knead for about two minutes and add more tapioca starch if the dough still feels too sticky. Pull the dough apart and if it snaps in the middle, then your dough is done kneading.",
+            "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-0-3"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Cut the dough into quarters and place three of the quarters under cling wrap to prevent them from drying out.",
+            "name": "Cut the dough into quarters and place three of the quarters under cling wrap to prevent them from drying out.",
+            "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-0-4"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Take one quarter and roll it into a long rope with ¼ of an inch diameter. Cut small pieces of about ¼ of an inch sections along the rope. Take one piece and roll it between the palm of your hands to form small balls. Add some tapioca starch into a bowl or sheet pan to prevent the balls from sticking. You want to move pretty quickly because you don’t want to dry out the dough. Repeat until you have formed all the boba balls.",
+            "name": "Take one quarter and roll it into a long rope with ¼ of an inch diameter. Cut small pieces of about ¼ of an inch sections along the rope. Take one piece and roll it between the palm of your hands to form small balls. Add some tapioca starch into a bowl or sheet pan to prevent the balls from sticking. You want to move pretty quickly because you don’t want to dry out the dough. Repeat until you have formed all the boba balls.",
+            "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-0-5"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Once you have enough balls you can start to cook them.",
+            "name": "Once you have enough balls you can start to cook them.",
+            "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-0-6"
+          }
+        ]
+      },
+      {
+        "@type": "HowToSection",
+        "name": "Cooking boba",
+        "itemListElement": [
+          {
+            "@type": "HowToStep",
+            "text": "Boil 10 cups of water in a large pot. Once it hits a boil, add ½ cup of boba. Wait for the boba to float and then lower to medium heat. Continue to cook on a simmer for 20 minutes.",
+            "name": "Boil 10 cups of water in a large pot. Once it hits a boil, add ½ cup of boba. Wait for the boba to float and then lower to medium heat. Continue to cook on a simmer for 20 minutes.",
+            "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-1-0"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Then move the pot off the stove, cover with a lid, and rest on the counter for an additional 20 minutes.",
+            "name": "Then move the pot off the stove, cover with a lid, and rest on the counter for an additional 20 minutes.",
+            "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-1-1"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Strain the pearls and run them under cold water to stop the cooking process and remove the starchy outer layer.",
+            "name": "Strain the pearls and run them under cold water to stop the cooking process and remove the starchy outer layer.",
+            "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-1-2"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "If you want to sweeten your boba, put them in a bowl and mix in two tablespoons of dark brown sugar. Marinate for 10 minutes and serve with your favorite milk tea!",
+            "name": "If you want to sweeten your boba, put them in a bowl and mix in two tablespoons of dark brown sugar. Marinate for 10 minutes and serve with your favorite milk tea!",
+            "url": "https://www.hungryhuy.com/tapioca-pearls/#wprm-recipe-7776-step-1-3"
+          }
+        ]
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "6",
+      "reviewCount": "2"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "The pearls can last overnight with a light coat of honey, covered and either in the cooler or in a cool place. Also, the boba (pre boil) could have a longer shelf life in the freezer, and cut the process time in half?",
+        "author": {
+          "@type": "Person",
+          "name": "Christian Copeland"
+        },
+        "datePublished": "2022-04-02"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Hey, thanks for the detailed recipe. I plan to try this soon. I was wondering, do you think that I should adjust the water content if I plan to omit the brown sugar?",
+        "author": {
+          "@type": "Person",
+          "name": "Alexa"
+        },
+        "datePublished": "2021-12-20"
+      }
+    ],
+    "recipeCategory": [
+      "Beverage"
+    ],
+    "recipeCuisine": [
+      "Asian"
+    ],
+    "keywords": "Boba, milk tea, Tapioca pearls",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "258.9 kcal",
+      "carbohydrateContent": "67.3 g",
+      "proteinContent": "0.1 g",
+      "sodiumContent": "8.9 mg",
+      "sugarContent": "25.7 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://www.hungryhuy.com/tapioca-pearls/#recipe",
+    "isPartOf": {
+      "@id": "https://www.hungryhuy.com/tapioca-pearls/#article"
+    },
+    "mainEntityOfPage": "https://www.hungryhuy.com/tapioca-pearls/"
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:aggregateRating|review"
+  ]
+}

@@ -1,0 +1,863 @@
+{
+  "schemaVersion": 1,
+  "id": "yumna-jawad/kibbeh-in-yogurt-sauce",
+  "slug": "kibbeh-in-yogurt-sauce",
+  "chefId": "chef_yumna-jawad",
+  "chefSlug": "yumna-jawad",
+  "chefName": "Yumna Jawad",
+  "title": "Kibbeh in Yogurt Sauce",
+  "description": "Kibbeh in yogurt sauce is a comforting & popular Middle Eastern recipe. This is an authentic Lebanese recipe from my mom that's easy to follow",
+  "source": {
+    "sourceUrl": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/",
+    "finalUrl": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/",
+    "retrievedAt": "2026-09-11T02:47:00.802Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2021-04-14T08:00:00+00:00",
+    "rights": "Feel Good Foodie. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "df04af953d428bccef5f7af6097319cd1553e0ad05f6cb63738fadd5e1267d1b",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": [
+        "equipment-from-html: 4",
+        "ingredient-html-only: ▢ 1 &frac12; cups fine #1 bulgur wheat",
+        "ingredient-html-only: ▢ &frac12; cup water",
+        "ingredient-html-only: ▢ &frac12; cup fresh mint packed",
+        "ingredient-html-only: ▢ &frac14; cup kamouneh spice",
+        "ingredient-html-only: ▢ &frac14; cup cornstarch",
+        "ingredient-html-only: ▢ &frac12; cup short grain rice",
+        "ingredient-jsonld-only: 6",
+        "regrouped-from-html: 3 groups"
+      ]
+    },
+    "robots": "allows recipe paths; /wp-admin/ and /signup/ disallowed"
+  },
+  "yield": {
+    "raw": [
+      "6",
+      "6 servings"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 90,
+    "cookMinutes": 60,
+    "totalMinutes": 120,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Mediterranean"
+  ],
+  "category": [
+    "Entree"
+  ],
+  "keywords": [
+    "Kibbeh",
+    "kibbeh bi laban",
+    "Kibbeh bi labanieh",
+    "Lebanese kibbeh recipe",
+    "Yogurt Sauce"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "Hashweh Filling",
+      "items": [
+        {
+          "raw": "2 tablespoons olive oil (plus more for forming kibbeh)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "olive oil (plus more for forming kibbeh)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 pound 95% lean ground beef",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "lb",
+          "name": "95% lean ground beef",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 large onion (diced)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "large onion (diced)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 teaspoon salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tablespoon 7 Spice",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "7 Spice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 teaspoons sumac",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "sumac",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "Kibbeh Mixture/Casing",
+      "items": [
+        {
+          "raw": "▢ 1 &frac12; cups fine #1 bulgur wheat",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 1 &frac12; cups fine #1 bulgur wheat",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "▢ &frac12; cup water",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ &frac12; cup water",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "1 large onion (quartered)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "large onion (quartered)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "▢ &frac12; cup fresh mint packed",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ &frac12; cup fresh mint packed",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "▢ &frac14; cup kamouneh spice",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ &frac14; cup kamouneh spice",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "1 tablespoon plus 1 teaspoon salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "plus 1 teaspoon salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 pound 100% lean ground beef",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "lb",
+          "name": "100% lean ground beef",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 teaspoons 7 Spice",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "7 Spice",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "Garlic Yogurt Sauce",
+      "items": [
+        {
+          "raw": "48 ounces Stonyfield Whole Milk Plain Yogurt",
+          "quantity": 48,
+          "quantityText": "48",
+          "unit": "oz",
+          "name": "Stonyfield Whole Milk Plain Yogurt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 teaspoons salt",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "20 ounces cold water (divided)",
+          "quantity": 20,
+          "quantityText": "20",
+          "unit": "oz",
+          "name": "cold water (divided)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "▢ &frac14; cup cornstarch",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ &frac14; cup cornstarch",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "▢ &frac12; cup short grain rice",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ &frac12; cup short grain rice",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "5 garlic cloves (pressed)",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": null,
+          "name": "garlic cloves (pressed)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tablespoon fresh mint (chopped, plus more for serving)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "fresh mint (chopped",
+          "note": "plus more for serving)",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1 ½ cups fine #1 bulgur wheat",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ cups fine #1 bulgur wheat",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ cup water",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "cup",
+          "name": "water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ cup fresh mint (packed)",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "cup",
+          "name": "fresh mint (packed)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ cup kamouneh spice",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "cup",
+          "name": "kamouneh spice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ cup cornstarch",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "cup",
+          "name": "cornstarch",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ cup short grain rice",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "cup",
+          "name": "short grain rice",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Heat the olive oil. Add the beef and onions and cook until the beef is browned, about 8-10 minutes. Season with salt, 7 Spice and sumac.",
+      "stepGroup": "Make the Filling",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Heat the olive oil. Add the beef and onions and cook until the beef is browned, about 8-10 minutes. Season with salt, 7 Spice and sumac.",
+        "name": "Heat the olive oil. Add the beef and onions and cook until the beef is browned, about 8-10 minutes. Season with salt, 7 Spice and sumac.",
+        "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Make the Kibbeh Mixture",
+      "stepGroup": "Make the Filling",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Make the Kibbeh Mixture",
+        "name": "Make the Kibbeh Mixture",
+        "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "To prepare the base meat mixture, add the bulgur wheat to a medium bowl along with the water, fluff after 10 minutes to absorb all the water.",
+      "stepGroup": "Make the Filling",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "To prepare the base meat mixture, add the bulgur wheat to a medium bowl along with the water, fluff after 10 minutes to absorb all the water.",
+        "name": "To prepare the base meat mixture, add the bulgur wheat to a medium bowl along with the water, fluff after 10 minutes to absorb all the water.",
+        "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Transfer soaked bulgur to a food processor along with the onion, mint, kamouneh spice and 1 tablespoon salt. Blend until well combined.",
+      "stepGroup": "Make the Filling",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Transfer soaked bulgur to a food processor along with the onion, mint, kamouneh spice and 1 tablespoon salt. Blend until well combined.",
+        "name": "Transfer soaked bulgur to a food processor along with the onion, mint, kamouneh spice and 1 tablespoon salt. Blend until well combined.",
+        "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Add the lean beef to the food processor, along with the remaining salt and 7 Spice. Blend again until a meat paste forms. (can add red pepper for color)",
+      "stepGroup": "Make the Filling",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add the lean beef to the food processor, along with the remaining salt and 7 Spice. Blend again until a meat paste forms. (can add red pepper for color)",
+        "name": "Add the lean beef to the food processor, along with the remaining salt and 7 Spice. Blend again until a meat paste forms. (can add red pepper for color)",
+        "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-0-4"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Add oil to your hands, and scoop about 3 tablespoons of the kibbeh mixture. Use one finger to indent the middle of the scooped mixture and then hollow out the inside using your finger until it looks like a half shell.",
+      "stepGroup": "Make Kibbeh Balls",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add oil to your hands, and scoop about 3 tablespoons of the kibbeh mixture. Use one finger to indent the middle of the scooped mixture and then hollow out the inside using your finger until it looks like a half shell.",
+        "name": "Add oil to your hands, and scoop about 3 tablespoons of the kibbeh mixture. Use one finger to indent the middle of the scooped mixture and then hollow out the inside using your finger until it looks like a half shell.",
+        "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-1-0"
+      }
+    },
+    {
+      "order": 7,
+      "text": "Add about two tablespoons of the mixture into the shell and then close the shell and shape into a football with your hands. Place the kibbeh ball on a tray and repeat for the remaining mixture and filling. Makes 24 kibbehs.",
+      "stepGroup": "Make Kibbeh Balls",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add about two tablespoons of the mixture into the shell and then close the shell and shape into a football with your hands. Place the kibbeh ball on a tray and repeat for the remaining mixture and filling. Makes 24 kibbehs.",
+        "name": "Add about two tablespoons of the mixture into the shell and then close the shell and shape into a football with your hands. Place the kibbeh ball on a tray and repeat for the remaining mixture and filling. Makes 24 kibbehs.",
+        "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-1-1"
+      }
+    },
+    {
+      "order": 8,
+      "text": "Freeze half of the kibbeh to make a second batch of this recipe at a later time. Bake the other half in the oven at 400F for 8 minutes, flipping halfway through. Remove and set aside at room temperature.",
+      "stepGroup": "Make Kibbeh Balls",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Freeze half of the kibbeh to make a second batch of this recipe at a later time. Bake the other half in the oven at 400F for 8 minutes, flipping halfway through.  Remove and set aside at room temperature.",
+        "name": "Freeze half of the kibbeh to make a second batch of this recipe at a later time. Bake the other half in the oven at 400F for 8 minutes, flipping halfway through.  Remove and set aside at room temperature.",
+        "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-1-2"
+      }
+    },
+    {
+      "order": 9,
+      "text": "Place the yogurt and salt in a large pot. Add the cornstarch in one of the emptied yogurt containers and dissolve with about 16 ounces of water. Transfer the cornstarch slurry to the pot with the yogurt. Stir without heat until it’s well blended without any clumps.",
+      "stepGroup": "Make Yogurt Sauce",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Place the yogurt and salt in a large pot. Add the cornstarch in one of the emptied yogurt containers and dissolve with about 16 ounces of water. Transfer the cornstarch slurry to the pot with the yogurt. Stir without heat until it’s well blended without any clumps.",
+        "name": "Place the yogurt and salt in a large pot. Add the cornstarch in one of the emptied yogurt containers and dissolve with about 16 ounces of water. Transfer the cornstarch slurry to the pot with the yogurt. Stir without heat until it’s well blended without any clumps.",
+        "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-2-0"
+      }
+    },
+    {
+      "order": 10,
+      "text": "Parboil the rice with the remaining water for 10 minutes until it’s half cooked.",
+      "stepGroup": "Make Yogurt Sauce",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Parboil the rice with the remaining water for 10 minutes until it’s half cooked.",
+        "name": "Parboil the rice with the remaining water for 10 minutes until it’s half cooked.",
+        "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-2-1"
+      }
+    },
+    {
+      "order": 11,
+      "text": "Add the parboiled rice to the pot of yogurt. Turn the heat to medium and stir frequently until the mixture thickens, about 15 minutes.",
+      "stepGroup": "Make Yogurt Sauce",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add the parboiled rice to the pot of yogurt. Turn the heat to medium and stir frequently until the mixture thickens, about 15 minutes.",
+        "name": "Add the parboiled rice to the pot of yogurt. Turn the heat to medium and stir frequently until the mixture thickens, about 15 minutes.",
+        "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-2-2"
+      }
+    },
+    {
+      "order": 12,
+      "text": "Add the garlic and mint and baked kibbeh balls to the pot of yogurt, and turn the heat to low. Allow the mixture to thicken for about 10 more minutes, stirring carefully occasionally.",
+      "stepGroup": "Make Yogurt Sauce",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add the garlic and mint and baked kibbeh balls to the pot of yogurt, and turn the heat to low. Allow the mixture to thicken for about 10 more minutes, stirring carefully occasionally.",
+        "name": "Add the garlic and mint and baked kibbeh balls to the pot of yogurt, and turn the heat to low. Allow the mixture to thicken for about 10 more minutes, stirring carefully occasionally.",
+        "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-2-3"
+      }
+    },
+    {
+      "order": 13,
+      "text": "Serve 2 kibbehs with the yogurt sauce in each bowl. You can enjoy warm, at room temperature or cold.",
+      "stepGroup": "Make Yogurt Sauce",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Serve 2 kibbehs with the yogurt sauce in each bowl. You can enjoy warm, at room temperature or cold.",
+        "name": "Serve 2 kibbehs with the yogurt sauce in each bowl. You can enjoy warm, at room temperature or cold.",
+        "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-2-4"
+      }
+    }
+  ],
+  "equipment": [
+    "Ceramic Nonstick Cookware Set",
+    "Mixing Bowl Set",
+    "Food Processor",
+    "Aluminum Sheet Pans"
+  ],
+  "supplies": [],
+  "nutrition": {
+    "calories": "626 kcal",
+    "carbohydrateContent": "64 g",
+    "proteinContent": "47 g",
+    "fatContent": "21 g",
+    "saturatedFatContent": "9 g",
+    "transFatContent": "1 g",
+    "cholesterolContent": "123 mg",
+    "sodiumContent": "2580 mg",
+    "fiberContent": "9 g",
+    "sugarContent": "13 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/04/Kibbeh-in-Yogurt-Sauce-15.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/04/Kibbeh-in-Yogurt-Sauce-15-500x500.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/04/Kibbeh-in-Yogurt-Sauce-15-500x375.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/04/Kibbeh-in-Yogurt-Sauce-15-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "94",
+      "reviewCount": "3"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "You're so good at what you present....fond memories of my late Mom making all these foods for our family (7 children). I have a question, what do you recommend as appetizers before serving the Labanieh?",
+        "author": {
+          "@type": "Person",
+          "name": "George"
+        },
+        "datePublished": "2025-07-15"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Finally made this and just want to say THANK YOU!!!! This is exactly what I remembered eating and it was so delicious.",
+        "author": {
+          "@type": "Person",
+          "name": "AMANDA"
+        },
+        "datePublished": "2024-02-12"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I'm lebanese and this is The best kibbeh in yogurt sauce recipe that I've tried!! Everyone at dinner asked about the recipe. So simple and not complicated yet so delicious!",
+        "author": {
+          "@type": "Person",
+          "name": "Therese"
+        },
+        "datePublished": "2023-07-03"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Kibbeh in Yogurt Sauce",
+    "author": {
+      "@id": "https://feelgoodfoodie.net/#/schema/person/7a5a734de72932611fa5814fce8c12d5"
+    },
+    "description": "Kibbeh in yogurt sauce is a comforting &amp; popular Middle Eastern recipe. This is an authentic Lebanese recipe from my mom that&#039;s easy to follow",
+    "datePublished": "2021-04-14T08:00:00+00:00",
+    "image": [
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/04/Kibbeh-in-Yogurt-Sauce-15.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/04/Kibbeh-in-Yogurt-Sauce-15-500x500.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/04/Kibbeh-in-Yogurt-Sauce-15-500x375.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/04/Kibbeh-in-Yogurt-Sauce-15-480x270.jpg"
+    ],
+    "recipeYield": [
+      "6",
+      "6 servings"
+    ],
+    "prepTime": "PT90M",
+    "cookTime": "PT60M",
+    "totalTime": "PT120M",
+    "recipeIngredient": [
+      "2 tablespoons olive oil (plus more for forming kibbeh)",
+      "1 pound 95% lean ground beef",
+      "1  large onion (diced)",
+      "1 teaspoon salt",
+      "1 tablespoon 7 Spice",
+      "2 teaspoons sumac",
+      "1 ½ cups fine #1 bulgur wheat",
+      "½ cup water",
+      "1  large onion (quartered)",
+      "½ cup fresh mint (packed)",
+      "¼ cup kamouneh spice",
+      "1 tablespoon plus 1 teaspoon salt",
+      "1 pound 100% lean ground beef",
+      "2 teaspoons 7 Spice",
+      "48 ounces Stonyfield Whole Milk Plain Yogurt",
+      "2 teaspoons salt",
+      "20 ounces cold water (divided)",
+      "¼ cup cornstarch",
+      "½ cup short grain rice",
+      "5  garlic cloves (pressed)",
+      "1 tablespoon fresh mint (chopped, plus more for serving)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToSection",
+        "name": "Make the Filling",
+        "itemListElement": [
+          {
+            "@type": "HowToStep",
+            "text": "Heat the olive oil. Add the beef and onions and cook until the beef is browned, about 8-10 minutes. Season with salt, 7 Spice and sumac.",
+            "name": "Heat the olive oil. Add the beef and onions and cook until the beef is browned, about 8-10 minutes. Season with salt, 7 Spice and sumac.",
+            "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-0-0"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Make the Kibbeh Mixture",
+            "name": "Make the Kibbeh Mixture",
+            "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-0-1"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "To prepare the base meat mixture, add the bulgur wheat to a medium bowl along with the water, fluff after 10 minutes to absorb all the water.",
+            "name": "To prepare the base meat mixture, add the bulgur wheat to a medium bowl along with the water, fluff after 10 minutes to absorb all the water.",
+            "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-0-2"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Transfer soaked bulgur to a food processor along with the onion, mint, kamouneh spice and 1 tablespoon salt. Blend until well combined.",
+            "name": "Transfer soaked bulgur to a food processor along with the onion, mint, kamouneh spice and 1 tablespoon salt. Blend until well combined.",
+            "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-0-3"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Add the lean beef to the food processor, along with the remaining salt and 7 Spice. Blend again until a meat paste forms. (can add red pepper for color)",
+            "name": "Add the lean beef to the food processor, along with the remaining salt and 7 Spice. Blend again until a meat paste forms. (can add red pepper for color)",
+            "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-0-4"
+          }
+        ]
+      },
+      {
+        "@type": "HowToSection",
+        "name": "Make Kibbeh Balls",
+        "itemListElement": [
+          {
+            "@type": "HowToStep",
+            "text": "Add oil to your hands, and scoop about 3 tablespoons of the kibbeh mixture. Use one finger to indent the middle of the scooped mixture and then hollow out the inside using your finger until it looks like a half shell.",
+            "name": "Add oil to your hands, and scoop about 3 tablespoons of the kibbeh mixture. Use one finger to indent the middle of the scooped mixture and then hollow out the inside using your finger until it looks like a half shell.",
+            "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-1-0"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Add about two tablespoons of the mixture into the shell and then close the shell and shape into a football with your hands. Place the kibbeh ball on a tray and repeat for the remaining mixture and filling. Makes 24 kibbehs.",
+            "name": "Add about two tablespoons of the mixture into the shell and then close the shell and shape into a football with your hands. Place the kibbeh ball on a tray and repeat for the remaining mixture and filling. Makes 24 kibbehs.",
+            "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-1-1"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Freeze half of the kibbeh to make a second batch of this recipe at a later time. Bake the other half in the oven at 400F for 8 minutes, flipping halfway through.  Remove and set aside at room temperature.",
+            "name": "Freeze half of the kibbeh to make a second batch of this recipe at a later time. Bake the other half in the oven at 400F for 8 minutes, flipping halfway through.  Remove and set aside at room temperature.",
+            "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-1-2"
+          }
+        ]
+      },
+      {
+        "@type": "HowToSection",
+        "name": "Make Yogurt Sauce",
+        "itemListElement": [
+          {
+            "@type": "HowToStep",
+            "text": "Place the yogurt and salt in a large pot. Add the cornstarch in one of the emptied yogurt containers and dissolve with about 16 ounces of water. Transfer the cornstarch slurry to the pot with the yogurt. Stir without heat until it’s well blended without any clumps.",
+            "name": "Place the yogurt and salt in a large pot. Add the cornstarch in one of the emptied yogurt containers and dissolve with about 16 ounces of water. Transfer the cornstarch slurry to the pot with the yogurt. Stir without heat until it’s well blended without any clumps.",
+            "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-2-0"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Parboil the rice with the remaining water for 10 minutes until it’s half cooked.",
+            "name": "Parboil the rice with the remaining water for 10 minutes until it’s half cooked.",
+            "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-2-1"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Add the parboiled rice to the pot of yogurt. Turn the heat to medium and stir frequently until the mixture thickens, about 15 minutes.",
+            "name": "Add the parboiled rice to the pot of yogurt. Turn the heat to medium and stir frequently until the mixture thickens, about 15 minutes.",
+            "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-2-2"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Add the garlic and mint and baked kibbeh balls to the pot of yogurt, and turn the heat to low. Allow the mixture to thicken for about 10 more minutes, stirring carefully occasionally.",
+            "name": "Add the garlic and mint and baked kibbeh balls to the pot of yogurt, and turn the heat to low. Allow the mixture to thicken for about 10 more minutes, stirring carefully occasionally.",
+            "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-2-3"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Serve 2 kibbehs with the yogurt sauce in each bowl. You can enjoy warm, at room temperature or cold.",
+            "name": "Serve 2 kibbehs with the yogurt sauce in each bowl. You can enjoy warm, at room temperature or cold.",
+            "url": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#wprm-recipe-36201-step-2-4"
+          }
+        ]
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "94",
+      "reviewCount": "3"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "You're so good at what you present....fond memories of my late Mom making all these foods for our family (7 children). I have a question, what do you recommend as appetizers before serving the Labanieh?",
+        "author": {
+          "@type": "Person",
+          "name": "George"
+        },
+        "datePublished": "2025-07-15"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Finally made this and just want to say THANK YOU!!!! This is exactly what I remembered eating and it was so delicious.",
+        "author": {
+          "@type": "Person",
+          "name": "AMANDA"
+        },
+        "datePublished": "2024-02-12"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I'm lebanese and this is The best kibbeh in yogurt sauce recipe that I've tried!! Everyone at dinner asked about the recipe. So simple and not complicated yet so delicious!",
+        "author": {
+          "@type": "Person",
+          "name": "Therese"
+        },
+        "datePublished": "2023-07-03"
+      }
+    ],
+    "recipeCategory": [
+      "Entree"
+    ],
+    "recipeCuisine": [
+      "Mediterranean"
+    ],
+    "keywords": "Kibbeh, kibbeh bi laban, Kibbeh bi labanieh, Lebanese kibbeh recipe, Yogurt Sauce",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "626 kcal",
+      "carbohydrateContent": "64 g",
+      "proteinContent": "47 g",
+      "fatContent": "21 g",
+      "saturatedFatContent": "9 g",
+      "transFatContent": "1 g",
+      "cholesterolContent": "123 mg",
+      "sodiumContent": "2580 mg",
+      "fiberContent": "9 g",
+      "sugarContent": "13 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#recipe",
+    "isPartOf": {
+      "@id": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/#article"
+    },
+    "mainEntityOfPage": "https://feelgoodfoodie.net/recipe/kibbeh-in-yogurt-sauce/"
+  },
+  "audit": [
+    "unparsed-quantity:6",
+    "unmapped:aggregateRating|review"
+  ]
+}

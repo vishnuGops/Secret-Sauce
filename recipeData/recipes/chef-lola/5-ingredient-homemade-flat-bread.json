@@ -1,0 +1,432 @@
+{
+  "schemaVersion": 1,
+  "id": "chef-lola/5-ingredient-homemade-flat-bread",
+  "slug": "5-ingredient-homemade-flat-bread",
+  "chefId": "chef_chef-lola",
+  "chefSlug": "chef-lola",
+  "chefName": "Chef Lola",
+  "title": "5-Ingredient Homemade Flat Bread",
+  "description": "Pita bread is a staple bread of the middle east. It is commonly referred to as Khubz in Arabic but it is commonly known as Pita bread in other parts of the world. This bread is made from a soft yeasty dough similar to the pizza dough.",
+  "source": {
+    "sourceUrl": "https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/",
+    "finalUrl": "https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/",
+    "retrievedAt": "2026-09-11T02:47:29.326Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2018-10-05T08:46:38+00:00",
+    "rights": "Chef Lola's Kitchen. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "1b6a77e567970b0f7b8ca6776cfcfd41cfb5defc0fa06d69aba463236c152780",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "allows recipe paths; /wp-admin/, /wp-json/ and query URLs disallowed"
+  },
+  "yield": {
+    "raw": [
+      "6"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 15,
+    "cookMinutes": 10,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Greek",
+    "Mediterranean"
+  ],
+  "category": [
+    "Breakfast/Lunch/Dinner"
+  ],
+  "keywords": [
+    "bread",
+    "flatbread",
+    "homemade",
+    "pastry"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "2.5 Cups Flour",
+          "quantity": 2.5,
+          "quantityText": "2.5",
+          "unit": "cups",
+          "name": "Flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 Teaspoons Yeast",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "Yeast",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 Teaspoon Salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "Salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 Tsp Sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "Sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Olive Oil",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Olive Oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 cup Water (warm )",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "cup",
+          "name": "Water (warm )",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "In a bowl, mix the water, yeast, and Wheat flour and leave for 5 to 10 minutes to froth.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a bowl, mix the water, yeast, and Wheat flour and leave for 5 to 10 minutes to froth.",
+        "name": "In a bowl, mix the water, yeast, and Wheat flour and leave for 5 to 10 minutes to froth.",
+        "url": "https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/#wprm-recipe-9183-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Add the flour, Salt, and Olive Oil to the mixture above and mix until a shaggy mass of dough is formed.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add the flour, Salt, and Olive Oil to the mixture above and mix until a shaggy mass of dough is formed.",
+        "name": "Add the flour, Salt, and Olive Oil to the mixture above and mix until a shaggy mass of dough is formed.",
+        "url": "https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/#wprm-recipe-9183-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Turn the dough unto a lightly floured work surface and knead until smooth, supple and elastic. About 5 to 7 minutes",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Turn the dough unto a lightly floured work surface and knead until smooth, supple and elastic. About 5 to 7 minutes",
+        "name": "Turn the dough unto a lightly floured work surface and knead until smooth, supple and elastic. About 5 to 7 minutes",
+        "url": "https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/#wprm-recipe-9183-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Place the dough in a clean bowl and lightly oil the dough with some Olive oil turning to coat evenly. Cover it with a tight fitting lid and leave in a warm place to rise for 1 hour or till doubled in size.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Place the dough in a clean bowl and lightly oil the dough with some Olive oil turning to coat evenly. Cover it with a tight fitting lid and leave in a warm place to rise for 1 hour or till doubled in size.",
+        "name": "Place the dough in a clean bowl and lightly oil the dough with some Olive oil turning to coat evenly. Cover it with a tight fitting lid and leave in a warm place to rise for 1 hour or till doubled in size.",
+        "url": "https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/#wprm-recipe-9183-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Punch down the dough return to a lightly floured work surface. Divide into 8 parts and roll out each piece into a circle of about a quarter of an inch thickness. Cover with a damp kitchen towel and proof for another 10 to 15 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Punch down the dough return to a lightly floured work surface. Divide into 8 parts and roll out each piece into a circle of about a quarter of an inch thickness. Cover with a damp kitchen towel and proof for another 10 to 15 minutes.",
+        "name": "Punch down the dough return to a lightly floured work surface. Divide into 8 parts and roll out each piece into a circle of about a quarter of an inch thickness. Cover with a damp kitchen towel and proof for another 10 to 15 minutes.",
+        "url": "https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/#wprm-recipe-9183-step-0-4"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Preheat the oven to 475 degrees F with the skillet or baking pan in the oven and cook the dough for 2 to 3 minutes on the first side or till puffy. Flip to the other side and cook for 1 more minute.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 475 degrees F with the skillet or baking pan in the oven and cook the dough for 2 to 3 minutes on the first side or till puffy. Flip to the other side and cook for 1 more minute.",
+        "name": "Preheat the oven to 475 degrees F with the skillet or baking pan in the oven and cook the dough for 2 to 3 minutes on the first side or till puffy. Flip to the other side and cook for 1 more minute.",
+        "url": "https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/#wprm-recipe-9183-step-0-5"
+      }
+    },
+    {
+      "order": 7,
+      "text": "Cover with a damp kitchen towel. This will keep the pita crust soft",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Cover with a damp kitchen towel. This will keep the pita crust soft",
+        "name": "Cover with a damp kitchen towel. This will keep the pita crust soft",
+        "url": "https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/#wprm-recipe-9183-step-0-6"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "205 kcal",
+    "carbohydrateContent": "42 g",
+    "proteinContent": "6 g",
+    "sodiumContent": "392 mg",
+    "fiberContent": "2 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2018/10/5-Ingredient-Flatbread-Recipe11.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2018/10/5-Ingredient-Flatbread-Recipe11-500x500.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2018/10/5-Ingredient-Flatbread-Recipe11-500x375.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2018/10/5-Ingredient-Flatbread-Recipe11-480x270.jpg"
+    ],
+    "video": {
+      "name": "Flatbread or Pita Bread - How to Make Pita Bread | Chef Lola's Kitchen",
+      "description": "Flat Bread or Pita Bread ingredients can be found here: https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/\n\nHello everyone its Lola here again and today I'm going to be showing you how to make a very soft tender and tasty pita bread or flatbread. \n\nAll you need for this pita bread is: a couple of pantry ingredients in little bit of time and a little bit of effort and your pizza bread is going to be ready in less than two hours so let's get started.\nThe first thing I'm going to do is to make a kind of sponge and for that I'm going to be using a little bit of warm water, some sugar, yeast and some flour.\n\nNow mix this together until everything is well combined. I'm going to be covering this at this point and I'm going to be leaving this for about ten minutes so that this yeast come bloom. \n\nSo this mixture has been resting for ten minutes now and as you can see the yeast as already bloomed. So at this point I'm going to be adding my all-purpose flour, a little bit of salt and some olive oil now mix this together very well until a kind of shaggy mass of dough is formed at this point don't be tempted to add more flour it's going to be wet and that is exactly what we want. \n\nSo I'm going to be transferring this to a lightly floured work surface and I'm going to be needing this for about five to six minutes until it becomes really smooth. So during the kneading process it's okay to add a little bit of more flour but try as much as you can not to overdo this because if you do the dough is going to become very hard and we don't want that we want our dough to be kind of wet because that is going to help to form the pockets by the time we put the dough in the oven. \n\nSo my dough is now ready as you can see it's really very soft and kind of wet what's really smooth this is exactly what we want like I said earlier this is going to allow us to achieve the desired pockets in a pizza bread.\n\n I will now be taking this inside my glass bowl and I'm going to be rubbing it all around with a little bit of olive oil this really prevents the dough from forming a crust at this point.\n\nI'm just going to be covering this and I will leave it in a warm place to rise for one hour. So here we go this dough has been resting for about one hour now and as you can see it's looking really good it's as reasonable to almost three times its original size. \n\nAt this point I'm just going to punch down this dough to remove the excess trapped air and I'm going to be transferring this dough back to my work surface now.\n\nI'm going to be dividing this dough into its part just take this dough one at a time and begin to roll it out into a circular disc the wider you roll this dough the larger your pizza bread is going to be. \n\nFor me I don't like my pizza bread to be too thin so I'm not going to rule it out too white but this totally depends on your personal preference.\n\nSo I'm okay with this circumference at this point I'll just be transferring this on a parchment paper - now I choose to use a parchment paper because it's going to be easy for me to lift it up.\n\nOnce I'm ready to cook my bread I'm going to be covering this with a damp clean kitchen cloth- well and this is going to prevent your dough from forming a crust so I'm going to be leaving this to rest again for about 10 to 15 minutes and the next thing to do is to start cooking it inside our oven.\n\n I already have my oven preheated to 475 degrees Fahrenheit - I also have my iron skillets in the oven it's really hot right now you can also use a tray if you don't have an iron skillet it works just as well and this bread should bloom after about two minutes so let's watch.\n\nWhat I like to do at this point is just to get a good chair beside my oven and get myself a very cold glass of juice sit down and watch as my pizza pocket is forming.\n\nSo this is looking really beautiful right now as you can see it has really bloomed but this is actually ready to be served at this point but I like to just Brown the other side for a little bit so I'm just going to flip it over and place it back in my oven for another extra minutes or thereabouts and there we have it our pizza bread is ready and please do remember to cover this with a damp kitchen towel so they don't dry out so this pita bread is very versatile you can eat it with your hummus you can dip it in curry sauce or any other good sauce of your choice and you can eat it the way it is so that is it again for today I hope you enjoy this recipe if you do don't forget to leave a thumbs up for me until next time I'll talk to you shortly.\n\nEnjoy !\n\nLET’S CONNECT!\n\nYou can find me on Facebook, Instagram, and Twitter, … I love keeping in touch with all of you 🙂\n\nIf you make this recipe, I’d love to see pictures of your creations on \n\nInstagram @cheflolaskitchen\nFacebook. @cheflolaskitchen\n\n-~-~~-~~~-~~-~-\nLatest Video: \"Super Crispy Baked Potato Wedges\" \nhttps://www.youtube.com/watch?v=YaVCk-U-Vic\n-~-~~-~~~-~~-~-",
+      "uploadDate": "2018-10-02T12:30:01+00:00",
+      "duration": "PT5M30S",
+      "thumbnailUrl": "https://i.ytimg.com/vi/20NTBUucHMk/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/20NTBUucHMk?feature=oembed",
+      "contentUrl": "https://www.youtube.com/watch?v=20NTBUucHMk",
+      "@type": "VideoObject"
+    }
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "video": {
+      "name": "Flatbread or Pita Bread - How to Make Pita Bread | Chef Lola's Kitchen",
+      "description": "Flat Bread or Pita Bread ingredients can be found here: https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/\n\nHello everyone its Lola here again and today I'm going to be showing you how to make a very soft tender and tasty pita bread or flatbread. \n\nAll you need for this pita bread is: a couple of pantry ingredients in little bit of time and a little bit of effort and your pizza bread is going to be ready in less than two hours so let's get started.\nThe first thing I'm going to do is to make a kind of sponge and for that I'm going to be using a little bit of warm water, some sugar, yeast and some flour.\n\nNow mix this together until everything is well combined. I'm going to be covering this at this point and I'm going to be leaving this for about ten minutes so that this yeast come bloom. \n\nSo this mixture has been resting for ten minutes now and as you can see the yeast as already bloomed. So at this point I'm going to be adding my all-purpose flour, a little bit of salt and some olive oil now mix this together very well until a kind of shaggy mass of dough is formed at this point don't be tempted to add more flour it's going to be wet and that is exactly what we want. \n\nSo I'm going to be transferring this to a lightly floured work surface and I'm going to be needing this for about five to six minutes until it becomes really smooth. So during the kneading process it's okay to add a little bit of more flour but try as much as you can not to overdo this because if you do the dough is going to become very hard and we don't want that we want our dough to be kind of wet because that is going to help to form the pockets by the time we put the dough in the oven. \n\nSo my dough is now ready as you can see it's really very soft and kind of wet what's really smooth this is exactly what we want like I said earlier this is going to allow us to achieve the desired pockets in a pizza bread.\n\n I will now be taking this inside my glass bowl and I'm going to be rubbing it all around with a little bit of olive oil this really prevents the dough from forming a crust at this point.\n\nI'm just going to be covering this and I will leave it in a warm place to rise for one hour. So here we go this dough has been resting for about one hour now and as you can see it's looking really good it's as reasonable to almost three times its original size. \n\nAt this point I'm just going to punch down this dough to remove the excess trapped air and I'm going to be transferring this dough back to my work surface now.\n\nI'm going to be dividing this dough into its part just take this dough one at a time and begin to roll it out into a circular disc the wider you roll this dough the larger your pizza bread is going to be. \n\nFor me I don't like my pizza bread to be too thin so I'm not going to rule it out too white but this totally depends on your personal preference.\n\nSo I'm okay with this circumference at this point I'll just be transferring this on a parchment paper - now I choose to use a parchment paper because it's going to be easy for me to lift it up.\n\nOnce I'm ready to cook my bread I'm going to be covering this with a damp clean kitchen cloth- well and this is going to prevent your dough from forming a crust so I'm going to be leaving this to rest again for about 10 to 15 minutes and the next thing to do is to start cooking it inside our oven.\n\n I already have my oven preheated to 475 degrees Fahrenheit - I also have my iron skillets in the oven it's really hot right now you can also use a tray if you don't have an iron skillet it works just as well and this bread should bloom after about two minutes so let's watch.\n\nWhat I like to do at this point is just to get a good chair beside my oven and get myself a very cold glass of juice sit down and watch as my pizza pocket is forming.\n\nSo this is looking really beautiful right now as you can see it has really bloomed but this is actually ready to be served at this point but I like to just Brown the other side for a little bit so I'm just going to flip it over and place it back in my oven for another extra minutes or thereabouts and there we have it our pizza bread is ready and please do remember to cover this with a damp kitchen towel so they don't dry out so this pita bread is very versatile you can eat it with your hummus you can dip it in curry sauce or any other good sauce of your choice and you can eat it the way it is so that is it again for today I hope you enjoy this recipe if you do don't forget to leave a thumbs up for me until next time I'll talk to you shortly.\n\nEnjoy !\n\nLET’S CONNECT!\n\nYou can find me on Facebook, Instagram, and Twitter, … I love keeping in touch with all of you 🙂\n\nIf you make this recipe, I’d love to see pictures of your creations on \n\nInstagram @cheflolaskitchen\nFacebook. @cheflolaskitchen\n\n-~-~~-~~~-~~-~-\nLatest Video: \"Super Crispy Baked Potato Wedges\" \nhttps://www.youtube.com/watch?v=YaVCk-U-Vic\n-~-~~-~~~-~~-~-",
+      "uploadDate": "2018-10-02T12:30:01+00:00",
+      "duration": "PT5M30S",
+      "thumbnailUrl": "https://i.ytimg.com/vi/20NTBUucHMk/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/20NTBUucHMk?feature=oembed",
+      "contentUrl": "https://www.youtube.com/watch?v=20NTBUucHMk",
+      "@type": "VideoObject"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "4",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Hi,Lola.great recipe.mine turned out well.pls could you do a video on tortillas. I need it to make your sharwama recipe.I can't find tortilla wraps in my area.thanks.",
+        "author": {
+          "@type": "Person",
+          "name": "Favour"
+        },
+        "datePublished": "2018-10-23"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "5-Ingredient Homemade Flat Bread",
+    "author": {
+      "@id": "https://cheflolaskitchen.com/#/schema/person/210ab4ab02cd92f770d27cf2a114f9a5"
+    },
+    "description": "Pita bread is a staple bread of the middle east. It is commonly referred to as Khubz in Arabic but it is commonly known as Pita bread in other parts of the world.&nbsp; This bread is made from a soft&nbsp;yeasty dough similar to the&nbsp;pizza&nbsp;dough.",
+    "datePublished": "2018-10-05T08:46:38+00:00",
+    "image": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2018/10/5-Ingredient-Flatbread-Recipe11.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2018/10/5-Ingredient-Flatbread-Recipe11-500x500.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2018/10/5-Ingredient-Flatbread-Recipe11-500x375.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2018/10/5-Ingredient-Flatbread-Recipe11-480x270.jpg"
+    ],
+    "video": {
+      "name": "Flatbread or Pita Bread - How to Make Pita Bread | Chef Lola's Kitchen",
+      "description": "Flat Bread or Pita Bread ingredients can be found here: https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/\n\nHello everyone its Lola here again and today I'm going to be showing you how to make a very soft tender and tasty pita bread or flatbread. \n\nAll you need for this pita bread is: a couple of pantry ingredients in little bit of time and a little bit of effort and your pizza bread is going to be ready in less than two hours so let's get started.\nThe first thing I'm going to do is to make a kind of sponge and for that I'm going to be using a little bit of warm water, some sugar, yeast and some flour.\n\nNow mix this together until everything is well combined. I'm going to be covering this at this point and I'm going to be leaving this for about ten minutes so that this yeast come bloom. \n\nSo this mixture has been resting for ten minutes now and as you can see the yeast as already bloomed. So at this point I'm going to be adding my all-purpose flour, a little bit of salt and some olive oil now mix this together very well until a kind of shaggy mass of dough is formed at this point don't be tempted to add more flour it's going to be wet and that is exactly what we want. \n\nSo I'm going to be transferring this to a lightly floured work surface and I'm going to be needing this for about five to six minutes until it becomes really smooth. So during the kneading process it's okay to add a little bit of more flour but try as much as you can not to overdo this because if you do the dough is going to become very hard and we don't want that we want our dough to be kind of wet because that is going to help to form the pockets by the time we put the dough in the oven. \n\nSo my dough is now ready as you can see it's really very soft and kind of wet what's really smooth this is exactly what we want like I said earlier this is going to allow us to achieve the desired pockets in a pizza bread.\n\n I will now be taking this inside my glass bowl and I'm going to be rubbing it all around with a little bit of olive oil this really prevents the dough from forming a crust at this point.\n\nI'm just going to be covering this and I will leave it in a warm place to rise for one hour. So here we go this dough has been resting for about one hour now and as you can see it's looking really good it's as reasonable to almost three times its original size. \n\nAt this point I'm just going to punch down this dough to remove the excess trapped air and I'm going to be transferring this dough back to my work surface now.\n\nI'm going to be dividing this dough into its part just take this dough one at a time and begin to roll it out into a circular disc the wider you roll this dough the larger your pizza bread is going to be. \n\nFor me I don't like my pizza bread to be too thin so I'm not going to rule it out too white but this totally depends on your personal preference.\n\nSo I'm okay with this circumference at this point I'll just be transferring this on a parchment paper - now I choose to use a parchment paper because it's going to be easy for me to lift it up.\n\nOnce I'm ready to cook my bread I'm going to be covering this with a damp clean kitchen cloth- well and this is going to prevent your dough from forming a crust so I'm going to be leaving this to rest again for about 10 to 15 minutes and the next thing to do is to start cooking it inside our oven.\n\n I already have my oven preheated to 475 degrees Fahrenheit - I also have my iron skillets in the oven it's really hot right now you can also use a tray if you don't have an iron skillet it works just as well and this bread should bloom after about two minutes so let's watch.\n\nWhat I like to do at this point is just to get a good chair beside my oven and get myself a very cold glass of juice sit down and watch as my pizza pocket is forming.\n\nSo this is looking really beautiful right now as you can see it has really bloomed but this is actually ready to be served at this point but I like to just Brown the other side for a little bit so I'm just going to flip it over and place it back in my oven for another extra minutes or thereabouts and there we have it our pizza bread is ready and please do remember to cover this with a damp kitchen towel so they don't dry out so this pita bread is very versatile you can eat it with your hummus you can dip it in curry sauce or any other good sauce of your choice and you can eat it the way it is so that is it again for today I hope you enjoy this recipe if you do don't forget to leave a thumbs up for me until next time I'll talk to you shortly.\n\nEnjoy !\n\nLET’S CONNECT!\n\nYou can find me on Facebook, Instagram, and Twitter, … I love keeping in touch with all of you 🙂\n\nIf you make this recipe, I’d love to see pictures of your creations on \n\nInstagram @cheflolaskitchen\nFacebook. @cheflolaskitchen\n\n-~-~~-~~~-~~-~-\nLatest Video: \"Super Crispy Baked Potato Wedges\" \nhttps://www.youtube.com/watch?v=YaVCk-U-Vic\n-~-~~-~~~-~~-~-",
+      "uploadDate": "2018-10-02T12:30:01+00:00",
+      "duration": "PT5M30S",
+      "thumbnailUrl": "https://i.ytimg.com/vi/20NTBUucHMk/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/20NTBUucHMk?feature=oembed",
+      "contentUrl": "https://www.youtube.com/watch?v=20NTBUucHMk",
+      "@type": "VideoObject"
+    },
+    "recipeYield": [
+      "6"
+    ],
+    "prepTime": "PT15M",
+    "cookTime": "PT10M",
+    "recipeIngredient": [
+      "2.5 Cups Flour",
+      "2 Teaspoons Yeast",
+      "1 Teaspoon Salt",
+      "1 Tsp Sugar",
+      "Olive Oil",
+      "1 cup Water (warm )"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "In a bowl, mix the water, yeast, and Wheat flour and leave for 5 to 10 minutes to froth.",
+        "name": "In a bowl, mix the water, yeast, and Wheat flour and leave for 5 to 10 minutes to froth.",
+        "url": "https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/#wprm-recipe-9183-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Add the flour, Salt, and Olive Oil to the mixture above and mix until a shaggy mass of dough is formed.",
+        "name": "Add the flour, Salt, and Olive Oil to the mixture above and mix until a shaggy mass of dough is formed.",
+        "url": "https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/#wprm-recipe-9183-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Turn the dough unto a lightly floured work surface and knead until smooth, supple and elastic. About 5 to 7 minutes",
+        "name": "Turn the dough unto a lightly floured work surface and knead until smooth, supple and elastic. About 5 to 7 minutes",
+        "url": "https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/#wprm-recipe-9183-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Place the dough in a clean bowl and lightly oil the dough with some Olive oil turning to coat evenly. Cover it with a tight fitting lid and leave in a warm place to rise for 1 hour or till doubled in size.",
+        "name": "Place the dough in a clean bowl and lightly oil the dough with some Olive oil turning to coat evenly. Cover it with a tight fitting lid and leave in a warm place to rise for 1 hour or till doubled in size.",
+        "url": "https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/#wprm-recipe-9183-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Punch down the dough return to a lightly floured work surface. Divide into 8 parts and roll out each piece into a circle of about a quarter of an inch thickness. Cover with a damp kitchen towel and proof for another 10 to 15 minutes.",
+        "name": "Punch down the dough return to a lightly floured work surface. Divide into 8 parts and roll out each piece into a circle of about a quarter of an inch thickness. Cover with a damp kitchen towel and proof for another 10 to 15 minutes.",
+        "url": "https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/#wprm-recipe-9183-step-0-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 475 degrees F with the skillet or baking pan in the oven and cook the dough for 2 to 3 minutes on the first side or till puffy. Flip to the other side and cook for 1 more minute.",
+        "name": "Preheat the oven to 475 degrees F with the skillet or baking pan in the oven and cook the dough for 2 to 3 minutes on the first side or till puffy. Flip to the other side and cook for 1 more minute.",
+        "url": "https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/#wprm-recipe-9183-step-0-5"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Cover with a damp kitchen towel. This will keep the pita crust soft",
+        "name": "Cover with a damp kitchen towel. This will keep the pita crust soft",
+        "url": "https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/#wprm-recipe-9183-step-0-6"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "4",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Hi,Lola.great recipe.mine turned out well.pls could you do a video on tortillas. I need it to make your sharwama recipe.I can't find tortilla wraps in my area.thanks.",
+        "author": {
+          "@type": "Person",
+          "name": "Favour"
+        },
+        "datePublished": "2018-10-23"
+      }
+    ],
+    "recipeCategory": [
+      "Breakfast/Lunch/Dinner"
+    ],
+    "recipeCuisine": [
+      "Greek",
+      "Mediterranean"
+    ],
+    "keywords": "bread, flatbread, homemade, pastry",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "205 kcal",
+      "carbohydrateContent": "42 g",
+      "proteinContent": "6 g",
+      "sodiumContent": "392 mg",
+      "fiberContent": "2 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/#recipe",
+    "isPartOf": {
+      "@id": "https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/#article"
+    },
+    "mainEntityOfPage": "https://cheflolaskitchen.com/5-ingredient-homemade-flatbread/"
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:video|aggregateRating|review"
+  ]
+}

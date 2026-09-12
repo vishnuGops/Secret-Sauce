@@ -1,0 +1,449 @@
+{
+  "schemaVersion": 1,
+  "id": "atul-kochhar/prawn-and-tamarind-curry-chemmeen-vevichathu",
+  "slug": "prawn-and-tamarind-curry-chemmeen-vevichathu",
+  "chefId": "chef_atul-kochhar",
+  "chefSlug": "atul-kochhar",
+  "chefName": "Atul Kochhar",
+  "title": "Prawn and tamarind curry (Chemmeen vevichathu)",
+  "description": "Bring the flavours of south India to your kitchen with this mouth-watering fish curry. Flavouring it with tamarind gives it an extra kick.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/prawn_and_tamarind_curry_30910",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/prawn_and_tamarind_curry_30910",
+    "retrievedAt": "2026-09-11T00:28:08.419Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Atul Kochhar"
+    ],
+    "datePublished": "2015-01-24T11:30:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "827269909ef180c5219416a6a88eb5d433fa7ba6fdf761f90e8bdd5f0ffe1ab6",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Indian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "curry",
+    "tamarind",
+    "prawn",
+    "dairy free",
+    "egg free",
+    "Saturday Kitchen"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the curry",
+      "items": [
+        {
+          "raw": "1 seedless dried tamarind (about the size of a walnut)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "seedless dried tamarind (about the size of a walnut)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp rapeseed oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "rapeseed oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp black mustard seeds",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "black mustard seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp fenugreek seeds",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "fenugreek seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 shallots, chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "shallots",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2 green chillies, finely chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "green chillies",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp chopped fresh ginger, peeled",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "chopped fresh ginger",
+          "note": "peeled",
+          "isOptional": false
+        },
+        {
+          "raw": "15–20 curry leaves",
+          "quantity": 15,
+          "quantityText": "15–20",
+          "unit": null,
+          "name": "curry leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "20–24 medium prawns, head and shell removed, deveined",
+          "quantity": 20,
+          "quantityText": "20–24",
+          "unit": null,
+          "name": "medium prawns, head and shell removed, deveined",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp palm sugar (optional), also known as jaggery",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "palm sugar (optional), also known as jaggery",
+          "note": null,
+          "isOptional": true
+        },
+        {
+          "raw": "100ml/3½fl oz warm fish stock or water (optional)",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "ml",
+          "name": "/3½fl oz warm fish stock or water (optional)",
+          "note": null,
+          "isOptional": true
+        },
+        {
+          "raw": "salt",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the spice paste",
+      "items": [
+        {
+          "raw": "2 garlic cloves, chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 cinnamon stick (approximately 5cm/2in)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "cinnamon stick (approximately 5cm/2in)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 cloves",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "cloves",
+          "name": "2 cloves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp fennel seeds",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "fennel seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 small dried red chilli",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "small dried red chilli",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp ground coriander",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "ground coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground turmeric",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground turmeric",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ tsp black pepper",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "tsp",
+          "name": "black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To serve",
+      "items": [
+        {
+          "raw": "steamed basmati rice",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "steamed basmati rice",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Soak the tamarind in 200ml/7fl oz water for 15-20 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Soak the tamarind in 200ml/7fl oz water for 15-20 minutes. "
+    },
+    {
+      "order": 2,
+      "text": "For the spice paste, put all of the ingredients in a blender with 4-5 tablespoons of water. Blend to a paste.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the spice paste, put all of the ingredients in a blender with 4-5 tablespoons of water. Blend to a paste. "
+    },
+    {
+      "order": 3,
+      "text": "For the curry, heat the oil in a large pan over a medium heat. Add the mustard seeds and cook until you hear them pop, then add the fenugreek seeds and shallots. Cook until the shallots are light brown in colour.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the curry, heat the oil in a large pan over a medium heat. Add the mustard seeds and cook until you hear them pop, then add the fenugreek seeds and shallots. Cook until the shallots are light brown in colour. "
+    },
+    {
+      "order": 4,
+      "text": "Add the green chillies, ginger and curry leaves. Season with salt. Cook over a medium heat for 3–5 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the green chillies, ginger and curry leaves. Season with salt. Cook over a medium heat for 3–5 minutes. "
+    },
+    {
+      "order": 5,
+      "text": "Mix in the spice paste, cook for 5 minutes or until light brown in colour. Stir in the prawns and palm sugar.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Mix in the spice paste, cook for 5 minutes or until light brown in colour. Stir in the prawns and palm sugar. "
+    },
+    {
+      "order": 6,
+      "text": "Add the tamarind and its soaking liquid. Cook for 10–12 minutes, or until the prawns are cooked. If the sauce is too thick for your liking, stir in 100ml/3½fl oz fish stock or hot water.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the tamarind and its soaking liquid. Cook for 10–12 minutes, or until the prawns are cooked. If the sauce is too thick for your liking, stir in 100ml/3½fl oz fish stock or hot water.  "
+    },
+    {
+      "order": 7,
+      "text": "Spoon the curry into bowls and serve with the rice alongside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Spoon the curry into bowls and serve with the rice alongside."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 2,
+      "ratingValue": 4.5
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Bring the flavours of south India to your kitchen with this mouth-watering fish curry. Flavouring it with tamarind gives it an extra kick.",
+    "headline": "Prawn and tamarind curry (Chemmeen vevichathu)",
+    "image": null,
+    "name": "Prawn and tamarind curry (Chemmeen vevichathu)",
+    "author": {
+      "@type": "Person",
+      "name": "Atul Kochhar"
+    },
+    "datePublished": "2015-01-24T11:30:00.000Z",
+    "dateModified": "2020-01-29T09:10:52.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 2,
+      "ratingValue": 4.5
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, curry, tamarind, prawn, dairy free, egg free, Saturday Kitchen",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Indian",
+    "recipeIngredient": [
+      "1 seedless dried tamarind (about the size of a walnut)",
+      "1 tbsp rapeseed oil",
+      "1 tsp black mustard seeds ",
+      "1 tsp fenugreek seeds",
+      "2 shallots, chopped",
+      "2 green chillies, finely chopped",
+      "1 tbsp chopped fresh ginger, peeled",
+      "15–20 curry leaves",
+      "20–24 medium prawns, head and shell removed, deveined",
+      "½ tsp palm sugar (optional), also known as jaggery",
+      "100ml/3½fl oz warm fish stock or water (optional)",
+      "salt",
+      "2 garlic cloves, chopped",
+      "1 cinnamon stick (approximately 5cm/2in)",
+      "2 cloves",
+      "½ tsp fennel seeds",
+      "1 small dried red chilli",
+      "2 tsp ground coriander ",
+      "1 tsp ground turmeric ",
+      "¼ tsp black pepper",
+      "steamed basmati rice"
+    ],
+    "recipeInstructions": [
+      "Soak the tamarind in 200ml/7fl oz water for 15-20 minutes. ",
+      "For the spice paste, put all of the ingredients in a blender with 4-5 tablespoons of water. Blend to a paste. ",
+      "For the curry, heat the oil in a large pan over a medium heat. Add the mustard seeds and cook until you hear them pop, then add the fenugreek seeds and shallots. Cook until the shallots are light brown in colour. ",
+      "Add the green chillies, ginger and curry leaves. Season with salt. Cook over a medium heat for 3–5 minutes. ",
+      "Mix in the spice paste, cook for 5 minutes or until light brown in colour. Stir in the prawns and palm sugar. ",
+      "Add the tamarind and its soaking liquid. Cook for 10–12 minutes, or until the prawns are cooked. If the sauce is too thick for your liking, stir in 100ml/3½fl oz fish stock or hot water.  ",
+      "Spoon the curry into bowls and serve with the rice alongside."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "range-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

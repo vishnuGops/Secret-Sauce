@@ -1,0 +1,370 @@
+{
+  "schemaVersion": 1,
+  "id": "mary-berry/mary-berry-s-chocolate-birthday-cake",
+  "slug": "mary-berry-s-chocolate-birthday-cake",
+  "chefId": "chef_mary-berry",
+  "chefSlug": "mary-berry",
+  "chefName": "Mary Berry",
+  "title": "Mary Berry's chocolate birthday cake",
+  "description": "It's a big day, so trust Mary Berry to make the perfect chocolate birthday cake for that special someone. This easy chocolate cake is layered with rich chocolate ganache. Decorate it with fruit according to the season, or switch it up for nuts or more chocolate.\n\nFor this recipe, you will need a piping bag fitted with a rose-shaped nozzle.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/birthday_chocolate_24628",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/birthday_chocolate_24628",
+    "retrievedAt": "2026-09-11T00:27:42.157Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Mary Berry"
+    ],
+    "datePublished": "2022-04-18T14:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "e3bee540f21b542c5996469ec92bdc0af8dc1f1db8ff4aecf7318c1668aa8ed2",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups",
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 10–12"
+    ],
+    "servings": 10
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Cakes and baking"
+  ],
+  "keywords": [
+    "quick",
+    "best chocolate cake",
+    "birthday cake",
+    "chocolate bakes with fruit",
+    "chocolate birthday cake",
+    "easy cake",
+    "mary berry's easy cake",
+    "afternoon tea",
+    "birthday party",
+    "party food",
+    "chocolate cake",
+    "dark chocolate",
+    "nut free",
+    "pregnancy friendly",
+    "vegetarian",
+    "Mary Berry's Fantastic Feasts"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the cake",
+      "items": [
+        {
+          "raw": "100g/3½oz baking spread or soft butter, plus extra for greasing",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz baking spread or soft butter, plus extra for greasing",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz cocoa powder",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz cocoa powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 tbsp boiling water",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": "tbsp",
+          "name": "boiling water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 free-range eggs",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "free-range eggs",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "175g/6oz self-raising flour",
+          "quantity": 175,
+          "quantityText": "175",
+          "unit": "g",
+          "name": "/6oz self-raising flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp baking powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "baking powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "250g/9oz caster sugar",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "/9oz caster sugar",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the ganache",
+      "items": [
+        {
+          "raw": "300ml/10fl oz pouring double cream",
+          "quantity": 300,
+          "quantityText": "300",
+          "unit": "ml",
+          "name": "/10fl oz pouring double cream",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "300g/10½oz dark chocolate, broken into small pieces",
+          "quantity": 300,
+          "quantityText": "300",
+          "unit": "g",
+          "name": "/10½oz dark chocolate, broken into small pieces",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp apricot jam",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "apricot jam",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the decoration",
+      "items": [
+        {
+          "raw": "5 white chocolate truffle balls",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": null,
+          "name": "white chocolate truffle balls",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 large strawberries, halved, green stalk left attached",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "large strawberries",
+          "note": "halved, green stalk left attached",
+          "isOptional": false
+        },
+        {
+          "raw": "25g/1oz dark chocolate, melted",
+          "quantity": 25,
+          "quantityText": "25",
+          "unit": "g",
+          "name": "/1oz dark chocolate",
+          "note": "melted",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 180C/160C Fan/Gas 4. Grease two 20cm/8in sandwich tins and line with baking paper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 180C/160C Fan/Gas 4. Grease two 20cm/8in sandwich tins and line with baking paper."
+    },
+    {
+      "order": 2,
+      "text": "To make the cake, place the cocoa and boiling water into a large bowl and mix well to make a paste. Add the remaining cake ingredients and beat with an electric whisk until smooth and an even chocolate colour.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the cake, place the cocoa and boiling water into a large bowl and mix well to make a paste. Add the remaining cake ingredients and beat with an electric whisk until smooth and an even chocolate colour. "
+    },
+    {
+      "order": 3,
+      "text": "Divide the mixture between the prepared tins. Bake for about 25–30 minutes until well risen, shrinking away from the sides of the tin and springy to the touch. Leave for 10 minutes to cool, then carefully remove from the tins and place on a wire rack to cool completely.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Divide the mixture between the prepared tins. Bake for about 25–30 minutes until well risen, shrinking away from the sides of the tin and springy to the touch. Leave for 10 minutes to cool, then carefully remove from the tins and place on a wire rack to cool completely. "
+    },
+    {
+      "order": 4,
+      "text": "Meanwhile, to make the ganache, pour the cream into a small saucepan and heat until piping hot. Remove from the heat, add the chocolate pieces and stir until smooth and shiny. Set aside to cool at room temperature until almost set. Divide the ganache into three.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, to make the ganache, pour the cream into a small saucepan and heat until piping hot. Remove from the heat, add the chocolate pieces and stir until smooth and shiny. Set aside to cool at room temperature until almost set. Divide the ganache into three. "
+    },
+    {
+      "order": 5,
+      "text": "Spread the tops of each cake with apricot jam. Sandwich the cakes with a third of the ganache, then spread another third on top. Take a small palette knife and make a pretty swirl pattern on top. Spoon the remaining third into a piping bag, fitted with a rose nozzle. Pipe large rosettes in one corner of the cake.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Spread the tops of each cake with apricot jam. Sandwich the cakes with a third of the ganache, then spread another third on top. Take a small palette knife and make a pretty swirl pattern on top. Spoon the remaining third into a piping bag, fitted with a rose nozzle. Pipe large rosettes in one corner of the cake. "
+    },
+    {
+      "order": 6,
+      "text": "To decorate the cake, place the truffle balls on the top of the rosettes of icing, then arrange the strawberries around them. Using a teaspoon or small piping bag, drizzle the melted chocolate in a zig-zag design over the truffles.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To decorate the cake, place the truffle balls on the top of the rosettes of icing, then arrange the strawberries around them. Using a teaspoon or small piping bag, drizzle the melted chocolate in a zig-zag design over the truffles. "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/birthday_chocolate_24628_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "It is important that both the cakes and ganache are fully cooled before you start to decorate, or the ganache will melt and cause the cakes to slide about."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 31,
+      "ratingValue": 4.516129032258065
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "It's a big day, so trust Mary Berry to make the perfect chocolate birthday cake for that special someone. This easy chocolate cake is layered with rich chocolate ganache. Decorate it with fruit according to the season, or switch it up for nuts or more chocolate.\r\n\r\nFor this recipe, you will need a piping bag fitted with a rose-shaped nozzle.",
+    "headline": "Mary Berry's chocolate birthday cake",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/birthday_chocolate_24628_16x9.jpg"
+    },
+    "name": "Mary Berry's chocolate birthday cake",
+    "author": {
+      "@type": "Person",
+      "name": "Mary Berry"
+    },
+    "datePublished": "2022-04-18T14:00:00.000Z",
+    "dateModified": "2026-08-05T13:33:25.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 31,
+      "ratingValue": 4.516129032258065
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, best chocolate cake, birthday cake, chocolate bakes with fruit, chocolate birthday cake, easy cake, mary berry's easy cake, afternoon tea, birthday party, party food, chocolate cake, dark chocolate, nut free, pregnancy friendly, vegetarian, Mary Berry's Fantastic Feasts",
+    "recipeCategory": "Cakes and baking",
+    "recipeIngredient": [
+      "100g/3½oz baking spread or soft butter, plus extra for greasing",
+      "50g/1¾oz cocoa powder",
+      "6 tbsp boiling water",
+      "4 free-range eggs",
+      "175g/6oz self-raising flour",
+      "1 tsp baking powder",
+      "250g/9oz caster sugar",
+      "300ml/10fl oz pouring double cream",
+      "300g/10½oz dark chocolate, broken into small pieces",
+      "3 tbsp apricot jam",
+      "5 white chocolate truffle balls",
+      "3 large strawberries, halved, green stalk left attached",
+      "25g/1oz dark chocolate, melted"
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 180C/160C Fan/Gas 4. Grease two 20cm/8in sandwich tins and line with baking paper.",
+      "To make the cake, place the cocoa and boiling water into a large bowl and mix well to make a paste. Add the remaining cake ingredients and beat with an electric whisk until smooth and an even chocolate colour. ",
+      "Divide the mixture between the prepared tins. Bake for about 25–30 minutes until well risen, shrinking away from the sides of the tin and springy to the touch. Leave for 10 minutes to cool, then carefully remove from the tins and place on a wire rack to cool completely. ",
+      "Meanwhile, to make the ganache, pour the cream into a small saucepan and heat until piping hot. Remove from the heat, add the chocolate pieces and stir until smooth and shiny. Set aside to cool at room temperature until almost set. Divide the ganache into three. ",
+      "Spread the tops of each cake with apricot jam. Sandwich the cakes with a third of the ganache, then spread another third on top. Take a small palette knife and make a pretty swirl pattern on top. Spoon the remaining third into a piping bag, fitted with a rose nozzle. Pipe large rosettes in one corner of the cake. ",
+      "To decorate the cake, place the truffle balls on the top of the rosettes of icing, then arrange the strawberries around them. Using a teaspoon or small piping bag, drizzle the melted chocolate in a zig-zag design over the truffles. "
+    ],
+    "recipeYield": "Serves 10–12",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

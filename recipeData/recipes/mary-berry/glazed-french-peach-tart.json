@@ -1,0 +1,456 @@
+{
+  "schemaVersion": 1,
+  "id": "mary-berry/glazed-french-peach-tart",
+  "slug": "glazed-french-peach-tart",
+  "chefId": "chef_mary-berry",
+  "chefSlug": "mary-berry",
+  "chefName": "Mary Berry",
+  "title": "Glazed French peach tart",
+  "description": "This peach tart is as impressive as it is delicious! The recipe works just as well with nectarines or apricots. It takes a little time to put together, but it’s a dish to be proud of.\n\nFor this recipe you will need a 28cm/11in fluted, loose-bottomed tart tin.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/glazed_french_peach_tart_51027",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/glazed_french_peach_tart_51027",
+    "retrievedAt": "2026-09-11T00:27:40.607Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Mary Berry"
+    ],
+    "datePublished": "2022-10-05T15:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "8ae21c33b4736340fa2237cc742f3604d5c04ad7edbd2f2428901fdc2bfea465",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 8–10"
+    ],
+    "servings": 8
+  },
+  "timing": {
+    "prepMinutes": 60,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Desserts"
+  ],
+  "keywords": [
+    "british summer fruit",
+    "classic french desserts",
+    "june",
+    "summer baking",
+    "summer dessert",
+    "sweet tarts",
+    "dinner party",
+    "summer party",
+    "fruit tart",
+    "peach",
+    "nut free",
+    "pregnancy friendly",
+    "vegetarian",
+    "Mary Berry - Cook and Share"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the pastry",
+      "items": [
+        {
+          "raw": "175g/6oz plain flour, plus extra for dusting",
+          "quantity": 175,
+          "quantityText": "175",
+          "unit": "g",
+          "name": "/6oz plain flour, plus extra for dusting",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "115g/4oz unsalted butter, cubed",
+          "quantity": 115,
+          "quantityText": "115",
+          "unit": "g",
+          "name": "/4oz unsalted butter",
+          "note": "cubed",
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp icing sugar",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "icing sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 free-range egg, beaten",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "free-range egg",
+          "note": "beaten",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the crème patissiere",
+      "items": [
+        {
+          "raw": "6 egg yolks",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": null,
+          "name": "egg yolks",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "115g/4oz caster sugar",
+          "quantity": 115,
+          "quantityText": "115",
+          "unit": "g",
+          "name": "/4oz caster sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "55g/2oz plain flour",
+          "quantity": 55,
+          "quantityText": "55",
+          "unit": "g",
+          "name": "/2oz plain flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "500ml/18fl oz full-fat milk",
+          "quantity": 500,
+          "quantityText": "500",
+          "unit": "ml",
+          "name": "/18fl oz full-fat milk",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp vanilla extract",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "vanilla extract",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100ml/3½fl oz pouring double cream, whipped to soft peaks",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "ml",
+          "name": "/3½fl oz pouring double cream, whipped to soft peaks",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the filling",
+      "items": [
+        {
+          "raw": "55g/2oz caster sugar",
+          "quantity": 55,
+          "quantityText": "55",
+          "unit": "g",
+          "name": "/2oz caster sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "8 large peaches, halved and thinly sliced",
+          "quantity": 8,
+          "quantityText": "8",
+          "unit": null,
+          "name": "large peaches",
+          "note": "halved and thinly sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "75g/3oz apricot jam",
+          "quantity": 75,
+          "quantityText": "75",
+          "unit": "g",
+          "name": "/3oz apricot jam",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "First make the pastry. Measure the flour, butter and icing sugar into a food processor. Pulse until the mixture resembles breadcrumbs. Add the egg and pulse again until the dough comes together.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "First make the pastry. Measure the flour, butter and icing sugar into a food processor. Pulse until the mixture resembles breadcrumbs. Add the egg and pulse again until the dough comes together."
+    },
+    {
+      "order": 2,
+      "text": "Dust a work surface with flour and roll out the pastry as thinly as possible to be a little bigger than the tin. Line the tin with pastry, leaving any excess overhanging. Prick the base with a fork and chill in the fridge or freezer for 30 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Dust a work surface with flour and roll out the pastry as thinly as possible to be a little bigger than the tin. Line the tin with pastry, leaving any excess overhanging. Prick the base with a fork and chill in the fridge or freezer for 30 minutes. "
+    },
+    {
+      "order": 3,
+      "text": "Preheat the oven to 200C/180C Fan/Gas 6.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 200C/180C Fan/Gas 6. "
+    },
+    {
+      "order": 4,
+      "text": "Line the pastry case with baking paper and fill with baking beans or uncooked rice. Bake blind for 15 minutes then remove the beans and paper and bake for another 5–10 minutes, until the pastry is pale golden and crisp. Trim away any excess pastry. Set aside to cool.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Line the pastry case with baking paper and fill with baking beans or uncooked rice. Bake blind for 15 minutes then remove the beans and paper and bake for another 5–10 minutes, until the pastry is pale golden and crisp. Trim away any excess pastry. Set aside to cool."
+    },
+    {
+      "order": 5,
+      "text": "Meanwhile, to make the crème patissiere, put the egg yolks, sugar and flour in a large bowl. Using an electric whisk, beat until the mixture is thick and pale.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, to make the crème patissiere, put the egg yolks, sugar and flour in a large bowl. Using an electric whisk, beat until the mixture is thick and pale."
+    },
+    {
+      "order": 6,
+      "text": "Heat the milk in a saucepan until scalding. Slowly pour the milk into the bowl and continue whisking until smooth.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat the milk in a saucepan until scalding. Slowly pour the milk into the bowl and continue whisking until smooth. "
+    },
+    {
+      "order": 7,
+      "text": "Pour back into the saucepan, add the vanilla and stir constantly over a medium heat until just boiling and the mixture is at a thick ribbon stage (where a trail of mixture sits on the surface like a ribbon when you lift out the spoon).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pour back into the saucepan, add the vanilla and stir constantly over a medium heat until just boiling and the mixture is at a thick ribbon stage (where a trail of mixture sits on the surface like a ribbon when you lift out the spoon). "
+    },
+    {
+      "order": 8,
+      "text": "Spoon into a bowl, cover the surface with baking paper to stop a skin forming and leave to cool.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Spoon into a bowl, cover the surface with baking paper to stop a skin forming and leave to cool."
+    },
+    {
+      "order": 9,
+      "text": "When the crème patissiere is cold, fold in the whipped cream. Cover and set aside in the fridge until needed.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "When the crème patissiere is cold, fold in the whipped cream. Cover and set aside in the fridge until needed."
+    },
+    {
+      "order": 10,
+      "text": "To poach the peaches, measure 200ml/7fl oz water and the caster sugar into a wide-based saucepan. Stir to dissolve the sugar, then bring up to the boil and boil for 2 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To poach the peaches, measure 200ml/7fl oz water and the caster sugar into a wide-based saucepan. Stir to dissolve the sugar, then bring up to the boil and boil for 2 minutes."
+    },
+    {
+      "order": 11,
+      "text": "Turn down the heat, add the peach slices and simmer gently for a few minutes, until the peaches are just soft, but not falling apart. Strain the peaches from the syrup and leave to cool completely. Discard the syrup.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Turn down the heat, add the peach slices and simmer gently for a few minutes, until the peaches are just soft, but not falling apart. Strain the peaches from the syrup and leave to cool completely. Discard the syrup."
+    },
+    {
+      "order": 12,
+      "text": "Put the apricot jam in a small saucepan . Place over a low heat and stir until smooth and runny.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put the apricot jam in a small saucepan . Place over a low heat and stir until smooth and runny."
+    },
+    {
+      "order": 13,
+      "text": "Fill the pastry case with the cold crème patissiere, spreading to the edges. Arrange the peach slices in a neat spiral on top. Brush the peach slices pastry edges with the apricot jam and place in the fridge for 30 minutes to set before serving. Cut into wedges and serve at room temperature.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Fill the pastry case with the cold crème patissiere, spreading to the edges. Arrange the peach slices in a neat spiral on top. Brush the peach slices pastry edges with the apricot jam and place in the fridge for 30 minutes to set before serving. Cut into wedges and serve at room temperature.  "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/glazed_french_peach_tart_51027_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 8,
+      "ratingValue": 4.5
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "This peach tart is as impressive as it is delicious! The recipe works just as well with nectarines or apricots. It takes a little time to put together, but it’s a dish to be proud of.\r\n\r\nFor this recipe you will need a 28cm/11in fluted, loose-bottomed tart tin.",
+    "headline": "Glazed French peach tart",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/glazed_french_peach_tart_51027_16x9.jpg"
+    },
+    "name": "Glazed French peach tart",
+    "author": {
+      "@type": "Person",
+      "name": "Mary Berry"
+    },
+    "datePublished": "2022-10-05T15:00:00.000Z",
+    "dateModified": "2026-08-05T13:36:21.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 8,
+      "ratingValue": 4.5
+    },
+    "prepTime": "PT1H",
+    "cookTime": "PT1H",
+    "keywords": "british summer fruit, classic french desserts, june, summer baking, summer dessert, sweet tarts, dinner party, summer party, fruit tart, peach, nut free, pregnancy friendly, vegetarian, Mary Berry - Cook and Share",
+    "recipeCategory": "Desserts",
+    "recipeIngredient": [
+      "175g/6oz plain flour, plus extra for dusting",
+      "115g/4oz unsalted butter, cubed",
+      "3 tbsp icing sugar",
+      "1 free-range egg, beaten",
+      "6 egg yolks",
+      "115g/4oz caster sugar",
+      "55g/2oz plain flour",
+      "500ml/18fl oz full-fat milk",
+      "1 tsp vanilla extract",
+      "100ml/3½fl oz pouring double cream, whipped to soft peaks",
+      "55g/2oz caster sugar",
+      "8 large peaches, halved and thinly sliced",
+      "75g/3oz apricot jam"
+    ],
+    "recipeInstructions": [
+      "First make the pastry. Measure the flour, butter and icing sugar into a food processor. Pulse until the mixture resembles breadcrumbs. Add the egg and pulse again until the dough comes together.",
+      "Dust a work surface with flour and roll out the pastry as thinly as possible to be a little bigger than the tin. Line the tin with pastry, leaving any excess overhanging. Prick the base with a fork and chill in the fridge or freezer for 30 minutes. ",
+      "Preheat the oven to 200C/180C Fan/Gas 6. ",
+      "Line the pastry case with baking paper and fill with baking beans or uncooked rice. Bake blind for 15 minutes then remove the beans and paper and bake for another 5–10 minutes, until the pastry is pale golden and crisp. Trim away any excess pastry. Set aside to cool.",
+      "Meanwhile, to make the crème patissiere, put the egg yolks, sugar and flour in a large bowl. Using an electric whisk, beat until the mixture is thick and pale.",
+      "Heat the milk in a saucepan until scalding. Slowly pour the milk into the bowl and continue whisking until smooth. ",
+      "Pour back into the saucepan, add the vanilla and stir constantly over a medium heat until just boiling and the mixture is at a thick ribbon stage (where a trail of mixture sits on the surface like a ribbon when you lift out the spoon). ",
+      "Spoon into a bowl, cover the surface with baking paper to stop a skin forming and leave to cool.",
+      "When the crème patissiere is cold, fold in the whipped cream. Cover and set aside in the fridge until needed.",
+      "To poach the peaches, measure 200ml/7fl oz water and the caster sugar into a wide-based saucepan. Stir to dissolve the sugar, then bring up to the boil and boil for 2 minutes.",
+      "Turn down the heat, add the peach slices and simmer gently for a few minutes, until the peaches are just soft, but not falling apart. Strain the peaches from the syrup and leave to cool completely. Discard the syrup.",
+      "Put the apricot jam in a small saucepan . Place over a low heat and stir until smooth and runny.",
+      "Fill the pastry case with the cold crème patissiere, spreading to the edges. Arrange the peach slices in a neat spiral on top. Brush the peach slices pastry edges with the apricot jam and place in the fridge for 30 minutes to set before serving. Cut into wedges and serve at room temperature.  "
+    ],
+    "recipeYield": "Serves 8–10",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

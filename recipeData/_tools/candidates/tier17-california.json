@@ -1,0 +1,116 @@
+[
+  {
+    "name": "cravingcalifornia.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://cravingcalifornia.com/"
+  },
+  {
+    "name": "foodgal.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://foodgal.com/"
+  },
+  {
+    "name": "kitchenconfidante.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://kitchenconfidante.com/"
+  },
+  {
+    "name": "snixykitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://snixykitchen.com/"
+  },
+  {
+    "name": "naturallyella.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://naturallyella.com/"
+  },
+  {
+    "name": "detoxinista.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://detoxinista.com/"
+  },
+  {
+    "name": "kirbiecravings.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://kirbiecravings.com/"
+  },
+  {
+    "name": "straightupfood.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://straightupfood.com/"
+  },
+  {
+    "name": "manjulaskitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://manjulaskitchen.com/"
+  },
+  {
+    "name": "thewimpyvegetarian.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thewimpyvegetarian.com/"
+  },
+  {
+    "name": "mysanfranciscokitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://mysanfranciscokitchen.com/"
+  },
+  {
+    "name": "asideofsweet.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://asideofsweet.com/"
+  },
+  {
+    "name": "bowl-me-over.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://bowl-me-over.com/"
+  },
+  {
+    "name": "californiagreekgirl.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://californiagreekgirl.com/"
+  },
+  {
+    "name": "forksoverknives.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://forksoverknives.com/"
+  },
+  {
+    "name": "californiaavocado.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://californiaavocado.com/"
+  },
+  {
+    "name": "walnuts.org",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://walnuts.org/"
+  },
+  {
+    "name": "theplainjane.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://theplainjane.com/"
+  },
+  {
+    "name": "cooking-therapy.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://cooking-therapy.com/"
+  }
+]

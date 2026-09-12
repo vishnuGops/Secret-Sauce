@@ -1,0 +1,448 @@
+{
+  "schemaVersion": 1,
+  "id": "atul-kochhar/indian-chicken-stew",
+  "slug": "indian-chicken-stew",
+  "chefId": "chef_atul-kochhar",
+  "chefSlug": "atul-kochhar",
+  "chefName": "Atul Kochhar",
+  "title": "Indian chicken stew",
+  "description": "This delicious spicy chicken dish is packed with fresh Indian flavours such as mace, curry leaves and other spices.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/koliishtewchickenste_87479",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/koliishtewchickenste_87479",
+    "retrievedAt": "2026-09-11T00:28:20.732Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Atul Kochhar"
+    ],
+    "datePublished": "2012-10-28T11:30:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "91ba9c56703345541f3590af86cc740eb4bbff0a78a0473917e13ec3351c60a2",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Indian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "easy chicken stew",
+    "diwali",
+    "chicken curry",
+    "chicken breast",
+    "egg free",
+    "pregnancy friendly",
+    "2007-16"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "3 tbsp vegetable oil",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "vegetable oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 boneless chicken breast, cut into four pieces, dusted with little flour, salt, freshly ground black pepper and ground cinnamon",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "boneless chicken breast, cut into four pieces, dusted with little flour, salt, freshly ground black pepper and ground cinnamon",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 star anise",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "star anise",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2.5cm/1in cinnamon stick",
+          "quantity": 2.5,
+          "quantityText": "2.5",
+          "unit": null,
+          "name": "cm/1in cinnamon stick",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2-3 green cardamom pods, lightly crushed",
+          "quantity": 2,
+          "quantityText": "2-3",
+          "unit": null,
+          "name": "green cardamom pods",
+          "note": "lightly crushed",
+          "isOptional": false
+        },
+        {
+          "raw": "4 cloves",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "cloves",
+          "name": "4 cloves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4-6 black peppercorns",
+          "quantity": 4,
+          "quantityText": "4-6",
+          "unit": null,
+          "name": "black peppercorns",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 blade mace",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "blade mace",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 green chilli, slit open",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "green chilli, slit open",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "20g/¾oz fresh ginger, peeled, sliced into matchsticks",
+          "quantity": 20,
+          "quantityText": "20",
+          "unit": "g",
+          "name": "/¾oz fresh ginger",
+          "note": "peeled, sliced into matchsticks",
+          "isOptional": false
+        },
+        {
+          "raw": "2 medium onions, thinly sliced",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "medium onions",
+          "note": "thinly sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "8-10 fresh curry leaves",
+          "quantity": 8,
+          "quantityText": "8-10",
+          "unit": null,
+          "name": "fresh curry leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground turmeric",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground turmeric",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp ground coriander",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "ground coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp ground black pepper",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ tsp ground cinnamon",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "tsp",
+          "name": "ground cinnamon",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "400ml/14fl oz coconut milk",
+          "quantity": 400,
+          "quantityText": "400",
+          "unit": "ml",
+          "name": "/14fl oz coconut milk",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "10-12 baby plum or cherry tomatoes",
+          "quantity": 10,
+          "quantityText": "10-12",
+          "unit": null,
+          "name": "baby plum or cherry tomatoes",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To serve",
+      "items": [
+        {
+          "raw": "steamed rice",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "steamed rice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "chopped celery leaves",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "chopped celery leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "shiso cress (or punnet cress if unavailable)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "shiso cress (or punnet cress if unavailable)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Heat one tablespoon of the vegetable oil in a large pan over a low heat. When the oil is hot, add the chicken breast pieces and fry gently, but do not allow to colour. When the chicken pieces are almost cooked through, remove from the pan and set aside until required.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat one tablespoon of the vegetable oil in a large pan over a low heat. When the oil is hot, add the chicken breast pieces and fry gently, but do not allow to colour. When the chicken pieces are almost cooked through, remove from the pan and set aside until required."
+    },
+    {
+      "order": 2,
+      "text": "Heat the remaining two tablespoons of vegetable oil and add the cinnamon stick, cardamom pods, cloves, peppercorns and mace. Fry until the spices start to crackle, then add the chilli, ginger, onions and curry leaves.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat the remaining two tablespoons of vegetable oil and add the cinnamon stick, cardamom pods, cloves, peppercorns and mace. Fry until the spices start to crackle, then add the chilli, ginger, onions and curry leaves."
+    },
+    {
+      "order": 3,
+      "text": "Fry the spices and onions for 4-5 minutes, or until onions are translucent.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Fry the spices and onions for 4-5 minutes, or until onions are translucent."
+    },
+    {
+      "order": 4,
+      "text": "Add the turmeric, coriander, black pepper and cinnamon powder and continue to fry for 2-3 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the turmeric, coriander, black pepper and cinnamon powder and continue to fry for 2-3 minutes."
+    },
+    {
+      "order": 5,
+      "text": "Add the coconut milk and heat to a gentle simmer.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the coconut milk and heat to a gentle simmer.  "
+    },
+    {
+      "order": 6,
+      "text": "Add the cooked chicken pieces and the tomatoes and simmer for 3-4 minutes, or until the chicken is completely cooked through (no pink should remain when the chicken is cut into).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the cooked chicken pieces and the tomatoes and simmer for 3-4 minutes, or until the chicken is completely cooked through (no pink should remain when the chicken is cut into)."
+    },
+    {
+      "order": 7,
+      "text": "To serve, place a spoonful of steamed rice onto each plate and then place a spoonful of the chicken stew alongside. Garnish with celery and shisho cress.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To serve, place a spoonful of steamed rice onto each plate and then place a spoonful of the chicken stew alongside. Garnish with celery and shisho cress."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/koliishtewchickenste_87479_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 5,
+      "ratingValue": 4.8
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "This delicious spicy chicken dish is packed with fresh Indian flavours such as mace, curry leaves and other spices.",
+    "headline": "Indian chicken stew",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/koliishtewchickenste_87479_16x9.jpg"
+    },
+    "name": "Indian chicken stew",
+    "author": {
+      "@type": "Person",
+      "name": "Atul Kochhar"
+    },
+    "datePublished": "2012-10-28T11:30:00.000Z",
+    "dateModified": "2018-06-19T12:35:05.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 5,
+      "ratingValue": 4.8
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, easy chicken stew, diwali, chicken curry, chicken breast, egg free, pregnancy friendly, 2007-16",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Indian",
+    "recipeIngredient": [
+      "3 tbsp vegetable oil",
+      "2 boneless chicken breast, cut into four pieces, dusted with little flour, salt, freshly ground black pepper and ground cinnamon",
+      "2 star anise",
+      "2.5cm/1in cinnamon stick",
+      "2-3 green cardamom pods, lightly crushed",
+      "4 cloves",
+      "4-6 black peppercorns",
+      "1 blade mace",
+      "1 green chilli, slit open",
+      "20g/¾oz fresh ginger, peeled, sliced into matchsticks",
+      "2 medium onions, thinly sliced",
+      "8-10 fresh curry leaves",
+      "1 tsp ground turmeric",
+      "2 tsp ground coriander",
+      "½ tsp ground black pepper",
+      "¼ tsp ground cinnamon",
+      "400ml/14fl oz coconut milk",
+      "10-12 baby plum or cherry tomatoes",
+      "steamed rice",
+      "chopped celery leaves",
+      "shiso cress (or punnet cress if unavailable)"
+    ],
+    "recipeInstructions": [
+      "Heat one tablespoon of the vegetable oil in a large pan over a low heat. When the oil is hot, add the chicken breast pieces and fry gently, but do not allow to colour. When the chicken pieces are almost cooked through, remove from the pan and set aside until required.",
+      "Heat the remaining two tablespoons of vegetable oil and add the cinnamon stick, cardamom pods, cloves, peppercorns and mace. Fry until the spices start to crackle, then add the chilli, ginger, onions and curry leaves.",
+      "Fry the spices and onions for 4-5 minutes, or until onions are translucent.",
+      "Add the turmeric, coriander, black pepper and cinnamon powder and continue to fry for 2-3 minutes.",
+      "Add the coconut milk and heat to a gentle simmer.  ",
+      "Add the cooked chicken pieces and the tomatoes and simmer for 3-4 minutes, or until the chicken is completely cooked through (no pink should remain when the chicken is cut into).",
+      "To serve, place a spoonful of steamed rice onto each plate and then place a spoonful of the chicken stew alongside. Garnish with celery and shisho cress."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:3",
+    "range-quantity:4",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

@@ -1,0 +1,338 @@
+{
+  "schemaVersion": 1,
+  "id": "huy-vu/boiled-peanuts",
+  "slug": "boiled-peanuts",
+  "chefId": "chef_huy-vu",
+  "chefSlug": "huy-vu",
+  "chefName": "Huy Vu",
+  "title": "Boiled Peanuts",
+  "description": "An easy yet delicious snack of boiled peanuts! Something commonly found at Vietnamese supermarkets.",
+  "source": {
+    "sourceUrl": "https://www.hungryhuy.com/boiled-peanuts/",
+    "finalUrl": "https://www.hungryhuy.com/boiled-peanuts/",
+    "retrievedAt": "2026-09-11T03:14:46.336Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2014-07-16T10:16:14+00:00",
+    "rights": "Hungry Huy. Functional content plus a link, for internal app testing. Not redistributed.",
+    "pageTitle": "Boiled Peanuts Recipe [Seasoned With Salt] - Hungry Huy",
+    "htmlSha256": "cb74f28b9b69604530b658fdb749c5b795e1868aa9796b6315bf43fd72fb799b",
+    "jsonLdBlockCount": 2,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 15,
+    "cookMinutes": null,
+    "totalMinutes": 15,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "American",
+    "Vietnamese"
+  ],
+  "category": [
+    "Appetizer",
+    "Snack"
+  ],
+  "keywords": [
+    "boiled cabbage",
+    "peanuts"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "2 pounds raw peanuts (not the dehydrated type)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "lb",
+          "name": "raw peanuts (not the dehydrated type)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 ounces of salt",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "oz",
+          "name": "of salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 gallons of water",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "gallons",
+          "name": "of water",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Soak peanuts in water for 15 minutes to loosen dirt, rinse and drain",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Soak peanuts in water for 15 minutes to loosen dirt, rinse and drain",
+        "name": "Soak peanuts in water for 15 minutes to loosen dirt, rinse and drain",
+        "url": "https://www.hungryhuy.com/boiled-peanuts/#wprm-recipe-3408-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Add peanuts and salt to boiling water",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add peanuts and salt to boiling water",
+        "name": "Add peanuts and salt to boiling water",
+        "url": "https://www.hungryhuy.com/boiled-peanuts/#wprm-recipe-3408-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Keep a low-medium boil for 1 hour, checking for doneness every 20-30 minutes. It should have some bite and be soft, but not mushy. It can take 1-4 hours depending on age of the peanuts.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Keep a low-medium boil for 1 hour, checking for doneness every 20-30 minutes. It should have some bite and be soft, but not mushy. It can take 1-4 hours depending on age of the peanuts.",
+        "name": "Keep a low-medium boil for 1 hour, checking for doneness every 20-30 minutes. It should have some bite and be soft, but not mushy. It can take 1-4 hours depending on age of the peanuts.",
+        "url": "https://www.hungryhuy.com/boiled-peanuts/#wprm-recipe-3408-step-0-2"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "1293 kcal",
+    "carbohydrateContent": "36 g",
+    "proteinContent": "59 g",
+    "fatContent": "112 g",
+    "saturatedFatContent": "17 g",
+    "sodiumContent": "5638 mg",
+    "fiberContent": "22 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/boiled-peanuts-3.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/boiled-peanuts-3-500x398.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/boiled-peanuts-3-500x375.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/boiled-peanuts-3-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "5",
+      "reviewCount": "3"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I grew up in Louisiana eating boiled peanuts and love them. I now live in Seattle and can buy them at a local Japanese grocery chain. These are spiced with Asian spices, but I like them in any form or fashion. I was buying them 1 day, and the check out person was of European descent. She looked at my packages like I had snake or perhaps live crawling Klingon food. She asked what you do with them. I pointed out that this was a grocery store, so you might assume that they are food to be eaten and that they are delicious. The Asian woman behind me cracked up and agreed. Thanks for your blog Huy. We really love your food having learned Vietnamese food in Houston in the 80s.",
+        "author": {
+          "@type": "Person",
+          "name": "Lindy"
+        },
+        "datePublished": "2020-07-21"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "congrats for all the recipes!!! they look amazing :)\r\nHow long would the peanuts last once they are boiled and what's the best way to keep them?",
+        "author": {
+          "@type": "Person",
+          "name": "mar"
+        },
+        "datePublished": "2017-10-18"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Hi Huy, \r\nCan I use the images and provide the credit backlink to your site?\r\nThanks,",
+        "author": {
+          "@type": "Person",
+          "name": "Quoc"
+        },
+        "datePublished": "2017-10-08"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Boiled Peanuts",
+    "author": {
+      "@id": "https://www.hungryhuy.com/#/schema/person/77ba703312129b3930232d1c829f0ff0"
+    },
+    "description": "An easy yet delicious snack of boiled peanuts! Something commonly found at Vietnamese supermarkets.",
+    "datePublished": "2014-07-16T10:16:14+00:00",
+    "image": [
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/boiled-peanuts-3.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/boiled-peanuts-3-500x398.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/boiled-peanuts-3-500x375.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/boiled-peanuts-3-480x270.jpg"
+    ],
+    "recipeYield": [
+      "4"
+    ],
+    "prepTime": "PT15M",
+    "totalTime": "PT15M",
+    "recipeIngredient": [
+      "2 pounds raw peanuts (not the dehydrated type)",
+      "2 ounces of salt",
+      "2 gallons of water"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Soak peanuts in water for 15 minutes to loosen dirt, rinse and drain",
+        "name": "Soak peanuts in water for 15 minutes to loosen dirt, rinse and drain",
+        "url": "https://www.hungryhuy.com/boiled-peanuts/#wprm-recipe-3408-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Add peanuts and salt to boiling water",
+        "name": "Add peanuts and salt to boiling water",
+        "url": "https://www.hungryhuy.com/boiled-peanuts/#wprm-recipe-3408-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Keep a low-medium boil for 1 hour, checking for doneness every 20-30 minutes. It should have some bite and be soft, but not mushy. It can take 1-4 hours depending on age of the peanuts.",
+        "name": "Keep a low-medium boil for 1 hour, checking for doneness every 20-30 minutes. It should have some bite and be soft, but not mushy. It can take 1-4 hours depending on age of the peanuts.",
+        "url": "https://www.hungryhuy.com/boiled-peanuts/#wprm-recipe-3408-step-0-2"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "5",
+      "reviewCount": "3"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I grew up in Louisiana eating boiled peanuts and love them. I now live in Seattle and can buy them at a local Japanese grocery chain. These are spiced with Asian spices, but I like them in any form or fashion. I was buying them 1 day, and the check out person was of European descent. She looked at my packages like I had snake or perhaps live crawling Klingon food. She asked what you do with them. I pointed out that this was a grocery store, so you might assume that they are food to be eaten and that they are delicious. The Asian woman behind me cracked up and agreed. Thanks for your blog Huy. We really love your food having learned Vietnamese food in Houston in the 80s.",
+        "author": {
+          "@type": "Person",
+          "name": "Lindy"
+        },
+        "datePublished": "2020-07-21"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "congrats for all the recipes!!! they look amazing :)\r\nHow long would the peanuts last once they are boiled and what's the best way to keep them?",
+        "author": {
+          "@type": "Person",
+          "name": "mar"
+        },
+        "datePublished": "2017-10-18"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Hi Huy, \r\nCan I use the images and provide the credit backlink to your site?\r\nThanks,",
+        "author": {
+          "@type": "Person",
+          "name": "Quoc"
+        },
+        "datePublished": "2017-10-08"
+      }
+    ],
+    "recipeCategory": [
+      "Appetizer",
+      "Snack"
+    ],
+    "recipeCuisine": [
+      "American",
+      "Vietnamese"
+    ],
+    "keywords": "boiled cabbage, peanuts",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "1293 kcal",
+      "carbohydrateContent": "36 g",
+      "proteinContent": "59 g",
+      "fatContent": "112 g",
+      "saturatedFatContent": "17 g",
+      "sodiumContent": "5638 mg",
+      "fiberContent": "22 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://www.hungryhuy.com/boiled-peanuts/#recipe",
+    "isPartOf": {
+      "@id": "https://www.hungryhuy.com/boiled-peanuts/#article"
+    },
+    "mainEntityOfPage": "https://www.hungryhuy.com/boiled-peanuts/"
+  },
+  "audit": [
+    "no-cook-time",
+    "unmapped:aggregateRating|review"
+  ]
+}

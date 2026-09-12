@@ -1,0 +1,1122 @@
+[
+  {
+    "name": "Dole",
+    "kind": "brand",
+    "homepage": "https://dole.com/",
+    "include": "/recipes/",
+    "retryOf": "tier1-brands.json"
+  },
+  {
+    "name": "Ocean Spray",
+    "kind": "brand",
+    "homepage": "https://www.oceanspray.com/",
+    "include": "/recipes/",
+    "retryOf": "tier1-brands.json"
+  },
+  {
+    "name": "Epicurious",
+    "kind": "publication",
+    "homepage": "https://www.epicurious.com/",
+    "include": "/recipes/food/views/",
+    "retryOf": "tier1-brands.json"
+  },
+  {
+    "name": "Gordon Ramsay Restaurants",
+    "kind": "restaurant",
+    "homepage": "https://www.gordonramsayrestaurants.com/",
+    "include": "/recipe",
+    "retryOf": "tier1-brands.json"
+  },
+  {
+    "name": "chinesehealthycooking.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://chinesehealthycooking.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "dessertfirstgirl.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://dessertfirstgirl.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "busyinbrooklyn.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://busyinbrooklyn.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "ohmysugarhigh.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://ohmysugarhigh.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "spamellab.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://spamellab.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "theitaliandishblog.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://theitaliandishblog.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "italianbellavita.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://italianbellavita.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "ciaochowlinda.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://ciaochowlinda.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "cookingwithmanuela.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://cookingwithmanuela.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "buonapappa.net",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://buonapappa.net/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "mypinchofitaly.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://mypinchofitaly.co.uk/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "emikodavies.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://emikodavies.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "katieparla.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://katieparla.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "pastagrammar.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://pastagrammar.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "lacocinadeleslie.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://lacocinadeleslie.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "mexicanplease.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://mexicanplease.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "chicanoeats.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://chicanoeats.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "justhungry.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://justhungry.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "hirokoliston.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://hirokoliston.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "foodsaketokyo.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://foodsaketokyo.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "umamibites.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://umamibites.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "cookingwithyoshiko.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://cookingwithyoshiko.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "thehalalfoodblog.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thehalalfoodblog.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "souschef.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://souschef.co.uk/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "japanesetaste.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://japanesetaste.com/",
+    "retryOf": "tier10-world2.json"
+  },
+  {
+    "name": "casabaluartefilipinorecipes.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://casabaluartefilipinorecipes.com/",
+    "retryOf": "tier11-seasia.json"
+  },
+  {
+    "name": "yedylicious.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://yedylicious.com/",
+    "retryOf": "tier11-seasia.json"
+  },
+  {
+    "name": "astigvegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://astigvegan.com/",
+    "retryOf": "tier11-seasia.json"
+  },
+  {
+    "name": "aeriskitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://aeriskitchen.com/",
+    "retryOf": "tier11-seasia.json"
+  },
+  {
+    "name": "glutenfreeeasily.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://glutenfreeeasily.com/",
+    "retryOf": "tier12-glutenfree.json"
+  },
+  {
+    "name": "thedomesticman.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thedomesticman.com/",
+    "retryOf": "tier12-glutenfree.json"
+  },
+  {
+    "name": "thecolorfulkitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thecolorfulkitchen.com/",
+    "retryOf": "tier12-glutenfree.json"
+  },
+  {
+    "name": "onlyglutenfreerecipes.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://onlyglutenfreerecipes.com/",
+    "retryOf": "tier12-glutenfree.json"
+  },
+  {
+    "name": "sarahbakesgfree.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://sarahbakesgfree.com/",
+    "retryOf": "tier12-glutenfree.json"
+  },
+  {
+    "name": "simpleglutenfreekitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://simpleglutenfreekitchen.com/",
+    "retryOf": "tier12-glutenfree.json"
+  },
+  {
+    "name": "fitnessista.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://fitnessista.com/",
+    "retryOf": "tier12-glutenfree.json"
+  },
+  {
+    "name": "Eda.ru",
+    "kind": "publication",
+    "country": "Russia",
+    "language": "ru",
+    "homepage": "https://eda.ru/",
+    "retryOf": "tier13-nonenglish.json"
+  },
+  {
+    "name": "Arla Sweden",
+    "kind": "brand",
+    "country": "Sweden",
+    "language": "sv",
+    "homepage": "https://www.arla.se/",
+    "retryOf": "tier13-nonenglish.json"
+  },
+  {
+    "name": "Ica Recept",
+    "kind": "brand",
+    "country": "Sweden",
+    "language": "sv",
+    "homepage": "https://www.ica.se/",
+    "retryOf": "tier13-nonenglish.json"
+  },
+  {
+    "name": "Yemek.com",
+    "kind": "publication",
+    "country": "Turkey",
+    "language": "tr",
+    "homepage": "https://yemek.com/",
+    "retryOf": "tier13-nonenglish.json"
+  },
+  {
+    "name": "sproutedkitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://sproutedkitchen.com/",
+    "retryOf": "tier14-seasonal.json"
+  },
+  {
+    "name": "sugarandsparrow.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://sugarandsparrow.com/",
+    "retryOf": "tier14-seasonal.json"
+  },
+  {
+    "name": "abbeyskitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "country": "Canada",
+    "homepage": "https://abbeyskitchen.com/",
+    "retryOf": "tier15-canada.json"
+  },
+  {
+    "name": "simplebites.net",
+    "nameAuto": true,
+    "kind": "chef",
+    "country": "Canada",
+    "homepage": "https://simplebites.net/",
+    "retryOf": "tier15-canada.json"
+  },
+  {
+    "name": "pureella.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "country": "Canada",
+    "homepage": "https://pureella.com/",
+    "retryOf": "tier15-canada.json"
+  },
+  {
+    "name": "baconismagic.ca",
+    "nameAuto": true,
+    "kind": "chef",
+    "country": "Canada",
+    "homepage": "https://baconismagic.ca/",
+    "retryOf": "tier15-canada.json"
+  },
+  {
+    "name": "hiddenponies.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "country": "Canada",
+    "homepage": "https://hiddenponies.com/",
+    "retryOf": "tier15-canada.json"
+  },
+  {
+    "name": "thehonoursystem.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "country": "Canada",
+    "homepage": "https://thehonoursystem.com/",
+    "retryOf": "tier15-canada.json"
+  },
+  {
+    "name": "myislandbistrokitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "country": "Canada",
+    "homepage": "https://myislandbistrokitchen.com/",
+    "retryOf": "tier15-canada.json"
+  },
+  {
+    "name": "therawtarian.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "country": "Canada",
+    "homepage": "https://therawtarian.com/",
+    "retryOf": "tier15-canada.json"
+  },
+  {
+    "name": "thesaltypot.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "country": "Canada",
+    "homepage": "https://thesaltypot.com/",
+    "retryOf": "tier15-canada.json"
+  },
+  {
+    "name": "80twenty.ca",
+    "nameAuto": true,
+    "kind": "chef",
+    "country": "Canada",
+    "homepage": "https://80twenty.ca/",
+    "retryOf": "tier15-canada.json"
+  },
+  {
+    "name": "eatlivetravelwrite.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "country": "Canada",
+    "homepage": "https://eatlivetravelwrite.com/",
+    "retryOf": "tier15-canada.json"
+  },
+  {
+    "name": "howtocookthat.net",
+    "nameAuto": true,
+    "kind": "chef",
+    "country": "Australia",
+    "homepage": "https://howtocookthat.net/",
+    "retryOf": "tier16-australia.json"
+  },
+  {
+    "name": "recipe30.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "country": "Australia",
+    "homepage": "https://recipe30.com/",
+    "retryOf": "tier16-australia.json"
+  },
+  {
+    "name": "wholefoodsimply.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "country": "Australia",
+    "homepage": "https://wholefoodsimply.com/",
+    "retryOf": "tier16-australia.json"
+  },
+  {
+    "name": "atablefortwo.com.au",
+    "nameAuto": true,
+    "kind": "chef",
+    "country": "Australia",
+    "homepage": "https://atablefortwo.com.au/",
+    "retryOf": "tier16-australia.json"
+  },
+  {
+    "name": "figjamandlimecordial.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "country": "Australia",
+    "homepage": "https://figjamandlimecordial.com/",
+    "retryOf": "tier16-australia.json"
+  },
+  {
+    "name": "the-fit-foodie.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "country": "Australia",
+    "homepage": "https://the-fit-foodie.com/",
+    "retryOf": "tier16-australia.json"
+  },
+  {
+    "name": "thehungrymum.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "country": "Australia",
+    "homepage": "https://thehungrymum.com/",
+    "retryOf": "tier16-australia.json"
+  },
+  {
+    "name": "delicious.com.au",
+    "nameAuto": true,
+    "kind": "chef",
+    "country": "Australia",
+    "homepage": "https://delicious.com.au/",
+    "retryOf": "tier16-australia.json"
+  },
+  {
+    "name": "foodgal.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://foodgal.com/",
+    "retryOf": "tier17-california.json"
+  },
+  {
+    "name": "kitchenconfidante.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://kitchenconfidante.com/",
+    "retryOf": "tier17-california.json"
+  },
+  {
+    "name": "naturallyella.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://naturallyella.com/",
+    "retryOf": "tier17-california.json"
+  },
+  {
+    "name": "manjulaskitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://manjulaskitchen.com/",
+    "retryOf": "tier17-california.json"
+  },
+  {
+    "name": "asideofsweet.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://asideofsweet.com/",
+    "retryOf": "tier17-california.json"
+  },
+  {
+    "name": "californiaavocado.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://californiaavocado.com/",
+    "retryOf": "tier17-california.json"
+  },
+  {
+    "name": "Deb Perelman (Smitten Kitchen)",
+    "kind": "chef",
+    "country": "USA",
+    "homepage": "https://smittenkitchen.com/",
+    "retryOf": "tier2-chefs.json"
+  },
+  {
+    "name": "Jeanine Donofrio (Love and Lemons)",
+    "kind": "chef",
+    "country": "USA",
+    "homepage": "https://www.loveandlemons.com/",
+    "retryOf": "tier2-chefs.json"
+  },
+  {
+    "name": "Lindsay Ostrom (Pinch of Yum)",
+    "kind": "chef",
+    "country": "USA",
+    "homepage": "https://pinchofyum.com/",
+    "retryOf": "tier2-chefs.json"
+  },
+  {
+    "name": "Jessica Merchant (How Sweet Eats)",
+    "kind": "chef",
+    "country": "USA",
+    "homepage": "https://www.howsweeteats.com/",
+    "retryOf": "tier2-chefs.json"
+  },
+  {
+    "name": "ChefSteps",
+    "kind": "restaurant",
+    "homepage": "https://www.chefsteps.com/",
+    "include": "/activities/",
+    "retryOf": "tier3-restaurants.json"
+  },
+  {
+    "name": "Coles Australia",
+    "kind": "brand",
+    "homepage": "https://www.coles.com.au/",
+    "include": "recipe",
+    "retryOf": "tier3-restaurants.json"
+  },
+  {
+    "name": "New World NZ",
+    "kind": "brand",
+    "homepage": "https://www.newworld.co.nz/",
+    "include": "recipe",
+    "retryOf": "tier3-restaurants.json"
+  },
+  {
+    "name": "Taste.com.au",
+    "kind": "publication",
+    "homepage": "https://www.taste.com.au/",
+    "include": "/recipes/",
+    "retryOf": "tier3-restaurants.json"
+  },
+  {
+    "name": "Baker by Nature",
+    "kind": "chef",
+    "homepage": "https://bakerbynature.com/",
+    "retryOf": "tier5-blogs.json"
+  },
+  {
+    "name": "Chef in Disguise",
+    "kind": "chef",
+    "country": "Jordan",
+    "homepage": "https://chefindisguise.com/",
+    "retryOf": "tier5-blogs.json"
+  },
+  {
+    "name": "Good To (UK)",
+    "kind": "publication",
+    "country": "UK",
+    "homepage": "https://www.goodto.com/",
+    "retryOf": "tier5-blogs.json"
+  },
+  {
+    "name": "Hairy Bikers",
+    "kind": "chef",
+    "country": "UK",
+    "homepage": "https://hairybikers.com/",
+    "retryOf": "tier5-blogs.json"
+  },
+  {
+    "name": "James Martin",
+    "kind": "chef",
+    "country": "UK",
+    "homepage": "https://www.jamesmartinchef.co.uk/",
+    "retryOf": "tier5-blogs.json"
+  },
+  {
+    "name": "Canadian Living",
+    "kind": "publication",
+    "country": "Canada",
+    "homepage": "https://www.canadianliving.com/",
+    "retryOf": "tier5-blogs.json"
+  },
+  {
+    "name": "Best Recipes Australia",
+    "kind": "community",
+    "country": "Australia",
+    "homepage": "https://www.bestrecipes.com.au/",
+    "retryOf": "tier5-blogs.json"
+  },
+  {
+    "name": "Punch Drink",
+    "kind": "publication",
+    "homepage": "https://punchdrink.com/",
+    "include": "/recipes/",
+    "retryOf": "tier5-blogs.json"
+  },
+  {
+    "name": "Joy of Baking",
+    "kind": "chef",
+    "homepage": "https://www.joyofbaking.com/",
+    "retryOf": "tier5-blogs.json"
+  },
+  {
+    "name": "Gousto",
+    "kind": "brand",
+    "homepage": "https://www.gousto.co.uk/",
+    "include": "/cookbook/",
+    "retryOf": "tier6-brands2.json"
+  },
+  {
+    "name": "Marley Spoon",
+    "kind": "brand",
+    "homepage": "https://marleyspoon.com/",
+    "include": "/menu/",
+    "retryOf": "tier6-brands2.json"
+  },
+  {
+    "name": "Trader Joe's",
+    "kind": "brand",
+    "homepage": "https://www.traderjoes.com/",
+    "include": "/recipes/",
+    "retryOf": "tier6-brands2.json"
+  },
+  {
+    "name": "Whole Foods Market",
+    "kind": "brand",
+    "homepage": "https://www.wholefoodsmarket.com/",
+    "include": "/recipes/",
+    "retryOf": "tier6-brands2.json"
+  },
+  {
+    "name": "Aldi UK",
+    "kind": "brand",
+    "homepage": "https://www.aldi.co.uk/",
+    "include": "recipe",
+    "retryOf": "tier6-brands2.json"
+  },
+  {
+    "name": "Abel & Cole",
+    "kind": "brand",
+    "homepage": "https://www.abelandcole.co.uk/",
+    "include": "recipe",
+    "retryOf": "tier6-brands2.json"
+  },
+  {
+    "name": "Quaker Oats",
+    "kind": "brand",
+    "homepage": "https://www.quakeroats.com/",
+    "include": "recipe",
+    "retryOf": "tier6-brands2.json"
+  },
+  {
+    "name": "Cabot Creamery",
+    "kind": "brand",
+    "homepage": "https://www.cabotcheese.coop/",
+    "include": "recipe",
+    "retryOf": "tier6-brands2.json"
+  },
+  {
+    "name": "Tillamook",
+    "kind": "brand",
+    "homepage": "https://www.tillamook.com/",
+    "include": "recipe",
+    "retryOf": "tier6-brands2.json"
+  },
+  {
+    "name": "Bush's Beans",
+    "kind": "brand",
+    "homepage": "https://bushbeans.com/",
+    "include": "recipe",
+    "retryOf": "tier6-brands2.json"
+  },
+  {
+    "name": "Tabasco",
+    "kind": "brand",
+    "homepage": "https://www.tabasco.com/",
+    "include": "recipe",
+    "retryOf": "tier6-brands2.json"
+  },
+  {
+    "name": "Kikkoman USA",
+    "kind": "brand",
+    "homepage": "https://kikkomanusa.com/",
+    "include": "recipe",
+    "retryOf": "tier6-brands2.json"
+  },
+  {
+    "name": "Lee Kum Kee",
+    "kind": "brand",
+    "homepage": "https://usa.lkk.com/",
+    "include": "recipe",
+    "retryOf": "tier6-brands2.json"
+  },
+  {
+    "name": "Beef + Lamb New Zealand",
+    "kind": "brand",
+    "homepage": "https://www.recipes.co.nz/",
+    "include": "recipe",
+    "retryOf": "tier6-brands2.json"
+  },
+  {
+    "name": "joythebaker.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://joythebaker.com/",
+    "retryOf": "tier7-feedspot.json"
+  },
+  {
+    "name": "iamafoodblog.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://iamafoodblog.com/",
+    "retryOf": "tier7-feedspot.json"
+  },
+  {
+    "name": "eater.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://eater.com/",
+    "retryOf": "tier7-feedspot.json"
+  },
+  {
+    "name": "vietworldkitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://vietworldkitchen.com/",
+    "retryOf": "tier7-feedspot.json"
+  },
+  {
+    "name": "closetcooking.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://closetcooking.com/",
+    "retryOf": "tier7-feedspot.json"
+  },
+  {
+    "name": "tinyurbankitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://tinyurbankitchen.com/",
+    "retryOf": "tier7-feedspot.json"
+  },
+  {
+    "name": "drizzleanddip.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://drizzleanddip.com/",
+    "retryOf": "tier7-feedspot.json"
+  },
+  {
+    "name": "cookrepublic.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://cookrepublic.com/",
+    "retryOf": "tier7-feedspot.json"
+  },
+  {
+    "name": "tastecooking.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://tastecooking.com/",
+    "retryOf": "tier7-feedspot.json"
+  },
+  {
+    "name": "prouditaliancook.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://prouditaliancook.com/",
+    "retryOf": "tier7-feedspot.json"
+  },
+  {
+    "name": "bakeat350.net",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://bakeat350.net/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "bakefromscratch.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://bakefromscratch.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "cupcakeproject.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://cupcakeproject.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "thecakeblog.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thecakeblog.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "bakingbites.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://bakingbites.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "pastryaffair.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://pastryaffair.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "willowbirdbaking.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://willowbirdbaking.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "thebakingfairy.net",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thebakingfairy.net/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "butterbaking.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://butterbaking.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "mynameisyeh.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://mynameisyeh.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "amyshealthybaking.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://amyshealthybaking.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "padhuskitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://padhuskitchen.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "cookingandme.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://cookingandme.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "blendwithspices.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://blendwithspices.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "kitchenofdebjani.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://kitchenofdebjani.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "traditionallymodernfood.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://traditionallymodernfood.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "mytastycurry.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://mytastycurry.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "sandyathome.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://sandyathome.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "flavorquotient.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://flavorquotient.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "yummyoyummy.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://yummyoyummy.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "givemesomespice.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://givemesomespice.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "foodandspice.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://foodandspice.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "kitchenflavours.net",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://kitchenflavours.net/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "gosumitup.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://gosumitup.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "poojascookery.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://poojascookery.com/",
+    "retryOf": "tier8-baking-india.json"
+  },
+  {
+    "name": "fatfreevegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://fatfreevegan.com/",
+    "retryOf": "tier9-vegan-uk.json"
+  },
+  {
+    "name": "keepinitkind.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://keepinitkind.com/",
+    "retryOf": "tier9-vegan-uk.json"
+  },
+  {
+    "name": "dreenaburton.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://dreenaburton.com/",
+    "retryOf": "tier9-vegan-uk.json"
+  },
+  {
+    "name": "theminimalistvegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://theminimalistvegan.com/",
+    "retryOf": "tier9-vegan-uk.json"
+  },
+  {
+    "name": "planetveggie.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://planetveggie.co.uk/",
+    "retryOf": "tier9-vegan-uk.json"
+  },
+  {
+    "name": "thatwasvegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thatwasvegan.com/",
+    "retryOf": "tier9-vegan-uk.json"
+  },
+  {
+    "name": "bohemianvegankitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://bohemianvegankitchen.com/",
+    "retryOf": "tier9-vegan-uk.json"
+  },
+  {
+    "name": "cooksister.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://cooksister.com/",
+    "retryOf": "tier9-vegan-uk.json"
+  },
+  {
+    "name": "britishfoodhistory.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://britishfoodhistory.com/",
+    "retryOf": "tier9-vegan-uk.json"
+  },
+  {
+    "name": "kaveyeats.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://kaveyeats.com/",
+    "retryOf": "tier9-vegan-uk.json"
+  },
+  {
+    "name": "patisseriemakesperfect.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://patisseriemakesperfect.co.uk/",
+    "retryOf": "tier9-vegan-uk.json"
+  },
+  {
+    "name": "casacostello.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://casacostello.com/",
+    "retryOf": "tier9-vegan-uk.json"
+  },
+  {
+    "name": "therarewelshbit.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://therarewelshbit.com/",
+    "retryOf": "tier9-vegan-uk.json"
+  },
+  {
+    "name": "dominthekitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://dominthekitchen.com/",
+    "retryOf": "tier9-vegan-uk.json"
+  },
+  {
+    "name": "bakingbar.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://bakingbar.co.uk/",
+    "retryOf": "tier9-vegan-uk.json"
+  },
+  {
+    "name": "dollybakes.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://dollybakes.co.uk/",
+    "retryOf": "tier9-vegan-uk.json"
+  },
+  {
+    "name": "messyvegancook.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://messyvegancook.com/",
+    "retryOf": "tier9-vegan-uk.json"
+  },
+  {
+    "name": "carolinemakes.net",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://carolinemakes.net/",
+    "retryOf": "tier9-vegan-uk.json"
+  },
+  {
+    "name": "apriljharris.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://apriljharris.com/",
+    "retryOf": "tier9-vegan-uk.json"
+  },
+  {
+    "name": "easypeasy-lemonsqueezy.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://easypeasy-lemonsqueezy.co.uk/",
+    "retryOf": "tier9-vegan-uk.json"
+  }
+]

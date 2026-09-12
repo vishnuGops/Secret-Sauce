@@ -1,0 +1,410 @@
+{
+  "schemaVersion": 1,
+  "id": "nigel-slater/beetroot-chocolate-cake",
+  "slug": "beetroot-chocolate-cake",
+  "chefId": "chef_nigel-slater",
+  "chefSlug": "nigel-slater",
+  "chefName": "Nigel Slater",
+  "title": "Beetroot chocolate cake",
+  "description": "If you haven’t yet discovered the delicious and surprising combo of beetroot and chocolate cake, this is the perfect introductory recipe. Try it with a dollop of crème fraîche.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/beetroot_chocolate_cake_82388",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/beetroot_chocolate_cake_82388",
+    "retrievedAt": "2026-09-11T00:28:46.961Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Nigel Slater"
+    ],
+    "datePublished": "2012-11-30T12:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "5dcf5b13942ed0d26c96d0949435d3923bcc462544ce09c59f59c82f74d68416",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": []
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 8–10"
+    ],
+    "servings": 8
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Cakes and baking"
+  ],
+  "keywords": [
+    "best chocolate cake",
+    "baking with vegetables",
+    "chocolate bakes with vegetables",
+    "our best chocolate",
+    "up your veg game",
+    "afternoon tea",
+    "autumn",
+    "bonfire night",
+    "halloween",
+    "chocolate cake",
+    "beetroot",
+    "dark chocolate",
+    "nut free",
+    "pregnancy friendly",
+    "vegetarian",
+    "Nigel Slater's Dish of the Day"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "200g/7oz butter, plus extra for greasing",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "g",
+          "name": "/7oz butter, plus extra for greasing",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "250g/9oz cooked and peeled beetroot",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "/9oz cooked and peeled beetroot",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "200g/7oz dark chocolate (70% cocoa solids)",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "g",
+          "name": "/7oz dark chocolate (70% cocoa solids)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 tbsp hot espresso coffee",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "hot espresso coffee",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "135g/5oz plain flour",
+          "quantity": 135,
+          "quantityText": "135",
+          "unit": "g",
+          "name": "/5oz plain flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 heaped tsp baking powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "heaped tsp baking powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp cocoa powder",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "cocoa powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "5 free-range eggs, separated",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": null,
+          "name": "free-range eggs",
+          "note": "separated",
+          "isOptional": false
+        },
+        {
+          "raw": "190g/6¾oz golden caster sugar",
+          "quantity": 190,
+          "quantityText": "190",
+          "unit": "g",
+          "name": "/6¾oz golden caster sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "crème fraîche or double cream, to serve",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "crème fraîche or double cream",
+          "note": "to serve",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 180C/160C Fan/Gas 4. Grease a 20cm/8in cake tin with a little butter and line the bottom of the tin with a disc of baking parchment.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 180C/160C Fan/Gas 4. Grease a 20cm/8in cake tin with a little butter and line the bottom of the tin with a disc of baking parchment."
+    },
+    {
+      "order": 2,
+      "text": "Blend the beetroot in a food processor to a rough purée.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Blend the beetroot in a food processor to a rough purée."
+    },
+    {
+      "order": 3,
+      "text": "Melt the chocolate in a bowl suspended over a pan of hot water (do not allow the bottom of the bowl to touch the water), then pour in the hot coffee.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Melt the chocolate in a bowl suspended over a pan of hot water (do not allow the bottom of the bowl to touch the water), then pour in the hot coffee."
+    },
+    {
+      "order": 4,
+      "text": "Stir in the butter in small pieces and leave to soften. Remove from the heat and allow to cool slightly.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Stir in the butter in small pieces and leave to soften. Remove from the heat and allow to cool slightly."
+    },
+    {
+      "order": 5,
+      "text": "Meanwhile, sift the flour, baking powder and cocoa together in a bowl and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, sift the flour, baking powder and cocoa together in a bowl and set aside. "
+    },
+    {
+      "order": 6,
+      "text": "Separate the eggs. Whisk the yolks in a bowl until frothy. Stir the egg yolks into the chocolate and butter mixture, then fold in the beetroot.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Separate the eggs. Whisk the yolks in a bowl until frothy. Stir the egg yolks into the chocolate and butter mixture, then fold in the beetroot."
+    },
+    {
+      "order": 7,
+      "text": "In a separate clean bowl, whisk the egg whites until still peaks form when the whisk is removed. Fold in the sugar.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "In a separate clean bowl, whisk the egg whites until still peaks form when the whisk is removed. Fold in the sugar."
+    },
+    {
+      "order": 8,
+      "text": "Fold the sugar and egg whites into the chocolate mixture, then fold in the sifted flour and cocoa mixture.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Fold the sugar and egg whites into the chocolate mixture, then fold in the sifted flour and cocoa mixture."
+    },
+    {
+      "order": 9,
+      "text": "Pour the batter into the prepared tin and bake for 40 minutes, or until a skewer inserted into the cake comes out clean.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pour the batter into the prepared tin and bake for 40 minutes, or until a skewer inserted into the cake comes out clean."
+    },
+    {
+      "order": 10,
+      "text": "Allow to cool in the tin, then serve with crème fraîche or double cream.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Allow to cool in the tin, then serve with crème fraîche or double cream. "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/beetroot_chocolate_cake_82388_16x9.jpg"
+    ],
+    "video": [
+      {
+        "description": "If you haven’t yet discovered the wonderful cake combination that is beetroot and chocolate, this is the perfect introductory recipe. Try it with a dollop of crème fraîche.",
+        "duration": "PT5M4S",
+        "name": "Beetroot chocolate cake",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/beetroot_chocolate_cake_82388_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-08T01:30:57.000Z"
+      }
+    ]
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 53,
+      "ratingValue": 4.452830188679245
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "If you haven’t yet discovered the wonderful cake combination that is beetroot and chocolate, this is the perfect introductory recipe. Try it with a dollop of crème fraîche.",
+        "duration": "PT5M4S",
+        "name": "Beetroot chocolate cake",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/beetroot_chocolate_cake_82388_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-08T01:30:57.000Z"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "If you haven’t yet discovered the delicious and surprising combo of beetroot and chocolate cake, this is the perfect introductory recipe. Try it with a dollop of crème fraîche. ",
+    "headline": "Beetroot chocolate cake ",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/beetroot_chocolate_cake_82388_16x9.jpg"
+    },
+    "name": "Beetroot chocolate cake ",
+    "author": {
+      "@type": "Person",
+      "name": "Nigel Slater"
+    },
+    "datePublished": "2012-11-30T12:00:00.000Z",
+    "dateModified": "2025-03-27T14:18:53.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 53,
+      "ratingValue": 4.452830188679245
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT1H",
+    "keywords": "best chocolate cake, baking with vegetables, chocolate bakes with vegetables, our best chocolate, up your veg game, afternoon tea, autumn, bonfire night, halloween, chocolate cake, beetroot, dark chocolate, nut free, pregnancy friendly, vegetarian, Nigel Slater's Dish of the Day",
+    "recipeCategory": "Cakes and baking",
+    "recipeIngredient": [
+      "200g/7oz butter, plus extra for greasing",
+      "250g/9oz cooked and peeled beetroot",
+      "200g/7oz dark chocolate (70% cocoa solids)",
+      "4 tbsp hot espresso coffee",
+      "135g/5oz plain flour",
+      "1 heaped tsp baking powder",
+      "3 tbsp cocoa powder",
+      "5 free-range eggs, separated",
+      "190g/6¾oz golden caster sugar",
+      "crème fraîche or double cream, to serve "
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 180C/160C Fan/Gas 4. Grease a 20cm/8in cake tin with a little butter and line the bottom of the tin with a disc of baking parchment.",
+      "Blend the beetroot in a food processor to a rough purée.",
+      "Melt the chocolate in a bowl suspended over a pan of hot water (do not allow the bottom of the bowl to touch the water), then pour in the hot coffee.",
+      "Stir in the butter in small pieces and leave to soften. Remove from the heat and allow to cool slightly.",
+      "Meanwhile, sift the flour, baking powder and cocoa together in a bowl and set aside. ",
+      "Separate the eggs. Whisk the yolks in a bowl until frothy. Stir the egg yolks into the chocolate and butter mixture, then fold in the beetroot.",
+      "In a separate clean bowl, whisk the egg whites until still peaks form when the whisk is removed. Fold in the sugar.",
+      "Fold the sugar and egg whites into the chocolate mixture, then fold in the sifted flour and cocoa mixture.",
+      "Pour the batter into the prepared tin and bake for 40 minutes, or until a skewer inserted into the cake comes out clean.",
+      "Allow to cool in the tin, then serve with crème fraîche or double cream. "
+    ],
+    "recipeYield": "Serves 8–10",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "If you haven’t yet discovered the wonderful cake combination that is beetroot and chocolate, this is the perfect introductory recipe. Try it with a dollop of crème fraîche.",
+        "duration": "PT5M4S",
+        "name": "Beetroot chocolate cake",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/beetroot_chocolate_cake_82388_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-08T01:30:57.000Z"
+      }
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet|video"
+  ]
+}

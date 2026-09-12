@@ -1,0 +1,551 @@
+{
+  "schemaVersion": 1,
+  "id": "rick-stein/mexican-fish-with-refried-beans",
+  "slug": "mexican-fish-with-refried-beans",
+  "chefId": "chef_rick-stein",
+  "chefSlug": "rick-stein",
+  "chefName": "Rick Stein",
+  "title": "Mexican fish with refried beans",
+  "description": "You’ve got to love this dish, which is a butterflied fish with salsa verde on one side and salsa rojo on the other. If served on a white plate it makes the Mexican flag, less the plumed serpent in the middle.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/butterfield_grilled_bass_01988",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/butterfield_grilled_bass_01988",
+    "retrievedAt": "2026-09-11T00:26:38.891Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Rick Stein"
+    ],
+    "datePublished": "2018-01-03T16:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "4d2fb858228d0404dffc65459f705964b2ef6d1e43f2265e35e341bee9016b09",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 5 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 2"
+    ],
+    "servings": 2
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Mexican"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "authentic mexican",
+    "sea bass",
+    "gluten free",
+    "healthy",
+    "nut free",
+    "pregnancy friendly",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "2 whole bass, each about 350g/12oz, gutted and butterflied",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "whole bass, each about 350g/12oz, gutted and butterflied",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the salsa verde (green sauce)",
+      "items": [
+        {
+          "raw": "large handful coriander",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "large handful coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "large handful chives",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "large handful chives",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 garlic cloves, roughly chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "roughly chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "100ml/3½fl oz olive oil",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "ml",
+          "name": "/3½fl oz olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp salt",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ lime, juice only",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "lime, juice only",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 green serrano chilli, roughly chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "green serrano chilli",
+          "note": "roughly chopped",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the salsa rojo (red sauce)",
+      "items": [
+        {
+          "raw": "3 dried guajillo chillies, stems and seeds removed",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "dried guajillo chillies, stems and seeds removed",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 ancho chillies, stems and seeds removed",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "ancho chillies, stems and seeds removed",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 medium tomato",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "medium tomato",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp olive oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ small onion, roughly chopped",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "small onion",
+          "note": "roughly chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2 garlic cloves, roughly chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "roughly chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp dried oregano",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "dried oregano",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp ground cumin",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "ground cumin",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp salt",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the refried beans",
+      "items": [
+        {
+          "raw": "35g/1¼oz lard",
+          "quantity": 35,
+          "quantityText": "35",
+          "unit": "g",
+          "name": "/1¼oz lard",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 medium onion, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "medium onion",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2 garlic cloves, finely chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 green jalapeño or serrano chilli, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "green jalapeño or serrano chilli",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "600g/1lb 5oz cooked black or pinto beans",
+          "quantity": 600,
+          "quantityText": "600",
+          "unit": "g",
+          "name": "/1lb 5oz cooked black or pinto beans",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp dried epazote (optional) or oregano",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "dried epazote (optional) or oregano",
+          "note": null,
+          "isOptional": true
+        },
+        {
+          "raw": "½ tsp salt",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the sauce",
+      "items": [
+        {
+          "raw": "1 tbsp soured cream",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "soured cream",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp mayonnaise",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "mayonnaise",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp salsa verde (reserved from above)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "salsa verde (reserved from above)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ lime, juice only",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "lime, juice only",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the salsa verde, place the coriander, chives, garlic, oil, salt, 1 teaspoon lime juice and the chilli in a blender and blend into a smooth sauce. Add more oil if necessary to loosen the mixture. Set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the salsa verde, place the coriander, chives, garlic, oil, salt, 1 teaspoon lime juice and the chilli in a blender and blend into a smooth sauce. Add more oil if necessary to loosen the mixture. Set aside."
+    },
+    {
+      "order": 2,
+      "text": "For the chili rojo, toast the chillies for 10 seconds in a hot dry frying pan over a high heat. Place them in a bowl of boiling water and leave to soften for 20 minutes. Drain reserving the liquid.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the chili rojo, toast the chillies for 10 seconds in a hot dry frying pan over a high heat. Place them in a bowl of boiling water and leave to soften for 20 minutes. Drain reserving the liquid."
+    },
+    {
+      "order": 3,
+      "text": "Char the tomato in the same frying pan over a high heat, until it starts to soften. Cut it into quarters when cool enough to handle and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Char the tomato in the same frying pan over a high heat,  until it starts to soften. Cut it into quarters when cool enough to handle and set aside. "
+    },
+    {
+      "order": 4,
+      "text": "Add the oil to the pan and fry the onion and garlic until softened. Add the tomato, softened chillies, oregano and cumin and cook for 5 minutes. Put the mixture into a blender with 75ml/5 tablespoons of the chilli soaking liquid. Season with salt and blend until smooth. Add more liquid if necessary to loosen the mixture.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the oil to the pan and fry the onion and garlic until softened. Add the tomato, softened chillies, oregano and cumin and cook for 5 minutes. Put the mixture into a blender with 75ml/5 tablespoons of the chilli soaking liquid. Season with salt and blend until smooth. Add more liquid if necessary to loosen the mixture. "
+    },
+    {
+      "order": 5,
+      "text": "Preheat your grill to a medium heat.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat your grill to a medium heat. "
+    },
+    {
+      "order": 6,
+      "text": "Coat the flesh of one of half of each bass with salsa verde, reserving at least 1 tablespoon for the sauce, coat the other half of each with all of the salsa rojo. Grill skin-side down for 5 minutes or until the internal temperature reaches 60–62C.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Coat the flesh of one of half of each bass with salsa verde, reserving at least 1 tablespoon for the sauce, coat the other half of each with all of the salsa rojo. Grill skin-side down for 5 minutes or until the internal temperature reaches 60–62C. "
+    },
+    {
+      "order": 7,
+      "text": "Meanwhile, to make the refried beans, melt the lard in a frying pan and sweat the onion until soft and golden. Add the garlic and chilli for 2–3 minutes until softened. Depending on how textured you like your refried beans, either use a potato masher to mash your beans in a bowl with their liquor or whizz them with a blender or stick blender for a smoother result. Add the beans to the pan with the fried onions and cook over a medium heat with the epazote or oregano and the salt until the mixture reaches your desired consistency. It’s better to keep it on the looser side as it will firm up considerably as it cools.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, to make the refried beans, melt the lard in a frying pan and sweat the onion until soft and golden. Add the garlic and chilli for 2–3 minutes until softened. Depending on how textured you like your refried beans, either use a potato masher to mash your beans in a bowl with their liquor or whizz them with a blender or stick blender for a smoother result. Add the beans to the pan with the fried onions and cook over a medium heat with the epazote or oregano and the salt until the mixture reaches your desired consistency.  It’s better to keep it on the looser side as it will firm up considerably as it cools."
+    },
+    {
+      "order": 8,
+      "text": "Mix the soured cream with the mayonnaise, a tablespoon of salsa verde and a squeeze of lime juice. Serve alongside the fish and beans.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Mix the soured cream with the mayonnaise, a tablespoon of salsa verde and a squeeze of lime juice. Serve alongside the fish and beans."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/butterfield_grilled_bass_01988_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 4,
+      "ratingValue": 5
+    },
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet",
+      "http://schema.org/LowCalorieDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "You’ve got to love this dish, which is a butterflied fish with salsa verde on one side and salsa rojo on the other. If served on a white plate it makes the Mexican flag, less the plumed serpent in the middle.",
+    "headline": "Mexican fish with refried beans",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/butterfield_grilled_bass_01988_16x9.jpg"
+    },
+    "name": "Mexican fish with refried beans",
+    "author": {
+      "@type": "Person",
+      "name": "Rick Stein"
+    },
+    "datePublished": "2018-01-03T16:00:00.000Z",
+    "dateModified": "2025-08-07T16:32:21.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 4,
+      "ratingValue": 5
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, authentic mexican, sea bass, gluten free, healthy, nut free, pregnancy friendly, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Mexican",
+    "recipeIngredient": [
+      "2 whole bass, each about 350g/12oz, gutted and butterflied ",
+      "large handful coriander",
+      "large handful chives",
+      "2 garlic cloves, roughly chopped",
+      "100ml/3½fl oz olive oil",
+      "¼ tsp salt",
+      "½ lime, juice only",
+      "1 green serrano chilli, roughly chopped",
+      "3 dried guajillo chillies, stems and seeds removed",
+      "2 ancho chillies, stems and seeds removed",
+      "1 medium tomato",
+      "1 tbsp olive oil",
+      "½ small onion, roughly chopped",
+      "2 garlic cloves, roughly chopped",
+      "½ tsp dried oregano",
+      "½ tsp ground cumin",
+      "½ tsp salt",
+      "35g/1¼oz lard",
+      "1 medium onion, finely chopped",
+      "2 garlic cloves, finely chopped",
+      "1 green jalapeño or serrano chilli, finely chopped",
+      "600g/1lb 5oz cooked black or pinto beans",
+      "½ tsp dried epazote (optional) or oregano",
+      "½ tsp salt",
+      "1 tbsp soured cream",
+      "1 tbsp mayonnaise",
+      "1 tbsp salsa verde (reserved from above)",
+      "½ lime, juice only"
+    ],
+    "recipeInstructions": [
+      "To make the salsa verde, place the coriander, chives, garlic, oil, salt, 1 teaspoon lime juice and the chilli in a blender and blend into a smooth sauce. Add more oil if necessary to loosen the mixture. Set aside.",
+      "For the chili rojo, toast the chillies for 10 seconds in a hot dry frying pan over a high heat. Place them in a bowl of boiling water and leave to soften for 20 minutes. Drain reserving the liquid.",
+      "Char the tomato in the same frying pan over a high heat,  until it starts to soften. Cut it into quarters when cool enough to handle and set aside. ",
+      "Add the oil to the pan and fry the onion and garlic until softened. Add the tomato, softened chillies, oregano and cumin and cook for 5 minutes. Put the mixture into a blender with 75ml/5 tablespoons of the chilli soaking liquid. Season with salt and blend until smooth. Add more liquid if necessary to loosen the mixture. ",
+      "Preheat your grill to a medium heat. ",
+      "Coat the flesh of one of half of each bass with salsa verde, reserving at least 1 tablespoon for the sauce, coat the other half of each with all of the salsa rojo. Grill skin-side down for 5 minutes or until the internal temperature reaches 60–62C. ",
+      "Meanwhile, to make the refried beans, melt the lard in a frying pan and sweat the onion until soft and golden. Add the garlic and chilli for 2–3 minutes until softened. Depending on how textured you like your refried beans, either use a potato masher to mash your beans in a bowl with their liquor or whizz them with a blender or stick blender for a smoother result. Add the beans to the pan with the fried onions and cook over a medium heat with the epazote or oregano and the salt until the mixture reaches your desired consistency.  It’s better to keep it on the looser side as it will firm up considerably as it cools.",
+      "Mix the soured cream with the mayonnaise, a tablespoon of salsa verde and a squeeze of lime juice. Serve alongside the fish and beans."
+    ],
+    "recipeYield": "Serves 2",
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet",
+      "http://schema.org/LowCalorieDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

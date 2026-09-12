@@ -1,0 +1,535 @@
+{
+  "schemaVersion": 1,
+  "id": "madhur-jaffrey/beef-jhal-faraizi-karhai-broccoli-and-sweet-and-sour-squash",
+  "slug": "beef-jhal-faraizi-karhai-broccoli-and-sweet-and-sour-squash",
+  "chefId": "chef_madhur-jaffrey",
+  "chefSlug": "madhur-jaffrey",
+  "chefName": "Madhur Jaffrey",
+  "title": "Beef jhal faraizi, karhai broccoli and sweet and sour squash",
+  "description": "This Indian dish is an amazing way to spice up leftover beef from your Sunday roast.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/beef_jhal_faraizi_karhai_92693",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/beef_jhal_faraizi_karhai_92693",
+    "retrievedAt": "2026-09-11T00:26:54.288Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Madhur Jaffrey"
+    ],
+    "datePublished": "2011-10-10T11:35:29.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "b245d088d14e4f551dad4b1ab40ceb08a0e754efdbeb5372a94713cf0326b789",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups",
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Indian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "beef curry",
+    "roast beef",
+    "egg free",
+    "gluten free",
+    "nut free",
+    "pregnancy friendly",
+    "autumn",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the beef jhal faraizi",
+      "items": [
+        {
+          "raw": "340g/12oz small floury potatoes, unpeeled",
+          "quantity": 340,
+          "quantityText": "340",
+          "unit": "g",
+          "name": "/12oz small floury potatoes, unpeeled",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp olive or rapeseed oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "olive or rapeseed oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ tsp whole cumin seeds",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "tsp",
+          "name": "whole cumin seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 medium onion, cut into 7mm/⅓in cubes",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "medium onion, cut into 7mm/⅓in cubes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2-3 fresh, hot green chillies (such as bird’s-eye chillies), chopped",
+          "quantity": 2,
+          "quantityText": "2-3",
+          "unit": null,
+          "name": "fresh",
+          "note": "hot green chillies (such as bird’s-eye chillies), chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "340g/12oz leftover roast beef, 7mm/⅓in cubes",
+          "quantity": 340,
+          "quantityText": "340",
+          "unit": "g",
+          "name": "/12oz leftover roast beef, 7mm/⅓in cubes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¾-1 tsp salt",
+          "quantity": 0.75,
+          "quantityText": "¾-1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the karhai broccoli",
+      "items": [
+        {
+          "raw": "3 tbsp olive or rapeseed oil",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "olive or rapeseed oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "⅛ tsp ground asafoetida",
+          "quantity": 0.125,
+          "quantityText": "⅛",
+          "unit": "tsp",
+          "name": "ground asafoetida",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ tsp whole cumin seeds",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "tsp",
+          "name": "whole cumin seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ tsp whole mustard seeds",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "tsp",
+          "name": "whole mustard seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "400g/14oz trimmed broccoli florets",
+          "quantity": 400,
+          "quantityText": "400",
+          "unit": "g",
+          "name": "/14oz trimmed broccoli florets",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp salt",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "⅛-¼ tsp cayenne pepper",
+          "quantity": 0.125,
+          "quantityText": "⅛-¼",
+          "unit": "tsp",
+          "name": "cayenne pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the sweet-and-sour butternut squash",
+      "items": [
+        {
+          "raw": "3 tbsp olive oil",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "generous pinch ground asafoetida",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "generous pinch ground asafoetida",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp whole brown or yellow mustard seeds",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "whole brown or yellow mustard seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "560g/1¼lb peeled and de-seeded butternut squash, cut into 2.5cm/1in pieces",
+          "quantity": 560,
+          "quantityText": "560",
+          "unit": "g",
+          "name": "/1¼lb peeled and de-seeded butternut squash, cut into 2.5cm/1in pieces",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¾-1 tsp salt",
+          "quantity": 0.75,
+          "quantityText": "¾-1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1½ tsp caster sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tsp caster sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "⅛-¼ tsp cayenne pepper",
+          "quantity": 0.125,
+          "quantityText": "⅛-¼",
+          "unit": "tsp",
+          "name": "cayenne pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp plain yoghurt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "plain yoghurt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp chopped fresh coriander",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "chopped fresh coriander",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "For the beef jhal faraizi, boil the potatoes in a pan of salted water and set aside to cool. Once cool, peel them and cut into 7mm/⅓in cubes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the beef jhal faraizi, boil the potatoes in a pan of salted water and set aside to cool. Once cool, peel them and cut into 7mm/⅓in cubes."
+    },
+    {
+      "order": 2,
+      "text": "Heat the oil in a large frying pan, preferably non-stick, over a medium-high heat. When hot, add the cumin seeds. Let them sizzle for five seconds, then add the onion, cooked potatoes and chillies.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat the oil in a large frying pan, preferably non-stick, over a medium-high heat. When hot, add the cumin seeds. Let them sizzle for five seconds, then add the onion, cooked potatoes and chillies. "
+    },
+    {
+      "order": 3,
+      "text": "Lower the heat to medium and stir-fry the mixture for 4-5 minutes, or until the onion has softened and is translucent. Add the beef, salt and lots of freshly ground black pepper, then stir-fry for a further minute.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Lower the heat to medium and stir-fry the mixture for 4-5 minutes, or until the onion has softened and is translucent. Add the beef, salt and lots of freshly ground black pepper, then stir-fry for a further minute. "
+    },
+    {
+      "order": 4,
+      "text": "Reduce the heat to medium-low. Press down on all the ingredients in the pan with a spatula to form a flat cake that fills the pan. Continue to cook for 12-15 minutes, turning the pan so that the bottom of the ‘cake’ browns evenly. Keep warm.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Reduce the heat to medium-low. Press down on all the ingredients in the pan with a spatula to form a flat cake that fills the pan. Continue to cook for 12-15 minutes, turning the pan so that the bottom of the ‘cake’ browns evenly. Keep warm. "
+    },
+    {
+      "order": 5,
+      "text": "For the karhai broccoli, heat the oil in a karhai (or lidded wok or frying pan) over a medium-high heat.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the karhai broccoli, heat the oil in a karhai (or lidded wok or frying pan) over a medium-high heat. "
+    },
+    {
+      "order": 6,
+      "text": "When the oil is hot, add the asafoetida, cumin and mustard seeds (be aware of mustard seeds popping out of the pan into your eyes). As soon as the mustard seeds begin to pop, add the broccoli. Stir-fry for one minute, then add the salt and cayenne pepper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "When the oil is hot, add the asafoetida, cumin and mustard seeds (be aware of mustard seeds popping out of the pan into your eyes). As soon as the mustard seeds begin to pop, add the broccoli. Stir-fry for one minute, then add the salt and cayenne pepper. "
+    },
+    {
+      "order": 7,
+      "text": "Pour in four tablespoons of water and bring the mixture to a simmer. Cover the pan with a lid, lower the heat until the mixture is simmering gently and cook for 7-8 minutes, or until the broccoli is just tender, stirring now and then.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pour in four tablespoons of water and bring the mixture to a simmer. Cover the pan with a lid, lower the heat until the mixture is simmering gently and cook for 7-8 minutes, or until the broccoli is just tender, stirring now and then."
+    },
+    {
+      "order": 8,
+      "text": "Meanwhile, for the sweet-and-sour butternut squash, heat the oil in a lidded pan over a medium heat. When hot, add the asafoetida and mustard seeds. As soon as the seeds start to pop - a matter of seconds - add the squash.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, for the sweet-and-sour butternut squash, heat the oil in a lidded pan over a medium heat. When hot, add the asafoetida and mustard seeds. As soon as the seeds start to pop - a matter of seconds - add the squash. "
+    },
+    {
+      "order": 9,
+      "text": "Stir-fry the squash for 2-3 minutes, or until the pieces just start to brown. Add 50ml/2fl oz water, cover the pan with a lid, lower the heat and cook for 8-10 minutes, or until the squash is tender.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Stir-fry the squash for 2-3 minutes, or until the pieces just start to brown. Add 50ml/2fl oz water, cover the pan with a lid, lower the heat and cook for 8-10 minutes, or until the squash is tender."
+    },
+    {
+      "order": 10,
+      "text": "Add the salt, sugar, cayenne pepper and yoghurt. Stir until well combined and cook, uncovered, over a medium heat, until the yoghurt mixture has warmed through. Stir in the fresh coriander.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the salt, sugar, cayenne pepper and yoghurt. Stir until well combined and cook, uncovered, over a medium heat, until the yoghurt mixture has warmed through. Stir in the fresh coriander."
+    },
+    {
+      "order": 11,
+      "text": "To serve, break up the the beef jhal faraizi into four equal portions and serve it hot with the karahi broccoli and squash.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To serve, break up the the beef jhal faraizi into four equal portions and serve it hot with the karahi broccoli and squash."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "This recipe uses an Indian karhai, a cooking pot that looks a bit like a wok. Alternatively, use a wok or medium-sized frying pan."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 2,
+      "ratingValue": 5
+    },
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "This Indian dish is an amazing way to spice up leftover beef from your Sunday roast.",
+    "headline": "Beef jhal faraizi, karhai broccoli and sweet and sour squash ",
+    "image": null,
+    "name": "Beef jhal faraizi, karhai broccoli and sweet and sour squash ",
+    "author": {
+      "@type": "Person",
+      "name": "Madhur Jaffrey"
+    },
+    "datePublished": "2011-10-10T11:35:29.000Z",
+    "dateModified": "2019-11-15T11:36:48.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 2,
+      "ratingValue": 5
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT1H",
+    "keywords": "beef curry, roast beef, egg free, gluten free, nut free, pregnancy friendly, autumn, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Indian",
+    "recipeIngredient": [
+      "340g/12oz small floury potatoes, unpeeled",
+      "2 tbsp olive or rapeseed oil",
+      "½ tsp whole cumin seeds",
+      "1 medium onion, cut into 7mm/⅓in cubes",
+      "2-3 fresh, hot green chillies (such as bird’s-eye chillies), chopped",
+      "340g/12oz leftover roast beef, 7mm/⅓in cubes",
+      "1 tsp salt ",
+      "freshly ground black pepper",
+      "3 tbsp olive or rapeseed oil",
+      "⅛ tsp ground asafoetida",
+      "¼ tsp whole cumin seeds",
+      "¼ tsp whole mustard seeds",
+      "400g/14oz trimmed broccoli florets",
+      "½ tsp salt",
+      "¼ tsp cayenne pepper",
+      "3 tbsp olive oil",
+      "generous pinch ground asafoetida",
+      "½ tsp whole brown or yellow mustard seeds",
+      "560g/1¼lb peeled and de-seeded butternut squash, cut into 2.5cm/1in pieces",
+      "¾-1 tsp salt",
+      "1½ tsp caster sugar",
+      "⅛-¼ tsp cayenne pepper",
+      "1 tbsp plain yoghurt",
+      "2 tbsp chopped fresh coriander"
+    ],
+    "recipeInstructions": [
+      "For the beef jhal faraizi, boil the potatoes in a pan of salted water and set aside to cool. Once cool, peel them and cut into 7mm/⅓in cubes.",
+      "Heat the oil in a large frying pan, preferably non-stick, over a medium-high heat. When hot, add the cumin seeds. Let them sizzle for five seconds, then add the onion, cooked potatoes and chillies. ",
+      "Lower the heat to medium and stir-fry the mixture for 4-5 minutes, or until the onion has softened and is translucent. Add the beef, salt and lots of freshly ground black pepper, then stir-fry for a further minute. ",
+      "Reduce the heat to medium-low. Press down on all the ingredients in the pan with a spatula to form a flat cake that fills the pan. Continue to cook for 12-15 minutes, turning the pan so that the bottom of the ‘cake’ browns evenly. Keep warm. ",
+      "For the karhai broccoli, heat the oil in a karhai (or lidded wok or frying pan) over a medium-high heat. ",
+      "When the oil is hot, add the asafoetida, cumin and mustard seeds (be aware of mustard seeds popping out of the pan into your eyes). As soon as the mustard seeds begin to pop, add the broccoli. Stir-fry for one minute, then add the salt and cayenne pepper. ",
+      "Pour in four tablespoons of water and bring the mixture to a simmer. Cover the pan with a lid, lower the heat until the mixture is simmering gently and cook for 7-8 minutes, or until the broccoli is just tender, stirring now and then.",
+      "Meanwhile, for the sweet-and-sour butternut squash, heat the oil in a lidded pan over a medium heat. When hot, add the asafoetida and mustard seeds. As soon as the seeds start to pop - a matter of seconds - add the squash. ",
+      "Stir-fry the squash for 2-3 minutes, or until the pieces just start to brown. Add 50ml/2fl oz water, cover the pan with a lid, lower the heat and cook for 8-10 minutes, or until the squash is tender.",
+      "Add the salt, sugar, cayenne pepper and yoghurt. Stir until well combined and cook, uncovered, over a medium heat, until the yoghurt mixture has warmed through. Stir in the fresh coriander.",
+      "To serve, break up the the beef jhal faraizi into four equal portions and serve it hot with the karahi broccoli and squash."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "range-quantity:5",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

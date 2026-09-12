@@ -1,0 +1,410 @@
+{
+  "schemaVersion": 1,
+  "id": "mary-berry/mary-berry-s-easy-victoria-sponge",
+  "slug": "mary-berry-s-easy-victoria-sponge",
+  "chefId": "chef_mary-berry",
+  "chefSlug": "mary-berry",
+  "chefName": "Mary Berry",
+  "title": "Mary Berry's easy Victoria sponge",
+  "description": "Mary Berry's easy Victoria sponge cake recipe is a baking classic and a tasty tea-time treat. Simply sandwich it with jam and cream and eat it while it's fresh.\n\nEach serving provides 501 kcal, 5g protein, 50g carbohydrates (of which 36g sugars), 31g fat (of which 19g saturates), 0.8g fibre and 0.8g salt (serving with 300g of jam and 300ml cream).",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/mary_berrys_perfect_34317",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/mary_berrys_perfect_34317",
+    "retrievedAt": "2026-09-11T00:27:34.437Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Mary Berry"
+    ],
+    "datePublished": "2010-10-28T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "1134d2406ff9f086b5bc5ac8b53ab23b003b49e0091d5de47179ad28261a88a9",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups",
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 12"
+    ],
+    "servings": 12
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "British"
+  ],
+  "category": [
+    "Cakes and baking"
+  ],
+  "keywords": [
+    "quick",
+    "best cake",
+    "best sponge cake",
+    "lazy day cakes",
+    "all in one cake",
+    "back to basics",
+    "bake sale ideas",
+    "baking therapy",
+    "basic bakes with 6 ingredients or less",
+    "birthday cake",
+    "british bakes",
+    "classic cake",
+    "easy baking",
+    "easy cake",
+    "english baking",
+    "father's day cakes and bakes",
+    "how to make cakes",
+    "‘i can’t believe they’re so cheap’ cakes and bakes",
+    "make ahead bakes",
+    "make it easy",
+    "mary berry's classic afternoon tea menu",
+    "mary berry's easy cake",
+    "mary berry favourites",
+    "mother’s day cake",
+    "recipes for beginners",
+    "retro baking",
+    "retro british",
+    "coronation cakes and bakes",
+    "simple cake",
+    "street party",
+    "afternoon tea",
+    "birthday party",
+    "father's day",
+    "mother's day",
+    "party food",
+    "st george's day",
+    "Victoria sponge",
+    "strawberry jam",
+    "nut free",
+    "pregnancy friendly",
+    "vegetarian",
+    "Mary at 90: A Lifetime of Cooking"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "4 free-range eggs",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "free-range eggs",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "225g/8oz caster sugar, plus a little extra for dusting the finished cake",
+          "quantity": 225,
+          "quantityText": "225",
+          "unit": "g",
+          "name": "/8oz caster sugar, plus a little extra for dusting the finished cake",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "225g/8oz self-raising flour",
+          "quantity": 225,
+          "quantityText": "225",
+          "unit": "g",
+          "name": "/8oz self-raising flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp baking powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "baking powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "225g/8oz baking spread at room temperature, plus a little extra to grease the tins",
+          "quantity": 225,
+          "quantityText": "225",
+          "unit": "g",
+          "name": "/8oz baking spread at room temperature, plus a little extra to grease the tins",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To serve",
+      "items": [
+        {
+          "raw": "good-quality strawberry or raspberry jam",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "good-quality strawberry or raspberry jam",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "whipped double cream (optional)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "whipped double cream (optional)",
+          "note": null,
+          "isOptional": true
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 180C/160C Fan/Gas 4. Grease and line two 20cm/8in sandwich tins.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 180C/160C Fan/Gas 4. Grease and line two 20cm/8in sandwich tins. "
+    },
+    {
+      "order": 2,
+      "text": "Break the eggs into a large mixing bowl, then add the sugar, flour, baking powder and butter.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Break the eggs into a large mixing bowl, then add the sugar, flour, baking powder and butter. "
+    },
+    {
+      "order": 3,
+      "text": "Mix together until well combined with an electric hand mixer (you can also use a wooden spoon), but be careful not to over mix. Put a damp cloth under your bowl when you’re mixing to stop it moving around. The finished mixture should fall off a spoon easily.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Mix together until well combined with an electric hand mixer (you can also use a wooden spoon), but be careful not to over mix. Put a damp cloth under your bowl when you’re mixing to stop it moving around. The finished mixture should fall off a spoon easily."
+    },
+    {
+      "order": 4,
+      "text": "Divide the mixture evenly between the tins: this doesn’t need to be exact, but you can weigh the filled tins if you want to check. Use a spatula to remove all of the mixture from the bowl and gently smooth the surface of the cakes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Divide the mixture evenly between the tins: this doesn’t need to be exact, but you can weigh the filled tins if you want to check. Use a spatula to remove all of the mixture from the bowl and gently smooth the surface of the cakes."
+    },
+    {
+      "order": 5,
+      "text": "Bake the cakes on the middle shelf of the oven for 25 minutes. Check them after 20 minutes. The cakes are done when they’re golden-brown and coming away from the edge of the tins. Press them gently to check – they should be springy to the touch.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Bake the cakes on the middle shelf of the oven for 25 minutes. Check them after 20 minutes. The cakes are done when they’re golden-brown and coming away from the edge of the tins. Press them gently to check – they should be springy to the touch. "
+    },
+    {
+      "order": 6,
+      "text": "Set aside to cool in their tins for 5 minutes. Run a palette or rounded butter knife around the inside edge of the tins and carefully turn the cakes out onto a cooling rack.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Set aside to cool in their tins for 5 minutes. Run a palette or rounded butter knife around the inside edge of the tins and carefully turn the cakes out onto a cooling rack. "
+    },
+    {
+      "order": 7,
+      "text": "To assemble the cake, place one cake upside down onto a plate and spread it with plenty of jam. If you want to, you can spread over whipped cream too.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To assemble the cake, place one cake upside down onto a plate and spread it with plenty of jam. If you want to, you can spread over whipped cream too. "
+    },
+    {
+      "order": 8,
+      "text": "Top with the second cake, top-side up. Sprinkle over the caster sugar.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Top with the second cake, top-side up. Sprinkle over the caster sugar."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "501kcal",
+    "proteinContent": "5g",
+    "carbohydrateContent": "50g",
+    "fatContent": "31g",
+    "fiberContent": "0.8g",
+    "saturatedFatContent": "19g",
+    "sugarContent": "36g"
+  },
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/mary_berrys_perfect_34317_16x9.jpg"
+    ],
+    "video": [
+      {
+        "description": "This recipe is from The Great British Bake Off, in which ten home bakers take part in a bake-off to test their baking skills and battle to be crowned best amateur baker. They begin with cake in the Cotswolds, including a Victoria sponge.\n\nMary Berry and Paul Hollywood show you how to bake with easy-to-follow recipes and advice on the Get Baking website.",
+        "duration": "PT3M45S",
+        "name": "Mary Berry's perfect Victoria sandwich",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/mary_berrys_perfect_34317_16x9.jpg"
+        ],
+        "uploadDate": "2024-12-19T10:31:07.000Z"
+      }
+    ]
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "Baking spread is a margarine that is suitable for baking. Check the label. You can use softened butter as well. To freeze the cakes: Allow the cakes to cool completely, then wrap each cake well in cling film or freezer bags. Freeze for up to 6 months. Allow to defrost thoroughly before filling. Before baking, give your tins a gentle tap on the work surface to remove any large air gaps and evenly distribute the batter. To take your cakes out of the tins without leaving a wire rack mark on the top, put the clean tea towel over the tin, put your hand onto the tea towel and turn the tin upside-down. The cakes should come out onto your hand and the tea towel – then you can turn them from your hand onto the wire rack. Set aside to cool completely. If you find your sponge cakes always have a big dome in the middle, your oven probably runs a bit hot (it's not unusual for the temperature in the oven to vary significantly from what's on the dial). Try reducing the temperature by 10C. All-in-one methods like Mary favours are very simple, but it is even more important that your butter is at the right temperature or it won't combine easily with the other ingredients. If you need to soften your butter quickly watch the technique video below. It's particulary useful on cold days when butter stays hard at room temperature. Many experienced bakers swear by using baking spread instead of butter. It has the advantage of being usuable straight from the fridge and makes lovely light cakes. Butter is generally considered to taste better though and it is in these very simple cakes that you are most likely to notice the difference. You can dust the top with icing sugar if you prefer, but do it immediately before serving. The moisture in the cake absorbs icing sugar so it doesn't stay visible for long. If you prefer a buttercream filling in your sponge cakes try Mary's recipe for a Victoria sandwich with buttercream ."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 490,
+      "ratingValue": 4.1020408163265305
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "This recipe is from The Great British Bake Off, in which ten home bakers take part in a bake-off to test their baking skills and battle to be crowned best amateur baker. They begin with cake in the Cotswolds, including a Victoria sponge.\n\nMary Berry and Paul Hollywood show you how to bake with easy-to-follow recipes and advice on the Get Baking website.",
+        "duration": "PT3M45S",
+        "name": "Mary Berry's perfect Victoria sandwich",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/mary_berrys_perfect_34317_16x9.jpg"
+        ],
+        "uploadDate": "2024-12-19T10:31:07.000Z"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Mary Berry's easy Victoria sponge cake recipe is a baking classic and a tasty tea-time treat. Simply sandwich it with jam and cream and eat it while it's fresh.\r\n\r\nEach serving provides 501 kcal, 5g protein, 50g carbohydrates (of which 36g sugars), 31g fat (of which 19g saturates), 0.8g fibre and 0.8g salt (serving with 300g of jam and 300ml cream). ",
+    "headline": "Mary Berry's easy Victoria sponge",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/mary_berrys_perfect_34317_16x9.jpg"
+    },
+    "name": "Mary Berry's easy Victoria sponge",
+    "author": {
+      "@type": "Person",
+      "name": "Mary Berry"
+    },
+    "datePublished": "2010-10-28T00:00:00.000Z",
+    "dateModified": "2026-09-09T13:22:54.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 490,
+      "ratingValue": 4.1020408163265305
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, best cake, best sponge cake, lazy day cakes, all in one cake, back to basics, bake sale ideas, baking therapy, basic bakes with 6 ingredients or less, birthday cake, british bakes , classic cake, easy baking, easy cake, english baking, father's day cakes and bakes, how to make cakes, ‘i can’t believe they’re so cheap’ cakes and bakes , make ahead bakes, make it easy, mary berry's classic afternoon tea menu, mary berry's easy cake, mary berry favourites, mother’s day cake, recipes for beginners, retro baking, retro british, coronation cakes and bakes, simple cake, street party, afternoon tea, birthday party, father's day, mother's day, party food, st george's day, Victoria sponge, strawberry jam, nut free, pregnancy friendly, vegetarian, Mary at 90: A Lifetime of Cooking",
+    "nutrition": {
+      "calories": "501kcal",
+      "proteinContent": "5g",
+      "carbohydrateContent": "50g",
+      "fatContent": "31g",
+      "fiberContent": "0.8g",
+      "saturatedFatContent": "19g",
+      "sugarContent": "36g"
+    },
+    "recipeCategory": "Cakes and baking",
+    "recipeCuisine": "British",
+    "recipeIngredient": [
+      "4 free-range eggs",
+      "225g/8oz caster sugar, plus a little extra for dusting the finished cake",
+      "225g/8oz self-raising flour",
+      "1 tsp baking powder ",
+      "225g/8oz baking spread at room temperature, plus a little extra to grease the tins",
+      "good-quality strawberry or raspberry jam",
+      "whipped double cream (optional)"
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 180C/160C Fan/Gas 4. Grease and line two 20cm/8in sandwich tins. ",
+      "Break the eggs into a large mixing bowl, then add the sugar, flour, baking powder and butter. ",
+      "Mix together until well combined with an electric hand mixer (you can also use a wooden spoon), but be careful not to over mix. Put a damp cloth under your bowl when you’re mixing to stop it moving around. The finished mixture should fall off a spoon easily.",
+      "Divide the mixture evenly between the tins: this doesn’t need to be exact, but you can weigh the filled tins if you want to check. Use a spatula to remove all of the mixture from the bowl and gently smooth the surface of the cakes.",
+      "Bake the cakes on the middle shelf of the oven for 25 minutes. Check them after 20 minutes. The cakes are done when they’re golden-brown and coming away from the edge of the tins. Press them gently to check – they should be springy to the touch. ",
+      "Set aside to cool in their tins for 5 minutes. Run a palette or rounded butter knife around the inside edge of the tins and carefully turn the cakes out onto a cooling rack. ",
+      "To assemble the cake, place one cake upside down onto a plate and spread it with plenty of jam. If you want to, you can spread over whipped cream too. ",
+      "Top with the second cake, top-side up. Sprinkle over the caster sugar."
+    ],
+    "recipeYield": "Serves 12",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "This recipe is from The Great British Bake Off, in which ten home bakers take part in a bake-off to test their baking skills and battle to be crowned best amateur baker. They begin with cake in the Cotswolds, including a Victoria sponge.\n\nMary Berry and Paul Hollywood show you how to bake with easy-to-follow recipes and advice on the Get Baking website.",
+        "duration": "PT3M45S",
+        "name": "Mary Berry's perfect Victoria sandwich",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/mary_berrys_perfect_34317_16x9.jpg"
+        ],
+        "uploadDate": "2024-12-19T10:31:07.000Z"
+      }
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet|video"
+  ]
+}

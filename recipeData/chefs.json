@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "chefs": [
+    {
+      "id": "chef_nigella-lawson",
+      "slug": "nigella-lawson",
+      "name": "Nigella Lawson",
+      "bio": null,
+      "country": null,
+      "homepage": "https://www.bbc.co.uk/food/chefs/nigella_lawson",
+      "corpusEmail": "nigella-lawson@corpus.invalid",
+      "appProfileId": null
+    },
+    {
+      "id": "chef_rick-stein",
+      "slug": "rick-stein",
+      "name": "Rick Stein",
+      "bio": null,
+      "country": null,
+      "homepage": "https://www.bbc.co.uk/food/chefs/rick_stein",
+      "corpusEmail": "rick-stein@corpus.invalid",
+      "appProfileId": null
+    },
+    {
+      "id": "chef_madhur-jaffrey",
+      "slug": "madhur-jaffrey",
+      "name": "Madhur Jaffrey",
+      "bio": null,
+      "country": null,
+      "homepage": "https://www.bbc.co.uk/food/chefs/madhur_jaffrey",
+      "corpusEmail": "madhur-jaffrey@corpus.invalid",
+      "appProfileId": null
+    },
+    {
+      "id": "chef_ken-hom",
+      "slug": "ken-hom",
+      "name": "Ken Hom",
+      "bio": null,
+      "country": null,
+      "homepage": "https://www.bbc.co.uk/food/chefs/ken_hom",
+      "corpusEmail": "ken-hom@corpus.invalid",
+      "appProfileId": null
+    },
+    {
+      "id": "chef_raymond-blanc",
+      "slug": "raymond-blanc",
+      "name": "Raymond Blanc",
+      "bio": null,
+      "country": null,
+      "homepage": "https://www.bbc.co.uk/food/chefs/raymond_blanc",
+      "corpusEmail": "raymond-blanc@corpus.invalid",
+      "appProfileId": null
+    },
+    {
+      "id": "chef_mary-berry",
+      "slug": "mary-berry",
+      "name": "Mary Berry",
+      "bio": null,
+      "country": null,
+      "homepage": "https://www.bbc.co.uk/food/chefs/mary_berry",
+      "corpusEmail": "mary-berry@corpus.invalid",
+      "appProfileId": null
+    },
+    {
+      "id": "chef_gennaro-contaldo",
+      "slug": "gennaro-contaldo",
+      "name": "Gennaro Contaldo",
+      "bio": null,
+      "country": null,
+      "homepage": "https://www.bbc.co.uk/food/chefs/gennaro_contaldo",
+      "corpusEmail": "gennaro-contaldo@corpus.invalid",
+      "appProfileId": null
+    },
+    {
+      "id": "chef_atul-kochhar",
+      "slug": "atul-kochhar",
+      "name": "Atul Kochhar",
+      "bio": null,
+      "country": null,
+      "homepage": "https://www.bbc.co.uk/food/chefs/atul_kochhar",
+      "corpusEmail": "atul-kochhar@corpus.invalid",
+      "appProfileId": null
+    },
+    {
+      "id": "chef_sabrina-ghayour",
+      "slug": "sabrina-ghayour",
+      "name": "Sabrina Ghayour",
+      "bio": null,
+      "country": null,
+      "homepage": "https://www.bbc.co.uk/food/chefs/sabrina_ghayour",
+      "corpusEmail": "sabrina-ghayour@corpus.invalid",
+      "appProfileId": null
+    },
+    {
+      "id": "chef_nigel-slater",
+      "slug": "nigel-slater",
+      "name": "Nigel Slater",
+      "bio": null,
+      "country": null,
+      "homepage": "https://www.bbc.co.uk/food/chefs/nigel_slater",
+      "corpusEmail": "nigel-slater@corpus.invalid",
+      "appProfileId": null
+    },
+    {
+      "id": "chef_yumna-jawad",
+      "slug": "yumna-jawad",
+      "name": "Yumna Jawad",
+      "bio": "Lebanese and Middle Eastern home cooking, Feel Good Foodie.",
+      "country": "Lebanon / USA",
+      "homepage": "https://feelgoodfoodie.net/",
+      "corpusEmail": "yumna-jawad@corpus.invalid",
+      "appProfileId": null
+    },
+    {
+      "id": "chef_chef-lola",
+      "slug": "chef-lola",
+      "name": "Chef Lola",
+      "bio": "West African and Nigerian cooking.",
+      "country": "Nigeria",
+      "homepage": "https://cheflolaskitchen.com/",
+      "corpusEmail": "chef-lola@corpus.invalid",
+      "appProfileId": null
+    },
+    {
+      "id": "chef_denise-browning",
+      "slug": "denise-browning",
+      "name": "Denise Browning",
+      "bio": "Brazilian and Latin American cooking, Easy and Delish.",
+      "country": "Brazil",
+      "homepage": "https://www.easyanddelish.com/",
+      "corpusEmail": "denise-browning@corpus.invalid",
+      "appProfileId": null
+    },
+    {
+      "id": "chef_eli-giannopoulos",
+      "slug": "eli-giannopoulos",
+      "name": "Eli K. Giannopoulos",
+      "bio": "Traditional Greek cooking, My Greek Dish.",
+      "country": "Greece",
+      "homepage": "https://www.mygreekdish.com/",
+      "corpusEmail": "eli-giannopoulos@corpus.invalid",
+      "appProfileId": null
+    },
+    {
+      "id": "chef_huy-vu",
+      "slug": "huy-vu",
+      "name": "Huy Vu",
+      "bio": "Vietnamese home cooking, Hungry Huy.",
+      "country": "Vietnam",
+      "homepage": "https://www.hungryhuy.com/",
+      "corpusEmail": "huy-vu@corpus.invalid",
+      "appProfileId": null
+    }
+  ]
+}

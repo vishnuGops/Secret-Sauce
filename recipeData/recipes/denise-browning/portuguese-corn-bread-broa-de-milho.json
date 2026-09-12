@@ -1,0 +1,422 @@
+{
+  "schemaVersion": 1,
+  "id": "denise-browning/portuguese-corn-bread-broa-de-milho",
+  "slug": "portuguese-corn-bread-broa-de-milho",
+  "chefId": "chef_denise-browning",
+  "chefSlug": "denise-browning",
+  "chefName": "Denise Browning",
+  "title": "Portuguese Corn Bread (Broa de Milho)",
+  "description": "Portuguese corn bread is an easy and traditional recipe, very popular in Portugal and Brazil which can be served with Portuguese kale soup (caldo verde).",
+  "source": {
+    "sourceUrl": "https://www.easyanddelish.com/portuguese-corn-bread/",
+    "finalUrl": "https://www.easyanddelish.com/portuguese-corn-bread/",
+    "retrievedAt": "2026-09-11T02:47:38.012Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2012-04-17T16:57:43+00:00",
+    "rights": "Easy and Delish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "38367e19658d3bddf09f31010b9aeccf27368ece470ee5a2433820b41dbbc481",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 35,
+    "cookMinutes": 25,
+    "totalMinutes": 60,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Portuguese"
+  ],
+  "category": [
+    "Side Dish"
+  ],
+  "keywords": [
+    "Portuguese Cornbread",
+    "Rustic Sourdough Cornbread"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1 cup lukewarm water (110º to 115º F or 43º a 46º C)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "cup",
+          "name": "lukewarm water (110º to 115º F or 43º a 46º C)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tablespoons active dry yeast",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "active dry yeast",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tablespoon crystallized sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "crystallized sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 cups all purpose or bread flour (plus extra for dusting (about 1/2 to 3/4 cup))",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "cups",
+          "name": "all purpose or bread flour (plus extra for dusting (about 1/2 to 3/4 cup))",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 cups stone ground yellow cornmeal",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "cups",
+          "name": "stone ground yellow cornmeal",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 - 1/2 teaspoon salt",
+          "quantity": 1,
+          "quantityText": "1 - 1",
+          "unit": null,
+          "name": "/2 teaspoon salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "5 tablespoon unsalted butter (at room temperature (for a Vegetarian and Dairy-free version, use vegetable oil instead))",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": "tbsp",
+          "name": "unsalted butter (at room temperature (for a Vegetarian and Dairy-free version, use vegetable oil instead))",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 cup milk (warm (for a Vegetarian and Dairy-free version, use water instead))",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "cup",
+          "name": "milk (warm (for a Vegetarian and Dairy-free version, use water instead))",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3-4 tablespoons fennel seeds (optional (I prefer mine without. You can use dried rosemary instead, if desired))",
+          "quantity": 3,
+          "quantityText": "3-4",
+          "unit": "tbsp",
+          "name": "fennel seeds (optional (I prefer mine without. You can use dried rosemary instead, if desired))",
+          "note": null,
+          "isOptional": true
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "First, stir the dry yeast with the sugar into 1 cup of lukewarm water. Keep aside for approximately 5 to 10 minutes. The mixture will turn a bit foamy.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "First, stir the dry yeast with the sugar into 1 cup of lukewarm water. Keep aside for approximately 5 to 10 minutes. The mixture will turn a bit foamy.",
+        "name": "First, stir the dry yeast with the sugar into 1 cup of lukewarm water. Keep aside for approximately 5 to 10 minutes. The mixture will turn a bit foamy.",
+        "url": "https://www.easyanddelish.com/portuguese-corn-bread/#wprm-recipe-47600-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Meanwhile, in a large bowl, mix the flour, the cornmeal, salt, butter or oil, and the fennel seeds (optional). Pour the yeast mixture and the other cup of lukewarm water or warm milk over the flour/meal and butter/oil mixture. Mix everything together and knead -- scraping everything from the bottom and sides of the bowl-- until obtaining a homogeneous and sticky dough. Cover the bowl with a kitchen towel and store in a warm place for 60 minutes, permitting the dough to rise. I stored mine in a very lightly warm oven, which I had preheated to a low temperature for a few minutes and then turned off.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Meanwhile, in a large bowl, mix the flour, the cornmeal, salt, butter or oil, and the fennel seeds (optional). Pour the yeast mixture and the other cup of lukewarm water or warm milk over the flour/meal and butter/oil mixture. Mix everything together and knead -- scraping everything from the bottom and sides of the bowl-- until obtaining a homogeneous and sticky dough. Cover the bowl with a kitchen towel and store in a warm place for 60 minutes, permitting the dough to rise. I stored mine in a very lightly warm oven, which I had preheated to a low temperature for a few minutes and then turned off.",
+        "name": "Meanwhile, in a large bowl, mix the flour, the cornmeal, salt, butter or oil, and the fennel seeds (optional). Pour the yeast mixture and the other cup of lukewarm water or warm milk over the flour/meal and butter/oil mixture. Mix everything together and knead -- scraping everything from the bottom and sides of the bowl-- until obtaining a homogeneous and sticky dough. Cover the bowl with a kitchen towel and store in a warm place for 60 minutes, permitting the dough to rise. I stored mine in a very lightly warm oven, which I had preheated to a low temperature for a few minutes and then turned off.",
+        "url": "https://www.easyanddelish.com/portuguese-corn-bread/#wprm-recipe-47600-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "After 60 minutes, punch down the risen dough to release the air, dusting with the extra all-purpose or bread flour little by little and kneading slowly. Make 4 round loaves from the dough. Flatten a bit (the dough will be soft and elastic but not that sticky anymore, permitting it to be formed into balls). Place the loaves on a baking sheet lined with parchment paper, cover with a wet kitchen towel, and let the loaves rest for an additional 60 minutes in a warm place.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "After 60 minutes, punch down the risen dough to release the air, dusting with the extra all-purpose or bread flour little by little and kneading slowly. Make 4 round loaves from the dough. Flatten a bit (the dough will be soft and elastic but not that sticky anymore, permitting it to be formed into balls). Place the loaves on a baking sheet lined with parchment paper, cover with a wet kitchen towel, and let the loaves rest for an additional 60 minutes in a warm place.",
+        "name": "After 60 minutes, punch down the risen dough to release the air, dusting with the extra all-purpose or bread flour little by little and kneading slowly. Make 4 round loaves from the dough. Flatten a bit (the dough will be soft and elastic but not that sticky anymore, permitting it to be formed into balls). Place the loaves on a baking sheet lined with parchment paper, cover with a wet kitchen towel, and let the loaves rest for an additional 60 minutes in a warm place.",
+        "url": "https://www.easyanddelish.com/portuguese-corn-bread/#wprm-recipe-47600-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Preheat the oven to 450º F (230º C).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 450º F (230º C).",
+        "name": "Preheat the oven to 450º F (230º C).",
+        "url": "https://www.easyanddelish.com/portuguese-corn-bread/#wprm-recipe-47600-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Remove towel, make both lengthwise and crosswise slashes on the top of each loaf with a sharp pairing knife-- like a checkboard-- and place the loaves onto the middle rack of the oven.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Remove towel, make both lengthwise and crosswise slashes on the top of each loaf with a sharp pairing knife-- like a checkboard-- and place the loaves onto the middle rack of the oven.",
+        "name": "Remove towel, make both lengthwise and crosswise slashes on the top of each loaf with a sharp pairing knife-- like a checkboard-- and place the loaves onto the middle rack of the oven.",
+        "url": "https://www.easyanddelish.com/portuguese-corn-bread/#wprm-recipe-47600-step-0-4"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Before that, place a deep baking tray filled 1/3 full with boiling water on the bottom rack of the oven to recreate the steam of the Portuguese brick ovens. Bake for 22 to 25 minutes or until the crust of the loaves is browned and firm. It is a hard crust bread with soft, dense-textured interior.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Before that, place a deep baking tray filled 1/3 full with boiling water on the bottom rack of the oven to recreate the steam of the Portuguese brick ovens. Bake for 22 to 25 minutes or until the crust of the loaves is browned and firm. It is a hard crust bread with soft, dense-textured interior.",
+        "name": "Before that, place a deep baking tray filled 1/3 full with boiling water on the bottom rack of the oven to recreate the steam of the Portuguese brick ovens. Bake for 22 to 25 minutes or until the crust of the loaves is browned and firm. It is a hard crust bread with soft, dense-textured interior.",
+        "url": "https://www.easyanddelish.com/portuguese-corn-bread/#wprm-recipe-47600-step-0-5"
+      }
+    },
+    {
+      "order": 7,
+      "text": "Serve warm with butter or with a bowl of Portuguese Kale Soup (Caldo Verde).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Serve warm with butter or with a bowl of Portuguese Kale Soup (Caldo Verde).",
+        "name": "Serve warm with butter or with a bowl of Portuguese Kale Soup (Caldo Verde).",
+        "url": "https://www.easyanddelish.com/portuguese-corn-bread/#wprm-recipe-47600-step-0-6"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "150 kcal",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_1000-2.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_1000-2-500x500.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_1000-2-500x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_1000-2-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "1",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This cornbread has a great rustic texture and rich corn flavor. It turns out slightly dense in the best way, making it perfect to serve alongside savory dishes. A very authentic and satisfying recipe.",
+        "author": {
+          "@type": "Person",
+          "name": "Valentina Dimitrova"
+        },
+        "datePublished": "2026-05-03"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Portuguese Corn Bread (Broa de Milho)",
+    "author": {
+      "@id": "https://www.easyanddelish.com/#/schema/person/4aa289bf19bceaa733ca6900648cfc47"
+    },
+    "description": "Portuguese corn bread is an easy and traditional recipe, very popular in Portugal and Brazil which can be served with Portuguese kale soup (caldo verde).",
+    "datePublished": "2012-04-17T16:57:43+00:00",
+    "image": [
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_1000-2.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_1000-2-500x500.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_1000-2-500x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_1000-2-480x270.jpg"
+    ],
+    "recipeYield": [
+      "4"
+    ],
+    "prepTime": "PT35M",
+    "cookTime": "PT25M",
+    "totalTime": "PT60M",
+    "recipeIngredient": [
+      "1 cup lukewarm water (110º to 115º F or 43º a 46º C)",
+      "2 tablespoons active dry yeast",
+      "1 tablespoon crystallized sugar",
+      "3 cups all purpose or bread flour (plus extra for dusting (about 1/2 to 3/4 cup))",
+      "3 cups stone ground yellow cornmeal",
+      "1 - 1/2 teaspoon salt",
+      "5 tablespoon unsalted butter (at room temperature (for a Vegetarian and Dairy-free version, use vegetable oil instead))",
+      "1 cup milk (warm (for a Vegetarian and Dairy-free version, use water instead))",
+      "3-4 tablespoons fennel seeds (optional (I prefer mine without. You can use dried rosemary instead, if desired))"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "First, stir the dry yeast with the sugar into 1 cup of lukewarm water. Keep aside for approximately 5 to 10 minutes. The mixture will turn a bit foamy.",
+        "name": "First, stir the dry yeast with the sugar into 1 cup of lukewarm water. Keep aside for approximately 5 to 10 minutes. The mixture will turn a bit foamy.",
+        "url": "https://www.easyanddelish.com/portuguese-corn-bread/#wprm-recipe-47600-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Meanwhile, in a large bowl, mix the flour, the cornmeal, salt, butter or oil, and the fennel seeds (optional). Pour the yeast mixture and the other cup of lukewarm water or warm milk over the flour/meal and butter/oil mixture. Mix everything together and knead -- scraping everything from the bottom and sides of the bowl-- until obtaining a homogeneous and sticky dough. Cover the bowl with a kitchen towel and store in a warm place for 60 minutes, permitting the dough to rise. I stored mine in a very lightly warm oven, which I had preheated to a low temperature for a few minutes and then turned off.",
+        "name": "Meanwhile, in a large bowl, mix the flour, the cornmeal, salt, butter or oil, and the fennel seeds (optional). Pour the yeast mixture and the other cup of lukewarm water or warm milk over the flour/meal and butter/oil mixture. Mix everything together and knead -- scraping everything from the bottom and sides of the bowl-- until obtaining a homogeneous and sticky dough. Cover the bowl with a kitchen towel and store in a warm place for 60 minutes, permitting the dough to rise. I stored mine in a very lightly warm oven, which I had preheated to a low temperature for a few minutes and then turned off.",
+        "url": "https://www.easyanddelish.com/portuguese-corn-bread/#wprm-recipe-47600-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "After 60 minutes, punch down the risen dough to release the air, dusting with the extra all-purpose or bread flour little by little and kneading slowly. Make 4 round loaves from the dough. Flatten a bit (the dough will be soft and elastic but not that sticky anymore, permitting it to be formed into balls). Place the loaves on a baking sheet lined with parchment paper, cover with a wet kitchen towel, and let the loaves rest for an additional 60 minutes in a warm place.",
+        "name": "After 60 minutes, punch down the risen dough to release the air, dusting with the extra all-purpose or bread flour little by little and kneading slowly. Make 4 round loaves from the dough. Flatten a bit (the dough will be soft and elastic but not that sticky anymore, permitting it to be formed into balls). Place the loaves on a baking sheet lined with parchment paper, cover with a wet kitchen towel, and let the loaves rest for an additional 60 minutes in a warm place.",
+        "url": "https://www.easyanddelish.com/portuguese-corn-bread/#wprm-recipe-47600-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 450º F (230º C).",
+        "name": "Preheat the oven to 450º F (230º C).",
+        "url": "https://www.easyanddelish.com/portuguese-corn-bread/#wprm-recipe-47600-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Remove towel, make both lengthwise and crosswise slashes on the top of each loaf with a sharp pairing knife-- like a checkboard-- and place the loaves onto the middle rack of the oven.",
+        "name": "Remove towel, make both lengthwise and crosswise slashes on the top of each loaf with a sharp pairing knife-- like a checkboard-- and place the loaves onto the middle rack of the oven.",
+        "url": "https://www.easyanddelish.com/portuguese-corn-bread/#wprm-recipe-47600-step-0-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Before that, place a deep baking tray filled 1/3 full with boiling water on the bottom rack of the oven to recreate the steam of the Portuguese brick ovens. Bake for 22 to 25 minutes or until the crust of the loaves is browned and firm. It is a hard crust bread with soft, dense-textured interior.",
+        "name": "Before that, place a deep baking tray filled 1/3 full with boiling water on the bottom rack of the oven to recreate the steam of the Portuguese brick ovens. Bake for 22 to 25 minutes or until the crust of the loaves is browned and firm. It is a hard crust bread with soft, dense-textured interior.",
+        "url": "https://www.easyanddelish.com/portuguese-corn-bread/#wprm-recipe-47600-step-0-5"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Serve warm with butter or with a bowl of Portuguese Kale Soup (Caldo Verde).",
+        "name": "Serve warm with butter or with a bowl of Portuguese Kale Soup (Caldo Verde).",
+        "url": "https://www.easyanddelish.com/portuguese-corn-bread/#wprm-recipe-47600-step-0-6"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "1",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This cornbread has a great rustic texture and rich corn flavor. It turns out slightly dense in the best way, making it perfect to serve alongside savory dishes. A very authentic and satisfying recipe.",
+        "author": {
+          "@type": "Person",
+          "name": "Valentina Dimitrova"
+        },
+        "datePublished": "2026-05-03"
+      }
+    ],
+    "recipeCategory": [
+      "Side Dish"
+    ],
+    "recipeCuisine": [
+      "Portuguese"
+    ],
+    "keywords": "Portuguese Cornbread, Rustic Sourdough Cornbread",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "150 kcal",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://www.easyanddelish.com/portuguese-corn-bread/#recipe",
+    "isPartOf": {
+      "@id": "https://www.easyanddelish.com/portuguese-corn-bread/#article"
+    },
+    "mainEntityOfPage": "https://www.easyanddelish.com/portuguese-corn-bread/"
+  },
+  "audit": [
+    "range-quantity:2",
+    "unmapped:aggregateRating|review"
+  ]
+}

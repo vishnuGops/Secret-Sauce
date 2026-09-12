@@ -1,0 +1,380 @@
+{
+  "schemaVersion": 1,
+  "id": "gennaro-contaldo/pappardelle-with-mixed-mushroom-ragu",
+  "slug": "pappardelle-with-mixed-mushroom-ragu",
+  "chefId": "chef_gennaro-contaldo",
+  "chefSlug": "gennaro-contaldo",
+  "chefName": "Gennaro Contaldo",
+  "title": "Pappardelle with mixed mushroom ragù",
+  "description": "Gennaro Contaldo’s classic mushroom ragù is the perfect autumnal vegetarian dish. Use dried pappardelle if you don’t have time to make fresh pasta.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/pappardelle_with_mixed_72922",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/pappardelle_with_mixed_72922",
+    "retrievedAt": "2026-09-11T00:27:56.046Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Gennaro Contaldo"
+    ],
+    "datePublished": "2019-11-02T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "5ea905388eb6a3fc534a42cd2afc05419a99a9c6205d4c603fdc3bd949ab3fd3",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Italian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "pappardelle",
+    "porcini",
+    "mushroom",
+    "nut free",
+    "vegetarian",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the pappardelle",
+      "items": [
+        {
+          "raw": "200g/7oz ‘00’ flour",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "g",
+          "name": "/7oz ‘00’ flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 large free-range eggs",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "large free-range eggs",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the mushroom ragù",
+      "items": [
+        {
+          "raw": "4 tbsp extra virgin olive oil",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "extra virgin olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 onion, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "onion",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 celery stick, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "celery stick",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 carrot, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "carrot",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 garlic clove, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "garlic clove",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "½ red chilli, finely chopped",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "red chilli",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2 fresh thyme sprigs",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "fresh thyme sprigs",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "20g/¾oz dried porcini, reconstituted in a little warm water",
+          "quantity": 20,
+          "quantityText": "20",
+          "unit": "g",
+          "name": "/¾oz dried porcini, reconstituted in a little warm water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "500g/1lb 2oz mixed wild or cultivated mushrooms, cleaned and roughly chopped",
+          "quantity": 500,
+          "quantityText": "500",
+          "unit": "g",
+          "name": "/1lb 2oz mixed wild or cultivated mushrooms",
+          "note": "cleaned and roughly chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp white wine",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "white wine",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "400g tin chopped plum tomatoes",
+          "quantity": 400,
+          "quantityText": "400",
+          "unit": "g",
+          "name": "tin chopped plum tomatoes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "300ml/10fl oz hot vegetable stock",
+          "quantity": 300,
+          "quantityText": "300",
+          "unit": "ml",
+          "name": "/10fl oz hot vegetable stock",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "grated Parmesan (or alternative vegetarian hard cheese), to serve",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "grated Parmesan (or alternative vegetarian hard cheese)",
+          "note": "to serve",
+          "isOptional": false
+        },
+        {
+          "raw": "sea salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "sea salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the pappardelle, put the flour in a large mixing bowl and make a well in the centre. Add the eggs and mix together to form a dough. Cover and chill in the fridge for 30 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the pappardelle, put the flour in a large mixing bowl and make a well in the centre. Add the eggs and mix together to form a dough. Cover and chill in the fridge for 30 minutes. "
+    },
+    {
+      "order": 2,
+      "text": "Roll the pasta out using a pasta maker and cut into thick pappardelle strips ready to cook.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Roll the pasta out using a pasta maker and cut into thick pappardelle strips ready to cook. "
+    },
+    {
+      "order": 3,
+      "text": "To make the mushroom ragù, heat the olive oil in a large frying pan over a medium heat, add the onion, celery, carrot, garlic, chilli and thyme, and sauté for about 5 minutes until softened. Squeeze out the soaked dried porcini (reserve the soaking water) and stir into the pan. Add the fresh mushrooms and sauté for 1 minute or so.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the mushroom ragù, heat the olive oil in a large frying pan over a medium heat, add the onion, celery, carrot, garlic, chilli and thyme, and sauté for about 5 minutes until softened. Squeeze out the soaked dried porcini (reserve the soaking water) and stir into the pan. Add the fresh mushrooms and sauté for 1 minute or so. "
+    },
+    {
+      "order": 4,
+      "text": "Increase the heat, add the white wine and allow to evaporate. Add the tomatoes, the reserved porcini soaking water and the stock, and season with some salt and pepper. Bring to the boil, then lower the heat, partially cover with a lid and cook gently for 45 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Increase the heat, add the white wine and allow to evaporate. Add the tomatoes, the reserved porcini soaking water and the stock, and season with some salt and pepper. Bring to the boil, then lower the heat, partially cover with a lid and cook gently for 45 minutes."
+    },
+    {
+      "order": 5,
+      "text": "Just before the mushroom ragù is ready, bring a large saucepan of salted water to the boil and cook the pappardelle pasta until al dente, about 2–3 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Just before the mushroom ragù is ready, bring a large saucepan of salted water to the boil and cook the pappardelle pasta until al dente, about 2–3 minutes. "
+    },
+    {
+      "order": 6,
+      "text": "Drain the pasta and combine well with the ragù. Serve with a sprinkling of grated Parmesan.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Drain the pasta and combine well with the ragù. Serve with a sprinkling of grated Parmesan. "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 15,
+      "ratingValue": 4.4
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Gennaro Contaldo’s classic mushroom ragù is the perfect autumnal vegetarian dish. Use dried pappardelle if you don’t have time to make fresh pasta. ",
+    "headline": "Pappardelle with mixed mushroom ragù",
+    "image": null,
+    "name": "Pappardelle with mixed mushroom ragù",
+    "author": {
+      "@type": "Person",
+      "name": "Gennaro Contaldo"
+    },
+    "datePublished": "2019-11-02T00:00:00.000Z",
+    "dateModified": "2025-10-31T12:51:26.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 15,
+      "ratingValue": 4.4
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, pappardelle, porcini, mushroom, nut free, vegetarian, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Italian",
+    "recipeIngredient": [
+      "200g/7oz ‘00’ flour",
+      "2 large free-range eggs",
+      "4 tbsp extra virgin olive oil",
+      "1 onion, finely chopped",
+      "1 celery stick, finely chopped",
+      "1 carrot, finely chopped",
+      "1 garlic clove, finely chopped",
+      "½ red chilli, finely chopped",
+      "2 fresh thyme sprigs",
+      "20g/¾oz dried porcini, reconstituted in a little warm water",
+      "500g/1lb 2oz mixed wild or cultivated mushrooms, cleaned and roughly chopped",
+      "3 tbsp white wine",
+      "400g tin chopped plum tomatoes",
+      "300ml/10fl oz hot vegetable stock ",
+      "grated Parmesan (or alternative vegetarian hard cheese), to serve",
+      "sea salt and freshly ground black pepper"
+    ],
+    "recipeInstructions": [
+      "To make the pappardelle, put the flour in a large mixing bowl and make a well in the centre. Add the eggs and mix together to form a dough. Cover and chill in the fridge for 30 minutes. ",
+      "Roll the pasta out using a pasta maker and cut into thick pappardelle strips ready to cook. ",
+      "To make the mushroom ragù, heat the olive oil in a large frying pan over a medium heat, add the onion, celery, carrot, garlic, chilli and thyme, and sauté for about 5 minutes until softened. Squeeze out the soaked dried porcini (reserve the soaking water) and stir into the pan. Add the fresh mushrooms and sauté for 1 minute or so. ",
+      "Increase the heat, add the white wine and allow to evaporate. Add the tomatoes, the reserved porcini soaking water and the stock, and season with some salt and pepper. Bring to the boil, then lower the heat, partially cover with a lid and cook gently for 45 minutes.",
+      "Just before the mushroom ragù is ready, bring a large saucepan of salted water to the boil and cook the pappardelle pasta until al dente, about 2–3 minutes. ",
+      "Drain the pasta and combine well with the ragù. Serve with a sprinkling of grated Parmesan. "
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

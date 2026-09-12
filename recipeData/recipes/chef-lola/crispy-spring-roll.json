@@ -1,0 +1,447 @@
+{
+  "schemaVersion": 1,
+  "id": "chef-lola/crispy-spring-roll",
+  "slug": "crispy-spring-roll",
+  "chefId": "chef_chef-lola",
+  "chefSlug": "chef-lola",
+  "chefName": "Chef Lola",
+  "title": "Crispy Spring Roll",
+  "description": "Crispy Spring Roll - These spring rolls are light and very crisp with savory beef and vegetable fillings. You can read my spring roll sheet story here.",
+  "source": {
+    "sourceUrl": "https://cheflolaskitchen.com/crispy-spring-rolls/",
+    "finalUrl": "https://cheflolaskitchen.com/crispy-spring-rolls/",
+    "retrievedAt": "2026-09-11T02:47:08.155Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2020-02-24T20:20:16+00:00",
+    "rights": "Chef Lola's Kitchen. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "24241d1b939a0d295a950182a46fa5e712eb8f95d2cd4be3d9ad08f72756727d",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "allows recipe paths; /wp-admin/, /wp-json/ and query URLs disallowed"
+  },
+  "yield": {
+    "raw": [
+      "8",
+      "8 Servings"
+    ],
+    "servings": 8
+  },
+  "timing": {
+    "prepMinutes": 10,
+    "cookMinutes": 20,
+    "totalMinutes": 30,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "African",
+    "Asian",
+    "Chinese",
+    "korean"
+  ],
+  "category": [
+    "Appetizer"
+  ],
+  "keywords": [
+    "chinese egg rolls",
+    "crispy egg roll",
+    "egg roll",
+    "homemade"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1/2 Pound Beef",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 Pound Beef",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 Tbsp oil (of your choice)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "oil (of your choice)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 Onion (small diced)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "Onion (small diced)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 scallion (diced)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "scallion (diced)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 Stock cube",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "Stock cube",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 Tsp chili pepper",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "chili pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 Tsp black pepper",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3/4 Cup Cabbage (shredded )",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "/4 Cup Cabbage (shredded )",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3/4 Cup Carrots (Shredded )",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "/4 Cup Carrots (Shredded )",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 Tsp Curry powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "Curry powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 Tbsp Water",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "Water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/4 Cup Water",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/4 Cup Water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Salt to taste",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Salt to taste",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Enough Oil to fry",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Enough Oil to fry",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the 2 tablespoons of Oil in the pan and saute the Onion and scallion until it's translucent then add the Chili pepper, black Pepper, Curry powder, salt to taste and the stock cube.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Preheat the 2 tablespoons of Oil in the pan and saute the Onion and scallion until it's translucent then add the Chili pepper, black Pepper, Curry powder, salt to taste and the stock cube.",
+        "name": "Preheat the 2 tablespoons of Oil in the pan and saute the Onion and scallion until it's translucent then add the Chili pepper, black Pepper, Curry powder, salt to taste and the stock cube.",
+        "url": "https://cheflolaskitchen.com/crispy-spring-rolls/#wprm-recipe-7495-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Add the ground beef and use a wooden spoon or spatula to break it up into tiny pieces then stir-fry until the meat is cooked through then add the shredded cabbage and carrots and turn off the heat to prevent the vegetables from turning soggy and leave it to cool before using it.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add the ground beef and use a wooden spoon or spatula to break it up into tiny pieces then stir-fry until the meat is cooked through then add the shredded cabbage and carrots and turn off the heat to prevent the vegetables from turning soggy and leave it to cool before using it.",
+        "name": "Add the ground beef and use a wooden spoon or spatula to break it up into tiny pieces then stir-fry until the meat is cooked through then add the shredded cabbage and carrots and turn off the heat to prevent the vegetables from turning soggy and leave it to cool before using it.",
+        "url": "https://cheflolaskitchen.com/crispy-spring-rolls/#wprm-recipe-7495-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "In a bowl, mix together the flour and Water to make the paste and set that aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a bowl, mix together the flour and Water to make the paste and set that aside.",
+        "name": "In a bowl, mix together the flour and Water to make the paste and set that aside.",
+        "url": "https://cheflolaskitchen.com/crispy-spring-rolls/#wprm-recipe-7495-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Add about 1 tablespoon of filling to the spring roll sheet you can add a little more depending on the size of your sheets but don't overfill it, else, it's going to burst while frying it, then secure it with the paste and roll it up. (please watch the video for details). Remember to cover both the rolled and unrolled sheets with a damp kitchen towel to prevent it from drying.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add about 1 tablespoon of filling to the spring roll sheet you can add a little more depending on the size of your sheets but don&#x27;t overfill it, else, it&#x27;s going to burst while frying it, then secure it with the paste and roll it up. (please watch the video for details). Remember to cover both the rolled and unrolled sheets with a damp kitchen towel to prevent it from drying.",
+        "name": "Add about 1 tablespoon of filling to the spring roll sheet you can add a little more depending on the size of your sheets but don&#x27;t overfill it, else, it&#x27;s going to burst while frying it, then secure it with the paste and roll it up. (please watch the video for details). Remember to cover both the rolled and unrolled sheets with a damp kitchen towel to prevent it from drying.",
+        "url": "https://cheflolaskitchen.com/crispy-spring-rolls/#wprm-recipe-7495-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Fry in a preheated Oil of about 350°F until golden brown. Serve with your favorite dip or sauce or eat as is. Enjoy!",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": "350°F",
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Fry in a preheated Oil of about 350°F until golden brown. Serve with your favorite dip or sauce or eat as is. Enjoy!",
+        "name": "Fry in a preheated Oil of about 350°F until golden brown. Serve with your favorite dip or sauce or eat as is. Enjoy!",
+        "url": "https://cheflolaskitchen.com/crispy-spring-rolls/#wprm-recipe-7495-step-0-4"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "118 kcal",
+    "carbohydrateContent": "3 g",
+    "proteinContent": "5 g",
+    "fatContent": "9 g",
+    "saturatedFatContent": "2 g",
+    "cholesterolContent": "20 mg",
+    "sodiumContent": "150 mg",
+    "sugarContent": "1 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Spring-Rolls.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Spring-Rolls-500x500.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Spring-Rolls-500x375.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Spring-Rolls-480x270.jpg"
+    ],
+    "video": {
+      "name": "Beef Recipes : Nigerian Spring rolls | Chef Lola's Kitchen",
+      "description": "Crispy fried spring roll is one of my favorite snacks and it's actually not as difficult as it's thought to be. I hope you give this a try?.\n\nYou can also find me here;\nBlog  http://cheflolaskitchen.com\nFacebook  https://www.facebook.com/ChefLolasKitchen\nInstagram  https://www.instagram.com/cheflolaskitchen\nBlog http://cheflolaskitchen.com/\n\n-~-~~-~~~-~~-~-\nLatest Video: \"Super Crispy Baked Potato Wedges\" \nhttps://www.youtube.com/watch?v=YaVCk-U-Vic\n-~-~~-~~~-~~-~-",
+      "uploadDate": "2015-11-29T09:58:05+00:00",
+      "duration": "PT3M49S",
+      "thumbnailUrl": "https://i.ytimg.com/vi/U_N4ayWrptE/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/U_N4ayWrptE?feature=oembed",
+      "contentUrl": "https://www.youtube.com/watch?v=U_N4ayWrptE",
+      "@type": "VideoObject"
+    }
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "video": {
+      "name": "Beef Recipes : Nigerian Spring rolls | Chef Lola's Kitchen",
+      "description": "Crispy fried spring roll is one of my favorite snacks and it's actually not as difficult as it's thought to be. I hope you give this a try?.\n\nYou can also find me here;\nBlog  http://cheflolaskitchen.com\nFacebook  https://www.facebook.com/ChefLolasKitchen\nInstagram  https://www.instagram.com/cheflolaskitchen\nBlog http://cheflolaskitchen.com/\n\n-~-~~-~~~-~~-~-\nLatest Video: \"Super Crispy Baked Potato Wedges\" \nhttps://www.youtube.com/watch?v=YaVCk-U-Vic\n-~-~~-~~~-~~-~-",
+      "uploadDate": "2015-11-29T09:58:05+00:00",
+      "duration": "PT3M49S",
+      "thumbnailUrl": "https://i.ytimg.com/vi/U_N4ayWrptE/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/U_N4ayWrptE?feature=oembed",
+      "contentUrl": "https://www.youtube.com/watch?v=U_N4ayWrptE",
+      "@type": "VideoObject"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.34",
+      "ratingCount": "12"
+    }
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Crispy Spring Roll",
+    "author": {
+      "@id": "https://cheflolaskitchen.com/#/schema/person/210ab4ab02cd92f770d27cf2a114f9a5"
+    },
+    "description": "Crispy Spring Roll - These spring rolls are light and very crisp with savory beef and vegetable fillings. You can read my spring roll sheet story here.",
+    "datePublished": "2020-02-24T20:20:16+00:00",
+    "image": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Spring-Rolls.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Spring-Rolls-500x500.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Spring-Rolls-500x375.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Spring-Rolls-480x270.jpg"
+    ],
+    "video": {
+      "name": "Beef Recipes : Nigerian Spring rolls | Chef Lola's Kitchen",
+      "description": "Crispy fried spring roll is one of my favorite snacks and it's actually not as difficult as it's thought to be. I hope you give this a try?.\n\nYou can also find me here;\nBlog  http://cheflolaskitchen.com\nFacebook  https://www.facebook.com/ChefLolasKitchen\nInstagram  https://www.instagram.com/cheflolaskitchen\nBlog http://cheflolaskitchen.com/\n\n-~-~~-~~~-~~-~-\nLatest Video: \"Super Crispy Baked Potato Wedges\" \nhttps://www.youtube.com/watch?v=YaVCk-U-Vic\n-~-~~-~~~-~~-~-",
+      "uploadDate": "2015-11-29T09:58:05+00:00",
+      "duration": "PT3M49S",
+      "thumbnailUrl": "https://i.ytimg.com/vi/U_N4ayWrptE/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/U_N4ayWrptE?feature=oembed",
+      "contentUrl": "https://www.youtube.com/watch?v=U_N4ayWrptE",
+      "@type": "VideoObject"
+    },
+    "recipeYield": [
+      "8",
+      "8 Servings"
+    ],
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "totalTime": "PT30M",
+    "recipeIngredient": [
+      "1/2 Pound Beef",
+      "2 Tbsp oil  (of your choice)",
+      "1  Onion (small  diced)",
+      "2  scallion (diced)",
+      "1  Stock cube",
+      "1 Tsp chili pepper",
+      "1 Tsp black pepper",
+      "3/4 Cup Cabbage (shredded )",
+      "3/4 Cup Carrots (Shredded )",
+      "1 Tsp Curry powder",
+      "1 Tbsp Water",
+      "1/4 Cup Water",
+      "Salt to taste",
+      "Enough Oil to fry"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Preheat the 2 tablespoons of Oil in the pan and saute the Onion and scallion until it's translucent then add the Chili pepper, black Pepper, Curry powder, salt to taste and the stock cube.",
+        "name": "Preheat the 2 tablespoons of Oil in the pan and saute the Onion and scallion until it's translucent then add the Chili pepper, black Pepper, Curry powder, salt to taste and the stock cube.",
+        "url": "https://cheflolaskitchen.com/crispy-spring-rolls/#wprm-recipe-7495-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Add the ground beef and use a wooden spoon or spatula to break it up into tiny pieces then stir-fry until the meat is cooked through then add the shredded cabbage and carrots and turn off the heat to prevent the vegetables from turning soggy and leave it to cool before using it.",
+        "name": "Add the ground beef and use a wooden spoon or spatula to break it up into tiny pieces then stir-fry until the meat is cooked through then add the shredded cabbage and carrots and turn off the heat to prevent the vegetables from turning soggy and leave it to cool before using it.",
+        "url": "https://cheflolaskitchen.com/crispy-spring-rolls/#wprm-recipe-7495-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "In a bowl, mix together the flour and Water to make the paste and set that aside.",
+        "name": "In a bowl, mix together the flour and Water to make the paste and set that aside.",
+        "url": "https://cheflolaskitchen.com/crispy-spring-rolls/#wprm-recipe-7495-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Add about 1 tablespoon of filling to the spring roll sheet you can add a little more depending on the size of your sheets but don&#x27;t overfill it, else, it&#x27;s going to burst while frying it, then secure it with the paste and roll it up. (please watch the video for details). Remember to cover both the rolled and unrolled sheets with a damp kitchen towel to prevent it from drying.",
+        "name": "Add about 1 tablespoon of filling to the spring roll sheet you can add a little more depending on the size of your sheets but don&#x27;t overfill it, else, it&#x27;s going to burst while frying it, then secure it with the paste and roll it up. (please watch the video for details). Remember to cover both the rolled and unrolled sheets with a damp kitchen towel to prevent it from drying.",
+        "url": "https://cheflolaskitchen.com/crispy-spring-rolls/#wprm-recipe-7495-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Fry in a preheated Oil of about 350°F until golden brown. Serve with your favorite dip or sauce or eat as is. Enjoy!",
+        "name": "Fry in a preheated Oil of about 350°F until golden brown. Serve with your favorite dip or sauce or eat as is. Enjoy!",
+        "url": "https://cheflolaskitchen.com/crispy-spring-rolls/#wprm-recipe-7495-step-0-4"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.34",
+      "ratingCount": "12"
+    },
+    "recipeCategory": [
+      "Appetizer"
+    ],
+    "recipeCuisine": [
+      "African",
+      "Asian",
+      "Chinese",
+      "korean"
+    ],
+    "keywords": "chinese egg rolls, crispy egg roll, egg roll, homemade",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "118 kcal",
+      "carbohydrateContent": "3 g",
+      "proteinContent": "5 g",
+      "fatContent": "9 g",
+      "saturatedFatContent": "2 g",
+      "cholesterolContent": "20 mg",
+      "sodiumContent": "150 mg",
+      "sugarContent": "1 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://cheflolaskitchen.com/crispy-spring-rolls/#recipe",
+    "isPartOf": {
+      "@id": "https://cheflolaskitchen.com/crispy-spring-rolls/#article"
+    },
+    "mainEntityOfPage": "https://cheflolaskitchen.com/crispy-spring-rolls/"
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:video|aggregateRating"
+  ]
+}

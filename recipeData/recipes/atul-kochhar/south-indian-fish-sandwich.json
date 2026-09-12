@@ -1,0 +1,561 @@
+{
+  "schemaVersion": 1,
+  "id": "atul-kochhar/south-indian-fish-sandwich",
+  "slug": "south-indian-fish-sandwich",
+  "chefId": "chef_atul-kochhar",
+  "chefSlug": "atul-kochhar",
+  "chefName": "Atul Kochhar",
+  "title": "South Indian fish sandwich",
+  "description": "BBC Food",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/southindianfishsandw_89816",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/southindianfishsandw_89816",
+    "retrievedAt": "2026-09-11T00:28:14.578Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Atul Kochhar"
+    ],
+    "datePublished": "2013-08-25T10:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "5860c9b3eae2391a3f6944a765f44b49aa3fcdaf4c3203d2b2efc14cab2682ea",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Indian"
+  ],
+  "category": [
+    "Light meals & snacks"
+  ],
+  "keywords": [
+    "quick",
+    "lunch",
+    "sandwich",
+    "plaice",
+    "dairy free",
+    "egg free",
+    "pregnancy friendly",
+    "2007-16"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the fish",
+      "items": [
+        {
+          "raw": "½ tsp chilli powder",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "chilli powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1½ tsp ground coriander",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tsp ground coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ tsp ground turmeric",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "tsp",
+          "name": "ground turmeric",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp tamarind pulp",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "tamarind pulp",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "pinch salt",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "pinch",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 small plaice, filleted",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "small plaice, filleted",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the crab mixture",
+      "items": [
+        {
+          "raw": "4 tbsp vegetable oil",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "vegetable oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp cumin seeds",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "cumin seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 green cardamom pods, crushed lightly with the back of a spoon",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "green cardamom pods",
+          "note": "crushed lightly with the back of a spoon",
+          "isOptional": false
+        },
+        {
+          "raw": "1 bay leaf",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "bay leaf",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2.5cm/1in piece of cinnamon stick",
+          "quantity": 2.5,
+          "quantityText": "2.5",
+          "unit": null,
+          "name": "cm/1in piece of cinnamon stick",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 cloves",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "cloves",
+          "name": "3 cloves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "5 black peppercorns",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": null,
+          "name": "black peppercorns",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 onions, chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "onions",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp readymade ginger-garlic paste, or 1 tbsp finely chopped garlic and 1 tbsp grated ginger",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "readymade ginger-garlic paste",
+          "note": "or 1 tbsp finely chopped garlic and 1 tbsp grated ginger",
+          "isOptional": false
+        },
+        {
+          "raw": "3 tomatoes, chopped",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "tomatoes",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "¼ tsp ground turmeric",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "tsp",
+          "name": "ground turmeric",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1½ tsp ground coriander",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tsp ground coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp chilli powder",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "chilli powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "250g/9oz fresh white crabmeat",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "/9oz fresh white crabmeat",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt, to taste",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt",
+          "note": "to taste",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp coriander leaves, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "coriander leaves",
+          "note": "finely chopped",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To serve",
+      "items": [
+        {
+          "raw": "16 cherry tomatoes, halved",
+          "quantity": 16,
+          "quantityText": "16",
+          "unit": null,
+          "name": "cherry tomatoes",
+          "note": "halved",
+          "isOptional": false
+        },
+        {
+          "raw": "1 punnet cress",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "punnet cress",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp balsamic vinegar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "balsamic vinegar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp extra virgin olive oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "extra virgin olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ tsp ground turmeric",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "tsp",
+          "name": "ground turmeric",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the grill to high.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the grill to high."
+    },
+    {
+      "order": 2,
+      "text": "For the fish, mix together the chilli powder, ground coriander, ground turmeric, tamarind pulp and salt.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the fish, mix together the chilli powder, ground coriander, ground turmeric, tamarind pulp and salt. "
+    },
+    {
+      "order": 3,
+      "text": "Rub the spice mix into the flesh side of the plaice fillets. Set aside to marinate.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Rub the spice mix into the flesh side of the plaice fillets. Set aside to marinate."
+    },
+    {
+      "order": 4,
+      "text": "Meanwhile, for the crab mixture, heat the vegetable oil in a frying pan over a medium-high heat, then add the cumin, cardamom, bay leaf, cinnamon, cloves and black peppercorns (take care as the spices may spit). Fry for 2-3 minutes, or until the spices are toasted and fragrant and start to crackle.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, for the crab mixture, heat the vegetable oil in a frying pan over a medium-high heat, then add the cumin, cardamom, bay leaf, cinnamon, cloves and black peppercorns (take care as the spices may spit). Fry for 2-3 minutes, or until the spices are toasted and fragrant and start to crackle. "
+    },
+    {
+      "order": 5,
+      "text": "Add the onions and fry for 4-5 minutes until lightly browned, then stir in the ginger-garlic paste and fry for 2-3 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the onions and fry for 4-5 minutes until lightly browned, then stir in the ginger-garlic paste and fry for 2-3 minutes. "
+    },
+    {
+      "order": 6,
+      "text": "Add the tomatoes, turmeric, coriander and chilli powder and fry for 8-10 minutes, until the tomatoes have reduced to form a thick sauce.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the tomatoes, turmeric, coriander and chilli powder and fry for 8-10 minutes, until the tomatoes have reduced to form a thick sauce. "
+    },
+    {
+      "order": 7,
+      "text": "Stir in the crabmeat, season with salt, to taste, and sprinkle with the chopped coriander.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Stir in the crabmeat, season with salt, to taste, and sprinkle with the chopped coriander."
+    },
+    {
+      "order": 8,
+      "text": "Put the plaice fillets on a baking tray, skin-side down, and place under the hot grill. Cook for 1-2 minutes, until the flesh starts to become firm and opaque.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put the plaice fillets on a baking tray, skin-side down, and place under the hot grill. Cook for 1-2 minutes, until the flesh starts to become firm and opaque."
+    },
+    {
+      "order": 9,
+      "text": "Remove from the grill and top half of the plaice fillets with the crab mixture. Top with the remaining plaice fillets, skin-side up, to form a 'sandwich' (the skin of the plaice fillets should be on the outside).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove from the grill and top half of the plaice fillets with the crab mixture. Top with the remaining plaice fillets, skin-side up, to form a 'sandwich' (the skin of the plaice fillets should be on the outside). "
+    },
+    {
+      "order": 10,
+      "text": "Return to the grill for 3-5 minutes, turning once, until the fish is completely cooked and the skin is crisp and golden.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Return to the grill for 3-5 minutes, turning once, until the fish is completely cooked and the skin is crisp and golden."
+    },
+    {
+      "order": 11,
+      "text": "To serve, place a fish sandwich onto the centre of each of four serving plates. Pile the tomatoes alongside and top with some cress. Whisk the vinegar, oil and turmeric together and drizzle around the fish. Serve at once.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To serve, place a fish sandwich onto the centre of each of four serving plates. Pile the tomatoes alongside and top with some cress. Whisk the vinegar, oil and turmeric together and drizzle around the fish. Serve at once."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 1,
+      "ratingValue": 4
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "BBC Food",
+    "headline": "South Indian fish sandwich",
+    "image": null,
+    "name": "South Indian fish sandwich",
+    "author": {
+      "@type": "Person",
+      "name": "Atul Kochhar"
+    },
+    "datePublished": "2013-08-25T10:00:00.000Z",
+    "dateModified": "2018-09-17T15:56:54.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 1,
+      "ratingValue": 4
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, lunch, sandwich, plaice, dairy free, egg free, pregnancy friendly, 2007-16",
+    "recipeCategory": "Light meals & snacks",
+    "recipeCuisine": "Indian",
+    "recipeIngredient": [
+      "½ tsp chilli powder",
+      "1 tsp ground coriander",
+      "½ tsp ground turmeric",
+      "2 tbsp tamarind pulp ",
+      "pinch salt",
+      "4 small plaice, filleted",
+      "4 tbsp vegetable oil",
+      "1 tsp cumin seeds",
+      "2 green cardamom pods, crushed lightly with the back of a spoon",
+      "1 bay leaf",
+      "2.5cm/1in piece of cinnamon stick",
+      "3 cloves",
+      "5 black peppercorns",
+      "2 onions, chopped",
+      "2 tbsp readymade ginger-garlic paste, or 1 tbsp finely chopped garlic and 1 tbsp grated ginger",
+      "3 tomatoes, chopped",
+      "¼ tsp ground turmeric",
+      "1½ tsp ground coriander",
+      "½ tsp chilli powder",
+      "250g/9oz fresh white crabmeat",
+      "salt, to taste",
+      "1 tbsp coriander leaves, finely chopped",
+      "16 cherry tomatoes, halved",
+      "1 punnet cress",
+      "1 tsp balsamic vinegar",
+      "1 tbsp extra virgin olive oil",
+      "¼ tsp ground turmeric"
+    ],
+    "recipeInstructions": [
+      "Preheat the grill to high.",
+      "For the fish, mix together the chilli powder, ground coriander, ground turmeric, tamarind pulp and salt. ",
+      "Rub the spice mix into the flesh side of the plaice fillets. Set aside to marinate.",
+      "Meanwhile, for the crab mixture, heat the vegetable oil in a frying pan over a medium-high heat, then add the cumin, cardamom, bay leaf, cinnamon, cloves and black peppercorns (take care as the spices may spit). Fry for 2-3 minutes, or until the spices are toasted and fragrant and start to crackle. ",
+      "Add the onions and fry for 4-5 minutes until lightly browned, then stir in the ginger-garlic paste and fry for 2-3 minutes. ",
+      "Add the tomatoes, turmeric, coriander and chilli powder and fry for 8-10 minutes, until the tomatoes have reduced to form a thick sauce. ",
+      "Stir in the crabmeat, season with salt, to taste, and sprinkle with the chopped coriander.",
+      "Put the plaice fillets on a baking tray, skin-side down, and place under the hot grill. Cook for 1-2 minutes, until the flesh starts to become firm and opaque.",
+      "Remove from the grill and top half of the plaice fillets with the crab mixture. Top with the remaining plaice fillets, skin-side up, to form a 'sandwich' (the skin of the plaice fillets should be on the outside). ",
+      "Return to the grill for 3-5 minutes, turning once, until the fish is completely cooked and the skin is crisp and golden.",
+      "To serve, place a fish sandwich onto the centre of each of four serving plates. Pile the tomatoes alongside and top with some cress. Whisk the vinegar, oil and turmeric together and drizzle around the fish. Serve at once."
+    ],
+    "recipeYield": "      4",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

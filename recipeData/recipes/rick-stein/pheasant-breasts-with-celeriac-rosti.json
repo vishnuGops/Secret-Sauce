@@ -1,0 +1,432 @@
+{
+  "schemaVersion": 1,
+  "id": "rick-stein/pheasant-breasts-with-celeriac-rosti",
+  "slug": "pheasant-breasts-with-celeriac-rosti",
+  "chefId": "chef_rick-stein",
+  "chefSlug": "rick-stein",
+  "chefName": "Rick Stein",
+  "title": "Pheasant breasts with celeriac rostï",
+  "description": "This is simple to make but worthy of a dinner party with the roast pheasant, whisky sauce and vegetable rostï.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/pheasant_breasts_with_34305",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/pheasant_breasts_with_34305",
+    "retrievedAt": "2026-09-11T00:26:31.191Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Rick Stein"
+    ],
+    "datePublished": "2025-12-13T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "4609813ceb4ff3dad5733f5e5ff051e4d77bebc05d28b4d07e73071f4bb1f5f4",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": null,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "pheasant",
+    "nut free",
+    "Saturday Kitchen"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the pheasant",
+      "items": [
+        {
+          "raw": "4 pheasant breasts",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "pheasant breasts",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "16 thin slices smoked pancetta",
+          "quantity": 16,
+          "quantityText": "16",
+          "unit": null,
+          "name": "thin slices smoked pancetta",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "20g/¾oz unsalted butter",
+          "quantity": 20,
+          "quantityText": "20",
+          "unit": "g",
+          "name": "/¾oz unsalted butter",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the sauce",
+      "items": [
+        {
+          "raw": "20g/¾oz unsalted butter",
+          "quantity": 20,
+          "quantityText": "20",
+          "unit": "g",
+          "name": "/¾oz unsalted butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 banana shallots, peeled and finely chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "banana shallots",
+          "note": "peeled and finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "150g/5½oz chestnut mushrooms, sliced",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "g",
+          "name": "/5½oz chestnut mushrooms",
+          "note": "sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "50ml/2fl oz Islay malt whisky",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "ml",
+          "name": "/2fl oz Islay malt whisky",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "150ml/5fl oz chicken stock",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "ml",
+          "name": "/5fl oz chicken stock",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 tbsp double cream",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "double cream",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "f2 tbsp fresh curly parsley, chopped, plus 4 small sprigs, to garnish",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "f2 tbsp fresh curly parsley",
+          "note": "chopped, plus 4 small sprigs, to garnish",
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the rostï",
+      "items": [
+        {
+          "raw": "300g/10½oz celeriac, peeled and coarsely grated",
+          "quantity": 300,
+          "quantityText": "300",
+          "unit": "g",
+          "name": "/10½oz celeriac",
+          "note": "peeled and coarsely grated",
+          "isOptional": false
+        },
+        {
+          "raw": "175g/6oz parsnip, peeled and coarsely grated",
+          "quantity": 175,
+          "quantityText": "175",
+          "unit": "g",
+          "name": "/6oz parsnip",
+          "note": "peeled and coarsely grated",
+          "isOptional": false
+        },
+        {
+          "raw": "175g/6oz apple, peeled, cored and coarsely grated",
+          "quantity": 175,
+          "quantityText": "175",
+          "unit": "g",
+          "name": "/6oz apple",
+          "note": "peeled, cored and coarsely grated",
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp plain flour",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "plain flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 free-range egg, beaten",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "free-range egg",
+          "note": "beaten",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp unsalted butter",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "unsalted butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp vegetable oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "vegetable oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the pheasant, preheat the oven to 180C/160C Fan/Gas 4.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the pheasant, preheat the oven to 180C/160C Fan/Gas 4. "
+    },
+    {
+      "order": 2,
+      "text": "Wrap each pheasant breast in 4 slices of pancetta.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Wrap each pheasant breast in 4 slices of pancetta. "
+    },
+    {
+      "order": 3,
+      "text": "Heat the butter in a heavy-based, ovenproof frying pan, then fry the breasts over a medium heat for 2–3 minutes. Turn them over and fry for a further 2 minutes, then transfer the pan to the oven and cook the breasts for 4–5 minutes, or until cooked through. Check the internal temperature with a meat thermometer inserted into the thickest part of one of the breasts – it should be 63C. Keep the breasts warm.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat the butter in a heavy-based, ovenproof frying pan, then fry the breasts over a medium heat for 2–3 minutes. Turn them over and fry for a further 2 minutes, then transfer the pan to the oven and cook the breasts for 4–5 minutes, or until cooked through. Check the internal temperature with a meat thermometer inserted into the thickest part of one of the breasts – it should be 63C. Keep the breasts warm."
+    },
+    {
+      "order": 4,
+      "text": "To make the sauce, melt the butter in a saucepan, add the shallots and fry gently until soft. Add the mushrooms and fry for 2–3 minutes. Pour in the whisky, stock and cream. Bring to the boil, then immediately turn the heat down to a simmer and cook for a couple of minutes until bubbling and thickened. Add the chopped parsley, then season with salt and pepper. Keep the sauce warm.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the sauce, melt the butter in a saucepan, add the shallots and fry gently until soft. Add the mushrooms and fry for 2–3 minutes. Pour in the whisky, stock and cream. Bring to the boil, then immediately turn the heat down to a simmer and cook for a couple of minutes until bubbling and thickened. Add the chopped parsley, then season with salt and pepper. Keep the sauce warm. "
+    },
+    {
+      "order": 5,
+      "text": "To make the rostï, mix the celeriac, parsnip and apple together in a large bowl. Wrap the celeriac mixture in a clean tea towel and wring out the excess moisture. Put the mixture back in the bowl, add the flour and enough of the egg to bind the mixture together. Season with salt and pepper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the rostï, mix the celeriac, parsnip and apple together in a large bowl. Wrap the celeriac mixture in a clean tea towel and wring out the excess moisture. Put the mixture back in the bowl, add the flour and enough of the egg to bind the mixture together. Season with salt and pepper."
+    },
+    {
+      "order": 6,
+      "text": "Heat the butter and oil in a large frying pan. Divide the mixture into four and, using your hands, shape into four flattish patties about the size of your palm.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat the butter and oil in a large frying pan. Divide the mixture into four and, using your hands, shape into four flattish patties about the size of your palm. "
+    },
+    {
+      "order": 7,
+      "text": "Fry the patties for 4–5 minutes over a medium heat, then flip them over and cook for another 3–4 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Fry the patties for 4–5 minutes over a medium heat, then flip them over and cook for another 3–4 minutes."
+    },
+    {
+      "order": 8,
+      "text": "To serve, slice the pheasant breasts on the diagonal into 1.5cm/¾in thick slices (or leave whole if desired). Serve each breast on a warmed plate on top of a rösti, with the sauce spooned around. Garnish with the parsley sprigs.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To serve, slice the pheasant breasts on the diagonal into 1.5cm/¾in thick slices (or leave whole if desired). Serve each breast on a warmed plate on top of a rösti, with the sauce spooned around. Garnish with the parsley sprigs."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 2,
+      "ratingValue": 4.5
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "This is simple to make but worthy of a dinner party with the roast pheasant, whisky sauce and vegetable rostï. ",
+    "headline": "Pheasant breasts with celeriac rostï",
+    "image": null,
+    "name": "Pheasant breasts with celeriac rostï",
+    "author": {
+      "@type": "Person",
+      "name": "Rick Stein"
+    },
+    "datePublished": "2025-12-13T00:00:00.000Z",
+    "dateModified": "2025-12-12T15:02:58.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 2,
+      "ratingValue": 4.5
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT0H0M0S",
+    "keywords": "quick, pheasant, nut free, Saturday Kitchen",
+    "recipeCategory": "Main course",
+    "recipeIngredient": [
+      "4 pheasant breasts",
+      "16 thin slices smoked pancetta",
+      "20g/¾oz unsalted butter",
+      "20g/¾oz unsalted butter",
+      "2 banana shallots, peeled and finely chopped",
+      "150g/5½oz chestnut mushrooms, sliced",
+      "50ml/2fl oz Islay malt whisky",
+      "150ml/5fl oz chicken stock",
+      "4 tbsp double cream",
+      "f2 tbsp fresh curly parsley, chopped, plus 4 small sprigs, to garnish ",
+      "salt and freshly ground black pepper",
+      "300g/10½oz celeriac, peeled and coarsely grated",
+      "175g/6oz parsnip, peeled and coarsely grated",
+      "175g/6oz apple, peeled, cored and coarsely grated",
+      "3 tbsp plain flour",
+      "1 free-range egg, beaten",
+      "1 tbsp unsalted butter ",
+      "1 tbsp vegetable oil",
+      "salt and freshly ground black pepper"
+    ],
+    "recipeInstructions": [
+      "To make the pheasant, preheat the oven to 180C/160C Fan/Gas 4. ",
+      "Wrap each pheasant breast in 4 slices of pancetta. ",
+      "Heat the butter in a heavy-based, ovenproof frying pan, then fry the breasts over a medium heat for 2–3 minutes. Turn them over and fry for a further 2 minutes, then transfer the pan to the oven and cook the breasts for 4–5 minutes, or until cooked through. Check the internal temperature with a meat thermometer inserted into the thickest part of one of the breasts – it should be 63C. Keep the breasts warm.",
+      "To make the sauce, melt the butter in a saucepan, add the shallots and fry gently until soft. Add the mushrooms and fry for 2–3 minutes. Pour in the whisky, stock and cream. Bring to the boil, then immediately turn the heat down to a simmer and cook for a couple of minutes until bubbling and thickened. Add the chopped parsley, then season with salt and pepper. Keep the sauce warm. ",
+      "To make the rostï, mix the celeriac, parsnip and apple together in a large bowl. Wrap the celeriac mixture in a clean tea towel and wring out the excess moisture. Put the mixture back in the bowl, add the flour and enough of the egg to bind the mixture together. Season with salt and pepper.",
+      "Heat the butter and oil in a large frying pan. Divide the mixture into four and, using your hands, shape into four flattish patties about the size of your palm. ",
+      "Fry the patties for 4–5 minutes over a medium heat, then flip them over and cook for another 3–4 minutes.",
+      "To serve, slice the pheasant breasts on the diagonal into 1.5cm/¾in thick slices (or leave whole if desired). Serve each breast on a warmed plate on top of a rösti, with the sauce spooned around. Garnish with the parsley sprigs."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:3",
+    "no-cook-time",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

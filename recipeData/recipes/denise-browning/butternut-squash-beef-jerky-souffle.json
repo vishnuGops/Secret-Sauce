@@ -1,0 +1,514 @@
+{
+  "schemaVersion": 1,
+  "id": "denise-browning/butternut-squash-beef-jerky-souffle",
+  "slug": "butternut-squash-beef-jerky-souffle",
+  "chefId": "chef_denise-browning",
+  "chefSlug": "denise-browning",
+  "chefName": "Denise Browning",
+  "title": "Butternut Squash Beef Jerky Soufflé",
+  "description": "Butternut squash beef jerky souffle is an easy and comforting portion-controlled dish that can be made with leftovers. So good!",
+  "source": {
+    "sourceUrl": "https://www.easyanddelish.com/butternut-squash-beef-jerky-souffle/",
+    "finalUrl": "https://www.easyanddelish.com/butternut-squash-beef-jerky-souffle/",
+    "retrievedAt": "2026-09-11T02:47:40.130Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2012-04-24T15:15:58+00:00",
+    "rights": "Easy and Delish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "b5dd8f81bb9ee50c622cc356984246e946e34962ec3b597877f377b3a834051c",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "10"
+    ],
+    "servings": 10
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 20,
+    "totalMinutes": 50,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "American"
+  ],
+  "category": [
+    "Main Course"
+  ],
+  "keywords": [
+    "cloud like",
+    "smoky",
+    "velvety"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "9 tablespoons unsalted butter (plus extra for greasing the ramekins)",
+          "quantity": 9,
+          "quantityText": "9",
+          "unit": "tbsp",
+          "name": "unsalted butter (plus extra for greasing the ramekins)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Enough finely grated Parmesan cheese for sprinkling",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Enough finely grated Parmesan cheese for sprinkling",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 medium white onion (small diced and divided)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 medium white onion (small diced and divided)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 oz beef jerky strips (not the rolls (about 115 gr.), rehydrated and finely shredded)",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "oz",
+          "name": "beef jerky strips (not the rolls (about 115 gr.)",
+          "note": "rehydrated and finely shredded)",
+          "isOptional": false
+        },
+        {
+          "raw": "2 cloves garlic (minced)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "cloves",
+          "name": "garlic (minced)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2-1/2 cups butternut squash (peeled, deseeded, and cubed)",
+          "quantity": 2,
+          "quantityText": "2-1",
+          "unit": null,
+          "name": "/2 cups butternut squash (peeled",
+          "note": "deseeded, and cubed)",
+          "isOptional": false
+        },
+        {
+          "raw": "1-1/4 cup vegetable broth",
+          "quantity": 1,
+          "quantityText": "1-1",
+          "unit": null,
+          "name": "/4 cup vegetable broth",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 bay leaf",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "bay leaf",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Salt and black ground pepper to taste",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Salt and black ground pepper to taste",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tablespoons heavy cream",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "heavy cream",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 large egg yolks",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "large egg yolks",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/4 cup green onion (finely chopped)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/4 cup green onion (finely chopped)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 tablespoons all-purpose flour",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": "tbsp",
+          "name": "all-purpose flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 cups whole milk (warm)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "cups",
+          "name": "whole milk (warm)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/8 teaspoon freshly grated nutmeg",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/8 teaspoon freshly grated nutmeg",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 oz provolone cheese (shredded, about 115 gr.)",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "oz",
+          "name": "provolone cheese (shredded, about 115 gr.)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 large egg whites",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "large egg whites",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 teaspoon cream of tartar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 teaspoon cream of tartar",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Boil the beef jerky for about 30 minutes or until soft (to rehydrate). Drain and shred in a food processor. Sauté 1/2 of the onion with 1 tablespoon of butter over medium-high heat and then add the shredded beef jerky and sauté. Reserve.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Boil the beef jerky for about 30 minutes or until soft (to rehydrate). Drain and shred in a food processor. Sauté 1/2 of the onion with 1 tablespoon of butter over medium-high heat and then add the shredded beef jerky and sauté. Reserve.",
+        "name": "Boil the beef jerky for about 30 minutes or until soft (to rehydrate). Drain and shred in a food processor. Sauté 1/2 of the onion with 1 tablespoon of butter over medium-high heat and then add the shredded beef jerky and sauté. Reserve.",
+        "url": "https://www.easyanddelish.com/butternut-squash-beef-jerky-souffle/#wprm-recipe-47596-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Melt 2 tablespoons of butter in a medium sized non-stick saucepan over medium heat. Add 1/2 of the onion and sauté for approximately 2 minutes. Then, add the garlic and sauté for 30 seconds. Add the cubed butternut squash and sauté for 2 minutes, stiring occasionally with a wooden spoon. Add the broth, bay leaf, 1/4 teaspoon salt and 1/8 teaspoon pepper. Bring to a boil over medium-high heat, cover and reduce heat to low. Let simmer for about 12 minutes or until butternut squash is tender.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Melt 2 tablespoons of butter in a medium sized non-stick saucepan over medium heat. Add 1/2 of the onion and sauté for approximately 2 minutes. Then, add the garlic and sauté for 30 seconds. Add the cubed butternut squash and sauté for 2 minutes, stiring occasionally with a wooden spoon. Add the broth, bay leaf, 1/4 teaspoon salt and 1/8 teaspoon pepper. Bring to a boil over medium-high heat, cover and reduce heat to low. Let simmer for about 12 minutes or until butternut squash is tender.",
+        "name": "Melt 2 tablespoons of butter in a medium sized non-stick saucepan over medium heat. Add 1/2 of the onion and sauté for approximately 2 minutes. Then, add the garlic and sauté for 30 seconds. Add the cubed butternut squash and sauté for 2 minutes, stiring occasionally with a wooden spoon. Add the broth, bay leaf, 1/4 teaspoon salt and 1/8 teaspoon pepper. Bring to a boil over medium-high heat, cover and reduce heat to low. Let simmer for about 12 minutes or until butternut squash is tender.",
+        "url": "https://www.easyanddelish.com/butternut-squash-beef-jerky-souffle/#wprm-recipe-47596-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Remove bay leaf and drain. Let cool down for about 3 minutes and mash with a fork or potato masher. Stir in enough salt and pepper to taste, cream, and then the egg yolks, beef, and green onions. Reserve.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Remove bay leaf and drain. Let cool down for about 3 minutes and mash with a fork or potato masher. Stir in enough salt and pepper to taste, cream, and then the egg yolks, beef, and green onions. Reserve.",
+        "name": "Remove bay leaf and drain. Let cool down for about 3 minutes and mash with a fork or potato masher. Stir in enough salt and pepper to taste, cream, and then the egg yolks, beef, and green onions. Reserve.",
+        "url": "https://www.easyanddelish.com/butternut-squash-beef-jerky-souffle/#wprm-recipe-47596-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Meanwhile, melt 6 tablespoons butter in a small saucepan over low heat. With a wooden spoon, stir in the 6 tablespoons of flour and cook, stirring constantly, for 2 minutes to make a roux. Turn off the heat, whisk in the warm milk, the nutmeg, 1/2 teaspoon salt and 1/8 teaspoon pepper. Cook over low heat, whisking constantly until smooth and thick. Remove from heat, stir in the cheese, let cool down a bit, and mix with the mashed butternut squash mixture.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Meanwhile, melt 6 tablespoons butter in a small saucepan over low heat. With a wooden spoon, stir in the 6 tablespoons of flour and cook, stirring constantly, for 2 minutes to make a roux. Turn off the heat, whisk in the warm milk, the nutmeg, 1/2 teaspoon salt and 1/8 teaspoon pepper. Cook over low heat, whisking constantly until smooth and thick. Remove from heat, stir in the cheese, let cool down a bit, and mix with the mashed butternut squash mixture.",
+        "name": "Meanwhile, melt 6 tablespoons butter in a small saucepan over low heat. With a wooden spoon, stir in the 6 tablespoons of flour and cook, stirring constantly, for 2 minutes to make a roux. Turn off the heat, whisk in the warm milk, the nutmeg, 1/2 teaspoon salt and 1/8 teaspoon pepper. Cook over low heat, whisking constantly until smooth and thick. Remove from heat, stir in the cheese, let cool down a bit, and mix with the mashed butternut squash mixture.",
+        "url": "https://www.easyanddelish.com/butternut-squash-beef-jerky-souffle/#wprm-recipe-47596-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Preheat the oven to 400º F (205º C). Butter the inside of 10-12 souffle dishes or ramekins (3 1/2 inches or 8.9 cm in diameter by 2 inches or 5 cm deep) and sprinkle evenly with Parmesan, rolling the Parmesan around the mold to cover the sides. Cover with plastic wrap and place into the freezer for 5 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 400º F (205º C). Butter the inside of 10-12 souffle dishes or ramekins (3 1/2 inches or 8.9 cm in diameter by 2 inches or 5 cm deep) and sprinkle evenly with Parmesan, rolling the Parmesan around the mold to cover the sides. Cover with plastic wrap and place into the freezer for 5 minutes.",
+        "name": "Preheat the oven to 400º F (205º C). Butter the inside of 10-12 souffle dishes or ramekins (3 1/2 inches or 8.9 cm in diameter by 2 inches or 5 cm deep) and sprinkle evenly with Parmesan, rolling the Parmesan around the mold to cover the sides. Cover with plastic wrap and place into the freezer for 5 minutes.",
+        "url": "https://www.easyanddelish.com/butternut-squash-beef-jerky-souffle/#wprm-recipe-47596-step-0-4"
+      }
+    },
+    {
+      "order": 6,
+      "text": "In a separate clean and dry stainless steel bowl, use a hand mixer to whisk egg whites with a pinch of salt. Beat at low or medium-low speed until frothy. Add the cream of tartar and gradually increase the speed to high, beating until the beaten egg whites hold a stiff peak.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a separate clean and dry stainless steel bowl, use a hand mixer to whisk egg whites with a pinch of salt. Beat at low or medium-low speed until frothy. Add the cream of tartar and gradually increase the speed to high, beating until the beaten egg whites hold a stiff peak.",
+        "name": "In a separate clean and dry stainless steel bowl, use a hand mixer to whisk egg whites with a pinch of salt. Beat at low or medium-low speed until frothy. Add the cream of tartar and gradually increase the speed to high, beating until the beaten egg whites hold a stiff peak.",
+        "url": "https://www.easyanddelish.com/butternut-squash-beef-jerky-souffle/#wprm-recipe-47596-step-0-5"
+      }
+    },
+    {
+      "order": 7,
+      "text": "Whisk one quarter of the egg whites into the butternut squash mixture to lighten and then gently fold in the rest with a rubber spatula. Ladle or spoon the mixture into the soufflé ramekins (only fill 3/4 full, as the soufflé will rise), then smooth the top. Place the ramekins on a sheet pan on the middle rack of the oven. Turn the temperature down to 375º F (190º C). Bake for 18 to 22 minutes without opening the oven door or until puffed and brown. Serve butternut squash beef jerky souffle immediately by itself or with a fresh salad.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Whisk one quarter of the egg whites into the butternut squash mixture to lighten and then gently fold in the rest with a rubber spatula. Ladle or spoon the mixture into the soufflé ramekins (only fill 3/4 full, as the soufflé will rise), then smooth the top. Place the ramekins on a sheet pan on the middle rack of the oven. Turn the temperature down to 375º F (190º C). Bake for 18 to 22 minutes without opening the oven door or until puffed and brown. Serve butternut squash beef jerky souffle immediately by itself or with a fresh salad.",
+        "name": "Whisk one quarter of the egg whites into the butternut squash mixture to lighten and then gently fold in the rest with a rubber spatula. Ladle or spoon the mixture into the soufflé ramekins (only fill 3/4 full, as the soufflé will rise), then smooth the top. Place the ramekins on a sheet pan on the middle rack of the oven. Turn the temperature down to 375º F (190º C). Bake for 18 to 22 minutes without opening the oven door or until puffed and brown. Serve butternut squash beef jerky souffle immediately by itself or with a fresh salad.",
+        "url": "https://www.easyanddelish.com/butternut-squash-beef-jerky-souffle/#wprm-recipe-47596-step-0-6"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "200 kcal",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_1122-3.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_1122-3-500x500.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_1122-3-500x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_1122-3-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "2",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This recipe has such a unique combination of flavors. The squash adds a natural sweetness that pairs really well with the savory meat, and the texture comes out smooth and creamy. It’s a very comforting dish.",
+        "author": {
+          "@type": "Person",
+          "name": "Valentina Dimitrova"
+        },
+        "datePublished": "2026-05-03"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Butternut Squash Beef Jerky Soufflé",
+    "author": {
+      "@id": "https://www.easyanddelish.com/#/schema/person/4aa289bf19bceaa733ca6900648cfc47"
+    },
+    "description": "Butternut squash beef jerky souffle is an easy and comforting portion-controlled dish that can be made with leftovers. So good!",
+    "datePublished": "2012-04-24T15:15:58+00:00",
+    "image": [
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_1122-3.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_1122-3-500x500.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_1122-3-500x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/08/dsc_1122-3-480x270.jpg"
+    ],
+    "recipeYield": [
+      "10"
+    ],
+    "prepTime": "PT30M",
+    "cookTime": "PT20M",
+    "totalTime": "PT50M",
+    "recipeIngredient": [
+      "9 tablespoons unsalted butter (plus extra for greasing the ramekins)",
+      "Enough finely grated Parmesan cheese for sprinkling",
+      "1/2  medium white onion (small diced and divided)",
+      "4 oz beef jerky strips (not the rolls (about 115 gr.), rehydrated and finely shredded)",
+      "2 cloves garlic (minced)",
+      "2-1/2 cups butternut squash (peeled, deseeded, and cubed)",
+      "1-1/4 cup vegetable broth",
+      "1  bay leaf",
+      "Salt and black ground pepper to taste",
+      "2 tablespoons heavy cream",
+      "2  large egg yolks",
+      "1/4 cup green onion (finely chopped)",
+      "6 tablespoons all-purpose flour",
+      "2 cups whole milk (warm)",
+      "1/8 teaspoon freshly grated nutmeg",
+      "4 oz provolone cheese (shredded, about 115 gr.)",
+      "4  large egg whites",
+      "1/2 teaspoon cream of tartar"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Boil the beef jerky for about 30 minutes or until soft (to rehydrate). Drain and shred in a food processor. Sauté 1/2 of the onion with 1 tablespoon of butter over medium-high heat and then add the shredded beef jerky and sauté. Reserve.",
+        "name": "Boil the beef jerky for about 30 minutes or until soft (to rehydrate). Drain and shred in a food processor. Sauté 1/2 of the onion with 1 tablespoon of butter over medium-high heat and then add the shredded beef jerky and sauté. Reserve.",
+        "url": "https://www.easyanddelish.com/butternut-squash-beef-jerky-souffle/#wprm-recipe-47596-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Melt 2 tablespoons of butter in a medium sized non-stick saucepan over medium heat. Add 1/2 of the onion and sauté for approximately 2 minutes. Then, add the garlic and sauté for 30 seconds. Add the cubed butternut squash and sauté for 2 minutes, stiring occasionally with a wooden spoon. Add the broth, bay leaf, 1/4 teaspoon salt and 1/8 teaspoon pepper. Bring to a boil over medium-high heat, cover and reduce heat to low. Let simmer for about 12 minutes or until butternut squash is tender.",
+        "name": "Melt 2 tablespoons of butter in a medium sized non-stick saucepan over medium heat. Add 1/2 of the onion and sauté for approximately 2 minutes. Then, add the garlic and sauté for 30 seconds. Add the cubed butternut squash and sauté for 2 minutes, stiring occasionally with a wooden spoon. Add the broth, bay leaf, 1/4 teaspoon salt and 1/8 teaspoon pepper. Bring to a boil over medium-high heat, cover and reduce heat to low. Let simmer for about 12 minutes or until butternut squash is tender.",
+        "url": "https://www.easyanddelish.com/butternut-squash-beef-jerky-souffle/#wprm-recipe-47596-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Remove bay leaf and drain. Let cool down for about 3 minutes and mash with a fork or potato masher. Stir in enough salt and pepper to taste, cream, and then the egg yolks, beef, and green onions. Reserve.",
+        "name": "Remove bay leaf and drain. Let cool down for about 3 minutes and mash with a fork or potato masher. Stir in enough salt and pepper to taste, cream, and then the egg yolks, beef, and green onions. Reserve.",
+        "url": "https://www.easyanddelish.com/butternut-squash-beef-jerky-souffle/#wprm-recipe-47596-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Meanwhile, melt 6 tablespoons butter in a small saucepan over low heat. With a wooden spoon, stir in the 6 tablespoons of flour and cook, stirring constantly, for 2 minutes to make a roux. Turn off the heat, whisk in the warm milk, the nutmeg, 1/2 teaspoon salt and 1/8 teaspoon pepper. Cook over low heat, whisking constantly until smooth and thick. Remove from heat, stir in the cheese, let cool down a bit, and mix with the mashed butternut squash mixture.",
+        "name": "Meanwhile, melt 6 tablespoons butter in a small saucepan over low heat. With a wooden spoon, stir in the 6 tablespoons of flour and cook, stirring constantly, for 2 minutes to make a roux. Turn off the heat, whisk in the warm milk, the nutmeg, 1/2 teaspoon salt and 1/8 teaspoon pepper. Cook over low heat, whisking constantly until smooth and thick. Remove from heat, stir in the cheese, let cool down a bit, and mix with the mashed butternut squash mixture.",
+        "url": "https://www.easyanddelish.com/butternut-squash-beef-jerky-souffle/#wprm-recipe-47596-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 400º F (205º C). Butter the inside of 10-12 souffle dishes or ramekins (3 1/2 inches or 8.9 cm in diameter by 2 inches or 5 cm deep) and sprinkle evenly with Parmesan, rolling the Parmesan around the mold to cover the sides. Cover with plastic wrap and place into the freezer for 5 minutes.",
+        "name": "Preheat the oven to 400º F (205º C). Butter the inside of 10-12 souffle dishes or ramekins (3 1/2 inches or 8.9 cm in diameter by 2 inches or 5 cm deep) and sprinkle evenly with Parmesan, rolling the Parmesan around the mold to cover the sides. Cover with plastic wrap and place into the freezer for 5 minutes.",
+        "url": "https://www.easyanddelish.com/butternut-squash-beef-jerky-souffle/#wprm-recipe-47596-step-0-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "In a separate clean and dry stainless steel bowl, use a hand mixer to whisk egg whites with a pinch of salt. Beat at low or medium-low speed until frothy. Add the cream of tartar and gradually increase the speed to high, beating until the beaten egg whites hold a stiff peak.",
+        "name": "In a separate clean and dry stainless steel bowl, use a hand mixer to whisk egg whites with a pinch of salt. Beat at low or medium-low speed until frothy. Add the cream of tartar and gradually increase the speed to high, beating until the beaten egg whites hold a stiff peak.",
+        "url": "https://www.easyanddelish.com/butternut-squash-beef-jerky-souffle/#wprm-recipe-47596-step-0-5"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Whisk one quarter of the egg whites into the butternut squash mixture to lighten and then gently fold in the rest with a rubber spatula. Ladle or spoon the mixture into the soufflé ramekins (only fill 3/4 full, as the soufflé will rise), then smooth the top. Place the ramekins on a sheet pan on the middle rack of the oven. Turn the temperature down to 375º F (190º C). Bake for 18 to 22 minutes without opening the oven door or until puffed and brown. Serve butternut squash beef jerky souffle immediately by itself or with a fresh salad.",
+        "name": "Whisk one quarter of the egg whites into the butternut squash mixture to lighten and then gently fold in the rest with a rubber spatula. Ladle or spoon the mixture into the soufflé ramekins (only fill 3/4 full, as the soufflé will rise), then smooth the top. Place the ramekins on a sheet pan on the middle rack of the oven. Turn the temperature down to 375º F (190º C). Bake for 18 to 22 minutes without opening the oven door or until puffed and brown. Serve butternut squash beef jerky souffle immediately by itself or with a fresh salad.",
+        "url": "https://www.easyanddelish.com/butternut-squash-beef-jerky-souffle/#wprm-recipe-47596-step-0-6"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "2",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This recipe has such a unique combination of flavors. The squash adds a natural sweetness that pairs really well with the savory meat, and the texture comes out smooth and creamy. It’s a very comforting dish.",
+        "author": {
+          "@type": "Person",
+          "name": "Valentina Dimitrova"
+        },
+        "datePublished": "2026-05-03"
+      }
+    ],
+    "recipeCategory": [
+      "Main Course"
+    ],
+    "recipeCuisine": [
+      "American"
+    ],
+    "keywords": "cloud like, smoky, velvety",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "200 kcal",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://www.easyanddelish.com/butternut-squash-beef-jerky-souffle/#recipe",
+    "isPartOf": {
+      "@id": "https://www.easyanddelish.com/butternut-squash-beef-jerky-souffle/#article"
+    },
+    "mainEntityOfPage": "https://www.easyanddelish.com/butternut-squash-beef-jerky-souffle/"
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "range-quantity:2",
+    "unmapped:aggregateRating|review"
+  ]
+}

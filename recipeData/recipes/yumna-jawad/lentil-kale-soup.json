@@ -1,0 +1,586 @@
+{
+  "schemaVersion": 1,
+  "id": "yumna-jawad/lentil-kale-soup",
+  "slug": "lentil-kale-soup",
+  "chefId": "chef_yumna-jawad",
+  "chefSlug": "yumna-jawad",
+  "chefName": "Yumna Jawad",
+  "title": "Lentil Kale Soup",
+  "description": "Lentil Kale Soup is a hearty vegan recipe that is easy to throw together with green lentils, onions, celery, carrots and kale - 13 grams of protein/serving!",
+  "source": {
+    "sourceUrl": "https://feelgoodfoodie.net/recipe/lentil-kale-soup/",
+    "finalUrl": "https://feelgoodfoodie.net/recipe/lentil-kale-soup/",
+    "retrievedAt": "2026-09-11T02:46:54.462Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2020-04-06T12:41:28+00:00",
+    "rights": "Feel Good Foodie. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "7622b11a73b1a8617755563addc9d74d6e91c7e4ac276ca2310fb6b777ae7ddb",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": [
+        "equipment-from-html: 4"
+      ]
+    },
+    "robots": "allows recipe paths; /wp-admin/ and /signup/ disallowed"
+  },
+  "yield": {
+    "raw": [
+      "6",
+      "6 servings"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 10,
+    "cookMinutes": 45,
+    "totalMinutes": 40,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "American"
+  ],
+  "category": [
+    "Soup"
+  ],
+  "keywords": [
+    "kale lentil soup",
+    "Lentil Soup",
+    "vegan lentil soup"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1 tablespoon olive oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 large onion (chopped)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "large onion (chopped)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 garlic cloves (minced)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "garlic cloves (minced)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 large carrots (chopped)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "large carrots (chopped)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 celery ribs (chopped)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "celery ribs (chopped)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 ½ cup dried green lentils",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ cup dried green lentils",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 teaspoon cumin",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "cumin",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ teaspoon coriander",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 teaspoon Kosher salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "Kosher salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ teaspoon black pepper",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 cups low sodium vegetable broth",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": "cups",
+          "name": "low sodium vegetable broth",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2-3 cups kale (destemmed, roughly chopped)",
+          "quantity": 2,
+          "quantityText": "2-3",
+          "unit": "cups",
+          "name": "kale (destemmed",
+          "note": "roughly chopped)",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "In a large pot, heat olive over medium high heat. Add onions and cook until translucent, about 3-5 minutes. Add the garlic, carrots and celery and cook for an additional 2-3 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a large pot, heat olive over medium high heat. Add onions and cook until  translucent, about 3-5 minutes. Add the garlic, carrots and celery and cook for an additional 2-3 minutes.",
+        "name": "In a large pot, heat olive over medium high heat. Add onions and cook until  translucent, about 3-5 minutes. Add the garlic, carrots and celery and cook for an additional 2-3 minutes.",
+        "url": "https://feelgoodfoodie.net/recipe/lentil-kale-soup/#wprm-recipe-19487-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Add the green lentils, cumin, coriander, salt and pepper and cook with the vegetables to lightly toast the lentils, about 5 minutes. Add vegetable broth and bring to a boil; reduce heat and then simmer on low for 30 minutes until the lentils are cooked and the broth thickens.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add the green lentils, cumin, coriander, salt and pepper and cook with the vegetables to lightly toast the lentils, about 5 minutes. Add vegetable broth and bring to a boil; reduce heat and then simmer on low for 30 minutes until the lentils are cooked and the broth thickens.",
+        "name": "Add the green lentils, cumin, coriander, salt and pepper and cook with the vegetables to lightly toast the lentils, about 5 minutes. Add vegetable broth and bring to a boil; reduce heat and then simmer on low for 30 minutes until the lentils are cooked and the broth thickens.",
+        "url": "https://feelgoodfoodie.net/recipe/lentil-kale-soup/#wprm-recipe-19487-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Stir in the kale and continue to simmer until the kale wilts, about 2 more minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Stir in the kale and continue to simmer until the kale wilts, about 2 more minutes.",
+        "name": "Stir in the kale and continue to simmer until the kale wilts, about 2 more minutes.",
+        "url": "https://feelgoodfoodie.net/recipe/lentil-kale-soup/#wprm-recipe-19487-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Remove from heat and serve immediately.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Remove from heat and serve immediately.",
+        "name": "Remove from heat and serve immediately.",
+        "url": "https://feelgoodfoodie.net/recipe/lentil-kale-soup/#wprm-recipe-19487-step-0-3"
+      }
+    }
+  ],
+  "equipment": [
+    "Ceramic Nonstick Cookware Set",
+    "Measuring Cups and Spoons",
+    "Cutting Board",
+    "Knife Block Set"
+  ],
+  "supplies": [],
+  "nutrition": {
+    "calories": "221 kcal",
+    "carbohydrateContent": "36 g",
+    "proteinContent": "13 g",
+    "fatContent": "3 g",
+    "saturatedFatContent": "1 g",
+    "sodiumContent": "1355 mg",
+    "fiberContent": "15 g",
+    "sugarContent": "5 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://feelgoodfoodie.net/wp-content/uploads/2020/03/Lentil-Kale-Soup-8.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2020/03/Lentil-Kale-Soup-8-500x500.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2020/03/Lentil-Kale-Soup-8-500x375.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2020/03/Lentil-Kale-Soup-8-480x270.jpg"
+    ],
+    "video": {
+      "name": "Shrimp & Broccoli Stir Fry",
+      "description": "Quick and easy to make, healthy and delicious, this shrimp and broccoli stir fry comes together in a matter of minutes with the most delicious sauce.",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/qpZPvBax-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/qpZPvBax.mp4",
+      "uploadDate": "2022-01-21T18:37:09.000Z",
+      "@type": "VideoObject"
+    }
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "video": {
+      "name": "Shrimp & Broccoli Stir Fry",
+      "description": "Quick and easy to make, healthy and delicious, this shrimp and broccoli stir fry comes together in a matter of minutes with the most delicious sauce.",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/qpZPvBax-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/qpZPvBax.mp4",
+      "uploadDate": "2022-01-21T18:37:09.000Z",
+      "@type": "VideoObject"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "376",
+      "reviewCount": "7"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Newly discovered your page and can’t wait to try more of your recipes, Yumna! This soup was perfect as a quick, nutritious meal after work. Reminds me of my mom’s lentil soup and loved your addition of the kale.",
+        "author": {
+          "@type": "Person",
+          "name": "Rachel"
+        },
+        "datePublished": "2026-03-10"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "So delish! I added fire roasted tomatoes which added another layer of flavor. Perfect fall go-to soup.",
+        "author": {
+          "@type": "Person",
+          "name": "Holly"
+        },
+        "datePublished": "2025-09-09"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Wow. The seasoning on this is next level. Love it! I've tried lots of lentil soup recipes, but this is my go-to now. I used Better Than Bouillon Lower Sodium Vegetable Base to make my veggie broth. My Beiruti husband asked me to add a little potato (I boiled it separately and then added it to the finished soup) since his mom did this from time to time. Thank you Yumna!",
+        "author": {
+          "@type": "Person",
+          "name": "Kathy"
+        },
+        "datePublished": "2025-01-14"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This recipe is always the first choice for cool fall and winter lunches. We make a huge pot then freeze in smaller batches, for quick dinners or lunches. It freezes well even with the kale. Each time we take a batch out, we add our leftover veggies ( roasted sweet potatoes, or broccoli etc. from the day before ), so that each batch is packed with extra veggies and has its own unique taste. Great recipe! Have sent it to so many family and friends! Yummy!!!!",
+        "author": {
+          "@type": "Person",
+          "name": "Monique"
+        },
+        "datePublished": "2024-12-10"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I loved this!! I added about 2 tbsp of chipotles in adobo and 1tbsp of tomato chicken bouillon to make the flavor similar to a mexican lentil soup. I loved it! So concentrated and perfect for fall weather.",
+        "author": {
+          "@type": "Person",
+          "name": "Mariana"
+        },
+        "datePublished": "2024-10-31"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Really tasty - added some crispy bacon and Parmesan on top ( not veggie), but even without it would still be lush!",
+        "author": {
+          "@type": "Person",
+          "name": "Lynda"
+        },
+        "datePublished": "2024-10-08"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "So good! Used stock I made from leek tops. Added fresh jalapeño pepper and some Yukon taters. Squeezed lemon juice in before serving. Sprinkled nooch atop. Yum.",
+        "author": {
+          "@type": "Person",
+          "name": "Shawnna"
+        },
+        "datePublished": "2024-07-16"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Lentil Kale Soup",
+    "author": {
+      "@id": "https://feelgoodfoodie.net/#/schema/person/7a5a734de72932611fa5814fce8c12d5"
+    },
+    "description": "Lentil Kale Soup is a hearty vegan recipe that is easy to throw together with green lentils, onions, celery, carrots and kale - 13 grams of protein/serving!",
+    "datePublished": "2020-04-06T12:41:28+00:00",
+    "image": [
+      "https://feelgoodfoodie.net/wp-content/uploads/2020/03/Lentil-Kale-Soup-8.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2020/03/Lentil-Kale-Soup-8-500x500.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2020/03/Lentil-Kale-Soup-8-500x375.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2020/03/Lentil-Kale-Soup-8-480x270.jpg"
+    ],
+    "video": {
+      "name": "Shrimp & Broccoli Stir Fry",
+      "description": "Quick and easy to make, healthy and delicious, this shrimp and broccoli stir fry comes together in a matter of minutes with the most delicious sauce.",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/qpZPvBax-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/qpZPvBax.mp4",
+      "uploadDate": "2022-01-21T18:37:09.000Z",
+      "@type": "VideoObject"
+    },
+    "recipeYield": [
+      "6",
+      "6 servings"
+    ],
+    "prepTime": "PT10M",
+    "cookTime": "PT45M",
+    "totalTime": "PT40M",
+    "recipeIngredient": [
+      "1 tablespoon olive oil",
+      "1  large onion  (chopped)",
+      "2  garlic cloves (minced)",
+      "2  large carrots (chopped)",
+      "2  celery ribs (chopped)",
+      "1 ½ cup dried green lentils",
+      "1 teaspoon cumin",
+      "½ teaspoon coriander",
+      "1 teaspoon Kosher salt",
+      "½ teaspoon black pepper",
+      "6 cups low sodium vegetable broth",
+      "2-3 cups kale (destemmed, roughly chopped)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "In a large pot, heat olive over medium high heat. Add onions and cook until  translucent, about 3-5 minutes. Add the garlic, carrots and celery and cook for an additional 2-3 minutes.",
+        "name": "In a large pot, heat olive over medium high heat. Add onions and cook until  translucent, about 3-5 minutes. Add the garlic, carrots and celery and cook for an additional 2-3 minutes.",
+        "url": "https://feelgoodfoodie.net/recipe/lentil-kale-soup/#wprm-recipe-19487-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Add the green lentils, cumin, coriander, salt and pepper and cook with the vegetables to lightly toast the lentils, about 5 minutes. Add vegetable broth and bring to a boil; reduce heat and then simmer on low for 30 minutes until the lentils are cooked and the broth thickens.",
+        "name": "Add the green lentils, cumin, coriander, salt and pepper and cook with the vegetables to lightly toast the lentils, about 5 minutes. Add vegetable broth and bring to a boil; reduce heat and then simmer on low for 30 minutes until the lentils are cooked and the broth thickens.",
+        "url": "https://feelgoodfoodie.net/recipe/lentil-kale-soup/#wprm-recipe-19487-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Stir in the kale and continue to simmer until the kale wilts, about 2 more minutes.",
+        "name": "Stir in the kale and continue to simmer until the kale wilts, about 2 more minutes.",
+        "url": "https://feelgoodfoodie.net/recipe/lentil-kale-soup/#wprm-recipe-19487-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Remove from heat and serve immediately.",
+        "name": "Remove from heat and serve immediately.",
+        "url": "https://feelgoodfoodie.net/recipe/lentil-kale-soup/#wprm-recipe-19487-step-0-3"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "376",
+      "reviewCount": "7"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Newly discovered your page and can’t wait to try more of your recipes, Yumna! This soup was perfect as a quick, nutritious meal after work. Reminds me of my mom’s lentil soup and loved your addition of the kale.",
+        "author": {
+          "@type": "Person",
+          "name": "Rachel"
+        },
+        "datePublished": "2026-03-10"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "So delish! I added fire roasted tomatoes which added another layer of flavor. Perfect fall go-to soup.",
+        "author": {
+          "@type": "Person",
+          "name": "Holly"
+        },
+        "datePublished": "2025-09-09"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Wow. The seasoning on this is next level. Love it! I've tried lots of lentil soup recipes, but this is my go-to now. I used Better Than Bouillon Lower Sodium Vegetable Base to make my veggie broth. My Beiruti husband asked me to add a little potato (I boiled it separately and then added it to the finished soup) since his mom did this from time to time. Thank you Yumna!",
+        "author": {
+          "@type": "Person",
+          "name": "Kathy"
+        },
+        "datePublished": "2025-01-14"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This recipe is always the first choice for cool fall and winter lunches. We make a huge pot then freeze in smaller batches, for quick dinners or lunches. It freezes well even with the kale. Each time we take a batch out, we add our leftover veggies ( roasted sweet potatoes, or broccoli etc. from the day before ), so that each batch is packed with extra veggies and has its own unique taste. Great recipe! Have sent it to so many family and friends! Yummy!!!!",
+        "author": {
+          "@type": "Person",
+          "name": "Monique"
+        },
+        "datePublished": "2024-12-10"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I loved this!! I added about 2 tbsp of chipotles in adobo and 1tbsp of tomato chicken bouillon to make the flavor similar to a mexican lentil soup. I loved it! So concentrated and perfect for fall weather.",
+        "author": {
+          "@type": "Person",
+          "name": "Mariana"
+        },
+        "datePublished": "2024-10-31"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Really tasty - added some crispy bacon and Parmesan on top ( not veggie), but even without it would still be lush!",
+        "author": {
+          "@type": "Person",
+          "name": "Lynda"
+        },
+        "datePublished": "2024-10-08"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "So good! Used stock I made from leek tops. Added fresh jalapeño pepper and some Yukon taters. Squeezed lemon juice in before serving. Sprinkled nooch atop. Yum.",
+        "author": {
+          "@type": "Person",
+          "name": "Shawnna"
+        },
+        "datePublished": "2024-07-16"
+      }
+    ],
+    "recipeCategory": [
+      "Soup"
+    ],
+    "recipeCuisine": [
+      "American"
+    ],
+    "keywords": "kale lentil soup, Lentil Soup, vegan lentil soup",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "221 kcal",
+      "carbohydrateContent": "36 g",
+      "proteinContent": "13 g",
+      "fatContent": "3 g",
+      "saturatedFatContent": "1 g",
+      "sodiumContent": "1355 mg",
+      "fiberContent": "15 g",
+      "sugarContent": "5 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://feelgoodfoodie.net/recipe/lentil-kale-soup/#recipe",
+    "isPartOf": {
+      "@id": "https://feelgoodfoodie.net/recipe/lentil-kale-soup/#article"
+    },
+    "mainEntityOfPage": "https://feelgoodfoodie.net/recipe/lentil-kale-soup/"
+  },
+  "audit": [
+    "range-quantity:1",
+    "unmapped:video|aggregateRating|review"
+  ]
+}

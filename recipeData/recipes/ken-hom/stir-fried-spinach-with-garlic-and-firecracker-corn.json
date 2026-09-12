@@ -1,0 +1,298 @@
+{
+  "schemaVersion": 1,
+  "id": "ken-hom/stir-fried-spinach-with-garlic-and-firecracker-corn",
+  "slug": "stir-fried-spinach-with-garlic-and-firecracker-corn",
+  "chefId": "chef_ken-hom",
+  "chefSlug": "ken-hom",
+  "chefName": "Ken Hom",
+  "title": "Stir-fried spinach with garlic and firecracker corn",
+  "description": "Sweet, sharp, fiery and garlicky, this quick and easy stir-fried spinach is a great addition to a Chinese meal.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/stir-fried_spinach_with_44635",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/stir-fried_spinach_with_44635",
+    "retrievedAt": "2026-09-11T00:27:09.736Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Ken Hom"
+    ],
+    "datePublished": "2022-01-29T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "740296ae56a83d0a9b8c9bfb0fe05879e94a67abc0f268862f059e06ef6a38a1",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 10,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Chinese"
+  ],
+  "category": [
+    "Light meals & snacks"
+  ],
+  "keywords": [
+    "quick",
+    "lunar new year",
+    "spinach",
+    "dairy free",
+    "egg free",
+    "gluten free",
+    "nut free",
+    "pregnancy friendly",
+    "vegan",
+    "vegetarian",
+    "Saturday Kitchen"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the stir-fried spinach",
+      "items": [
+        {
+          "raw": "1 tbsp vegetable oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "vegetable oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 garlic cloves, crushed",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "crushed",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "750g/1lb 10oz fresh spinach",
+          "quantity": 750,
+          "quantityText": "750",
+          "unit": "g",
+          "name": "/1lb 10oz fresh spinach",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp caster sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "caster sugar",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the firecracker corn",
+      "items": [
+        {
+          "raw": "275g/9¾oz sweetcorn (fresh, frozen or tinned)",
+          "quantity": 275,
+          "quantityText": "275",
+          "unit": "g",
+          "name": "/9¾oz sweetcorn (fresh, frozen or tinned)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp vegetable oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "vegetable oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 small mild red chillies, seeds removed and finely chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "small mild red chillies",
+          "note": "seeds removed and finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp caster sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "caster sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp Shaoxing rice wine",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "Shaoxing rice wine",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp sesame oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "sesame oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "freshly ground black pepper, to taste",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "freshly ground black pepper",
+          "note": "to taste",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the stir-fried spinach, place a wok or large frying pan over a high heat until it is hot. Add the oil and, when it very hot and slightly smoking, add the garlic and salt. Stir-fry for 25 seconds. Add the spinach and stir-fry for about 2 minutes to coat the leaves thoroughly in the oil, garlic and salt. When the spinach has wilted to about a third of its original size, add the sugar and continue to stir-fry for another 4 minutes. Transfer the spinach to a plate and pour off any excess liquid. The stir-fried spinach can be served hot or cold.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the stir-fried spinach, place a wok or large frying pan over a high heat until it is hot. Add the oil and, when it very hot and slightly smoking, add the garlic and salt. Stir-fry for 25 seconds. Add the spinach and stir-fry for about 2 minutes to coat the leaves thoroughly in the oil, garlic and salt. When the spinach has wilted to about a third of its original size, add the sugar and continue to stir-fry for another 4 minutes. Transfer the spinach to a plate and pour off any excess liquid. The stir-fried spinach can be served hot or cold. "
+    },
+    {
+      "order": 2,
+      "text": "Meanwhile, to make the firecracker corn, if the sweetcorn is fresh then cut the kernels off the cob. If it is frozen, blanch for 10 seconds in boiling water and drain. If you are using tinned corn, simply drain it. Place a wok or large frying pan over a high heat until it is hot. Add the oil and, when it is very hot and slightly smoking, add the corn and chillies and season with ½ teaspoon salt and some black pepper. Stir-fry for 1 minute and then add the sugar and rice wine. Continue to stir-fry for 2 minutes. Finally, stir in the sesame oil, mix well and serve immediately with the stir-fried spinach.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, to make the firecracker corn, if the sweetcorn is fresh then cut the kernels off the cob. If it is frozen, blanch for 10 seconds in boiling water and drain. If you are using tinned corn, simply drain it. Place a wok or large frying pan over a high heat until it is hot. Add the oil and, when it is very hot and slightly smoking, add the corn and chillies and season with ½ teaspoon salt and some black pepper. Stir-fry for 1 minute and then add the sugar and rice wine. Continue to stir-fry for 2 minutes. Finally, stir in the sesame oil, mix well and serve immediately with the stir-fried spinach. "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 1,
+      "ratingValue": 5
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/GlutenFreeDiet",
+      "http://schema.org/VeganDiet",
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Sweet, sharp, fiery and garlicky, this quick and easy  stir-fried spinach is a great addition to a Chinese meal.\r\n",
+    "headline": "Stir-fried spinach with garlic and firecracker corn",
+    "image": null,
+    "name": "Stir-fried spinach with garlic and firecracker corn",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Hom"
+    },
+    "datePublished": "2022-01-29T00:00:00.000Z",
+    "dateModified": "2022-01-28T14:15:35.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 1,
+      "ratingValue": 5
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT10M",
+    "keywords": "quick, lunar new year, spinach, dairy free, egg free, gluten free, nut free, pregnancy friendly, vegan, vegetarian, Saturday Kitchen",
+    "recipeCategory": "Light meals & snacks",
+    "recipeCuisine": "Chinese",
+    "recipeIngredient": [
+      "1 tbsp vegetable oil",
+      "4 garlic cloves, crushed",
+      "1 tsp salt",
+      "750g/1lb 10oz fresh spinach",
+      "1 tsp caster sugar",
+      "275g/9¾oz sweetcorn (fresh, frozen or tinned)",
+      "1 tbsp vegetable oil",
+      "2 small mild red chillies, seeds removed and finely chopped",
+      "1 tsp caster sugar",
+      "2 tsp Shaoxing rice wine",
+      "1 tsp sesame oil",
+      "freshly ground black pepper, to taste"
+    ],
+    "recipeInstructions": [
+      "To make the stir-fried spinach, place a wok or large frying pan over a high heat until it is hot. Add the oil and, when it very hot and slightly smoking, add the garlic and salt. Stir-fry for 25 seconds. Add the spinach and stir-fry for about 2 minutes to coat the leaves thoroughly in the oil, garlic and salt. When the spinach has wilted to about a third of its original size, add the sugar and continue to stir-fry for another 4 minutes. Transfer the spinach to a plate and pour off any excess liquid. The stir-fried spinach can be served hot or cold. ",
+      "Meanwhile, to make the firecracker corn, if the sweetcorn is fresh then cut the kernels off the cob. If it is frozen, blanch for 10 seconds in boiling water and drain. If you are using tinned corn, simply drain it. Place a wok or large frying pan over a high heat until it is hot. Add the oil and, when it is very hot and slightly smoking, add the corn and chillies and season with ½ teaspoon salt and some black pepper. Stir-fry for 1 minute and then add the sugar and rice wine. Continue to stir-fry for 2 minutes. Finally, stir in the sesame oil, mix well and serve immediately with the stir-fried spinach. "
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/GlutenFreeDiet",
+      "http://schema.org/VeganDiet",
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

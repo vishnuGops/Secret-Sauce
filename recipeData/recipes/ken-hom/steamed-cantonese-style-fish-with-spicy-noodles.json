@@ -1,0 +1,490 @@
+{
+  "schemaVersion": 1,
+  "id": "ken-hom/steamed-cantonese-style-fish-with-spicy-noodles",
+  "slug": "steamed-cantonese-style-fish-with-spicy-noodles",
+  "chefId": "chef_ken-hom",
+  "chefSlug": "ken-hom",
+  "chefName": "Ken Hom",
+  "title": "Steamed Cantonese-style fish with spicy noodles",
+  "description": "This delicious recipe is healthy and low fat without compromising on flavour.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/steamedcantonesestyl_66273",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/steamedcantonesestyl_66273",
+    "retrievedAt": "2026-09-11T00:27:02.025Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Ken Hom"
+    ],
+    "datePublished": "2020-01-25T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "97f0a46e6589a6c49c724968e3672bead2259b5285518da8b03cff58d4920ac8",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Chinese"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "lunar new year",
+    "fish",
+    "dairy free",
+    "healthy",
+    "pregnancy friendly",
+    "summer",
+    "autumn",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the fish",
+      "items": [
+        {
+          "raw": "450g/1lb firm white fish fillets, such as cod or sole, skinned or a whole fish such as Dover sole or turbot",
+          "quantity": 450,
+          "quantityText": "450",
+          "unit": "g",
+          "name": "/1lb firm white fish fillets, such as cod or sole, skinned or a whole fish such as Dover sole or turbot",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp coarse sea salt or plain salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "coarse sea salt or plain salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1½ tbsp finely shredded fresh root ginger",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tbsp finely shredded fresh root ginger",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp finely shredded spring onions",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "finely shredded spring onions",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp light soy sauce",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "light soy sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp dark soy sauce",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "dark soy sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp groundnut oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "groundnut oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp sesame oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "sesame oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "fresh coriander sprigs, to garnish",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "fresh coriander sprigs",
+          "note": "to garnish",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the spicy noodles",
+      "items": [
+        {
+          "raw": "450g/1lb dried or fresh egg noodles",
+          "quantity": 450,
+          "quantityText": "450",
+          "unit": "g",
+          "name": "/1lb dried or fresh egg noodles",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3½ tbsp sesame oil",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "½ tbsp sesame oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1½ tbsp finely chopped garlic",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tbsp finely chopped garlic",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp finely chopped spring onions",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "finely chopped spring onions",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp light soy sauce",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "light soy sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp dark soy sauce",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "dark soy sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp sesame paste",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "sesame paste",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp chilli bean sauce",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "chilli bean sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp chilli oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "chilli oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp Chinese white rice vinegar or cider vinegar",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "Chinese white rice vinegar or cider vinegar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp Sichuan peppercorns, roasted and ground",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "Sichuan peppercorns, roasted and ground",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp freshly ground black pepper",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp sugar",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "sugar",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the fish, pat the fish dry with kitchen towels and rub evenly with the salt, rubbing it inside the cavity as well if you are using a whole fish. Put the fish on a heatproof plate and squeeze the ginger over the top.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the fish, pat the fish dry with kitchen towels and rub evenly with the salt, rubbing it inside the cavity as well if you are using a whole fish. Put the fish on a heatproof plate and squeeze the ginger over the top."
+    },
+    {
+      "order": 2,
+      "text": "Set up a steamer or put a rack into a wok or deep pan. Fill with 5cm/2in of water and bring to the boil over a high heat.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Set up a steamer or put a rack into a wok or deep pan. Fill with 5cm/2in of water and bring to the boil over a high heat. "
+    },
+    {
+      "order": 3,
+      "text": "Put the plate of fish in the steamer or on the rack, cover tightly and steam until it is just cooked. Flat fish fillets will take about 5 minutes; whole fish, or thick fillets, will take 12–14 minutes. The fish should turn opaque and flake slightly but still remain moist.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put the plate of fish in the steamer or on the rack, cover tightly and steam until it is just cooked. Flat fish fillets will take about 5 minutes; whole fish, or thick fillets, will take 12–14 minutes. The fish should turn opaque and flake slightly but still remain moist."
+    },
+    {
+      "order": 4,
+      "text": "Remove the plate and pour off any liquid that may have accumulated. Scatter the spring onions on the fish, then drizzle over the light and dark soy sauces.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove the plate and pour off any liquid that may have accumulated. Scatter the spring onions on the fish, then drizzle over the light and dark soy sauces."
+    },
+    {
+      "order": 5,
+      "text": "Heat the two oils together in a small saucepan until smoking, then immediately pour them over the fish.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat the two oils together in a small saucepan until smoking, then immediately pour them over the fish."
+    },
+    {
+      "order": 6,
+      "text": "Meanwhile, to make the spicy noodles, bring a saucepan of water to the boil and cook the noodles for 3–5 minutes or according to packet instructions. Drain and then plunge the noodles in cold water. Drain thoroughly and toss them with 2 tablespoons of sesame oil. Arrange on a serving platter.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, to make the spicy noodles, bring a saucepan of water to the boil and cook the noodles for 3–5 minutes or according to packet instructions. Drain and then plunge the noodles in cold water. Drain thoroughly and toss them with 2 tablespoons of sesame oil.  Arrange on a serving platter.  "
+    },
+    {
+      "order": 7,
+      "text": "Heat the sesame oil in a wok over a medium heat, and add the garlic and spring onions. Fry for 1 minute, then add the soy sauces, sesame paste, chilli paste, chilli oil and vinegar and mix well.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat the sesame oil in a wok over a medium heat, and add the garlic and spring onions. Fry for 1 minute, then add the soy sauces, sesame paste, chilli paste, chilli oil and vinegar and mix well. "
+    },
+    {
+      "order": 8,
+      "text": "Mix the ground peppers and sugar together in a bowl and add to the wok. Add the noodles and mix well to combine.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Mix the ground peppers and sugar together in a bowl and add to the wok. Add the noodles and mix well to combine. "
+    },
+    {
+      "order": 9,
+      "text": "Garnish the fish with the coriander and serve with the noodles on the side.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Garnish the fish with the coriander and serve with the noodles on the side. "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/steamedcantonesestyl_66273_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 12,
+      "ratingValue": 3.5
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/LowCalorieDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "This delicious recipe is healthy and low fat without compromising on flavour.",
+    "headline": "Steamed Cantonese-style fish with spicy noodles",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/steamedcantonesestyl_66273_16x9.jpg"
+    },
+    "name": "Steamed Cantonese-style fish with spicy noodles",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Hom"
+    },
+    "datePublished": "2020-01-25T00:00:00.000Z",
+    "dateModified": "2025-01-22T12:15:30.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 12,
+      "ratingValue": 3.5
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, lunar new year, fish, dairy free, healthy, pregnancy friendly, summer, autumn, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Chinese",
+    "recipeIngredient": [
+      "450g/1lb firm white fish fillets, such as cod or sole, skinned or a whole fish such as Dover sole or turbot",
+      "1 tsp coarse sea salt or plain salt",
+      "1½ tbsp finely shredded fresh root ginger",
+      "3 tbsp finely shredded spring onions",
+      "1 tbsp light soy sauce",
+      "2 tbsp dark soy sauce",
+      "1 tbsp groundnut oil",
+      "2 tsp sesame oil",
+      "fresh coriander sprigs, to garnish",
+      "450g/1lb dried or fresh egg noodles",
+      "3½ tbsp sesame oil ",
+      "1½ tbsp finely chopped garlic",
+      "3 tbsp finely chopped spring onions",
+      "2 tbsp light soy sauce",
+      "2 tbsp dark soy sauce",
+      "3 tbsp sesame paste",
+      "1 tbsp chilli bean sauce",
+      "2 tbsp chilli oil",
+      "2 tbsp Chinese white rice vinegar or cider vinegar",
+      "2 tsp Sichuan peppercorns, roasted and ground",
+      "1 tsp freshly ground black pepper",
+      "2 tsp sugar"
+    ],
+    "recipeInstructions": [
+      "To make the fish, pat the fish dry with kitchen towels and rub evenly with the salt, rubbing it inside the cavity as well if you are using a whole fish. Put the fish on a heatproof plate and squeeze the ginger over the top.",
+      "Set up a steamer or put a rack into a wok or deep pan. Fill with 5cm/2in of water and bring to the boil over a high heat. ",
+      "Put the plate of fish in the steamer or on the rack, cover tightly and steam until it is just cooked. Flat fish fillets will take about 5 minutes; whole fish, or thick fillets, will take 12–14 minutes. The fish should turn opaque and flake slightly but still remain moist.",
+      "Remove the plate and pour off any liquid that may have accumulated. Scatter the spring onions on the fish, then drizzle over the light and dark soy sauces.",
+      "Heat the two oils together in a small saucepan until smoking, then immediately pour them over the fish.",
+      "Meanwhile, to make the spicy noodles, bring a saucepan of water to the boil and cook the noodles for 3–5 minutes or according to packet instructions. Drain and then plunge the noodles in cold water. Drain thoroughly and toss them with 2 tablespoons of sesame oil.  Arrange on a serving platter.  ",
+      "Heat the sesame oil in a wok over a medium heat, and add the garlic and spring onions. Fry for 1 minute, then add the soy sauces, sesame paste, chilli paste, chilli oil and vinegar and mix well. ",
+      "Mix the ground peppers and sugar together in a bowl and add to the wok. Add the noodles and mix well to combine. ",
+      "Garnish the fish with the coriander and serve with the noodles on the side. "
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/LowCalorieDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

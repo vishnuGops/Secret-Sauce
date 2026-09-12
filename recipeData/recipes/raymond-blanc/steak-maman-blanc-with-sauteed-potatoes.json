@@ -1,0 +1,328 @@
+{
+  "schemaVersion": 1,
+  "id": "raymond-blanc/steak-maman-blanc-with-sauteed-potatoes",
+  "slug": "steak-maman-blanc-with-sauteed-potatoes",
+  "chefId": "chef_raymond-blanc",
+  "chefSlug": "raymond-blanc",
+  "chefName": "Raymond Blanc",
+  "title": "Steak Maman Blanc with sautéed potatoes",
+  "description": "Need a simple dish to impress a special someone? When it comes to cooking for romance, Raymond Blanc has it covered.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/steakmamanblancwiths_85136",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/steakmamanblancwiths_85136",
+    "retrievedAt": "2026-09-11T00:27:22.115Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Raymond Blanc"
+    ],
+    "datePublished": "2013-02-10T11:30:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "c4f68761ecdb995ec5421aa0fcc8f05c37aa53cd560680db2786fac7d47276d6",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "French"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "egg free",
+    "gluten free",
+    "nut free",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the potatoes",
+      "items": [
+        {
+          "raw": "4 medium King Edward or Lincolnshire potatoes, cut into 2cm/¾in cubes",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "medium King Edward or Lincolnshire potatoes, cut into 2cm/¾in cubes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp olive oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "10g/½oz unsalted butter",
+          "quantity": 10,
+          "quantityText": "10",
+          "unit": "g",
+          "name": "/½oz unsalted butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 handful fresh flatleaf parsley, roughly chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "handful",
+          "name": "fresh flatleaf parsley",
+          "note": "roughly chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 banana shallot, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "banana shallot",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the steak",
+      "items": [
+        {
+          "raw": "4 x 225g/8oz sirloin steaks (preferably organic), 2cm/¾in thick",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "x 225g/8oz sirloin steaks (preferably organic), 2cm/¾in thick",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp olive oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "65g/2¼oz unsalted butter",
+          "quantity": 65,
+          "quantityText": "65",
+          "unit": "g",
+          "name": "/2¼oz unsalted butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "200ml/7fl oz water",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "ml",
+          "name": "/7fl oz water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the potatoes, bring a large saucepan of salted water to a boil and blanch the potatoes for 1 minute then drain.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the potatoes, bring a large saucepan of salted water to a boil and blanch the potatoes for 1 minute then drain. "
+    },
+    {
+      "order": 2,
+      "text": "Heat a frying pan until hot, then add the olive oil and potatoes. Sauté the potatoes over a medium heat for 4-5 minutes, or until golden-brown all over and tender. Season, to taste, with salt and pepper. Reduce the heat and add the butter, parsley and shallot and stir well. Allow the butter to melt and glaze the potatoes and the shallots. Keep warm.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat a frying pan until hot, then add the olive oil and potatoes. Sauté the potatoes over a medium heat for 4-5 minutes, or until golden-brown all over and tender. Season, to taste, with salt and pepper. Reduce the heat and add the butter, parsley and shallot and stir well. Allow the butter to melt and glaze the potatoes and the shallots. Keep warm. "
+    },
+    {
+      "order": 3,
+      "text": "To make the steaks, season the steaks with the salt and pepper, pressing it firmly into the steaks on each side.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the steaks, season the steaks with the salt and pepper, pressing it firmly into the steaks on each side."
+    },
+    {
+      "order": 4,
+      "text": "Heat a large frying pan, add the oil and butter and heat until the butter is foaming, light brown and smells nutty. Place the steaks into the foaming butter and cook for 1–2 minutes on each side for rare, 3 minutes for medium rare, or 4 minutes for medium. Remove the steaks from the pan and place onto a warm plate.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat a large frying pan, add the oil and butter and heat until the butter is foaming, light brown and smells nutty. Place the steaks into the foaming butter and cook for 1–2 minutes on each side for rare, 3 minutes for medium rare, or 4 minutes for medium. Remove the steaks from the pan and place onto a warm plate."
+    },
+    {
+      "order": 5,
+      "text": "Pour the water into the frying pan and scrape the base of the pan with a wooden spoon to release the caramelised residue on the bottom of the pan, which will give taste and colour to this succulent juice. Simmer the sauce for a minute, stirring occasionally to emulsify the liquid.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pour the water into the frying pan and scrape the base of the pan with a wooden spoon to release the caramelised residue on the bottom of the pan, which will give taste and colour to this succulent juice. Simmer the sauce for a minute, stirring occasionally to emulsify the liquid."
+    },
+    {
+      "order": 6,
+      "text": "Pour the sauce onto the steaks and serve immediately with the potatoes and some green beans on the side.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pour the sauce onto the steaks and serve immediately with the potatoes and some green beans on the side. "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 4,
+      "ratingValue": 5
+    },
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Need a simple dish to impress a special someone? When it comes to cooking for romance, Raymond Blanc has it covered. ",
+    "headline": "Steak Maman Blanc with sautéed potatoes",
+    "image": null,
+    "name": "Steak Maman Blanc with sautéed potatoes",
+    "author": {
+      "@type": "Person",
+      "name": "Raymond Blanc"
+    },
+    "datePublished": "2013-02-10T11:30:00.000Z",
+    "dateModified": "2025-12-05T18:08:23.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 4,
+      "ratingValue": 5
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, egg free, gluten free, nut free, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "French",
+    "recipeIngredient": [
+      "4 medium King Edward or Lincolnshire potatoes, cut into 2cm/¾in cubes",
+      "2 tbsp olive oil",
+      "10g/½oz unsalted butter",
+      "1 handful fresh flatleaf parsley, roughly chopped",
+      "1 banana shallot, finely chopped",
+      "salt and freshly ground black pepper",
+      "4 x 225g/8oz sirloin steaks (preferably organic), 2cm/¾in thick ",
+      "2 tbsp olive oil",
+      "65g/2¼oz unsalted butter",
+      "200ml/7fl oz water",
+      "salt and freshly ground black pepper"
+    ],
+    "recipeInstructions": [
+      "To make the potatoes, bring a large saucepan of salted water to a boil and blanch the potatoes for 1 minute then drain. ",
+      "Heat a frying pan until hot, then add the olive oil and potatoes. Sauté the potatoes over a medium heat for 4-5 minutes, or until golden-brown all over and tender. Season, to taste, with salt and pepper. Reduce the heat and add the butter, parsley and shallot and stir well. Allow the butter to melt and glaze the potatoes and the shallots. Keep warm. ",
+      "To make the steaks, season the steaks with the salt and pepper, pressing it firmly into the steaks on each side.",
+      "Heat a large frying pan, add the oil and butter and heat until the butter is foaming, light brown and smells nutty. Place the steaks into the foaming butter and cook for 1–2 minutes on each side for rare, 3 minutes for medium rare, or 4 minutes for medium. Remove the steaks from the pan and place onto a warm plate.",
+      "Pour the water into the frying pan and scrape the base of the pan with a wooden spoon to release the caramelised residue on the bottom of the pan, which will give taste and colour to this succulent juice. Simmer the sauce for a minute, stirring occasionally to emulsify the liquid.",
+      "Pour the sauce onto the steaks and serve immediately with the potatoes and some green beans on the side. "
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

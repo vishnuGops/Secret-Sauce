@@ -1,0 +1,856 @@
+{
+  "schemaVersion": 1,
+  "id": "huy-vu/pate-chaud-recipe-banh-pate-so",
+  "slug": "pate-chaud-recipe-banh-pate-so",
+  "chefId": "chef_huy-vu",
+  "chefSlug": "huy-vu",
+  "chefName": "Huy Vu",
+  "title": "Pâté Chaud Recipe (Bánh Patê Sô)",
+  "description": "This pâté chaud recipe gives you flaky, buttery, and savory meat pies that are the perfect on the go snack.",
+  "source": {
+    "sourceUrl": "https://www.hungryhuy.com/pate-chaud/",
+    "finalUrl": "https://www.hungryhuy.com/pate-chaud/",
+    "retrievedAt": "2026-09-11T03:14:30.378Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2020-03-21T10:59:02+00:00",
+    "rights": "Hungry Huy. Functional content plus a link, for internal app testing. Not redistributed.",
+    "pageTitle": "Pâté Chaud Recipe (Patê Sô / Vietnamese Meat Pastries) - Hungry Huy",
+    "htmlSha256": "0ccd83b8cadac3eadba03094dc9a0584315e5edd2cf83606df728e7e5b1bce24",
+    "jsonLdBlockCount": 2,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": [
+        "ingredient-html-only: ▢ 1 pack puff pastry Pepperidge Farm has 2 sheets of 10&times;15&rdquo;, but any brand will do",
+        "ingredient-jsonld-only: 1",
+        "regrouped-from-html: 2 groups"
+      ]
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "12",
+      "12 pastries"
+    ],
+    "servings": 12
+  },
+  "timing": {
+    "prepMinutes": 20,
+    "cookMinutes": 25,
+    "totalMinutes": 165,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Vietnamese"
+  ],
+  "category": [
+    "Appetizer",
+    "Snack"
+  ],
+  "keywords": [
+    "Meat pie",
+    "Pate Chaud",
+    "Pate So",
+    "Vietnamese Puff Pastry"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "Dough & sealer",
+      "items": [
+        {
+          "raw": "▢ 1 pack puff pastry Pepperidge Farm has 2 sheets of 10&times;15&rdquo;, but any brand will do",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 1 pack puff pastry Pepperidge Farm has 2 sheets of 10&times;15&rdquo;, but any brand will do",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "1 extra large egg (egg whites and yolk separated into two bowls and lightly beaten)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "extra large egg (egg whites and yolk separated into two bowls and lightly beaten)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "Filling",
+      "items": [
+        {
+          "raw": "1 lb ground pork (or ground chicken)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "lb",
+          "name": "ground pork (or ground chicken)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "⅔ c chopped onion (sweated with 2 tbsp oil until fragrant, then cooled)",
+          "quantity": 0.6667,
+          "quantityText": "⅔",
+          "unit": null,
+          "name": "c chopped onion (sweated with 2 tbsp oil until fragrant, then cooled)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp sugar",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground pepper",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "⅓ tsp MSG (monosodium glutamate) (or chicken bouillon)",
+          "quantity": 0.3333,
+          "quantityText": "⅓",
+          "unit": "tsp",
+          "name": "MSG (monosodium glutamate) (or chicken bouillon)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp potato starch (or 2 tbsp bread crumbs)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "potato starch (or 2 tbsp bread crumbs)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1 pack puff pastry (Pepperidge Farm has 2 sheets of 10x15”, but any brand will do)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "pack puff pastry (Pepperidge Farm has 2 sheets of 10x15”, but any brand will do)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Defrost the puff pastry dough on the counter for about one to two hours. You want to make sure that the dough is a little frozen so that it doesn’t over-soften while you work with the dough.",
+      "stepGroup": "Defrost",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Defrost the puff pastry dough on the counter for about one to two hours. You want to make sure that the dough is a little frozen so that it doesn’t over-soften while you work with the dough.",
+        "name": "Defrost the puff pastry dough on the counter for about one to two hours. You want to make sure that the dough is a little frozen so that it doesn’t over-soften while you work with the dough.",
+        "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Sweat onions on medium-low heat until fragrant then set aside until cooled, about five minutes.",
+      "stepGroup": "Filling prep",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Sweat onions on medium-low heat until fragrant then set aside until cooled, about five minutes.",
+        "name": "Sweat onions on medium-low heat until fragrant then set aside until cooled, about five minutes.",
+        "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-1-0"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Combine the onions, ground meat, salt, sugar, ground pepper, MSG, and potato starch into a bowl and mix well.",
+      "stepGroup": "Filling prep",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Combine the onions, ground meat, salt, sugar, ground pepper, MSG, and potato starch into a bowl and mix well.",
+        "name": "Combine the onions, ground meat, salt, sugar, ground pepper, MSG, and potato starch into a bowl and mix well.",
+        "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-1-1"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Taste test: put ½ tsp meat in the microwave on a small plate and taste it to make sure you like the seasoning, adjust as needed.",
+      "stepGroup": "Filling prep",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Taste test: put ½ tsp meat in the microwave on a small plate and taste it to make sure you like the seasoning, adjust as needed.",
+        "name": "Taste test: put ½ tsp meat in the microwave on a small plate and taste it to make sure you like the seasoning, adjust as needed.",
+        "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-1-2"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Preheat the oven at 350 °F degrees.",
+      "stepGroup": "Assembly & baking",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": "350 °F",
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Preheat the oven at 350 °F degrees.",
+        "name": "Preheat the oven at 350 °F degrees.",
+        "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-0"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Unfold the dough carefully and if there are any cracks, make sure to lightly roll out the cracks. If you find your dough softening too much, put it back in the fridge to solidify.",
+      "stepGroup": "Assembly & baking",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Unfold the dough carefully and if there are any cracks, make sure to lightly roll out the cracks. If you find your dough softening too much, put it back in the fridge to solidify.",
+        "name": "Unfold the dough carefully and if there are any cracks, make sure to lightly roll out the cracks. If you find your dough softening too much, put it back in the fridge to solidify.",
+        "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-1"
+      }
+    },
+    {
+      "order": 7,
+      "text": "Cut the dough into three by three inch squares.",
+      "stepGroup": "Assembly & baking",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Cut the dough into three by three inch squares.",
+        "name": "Cut the dough into three by three inch squares.",
+        "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-2"
+      }
+    },
+    {
+      "order": 8,
+      "text": "The amount of filling you add onto each square varies depending on the size of the square. For a three by three square, spoon in about 1.5-2 tablespoons filling onto the middle of each square. The goal is to add enough that’s a good dough to meat ratio, but not overload it so the top layer has to stretch too much, or so much that the filling will spill out.",
+      "stepGroup": "Assembly & baking",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "The amount of filling you add onto each square varies depending on the size of the square. For a three by three square, spoon in about 1.5-2 tablespoons filling onto the middle of each square. The goal is to add enough that’s a good dough to meat ratio, but not overload it so the top layer has to stretch too much, or so much that the filling will spill out.",
+        "name": "The amount of filling you add onto each square varies depending on the size of the square. For a three by three square, spoon in about 1.5-2 tablespoons filling onto the middle of each square. The goal is to add enough that’s a good dough to meat ratio, but not overload it so the top layer has to stretch too much, or so much that the filling will spill out.",
+        "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-3"
+      }
+    },
+    {
+      "order": 9,
+      "text": "Separate the egg whites and yolks of two small eggs into two bowls.",
+      "stepGroup": "Assembly & baking",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Separate the egg whites and yolks of two small eggs into two bowls.",
+        "name": "Separate the egg whites and yolks of two small eggs into two bowls.",
+        "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-4"
+      }
+    },
+    {
+      "order": 10,
+      "text": "Brush the egg whites along the edges of the square and gently place the top square over the meat filling.",
+      "stepGroup": "Assembly & baking",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Brush the egg whites along the edges of the square and gently place the top square over the meat filling.",
+        "name": "Brush the egg whites along the edges of the square and gently place the top square over the meat filling.",
+        "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-5"
+      }
+    },
+    {
+      "order": 11,
+      "text": "Using the tips of a fork, crimp the edges of the square to seal the top and bottom squares.",
+      "stepGroup": "Assembly & baking",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Using the tips of a fork, crimp the edges of the square to seal the top and bottom squares.",
+        "name": "Using the tips of a fork, crimp the edges of the square to seal the top and bottom squares.",
+        "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-6"
+      }
+    },
+    {
+      "order": 12,
+      "text": "Lightly brush the egg yolk over the top. This creates a nice golden crust when baked.",
+      "stepGroup": "Assembly & baking",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Lightly brush the egg yolk over the top. This creates a nice golden crust when baked.",
+        "name": "Lightly brush the egg yolk over the top. This creates a nice golden crust when baked.",
+        "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-7"
+      }
+    },
+    {
+      "order": 13,
+      "text": "Place all of your pâté chaud on a half sheet over parchment paper to prevent sticking.",
+      "stepGroup": "Assembly & baking",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Place all of your pâté chaud on a half sheet over parchment paper to prevent sticking.",
+        "name": "Place all of your pâté chaud on a half sheet over parchment paper to prevent sticking.",
+        "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-8"
+      }
+    },
+    {
+      "order": 14,
+      "text": "Bake for about 20 to 25 minutes until golden brown. This also varies depending on the size of your squares, but you can tell it’s finished when golden brown.",
+      "stepGroup": "Assembly & baking",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Bake for about 20 to 25 minutes until golden brown. This also varies depending on the size of your squares, but you can tell it’s finished when golden brown.",
+        "name": "Bake for about 20 to 25 minutes until golden brown. This also varies depending on the size of your squares, but you can tell it’s finished when golden brown.",
+        "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-9"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "338 kcal",
+    "carbohydrateContent": "20 g",
+    "proteinContent": "10 g",
+    "fatContent": "24 g",
+    "saturatedFatContent": "7 g",
+    "cholesterolContent": "45 mg",
+    "sodiumContent": "324 mg",
+    "fiberContent": "1 g",
+    "sugarContent": "1 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/angle-view-pate-chaud.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/angle-view-pate-chaud-500x500.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/angle-view-pate-chaud-500x375.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/angle-view-pate-chaud-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "28",
+      "reviewCount": "9"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Yum! Made for thanksgiving, whole fam loved it! I treated it as if i was seasoning cha gio. So i added 1 tsp of fish sauce and 1 tsp of oyster sauce! I also subbed in for cornstarch since i didn’t have potato starch. Didn’t want to over season, as these things taste so good simple! Mine took about 35 min to bake. Super juicy and super flaky.",
+        "author": {
+          "@type": "Person",
+          "name": "Nana"
+        },
+        "datePublished": "2025-11-28"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Great recipe. The story line sure makes the pate Chaud more interesting to make, eat and share with friends.",
+        "author": {
+          "@type": "Person",
+          "name": "Neil Mai"
+        },
+        "datePublished": "2024-11-14"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This was really good!  I wasn't sure about using chicken for this recipe (it's not as traditional and also I am a die hard pork fan) but I was pleasantly surprised by how delicious it was!  I ended up replacing salt with oyster sauce to add some extra moisture to the chicken and the end result was nice and juicy without being soggy.  Thank you for the recipe!",
+        "author": {
+          "@type": "Person",
+          "name": "L Nguyen"
+        },
+        "datePublished": "2024-02-24"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I followed your recipe and they turned out delicious! Thank you so much for putting together this recipe for everyone to enjoy.",
+        "author": {
+          "@type": "Person",
+          "name": "Tan Kaylin"
+        },
+        "datePublished": "2024-02-04"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "So good! Love this!!",
+        "author": {
+          "@type": "Person",
+          "name": "CT"
+        },
+        "datePublished": "2021-11-22"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thank you for the recipe!\r\n\r\nDo you roll out the PF puff pastry sheets before assembling them?",
+        "author": {
+          "@type": "Person",
+          "name": "Tracy"
+        },
+        "datePublished": "2021-02-01"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thanks for the awesome recipe! \r\n\r\nDid you roll out the PF pastry sheets before assembling the pate chaud? In the directions, it doesn’t say to roll it out, but the sheets look thinner in your pictures.",
+        "author": {
+          "@type": "Person",
+          "name": "Tracy"
+        },
+        "datePublished": "2021-01-31"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thanks for this amazing recipe! \r\n\r\nDo you roll out the PF puff pastry sheets before assembling the pate chaud? In the instructions, you don’t mention that you roll it out, but in the pictures, it looks thinner than the PF sheets that I bought.",
+        "author": {
+          "@type": "Person",
+          "name": "Tracy"
+        },
+        "datePublished": "2021-01-31"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Yummy recipe, now we don't have to drive 14 miles each way to pick up some fresh ones. :) Thank you for this and other recipes I have yet to try.",
+        "author": {
+          "@type": "Person",
+          "name": "Chelle"
+        },
+        "datePublished": "2020-10-18"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Pâté Chaud Recipe (Bánh Patê Sô)",
+    "author": {
+      "@id": "https://www.hungryhuy.com/#/schema/person/77ba703312129b3930232d1c829f0ff0"
+    },
+    "description": "This pâté chaud recipe gives you flaky, buttery, and savory meat pies that are the perfect on the go snack.",
+    "datePublished": "2020-03-21T10:59:02+00:00",
+    "image": [
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/angle-view-pate-chaud.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/angle-view-pate-chaud-500x500.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/angle-view-pate-chaud-500x375.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/angle-view-pate-chaud-480x270.jpg"
+    ],
+    "recipeYield": [
+      "12",
+      "12 pastries"
+    ],
+    "prepTime": "PT20M",
+    "cookTime": "PT25M",
+    "totalTime": "PT165M",
+    "recipeIngredient": [
+      "1 pack puff pastry (Pepperidge Farm has 2 sheets of 10x15”, but any brand will do)",
+      "1 extra large egg (egg whites and yolk separated into two bowls and lightly beaten)",
+      "1 lb ground pork (or ground chicken)",
+      "⅔ c chopped onion (sweated with 2 tbsp oil until fragrant, then cooled)",
+      "1 tsp salt",
+      "2 tsp sugar",
+      "1 tsp ground pepper",
+      "⅓ tsp MSG (monosodium glutamate) (or chicken bouillon)",
+      "1 tsp potato starch (or 2 tbsp bread crumbs)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToSection",
+        "name": "Defrost",
+        "itemListElement": [
+          {
+            "@type": "HowToStep",
+            "text": "Defrost the puff pastry dough on the counter for about one to two hours. You want to make sure that the dough is a little frozen so that it doesn’t over-soften while you work with the dough.",
+            "name": "Defrost the puff pastry dough on the counter for about one to two hours. You want to make sure that the dough is a little frozen so that it doesn’t over-soften while you work with the dough.",
+            "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-0-0"
+          }
+        ]
+      },
+      {
+        "@type": "HowToSection",
+        "name": "Filling prep",
+        "itemListElement": [
+          {
+            "@type": "HowToStep",
+            "text": "Sweat onions on medium-low heat until fragrant then set aside until cooled, about five minutes.",
+            "name": "Sweat onions on medium-low heat until fragrant then set aside until cooled, about five minutes.",
+            "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-1-0"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Combine the onions, ground meat, salt, sugar, ground pepper, MSG, and potato starch into a bowl and mix well.",
+            "name": "Combine the onions, ground meat, salt, sugar, ground pepper, MSG, and potato starch into a bowl and mix well.",
+            "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-1-1"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Taste test: put ½ tsp meat in the microwave on a small plate and taste it to make sure you like the seasoning, adjust as needed.",
+            "name": "Taste test: put ½ tsp meat in the microwave on a small plate and taste it to make sure you like the seasoning, adjust as needed.",
+            "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-1-2"
+          }
+        ]
+      },
+      {
+        "@type": "HowToSection",
+        "name": "Assembly &amp; baking",
+        "itemListElement": [
+          {
+            "@type": "HowToStep",
+            "text": "Preheat the oven at 350 °F degrees.",
+            "name": "Preheat the oven at 350 °F degrees.",
+            "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-0"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Unfold the dough carefully and if there are any cracks, make sure to lightly roll out the cracks. If you find your dough softening too much, put it back in the fridge to solidify.",
+            "name": "Unfold the dough carefully and if there are any cracks, make sure to lightly roll out the cracks. If you find your dough softening too much, put it back in the fridge to solidify.",
+            "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-1"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Cut the dough into three by three inch squares.",
+            "name": "Cut the dough into three by three inch squares.",
+            "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-2"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "The amount of filling you add onto each square varies depending on the size of the square. For a three by three square, spoon in about 1.5-2 tablespoons filling onto the middle of each square. The goal is to add enough that’s a good dough to meat ratio, but not overload it so the top layer has to stretch too much, or so much that the filling will spill out.",
+            "name": "The amount of filling you add onto each square varies depending on the size of the square. For a three by three square, spoon in about 1.5-2 tablespoons filling onto the middle of each square. The goal is to add enough that’s a good dough to meat ratio, but not overload it so the top layer has to stretch too much, or so much that the filling will spill out.",
+            "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-3"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Separate the egg whites and yolks of two small eggs into two bowls.",
+            "name": "Separate the egg whites and yolks of two small eggs into two bowls.",
+            "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-4"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Brush the egg whites along the edges of the square and gently place the top square over the meat filling.",
+            "name": "Brush the egg whites along the edges of the square and gently place the top square over the meat filling.",
+            "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-5"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Using the tips of a fork, crimp the edges of the square to seal the top and bottom squares.",
+            "name": "Using the tips of a fork, crimp the edges of the square to seal the top and bottom squares.",
+            "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-6"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Lightly brush the egg yolk over the top. This creates a nice golden crust when baked.",
+            "name": "Lightly brush the egg yolk over the top. This creates a nice golden crust when baked.",
+            "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-7"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Place all of your pâté chaud on a half sheet over parchment paper to prevent sticking.",
+            "name": "Place all of your pâté chaud on a half sheet over parchment paper to prevent sticking.",
+            "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-8"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Bake for about 20 to 25 minutes until golden brown. This also varies depending on the size of your squares, but you can tell it’s finished when golden brown.",
+            "name": "Bake for about 20 to 25 minutes until golden brown. This also varies depending on the size of your squares, but you can tell it’s finished when golden brown.",
+            "url": "https://www.hungryhuy.com/pate-chaud/#wprm-recipe-5090-step-2-9"
+          }
+        ]
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "28",
+      "reviewCount": "9"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Yum! Made for thanksgiving, whole fam loved it! I treated it as if i was seasoning cha gio. So i added 1 tsp of fish sauce and 1 tsp of oyster sauce! I also subbed in for cornstarch since i didn’t have potato starch. Didn’t want to over season, as these things taste so good simple! Mine took about 35 min to bake. Super juicy and super flaky.",
+        "author": {
+          "@type": "Person",
+          "name": "Nana"
+        },
+        "datePublished": "2025-11-28"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Great recipe. The story line sure makes the pate Chaud more interesting to make, eat and share with friends.",
+        "author": {
+          "@type": "Person",
+          "name": "Neil Mai"
+        },
+        "datePublished": "2024-11-14"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This was really good!  I wasn't sure about using chicken for this recipe (it's not as traditional and also I am a die hard pork fan) but I was pleasantly surprised by how delicious it was!  I ended up replacing salt with oyster sauce to add some extra moisture to the chicken and the end result was nice and juicy without being soggy.  Thank you for the recipe!",
+        "author": {
+          "@type": "Person",
+          "name": "L Nguyen"
+        },
+        "datePublished": "2024-02-24"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I followed your recipe and they turned out delicious! Thank you so much for putting together this recipe for everyone to enjoy.",
+        "author": {
+          "@type": "Person",
+          "name": "Tan Kaylin"
+        },
+        "datePublished": "2024-02-04"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "So good! Love this!!",
+        "author": {
+          "@type": "Person",
+          "name": "CT"
+        },
+        "datePublished": "2021-11-22"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thank you for the recipe!\r\n\r\nDo you roll out the PF puff pastry sheets before assembling them?",
+        "author": {
+          "@type": "Person",
+          "name": "Tracy"
+        },
+        "datePublished": "2021-02-01"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thanks for the awesome recipe! \r\n\r\nDid you roll out the PF pastry sheets before assembling the pate chaud? In the directions, it doesn’t say to roll it out, but the sheets look thinner in your pictures.",
+        "author": {
+          "@type": "Person",
+          "name": "Tracy"
+        },
+        "datePublished": "2021-01-31"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thanks for this amazing recipe! \r\n\r\nDo you roll out the PF puff pastry sheets before assembling the pate chaud? In the instructions, you don’t mention that you roll it out, but in the pictures, it looks thinner than the PF sheets that I bought.",
+        "author": {
+          "@type": "Person",
+          "name": "Tracy"
+        },
+        "datePublished": "2021-01-31"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Yummy recipe, now we don't have to drive 14 miles each way to pick up some fresh ones. :) Thank you for this and other recipes I have yet to try.",
+        "author": {
+          "@type": "Person",
+          "name": "Chelle"
+        },
+        "datePublished": "2020-10-18"
+      }
+    ],
+    "recipeCategory": [
+      "Appetizer",
+      "Snack"
+    ],
+    "recipeCuisine": [
+      "Vietnamese"
+    ],
+    "keywords": "Meat pie, Pate Chaud, Pate So, Vietnamese Puff Pastry",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "338 kcal",
+      "carbohydrateContent": "20 g",
+      "proteinContent": "10 g",
+      "fatContent": "24 g",
+      "saturatedFatContent": "7 g",
+      "cholesterolContent": "45 mg",
+      "sodiumContent": "324 mg",
+      "fiberContent": "1 g",
+      "sugarContent": "1 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://www.hungryhuy.com/pate-chaud/#recipe",
+    "isPartOf": {
+      "@id": "https://www.hungryhuy.com/pate-chaud/#article"
+    },
+    "mainEntityOfPage": "https://www.hungryhuy.com/pate-chaud/"
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|review"
+  ]
+}

@@ -1,0 +1,739 @@
+{
+  "schemaVersion": 1,
+  "id": "gennaro-contaldo/pasta-pie-pasticcio-di-pasta-alla-ferrarese",
+  "slug": "pasta-pie-pasticcio-di-pasta-alla-ferrarese",
+  "chefId": "chef_gennaro-contaldo",
+  "chefSlug": "gennaro-contaldo",
+  "chefName": "Gennaro Contaldo",
+  "title": "Pasta pie (pasticcio di pasta alla ferrarese)",
+  "description": "This is real comfort food – pasta smothered in tomato and béchamel sauce and cooked in golden pastry.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/pasta_pie_pasticcio_di_53823",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/pasta_pie_pasticcio_di_53823",
+    "retrievedAt": "2026-09-11T00:27:52.967Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Gennaro Contaldo"
+    ],
+    "datePublished": "2026-02-21T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "b35ef058d19afdf992fa7b9a59b15f60808300e32c62eaeb26234183f34810e1",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 5 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 6"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 120,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Italian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "pie",
+    "rigatoni",
+    "nut free",
+    "Saturday Kitchen"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the pastry",
+      "items": [
+        {
+          "raw": "330g/11½oz ‘00’ flour, plus extra for dusting",
+          "quantity": 330,
+          "quantityText": "330",
+          "unit": "g",
+          "name": "/11½oz ‘00’ flour, plus extra for dusting",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "pinch sea salt",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "pinch",
+          "name": "sea salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "180g/6¼oz butter, cold and cut into small pieces, plus extra for greasing",
+          "quantity": 180,
+          "quantityText": "180",
+          "unit": "g",
+          "name": "/6¼oz butter, cold and cut into small pieces, plus extra for greasing",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "60g/2¼oz caster sugar",
+          "quantity": 60,
+          "quantityText": "60",
+          "unit": "g",
+          "name": "/2¼oz caster sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ lemon, zest only",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "lemon, zest only",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 free-range egg yolks, lightly beaten, plus 1 small free-range egg yolk, beaten with a little milk, for egg wash",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "free-range egg yolks",
+          "note": "lightly beaten, plus 1 small free-range egg yolk, beaten with a little milk, for egg wash",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the ragù",
+      "items": [
+        {
+          "raw": "2 tbsp extra virgin olive oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "extra virgin olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ small onion, finely chopped",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "small onion",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "½ celery stick, finely chopped",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "celery stick",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "½ small carrot, peeled and finely chopped",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "small carrot",
+          "note": "peeled and finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2 bay leaves",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "bay leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz beef mince",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz beef mince",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz turkey or chicken mince",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz turkey or chicken mince",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 Italian pork sausages, skins removed and crumbled (approximately 150g/5½oz in total)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "Italian pork sausages, skins removed and crumbled (approximately 150g/5½oz in total)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "200g/7oz chestnut or button mushrooms, finely sliced",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "g",
+          "name": "/7oz chestnut or button mushrooms",
+          "note": "finely sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "80ml/2½fl oz white wine",
+          "quantity": 80,
+          "quantityText": "80",
+          "unit": "ml",
+          "name": "/2½fl oz white wine",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "sea salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "sea salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the béchamel sauce",
+      "items": [
+        {
+          "raw": "25g/1oz butter",
+          "quantity": 25,
+          "quantityText": "25",
+          "unit": "g",
+          "name": "/1oz butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "25g/1oz ‘00’ flour",
+          "quantity": 25,
+          "quantityText": "25",
+          "unit": "g",
+          "name": "/1oz ‘00’ flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "300ml/10fl oz whole milk",
+          "quantity": 300,
+          "quantityText": "300",
+          "unit": "ml",
+          "name": "/10fl oz whole milk",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "pinch ground nutmeg",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "pinch",
+          "name": "ground nutmeg",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "20g/¾oz Parmesan, grated",
+          "quantity": 20,
+          "quantityText": "20",
+          "unit": "g",
+          "name": "/¾oz Parmesan",
+          "note": "grated",
+          "isOptional": false
+        },
+        {
+          "raw": "sea salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "sea salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the pasta",
+      "items": [
+        {
+          "raw": "300g/10½oz dried tortiglioni, rigatoni or broken-up ziti",
+          "quantity": 300,
+          "quantityText": "300",
+          "unit": "g",
+          "name": "/10½oz dried tortiglioni, rigatoni or broken-up ziti",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 small egg yolk, beaten with a little milk, for egg wash",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "small egg yolk",
+          "note": "beaten with a little milk, for egg wash",
+          "isOptional": false
+        },
+        {
+          "raw": "salt",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To serve",
+      "items": [
+        {
+          "raw": "200g/7oz mixed leaf salad",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "g",
+          "name": "/7oz mixed leaf salad",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ lemon, juice only",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "lemon, juice only",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp olive oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the pastry, grease a 24cm/9½in round pie dish or cake tin with butter and dust with flour. Set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the pastry, grease a 24cm/9½in round pie dish or cake tin with butter and dust with flour. Set aside."
+    },
+    {
+      "order": 2,
+      "text": "Place the flour, salt and butter in a large bowl and rub together with your fingertips until the mixture resembles breadcrumbs.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place the flour, salt and butter in a large bowl and rub together with your fingertips until the mixture resembles breadcrumbs. "
+    },
+    {
+      "order": 3,
+      "text": "Stir in the sugar and lemon zest.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Stir in the sugar and lemon zest. "
+    },
+    {
+      "order": 4,
+      "text": "Gradually add the egg yolks and, if necessary, a little cold water until it comes together to make a smooth dough.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Gradually add the egg yolks and, if necessary, a little cold water until it comes together to make a smooth dough. "
+    },
+    {
+      "order": 5,
+      "text": "Form into a ball, then divide into two pieces, making one piece a little bigger.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Form into a ball, then divide into two pieces, making one piece a little bigger."
+    },
+    {
+      "order": 6,
+      "text": "On a lightly floured work surface, roll out the larger piece of dough until it is approximately 3mm thick and use it to line the pie dish.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "On a lightly floured work surface, roll out the larger piece of dough until it is approximately 3mm thick and use it to line the pie dish. "
+    },
+    {
+      "order": 7,
+      "text": "Take the other piece of dough and roll it out to a similar thickness and into a circle that is approximately 24cm/9½in in diameter. Place between two sheets of baking paper and place both the pie dish and the pastry in the baking paper in the fridge to chill.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Take the other piece of dough and roll it out to a similar thickness and into a circle that is approximately 24cm/9½in in diameter. Place between two sheets of baking paper and place both the pie dish and the pastry in the baking paper in the fridge to chill."
+    },
+    {
+      "order": 8,
+      "text": "To make the ragù, heat the oil in a frying pan and fry the onion, celery, carrot and bay leaves for about 5 minutes, or until softened.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the ragù, heat the oil in a frying pan and fry the onion, celery, carrot and bay leaves for about 5 minutes, or until softened. "
+    },
+    {
+      "order": 9,
+      "text": "Add the minces and sausage meat and cook over a medium heat until sealed, this will take about 10 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the minces and sausage meat and cook over a medium heat until sealed, this will take about 10 minutes. "
+    },
+    {
+      "order": 10,
+      "text": "Add the mushrooms, season with salt and pepper and stir-fry for 1–2 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the mushrooms, season with salt and pepper and stir-fry for 1–2 minutes. "
+    },
+    {
+      "order": 11,
+      "text": "Increase the heat, add the wine and cook for 1 minute.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Increase the heat, add the wine and cook for 1 minute. "
+    },
+    {
+      "order": 12,
+      "text": "Lower the heat, cover with a lid and cook for about 25 minutes, or until the meat is nicely browned and cooked through. Set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Lower the heat, cover with a lid and cook for about 25 minutes, or until the meat is nicely browned and cooked through. Set aside. "
+    },
+    {
+      "order": 13,
+      "text": "To make the sauce, melt the butter in a small, non-stick saucepan over a medium heat. Remove from the heat and whisk in the flour.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the sauce, melt the butter in a small, non-stick saucepan over a medium heat. Remove from the heat and whisk in the flour. "
+    },
+    {
+      "order": 14,
+      "text": "Add a little milk and whisk to a smooth paste. Return the pan to the heat and gradually add the remaining milk, whisking all the time over a medium heat until the mixture thickens slightly and the flour is cooked through.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add a little milk and whisk to a smooth paste. Return the pan to the heat and gradually add the remaining milk, whisking all the time over a medium heat until the mixture thickens slightly and the flour is cooked through. "
+    },
+    {
+      "order": 15,
+      "text": "Remove from the heat. Season with salt and pepper, add the nutmeg and stir through the Parmesan. Set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove from the heat. Season with salt and pepper, add the nutmeg and stir through the Parmesan. Set aside. "
+    },
+    {
+      "order": 16,
+      "text": "Preheat the oven to 170C/150C Fan/Gas 3.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 170C/150C Fan/Gas 3."
+    },
+    {
+      "order": 17,
+      "text": "To make the pasta, bring a large saucepan of salted water to the boil and cook the pasta for half of the time stated on the packet. Drain well.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the pasta, bring a large saucepan of salted water to the boil and cook the pasta for half of the time stated on the packet. Drain well. "
+    },
+    {
+      "order": 18,
+      "text": "Stir the ragù into the béchamel sauce. Add the par-boiled pasta and stir again to combine.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Stir the ragù into the béchamel sauce. Add the par-boiled pasta and stir again to combine."
+    },
+    {
+      "order": 19,
+      "text": "Take the chilled pastry out of the fridge. Fill the lined pie dish with the pasta mixture.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Take the chilled pastry out of the fridge. Fill the lined pie dish with the pasta mixture. "
+    },
+    {
+      "order": 20,
+      "text": "Cover with the pastry lid, crimping the edges together to seal. With any pastry trimmings, cut out pretty shapes to decorate the pie lid, if desired.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Cover with the pastry lid, crimping the edges together to seal. With any pastry trimmings, cut out pretty shapes to decorate the pie lid, if desired.  "
+    },
+    {
+      "order": 21,
+      "text": "Brush the top of the pie with the egg wash and bake for 50–55 minutes, or until golden brown.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Brush the top of the pie with the egg wash and bake for 50–55 minutes, or until golden brown."
+    },
+    {
+      "order": 22,
+      "text": "Remove from the oven, leave to rest for 5 minutes, then carefully remove from the pie dish.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove from the oven, leave to rest for 5 minutes, then carefully remove from the pie dish."
+    },
+    {
+      "order": 23,
+      "text": "To serve, dress the salad leaves with the lemon juice and oil. Slice the pie into six pieces and serve on plates with the salad.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To serve, dress the salad leaves with the lemon juice and oil. Slice the pie into six pieces and serve on plates with the salad.  "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 4,
+      "ratingValue": 2.75
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "This is real comfort food – pasta smothered in tomato and béchamel sauce and cooked in golden pastry. ",
+    "headline": "Pasta pie (pasticcio di pasta alla ferrarese)",
+    "image": null,
+    "name": "Pasta pie (pasticcio di pasta alla ferrarese)",
+    "author": {
+      "@type": "Person",
+      "name": "Gennaro Contaldo"
+    },
+    "datePublished": "2026-02-21T00:00:00.000Z",
+    "dateModified": "2026-02-20T16:55:43.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 4,
+      "ratingValue": 2.75
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT2H",
+    "keywords": "pie, rigatoni, nut free, Saturday Kitchen",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Italian",
+    "recipeIngredient": [
+      "330g/11½oz ‘00’ flour, plus extra for dusting",
+      "pinch sea salt",
+      "180g/6¼oz butter, cold and cut into small pieces, plus extra for greasing",
+      "60g/2¼oz caster sugar",
+      "½ lemon, zest only",
+      "3 free-range egg yolks, lightly beaten, plus 1 small free-range egg yolk, beaten with a little milk, for egg wash",
+      "2 tbsp extra virgin olive oil",
+      "½ small onion, finely chopped",
+      "½ celery stick, finely chopped",
+      "½ small carrot, peeled and finely chopped",
+      "2 bay leaves",
+      "100g/3½oz beef mince",
+      "100g/3½oz turkey or chicken mince",
+      "2 Italian pork sausages, skins removed and crumbled (approximately 150g/5½oz in total)",
+      "200g/7oz chestnut or button mushrooms, finely sliced",
+      "80ml/2½fl oz white wine",
+      "sea salt and freshly ground black pepper",
+      "25g/1oz butter",
+      "25g/1oz ‘00’ flour",
+      "300ml/10fl oz whole milk",
+      "pinch ground nutmeg",
+      "20g/¾oz Parmesan, grated",
+      "sea salt and freshly ground black pepper",
+      "300g/10½oz dried tortiglioni, rigatoni or broken-up ziti",
+      "1 small egg yolk, beaten with a little milk, for egg wash",
+      "salt",
+      "200g/7oz mixed leaf salad",
+      "½ lemon, juice only",
+      "2 tbsp olive oil"
+    ],
+    "recipeInstructions": [
+      "To make the pastry, grease a 24cm/9½in round pie dish or cake tin with butter and dust with flour. Set aside.",
+      "Place the flour, salt and butter in a large bowl and rub together with your fingertips until the mixture resembles breadcrumbs. ",
+      "Stir in the sugar and lemon zest. ",
+      "Gradually add the egg yolks and, if necessary, a little cold water until it comes together to make a smooth dough. ",
+      "Form into a ball, then divide into two pieces, making one piece a little bigger.",
+      "On a lightly floured work surface, roll out the larger piece of dough until it is approximately 3mm thick and use it to line the pie dish. ",
+      "Take the other piece of dough and roll it out to a similar thickness and into a circle that is approximately 24cm/9½in in diameter. Place between two sheets of baking paper and place both the pie dish and the pastry in the baking paper in the fridge to chill.",
+      "To make the ragù, heat the oil in a frying pan and fry the onion, celery, carrot and bay leaves for about 5 minutes, or until softened. ",
+      "Add the minces and sausage meat and cook over a medium heat until sealed, this will take about 10 minutes. ",
+      "Add the mushrooms, season with salt and pepper and stir-fry for 1–2 minutes. ",
+      "Increase the heat, add the wine and cook for 1 minute. ",
+      "Lower the heat, cover with a lid and cook for about 25 minutes, or until the meat is nicely browned and cooked through. Set aside. ",
+      "To make the sauce, melt the butter in a small, non-stick saucepan over a medium heat. Remove from the heat and whisk in the flour. ",
+      "Add a little milk and whisk to a smooth paste. Return the pan to the heat and gradually add the remaining milk, whisking all the time over a medium heat until the mixture thickens slightly and the flour is cooked through. ",
+      "Remove from the heat. Season with salt and pepper, add the nutmeg and stir through the Parmesan. Set aside. ",
+      "Preheat the oven to 170C/150C Fan/Gas 3.",
+      "To make the pasta, bring a large saucepan of salted water to the boil and cook the pasta for half of the time stated on the packet. Drain well. ",
+      "Stir the ragù into the béchamel sauce. Add the par-boiled pasta and stir again to combine.",
+      "Take the chilled pastry out of the fridge. Fill the lined pie dish with the pasta mixture. ",
+      "Cover with the pastry lid, crimping the edges together to seal. With any pastry trimmings, cut out pretty shapes to decorate the pie lid, if desired.  ",
+      "Brush the top of the pie with the egg wash and bake for 50–55 minutes, or until golden brown.",
+      "Remove from the oven, leave to rest for 5 minutes, then carefully remove from the pie dish.",
+      "To serve, dress the salad leaves with the lemon juice and oil. Slice the pie into six pieces and serve on plates with the salad.  "
+    ],
+    "recipeYield": "Serves 6",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:5",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

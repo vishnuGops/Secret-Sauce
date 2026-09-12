@@ -1,0 +1,337 @@
+{
+  "schemaVersion": 1,
+  "id": "chef-lola/how-to-make-yogurt-video",
+  "slug": "how-to-make-yogurt-video",
+  "chefId": "chef_chef-lola",
+  "chefSlug": "chef-lola",
+  "chefName": "Chef Lola",
+  "title": "How To Make Yogurt (VIDEO)",
+  "description": "The idea of making homemade Yogurt may look a bit complex but it is not as complex as it seems. All you need is a quality whole Milk and a starter of some kind. In this recipe, I used two heaping tablespoons of plain Yogurt from a store-bought Yogurt as my starter. Boil milk, cool, add yogurt, leave in the oven for a few hours and that is basically it!",
+  "source": {
+    "sourceUrl": "https://cheflolaskitchen.com/homemade-yogurt-without-yogurt-maker/",
+    "finalUrl": "https://cheflolaskitchen.com/homemade-yogurt-without-yogurt-maker/",
+    "retrievedAt": "2026-09-11T02:47:24.659Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2019-06-24T16:03:12+00:00",
+    "rights": "Chef Lola's Kitchen. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "55696c318dc6f436cdf22e263a8bf5beb5273a427019a4959dfe0aa403620378",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "allows recipe paths; /wp-admin/, /wp-json/ and query URLs disallowed"
+  },
+  "yield": {
+    "raw": [
+      "4",
+      "4 People"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 5,
+    "cookMinutes": 720,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "American"
+  ],
+  "category": [
+    "Breakfast/Lunch/Dinner"
+  ],
+  "keywords": [
+    "homemade",
+    "yogurt"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1 liter Whole Milk",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "liter Whole Milk",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 Tbsp plain Yogurt",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "plain Yogurt",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Pour the Milk inside the Pot and heat it up to about",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Pour the Milk inside the Pot and heat it up to about",
+        "name": "Pour the Milk inside the Pot and heat it up to about",
+        "url": "https://cheflolaskitchen.com/homemade-yogurt-without-yogurt-maker/#wprm-recipe-7371-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Remove it from heat and allow it to cool down till it’s warm to the touch ( 110°F to 115°F. )",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": "110°F",
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Remove it from heat and allow it to cool down till it’s warm to the touch ( 110°F to 115°F. )",
+        "name": "Remove it from heat and allow it to cool down till it’s warm to the touch ( 110°F to 115°F. )",
+        "url": "https://cheflolaskitchen.com/homemade-yogurt-without-yogurt-maker/#wprm-recipe-7371-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Stir in the starter culture. Make sure to completely dissolve in the Milk.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Stir in the starter culture. Make sure to completely dissolve in the Milk.",
+        "name": "Stir in the starter culture. Make sure to completely dissolve in the Milk.",
+        "url": "https://cheflolaskitchen.com/homemade-yogurt-without-yogurt-maker/#wprm-recipe-7371-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Cover it up with a tight-fitting lid and keep in in the Oven with the light on for 6 to 12 hours depending on how tangy you want it to be.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Cover it up with a tight-fitting lid and keep in in the Oven with the light on for 6 to 12 hours depending on how tangy you want it to be.",
+        "name": "Cover it up with a tight-fitting lid and keep in in the Oven with the light on for 6 to 12 hours depending on how tangy you want it to be.",
+        "url": "https://cheflolaskitchen.com/homemade-yogurt-without-yogurt-maker/#wprm-recipe-7371-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Chill in the fridge for about 2 hours or more before serving.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Chill in the fridge for about 2 hours or more before serving.",
+        "name": "Chill in the fridge for about 2 hours or more before serving.",
+        "url": "https://cheflolaskitchen.com/homemade-yogurt-without-yogurt-maker/#wprm-recipe-7371-step-0-4"
+      }
+    },
+    {
+      "order": 6,
+      "text": "You can add sweeteners of your choice, fruits, or simply customize it to your taste.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "You can add sweeteners of your choice, fruits, or simply customize it to your taste.",
+        "name": "You can add sweeteners of your choice, fruits, or simply customize it to your taste.",
+        "url": "https://cheflolaskitchen.com/homemade-yogurt-without-yogurt-maker/#wprm-recipe-7371-step-0-5"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "158 kcal",
+    "carbohydrateContent": "12 g",
+    "proteinContent": "8 g",
+    "fatContent": "8 g",
+    "saturatedFatContent": "4 g",
+    "cholesterolContent": "26 mg",
+    "sodiumContent": "112 mg",
+    "sugarContent": "13 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2018/05/Home-made-Yogurt.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.67",
+      "ratingCount": "12",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "My first trial ans came out very smooth and creamy. I tasted it until I finished it  and forgot to leave some for my starter...\n\nI can now produce nice tasty and creamy yogourt. \n\nThanks Lola.",
+        "author": {
+          "@type": "Person",
+          "name": "Christie"
+        },
+        "datePublished": "2022-01-30"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "How To Make Yogurt (VIDEO)",
+    "author": {
+      "@id": "https://cheflolaskitchen.com/#/schema/person/210ab4ab02cd92f770d27cf2a114f9a5"
+    },
+    "description": "The idea of making&nbsp;homemade Yogurt&nbsp;may look a bit complex but it is not as complex as it seems. All you need is a&nbsp;quality whole Milk&nbsp;and a starter of some kind.&nbsp; In this recipe, I used two heaping tablespoons of plain Yogurt from a store-bought Yogurt as my starter.&nbsp;&nbsp;Boil milk, cool, add yogurt, leave in the oven for a few hours and that is basically it!",
+    "datePublished": "2019-06-24T16:03:12+00:00",
+    "image": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2018/05/Home-made-Yogurt.jpg"
+    ],
+    "recipeYield": [
+      "4",
+      "4 People"
+    ],
+    "prepTime": "PT5M",
+    "cookTime": "PT720M",
+    "recipeIngredient": [
+      "1 liter Whole Milk",
+      "2 Tbsp plain Yogurt"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Pour the Milk inside the Pot and heat it up to about",
+        "name": "Pour the Milk inside the Pot and heat it up to about",
+        "url": "https://cheflolaskitchen.com/homemade-yogurt-without-yogurt-maker/#wprm-recipe-7371-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Remove it from heat and allow it to cool down till it’s warm to the touch ( 110°F to 115°F. )",
+        "name": "Remove it from heat and allow it to cool down till it’s warm to the touch ( 110°F to 115°F. )",
+        "url": "https://cheflolaskitchen.com/homemade-yogurt-without-yogurt-maker/#wprm-recipe-7371-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Stir in the starter culture. Make sure to completely dissolve in the Milk.",
+        "name": "Stir in the starter culture. Make sure to completely dissolve in the Milk.",
+        "url": "https://cheflolaskitchen.com/homemade-yogurt-without-yogurt-maker/#wprm-recipe-7371-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Cover it up with a tight-fitting lid and keep in in the Oven with the light on for 6 to 12 hours depending on how tangy you want it to be.",
+        "name": "Cover it up with a tight-fitting lid and keep in in the Oven with the light on for 6 to 12 hours depending on how tangy you want it to be.",
+        "url": "https://cheflolaskitchen.com/homemade-yogurt-without-yogurt-maker/#wprm-recipe-7371-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Chill in the fridge for about 2 hours or more before serving.",
+        "name": "Chill in the fridge for about 2 hours or more before serving.",
+        "url": "https://cheflolaskitchen.com/homemade-yogurt-without-yogurt-maker/#wprm-recipe-7371-step-0-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "You can add sweeteners of your choice, fruits, or simply customize it to your taste.",
+        "name": "You can add sweeteners of your choice, fruits, or simply customize it to your taste.",
+        "url": "https://cheflolaskitchen.com/homemade-yogurt-without-yogurt-maker/#wprm-recipe-7371-step-0-5"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.67",
+      "ratingCount": "12",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "My first trial ans came out very smooth and creamy. I tasted it until I finished it  and forgot to leave some for my starter...\n\nI can now produce nice tasty and creamy yogourt. \n\nThanks Lola.",
+        "author": {
+          "@type": "Person",
+          "name": "Christie"
+        },
+        "datePublished": "2022-01-30"
+      }
+    ],
+    "recipeCategory": [
+      "Breakfast/Lunch/Dinner"
+    ],
+    "recipeCuisine": [
+      "American"
+    ],
+    "keywords": "homemade, yogurt",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "158 kcal",
+      "carbohydrateContent": "12 g",
+      "proteinContent": "8 g",
+      "fatContent": "8 g",
+      "saturatedFatContent": "4 g",
+      "cholesterolContent": "26 mg",
+      "sodiumContent": "112 mg",
+      "sugarContent": "13 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://cheflolaskitchen.com/homemade-yogurt-without-yogurt-maker/#recipe",
+    "isPartOf": {
+      "@id": "https://cheflolaskitchen.com/homemade-yogurt-without-yogurt-maker/#article"
+    },
+    "mainEntityOfPage": "https://cheflolaskitchen.com/homemade-yogurt-without-yogurt-maker/"
+  },
+  "audit": [
+    "unmapped:aggregateRating|review"
+  ]
+}

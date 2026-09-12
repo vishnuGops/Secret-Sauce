@@ -1,0 +1,533 @@
+{
+  "schemaVersion": 1,
+  "id": "yumna-jawad/dijon-grilled-chicken",
+  "slug": "dijon-grilled-chicken",
+  "chefId": "chef_yumna-jawad",
+  "chefSlug": "yumna-jawad",
+  "chefName": "Yumna Jawad",
+  "title": "Dijon Grilled Chicken",
+  "description": "Made with four ingredients, this simple dijon grilled chicken is quick to cook and full on flavor. Perfect for an easy weeknight dinner.",
+  "source": {
+    "sourceUrl": "https://feelgoodfoodie.net/recipe/grilled-dijon-chicken/",
+    "finalUrl": "https://feelgoodfoodie.net/recipe/grilled-dijon-chicken/",
+    "retrievedAt": "2026-09-11T02:47:02.943Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2021-03-22T23:02:45+00:00",
+    "rights": "Feel Good Foodie. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "50cd090a580174bda6a1c7b39987592097ec2b1f000dfcae8ac3e55494e09124",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": [
+        "equipment-from-html: 2"
+      ]
+    },
+    "robots": "allows recipe paths; /wp-admin/ and /signup/ disallowed"
+  },
+  "yield": {
+    "raw": [
+      "4",
+      "4 servings"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 5,
+    "cookMinutes": 15,
+    "totalMinutes": 20,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "American"
+  ],
+  "category": [
+    "Main Course"
+  ],
+  "keywords": [
+    "dijon chicken breast",
+    "dijon mustard chicken marinade",
+    "grilled mustard chicken"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "4 boneless skinless chicken breasts or thighs",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "boneless skinless chicken breasts or thighs",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ cup olive oil",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "cup",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tablespoon Dijon mustard",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "Dijon mustard",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 garlic cloves (pressed)",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "garlic cloves (pressed)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ teaspoon salt",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ teaspoon black pepper",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Prepare the marinade by whisking the olive oil, Dijon mustard, garlic, salt and pepper in a large bowl.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Prepare the marinade by whisking the olive oil, Dijon mustard, garlic, salt and pepper in a large bowl.",
+        "name": "Prepare the marinade by whisking the olive oil, Dijon mustard, garlic, salt and pepper in a large bowl.",
+        "url": "https://feelgoodfoodie.net/recipe/grilled-dijon-chicken/#wprm-recipe-30960-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Add the chicken breast into the bowl and toss to combine and evenly coat the chicken with the marinade. Refrigerate and let marinate for 2 hours or up to 24 hours.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add the chicken breast into the bowl and toss to combine and evenly coat the chicken with the marinade. Refrigerate and let marinate for 2 hours or up to 24 hours.",
+        "name": "Add the chicken breast into the bowl and toss to combine and evenly coat the chicken with the marinade. Refrigerate and let marinate for 2 hours or up to 24 hours.",
+        "url": "https://feelgoodfoodie.net/recipe/grilled-dijon-chicken/#wprm-recipe-30960-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Preheat grill or grill pan to medium heat. Place chicken on the grill for 5-7 minutes. Flip over and cook until golden brown and the juices run dry, approximately 5-7 more minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Preheat grill or grill pan to medium heat. Place chicken on the grill for 5-7 minutes. Flip over and cook until golden brown and the juices run dry, approximately 5-7 more minutes.",
+        "name": "Preheat grill or grill pan to medium heat. Place chicken on the grill for 5-7 minutes. Flip over and cook until golden brown and the juices run dry, approximately 5-7 more minutes.",
+        "url": "https://feelgoodfoodie.net/recipe/grilled-dijon-chicken/#wprm-recipe-30960-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Remove chicken from the grill. Sprinkle with parsley and serve as desired.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Remove chicken from the grill. Sprinkle with parsley and serve as desired.",
+        "name": "Remove chicken from the grill. Sprinkle with parsley and serve as desired.",
+        "url": "https://feelgoodfoodie.net/recipe/grilled-dijon-chicken/#wprm-recipe-30960-step-0-3"
+      }
+    }
+  ],
+  "equipment": [
+    "Mixing Bowl Set",
+    "Nonstick Square Grill Pan"
+  ],
+  "supplies": [],
+  "nutrition": {
+    "calories": "207 kcal",
+    "carbohydrateContent": "1 g",
+    "proteinContent": "24 g",
+    "fatContent": "11 g",
+    "saturatedFatContent": "2 g",
+    "transFatContent": "1 g",
+    "cholesterolContent": "72 mg",
+    "sodiumContent": "465 mg",
+    "fiberContent": "1 g",
+    "sugarContent": "1 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/02/Dijon-Grilled-Chicken-5.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/02/Dijon-Grilled-Chicken-5-500x500.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/02/Dijon-Grilled-Chicken-5-500x375.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/02/Dijon-Grilled-Chicken-5-480x270.jpg"
+    ],
+    "video": {
+      "name": "Grilled Dijon Chicken",
+      "description": "Made with four ingredients, this simple dijon grilled chicken is quick to cook and full on flavor. Perfect for an easy weeknight dinner.",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/UNSacfuj-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/UNSacfuj.mp4",
+      "uploadDate": "2021-05-16T17:00:23.000Z",
+      "@type": "VideoObject"
+    }
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "video": {
+      "name": "Grilled Dijon Chicken",
+      "description": "Made with four ingredients, this simple dijon grilled chicken is quick to cook and full on flavor. Perfect for an easy weeknight dinner.",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/UNSacfuj-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/UNSacfuj.mp4",
+      "uploadDate": "2021-05-16T17:00:23.000Z",
+      "@type": "VideoObject"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "266",
+      "reviewCount": "7"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Really tasty! I added oregano and fresh thyme. Put the breast pieces into my sandwich grill press for 8 minutes and was cooked beautifully. I've tried this a few times and it is better if you can leave it to marinate for more than a few hours but at minimum 2 hours I would say so the meat gets more on the tender soft side of things.",
+        "author": {
+          "@type": "Person",
+          "name": "Jamie"
+        },
+        "datePublished": "2023-11-19"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Easy and delicious recipe! I used chicken thighs and marinated overnight. They came out great.",
+        "author": {
+          "@type": "Person",
+          "name": "Chelsea"
+        },
+        "datePublished": "2022-10-23"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Best chicken ever! So simple but full of so much flavor! Definitely adding to my rotation! Thank you!",
+        "author": {
+          "@type": "Person",
+          "name": "Lisa"
+        },
+        "datePublished": "2021-07-17"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Delicious! The Dijon mustard marinade was scrumptious. I reserved some of the marinade and coated the chicken with it once it was almost done cooking. I didn't grill it - I pan fried it in a bit of butter. My husband said, \"don't change a thing.\" Thanks for the recipe!",
+        "author": {
+          "@type": "Person",
+          "name": "Daisy Esparza"
+        },
+        "datePublished": "2021-05-25"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Easy recipe for grill",
+        "author": {
+          "@type": "Person",
+          "name": "Nick"
+        },
+        "datePublished": "2021-05-05"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "After seeing this marinade posted on IG, I made it and then cut up the chicken into small pieces and broiled it! It was phenomenal and works well as a standalone on rice pilaf, or in a wrap/salad. My husband is normally really picky about chicken and he loved it! This is so simple but the flavor is unreal. Thank you!",
+        "author": {
+          "@type": "Person",
+          "name": "Mary"
+        },
+        "datePublished": "2021-04-23"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "By far the best chicken breast I have ever made/had. I always run away from making chicken breast. This was so juicy and delicious and the best part, we couldn't taste the mustard.  Thanks for sharing 💚❤",
+        "author": {
+          "@type": "Person",
+          "name": "Abiola"
+        },
+        "datePublished": "2021-04-23"
+      }
+    ],
+    "suitableForDiet": [
+      "https://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Dijon Grilled Chicken",
+    "author": {
+      "@id": "https://feelgoodfoodie.net/#/schema/person/7a5a734de72932611fa5814fce8c12d5"
+    },
+    "description": "Made with four ingredients, this simple dijon grilled chicken is quick to cook and full on flavor. Perfect for an easy weeknight dinner.",
+    "datePublished": "2021-03-22T23:02:45+00:00",
+    "image": [
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/02/Dijon-Grilled-Chicken-5.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/02/Dijon-Grilled-Chicken-5-500x500.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/02/Dijon-Grilled-Chicken-5-500x375.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/02/Dijon-Grilled-Chicken-5-480x270.jpg"
+    ],
+    "video": {
+      "name": "Grilled Dijon Chicken",
+      "description": "Made with four ingredients, this simple dijon grilled chicken is quick to cook and full on flavor. Perfect for an easy weeknight dinner.",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/UNSacfuj-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/UNSacfuj.mp4",
+      "uploadDate": "2021-05-16T17:00:23.000Z",
+      "@type": "VideoObject"
+    },
+    "recipeYield": [
+      "4",
+      "4 servings"
+    ],
+    "prepTime": "PT5M",
+    "cookTime": "PT15M",
+    "totalTime": "PT20M",
+    "recipeIngredient": [
+      "4  boneless skinless chicken breasts or thighs",
+      "¼ cup olive oil",
+      "1 tablespoon Dijon mustard",
+      "3  garlic cloves (pressed)",
+      "½ teaspoon salt",
+      "½ teaspoon black pepper"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Prepare the marinade by whisking the olive oil, Dijon mustard, garlic, salt and pepper in a large bowl.",
+        "name": "Prepare the marinade by whisking the olive oil, Dijon mustard, garlic, salt and pepper in a large bowl.",
+        "url": "https://feelgoodfoodie.net/recipe/grilled-dijon-chicken/#wprm-recipe-30960-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Add the chicken breast into the bowl and toss to combine and evenly coat the chicken with the marinade. Refrigerate and let marinate for 2 hours or up to 24 hours.",
+        "name": "Add the chicken breast into the bowl and toss to combine and evenly coat the chicken with the marinade. Refrigerate and let marinate for 2 hours or up to 24 hours.",
+        "url": "https://feelgoodfoodie.net/recipe/grilled-dijon-chicken/#wprm-recipe-30960-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Preheat grill or grill pan to medium heat. Place chicken on the grill for 5-7 minutes. Flip over and cook until golden brown and the juices run dry, approximately 5-7 more minutes.",
+        "name": "Preheat grill or grill pan to medium heat. Place chicken on the grill for 5-7 minutes. Flip over and cook until golden brown and the juices run dry, approximately 5-7 more minutes.",
+        "url": "https://feelgoodfoodie.net/recipe/grilled-dijon-chicken/#wprm-recipe-30960-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Remove chicken from the grill. Sprinkle with parsley and serve as desired.",
+        "name": "Remove chicken from the grill. Sprinkle with parsley and serve as desired.",
+        "url": "https://feelgoodfoodie.net/recipe/grilled-dijon-chicken/#wprm-recipe-30960-step-0-3"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "266",
+      "reviewCount": "7"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Really tasty! I added oregano and fresh thyme. Put the breast pieces into my sandwich grill press for 8 minutes and was cooked beautifully. I've tried this a few times and it is better if you can leave it to marinate for more than a few hours but at minimum 2 hours I would say so the meat gets more on the tender soft side of things.",
+        "author": {
+          "@type": "Person",
+          "name": "Jamie"
+        },
+        "datePublished": "2023-11-19"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Easy and delicious recipe! I used chicken thighs and marinated overnight. They came out great.",
+        "author": {
+          "@type": "Person",
+          "name": "Chelsea"
+        },
+        "datePublished": "2022-10-23"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Best chicken ever! So simple but full of so much flavor! Definitely adding to my rotation! Thank you!",
+        "author": {
+          "@type": "Person",
+          "name": "Lisa"
+        },
+        "datePublished": "2021-07-17"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Delicious! The Dijon mustard marinade was scrumptious. I reserved some of the marinade and coated the chicken with it once it was almost done cooking. I didn't grill it - I pan fried it in a bit of butter. My husband said, \"don't change a thing.\" Thanks for the recipe!",
+        "author": {
+          "@type": "Person",
+          "name": "Daisy Esparza"
+        },
+        "datePublished": "2021-05-25"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Easy recipe for grill",
+        "author": {
+          "@type": "Person",
+          "name": "Nick"
+        },
+        "datePublished": "2021-05-05"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "After seeing this marinade posted on IG, I made it and then cut up the chicken into small pieces and broiled it! It was phenomenal and works well as a standalone on rice pilaf, or in a wrap/salad. My husband is normally really picky about chicken and he loved it! This is so simple but the flavor is unreal. Thank you!",
+        "author": {
+          "@type": "Person",
+          "name": "Mary"
+        },
+        "datePublished": "2021-04-23"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "By far the best chicken breast I have ever made/had. I always run away from making chicken breast. This was so juicy and delicious and the best part, we couldn't taste the mustard.  Thanks for sharing 💚❤",
+        "author": {
+          "@type": "Person",
+          "name": "Abiola"
+        },
+        "datePublished": "2021-04-23"
+      }
+    ],
+    "recipeCategory": [
+      "Main Course"
+    ],
+    "recipeCuisine": [
+      "American"
+    ],
+    "suitableForDiet": [
+      "https://schema.org/GlutenFreeDiet"
+    ],
+    "keywords": "dijon chicken breast, dijon mustard chicken marinade, grilled mustard chicken",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "207 kcal",
+      "carbohydrateContent": "1 g",
+      "proteinContent": "24 g",
+      "fatContent": "11 g",
+      "saturatedFatContent": "2 g",
+      "transFatContent": "1 g",
+      "cholesterolContent": "72 mg",
+      "sodiumContent": "465 mg",
+      "fiberContent": "1 g",
+      "sugarContent": "1 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://feelgoodfoodie.net/recipe/grilled-dijon-chicken/#recipe",
+    "isPartOf": {
+      "@id": "https://feelgoodfoodie.net/recipe/grilled-dijon-chicken/#article"
+    },
+    "mainEntityOfPage": "https://feelgoodfoodie.net/recipe/grilled-dijon-chicken/"
+  },
+  "audit": [
+    "unmapped:video|aggregateRating|review|suitableForDiet"
+  ]
+}

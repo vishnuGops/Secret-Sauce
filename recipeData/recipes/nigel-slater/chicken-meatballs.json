@@ -1,0 +1,286 @@
+{
+  "schemaVersion": 1,
+  "id": "nigel-slater/chicken-meatballs",
+  "slug": "chicken-meatballs",
+  "chefId": "chef_nigel-slater",
+  "chefSlug": "nigel-slater",
+  "chefName": "Nigel Slater",
+  "title": "Chicken meatballs",
+  "description": "Deeply savoury meatballs with chicken, bacon and Parmesan make a great snack with drinks or an incredible sandwich.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/hotchickencakeswithh_92226",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/hotchickencakeswithh_92226",
+    "retrievedAt": "2026-09-11T00:28:43.875Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Nigel Slater"
+    ],
+    "datePublished": "2010-10-28T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "0072ea4e657600fc6a4cdd087fcc49a55d3f81edb3ffb47702e50319d7eb395f",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Light meals & snacks"
+  ],
+  "keywords": [
+    "quick",
+    "marvellous meatballs",
+    "making the most of mince",
+    "meat on the side",
+    "spring recipes",
+    "student food",
+    "meatballs",
+    "chicken mince",
+    "nut free",
+    "pregnancy friendly",
+    "Nigel Slater's Simple Suppers"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "70g/2½oz fresh white breadcrumbs",
+          "quantity": 70,
+          "quantityText": "70",
+          "unit": "g",
+          "name": "/2½oz fresh white breadcrumbs",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "500g/17½oz chicken mince",
+          "quantity": 500,
+          "quantityText": "500",
+          "unit": "g",
+          "name": "/17½oz chicken mince",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 rashers streaky bacon, finely chopped",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": null,
+          "name": "rashers streaky bacon",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 lemon, zest and juice",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "lemon, zest and juice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 sprigs fresh thyme, leaves only, roughly chopped",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": "sprigs",
+          "name": "fresh thyme",
+          "note": "leaves only, roughly chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "3 heaped tbsp freshly grated Parmesan",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "heaped tbsp freshly grated Parmesan",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1-2 tbsp olive oil",
+          "quantity": 1,
+          "quantityText": "1-2",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To serve",
+      "items": [
+        {
+          "raw": "mayonnaise",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "mayonnaise",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "lettuce leaves",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "lettuce leaves",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Place the breadcrumbs, chicken and chopped bacon into a mixing bowl. Grate the lemon zest in with the chicken and bacon, then halve and squeeze the lemon. Add the lemon juice to the mixture with the roughly chopped thyme leaves. Tip in the grated parmesan. Season the mixture with a little salt, then more generously with black pepper. Mix thoroughly.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place the breadcrumbs, chicken and chopped bacon into a mixing bowl. Grate the lemon zest in with the chicken and bacon, then halve and squeeze the lemon. Add the lemon juice to the mixture with the roughly chopped thyme leaves. Tip in the grated parmesan. Season the mixture with a little salt, then more generously with black pepper. Mix thoroughly."
+    },
+    {
+      "order": 2,
+      "text": "Shape the mixture into small balls or patties. Warm the olive oil in a non-stick pan. Fry them in the oil, about eight at a time, for 4-5 minutes until they are crisp and golden-brown on all sides. Lower the heat and leave to cook through to the middle, about 6-8 minutes more. I tend to turn them no more than once or twice during cooking so they develop a crisp, slightly sticky exterior.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Shape the mixture into small balls or patties. Warm the olive oil in a non-stick pan. Fry them in the oil, about eight at a time, for 4-5 minutes until they are crisp and golden-brown on all sides. Lower the heat and leave to cook through to the middle, about 6-8 minutes more. I tend to turn them no more than once or twice during cooking so they develop a crisp, slightly sticky exterior."
+    },
+    {
+      "order": 3,
+      "text": "Remove the cakes from the pan and place on large, crisp lettuce leaves, add a dollop of mayonnaise and wrap the cakes in the leaves.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove the cakes from the pan and place on large, crisp lettuce leaves, add a dollop of mayonnaise and wrap the cakes in the leaves."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/hotchickencakeswithh_92226_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 7,
+      "ratingValue": 4.857142857142857
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Deeply savoury meatballs with chicken, bacon and Parmesan make a great snack with drinks or an incredible sandwich.",
+    "headline": "Chicken meatballs",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/hotchickencakeswithh_92226_16x9.jpg"
+    },
+    "name": "Chicken meatballs",
+    "author": {
+      "@type": "Person",
+      "name": "Nigel Slater"
+    },
+    "datePublished": "2010-10-28T00:00:00.000Z",
+    "dateModified": "2025-05-19T15:09:10.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 7,
+      "ratingValue": 4.857142857142857
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, marvellous meatballs, making the most of mince, meat on the side, spring recipes , student food, meatballs, chicken mince, nut free, pregnancy friendly, Nigel Slater's Simple Suppers",
+    "recipeCategory": "Light meals & snacks",
+    "recipeIngredient": [
+      "70g/2½oz fresh white breadcrumbs",
+      "500g/17½oz chicken mince",
+      "6 rashers streaky bacon, finely chopped",
+      "1 lemon, zest and juice",
+      "6 sprigs fresh thyme, leaves only, roughly chopped",
+      "3 heaped tbsp freshly grated Parmesan",
+      "salt and freshly ground black pepper",
+      "1-2 tbsp olive oil",
+      "mayonnaise",
+      "lettuce leaves"
+    ],
+    "recipeInstructions": [
+      "Place the breadcrumbs, chicken and chopped bacon into a mixing bowl. Grate the lemon zest in with the chicken and bacon, then halve and squeeze the lemon. Add the lemon juice to the mixture with the roughly chopped thyme leaves. Tip in the grated parmesan. Season the mixture with a little salt, then more generously with black pepper. Mix thoroughly.",
+      "Shape the mixture into small balls or patties. Warm the olive oil in a non-stick pan. Fry them in the oil, about eight at a time, for 4-5 minutes until they are crisp and golden-brown on all sides. Lower the heat and leave to cook through to the middle, about 6-8 minutes more. I tend to turn them no more than once or twice during cooking so they develop a crisp, slightly sticky exterior.",
+      "Remove the cakes from the pan and place on large, crisp lettuce leaves, add a dollop of mayonnaise and wrap the cakes in the leaves."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:3",
+    "range-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

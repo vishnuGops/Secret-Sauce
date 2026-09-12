@@ -1,0 +1,391 @@
+{
+  "schemaVersion": 1,
+  "id": "denise-browning/chicken-casserole-nests",
+  "slug": "chicken-casserole-nests",
+  "chefId": "chef_denise-browning",
+  "chefSlug": "denise-browning",
+  "chefName": "Denise Browning",
+  "title": "Chicken Casserole Nests",
+  "description": "A healthy, easy baked chicken casserole nests made from pasta nests filled with a mixture of cheeses, peas, and chicken, layered on a pool of tomato sauce.",
+  "source": {
+    "sourceUrl": "https://www.easyanddelish.com/chicken-casserole-nests/",
+    "finalUrl": "https://www.easyanddelish.com/chicken-casserole-nests/",
+    "retrievedAt": "2026-09-11T02:47:35.856Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2014-08-27T08:00:27+00:00",
+    "rights": "Easy and Delish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "abbdfb1093eceae3a0a5353edaf3b64875bbefcf546cb15b895bc3a4c98fb129",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 5,
+    "cookMinutes": 55,
+    "totalMinutes": 60,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "American"
+  ],
+  "category": [
+    "Main Course"
+  ],
+  "keywords": [
+    "comforting main course",
+    "Gemini said Chicken Casserole Nests",
+    "traditional pasta"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the sauce",
+      "items": [
+        {
+          "raw": "5 cups of your favorite store-bought tomato sauce",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": "cups",
+          "name": "of your favorite store-bought tomato sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 teaspoons garlic powder",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "garlic powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ cup white wine (optional)",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "cup",
+          "name": "white wine (optional)",
+          "note": null,
+          "isOptional": true
+        },
+        {
+          "raw": "2 tablespoon chopped fresh basil leaves (or 1-2 teaspoons of dried)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "chopped fresh basil leaves (or 1-2 teaspoons of dried)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the pasta nests",
+      "items": [
+        {
+          "raw": "8 fettuccine nests (uncooked (pick the nests that have a wider opening in the center))",
+          "quantity": 8,
+          "quantityText": "8",
+          "unit": null,
+          "name": "fettuccine nests (uncooked (pick the nests that have a wider opening in the center))",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 cup part skim ricotta cheese",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 cup part skim ricotta cheese",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 cup shredded reduced-fat provolone or mild cheddar cheese",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 cup shredded reduced-fat provolone or mild cheddar cheese",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ cup frozen peas",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "cup",
+          "name": "frozen peas",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 pound Tyson Trimmed and Ready Chicken Breast Tenderloin (8 ounces)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 pound Tyson Trimmed and Ready Chicken Breast Tenderloin (8 ounces)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 pinch salt and ground black pepper",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "pinch",
+          "name": "salt and ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tablespoons olive oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Grated Parmesan cheese to sprinkle (optional)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Grated Parmesan cheese to sprinkle (optional)",
+          "note": null,
+          "isOptional": true
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 350 degrees F (about 180 degrees C).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 350 degrees F (about 180 degrees C).",
+        "name": "Preheat the oven to 350 degrees F (about 180 degrees C).",
+        "url": "https://www.easyanddelish.com/chicken-casserole-nests/#wprm-recipe-47370-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Prepare the sauce: In a medium stainless steel saucepan, mix together all ingredients until combined and bring to a boil over medium-high heat, stirring occasionally. Pour into a large Pyrex or casserole dish, and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Prepare the sauce: In a medium stainless steel saucepan, mix together all ingredients until combined and bring to a boil over medium-high heat, stirring occasionally. Pour into a large Pyrex or casserole dish, and set aside.",
+        "name": "Prepare the sauce: In a medium stainless steel saucepan, mix together all ingredients until combined and bring to a boil over medium-high heat, stirring occasionally. Pour into a large Pyrex or casserole dish, and set aside.",
+        "url": "https://www.easyanddelish.com/chicken-casserole-nests/#wprm-recipe-47370-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "For the pasta nests: Arrange uncooked pasta nests on top of the hot tomato sauce, keeping each a bit of a distance from the others. Using a spoon, ladle some of the hot tomato sauce over each nest to moisten. In a medium bowl, mix together the cheeses and peas, and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "For the pasta nests: Arrange uncooked pasta nests on top of the hot tomato sauce, keeping each a bit of a distance from the others. Using a spoon, ladle some of the hot tomato sauce over each nest to moisten. In a medium bowl, mix together the cheeses and peas, and set aside.",
+        "name": "For the pasta nests: Arrange uncooked pasta nests on top of the hot tomato sauce, keeping each a bit of a distance from the others. Using a spoon, ladle some of the hot tomato sauce over each nest to moisten. In a medium bowl, mix together the cheeses and peas, and set aside.",
+        "url": "https://www.easyanddelish.com/chicken-casserole-nests/#wprm-recipe-47370-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Pat dry the chicken with paper towels and cut into small pieces. Season chicken pieces with salt and pepper. In a medium non-stick skillet, heat the olive oil over medium-high heat and brown the chicken (about 2-3 minutes). Mix into the cheese-pea mixture. Spoon cheese-chicken mixture into the raw pasta nests. Cover baking dish tightly with aluminum foil (If necessary, grease the interior of the sheet with non-stick cooking spray in order to avoid the cheeses sticking to the foil). Bake for about 40-45 minutes. Remove foil and sprinkle grated Parmesan cheese on top of the pasta nests if desired. Serve chicken casserole nests hot (2 nests per person). A fresh salad or steamed vegetables, if desired, can accompany chicken casserole nests. Enjoy our chicken casserole nests!!!",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Pat dry the chicken with paper towels and cut into small pieces. Season chicken pieces with salt and pepper. In a medium non-stick skillet, heat the olive oil over medium-high heat and brown the chicken (about 2-3 minutes). Mix into the cheese-pea mixture. Spoon cheese-chicken mixture into the raw pasta nests. Cover baking dish tightly with aluminum foil (If necessary, grease the interior of the sheet with non-stick cooking spray in order to avoid the cheeses sticking to the foil). Bake for about 40-45 minutes. Remove foil and sprinkle grated Parmesan cheese on top of the pasta nests if desired. Serve chicken casserole nests hot (2 nests per person). A fresh salad or steamed vegetables, if desired, can accompany chicken casserole nests. Enjoy our chicken casserole nests!!!",
+        "name": "Pat dry the chicken with paper towels and cut into small pieces. Season chicken pieces with salt and pepper. In a medium non-stick skillet, heat the olive oil over medium-high heat and brown the chicken (about 2-3 minutes). Mix into the cheese-pea mixture. Spoon cheese-chicken mixture into the raw pasta nests. Cover baking dish tightly with aluminum foil (If necessary, grease the interior of the sheet with non-stick cooking spray in order to avoid the cheeses sticking to the foil). Bake for about 40-45 minutes. Remove foil and sprinkle grated Parmesan cheese on top of the pasta nests if desired. Serve chicken casserole nests hot (2 nests per person). A fresh salad or steamed vegetables, if desired, can accompany chicken casserole nests. Enjoy our chicken casserole nests!!!",
+        "url": "https://www.easyanddelish.com/chicken-casserole-nests/#wprm-recipe-47370-step-0-3"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "servingSize": "1 serving",
+    "calories": "410 kcal"
+  },
+  "media": {
+    "coverImages": [
+      "https://www.easyanddelish.com/wp-content/uploads/2014/08/Chicken-Casserole-Nests.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2014/08/Chicken-Casserole-Nests-500x426.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2014/08/Chicken-Casserole-Nests-500x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2014/08/Chicken-Casserole-Nests-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.92",
+      "ratingCount": "23",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "My favorite chicken recipe is stir fry.  I eat a lot of fish.\nThanks for the contest.",
+        "author": {
+          "@type": "Person",
+          "name": "Sarah L"
+        },
+        "datePublished": "2014-10-26"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Chicken Casserole Nests",
+    "author": {
+      "@id": "https://www.easyanddelish.com/#/schema/person/4aa289bf19bceaa733ca6900648cfc47"
+    },
+    "description": "A healthy, easy baked chicken casserole nests made from pasta nests filled with a mixture of cheeses, peas, and chicken, layered on a pool of tomato sauce.",
+    "datePublished": "2014-08-27T08:00:27+00:00",
+    "image": [
+      "https://www.easyanddelish.com/wp-content/uploads/2014/08/Chicken-Casserole-Nests.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2014/08/Chicken-Casserole-Nests-500x426.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2014/08/Chicken-Casserole-Nests-500x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2014/08/Chicken-Casserole-Nests-480x270.jpg"
+    ],
+    "recipeYield": [
+      "4"
+    ],
+    "prepTime": "PT5M",
+    "cookTime": "PT55M",
+    "totalTime": "PT60M",
+    "recipeIngredient": [
+      "For the sauce:",
+      "5 cups of your favorite store-bought tomato sauce",
+      "2 teaspoons garlic powder",
+      "¼ cup white wine (optional)",
+      "2 tablespoon chopped fresh basil leaves (or 1-2 teaspoons of dried)",
+      "For the pasta nests:",
+      "8  fettuccine nests (uncooked (pick the nests that have a wider opening in the center))",
+      "1/2 cup part skim ricotta cheese",
+      "1/2 cup shredded reduced-fat provolone or mild cheddar cheese",
+      "¼ cup frozen peas",
+      "1/2 pound Tyson Trimmed and Ready Chicken Breast Tenderloin (8 ounces)",
+      "1 pinch salt and ground black pepper",
+      "2 tablespoons olive oil",
+      "Grated Parmesan cheese to sprinkle (optional)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 350 degrees F (about 180 degrees C).",
+        "name": "Preheat the oven to 350 degrees F (about 180 degrees C).",
+        "url": "https://www.easyanddelish.com/chicken-casserole-nests/#wprm-recipe-47370-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Prepare the sauce: In a medium stainless steel saucepan, mix together all ingredients until combined and bring to a boil over medium-high heat, stirring occasionally. Pour into a large Pyrex or casserole dish, and set aside.",
+        "name": "Prepare the sauce: In a medium stainless steel saucepan, mix together all ingredients until combined and bring to a boil over medium-high heat, stirring occasionally. Pour into a large Pyrex or casserole dish, and set aside.",
+        "url": "https://www.easyanddelish.com/chicken-casserole-nests/#wprm-recipe-47370-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "For the pasta nests: Arrange uncooked pasta nests on top of the hot tomato sauce, keeping each a bit of a distance from the others. Using a spoon, ladle some of the hot tomato sauce over each nest to moisten. In a medium bowl, mix together the cheeses and peas, and set aside.",
+        "name": "For the pasta nests: Arrange uncooked pasta nests on top of the hot tomato sauce, keeping each a bit of a distance from the others. Using a spoon, ladle some of the hot tomato sauce over each nest to moisten. In a medium bowl, mix together the cheeses and peas, and set aside.",
+        "url": "https://www.easyanddelish.com/chicken-casserole-nests/#wprm-recipe-47370-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Pat dry the chicken with paper towels and cut into small pieces. Season chicken pieces with salt and pepper. In a medium non-stick skillet, heat the olive oil over medium-high heat and brown the chicken (about 2-3 minutes). Mix into the cheese-pea mixture. Spoon cheese-chicken mixture into the raw pasta nests. Cover baking dish tightly with aluminum foil (If necessary, grease the interior of the sheet with non-stick cooking spray in order to avoid the cheeses sticking to the foil). Bake for about 40-45 minutes. Remove foil and sprinkle grated Parmesan cheese on top of the pasta nests if desired. Serve chicken casserole nests hot (2 nests per person). A fresh salad or steamed vegetables, if desired, can accompany chicken casserole nests. Enjoy our chicken casserole nests!!!",
+        "name": "Pat dry the chicken with paper towels and cut into small pieces. Season chicken pieces with salt and pepper. In a medium non-stick skillet, heat the olive oil over medium-high heat and brown the chicken (about 2-3 minutes). Mix into the cheese-pea mixture. Spoon cheese-chicken mixture into the raw pasta nests. Cover baking dish tightly with aluminum foil (If necessary, grease the interior of the sheet with non-stick cooking spray in order to avoid the cheeses sticking to the foil). Bake for about 40-45 minutes. Remove foil and sprinkle grated Parmesan cheese on top of the pasta nests if desired. Serve chicken casserole nests hot (2 nests per person). A fresh salad or steamed vegetables, if desired, can accompany chicken casserole nests. Enjoy our chicken casserole nests!!!",
+        "url": "https://www.easyanddelish.com/chicken-casserole-nests/#wprm-recipe-47370-step-0-3"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.92",
+      "ratingCount": "23",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "My favorite chicken recipe is stir fry.  I eat a lot of fish.\nThanks for the contest.",
+        "author": {
+          "@type": "Person",
+          "name": "Sarah L"
+        },
+        "datePublished": "2014-10-26"
+      }
+    ],
+    "recipeCategory": [
+      "Main Course"
+    ],
+    "recipeCuisine": [
+      "American"
+    ],
+    "keywords": "comforting main course, Gemini said Chicken Casserole Nests, traditional pasta",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "servingSize": "1 serving",
+      "calories": "410 kcal"
+    },
+    "@id": "https://www.easyanddelish.com/chicken-casserole-nests/#recipe",
+    "isPartOf": {
+      "@id": "https://www.easyanddelish.com/chicken-casserole-nests/#article"
+    },
+    "mainEntityOfPage": "https://www.easyanddelish.com/chicken-casserole-nests/"
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|review"
+  ]
+}

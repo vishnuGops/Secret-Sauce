@@ -1,0 +1,741 @@
+{
+  "schemaVersion": 1,
+  "id": "huy-vu/chicken-liver-pate-great-for-banh-mi",
+  "slug": "chicken-liver-pate-great-for-banh-mi",
+  "chefId": "chef_huy-vu",
+  "chefSlug": "huy-vu",
+  "chefName": "Huy Vu",
+  "title": "Chicken Liver Pâté (great for bánh mì)",
+  "description": "This creamy and buttery chicken liver pate is an easy to follow recipe and you'll want to make this for any Vietnamese bánh mì sandwich.",
+  "source": {
+    "sourceUrl": "https://www.hungryhuy.com/chicken-liver-pate/",
+    "finalUrl": "https://www.hungryhuy.com/chicken-liver-pate/",
+    "retrievedAt": "2026-09-11T03:14:35.019Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2020-09-19T21:19:36+00:00",
+    "rights": "Hungry Huy. Functional content plus a link, for internal app testing. Not redistributed.",
+    "pageTitle": "Chicken Liver Pâté Recipe (Great for Vietnamese Bánh Mì) - Hungry Huy",
+    "htmlSha256": "57939c58a74b2a16db90f1ad3714065799abb6fac8ea85a6b05e5f4969bc7f16",
+    "jsonLdBlockCount": 2,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": [
+        "equipment-from-html: 2"
+      ]
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "6"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 10,
+    "cookMinutes": 25,
+    "totalMinutes": 635,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Vietnamese"
+  ],
+  "category": [
+    "Appetizer",
+    "Sides"
+  ],
+  "keywords": [
+    "banh mi",
+    "chicken liver",
+    "pate"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1 lb chicken livers",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "lb",
+          "name": "chicken livers",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 c milk",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "c milk",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ lb ground pork (minced)",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "lb",
+          "name": "ground pork (minced)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp vegetable oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "vegetable oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¾ c yellow onion (about 1 small onion) (chopped)",
+          "quantity": 0.75,
+          "quantityText": "¾",
+          "unit": null,
+          "name": "c yellow onion (about 1 small onion) (chopped)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp garlic (about 5 cloves) (minced)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "garlic (about 5 cloves) (minced)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 tbsp butter (unsalted)",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "butter (unsalted)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp white sugar",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "white sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp fish sauce",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "fish sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp heavy cream",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "heavy cream",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp bourbon",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "bourbon",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp black pepper",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Prep liver by cleaning the livers under running water to remove any random debris and using a knife to cut out fatty pieces or dark brown spots.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Prep liver by cleaning the livers under running water to remove any random debris and using a knife to cut out fatty pieces or dark brown spots.",
+        "name": "Prep liver by cleaning the livers under running water to remove any random debris and using a knife to cut out fatty pieces or dark brown spots.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Put the livers into a glass container, pour milk until it covers all of the livers, and cover with a lid. Marinade the livers in milk overnight in the fridge.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Put the livers into a glass container, pour milk until it covers all of the livers, and cover with a lid. Marinade the livers in milk overnight in the fridge.",
+        "name": "Put the livers into a glass container, pour milk until it covers all of the livers, and cover with a lid. Marinade the livers in milk overnight in the fridge.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "The day after, remove the livers from the fridge, transfer them into a strainer to remove the excess milk, and rest on the counter to get to room temperature (about 20 minutes before cooking).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "The day after, remove the livers from the fridge, transfer them into a strainer to remove the excess milk, and rest on the counter to get to room temperature (about 20 minutes before cooking).",
+        "name": "The day after, remove the livers from the fridge, transfer them into a strainer to remove the excess milk, and rest on the counter to get to room temperature (about 20 minutes before cooking).",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Place the ground pork in the food processor and grind until it’s minced.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/blending-meat.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Place the ground pork in the food processor and grind until it’s minced.",
+        "name": "Place the ground pork in the food processor and grind until it’s minced.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-3",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/blending-meat.jpg"
+      }
+    },
+    {
+      "order": 5,
+      "text": "In a large saucepan over medium heat, add the vegetable oil and saute the onions for about two minutes or until fragrant, then add the garlic and saute for another one minute. Add the butter and stir until it melts.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a large saucepan over medium heat, add the vegetable oil and saute the onions for about two minutes or until fragrant, then add the garlic and saute for another one minute. Add the butter and stir until it melts.",
+        "name": "In a large saucepan over medium heat, add the vegetable oil and saute the onions for about two minutes or until fragrant, then add the garlic and saute for another one minute. Add the butter and stir until it melts.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-4"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Add the chicken livers and ground pork in the saucepan and simmer for 2 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cooking-liver.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add the chicken livers and ground pork in the saucepan and simmer for 2 minutes.",
+        "name": "Add the chicken livers and ground pork in the saucepan and simmer for 2 minutes.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-5",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cooking-liver.jpg"
+      }
+    },
+    {
+      "order": 7,
+      "text": "Then, mix in the other ingredients into the saucepan and cook for about 7 minutes or until the liver’s temperature measures to about 160 °F and it feels firmer to the touch. The whole cooking time should not take longer than 15 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": "160 °F",
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/taking-liver-temps.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Then, mix in the other ingredients into the saucepan and cook for about 7 minutes or until the liver’s temperature measures to about 160 °F and it feels firmer to the touch. The whole cooking time should not take longer than 15 minutes.",
+        "name": "Then, mix in the other ingredients into the saucepan and cook for about 7 minutes or until the liver’s temperature measures to about 160 °F and it feels firmer to the touch. The whole cooking time should not take longer than 15 minutes.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-6",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/taking-liver-temps.jpg"
+      }
+    },
+    {
+      "order": 8,
+      "text": "Turn off heat and let the liver mixture come to room temperature for about 30 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Turn off heat and let the liver mixture come to room temperature for about 30 minutes.",
+        "name": "Turn off heat and let the liver mixture come to room temperature for about 30 minutes.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-7"
+      }
+    },
+    {
+      "order": 9,
+      "text": "Once it’s cooled down, add everything into a food processor and chop until it’s smooth. Option to strain if you want a smoother texture.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/pate-processing-before-after-scaled.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Once it’s cooled down, add everything into a food processor and chop until it’s smooth. Option to strain if you want a smoother texture.",
+        "name": "Once it’s cooled down, add everything into a food processor and chop until it’s smooth. Option to strain if you want a smoother texture.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-8",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/pate-processing-before-after-scaled.jpg"
+      }
+    },
+    {
+      "order": 10,
+      "text": "Transfer the pâté to containers and cling wrap over the top of the container to prevent the pâté from drying out. Chill in the fridge for at least 2 hours to let it form.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Transfer the pâté to containers and cling wrap over the top of the container to prevent the pâté from drying out. Chill in the fridge for at least 2 hours to let it form.",
+        "name": "Transfer the pâté to containers and cling wrap over the top of the container to prevent the pâté from drying out. Chill in the fridge for at least 2 hours to let it form.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-9"
+      }
+    },
+    {
+      "order": 11,
+      "text": "Optional: line containers with cling wrap to prevent it from sticking after forming in the fridge. I like to use airtight containers with a lid so the pâté will stay fresh in the fridge. You also can add a top layer of clarified butter to further keep the pâté from molding.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Optional: line containers with cling wrap to prevent it from sticking after forming in the fridge. I like to use airtight containers with a lid so the pâté will stay fresh in the fridge. You also can add a top layer of clarified butter to further keep the pâté from molding.",
+        "name": "Optional: line containers with cling wrap to prevent it from sticking after forming in the fridge. I like to use airtight containers with a lid so the pâté will stay fresh in the fridge. You also can add a top layer of clarified butter to further keep the pâté from molding.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-10"
+      }
+    },
+    {
+      "order": 12,
+      "text": "Transfer the pâté from the fridge and onto a serving container and eat immediately. Fresh pâté can be stored in the fridge for up to three to four days. You can also freeze untouched pâté too.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/liver-pate-spread.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Transfer the pâté from the fridge and onto a serving container and eat immediately. Fresh pâté can be stored in the fridge for up to three to four days. You can also freeze untouched pâté too.",
+        "name": "Transfer the pâté from the fridge and onto a serving container and eat immediately. Fresh pâté can be stored in the fridge for up to three to four days. You can also freeze untouched pâté too.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-11",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/liver-pate-spread.jpg"
+      }
+    }
+  ],
+  "equipment": [
+    "food processor",
+    "blender (optional)"
+  ],
+  "supplies": [],
+  "nutrition": {
+    "calories": "332.5 kcal",
+    "carbohydrateContent": "6.7 g",
+    "proteinContent": "21 g",
+    "fatContent": "23.9 g",
+    "saturatedFatContent": "12.2 g",
+    "cholesterolContent": "315.9 mg",
+    "sodiumContent": "628.2 mg",
+    "fiberContent": "0.4 g",
+    "sugarContent": "4.6 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/liver-pate-closeup.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/liver-pate-closeup-500x500.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/liver-pate-closeup-500x375.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/liver-pate-closeup-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.86",
+      "ratingCount": "14",
+      "reviewCount": "6"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4"
+        },
+        "reviewBody": "Found the pate a little too sweet for my taste, but overall this recipe is a keeper! Thanks for sharing! How long will this pate keep in the freezer?",
+        "author": {
+          "@type": "Person",
+          "name": "Diane T"
+        },
+        "datePublished": "2026-04-27"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4"
+        },
+        "reviewBody": "Delicious with very little gaminess",
+        "author": {
+          "@type": "Person",
+          "name": "Bonny Imbembe Tpele Chicha Hidza"
+        },
+        "datePublished": "2026-01-18"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Used a little less cognac then suggested, but really nice. Used it for making Vietnamese banh mi. Thank you for the recipe.",
+        "author": {
+          "@type": "Person",
+          "name": "Anh H"
+        },
+        "datePublished": "2025-12-03"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Hi Huy, My mom made this with pork liver.  I don't really like it because it's tasted kind of dry.  I am so glad that I found your post.  I just made it tonight.  It's tasted amazing!  I didn't put alcohol in it because our little one is eating it too.  Thank you for a great recipe.  I cooked thit kho from your recipe.  My whole family love it.",
+        "author": {
+          "@type": "Person",
+          "name": "Han Gonzales"
+        },
+        "datePublished": "2025-03-05"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thank you for the recipe.  Second time I did not add sugar since I used sweet opinion and triple the cognac",
+        "author": {
+          "@type": "Person",
+          "name": "Olivia"
+        },
+        "datePublished": "2021-12-05"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Great",
+        "author": {
+          "@type": "Person",
+          "name": "Diana Vuong"
+        },
+        "datePublished": "2020-09-27"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Chicken Liver Pâté (great for bánh mì)",
+    "author": {
+      "@id": "https://www.hungryhuy.com/#/schema/person/77ba703312129b3930232d1c829f0ff0"
+    },
+    "description": "This creamy and buttery chicken liver pate is an easy to follow recipe and you&#039;ll want to make this for any Vietnamese bánh mì sandwich.",
+    "datePublished": "2020-09-19T21:19:36+00:00",
+    "image": [
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/liver-pate-closeup.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/liver-pate-closeup-500x500.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/liver-pate-closeup-500x375.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/liver-pate-closeup-480x270.jpg"
+    ],
+    "recipeYield": [
+      "6"
+    ],
+    "prepTime": "PT10M",
+    "cookTime": "PT25M",
+    "totalTime": "PT635M",
+    "recipeIngredient": [
+      "1 lb chicken livers",
+      "1 c milk",
+      "½ lb ground pork (minced)",
+      "1 tbsp vegetable oil",
+      "¾ c yellow onion (about 1 small onion) (chopped)",
+      "1 tbsp garlic (about 5 cloves) (minced)",
+      "4 tbsp butter (unsalted)",
+      "2 tsp white sugar",
+      "1 tsp fish sauce",
+      "1 tbsp heavy cream",
+      "1 tbsp bourbon",
+      "1 tsp salt",
+      "½ tsp black pepper"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Prep liver by cleaning the livers under running water to remove any random debris and using a knife to cut out fatty pieces or dark brown spots.",
+        "name": "Prep liver by cleaning the livers under running water to remove any random debris and using a knife to cut out fatty pieces or dark brown spots.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Put the livers into a glass container, pour milk until it covers all of the livers, and cover with a lid. Marinade the livers in milk overnight in the fridge.",
+        "name": "Put the livers into a glass container, pour milk until it covers all of the livers, and cover with a lid. Marinade the livers in milk overnight in the fridge.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "The day after, remove the livers from the fridge, transfer them into a strainer to remove the excess milk, and rest on the counter to get to room temperature (about 20 minutes before cooking).",
+        "name": "The day after, remove the livers from the fridge, transfer them into a strainer to remove the excess milk, and rest on the counter to get to room temperature (about 20 minutes before cooking).",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Place the ground pork in the food processor and grind until it’s minced.",
+        "name": "Place the ground pork in the food processor and grind until it’s minced.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-3",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/blending-meat.jpg"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "In a large saucepan over medium heat, add the vegetable oil and saute the onions for about two minutes or until fragrant, then add the garlic and saute for another one minute. Add the butter and stir until it melts.",
+        "name": "In a large saucepan over medium heat, add the vegetable oil and saute the onions for about two minutes or until fragrant, then add the garlic and saute for another one minute. Add the butter and stir until it melts.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Add the chicken livers and ground pork in the saucepan and simmer for 2 minutes.",
+        "name": "Add the chicken livers and ground pork in the saucepan and simmer for 2 minutes.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-5",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/cooking-liver.jpg"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Then, mix in the other ingredients into the saucepan and cook for about 7 minutes or until the liver’s temperature measures to about 160 °F and it feels firmer to the touch. The whole cooking time should not take longer than 15 minutes.",
+        "name": "Then, mix in the other ingredients into the saucepan and cook for about 7 minutes or until the liver’s temperature measures to about 160 °F and it feels firmer to the touch. The whole cooking time should not take longer than 15 minutes.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-6",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/taking-liver-temps.jpg"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Turn off heat and let the liver mixture come to room temperature for about 30 minutes.",
+        "name": "Turn off heat and let the liver mixture come to room temperature for about 30 minutes.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-7"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Once it’s cooled down, add everything into a food processor and chop until it’s smooth. Option to strain if you want a smoother texture.",
+        "name": "Once it’s cooled down, add everything into a food processor and chop until it’s smooth. Option to strain if you want a smoother texture.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-8",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/pate-processing-before-after-scaled.jpg"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Transfer the pâté to containers and cling wrap over the top of the container to prevent the pâté from drying out. Chill in the fridge for at least 2 hours to let it form.",
+        "name": "Transfer the pâté to containers and cling wrap over the top of the container to prevent the pâté from drying out. Chill in the fridge for at least 2 hours to let it form.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-9"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Optional: line containers with cling wrap to prevent it from sticking after forming in the fridge. I like to use airtight containers with a lid so the pâté will stay fresh in the fridge. You also can add a top layer of clarified butter to further keep the pâté from molding.",
+        "name": "Optional: line containers with cling wrap to prevent it from sticking after forming in the fridge. I like to use airtight containers with a lid so the pâté will stay fresh in the fridge. You also can add a top layer of clarified butter to further keep the pâté from molding.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-10"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Transfer the pâté from the fridge and onto a serving container and eat immediately. Fresh pâté can be stored in the fridge for up to three to four days. You can also freeze untouched pâté too.",
+        "name": "Transfer the pâté from the fridge and onto a serving container and eat immediately. Fresh pâté can be stored in the fridge for up to three to four days. You can also freeze untouched pâté too.",
+        "url": "https://www.hungryhuy.com/chicken-liver-pate/#wprm-recipe-9137-step-0-11",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/liver-pate-spread.jpg"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.86",
+      "ratingCount": "14",
+      "reviewCount": "6"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4"
+        },
+        "reviewBody": "Found the pate a little too sweet for my taste, but overall this recipe is a keeper! Thanks for sharing! How long will this pate keep in the freezer?",
+        "author": {
+          "@type": "Person",
+          "name": "Diane T"
+        },
+        "datePublished": "2026-04-27"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4"
+        },
+        "reviewBody": "Delicious with very little gaminess",
+        "author": {
+          "@type": "Person",
+          "name": "Bonny Imbembe Tpele Chicha Hidza"
+        },
+        "datePublished": "2026-01-18"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Used a little less cognac then suggested, but really nice. Used it for making Vietnamese banh mi. Thank you for the recipe.",
+        "author": {
+          "@type": "Person",
+          "name": "Anh H"
+        },
+        "datePublished": "2025-12-03"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Hi Huy, My mom made this with pork liver.  I don't really like it because it's tasted kind of dry.  I am so glad that I found your post.  I just made it tonight.  It's tasted amazing!  I didn't put alcohol in it because our little one is eating it too.  Thank you for a great recipe.  I cooked thit kho from your recipe.  My whole family love it.",
+        "author": {
+          "@type": "Person",
+          "name": "Han Gonzales"
+        },
+        "datePublished": "2025-03-05"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thank you for the recipe.  Second time I did not add sugar since I used sweet opinion and triple the cognac",
+        "author": {
+          "@type": "Person",
+          "name": "Olivia"
+        },
+        "datePublished": "2021-12-05"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Great",
+        "author": {
+          "@type": "Person",
+          "name": "Diana Vuong"
+        },
+        "datePublished": "2020-09-27"
+      }
+    ],
+    "recipeCategory": [
+      "Appetizer",
+      "Sides"
+    ],
+    "recipeCuisine": [
+      "Vietnamese"
+    ],
+    "keywords": "banh mi, chicken liver, pate",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "332.5 kcal",
+      "carbohydrateContent": "6.7 g",
+      "proteinContent": "21 g",
+      "fatContent": "23.9 g",
+      "saturatedFatContent": "12.2 g",
+      "cholesterolContent": "315.9 mg",
+      "sodiumContent": "628.2 mg",
+      "fiberContent": "0.4 g",
+      "sugarContent": "4.6 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://www.hungryhuy.com/chicken-liver-pate/#recipe",
+    "isPartOf": {
+      "@id": "https://www.hungryhuy.com/chicken-liver-pate/#article"
+    },
+    "mainEntityOfPage": "https://www.hungryhuy.com/chicken-liver-pate/"
+  },
+  "audit": [
+    "unmapped:aggregateRating|review"
+  ]
+}

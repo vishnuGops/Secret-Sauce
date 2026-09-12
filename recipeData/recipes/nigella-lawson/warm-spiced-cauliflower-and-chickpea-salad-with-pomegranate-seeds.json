@@ -1,0 +1,396 @@
+{
+  "schemaVersion": 1,
+  "id": "nigella-lawson/warm-spiced-cauliflower-and-chickpea-salad-with-pomegranate-seeds",
+  "slug": "warm-spiced-cauliflower-and-chickpea-salad-with-pomegranate-seeds",
+  "chefId": "chef_nigella-lawson",
+  "chefSlug": "nigella-lawson",
+  "chefName": "Nigella Lawson",
+  "title": "Warm spiced cauliflower and chickpea salad with pomegranate seeds",
+  "description": "This is one of my favourite suppers, although there’s nothing that says you can’t serve this as a vegetable side. And you could also bolster it further by crumbling in some feta. But for me, it is perfect just as it is.\n\nEach serving provides 483 kcal, 17g protein, 39g carbohydrate (of which 14g sugars), 26g fat (of which 3.5g saturates), 15g fibre and 2.7g salt.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/warm_spiced_cauliflower_36652",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/warm_spiced_cauliflower_36652",
+    "retrievedAt": "2026-09-11T00:26:18.865Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Nigella Lawson"
+    ],
+    "datePublished": "2015-11-02T16:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "dabe76166b3e4b420ffa462bb7c54a69506919e9ba677bc25d75f8bf7677a361",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 2"
+    ],
+    "servings": 2
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "easy chickpea",
+    "30 minute meals for two",
+    "easy cauliflower",
+    "fruity salads",
+    "our best bean",
+    "gluten-free picnic",
+    "gut-health",
+    "healthy lunches",
+    "high fibre meals",
+    "high fibre dinners",
+    "high fibre lunch",
+    "make-ahead salads",
+    "prep-ahead meals",
+    "mediterranean diet",
+    "nigella's vegetarian favourites",
+    "quick vegetarian",
+    "summery traybakes",
+    "tinned bean salads",
+    "vegan cauliflower dinners",
+    "vegan lunch",
+    "vegan starters",
+    "veggie lunchbox ideas",
+    "warm and filling salads",
+    "winter packed lunch ideas",
+    "summer dinner",
+    "valentine's day",
+    "veganuary",
+    "warm salad",
+    "cauliflower",
+    "chickpea",
+    "dairy free",
+    "egg free",
+    "healthy",
+    "nut free",
+    "pregnancy friendly",
+    "vegan",
+    "vegetarian",
+    "Simply Nigella"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "3 tbsp regular olive oil",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "regular olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp ground cinnamon",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "ground cinnamon",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp cumin seeds",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "cumin seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 small head cauliflower, trimmed and divided into small florets",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "small head cauliflower",
+          "note": "trimmed and divided into small florets",
+          "isOptional": false
+        },
+        {
+          "raw": "250g/9oz home-cooked chickpeas (drained weight) or a 400g tin chickpeas",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "/9oz home-cooked chickpeas (drained weight) or a 400g tin chickpeas",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1–2 tbsp harissa, to taste",
+          "quantity": 1,
+          "quantityText": "1–2",
+          "unit": "tbsp",
+          "name": "harissa",
+          "note": "to taste",
+          "isOptional": false
+        },
+        {
+          "raw": "4 small ripe vine tomatoes (approximately 150g/5½oz), quartered",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "small ripe vine tomatoes (approximately 150g/5½oz)",
+          "note": "quartered",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp sea salt flakes, or to taste",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "sea salt flakes",
+          "note": "or to taste",
+          "isOptional": false
+        },
+        {
+          "raw": "3–4 tbsp pomegranate seeds",
+          "quantity": 3,
+          "quantityText": "3–4",
+          "unit": "tbsp",
+          "name": "pomegranate seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "large bunch (approximately 100g/3½oz) flatleaf parsley",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "large bunch (approximately 100g/3½oz) flatleaf parsley",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 220C/200C Fan/Gas 7.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 220C/200C Fan/Gas 7. "
+    },
+    {
+      "order": 2,
+      "text": "Pour the oil into a large bowl, add the cinnamon and cumin seeds, and stir. Tip in the cauliflower and toss to coat. Pour into a small oven tray (I mostly use a disposable foil baking tray measuring 30x20cm/12x8in) and place in the oven for 15 minutes. Don’t wash out the bowl you’ve been using.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pour the oil into a large bowl, add the cinnamon and cumin seeds, and stir. Tip in the cauliflower and toss to coat. Pour into a small oven tray (I mostly use a disposable foil baking tray measuring 30x20cm/12x8in) and place in the oven for 15 minutes. Don’t wash out the bowl you’ve been using."
+    },
+    {
+      "order": 3,
+      "text": "Add the chickpeas to the bowl, and add the harissa, tasting it first to see if you want both tablespoonfuls. Toss to coat. Add the tomatoes to the bowl, and stir to mix.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the chickpeas to the bowl, and add the harissa, tasting it first to see if you want both tablespoonfuls. Toss to coat. Add the tomatoes to the bowl, and stir to mix. "
+    },
+    {
+      "order": 4,
+      "text": "Remove the cauliflower and quickly tip the chickpeas and tomatoes over the cauliflower. Toss to combine and return to the oven for 15 minutes, or until the cauliflower is tender.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove the cauliflower and quickly tip the chickpeas and tomatoes over the cauliflower. Toss to combine and return to the oven for 15 minutes, or until the cauliflower is tender."
+    },
+    {
+      "order": 5,
+      "text": "Remove from the oven and sprinkle the salt over the vegetables, add half of the pomegranate seeds and toss to combine. Divide between 2 bowls. Divide the parsley leaves – without chopping them – between the 2 bowls and toss to mix. Scatter with the remaining pomegranate seeds and serve.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove from the oven and sprinkle the salt over the vegetables, add half of the pomegranate seeds and toss to combine. Divide between 2 bowls.  Divide the parsley leaves – without chopping them – between the 2 bowls and toss to mix. Scatter with the remaining pomegranate seeds and serve."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "483kcal",
+    "proteinContent": "17g",
+    "carbohydrateContent": "39g",
+    "fatContent": "26g",
+    "fiberContent": "15g",
+    "saturatedFatContent": "3.5g",
+    "sugarContent": "14g"
+  },
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/warm_spiced_cauliflower_36652_16x9.jpg"
+    ],
+    "video": [
+      {
+        "description": "This is one of my favourite suppers, although there’s nothing that says you can’t serve this as a vegetable side. And you could also bolster it further by crumbling in some feta. But for me, it is perfect just as it is.",
+        "duration": "PT4M14S",
+        "name": "Warm spiced cauliflower and chickpea salad with pomegranate seeds",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/warm_spiced_cauliflower_36652_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:38:10.000Z"
+      }
+    ]
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "Cool leftovers, then cover and refrigerate within 2 hours of making. They will keep in fridge for up to 2 days. This dish is very good cold, making it a fabulous packed lunch."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 60,
+      "ratingValue": 4.95
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/LowCalorieDiet",
+      "http://schema.org/VeganDiet",
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "This is one of my favourite suppers, although there’s nothing that says you can’t serve this as a vegetable side. And you could also bolster it further by crumbling in some feta. But for me, it is perfect just as it is.",
+        "duration": "PT4M14S",
+        "name": "Warm spiced cauliflower and chickpea salad with pomegranate seeds",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/warm_spiced_cauliflower_36652_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:38:10.000Z"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "This is one of my favourite suppers, although there’s nothing that says you can’t serve this as a vegetable side. And you could also bolster it further by crumbling in some feta. But for me, it is perfect just as it is.\r\n\r\nEach serving provides 483 kcal, 17g protein, 39g carbohydrate (of which 14g sugars), 26g fat (of which 3.5g saturates), 15g fibre and 2.7g salt.",
+    "headline": "Warm spiced cauliflower and chickpea salad with pomegranate seeds",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/warm_spiced_cauliflower_36652_16x9.jpg"
+    },
+    "name": "Warm spiced cauliflower and chickpea salad with pomegranate seeds",
+    "author": {
+      "@type": "Person",
+      "name": "Nigella Lawson"
+    },
+    "datePublished": "2015-11-02T16:00:00.000Z",
+    "dateModified": "2025-03-21T10:08:22.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 60,
+      "ratingValue": 4.95
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, easy chickpea, 30 minute meals for two, easy cauliflower, fruity salads, our best bean, gluten-free picnic , gut-health, healthy lunches, high fibre meals, high fibre dinners, high fibre lunch, make-ahead salads, prep-ahead meals, mediterranean diet, nigella's vegetarian favourites, quick vegetarian, summery traybakes, tinned bean salads, vegan cauliflower dinners, vegan lunch, vegan starters, veggie lunchbox ideas , warm and filling salads, winter packed lunch ideas, summer dinner, valentine's day, veganuary, warm salad, cauliflower, chickpea, dairy free, egg free, healthy, nut free, pregnancy friendly, vegan, vegetarian, Simply Nigella",
+    "nutrition": {
+      "calories": "483kcal",
+      "proteinContent": "17g",
+      "carbohydrateContent": "39g",
+      "fatContent": "26g",
+      "fiberContent": "15g",
+      "saturatedFatContent": "3.5g",
+      "sugarContent": "14g"
+    },
+    "recipeCategory": "Main course",
+    "recipeIngredient": [
+      "3 tbsp regular olive oil",
+      "½ tsp ground cinnamon",
+      "2 tsp cumin seeds",
+      "1 small head cauliflower, trimmed and divided into small florets",
+      "250g/9oz home-cooked chickpeas (drained weight) or a 400g tin chickpeas",
+      "1–2 tbsp harissa, to taste ",
+      "4 small ripe vine tomatoes (approximately 150g/5½oz), quartered",
+      "1 tsp sea salt flakes, or to taste",
+      "3–4 tbsp pomegranate seeds",
+      "large bunch (approximately 100g/3½oz) flatleaf parsley"
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 220C/200C Fan/Gas 7. ",
+      "Pour the oil into a large bowl, add the cinnamon and cumin seeds, and stir. Tip in the cauliflower and toss to coat. Pour into a small oven tray (I mostly use a disposable foil baking tray measuring 30x20cm/12x8in) and place in the oven for 15 minutes. Don’t wash out the bowl you’ve been using.",
+      "Add the chickpeas to the bowl, and add the harissa, tasting it first to see if you want both tablespoonfuls. Toss to coat. Add the tomatoes to the bowl, and stir to mix. ",
+      "Remove the cauliflower and quickly tip the chickpeas and tomatoes over the cauliflower. Toss to combine and return to the oven for 15 minutes, or until the cauliflower is tender.",
+      "Remove from the oven and sprinkle the salt over the vegetables, add half of the pomegranate seeds and toss to combine. Divide between 2 bowls.  Divide the parsley leaves – without chopping them – between the 2 bowls and toss to mix. Scatter with the remaining pomegranate seeds and serve."
+    ],
+    "recipeYield": "Serves 2",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/LowCalorieDiet",
+      "http://schema.org/VeganDiet",
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "This is one of my favourite suppers, although there’s nothing that says you can’t serve this as a vegetable side. And you could also bolster it further by crumbling in some feta. But for me, it is perfect just as it is.",
+        "duration": "PT4M14S",
+        "name": "Warm spiced cauliflower and chickpea salad with pomegranate seeds",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/warm_spiced_cauliflower_36652_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:38:10.000Z"
+      }
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "range-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet|video"
+  ]
+}

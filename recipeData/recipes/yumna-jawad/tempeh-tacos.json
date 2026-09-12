@@ -1,0 +1,441 @@
+{
+  "schemaVersion": 1,
+  "id": "yumna-jawad/tempeh-tacos",
+  "slug": "tempeh-tacos",
+  "chefId": "chef_yumna-jawad",
+  "chefSlug": "yumna-jawad",
+  "chefName": "Yumna Jawad",
+  "title": "Tempeh Tacos",
+  "description": "Full of flavor and quick to make, these tempeh tacos are a delicious meat-free alternative. Load them with your favorite toppings for a vegan taco that the whole family will love.",
+  "source": {
+    "sourceUrl": "https://feelgoodfoodie.net/recipe/tempeh-tacos/",
+    "finalUrl": "https://feelgoodfoodie.net/recipe/tempeh-tacos/",
+    "retrievedAt": "2026-09-11T02:47:05.105Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2021-02-23T00:08:00+00:00",
+    "rights": "Feel Good Foodie. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "11eaff16a8992ee3b8e070820b836eb8926b45cd0baa9a614a94fe3910154ad1",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": [
+        "equipment-from-html: 1"
+      ]
+    },
+    "robots": "allows recipe paths; /wp-admin/ and /signup/ disallowed"
+  },
+  "yield": {
+    "raw": [
+      "4",
+      "4 servings"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 5,
+    "cookMinutes": 15,
+    "totalMinutes": 20,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Mexican"
+  ],
+  "category": [
+    "Main Course"
+  ],
+  "keywords": [
+    "easy tempeh tacos",
+    "vegan street tacos",
+    "vegan taco recipe"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1 tablespoon olive oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 small red onion (diced, plus more for serving)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "small red onion (diced",
+          "note": "plus more for serving)",
+          "isOptional": false
+        },
+        {
+          "raw": "2 garlic cloves (minced)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "garlic cloves (minced)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 8- ounce package tempeh (cut into small cubes)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "8- ounce package tempeh (cut into small cubes)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ cup tomato sauce",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "cup",
+          "name": "tomato sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 ½ tablespoons taco seasoning",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tablespoons taco seasoning",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 flour tortillas",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "flour tortillas",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Avocados (diced, for topping)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Avocados (diced, for topping)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Cashew cream (for topping)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Cashew cream (for topping)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Cilantro (for topping)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Cilantro (for topping)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Heat the olive oil in skillet over medium high heat. Add the onions and cook until softened, about 5 minutes. Add the garlic and cook until fragrant, about 1 more minute.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Heat the olive oil in skillet over medium high heat. Add the onions and cook until softened, about 5 minutes. Add the garlic and cook until fragrant, about 1 more minute.",
+        "name": "Heat the olive oil in skillet over medium high heat. Add the onions and cook until softened, about 5 minutes. Add the garlic and cook until fragrant, about 1 more minute.",
+        "url": "https://feelgoodfoodie.net/recipe/tempeh-tacos/#wprm-recipe-32391-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Add the diced tempeh to the skillet and cook, stirring occasionally, until the tempeh begins to brown, about 5 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add the diced tempeh to the skillet and cook, stirring occasionally, until the tempeh begins to brown, about 5 minutes.",
+        "name": "Add the diced tempeh to the skillet and cook, stirring occasionally, until the tempeh begins to brown, about 5 minutes.",
+        "url": "https://feelgoodfoodie.net/recipe/tempeh-tacos/#wprm-recipe-32391-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Stir in the tomato sauce and taco seasoning to the skillet, and continue cooking with the tempeh until everything is well coated, about 2-3 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Stir in the tomato sauce and taco seasoning to the skillet, and continue cooking with the tempeh until everything is well coated, about 2-3 minutes.",
+        "name": "Stir in the tomato sauce and taco seasoning to the skillet, and continue cooking with the tempeh until everything is well coated, about 2-3 minutes.",
+        "url": "https://feelgoodfoodie.net/recipe/tempeh-tacos/#wprm-recipe-32391-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Serve warm over tortillas with diced avocados, red onions and cashew cream, or your other desired toppings.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Serve warm over tortillas with diced avocados, red onions and cashew cream, or your other desired toppings.",
+        "name": "Serve warm over tortillas with diced avocados, red onions and cashew cream, or your other desired toppings.",
+        "url": "https://feelgoodfoodie.net/recipe/tempeh-tacos/#wprm-recipe-32391-step-0-3"
+      }
+    }
+  ],
+  "equipment": [
+    "10\" Cast Iron Skillet"
+  ],
+  "supplies": [],
+  "nutrition": {
+    "calories": "248 kcal",
+    "carbohydrateContent": "25 g",
+    "proteinContent": "13 g",
+    "fatContent": "12 g",
+    "saturatedFatContent": "2 g",
+    "sodiumContent": "290 mg",
+    "fiberContent": "2 g",
+    "sugarContent": "3 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/02/Tempeh-Tacos-10.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/02/Tempeh-Tacos-10-500x500.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/02/Tempeh-Tacos-10-500x375.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/02/Tempeh-Tacos-10-480x270.jpg"
+    ],
+    "video": {
+      "name": "Tempeh Tacos",
+      "description": "Full of flavor and quick to make, these tempeh tacos are a delicious meat-free alternative. Load them with your favorite toppings for a vegan taco that the whole family will love.",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/dfoLlJX7-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/dfoLlJX7.mp4",
+      "uploadDate": "2021-03-24T13:44:31.000Z",
+      "@type": "VideoObject"
+    }
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "video": {
+      "name": "Tempeh Tacos",
+      "description": "Full of flavor and quick to make, these tempeh tacos are a delicious meat-free alternative. Load them with your favorite toppings for a vegan taco that the whole family will love.",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/dfoLlJX7-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/dfoLlJX7.mp4",
+      "uploadDate": "2021-03-24T13:44:31.000Z",
+      "@type": "VideoObject"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.77",
+      "ratingCount": "21",
+      "reviewCount": "2"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4"
+        },
+        "reviewBody": "It is was a unique and best dish",
+        "author": {
+          "@type": "Person",
+          "name": "Uzair"
+        },
+        "datePublished": "2025-09-27"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I'm not vegan and had never even heard of tempeh before I ran across this recipe, but I'm so glad I decided to make this!! This was SUCH AN EASY RECIPE packed with so much flavor! Even my mom liked it, and usually she's usually pretty skeptical of vegan food. This dish is a new favorite!!",
+        "author": {
+          "@type": "Person",
+          "name": "Ellie"
+        },
+        "datePublished": "2021-03-08"
+      }
+    ],
+    "suitableForDiet": [
+      "https://schema.org/VeganDiet",
+      "https://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Tempeh Tacos",
+    "author": {
+      "@id": "https://feelgoodfoodie.net/#/schema/person/7a5a734de72932611fa5814fce8c12d5"
+    },
+    "description": "Full of flavor and quick to make, these tempeh tacos are a delicious meat-free alternative. Load them with your favorite toppings for a vegan taco that the whole family will love.",
+    "datePublished": "2021-02-23T00:08:00+00:00",
+    "image": [
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/02/Tempeh-Tacos-10.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/02/Tempeh-Tacos-10-500x500.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/02/Tempeh-Tacos-10-500x375.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2021/02/Tempeh-Tacos-10-480x270.jpg"
+    ],
+    "video": {
+      "name": "Tempeh Tacos",
+      "description": "Full of flavor and quick to make, these tempeh tacos are a delicious meat-free alternative. Load them with your favorite toppings for a vegan taco that the whole family will love.",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/dfoLlJX7-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/dfoLlJX7.mp4",
+      "uploadDate": "2021-03-24T13:44:31.000Z",
+      "@type": "VideoObject"
+    },
+    "recipeYield": [
+      "4",
+      "4 servings"
+    ],
+    "prepTime": "PT5M",
+    "cookTime": "PT15M",
+    "totalTime": "PT20M",
+    "recipeIngredient": [
+      "1 tablespoon olive oil",
+      "1  small red onion (diced, plus more for serving)",
+      "2  garlic cloves (minced)",
+      "1 8- ounce package tempeh (cut into small cubes)",
+      "¼ cup tomato sauce",
+      "1 ½ tablespoons taco seasoning",
+      "4  flour tortillas",
+      "Avocados (diced, for topping)",
+      "Cashew cream (for topping)",
+      "Cilantro (for topping)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Heat the olive oil in skillet over medium high heat. Add the onions and cook until softened, about 5 minutes. Add the garlic and cook until fragrant, about 1 more minute.",
+        "name": "Heat the olive oil in skillet over medium high heat. Add the onions and cook until softened, about 5 minutes. Add the garlic and cook until fragrant, about 1 more minute.",
+        "url": "https://feelgoodfoodie.net/recipe/tempeh-tacos/#wprm-recipe-32391-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Add the diced tempeh to the skillet and cook, stirring occasionally, until the tempeh begins to brown, about 5 minutes.",
+        "name": "Add the diced tempeh to the skillet and cook, stirring occasionally, until the tempeh begins to brown, about 5 minutes.",
+        "url": "https://feelgoodfoodie.net/recipe/tempeh-tacos/#wprm-recipe-32391-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Stir in the tomato sauce and taco seasoning to the skillet, and continue cooking with the tempeh until everything is well coated, about 2-3 minutes.",
+        "name": "Stir in the tomato sauce and taco seasoning to the skillet, and continue cooking with the tempeh until everything is well coated, about 2-3 minutes.",
+        "url": "https://feelgoodfoodie.net/recipe/tempeh-tacos/#wprm-recipe-32391-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Serve warm over tortillas with diced avocados, red onions and cashew cream, or your other desired toppings.",
+        "name": "Serve warm over tortillas with diced avocados, red onions and cashew cream, or your other desired toppings.",
+        "url": "https://feelgoodfoodie.net/recipe/tempeh-tacos/#wprm-recipe-32391-step-0-3"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.77",
+      "ratingCount": "21",
+      "reviewCount": "2"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4"
+        },
+        "reviewBody": "It is was a unique and best dish",
+        "author": {
+          "@type": "Person",
+          "name": "Uzair"
+        },
+        "datePublished": "2025-09-27"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I'm not vegan and had never even heard of tempeh before I ran across this recipe, but I'm so glad I decided to make this!! This was SUCH AN EASY RECIPE packed with so much flavor! Even my mom liked it, and usually she's usually pretty skeptical of vegan food. This dish is a new favorite!!",
+        "author": {
+          "@type": "Person",
+          "name": "Ellie"
+        },
+        "datePublished": "2021-03-08"
+      }
+    ],
+    "recipeCategory": [
+      "Main Course"
+    ],
+    "recipeCuisine": [
+      "Mexican"
+    ],
+    "suitableForDiet": [
+      "https://schema.org/VeganDiet",
+      "https://schema.org/VegetarianDiet"
+    ],
+    "keywords": "easy tempeh tacos, vegan street tacos, vegan taco recipe",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "248 kcal",
+      "carbohydrateContent": "25 g",
+      "proteinContent": "13 g",
+      "fatContent": "12 g",
+      "saturatedFatContent": "2 g",
+      "sodiumContent": "290 mg",
+      "fiberContent": "2 g",
+      "sugarContent": "3 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://feelgoodfoodie.net/recipe/tempeh-tacos/#recipe",
+    "isPartOf": {
+      "@id": "https://feelgoodfoodie.net/recipe/tempeh-tacos/#article"
+    },
+    "mainEntityOfPage": "https://feelgoodfoodie.net/recipe/tempeh-tacos/"
+  },
+  "audit": [
+    "unparsed-quantity:3",
+    "unmapped:video|aggregateRating|review|suitableForDiet"
+  ]
+}

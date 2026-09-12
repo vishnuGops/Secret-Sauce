@@ -1,0 +1,363 @@
+{
+  "schemaVersion": 1,
+  "id": "nigel-slater/beef-cheek-and-butternut-broth-in-sourdough",
+  "slug": "beef-cheek-and-butternut-broth-in-sourdough",
+  "chefId": "chef_nigel-slater",
+  "chefSlug": "nigel-slater",
+  "chefName": "Nigel Slater",
+  "title": "Beef cheek and butternut broth in sourdough",
+  "description": "This hearty, filling soup requires very little washing up – just eat the bowl when you've finished!",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/beef_cheek_and_butternut_59977",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/beef_cheek_and_butternut_59977",
+    "retrievedAt": "2026-09-11T00:28:42.336Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Nigel Slater"
+    ],
+    "datePublished": "2015-06-08T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "72e52922741ef08ea5b811ff3af809837f08ee5822be1967edce4cff2cc81cd8",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 120,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Italian"
+  ],
+  "category": [
+    "Light meals & snacks"
+  ],
+  "keywords": [
+    "butternut squash soups",
+    "seriously special soups",
+    "soup",
+    "beef cheek",
+    "butternut squash",
+    "dairy free",
+    "nut free",
+    "pregnancy friendly",
+    "winter",
+    "spring",
+    "autumn",
+    "Nigel Slater: Eating Together"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "2 litres/4¼ pints boiling water",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "L",
+          "name": "/4¼ pints boiling water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz dried porcini mushrooms",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz dried porcini mushrooms",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 tbsp olive oil",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "800g/1lb 12oz beef cheek",
+          "quantity": 800,
+          "quantityText": "800",
+          "unit": "g",
+          "name": "/1lb 12oz beef cheek",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 large onion, roughly chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "large onion",
+          "note": "roughly chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 butternut squash, peeled, de-seeded, cut into 5cm/2in chunks",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "butternut squash",
+          "note": "peeled, de-seeded, cut into 5cm/2in chunks",
+          "isOptional": false
+        },
+        {
+          "raw": "250g/9oz orzo pasta",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "/9oz orzo pasta",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 large round sourdough loaf (the largest you can find)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "large round sourdough loaf (the largest you can find)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp chopped fresh parsley leaves, to serve",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "chopped fresh parsley leaves",
+          "note": "to serve",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Pour the boiling water into a large bowl and add the porcini mushrooms. Set aside to infuse for 20 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pour the boiling water into a large bowl and add the porcini mushrooms. Set aside to infuse for 20 minutes."
+    },
+    {
+      "order": 2,
+      "text": "Meanwhile, heat the oil in a frying pan over a medium heat. Brown the beef cheek on all sides for 3-4 minutes, then transfer to a large lidded casserole.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, heat the oil in a frying pan over a medium heat. Brown the beef cheek on all sides for 3-4 minutes, then transfer to a large lidded casserole."
+    },
+    {
+      "order": 3,
+      "text": "Add the onions to the frying pan and fry for 4-5 minutes, or until softened and just golden-brown. Transfer to the casserole. Repeat the process with the butternut squash.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the onions to the frying pan and fry for 4-5 minutes, or until softened and just golden-brown. Transfer to the casserole. Repeat the process with the butternut squash."
+    },
+    {
+      "order": 4,
+      "text": "Pour the porcini liquid and the mushrooms into the casserole and bring to the boil. Reduce the heat until the mixture is simmering. Half-cover the casserole with the lid, then simmer gently for 3 hours, stirring occasionally and topping up with boiling water if the volume of liquid reduces significantly.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pour the porcini liquid and the mushrooms into the casserole and bring to the boil. Reduce the heat until the mixture is simmering. Half-cover the casserole with the lid, then simmer gently for 3 hours, stirring occasionally and topping up with boiling water if the volume of liquid reduces significantly."
+    },
+    {
+      "order": 5,
+      "text": "After 3 hours, tip the orzo into the casserole and continue to cook for a further 10 minutes, or until tender.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "After 3 hours, tip the orzo into the casserole and continue to cook for a further 10 minutes, or until tender."
+    },
+    {
+      "order": 6,
+      "text": "Meanwhile, slice the top off the sourdough loaf and hollow out the inside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, slice the top off the sourdough loaf and hollow out the inside."
+    },
+    {
+      "order": 7,
+      "text": "Ladle the broth into the empty sourdough loaf, sprinkling over the chopped parsley to garnish.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Ladle the broth into the empty sourdough loaf, sprinkling over the chopped parsley to garnish."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/beef_cheek_and_butternut_59977_16x9.jpg"
+    ],
+    "video": [
+      {
+        "description": "Nigel cooks his beef and butternut squash soup explaining the influences from Miles, Sumiko and Regina.",
+        "duration": "PT4M55S",
+        "name": "Beef cheek and butternut squash broth in sourdough",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/beef_cheek_and_butternut_59977_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:36:11.000Z"
+      }
+    ]
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "Either ladle the soup into one large sourdough loaf and allow people to help themselves, or serve the soup in individual sourdough rolls."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 5,
+      "ratingValue": 3.6
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ],
+    "video": [
+      {
+        "description": "Nigel cooks his beef and butternut squash soup explaining the influences from Miles, Sumiko and Regina.",
+        "duration": "PT4M55S",
+        "name": "Beef cheek and butternut squash broth in sourdough",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/beef_cheek_and_butternut_59977_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:36:11.000Z"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "This hearty, filling soup requires very little washing up – just eat the bowl when you've finished! \r\n",
+    "headline": "Beef cheek and butternut broth in sourdough ",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/beef_cheek_and_butternut_59977_16x9.jpg"
+    },
+    "name": "Beef cheek and butternut broth in sourdough ",
+    "author": {
+      "@type": "Person",
+      "name": "Nigel Slater"
+    },
+    "datePublished": "2015-06-08T00:00:00.000Z",
+    "dateModified": "2025-10-07T12:36:18.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 5,
+      "ratingValue": 3.6
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT2H",
+    "keywords": "butternut squash soups, seriously special soups, soup, beef cheek, butternut squash, dairy free, nut free, pregnancy friendly, winter, spring, autumn, Nigel Slater: Eating Together",
+    "recipeCategory": "Light meals & snacks",
+    "recipeCuisine": "Italian",
+    "recipeIngredient": [
+      "2 litres/4¼ pints boiling water",
+      "50g/1¾oz dried porcini mushrooms",
+      "4 tbsp olive oil",
+      "800g/1lb 12oz beef cheek",
+      "1 large onion, roughly chopped",
+      "1 butternut squash, peeled, de-seeded, cut into 5cm/2in chunks",
+      "250g/9oz orzo pasta",
+      "1 large round sourdough loaf (the largest you can find)",
+      "3 tbsp chopped fresh parsley leaves, to serve"
+    ],
+    "recipeInstructions": [
+      "Pour the boiling water into a large bowl and add the porcini mushrooms. Set aside to infuse for 20 minutes.",
+      "Meanwhile, heat the oil in a frying pan over a medium heat. Brown the beef cheek on all sides for 3-4 minutes, then transfer to a large lidded casserole.",
+      "Add the onions to the frying pan and fry for 4-5 minutes, or until softened and just golden-brown. Transfer to the casserole. Repeat the process with the butternut squash.",
+      "Pour the porcini liquid and the mushrooms into the casserole and bring to the boil. Reduce the heat until the mixture is simmering. Half-cover the casserole with the lid, then simmer gently for 3 hours, stirring occasionally and topping up with boiling water if the volume of liquid reduces significantly.",
+      "After 3 hours, tip the orzo into the casserole and continue to cook for a further 10 minutes, or until tender.",
+      "Meanwhile, slice the top off the sourdough loaf and hollow out the inside.",
+      "Ladle the broth into the empty sourdough loaf, sprinkling over the chopped parsley to garnish."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ],
+    "video": [
+      {
+        "description": "Nigel cooks his beef and butternut squash soup explaining the influences from Miles, Sumiko and Regina.",
+        "duration": "PT4M55S",
+        "name": "Beef cheek and butternut squash broth in sourdough",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/beef_cheek_and_butternut_59977_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:36:11.000Z"
+      }
+    ]
+  },
+  "audit": [
+    "unmapped:aggregateRating|suitableForDiet|video"
+  ]
+}

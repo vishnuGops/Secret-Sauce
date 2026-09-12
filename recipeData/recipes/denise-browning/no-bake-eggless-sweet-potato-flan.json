@@ -1,0 +1,442 @@
+{
+  "schemaVersion": 1,
+  "id": "denise-browning/no-bake-eggless-sweet-potato-flan",
+  "slug": "no-bake-eggless-sweet-potato-flan",
+  "chefId": "chef_denise-browning",
+  "chefSlug": "denise-browning",
+  "chefName": "Denise Browning",
+  "title": "No Bake Eggless Sweet Potato Flan",
+  "description": "A No Bake Eggless Sweet Potato Flan topped with caramel and meringue... An easy and delicious dessert to welcome autumn that is just perfect for Thanksgiving.",
+  "source": {
+    "sourceUrl": "https://www.easyanddelish.com/no-bake-eggless-sweet-potato-flan/",
+    "finalUrl": "https://www.easyanddelish.com/no-bake-eggless-sweet-potato-flan/",
+    "retrievedAt": "2026-09-11T02:47:33.611Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2016-10-03T17:43:13+00:00",
+    "rights": "Easy and Delish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "dae39ff90886ddfe96d1ed62a807ff6ef76c0309d46f6976b899f06524b2a44b",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "12"
+    ],
+    "servings": 12
+  },
+  "timing": {
+    "prepMinutes": 35,
+    "cookMinutes": null,
+    "totalMinutes": 35,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Brazilian",
+    "Latin"
+  ],
+  "category": [
+    "Dessert"
+  ],
+  "keywords": [
+    "Creamy Vegan Flan",
+    "Eggless Sweet Potato Flan",
+    "No Bake Sweet Potato Dessert"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the Sweet Potato Flan",
+      "items": [
+        {
+          "raw": "3.3 lbs sweet potatoes (peeled and cut into medium chunks)",
+          "quantity": 3.3,
+          "quantityText": "3.3",
+          "unit": "lb",
+          "name": "sweet potatoes (peeled and cut into medium chunks)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 can sweetened condensed milk (14 oz)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "can",
+          "name": "sweetened condensed milk (14 oz)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "8 tablespoons unsalted butter (melted, or 1 stick)",
+          "quantity": 8,
+          "quantityText": "8",
+          "unit": "tbsp",
+          "name": "unsalted butter (melted, or 1 stick)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/4 teaspoon salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/4 teaspoon salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 teaspoon ground nutmeg",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 teaspoon ground nutmeg",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 teaspoon ground cinnamon",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground cinnamon",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 envelopes unflavored gelatin (or 2 Tablespoons)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "envelopes unflavored gelatin (or 2 Tablespoons)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 cup hot water (not boiling)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 cup hot water (not boiling)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the Caramel",
+      "items": [
+        {
+          "raw": "1 cup granulated sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "cup",
+          "name": "granulated sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 cup water",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 cup water",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the Meringue: (optional)",
+      "items": [
+        {
+          "raw": "2 egg whites",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "egg whites",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/4 cup granulated sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/4 cup granulated sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/3 cup powdered sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/3 cup powdered sugar",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "In a large pot, boil peeled sweet potatoes in water over high heat for about 12-15 minutes or until fork tender. Drain water and roughly mash sweet potatoes with a fork while still hot. Place roughly mashed sweet potatoes (while still hot) into a blender with sweetened condensed milk, melted butter, salt, and spices. Blend well until obtaining a smooth mixture and set aside. In a small cup, stir well the gelatin in water until dissolved and let sit for about a couple of minutes. Pour the dissolved gelatin into the blender and blend sweet potato-gelatin mixture until well combined. Set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a large pot, boil peeled sweet potatoes in water over high heat for about 12-15 minutes or until fork tender. Drain water and roughly mash sweet potatoes with a fork while still hot. Place roughly mashed sweet potatoes (while still hot) into a blender with sweetened condensed milk, melted butter, salt, and spices. Blend well until obtaining a smooth mixture and set aside. In a small cup, stir well the gelatin in water until dissolved and let sit for about a couple of minutes. Pour the dissolved gelatin into the blender and blend sweet potato-gelatin mixture until well combined. Set aside.",
+        "name": "In a large pot, boil peeled sweet potatoes in water over high heat for about 12-15 minutes or until fork tender. Drain water and roughly mash sweet potatoes with a fork while still hot. Place roughly mashed sweet potatoes (while still hot) into a blender with sweetened condensed milk, melted butter, salt, and spices. Blend well until obtaining a smooth mixture and set aside. In a small cup, stir well the gelatin in water until dissolved and let sit for about a couple of minutes. Pour the dissolved gelatin into the blender and blend sweet potato-gelatin mixture until well combined. Set aside.",
+        "url": "https://www.easyanddelish.com/no-bake-eggless-sweet-potato-flan/#wprm-recipe-47164-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Prepare the caramel. In a medium heavy-bottom saucepan, stir sugar and water until combined. Heat mixture over medium-low heat, stirring occasionally with an wooden spoon, just until it starts to boil. After this point, do not stir mixture anymore! Using a kitchen brush that has been moistened with water, brush down the sides of the pan occasionally, until the mixture starts to color around the edges, about 5 to 10 minutes. Gently swirl the pan once to even out the color and prevent the sugar from burning in isolated spots. Continue to cook until the sugar turns light to medium amber. Pour caramel into a 10-inch ring mold and using kitchen gloves, carefully swirl the ring mold to spread caramel on the sides and bottom pf the mold. Let sit for about 5 minutes or until it hardens.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Prepare the caramel. In a medium heavy-bottom saucepan, stir sugar and water until combined. Heat mixture over medium-low heat, stirring occasionally with an wooden spoon, just until it starts to boil. After this point, do not stir mixture anymore! Using a kitchen brush that has been moistened with water, brush down the sides of the pan occasionally, until the mixture starts to color around the edges, about 5 to 10 minutes. Gently swirl the pan once to even out the color and prevent the sugar from burning in isolated spots. Continue to cook until the sugar turns light to medium amber. Pour caramel into a 10-inch ring mold and using kitchen gloves, carefully swirl the ring mold to spread caramel on the sides and bottom pf the mold. Let sit for about 5 minutes or until it hardens.",
+        "name": "Prepare the caramel. In a medium heavy-bottom saucepan, stir sugar and water until combined. Heat mixture over medium-low heat, stirring occasionally with an wooden spoon, just until it starts to boil. After this point, do not stir mixture anymore! Using a kitchen brush that has been moistened with water, brush down the sides of the pan occasionally, until the mixture starts to color around the edges, about 5 to 10 minutes. Gently swirl the pan once to even out the color and prevent the sugar from burning in isolated spots. Continue to cook until the sugar turns light to medium amber. Pour caramel into a 10-inch ring mold and using kitchen gloves, carefully swirl the ring mold to spread caramel on the sides and bottom pf the mold. Let sit for about 5 minutes or until it hardens.",
+        "url": "https://www.easyanddelish.com/no-bake-eggless-sweet-potato-flan/#wprm-recipe-47164-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Pour the sweet potato mixture into the mold, smooth it out with the back of a spoon or spatula, cover mold with aluminum foil, and refrigerate for at least 8 hours or until sweet potato flan is well set.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Pour the sweet potato mixture into the mold, smooth it out with the back of a spoon or spatula, cover mold with aluminum foil, and refrigerate for at least 8 hours or until sweet potato flan is well set.",
+        "name": "Pour the sweet potato mixture into the mold, smooth it out with the back of a spoon or spatula, cover mold with aluminum foil, and refrigerate for at least 8 hours or until sweet potato flan is well set.",
+        "url": "https://www.easyanddelish.com/no-bake-eggless-sweet-potato-flan/#wprm-recipe-47164-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "To unmold flan, carefully run a knife around the edges to loosen the flan and place a serving plate on top of the ring mold. Invert flan onto the plate and serve by itself or topped with piped meringue.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "To unmold flan, carefully run a knife around the edges to loosen the flan and place a serving plate on top of the ring mold. Invert flan onto the plate and serve by itself or topped with piped meringue.",
+        "name": "To unmold flan, carefully run a knife around the edges to loosen the flan and place a serving plate on top of the ring mold. Invert flan onto the plate and serve by itself or topped with piped meringue.",
+        "url": "https://www.easyanddelish.com/no-bake-eggless-sweet-potato-flan/#wprm-recipe-47164-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Prepare the meringue. Using an electric mixer on high, beat egg whites until loose and foamy (about 2 minutes). With motor still running, gradually add granulated sugar and beat until stiff, shiny peaks form (about 5 minutes). Gradually add powdered sugar and beat for a couple of minutes. You may have to stop the mixer to to scoop the sugar off of the sides of the electric mixer bowl using a spatula.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Prepare the meringue. Using an electric mixer on high, beat egg whites until loose and foamy (about 2 minutes). With motor still running, gradually add granulated sugar and beat until stiff, shiny peaks form (about 5 minutes). Gradually add powdered sugar and beat for a couple of minutes. You may have to stop the mixer to to scoop the sugar off of the sides of the electric mixer bowl using a spatula.",
+        "name": "Prepare the meringue. Using an electric mixer on high, beat egg whites until loose and foamy (about 2 minutes). With motor still running, gradually add granulated sugar and beat until stiff, shiny peaks form (about 5 minutes). Gradually add powdered sugar and beat for a couple of minutes. You may have to stop the mixer to to scoop the sugar off of the sides of the electric mixer bowl using a spatula.",
+        "url": "https://www.easyanddelish.com/no-bake-eggless-sweet-potato-flan/#wprm-recipe-47164-step-0-4"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Pipe meringue over flan decoratively and then use a kitchen torch to toast meringue, if desired.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Pipe meringue over flan decoratively and then use a kitchen torch to toast meringue, if desired.",
+        "name": "Pipe meringue over flan decoratively and then use a kitchen torch to toast meringue, if desired.",
+        "url": "https://www.easyanddelish.com/no-bake-eggless-sweet-potato-flan/#wprm-recipe-47164-step-0-5"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "servingSize": "1 serving",
+    "calories": "380.7 kcal",
+    "carbohydrateContent": "67.3 g",
+    "proteinContent": "6.2 g",
+    "fatContent": "10.6 g",
+    "saturatedFatContent": "6.7 g",
+    "transFatContent": "0.3 g",
+    "cholesterolContent": "31.3 mg",
+    "sodiumContent": "230.4 mg",
+    "fiberContent": "3.8 g",
+    "sugarContent": "47.3 g",
+    "unsaturatedFatContent": "3.2 g"
+  },
+  "media": {
+    "coverImages": [
+      "https://www.easyanddelish.com/wp-content/uploads/2016/10/No-Bake-Eggless-Sweet-Potato-Flan-2.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2016/10/No-Bake-Eggless-Sweet-Potato-Flan-2-500x500.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2016/10/No-Bake-Eggless-Sweet-Potato-Flan-2-500x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2016/10/No-Bake-Eggless-Sweet-Potato-Flan-2-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "1"
+    }
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "No Bake Eggless Sweet Potato Flan",
+    "author": {
+      "@id": "https://www.easyanddelish.com/#/schema/person/4aa289bf19bceaa733ca6900648cfc47"
+    },
+    "description": "A No Bake Eggless Sweet Potato Flan topped with caramel and meringue... An easy and delicious dessert to welcome autumn that is just perfect for Thanksgiving.",
+    "datePublished": "2016-10-03T17:43:13+00:00",
+    "image": [
+      "https://www.easyanddelish.com/wp-content/uploads/2016/10/No-Bake-Eggless-Sweet-Potato-Flan-2.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2016/10/No-Bake-Eggless-Sweet-Potato-Flan-2-500x500.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2016/10/No-Bake-Eggless-Sweet-Potato-Flan-2-500x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2016/10/No-Bake-Eggless-Sweet-Potato-Flan-2-480x270.jpg"
+    ],
+    "recipeYield": [
+      "12"
+    ],
+    "prepTime": "PT35M",
+    "totalTime": "PT35M",
+    "recipeIngredient": [
+      "For the Sweet Potato Flan:",
+      "3.3 lbs sweet potatoes (peeled and cut into medium chunks)",
+      "1 can sweetened condensed milk (14 oz)",
+      "8 tablespoons unsalted butter (melted, or 1 stick)",
+      "1/4 teaspoon salt",
+      "1/2 teaspoon ground nutmeg",
+      "1 teaspoon ground cinnamon",
+      "2 envelopes unflavored gelatin (or 2 Tablespoons)",
+      "1/2 cup hot water (not boiling)",
+      "For the Caramel:",
+      "1 cup granulated sugar",
+      "1/2 cup water",
+      "For the Meringue: (optional)",
+      "2  egg whites",
+      "1/4 cup granulated sugar",
+      "1/3 cup powdered sugar"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "In a large pot, boil peeled sweet potatoes in water over high heat for about 12-15 minutes or until fork tender. Drain water and roughly mash sweet potatoes with a fork while still hot. Place roughly mashed sweet potatoes (while still hot) into a blender with sweetened condensed milk, melted butter, salt, and spices. Blend well until obtaining a smooth mixture and set aside. In a small cup, stir well the gelatin in water until dissolved and let sit for about a couple of minutes. Pour the dissolved gelatin into the blender and blend sweet potato-gelatin mixture until well combined. Set aside.",
+        "name": "In a large pot, boil peeled sweet potatoes in water over high heat for about 12-15 minutes or until fork tender. Drain water and roughly mash sweet potatoes with a fork while still hot. Place roughly mashed sweet potatoes (while still hot) into a blender with sweetened condensed milk, melted butter, salt, and spices. Blend well until obtaining a smooth mixture and set aside. In a small cup, stir well the gelatin in water until dissolved and let sit for about a couple of minutes. Pour the dissolved gelatin into the blender and blend sweet potato-gelatin mixture until well combined. Set aside.",
+        "url": "https://www.easyanddelish.com/no-bake-eggless-sweet-potato-flan/#wprm-recipe-47164-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Prepare the caramel. In a medium heavy-bottom saucepan, stir sugar and water until combined. Heat mixture over medium-low heat, stirring occasionally with an wooden spoon, just until it starts to boil. After this point, do not stir mixture anymore! Using a kitchen brush that has been moistened with water, brush down the sides of the pan occasionally, until the mixture starts to color around the edges, about 5 to 10 minutes. Gently swirl the pan once to even out the color and prevent the sugar from burning in isolated spots. Continue to cook until the sugar turns light to medium amber. Pour caramel into a 10-inch ring mold and using kitchen gloves, carefully swirl the ring mold to spread caramel on the sides and bottom pf the mold. Let sit for about 5 minutes or until it hardens.",
+        "name": "Prepare the caramel. In a medium heavy-bottom saucepan, stir sugar and water until combined. Heat mixture over medium-low heat, stirring occasionally with an wooden spoon, just until it starts to boil. After this point, do not stir mixture anymore! Using a kitchen brush that has been moistened with water, brush down the sides of the pan occasionally, until the mixture starts to color around the edges, about 5 to 10 minutes. Gently swirl the pan once to even out the color and prevent the sugar from burning in isolated spots. Continue to cook until the sugar turns light to medium amber. Pour caramel into a 10-inch ring mold and using kitchen gloves, carefully swirl the ring mold to spread caramel on the sides and bottom pf the mold. Let sit for about 5 minutes or until it hardens.",
+        "url": "https://www.easyanddelish.com/no-bake-eggless-sweet-potato-flan/#wprm-recipe-47164-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Pour the sweet potato mixture into the mold, smooth it out with the back of a spoon or spatula, cover mold with aluminum foil, and refrigerate for at least 8 hours or until sweet potato flan is well set.",
+        "name": "Pour the sweet potato mixture into the mold, smooth it out with the back of a spoon or spatula, cover mold with aluminum foil, and refrigerate for at least 8 hours or until sweet potato flan is well set.",
+        "url": "https://www.easyanddelish.com/no-bake-eggless-sweet-potato-flan/#wprm-recipe-47164-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "To unmold flan, carefully run a knife around the edges to loosen the flan and place a serving plate on top of the ring mold. Invert flan onto the plate and serve by itself or topped with piped meringue.",
+        "name": "To unmold flan, carefully run a knife around the edges to loosen the flan and place a serving plate on top of the ring mold. Invert flan onto the plate and serve by itself or topped with piped meringue.",
+        "url": "https://www.easyanddelish.com/no-bake-eggless-sweet-potato-flan/#wprm-recipe-47164-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Prepare the meringue. Using an electric mixer on high, beat egg whites until loose and foamy (about 2 minutes). With motor still running, gradually add granulated sugar and beat until stiff, shiny peaks form (about 5 minutes). Gradually add powdered sugar and beat for a couple of minutes. You may have to stop the mixer to to scoop the sugar off of the sides of the electric mixer bowl using a spatula.",
+        "name": "Prepare the meringue. Using an electric mixer on high, beat egg whites until loose and foamy (about 2 minutes). With motor still running, gradually add granulated sugar and beat until stiff, shiny peaks form (about 5 minutes). Gradually add powdered sugar and beat for a couple of minutes. You may have to stop the mixer to to scoop the sugar off of the sides of the electric mixer bowl using a spatula.",
+        "url": "https://www.easyanddelish.com/no-bake-eggless-sweet-potato-flan/#wprm-recipe-47164-step-0-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Pipe meringue over flan decoratively and then use a kitchen torch to toast meringue, if desired.",
+        "name": "Pipe meringue over flan decoratively and then use a kitchen torch to toast meringue, if desired.",
+        "url": "https://www.easyanddelish.com/no-bake-eggless-sweet-potato-flan/#wprm-recipe-47164-step-0-5"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "1"
+    },
+    "recipeCategory": [
+      "Dessert"
+    ],
+    "recipeCuisine": [
+      "Brazilian",
+      "Latin"
+    ],
+    "keywords": "Creamy Vegan Flan, Eggless Sweet Potato Flan, No Bake Sweet Potato Dessert",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "servingSize": "1 serving",
+      "calories": "380.7 kcal",
+      "carbohydrateContent": "67.3 g",
+      "proteinContent": "6.2 g",
+      "fatContent": "10.6 g",
+      "saturatedFatContent": "6.7 g",
+      "transFatContent": "0.3 g",
+      "cholesterolContent": "31.3 mg",
+      "sodiumContent": "230.4 mg",
+      "fiberContent": "3.8 g",
+      "sugarContent": "47.3 g",
+      "unsaturatedFatContent": "3.2 g"
+    },
+    "@id": "https://www.easyanddelish.com/no-bake-eggless-sweet-potato-flan/#recipe",
+    "isPartOf": {
+      "@id": "https://www.easyanddelish.com/no-bake-eggless-sweet-potato-flan/#article"
+    },
+    "mainEntityOfPage": "https://www.easyanddelish.com/no-bake-eggless-sweet-potato-flan/"
+  },
+  "audit": [
+    "no-cook-time",
+    "unmapped:aggregateRating"
+  ]
+}

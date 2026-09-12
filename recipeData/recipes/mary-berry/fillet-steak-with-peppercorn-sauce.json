@@ -1,0 +1,308 @@
+{
+  "schemaVersion": 1,
+  "id": "mary-berry/fillet-steak-with-peppercorn-sauce",
+  "slug": "fillet-steak-with-peppercorn-sauce",
+  "chefId": "chef_mary-berry",
+  "chefSlug": "mary-berry",
+  "chefName": "Mary Berry",
+  "title": "Fillet steak with peppercorn sauce",
+  "description": "Make a fillet steak even more special with Mary Berry's classic peppercorn sauce. This make-ahead sauce is a lifesaver if you want to cook a fancy dinner without spending all night in the kitchen.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/steak_with_peppercorn_07284",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/steak_with_peppercorn_07284",
+    "retrievedAt": "2026-09-11T00:27:35.982Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Mary Berry"
+    ],
+    "datePublished": "2017-03-20T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "ee8ceebc3ee8920c3247925506f140a2f3e0452d0e2d1630e766b5cff9740be7",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups",
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "the best steak",
+    "father's day",
+    "valentine's day",
+    "steak",
+    "egg free",
+    "nut free",
+    "Mary Berry Everyday"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "4 x 150g/5½oz centre cut fillet steaks",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "x 150g/5½oz centre cut fillet steaks",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz butter, at room temperature",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz butter",
+          "note": "at room temperature",
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the sauce",
+      "items": [
+        {
+          "raw": "100ml/3½fl oz beef stock",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "ml",
+          "name": "/3½fl oz beef stock",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ garlic clove, crushed",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "garlic clove",
+          "note": "crushed",
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp brandy",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "brandy",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp Worcestershire sauce",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "Worcestershire sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp Dijon mustard",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "Dijon mustard",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "150ml/¼ pint double cream",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "ml",
+          "name": "/¼ pint double cream",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp crushed black peppercorns",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "crushed black peppercorns",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp chopped fresh parsley",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "chopped fresh parsley",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Using your hands, flatten the steaks to a thickness of about 1½cm/¾in. Season them well with salt and pepper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Using your hands, flatten the steaks to a thickness of about 1½cm/¾in. Season them well with salt and pepper."
+    },
+    {
+      "order": 2,
+      "text": "Heat a large frying pan or griddle pan over a high heat until very hot. Spread the butter all over the steaks and fry for 2 minutes on each side. Cover loosely with foil, rest and keep warm.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat a large frying pan or griddle pan over a high heat until very hot. Spread the butter all over the steaks and fry for 2 minutes on each side. Cover loosely with foil, rest and keep warm."
+    },
+    {
+      "order": 3,
+      "text": "For the sauce, add the stock to a small saucepan, bring to the boil and cook until reduced by half. Add the garlic, brandy, Worcestershire sauce, mustard, cream and peppercorns. Stir and bring to the boil over a high heat. Season with salt and cook, stirring regularly, until it reaches the consistency of pouring cream. Stir in the parsley.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the sauce, add the stock to a small saucepan, bring to the boil and cook until reduced by half. Add the garlic, brandy, Worcestershire sauce, mustard, cream and peppercorns. Stir and bring to the boil over a high heat. Season with salt and cook, stirring regularly, until it reaches the consistency of pouring cream. Stir in the parsley. "
+    },
+    {
+      "order": 4,
+      "text": "Divide the steaks between plates, pour over the sauce and serve.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Divide the steaks between plates, pour over the sauce and serve. "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/steak_with_peppercorn_07284_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "The sauce can be made up to a day ahead, covered and kept in the fridge. You can just cook two fillet steaks and halve the sauce recipe for a special dinner for two. The steaks can be cooked in advance and reheated just before serving. Once cool, cover and keep in the fridge for up to 12 hours. Reheat on a baking tray with a knob of butter on top in an oven at 220C/200C Fan/Gas 7 for 6 minutes. Serve with chips , mashed potato or Lyonnaise potatoes (if you want a make-ahead option). Steamed green veg or a simple salad balances the meal."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 54,
+      "ratingValue": 4.462962962962963
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Make a fillet steak even more special with Mary Berry's classic peppercorn sauce. This make-ahead sauce is a lifesaver if you want to cook a fancy dinner without spending all night in the kitchen.",
+    "headline": "Fillet steak with peppercorn sauce",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/steak_with_peppercorn_07284_16x9.jpg"
+    },
+    "name": "Fillet steak with peppercorn sauce",
+    "author": {
+      "@type": "Person",
+      "name": "Mary Berry"
+    },
+    "datePublished": "2017-03-20T00:00:00.000Z",
+    "dateModified": "2026-08-26T13:13:20.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 54,
+      "ratingValue": 4.462962962962963
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, the best steak, father's day, valentine's day, steak, egg free, nut free, Mary Berry Everyday",
+    "recipeCategory": "Main course",
+    "recipeIngredient": [
+      "4 x 150g/5½oz centre cut fillet steaks",
+      "50g/1¾oz butter, at room temperature",
+      "salt and freshly ground black pepper",
+      "100ml/3½fl oz beef stock ",
+      "½ garlic clove, crushed",
+      "2 tbsp brandy",
+      "1 tbsp Worcestershire sauce",
+      "1 tbsp Dijon mustard",
+      "150ml/¼ pint double cream",
+      "½ tsp crushed black peppercorns",
+      "2 tbsp chopped fresh parsley"
+    ],
+    "recipeInstructions": [
+      "Using your hands, flatten the steaks to a thickness of about 1½cm/¾in. Season them well with salt and pepper.",
+      "Heat a large frying pan or griddle pan over a high heat until very hot. Spread the butter all over the steaks and fry for 2 minutes on each side. Cover loosely with foil, rest and keep warm.",
+      "For the sauce, add the stock to a small saucepan, bring to the boil and cook until reduced by half. Add the garlic, brandy, Worcestershire sauce, mustard, cream and peppercorns. Stir and bring to the boil over a high heat. Season with salt and cook, stirring regularly, until it reaches the consistency of pouring cream. Stir in the parsley. ",
+      "Divide the steaks between plates, pour over the sauce and serve. "
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

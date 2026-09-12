@@ -1,0 +1,800 @@
+{
+  "schemaVersion": 1,
+  "id": "chef-lola/bell-peppers-tomato-and-stew",
+  "slug": "bell-peppers-tomato-and-stew",
+  "chefId": "chef_chef-lola",
+  "chefSlug": "chef-lola",
+  "chefName": "Chef Lola",
+  "title": "Bell peppers, Tomato and Stew",
+  "description": "Eggplant stew – A lovely and refreshing choice for a family meal. This Vibrant color, robustly flavored Eggplant stew is loaded with Onions, Red bell peppers, Yellow bell peppers, Green bell peppers, and Scallions.",
+  "source": {
+    "sourceUrl": "https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/",
+    "finalUrl": "https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/",
+    "retrievedAt": "2026-09-11T02:47:16.712Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2019-02-23T12:05:55+00:00",
+    "rights": "Chef Lola's Kitchen. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "f1c432707547697843484b6374fa44a20a23e625511c19a594f8e34bdad380fe",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "allows recipe paths; /wp-admin/, /wp-json/ and query URLs disallowed"
+  },
+  "yield": {
+    "raw": [
+      "5",
+      "5 People"
+    ],
+    "servings": 5
+  },
+  "timing": {
+    "prepMinutes": 10,
+    "cookMinutes": 20,
+    "totalMinutes": 30,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Global"
+  ],
+  "category": [
+    "Breakfast"
+  ],
+  "keywords": [
+    "homemade",
+    "stew"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1 EggPlant",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "EggPlant",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 Tbsp Olive Oil",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "Olive Oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 Cup Diced Red Bell Pepper",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 Cup Diced Red Bell Pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 Cup Diced Greed Bell Peper",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 Cup Diced Greed Bell Peper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 Cup Diced Yellow Bell Pepper",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 Cup Diced Yellow Bell Pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 Ripe Tomatoes",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "Ripe Tomatoes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 Onion",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "Onion",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 Green Onions",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "Green Onions",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/4 lb Smoked Salmon Fish",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/4 lb Smoked Salmon Fish",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 Tsp Paprika",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "Paprika",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 Tsp Red pepper flakes",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "Red pepper flakes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 Cup Chicken Stock",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "cup",
+          "name": "Chicken Stock",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 Cloves Garlic",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "cloves",
+          "name": "Garlic",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 Tsp Bouillon powder (Optional)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "Bouillon powder (Optional)",
+          "note": null,
+          "isOptional": true
+        },
+        {
+          "raw": "Salt",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Black Pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Black Pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Trim the stem of the Garden Egg and cut into small Cubes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Trim the stem of the Garden Egg and cut into small Cubes.",
+        "name": "Trim the stem of the Garden Egg and cut into small Cubes.",
+        "url": "https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/#wprm-recipe-10785-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Pour the cut Garden Egg in a glass bowl, sprinkle with some Salt and pour hot water over it and leave it to soak for 5 to 10 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Pour the cut Garden Egg in a glass bowl, sprinkle with some Salt and pour hot water over it and leave it to soak for 5 to 10 minutes.",
+        "name": "Pour the cut Garden Egg in a glass bowl, sprinkle with some Salt and pour hot water over it and leave it to soak for 5 to 10 minutes.",
+        "url": "https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/#wprm-recipe-10785-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Meanwhile, preheat the Olive oil in a skillet, add the Diced Onions and cook till it becomes translucent about 3 to 5 minutes",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Meanwhile, preheat the Olive oil in a skillet, add the Diced Onions and cook till it becomes translucent about 3 to 5 minutes",
+        "name": "Meanwhile, preheat the Olive oil in a skillet, add the Diced Onions and cook till it becomes translucent about 3 to 5 minutes",
+        "url": "https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/#wprm-recipe-10785-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Add the Chili Flakes and minced Garlic cook for another 2 minutes",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add the Chili Flakes and minced Garlic  cook for another 2 minutes",
+        "name": "Add the Chili Flakes and minced Garlic  cook for another 2 minutes",
+        "url": "https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/#wprm-recipe-10785-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Stir in the Diced Tomatoes, and season with Salt, Paprika and Black Pepper. Cover it up and leave to simmer for another 3 to 5 minutes",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Stir in the Diced Tomatoes, and season with Salt, Paprika and Black Pepper. Cover it up and leave to simmer for another 3 to 5 minutes",
+        "name": "Stir in the Diced Tomatoes, and season with Salt, Paprika and Black Pepper. Cover it up and leave to simmer for another 3 to 5 minutes",
+        "url": "https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/#wprm-recipe-10785-step-0-4"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Add the Smoked Fish (Seasoning Cube) and stir in the stock. Then, add the Garden Egg, mix well and leave to cook for about 10 to 15 minutes until the pulp becomes tender.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add the Smoked Fish (Seasoning Cube) and stir in the stock. Then, add the Garden Egg, mix well and leave to cook for about 10 to 15 minutes until the pulp becomes tender.",
+        "name": "Add the Smoked Fish (Seasoning Cube) and stir in the stock. Then, add the Garden Egg, mix well and leave to cook for about 10 to 15 minutes until the pulp becomes tender.",
+        "url": "https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/#wprm-recipe-10785-step-0-5"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "125 kcal",
+    "carbohydrateContent": "17 g",
+    "proteinContent": "8 g",
+    "fatContent": "3 g",
+    "cholesterolContent": "13 mg",
+    "sodiumContent": "274 mg",
+    "fiberContent": "5 g",
+    "sugarContent": "8 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2019/02/Eggplant-Stew-09.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2019/02/Eggplant-Stew-09-500x453.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2019/02/Eggplant-Stew-09-500x375.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2019/02/Eggplant-Stew-09-480x270.jpg"
+    ],
+    "video": {
+      "name": "Bell Peppers, Tomatoes and Eggplant Stew !",
+      "description": "Eggplant stew – A lovely and refreshing choice for a family meal. This Vibrantly colored, robustly flavored Eggplant stew is loaded with Onions, Red bell peppers, Yellow bell peppers, Green bell peppers, and Scallions.\n\nIngredients: https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/\n\n\nLET’S CONNECT!\n\nYou can find me on Facebook, Instagram, and Twitter, … I love keeping in touch with all of you 🙂\n\nIf you make this recipe, I’d love to see pictures of your creations on \n\nInstagram @cheflolaskitchen\nFacebook. @cheflolaskitchen\n\n-~-~~-~~~-~~-~-\nLatest Video: \"Super Crispy Baked Potato Wedges\" \nhttps://www.youtube.com/watch?v=YaVCk-U-Vic\n-~-~~-~~~-~~-~-",
+      "uploadDate": "2019-02-23T20:18:21+00:00",
+      "duration": "PT4M15S",
+      "thumbnailUrl": "https://i.ytimg.com/vi/4cdLytp9Vjw/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/4cdLytp9Vjw?feature=oembed",
+      "contentUrl": "https://www.youtube.com/watch?v=4cdLytp9Vjw",
+      "@type": "VideoObject"
+    }
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "video": {
+      "name": "Bell Peppers, Tomatoes and Eggplant Stew !",
+      "description": "Eggplant stew – A lovely and refreshing choice for a family meal. This Vibrantly colored, robustly flavored Eggplant stew is loaded with Onions, Red bell peppers, Yellow bell peppers, Green bell peppers, and Scallions.\n\nIngredients: https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/\n\n\nLET’S CONNECT!\n\nYou can find me on Facebook, Instagram, and Twitter, … I love keeping in touch with all of you 🙂\n\nIf you make this recipe, I’d love to see pictures of your creations on \n\nInstagram @cheflolaskitchen\nFacebook. @cheflolaskitchen\n\n-~-~~-~~~-~~-~-\nLatest Video: \"Super Crispy Baked Potato Wedges\" \nhttps://www.youtube.com/watch?v=YaVCk-U-Vic\n-~-~~-~~~-~~-~-",
+      "uploadDate": "2019-02-23T20:18:21+00:00",
+      "duration": "PT4M15S",
+      "thumbnailUrl": "https://i.ytimg.com/vi/4cdLytp9Vjw/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/4cdLytp9Vjw?feature=oembed",
+      "contentUrl": "https://www.youtube.com/watch?v=4cdLytp9Vjw",
+      "@type": "VideoObject"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.95",
+      "ratingCount": "18",
+      "reviewCount": "12"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I found this recipe a year ago when I didn't know what to do with an eggplant and it immediately became a favorite. I have actually never had smoked fish on hand, but the stew is so good even without that I forget! Potatoes and corn are a tasty addition when skipping the fish. I haven't been much of a cook before, but I'm starting to learn more and am so excited to finally explore the rest of your recipes. Thank you Lola!",
+        "author": {
+          "@type": "Person",
+          "name": "Natalie"
+        },
+        "datePublished": "2024-01-25"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Great base recipe!!!  2nd time I added black beans and we rolled the mixture in tortillas…..Mediterranea and Middle East meets Mex!!! Yummy. Thank you for a delicious base 👍🏽",
+        "author": {
+          "@type": "Person",
+          "name": "Gloria Corfias"
+        },
+        "datePublished": "2021-09-25"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Delicious and so easy to make. I put some hot peppers in it. Eggplant is so healthy veggie. Thank you for the recipe. I forgot to make pictures for instagram 😔😔😔. And I thought I make for two days. NOT! Almost seeing the bottem of my pan.😊😊😊. So I ll make a little side dish with rice with the rest of your eggplant stew. Have a nice day! 👌👌👌💖💖💖",
+        "author": {
+          "@type": "Person",
+          "name": "Ira"
+        },
+        "datePublished": "2020-01-05"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I love eating eggplant with a variety of bell peppers. Never heard of a stew with them. This sounds so flavorful and yummy.",
+        "author": {
+          "@type": "Person",
+          "name": "Andrea Metlika"
+        },
+        "datePublished": "2019-07-30"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "So easy and flavorful! I'm loving this recipe!",
+        "author": {
+          "@type": "Person",
+          "name": "kim"
+        },
+        "datePublished": "2019-07-30"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I’m always looking for new veggie packed stews to try and this looks delicious.",
+        "author": {
+          "@type": "Person",
+          "name": "Dannii"
+        },
+        "datePublished": "2019-07-30"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This is so bright and colorful! And your photos are making me hungry, looks delicious! Pinning this one!",
+        "author": {
+          "@type": "Person",
+          "name": "Mary Bostow"
+        },
+        "datePublished": "2019-07-30"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Never had eggplant prepared this way but I'm so excited to try, the flavors sound amazing in this dish!",
+        "author": {
+          "@type": "Person",
+          "name": "Mikayla"
+        },
+        "datePublished": "2019-04-28"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Just the title alone makes me excited - three of my favourite ingredients! Delicious :)",
+        "author": {
+          "@type": "Person",
+          "name": "Alexandra"
+        },
+        "datePublished": "2019-04-27"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This is comfort food for the win!",
+        "author": {
+          "@type": "Person",
+          "name": "Taylor Kiser"
+        },
+        "datePublished": "2019-04-27"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I love dishes full of veggies like this one!  This is some serious comfort food!",
+        "author": {
+          "@type": "Person",
+          "name": "Beth"
+        },
+        "datePublished": "2019-04-27"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I love the addition of the smoked fish to this recipe. It looks very tasty indeed. Thanks for sharing, I will have to whip it up! Cheers",
+        "author": {
+          "@type": "Person",
+          "name": "Adrianne Jamieson"
+        },
+        "datePublished": "2019-04-27"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Bell peppers, Tomato and Stew",
+    "author": {
+      "@id": "https://cheflolaskitchen.com/#/schema/person/210ab4ab02cd92f770d27cf2a114f9a5"
+    },
+    "description": "Eggplant stew – A lovely and refreshing choice for a family meal. This Vibrant color, robustly flavored Eggplant stew is loaded with Onions, Red bell peppers, Yellow bell peppers, Green bell peppers, and Scallions.",
+    "datePublished": "2019-02-23T12:05:55+00:00",
+    "image": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2019/02/Eggplant-Stew-09.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2019/02/Eggplant-Stew-09-500x453.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2019/02/Eggplant-Stew-09-500x375.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2019/02/Eggplant-Stew-09-480x270.jpg"
+    ],
+    "video": {
+      "name": "Bell Peppers, Tomatoes and Eggplant Stew !",
+      "description": "Eggplant stew – A lovely and refreshing choice for a family meal. This Vibrantly colored, robustly flavored Eggplant stew is loaded with Onions, Red bell peppers, Yellow bell peppers, Green bell peppers, and Scallions.\n\nIngredients: https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/\n\n\nLET’S CONNECT!\n\nYou can find me on Facebook, Instagram, and Twitter, … I love keeping in touch with all of you 🙂\n\nIf you make this recipe, I’d love to see pictures of your creations on \n\nInstagram @cheflolaskitchen\nFacebook. @cheflolaskitchen\n\n-~-~~-~~~-~~-~-\nLatest Video: \"Super Crispy Baked Potato Wedges\" \nhttps://www.youtube.com/watch?v=YaVCk-U-Vic\n-~-~~-~~~-~~-~-",
+      "uploadDate": "2019-02-23T20:18:21+00:00",
+      "duration": "PT4M15S",
+      "thumbnailUrl": "https://i.ytimg.com/vi/4cdLytp9Vjw/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/4cdLytp9Vjw?feature=oembed",
+      "contentUrl": "https://www.youtube.com/watch?v=4cdLytp9Vjw",
+      "@type": "VideoObject"
+    },
+    "recipeYield": [
+      "5",
+      "5 People"
+    ],
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "totalTime": "PT30M",
+    "recipeIngredient": [
+      "1  EggPlant",
+      "3 Tbsp Olive Oil",
+      "1/2 Cup Diced Red Bell Pepper",
+      "1/2 Cup Diced Greed Bell Peper",
+      "1/2 Cup Diced Yellow Bell Pepper",
+      "4  Ripe Tomatoes",
+      "1  Onion",
+      "2  Green Onions",
+      "1/4 lb Smoked Salmon Fish",
+      "2 Tsp Paprika",
+      "1 Tsp Red pepper flakes",
+      "1 Cup Chicken Stock",
+      "2 Cloves Garlic",
+      "1 Tsp Bouillon powder (Optional)",
+      "Salt",
+      "Black Pepper"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Trim the stem of the Garden Egg and cut into small Cubes.",
+        "name": "Trim the stem of the Garden Egg and cut into small Cubes.",
+        "url": "https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/#wprm-recipe-10785-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Pour the cut Garden Egg in a glass bowl, sprinkle with some Salt and pour hot water over it and leave it to soak for 5 to 10 minutes.",
+        "name": "Pour the cut Garden Egg in a glass bowl, sprinkle with some Salt and pour hot water over it and leave it to soak for 5 to 10 minutes.",
+        "url": "https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/#wprm-recipe-10785-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Meanwhile, preheat the Olive oil in a skillet, add the Diced Onions and cook till it becomes translucent about 3 to 5 minutes",
+        "name": "Meanwhile, preheat the Olive oil in a skillet, add the Diced Onions and cook till it becomes translucent about 3 to 5 minutes",
+        "url": "https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/#wprm-recipe-10785-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Add the Chili Flakes and minced Garlic  cook for another 2 minutes",
+        "name": "Add the Chili Flakes and minced Garlic  cook for another 2 minutes",
+        "url": "https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/#wprm-recipe-10785-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Stir in the Diced Tomatoes, and season with Salt, Paprika and Black Pepper. Cover it up and leave to simmer for another 3 to 5 minutes",
+        "name": "Stir in the Diced Tomatoes, and season with Salt, Paprika and Black Pepper. Cover it up and leave to simmer for another 3 to 5 minutes",
+        "url": "https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/#wprm-recipe-10785-step-0-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Add the Smoked Fish (Seasoning Cube) and stir in the stock. Then, add the Garden Egg, mix well and leave to cook for about 10 to 15 minutes until the pulp becomes tender.",
+        "name": "Add the Smoked Fish (Seasoning Cube) and stir in the stock. Then, add the Garden Egg, mix well and leave to cook for about 10 to 15 minutes until the pulp becomes tender.",
+        "url": "https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/#wprm-recipe-10785-step-0-5"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.95",
+      "ratingCount": "18",
+      "reviewCount": "12"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I found this recipe a year ago when I didn't know what to do with an eggplant and it immediately became a favorite. I have actually never had smoked fish on hand, but the stew is so good even without that I forget! Potatoes and corn are a tasty addition when skipping the fish. I haven't been much of a cook before, but I'm starting to learn more and am so excited to finally explore the rest of your recipes. Thank you Lola!",
+        "author": {
+          "@type": "Person",
+          "name": "Natalie"
+        },
+        "datePublished": "2024-01-25"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Great base recipe!!!  2nd time I added black beans and we rolled the mixture in tortillas…..Mediterranea and Middle East meets Mex!!! Yummy. Thank you for a delicious base 👍🏽",
+        "author": {
+          "@type": "Person",
+          "name": "Gloria Corfias"
+        },
+        "datePublished": "2021-09-25"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Delicious and so easy to make. I put some hot peppers in it. Eggplant is so healthy veggie. Thank you for the recipe. I forgot to make pictures for instagram 😔😔😔. And I thought I make for two days. NOT! Almost seeing the bottem of my pan.😊😊😊. So I ll make a little side dish with rice with the rest of your eggplant stew. Have a nice day! 👌👌👌💖💖💖",
+        "author": {
+          "@type": "Person",
+          "name": "Ira"
+        },
+        "datePublished": "2020-01-05"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I love eating eggplant with a variety of bell peppers. Never heard of a stew with them. This sounds so flavorful and yummy.",
+        "author": {
+          "@type": "Person",
+          "name": "Andrea Metlika"
+        },
+        "datePublished": "2019-07-30"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "So easy and flavorful! I'm loving this recipe!",
+        "author": {
+          "@type": "Person",
+          "name": "kim"
+        },
+        "datePublished": "2019-07-30"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I’m always looking for new veggie packed stews to try and this looks delicious.",
+        "author": {
+          "@type": "Person",
+          "name": "Dannii"
+        },
+        "datePublished": "2019-07-30"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This is so bright and colorful! And your photos are making me hungry, looks delicious! Pinning this one!",
+        "author": {
+          "@type": "Person",
+          "name": "Mary Bostow"
+        },
+        "datePublished": "2019-07-30"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Never had eggplant prepared this way but I'm so excited to try, the flavors sound amazing in this dish!",
+        "author": {
+          "@type": "Person",
+          "name": "Mikayla"
+        },
+        "datePublished": "2019-04-28"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Just the title alone makes me excited - three of my favourite ingredients! Delicious :)",
+        "author": {
+          "@type": "Person",
+          "name": "Alexandra"
+        },
+        "datePublished": "2019-04-27"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This is comfort food for the win!",
+        "author": {
+          "@type": "Person",
+          "name": "Taylor Kiser"
+        },
+        "datePublished": "2019-04-27"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I love dishes full of veggies like this one!  This is some serious comfort food!",
+        "author": {
+          "@type": "Person",
+          "name": "Beth"
+        },
+        "datePublished": "2019-04-27"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I love the addition of the smoked fish to this recipe. It looks very tasty indeed. Thanks for sharing, I will have to whip it up! Cheers",
+        "author": {
+          "@type": "Person",
+          "name": "Adrianne Jamieson"
+        },
+        "datePublished": "2019-04-27"
+      }
+    ],
+    "recipeCategory": [
+      "Breakfast"
+    ],
+    "recipeCuisine": [
+      "Global"
+    ],
+    "keywords": "homemade, stew",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "125 kcal",
+      "carbohydrateContent": "17 g",
+      "proteinContent": "8 g",
+      "fatContent": "3 g",
+      "cholesterolContent": "13 mg",
+      "sodiumContent": "274 mg",
+      "fiberContent": "5 g",
+      "sugarContent": "8 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/#recipe",
+    "isPartOf": {
+      "@id": "https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/#article"
+    },
+    "mainEntityOfPage": "https://cheflolaskitchen.com/bell-peppers-tomatoes-eggplant-stew/"
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:video|aggregateRating|review"
+  ]
+}

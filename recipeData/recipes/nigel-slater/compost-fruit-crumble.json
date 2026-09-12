@@ -1,0 +1,399 @@
+{
+  "schemaVersion": 1,
+  "id": "nigel-slater/compost-fruit-crumble",
+  "slug": "compost-fruit-crumble",
+  "chefId": "chef_nigel-slater",
+  "chefSlug": "nigel-slater",
+  "chefName": "Nigel Slater",
+  "title": "Compost fruit crumble",
+  "description": "Nigel Slater's fruit crumble tidies away fruit that's past its best under a delicious toasted oat and nut topping. Far too good for the compost heap.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/compost_crumble_38208",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/compost_crumble_38208",
+    "retrievedAt": "2026-09-11T00:28:39.257Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Nigel Slater"
+    ],
+    "datePublished": "2012-11-09T12:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "6b0c10a73ac0e7d38a3201063b027cf39b869363b7bccf0431f5dd94c565b25b",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups",
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 6-7"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "British"
+  ],
+  "category": [
+    "Desserts"
+  ],
+  "keywords": [
+    "best crumble",
+    "crumbles with a twist",
+    "flexible fruity puddings",
+    "flexible",
+    "using up older fruits",
+    "autumn",
+    "crumble",
+    "nectarine",
+    "egg free",
+    "pregnancy friendly",
+    "vegetarian",
+    "Nigel Slater's Dish of the Day"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "2 pears",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "pears",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 apple",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "apple",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 nectarines",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "nectarines",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ lemon, juice only",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "lemon, juice only",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 banana, roughly chopped into discs",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "banana",
+          "note": "roughly chopped into discs",
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp golden caster sugar",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "golden caster sugar",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the crumble topping",
+      "items": [
+        {
+          "raw": "200g/7oz plain flour",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "g",
+          "name": "/7oz plain flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz butter",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "60g/2¼oz rolled oats",
+          "quantity": 60,
+          "quantityText": "60",
+          "unit": "g",
+          "name": "/2¼oz rolled oats",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 large handful pumpkin seeds",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "large handful pumpkin seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "30g/1oz flaked almonds",
+          "quantity": 30,
+          "quantityText": "30",
+          "unit": "g",
+          "name": "/1oz flaked almonds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp sesame seeds",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "sesame seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 tbsp demerara sugar",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "demerara sugar",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To serve",
+      "items": [
+        {
+          "raw": "cream or custard",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "cream or custard",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 180C/350F/Gas 4.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 180C/350F/Gas 4. "
+    },
+    {
+      "order": 2,
+      "text": "Chop the pears, apple and nectarines and place in a pan over a low heat with the lemon juice. Warm through for 10 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Chop the pears, apple and nectarines and place in a pan over a low heat with the lemon juice. Warm through for 10 minutes."
+    },
+    {
+      "order": 3,
+      "text": "For the crumble topping, in a bowl, rub together the flour and butter with your hands until it resembles breadcrumbs. Add the remaining dry ingredients and the demarara sugar. Set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the crumble topping, in a bowl, rub together the flour and butter with your hands until it resembles breadcrumbs. Add the remaining dry ingredients and the demarara sugar. Set aside."
+    },
+    {
+      "order": 4,
+      "text": "Take a small roasting tin. Layer the warm fruit on the bottom, along with the chopped banana. Sprinkle with the golden caster sugar.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Take a small roasting tin. Layer the warm fruit on the bottom, along with the chopped banana. Sprinkle with the golden caster sugar."
+    },
+    {
+      "order": 5,
+      "text": "Top with the crumble mixture and bake for 20-30 minutes, or until the topping is golden-brown. Serve immediately with cream or custard.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Top with the crumble mixture and bake for 20-30 minutes, or until the topping is golden-brown. Serve immediately with cream or custard."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/compost_crumble_38208_16x9.jpg"
+    ],
+    "video": [
+      {
+        "description": "Stewed nectarines, pears and apple covered with a delicious toasted oat and nut topping. Far too good for the compost heap!",
+        "duration": "PT4M45S",
+        "name": "Compost crumble",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/compost_crumble_38208_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-08T01:30:56.000Z"
+      }
+    ]
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "The nectarines and pears are a lovely combination but you can substitute them for any fruit you have to hand. If your fruit is underripe, you may need to add a little extra sugar. If you prefer a more traditional crumble topping, try the classic apple crumble recipe."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 19,
+      "ratingValue": 4.7368421052631575
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "Stewed nectarines, pears and apple covered with a delicious toasted oat and nut topping. Far too good for the compost heap!",
+        "duration": "PT4M45S",
+        "name": "Compost crumble",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/compost_crumble_38208_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-08T01:30:56.000Z"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Nigel Slater's fruit crumble tidies away fruit that's past its best under a delicious toasted oat and nut topping. Far too good for the compost heap.",
+    "headline": "Compost fruit crumble",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/compost_crumble_38208_16x9.jpg"
+    },
+    "name": "Compost fruit crumble",
+    "author": {
+      "@type": "Person",
+      "name": "Nigel Slater"
+    },
+    "datePublished": "2012-11-09T12:00:00.000Z",
+    "dateModified": "2025-12-09T09:42:11.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 19,
+      "ratingValue": 4.7368421052631575
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT1H",
+    "keywords": "best crumble, crumbles with a twist, flexible fruity puddings, flexible, using up older fruits, autumn, crumble, nectarine, egg free, pregnancy friendly, vegetarian, Nigel Slater's Dish of the Day",
+    "recipeCategory": "Desserts",
+    "recipeCuisine": "British",
+    "recipeIngredient": [
+      "2 pears",
+      "1 apple",
+      "2 nectarines",
+      "½ lemon, juice only",
+      "1 banana, roughly chopped into discs",
+      "3 tbsp golden caster sugar",
+      "200g/7oz plain flour",
+      "100g/3½oz butter",
+      "60g/2¼oz rolled oats",
+      "1 large handful pumpkin seeds",
+      "30g/1oz flaked almonds ",
+      "2 tbsp sesame seeds",
+      "4 tbsp demerara sugar",
+      "cream or custard"
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 180C/350F/Gas 4. ",
+      "Chop the pears, apple and nectarines and place in a pan over a low heat with the lemon juice. Warm through for 10 minutes.",
+      "For the crumble topping, in a bowl, rub together the flour and butter with your hands until it resembles breadcrumbs. Add the remaining dry ingredients and the demarara sugar. Set aside.",
+      "Take a small roasting tin. Layer the warm fruit on the bottom, along with the chopped banana. Sprinkle with the golden caster sugar.",
+      "Top with the crumble mixture and bake for 20-30 minutes, or until the topping is golden-brown. Serve immediately with cream or custard."
+    ],
+    "recipeYield": "Serves 6-7",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "Stewed nectarines, pears and apple covered with a delicious toasted oat and nut topping. Far too good for the compost heap!",
+        "duration": "PT4M45S",
+        "name": "Compost crumble",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/compost_crumble_38208_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-08T01:30:56.000Z"
+      }
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet|video"
+  ]
+}

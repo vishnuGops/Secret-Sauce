@@ -1,0 +1,440 @@
+{
+  "schemaVersion": 1,
+  "id": "nigella-lawson/fried-chicken-sandwich",
+  "slug": "fried-chicken-sandwich",
+  "chefId": "chef_nigella-lawson",
+  "chefSlug": "nigella-lawson",
+  "chefName": "Nigella Lawson",
+  "title": "Fried chicken sandwich",
+  "description": "‘Fried’, ‘chicken’ and ‘sandwich’: three alluring enough words on their own; together, they promise pure, unbridled pleasure. And, frankly, that’s the only kind of pleasure I’m interested in.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/fried_chicken_sandwich_58048",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/fried_chicken_sandwich_58048",
+    "retrievedAt": "2026-09-11T00:26:15.767Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Nigella Lawson"
+    ],
+    "datePublished": "2020-11-16T15:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "ebc0215a2ee11ab5b2806bb48d10ae6db6b6bc816e87e4113e2c2f9665ac9ae5",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups",
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 1"
+    ],
+    "servings": 1
+  },
+  "timing": {
+    "prepMinutes": 120,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "brilliant burgers",
+    "best chicken",
+    "comfort food for one",
+    "easy summer chicken",
+    "fantastic fried chicken",
+    "fried favourites",
+    "homemade fast food",
+    "hot sandwich",
+    "kimchi favourites",
+    "meals for one",
+    "must-try meals for one",
+    "really good sandwiches",
+    "sandwich ideas",
+    "sports snacks and dinners",
+    "takeaway favourites",
+    "autumn",
+    "father's day",
+    "student food",
+    "winter",
+    "chicken burger",
+    "chicken thigh",
+    "pregnancy friendly",
+    "Nigella’s Cook",
+    "Eat",
+    "Repeat"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the pink-pickled onions",
+      "items": [
+        {
+          "raw": "½ red onion, thinly sliced",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "red onion",
+          "note": "thinly sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "red wine vinegar or lime juice to cover",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "red wine vinegar or lime juice to cover",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the fried chicken",
+      "items": [
+        {
+          "raw": "75ml/2½fl oz kefir, buttermilk or plain yoghurt",
+          "quantity": 75,
+          "quantityText": "75",
+          "unit": "ml",
+          "name": "/2½fl oz kefir, buttermilk or plain yoghurt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp hot smoked paprika, plus ¼ tsp for the coating",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "hot smoked paprika, plus ¼ tsp for the coating",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp fine sea salt, plus ¼ tsp for the coating",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "fine sea salt, plus ¼ tsp for the coating",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp lemon juice",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "lemon juice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp Dijon mustard",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "Dijon mustard",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp maple syrup",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "maple syrup",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 fat garlic clove, finely grated",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "fat garlic clove",
+          "note": "finely grated",
+          "isOptional": false
+        },
+        {
+          "raw": "1 small boneless chicken thigh fillet, skin removed",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "small boneless chicken thigh fillet, skin removed",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4–5 tbsp plain flour",
+          "quantity": 4,
+          "quantityText": "4–5",
+          "unit": "tbsp",
+          "name": "plain flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "sunflower oil for deep-frying",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "sunflower oil for deep-frying",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To serve",
+      "items": [
+        {
+          "raw": "4 tbsp garlic mayonnaise",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "garlic mayonnaise",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp crispy chilli oil or other chilli sauce",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "crispy chilli oil or other chilli sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ tsp honey",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "tsp",
+          "name": "honey",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 burger bun, split, or 2 slices white bread",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "burger bun, split, or 2 slices white bread",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "a few leaves iceberg lettuce",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "a few leaves iceberg lettuce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "kimchi or pickles of your choice",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "kimchi or pickles of your choice",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Make your pink-pickled onions in advance: at least 2 hours, and up to 24. Put the onion into a jar or bowl and cover with the vinegar (or lime juice), pressing down on the onions. Cover and leave the onions to steep.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Make your pink-pickled onions in advance: at least 2 hours, and up to 24. Put the onion into a jar or bowl and cover with the vinegar (or lime juice), pressing down on the onions. Cover and leave the onions to steep."
+    },
+    {
+      "order": 2,
+      "text": "Pour the kefir, buttermilk or yoghurt into a small dish and stir in the ½ teaspoon of paprika, ½ teaspoon of salt, lemon juice, mustard, maple syrup and garlic. Add the chicken and turn to coat in the marinade. Cover the dish, then leave in the fridge for at least 4 hours or up to 2 days. (If you simply cannot wait that long, leave the chicken out on the kitchen counter for 20–40 minutes.)",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pour the kefir, buttermilk or yoghurt into a small dish and stir in the ½ teaspoon of paprika, ½ teaspoon of salt, lemon juice, mustard, maple syrup and garlic. Add the chicken and turn to coat in the marinade. Cover the dish, then leave in the fridge for at least 4 hours or up to 2 days. (If you simply cannot wait that long, leave the chicken out on the kitchen counter for 20–40 minutes.)"
+    },
+    {
+      "order": 3,
+      "text": "Take the chicken out of the fridge in good time to get to room temperature before you start to cook it.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Take the chicken out of the fridge in good time to get to room temperature before you start to cook it."
+    },
+    {
+      "order": 4,
+      "text": "Mix the flour with the remaining ¼ teaspoon each of paprika and salt in a shallow dish. Lift the chicken out of the marinade, but don’t try and shake it off. Dredge both sides of the chicken in the seasoned flour, then dip briefly back into the marinade and dredge again. This double-dredging is essential to get a thick, shaggy coating. You can leave the coated chicken in the flour dish until you fry.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Mix the flour with the remaining ¼ teaspoon each of paprika and salt in a shallow dish. Lift the chicken out of the marinade, but don’t try and shake it off. Dredge both sides of the chicken in the seasoned flour, then dip briefly back into the marinade and dredge again. This double-dredging is essential to get a thick, shaggy coating. You can leave the coated chicken in the flour dish until you fry."
+    },
+    {
+      "order": 5,
+      "text": "Mix the garlic mayonnaise with the chilli oil and honey, and spread over both sides of a split burger bun (or a couple of slices of bread). Put a plate lined with kitchen paper by (but not dangerously near) the hob, if you want to get rid of any excess fat once the chicken’s cooked.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Mix the garlic mayonnaise with the chilli oil and honey, and spread over both sides of a split burger bun (or a couple of slices of bread). Put a plate lined with kitchen paper by (but not dangerously near) the hob, if you want to get rid of any excess fat once the chicken’s cooked."
+    },
+    {
+      "order": 6,
+      "text": "Pour enough oil into a deep, heavy-bottomed saucepan to come about 3½cm/1⅓in up the sides. Heat until a small piece of bread becomes golden and crisp almost instantly; if you have a food thermometer, you want the fat to be at 190°C when the chicken goes in. (CAUTION: hot oil can be dangerous. Do not leave unattended.) Using tongs, gently lower the chicken into the hot oil, and cook for 3–4 minutes on each side, until the coating is deep gold and very crisp and the chicken is completely cooked through. Drain on the paper-lined plate and leave to stand (for a couple of minutes) while you shred some iceberg lettuce and get out your pickles.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": "190°C",
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pour enough oil into a deep, heavy-bottomed saucepan to come about 3½cm/1⅓in up the sides. Heat until a small piece of bread becomes golden and crisp almost instantly; if you have a food thermometer, you want the fat to be at 190°C when the chicken goes in. (CAUTION: hot oil can be dangerous. Do not leave unattended.) Using tongs, gently lower the chicken into the hot oil, and cook for 3–4 minutes on each side, until the coating is deep gold and very crisp and the chicken is completely cooked through. Drain on the paper-lined plate and leave to stand (for a couple of minutes) while you shred some iceberg lettuce and get out your pickles. "
+    },
+    {
+      "order": 7,
+      "text": "Put a handful of lettuce on the mayo on the bottom of the bun, top with the fried chicken, add kimchi and pink-pickled onions, scatter with a bit more lettuce and squidge on the top of the bun. Go in cautiously: I have more than once burned my mouth.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put a handful of lettuce on the mayo on the bottom of the bun, top with the fried chicken, add kimchi and pink-pickled onions, scatter with a bit more lettuce and squidge on the top of the bun. Go in cautiously: I have more than once burned my mouth."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/fried_chicken_sandwich_58048_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "For the pink-pickled onions, use a whole onion if you prefer, as you will find yourself adding them to much else. Chinese crispy chilli oil is a staple in my kitchen but really, any chilli component works along with the mayonnaise; if using a sweeter sauce though omit the honey."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 38,
+      "ratingValue": 4.2894736842105265
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "‘Fried’, ‘chicken’ and ‘sandwich’: three alluring enough words on their own; together, they promise pure, unbridled pleasure. And, frankly, that’s the only kind of pleasure I’m interested in. ",
+    "headline": "Fried chicken sandwich",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/fried_chicken_sandwich_58048_16x9.jpg"
+    },
+    "name": "Fried chicken sandwich",
+    "author": {
+      "@type": "Person",
+      "name": "Nigella Lawson"
+    },
+    "datePublished": "2020-11-16T15:00:00.000Z",
+    "dateModified": "2025-05-19T14:20:25.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 38,
+      "ratingValue": 4.2894736842105265
+    },
+    "prepTime": "PT2H",
+    "cookTime": "PT30M",
+    "keywords": "brilliant burgers, best chicken, comfort food for one, easy summer chicken, fantastic fried chicken, fried favourites, homemade fast food, hot sandwich, kimchi favourites , meals for one, must-try meals for one , really good sandwiches, sandwich ideas, sports snacks and dinners, takeaway favourites, autumn, father's day, student food, winter, chicken burger, chicken thigh, pregnancy friendly, Nigella’s Cook, Eat, Repeat",
+    "recipeCategory": "Main course",
+    "recipeIngredient": [
+      "½ red onion, thinly sliced",
+      "red wine vinegar or lime juice to cover",
+      "75ml/2½fl oz kefir, buttermilk or plain yoghurt",
+      "½ tsp hot smoked paprika, plus ¼ tsp for the coating",
+      "½ tsp fine sea salt, plus ¼ tsp for the coating",
+      "1 tsp lemon juice",
+      "½ tsp Dijon mustard",
+      "½ tsp maple syrup",
+      "1 fat garlic clove, finely grated",
+      "1 small boneless chicken thigh fillet, skin removed",
+      "4–5 tbsp plain flour",
+      "sunflower oil for deep-frying",
+      "4 tbsp garlic mayonnaise",
+      "1 tsp crispy chilli oil or other chilli sauce",
+      "¼ tsp honey",
+      "1 burger bun, split, or 2 slices white bread",
+      "a few leaves iceberg lettuce",
+      "kimchi or pickles of your choice"
+    ],
+    "recipeInstructions": [
+      "Make your pink-pickled onions in advance: at least 2 hours, and up to 24. Put the onion into a jar or bowl and cover with the vinegar (or lime juice), pressing down on the onions. Cover and leave the onions to steep.",
+      "Pour the kefir, buttermilk or yoghurt into a small dish and stir in the ½ teaspoon of paprika, ½ teaspoon of salt, lemon juice, mustard, maple syrup and garlic. Add the chicken and turn to coat in the marinade. Cover the dish, then leave in the fridge for at least 4 hours or up to 2 days. (If you simply cannot wait that long, leave the chicken out on the kitchen counter for 20–40 minutes.)",
+      "Take the chicken out of the fridge in good time to get to room temperature before you start to cook it.",
+      "Mix the flour with the remaining ¼ teaspoon each of paprika and salt in a shallow dish. Lift the chicken out of the marinade, but don’t try and shake it off. Dredge both sides of the chicken in the seasoned flour, then dip briefly back into the marinade and dredge again. This double-dredging is essential to get a thick, shaggy coating. You can leave the coated chicken in the flour dish until you fry.",
+      "Mix the garlic mayonnaise with the chilli oil and honey, and spread over both sides of a split burger bun (or a couple of slices of bread). Put a plate lined with kitchen paper by (but not dangerously near) the hob, if you want to get rid of any excess fat once the chicken’s cooked.",
+      "Pour enough oil into a deep, heavy-bottomed saucepan to come about 3½cm/1⅓in up the sides. Heat until a small piece of bread becomes golden and crisp almost instantly; if you have a food thermometer, you want the fat to be at 190°C when the chicken goes in. (CAUTION: hot oil can be dangerous. Do not leave unattended.) Using tongs, gently lower the chicken into the hot oil, and cook for 3–4 minutes on each side, until the coating is deep gold and very crisp and the chicken is completely cooked through. Drain on the paper-lined plate and leave to stand (for a couple of minutes) while you shred some iceberg lettuce and get out your pickles. ",
+      "Put a handful of lettuce on the mayo on the bottom of the bun, top with the fried chicken, add kimchi and pink-pickled onions, scatter with a bit more lettuce and squidge on the top of the bun. Go in cautiously: I have more than once burned my mouth."
+    ],
+    "recipeYield": "Serves 1",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:4",
+    "range-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

@@ -1,0 +1,329 @@
+{
+  "schemaVersion": 1,
+  "id": "mary-berry/mary-berry-s-yorkshire-puddings",
+  "slug": "mary-berry-s-yorkshire-puddings",
+  "chefId": "chef_mary-berry",
+  "chefSlug": "mary-berry",
+  "chefName": "Mary Berry",
+  "title": "Mary Berry's Yorkshire puddings",
+  "description": "Mary Berry's Yorkshire pudding recipe is super simple, but effective. The secret to perfect Yorkshire puddings is the cooking technique, so do follow her instructions (or watch the recipe video). Resting the batter and getting the oven and oil really hot makes all the difference! If you're cooking a roast, check out our easy roast calculator to ensure your meat will be cooked to perfection.\n\n\nFor this recipe you will need a 12-hole deep bun tin, or two four-hole Yorkshire pudding tins or a large roasting tin.\n\n\nEach serving provides 197 kcal, 7g protein, 14.5g carbohydrates (of which 2g sugars), 12g fat (of which 3g saturates), 0.7g fibre and 0.3g salt.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/yorkshire_pudding_69240",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/yorkshire_pudding_69240",
+    "retrievedAt": "2026-09-11T00:27:32.899Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Mary Berry"
+    ],
+    "datePublished": "2014-03-17T17:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "99986bb7e62456bee579c67b1d92ea0d1e483b3b891d274be2fa319d60938d66",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 6"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "British"
+  ],
+  "category": [
+    "Side dishes"
+  ],
+  "keywords": [
+    "quick",
+    "best roast dinner sides",
+    "christmas essentials",
+    "batch cooking",
+    "best ever boxing day",
+    "christmas dinner",
+    "christmas sides",
+    "mary berry's christmas",
+    "classic sunday roasts",
+    "traditional roast beef dinner",
+    "easter dinner made easy",
+    "easter roast dinner",
+    "easy roast dinner",
+    "english regional classics",
+    "freezable christmas",
+    "friendmas",
+    "make ahead christmas",
+    "mary berry's easter",
+    "mary berry's roast dinners",
+    "mary berry favourites",
+    "proper pub grub",
+    "quick sides for roast dinner",
+    "retro british",
+    "roast beef christmas menu",
+    "sunday roast",
+    "the best roast dinner",
+    "vegetarian christmas side dishes",
+    "autumn",
+    "christmas",
+    "easter",
+    "new year and hogmanay",
+    "roast dinner",
+    "st george's day",
+    "winter",
+    "Yorkshire pudding",
+    "egg",
+    "nut free",
+    "pregnancy friendly",
+    "vegetarian",
+    "Mary Berry Cooks"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "100g/3½oz plain flour",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz plain flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ tsp salt",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 large free-range eggs",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "large free-range eggs",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "225ml/8fl oz milk (preferably semi-skimmed)",
+          "quantity": 225,
+          "quantityText": "225",
+          "unit": "ml",
+          "name": "/8fl oz milk (preferably semi-skimmed)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 tbsp sunflower oil",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "sunflower oil",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 220C/200C Fan/Gas 7.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 220C/200C Fan/Gas 7."
+    },
+    {
+      "order": 2,
+      "text": "Mix the flour and salt together in a bowl and make a well in the centre. Add the eggs and a little of the milk. Whisk until smooth, then gradually add the remaining milk. This can be done with a wooden spoon, but is easier with an electric hand-held whisk. Pour the mixture into a jug. Leave to rest for an hour if you have time.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Mix the flour and salt together in a bowl and make a well in the centre. Add the eggs and a little of the milk. Whisk until smooth, then gradually add the remaining milk. This can be done with a wooden spoon, but is easier with an electric hand-held whisk. Pour the mixture into a jug. Leave to rest for an hour if you have time."
+    },
+    {
+      "order": 3,
+      "text": "Measure a teaspoon of oil into each hole of a 12-bun tray, or a tablespoonful into each hole of a 4-hole tin, or 3 tablespoons into a roasting tin. Transfer to the oven for 5–10 minutes, or until the oil is piping hot.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Measure a teaspoon of oil into each hole of a 12-bun tray, or a tablespoonful into each hole of a 4-hole tin, or 3 tablespoons into a roasting tin. Transfer to the oven for 5–10 minutes, or until the oil is piping hot."
+    },
+    {
+      "order": 4,
+      "text": "Carefully remove from the oven and pour the batter equally between the holes or the tin. Quickly return the batter to the oven and cook for 20–25 minutes (35 if making the Yorkshire pudding in the roasting tin), or until golden-brown and well-risen. Serve immediately.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Carefully remove from the oven and pour the batter equally between the holes or the tin. Quickly return the batter to the oven and cook for 20–25 minutes (35 if making the Yorkshire pudding in the roasting tin), or until golden-brown and well-risen. Serve immediately."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "197kcal",
+    "proteinContent": "7g",
+    "carbohydrateContent": "14.5g",
+    "fatContent": "12g",
+    "fiberContent": "0.7g",
+    "saturatedFatContent": "3g",
+    "sugarContent": "2g"
+  },
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/yorkshire_pudding_69240_16x9.jpg"
+    ],
+    "video": [
+      {
+        "description": "Mary Berry reveals her clever trick for making perfect Yorkshire puddings ahead of time. You reheat them when it's time to serve and they're as good as if you'd just made them.",
+        "duration": "PT2M13S",
+        "name": "Yorkshire Puddings",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/yorkshire_pudding_69240_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T23:02:44.000Z"
+      }
+    ]
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "What is the secret to making Yorkshire puddings rise? Mary likes to add more eggs and omit a little milk in her recipe as decades of experience have convinced her this gets the best results. If you only have full-fat milk, replace a quarter of the milk with water. Technique is important for the best Yorkshires, so follow the recipe steps carefully. It is very important to get the oil piping hot. As soon as the batter is poured in it will set and start to cook giving you crisp well-risen puds. Should you let Yorkshire pudding batter rest? Resting Yorkshire pudding batter is definitely beneficial but not essential. Resting helps them rise fully during cooking because it allows the gluten to ‘relax’ and relaxed gluten is more stretchy. Ideally rest the batter for at least 30 minutes and up to 2 hours at room temperature, or overnight in the fridge (allow the batter to come back to room temperature before cooking). Should Yorkshire pudding batter be thick or runny? The batter should be about as thick as double cream (so easily pourable but with some body). Why do my Yorkshire puddings rise then go flat? It might be because the oven door was opened while they were cooking. Yorkshire puddings need a consistently high heat to rise fully and set. It’s also important to cook them fully – if you remove them from the oven before the structure is set they will sink. Wait until they are a fairly dark golden-brown before removing them from the oven. Can you make Yorkshire puddings in advance and reheat? The Yorkshire puddings can be made completely ahead and reheated in a hot oven for about 8 minutes. The cooked puddings can also be frozen and cooked from frozen in about 10 minutes. They will go a little soft as they cool, but don't worry as they will crisp up again when you reheat them."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 353,
+      "ratingValue": 4.674220963172805
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "Mary Berry reveals her clever trick for making perfect Yorkshire puddings ahead of time. You reheat them when it's time to serve and they're as good as if you'd just made them.",
+        "duration": "PT2M13S",
+        "name": "Yorkshire Puddings",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/yorkshire_pudding_69240_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T23:02:44.000Z"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Mary Berry's Yorkshire pudding recipe is super simple, but effective.  The secret to perfect Yorkshire puddings is the cooking technique, so do follow her instructions (or watch the recipe video). Resting the batter and getting the oven and oil really hot makes all the difference! If you're cooking a roast, check out our easy <a href=\"https://www.bbc.co.uk/food/articles/roast-calculator\">roast calculator</a> to ensure your meat will be cooked to perfection.\r\n<br></br>\r\nFor this recipe you will need a 12-hole deep bun tin, or two four-hole Yorkshire pudding tins or a large roasting tin.\r\n<br></br>\r\nEach serving provides 197 kcal, 7g protein, 14.5g carbohydrates (of which 2g sugars), 12g fat (of which 3g saturates), 0.7g fibre and 0.3g salt.",
+    "headline": "Mary Berry's Yorkshire puddings ",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/yorkshire_pudding_69240_16x9.jpg"
+    },
+    "name": "Mary Berry's Yorkshire puddings ",
+    "author": {
+      "@type": "Person",
+      "name": "Mary Berry"
+    },
+    "datePublished": "2014-03-17T17:00:00.000Z",
+    "dateModified": "2026-09-10T16:11:36.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 353,
+      "ratingValue": 4.674220963172805
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, best roast dinner sides, christmas essentials, batch cooking, best ever boxing day, christmas dinner, christmas sides, mary berry's christmas, classic sunday roasts, traditional roast beef dinner, easter dinner made easy, easter roast dinner, easy roast dinner, english regional classics , freezable christmas, friendmas, make ahead christmas, mary berry's easter, mary berry's roast dinners, mary berry favourites, proper pub grub, quick sides for roast dinner, retro british, roast beef christmas menu, sunday roast, the best roast dinner, vegetarian christmas side dishes, autumn, christmas, easter, new year and hogmanay, roast dinner, st george's day, winter, Yorkshire pudding, egg, nut free, pregnancy friendly, vegetarian, Mary Berry Cooks",
+    "nutrition": {
+      "calories": "197kcal",
+      "proteinContent": "7g",
+      "carbohydrateContent": "14.5g",
+      "fatContent": "12g",
+      "fiberContent": "0.7g",
+      "saturatedFatContent": "3g",
+      "sugarContent": "2g"
+    },
+    "recipeCategory": "Side dishes",
+    "recipeCuisine": "British",
+    "recipeIngredient": [
+      "100g/3½oz plain flour",
+      "¼ tsp salt",
+      "3 large free-range eggs ",
+      "225ml/8fl oz milk (preferably semi-skimmed)",
+      "4 tbsp sunflower oil"
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 220C/200C Fan/Gas 7.",
+      "Mix the flour and salt together in a bowl and make a well in the centre. Add the eggs and a little of the milk. Whisk until smooth, then gradually add the remaining milk. This can be done with a wooden spoon, but is easier with an electric hand-held whisk. Pour the mixture into a jug. Leave to rest for an hour if you have time.",
+      "Measure a teaspoon of oil into each hole of a 12-bun tray, or a tablespoonful into each hole of a 4-hole tin, or 3 tablespoons into a roasting tin. Transfer to the oven for 5–10 minutes, or until the oil is piping hot.",
+      "Carefully remove from the oven and pour the batter equally between the holes or the tin. Quickly return the batter to the oven and cook for 20–25 minutes (35 if making the Yorkshire pudding in the roasting tin), or until golden-brown and well-risen. Serve immediately."
+    ],
+    "recipeYield": "Serves 6",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "Mary Berry reveals her clever trick for making perfect Yorkshire puddings ahead of time. You reheat them when it's time to serve and they're as good as if you'd just made them.",
+        "duration": "PT2M13S",
+        "name": "Yorkshire Puddings",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/yorkshire_pudding_69240_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T23:02:44.000Z"
+      }
+    ]
+  },
+  "audit": [
+    "unmapped:aggregateRating|suitableForDiet|video"
+  ]
+}

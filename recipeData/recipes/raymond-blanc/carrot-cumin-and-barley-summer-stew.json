@@ -1,0 +1,414 @@
+{
+  "schemaVersion": 1,
+  "id": "raymond-blanc/carrot-cumin-and-barley-summer-stew",
+  "slug": "carrot-cumin-and-barley-summer-stew",
+  "chefId": "chef_raymond-blanc",
+  "chefSlug": "raymond-blanc",
+  "chefName": "Raymond Blanc",
+  "title": "Carrot, cumin and barley summer stew",
+  "description": "For many years I’ve had a deep longing to create a form of risotto using barley, but as the Italians might tell me off, I decided to play safe and call this a stew. The spices add complex notes, but the heat should be gentle. The dish is wholesome, satisfying and healthy yet luxuriously creamy and a fantastic showcase for the big flavour of my favourite Early Nantes carrots.\n\nEach serving provides 351kcal, 7g protein, 51g carbohydrates (of which 18g sugars), 12g fat (of which 1g saturates), 7g fibre and 0.8g salt.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/carrot_cumin_and_barley_69308",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/carrot_cumin_and_barley_69308",
+    "retrievedAt": "2026-09-11T00:27:25.200Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Raymond Blanc"
+    ],
+    "datePublished": "2015-03-23T14:01:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "c6eb7e5f2c98ab31f1e9ddc1738d590ddca9381907f127f9fdc225928abdb1e9",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 120,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "summer dinner",
+    "veganuary",
+    "veggie stew",
+    "carrot",
+    "dairy free",
+    "egg free",
+    "healthy",
+    "nut free",
+    "pregnancy friendly",
+    "vegan",
+    "vegetarian",
+    "Kew on a Plate"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the carrots",
+      "items": [
+        {
+          "raw": "500ml/18fl oz carrot juice",
+          "quantity": 500,
+          "quantityText": "500",
+          "unit": "ml",
+          "name": "/18fl oz carrot juice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "large pinch of sea salt",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "large pinch of sea salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground cumin",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground cumin",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 carrots (ideally Early Nantes), skin on, scrubbed, halved lengthways then cut into 1cm/½in slices at an angle",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": null,
+          "name": "carrots (ideally Early Nantes)",
+          "note": "skin on, scrubbed, halved lengthways then cut into 1cm/½in slices at an angle",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the barley",
+      "items": [
+        {
+          "raw": "2 tbsp rapeseed oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "rapeseed oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "80g/2¾oz white onion (about ½ a medium onion), chopped",
+          "quantity": 80,
+          "quantityText": "80",
+          "unit": "g",
+          "name": "/2¾oz white onion (about ½ a medium onion)",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2 Pasilla Bajio chillies, deseeded and finely chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "Pasilla Bajio chillies",
+          "note": "deseeded and finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "150g/5½oz pearl barley",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "g",
+          "name": "/5½oz pearl barley",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground cumin",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground cumin",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 corn cob, cooked in boiling water for 20 minutes, covered",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "corn cob, cooked in boiling water for 20 minutes, covered",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 rainbow chard leaves, rolled and chopped; stems cut into 3cm/1¼in pieces",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "rainbow chard leaves",
+          "note": "rolled and chopped; stems cut into 3cm/1¼in pieces",
+          "isOptional": false
+        },
+        {
+          "raw": "3 spring onions, finely sliced",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "spring onions",
+          "note": "finely sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "small bunch coriander, chopped",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "small bunch coriander",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "½ lemon, juice only",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "lemon, juice only",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To finish",
+      "items": [
+        {
+          "raw": "1½ tbsp rapeseed oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tbsp rapeseed oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "micro coriander (optional)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "micro coriander (optional)",
+          "note": null,
+          "isOptional": true
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "For the carrots, in a large saucepan over a medium heat, bring the carrot juice and 100ml/3½fl oz water to the boil, then add the salt and cumin. Add the carrots and simmer gently for 10 minutes, or until they are cooked through. Remove from the heat, remove the carrots and reserve the cooking liquor.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the carrots, in a large saucepan over a medium heat, bring the carrot juice and 100ml/3½fl oz water to the boil, then add the salt and cumin. Add the carrots and simmer gently for 10 minutes, or until they are cooked through. Remove from the heat, remove the carrots and reserve the cooking liquor. "
+    },
+    {
+      "order": 2,
+      "text": "For the barley, in a medium, lidded saucepan over a medium heat, heat the oil and gently fry the onions and chillies for 5 minutes, covered with a lid, until softened. Stir in the barley and cumin and continue to fry for a minute. Add 500ml/18fl oz of the carrot cooking liquor to the pan. Bring to a gentle simmer, then cover with the lid and cook for 50–55 minutes, stirring from time to time, until the barley swells and is firm with a good bite. Check the texture, taste and season with salt and pepper. Cook for a few minutes more, if necessary. Set aside in the pan.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the barley, in a medium, lidded saucepan over a medium heat, heat the oil and gently fry the onions and chillies for 5 minutes, covered with a lid, until softened. Stir in the barley and cumin and continue to fry for a minute. Add 500ml/18fl oz of the carrot cooking liquor to the pan. Bring to a gentle simmer, then cover with the lid and cook for 50–55 minutes, stirring from time to time, until the barley swells and is firm with a good bite. Check the texture, taste and season with salt and pepper. Cook for a few minutes more, if necessary. Set aside in the pan. "
+    },
+    {
+      "order": 3,
+      "text": "To finish the barley risotto, using a long knife, carefully cut the kernels off the corn cob by running a knife along the central core. Keep 4 of the biggest lengths intact to use as garnish. Set these aside then release the kernels from the rest. Add the chard stems and leaves, spring onions and loose corn kernels to the barley pan and stir. Place the pan back on a medium heat and cook for 12 minutes. Add the coriander and cook for a further minute until wilted. Finally, taste and adjust the seasoning if required, then add the lemon juice to sharpen the flavour.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To finish the barley risotto, using a long knife, carefully cut the kernels off the corn cob by running a knife along the central core. Keep 4 of the biggest lengths intact to use as garnish. Set these aside then release the kernels from the rest. Add the chard stems and leaves, spring onions and loose corn kernels to the barley pan and stir. Place the pan back on a medium heat and cook for 12 minutes. Add the coriander and cook for a further minute until wilted. Finally, taste and adjust the seasoning if required, then add the lemon juice to sharpen the flavour. "
+    },
+    {
+      "order": 4,
+      "text": "To finish, in a frying pan over a medium heat, fry the cooked carrot pieces in the rapeseed oil for 6–7 minutes, until caramelised. Add the reserved pieces of sliced corn to the pan and cook for 3 minutes, or until they begin to brown.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To finish, in a frying pan over a medium heat, fry the cooked carrot pieces in the rapeseed oil for 6–7 minutes, until caramelised. Add the reserved pieces of sliced corn to the pan and cook for 3 minutes, or until they begin to brown. "
+    },
+    {
+      "order": 5,
+      "text": "To serve, remove the caramelised carrots, add them to the barley risotto and divide the risotto evenly between four plates. Finish with a length of sliced corn and micro coriander, if using. Serve immediately.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To serve, remove the caramelised carrots, add them to the barley risotto and divide the risotto evenly between four plates. Finish with a length of sliced corn and micro coriander, if using. Serve immediately."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "351kcal",
+    "proteinContent": "7g",
+    "carbohydrateContent": "51g",
+    "fatContent": "12g",
+    "fiberContent": "7g",
+    "saturatedFatContent": "1g",
+    "sugarContent": "18g"
+  },
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/carrot_cumin_and_barley_69308_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 6,
+      "ratingValue": 3.5
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/LowCalorieDiet",
+      "http://schema.org/VeganDiet",
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "For many years I’ve had a deep longing to create a form of risotto using barley, but as the Italians might tell me off, I decided to play safe and call this a stew. The spices add complex notes, but the heat should be gentle. The dish is wholesome, satisfying and healthy yet luxuriously creamy and a fantastic showcase for the big flavour of my favourite Early Nantes carrots.\r\n\r\nEach serving provides 351kcal, 7g protein, 51g carbohydrates (of which 18g sugars), 12g fat (of which 1g saturates), 7g fibre and\t0.8g salt.\r\n",
+    "headline": "Carrot, cumin and barley summer stew",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/carrot_cumin_and_barley_69308_16x9.jpg"
+    },
+    "name": "Carrot, cumin and barley summer stew",
+    "author": {
+      "@type": "Person",
+      "name": "Raymond Blanc"
+    },
+    "datePublished": "2015-03-23T14:01:00.000Z",
+    "dateModified": "2024-12-16T16:11:41.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 6,
+      "ratingValue": 3.5
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT2H",
+    "keywords": "summer dinner, veganuary, veggie stew, carrot, dairy free, egg free, healthy, nut free, pregnancy friendly, vegan, vegetarian, Kew on a Plate",
+    "nutrition": {
+      "calories": "351kcal",
+      "proteinContent": "7g",
+      "carbohydrateContent": "51g",
+      "fatContent": "12g",
+      "fiberContent": "7g",
+      "saturatedFatContent": "1g",
+      "sugarContent": "18g"
+    },
+    "recipeCategory": "Main course",
+    "recipeIngredient": [
+      "500ml/18fl oz carrot juice ",
+      "large pinch of sea salt ",
+      "1 tsp ground cumin ",
+      "6 carrots (ideally Early Nantes), skin on, scrubbed, halved lengthways then cut into 1cm/½in slices at an angle ",
+      "2 tbsp rapeseed oil ",
+      "80g/2¾oz white onion (about ½ a medium onion), chopped ",
+      "2 Pasilla Bajio chillies, deseeded and finely chopped ",
+      "150g/5½oz pearl barley ",
+      "1 tsp ground cumin ",
+      "1 corn cob, cooked in boiling water for 20 minutes, covered ",
+      "4 rainbow chard leaves, rolled and chopped; stems cut into 3cm/1¼in pieces ",
+      "3 spring onions, finely sliced ",
+      "small bunch coriander, chopped ",
+      "½ lemon, juice only ",
+      "salt and freshly ground black pepper",
+      "1½ tbsp rapeseed oil ",
+      "micro coriander (optional)"
+    ],
+    "recipeInstructions": [
+      "For the carrots, in a large saucepan over a medium heat, bring the carrot juice and 100ml/3½fl oz water to the boil, then add the salt and cumin. Add the carrots and simmer gently for 10 minutes, or until they are cooked through. Remove from the heat, remove the carrots and reserve the cooking liquor. ",
+      "For the barley, in a medium, lidded saucepan over a medium heat, heat the oil and gently fry the onions and chillies for 5 minutes, covered with a lid, until softened. Stir in the barley and cumin and continue to fry for a minute. Add 500ml/18fl oz of the carrot cooking liquor to the pan. Bring to a gentle simmer, then cover with the lid and cook for 50–55 minutes, stirring from time to time, until the barley swells and is firm with a good bite. Check the texture, taste and season with salt and pepper. Cook for a few minutes more, if necessary. Set aside in the pan. ",
+      "To finish the barley risotto, using a long knife, carefully cut the kernels off the corn cob by running a knife along the central core. Keep 4 of the biggest lengths intact to use as garnish. Set these aside then release the kernels from the rest. Add the chard stems and leaves, spring onions and loose corn kernels to the barley pan and stir. Place the pan back on a medium heat and cook for 12 minutes. Add the coriander and cook for a further minute until wilted. Finally, taste and adjust the seasoning if required, then add the lemon juice to sharpen the flavour. ",
+      "To finish, in a frying pan over a medium heat, fry the cooked carrot pieces in the rapeseed oil for 6–7 minutes, until caramelised. Add the reserved pieces of sliced corn to the pan and cook for 3 minutes, or until they begin to brown. ",
+      "To serve, remove the caramelised carrots, add them to the barley risotto and divide the risotto evenly between four plates. Finish with a length of sliced corn and micro coriander, if using. Serve immediately."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/LowCalorieDiet",
+      "http://schema.org/VeganDiet",
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:4",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

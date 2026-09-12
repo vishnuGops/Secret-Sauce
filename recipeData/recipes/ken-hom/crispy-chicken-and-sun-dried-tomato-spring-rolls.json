@@ -1,0 +1,363 @@
+{
+  "schemaVersion": 1,
+  "id": "ken-hom/crispy-chicken-and-sun-dried-tomato-spring-rolls",
+  "slug": "crispy-chicken-and-sun-dried-tomato-spring-rolls",
+  "chefId": "chef_ken-hom",
+  "chefSlug": "ken-hom",
+  "chefName": "Ken Hom",
+  "title": "Crispy chicken and sun-dried tomato spring rolls",
+  "description": "Ken Hom’s spring rolls are bursting with flavour and surprisingly easy to make.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/crispy_chicken_and_40136",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/crispy_chicken_and_40136",
+    "retrievedAt": "2026-09-11T00:27:03.574Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Ken Hom"
+    ],
+    "datePublished": "2017-11-29T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "ebe3e63068e110b33cf5f95892ed1e650a431ba8d7d0e3bd24960701e2b94656",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Makes 35–40"
+    ],
+    "servings": 35
+  },
+  "timing": {
+    "prepMinutes": 60,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Chinese"
+  ],
+  "category": [
+    "Light meals & snacks"
+  ],
+  "keywords": [
+    "noodles",
+    "chicken breast",
+    "pregnancy friendly",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "55g/2oz glass noodles",
+          "quantity": 55,
+          "quantityText": "55",
+          "unit": "g",
+          "name": "/2oz glass noodles",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "225g skinless chicken breast, cut into thin strips",
+          "quantity": 225,
+          "quantityText": "225",
+          "unit": "g",
+          "name": "skinless chicken breast, cut into thin strips",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp olive oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp finely chopped spring onions",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "finely chopped spring onions",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp finely chopped fresh chives",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "finely chopped fresh chives",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp finely chopped fresh coriander",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "finely chopped fresh coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp finely chopped sun-dried tomatoes",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "finely chopped sun-dried tomatoes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp plain flour",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "plain flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp water",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "300ml/10fl oz groundnut oil",
+          "quantity": 300,
+          "quantityText": "300",
+          "unit": "ml",
+          "name": "/10fl oz groundnut oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 pack 22cm/8in banh trang rice paper wrappers",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "pack 22cm/8in banh trang rice paper wrappers",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 iceberg lettuce, leaves separated into cups",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "iceberg lettuce",
+          "note": "leaves separated into cups",
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp fresh basil leaves, torn",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "fresh basil leaves",
+          "note": "torn",
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp coriander sprigs, leaves left whole",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "coriander sprigs, leaves left whole",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Soak the noodles in warm water for about 15 minutes, or until soft. Drain in a colander and cut them into thirds. Squeeze out any excess moisture in a clean tea towel.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Soak the noodles in warm water for about 15 minutes, or until soft. Drain in a colander and cut them into thirds. Squeeze out any excess moisture in a clean tea towel."
+    },
+    {
+      "order": 2,
+      "text": "Meanwhile, mix the chicken with some salt and pepper, the olive oil, spring onions, chives, coriander and sun-dried tomatoes in a bowl. Add the noodles and mix well.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, mix the chicken with some salt and pepper, the olive oil, spring onions, chives, coriander and sun-dried tomatoes in a bowl. Add the noodles and mix well. "
+    },
+    {
+      "order": 3,
+      "text": "Make a paste by mixing the flour and water together.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Make a paste by mixing the flour and water together. "
+    },
+    {
+      "order": 4,
+      "text": "When you are ready to make the rolls, fill a large bowl with warm water. Dip a rice paper wrapper in the water and let it soften for 1 minute. Remove and drain on a clean tea towel.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "When you are ready to make the rolls, fill a large bowl with warm water. Dip a rice paper wrapper in the water and let it soften for 1 minute. Remove and drain on a clean tea towel."
+    },
+    {
+      "order": 5,
+      "text": "Place a large spoonful of the filling in the middle of the wrapper and roll the bottom edge over the filling, fold up both sides of the rice paper, and continue to roll to the end. Seal the end with a little of the flour paste mixture. The roll should be compact and tight, about 7.5cm/3in. Place on a clean plate and continue the process until you have used up all the filling.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place a large spoonful of the filling in the middle of the wrapper and roll the bottom edge over the filling, fold up both sides of the rice paper, and continue to roll to the end. Seal the end with a little of the flour paste mixture. The roll should be compact and tight, about 7.5cm/3in. Place on a clean plate and continue the process until you have used up all the filling."
+    },
+    {
+      "order": 6,
+      "text": "Heat the oil in a wok or large frying-pan over a high heat to smoking point. Turn the heat down to medium and deep-fry the rolls a few at a time, until they are golden-brown. They have a tendency to stick to each other, so only fry a few at a time. Do not attempt to break them apart if they stick together, you can do this after they have been removed from the oil. Drain each batch on kitchen paper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat the oil in a wok or large frying-pan over a high heat to smoking point. Turn the heat down to medium and deep-fry the rolls a few at a time, until they are golden-brown. They have a tendency to stick to each other, so only fry a few at a time. Do not attempt to break them apart if they stick together, you can do this after they have been removed from the oil. Drain each batch on kitchen paper. "
+    },
+    {
+      "order": 7,
+      "text": "Serve with iceberg lettuce cups, fresh basil and coriander sprigs.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Serve with iceberg lettuce cups, fresh basil and coriander sprigs."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "The rolls can be made ahead before frying; cover loosely with dry tea towel and place in the fridge for up to 4 hours."
+    ]
+  },
+  "unmappedFields": {
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Ken Hom’s spring rolls are bursting with flavour and surprisingly easy to make. \r\n\r\n",
+    "headline": "Crispy chicken and sun-dried tomato spring rolls",
+    "image": null,
+    "name": "Crispy chicken and sun-dried tomato spring rolls",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Hom"
+    },
+    "datePublished": "2017-11-29T00:00:00.000Z",
+    "dateModified": "2024-11-27T11:37:11.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "prepTime": "PT1H",
+    "cookTime": "PT30M",
+    "keywords": "noodles, chicken breast, pregnancy friendly, Saturday Kitchen Best Bites",
+    "recipeCategory": "Light meals & snacks",
+    "recipeCuisine": "Chinese",
+    "recipeIngredient": [
+      "55g/2oz glass noodles",
+      "225g skinless chicken breast, cut into thin strips",
+      "2 tsp olive oil",
+      "1 tbsp finely chopped spring onions",
+      "2 tbsp finely chopped fresh chives",
+      "2 tsp finely chopped fresh coriander",
+      "2 tbsp finely chopped sun-dried tomatoes",
+      "3 tbsp plain flour",
+      "3 tbsp water",
+      "300ml/10fl oz groundnut oil",
+      "1 pack 22cm/8in banh trang rice paper wrappers",
+      "1 iceberg lettuce, leaves separated into cups",
+      "2 tbsp fresh basil leaves, torn ",
+      "2 tbsp coriander sprigs, leaves left whole",
+      "salt and freshly ground pepper "
+    ],
+    "recipeInstructions": [
+      "Soak the noodles in warm water for about 15 minutes, or until soft. Drain in a colander and cut them into thirds. Squeeze out any excess moisture in a clean tea towel.",
+      "Meanwhile, mix the chicken with some salt and pepper, the olive oil, spring onions, chives, coriander and sun-dried tomatoes in a bowl. Add the noodles and mix well. ",
+      "Make a paste by mixing the flour and water together. ",
+      "When you are ready to make the rolls, fill a large bowl with warm water. Dip a rice paper wrapper in the water and let it soften for 1 minute. Remove and drain on a clean tea towel.",
+      "Place a large spoonful of the filling in the middle of the wrapper and roll the bottom edge over the filling, fold up both sides of the rice paper, and continue to roll to the end. Seal the end with a little of the flour paste mixture. The roll should be compact and tight, about 7.5cm/3in. Place on a clean plate and continue the process until you have used up all the filling.",
+      "Heat the oil in a wok or large frying-pan over a high heat to smoking point. Turn the heat down to medium and deep-fry the rolls a few at a time, until they are golden-brown. They have a tendency to stick to each other, so only fry a few at a time. Do not attempt to break them apart if they stick together, you can do this after they have been removed from the oil. Drain each batch on kitchen paper. ",
+      "Serve with iceberg lettuce cups, fresh basil and coriander sprigs."
+    ],
+    "recipeYield": "Makes 35–40",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:suitableForDiet"
+  ]
+}

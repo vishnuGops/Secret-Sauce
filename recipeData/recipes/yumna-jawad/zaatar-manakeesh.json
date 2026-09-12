@@ -1,0 +1,661 @@
+{
+  "schemaVersion": 1,
+  "id": "yumna-jawad/zaatar-manakeesh",
+  "slug": "zaatar-manakeesh",
+  "chefId": "chef_yumna-jawad",
+  "chefSlug": "yumna-jawad",
+  "chefName": "Yumna Jawad",
+  "title": "Zaatar Manakeesh",
+  "description": "Zaatar Manakeesh is a Mediterranean flatbread that's made with dough and zaatar spice. It's an easy recipe to make from scratch using very few ingredients!",
+  "source": {
+    "sourceUrl": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/",
+    "finalUrl": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/",
+    "retrievedAt": "2026-09-11T02:46:48.147Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2019-05-07T09:48:12+00:00",
+    "rights": "Feel Good Foodie. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "d56d00f0130b7e77fdae3b2c850bb5f4b6fe9eb3f6ed0a59745358faeb1e2541",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": [
+        "equipment-from-html: 4",
+        "regrouped-from-html: 2 groups"
+      ]
+    },
+    "robots": "allows recipe paths; /wp-admin/ and /signup/ disallowed"
+  },
+  "yield": {
+    "raw": [
+      "6",
+      "6 servings"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 10,
+    "cookMinutes": 12,
+    "totalMinutes": 82,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Middle Eastern"
+  ],
+  "category": [
+    "Breakfast"
+  ],
+  "keywords": [
+    "homemade manakeesh",
+    "zaatar bread",
+    "zaatar manakeesh recipe"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "Dough",
+      "items": [
+        {
+          "raw": "1 tablespoon instant yeast",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "instant yeast",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 cup warm water",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "cup",
+          "name": "warm water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 teaspoon salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 teaspoon granulated sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "granulated sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 cups all-purpose flour (plus more for shaping)",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "cups",
+          "name": "all-purpose flour (plus more for shaping)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tablespoons olive oil (plus more for coating bowl)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "olive oil (plus more for coating bowl)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "Zaatar Spread",
+      "items": [
+        {
+          "raw": "1/3 cup zaatar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/3 cup zaatar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/4 cup olive oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/4 cup olive oil",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "In a large bowl, activate the yeast in warm water; allow 10 minutes for it to proof.",
+      "stepGroup": "Make the Dough",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a large bowl, activate the yeast in warm water; allow 10 minutes for it to proof.",
+        "name": "In a large bowl, activate the yeast in warm water; allow 10 minutes for it to proof.",
+        "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Add the salt, sugar and olive oil to bowl and use a wooden spoon to mix until combined. Wait a few minutes, then add the flour into the wet ingredients and mix with a spoon until the dough becomes shaggy and you’re no longer able to mix.",
+      "stepGroup": "Make the Dough",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add the salt, sugar and olive oil to bowl and use a wooden spoon to mix until combined. Wait a few minutes, then add the flour into the wet ingredients and mix with a spoon until the dough becomes shaggy and you’re no longer able to mix.",
+        "name": "Add the salt, sugar and olive oil to bowl and use a wooden spoon to mix until combined. Wait a few minutes, then add the flour into the wet ingredients and mix with a spoon until the dough becomes shaggy and you’re no longer able to mix.",
+        "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Transfer to a floured surface and knead the dough by hand to form a tight ball.",
+      "stepGroup": "Make the Dough",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Transfer to a floured surface and knead the dough by hand to form a tight ball.",
+        "name": "Transfer to a floured surface and knead the dough by hand to form a tight ball.",
+        "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Place the dough back into the same oil-coated bowl. Cover with a plastic wrap or towel and set aside at room temperature to rise for 45-60 minutes.",
+      "stepGroup": "Make the Dough",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Place the dough back into the same oil-coated bowl. Cover with a plastic wrap or towel and set aside at room temperature to rise for 45-60 minutes.",
+        "name": "Place the dough back into the same oil-coated bowl. Cover with a plastic wrap or towel and set aside at room temperature to rise for 45-60 minutes.",
+        "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Mix the zaatar with olive oil in small bowl until it forms a consistent and spreadable mixture.",
+      "stepGroup": "Make the Zaatar Spread",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Mix the zaatar with olive oil in  small bowl until it forms a consistent and spreadable mixture.",
+        "name": "Mix the zaatar with olive oil in  small bowl until it forms a consistent and spreadable mixture.",
+        "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-1-0"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Preheat the oven to 450° F and line a baking sheet with parchment paper.",
+      "stepGroup": "Assemble and Bake",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": "450° F",
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 450° F and line a baking sheet with parchment paper.",
+        "name": "Preheat the oven to 450° F and line a baking sheet with parchment paper.",
+        "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-2-0"
+      }
+    },
+    {
+      "order": 7,
+      "text": "Divide the dough into 6-8 equal parts, depending on how large you’d like them. Use your fingers to spread each piece into a round flat disc, about 1/4 inch thickness.",
+      "stepGroup": "Assemble and Bake",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Divide the dough into 6-8 equal parts, depending on how large you’d like them. Use your fingers to spread each piece into a round flat disc, about 1/4 inch thickness.",
+        "name": "Divide the dough into 6-8 equal parts, depending on how large you’d like them. Use your fingers to spread each piece into a round flat disc, about 1/4 inch thickness.",
+        "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-2-1"
+      }
+    },
+    {
+      "order": 8,
+      "text": "Place 1-2 tablespoons of zaatar spread on each dough and use the back of the spoon to spread evenly. Place on the prepared baking sheet.",
+      "stepGroup": "Assemble and Bake",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Place 1-2 tablespoons of zaatar spread on each dough and use the back of the spoon to spread evenly. Place on the prepared baking sheet.",
+        "name": "Place 1-2 tablespoons of zaatar spread on each dough and use the back of the spoon to spread evenly. Place on the prepared baking sheet.",
+        "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-2-2"
+      }
+    },
+    {
+      "order": 9,
+      "text": "Bake in the preheated oven for 10-12 minutes, until the dough becomes light golden in color and puffs slightly.",
+      "stepGroup": "Assemble and Bake",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Bake in the preheated oven for 10-12 minutes, until the dough becomes light golden in color and puffs slightly.",
+        "name": "Bake in the preheated oven for 10-12 minutes, until the dough becomes light golden in color and puffs slightly.",
+        "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-2-3"
+      }
+    },
+    {
+      "order": 10,
+      "text": "Enjoy warm with cheese and vegetables, if desired.",
+      "stepGroup": "Assemble and Bake",
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Enjoy warm with cheese and vegetables, if desired.",
+        "name": "Enjoy warm with cheese and vegetables, if desired.",
+        "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-2-4"
+      }
+    }
+  ],
+  "equipment": [
+    "Mixing Bowl Set",
+    "Measuring Cups and Spoons",
+    "Aluminum Sheet Pans",
+    "Kettle"
+  ],
+  "supplies": [],
+  "nutrition": {
+    "calories": "353 kcal",
+    "carbohydrateContent": "48 g",
+    "proteinContent": "6 g",
+    "fatContent": "14 g",
+    "saturatedFatContent": "1 g",
+    "sodiumContent": "389 mg",
+    "fiberContent": "1 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/05/Zaatar-Manakeesh-15.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/05/Zaatar-Manakeesh-15-500x500.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/05/Zaatar-Manakeesh-15-500x375.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/05/Zaatar-Manakeesh-15-480x270.jpg"
+    ],
+    "video": {
+      "name": "Zaatar Manakeesh",
+      "description": "Zaatar Manakeesh is a Mediterranean flatbread that's made with dough and zaatar spice. It's an easy recipe to make from scratch using very few ingredients!",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/urc4PCA7-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/urc4PCA7.mp4",
+      "uploadDate": "2019-05-07T15:31:17.000Z",
+      "@type": "VideoObject"
+    }
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "video": {
+      "name": "Zaatar Manakeesh",
+      "description": "Zaatar Manakeesh is a Mediterranean flatbread that's made with dough and zaatar spice. It's an easy recipe to make from scratch using very few ingredients!",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/urc4PCA7-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/urc4PCA7.mp4",
+      "uploadDate": "2019-05-07T15:31:17.000Z",
+      "@type": "VideoObject"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "299",
+      "reviewCount": "5"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Tried this recipe today. Delicious !  Came out great. Alhamdulillāh \r\nWill try other Mana’esh toppings next time",
+        "author": {
+          "@type": "Person",
+          "name": "Fatima"
+        },
+        "datePublished": "2026-06-20"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "ABSOLOUTELY LOVE THIS RECIPIE!!! \r\nI've made it so many times now and it has never failed!\r\nMade it again today and it was the best by far!!\r\nDefinetly recommend!!",
+        "author": {
+          "@type": "Person",
+          "name": "Zainab"
+        },
+        "datePublished": "2026-02-10"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Never made dough before but I saw your recipe and started doing manakeesh, it’s fantastic! Am doing some today to put in my son’s packed lunch for tomorrow. Would the manakeesh keep outside at room temperature once baked in the oven for the next day so I can put in my son’s packed lunch at room temperature?",
+        "author": {
+          "@type": "Person",
+          "name": "Fatima"
+        },
+        "datePublished": "2025-03-19"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Love this recipe, it's absolutely foolproof. I've made za'atar hundreds of times now with this recipe and it has never gone bad!",
+        "author": {
+          "@type": "Person",
+          "name": "Zainab"
+        },
+        "datePublished": "2025-03-16"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "You’re welcome and sorry…one more note. I did Accidentally use less yeast 1 tsp vs 1 tbs and it still worked. I would Recommend maybe 1 1/2 tsp instead with the altitude and plan to test this again with more yeast. I know in Mn this would not have worked but it did work in Denver.",
+        "author": {
+          "@type": "Person",
+          "name": "Mia w"
+        },
+        "datePublished": "2024-11-12"
+      }
+    ],
+    "suitableForDiet": [
+      "https://schema.org/VeganDiet",
+      "https://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Zaatar Manakeesh",
+    "author": {
+      "@id": "https://feelgoodfoodie.net/#/schema/person/7a5a734de72932611fa5814fce8c12d5"
+    },
+    "description": "Zaatar Manakeesh is a Mediterranean flatbread that's made with dough and zaatar spice. It's an easy recipe to make from scratch using very few ingredients!",
+    "datePublished": "2019-05-07T09:48:12+00:00",
+    "image": [
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/05/Zaatar-Manakeesh-15.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/05/Zaatar-Manakeesh-15-500x500.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/05/Zaatar-Manakeesh-15-500x375.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2019/05/Zaatar-Manakeesh-15-480x270.jpg"
+    ],
+    "video": {
+      "name": "Zaatar Manakeesh",
+      "description": "Zaatar Manakeesh is a Mediterranean flatbread that's made with dough and zaatar spice. It's an easy recipe to make from scratch using very few ingredients!",
+      "thumbnailUrl": "https://content.jwplatform.com/thumbs/urc4PCA7-720.jpg",
+      "contentUrl": "https://content.jwplatform.com/videos/urc4PCA7.mp4",
+      "uploadDate": "2019-05-07T15:31:17.000Z",
+      "@type": "VideoObject"
+    },
+    "recipeYield": [
+      "6",
+      "6 servings"
+    ],
+    "prepTime": "PT10M",
+    "cookTime": "PT12M",
+    "totalTime": "PT82M",
+    "recipeIngredient": [
+      "1 tablespoon instant yeast",
+      "1 cup warm water",
+      "1 teaspoon salt",
+      "1 teaspoon granulated sugar",
+      "3 cups all-purpose flour (plus more for shaping)",
+      "2 tablespoons olive oil (plus more for coating bowl)",
+      "1/3 cup zaatar",
+      "1/4 cup olive oil"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToSection",
+        "name": "Make the Dough",
+        "itemListElement": [
+          {
+            "@type": "HowToStep",
+            "text": "In a large bowl, activate the yeast in warm water; allow 10 minutes for it to proof.",
+            "name": "In a large bowl, activate the yeast in warm water; allow 10 minutes for it to proof.",
+            "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-0-0"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Add the salt, sugar and olive oil to bowl and use a wooden spoon to mix until combined. Wait a few minutes, then add the flour into the wet ingredients and mix with a spoon until the dough becomes shaggy and you’re no longer able to mix.",
+            "name": "Add the salt, sugar and olive oil to bowl and use a wooden spoon to mix until combined. Wait a few minutes, then add the flour into the wet ingredients and mix with a spoon until the dough becomes shaggy and you’re no longer able to mix.",
+            "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-0-1"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Transfer to a floured surface and knead the dough by hand to form a tight ball.",
+            "name": "Transfer to a floured surface and knead the dough by hand to form a tight ball.",
+            "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-0-2"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Place the dough back into the same oil-coated bowl. Cover with a plastic wrap or towel and set aside at room temperature to rise for 45-60 minutes.",
+            "name": "Place the dough back into the same oil-coated bowl. Cover with a plastic wrap or towel and set aside at room temperature to rise for 45-60 minutes.",
+            "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-0-3"
+          }
+        ]
+      },
+      {
+        "@type": "HowToSection",
+        "name": "Make the Zaatar Spread",
+        "itemListElement": [
+          {
+            "@type": "HowToStep",
+            "text": "Mix the zaatar with olive oil in  small bowl until it forms a consistent and spreadable mixture.",
+            "name": "Mix the zaatar with olive oil in  small bowl until it forms a consistent and spreadable mixture.",
+            "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-1-0"
+          }
+        ]
+      },
+      {
+        "@type": "HowToSection",
+        "name": "Assemble and Bake",
+        "itemListElement": [
+          {
+            "@type": "HowToStep",
+            "text": "Preheat the oven to 450° F and line a baking sheet with parchment paper.",
+            "name": "Preheat the oven to 450° F and line a baking sheet with parchment paper.",
+            "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-2-0"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Divide the dough into 6-8 equal parts, depending on how large you’d like them. Use your fingers to spread each piece into a round flat disc, about 1/4 inch thickness.",
+            "name": "Divide the dough into 6-8 equal parts, depending on how large you’d like them. Use your fingers to spread each piece into a round flat disc, about 1/4 inch thickness.",
+            "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-2-1"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Place 1-2 tablespoons of zaatar spread on each dough and use the back of the spoon to spread evenly. Place on the prepared baking sheet.",
+            "name": "Place 1-2 tablespoons of zaatar spread on each dough and use the back of the spoon to spread evenly. Place on the prepared baking sheet.",
+            "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-2-2"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Bake in the preheated oven for 10-12 minutes, until the dough becomes light golden in color and puffs slightly.",
+            "name": "Bake in the preheated oven for 10-12 minutes, until the dough becomes light golden in color and puffs slightly.",
+            "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-2-3"
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Enjoy warm with cheese and vegetables, if desired.",
+            "name": "Enjoy warm with cheese and vegetables, if desired.",
+            "url": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#wprm-recipe-9590-step-2-4"
+          }
+        ]
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "299",
+      "reviewCount": "5"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Tried this recipe today. Delicious !  Came out great. Alhamdulillāh \r\nWill try other Mana’esh toppings next time",
+        "author": {
+          "@type": "Person",
+          "name": "Fatima"
+        },
+        "datePublished": "2026-06-20"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "ABSOLOUTELY LOVE THIS RECIPIE!!! \r\nI've made it so many times now and it has never failed!\r\nMade it again today and it was the best by far!!\r\nDefinetly recommend!!",
+        "author": {
+          "@type": "Person",
+          "name": "Zainab"
+        },
+        "datePublished": "2026-02-10"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Never made dough before but I saw your recipe and started doing manakeesh, it’s fantastic! Am doing some today to put in my son’s packed lunch for tomorrow. Would the manakeesh keep outside at room temperature once baked in the oven for the next day so I can put in my son’s packed lunch at room temperature?",
+        "author": {
+          "@type": "Person",
+          "name": "Fatima"
+        },
+        "datePublished": "2025-03-19"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Love this recipe, it's absolutely foolproof. I've made za'atar hundreds of times now with this recipe and it has never gone bad!",
+        "author": {
+          "@type": "Person",
+          "name": "Zainab"
+        },
+        "datePublished": "2025-03-16"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "You’re welcome and sorry…one more note. I did Accidentally use less yeast 1 tsp vs 1 tbs and it still worked. I would Recommend maybe 1 1/2 tsp instead with the altitude and plan to test this again with more yeast. I know in Mn this would not have worked but it did work in Denver.",
+        "author": {
+          "@type": "Person",
+          "name": "Mia w"
+        },
+        "datePublished": "2024-11-12"
+      }
+    ],
+    "recipeCategory": [
+      "Breakfast"
+    ],
+    "recipeCuisine": [
+      "Middle Eastern"
+    ],
+    "suitableForDiet": [
+      "https://schema.org/VeganDiet",
+      "https://schema.org/VegetarianDiet"
+    ],
+    "keywords": "homemade manakeesh, zaatar bread, zaatar manakeesh recipe",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "353 kcal",
+      "carbohydrateContent": "48 g",
+      "proteinContent": "6 g",
+      "fatContent": "14 g",
+      "saturatedFatContent": "1 g",
+      "sodiumContent": "389 mg",
+      "fiberContent": "1 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#recipe",
+    "isPartOf": {
+      "@id": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/#article"
+    },
+    "mainEntityOfPage": "https://feelgoodfoodie.net/recipe/zaatar-manakeesh/"
+  },
+  "audit": [
+    "unmapped:video|aggregateRating|review|suitableForDiet"
+  ]
+}

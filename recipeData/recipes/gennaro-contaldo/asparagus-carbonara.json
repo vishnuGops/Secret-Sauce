@@ -1,0 +1,339 @@
+{
+  "schemaVersion": 1,
+  "id": "gennaro-contaldo/asparagus-carbonara",
+  "slug": "asparagus-carbonara",
+  "chefId": "chef_gennaro-contaldo",
+  "chefSlug": "gennaro-contaldo",
+  "chefName": "Gennaro Contaldo",
+  "title": "Asparagus carbonara",
+  "description": "Silky smooth carbonara made with traditional Italian guanciale is elevated even further with seasonal asparagus.\n\nEquipment and preparation: You’ll need a pasta machine with a linguine cutting attachment.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/asparagus_carbonara_17671",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/asparagus_carbonara_17671",
+    "retrievedAt": "2026-09-11T00:27:48.344Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Gennaro Contaldo"
+    ],
+    "datePublished": "2025-07-03T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "31f01c02197b3bf9146f42fbd881cf4a146354fceccf72b0b33d0dd82324aeed",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 120,
+    "cookMinutes": 10,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Italian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "pasta",
+    "asparagus",
+    "nut free",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the fresh pasta",
+      "items": [
+        {
+          "raw": "150g/5½oz ‘00’ flour, plus extra for dusting",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "g",
+          "name": "/5½oz ‘00’ flour, plus extra for dusting",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz fine semolina flour",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz fine semolina flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 large free-range organic eggs",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "large free-range organic eggs",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the asparagus carbonara",
+      "items": [
+        {
+          "raw": "320g/11¼oz asparagus",
+          "quantity": 320,
+          "quantityText": "320",
+          "unit": "g",
+          "name": "/11¼oz asparagus",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp extra virgin olive oil",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "extra virgin olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "60g/2¼oz guanciale, finely chopped",
+          "quantity": 60,
+          "quantityText": "60",
+          "unit": "g",
+          "name": "/2¼oz guanciale",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "6 medium free-range egg yolks",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": null,
+          "name": "medium free-range egg yolks",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "80g/2¾oz pecorino, grated, plus extra for sprinkling on top",
+          "quantity": 80,
+          "quantityText": "80",
+          "unit": "g",
+          "name": "/2¾oz pecorino",
+          "note": "grated, plus extra for sprinkling on top",
+          "isOptional": false
+        },
+        {
+          "raw": "320g/11¼oz linguine pasta",
+          "quantity": 320,
+          "quantityText": "320",
+          "unit": "g",
+          "name": "/11¼oz linguine pasta",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "pinch salt and black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "pinch",
+          "name": "salt and black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the fresh pasta, place the flours onto a clean work surface or in a large mixing bowl. Make a well in the centre, then crack in the eggs. With a fork or using your hands gradually mix together until combined. On a lightly floured work surface, knead the dough gently by stretching it out with the palm of your hand, rolling it back, then stretching it out again. Keep doing this until you have a smooth, soft dough. Form into a ball, wrap in cling film and leave to rest in the fridge for 30 minutes or until required.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the fresh pasta, place the flours onto a clean work surface or in a large mixing bowl. Make a well in the centre, then crack in the eggs. With a fork or using your hands gradually mix together until combined. On a lightly floured work surface, knead the dough gently by stretching it out with the palm of your hand, rolling it back, then stretching it out again. Keep doing this until you have a smooth, soft dough. Form into a ball, wrap in cling film and leave to rest in the fridge for 30 minutes or until required.  "
+    },
+    {
+      "order": 2,
+      "text": "When ready, roll the dough through a pasta machine until you have reached its lowest/thinnest setting. Then feed it through a linguine setting cutter. You might need a little semolina flour for dusting while you feed it through the machines.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "When ready, roll the dough through a pasta machine until you have reached its lowest/thinnest setting. Then feed it through a linguine setting cutter. You might need a little semolina flour for dusting while you feed it through the machines. "
+    },
+    {
+      "order": 3,
+      "text": "To make the asparagus carbonara, keep the asparagus tips intact and finely chop the stems, then set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the asparagus carbonara, keep the asparagus tips intact and finely chop the stems, then set aside."
+    },
+    {
+      "order": 4,
+      "text": "Chop the harder part of the asparagus stems and place in a saucepan of salted water and bring to the boil. When the water begins to boil, discard the asparagus stems, add the linguine pasta and cook until al dente. Drain the pasta and retain a little of the cooking water.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Chop the harder part of the asparagus stems and place in a saucepan of salted water and bring to the boil. When the water begins to boil, discard the asparagus stems, add the linguine pasta and cook until al dente. Drain the pasta and retain a little of the cooking water. "
+    },
+    {
+      "order": 5,
+      "text": "Meanwhile, heat the extra virgin olive oil in a large frying pan over a medium heat, then add the guanciale and sweat for 2–3 minutes until it begins to colour. Chop the remaining asparagus into thin slices. Stir in the finely sliced asparagus stems and tips and stir-fry for about 3 minutes until the asparagus is cooked.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, heat the extra virgin olive oil in a large frying pan over a medium heat, then add the guanciale and sweat for 2–3 minutes until it begins to colour. Chop the remaining asparagus into thin slices. Stir in the finely sliced asparagus stems and tips and stir-fry for about 3 minutes until the asparagus is cooked.  "
+    },
+    {
+      "order": 6,
+      "text": "In a bowl, lightly beat the egg yolks, then add the grated pecorino and a little black pepper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "In a bowl, lightly beat the egg yolks, then add the grated pecorino and a little black pepper."
+    },
+    {
+      "order": 7,
+      "text": "Add the pasta to the frying pan with the asparagus and mix together well with enough of the hot pasta water to bind. Remove from the heat, stir in the egg yolk mixture until everything is well combined and silky.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the pasta to the frying pan with the asparagus and mix together well with enough of the hot pasta water to bind. Remove from the heat, stir in the egg yolk mixture until everything is well combined and silky.  "
+    },
+    {
+      "order": 8,
+      "text": "Serve immediately with a sprinkling of black pepper and grated pecorino if desired.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Serve immediately with a sprinkling of black pepper and grated pecorino if desired.  "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 10,
+      "ratingValue": 4.9
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Silky smooth carbonara made with traditional Italian guanciale is elevated even further with seasonal asparagus.\r\n\r\nEquipment and preparation: You’ll need a pasta machine with a linguine cutting attachment.",
+    "headline": "Asparagus carbonara",
+    "image": null,
+    "name": "Asparagus carbonara",
+    "author": {
+      "@type": "Person",
+      "name": "Gennaro Contaldo"
+    },
+    "datePublished": "2025-07-03T00:00:00.000Z",
+    "dateModified": "2026-07-17T15:15:54.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 10,
+      "ratingValue": 4.9
+    },
+    "prepTime": "PT2H",
+    "cookTime": "PT10M",
+    "keywords": "pasta, asparagus, nut free, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Italian",
+    "recipeIngredient": [
+      "150g/5½oz ‘00’ flour, plus extra for dusting  ",
+      "50g/1¾oz fine semolina flour",
+      "2 large free-range organic eggs ",
+      "320g/11¼oz asparagus ",
+      "3 tbsp extra virgin olive oil",
+      "60g/2¼oz guanciale, finely chopped ",
+      "6 medium free-range egg yolks ",
+      "80g/2¾oz pecorino, grated, plus extra for sprinkling on top",
+      "320g/11¼oz linguine pasta",
+      "pinch salt and black pepper"
+    ],
+    "recipeInstructions": [
+      "To make the fresh pasta, place the flours onto a clean work surface or in a large mixing bowl. Make a well in the centre, then crack in the eggs. With a fork or using your hands gradually mix together until combined. On a lightly floured work surface, knead the dough gently by stretching it out with the palm of your hand, rolling it back, then stretching it out again. Keep doing this until you have a smooth, soft dough. Form into a ball, wrap in cling film and leave to rest in the fridge for 30 minutes or until required.  ",
+      "When ready, roll the dough through a pasta machine until you have reached its lowest/thinnest setting. Then feed it through a linguine setting cutter. You might need a little semolina flour for dusting while you feed it through the machines. ",
+      "To make the asparagus carbonara, keep the asparagus tips intact and finely chop the stems, then set aside.",
+      "Chop the harder part of the asparagus stems and place in a saucepan of salted water and bring to the boil. When the water begins to boil, discard the asparagus stems, add the linguine pasta and cook until al dente. Drain the pasta and retain a little of the cooking water. ",
+      "Meanwhile, heat the extra virgin olive oil in a large frying pan over a medium heat, then add the guanciale and sweat for 2–3 minutes until it begins to colour. Chop the remaining asparagus into thin slices. Stir in the finely sliced asparagus stems and tips and stir-fry for about 3 minutes until the asparagus is cooked.  ",
+      "In a bowl, lightly beat the egg yolks, then add the grated pecorino and a little black pepper.",
+      "Add the pasta to the frying pan with the asparagus and mix together well with enough of the hot pasta water to bind. Remove from the heat, stir in the egg yolk mixture until everything is well combined and silky.  ",
+      "Serve immediately with a sprinkling of black pepper and grated pecorino if desired.  "
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

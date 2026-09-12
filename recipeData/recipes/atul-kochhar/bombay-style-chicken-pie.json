@@ -1,0 +1,472 @@
+{
+  "schemaVersion": 1,
+  "id": "atul-kochhar/bombay-style-chicken-pie",
+  "slug": "bombay-style-chicken-pie",
+  "chefId": "chef_atul-kochhar",
+  "chefSlug": "atul-kochhar",
+  "chefName": "Atul Kochhar",
+  "title": "Bombay-style chicken pie",
+  "description": "From Bombay’s Gymkhana club, this recipe has stood the test of the time. Atul Kochhar's version may have changed few ingredients but it still tastes just as good.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/gymkhanachickenpie_86568",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/gymkhanachickenpie_86568",
+    "retrievedAt": "2026-09-11T00:28:19.199Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Atul Kochhar"
+    ],
+    "datePublished": "2013-07-14T10:30:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "af114c84000be1576beaffddd5e2fb114ff315922974e63bf24acd0fe4451ffe",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4-6"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Indian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "chicken pie",
+    "chicken leg",
+    "puff pastry",
+    "pregnancy friendly",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1 tbsp coconut or vegetable oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "coconut or vegetable oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 cloves",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "cloves",
+          "name": "2 cloves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "10 Tellicherry or ordinary black peppercorns",
+          "quantity": 10,
+          "quantityText": "10",
+          "unit": null,
+          "name": "Tellicherry or ordinary black peppercorns",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2.5cm/1in cassia bark (available in Asian stores and some supermarkets)",
+          "quantity": 2.5,
+          "quantityText": "2.5",
+          "unit": null,
+          "name": "cm/1in cassia bark (available in Asian stores and some supermarkets)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "12 curry leaves",
+          "quantity": 12,
+          "quantityText": "12",
+          "unit": null,
+          "name": "curry leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp freshly grated root ginger",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "freshly grated root ginger",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 medium onion, diced",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "medium onion",
+          "note": "diced",
+          "isOptional": false
+        },
+        {
+          "raw": "50g/2oz plain flour",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/2oz plain flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper, to taste",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": "to taste",
+          "isOptional": false
+        },
+        {
+          "raw": "500g/1lb 2oz chicken thighs, boneless and diced",
+          "quantity": 500,
+          "quantityText": "500",
+          "unit": "g",
+          "name": "/1lb 2oz chicken thighs",
+          "note": "boneless and diced",
+          "isOptional": false
+        },
+        {
+          "raw": "8-12 baby carrots, peeled, blanched and chopped",
+          "quantity": 8,
+          "quantityText": "8-12",
+          "unit": null,
+          "name": "baby carrots",
+          "note": "peeled, blanched and chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "16-20 silverskin onions",
+          "quantity": 16,
+          "quantityText": "16-20",
+          "unit": null,
+          "name": "silverskin onions",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "15 green beans, chopped and blanched",
+          "quantity": 15,
+          "quantityText": "15",
+          "unit": null,
+          "name": "green beans",
+          "note": "chopped and blanched",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground turmeric",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground turmeric",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp ground coriander",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "ground coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp seasoned flour",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "seasoned flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "400ml/14fl oz coconut milk",
+          "quantity": 400,
+          "quantityText": "400",
+          "unit": "ml",
+          "name": "/14fl oz coconut milk",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "110g/4oz ready made puff pastry sheet",
+          "quantity": 110,
+          "quantityText": "110",
+          "unit": "g",
+          "name": "/4oz ready made puff pastry sheet",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 free-range egg, beaten, to brush the pastry",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "free-range egg",
+          "note": "beaten, to brush the pastry",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the crust",
+      "items": [
+        {
+          "raw": "1 tsp coriander seeds",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "coriander seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp cumin seeds",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "cumin seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp fennel seeds",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "fennel seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp black sesame seeds",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "black sesame seeds",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 200C/400F/Gas 6.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 200C/400F/Gas 6."
+    },
+    {
+      "order": 2,
+      "text": "In a large pan heat the oil before frying the cloves, peppercorns, cassia bark and curry leaves for about a minute. Add the ginger and onion and cook until the onion is translucent.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "In a large pan heat the oil before frying the cloves, peppercorns, cassia bark and curry leaves for about a minute. Add the ginger and onion and cook until the onion is translucent."
+    },
+    {
+      "order": 3,
+      "text": "Place the plain flour into a bowl with a little salt and freshly ground black pepper, to taste. Toss the chicken pieces in the flour until they are completly covered.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place the plain flour into a bowl with a little salt and freshly ground black pepper, to taste. Toss the chicken pieces in the flour until they are completly covered."
+    },
+    {
+      "order": 4,
+      "text": "Place the chicken pieces into the pan. Sauté the chicken briefly, browning it on all sides. Stir in the carrots, silverskin onions, beans and spices and cook for about one minute. Add the seasoned flour and cook for a further 2-3 minutes. Stir in the coconut milk and simmer for another five minutes before removing the pan from the heat. Leave to cool.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place the chicken pieces into the pan. Sauté the chicken briefly, browning it on all sides. Stir in the carrots, silverskin onions, beans and spices and cook for about one minute. Add the seasoned flour and cook for a further 2-3 minutes. Stir in the coconut milk and simmer for another five minutes before removing the pan from the heat.  Leave to cool."
+    },
+    {
+      "order": 5,
+      "text": "Spoon the filling into a pie dish until the filling almost reaches the top. In the centre of the dish place a pie funnel or egg cup. This will hold the pastry up as it cooks.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Spoon the filling into a pie dish until the filling almost reaches the top. In the centre of the dish place a pie funnel or egg cup. This will hold the pastry up as it cooks. "
+    },
+    {
+      "order": 6,
+      "text": "On a chopping board or clean surface, roll out the pastry so that it is slightly larger than the circumference of the pie dish. Use a little water or milk to wet the edges of the pastry and place it over the pie dish. Pinch the edges firmly to seal the pastry onto the dish.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "On a chopping board or clean surface, roll out the pastry so that it is slightly larger than the circumference of the pie dish. Use a little water or milk to wet the edges of the pastry and place it over the pie dish. Pinch the edges firmly to seal the pastry onto the dish."
+    },
+    {
+      "order": 7,
+      "text": "For the curst, use a mortar and pestle to crush the coriander, cumin, fennel and sesame seeds together.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the curst, use a mortar and pestle to crush the coriander, cumin, fennel and sesame seeds together."
+    },
+    {
+      "order": 8,
+      "text": "Brush the top of the pie with the beaten egg before sprinkling the spice crust over the top. Place the pie into the oven and cook for 10-15 minutes or until the pastry is golden-brown and crisp at the edges. Serve immediately.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Brush the top of the pie with the beaten egg before sprinkling the spice crust over the top. Place the pie into the oven and cook for 10-15 minutes or until the pastry is golden-brown and crisp at the edges. Serve immediately."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 1,
+      "ratingValue": 4
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "From Bombay’s Gymkhana club, this recipe has stood the test of the time. Atul Kochhar's version may have changed few ingredients but it still tastes just as good.",
+    "headline": "Bombay-style chicken pie",
+    "image": null,
+    "name": "Bombay-style chicken pie",
+    "author": {
+      "@type": "Person",
+      "name": "Atul Kochhar"
+    },
+    "datePublished": "2013-07-14T10:30:00.000Z",
+    "dateModified": "2018-07-17T17:24:27.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 1,
+      "ratingValue": 4
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, chicken pie, chicken leg, puff pastry, pregnancy friendly, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Indian",
+    "recipeIngredient": [
+      "1 tbsp coconut or vegetable oil",
+      "2 cloves",
+      "10 Tellicherry or ordinary black peppercorns",
+      "2.5cm/1in cassia bark (available in Asian stores and some supermarkets)",
+      "12 curry leaves",
+      "1 tsp freshly grated root ginger",
+      "1 medium onion, diced",
+      "50g/2oz plain flour",
+      "salt and freshly ground black pepper, to taste ",
+      "500g/1lb 2oz chicken thighs, boneless and diced",
+      "8-12 baby carrots, peeled, blanched and chopped ",
+      "16-20 silverskin onions",
+      "15 green beans, chopped and blanched",
+      "1 tsp ground turmeric ",
+      "½ tsp ground coriander ",
+      "2 tbsp seasoned flour",
+      "400ml/14fl oz coconut milk",
+      "110g/4oz ready made puff pastry sheet",
+      "1 free-range egg, beaten, to brush the pastry",
+      "1 tsp coriander seeds",
+      "½ tsp cumin seeds",
+      "1 tsp fennel seeds",
+      "1 tsp black sesame seeds"
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 200C/400F/Gas 6.",
+      "In a large pan heat the oil before frying the cloves, peppercorns, cassia bark and curry leaves for about a minute. Add the ginger and onion and cook until the onion is translucent.",
+      "Place the plain flour into a bowl with a little salt and freshly ground black pepper, to taste. Toss the chicken pieces in the flour until they are completly covered.",
+      "Place the chicken pieces into the pan. Sauté the chicken briefly, browning it on all sides. Stir in the carrots, silverskin onions, beans and spices and cook for about one minute. Add the seasoned flour and cook for a further 2-3 minutes. Stir in the coconut milk and simmer for another five minutes before removing the pan from the heat.  Leave to cool.",
+      "Spoon the filling into a pie dish until the filling almost reaches the top. In the centre of the dish place a pie funnel or egg cup. This will hold the pastry up as it cooks. ",
+      "On a chopping board or clean surface, roll out the pastry so that it is slightly larger than the circumference of the pie dish. Use a little water or milk to wet the edges of the pastry and place it over the pie dish. Pinch the edges firmly to seal the pastry onto the dish.",
+      "For the curst, use a mortar and pestle to crush the coriander, cumin, fennel and sesame seeds together.",
+      "Brush the top of the pie with the beaten egg before sprinkling the spice crust over the top. Place the pie into the oven and cook for 10-15 minutes or until the pastry is golden-brown and crisp at the edges. Serve immediately."
+    ],
+    "recipeYield": "Serves 4-6",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "range-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

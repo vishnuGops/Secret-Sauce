@@ -1,0 +1,328 @@
+{
+  "schemaVersion": 1,
+  "id": "eli-giannopoulos/kariokes-walnut-filled-chocolate-crescents",
+  "slug": "kariokes-walnut-filled-chocolate-crescents",
+  "chefId": "chef_eli-giannopoulos",
+  "chefSlug": "eli-giannopoulos",
+  "chefName": "Eli K. Giannopoulos",
+  "title": "Kariokes (Walnut-filled Chocolate Crescents)",
+  "description": "Delicious chocolate and walnut filled crescents dipped in more chocolate (kariokes)! Soft and with an unexpected crunchy bite, these delicious treats are very popular amongst the chocolate lovers during Christmas time.",
+  "source": {
+    "sourceUrl": "https://www.mygreekdish.com/recipe/kariokes/",
+    "finalUrl": "https://www.mygreekdish.com/recipe/kariokes/",
+    "retrievedAt": "2026-09-11T02:48:09.952Z",
+    "publisher": null,
+    "authorRaw": [
+      "Eli K. Giannopoulos"
+    ],
+    "datePublished": "2013-11-30",
+    "rights": "My Greek Dish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "b71f8923291717aaab46f60066c7d0cac58e9358b4b4a88c1d4bcdc2f4f798ce",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "50",
+      "50 pieces"
+    ],
+    "servings": 50
+  },
+  "timing": {
+    "prepMinutes": 15,
+    "cookMinutes": 15,
+    "totalMinutes": 30,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Greek"
+  ],
+  "category": [
+    "Dessert"
+  ],
+  "keywords": [
+    "Kariokes recipe"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "250g sugar (9 ounces)",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "sugar (9 ounces)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "250g water (9 ounces)",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "water (9 ounces)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "125g dark chocolate, cut in small pieces (4.5 ounces)",
+          "quantity": 125,
+          "quantityText": "125",
+          "unit": "g",
+          "name": "dark chocolate, cut in small pieces (4.5 ounces)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "85g butter (3 ounces)",
+          "quantity": 85,
+          "quantityText": "85",
+          "unit": "g",
+          "name": "butter (3 ounces)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "300g walnuts, chopped (10.5 ounces)",
+          "quantity": 300,
+          "quantityText": "300",
+          "unit": "g",
+          "name": "walnuts",
+          "note": "chopped (10.5 ounces)",
+          "isOptional": false
+        },
+        {
+          "raw": "zest of 1 orange",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "zest of 1 orange",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "juice of 1/2 lemon (2 tbsps)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "juice of 1/2 lemon (2 tbsps)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "450g Pettit beurre biscuits, powdered (16 ounces)",
+          "quantity": 450,
+          "quantityText": "450",
+          "unit": "g",
+          "name": "Pettit beurre biscuits, powdered (16 ounces)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1kg dark chocolate (35 ounces)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "kg",
+          "name": "dark chocolate (35 ounces)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To prepare the filling for the kariokes, pour in a pot the water and sugar and bring to the boil. Let it boil for a few minutes, until the sugar has dissolved. Remove the pot from the stove and add the butter, the chocolate (cut in small pieces), the orange zest and the lemon juice; blend until the chocolate has melted and the ingredients combine.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "To prepare the filling for the kariokes, pour in a pot the water and sugar and bring to the boil. Let it boil for a few minutes, until the sugar has dissolved. Remove the pot from the stove and add the butter, the chocolate (cut in small pieces), the orange zest and the lemon juice; blend until the chocolate has melted and the ingredients combine.",
+        "url": "https://www.mygreekdish.com/recipe/kariokes/#instruction-step-1"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Pour the mixture in a bowl and mix in the powdered biscuits and chopped walnuts. Blend, until the ingredients combine.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Pour the mixture in a bowl and mix in the powdered biscuits and chopped walnuts. Blend, until the ingredients combine.",
+        "url": "https://www.mygreekdish.com/recipe/kariokes/#instruction-step-2"
+      }
+    },
+    {
+      "order": 3,
+      "text": "On a working surface, line some plastic wrap and pour in 1/3 of the mixture. Form the mix into a roll, wrap it up and put it in the fridge overnight. Repeat the same with rest of the mixture, forming 3 rolls, about 17cm long and 3-4 cm thick. Leave in the fridge overnight.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "On a working surface, line some plastic wrap and pour in 1/3 of the mixture. Form the mix into a roll, wrap it up and put it in the fridge overnight. Repeat the same with rest of the mixture, forming 3 rolls, about 17cm long and 3-4 cm thick. Leave in the fridge overnight.",
+        "url": "https://www.mygreekdish.com/recipe/kariokes/#instruction-step-3"
+      }
+    },
+    {
+      "order": 4,
+      "text": "A little bit before you take the rolls out of the fridge, start making the coating. To melt the chocolate it is best to use a bain-marie (or double boiler), a piece of equipment used to heat the chocolate gently and gradually to fixed temperatures so that it doesn’t burn. If you don’t have a Bain-marie, break the chocolate into small pieces and drop into a heatproof bowl. Set the bowl over a small saucepan about a quarter full with hot water and place the bowl on top so that it rests on the rim of the pan (the bowl should not to touch the water). Place the pan, with the bowl on top, over low heat until the chocolate has melted, whilst stirring occasionally.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "A little bit before you take the rolls out of the fridge, start making the coating. To melt the chocolate it is best to use a bain-marie (or double boiler), a piece of equipment used to heat the chocolate gently and gradually to fixed temperatures so that it doesn&#8217;t burn. If you don&#8217;t have a Bain-marie, break the chocolate into small pieces and drop into a heatproof bowl. Set the bowl over a small saucepan about a quarter full with hot water and place the bowl on top so that it rests on the rim of the pan (the bowl should not to touch the water). Place the pan, with the bowl on top, over low heat until the chocolate has melted, whilst stirring occasionally.",
+        "url": "https://www.mygreekdish.com/recipe/kariokes/#instruction-step-4"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Take the rolls out of the fridge, unwrap the plastic wrap and slice them in equal slices, about 1cm thick. Dip each piece in the chocolate, using a fork and then place on a baking tray, lined with parchment paper; repeat with all the pieces. When done, let the kariokes to cool down, at room temperature (not in the fridge), until the chocolate thickens. Enjoy!",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Take the rolls out of the fridge, unwrap the plastic wrap and slice them in equal slices, about 1cm thick. Dip each piece in the chocolate, using a fork and then place on a baking tray, lined with parchment paper; repeat with all the pieces. When done, let the kariokes to cool down, at room temperature (not in the fridge), until the chocolate thickens. Enjoy!",
+        "url": "https://www.mygreekdish.com/recipe/kariokes/#instruction-step-5"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Kariokes-scaled-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Kariokes-scaled-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Kariokes-scaled-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Kariokes-scaled.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "550",
+      "ratingValue": "4.9"
+    }
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org/",
+    "@type": "Recipe",
+    "name": "Kariokes (Walnut-filled Chocolate Crescents)",
+    "description": "Delicious chocolate and walnut filled crescents dipped in more chocolate (kariokes)! Soft and with an unexpected crunchy bite, these delicious treats are very popular amongst the chocolate lovers during Christmas time.",
+    "author": {
+      "@type": "Person",
+      "name": "Eli K. Giannopoulos"
+    },
+    "keywords": "Kariokes recipe",
+    "image": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Kariokes-scaled-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Kariokes-scaled-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Kariokes-scaled-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/11/Kariokes-scaled.jpg"
+    ],
+    "url": "https://www.mygreekdish.com/recipe/kariokes/",
+    "recipeIngredient": [
+      "250g sugar (9 ounces)",
+      "250g water (9 ounces)",
+      "125g dark chocolate, cut in small pieces (4.5 ounces)",
+      "85g butter (3 ounces)",
+      "300g walnuts, chopped (10.5 ounces)",
+      "zest of 1 orange",
+      "juice of 1/2 lemon (2 tbsps)",
+      "450g Pettit beurre biscuits, powdered (16 ounces)",
+      "1kg dark chocolate (35 ounces)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "To prepare the filling for the kariokes, pour in a pot the water and sugar and bring to the boil. Let it boil for a few minutes, until the sugar has dissolved. Remove the pot from the stove and add the butter, the chocolate (cut in small pieces), the orange zest and the lemon juice; blend until the chocolate has melted and the ingredients combine.",
+        "url": "https://www.mygreekdish.com/recipe/kariokes/#instruction-step-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Pour the mixture in a bowl and mix in the powdered biscuits and chopped walnuts. Blend, until the ingredients combine.",
+        "url": "https://www.mygreekdish.com/recipe/kariokes/#instruction-step-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "On a working surface, line some plastic wrap and pour in 1/3 of the mixture. Form the mix into a roll, wrap it up and put it in the fridge overnight. Repeat the same with rest of the mixture, forming 3 rolls, about 17cm long and 3-4 cm thick. Leave in the fridge overnight.",
+        "url": "https://www.mygreekdish.com/recipe/kariokes/#instruction-step-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "A little bit before you take the rolls out of the fridge, start making the coating. To melt the chocolate it is best to use a bain-marie (or double boiler), a piece of equipment used to heat the chocolate gently and gradually to fixed temperatures so that it doesn&#8217;t burn. If you don&#8217;t have a Bain-marie, break the chocolate into small pieces and drop into a heatproof bowl. Set the bowl over a small saucepan about a quarter full with hot water and place the bowl on top so that it rests on the rim of the pan (the bowl should not to touch the water). Place the pan, with the bowl on top, over low heat until the chocolate has melted, whilst stirring occasionally.",
+        "url": "https://www.mygreekdish.com/recipe/kariokes/#instruction-step-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Take the rolls out of the fridge, unwrap the plastic wrap and slice them in equal slices, about 1cm thick. Dip each piece in the chocolate, using a fork and then place on a baking tray, lined with parchment paper; repeat with all the pieces. When done, let the kariokes to cool down, at room temperature (not in the fridge), until the chocolate thickens. Enjoy!",
+        "url": "https://www.mygreekdish.com/recipe/kariokes/#instruction-step-5"
+      }
+    ],
+    "prepTime": "PT15M",
+    "cookTime": "PT15M",
+    "totalTime": "PT30M",
+    "recipeYield": [
+      "50",
+      "50 pieces"
+    ],
+    "recipeCategory": "Dessert",
+    "recipeCuisine": "Greek",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "550",
+      "ratingValue": "4.9"
+    },
+    "datePublished": "2013-11-30",
+    "@id": "https://www.mygreekdish.com/recipe/kariokes/#recipe",
+    "isPartOf": {
+      "@id": "https://www.mygreekdish.com/recipe/kariokes/#article"
+    },
+    "mainEntityOfPage": "https://www.mygreekdish.com/recipe/kariokes/"
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:aggregateRating"
+  ]
+}

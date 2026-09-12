@@ -1,0 +1,356 @@
+{
+  "schemaVersion": 1,
+  "id": "gennaro-contaldo/chicken-cacciatore",
+  "slug": "chicken-cacciatore",
+  "chefId": "chef_gennaro-contaldo",
+  "chefSlug": "gennaro-contaldo",
+  "chefName": "Gennaro Contaldo",
+  "title": "Chicken cacciatore",
+  "description": "This chicken cacciatore recipe cooks up a big pot of stew – it's a Mediterranean midweek marvel!",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/chickenalocacciatore_70349",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/chickenalocacciatore_70349",
+    "retrievedAt": "2026-09-11T00:28:00.692Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Gennaro Contaldo"
+    ],
+    "datePublished": "2010-10-28T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "72fbcd93de0ef79358f7d2b3720482fc9f8f02e410781bca487d8d2c91dfca90",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups",
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 6"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Italian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "italian family meals",
+    "mediterranean family dinners",
+    "summer stews",
+    "sunday lunch for a crowd",
+    "autumn",
+    "winter",
+    "stew",
+    "chicken",
+    "egg free",
+    "nut free",
+    "Saturday Kitchen"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the chicken",
+      "items": [
+        {
+          "raw": "8 tbsp olive oil",
+          "quantity": 8,
+          "quantityText": "8",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 onion, thinly sliced",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "onion",
+          "note": "thinly sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "2 celery stalks, roughly chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "celery stalks",
+          "note": "roughly chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2 medium carrots, roughly chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "medium carrots",
+          "note": "roughly chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "6 chicken breasts, or chicken thighs, bones removed",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": null,
+          "name": "chicken breasts, or chicken thighs, bones removed",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "175ml/6fl oz white wine",
+          "quantity": 175,
+          "quantityText": "175",
+          "unit": "ml",
+          "name": "/6fl oz white wine",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp tomato purée",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "tomato purée",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "500ml/17fl oz chicken stock",
+          "quantity": 500,
+          "quantityText": "500",
+          "unit": "ml",
+          "name": "/17fl oz chicken stock",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 bay leaf",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "bay leaf",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2–3 sage leaves",
+          "quantity": 2,
+          "quantityText": "2–3",
+          "unit": null,
+          "name": "sage leaves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 rosemary sprig",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "rosemary sprig",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the polenta",
+      "items": [
+        {
+          "raw": "250g/9oz easy-cook polenta",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "/9oz easy-cook polenta",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "knob of butter",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "knob",
+          "name": "of butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "25g/1oz Parmesan",
+          "quantity": 25,
+          "quantityText": "25",
+          "unit": "g",
+          "name": "/1oz Parmesan",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Heat the oil in a frying pan and fry the onion, celery and carrots for 4–5 minutes, or until softened. Add the chicken pieces and continue to cook for 2–3 minutes or until they have browned a little.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat the oil in a frying pan and fry the onion, celery and carrots for 4–5 minutes, or until softened. Add the chicken pieces and continue to cook for 2–3 minutes or until they have browned a little."
+    },
+    {
+      "order": 2,
+      "text": "Pour in the wine and continue to cook until the volume of the liquid has reduced by half. Stir in the tomato purée and the stock. Add the herbs, season with salt and freshly ground black pepper then reduce the heat and simmer for 20–25 minutes, or until the chicken is cooked through.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Pour in the wine and continue to cook until the volume of the liquid has reduced by half. Stir in the tomato purée and the stock. Add the herbs, season with salt and freshly ground black pepper then reduce the heat and simmer for 20–25 minutes, or until the chicken is cooked through."
+    },
+    {
+      "order": 3,
+      "text": "Meanwhile, cook the polenta according to packet instructions. Add the butter and parmesan and stir until well combined.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, cook the polenta according to packet instructions. Add the butter and parmesan and stir until well combined. "
+    },
+    {
+      "order": 4,
+      "text": "To serve, spoon the polenta onto serving plates and top with the chicken.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To serve, spoon the polenta onto serving plates and top with the chicken."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/chickenalocacciatore_70349_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "Chicken cacciatore refers to a stew often made by hunters, who would stew whatever they had caught that day. As such, you can easily switch the chicken for other poultry or even rabbit."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 45,
+      "ratingValue": 4.4
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "This chicken cacciatore recipe cooks up a big pot of stew – it's a Mediterranean midweek marvel!",
+    "headline": "Chicken cacciatore",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/chickenalocacciatore_70349_16x9.jpg"
+    },
+    "name": "Chicken cacciatore",
+    "author": {
+      "@type": "Person",
+      "name": "Gennaro Contaldo"
+    },
+    "datePublished": "2010-10-28T00:00:00.000Z",
+    "dateModified": "2025-03-27T14:18:26.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 45,
+      "ratingValue": 4.4
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, italian family meals, mediterranean family dinners , summer stews, sunday lunch for a crowd, autumn, winter, stew, chicken, egg free, nut free, Saturday Kitchen",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Italian",
+    "recipeIngredient": [
+      "8 tbsp olive oil",
+      "1 onion, thinly sliced",
+      "2 celery stalks, roughly chopped",
+      "2 medium carrots, roughly chopped",
+      "6 chicken breasts, or chicken thighs, bones removed",
+      "175ml/6fl oz white wine",
+      "3 tbsp tomato purée",
+      "500ml/17fl oz chicken stock",
+      "2 bay leaf",
+      "2–3 sage leaves",
+      "1 rosemary sprig",
+      "salt and freshly ground black pepper",
+      "250g/9oz easy-cook polenta",
+      "knob of butter",
+      "25g/1oz Parmesan"
+    ],
+    "recipeInstructions": [
+      "Heat the oil in a frying pan and fry the onion, celery and carrots for 4–5 minutes, or until softened. Add the chicken pieces and continue to cook for 2–3 minutes or until they have browned a little.",
+      "Pour in the wine and continue to cook until the volume of the liquid has reduced by half. Stir in the tomato purée and the stock. Add the herbs, season with salt and freshly ground black pepper then reduce the heat and simmer for 20–25 minutes, or until the chicken is cooked through.",
+      "Meanwhile, cook the polenta according to packet instructions. Add the butter and parmesan and stir until well combined. ",
+      "To serve, spoon the polenta onto serving plates and top with the chicken."
+    ],
+    "recipeYield": "Serves 6",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "range-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

@@ -1,0 +1,361 @@
+{
+  "schemaVersion": 1,
+  "id": "sabrina-ghayour/sticky-lamb-buns-with-pickled-cucumber-relish",
+  "slug": "sticky-lamb-buns-with-pickled-cucumber-relish",
+  "chefId": "chef_sabrina-ghayour",
+  "chefSlug": "sabrina-ghayour",
+  "chefName": "Sabrina Ghayour",
+  "title": "Sticky lamb buns with pickled cucumber relish",
+  "description": "A great recipe for using up leftover roast lamb. Double the quantities to serve at small parties.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/sticky_lamb_buns_with_a_40943",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/sticky_lamb_buns_with_a_40943",
+    "retrievedAt": "2026-09-11T00:28:34.609Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Sabrina Ghayour"
+    ],
+    "datePublished": "2016-10-01T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "82c3ffa52a16a53fe979ed284391e8abf9b5f94d8ba013b3377f390a64dbf5ab",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups",
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 60,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Turkish and Middle Eastern"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "leftover lamb",
+    "easter leftovers",
+    "leftovers",
+    "leftover roast",
+    "new year's sharing",
+    "persian",
+    "father's day",
+    "party food",
+    "lamb shoulder",
+    "dairy free",
+    "egg free",
+    "nut free",
+    "pregnancy friendly",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the pickled cucumber relish",
+      "items": [
+        {
+          "raw": "½ large cucumber",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "large cucumber",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ red onion, finely chopped",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "red onion",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp rice vinegar",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "rice vinegar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 heaped tsp caster sugar",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "heaped tsp caster sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp sesame oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "sesame oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp nigella seeds",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "nigella seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "handful dill, fronds finely chopped",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "handful",
+          "name": "dill",
+          "note": "fronds finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz pomegranate seeds",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz pomegranate seeds",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the sticky lamb buns",
+      "items": [
+        {
+          "raw": "600g/1lb 5oz roasted lamb shoulder meat, shredded (if cooking from scratch, refer to the recipe tip below)",
+          "quantity": 600,
+          "quantityText": "600",
+          "unit": "g",
+          "name": "/1lb 5oz roasted lamb shoulder meat",
+          "note": "shredded (if cooking from scratch, refer to the recipe tip below)",
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp rose harissa",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "rose harissa",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 tbsp clear honey",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": "tbsp",
+          "name": "clear honey",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 heaped tsp ground cumin",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "heaped tsp ground cumin",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 heaped tsp ground cinnamon",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "heaped tsp ground cinnamon",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "pinch sea salt flakes",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "pinch",
+          "name": "sea salt flakes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 bread rolls, toasted just prior to serving (if desired), to serve",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "bread rolls",
+          "note": "toasted just prior to serving (if desired), to serve",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "For the relish, quarter the cucumber lengthways, then thinly slice and place in a bowl along with the onion. Season with a few generous pinches of salt. Mix well and leave to rest for 15 minutes. Stir again and leave to sit for another 15 minutes. After the resting time, drain off any excess moisture and wrap the cucumber mixture in a clean tea towel or a few sheets of kitchen paper until dry.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the relish, quarter the cucumber lengthways, then thinly slice and place in a bowl along with the onion. Season with a few generous pinches of salt.  Mix well and leave to rest for 15 minutes. Stir again and leave to sit for another 15 minutes. After the resting time, drain off any excess moisture and wrap the cucumber mixture in a clean tea towel or a few sheets of kitchen paper until dry. "
+    },
+    {
+      "order": 2,
+      "text": "Put the cucumber mixture in a bowl, add the vinegar, sugar and sesame oil. Mix well until the sugar is dissolved and the marinade coats the cucumber and onion. Add the nigella seeds, dill and pomegranate seeds and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put the cucumber mixture in a bowl, add the vinegar, sugar and sesame oil. Mix well until the sugar is dissolved and the marinade coats the cucumber and onion. Add the nigella seeds, dill and pomegranate seeds and set aside. "
+    },
+    {
+      "order": 3,
+      "text": "For the lamb, put the shredded, cooked meat in a saucepan set over a medium heat, add the harissa, honey, cumin and cinnamon and coat the meat in the mixture. (If desired, you can soften the texture with a little oil, water or even apple juice, a tablespoon at a time.) Season with salt, to taste, and once the consistency has reached a moist and juicy meat mixture, remove from the heat.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the lamb, put the shredded, cooked meat in a saucepan set over a medium heat, add the harissa, honey, cumin and cinnamon and coat the meat in the mixture. (If desired, you can soften the texture with a little oil, water or even apple juice, a tablespoon at a time.) Season with salt, to taste, and once the consistency has reached a moist and juicy meat mixture, remove from the heat. "
+    },
+    {
+      "order": 4,
+      "text": "Serve the lamb inside the bread rolls with a generous amount of relish.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Serve the lamb inside the bread rolls with a generous amount of relish.  "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/sticky_lamb_buns_with_a_40943_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "To roast the lamb, you'll need a 1.4kg/3lb lamb shoulder joint. Rub with a little oil, cover the tin with aluminium foil and roast at 180C/160C Fan/Gas 4 for 4-5 hours, or until the meat is very tender."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 9,
+      "ratingValue": 4.888888888888889
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "A great recipe for using up leftover roast lamb. Double the quantities to serve at small parties.",
+    "headline": "Sticky lamb buns with pickled cucumber relish",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/sticky_lamb_buns_with_a_40943_16x9.jpg"
+    },
+    "name": "Sticky lamb buns with pickled cucumber relish",
+    "author": {
+      "@type": "Person",
+      "name": "Sabrina Ghayour"
+    },
+    "datePublished": "2016-10-01T00:00:00.000Z",
+    "dateModified": "2025-10-27T08:41:00.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 9,
+      "ratingValue": 4.888888888888889
+    },
+    "prepTime": "PT1H",
+    "cookTime": "PT30M",
+    "keywords": "leftover lamb, easter leftovers, leftovers, leftover roast, new year's sharing, persian, father's day, party food, lamb shoulder, dairy free, egg free, nut free, pregnancy friendly, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Turkish and Middle Eastern",
+    "recipeIngredient": [
+      "½ large cucumber ",
+      "½ red onion, finely chopped",
+      "2 tbsp rice vinegar ",
+      "2 heaped tsp caster sugar ",
+      "1 tsp sesame oil ",
+      "1 tsp nigella seeds",
+      "handful dill, fronds finely chopped ",
+      "100g/3½oz pomegranate seeds ",
+      "600g/1lb 5oz roasted lamb shoulder meat, shredded (if cooking from scratch, refer to the recipe tip below)",
+      "2 tsp rose harissa ",
+      "6 tbsp clear honey ",
+      "1 heaped tsp ground cumin ",
+      "2 heaped tsp ground cinnamon ",
+      "pinch sea salt flakes",
+      "4 bread rolls, toasted just prior to serving (if desired), to serve"
+    ],
+    "recipeInstructions": [
+      "For the relish, quarter the cucumber lengthways, then thinly slice and place in a bowl along with the onion. Season with a few generous pinches of salt.  Mix well and leave to rest for 15 minutes. Stir again and leave to sit for another 15 minutes. After the resting time, drain off any excess moisture and wrap the cucumber mixture in a clean tea towel or a few sheets of kitchen paper until dry. ",
+      "Put the cucumber mixture in a bowl, add the vinegar, sugar and sesame oil. Mix well until the sugar is dissolved and the marinade coats the cucumber and onion. Add the nigella seeds, dill and pomegranate seeds and set aside. ",
+      "For the lamb, put the shredded, cooked meat in a saucepan set over a medium heat, add the harissa, honey, cumin and cinnamon and coat the meat in the mixture. (If desired, you can soften the texture with a little oil, water or even apple juice, a tablespoon at a time.) Season with salt, to taste, and once the consistency has reached a moist and juicy meat mixture, remove from the heat. ",
+      "Serve the lamb inside the bread rolls with a generous amount of relish.  "
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

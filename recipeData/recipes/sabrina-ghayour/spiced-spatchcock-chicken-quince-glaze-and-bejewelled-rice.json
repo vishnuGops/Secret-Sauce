@@ -1,0 +1,442 @@
+{
+  "schemaVersion": 1,
+  "id": "sabrina-ghayour/spiced-spatchcock-chicken-quince-glaze-and-bejewelled-rice",
+  "slug": "spiced-spatchcock-chicken-quince-glaze-and-bejewelled-rice",
+  "chefId": "chef_sabrina-ghayour",
+  "chefSlug": "sabrina-ghayour",
+  "chefName": "Sabrina Ghayour",
+  "title": "Spiced spatchcock chicken, quince glaze and bejewelled rice",
+  "description": "Spatchcocking a chicken makes it much quicker to cook – this flavourful chicken and rice can be on the table in less than an hour.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/spiced_spatchcock_39973",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/spiced_spatchcock_39973",
+    "retrievedAt": "2026-09-11T00:28:33.070Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Sabrina Ghayour"
+    ],
+    "datePublished": "2021-11-20T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "d1165f5ade4d05cb102cc2b41ea99d0ea99ae4115e4d6ba7c53698772e78ecb6",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 4 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4–6"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Turkish and Middle Eastern"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "best roast chicken",
+    "spice up your roast",
+    "easter mains",
+    "eid feasts",
+    "healthy roast",
+    "middle-eastern chicken",
+    "middle eastern feasts",
+    "spice up roast chicken",
+    "spring chicken recipes",
+    "summer sunday lunch",
+    "weekend dinner ideas",
+    "roast chicken",
+    "chicken",
+    "egg free",
+    "pregnancy friendly",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the spiced spatchcock chicken",
+      "items": [
+        {
+          "raw": "4 tbsp olive oil",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 heaped tbsp baharat (or ½ tbsp mix of cumin, paprika, ginger, clove, cinnamon and cayenne)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "heaped tbsp baharat (or ½ tbsp mix of cumin, paprika, ginger, clove, cinnamon and cayenne)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 medium chicken, spatchcocked",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "medium chicken, spatchcocked",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the chicken glaze",
+      "items": [
+        {
+          "raw": "100g/3½oz membrillo (quince paste)",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz membrillo (quince paste)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100ml/3½fl oz apple juice",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "ml",
+          "name": "/3½fl oz apple juice",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the bejewelled vermicelli rice",
+      "items": [
+        {
+          "raw": "2 tbsp olive oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 onion, diced",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "onion",
+          "note": "diced",
+          "isOptional": false
+        },
+        {
+          "raw": "2 garlic cloves, chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz cut vermicelli",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz cut vermicelli",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "425g/15oz basmati rice",
+          "quantity": 425,
+          "quantityText": "425",
+          "unit": "g",
+          "name": "/15oz basmati rice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp cinnamon",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "cinnamon",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground cumin",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground cumin",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz butter, plus extra for serving",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz butter, plus extra for serving",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz dried apricots, chopped",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz dried apricots",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz dried cranberries, chopped",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz dried cranberries",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz toasted pine nuts",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz toasted pine nuts",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz slivered pistachios",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz slivered pistachios",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To serve",
+      "items": [
+        {
+          "raw": "15g/½oz fresh parsley, roughly chopped",
+          "quantity": 15,
+          "quantityText": "15",
+          "unit": "g",
+          "name": "/½oz fresh parsley",
+          "note": "roughly chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz pomegranate seeds",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz pomegranate seeds",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 200C/180C Fan/Gas 6. Mix the oil and baharat in a bowl, then brush all over the chicken. Roast for 45 minutes, adjusting this timing depending on the size of the chicken.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 200C/180C Fan/Gas 6. Mix the oil and baharat in a bowl, then brush all over the chicken. Roast for 45 minutes, adjusting this timing depending on the size of the chicken. "
+    },
+    {
+      "order": 2,
+      "text": "Meanwhile, to make the chicken glaze, combine the membrillo and apple juice in a saucepan and simmer over a medium heat until it boils down to a glaze consistency (this should be about 4–5 tablespoons of liquid). Season the glaze with salt and pepper and set aside until the chicken is cooked.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, to make the chicken glaze, combine the membrillo and apple juice in a saucepan and simmer over a medium heat until it boils down to a glaze consistency (this should be about 4–5 tablespoons of liquid). Season the glaze with salt and pepper and set aside until the chicken is cooked.  "
+    },
+    {
+      "order": 3,
+      "text": "To make the jewelled rice, place a saucepan with a lid over a medium heat and add the olive oil. Add the onion and cook until softened and translucent, then add the garlic and cook for another minute. Add the vermicelli, stir well and toast until it turns golden brown.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the jewelled rice, place a saucepan with a lid over a medium heat and add the olive oil. Add the onion and cook until softened and translucent, then add the garlic and cook for another minute. Add the vermicelli, stir well and toast until it turns golden brown. "
+    },
+    {
+      "order": 4,
+      "text": "Add the rice, spices, butter and a generous amount of salt and pepper and cook, stirring, until the vermicelli is evenly coated in the melted butter and spices. Pour in 600ml/21fl oz cold water and stir again, then cover the pan with the lid, reduce to a very gentle simmer and cook for 30–35 minutes, or until the rice on top is cooked and fluffy.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the rice, spices, butter and a generous amount of salt and pepper and cook, stirring, until the vermicelli is evenly coated in the melted butter and spices. Pour in 600ml/21fl oz cold water and stir again, then cover the pan with the lid, reduce to a very gentle simmer and cook for 30–35 minutes, or until the rice on top is cooked and fluffy."
+    },
+    {
+      "order": 5,
+      "text": "Fluff the rice up with a fork and add a few extra knobs of butter. Fold in the chopped apricots, dried chopped cranberries, toasted pine nuts and pistachios.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Fluff the rice up with a fork and add a few extra knobs of butter. Fold in the chopped apricots, dried chopped cranberries, toasted pine nuts and pistachios."
+    },
+    {
+      "order": 6,
+      "text": "When the chicken is cooked, brush the chicken with the glaze as it rests. Serve the chicken with a flourish of chopped parsley and pomegranate seeds, and the rice on the side. Alternatively you can cut the chicken into portions.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "When the chicken is cooked, brush the chicken with the glaze as it rests. Serve the chicken with a  flourish of chopped parsley and pomegranate seeds, and the rice on the side. Alternatively you can cut the chicken into portions."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/spiced_spatchcock_39973_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 30,
+      "ratingValue": 4.8
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Spatchcocking a chicken makes it much quicker to cook – this flavourful chicken and rice can be on the table in less than an hour.",
+    "headline": "Spiced spatchcock chicken, quince glaze and bejewelled rice",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/spiced_spatchcock_39973_16x9.jpg"
+    },
+    "name": "Spiced spatchcock chicken, quince glaze and bejewelled rice",
+    "author": {
+      "@type": "Person",
+      "name": "Sabrina Ghayour"
+    },
+    "datePublished": "2021-11-20T00:00:00.000Z",
+    "dateModified": "2025-11-14T16:05:13.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 30,
+      "ratingValue": 4.8
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT1H",
+    "keywords": "best roast chicken, spice up your roast, easter mains, eid feasts, healthy roast, middle-eastern chicken, middle eastern feasts, spice up roast chicken, spring chicken recipes , summer sunday lunch, weekend dinner ideas, roast chicken, chicken, egg free, pregnancy friendly, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Turkish and Middle Eastern",
+    "recipeIngredient": [
+      "4 tbsp olive oil",
+      "1 heaped tbsp baharat (or ½ tbsp mix of cumin, paprika, ginger, clove, cinnamon and cayenne) ",
+      "1 medium chicken, spatchcocked",
+      "salt and freshly ground black pepper",
+      "100g/3½oz membrillo (quince paste)",
+      "100ml/3½fl oz apple juice",
+      "2 tbsp olive oil",
+      "1 onion, diced",
+      "2 garlic cloves, chopped",
+      "100g/3½oz cut vermicelli",
+      "425g/15oz basmati rice",
+      "1 tsp cinnamon ",
+      "1 tsp ground cumin ",
+      "50g/1¾oz butter, plus extra for serving",
+      "50g/1¾oz dried apricots, chopped",
+      "50g/1¾oz dried cranberries, chopped ",
+      "50g/1¾oz toasted pine nuts",
+      "50g/1¾oz slivered pistachios",
+      "15g/½oz fresh parsley, roughly chopped",
+      "50g/1¾oz pomegranate seeds"
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 200C/180C Fan/Gas 6. Mix the oil and baharat in a bowl, then brush all over the chicken. Roast for 45 minutes, adjusting this timing depending on the size of the chicken. ",
+      "Meanwhile, to make the chicken glaze, combine the membrillo and apple juice in a saucepan and simmer over a medium heat until it boils down to a glaze consistency (this should be about 4–5 tablespoons of liquid). Season the glaze with salt and pepper and set aside until the chicken is cooked.  ",
+      "To make the jewelled rice, place a saucepan with a lid over a medium heat and add the olive oil. Add the onion and cook until softened and translucent, then add the garlic and cook for another minute. Add the vermicelli, stir well and toast until it turns golden brown. ",
+      "Add the rice, spices, butter and a generous amount of salt and pepper and cook, stirring, until the vermicelli is evenly coated in the melted butter and spices. Pour in 600ml/21fl oz cold water and stir again, then cover the pan with the lid, reduce to a very gentle simmer and cook for 30–35 minutes, or until the rice on top is cooked and fluffy.",
+      "Fluff the rice up with a fork and add a few extra knobs of butter. Fold in the chopped apricots, dried chopped cranberries, toasted pine nuts and pistachios.",
+      "When the chicken is cooked, brush the chicken with the glaze as it rests. Serve the chicken with a  flourish of chopped parsley and pomegranate seeds, and the rice on the side. Alternatively you can cut the chicken into portions."
+    ],
+    "recipeYield": "Serves 4–6",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

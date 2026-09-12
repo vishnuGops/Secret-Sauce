@@ -1,0 +1,674 @@
+[
+  {
+    "name": "theppk.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://theppk.com/"
+  },
+  {
+    "name": "itdoesnttastelikechicken.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://itdoesnttastelikechicken.com/"
+  },
+  {
+    "name": "connoisseurusveg.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://connoisseurusveg.com/"
+  },
+  {
+    "name": "olivesfordinner.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://olivesfordinner.com/"
+  },
+  {
+    "name": "pickuplimes.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://pickuplimes.com/"
+  },
+  {
+    "name": "healthyhappylife.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://healthyhappylife.com/"
+  },
+  {
+    "name": "ohsheglows.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://ohsheglows.com/"
+  },
+  {
+    "name": "plantifullybasedblog.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://plantifullybasedblog.com/"
+  },
+  {
+    "name": "simpleveganblog.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://simpleveganblog.com/"
+  },
+  {
+    "name": "fatfreevegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://fatfreevegan.com/"
+  },
+  {
+    "name": "thekoreanvegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thekoreanvegan.com/"
+  },
+  {
+    "name": "lovingitvegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://lovingitvegan.com/"
+  },
+  {
+    "name": "hotforfoodblog.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://hotforfoodblog.com/"
+  },
+  {
+    "name": "thevegan8.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thevegan8.com/"
+  },
+  {
+    "name": "simple-veganista.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://simple-veganista.com/"
+  },
+  {
+    "name": "sweetsimplevegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://sweetsimplevegan.com/"
+  },
+  {
+    "name": "ohmyveggies.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://ohmyveggies.com/"
+  },
+  {
+    "name": "vegkitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://vegkitchen.com/"
+  },
+  {
+    "name": "thefoodietakesflight.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thefoodietakesflight.com/"
+  },
+  {
+    "name": "thelittleblogofvegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thelittleblogofvegan.com/"
+  },
+  {
+    "name": "thevietvegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thevietvegan.com/"
+  },
+  {
+    "name": "lazycatkitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://lazycatkitchen.com/"
+  },
+  {
+    "name": "rhiansrecipes.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://rhiansrecipes.com/"
+  },
+  {
+    "name": "elavegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://elavegan.com/"
+  },
+  {
+    "name": "veganheaven.org",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://veganheaven.org/"
+  },
+  {
+    "name": "veganosity.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://veganosity.com/"
+  },
+  {
+    "name": "veganinthefreezer.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://veganinthefreezer.com/"
+  },
+  {
+    "name": "diannesvegankitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://diannesvegankitchen.com/"
+  },
+  {
+    "name": "thehiddenveggies.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thehiddenveggies.com/"
+  },
+  {
+    "name": "keepinitkind.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://keepinitkind.com/"
+  },
+  {
+    "name": "wellvegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://wellvegan.com/"
+  },
+  {
+    "name": "dreenaburton.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://dreenaburton.com/"
+  },
+  {
+    "name": "spabettie.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://spabettie.com/"
+  },
+  {
+    "name": "cupfulofkale.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://cupfulofkale.com/"
+  },
+  {
+    "name": "theconscientiouseater.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://theconscientiouseater.com/"
+  },
+  {
+    "name": "thevegspace.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thevegspace.co.uk/"
+  },
+  {
+    "name": "theminimalistvegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://theminimalistvegan.com/"
+  },
+  {
+    "name": "thegreencreator.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thegreencreator.com/"
+  },
+  {
+    "name": "namelymarly.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://namelymarly.com/"
+  },
+  {
+    "name": "mydarlingvegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://mydarlingvegan.com/"
+  },
+  {
+    "name": "bittersweetblog.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://bittersweetblog.com/"
+  },
+  {
+    "name": "veganlovlie.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://veganlovlie.com/"
+  },
+  {
+    "name": "healthylittlevittles.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://healthylittlevittles.com/"
+  },
+  {
+    "name": "mississippivegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://mississippivegan.com/"
+  },
+  {
+    "name": "romylondonuk.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://romylondonuk.com/"
+  },
+  {
+    "name": "planetveggie.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://planetveggie.co.uk/"
+  },
+  {
+    "name": "theplantbasedschool.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://theplantbasedschool.com/"
+  },
+  {
+    "name": "schoolnightvegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://schoolnightvegan.com/"
+  },
+  {
+    "name": "greenevi.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://greenevi.com/"
+  },
+  {
+    "name": "elephantasticvegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://elephantasticvegan.com/"
+  },
+  {
+    "name": "crazyvegankitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://crazyvegankitchen.com/"
+  },
+  {
+    "name": "thatwasvegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thatwasvegan.com/"
+  },
+  {
+    "name": "frieddandelions.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://frieddandelions.com/"
+  },
+  {
+    "name": "mygoodnesskitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://mygoodnesskitchen.com/"
+  },
+  {
+    "name": "yupitsvegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://yupitsvegan.com/"
+  },
+  {
+    "name": "thecheekychickpea.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thecheekychickpea.com/"
+  },
+  {
+    "name": "bohemianvegankitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://bohemianvegankitchen.com/"
+  },
+  {
+    "name": "thecheaplazyvegan.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thecheaplazyvegan.com/"
+  },
+  {
+    "name": "deliciouslyella.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://deliciouslyella.com/"
+  },
+  {
+    "name": "pinchofnom.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://pinchofnom.com/"
+  },
+  {
+    "name": "theenglishkitchen.co",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://theenglishkitchen.co/"
+  },
+  {
+    "name": "cooksister.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://cooksister.com/"
+  },
+  {
+    "name": "veggiedesserts.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://veggiedesserts.com/"
+  },
+  {
+    "name": "wallflowerkitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://wallflowerkitchen.com/"
+  },
+  {
+    "name": "domesticgothess.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://domesticgothess.com/"
+  },
+  {
+    "name": "easycheesyvegetarian.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://easycheesyvegetarian.com/"
+  },
+  {
+    "name": "tinnedtomatoes.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://tinnedtomatoes.com/"
+  },
+  {
+    "name": "simplysensationalfood.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://simplysensationalfood.com/"
+  },
+  {
+    "name": "recipesfromapantry.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://recipesfromapantry.com/"
+  },
+  {
+    "name": "supergoldenbakes.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://supergoldenbakes.com/"
+  },
+  {
+    "name": "theworktop.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://theworktop.com/"
+  },
+  {
+    "name": "thelastfoodblog.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thelastfoodblog.com/"
+  },
+  {
+    "name": "glutenfreecuppatea.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://glutenfreecuppatea.co.uk/"
+  },
+  {
+    "name": "britishfoodhistory.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://britishfoodhistory.com/"
+  },
+  {
+    "name": "eatsamazing.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://eatsamazing.co.uk/"
+  },
+  {
+    "name": "hedgecombers.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://hedgecombers.com/"
+  },
+  {
+    "name": "everydayhealthyrecipes.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://everydayhealthyrecipes.com/"
+  },
+  {
+    "name": "foodiequine.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://foodiequine.co.uk/"
+  },
+  {
+    "name": "kaveyeats.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://kaveyeats.com/"
+  },
+  {
+    "name": "farmersgirlkitchen.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://farmersgirlkitchen.co.uk/"
+  },
+  {
+    "name": "aglugofoil.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://aglugofoil.com/"
+  },
+  {
+    "name": "patisseriemakesperfect.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://patisseriemakesperfect.co.uk/"
+  },
+  {
+    "name": "everynookandcranny.net",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://everynookandcranny.net/"
+  },
+  {
+    "name": "tinandthyme.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://tinandthyme.uk/"
+  },
+  {
+    "name": "krumpli.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://krumpli.co.uk/"
+  },
+  {
+    "name": "larderlove.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://larderlove.com/"
+  },
+  {
+    "name": "joskitchenlarder.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://joskitchenlarder.com/"
+  },
+  {
+    "name": "casacostello.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://casacostello.com/"
+  },
+  {
+    "name": "thecrazykitchen.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thecrazykitchen.co.uk/"
+  },
+  {
+    "name": "endofthefork.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://endofthefork.com/"
+  },
+  {
+    "name": "therarewelshbit.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://therarewelshbit.com/"
+  },
+  {
+    "name": "dominthekitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://dominthekitchen.com/"
+  },
+  {
+    "name": "nadiashealthykitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://nadiashealthykitchen.com/"
+  },
+  {
+    "name": "flawlessfood.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://flawlessfood.co.uk/"
+  },
+  {
+    "name": "bakingbar.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://bakingbar.co.uk/"
+  },
+  {
+    "name": "dollybakes.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://dollybakes.co.uk/"
+  },
+  {
+    "name": "kerrycooks.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://kerrycooks.com/"
+  },
+  {
+    "name": "munchiesandmunchkins.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://munchiesandmunchkins.com/"
+  },
+  {
+    "name": "messyvegancook.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://messyvegancook.com/"
+  },
+  {
+    "name": "amummytoo.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://amummytoo.co.uk/"
+  },
+  {
+    "name": "carolinemakes.net",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://carolinemakes.net/"
+  },
+  {
+    "name": "talesfromthekitchenshed.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://talesfromthekitchenshed.com/"
+  },
+  {
+    "name": "emmaeatsandexplores.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://emmaeatsandexplores.com/"
+  },
+  {
+    "name": "apriljharris.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://apriljharris.com/"
+  },
+  {
+    "name": "combinegoodflavors.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://combinegoodflavors.com/"
+  },
+  {
+    "name": "rachelsrecipepantry.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://rachelsrecipepantry.com/"
+  },
+  {
+    "name": "dontgobaconmyheart.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://dontgobaconmyheart.co.uk/"
+  },
+  {
+    "name": "easypeasy-lemonsqueezy.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://easypeasy-lemonsqueezy.co.uk/"
+  },
+  {
+    "name": "hintofhealthy.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://hintofhealthy.com/"
+  },
+  {
+    "name": "monsoonspice.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://monsoonspice.com/"
+  },
+  {
+    "name": "soyummyrecipes.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://soyummyrecipes.com/"
+  },
+  {
+    "name": "togethertoeat.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://togethertoeat.com/"
+  }
+]

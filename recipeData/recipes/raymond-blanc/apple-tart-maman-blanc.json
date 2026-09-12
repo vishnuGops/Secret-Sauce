@@ -1,0 +1,454 @@
+{
+  "schemaVersion": 1,
+  "id": "raymond-blanc/apple-tart-maman-blanc",
+  "slug": "apple-tart-maman-blanc",
+  "chefId": "chef_raymond-blanc",
+  "chefSlug": "raymond-blanc",
+  "chefName": "Raymond Blanc",
+  "title": "Apple tart 'Maman Blanc'",
+  "description": "A simple tart topped with buttery soft apples, cream and calvados - takes no time to make, but is so delicious.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/appletartmamanblanc_93268",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/appletartmamanblanc_93268",
+    "retrievedAt": "2026-09-11T00:27:28.273Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Raymond Blanc"
+    ],
+    "datePublished": "2010-01-05T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "e547aa41d4e2767578d2d8f1ebbac7b809ee3cc06c17dc93a653605a986dbadf",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 6"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 60,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "French"
+  ],
+  "category": [
+    "Cakes and baking"
+  ],
+  "keywords": [
+    "best apple",
+    "autumn",
+    "roast dinner",
+    "thanksgiving",
+    "apple pie",
+    "apple",
+    "nut free",
+    "summer",
+    "winter",
+    "Raymond Blanc's Kitchen Secrets"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the pastry",
+      "items": [
+        {
+          "raw": "250g/9oz plain flour",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "/9oz plain flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "pinch sea salt",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "pinch",
+          "name": "sea salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "125g/4oz unsalted butter, diced, at room temperature",
+          "quantity": 125,
+          "quantityText": "125",
+          "unit": "g",
+          "name": "/4oz unsalted butter",
+          "note": "diced, at room temperature",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp cold water",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "cold water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 medium free-range egg",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "medium free-range egg",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the filling",
+      "items": [
+        {
+          "raw": "15g/½oz unsalted butter",
+          "quantity": 15,
+          "quantityText": "15",
+          "unit": "g",
+          "name": "/½oz unsalted butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tbsp lemon juice",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tbsp",
+          "name": "lemon juice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "65g/2½oz caster sugar",
+          "quantity": 65,
+          "quantityText": "65",
+          "unit": "g",
+          "name": "/2½oz caster sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tbsp calvados",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tbsp",
+          "name": "calvados",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3-4 Cox's Orange Pippin, Worcester, Russet or Braeburn apples, peeled, cores removed, each cut into 10 segments",
+          "quantity": 3,
+          "quantityText": "3-4",
+          "unit": null,
+          "name": "Cox's Orange Pippin",
+          "note": "Worcester, Russet or Braeburn apples, peeled, cores removed, each cut into 10 segments",
+          "isOptional": false
+        },
+        {
+          "raw": "100ml/3½fl oz double cream",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "ml",
+          "name": "/3½fl oz double cream",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 medium free-range egg",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "medium free-range egg",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1-2 tbsp icing sugar, for dusting",
+          "quantity": 1,
+          "quantityText": "1-2",
+          "unit": "tbsp",
+          "name": "icing sugar, for dusting",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "For the pastry, pulse together the flour, butter and salt in a food processor until you reach a sandy texture. Add the egg, water and pulse again. If you over mix the dough at this stage it will lose its flakiness.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the pastry, pulse together the flour, butter and salt in a food processor until you reach a sandy texture. Add the egg, water and pulse again. If you over mix the dough at this stage it will lose its flakiness."
+    },
+    {
+      "order": 2,
+      "text": "Transfer the dough onto a lightly floured work surface and knead with the palms of your hands for 30 seconds, or until the dough is smooth and well combined.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Transfer the dough onto a lightly floured work surface and knead with the palms of your hands for 30 seconds, or until the dough is smooth and well combined. "
+    },
+    {
+      "order": 3,
+      "text": "With the palm of your hand flatten the dough slightly to 1cm/½in thickness, then sandwich it between two large sheets of cling film. Chill in the fridge for 30 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "With the palm of your hand flatten the dough slightly to 1cm/½in thickness, then sandwich it between two large sheets of cling film. Chill in the fridge for 30 minutes."
+    },
+    {
+      "order": 4,
+      "text": "Preheat the oven to 220C/440F/Gas 7. Place a baking tray into the oven to preheat.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 220C/440F/Gas 7. Place a baking tray into the oven to preheat."
+    },
+    {
+      "order": 5,
+      "text": "Roll the chilled dough, still sandwiched in cling film, to a 2mm thickness. Place a 22cm/9in diameter, 2cm/¾in deep tart ring on a greaseproof lined wooden peel or baking tray. Remove the top layer of clingfilm and carefully pick up the dough, place it into the tart ring with the second layer of clingfilm facing up. Lift and tuck the dough into the edges of the ring and discard the clingfilm. By tucking in the base you will minimise the shrinking of the dough during cooking. Trim off any excess with a rolling pin.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Roll the chilled dough, still sandwiched in cling film, to a 2mm thickness. Place a 22cm/9in diameter, 2cm/¾in deep tart ring on a greaseproof lined wooden peel or baking tray. Remove the top layer of clingfilm and carefully pick up the dough, place it into the tart ring with the second layer of clingfilm facing up. Lift and tuck the dough into the edges of the ring and discard the clingfilm. By tucking in the base you will minimise the shrinking of the dough during cooking. Trim off any excess with a rolling pin. "
+    },
+    {
+      "order": 6,
+      "text": "Using your index finger and thumb, pinch and press the dough until it's 2mm above the tart ring all around the edge. With a fork, prick the bottom of the tart. Chill in the fridge for 20 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Using your index finger and thumb, pinch and press the dough until it's 2mm above the tart ring all around the edge. With a fork, prick the bottom of the tart. Chill in the fridge for 20 minutes."
+    },
+    {
+      "order": 7,
+      "text": "Meanwhile, for the filling, heat the butter, lemon juice and 15g/1oz of the sugar in a small saucepan until the butter has melted and the sugar has dissolved. Remove from the heat and stir in the Calvados. Set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, for the filling, heat the butter, lemon juice and 15g/1oz of the sugar in a small saucepan until the butter has melted and the sugar has dissolved. Remove from the heat and stir in the Calvados. Set aside."
+    },
+    {
+      "order": 8,
+      "text": "When the tart case has chilled, arrange the apple segments in concentric circles, overlapping the apple slices as you go. Brush the apples all over with the Calvados mixture. Slide the tart ring onto the pre-heated baking tray and bake for 10 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "When the tart case has chilled, arrange the apple segments in concentric circles, overlapping the apple slices as you go. Brush the apples all over with the Calvados mixture. Slide the tart ring onto the pre-heated baking tray and bake for 10 minutes."
+    },
+    {
+      "order": 9,
+      "text": "Reduce the oven temperature to 200C/400F/Gas 6, then continue to cook for a further 20 minutes, until the pastry is pale golden-brown and the apples have caramelised.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Reduce the oven temperature to 200C/400F/Gas 6, then continue to cook for a further 20 minutes, until the pastry is pale golden-brown and the apples have caramelised. "
+    },
+    {
+      "order": 10,
+      "text": "Whisk together the double cream, egg and the remaining 50g/2oz caster sugar until well combined. When the pastry is pale golden-brown and the apples have caramelised, sprinkle the tart with a tablespoon of sugar and pour the custard mixture into the tart, bake for a further 10 minutes, until the filling mixture has just set.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Whisk together the double cream, egg and the remaining 50g/2oz caster sugar until well combined. When the pastry is pale golden-brown and the apples have caramelised, sprinkle the tart with a tablespoon of sugar and pour the custard mixture into the tart, bake for a further 10 minutes, until the filling mixture has just set."
+    },
+    {
+      "order": 11,
+      "text": "To serve, remove the tart from the oven and set aside for 1 hour to cool slightly, then carefully remove the tart ring. Dust all over with icing sugar. Serve immediately.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To serve, remove the tart from the oven and set aside for 1 hour to cool slightly, then carefully remove the tart ring. Dust all over with icing sugar. Serve immediately."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/appletartmamanblanc_93268_16x9.jpg"
+    ],
+    "video": [
+      {
+        "description": "Raymond Blanc makes apple tart with cream and calvados - easy to make, but so delicious.",
+        "duration": "PT5M1S",
+        "name": "Apple tart 'Maman Blanc'",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/appletartmamanblanc_93268_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:49:23.000Z"
+      }
+    ]
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 21,
+      "ratingValue": 4.9523809523809526
+    },
+    "suitableForDiet": [],
+    "video": [
+      {
+        "description": "Raymond Blanc makes apple tart with cream and calvados - easy to make, but so delicious.",
+        "duration": "PT5M1S",
+        "name": "Apple tart 'Maman Blanc'",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/appletartmamanblanc_93268_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:49:23.000Z"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "A simple tart topped with buttery soft apples, cream and calvados - takes no time to make, but is so delicious.",
+    "headline": "Apple tart 'Maman Blanc'",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/appletartmamanblanc_93268_16x9.jpg"
+    },
+    "name": "Apple tart 'Maman Blanc'",
+    "author": {
+      "@type": "Person",
+      "name": "Raymond Blanc"
+    },
+    "datePublished": "2010-01-05T00:00:00.000Z",
+    "dateModified": "2024-12-09T17:39:42.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 21,
+      "ratingValue": 4.9523809523809526
+    },
+    "prepTime": "PT1H",
+    "cookTime": "PT30M",
+    "keywords": "best apple, autumn, roast dinner, thanksgiving, apple pie, apple, nut free, summer, winter, Raymond Blanc's Kitchen Secrets",
+    "recipeCategory": "Cakes and baking",
+    "recipeCuisine": "French",
+    "recipeIngredient": [
+      "250g/9oz plain flour",
+      "pinch sea salt",
+      "125g/4oz unsalted butter, diced, at room temperature",
+      "1 tsp cold water",
+      "1 medium free-range egg",
+      "15g/½oz unsalted butter ",
+      "½ tbsp lemon juice",
+      "65g/2½oz caster sugar",
+      "½ tbsp calvados",
+      "3-4 Cox's Orange Pippin, Worcester, Russet or Braeburn apples, peeled, cores removed, each cut into 10 segments",
+      "100ml/3½fl oz double cream",
+      "1 medium free-range egg",
+      "1-2 tbsp icing sugar, for dusting"
+    ],
+    "recipeInstructions": [
+      "For the pastry, pulse together the flour, butter and salt in a food processor until you reach a sandy texture. Add the egg, water and pulse again. If you over mix the dough at this stage it will lose its flakiness.",
+      "Transfer the dough onto a lightly floured work surface and knead with the palms of your hands for 30 seconds, or until the dough is smooth and well combined. ",
+      "With the palm of your hand flatten the dough slightly to 1cm/½in thickness, then sandwich it between two large sheets of cling film. Chill in the fridge for 30 minutes.",
+      "Preheat the oven to 220C/440F/Gas 7. Place a baking tray into the oven to preheat.",
+      "Roll the chilled dough, still sandwiched in cling film, to a 2mm thickness. Place a 22cm/9in diameter, 2cm/¾in deep tart ring on a greaseproof lined wooden peel or baking tray. Remove the top layer of clingfilm and carefully pick up the dough, place it into the tart ring with the second layer of clingfilm facing up. Lift and tuck the dough into the edges of the ring and discard the clingfilm. By tucking in the base you will minimise the shrinking of the dough during cooking. Trim off any excess with a rolling pin. ",
+      "Using your index finger and thumb, pinch and press the dough until it's 2mm above the tart ring all around the edge. With a fork, prick the bottom of the tart. Chill in the fridge for 20 minutes.",
+      "Meanwhile, for the filling, heat the butter, lemon juice and 15g/1oz of the sugar in a small saucepan until the butter has melted and the sugar has dissolved. Remove from the heat and stir in the Calvados. Set aside.",
+      "When the tart case has chilled, arrange the apple segments in concentric circles, overlapping the apple slices as you go. Brush the apples all over with the Calvados mixture. Slide the tart ring onto the pre-heated baking tray and bake for 10 minutes.",
+      "Reduce the oven temperature to 200C/400F/Gas 6, then continue to cook for a further 20 minutes, until the pastry is pale golden-brown and the apples have caramelised. ",
+      "Whisk together the double cream, egg and the remaining 50g/2oz caster sugar until well combined. When the pastry is pale golden-brown and the apples have caramelised, sprinkle the tart with a tablespoon of sugar and pour the custard mixture into the tart, bake for a further 10 minutes, until the filling mixture has just set.",
+      "To serve, remove the tart from the oven and set aside for 1 hour to cool slightly, then carefully remove the tart ring. Dust all over with icing sugar. Serve immediately."
+    ],
+    "recipeYield": "Serves 6",
+    "suitableForDiet": [],
+    "video": [
+      {
+        "description": "Raymond Blanc makes apple tart with cream and calvados - easy to make, but so delicious.",
+        "duration": "PT5M1S",
+        "name": "Apple tart 'Maman Blanc'",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/appletartmamanblanc_93268_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-07T22:49:23.000Z"
+      }
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "range-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet|video"
+  ]
+}

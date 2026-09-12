@@ -1,0 +1,520 @@
+{
+  "schemaVersion": 1,
+  "id": "denise-browning/quick-pan-fried-barbecue-pork-chops",
+  "slug": "quick-pan-fried-barbecue-pork-chops",
+  "chefId": "chef_denise-browning",
+  "chefSlug": "denise-browning",
+  "chefName": "Denise Browning",
+  "title": "Quick Pan Fried Barbecue Pork Chops",
+  "description": "Less than 30-minute, easy to prepare, darn delicious Pan Fried Barbecue Pork Chops. A 'one-pan' dish that is perfect for any time of the year!",
+  "source": {
+    "sourceUrl": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/",
+    "finalUrl": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/",
+    "retrievedAt": "2026-09-11T02:47:46.508Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2018-02-08T10:54:24+00:00",
+    "rights": "Easy and Delish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "31640c7d9d5810b0c87367383f56af9ce1e1c1e333c40d95efbe5ffcc336d951",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "8",
+      "8 pork chops"
+    ],
+    "servings": 8
+  },
+  "timing": {
+    "prepMinutes": 17,
+    "cookMinutes": 11,
+    "totalMinutes": 28,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "American"
+  ],
+  "category": [
+    "Dinner",
+    "Main Course"
+  ],
+  "keywords": [
+    "BBQ Pork Chops",
+    "Pan Fried Pork Chops",
+    "Quick Weeknight Dinner"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "8 (1/2 to 3/4-inch thick) bone-in center-cut pork loin chops",
+          "quantity": 8,
+          "quantityText": "8",
+          "unit": null,
+          "name": "(1/2 to 3/4-inch thick) bone-in center-cut pork loin chops",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt (enough to season chops)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt (enough to season chops)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 teaspoon ground black pepper (plus extra to season chops)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 teaspoon ground black pepper (plus extra to season chops)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 Tablespoons vegetable oil, divided",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "vegetable oil",
+          "note": "divided",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tablespoon chili powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "chili powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 teaspoon cayenne pepper",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 teaspoon cayenne pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 teaspoon onion powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "onion powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 teapsoon garlic powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "teapsoon garlic powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 Tablespoons Dijon mustard",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "Dijon mustard",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/3 cup apple cider vinegar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/3 cup apple cider vinegar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/3 cup packed brown sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/3 cup packed brown sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3/4 cup barbecue sauce",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "/4 cup barbecue sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3/4 cup ketchup",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "/4 cup ketchup",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "chopped green onions",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "chopped green onions",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Season both sides of each pork chop with enough salt and pepper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Season both sides of each pork chop with enough salt and pepper. ",
+        "name": "Season both sides of each pork chop with enough salt and pepper. ",
+        "url": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/#wprm-recipe-47032-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Then, heat a large skillet over medium-high heat and add 2 Tablespoons of oil.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Then, heat a large skillet over medium-high heat and add 2 Tablespoons of oil.",
+        "name": "Then, heat a large skillet over medium-high heat and add 2 Tablespoons of oil.",
+        "url": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/#wprm-recipe-47032-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Place 4 chops at a time into the hot pan and let brown without disturbing for about 2-3 minutes per side.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Place 4 chops at a time into the hot pan and let brown without disturbing for about 2-3 minutes per side.",
+        "name": "Place 4 chops at a time into the hot pan and let brown without disturbing for about 2-3 minutes per side.",
+        "url": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/#wprm-recipe-47032-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Remove the 4 chops and place onto a plate. Pour in the remaining oil and brown the other 4 chops.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Remove the 4 chops and place onto a plate. Pour in the remaining oil and brown the other 4 chops.",
+        "name": "Remove the 4 chops and place onto a plate. Pour in the remaining oil and brown the other 4 chops.",
+        "url": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/#wprm-recipe-47032-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Meanwhile, combine the spices, 1/2 teaspoon black pepper, mustard, vinegar, sugar, barbecue sauce, and ketchup in a medium bowl, whisking well until homogeneous and free of lumps.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Meanwhile, combine the spices, 1/2 teaspoon black pepper, mustard, vinegar, sugar, barbecue sauce, and ketchup in a medium bowl, whisking well until homogeneous and free of lumps.",
+        "name": "Meanwhile, combine the spices, 1/2 teaspoon black pepper, mustard, vinegar, sugar, barbecue sauce, and ketchup in a medium bowl, whisking well until homogeneous and free of lumps.",
+        "url": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/#wprm-recipe-47032-step-0-4"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Return all 8 chops to the pan, pour on the sauce mixture, and bring to a boil.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Return all 8 chops to the pan, pour on the sauce mixture, and bring to a boil.",
+        "name": "Return all 8 chops to the pan, pour on the sauce mixture, and bring to a boil.",
+        "url": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/#wprm-recipe-47032-step-0-5"
+      }
+    },
+    {
+      "order": 7,
+      "text": "Reduce heat to medium-low, cover, and let simmer for about 5 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Reduce heat to medium-low, cover, and let simmer for about 5 minutes.",
+        "name": "Reduce heat to medium-low, cover, and let simmer for about 5 minutes.",
+        "url": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/#wprm-recipe-47032-step-0-6"
+      }
+    },
+    {
+      "order": 8,
+      "text": "Serve immediately with chopped green onions on top. Enjoy!",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Serve immediately with chopped green onions on top.  Enjoy!",
+        "name": "Serve immediately with chopped green onions on top.  Enjoy!",
+        "url": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/#wprm-recipe-47032-step-0-7"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "servingSize": "1 serving",
+    "calories": "114.1 kcal",
+    "carbohydrateContent": "27.2 g",
+    "proteinContent": "1 g",
+    "fatContent": "0.6 g",
+    "saturatedFatContent": "0.1 g",
+    "transFatContent": "0.001 g",
+    "cholesterolContent": "0.7 mg",
+    "sodiumContent": "541.7 mg",
+    "fiberContent": "0.9 g",
+    "sugarContent": "22.8 g",
+    "unsaturatedFatContent": "0.4 g"
+  },
+  "media": {
+    "coverImages": [
+      "https://www.easyanddelish.com/wp-content/uploads/2018/02/Pan-Fried-Barbecue-Pork-Chops.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2018/02/Pan-Fried-Barbecue-Pork-Chops-500x500.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2018/02/Pan-Fried-Barbecue-Pork-Chops-500x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2018/02/Pan-Fried-Barbecue-Pork-Chops-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "3",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "WOW WOW WOW   BEST BBQ PORK CHOP RECIPE AND SPICE COMBINATION I\"VE EVER MADE AND TASTED.........  Denise Browning  THANK YOU more than words can say - My family and I devoured and LOVED these thick pork chops flavor out of this world.  Made in the pan in about 1/2 hour - juicy and BBQ sauce like none I've had before...........",
+        "author": {
+          "@type": "Person",
+          "name": "Debbie"
+        },
+        "datePublished": "2022-08-11"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Quick Pan Fried Barbecue Pork Chops",
+    "author": {
+      "@id": "https://www.easyanddelish.com/#/schema/person/4aa289bf19bceaa733ca6900648cfc47"
+    },
+    "description": "Less than 30-minute, easy to prepare, darn delicious Pan Fried Barbecue Pork Chops. A 'one-pan' dish that is perfect for any time of the year! ",
+    "datePublished": "2018-02-08T10:54:24+00:00",
+    "image": [
+      "https://www.easyanddelish.com/wp-content/uploads/2018/02/Pan-Fried-Barbecue-Pork-Chops.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2018/02/Pan-Fried-Barbecue-Pork-Chops-500x500.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2018/02/Pan-Fried-Barbecue-Pork-Chops-500x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2018/02/Pan-Fried-Barbecue-Pork-Chops-480x270.jpg"
+    ],
+    "recipeYield": [
+      "8",
+      "8 pork chops"
+    ],
+    "prepTime": "PT17M",
+    "cookTime": "PT11M",
+    "totalTime": "PT28M",
+    "recipeIngredient": [
+      "8 (1/2 to 3/4-inch thick) bone-in center-cut pork loin chops",
+      "salt (enough to season chops)",
+      "1/2 teaspoon ground black pepper (plus extra to season chops)",
+      "4 Tablespoons vegetable oil, divided",
+      "1 tablespoon chili powder",
+      "1/2 teaspoon cayenne pepper",
+      "1 teaspoon onion powder",
+      "1 teapsoon garlic powder",
+      "2 Tablespoons Dijon mustard",
+      "1/3 cup apple cider vinegar",
+      "1/3 cup packed brown sugar",
+      "3/4 cup barbecue sauce",
+      "3/4 cup ketchup",
+      "chopped green onions"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Season both sides of each pork chop with enough salt and pepper. ",
+        "name": "Season both sides of each pork chop with enough salt and pepper. ",
+        "url": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/#wprm-recipe-47032-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Then, heat a large skillet over medium-high heat and add 2 Tablespoons of oil.",
+        "name": "Then, heat a large skillet over medium-high heat and add 2 Tablespoons of oil.",
+        "url": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/#wprm-recipe-47032-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Place 4 chops at a time into the hot pan and let brown without disturbing for about 2-3 minutes per side.",
+        "name": "Place 4 chops at a time into the hot pan and let brown without disturbing for about 2-3 minutes per side.",
+        "url": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/#wprm-recipe-47032-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Remove the 4 chops and place onto a plate. Pour in the remaining oil and brown the other 4 chops.",
+        "name": "Remove the 4 chops and place onto a plate. Pour in the remaining oil and brown the other 4 chops.",
+        "url": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/#wprm-recipe-47032-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Meanwhile, combine the spices, 1/2 teaspoon black pepper, mustard, vinegar, sugar, barbecue sauce, and ketchup in a medium bowl, whisking well until homogeneous and free of lumps.",
+        "name": "Meanwhile, combine the spices, 1/2 teaspoon black pepper, mustard, vinegar, sugar, barbecue sauce, and ketchup in a medium bowl, whisking well until homogeneous and free of lumps.",
+        "url": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/#wprm-recipe-47032-step-0-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Return all 8 chops to the pan, pour on the sauce mixture, and bring to a boil.",
+        "name": "Return all 8 chops to the pan, pour on the sauce mixture, and bring to a boil.",
+        "url": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/#wprm-recipe-47032-step-0-5"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Reduce heat to medium-low, cover, and let simmer for about 5 minutes.",
+        "name": "Reduce heat to medium-low, cover, and let simmer for about 5 minutes.",
+        "url": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/#wprm-recipe-47032-step-0-6"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Serve immediately with chopped green onions on top.  Enjoy!",
+        "name": "Serve immediately with chopped green onions on top.  Enjoy!",
+        "url": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/#wprm-recipe-47032-step-0-7"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "3",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "WOW WOW WOW   BEST BBQ PORK CHOP RECIPE AND SPICE COMBINATION I\"VE EVER MADE AND TASTED.........  Denise Browning  THANK YOU more than words can say - My family and I devoured and LOVED these thick pork chops flavor out of this world.  Made in the pan in about 1/2 hour - juicy and BBQ sauce like none I've had before...........",
+        "author": {
+          "@type": "Person",
+          "name": "Debbie"
+        },
+        "datePublished": "2022-08-11"
+      }
+    ],
+    "recipeCategory": [
+      "Dinner",
+      "Main Course"
+    ],
+    "recipeCuisine": [
+      "American"
+    ],
+    "keywords": "BBQ Pork Chops, Pan Fried Pork Chops, Quick Weeknight Dinner",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "servingSize": "1 serving",
+      "calories": "114.1 kcal",
+      "carbohydrateContent": "27.2 g",
+      "proteinContent": "1 g",
+      "fatContent": "0.6 g",
+      "saturatedFatContent": "0.1 g",
+      "transFatContent": "0.001 g",
+      "cholesterolContent": "0.7 mg",
+      "sodiumContent": "541.7 mg",
+      "fiberContent": "0.9 g",
+      "sugarContent": "22.8 g",
+      "unsaturatedFatContent": "0.4 g"
+    },
+    "@id": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/#recipe",
+    "isPartOf": {
+      "@id": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/#article"
+    },
+    "mainEntityOfPage": "https://www.easyanddelish.com/pan-fried-barbecue-pork-chops/"
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:aggregateRating|review"
+  ]
+}

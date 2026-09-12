@@ -1,0 +1,383 @@
+{
+  "schemaVersion": 1,
+  "id": "nigella-lawson/cranberry-studded-mincemeat",
+  "slug": "cranberry-studded-mincemeat",
+  "chefId": "chef_nigella-lawson",
+  "chefSlug": "nigella-lawson",
+  "chefName": "Nigella Lawson",
+  "title": "Cranberry-studded mincemeat",
+  "description": "Nigella Lawson’s vegetarian mincemeat recipe is packed with port, brandy, spices and dried fruit - what’s not to love?",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/cranberrystuddedminc_90619",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/cranberrystuddedminc_90619",
+    "retrievedAt": "2026-09-11T00:26:23.478Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Nigella Lawson"
+    ],
+    "datePublished": "2011-12-20T19:30:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "501953962ede09df29a6a6b131c064e1f65dff2c3858782f766e30d5f04fd042",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": []
+    }
+  },
+  "yield": {
+    "raw": [
+      "Makes 600ml/1 pint"
+    ],
+    "servings": 600
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Other"
+  ],
+  "keywords": [
+    "christmas preserves and pickles",
+    "gluten-free christmas desserts and baking",
+    "nigella's christmas favourites",
+    "nigella's christmas",
+    "stock-up for christmas",
+    "christmas",
+    "mincemeat",
+    "cranberry",
+    "clementine",
+    "dairy free",
+    "egg free",
+    "gluten free",
+    "vegetarian",
+    "autumn",
+    "winter",
+    "Nigella's Christmas Kitchen"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "75g/2½oz soft dark brown sugar",
+          "quantity": 75,
+          "quantityText": "75",
+          "unit": "g",
+          "name": "/2½oz soft dark brown sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "60ml/2fl oz ruby port",
+          "quantity": 60,
+          "quantityText": "60",
+          "unit": "ml",
+          "name": "/2fl oz ruby port",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "300g/10½oz cranberries",
+          "quantity": 300,
+          "quantityText": "300",
+          "unit": "g",
+          "name": "/10½oz cranberries",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground cinnamon",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground cinnamon",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground ginger",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground ginger",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp ground cloves",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "ground cloves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "75g/2½oz currants",
+          "quantity": 75,
+          "quantityText": "75",
+          "unit": "g",
+          "name": "/2½oz currants",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "75g/2½oz raisins",
+          "quantity": 75,
+          "quantityText": "75",
+          "unit": "g",
+          "name": "/2½oz raisins",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "30g/1oz dried cranberries",
+          "quantity": 30,
+          "quantityText": "30",
+          "unit": "g",
+          "name": "/1oz dried cranberries",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 clementine, zest and juice only",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "clementine, zest and juice only",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "25ml/1fl oz brandy",
+          "quantity": 25,
+          "quantityText": "25",
+          "unit": "ml",
+          "name": "/1fl oz brandy",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "few drops almond extract",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "few drops almond extract",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp vanilla extract",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "vanilla extract",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp honey",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "honey",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "In a large pan, dissolve the sugar in the ruby port over a gentle heat.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "In a large pan, dissolve the sugar in the ruby port over a gentle heat."
+    },
+    {
+      "order": 2,
+      "text": "Add the cranberries and stir.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the cranberries and stir."
+    },
+    {
+      "order": 3,
+      "text": "Add the cinnamon, ginger and cloves, currants, raisins, dried cranberries and the zest and juice of the clementine.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the cinnamon, ginger and cloves, currants, raisins, dried cranberries and the zest and juice of the clementine."
+    },
+    {
+      "order": 4,
+      "text": "Bring to a gentle simmer and cook for 20 minutes, or until the fruit has broken down and has absorbed most of the liquid in the pan. (You may need to squish the cranberries a little with the back of a wooden spoon to incorporate them fully.)",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Bring to a gentle simmer and cook for 20 minutes, or until the fruit has broken down and has absorbed most of the liquid in the pan. (You may need to squish the cranberries a little with the back of a wooden spoon to incorporate them fully.)"
+    },
+    {
+      "order": 5,
+      "text": "Remove from the heat and allow to cool a little.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove from the heat and allow to cool a little."
+    },
+    {
+      "order": 6,
+      "text": "Add the brandy, almond extract, vanilla extract and honey and stir well with a wooden spoon to mash the mixture down into a paste.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the brandy, almond extract, vanilla extract and honey and stir well with a wooden spoon to mash the mixture down into a paste."
+    },
+    {
+      "order": 7,
+      "text": "Spoon the mincemeat into sterilised jars and, once cool, store in the fridge for up to two weeks.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Spoon the mincemeat into sterilised jars and, once cool, store in the fridge for up to two weeks."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/cranberrystuddedminc_90619_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 5,
+      "ratingValue": 4
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/GlutenFreeDiet",
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Nigella Lawson’s vegetarian mincemeat recipe is packed with port, brandy, spices and dried fruit - what’s not to love?",
+    "headline": "Cranberry-studded mincemeat",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/cranberrystuddedminc_90619_16x9.jpg"
+    },
+    "name": "Cranberry-studded mincemeat",
+    "author": {
+      "@type": "Person",
+      "name": "Nigella Lawson"
+    },
+    "datePublished": "2011-12-20T19:30:00.000Z",
+    "dateModified": "2025-01-20T17:06:46.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 5,
+      "ratingValue": 4
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT1H",
+    "keywords": "christmas preserves and pickles, gluten-free christmas desserts and baking, nigella's christmas favourites, nigella's christmas, stock-up for christmas , christmas, mincemeat, cranberry, clementine, dairy free, egg free, gluten free, vegetarian, autumn, winter, Nigella's Christmas Kitchen",
+    "recipeCategory": "Other",
+    "recipeIngredient": [
+      "75g/2½oz soft dark brown sugar",
+      "60ml/2fl oz ruby port",
+      "300g/10½oz cranberries",
+      "1 tsp ground cinnamon",
+      "1 tsp ground ginger",
+      "½ tsp ground cloves",
+      "75g/2½oz currants",
+      "75g/2½oz raisins",
+      "30g/1oz dried cranberries",
+      "1 clementine, zest and juice only",
+      "25ml/1fl oz brandy",
+      "few drops almond extract",
+      "½ tsp vanilla extract",
+      "2 tbsp honey"
+    ],
+    "recipeInstructions": [
+      "In a large pan, dissolve the sugar in the ruby port over a gentle heat.",
+      "Add the cranberries and stir.",
+      "Add the cinnamon, ginger and cloves, currants, raisins, dried cranberries and the zest and juice of the clementine.",
+      "Bring to a gentle simmer and cook for 20 minutes, or until the fruit has broken down and has absorbed most of the liquid in the pan. (You may need to squish the cranberries a little with the back of a wooden spoon to incorporate them fully.)",
+      "Remove from the heat and allow to cool a little.",
+      "Add the brandy, almond extract, vanilla extract and honey and stir well with a wooden spoon to mash the mixture down into a paste.",
+      "Spoon the mincemeat into sterilised jars and, once cool, store in the fridge for up to two weeks."
+    ],
+    "recipeYield": "Makes 600ml/1 pint",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/GlutenFreeDiet",
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

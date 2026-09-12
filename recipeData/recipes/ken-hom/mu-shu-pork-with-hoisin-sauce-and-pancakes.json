@@ -1,0 +1,374 @@
+{
+  "schemaVersion": 1,
+  "id": "ken-hom/mu-shu-pork-with-hoisin-sauce-and-pancakes",
+  "slug": "mu-shu-pork-with-hoisin-sauce-and-pancakes",
+  "chefId": "chef_ken-hom",
+  "chefSlug": "ken-hom",
+  "chefName": "Ken Hom",
+  "title": "Mu shu pork with hoisin sauce and pancakes",
+  "description": "Ken Hom makes this classic mu shu pork served with Chinese-style soft pancakes and hoisin sauce.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/mu_shu_pork_with_hoisin_53411",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/mu_shu_pork_with_hoisin_53411",
+    "retrievedAt": "2026-09-11T00:26:58.924Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Ken Hom"
+    ],
+    "datePublished": "2022-05-21T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "b45c662d0f08ce89a8f68b1b45f8f0be791f137a407dc81a10e624f0d71ddf21",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Chinese"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "dairy free",
+    "pregnancy friendly",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "450g/1lb boneless pork fillet, cut into thin strips about 7.5cm/3in long",
+          "quantity": 450,
+          "quantityText": "450",
+          "unit": "g",
+          "name": "/1lb boneless pork fillet, cut into thin strips about 7.5cm/3in long",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 free-range egg white",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "free-range egg white",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp salt",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp cornflour",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "cornflour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "280ml/10oz groundnut or vegetable oil, for deep frying",
+          "quantity": 280,
+          "quantityText": "280",
+          "unit": "ml",
+          "name": "/10oz groundnut or vegetable oil, for deep frying",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 free-range eggs, beaten",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "free-range eggs",
+          "note": "beaten",
+          "isOptional": false
+        },
+        {
+          "raw": "25g/1oz dried lily stems (golden needles), soaked, trimmed and shredded",
+          "quantity": 25,
+          "quantityText": "25",
+          "unit": "g",
+          "name": "/1oz dried lily stems (golden needles)",
+          "note": "soaked, trimmed and shredded",
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz tree ear mushrooms, soaked, rinsed, hard stems removed and finely shredded",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz tree ear mushrooms",
+          "note": "soaked, rinsed, hard stems removed and finely shredded",
+          "isOptional": false
+        },
+        {
+          "raw": "6 spring onions, finely shredded",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": null,
+          "name": "spring onions",
+          "note": "finely shredded",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp freshly ground black pepper",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp Shaoxing rice wine or dry sherry",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "Shaoxing rice wine or dry sherry",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1½ tbsp light soy sauce",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tbsp light soy sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp sesame oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "sesame oil",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To serve",
+      "items": [
+        {
+          "raw": "Chinese pancakes",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Chinese pancakes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "hoisin sauce, for dipping",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "hoisin sauce, for dipping",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Combine the pork with the egg white, salt and cornflour in a small bowl and refrigerate for 20 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Combine the pork with the egg white, salt and cornflour in a small bowl and refrigerate for 20 minutes."
+    },
+    {
+      "order": 2,
+      "text": "Heat a wok until very hot, then add the oil. When the oil is very hot, remove the wok from the heat and immediately add the pork, stirring vigorously to keep it from sticking. When the pork shreds turn white, after about 1 minute, quickly strain the pork through a stainless-steel colander set inside a bowl. Save 3 and a half tablespoons of oil and discard the rest.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat a wok until very hot, then add the oil. When the oil is very hot, remove the wok from the heat and immediately add the pork, stirring vigorously to keep it from sticking. When the pork shreds turn white, after about 1 minute, quickly strain the pork through a stainless-steel colander set inside a bowl. Save 3 and a half tablespoons of oil and discard the rest."
+    },
+    {
+      "order": 3,
+      "text": "Wipe the wok clean. Place back on the heat, and when hot add 2 tablespoons of the reserved oil. Immediately add the eggs and gently stir-fry by lifting it up and around until it is set. Remove and drain on kitchen paper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Wipe the wok clean. Place back on the heat, and when hot add 2 tablespoons of the reserved oil. Immediately add the eggs and gently stir-fry by lifting it up and around until it is set. Remove and drain on kitchen paper. "
+    },
+    {
+      "order": 4,
+      "text": "Wipe the wok clean and reheat. When it is very hot, add the remaining reserved oil, the tree ear mushrooms, lily stems and spring onions and stir-fry for 1 minute. Add the remaining ingredients and stir-fry for another 2 minutes. Return the cooked pork and egg to the mix and stir-fry for 2 minutes, or until cooked through.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Wipe the wok clean and reheat. When it is very hot, add the remaining reserved oil, the tree ear mushrooms, lily stems and spring onions and stir-fry for 1 minute. Add the remaining ingredients and stir-fry for another 2 minutes. Return the cooked pork and egg to the mix and stir-fry for 2 minutes, or until cooked through. "
+    },
+    {
+      "order": 5,
+      "text": "Steam or microwave the pancakes for 30 seconds and serve with the mu shu and hoisin sauce.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Steam or microwave the pancakes for 30 seconds and serve with the mu shu and hoisin sauce."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 2,
+      "ratingValue": 3
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Ken Hom makes this classic mu shu pork served with Chinese-style soft pancakes and hoisin sauce.",
+    "headline": "Mu shu pork with hoisin sauce and pancakes",
+    "image": null,
+    "name": "Mu shu pork with hoisin sauce and pancakes",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Hom"
+    },
+    "datePublished": "2022-05-21T00:00:00.000Z",
+    "dateModified": "2026-05-15T15:54:44.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 2,
+      "ratingValue": 3
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, dairy free, pregnancy friendly, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Chinese",
+    "recipeIngredient": [
+      "450g/1lb boneless pork fillet, cut into thin strips about 7.5cm/3in long",
+      "1 free-range egg white",
+      "½ tsp salt",
+      "2 tsp cornflour",
+      "280ml/10oz groundnut or vegetable oil, for deep frying",
+      "4 free-range eggs, beaten",
+      "25g/1oz dried lily stems (golden needles), soaked, trimmed and shredded",
+      "50g/1¾oz tree ear mushrooms, soaked, rinsed, hard stems removed and finely shredded",
+      "6 spring onions, finely shredded",
+      "1 tsp sugar",
+      "1 tsp salt",
+      "1 tsp freshly ground black pepper",
+      "1 tbsp Shaoxing rice wine or dry sherry",
+      "1½ tbsp light soy sauce",
+      "2 tsp sesame oil",
+      "Chinese pancakes",
+      "hoisin sauce, for dipping"
+    ],
+    "recipeInstructions": [
+      "Combine the pork with the egg white, salt and cornflour in a small bowl and refrigerate for 20 minutes.",
+      "Heat a wok until very hot, then add the oil. When the oil is very hot, remove the wok from the heat and immediately add the pork, stirring vigorously to keep it from sticking. When the pork shreds turn white, after about 1 minute, quickly strain the pork through a stainless-steel colander set inside a bowl. Save 3 and a half tablespoons of oil and discard the rest.",
+      "Wipe the wok clean. Place back on the heat, and when hot add 2 tablespoons of the reserved oil. Immediately add the eggs and gently stir-fry by lifting it up and around until it is set. Remove and drain on kitchen paper. ",
+      "Wipe the wok clean and reheat. When it is very hot, add the remaining reserved oil, the tree ear mushrooms, lily stems and spring onions and stir-fry for 1 minute. Add the remaining ingredients and stir-fry for another 2 minutes. Return the cooked pork and egg to the mix and stir-fry for 2 minutes, or until cooked through. ",
+      "Steam or microwave the pancakes for 30 seconds and serve with the mu shu and hoisin sauce."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

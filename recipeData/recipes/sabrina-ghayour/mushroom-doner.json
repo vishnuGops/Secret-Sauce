@@ -1,0 +1,482 @@
+{
+  "schemaVersion": 1,
+  "id": "sabrina-ghayour/mushroom-doner",
+  "slug": "mushroom-doner",
+  "chefId": "chef_sabrina-ghayour",
+  "chefSlug": "sabrina-ghayour",
+  "chefName": "Sabrina Ghayour",
+  "title": "Mushroom doner",
+  "description": "A meat-free mushroom ‘doner’ kebab packed with two types of sauces, pickles and veg. A mighty delicious vegetarian dish.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/mushroom_doner_22676",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/mushroom_doner_22676",
+    "retrievedAt": "2026-09-11T00:28:26.880Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Sabrina Ghayour"
+    ],
+    "datePublished": "2019-01-26T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "8172684588128dbc7a152c00c6fb133257ae08dbdda0742b18b767ae6fdc6a99",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 5 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Turkish and Middle Eastern"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "fakeaway",
+    "fresh vegetarian",
+    "homemade fast food",
+    "middle eastern feasts",
+    "pitta pockets",
+    "vegetarian fakeaway",
+    "veggie fast food",
+    "father's day",
+    "healthy summer",
+    "lunch",
+    "student food",
+    "summer dinner",
+    "kebab",
+    "oyster mushrooms",
+    "egg free",
+    "healthy",
+    "nut free",
+    "pregnancy friendly",
+    "vegetarian",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the chilli sauce",
+      "items": [
+        {
+          "raw": "1 x 400g tin chopped tomatoes",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "x 400g tin chopped tomatoes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp rose harissa",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "rose harissa",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp caster sugar",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "caster sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "good squeeze lemon juice",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "good squeeze lemon juice",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the onion",
+      "items": [
+        {
+          "raw": "1 onion, very thinly sliced into half moons",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "onion",
+          "note": "very thinly sliced into half moons",
+          "isOptional": false
+        },
+        {
+          "raw": "2 level tsp white wine vinegar",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "level tsp white wine vinegar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "20g/¾oz flatleaf parsley, finely chopped",
+          "quantity": 20,
+          "quantityText": "20",
+          "unit": "g",
+          "name": "/¾oz flatleaf parsley",
+          "note": "finely chopped",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the yoghurt sauce",
+      "items": [
+        {
+          "raw": "150g/5½oz plain yoghurt",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "g",
+          "name": "/5½oz plain yoghurt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 heaped tsp dried mint",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "heaped tsp dried mint",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the ‘doner’",
+      "items": [
+        {
+          "raw": "500g/1lb 2oz oyster mushrooms, very thinly sliced lengthways",
+          "quantity": 500,
+          "quantityText": "500",
+          "unit": "g",
+          "name": "/1lb 2oz oyster mushrooms",
+          "note": "very thinly sliced lengthways",
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp garlic oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "garlic oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp sweet paprika",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "sweet paprika",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 heaped tsp ground coriander",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "heaped tsp ground coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp celery salt",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "celery salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tsp garlic granules",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tsp",
+          "name": "garlic granules",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp freshly ground black pepper",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 white pitta breads",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "white pitta breads",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the garnish",
+      "items": [
+        {
+          "raw": "¼ small white cabbage, very finely shredded",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": null,
+          "name": "small white cabbage",
+          "note": "very finely shredded",
+          "isOptional": false
+        },
+        {
+          "raw": "2 tomatoes, sliced cut into half moons",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "tomatoes",
+          "note": "sliced cut into half moons",
+          "isOptional": false
+        },
+        {
+          "raw": "4–6 pickled chillies, thinly sliced (optional)",
+          "quantity": 4,
+          "quantityText": "4–6",
+          "unit": null,
+          "name": "pickled chillies",
+          "note": "thinly sliced (optional)",
+          "isOptional": true
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 180C/200C Fan/Gas 4.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 180C/200C Fan/Gas 4. "
+    },
+    {
+      "order": 2,
+      "text": "To make the chilli sauce, heat the chopped tomatoes, rose harissa, sugar and lemon juice in a small saucepan over a medium heat. Bring to a gentle boil and cook for 10 minutes, stirring regularly, until reduced to a thick sauce-like consistency. Remove from the heat and set aside to cool. You can blend the sauce until it’s smooth using a hand-blender if you like, or just leave it chunky.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the chilli sauce, heat the chopped tomatoes, rose harissa, sugar and lemon juice in a small saucepan over a medium heat. Bring to a gentle boil and cook for 10 minutes, stirring regularly, until reduced to a thick sauce-like consistency. Remove from the heat and set aside to cool. You can blend the sauce until it’s smooth using a hand-blender if you like, or just leave it chunky. "
+    },
+    {
+      "order": 3,
+      "text": "For the onion, mix together the onion slices, vinegar and parsley and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the onion, mix together the onion slices, vinegar and parsley and set aside. "
+    },
+    {
+      "order": 4,
+      "text": "To make the yoghurt sauce, mix the yoghurt with the dried mint, season with salt and pepper and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the yoghurt sauce, mix the yoghurt with the dried mint, season with salt and pepper and set aside."
+    },
+    {
+      "order": 5,
+      "text": "Put the pittas in the oven to warm for 5 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put the pittas in the oven to warm for 5 minutes. "
+    },
+    {
+      "order": 6,
+      "text": "To make the 'doner,' heat a frying pan over a medium-high heat. Add the mushrooms and dry-fry for 2 minutes, stirring once or twice. Add the garlic oil, paprika, coriander, celery salt, garlic granules and black pepper and quickly coat the mushrooms. Add 2–3 tablespoons of water to the pan and stir-fry for 1 minute before removing from the heat.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the 'doner,' heat a frying pan over a medium-high heat. Add the mushrooms and dry-fry for 2 minutes, stirring once or twice. Add the garlic oil, paprika, coriander, celery salt, garlic granules and black pepper and quickly coat the mushrooms. Add 2–3 tablespoons of water to the pan and stir-fry for 1 minute before removing from the heat."
+    },
+    {
+      "order": 7,
+      "text": "Split the warmed pitta breads. Spoon a little white cabbage into each pitta and add a little tomato and onion. Divide the mushrooms between the pittas, add a little more cabbage and tomato, then drizzle with the chilli and yoghurt sauces. Serve immediately, topped with the pickled chillies, if using.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Split the warmed pitta breads. Spoon a little white cabbage into each pitta and add a little tomato and onion. Divide the mushrooms between the pittas, add a little more cabbage and tomato, then drizzle with the chilli and yoghurt sauces. Serve immediately, topped with the pickled chillies, if using. "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/mushroom_doner_22676_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 27,
+      "ratingValue": 4.481481481481482
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowCalorieDiet",
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "A meat-free mushroom ‘doner’ kebab packed with two types of sauces, pickles and veg. A mighty delicious vegetarian dish. \r\n",
+    "headline": "Mushroom doner",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/mushroom_doner_22676_16x9.jpg"
+    },
+    "name": "Mushroom doner",
+    "author": {
+      "@type": "Person",
+      "name": "Sabrina Ghayour"
+    },
+    "datePublished": "2019-01-26T00:00:00.000Z",
+    "dateModified": "2026-01-14T15:51:55.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 27,
+      "ratingValue": 4.481481481481482
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, fakeaway, fresh vegetarian, homemade fast food, middle eastern feasts, pitta pockets, vegetarian fakeaway, veggie fast food , father's day, healthy summer, lunch, student food, summer dinner, kebab, oyster mushrooms, egg free, healthy, nut free, pregnancy friendly, vegetarian, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Turkish and Middle Eastern",
+    "recipeIngredient": [
+      "1 x 400g tin chopped tomatoes ",
+      "2 tbsp rose harissa",
+      "2 tsp caster sugar",
+      "good squeeze lemon juice",
+      "1 onion, very thinly sliced into half moons",
+      "2 level tsp white wine vinegar",
+      "20g/¾oz flatleaf parsley, finely chopped",
+      "150g/5½oz plain yoghurt",
+      "1 heaped tsp dried mint",
+      "salt and freshly ground black pepper ",
+      "500g/1lb 2oz oyster mushrooms, very thinly sliced lengthways",
+      "2 tsp garlic oil",
+      "2 tsp sweet paprika ",
+      "2 heaped tsp ground coriander",
+      "2 tsp celery salt",
+      "3 tsp garlic granules",
+      "½ tsp freshly ground black pepper",
+      "4 white pitta breads",
+      "¼ small white cabbage, very finely shredded",
+      "2 tomatoes, sliced cut into half moons",
+      "4–6 pickled chillies, thinly sliced (optional)"
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 180C/200C Fan/Gas 4. ",
+      "To make the chilli sauce, heat the chopped tomatoes, rose harissa, sugar and lemon juice in a small saucepan over a medium heat. Bring to a gentle boil and cook for 10 minutes, stirring regularly, until reduced to a thick sauce-like consistency. Remove from the heat and set aside to cool. You can blend the sauce until it’s smooth using a hand-blender if you like, or just leave it chunky. ",
+      "For the onion, mix together the onion slices, vinegar and parsley and set aside. ",
+      "To make the yoghurt sauce, mix the yoghurt with the dried mint, season with salt and pepper and set aside.",
+      "Put the pittas in the oven to warm for 5 minutes. ",
+      "To make the 'doner,' heat a frying pan over a medium-high heat. Add the mushrooms and dry-fry for 2 minutes, stirring once or twice. Add the garlic oil, paprika, coriander, celery salt, garlic granules and black pepper and quickly coat the mushrooms. Add 2–3 tablespoons of water to the pan and stir-fry for 1 minute before removing from the heat.",
+      "Split the warmed pitta breads. Spoon a little white cabbage into each pitta and add a little tomato and onion. Divide the mushrooms between the pittas, add a little more cabbage and tomato, then drizzle with the chilli and yoghurt sauces. Serve immediately, topped with the pickled chillies, if using. "
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/LowCalorieDiet",
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "range-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

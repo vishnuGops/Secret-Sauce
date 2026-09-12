@@ -1,0 +1,297 @@
+{
+  "schemaVersion": 1,
+  "id": "chef-lola/fried-banana",
+  "slug": "fried-banana",
+  "chefId": "chef_chef-lola",
+  "chefSlug": "chef-lola",
+  "chefName": "Chef Lola",
+  "title": "Fried Banana",
+  "description": "Fried Banana - This is a simple recipe, but a good one. Fried Bananas are sweet tasty treats can be eaten as a side dish or even snacks. Once you give this a try you will definitely fall in love with it because it's simple, quick and delicious!",
+  "source": {
+    "sourceUrl": "https://cheflolaskitchen.com/fried-banana/",
+    "finalUrl": "https://cheflolaskitchen.com/fried-banana/",
+    "retrievedAt": "2026-09-11T02:47:19.432Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2019-01-24T09:00:23+00:00",
+    "rights": "Chef Lola's Kitchen. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "ac0659c0241e0039824bebaee641b898dc18f095f111271714f500241dac5d27",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "allows recipe paths; /wp-admin/, /wp-json/ and query URLs disallowed"
+  },
+  "yield": {
+    "raw": [
+      "4",
+      "4 People"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 5,
+    "cookMinutes": 10,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "African",
+    "Asian",
+    "Mexican",
+    "north american"
+  ],
+  "category": [
+    "Side Dish"
+  ],
+  "keywords": [
+    "easy",
+    "homemade"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "4 Bananas",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "Bananas",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Salt (optional)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Salt (optional)",
+          "note": null,
+          "isOptional": true
+        },
+        {
+          "raw": "Vegetable oil (enough to deep fry)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Vegetable oil (enough to deep fry)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Peel the Bananas and cut into slices about a half-inch thick. Season with salt (optional)",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Peel the Bananas and cut into slices about a half-inch thick. Season with salt (optional)",
+        "name": "Peel the Bananas and cut into slices about a half-inch thick. Season with salt (optional)",
+        "url": "https://cheflolaskitchen.com/fried-banana/#wprm-recipe-7258-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Fry in oil over medium to high heat flipping over a couple of times until golden brown.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Fry in oil over medium to high heat flipping over a couple of times until golden brown.",
+        "name": "Fry in oil over medium to high heat flipping over a couple of times until golden brown.",
+        "url": "https://cheflolaskitchen.com/fried-banana/#wprm-recipe-7258-step-0-1"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "420 kcal",
+    "carbohydrateContent": "108 g",
+    "proteinContent": "5 g",
+    "fatContent": "2 g",
+    "saturatedFatContent": "1 g",
+    "sodiumContent": "5 mg",
+    "fiberContent": "12 g",
+    "sugarContent": "58 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2014/12/Fried-Bananas-34.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2014/12/Fried-Bananas-34-500x500.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2014/12/Fried-Bananas-34-500x375.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2014/12/Fried-Bananas-34-480x270.jpg"
+    ],
+    "video": {
+      "name": "How To Fry Bananas - Chef Lola's Kitchen",
+      "description": "This Fried Banana is very delicious treat and can be eaten as a main dish, side dish or even snacks. Once you give this a try you will definitely fall in love with it.\n\nIngredients\n\nRipe plantain\n\nA pinch Salt (optional)\n\nVegetable oil (enough to deep fry)\n\n \n\nDirections\n\nPeel the Banana\n\nCut into slices about half inch thick\n\nAdd salt (optional)\n\nFry in oil over medium to high heat flipping over constantly until golden brown.\n\n-~-~~-~~~-~~-~-\nLatest Video: \"Super Crispy Baked Potato Wedges\" \nhttps://www.youtube.com/watch?v=YaVCk-U-Vic\n-~-~~-~~~-~~-~-",
+      "uploadDate": "2014-12-15T19:39:44+00:00",
+      "duration": "PT2M1S",
+      "thumbnailUrl": "https://i.ytimg.com/vi/gXcibs8qkw8/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/gXcibs8qkw8?start=4&feature=oembed",
+      "contentUrl": "https://www.youtube.com/watch?v=gXcibs8qkw8&t=4s",
+      "@type": "VideoObject"
+    }
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "video": {
+      "name": "How To Fry Bananas - Chef Lola's Kitchen",
+      "description": "This Fried Banana is very delicious treat and can be eaten as a main dish, side dish or even snacks. Once you give this a try you will definitely fall in love with it.\n\nIngredients\n\nRipe plantain\n\nA pinch Salt (optional)\n\nVegetable oil (enough to deep fry)\n\n \n\nDirections\n\nPeel the Banana\n\nCut into slices about half inch thick\n\nAdd salt (optional)\n\nFry in oil over medium to high heat flipping over constantly until golden brown.\n\n-~-~~-~~~-~~-~-\nLatest Video: \"Super Crispy Baked Potato Wedges\" \nhttps://www.youtube.com/watch?v=YaVCk-U-Vic\n-~-~~-~~~-~~-~-",
+      "uploadDate": "2014-12-15T19:39:44+00:00",
+      "duration": "PT2M1S",
+      "thumbnailUrl": "https://i.ytimg.com/vi/gXcibs8qkw8/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/gXcibs8qkw8?start=4&feature=oembed",
+      "contentUrl": "https://www.youtube.com/watch?v=gXcibs8qkw8&t=4s",
+      "@type": "VideoObject"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.65",
+      "ratingCount": "17",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I've always eaten plantains. I tried your yellow fry bananas recope, it was awesome. Family enjoyed it and it is so simple to make. Thank you Chef Lola",
+        "author": {
+          "@type": "Person",
+          "name": "Rick Vargas"
+        },
+        "datePublished": "2019-11-13"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Fried Banana",
+    "author": {
+      "@id": "https://cheflolaskitchen.com/#/schema/person/210ab4ab02cd92f770d27cf2a114f9a5"
+    },
+    "description": "Fried Banana -&nbsp; This is a simple recipe, but a good one. Fried Bananas are sweet tasty treats&nbsp;can be eaten as a side dish or even snacks.&nbsp;Once you give this a try you will definitely fall in love with it because it's&nbsp;simple, quick and delicious!",
+    "datePublished": "2019-01-24T09:00:23+00:00",
+    "image": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2014/12/Fried-Bananas-34.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2014/12/Fried-Bananas-34-500x500.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2014/12/Fried-Bananas-34-500x375.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2014/12/Fried-Bananas-34-480x270.jpg"
+    ],
+    "video": {
+      "name": "How To Fry Bananas - Chef Lola's Kitchen",
+      "description": "This Fried Banana is very delicious treat and can be eaten as a main dish, side dish or even snacks. Once you give this a try you will definitely fall in love with it.\n\nIngredients\n\nRipe plantain\n\nA pinch Salt (optional)\n\nVegetable oil (enough to deep fry)\n\n \n\nDirections\n\nPeel the Banana\n\nCut into slices about half inch thick\n\nAdd salt (optional)\n\nFry in oil over medium to high heat flipping over constantly until golden brown.\n\n-~-~~-~~~-~~-~-\nLatest Video: \"Super Crispy Baked Potato Wedges\" \nhttps://www.youtube.com/watch?v=YaVCk-U-Vic\n-~-~~-~~~-~~-~-",
+      "uploadDate": "2014-12-15T19:39:44+00:00",
+      "duration": "PT2M1S",
+      "thumbnailUrl": "https://i.ytimg.com/vi/gXcibs8qkw8/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/gXcibs8qkw8?start=4&feature=oembed",
+      "contentUrl": "https://www.youtube.com/watch?v=gXcibs8qkw8&t=4s",
+      "@type": "VideoObject"
+    },
+    "recipeYield": [
+      "4",
+      "4 People"
+    ],
+    "prepTime": "PT5M",
+    "cookTime": "PT10M",
+    "recipeIngredient": [
+      "4  Bananas",
+      "Salt (optional)",
+      "Vegetable oil (enough to deep fry)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Peel the Bananas and cut into slices about a half-inch thick. Season with salt (optional)",
+        "name": "Peel the Bananas and cut into slices about a half-inch thick. Season with salt (optional)",
+        "url": "https://cheflolaskitchen.com/fried-banana/#wprm-recipe-7258-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Fry in oil over medium to high heat flipping over a couple of times until golden brown.",
+        "name": "Fry in oil over medium to high heat flipping over a couple of times until golden brown.",
+        "url": "https://cheflolaskitchen.com/fried-banana/#wprm-recipe-7258-step-0-1"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.65",
+      "ratingCount": "17",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I've always eaten plantains. I tried your yellow fry bananas recope, it was awesome. Family enjoyed it and it is so simple to make. Thank you Chef Lola",
+        "author": {
+          "@type": "Person",
+          "name": "Rick Vargas"
+        },
+        "datePublished": "2019-11-13"
+      }
+    ],
+    "recipeCategory": [
+      "Side Dish"
+    ],
+    "recipeCuisine": [
+      "African",
+      "Asian",
+      "Mexican",
+      "north american"
+    ],
+    "keywords": "easy, homemade",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "420 kcal",
+      "carbohydrateContent": "108 g",
+      "proteinContent": "5 g",
+      "fatContent": "2 g",
+      "saturatedFatContent": "1 g",
+      "sodiumContent": "5 mg",
+      "fiberContent": "12 g",
+      "sugarContent": "58 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://cheflolaskitchen.com/fried-banana/#recipe",
+    "isPartOf": {
+      "@id": "https://cheflolaskitchen.com/fried-banana/#article"
+    },
+    "mainEntityOfPage": "https://cheflolaskitchen.com/fried-banana/"
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:video|aggregateRating|review"
+  ]
+}

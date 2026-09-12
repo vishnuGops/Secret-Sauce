@@ -1,0 +1,290 @@
+{
+  "schemaVersion": 1,
+  "id": "sabrina-ghayour/smashed-crispy-potato-chaat",
+  "slug": "smashed-crispy-potato-chaat",
+  "chefId": "chef_sabrina-ghayour",
+  "chefSlug": "sabrina-ghayour",
+  "chefName": "Sabrina Ghayour",
+  "title": "Smashed crispy potato chaat",
+  "description": "Tangy, crispy and crunchy with pops of sweetness from the pomegranate seeds, Sabrina’s potato chaat has it all.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/crispy_potato_chaat_89973",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/crispy_potato_chaat_89973",
+    "retrievedAt": "2026-09-11T00:28:36.152Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Sabrina Ghayour"
+    ],
+    "datePublished": "2025-08-14T09:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "db403a01ed5d833b586602b871cfb279c2d7564e4d125b712601d8a8ea17f593",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": []
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Indian"
+  ],
+  "category": [
+    "Light meals & snacks"
+  ],
+  "keywords": [
+    "samosa",
+    "new potatoes",
+    "egg free",
+    "nut free",
+    "pregnancy friendly",
+    "vegetarian",
+    "Saturday Kitchen"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1kg/2lb 4oz baby or new potatoes",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "kg",
+          "name": "/2lb 4oz baby or new potatoes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "olive oil, for drizzling",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "olive oil, for drizzling",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "250g/9oz Greek-style yoghurt",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "/9oz Greek-style yoghurt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "sweet tamarind sauce or pomegranate molasses, for drizzling",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "sweet tamarind sauce or pomegranate molasses, for drizzling",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 small red onion, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "small red onion",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "½ small packet (about 15g/½oz) fresh coriander, finely chopped",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "small packet (about 15g/½oz) fresh coriander",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "80g/3oz pomegranate seeds",
+          "quantity": 80,
+          "quantityText": "80",
+          "unit": "g",
+          "name": "/3oz pomegranate seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "generous handful cornflakes",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "generous handful cornflakes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "sea salt flakes and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "sea salt flakes and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Boil the potatoes in a large saucepan of water for 15–20 minutes until cooked through.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Boil the potatoes in a large saucepan of water for 15–20 minutes until cooked through."
+    },
+    {
+      "order": 2,
+      "text": "Meanwhile, preheat the oven to 240C/220C Fan/Gas 9. Line your largest baking tray with baking paper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, preheat the oven to 240C/220C Fan/Gas 9. Line your largest baking tray with baking paper."
+    },
+    {
+      "order": 3,
+      "text": "Drain the potatoes and tip out onto a clean work surface. Using a tumbler or cup with a flat base, gently crush the potatoes until they burst and flatten without breaking up (if they do break up, reshape them back together by hand).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Drain the potatoes and tip out onto a clean work surface. Using a tumbler or cup with a flat base, gently crush the potatoes until they burst and flatten without breaking up (if they do break up, reshape them back together by hand)."
+    },
+    {
+      "order": 4,
+      "text": "Place the potatoes on the lined tray, drizzle each one generously with olive oil and season heavily with salt and pepper. Roast for 30–35 minutes until crispy and browned around the edges.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place the potatoes on the lined tray, drizzle each one generously with olive oil and season heavily with salt and pepper. Roast for 30–35 minutes until crispy and browned around the edges."
+    },
+    {
+      "order": 5,
+      "text": "Remove from the oven and arrange on a serving platter. Drizzle over the yoghurt, followed by tamarind sauce or pomegranate molasses, then scatter over the red onion, coriander, pomegranate seeds and cornflakes. Serve immediately.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove from the oven and arrange on a serving platter. Drizzle over the yoghurt, followed by tamarind sauce or pomegranate molasses, then scatter over the red onion, coriander, pomegranate seeds and cornflakes. Serve immediately."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 4,
+      "ratingValue": 5
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Tangy, crispy and crunchy with pops of sweetness from the pomegranate seeds, Sabrina’s potato chaat has it all.",
+    "headline": "Smashed crispy potato chaat",
+    "image": null,
+    "name": "Smashed crispy potato chaat",
+    "author": {
+      "@type": "Person",
+      "name": "Sabrina Ghayour"
+    },
+    "datePublished": "2025-08-14T09:00:00.000Z",
+    "dateModified": "2025-08-15T13:18:34.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 4,
+      "ratingValue": 5
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT1H",
+    "keywords": "samosa, new potatoes, egg free, nut free, pregnancy friendly, vegetarian, Saturday Kitchen",
+    "recipeCategory": "Light meals & snacks",
+    "recipeCuisine": "Indian",
+    "recipeIngredient": [
+      "1kg/2lb 4oz baby or new potatoes",
+      "olive oil, for drizzling",
+      "250g/9oz Greek-style yoghurt",
+      "sweet tamarind sauce or pomegranate molasses, for drizzling",
+      "1 small red onion, finely chopped",
+      "½ small packet (about 15g/½oz) fresh coriander, finely chopped",
+      "80g/3oz pomegranate seeds",
+      "generous handful cornflakes",
+      "sea salt flakes and freshly ground black pepper"
+    ],
+    "recipeInstructions": [
+      "Boil the potatoes in a large saucepan of water for 15–20 minutes until cooked through.",
+      "Meanwhile, preheat the oven to 240C/220C Fan/Gas 9. Line your largest baking tray with baking paper.",
+      "Drain the potatoes and tip out onto a clean work surface. Using a tumbler or cup with a flat base, gently crush the potatoes until they burst and flatten without breaking up (if they do break up, reshape them back together by hand).",
+      "Place the potatoes on the lined tray, drizzle each one generously with olive oil and season heavily with salt and pepper. Roast for 30–35 minutes until crispy and browned around the edges.",
+      "Remove from the oven and arrange on a serving platter. Drizzle over the yoghurt, followed by tamarind sauce or pomegranate molasses, then scatter over the red onion, coriander, pomegranate seeds and cornflakes. Serve immediately."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:4",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

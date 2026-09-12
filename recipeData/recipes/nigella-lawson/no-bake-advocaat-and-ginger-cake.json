@@ -1,0 +1,375 @@
+{
+  "schemaVersion": 1,
+  "id": "nigella-lawson/no-bake-advocaat-and-ginger-cake",
+  "slug": "no-bake-advocaat-and-ginger-cake",
+  "chefId": "chef_nigella-lawson",
+  "chefSlug": "nigella-lawson",
+  "chefName": "Nigella Lawson",
+  "title": "No-bake Advocaat and ginger cake",
+  "description": "I have a bit of a weakness for this sort of cake, which is essentially an assembly–job number, a construction of alternate layers of a rich, boozy cream and some storebought sponge or other. Here the layers comprise a confection of cream and mascarpone, seasonally spiked with Advocaat, full of crystallised ginger, figs and nuts, and that essential component of Christmas: gingerbread. Now, there are many types of gingerbread, but for this particular cake you need to get the dark, sticky sort – always my first choice – rather in the style of a Jamaica ginger cake. And you need quite a lot of it, not least because its squodgy texture means that as you cut it, the cake compresses into divinely dense slices, more the shape of bricks, all the better to build with.\n\nJust so that you’re aware, you do need to get on with this a day before you want to eat it.\n\n\nFor this recipe you will need a 23cm/9in springform cake tin.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/no-bake_advocaat_and_99988",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/no-bake_advocaat_and_99988",
+    "retrievedAt": "2026-09-11T00:26:11.109Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Nigella Lawson"
+    ],
+    "datePublished": "2023-12-21T16:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "e5bf5b53c91088041a14336f226d347de7e794457ee84f7f2647da696e54b107",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 8–10"
+    ],
+    "servings": 8
+  },
+  "timing": {
+    "prepMinutes": 720,
+    "cookMinutes": null,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Desserts"
+  ],
+  "keywords": [
+    "alternative christmas cake",
+    "nigella's christmas",
+    "no-cook christmas",
+    "christmas",
+    "quick desserts",
+    "ginger",
+    "vegetarian",
+    "Nigella's Amsterdam Christmas"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "5 Jamaican ginger cakes or other sticky gingerbread loaves (just over 1kg/2lb 4oz total weight)",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": null,
+          "name": "Jamaican ginger cakes or other sticky gingerbread loaves (just over 1kg/2lb 4oz total weight)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "500g/1lb 2oz mascarpone",
+          "quantity": 500,
+          "quantityText": "500",
+          "unit": "g",
+          "name": "/1lb 2oz mascarpone",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "375ml/13fl oz double cream",
+          "quantity": 375,
+          "quantityText": "375",
+          "unit": "ml",
+          "name": "/13fl oz double cream",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp custard powder",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "custard powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp icing sugar",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "icing sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "200ml/7fl oz Advocaat",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "ml",
+          "name": "/7fl oz Advocaat",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "75g/2½oz crystallised ginger, roughly chopped",
+          "quantity": 75,
+          "quantityText": "75",
+          "unit": "g",
+          "name": "/2½oz crystallised ginger",
+          "note": "roughly chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "6 soft dried figs, chopped or scissored into small pieces",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": null,
+          "name": "soft dried figs",
+          "note": "chopped or scissored into small pieces",
+          "isOptional": false
+        },
+        {
+          "raw": "75g/2½oz macadamia nuts, chopped roughly into chunks and shards",
+          "quantity": 75,
+          "quantityText": "75",
+          "unit": "g",
+          "name": "/2½oz macadamia nuts",
+          "note": "chopped roughly into chunks and shards",
+          "isOptional": false
+        },
+        {
+          "raw": "approx. 1 tbsp chocolate sprinkles or chocolate strands, for scattering on top",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "approx. 1 tbsp chocolate sprinkles or chocolate strands, for scattering on top",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Take your 4 Jamaica ginger cakes and cut each into 12 slices. You’ll need 16 slices per layer, so do sort them out in 3 piles to make life simpler.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Take your 4 Jamaica ginger cakes and cut each into 12 slices. You’ll need 16 slices per layer, so do sort them out in 3 piles to make life simpler. "
+    },
+    {
+      "order": 2,
+      "text": "Either using a freestanding mixer or an electric handwhisk for ease (though you could do this by hand) mix the mascarpone together with the double cream, custard powder and icing sugar, and whisk until it starts thickening, then keep whisking while you slowly pour in the Advocaat, and carry on until it’s lusciously thickened. It needs to be thick enough to hold its shape and be dollopable and spreadable between the layers of cake.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Either using a freestanding mixer or an electric handwhisk for ease (though you could do this by hand) mix the mascarpone together with the double cream, custard powder and icing sugar, and whisk until it starts thickening, then keep whisking while you slowly pour in the Advocaat, and carry on until it’s lusciously thickened. It needs to be thick enough to hold its shape and be dollopable and spreadable between the layers of cake."
+    },
+    {
+      "order": 3,
+      "text": "Reserve 2 cups’ worth of the rich, egg-noggy cream, or enough to come up to the 500ml-mark on a measuring jug (or about 380g in weight, though it’s easier to go by volume here) and either put in a bowl or leave in the jug if you’ve used that method, then cover and stash in the fridge until the cake is ready to serve the next day.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Reserve 2 cups’ worth of the rich, egg-noggy cream, or enough to come up to the 500ml-mark on a measuring jug (or about 380g in weight, though it’s easier to go by volume here) and either put in a bowl or leave in the jug if you’ve used that method, then cover and stash in the fridge until the cake is ready to serve the next day."
+    },
+    {
+      "order": 4,
+      "text": "Add the chopped crystallised ginger, dried figs and macadamia nuts to the rest of the cream mixture still in its big bowl, and mix in gently with a spatula.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the chopped crystallised ginger, dried figs and macadamia nuts to the rest of the cream mixture still in its big bowl, and mix in gently with a spatula."
+    },
+    {
+      "order": 5,
+      "text": "Get out a 23cm/9in springform tin, unclip it, and turn the bottom upside down, that’s to say with the lip facing downwards to give you a smooth base, which’ll make unmoulding the cake easier later. Once you’ve clipped it shut again, line the base of the tin with your first 16 slices of gingerbread, making sure the sticky bits from the top of the loaves are not touching the edge of the tin, to form an even layer; as the gingerbread is so gorgeously squidgy and thus mouldable, you can press on it and bend it to your will easily enough.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Get out a 23cm/9in springform tin, unclip it, and turn the bottom upside down, that’s to say with the lip facing downwards to give you a smooth base, which’ll make unmoulding the cake easier later. Once you’ve clipped it shut again, line the base of the tin with your first 16 slices of gingerbread, making sure the sticky bits from the top of the loaves are not touching the edge of the tin, to form an even layer; as the gingerbread is so gorgeously squidgy and thus mouldable, you can press on it and bend it to your will easily enough."
+    },
+    {
+      "order": 6,
+      "text": "Spoon half of the nubbly cream on top and, with a cranked spatula for ease, spread it over the ginger cake layer to cover evenly, and then repeat with another round of cake slices – in other words, another 16 small slices of gingerbread – to cover the cream. Crumble in some of the ginger cake if there are holes, to avoid pressing down too firmly on this layer, though a coaxing tap or two should be fine.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Spoon half of the nubbly cream on top and, with a cranked spatula for ease, spread it over the ginger cake layer to cover evenly, and then repeat with another round of cake slices – in other words, another 16 small slices of gingerbread – to cover the cream. Crumble in some of the ginger cake if there are holes, to avoid pressing down too firmly on this layer, though a coaxing tap or two should be fine."
+    },
+    {
+      "order": 7,
+      "text": "Spread the rest of the cream over this middle layer of ginger cake, and cover with your final pile of gingerbread slices. Press down gently to smooth the top slightly before covering the tin with cling film, and leave it in the fridge overnight to firm up and fuse together.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Spread the rest of the cream over this middle layer of ginger cake, and cover with your final pile of gingerbread slices. Press down gently to smooth the top slightly before covering the tin with cling film, and leave it in the fridge overnight to firm up and fuse together."
+    },
+    {
+      "order": 8,
+      "text": "When you are nearly ready to serve the cake, take it out of the fridge, along with the reserved Advocaat cream. Let the cake stand out of the fridge for 15 minutes then, with a small cranked spatula, gently ease the cake from the sides of the tin.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "When you are nearly ready to serve the cake, take it out of the fridge, along with the reserved Advocaat cream. Let the cake stand out of the fridge for 15 minutes then, with a small cranked spatula, gently ease the cake from the sides of the tin."
+    },
+    {
+      "order": 9,
+      "text": "After you’ve given it a few encouraging turns with your little spatula, unclip the tin cautiously. If the cake doesn’t want to spring free, close the tin again, and ease the edges away from the tin again the spatula, then unclip, and remove the sides of the tin with a tender touch, squeezing the cake together gently as needed. If you want to help it more on its way, wrap a warm tea towel around the sides of the tin for a couple of minutes. The removed ring of the springform tin will have some of the cream mixture stuck to it, so you can use this to patch up any gaps around the sides of the cake. Transfer the cake, still on its base, to a flat cake stand or plate – unless, that is, you like living dangerously, in which case by all means try and remove the cake from its base.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "After you’ve given it a few encouraging turns with your little spatula, unclip the tin cautiously. If the cake doesn’t want to spring free, close the tin again, and ease the edges away from the tin again the spatula, then unclip, and remove the sides of the tin with a tender touch, squeezing the cake together gently as needed. If you want to help it more on its way, wrap a warm tea towel around the sides of the tin for a couple of minutes. The removed ring of the springform tin will have some of the cream mixture stuck to it, so you can use this to patch up any gaps around the sides of the cake. Transfer the cake, still on its base, to a flat cake stand or plate – unless, that is, you like living dangerously, in which case by all means try and remove the cake from its base. "
+    },
+    {
+      "order": 10,
+      "text": "Give a little stir to the reserved cream, then spread it on top of the cake in an even layer, swirling it a little if you so desire, and then give a celebratory shake of chocolate sprinkles all over the top.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Give a little stir to the reserved cream, then spread it on top of the cake in an even layer, swirling it a little if you so desire, and then give a celebratory shake of chocolate sprinkles all over the top."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/no-bake_advocaat_and_99988_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "There is a way of making an alcohol-free version – substitute the 200ml/7fl oz Advocaat with 300ml/10fl oz ready-made custard/crème anglaise from a tub – but it doesn’t quite have the depth of the real thing, so you might consider adding a drop or two of rum flavouring. The quantity of gingerbread was updated on 19/01/2026 to reflect changes in pack sizes."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 8,
+      "ratingValue": 5
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "I have a bit of a weakness for this sort of cake, which is essentially an assembly–job number, a construction of alternate layers of a rich, boozy cream and some storebought sponge or other. Here the layers comprise a confection of cream and mascarpone, seasonally spiked with Advocaat, full of crystallised ginger, figs and nuts, and that essential component of Christmas: gingerbread. Now, there are many types of gingerbread, but for this particular cake you need to get the dark, sticky sort – always my first choice – rather in the style of a Jamaica ginger cake. And you need quite a lot of it, not least because its squodgy texture means that as you cut it, the cake compresses into divinely dense slices, more the shape of bricks, all the better to build with. \r\n\r\nJust so that you’re aware, you do need to get on with this a day before you want to eat it.\r\n<br></br>\r\nFor this recipe you will need a 23cm/9in springform cake tin.",
+    "headline": "No-bake Advocaat and ginger cake",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/no-bake_advocaat_and_99988_16x9.jpg"
+    },
+    "name": "No-bake Advocaat and ginger cake",
+    "author": {
+      "@type": "Person",
+      "name": "Nigella Lawson"
+    },
+    "datePublished": "2023-12-21T16:00:00.000Z",
+    "dateModified": "2026-01-19T10:49:23.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 8,
+      "ratingValue": 5
+    },
+    "prepTime": "PT12H",
+    "cookTime": "PT0H0M0S",
+    "keywords": "alternative christmas cake, nigella's christmas, no-cook christmas, christmas, quick desserts, ginger, vegetarian, Nigella's Amsterdam Christmas",
+    "recipeCategory": "Desserts",
+    "recipeIngredient": [
+      "5 Jamaican ginger cakes or other sticky gingerbread loaves (just over 1kg/2lb 4oz total weight) ",
+      "500g/1lb 2oz mascarpone",
+      "375ml/13fl oz double cream",
+      "2 tsp custard powder",
+      "2 tbsp icing sugar",
+      "200ml/7fl oz Advocaat",
+      "75g/2½oz crystallised ginger, roughly chopped",
+      "6 soft dried figs, chopped or scissored into small pieces",
+      "75g/2½oz macadamia nuts, chopped roughly into chunks and shards",
+      "approx. 1 tbsp chocolate sprinkles or chocolate strands, for scattering on top"
+    ],
+    "recipeInstructions": [
+      "Take your 4 Jamaica ginger cakes and cut each into 12 slices. You’ll need 16 slices per layer, so do sort them out in 3 piles to make life simpler. ",
+      "Either using a freestanding mixer or an electric handwhisk for ease (though you could do this by hand) mix the mascarpone together with the double cream, custard powder and icing sugar, and whisk until it starts thickening, then keep whisking while you slowly pour in the Advocaat, and carry on until it’s lusciously thickened. It needs to be thick enough to hold its shape and be dollopable and spreadable between the layers of cake.",
+      "Reserve 2 cups’ worth of the rich, egg-noggy cream, or enough to come up to the 500ml-mark on a measuring jug (or about 380g in weight, though it’s easier to go by volume here) and either put in a bowl or leave in the jug if you’ve used that method, then cover and stash in the fridge until the cake is ready to serve the next day.",
+      "Add the chopped crystallised ginger, dried figs and macadamia nuts to the rest of the cream mixture still in its big bowl, and mix in gently with a spatula.",
+      "Get out a 23cm/9in springform tin, unclip it, and turn the bottom upside down, that’s to say with the lip facing downwards to give you a smooth base, which’ll make unmoulding the cake easier later. Once you’ve clipped it shut again, line the base of the tin with your first 16 slices of gingerbread, making sure the sticky bits from the top of the loaves are not touching the edge of the tin, to form an even layer; as the gingerbread is so gorgeously squidgy and thus mouldable, you can press on it and bend it to your will easily enough.",
+      "Spoon half of the nubbly cream on top and, with a cranked spatula for ease, spread it over the ginger cake layer to cover evenly, and then repeat with another round of cake slices – in other words, another 16 small slices of gingerbread – to cover the cream. Crumble in some of the ginger cake if there are holes, to avoid pressing down too firmly on this layer, though a coaxing tap or two should be fine.",
+      "Spread the rest of the cream over this middle layer of ginger cake, and cover with your final pile of gingerbread slices. Press down gently to smooth the top slightly before covering the tin with cling film, and leave it in the fridge overnight to firm up and fuse together.",
+      "When you are nearly ready to serve the cake, take it out of the fridge, along with the reserved Advocaat cream. Let the cake stand out of the fridge for 15 minutes then, with a small cranked spatula, gently ease the cake from the sides of the tin.",
+      "After you’ve given it a few encouraging turns with your little spatula, unclip the tin cautiously. If the cake doesn’t want to spring free, close the tin again, and ease the edges away from the tin again the spatula, then unclip, and remove the sides of the tin with a tender touch, squeezing the cake together gently as needed. If you want to help it more on its way, wrap a warm tea towel around the sides of the tin for a couple of minutes. The removed ring of the springform tin will have some of the cream mixture stuck to it, so you can use this to patch up any gaps around the sides of the cake. Transfer the cake, still on its base, to a flat cake stand or plate – unless, that is, you like living dangerously, in which case by all means try and remove the cake from its base. ",
+      "Give a little stir to the reserved cream, then spread it on top of the cake in an even layer, swirling it a little if you so desire, and then give a celebratory shake of chocolate sprinkles all over the top."
+    ],
+    "recipeYield": "Serves 8–10",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "no-cook-time",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

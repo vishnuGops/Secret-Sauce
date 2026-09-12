@@ -1,0 +1,323 @@
+{
+  "schemaVersion": 1,
+  "id": "eli-giannopoulos/cinnamon-cookies-with-red-wine",
+  "slug": "cinnamon-cookies-with-red-wine",
+  "chefId": "chef_eli-giannopoulos",
+  "chefSlug": "eli-giannopoulos",
+  "chefName": "Eli K. Giannopoulos",
+  "title": "Cinnamon Cookies with red Wine",
+  "description": "Our very best recipe for cinnamon cookies; very easy to make and easier to disappear! Amazingly crunchy and scented with the aromas of red wine, cinnamon and ground clove..",
+  "source": {
+    "sourceUrl": "https://www.mygreekdish.com/recipe/cinnamon-cookies/",
+    "finalUrl": "https://www.mygreekdish.com/recipe/cinnamon-cookies/",
+    "retrievedAt": "2026-09-11T02:48:05.783Z",
+    "publisher": null,
+    "authorRaw": [
+      "Eli K. Giannopoulos"
+    ],
+    "datePublished": "2013-12-13",
+    "rights": "My Greek Dish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "bdcf2f9c7b747dbc216851a55ea7af77512723cd47833852b121629747412ba1",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "60",
+      "60-70 cookies"
+    ],
+    "servings": 60
+  },
+  "timing": {
+    "prepMinutes": 15,
+    "cookMinutes": 25,
+    "totalMinutes": 40,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Greek"
+  ],
+  "category": [
+    "Dessert"
+  ],
+  "keywords": [
+    "Greek cinnamon cookies",
+    "Greek cinnamon biscuits",
+    "Greek olive oil cinnamon cookies",
+    "Koulourakia with cinnamon"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "450ml olive oil (1 and 5/6 cups olive oil)",
+          "quantity": 450,
+          "quantityText": "450",
+          "unit": "ml",
+          "name": "olive oil (1 and 5/6 cups olive oil)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "180ml red wine (3/4 of a cup red wine)",
+          "quantity": 180,
+          "quantityText": "180",
+          "unit": "ml",
+          "name": "red wine (3/4 of a cup red wine)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "90ml orange juice (1/3 of a cup)",
+          "quantity": 90,
+          "quantityText": "90",
+          "unit": "ml",
+          "name": "orange juice (1/3 of a cup)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "90ml sugar (1/3 of a cup sugar)",
+          "quantity": 90,
+          "quantityText": "90",
+          "unit": "ml",
+          "name": "sugar (1/3 of a cup sugar)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp ground cinnamon",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "ground cinnamon",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 1/2 flat tsp ground clove",
+          "quantity": 1.5,
+          "quantityText": "1 1/2",
+          "unit": null,
+          "name": "flat tsp ground clove",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "zest of 1 1/2 orange",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "zest of 1 1/2 orange",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp baking powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "baking powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 tsp baking soda",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 tsp baking soda",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 kg soft flour, sifted (35 ounces)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "kg",
+          "name": "soft flour, sifted (35 ounces)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsps brown sugar (optional)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "brown sugar (optional)",
+          "note": null,
+          "isOptional": true
+        },
+        {
+          "raw": "80gr sesame seeds, roasted (1/3 of a cup)",
+          "quantity": 80,
+          "quantityText": "80",
+          "unit": null,
+          "name": "gr sesame seeds, roasted (1/3 of a cup)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To prepare these flavourful cinnamon cookies, add in a large bowl the sugar and olive oil and whisk. In a cup add the orange juice and baking soda and blend, until dissolved; pour in the bowl and add the wine, the cinnamon, the clove, the orange zest and the sesame seeds. Whisk well, until the ingredients combine.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "To prepare these flavourful cinnamon cookies, add in a large bowl the sugar and olive oil and whisk. In a cup add the orange juice and baking soda and blend, until dissolved; pour in the bowl and add the wine, the cinnamon, the clove, the orange zest and the sesame seeds. Whisk well, until the ingredients combine.",
+        "url": "https://www.mygreekdish.com/recipe/cinnamon-cookies/#instruction-step-1"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Sieve the flour with the baking powder; add 1/2 the flour to the mixture and start kneading the dough. Slowly add the rest of the flour and knead the dough, until smooth and not sticky; don’t overwork the dough. Depending on the flour, you may need to use a little bit less or more flour than the recipe calls for. The dough should be soft, but not sticky.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Sieve the flour with the baking powder; add 1/2 the flour to the mixture and start kneading the dough. Slowly add the rest of the flour and knead the dough, until smooth and not sticky; don&#8217;t overwork the dough. Depending on the flour, you may need to use a little bit less or more flour than the recipe calls for. The dough should be soft, but not sticky.",
+        "url": "https://www.mygreekdish.com/recipe/cinnamon-cookies/#instruction-step-2"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Preheat the oven to 170C and line two large baking trays with parchment paper. Shape the cinnamon cookies with your hands, giving them any shape you like, sprinkle with brown sugar and bake for 25-30 minutes, until nicely coloured. Enjoy!",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 170C and line two large baking trays with parchment paper. Shape the cinnamon cookies with your hands, giving them any shape you like, sprinkle with brown sugar and bake for 25-30 minutes, until nicely coloured. Enjoy!",
+        "url": "https://www.mygreekdish.com/recipe/cinnamon-cookies/#instruction-step-3"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Cinnamon-Cookies-with-red-Wine-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Cinnamon-Cookies-with-red-Wine-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Cinnamon-Cookies-with-red-Wine-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Cinnamon-Cookies-with-red-Wine.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "cookingMethod": "Baked",
+    "suitableForDiet": "VeganDiet",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "591",
+      "ratingValue": "4.9"
+    }
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org/",
+    "@type": "Recipe",
+    "name": "Cinnamon Cookies with red Wine",
+    "description": "Our very best recipe for cinnamon cookies; very easy to make and easier to disappear! Amazingly crunchy and scented with the aromas of red wine, cinnamon and ground clove..",
+    "author": {
+      "@type": "Person",
+      "name": "Eli K. Giannopoulos"
+    },
+    "keywords": "Greek cinnamon cookies, Greek cinnamon biscuits, Greek olive oil cinnamon cookies, Koulourakia with cinnamon",
+    "image": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Cinnamon-Cookies-with-red-Wine-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Cinnamon-Cookies-with-red-Wine-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Cinnamon-Cookies-with-red-Wine-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/12/Cinnamon-Cookies-with-red-Wine.jpg"
+    ],
+    "url": "https://www.mygreekdish.com/recipe/cinnamon-cookies/",
+    "recipeIngredient": [
+      "450ml olive oil (1 and 5/6 cups olive oil)",
+      "180ml red wine (3/4 of a cup red wine)",
+      "90ml orange juice (1/3 of a cup)",
+      "90ml sugar (1/3 of a cup sugar)",
+      "1 tbsp ground cinnamon",
+      "1 1/2 flat tsp ground clove",
+      "zest of 1 1/2 orange",
+      "1 tbsp baking powder",
+      "1/2 tsp baking soda",
+      "1 kg soft flour, sifted (35 ounces)",
+      "2 tbsps brown sugar (optional)",
+      "80gr sesame seeds, roasted (1/3 of a cup)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "To prepare these flavourful cinnamon cookies, add in a large bowl the sugar and olive oil and whisk. In a cup add the orange juice and baking soda and blend, until dissolved; pour in the bowl and add the wine, the cinnamon, the clove, the orange zest and the sesame seeds. Whisk well, until the ingredients combine.",
+        "url": "https://www.mygreekdish.com/recipe/cinnamon-cookies/#instruction-step-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Sieve the flour with the baking powder; add 1/2 the flour to the mixture and start kneading the dough. Slowly add the rest of the flour and knead the dough, until smooth and not sticky; don&#8217;t overwork the dough. Depending on the flour, you may need to use a little bit less or more flour than the recipe calls for. The dough should be soft, but not sticky.",
+        "url": "https://www.mygreekdish.com/recipe/cinnamon-cookies/#instruction-step-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 170C and line two large baking trays with parchment paper. Shape the cinnamon cookies with your hands, giving them any shape you like, sprinkle with brown sugar and bake for 25-30 minutes, until nicely coloured. Enjoy!",
+        "url": "https://www.mygreekdish.com/recipe/cinnamon-cookies/#instruction-step-3"
+      }
+    ],
+    "prepTime": "PT15M",
+    "cookTime": "PT25M",
+    "totalTime": "PT40M",
+    "recipeYield": [
+      "60",
+      "60-70 cookies"
+    ],
+    "recipeCategory": "Dessert",
+    "cookingMethod": "Baked",
+    "recipeCuisine": "Greek",
+    "suitableForDiet": "VeganDiet",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "591",
+      "ratingValue": "4.9"
+    },
+    "datePublished": "2013-12-13",
+    "@id": "https://www.mygreekdish.com/recipe/cinnamon-cookies/#recipe",
+    "isPartOf": {
+      "@id": "https://www.mygreekdish.com/recipe/cinnamon-cookies/#article"
+    },
+    "mainEntityOfPage": "https://www.mygreekdish.com/recipe/cinnamon-cookies/"
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:cookingMethod|suitableForDiet|aggregateRating"
+  ]
+}

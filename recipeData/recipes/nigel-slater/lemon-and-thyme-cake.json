@@ -1,0 +1,376 @@
+{
+  "schemaVersion": 1,
+  "id": "nigel-slater/lemon-and-thyme-cake",
+  "slug": "lemon-and-thyme-cake",
+  "chefId": "chef_nigel-slater",
+  "chefSlug": "nigel-slater",
+  "chefName": "Nigel Slater",
+  "title": "Lemon and thyme cake",
+  "description": "A simple, moist lemon sponge soaked with thyme and lemon syrup. Tastes wonderful served with thick, creamy Greek-style yoghurt.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/lemon_and_thyme_cake_15394",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/lemon_and_thyme_cake_15394",
+    "retrievedAt": "2026-09-11T00:28:45.408Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Nigel Slater"
+    ],
+    "datePublished": "2012-10-26T15:30:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "d50029b6e9f8a2961023f68b29cce36aa9e6bf2c2ab0d39432f2d46a5405b196",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 6–8"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Cakes and baking"
+  ],
+  "keywords": [
+    "heavenly herbs",
+    "the best lemon cake",
+    "tea bread",
+    "ground almonds",
+    "lemon",
+    "pregnancy friendly",
+    "vegetarian",
+    "Nigel Slater's Dish of the Day"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the cake",
+      "items": [
+        {
+          "raw": "200g/7oz butter",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "g",
+          "name": "/7oz butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "200g/7oz golden caster sugar",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "g",
+          "name": "/7oz golden caster sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz plain flour",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz plain flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp baking powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "baking powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz ground almonds",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz ground almonds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 free-range eggs",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "free-range eggs",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 lemon, zest only",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "lemon, zest only",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp thyme leaves",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "thyme leaves",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the syrup",
+      "items": [
+        {
+          "raw": "4 tbsp sugar",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 large lemons, juice only",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "large lemons, juice only",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp thyme leaves",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "thyme leaves",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To serve (optional)",
+      "items": [
+        {
+          "raw": "Greek-style yoghurt",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Greek-style yoghurt",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 160C/140C Fan/Gas 3. Line a 900g/2lb loaf tin with baking paper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 160C/140C Fan/Gas 3. Line a 900g/2lb loaf tin with baking paper."
+    },
+    {
+      "order": 2,
+      "text": "To make the cake, cream the butter with the sugar in a food mixer until pale and fluffy. In a separate bowl, sift together the flour and baking powder then mix with the ground almonds.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the cake, cream the butter with the sugar in a food mixer until pale and fluffy. In a separate bowl, sift together the flour and baking powder then mix with the ground almonds."
+    },
+    {
+      "order": 3,
+      "text": "Lightly beat the eggs in a jug, then fold them into the butter mixture in two or three sessions, beating them in thoroughly each time. If the mixture looks as if it is about to curdle, stir in some of the flour.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Lightly beat the eggs in a jug, then fold them into the butter mixture in two or three sessions, beating them in thoroughly each time. If the mixture looks as if it is about to curdle, stir in some of the flour. "
+    },
+    {
+      "order": 4,
+      "text": "Grate the zest from the lemon into a bowl and mix it with the thyme leaves. Pound the two together with a pestle, or some other heavy weight, then stir into the cake mixture.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Grate the zest from the lemon into a bowl and mix it with the thyme leaves. Pound the two together with a pestle, or some other heavy weight, then stir into the cake mixture. "
+    },
+    {
+      "order": 5,
+      "text": "Gradually mix in the flour, baking powder and almond mixture.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Gradually mix in the flour, baking powder and almond mixture."
+    },
+    {
+      "order": 6,
+      "text": "Spoon the cake mixture into the lined tin and bake for 45 minutes (if dividing the mixture into smaller tins reduce the time accordingly).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Spoon the cake mixture into the lined tin and bake for 45 minutes (if dividing the mixture into smaller tins reduce the time accordingly). "
+    },
+    {
+      "order": 7,
+      "text": "To make the syrup, place the sugar and lemon juice in a saucepan over a moderate heat and heat until the sugar has dissolved. Stir in the thyme leaves (a few flowers would be good here too). As the cake comes out of the oven, spike the surface all over with a skewer and spoon over the syrup.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the syrup, place the sugar and lemon juice in a saucepan over a moderate heat and heat until the sugar has dissolved. Stir in the thyme leaves (a few flowers would be good here too). As the cake comes out of the oven, spike the surface all over with a skewer and spoon over the syrup. "
+    },
+    {
+      "order": 8,
+      "text": "Leave to cool and serve in slices with thick yoghurt alongside, if you like.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Leave to cool and serve in slices with thick yoghurt alongside, if you like."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/lemon_and_thyme_cake_15394_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 32,
+      "ratingValue": 4.90625
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "A simple, moist lemon sponge soaked with thyme and lemon syrup. Tastes wonderful served with thick, creamy Greek-style yoghurt.",
+    "headline": "Lemon and thyme cake",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/lemon_and_thyme_cake_15394_16x9.jpg"
+    },
+    "name": "Lemon and thyme cake",
+    "author": {
+      "@type": "Person",
+      "name": "Nigel Slater"
+    },
+    "datePublished": "2012-10-26T15:30:00.000Z",
+    "dateModified": "2025-03-27T14:19:53.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 32,
+      "ratingValue": 4.90625
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT1H",
+    "keywords": "heavenly herbs, the best lemon cake, tea bread, ground almonds, lemon, pregnancy friendly, vegetarian, Nigel Slater's Dish of the Day",
+    "recipeCategory": "Cakes and baking",
+    "recipeIngredient": [
+      "200g/7oz butter",
+      "200g/7oz golden caster sugar",
+      "100g/3½oz plain flour",
+      "1 tsp baking powder",
+      "100g/3½oz ground almonds",
+      "4 free-range eggs",
+      "1 lemon, zest only",
+      "1 tsp thyme leaves",
+      "4 tbsp sugar",
+      "2 large lemons, juice only",
+      "½ tsp thyme leaves",
+      "Greek-style yoghurt"
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 160C/140C Fan/Gas 3. Line a 900g/2lb loaf tin with baking paper.",
+      "To make the cake, cream the butter with the sugar in a food mixer until pale and fluffy. In a separate bowl, sift together the flour and baking powder then mix with the ground almonds.",
+      "Lightly beat the eggs in a jug, then fold them into the butter mixture in two or three sessions, beating them in thoroughly each time. If the mixture looks as if it is about to curdle, stir in some of the flour. ",
+      "Grate the zest from the lemon into a bowl and mix it with the thyme leaves. Pound the two together with a pestle, or some other heavy weight, then stir into the cake mixture. ",
+      "Gradually mix in the flour, baking powder and almond mixture.",
+      "Spoon the cake mixture into the lined tin and bake for 45 minutes (if dividing the mixture into smaller tins reduce the time accordingly). ",
+      "To make the syrup, place the sugar and lemon juice in a saucepan over a moderate heat and heat until the sugar has dissolved. Stir in the thyme leaves (a few flowers would be good here too). As the cake comes out of the oven, spike the surface all over with a skewer and spoon over the syrup. ",
+      "Leave to cool and serve in slices with thick yoghurt alongside, if you like."
+    ],
+    "recipeYield": "Serves 6–8",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

@@ -1,0 +1,504 @@
+{
+  "schemaVersion": 1,
+  "id": "huy-vu/30-30-cooking-method-for-brown-boba",
+  "slug": "30-30-cooking-method-for-brown-boba",
+  "chefId": "chef_huy-vu",
+  "chefSlug": "huy-vu",
+  "chefName": "Huy Vu",
+  "title": "30 & 30 Cooking Method for Brown Boba",
+  "description": "This method works for tapioca pearls from Bossen & Tea Zone and is not meant for \"quick cooking\" pearls. It can also work as a starting point for tapioca pearls that don’t come with instructions.",
+  "source": {
+    "sourceUrl": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/",
+    "finalUrl": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/",
+    "retrievedAt": "2026-09-11T03:14:37.215Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2020-04-02T18:01:54+00:00",
+    "rights": "Hungry Huy. Functional content plus a link, for internal app testing. Not redistributed.",
+    "pageTitle": "How To Cook Tapioca Pearls for Boba & Bubble Tea - Hungry Huy",
+    "htmlSha256": "97e7dc4d3eec8eb25d2619b186a8e0ee11c1fc070005ff4eea624a83e7bcb0d9",
+    "jsonLdBlockCount": 2,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed",
+    "titleWarning": "title-overlap-0.33: page=\"How To Cook Tapioca Pearls for Boba & Bubble Tea - Hungry Huy\""
+  },
+  "yield": {
+    "raw": [
+      "2"
+    ],
+    "servings": 2
+  },
+  "timing": {
+    "prepMinutes": 1,
+    "cookMinutes": 30,
+    "totalMinutes": 61,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Asian",
+    "Taiwanese"
+  ],
+  "category": [
+    "Dessert"
+  ],
+  "keywords": [
+    "Boba",
+    "Tapioca pearls"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1/2 c tapioca pearls",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 c tapioca pearls",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "10 c filtered water",
+          "quantity": 10,
+          "quantityText": "10",
+          "unit": null,
+          "name": "c filtered water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp sugar or honey",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "sugar or honey",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "In a large pot, add 10 cups of water and bring to a boil.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a large pot, add 10 cups of water and bring to a boil.",
+        "name": "In a large pot, add 10 cups of water and bring to a boil.",
+        "url": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/#wprm-recipe-7795-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "When it hits a rolling boil, add the tapioca pearls and wait for them to float to the top of the water. Once the boba is floating, lower to medium heat.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "When it hits a rolling boil, add the tapioca pearls and wait for them to float to the top of the water. Once the boba is floating, lower to medium heat.",
+        "name": "When it hits a rolling boil, add the tapioca pearls and wait for them to float to the top of the water. Once the boba is floating, lower to medium heat.",
+        "url": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/#wprm-recipe-7795-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Continue to simmer for 30 minutes uncovered. Stir occasionally to prevent the pearls from sticking.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Continue to simmer for 30 minutes uncovered. Stir occasionally to prevent the pearls from sticking.",
+        "name": "Continue to simmer for 30 minutes uncovered. Stir occasionally to prevent the pearls from sticking.",
+        "url": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/#wprm-recipe-7795-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "After 30 minutes, remove the pot from the stove, cover with lid, and let rest another 30 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "After 30 minutes, remove the pot from the stove, cover with lid, and let rest another 30 minutes.",
+        "name": "After 30 minutes, remove the pot from the stove, cover with lid, and let rest another 30 minutes.",
+        "url": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/#wprm-recipe-7795-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Strain the boba and rinse under cold running water to stop the cooking and remove the starchy outer layer.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Strain the boba and rinse under cold running water to stop the cooking and remove the starchy outer layer.",
+        "name": "Strain the boba and rinse under cold running water to stop the cooking and remove the starchy outer layer.",
+        "url": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/#wprm-recipe-7795-step-0-4"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Taste-test the tapioca pearls and test if they're fully cooked through. They should be soft and chewy, but not crumble when you eat it. Note that just because the centers may look opaque it doesn't mean it's raw. They can still be cooked fully, so you need to taste test to make sure they’re cooked.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Taste-test the tapioca pearls and test if they&#039;re fully cooked through. They should be soft and chewy, but not crumble when you eat it. Note that just because the centers may look opaque it doesn&#039;t mean it&#039;s raw. They can still be cooked fully, so you need to taste test to make sure they’re cooked.",
+        "name": "Taste-test the tapioca pearls and test if they&#039;re fully cooked through. They should be soft and chewy, but not crumble when you eat it. Note that just because the centers may look opaque it doesn&#039;t mean it&#039;s raw. They can still be cooked fully, so you need to taste test to make sure they’re cooked.",
+        "url": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/#wprm-recipe-7795-step-0-5"
+      }
+    },
+    {
+      "order": 7,
+      "text": "If the pearls are still not cooked throughout or have hard centers, repeat steps 2-6 with a new batch of water.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "If the pearls are still not cooked throughout or have hard centers, repeat steps 2-6 with a new batch of water.",
+        "name": "If the pearls are still not cooked throughout or have hard centers, repeat steps 2-6 with a new batch of water.",
+        "url": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/#wprm-recipe-7795-step-0-6"
+      }
+    },
+    {
+      "order": 8,
+      "text": "To sweeten your boba after they are finished cooking, add about two tablespoons of sugar or honey on top and let sit for an additional 10 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "To sweeten your boba after they are finished cooking, add about two tablespoons of sugar or honey on top and let sit for an additional 10 minutes.",
+        "name": "To sweeten your boba after they are finished cooking, add about two tablespoons of sugar or honey on top and let sit for an additional 10 minutes.",
+        "url": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/#wprm-recipe-7795-step-0-7"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "182.5 kcal",
+    "carbohydrateContent": "45.7 g",
+    "proteinContent": "0.1 g",
+    "fatContent": "0.1 g",
+    "sodiumContent": "59.6 mg",
+    "fiberContent": "0.3 g",
+    "sugarContent": "13.3 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://www.hungryhuy.com/wp-content/uploads/checking-doneness.jpg",
+      "https://www.hungryhuy.com/wp-content/uploads/checking-doneness-500x500.jpg",
+      "https://www.hungryhuy.com/wp-content/uploads/checking-doneness-500x375.jpg",
+      "https://www.hungryhuy.com/wp-content/uploads/checking-doneness-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "11",
+      "reviewCount": "5"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Can one freeze boba pearls that are cooked?",
+        "author": {
+          "@type": "Person",
+          "name": "K Lambert"
+        },
+        "datePublished": "2024-11-13"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thanks for this post! I wanted to try a recipe with boba and didn't know what brand to use as I have never made it at home. I just tried WuFuYuan brand and they were so fast and tasty :)",
+        "author": {
+          "@type": "Person",
+          "name": "HungryPinner"
+        },
+        "datePublished": "2023-07-15"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "stunning, exhaustive coverage of boba.\r\nyou even covered the 5 minute brands.\r\nif it wasn't for you i would have done the\r\n15/15 or 30/30 method...and ruined it.\r\ngreat website. it's nice to see EXCELLENCE.\r\nno response requested,\r\nroger",
+        "author": {
+          "@type": "Person",
+          "name": "roger mason"
+        },
+        "datePublished": "2022-04-03"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thanks so much for posting this recipe! I bought my husband a Boba tea kit for Christmas; the kit contained uncooked black tapioca pearls and no instructions on how to prepare them, so we used them raw and it was a gross disaster (the uncooked pearls fused into a chalky, undissolved mass at the bottom of the glass). The manufacturer didn't respond to my question about how to fix the pearls, so I Googled Boba pearls and found your page - your 30/30 method is perfect and resulted in tasty pearls in the tea. Thank you again!",
+        "author": {
+          "@type": "Person",
+          "name": "MMR"
+        },
+        "datePublished": "2021-01-09"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thanks a lot! The quick cooking method worked just right with the tapioca pearls my parents bought, unfortunately the instructions were not translated and I found your website and decided to try. Thanks for sharing!",
+        "author": {
+          "@type": "Person",
+          "name": "Katagiri"
+        },
+        "datePublished": "2020-11-07"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "30 & 30 Cooking Method for Brown Boba",
+    "author": {
+      "@id": "https://www.hungryhuy.com/#/schema/person/77ba703312129b3930232d1c829f0ff0"
+    },
+    "description": "This method works for tapioca pearls from Bossen &amp; Tea Zone and is not meant for &quot;quick cooking&quot; pearls. It can also work as a starting point for tapioca pearls that don’t come with instructions.",
+    "datePublished": "2020-04-02T18:01:54+00:00",
+    "image": [
+      "https://www.hungryhuy.com/wp-content/uploads/checking-doneness.jpg",
+      "https://www.hungryhuy.com/wp-content/uploads/checking-doneness-500x500.jpg",
+      "https://www.hungryhuy.com/wp-content/uploads/checking-doneness-500x375.jpg",
+      "https://www.hungryhuy.com/wp-content/uploads/checking-doneness-480x270.jpg"
+    ],
+    "recipeYield": [
+      "2"
+    ],
+    "prepTime": "PT1M",
+    "cookTime": "PT30M",
+    "totalTime": "PT61M",
+    "recipeIngredient": [
+      "1/2 c tapioca pearls",
+      "10 c filtered water",
+      "2 tbsp sugar or honey"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "In a large pot, add 10 cups of water and bring to a boil.",
+        "name": "In a large pot, add 10 cups of water and bring to a boil.",
+        "url": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/#wprm-recipe-7795-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "When it hits a rolling boil, add the tapioca pearls and wait for them to float to the top of the water. Once the boba is floating, lower to medium heat.",
+        "name": "When it hits a rolling boil, add the tapioca pearls and wait for them to float to the top of the water. Once the boba is floating, lower to medium heat.",
+        "url": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/#wprm-recipe-7795-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Continue to simmer for 30 minutes uncovered. Stir occasionally to prevent the pearls from sticking.",
+        "name": "Continue to simmer for 30 minutes uncovered. Stir occasionally to prevent the pearls from sticking.",
+        "url": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/#wprm-recipe-7795-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "After 30 minutes, remove the pot from the stove, cover with lid, and let rest another 30 minutes.",
+        "name": "After 30 minutes, remove the pot from the stove, cover with lid, and let rest another 30 minutes.",
+        "url": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/#wprm-recipe-7795-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Strain the boba and rinse under cold running water to stop the cooking and remove the starchy outer layer.",
+        "name": "Strain the boba and rinse under cold running water to stop the cooking and remove the starchy outer layer.",
+        "url": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/#wprm-recipe-7795-step-0-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Taste-test the tapioca pearls and test if they&#039;re fully cooked through. They should be soft and chewy, but not crumble when you eat it. Note that just because the centers may look opaque it doesn&#039;t mean it&#039;s raw. They can still be cooked fully, so you need to taste test to make sure they’re cooked.",
+        "name": "Taste-test the tapioca pearls and test if they&#039;re fully cooked through. They should be soft and chewy, but not crumble when you eat it. Note that just because the centers may look opaque it doesn&#039;t mean it&#039;s raw. They can still be cooked fully, so you need to taste test to make sure they’re cooked.",
+        "url": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/#wprm-recipe-7795-step-0-5"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "If the pearls are still not cooked throughout or have hard centers, repeat steps 2-6 with a new batch of water.",
+        "name": "If the pearls are still not cooked throughout or have hard centers, repeat steps 2-6 with a new batch of water.",
+        "url": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/#wprm-recipe-7795-step-0-6"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "To sweeten your boba after they are finished cooking, add about two tablespoons of sugar or honey on top and let sit for an additional 10 minutes.",
+        "name": "To sweeten your boba after they are finished cooking, add about two tablespoons of sugar or honey on top and let sit for an additional 10 minutes.",
+        "url": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/#wprm-recipe-7795-step-0-7"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "11",
+      "reviewCount": "5"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Can one freeze boba pearls that are cooked?",
+        "author": {
+          "@type": "Person",
+          "name": "K Lambert"
+        },
+        "datePublished": "2024-11-13"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thanks for this post! I wanted to try a recipe with boba and didn't know what brand to use as I have never made it at home. I just tried WuFuYuan brand and they were so fast and tasty :)",
+        "author": {
+          "@type": "Person",
+          "name": "HungryPinner"
+        },
+        "datePublished": "2023-07-15"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "stunning, exhaustive coverage of boba.\r\nyou even covered the 5 minute brands.\r\nif it wasn't for you i would have done the\r\n15/15 or 30/30 method...and ruined it.\r\ngreat website. it's nice to see EXCELLENCE.\r\nno response requested,\r\nroger",
+        "author": {
+          "@type": "Person",
+          "name": "roger mason"
+        },
+        "datePublished": "2022-04-03"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thanks so much for posting this recipe! I bought my husband a Boba tea kit for Christmas; the kit contained uncooked black tapioca pearls and no instructions on how to prepare them, so we used them raw and it was a gross disaster (the uncooked pearls fused into a chalky, undissolved mass at the bottom of the glass). The manufacturer didn't respond to my question about how to fix the pearls, so I Googled Boba pearls and found your page - your 30/30 method is perfect and resulted in tasty pearls in the tea. Thank you again!",
+        "author": {
+          "@type": "Person",
+          "name": "MMR"
+        },
+        "datePublished": "2021-01-09"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thanks a lot! The quick cooking method worked just right with the tapioca pearls my parents bought, unfortunately the instructions were not translated and I found your website and decided to try. Thanks for sharing!",
+        "author": {
+          "@type": "Person",
+          "name": "Katagiri"
+        },
+        "datePublished": "2020-11-07"
+      }
+    ],
+    "recipeCategory": [
+      "Dessert"
+    ],
+    "recipeCuisine": [
+      "Asian",
+      "Taiwanese"
+    ],
+    "keywords": "Boba, Tapioca pearls",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "182.5 kcal",
+      "carbohydrateContent": "45.7 g",
+      "proteinContent": "0.1 g",
+      "fatContent": "0.1 g",
+      "sodiumContent": "59.6 mg",
+      "fiberContent": "0.3 g",
+      "sugarContent": "13.3 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/#recipe",
+    "isPartOf": {
+      "@id": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/#article"
+    },
+    "mainEntityOfPage": "https://www.hungryhuy.com/how-to-cook-tapioca-pearls/"
+  },
+  "audit": [
+    "unmapped:aggregateRating|review"
+  ]
+}

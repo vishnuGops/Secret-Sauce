@@ -1,0 +1,466 @@
+{
+  "schemaVersion": 1,
+  "id": "chef-lola/banana-muffins",
+  "slug": "banana-muffins",
+  "chefId": "chef_chef-lola",
+  "chefSlug": "chef-lola",
+  "chefName": "Chef Lola",
+  "title": "Banana Muffins",
+  "description": "Nothing beats the smell of fresh banana bread in the oven. These tasty little banana muffins are so easy to make and will fast become a breakfast favorite. You can also make a double batch and freeze for later.",
+  "source": {
+    "sourceUrl": "https://cheflolaskitchen.com/easy-moist-banana-muffins-recipe/",
+    "finalUrl": "https://cheflolaskitchen.com/easy-moist-banana-muffins-recipe/",
+    "retrievedAt": "2026-09-11T02:47:11.343Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2020-05-09T01:00:43+00:00",
+    "rights": "Chef Lola's Kitchen. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "56237ba524abebec52b92ecc78e051ffa2ca5c1b8ba6fd389fae2756dee3de3a",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "allows recipe paths; /wp-admin/, /wp-json/ and query URLs disallowed"
+  },
+  "yield": {
+    "raw": [
+      "12",
+      "12 Muffins"
+    ],
+    "servings": 12
+  },
+  "timing": {
+    "prepMinutes": 10,
+    "cookMinutes": 20,
+    "totalMinutes": 30,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "American"
+  ],
+  "category": [
+    "Breakfast",
+    "Brunch",
+    "Snack"
+  ],
+  "keywords": [
+    "banana muffins",
+    "muffins"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1½ cups all-purpose flour",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ cups all-purpose flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ teaspoon baking powder",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "baking powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 teaspoon salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 teaspoon salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 bananas (large, mashed)",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "bananas (large, mashed)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3/4 cup white sugar (use 1 cup if you have a sweet tooth)",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "/4 cup white sugar (use 1 cup if you have a sweet tooth)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 egg",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "egg",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp Vanilla extract",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "Vanilla extract",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 tbsp butter (melted)",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "butter (melted)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 350 degrees F. Spray the muffin pans with a non-stick spray or use paper liners.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 350 degrees F. Spray the muffin pans with a non-stick spray or use paper liners.",
+        "name": "Preheat the oven to 350 degrees F. Spray the muffin pans with a non-stick spray or use paper liners.",
+        "url": "https://cheflolaskitchen.com/easy-moist-banana-muffins-recipe/#wprm-recipe-13987-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Whisk together the flour, baking powder, and salt in a large bowl. Set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Whisk together the flour, baking powder, and salt in a large bowl. Set aside.",
+        "name": "Whisk together the flour, baking powder, and salt in a large bowl. Set aside.",
+        "url": "https://cheflolaskitchen.com/easy-moist-banana-muffins-recipe/#wprm-recipe-13987-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Mash the bananas, add the egg, melted butter, sugar, egg, and sugar in another bowl.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Mash the bananas, add the egg, melted butter, sugar, egg, and sugar in another bowl.",
+        "name": "Mash the bananas, add the egg, melted butter, sugar, egg, and sugar in another bowl.",
+        "url": "https://cheflolaskitchen.com/easy-moist-banana-muffins-recipe/#wprm-recipe-13987-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Create a well in the center of the dry ingredients, add the wet ingredients, and fold until just combined.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Create a well in the center of the dry ingredients, add the wet ingredients, and fold until just combined.",
+        "name": "Create a well in the center of the dry ingredients, add the wet ingredients, and fold until just combined.",
+        "url": "https://cheflolaskitchen.com/easy-moist-banana-muffins-recipe/#wprm-recipe-13987-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Scoop the batter into the muffin pan.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Scoop the batter into the muffin pan.",
+        "name": "Scoop the batter into the muffin pan.",
+        "url": "https://cheflolaskitchen.com/easy-moist-banana-muffins-recipe/#wprm-recipe-13987-step-0-4"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Bake for 20 to 25 minutes or till the muffins spring back when lightly tapped.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Bake for 20 to 25 minutes or till the muffins spring back when lightly tapped.",
+        "name": "Bake for 20 to 25 minutes or till the muffins spring back when lightly tapped.",
+        "url": "https://cheflolaskitchen.com/easy-moist-banana-muffins-recipe/#wprm-recipe-13987-step-0-5"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "171.1 kcal",
+    "carbohydrateContent": "31.2 g",
+    "proteinContent": "2.4 g",
+    "fatContent": "4.4 g",
+    "saturatedFatContent": "2.6 g",
+    "transFatContent": "0.2 g",
+    "cholesterolContent": "23.7 mg",
+    "sodiumContent": "133 mg",
+    "fiberContent": "1.2 g",
+    "sugarContent": "16.2 g",
+    "unsaturatedFatContent": "1.4 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Banana-Muffins.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Banana-Muffins-500x500.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Banana-Muffins-500x375.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Banana-Muffins-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.86",
+      "ratingCount": "7",
+      "reviewCount": "3"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thank you for this recipe",
+        "author": {
+          "@type": "Person",
+          "name": "Bliss"
+        },
+        "datePublished": "2021-09-20"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thank you so much Lola, I have tried out a couple of your recipes for pastries, comes out well all the time. Will try this soon, meanwhile thank you for sharing your recipes, there is always something to nibble on in the fridge.",
+        "author": {
+          "@type": "Person",
+          "name": "Sarah"
+        },
+        "datePublished": "2020-06-19"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4"
+        },
+        "reviewBody": "Greetings, Lola,\r\nMy son LOVES the banana muffins especially with grape jelly.  Because he is gluten intolerant I used gluten free flour.  They still came out moist.  I give the recipe 4-stars because I used 3/4 of a cup of sugar and I thought it was too sweet.   Other than that it is an excellent recipe!",
+        "author": {
+          "@type": "Person",
+          "name": "Joan"
+        },
+        "datePublished": "2020-06-19"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Banana Muffins",
+    "author": {
+      "@id": "https://cheflolaskitchen.com/#/schema/person/210ab4ab02cd92f770d27cf2a114f9a5"
+    },
+    "description": "Nothing beats the smell of fresh banana bread in the oven. These tasty little banana muffins are so easy to make and will fast become a breakfast favorite. You can also make a double batch and freeze for later.",
+    "datePublished": "2020-05-09T01:00:43+00:00",
+    "image": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Banana-Muffins.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Banana-Muffins-500x500.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Banana-Muffins-500x375.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2025/07/Banana-Muffins-480x270.jpg"
+    ],
+    "recipeYield": [
+      "12",
+      "12 Muffins"
+    ],
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "totalTime": "PT30M",
+    "recipeIngredient": [
+      "1½ cups all-purpose flour",
+      "½ teaspoon baking powder",
+      "1/2 teaspoon salt",
+      "3   bananas (large, mashed)",
+      "3/4 cup white sugar (use 1 cup if you have a sweet tooth)",
+      "1  egg",
+      "1 tsp Vanilla extract",
+      "4 tbsp butter (melted)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 350 degrees F. Spray the muffin pans with a non-stick spray or use paper liners.",
+        "name": "Preheat the oven to 350 degrees F. Spray the muffin pans with a non-stick spray or use paper liners.",
+        "url": "https://cheflolaskitchen.com/easy-moist-banana-muffins-recipe/#wprm-recipe-13987-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Whisk together the flour, baking powder, and salt in a large bowl. Set aside.",
+        "name": "Whisk together the flour, baking powder, and salt in a large bowl. Set aside.",
+        "url": "https://cheflolaskitchen.com/easy-moist-banana-muffins-recipe/#wprm-recipe-13987-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Mash the bananas, add the egg, melted butter, sugar, egg, and sugar in another bowl.",
+        "name": "Mash the bananas, add the egg, melted butter, sugar, egg, and sugar in another bowl.",
+        "url": "https://cheflolaskitchen.com/easy-moist-banana-muffins-recipe/#wprm-recipe-13987-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Create a well in the center of the dry ingredients, add the wet ingredients, and fold until just combined.",
+        "name": "Create a well in the center of the dry ingredients, add the wet ingredients, and fold until just combined.",
+        "url": "https://cheflolaskitchen.com/easy-moist-banana-muffins-recipe/#wprm-recipe-13987-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Scoop the batter into the muffin pan.",
+        "name": "Scoop the batter into the muffin pan.",
+        "url": "https://cheflolaskitchen.com/easy-moist-banana-muffins-recipe/#wprm-recipe-13987-step-0-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Bake for 20 to 25 minutes or till the muffins spring back when lightly tapped.",
+        "name": "Bake for 20 to 25 minutes or till the muffins spring back when lightly tapped.",
+        "url": "https://cheflolaskitchen.com/easy-moist-banana-muffins-recipe/#wprm-recipe-13987-step-0-5"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.86",
+      "ratingCount": "7",
+      "reviewCount": "3"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thank you for this recipe",
+        "author": {
+          "@type": "Person",
+          "name": "Bliss"
+        },
+        "datePublished": "2021-09-20"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thank you so much Lola, I have tried out a couple of your recipes for pastries, comes out well all the time. Will try this soon, meanwhile thank you for sharing your recipes, there is always something to nibble on in the fridge.",
+        "author": {
+          "@type": "Person",
+          "name": "Sarah"
+        },
+        "datePublished": "2020-06-19"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4"
+        },
+        "reviewBody": "Greetings, Lola,\r\nMy son LOVES the banana muffins especially with grape jelly.  Because he is gluten intolerant I used gluten free flour.  They still came out moist.  I give the recipe 4-stars because I used 3/4 of a cup of sugar and I thought it was too sweet.   Other than that it is an excellent recipe!",
+        "author": {
+          "@type": "Person",
+          "name": "Joan"
+        },
+        "datePublished": "2020-06-19"
+      }
+    ],
+    "recipeCategory": [
+      "Breakfast",
+      "Brunch",
+      "Snack"
+    ],
+    "recipeCuisine": [
+      "American"
+    ],
+    "keywords": "banana muffins, muffins",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "171.1 kcal",
+      "carbohydrateContent": "31.2 g",
+      "proteinContent": "2.4 g",
+      "fatContent": "4.4 g",
+      "saturatedFatContent": "2.6 g",
+      "transFatContent": "0.2 g",
+      "cholesterolContent": "23.7 mg",
+      "sodiumContent": "133 mg",
+      "fiberContent": "1.2 g",
+      "sugarContent": "16.2 g",
+      "unsaturatedFatContent": "1.4 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://cheflolaskitchen.com/easy-moist-banana-muffins-recipe/#recipe",
+    "isPartOf": {
+      "@id": "https://cheflolaskitchen.com/easy-moist-banana-muffins-recipe/#article"
+    },
+    "mainEntityOfPage": "https://cheflolaskitchen.com/easy-moist-banana-muffins-recipe/"
+  },
+  "audit": [
+    "unmapped:aggregateRating|review"
+  ]
+}

@@ -1,0 +1,324 @@
+{
+  "schemaVersion": 1,
+  "id": "mary-berry/tiramisu-piccoli",
+  "slug": "tiramisu-piccoli",
+  "chefId": "chef_mary-berry",
+  "chefSlug": "mary-berry",
+  "chefName": "Mary Berry",
+  "title": "Tiramisù piccoli",
+  "description": "Mary Berry makes her tiramisù as individual puddings because they set more quickly (piccolo means ‘small’ in Italian), but you could make this in a large 1.2 litre/2 pint dish if you prefer.\n\nFor this recipe you will need 4–6 small tumblers.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/piccoli_tiramisu_63211",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/piccoli_tiramisu_63211",
+    "retrievedAt": "2026-09-11T00:27:39.070Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Mary Berry"
+    ],
+    "datePublished": "2019-03-11T14:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "b133b96cb1558ba7a8e3ff930dbec28d95dd6beaf0c7444567de192283b4842b",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4–6"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 120,
+    "cookMinutes": null,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Italian"
+  ],
+  "category": [
+    "Desserts"
+  ],
+  "keywords": [
+    "coffee lovers'",
+    "easy pudding",
+    "boozy puddings",
+    "camping",
+    "easy christmas dessert ideas",
+    "cosy nye",
+    "desserts with a difference",
+    "easiest christmas desserts",
+    "easy dessert",
+    "easy festive desserts",
+    "no-cook dessert",
+    "italian-inspired desserts",
+    "mary’s twists on the classics",
+    "mary berry's roast dinners",
+    "no-cook christmas",
+    "quick desserts",
+    "shortcut christmas",
+    "valentine's day baking",
+    "dinner party",
+    "party food",
+    "summer party",
+    "winter",
+    "tiramisu",
+    "mascarpone",
+    "nut free",
+    "vegetarian",
+    "Mary Berry’s Quick Cooking"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "250g/9oz full-fat mascarpone cheese",
+          "quantity": 250,
+          "quantityText": "250",
+          "unit": "g",
+          "name": "/9oz full-fat mascarpone cheese",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "300ml/½ pint double cream",
+          "quantity": 300,
+          "quantityText": "300",
+          "unit": "ml",
+          "name": "/½ pint double cream",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp vanilla extract",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "vanilla extract",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 tbsp icing sugar, sifted",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "icing sugar, sifted",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "125ml/4fl oz strong coffee, cooled",
+          "quantity": 125,
+          "quantityText": "125",
+          "unit": "ml",
+          "name": "/4fl oz strong coffee, cooled",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 tbsp brandy",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": "tbsp",
+          "name": "brandy",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "12 sponge fingers",
+          "quantity": 12,
+          "quantityText": "12",
+          "unit": null,
+          "name": "sponge fingers",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz dark chocolate, coarsely grated",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz dark chocolate",
+          "note": "coarsely grated",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Measure the mascarpone and about 50ml/2fl oz of the cream into a large bowl and whisk until smooth. Slowly add the remaining cream and whisk again until soft peaks form when the whisk is removed from the bowl, being careful not to over-mix or it will be too thick.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Measure the mascarpone and about 50ml/2fl oz of the cream into a large bowl and whisk until smooth. Slowly add the remaining cream and whisk again until soft peaks form when the whisk is removed from the bowl, being careful not to over-mix or it will be too thick. "
+    },
+    {
+      "order": 2,
+      "text": "Fold in the vanilla extract and icing sugar.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Fold in the vanilla extract and icing sugar. "
+    },
+    {
+      "order": 3,
+      "text": "Meanwhile, in a separate bowl, combine the coffee and brandy.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, in a separate bowl, combine the coffee and brandy. "
+    },
+    {
+      "order": 4,
+      "text": "Break six of the sponge fingers in half and dip into the coffee and brandy mixture. Arrange the soaked sponge fingers in the base of the tumblers. Spoon half of the cream mixture on top and half of the grated chocolate.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Break six of the sponge fingers in half and dip into the coffee and brandy mixture. Arrange the soaked sponge fingers in the base of the tumblers. Spoon half of the cream mixture on top and half of the grated chocolate. "
+    },
+    {
+      "order": 5,
+      "text": "Break the remaining sponge fingers and soak in the coffee and brandy. Place on the cream layer, then spoon the remaining cream mixture on top, levelling neatly.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Break the remaining sponge fingers and soak in the coffee and brandy. Place on the cream layer, then spoon the remaining cream mixture on top, levelling neatly. "
+    },
+    {
+      "order": 6,
+      "text": "Chill for a few hours, if possible, then sprinkle with the remaining chocolate before serving at room temperature.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Chill for a few hours, if possible, then sprinkle with the remaining chocolate before serving at room temperature."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/piccoli_tiramisu_63211_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "If you can’t find sponge fingers, use trifle sponges or slices of sponge cake instead, though they are less robust once dipped, so take care when assembling. Give the sponge fingers a really good dunking in the coffee and brandy – you want them to absorb all the flavour and add moisture to the dish."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 23,
+      "ratingValue": 4.217391304347826
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Mary Berry makes her tiramisù as individual puddings because they set more quickly (piccolo means ‘small’ in Italian), but you could make this in a large 1.2 litre/2 pint dish if you prefer.\r\n\r\nFor this recipe you will need 4–6 small tumblers. \r\n",
+    "headline": "Tiramisù piccoli ",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/piccoli_tiramisu_63211_16x9.jpg"
+    },
+    "name": "Tiramisù piccoli ",
+    "author": {
+      "@type": "Person",
+      "name": "Mary Berry"
+    },
+    "datePublished": "2019-03-11T14:00:00.000Z",
+    "dateModified": "2026-08-05T13:40:58.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 23,
+      "ratingValue": 4.217391304347826
+    },
+    "prepTime": "PT2H",
+    "cookTime": "PT0H0M0S",
+    "keywords": "coffee lovers', easy pudding, boozy puddings, camping, easy christmas dessert ideas, cosy nye, desserts with a difference, easiest christmas desserts, easy dessert, easy festive desserts, no-cook dessert, italian-inspired desserts, mary’s twists on the classics, mary berry's roast dinners, no-cook christmas, quick desserts, shortcut christmas, valentine's day baking, dinner party, party food, summer party, winter, tiramisu, mascarpone, nut free, vegetarian, Mary Berry’s Quick Cooking",
+    "recipeCategory": "Desserts",
+    "recipeCuisine": "Italian",
+    "recipeIngredient": [
+      "250g/9oz full-fat mascarpone cheese",
+      "300ml/½ pint double cream ",
+      "2 tsp vanilla extract ",
+      "4 tbsp icing sugar, sifted",
+      "125ml/4fl oz strong coffee, cooled ",
+      "6 tbsp brandy",
+      "12 sponge fingers ",
+      "50g/1¾oz dark chocolate, coarsely grated "
+    ],
+    "recipeInstructions": [
+      "Measure the mascarpone and about 50ml/2fl oz of the cream into a large bowl and whisk until smooth. Slowly add the remaining cream and whisk again until soft peaks form when the whisk is removed from the bowl, being careful not to over-mix or it will be too thick. ",
+      "Fold in the vanilla extract and icing sugar. ",
+      "Meanwhile, in a separate bowl, combine the coffee and brandy. ",
+      "Break six of the sponge fingers in half and dip into the coffee and brandy mixture. Arrange the soaked sponge fingers in the base of the tumblers. Spoon half of the cream mixture on top and half of the grated chocolate. ",
+      "Break the remaining sponge fingers and soak in the coffee and brandy. Place on the cream layer, then spoon the remaining cream mixture on top, levelling neatly. ",
+      "Chill for a few hours, if possible, then sprinkle with the remaining chocolate before serving at room temperature."
+    ],
+    "recipeYield": "Serves 4–6",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "no-cook-time",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

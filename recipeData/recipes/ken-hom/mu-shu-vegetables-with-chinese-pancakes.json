@@ -1,0 +1,314 @@
+{
+  "schemaVersion": 1,
+  "id": "ken-hom/mu-shu-vegetables-with-chinese-pancakes",
+  "slug": "mu-shu-vegetables-with-chinese-pancakes",
+  "chefId": "chef_ken-hom",
+  "chefSlug": "ken-hom",
+  "chefName": "Ken Hom",
+  "title": "Mu shu vegetables with Chinese pancakes",
+  "description": "A delicious mu shu vegetable dish served with hoisin sauce and Chinese pancakes.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/vegetarian_mu_shu_with_84810",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/vegetarian_mu_shu_with_84810",
+    "retrievedAt": "2026-09-11T00:27:06.659Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Ken Hom"
+    ],
+    "datePublished": "2022-05-21T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "ca683f92e84ab21f3c836a0436ed75ebe427b7d44ef3938d7e4344e1b88ff203",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "spring onion",
+    "pepper",
+    "chinese pancake",
+    "dairy free",
+    "egg free",
+    "vegan",
+    "vegetarian",
+    "Saturday Kitchen"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1½ tbsp groundnut or vegetable oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tbsp groundnut or vegetable oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp spring onions, finely chopped",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "spring onions",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp banana shallots, finely chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "banana shallots",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz red pepper, diced",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz red pepper",
+          "note": "diced",
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz carrot, diced",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz carrot",
+          "note": "diced",
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz courgette, diced",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz courgette",
+          "note": "diced",
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz green peas, thawed if frozen",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz green peas, thawed if frozen",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp Shaoxing rice wine or dry sherry",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "Shaoxing rice wine or dry sherry",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1½ tbsp light soy sauce",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tbsp light soy sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp freshly ground black pepper",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp sesame oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "sesame oil",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To serve",
+      "items": [
+        {
+          "raw": "Chinese pancakes",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Chinese pancakes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "hoisin sauce, for dipping",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "hoisin sauce, for dipping",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Steam the pancakes for a few minutes or heat in the microwave and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Steam the pancakes for a few minutes or heat in the microwave and set aside."
+    },
+    {
+      "order": 2,
+      "text": "Heat a wok or large frying-pan over a high heat until it is hot. Add the oil, and when it is very hot and slightly smoking, add the spring onions and shallots and stir-fry for about 30 seconds. Add all the remaining vegetables and stir-fry for 4 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat a wok or large frying-pan over a high heat until it is hot. Add the oil, and when it is very hot and slightly smoking, add the spring onions and shallots and stir-fry for about 30 seconds. Add all the remaining vegetables and stir-fry for 4 minutes."
+    },
+    {
+      "order": 3,
+      "text": "Add the rice wine, soy sauce, salt and pepper. Give the mixture a few stirs and then add the sesame oil. Serve at once with the warmed pancakes and hoisin sauce.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the rice wine, soy sauce, salt and pepper. Give the mixture a few stirs and then add the sesame oil. Serve at once with the warmed pancakes and hoisin sauce."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/VeganDiet",
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "A delicious mu shu vegetable dish served with hoisin sauce and Chinese pancakes.",
+    "headline": "Mu shu vegetables with Chinese pancakes",
+    "image": null,
+    "name": "Mu shu vegetables with Chinese pancakes",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Hom"
+    },
+    "datePublished": "2022-05-21T00:00:00.000Z",
+    "dateModified": "2022-05-20T14:34:42.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, spring onion, pepper, chinese pancake, dairy free, egg free, vegan, vegetarian, Saturday Kitchen",
+    "recipeCategory": "Main course",
+    "recipeIngredient": [
+      "1½ tbsp groundnut or vegetable oil",
+      "3 tbsp spring onions, finely chopped",
+      "2 tbsp banana shallots, finely chopped",
+      "50g/1¾oz red pepper, diced",
+      "50g/1¾oz carrot, diced",
+      "100g/3½oz courgette, diced ",
+      "50g/1¾oz green peas, thawed if frozen",
+      "1 tbsp Shaoxing rice wine or dry sherry",
+      "1½ tbsp light soy sauce",
+      "1 tsp salt",
+      "½ tsp freshly ground black pepper",
+      "2 tsp sesame oil",
+      "Chinese pancakes  ",
+      "hoisin sauce, for dipping"
+    ],
+    "recipeInstructions": [
+      "Steam the pancakes for a few minutes or heat in the microwave and set aside.",
+      "Heat a wok or large frying-pan over a high heat until it is hot. Add the oil, and when it is very hot and slightly smoking, add the spring onions and shallots and stir-fry for about 30 seconds. Add all the remaining vegetables and stir-fry for 4 minutes.",
+      "Add the rice wine, soy sauce, salt and pepper. Give the mixture a few stirs and then add the sesame oil. Serve at once with the warmed pancakes and hoisin sauce."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/VeganDiet",
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:suitableForDiet"
+  ]
+}

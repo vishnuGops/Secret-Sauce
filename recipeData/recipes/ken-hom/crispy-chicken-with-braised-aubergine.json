@@ -1,0 +1,502 @@
+{
+  "schemaVersion": 1,
+  "id": "ken-hom/crispy-chicken-with-braised-aubergine",
+  "slug": "crispy-chicken-with-braised-aubergine",
+  "chefId": "chef_ken-hom",
+  "chefSlug": "ken-hom",
+  "chefName": "Ken Hom",
+  "title": "Crispy chicken with braised aubergine",
+  "description": "This traditional Chinese chicken with braised aubergine is deliciously crunchy and sticky. Serve with plain fragrant rice for a bigger dinner.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/crispy_chicken_with_70782",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/crispy_chicken_with_70782",
+    "retrievedAt": "2026-09-11T00:27:05.110Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Ken Hom"
+    ],
+    "datePublished": "2018-10-06T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "0703f222ef431fd93a3f57d5a2956492e4c175ab0d9fee3af81f8f42516c5077",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 120,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Chinese"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "authentic chinese",
+    "chinese-style dinner party",
+    "simple dinners for get-togethers",
+    "lunar new year",
+    "chicken casserole",
+    "chicken thigh",
+    "dairy free",
+    "egg free",
+    "pregnancy friendly",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the crispy chicken",
+      "items": [
+        {
+          "raw": "675g/1lb 8oz boneless, skinless chicken thighs",
+          "quantity": 675,
+          "quantityText": "675",
+          "unit": "g",
+          "name": "/1lb 8oz boneless, skinless chicken thighs",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp Shaoxing rice wine or dry sherry",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "Shaoxing rice wine or dry sherry",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp light soy sauce",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "light soy sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp dark soy sauce",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "dark soy sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "5 spring onions, roughly chopped",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": null,
+          "name": "spring onions",
+          "note": "roughly chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2 slices fresh ginger",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "slices",
+          "name": "fresh ginger",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp honey",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "honey",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp Chinese five-spice powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "Chinese five-spice powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground Sichuan peppercorn",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground Sichuan peppercorn",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp freshly ground black pepper",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp sesame oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "sesame oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp sugar",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "sugar",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the aubergine",
+      "items": [
+        {
+          "raw": "1½ tbsp groundnut or vegetable oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tbsp groundnut or vegetable oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp finely chopped garlic",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "finely chopped garlic",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1½ tbsp finely chopped fresh ginger",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tbsp finely chopped fresh ginger",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp finely chopped spring onions",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "finely chopped spring onions",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "450g/1lb aubergines, cut into 2.5-cm/1-in cubes",
+          "quantity": 450,
+          "quantityText": "450",
+          "unit": "g",
+          "name": "/1lb aubergines, cut into 2.5-cm/1-in cubes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp dark soy sauce",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "dark soy sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp chilli bean sauce",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "chilli bean sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp whole yellow bean sauce",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "whole yellow bean sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp caster sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "caster sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp Chinese black vinegar or cider vinegar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "Chinese black vinegar or cider vinegar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp ground Sichuan peppercorns",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "ground Sichuan peppercorns",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "300ml/10fl oz chicken stock or water",
+          "quantity": 300,
+          "quantityText": "300",
+          "unit": "ml",
+          "name": "/10fl oz chicken stock or water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp chopped green spring onion tops, to garnish",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "chopped green spring onion tops",
+          "note": "to garnish",
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To serve",
+      "items": [
+        {
+          "raw": "freshly steamed fragrant rice",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "freshly steamed fragrant rice",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the crispy chicken, lightly pound the thighs until they are evenly flat and place in a bowl.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the crispy chicken, lightly pound the thighs until they are evenly flat and place in a bowl."
+    },
+    {
+      "order": 2,
+      "text": "Blend the rice wine, soy sauces, 3 spring onions and ginger until smooth. Pour into the bowl with the chicken. Stir in the honey, five-spice, peppercorns, black pepper, and salt. Leave to marinate for 45 minutes. Remove the chicken from the bowl and reserve the marinade.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Blend the rice wine, soy sauces, 3 spring onions and ginger until smooth. Pour into the bowl with the chicken. Stir in the honey, five-spice, peppercorns, black pepper, and salt. Leave to marinate for 45 minutes. Remove the chicken from the bowl and reserve the marinade."
+    },
+    {
+      "order": 3,
+      "text": "Put the oil into a non-stick wok over a high heat until hot. Add the chicken thighs and cook on both sides side until dark, crispy and cooked through. This should take about 10 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put the oil into a non-stick wok over a high heat until hot. Add the chicken thighs and cook on both sides side until dark, crispy and cooked through. This should take about 10 minutes. "
+    },
+    {
+      "order": 4,
+      "text": "To make the braised aubergine, heat a wok or large frying pan over high heat until hot. Add the oil and when slightly smoking, add the garlic, ginger and spring onions and stir-fry for 30 seconds. Add the aubergines and continue to stir-fry for 1 minute. Add the soy sauce, bean sauces, caster sugar, vinegar, peppercorns and stock. Turn the heat down and cook uncovered for 10–15 minutes until the aubergine is tender, stirring occasionally. Bring to the boil until the liquid has been reduced and has thickened slightly. Place aon a serving plate, scatter over the spring onions and keep warm.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the braised aubergine, heat a wok or large frying pan over high heat until hot. Add the oil and when slightly smoking, add the garlic, ginger and spring onions and stir-fry for 30 seconds. Add the aubergines and continue to stir-fry for 1 minute. Add the soy sauce, bean sauces, caster sugar, vinegar, peppercorns and stock. Turn the heat down and cook uncovered for 10–15 minutes until the aubergine is tender, stirring occasionally. Bring to the boil until the liquid has been reduced and has thickened slightly. Place aon a serving plate, scatter over the spring onions and keep warm."
+    },
+    {
+      "order": 5,
+      "text": "Place a wok over a medium heat, add the reserved chicken marinade, sesame oil, spring onions and sugar, bring to the boil. Slice the chicken at an angle and arrange on a platter. Pour over the marinade and serve the dishes with the rice, if using.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place a wok over a medium heat, add the reserved chicken marinade, sesame oil, spring onions and sugar, bring to the boil. Slice the chicken at an angle and arrange on a platter. Pour over the marinade and serve the dishes with the rice, if using."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/crispy_chicken_with_70782_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 9,
+      "ratingValue": 4.888888888888889
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "This traditional Chinese chicken with braised aubergine is deliciously crunchy and sticky. Serve with plain fragrant rice for a bigger dinner. ",
+    "headline": "Crispy chicken with braised aubergine",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/crispy_chicken_with_70782_16x9.jpg"
+    },
+    "name": "Crispy chicken with braised aubergine",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Hom"
+    },
+    "datePublished": "2018-10-06T00:00:00.000Z",
+    "dateModified": "2023-10-20T14:12:39.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 9,
+      "ratingValue": 4.888888888888889
+    },
+    "prepTime": "PT2H",
+    "cookTime": "PT30M",
+    "keywords": "authentic chinese, chinese-style dinner party, simple dinners for get-togethers, lunar new year, chicken casserole, chicken thigh, dairy free, egg free, pregnancy friendly, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Chinese",
+    "recipeIngredient": [
+      "675g/1lb 8oz boneless, skinless chicken thighs",
+      "3 tbsp Shaoxing rice wine or dry sherry ",
+      "1 tbsp light soy sauce",
+      "2 tsp dark soy sauce",
+      "5 spring onions, roughly chopped",
+      "2 slices fresh ginger",
+      "1 tbsp honey",
+      "1 tsp Chinese five-spice powder",
+      "1 tsp ground Sichuan peppercorn",
+      "1 tsp salt",
+      "½ tsp freshly ground black pepper",
+      "2 tbsp oil",
+      "2 tsp sesame oil",
+      "2 tsp sugar",
+      "1½ tbsp groundnut or vegetable oil",
+      "2 tbsp finely chopped garlic",
+      "1½ tbsp finely chopped fresh ginger",
+      "3 tbsp finely chopped spring onions",
+      "450g/1lb aubergines, cut into 2.5-cm/1-in cubes",
+      "2 tbsp dark soy sauce",
+      "1 tbsp chilli bean sauce ",
+      "1 tbsp whole yellow bean sauce",
+      "1 tbsp caster sugar",
+      "1 tbsp Chinese black vinegar or cider vinegar",
+      "2 tsp ground Sichuan peppercorns",
+      "300ml/10fl oz chicken stock or water",
+      "2 tbsp chopped green spring onion tops, to garnish",
+      "freshly steamed fragrant rice"
+    ],
+    "recipeInstructions": [
+      "To make the crispy chicken, lightly pound the thighs until they are evenly flat and place in a bowl.",
+      "Blend the rice wine, soy sauces, 3 spring onions and ginger until smooth. Pour into the bowl with the chicken. Stir in the honey, five-spice, peppercorns, black pepper, and salt. Leave to marinate for 45 minutes. Remove the chicken from the bowl and reserve the marinade.",
+      "Put the oil into a non-stick wok over a high heat until hot. Add the chicken thighs and cook on both sides side until dark, crispy and cooked through. This should take about 10 minutes. ",
+      "To make the braised aubergine, heat a wok or large frying pan over high heat until hot. Add the oil and when slightly smoking, add the garlic, ginger and spring onions and stir-fry for 30 seconds. Add the aubergines and continue to stir-fry for 1 minute. Add the soy sauce, bean sauces, caster sugar, vinegar, peppercorns and stock. Turn the heat down and cook uncovered for 10–15 minutes until the aubergine is tender, stirring occasionally. Bring to the boil until the liquid has been reduced and has thickened slightly. Place aon a serving plate, scatter over the spring onions and keep warm.",
+      "Place a wok over a medium heat, add the reserved chicken marinade, sesame oil, spring onions and sugar, bring to the boil. Slice the chicken at an angle and arrange on a platter. Pour over the marinade and serve the dishes with the rice, if using."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

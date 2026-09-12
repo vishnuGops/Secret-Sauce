@@ -1,0 +1,598 @@
+{
+  "schemaVersion": 1,
+  "id": "atul-kochhar/monkfish-curry",
+  "slug": "monkfish-curry",
+  "chefId": "chef_atul-kochhar",
+  "chefSlug": "atul-kochhar",
+  "chefName": "Atul Kochhar",
+  "title": "Monkfish curry",
+  "description": "Spice up your life with this wonderful fish supper which marinates monkfish tail in a flavourful rub. The monkfish is served with a rich coconut sauce and spicy vegetables.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/monkfish_curry_96937",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/monkfish_curry_96937",
+    "retrievedAt": "2026-09-11T00:28:03.769Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Atul Kochhar"
+    ],
+    "datePublished": "2020-01-18T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "76b762f43b224666b8a5881ff011ad9452104be96ffc39c4ea800e160bc31141",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 5 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 2"
+    ],
+    "servings": 2
+  },
+  "timing": {
+    "prepMinutes": 60,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Indian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "dinner party",
+    "diwali",
+    "eid al-fitr",
+    "curry",
+    "monkfish",
+    "pregnancy friendly",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the marinade",
+      "items": [
+        {
+          "raw": "2 tsp mild red chilli powder",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "mild red chilli powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground turmeric",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground turmeric",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tbsp ginger and garlic paste",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tbsp",
+          "name": "ginger and garlic paste",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp Kasundi mustard sauce or wholegrain mustard",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "Kasundi mustard sauce or wholegrain mustard",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp finely chopped green chilli",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "finely chopped green chilli",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp chickpea flour",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "chickpea flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp lemon juice",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "lemon juice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp rapeseed oil, plus extra for basting if needed",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "rapeseed oil, plus extra for basting if needed",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the monkfish curry",
+      "items": [
+        {
+          "raw": "2 x 250g/9oz pieces monkfish tails, trimmed",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "x 250g/9oz pieces monkfish tails",
+          "note": "trimmed",
+          "isOptional": false
+        },
+        {
+          "raw": "½ lemon, juice only",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "lemon, juice only",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the malai kory sauce",
+      "items": [
+        {
+          "raw": "3 tbsp rapeseed oil",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "rapeseed oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 black cardamom pod",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "black cardamom pod",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 green cardamom pods",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "green cardamom pods",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 bay leaf",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "bay leaf",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 green chilli, split",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "green chilli, split",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 onions, roughly chopped, fried in vegetable oil and blended into a paste",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "onions",
+          "note": "roughly chopped, fried in vegetable oil and blended into a paste",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ginger and garlic paste",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ginger and garlic paste",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp Kasundi mustard sauce or wholegrain mustard",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "Kasundi mustard sauce or wholegrain mustard",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp ground coriander",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "ground coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp red chilli powder",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "red chilli powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100ml/3½fl oz fish stock",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "ml",
+          "name": "/3½fl oz fish stock",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "200ml/7fl oz coconut milk",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "ml",
+          "name": "/7fl oz coconut milk",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ tsp green cardamom powder",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "tsp",
+          "name": "green cardamom powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the mushrooms and beans",
+      "items": [
+        {
+          "raw": "1 tbsp rapeseed oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "rapeseed oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp mustard seeds",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "mustard seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp cumin seeds",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "cumin seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "10g fresh root ginger, peeled and julienned",
+          "quantity": 10,
+          "quantityText": "10",
+          "unit": "g",
+          "name": "fresh root ginger",
+          "note": "peeled and julienned",
+          "isOptional": false
+        },
+        {
+          "raw": "10g fresh root turmeric, peeled and julienned",
+          "quantity": 10,
+          "quantityText": "10",
+          "unit": "g",
+          "name": "fresh root turmeric",
+          "note": "peeled and julienned",
+          "isOptional": false
+        },
+        {
+          "raw": "1 green chilli, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "green chilli",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz green beans, trimmed and blanched",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz green beans",
+          "note": "trimmed and blanched",
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz mixed fresh wild mushrooms",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz mixed fresh wild mushrooms",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp medium curry powder",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "medium curry powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "small pinch ground timut pepper or ground Sichuan peppercorns",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "small pinch ground timut pepper or ground Sichuan peppercorns",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "To garnish",
+      "items": [
+        {
+          "raw": "handful samphire, sautéed",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "handful",
+          "name": "samphire, sautéed",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "finely chopped pickled silverskin onions",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "finely chopped pickled silverskin onions",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "edible flowers",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "edible flowers",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the monkfish curry, place all the ingredients for the marinade in a small bowl and mix to combine. Rub all over the monkfish. Leave to marinate for 30 minutes in the fridge.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the monkfish curry, place all the ingredients for the marinade in a small bowl and mix to combine. Rub all over the monkfish. Leave to marinate for 30 minutes in the fridge."
+    },
+    {
+      "order": 2,
+      "text": "Preheat the oven to 220C/200C Fan/Gas 7. Place the fish in a roasting tin and roast for 12–15 minutes. Baste the fish midway through cooking with the juices in the tin or use some extra oil for basting. Remove from the oven and drizzle with the lemon juice.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 220C/200C Fan/Gas 7. Place the fish in a roasting tin and roast for 12–15 minutes. Baste the fish midway through cooking with the juices in the tin or use some extra oil for basting. Remove from the oven and drizzle with the lemon juice."
+    },
+    {
+      "order": 3,
+      "text": "Meanwhile, to make the malai kory sauce, heat the oil in a saucepan and add the cardamom pods, bay leaf and green chilli. Add the onion paste and fry for 2 minutes. Add the ginger and garlic paste and fry for another 2–3 minutes until the paste turns light brown in colour. Add the mustard, coriander and chilli powder. Add half of the fish stock and then add the coconut milk. Season with salt to taste. Bring to the boil and adjust the consistency of the sauce by simmering down or adding more of the fish stock as preferred. Stir in the cardamom powder. Strain the sauce and keep warm.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, to make the malai kory sauce, heat the oil in a saucepan and add the cardamom pods, bay leaf and green chilli. Add the onion paste and fry for 2 minutes. Add the ginger and garlic paste and fry for another 2–3 minutes until the paste turns light brown in colour. Add the mustard, coriander and chilli powder. Add half of the fish stock and then add the coconut milk. Season with salt to taste. Bring to the boil and adjust the consistency of the sauce by simmering down or adding more of the fish stock as preferred. Stir in the cardamom powder. Strain the sauce and keep warm. "
+    },
+    {
+      "order": 4,
+      "text": "To make the mushrooms and beans, heat the oil in a frying pan and fry the mustard and cumin seeds for 1 minute. Add the ginger, turmeric, green chilli, beans and mushrooms and sauté for 2–3 minutes. Add the curry powder, timut pepper and season with salt to taste.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the mushrooms and beans, heat the oil in a frying pan and fry the mustard and cumin seeds for 1 minute. Add the ginger, turmeric, green chilli, beans and mushrooms and sauté for 2–3 minutes. Add the curry powder, timut pepper and season with salt to taste."
+    },
+    {
+      "order": 5,
+      "text": "Ladle the sauce onto two large plates and place the mushrooms and beans in the centre. Top with the fish and garnish with samphire, onions and edible flowers. Serve immediately.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Ladle the sauce onto two large plates and place the mushrooms and beans in the centre. Top with the fish and garnish with samphire, onions and edible flowers. Serve immediately. "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 20,
+      "ratingValue": 4.6
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Spice up your life with this wonderful fish supper which marinates monkfish tail in a flavourful rub. The monkfish is served with a rich coconut sauce and spicy vegetables. ",
+    "headline": "Monkfish curry",
+    "image": null,
+    "name": "Monkfish curry",
+    "author": {
+      "@type": "Person",
+      "name": "Atul Kochhar"
+    },
+    "datePublished": "2020-01-18T00:00:00.000Z",
+    "dateModified": "2024-12-13T09:37:29.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 20,
+      "ratingValue": 4.6
+    },
+    "prepTime": "PT1H",
+    "cookTime": "PT30M",
+    "keywords": "dinner party, diwali, eid al-fitr, curry, monkfish, pregnancy friendly, Saturday Kitchen Best Bites",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Indian",
+    "recipeIngredient": [
+      "2 tsp mild red chilli powder",
+      "1 tsp ground turmeric",
+      "½ tbsp ginger and garlic paste",
+      "1 tbsp Kasundi mustard sauce or wholegrain mustard",
+      "1 tsp finely chopped green chilli",
+      "1 tsp chickpea flour ",
+      "1 tbsp lemon juice",
+      "1 tbsp rapeseed oil, plus extra for basting if needed",
+      "2 x 250g/9oz pieces monkfish tails, trimmed",
+      "½ lemon, juice only",
+      "3 tbsp rapeseed oil",
+      "1 black cardamom pod",
+      "2 green cardamom pods",
+      "1 bay leaf",
+      "1 green chilli, split",
+      "3 onions, roughly chopped, fried in vegetable oil and blended into a paste ",
+      "1 tsp ginger and garlic paste",
+      "1 tbsp Kasundi mustard sauce or wholegrain mustard",
+      "2 tsp ground coriander",
+      "½ tsp red chilli powder ",
+      "100ml/3½fl oz fish stock ",
+      "200ml/7fl oz coconut milk",
+      "¼ tsp green cardamom powder",
+      "salt",
+      "1 tbsp rapeseed oil",
+      "½ tsp mustard seeds",
+      "½ tsp cumin seeds",
+      "10g fresh root ginger, peeled and julienned",
+      "10g fresh root turmeric, peeled and julienned",
+      "1 green chilli, finely chopped",
+      "50g/1¾oz green beans, trimmed and blanched",
+      "100g/3½oz mixed fresh wild mushrooms",
+      "1 tsp medium curry powder",
+      "small pinch ground timut pepper or ground Sichuan peppercorns",
+      "salt ",
+      "handful samphire, sautéed ",
+      "finely chopped pickled silverskin onions",
+      "edible flowers "
+    ],
+    "recipeInstructions": [
+      "To make the monkfish curry, place all the ingredients for the marinade in a small bowl and mix to combine. Rub all over the monkfish. Leave to marinate for 30 minutes in the fridge.",
+      "Preheat the oven to 220C/200C Fan/Gas 7. Place the fish in a roasting tin and roast for 12–15 minutes. Baste the fish midway through cooking with the juices in the tin or use some extra oil for basting. Remove from the oven and drizzle with the lemon juice.",
+      "Meanwhile, to make the malai kory sauce, heat the oil in a saucepan and add the cardamom pods, bay leaf and green chilli. Add the onion paste and fry for 2 minutes. Add the ginger and garlic paste and fry for another 2–3 minutes until the paste turns light brown in colour. Add the mustard, coriander and chilli powder. Add half of the fish stock and then add the coconut milk. Season with salt to taste. Bring to the boil and adjust the consistency of the sauce by simmering down or adding more of the fish stock as preferred. Stir in the cardamom powder. Strain the sauce and keep warm. ",
+      "To make the mushrooms and beans, heat the oil in a frying pan and fry the mustard and cumin seeds for 1 minute. Add the ginger, turmeric, green chilli, beans and mushrooms and sauté for 2–3 minutes. Add the curry powder, timut pepper and season with salt to taste.",
+      "Ladle the sauce onto two large plates and place the mushrooms and beans in the centre. Top with the fish and garnish with samphire, onions and edible flowers. Serve immediately. "
+    ],
+    "recipeYield": "Serves 2",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:6",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

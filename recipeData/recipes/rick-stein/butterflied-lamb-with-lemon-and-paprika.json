@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "id": "rick-stein/butterflied-lamb-with-lemon-and-paprika",
+  "slug": "butterflied-lamb-with-lemon-and-paprika",
+  "chefId": "chef_rick-stein",
+  "chefSlug": "rick-stein",
+  "chefName": "Rick Stein",
+  "title": "Butterflied lamb with lemon and paprika",
+  "description": "This leg of lamb can be cooked on the barbecue or in the oven. Serve simply with potato wedges and greens for a laid-back meal with friends. Reduce the dried red chilli flakes if you prefer a milder marinade.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/butterflied_lamb_with_08901",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/butterflied_lamb_with_08901",
+    "retrievedAt": "2026-09-11T00:26:41.977Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Rick Stein"
+    ],
+    "datePublished": "2021-01-22T12:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "05ad63096979ee6cbb7b0d853165d6faa768ebdb2eeb657795840498b16bc638",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups",
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 6"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 60,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "al fresco easter",
+    "barbecue roasts",
+    "big barbecue",
+    "easter roast dinner",
+    "gluten-free roast dinner",
+    "healthy roast",
+    "impressive barbecue",
+    "lovely lamb",
+    "passover food ideas",
+    "spring lamb",
+    "barbecue",
+    "dinner party",
+    "roast dinner",
+    "roast lamb",
+    "leg of lamb",
+    "dairy free",
+    "egg free",
+    "gluten free",
+    "nut free",
+    "pregnancy friendly",
+    "Rick Stein's Cornwall"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "1 x 2.5kg/5lb 8oz leg of lamb (see directions below on how to remove the bones)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "x 2.5kg/5lb 8oz leg of lamb (see directions below on how to remove the bones)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the marinade",
+      "items": [
+        {
+          "raw": "1 large garlic clove, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "large garlic clove",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp dried red chilli flakes",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "dried red chilli flakes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 tsp chopped rosemary",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": "tsp",
+          "name": "chopped rosemary",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 sprigs thyme, leaves picked",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": "sprigs",
+          "name": "thyme, leaves picked",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 fresh bay leaf, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "fresh bay leaf",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 lemon, juice only",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "lemon, juice only",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp Thai fish sauce",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "Thai fish sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp pimenton (Spanish sweet smoked paprika)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "pimenton (Spanish sweet smoked paprika)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 tbsp olive oil",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": "tbsp",
+          "name": "olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp flaky sea salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "flaky sea salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp coarsely ground or crushed black pepper",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "coarsely ground or crushed black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To prepare the lamb, turn the leg over to the point where the bone runs closest to the surface. Using a sharp knife, split the meat along the bone and ease it away from the bone along both sides, leaving the bone as clean as possible. At the fatter end of the joint, there is a group of smaller bones, so continue to cut around them too until you can lift all the bones from the meat and are left with a butterfly shaped, bone-free joint. Trim away any excess fat and sinew.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To prepare the lamb, turn the leg over to the point where the bone runs closest to the surface. Using a sharp knife, split the meat along the bone and ease it away from the bone along both sides, leaving the bone as clean as possible. At the fatter end of the joint, there is a group of smaller bones, so continue to cut around them too until you can lift all the bones from the meat and are left with a butterfly shaped, bone-free joint. Trim away any excess fat and sinew. "
+    },
+    {
+      "order": 2,
+      "text": "Lay a piece of cling film over the meat and bash the surface with a rolling pin to flatten the thick sections lightly. The meat should be an even thickness throughout.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Lay a piece of cling film over the meat and bash the surface with a rolling pin to flatten the thick sections lightly. The meat should be an even thickness throughout."
+    },
+    {
+      "order": 3,
+      "text": "Mix the marinade ingredients together. Rub the marinade all over the lamb and set aside in a roasting tin, skin-side up, for about 30 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Mix the marinade ingredients together. Rub the marinade all over the lamb and set aside in a roasting tin, skin-side up, for about 30 minutes.  "
+    },
+    {
+      "order": 4,
+      "text": "Preheat the oven to 222C/200C Fan/Gas 7.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 222C/200C Fan/Gas 7. "
+    },
+    {
+      "order": 5,
+      "text": "Roast the lamb for 15 minutes, reduce the temperature to 180C/160C Fan/Gas 4 and roast for a further 15 minutes. This will give you pink lamb, if you would rather it slightly less so, cook for a further 5 minutes. Remove from the oven and cover with foil. Rest for at least 15 minutes. Place on a board before carving into thick slices.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Roast the lamb for 15 minutes, reduce the temperature to 180C/160C Fan/Gas 4 and roast for a further 15 minutes. This will give you pink lamb, if you would rather it slightly less so, cook for a further 5 minutes. Remove from the oven and cover with foil. Rest for at least 15 minutes. Place on a board before carving into thick slices."
+    },
+    {
+      "order": 6,
+      "text": "Serve with potato wedges, steamed green vegetables and some of the meat juices.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Serve with potato wedges, steamed green vegetables and some of the meat juices."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/butterflied_lamb_with_08901_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "You can buy a ready-boned or a butterflied leg of lamb, or ask your butcher to bone it for you. To cook on the barbecue, preheat the barbecue (10 minutes for gas and up to 40 minutes for charcoal). When hot, grill the lamb for about 10–12 minutes on each side. Rest for 5 minutes on a board covered with kitchen foil before carving into thick slices."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 17,
+      "ratingValue": 4.588235294117647
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "This leg of lamb can be cooked on the barbecue or in the oven. Serve simply with potato wedges and greens for a laid-back meal with friends. Reduce the dried red chilli flakes if you prefer a milder marinade.  ",
+    "headline": "Butterflied lamb with lemon and paprika",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/butterflied_lamb_with_08901_16x9.jpg"
+    },
+    "name": "Butterflied lamb with lemon and paprika",
+    "author": {
+      "@type": "Person",
+      "name": "Rick Stein"
+    },
+    "datePublished": "2021-01-22T12:00:00.000Z",
+    "dateModified": "2025-04-09T15:52:36.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 17,
+      "ratingValue": 4.588235294117647
+    },
+    "prepTime": "PT1H",
+    "cookTime": "PT1H",
+    "keywords": "al fresco easter, barbecue roasts, big barbecue, easter roast dinner, gluten-free roast dinner, healthy roast, impressive barbecue, lovely lamb, passover food ideas , spring lamb, barbecue, dinner party, roast dinner, roast lamb, leg of lamb, dairy free, egg free, gluten free, nut free, pregnancy friendly, Rick Stein's Cornwall",
+    "recipeCategory": "Main course",
+    "recipeIngredient": [
+      "1 x 2.5kg/5lb 8oz leg of lamb (see directions below on how to remove the bones)",
+      "1 large garlic clove, finely chopped",
+      "1 tsp dried red chilli flakes                       ",
+      "6 tsp chopped rosemary",
+      "6 sprigs thyme, leaves picked ",
+      "1 fresh bay leaf, finely chopped",
+      "1 lemon, juice only",
+      "2 tbsp Thai fish sauce ",
+      "2 tbsp pimenton (Spanish sweet smoked paprika)           ",
+      "6 tbsp olive oil ",
+      "1 tsp flaky sea salt",
+      "½ tsp coarsely ground or crushed black pepper        "
+    ],
+    "recipeInstructions": [
+      "To prepare the lamb, turn the leg over to the point where the bone runs closest to the surface. Using a sharp knife, split the meat along the bone and ease it away from the bone along both sides, leaving the bone as clean as possible. At the fatter end of the joint, there is a group of smaller bones, so continue to cut around them too until you can lift all the bones from the meat and are left with a butterfly shaped, bone-free joint. Trim away any excess fat and sinew. ",
+      "Lay a piece of cling film over the meat and bash the surface with a rolling pin to flatten the thick sections lightly. The meat should be an even thickness throughout.",
+      "Mix the marinade ingredients together. Rub the marinade all over the lamb and set aside in a roasting tin, skin-side up, for about 30 minutes.  ",
+      "Preheat the oven to 222C/200C Fan/Gas 7. ",
+      "Roast the lamb for 15 minutes, reduce the temperature to 180C/160C Fan/Gas 4 and roast for a further 15 minutes. This will give you pink lamb, if you would rather it slightly less so, cook for a further 5 minutes. Remove from the oven and cover with foil. Rest for at least 15 minutes. Place on a board before carving into thick slices.",
+      "Serve with potato wedges, steamed green vegetables and some of the meat juices."
+    ],
+    "recipeYield": "Serves 6",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "audit": [
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

@@ -1,0 +1,416 @@
+{
+  "schemaVersion": 1,
+  "id": "rick-stein/salt-pork-belly-with-split-pea-puree-and-sauerkraut",
+  "slug": "salt-pork-belly-with-split-pea-puree-and-sauerkraut",
+  "chefId": "chef_rick-stein",
+  "chefSlug": "rick-stein",
+  "chefName": "Rick Stein",
+  "title": "Salt pork belly with split pea purée and sauerkraut",
+  "description": "This quick cook sauerkraut is a short cut to the real thing, and any leftovers can be stored in an airtight jar in the fridge for up to two weeks.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/salt_pork_belly_with_34759",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/salt_pork_belly_with_34759",
+    "retrievedAt": "2026-09-11T00:26:37.350Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Rick Stein"
+    ],
+    "datePublished": "2016-03-07T10:05:41.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "3035d96303738a3860ae64f8c646b8ef619c5eeb5ea8d9fd413ccf743363e076",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 3-4"
+    ],
+    "servings": 3
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 120,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "russian",
+    "new year and hogmanay",
+    "bacon",
+    "dairy free",
+    "egg free",
+    "gluten free",
+    "nut free",
+    "Rick Stein's Long Weekends"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the sauerkraut",
+      "items": [
+        {
+          "raw": "1 tbsp rapeseed oil",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "rapeseed oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 small onion, thinly sliced",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "small onion",
+          "note": "thinly sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "1 medium white cabbage (about 750g/1lb 10oz), very thinly shredded",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "medium white cabbage (about 750g/1lb 10oz)",
+          "note": "very thinly shredded",
+          "isOptional": false
+        },
+        {
+          "raw": "125ml/4fl oz apple cider",
+          "quantity": 125,
+          "quantityText": "125",
+          "unit": "ml",
+          "name": "/4fl oz apple cider",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "200ml/7fl oz cider vinegar",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "ml",
+          "name": "/7fl oz cider vinegar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp fine salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "fine salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp caraway seeds",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "caraway seeds",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the pork",
+      "items": [
+        {
+          "raw": "600g/1lb 5oz unsmoked streaky bacon, in one piece, rind removed",
+          "quantity": 600,
+          "quantityText": "600",
+          "unit": "g",
+          "name": "/1lb 5oz unsmoked streaky bacon, in one piece, rind removed",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 onion, peeled and left whole",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "onion",
+          "note": "peeled and left whole",
+          "isOptional": false
+        },
+        {
+          "raw": "10 cloves",
+          "quantity": 10,
+          "quantityText": "10",
+          "unit": "cloves",
+          "name": "10 cloves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "75g/2½oz dark brown sugar",
+          "quantity": 75,
+          "quantityText": "75",
+          "unit": "g",
+          "name": "/2½oz dark brown sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 bay leaves, fresh if possible",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": null,
+          "name": "bay leaves, fresh if possible",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp black peppercorns",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "black peppercorns",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp chilli flakes",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "chilli flakes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "150ml/5fl oz apple cider",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "ml",
+          "name": "/5fl oz apple cider",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the split pea purée",
+      "items": [
+        {
+          "raw": "500g/1lb 2oz yellow split peas",
+          "quantity": 500,
+          "quantityText": "500",
+          "unit": "g",
+          "name": "/1lb 2oz yellow split peas",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100ml/3½fl oz rapeseed oil",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "ml",
+          "name": "/3½fl oz rapeseed oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 onion, roughly chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "onion",
+          "note": "roughly chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2 garlic cloves, chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 lemon, juice only",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "lemon, juice only",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "For the sauerkraut, heat the oil in a pan over a medium–high heat. Fry the onion, stirring constantly, until soft and translucent. Add the cabbage, cider, vinegar, 100ml/3½fl oz water, salt and caraway seeds and bring to a boil. Cover and reduce the heat, then simmer for 45 minutes, or until the cabbage is tender. Keep an eye on it, if it looks as though it’s drying out too much, add a little water.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the sauerkraut, heat the oil in a pan over a medium–high heat. Fry the onion, stirring constantly, until soft and translucent. Add the cabbage, cider, vinegar, 100ml/3½fl oz water, salt and caraway seeds and bring to a boil. Cover and reduce the heat, then simmer for 45 minutes, or until the cabbage is tender. Keep an eye on it, if it looks as though it’s drying out too much, add a little water."
+    },
+    {
+      "order": 2,
+      "text": "For the pork, put the bacon in a saucepan and cover with cold water. Stud the onion with the cloves and add to the pan with the dark brown sugar, bay leaves, peppercorns, chilli flakes and cider. Cover the pot and bring the water up to the boil. Skim off any scum that comes to the surface, then turn down the heat and simmer for 45–60 minutes, or until the meat is cooked and tender. Lift out of the cooking liquor using a slotted spoon and slice into about six to eight long rashers/slices",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the pork, put the bacon in a saucepan and cover with cold water. Stud the onion with the cloves and add to the pan with the dark brown sugar, bay leaves, peppercorns, chilli flakes and cider. Cover the pot and bring the water up to the boil. Skim off any scum that comes to the surface, then turn down the heat and simmer for 45–60 minutes, or until the meat is cooked and tender. Lift out of the cooking liquor using a slotted spoon and slice into about six to eight long rashers/slices"
+    },
+    {
+      "order": 3,
+      "text": "For the split pea purée, rinse the split peas under running water. Heat 2–3 tablespoons of the rapeseed oil in a large saucepan. Add the onion and garlic and gently fry until soft and translucent. Add the split peas. Pour in 1.2 litres/2 pints water, bring to the boil and skim off any white scum that appears on the surface. Turn the heat down and simmer gently with a lid on the pan for 45–60 minutes, or until the split peas are thick and mushy. Add the remaining rapeseed oil and the lemon juice and transfer the mixture to a food processor, or use a stick blender to purée. Season with salt and pepper. (This can be made in advance. If it thickens on standing, reheat with a little extra water.)",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the split pea purée, rinse the split peas under running water. Heat 2–3 tablespoons of the rapeseed oil in a large saucepan. Add the onion and garlic and gently fry until soft and translucent. Add the split peas. Pour in 1.2 litres/2 pints water, bring to the boil and skim off any white scum that appears on the surface. Turn the heat down and simmer gently with a lid on the pan for 45–60 minutes, or until the split peas are thick and mushy. Add the remaining rapeseed oil and the lemon juice and transfer the mixture to a food processor, or use a stick blender to purée. Season with salt and pepper. (This can be made in advance. If it thickens on standing, reheat with a little extra water.) "
+    },
+    {
+      "order": 4,
+      "text": "Serve the split pea purée and sauerkraut with rashers of pork belly.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Serve the split pea purée and sauerkraut with rashers of pork belly."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/salt_pork_belly_with_34759_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 8,
+      "ratingValue": 2.875
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "This quick cook sauerkraut is a short cut to the real thing, and any leftovers can be stored in an airtight jar in the fridge for up to two weeks.",
+    "headline": "Salt pork belly with split pea purée and sauerkraut",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/salt_pork_belly_with_34759_16x9.jpg"
+    },
+    "name": "Salt pork belly with split pea purée and sauerkraut",
+    "author": {
+      "@type": "Person",
+      "name": "Rick Stein"
+    },
+    "datePublished": "2016-03-07T10:05:41.000Z",
+    "dateModified": "2025-10-29T11:30:57.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 8,
+      "ratingValue": 2.875
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT2H",
+    "keywords": "russian, new year and hogmanay, bacon, dairy free, egg free, gluten free, nut free, Rick Stein's Long Weekends",
+    "recipeCategory": "Main course",
+    "recipeIngredient": [
+      "1 tbsp rapeseed oil",
+      "1 small onion, thinly sliced",
+      "1 medium white cabbage (about 750g/1lb 10oz), very thinly shredded",
+      "125ml/4fl oz apple cider",
+      "200ml/7fl oz cider vinegar",
+      "1 tbsp fine salt",
+      "1 tsp caraway seeds ",
+      "600g/1lb 5oz unsmoked streaky bacon, in one piece, rind removed",
+      "1 onion, peeled and left whole",
+      "10 cloves",
+      "75g/2½oz dark brown sugar",
+      "6 bay leaves, fresh if possible",
+      "1 tsp black peppercorns",
+      "½ tsp chilli flakes",
+      "150ml/5fl oz apple cider",
+      "500g/1lb 2oz yellow split peas ",
+      "100ml/3½fl oz rapeseed oil",
+      "1 onion, roughly chopped",
+      "2 garlic cloves, chopped ",
+      "1 lemon, juice only",
+      "salt and freshly ground black pepper"
+    ],
+    "recipeInstructions": [
+      "For the sauerkraut, heat the oil in a pan over a medium–high heat. Fry the onion, stirring constantly, until soft and translucent. Add the cabbage, cider, vinegar, 100ml/3½fl oz water, salt and caraway seeds and bring to a boil. Cover and reduce the heat, then simmer for 45 minutes, or until the cabbage is tender. Keep an eye on it, if it looks as though it’s drying out too much, add a little water.",
+      "For the pork, put the bacon in a saucepan and cover with cold water. Stud the onion with the cloves and add to the pan with the dark brown sugar, bay leaves, peppercorns, chilli flakes and cider. Cover the pot and bring the water up to the boil. Skim off any scum that comes to the surface, then turn down the heat and simmer for 45–60 minutes, or until the meat is cooked and tender. Lift out of the cooking liquor using a slotted spoon and slice into about six to eight long rashers/slices",
+      "For the split pea purée, rinse the split peas under running water. Heat 2–3 tablespoons of the rapeseed oil in a large saucepan. Add the onion and garlic and gently fry until soft and translucent. Add the split peas. Pour in 1.2 litres/2 pints water, bring to the boil and skim off any white scum that appears on the surface. Turn the heat down and simmer gently with a lid on the pan for 45–60 minutes, or until the split peas are thick and mushy. Add the remaining rapeseed oil and the lemon juice and transfer the mixture to a food processor, or use a stick blender to purée. Season with salt and pepper. (This can be made in advance. If it thickens on standing, reheat with a little extra water.) ",
+      "Serve the split pea purée and sauerkraut with rashers of pork belly."
+    ],
+    "recipeYield": "Serves 3-4",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

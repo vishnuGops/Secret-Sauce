@@ -1,0 +1,323 @@
+{
+  "schemaVersion": 1,
+  "id": "rick-stein/viennese-goulash",
+  "slug": "viennese-goulash",
+  "chefId": "chef_rick-stein",
+  "chefSlug": "rick-stein",
+  "chefName": "Rick Stein",
+  "title": "Viennese goulash",
+  "description": "The people of Vienna love goulash so much they’ve taken the Hungarian dish and made it their own. The secret is to use lots of onion. If you don't like your food too hot, then reduce the amount of paprika to suit your taste.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/viennese_gulasch_96419",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/viennese_gulasch_96419",
+    "retrievedAt": "2026-09-11T00:26:35.806Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Rick Stein"
+    ],
+    "datePublished": "2016-04-29T15:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "660a19a0fb72da64aeb536206d228dd20cab88176743600fdd94937615c06e40",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": []
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 6-8"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 120,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "autumn",
+    "winter",
+    "beef stew",
+    "beef",
+    "dairy free",
+    "egg free",
+    "gluten free",
+    "nut free",
+    "pregnancy friendly",
+    "Rick Stein's Long Weekends"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "100g/3½oz lard",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz lard",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1.25kg/2lb 12oz onions, sliced",
+          "quantity": 1.25,
+          "quantityText": "1.25",
+          "unit": "kg",
+          "name": "/2lb 12oz onions",
+          "note": "sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "2 garlic cloves, grated or finely chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "grated or finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp tomato purée",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "tomato purée",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp sweet paprika",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "sweet paprika",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1½ tbsp hot paprika, to taste",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tbsp hot paprika",
+          "note": "to taste",
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp caraway seeds, crushed in a pestle and mortar",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "caraway seeds",
+          "note": "crushed in a pestle and mortar",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp brown sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "brown sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1½ tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tsp salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "12 turns of the black pepper mill",
+          "quantity": 12,
+          "quantityText": "12",
+          "unit": null,
+          "name": "turns of the black pepper mill",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp cider vinegar",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "cider vinegar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1.5kg/3lb 5oz shin of beef, cut into 3cm/1in pieces",
+          "quantity": 1.5,
+          "quantityText": "1.5",
+          "unit": "kg",
+          "name": "/3lb 5oz shin of beef, cut into 3cm/1in pieces",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp chopped flat leaf parsley",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "chopped flat leaf parsley",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "soured cream, to serve",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "soured cream",
+          "note": "to serve",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Heat the lard in a large pot and fry the onions until they are deep golden brown. Add the garlic, cook for a minute, then add the tomato purée, paprikas, crushed caraway seeds, sugar, salt, pepper and vinegar and cover with 1 litre/1¾ pints of water.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat the lard in a large pot and fry the onions until they are deep golden brown. Add the garlic, cook for a minute, then add the tomato purée, paprikas, crushed caraway seeds, sugar, salt, pepper and vinegar and cover with 1 litre/1¾ pints of water. "
+    },
+    {
+      "order": 2,
+      "text": "Bring to a boil, then add the beef. Turn down to a gentle simmer and cook for 2½ hours. Check the pan fairly frequently and stir, adding more water to cover the meat if necessary. Check the meat for tenderness, if not tender add a little more water and cook for a little longer. Remove the meat when done and, if needed, continue to cook the liquid to thicken the sauce.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Bring to a boil, then add the beef. Turn down to a gentle simmer and cook for 2½  hours. Check the pan fairly frequently and stir, adding more water to cover the meat if necessary. Check the meat for tenderness, if not tender add a little more water and cook for a little longer. Remove the meat when done and, if needed, continue to cook the liquid to thicken the sauce."
+    },
+    {
+      "order": 3,
+      "text": "Serve the goulash sprinkled with a little chopped parsley with new potatoes, spatzle or dark rye bread. Top with a spoonful of soured cream",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Serve the goulash sprinkled with a little chopped parsley with new potatoes, spatzle or dark rye bread. Top with a spoonful of soured cream"
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/viennese_gulasch_96419_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 29,
+      "ratingValue": 4.379310344827586
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "The people of Vienna love goulash so much they’ve taken the Hungarian dish and made it their own. The secret is to use lots of onion. If you don't like your food too hot, then reduce the amount of paprika to suit your taste.",
+    "headline": "Viennese goulash",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/viennese_gulasch_96419_16x9.jpg"
+    },
+    "name": "Viennese goulash",
+    "author": {
+      "@type": "Person",
+      "name": "Rick Stein"
+    },
+    "datePublished": "2016-04-29T15:00:00.000Z",
+    "dateModified": "2025-10-29T12:04:12.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 29,
+      "ratingValue": 4.379310344827586
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT2H",
+    "keywords": "autumn, winter, beef stew, beef, dairy free, egg free, gluten free, nut free, pregnancy friendly, Rick Stein's Long Weekends",
+    "recipeCategory": "Main course",
+    "recipeIngredient": [
+      "100g/3½oz lard",
+      "1.25kg/2lb 12oz onions, sliced",
+      "2 garlic cloves, grated or finely chopped",
+      "1 tbsp tomato purée",
+      "2 tbsp sweet paprika",
+      "1½ tbsp hot paprika, to taste",
+      "½ tsp caraway seeds, crushed in a pestle and mortar",
+      "1 tsp brown sugar",
+      "1½ tsp salt",
+      "12 turns of the black pepper mill",
+      "2 tsp cider vinegar",
+      "1.5kg/3lb 5oz shin of beef, cut into 3cm/1in pieces",
+      "1 tbsp chopped flat leaf parsley",
+      "soured cream, to serve"
+    ],
+    "recipeInstructions": [
+      "Heat the lard in a large pot and fry the onions until they are deep golden brown. Add the garlic, cook for a minute, then add the tomato purée, paprikas, crushed caraway seeds, sugar, salt, pepper and vinegar and cover with 1 litre/1¾ pints of water. ",
+      "Bring to a boil, then add the beef. Turn down to a gentle simmer and cook for 2½  hours. Check the pan fairly frequently and stir, adding more water to cover the meat if necessary. Check the meat for tenderness, if not tender add a little more water and cook for a little longer. Remove the meat when done and, if needed, continue to cook the liquid to thicken the sauce.",
+      "Serve the goulash sprinkled with a little chopped parsley with new potatoes, spatzle or dark rye bread. Top with a spoonful of soured cream"
+    ],
+    "recipeYield": "Serves 6-8",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

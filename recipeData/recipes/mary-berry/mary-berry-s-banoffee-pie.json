@@ -1,0 +1,339 @@
+{
+  "schemaVersion": 1,
+  "id": "mary-berry/mary-berry-s-banoffee-pie",
+  "slug": "mary-berry-s-banoffee-pie",
+  "chefId": "chef_mary-berry",
+  "chefSlug": "mary-berry",
+  "chefName": "Mary Berry",
+  "title": "Mary Berry's banoffee pie",
+  "description": "Mary Berry does her bit to promote that British classic, the banoffee pie. An easy recipe for a crowd-pleasing dessert!\n\nEquipment and preparation: You will need a deep 20cm/8in springform cake tin to make this recipe.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/banoffeepiewithpecan_86926",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/banoffeepiewithpecan_86926",
+    "retrievedAt": "2026-09-11T00:27:43.705Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Mary Berry"
+    ],
+    "datePublished": "2018-04-02T16:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "a9a2decdbf71350a133b2075ee90580d9bbec1d0fc9065348862b5d1fb63191c",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups",
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 8"
+    ],
+    "servings": 8
+  },
+  "timing": {
+    "prepMinutes": 60,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "British"
+  ],
+  "category": [
+    "Desserts"
+  ],
+  "keywords": [
+    "easy pudding",
+    "baking with bananas",
+    "banana dessert",
+    "british bakes",
+    "decadent dessert",
+    "easy dessert",
+    "easy family puddings",
+    "easy festive desserts",
+    "great british puddings",
+    "make-ahead summer desserts",
+    "mary berry dinner party",
+    "old-fashioned puddings",
+    "terrific toffee",
+    "birthday party",
+    "dinner party",
+    "mother's day",
+    "winter",
+    "banoffee pie",
+    "banana",
+    "pregnancy friendly",
+    "vegetarian",
+    "Classic Mary Berry"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the base",
+      "items": [
+        {
+          "raw": "150g/5½oz digestive biscuits (about 10)",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "g",
+          "name": "/5½oz digestive biscuits (about 10)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "75g/2¾oz butter",
+          "quantity": 75,
+          "quantityText": "75",
+          "unit": "g",
+          "name": "/2¾oz butter",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the toffee filling",
+      "items": [
+        {
+          "raw": "75g/2¾oz butter",
+          "quantity": 75,
+          "quantityText": "75",
+          "unit": "g",
+          "name": "/2¾oz butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "75g/2¾oz light muscovado sugar",
+          "quantity": 75,
+          "quantityText": "75",
+          "unit": "g",
+          "name": "/2¾oz light muscovado sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "397g/14oz tin full-fat condensed milk (see tip)",
+          "quantity": 397,
+          "quantityText": "397",
+          "unit": "g",
+          "name": "/14oz tin full-fat condensed milk (see tip)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp vanilla extract",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "vanilla extract",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the topping",
+      "items": [
+        {
+          "raw": "300ml/10fl oz double cream",
+          "quantity": 300,
+          "quantityText": "300",
+          "unit": "ml",
+          "name": "/10fl oz double cream",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 small just-ripe bananas, sliced",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "small just-ripe bananas",
+          "note": "sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "50g/1¾oz dark chocolate, melted, or cocoa powder",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/1¾oz dark chocolate",
+          "note": "melted, or cocoa powder",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Line the base of a deep 20cm/8in springform cake tin with baking paper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Line the base of a deep 20cm/8in springform cake tin with baking paper."
+    },
+    {
+      "order": 2,
+      "text": "To make the base, crush the biscuits to fine crumbs and melt the butter over a low heat. Pour both into a bowl and mix to combine. Spoon into the base of the tin and press down with the back of a spoon until level. Place in the fridge for 15 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the base, crush the biscuits to fine crumbs and melt the butter over a low heat. Pour both into a bowl and mix to combine. Spoon into the base of the tin and press down with the back of a spoon until level. Place in the fridge for 15 minutes."
+    },
+    {
+      "order": 3,
+      "text": "To make the toffee filling, heat the butter and sugar together in a small non-stick saucepan and stir over a low heat until combined. Add the condensed milk and bring to the boil, stirring for 2–3 minutes – do not over-boil or it will become grainy and fudge-like. Add the vanilla and pour into the tin. Place in the fridge for at least 1 hour.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To make the toffee filling, heat the butter and sugar together in a small non-stick saucepan and stir over a low heat until combined. Add the condensed milk and bring to the boil, stirring for 2–3 minutes – do not over-boil or it will become grainy and fudge-like. Add the vanilla and pour into the tin. Place in the fridge for at least 1 hour. "
+    },
+    {
+      "order": 4,
+      "text": "Whip the cream in a bowl until soft peaks form.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Whip the cream in a bowl until soft peaks form. "
+    },
+    {
+      "order": 5,
+      "text": "Arrange the banana slices in neat rounds on top of the toffee. Spoon or pipe the cream on top and level.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Arrange the banana slices in neat rounds on top of the toffee. Spoon or pipe the cream on top and level. "
+    },
+    {
+      "order": 6,
+      "text": "Remove from the tin, and zig-zag the melted chocolate over the top or dust with cocoa powder.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove from the tin, and zig-zag the melted chocolate over the top or dust with cocoa powder."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/banoffeepiewithpecan_86926_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "You could use a 397g tin of dulce de leche caramel instead of the toffee filling and skip step 3. Add a teaspoon of sea salt to make a salted caramel version. This recipe will also make 8 x 7cm/2in rings to make individual pies. The base and toffee can be prepared up to a day ahead and left in the fridge. Assemble with the banana and cream ideally on the day. Not suitable for freezing."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 43,
+      "ratingValue": 3.953488372093023
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Mary Berry does her bit to promote that British classic, the banoffee pie. An easy recipe for a crowd-pleasing dessert! \r\n\r\nEquipment and preparation: You will need a deep 20cm/8in springform cake tin to make this recipe. ",
+    "headline": "Mary Berry's banoffee pie",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/banoffeepiewithpecan_86926_16x9.jpg"
+    },
+    "name": "Mary Berry's banoffee pie",
+    "author": {
+      "@type": "Person",
+      "name": "Mary Berry"
+    },
+    "datePublished": "2018-04-02T16:00:00.000Z",
+    "dateModified": "2026-08-05T13:32:28.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 43,
+      "ratingValue": 3.953488372093023
+    },
+    "prepTime": "PT1H",
+    "cookTime": "PT30M",
+    "keywords": "easy pudding, baking with bananas, banana dessert, british bakes , decadent dessert, easy dessert, easy family puddings, easy festive desserts, great british puddings, make-ahead summer desserts, mary berry dinner party, old-fashioned puddings, terrific toffee, birthday party, dinner party, mother's day, winter, banoffee pie, banana, pregnancy friendly, vegetarian, Classic Mary Berry",
+    "recipeCategory": "Desserts",
+    "recipeCuisine": "British",
+    "recipeIngredient": [
+      "150g/5½oz digestive biscuits (about 10)",
+      "75g/2¾oz butter",
+      "75g/2¾oz butter",
+      "75g/2¾oz light muscovado sugar",
+      "397g/14oz tin full-fat condensed milk (see tip)",
+      "1 tsp vanilla extract",
+      "300ml/10fl oz double cream",
+      "3 small just-ripe bananas, sliced",
+      "50g/1¾oz dark chocolate, melted, or cocoa powder"
+    ],
+    "recipeInstructions": [
+      "Line the base of a deep 20cm/8in springform cake tin with baking paper.",
+      "To make the base, crush the biscuits to fine crumbs and melt the butter over a low heat. Pour both into a bowl and mix to combine. Spoon into the base of the tin and press down with the back of a spoon until level. Place in the fridge for 15 minutes.",
+      "To make the toffee filling, heat the butter and sugar together in a small non-stick saucepan and stir over a low heat until combined. Add the condensed milk and bring to the boil, stirring for 2–3 minutes – do not over-boil or it will become grainy and fudge-like. Add the vanilla and pour into the tin. Place in the fridge for at least 1 hour. ",
+      "Whip the cream in a bowl until soft peaks form. ",
+      "Arrange the banana slices in neat rounds on top of the toffee. Spoon or pipe the cream on top and level. ",
+      "Remove from the tin, and zig-zag the melted chocolate over the top or dust with cocoa powder."
+    ],
+    "recipeYield": "Serves 8",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

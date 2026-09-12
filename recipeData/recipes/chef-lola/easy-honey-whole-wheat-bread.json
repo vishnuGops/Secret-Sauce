@@ -1,0 +1,496 @@
+{
+  "schemaVersion": 1,
+  "id": "chef-lola/easy-honey-whole-wheat-bread",
+  "slug": "easy-honey-whole-wheat-bread",
+  "chefId": "chef_chef-lola",
+  "chefSlug": "chef-lola",
+  "chefName": "Chef Lola",
+  "title": "Easy Honey Whole Wheat Bread",
+  "description": "Honey Whole Wheat Bread - A simple great-tasting and easy to make whole wheat bread. Made with 100% whole wheat flour and honey. The slices are moist, tender, slightly chewy with a beautiful crust and great taste.",
+  "source": {
+    "sourceUrl": "https://cheflolaskitchen.com/easy-honey-whole-wheat-bread/",
+    "finalUrl": "https://cheflolaskitchen.com/easy-honey-whole-wheat-bread/",
+    "retrievedAt": "2026-09-11T02:47:14.081Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2019-03-19T00:55:37+00:00",
+    "rights": "Chef Lola's Kitchen. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "a472adb7030bf0c8e382b8e9d54b1c8ecceedfa67820bfe0ff28fa2f38e475fd",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "allows recipe paths; /wp-admin/, /wp-json/ and query URLs disallowed"
+  },
+  "yield": {
+    "raw": [
+      "2",
+      "2 Loaves"
+    ],
+    "servings": 2
+  },
+  "timing": {
+    "prepMinutes": 15,
+    "cookMinutes": 25,
+    "totalMinutes": 130,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Global"
+  ],
+  "category": [
+    "Breakfast/Lunch/Dinner"
+  ],
+  "keywords": [
+    "bread",
+    "homemade",
+    "wheat bread",
+    "whole wheat bread"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "6 cups Whole Wheat Flour",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": "cups",
+          "name": "Whole Wheat Flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 Cup Whole Wheat Flour (Reserved)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 Cup Whole Wheat Flour (Reserved)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 Cup Honey",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 Cup Honey",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/2 Cup Milk",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/2 Cup Milk",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1½ cups Water",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ cups Water",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 Tsp Salt",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "Salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 Tbsps Yeast",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "Yeast",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 Tbsps Olive Oil",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": "tbsp",
+          "name": "Olive Oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 Tbsps Lemon juice",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "Lemon juice",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Combine all the ingredients together in a large bowl except the reserved half Cup of wheat flour. Mix until a wet dough is formed.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Combine all the ingredients together in a large bowl except the reserved half Cup of wheat flour. Mix until a wet dough is formed.&nbsp;",
+        "name": "Combine all the ingredients together in a large bowl except the reserved half Cup of wheat flour. Mix until a wet dough is formed.&nbsp;",
+        "url": "https://cheflolaskitchen.com/easy-honey-whole-wheat-bread/#wprm-recipe-7516-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Cover up the dough with a plastic wrap and leave for about 10 to15 minutes, this will allow the wheat grains to soften and you will be able to knead easily.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Cover up the dough with a plastic wrap and leave for about 10 to15 minutes, this will allow the wheat grains to soften and you will be able to knead easily.",
+        "name": "Cover up the dough with a plastic wrap and leave for about 10 to15 minutes, this will allow the wheat grains to soften and you will be able to knead easily.",
+        "url": "https://cheflolaskitchen.com/easy-honey-whole-wheat-bread/#wprm-recipe-7516-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Turn the dough over to your work surface and knead for about 5 to 10 minutes or till it becomes smooth. Use the reserved half cup of flour to dust the work surface of the work table during the kneading process to prevent the dough from sticking.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Turn the dough over to your work surface and knead for about 5 to 10 minutes or till it becomes smooth. Use the reserved half cup of flour to&nbsp;dust the work surface of the work table during the kneading process to prevent the dough from sticking.",
+        "name": "Turn the dough over to your work surface and knead for about 5 to 10 minutes or till it becomes smooth. Use the reserved half cup of flour to&nbsp;dust the work surface of the work table during the kneading process to prevent the dough from sticking.",
+        "url": "https://cheflolaskitchen.com/easy-honey-whole-wheat-bread/#wprm-recipe-7516-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Gather the dough into a smooth ball and grease a large bowl with a neutral Oil then well to prevent it from drying out. Then leave it to rise for about an hour or till it's doubled in size.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Gather the dough into a smooth ball and grease a large bowl with a neutral Oil then well to prevent it from drying out. Then leave it to rise for about an hour or till it's doubled in size.",
+        "name": "Gather the dough into a smooth ball and grease a large bowl with a neutral Oil then well to prevent it from drying out. Then leave it to rise for about an hour or till it's doubled in size.",
+        "url": "https://cheflolaskitchen.com/easy-honey-whole-wheat-bread/#wprm-recipe-7516-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Punch down the dough to remove the excess air trapped air and return it to your work surface and shape the bread into two loaves",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Punch down the dough to remove the excess air trapped air and return it to your work surface and shape the bread into two loaves",
+        "name": "Punch down the dough to remove the excess air trapped air and return it to your work surface and shape the bread into two loaves",
+        "url": "https://cheflolaskitchen.com/easy-honey-whole-wheat-bread/#wprm-recipe-7516-step-0-4"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Brush your loaf pan with Oil and dust it with some wheat flour then place the loaves inside the prepared pan and leave it to rise again for about 30 minutes or till it's doubled in size.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Brush your loaf pan with Oil and dust it with some wheat flour then place the loaves inside the prepared pan and leave it to rise again for about 30 minutes or till it's doubled in size.",
+        "name": "Brush your loaf pan with Oil and dust it with some wheat flour then place the loaves inside the prepared pan and leave it to rise again for about 30 minutes or till it's doubled in size.",
+        "url": "https://cheflolaskitchen.com/easy-honey-whole-wheat-bread/#wprm-recipe-7516-step-0-5"
+      }
+    },
+    {
+      "order": 7,
+      "text": "Put the loaves inside your preheated oven (350°F) and bake for 25 to 30 minutes or till a toothpick inserted in the middle of the Bread comes out clean.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": "350°F",
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Put the loaves inside your preheated oven (350°F) and bake for 25 to 30 minutes or till a toothpick inserted in the middle of the Bread comes out clean.",
+        "name": "Put the loaves inside your preheated oven (350°F) and bake for 25 to 30 minutes or till a toothpick inserted in the middle of the Bread comes out clean.",
+        "url": "https://cheflolaskitchen.com/easy-honey-whole-wheat-bread/#wprm-recipe-7516-step-0-6"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "1671 kcal",
+    "carbohydrateContent": "357 g",
+    "proteinContent": "55 g",
+    "fatContent": "15 g",
+    "saturatedFatContent": "3 g",
+    "cholesterolContent": "6 mg",
+    "sodiumContent": "2747 mg",
+    "fiberContent": "43 g",
+    "sugarContent": "74 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2016/08/Honey-whole-wheat-Bread-41.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2016/08/Honey-whole-wheat-Bread-41-500x500.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2016/08/Honey-whole-wheat-Bread-41-500x375.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2016/08/Honey-whole-wheat-Bread-41-480x270.jpg"
+    ],
+    "video": {
+      "name": "Bread Recipes: Whole Wheat Bread | Afropotluck",
+      "description": "Super soft and moist 100% whole wheat Bread, No white flour and no sugar added!\n\nIngredients:\n6-7 cups Whole Wheat\n1/2 Cup Honey\n1/2 Cup Milk\n11/2 cups Water\n2 Tsp Salt\n2 Tbsps Yeast\n6 Tbsps Olive Oil\n2 Tbsps Lemon juice\n\nDetailed written recipe - http://cheflolaskitchen.com/100-whole-wheat-bread/\n\nYes I'm social:\nBlog  http://cheflolaskitchen.com\nFacebook  https://www.facebook.com/ChefLolasKitchen\nInstagram  https://www.instagram.com/cheflolaskitchen\n\n-~-~~-~~~-~~-~-\nLatest Video: \"Super Crispy Baked Potato Wedges\" \nhttps://www.youtube.com/watch?v=YaVCk-U-Vic\n-~-~~-~~~-~~-~-",
+      "uploadDate": "2016-07-18T02:40:50+00:00",
+      "duration": "PT5M53S",
+      "thumbnailUrl": "https://i.ytimg.com/vi/iUwOYXZJSqQ/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/iUwOYXZJSqQ?feature=oembed",
+      "contentUrl": "https://www.youtube.com/watch?v=iUwOYXZJSqQ",
+      "@type": "VideoObject"
+    }
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "video": {
+      "name": "Bread Recipes: Whole Wheat Bread | Afropotluck",
+      "description": "Super soft and moist 100% whole wheat Bread, No white flour and no sugar added!\n\nIngredients:\n6-7 cups Whole Wheat\n1/2 Cup Honey\n1/2 Cup Milk\n11/2 cups Water\n2 Tsp Salt\n2 Tbsps Yeast\n6 Tbsps Olive Oil\n2 Tbsps Lemon juice\n\nDetailed written recipe - http://cheflolaskitchen.com/100-whole-wheat-bread/\n\nYes I'm social:\nBlog  http://cheflolaskitchen.com\nFacebook  https://www.facebook.com/ChefLolasKitchen\nInstagram  https://www.instagram.com/cheflolaskitchen\n\n-~-~~-~~~-~~-~-\nLatest Video: \"Super Crispy Baked Potato Wedges\" \nhttps://www.youtube.com/watch?v=YaVCk-U-Vic\n-~-~~-~~~-~~-~-",
+      "uploadDate": "2016-07-18T02:40:50+00:00",
+      "duration": "PT5M53S",
+      "thumbnailUrl": "https://i.ytimg.com/vi/iUwOYXZJSqQ/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/iUwOYXZJSqQ?feature=oembed",
+      "contentUrl": "https://www.youtube.com/watch?v=iUwOYXZJSqQ",
+      "@type": "VideoObject"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.93",
+      "ratingCount": "14",
+      "reviewCount": "2"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Just seeing this today. Very explanatory. I've made it before, but very hard. This looks more of it. I will try again. God bless you Lola",
+        "author": {
+          "@type": "Person",
+          "name": "Phebe"
+        },
+        "datePublished": "2022-10-07"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "You are blessed Lola. My family now eat strictly homemade bread, finally i got a recipe that works. Great Job.",
+        "author": {
+          "@type": "Person",
+          "name": "Elizabeth Adeosun"
+        },
+        "datePublished": "2020-10-20"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Easy Honey Whole Wheat Bread",
+    "author": {
+      "@id": "https://cheflolaskitchen.com/#/schema/person/210ab4ab02cd92f770d27cf2a114f9a5"
+    },
+    "description": "Honey Whole Wheat Bread - A simple great-tasting and easy to make whole wheat bread. Made with 100% whole wheat flour and honey. The slices are moist, tender, slightly chewy with a beautiful crust and great taste.",
+    "datePublished": "2019-03-19T00:55:37+00:00",
+    "image": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2016/08/Honey-whole-wheat-Bread-41.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2016/08/Honey-whole-wheat-Bread-41-500x500.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2016/08/Honey-whole-wheat-Bread-41-500x375.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2016/08/Honey-whole-wheat-Bread-41-480x270.jpg"
+    ],
+    "video": {
+      "name": "Bread Recipes: Whole Wheat Bread | Afropotluck",
+      "description": "Super soft and moist 100% whole wheat Bread, No white flour and no sugar added!\n\nIngredients:\n6-7 cups Whole Wheat\n1/2 Cup Honey\n1/2 Cup Milk\n11/2 cups Water\n2 Tsp Salt\n2 Tbsps Yeast\n6 Tbsps Olive Oil\n2 Tbsps Lemon juice\n\nDetailed written recipe - http://cheflolaskitchen.com/100-whole-wheat-bread/\n\nYes I'm social:\nBlog  http://cheflolaskitchen.com\nFacebook  https://www.facebook.com/ChefLolasKitchen\nInstagram  https://www.instagram.com/cheflolaskitchen\n\n-~-~~-~~~-~~-~-\nLatest Video: \"Super Crispy Baked Potato Wedges\" \nhttps://www.youtube.com/watch?v=YaVCk-U-Vic\n-~-~~-~~~-~~-~-",
+      "uploadDate": "2016-07-18T02:40:50+00:00",
+      "duration": "PT5M53S",
+      "thumbnailUrl": "https://i.ytimg.com/vi/iUwOYXZJSqQ/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/iUwOYXZJSqQ?feature=oembed",
+      "contentUrl": "https://www.youtube.com/watch?v=iUwOYXZJSqQ",
+      "@type": "VideoObject"
+    },
+    "recipeYield": [
+      "2",
+      "2 Loaves"
+    ],
+    "prepTime": "PT15M",
+    "cookTime": "PT25M",
+    "totalTime": "PT130M",
+    "recipeIngredient": [
+      "6 cups Whole Wheat  Flour",
+      "1/2 Cup Whole Wheat Flour (Reserved)",
+      "1/2 Cup Honey",
+      "1/2 Cup Milk",
+      "1½ cups Water",
+      "2 Tsp Salt",
+      "2 Tbsps Yeast",
+      "6 Tbsps Olive Oil",
+      "2 Tbsps Lemon juice"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Combine all the ingredients together in a large bowl except the reserved half Cup of wheat flour. Mix until a wet dough is formed.&nbsp;",
+        "name": "Combine all the ingredients together in a large bowl except the reserved half Cup of wheat flour. Mix until a wet dough is formed.&nbsp;",
+        "url": "https://cheflolaskitchen.com/easy-honey-whole-wheat-bread/#wprm-recipe-7516-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Cover up the dough with a plastic wrap and leave for about 10 to15 minutes, this will allow the wheat grains to soften and you will be able to knead easily.",
+        "name": "Cover up the dough with a plastic wrap and leave for about 10 to15 minutes, this will allow the wheat grains to soften and you will be able to knead easily.",
+        "url": "https://cheflolaskitchen.com/easy-honey-whole-wheat-bread/#wprm-recipe-7516-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Turn the dough over to your work surface and knead for about 5 to 10 minutes or till it becomes smooth. Use the reserved half cup of flour to&nbsp;dust the work surface of the work table during the kneading process to prevent the dough from sticking.",
+        "name": "Turn the dough over to your work surface and knead for about 5 to 10 minutes or till it becomes smooth. Use the reserved half cup of flour to&nbsp;dust the work surface of the work table during the kneading process to prevent the dough from sticking.",
+        "url": "https://cheflolaskitchen.com/easy-honey-whole-wheat-bread/#wprm-recipe-7516-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Gather the dough into a smooth ball and grease a large bowl with a neutral Oil then well to prevent it from drying out. Then leave it to rise for about an hour or till it's doubled in size.",
+        "name": "Gather the dough into a smooth ball and grease a large bowl with a neutral Oil then well to prevent it from drying out. Then leave it to rise for about an hour or till it's doubled in size.",
+        "url": "https://cheflolaskitchen.com/easy-honey-whole-wheat-bread/#wprm-recipe-7516-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Punch down the dough to remove the excess air trapped air and return it to your work surface and shape the bread into two loaves",
+        "name": "Punch down the dough to remove the excess air trapped air and return it to your work surface and shape the bread into two loaves",
+        "url": "https://cheflolaskitchen.com/easy-honey-whole-wheat-bread/#wprm-recipe-7516-step-0-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Brush your loaf pan with Oil and dust it with some wheat flour then place the loaves inside the prepared pan and leave it to rise again for about 30 minutes or till it's doubled in size.",
+        "name": "Brush your loaf pan with Oil and dust it with some wheat flour then place the loaves inside the prepared pan and leave it to rise again for about 30 minutes or till it's doubled in size.",
+        "url": "https://cheflolaskitchen.com/easy-honey-whole-wheat-bread/#wprm-recipe-7516-step-0-5"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Put the loaves inside your preheated oven (350°F) and bake for 25 to 30 minutes or till a toothpick inserted in the middle of the Bread comes out clean.",
+        "name": "Put the loaves inside your preheated oven (350°F) and bake for 25 to 30 minutes or till a toothpick inserted in the middle of the Bread comes out clean.",
+        "url": "https://cheflolaskitchen.com/easy-honey-whole-wheat-bread/#wprm-recipe-7516-step-0-6"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.93",
+      "ratingCount": "14",
+      "reviewCount": "2"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Just seeing this today. Very explanatory. I've made it before, but very hard. This looks more of it. I will try again. God bless you Lola",
+        "author": {
+          "@type": "Person",
+          "name": "Phebe"
+        },
+        "datePublished": "2022-10-07"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "You are blessed Lola. My family now eat strictly homemade bread, finally i got a recipe that works. Great Job.",
+        "author": {
+          "@type": "Person",
+          "name": "Elizabeth Adeosun"
+        },
+        "datePublished": "2020-10-20"
+      }
+    ],
+    "recipeCategory": [
+      "Breakfast/Lunch/Dinner"
+    ],
+    "recipeCuisine": [
+      "Global"
+    ],
+    "keywords": "bread, homemade, wheat bread, whole wheat bread",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "1671 kcal",
+      "carbohydrateContent": "357 g",
+      "proteinContent": "55 g",
+      "fatContent": "15 g",
+      "saturatedFatContent": "3 g",
+      "cholesterolContent": "6 mg",
+      "sodiumContent": "2747 mg",
+      "fiberContent": "43 g",
+      "sugarContent": "74 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://cheflolaskitchen.com/easy-honey-whole-wheat-bread/#recipe",
+    "isPartOf": {
+      "@id": "https://cheflolaskitchen.com/easy-honey-whole-wheat-bread/#article"
+    },
+    "mainEntityOfPage": "https://cheflolaskitchen.com/easy-honey-whole-wheat-bread/"
+  },
+  "audit": [
+    "unmapped:video|aggregateRating|review"
+  ]
+}

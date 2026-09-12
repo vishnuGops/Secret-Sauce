@@ -1,0 +1,721 @@
+{
+  "schemaVersion": 1,
+  "id": "huy-vu/char-siu-pork-recipe-chinese-bbq-pork",
+  "slug": "char-siu-pork-recipe-chinese-bbq-pork",
+  "chefId": "chef_huy-vu",
+  "chefSlug": "huy-vu",
+  "chefName": "Huy Vu",
+  "title": "Char Siu Pork Recipe (Chinese BBQ Pork)",
+  "description": "Spiced, savory, and sweet--this char siu recipe is a traditional take on Chinese roasted pork that goes well with anything: steamed bao, white rice, and even noodles.",
+  "source": {
+    "sourceUrl": "https://www.hungryhuy.com/char-siu-pork/",
+    "finalUrl": "https://www.hungryhuy.com/char-siu-pork/",
+    "retrievedAt": "2026-09-11T03:14:44.082Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2021-01-28T12:05:38+00:00",
+    "rights": "Hungry Huy. Functional content plus a link, for internal app testing. Not redistributed.",
+    "pageTitle": "Char Siu Pork Recipe (Authentic Chinese BBQ Pork) - Hungry Huy",
+    "htmlSha256": "b49802fcd6587898be23b3898b38a1e4723ca855197afcf2297131a78354fa66",
+    "jsonLdBlockCount": 2,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": [
+        "equipment-from-html: 4",
+        "ingredient-html-only: ▢ 680 g ( 1 &frac12; lb ) pork butt/shoulder",
+        "ingredient-html-only: ▢ 50 g ( 4 tbsp ) white granulated sugar",
+        "ingredient-html-only: ▢ 56 g ( 4 tbsp ) fermented red bean curd sauce",
+        "ingredient-html-only: ▢ 20 g ( 2 pieces ) fermented red bean curd",
+        "ingredient-html-only: ▢ 81 g ( 4 tbsp ) honey",
+        "ingredient-html-only: ▢ 32 g ( 2 tbsp ) dark soy sauce",
+        "ingredient-html-only: ▢ 45 g ( 2 tbsp ) molasses",
+        "ingredient-html-only: ▢ 10 g ( 1 tbsp ) kosher salt Diamond Crystal brand",
+        "ingredient-html-only: ▢ 12 g ( 3 &frac12; tsp ) garlic powder",
+        "ingredient-html-only: ▢ 1.5 g ( &frac34; tsp ) five spice powder",
+        "ingredient-html-only: ▢ 67.5 g ( 3 tbsp ) maltose",
+        "ingredient-html-only: ▢ 14 g ( 1 tbsp ) boiling water",
+        "ingredient-jsonld-only: 12",
+        "regrouped-from-html: 2 groups"
+      ]
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "6"
+    ],
+    "servings": 6
+  },
+  "timing": {
+    "prepMinutes": 10,
+    "cookMinutes": 60,
+    "totalMinutes": 550,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Asian",
+    "Chinese"
+  ],
+  "category": [
+    "Dinner",
+    "Main Course"
+  ],
+  "keywords": [
+    "bbq pork",
+    "roasted pork"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "Marinade",
+      "items": [
+        {
+          "raw": "▢ 680 g ( 1 &frac12; lb ) pork butt/shoulder",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 680 g ( 1 &frac12; lb ) pork butt/shoulder",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "▢ 50 g ( 4 tbsp ) white granulated sugar",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 50 g ( 4 tbsp ) white granulated sugar",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "▢ 56 g ( 4 tbsp ) fermented red bean curd sauce",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 56 g ( 4 tbsp ) fermented red bean curd sauce",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "▢ 20 g ( 2 pieces ) fermented red bean curd",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 20 g ( 2 pieces ) fermented red bean curd",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "▢ 81 g ( 4 tbsp ) honey",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 81 g ( 4 tbsp ) honey",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "▢ 32 g ( 2 tbsp ) dark soy sauce",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 32 g ( 2 tbsp ) dark soy sauce",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "▢ 45 g ( 2 tbsp ) molasses",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 45 g ( 2 tbsp ) molasses",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "▢ 10 g ( 1 tbsp ) kosher salt Diamond Crystal brand",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 10 g ( 1 tbsp ) kosher salt Diamond Crystal brand",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "▢ 12 g ( 3 &frac12; tsp ) garlic powder",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 12 g ( 3 &frac12; tsp ) garlic powder",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "▢ 1.5 g ( &frac34; tsp ) five spice powder",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 1.5 g ( &frac34; tsp ) five spice powder",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        }
+      ]
+    },
+    {
+      "name": "Basting sauce & assembly",
+      "items": [
+        {
+          "raw": "▢ 67.5 g ( 3 tbsp ) maltose",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 67.5 g ( 3 tbsp ) maltose",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "▢ 14 g ( 1 tbsp ) boiling water",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "▢ 14 g ( 1 tbsp ) boiling water",
+          "note": null,
+          "isOptional": false,
+          "htmlOnly": true
+        },
+        {
+          "raw": "water (for roasting )",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "water (for roasting )",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "680 g pork butt/shoulder",
+          "quantity": 680,
+          "quantityText": "680",
+          "unit": "g",
+          "name": "pork butt/shoulder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "50 g white granulated sugar",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "white granulated sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "56 g fermented red bean curd sauce",
+          "quantity": 56,
+          "quantityText": "56",
+          "unit": "g",
+          "name": "fermented red bean curd sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "20 g fermented red bean curd",
+          "quantity": 20,
+          "quantityText": "20",
+          "unit": "g",
+          "name": "fermented red bean curd",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "81 g honey",
+          "quantity": 81,
+          "quantityText": "81",
+          "unit": "g",
+          "name": "honey",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "32 g dark soy sauce",
+          "quantity": 32,
+          "quantityText": "32",
+          "unit": "g",
+          "name": "dark soy sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "45 g molasses",
+          "quantity": 45,
+          "quantityText": "45",
+          "unit": "g",
+          "name": "molasses",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "10 g kosher salt (Diamond Crystal brand)",
+          "quantity": 10,
+          "quantityText": "10",
+          "unit": "g",
+          "name": "kosher salt (Diamond Crystal brand)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "12 g garlic powder",
+          "quantity": 12,
+          "quantityText": "12",
+          "unit": "g",
+          "name": "garlic powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1.5 g five spice powder",
+          "quantity": 1.5,
+          "quantityText": "1.5",
+          "unit": "g",
+          "name": "five spice powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "67.5 g maltose",
+          "quantity": 67.5,
+          "quantityText": "67.5",
+          "unit": "g",
+          "name": "maltose",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "14 g boiling water",
+          "quantity": 14,
+          "quantityText": "14",
+          "unit": "g",
+          "name": "boiling water",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Cut the pork butt into two long strips horizontally and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/pork-butt-split.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Cut the pork butt into two long strips horizontally and set aside.",
+        "name": "Cut the pork butt into two long strips horizontally and set aside.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-0",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/pork-butt-split.jpg"
+      }
+    },
+    {
+      "order": 2,
+      "text": "In a small-sized bowl, combine the rest of the ingredients to make the marinade. Use a fork or a whisk to thoroughly incorporate the bean curd in the sauce. Reserve half of the marinade in another glass container, you will use this for the basting sauce later.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/char-siu-marinade-ingredients-scaled.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a small-sized bowl, combine the rest of the ingredients to make the marinade. Use a fork or a whisk to thoroughly incorporate the bean curd in the sauce. Reserve half of the marinade in another glass container, you will use this for the basting sauce later.",
+        "name": "In a small-sized bowl, combine the rest of the ingredients to make the marinade. Use a fork or a whisk to thoroughly incorporate the bean curd in the sauce. Reserve half of the marinade in another glass container, you will use this for the basting sauce later.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-1",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/char-siu-marinade-ingredients-scaled.jpg"
+      }
+    },
+    {
+      "order": 3,
+      "text": "In a container, combine the pork strips and marinade making sure every side of the meat is thoroughly covered. Cover with a lid and marinate in the fridge for at least 8 hours or overnight. Halfway in the marinating process, make sure to turn the meat so that all sides get an even amount of marinating.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/char-siu-marinades.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a container, combine the pork strips and marinade making sure every side of the meat is thoroughly covered. Cover with a lid and marinate in the fridge for at least 8 hours or overnight. Halfway in the marinating process, make sure to turn the meat so that all sides get an even amount of marinating.",
+        "name": "In a container, combine the pork strips and marinade making sure every side of the meat is thoroughly covered. Cover with a lid and marinate in the fridge for at least 8 hours or overnight. Halfway in the marinating process, make sure to turn the meat so that all sides get an even amount of marinating.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-2",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/char-siu-marinades.jpg"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Remove the pork from the fridge at least 30 minutes before baking to bring the meat into room temperature; This will help to evenly cook the meat throughout.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Remove the pork from the fridge at least 30 minutes before baking to bring the meat into room temperature; This will help to evenly cook the meat throughout.",
+        "name": "Remove the pork from the fridge at least 30 minutes before baking to bring the meat into room temperature; This will help to evenly cook the meat throughout.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Preheat the oven to 375 °F. Prep the basting sauce by warming up the maltose in the microwave for about 20 seconds. Mix the maltose and hot water together, then mix with the rest of the reserved marinade to create the basting sauce.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": "375 °F",
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/basted-char-siu.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 375 °F. Prep the basting sauce by warming up the maltose in the microwave for about 20 seconds. Mix the maltose and hot water together, then mix with the rest of the reserved marinade to create the basting sauce.",
+        "name": "Preheat the oven to 375 °F. Prep the basting sauce by warming up the maltose in the microwave for about 20 seconds. Mix the maltose and hot water together, then mix with the rest of the reserved marinade to create the basting sauce.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-4",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/basted-char-siu.jpg"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Place the marinated meat on top of a rack lined sheet pan. Place the pan in the middle rack of the oven. Add water enough in the sheet pan to fill about 1 inch from the bottom of the pan.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Place the marinated meat on top of a rack lined sheet pan. Place the pan in the middle rack of the oven. Add water enough in the sheet pan to fill about 1 inch from the bottom of the pan.",
+        "name": "Place the marinated meat on top of a rack lined sheet pan. Place the pan in the middle rack of the oven. Add water enough in the sheet pan to fill about 1 inch from the bottom of the pan.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-5"
+      }
+    },
+    {
+      "order": 7,
+      "text": "Bake for 20 minutes, turn over and baste the meat with a brush.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/flipping-over-pork.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Bake for 20 minutes, turn over and baste the meat with a brush.",
+        "name": "Bake for 20 minutes, turn over and baste the meat with a brush.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-6",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/flipping-over-pork.jpg"
+      }
+    },
+    {
+      "order": 8,
+      "text": "Bake for another 15 minutes, turn over and baste.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/re-basting-in-oven.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Bake for another 15 minutes, turn over and baste.",
+        "name": "Bake for another 15 minutes, turn over and baste.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-7",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/re-basting-in-oven.jpg"
+      }
+    },
+    {
+      "order": 9,
+      "text": "Turn the heat up to 425 °F and bake for 5 minutes or until the edges of the char siu begin to darken and caramelize. Take internal temperature, it needs to be at least 145°F.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": "425 °F",
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/taking-pork-temp.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Turn the heat up to 425 °F and bake for 5 minutes or until the edges of the char siu begin to darken and caramelize. Take internal temperature, it needs to be at least 145°F.",
+        "name": "Turn the heat up to 425 °F and bake for 5 minutes or until the edges of the char siu begin to darken and caramelize. Take internal temperature, it needs to be at least 145°F.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-8",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/taking-pork-temp.jpg"
+      }
+    },
+    {
+      "order": 10,
+      "text": "Transfer the meat onto a cutting board, baste one more time, and let it rest for about five minutes before cutting. Serve the meat with steamed white rice and fresh veggies.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/sliced-char-siu.jpg",
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Transfer the meat onto a cutting board, baste one more time, and let it rest for about five minutes before cutting. Serve the meat with steamed white rice and fresh veggies.",
+        "name": "Transfer the meat onto a cutting board, baste one more time, and let it rest for about five minutes before cutting. Serve the meat with steamed white rice and fresh veggies.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-9",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/sliced-char-siu.jpg"
+      }
+    }
+  ],
+  "equipment": [
+    "cooling rack",
+    "sheet pan",
+    "tongs",
+    "brush"
+  ],
+  "supplies": [],
+  "nutrition": {
+    "calories": "301.06 kcal",
+    "carbohydrateContent": "35.94 g",
+    "proteinContent": "22.92 g",
+    "fatContent": "7.37 g",
+    "saturatedFatContent": "2.27 g",
+    "transFatContent": "0.04 g",
+    "cholesterolContent": "68.04 mg",
+    "sodiumContent": "1457.65 mg",
+    "fiberContent": "0.24 g",
+    "sugarContent": "31.75 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/char-siu-recipe-closeup.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/char-siu-recipe-closeup-500x500.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/char-siu-recipe-closeup-500x375.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/char-siu-recipe-closeup-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "8",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "These turned out amazing! Thanks Huy! It was my first time making bao and now I cannot go back to the store bought variety. Home made dough just tastes so fresh and fluffy!!! 5 stars",
+        "author": {
+          "@type": "Person",
+          "name": "Max"
+        },
+        "datePublished": "2025-01-13"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Char Siu Pork Recipe (Chinese BBQ Pork)",
+    "author": {
+      "@id": "https://www.hungryhuy.com/#/schema/person/77ba703312129b3930232d1c829f0ff0"
+    },
+    "description": "Spiced, savory, and sweet--this char siu recipe is a traditional take on Chinese roasted pork that goes well with anything: steamed bao, white rice, and even noodles.",
+    "datePublished": "2021-01-28T12:05:38+00:00",
+    "image": [
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/char-siu-recipe-closeup.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/char-siu-recipe-closeup-500x500.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/char-siu-recipe-closeup-500x375.jpg",
+      "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/char-siu-recipe-closeup-480x270.jpg"
+    ],
+    "recipeYield": [
+      "6"
+    ],
+    "prepTime": "PT10M",
+    "cookTime": "PT60M",
+    "totalTime": "PT550M",
+    "recipeIngredient": [
+      "680 g pork butt/shoulder",
+      "50 g white granulated sugar",
+      "56 g fermented red bean curd sauce",
+      "20 g fermented red bean curd",
+      "81 g honey",
+      "32 g dark soy sauce",
+      "45 g molasses",
+      "10 g kosher salt (Diamond Crystal brand)",
+      "12 g garlic powder",
+      "1.5 g five spice powder",
+      "67.5 g maltose",
+      "14 g boiling water",
+      "water (for roasting )"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Cut the pork butt into two long strips horizontally and set aside.",
+        "name": "Cut the pork butt into two long strips horizontally and set aside.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-0",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/pork-butt-split.jpg"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "In a small-sized bowl, combine the rest of the ingredients to make the marinade. Use a fork or a whisk to thoroughly incorporate the bean curd in the sauce. Reserve half of the marinade in another glass container, you will use this for the basting sauce later.",
+        "name": "In a small-sized bowl, combine the rest of the ingredients to make the marinade. Use a fork or a whisk to thoroughly incorporate the bean curd in the sauce. Reserve half of the marinade in another glass container, you will use this for the basting sauce later.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-1",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/char-siu-marinade-ingredients-scaled.jpg"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "In a container, combine the pork strips and marinade making sure every side of the meat is thoroughly covered. Cover with a lid and marinate in the fridge for at least 8 hours or overnight. Halfway in the marinating process, make sure to turn the meat so that all sides get an even amount of marinating.",
+        "name": "In a container, combine the pork strips and marinade making sure every side of the meat is thoroughly covered. Cover with a lid and marinate in the fridge for at least 8 hours or overnight. Halfway in the marinating process, make sure to turn the meat so that all sides get an even amount of marinating.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-2",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/char-siu-marinades.jpg"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Remove the pork from the fridge at least 30 minutes before baking to bring the meat into room temperature; This will help to evenly cook the meat throughout.",
+        "name": "Remove the pork from the fridge at least 30 minutes before baking to bring the meat into room temperature; This will help to evenly cook the meat throughout.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Preheat the oven to 375 °F. Prep the basting sauce by warming up the maltose in the microwave for about 20 seconds. Mix the maltose and hot water together, then mix with the rest of the reserved marinade to create the basting sauce.",
+        "name": "Preheat the oven to 375 °F. Prep the basting sauce by warming up the maltose in the microwave for about 20 seconds. Mix the maltose and hot water together, then mix with the rest of the reserved marinade to create the basting sauce.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-4",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/basted-char-siu.jpg"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Place the marinated meat on top of a rack lined sheet pan. Place the pan in the middle rack of the oven. Add water enough in the sheet pan to fill about 1 inch from the bottom of the pan.",
+        "name": "Place the marinated meat on top of a rack lined sheet pan. Place the pan in the middle rack of the oven. Add water enough in the sheet pan to fill about 1 inch from the bottom of the pan.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-5"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Bake for 20 minutes, turn over and baste the meat with a brush.",
+        "name": "Bake for 20 minutes, turn over and baste the meat with a brush.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-6",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/flipping-over-pork.jpg"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Bake for another 15 minutes, turn over and baste.",
+        "name": "Bake for another 15 minutes, turn over and baste.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-7",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/re-basting-in-oven.jpg"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Turn the heat up to 425 °F and bake for 5 minutes or until the edges of the char siu begin to darken and caramelize. Take internal temperature, it needs to be at least 145°F.",
+        "name": "Turn the heat up to 425 °F and bake for 5 minutes or until the edges of the char siu begin to darken and caramelize. Take internal temperature, it needs to be at least 145°F.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-8",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/taking-pork-temp.jpg"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Transfer the meat onto a cutting board, baste one more time, and let it rest for about five minutes before cutting. Serve the meat with steamed white rice and fresh veggies.",
+        "name": "Transfer the meat onto a cutting board, baste one more time, and let it rest for about five minutes before cutting. Serve the meat with steamed white rice and fresh veggies.",
+        "url": "https://www.hungryhuy.com/char-siu-pork/#wprm-recipe-12735-step-0-9",
+        "image": "https://cdn.shortpixel.ai/spai2/q_lossless+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/sliced-char-siu.jpg"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "8",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "These turned out amazing! Thanks Huy! It was my first time making bao and now I cannot go back to the store bought variety. Home made dough just tastes so fresh and fluffy!!! 5 stars",
+        "author": {
+          "@type": "Person",
+          "name": "Max"
+        },
+        "datePublished": "2025-01-13"
+      }
+    ],
+    "recipeCategory": [
+      "Dinner",
+      "Main Course"
+    ],
+    "recipeCuisine": [
+      "Asian",
+      "Chinese"
+    ],
+    "keywords": "bbq pork, roasted pork",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "301.06 kcal",
+      "carbohydrateContent": "35.94 g",
+      "proteinContent": "22.92 g",
+      "fatContent": "7.37 g",
+      "saturatedFatContent": "2.27 g",
+      "transFatContent": "0.04 g",
+      "cholesterolContent": "68.04 mg",
+      "sodiumContent": "1457.65 mg",
+      "fiberContent": "0.24 g",
+      "sugarContent": "31.75 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://www.hungryhuy.com/char-siu-pork/#recipe",
+    "isPartOf": {
+      "@id": "https://www.hungryhuy.com/char-siu-pork/#article"
+    },
+    "mainEntityOfPage": "https://www.hungryhuy.com/char-siu-pork/"
+  },
+  "audit": [
+    "unparsed-quantity:13",
+    "unmapped:aggregateRating|review"
+  ]
+}

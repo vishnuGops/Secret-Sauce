@@ -1,0 +1,618 @@
+{
+  "schemaVersion": 1,
+  "id": "yumna-jawad/lebanese-spinach-stew",
+  "slug": "lebanese-spinach-stew",
+  "chefId": "chef_yumna-jawad",
+  "chefSlug": "yumna-jawad",
+  "chefName": "Yumna Jawad",
+  "title": "Lebanese Spinach Stew",
+  "description": "Try this authentic Lebanese style Spinach stew made with simple ingredients; it's wholesome, well-balanced and perfect to feed a large family",
+  "source": {
+    "sourceUrl": "https://feelgoodfoodie.net/recipe/spinach-stew/",
+    "finalUrl": "https://feelgoodfoodie.net/recipe/spinach-stew/",
+    "retrievedAt": "2026-09-11T02:46:56.567Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2020-04-16T22:45:09+00:00",
+    "rights": "Feel Good Foodie. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "744785426613821a3004ca733863d8002a634fdf42ec629600b36690a1ca766a",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": [
+        "equipment-from-html: 1"
+      ]
+    },
+    "robots": "allows recipe paths; /wp-admin/ and /signup/ disallowed"
+  },
+  "yield": {
+    "raw": [
+      "8",
+      "8 servings"
+    ],
+    "servings": 8
+  },
+  "timing": {
+    "prepMinutes": 5,
+    "cookMinutes": 22,
+    "totalMinutes": 27,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Arabic",
+    "Lebanese",
+    "Middle Eastern"
+  ],
+  "category": [
+    "Entree"
+  ],
+  "keywords": [
+    "beef and spinach stew",
+    "Lebanese Spinach Stew",
+    "middle eastern spinach stew",
+    "spinach in stew",
+    "Spinach Stew",
+    "spinach stew recipe"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "2 tablespoons olive oil (divided)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "olive oil (divided)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "⅓ cup pine nuts",
+          "quantity": 0.3333,
+          "quantityText": "⅓",
+          "unit": "cup",
+          "name": "pine nuts",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 pound lean ground beef",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "lb",
+          "name": "lean ground beef",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 teaspoons 7 Spice",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "7 Spice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 teaspoons salt (divided)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "salt (divided)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ teaspoon black pepper (divided)",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "black pepper (divided)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ cup chopped cilantro",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "cup",
+          "name": "chopped cilantro",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "5 garlic cloves (minced)",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": null,
+          "name": "garlic cloves (minced)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ teaspoon crushed red pepper",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "crushed red pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 10-ounce bags frozen spinach",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "10-ounce bags frozen spinach",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 cups chicken broth",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "cups",
+          "name": "chicken broth",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Juice of 1 lemon",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Juice of 1 lemon",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "In a heavy bottomed saute pan over medium heat, heat 1 tablespoon olive oil and toast the pine nuts until golden, remove and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a heavy bottomed saute pan over medium heat, heat 1 tablespoon olive oil and toast the pine nuts until golden, remove and set aside.",
+        "name": "In a heavy bottomed saute pan over medium heat, heat 1 tablespoon olive oil and toast the pine nuts until golden, remove and set aside.",
+        "url": "https://feelgoodfoodie.net/recipe/spinach-stew/#wprm-recipe-20344-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "In the same pan over medium high heat, heat the remaining tablespoon of olive oil and add the ground beef, season with 7 Spice, 1 teaspoon salt and 1/4 teaspoon pepper. Cook until the meat is browned, about 5-7 minutes. Remove and set aside, keep any oil and juices in the pan.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In the same pan over medium high heat, heat the remaining tablespoon of olive oil and add the ground beef, season with 7 Spice, 1 teaspoon salt and 1/4 teaspoon pepper. Cook until the meat is browned, about 5-7 minutes. Remove and set aside, keep any oil and juices in the pan.",
+        "name": "In the same pan over medium high heat, heat the remaining tablespoon of olive oil and add the ground beef, season with 7 Spice, 1 teaspoon salt and 1/4 teaspoon pepper. Cook until the meat is browned, about 5-7 minutes. Remove and set aside, keep any oil and juices in the pan.",
+        "url": "https://feelgoodfoodie.net/recipe/spinach-stew/#wprm-recipe-20344-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "In the same pan, add the cilantro, garlic and crushed red pepper, cook for about 2-3 minutes until fragrant. Add the frozen spinach, remaining salt and cook with the cilantro mixture until softened, about 5 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In the same pan, add the cilantro, garlic and crushed red pepper, cook for about 2-3 minutes until fragrant. Add the frozen spinach, remaining salt and cook with the cilantro mixture until softened, about 5 minutes.",
+        "name": "In the same pan, add the cilantro, garlic and crushed red pepper, cook for about 2-3 minutes until fragrant. Add the frozen spinach, remaining salt and cook with the cilantro mixture until softened, about 5 minutes.",
+        "url": "https://feelgoodfoodie.net/recipe/spinach-stew/#wprm-recipe-20344-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Add the chicken broth or water and bring mixture to a boil. Return the cooked ground beef and pine nuts to the pan. Lower heat and simmer for 20 minutes until stew thickens.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add the chicken broth or water and bring mixture to a boil. Return the cooked ground beef and pine nuts to the pan. Lower heat and simmer for 20 minutes until stew thickens.",
+        "name": "Add the chicken broth or water and bring mixture to a boil. Return the cooked ground beef and pine nuts to the pan. Lower heat and simmer for 20 minutes until stew thickens.",
+        "url": "https://feelgoodfoodie.net/recipe/spinach-stew/#wprm-recipe-20344-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Stir in the lemon juice and serve over traditional Arabic rice pilaf.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Stir in the lemon juice and serve over traditional Arabic rice pilaf.",
+        "name": "Stir in the lemon juice and serve over traditional Arabic rice pilaf.",
+        "url": "https://feelgoodfoodie.net/recipe/spinach-stew/#wprm-recipe-20344-step-0-4"
+      }
+    }
+  ],
+  "equipment": [
+    "Ceramic Nonstick Cookware Set"
+  ],
+  "supplies": [],
+  "nutrition": {
+    "calories": "157 kcal",
+    "carbohydrateContent": "2 g",
+    "proteinContent": "14 g",
+    "fatContent": "10 g",
+    "saturatedFatContent": "2 g",
+    "cholesterolContent": "35 mg",
+    "sodiumContent": "765 mg",
+    "fiberContent": "1 g",
+    "sugarContent": "1 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://feelgoodfoodie.net/wp-content/uploads/2020/04/Spinach-Stew-7.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2020/04/Spinach-Stew-7-500x500.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2020/04/Spinach-Stew-7-500x375.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2020/04/Spinach-Stew-7-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "290",
+      "reviewCount": "8"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "From the moment I tried your micro chopped salad on pita I’ve been hooked. But this one I keep coming back to because it’s just so delicious and pretty simple. \r\nI make it with ground turkey as I cannot eat beef for health reasons. I also like it with black forbidden rice when I have some. This and many of your recipes have helped me on my health journey with chronic diseases. Thank you. “It’s so good”.",
+        "author": {
+          "@type": "Person",
+          "name": "Karen"
+        },
+        "datePublished": "2026-02-20"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Hi Yumna, I am very happy to have found this recipe. I come from a traditional home cooking traditional food, making this recipe tasted just like mom made with the right approach and perfectly spiced.",
+        "author": {
+          "@type": "Person",
+          "name": "RM"
+        },
+        "datePublished": "2026-01-24"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Amazing recipe and so easy to follow. I use this regularly on rotation. Recently found how to boost it further by adding lentils and mushrooms to the soup, and quinoa to the rice.",
+        "author": {
+          "@type": "Person",
+          "name": "Tiffany"
+        },
+        "datePublished": "2025-11-28"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I tried this recipe today and it was exceptional! Tastes exactly how my mom makes it. Thank you!!!! Def will be making it again, it was super easy to make. I served it on basmati rice instead as my Lebanese rice skills are questionable still.",
+        "author": {
+          "@type": "Person",
+          "name": "Rey"
+        },
+        "datePublished": "2025-11-08"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This recipe is delicious!  My Mother made a similar dish when I was growing up.  So happy to have a recipe to follow now!  Well done as always Yumna!  😊",
+        "author": {
+          "@type": "Person",
+          "name": "Clara"
+        },
+        "datePublished": "2025-10-21"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thanks for sharing this recipe. I did it without the onions and with fresh spinach, it was very nice. I would try with frozen spinach next time to make life easier but do you use chopped frozen spinach or whole leaf frozen spinach?",
+        "author": {
+          "@type": "Person",
+          "name": "Fatima"
+        },
+        "datePublished": "2025-05-20"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This is my 2nd recipe from your website. It's so yummy! Thanks for sharing, everybody loved it",
+        "author": {
+          "@type": "Person",
+          "name": "Mirna"
+        },
+        "datePublished": "2025-01-22"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "We love the spices in this dish!  It's now on my rotation.  The first time I made it with frozen spinach but the second time I subbed fresh spinach using the measurements given and we liked the dish even better.  The frozen spinach has a bit of a weird taste.  Also, this recipe came up as a vegetarian selection but the ingredients included beef, with a note that garbanzos could be substitued.  I subbed a drained 15 oz can of garbanzos and it was fine.  But it feels like there could be a better conversion to vegetarian.",
+        "author": {
+          "@type": "Person",
+          "name": "Michele"
+        },
+        "datePublished": "2025-01-03"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Lebanese Spinach Stew",
+    "author": {
+      "@id": "https://feelgoodfoodie.net/#/schema/person/7a5a734de72932611fa5814fce8c12d5"
+    },
+    "description": "Try this authentic Lebanese style Spinach stew made with simple ingredients; it&#039;s wholesome, well-balanced and perfect to feed a large family",
+    "datePublished": "2020-04-16T22:45:09+00:00",
+    "image": [
+      "https://feelgoodfoodie.net/wp-content/uploads/2020/04/Spinach-Stew-7.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2020/04/Spinach-Stew-7-500x500.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2020/04/Spinach-Stew-7-500x375.jpg",
+      "https://feelgoodfoodie.net/wp-content/uploads/2020/04/Spinach-Stew-7-480x270.jpg"
+    ],
+    "recipeYield": [
+      "8",
+      "8 servings"
+    ],
+    "prepTime": "PT5M",
+    "cookTime": "PT22M",
+    "totalTime": "PT27M",
+    "recipeIngredient": [
+      "2 tablespoons olive oil (divided)",
+      "⅓ cup pine nuts",
+      "1 pound lean ground beef",
+      "2 teaspoons 7 Spice",
+      "2 teaspoons salt (divided)",
+      "½ teaspoon black pepper (divided)",
+      "¼ cup chopped cilantro",
+      "5  garlic cloves (minced)",
+      "½ teaspoon crushed red pepper",
+      "2 10-ounce bags frozen spinach",
+      "3 cups chicken broth",
+      "Juice of 1 lemon"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "In a heavy bottomed saute pan over medium heat, heat 1 tablespoon olive oil and toast the pine nuts until golden, remove and set aside.",
+        "name": "In a heavy bottomed saute pan over medium heat, heat 1 tablespoon olive oil and toast the pine nuts until golden, remove and set aside.",
+        "url": "https://feelgoodfoodie.net/recipe/spinach-stew/#wprm-recipe-20344-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "In the same pan over medium high heat, heat the remaining tablespoon of olive oil and add the ground beef, season with 7 Spice, 1 teaspoon salt and 1/4 teaspoon pepper. Cook until the meat is browned, about 5-7 minutes. Remove and set aside, keep any oil and juices in the pan.",
+        "name": "In the same pan over medium high heat, heat the remaining tablespoon of olive oil and add the ground beef, season with 7 Spice, 1 teaspoon salt and 1/4 teaspoon pepper. Cook until the meat is browned, about 5-7 minutes. Remove and set aside, keep any oil and juices in the pan.",
+        "url": "https://feelgoodfoodie.net/recipe/spinach-stew/#wprm-recipe-20344-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "In the same pan, add the cilantro, garlic and crushed red pepper, cook for about 2-3 minutes until fragrant. Add the frozen spinach, remaining salt and cook with the cilantro mixture until softened, about 5 minutes.",
+        "name": "In the same pan, add the cilantro, garlic and crushed red pepper, cook for about 2-3 minutes until fragrant. Add the frozen spinach, remaining salt and cook with the cilantro mixture until softened, about 5 minutes.",
+        "url": "https://feelgoodfoodie.net/recipe/spinach-stew/#wprm-recipe-20344-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Add the chicken broth or water and bring mixture to a boil. Return the cooked ground beef and pine nuts to the pan. Lower heat and simmer for 20 minutes until stew thickens.",
+        "name": "Add the chicken broth or water and bring mixture to a boil. Return the cooked ground beef and pine nuts to the pan. Lower heat and simmer for 20 minutes until stew thickens.",
+        "url": "https://feelgoodfoodie.net/recipe/spinach-stew/#wprm-recipe-20344-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Stir in the lemon juice and serve over traditional Arabic rice pilaf.",
+        "name": "Stir in the lemon juice and serve over traditional Arabic rice pilaf.",
+        "url": "https://feelgoodfoodie.net/recipe/spinach-stew/#wprm-recipe-20344-step-0-4"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "290",
+      "reviewCount": "8"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "From the moment I tried your micro chopped salad on pita I’ve been hooked. But this one I keep coming back to because it’s just so delicious and pretty simple. \r\nI make it with ground turkey as I cannot eat beef for health reasons. I also like it with black forbidden rice when I have some. This and many of your recipes have helped me on my health journey with chronic diseases. Thank you. “It’s so good”.",
+        "author": {
+          "@type": "Person",
+          "name": "Karen"
+        },
+        "datePublished": "2026-02-20"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Hi Yumna, I am very happy to have found this recipe. I come from a traditional home cooking traditional food, making this recipe tasted just like mom made with the right approach and perfectly spiced.",
+        "author": {
+          "@type": "Person",
+          "name": "RM"
+        },
+        "datePublished": "2026-01-24"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Amazing recipe and so easy to follow. I use this regularly on rotation. Recently found how to boost it further by adding lentils and mushrooms to the soup, and quinoa to the rice.",
+        "author": {
+          "@type": "Person",
+          "name": "Tiffany"
+        },
+        "datePublished": "2025-11-28"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "I tried this recipe today and it was exceptional! Tastes exactly how my mom makes it. Thank you!!!! Def will be making it again, it was super easy to make. I served it on basmati rice instead as my Lebanese rice skills are questionable still.",
+        "author": {
+          "@type": "Person",
+          "name": "Rey"
+        },
+        "datePublished": "2025-11-08"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This recipe is delicious!  My Mother made a similar dish when I was growing up.  So happy to have a recipe to follow now!  Well done as always Yumna!  😊",
+        "author": {
+          "@type": "Person",
+          "name": "Clara"
+        },
+        "datePublished": "2025-10-21"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Thanks for sharing this recipe. I did it without the onions and with fresh spinach, it was very nice. I would try with frozen spinach next time to make life easier but do you use chopped frozen spinach or whole leaf frozen spinach?",
+        "author": {
+          "@type": "Person",
+          "name": "Fatima"
+        },
+        "datePublished": "2025-05-20"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This is my 2nd recipe from your website. It's so yummy! Thanks for sharing, everybody loved it",
+        "author": {
+          "@type": "Person",
+          "name": "Mirna"
+        },
+        "datePublished": "2025-01-22"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "We love the spices in this dish!  It's now on my rotation.  The first time I made it with frozen spinach but the second time I subbed fresh spinach using the measurements given and we liked the dish even better.  The frozen spinach has a bit of a weird taste.  Also, this recipe came up as a vegetarian selection but the ingredients included beef, with a note that garbanzos could be substitued.  I subbed a drained 15 oz can of garbanzos and it was fine.  But it feels like there could be a better conversion to vegetarian.",
+        "author": {
+          "@type": "Person",
+          "name": "Michele"
+        },
+        "datePublished": "2025-01-03"
+      }
+    ],
+    "recipeCategory": [
+      "Entree"
+    ],
+    "recipeCuisine": [
+      "Arabic",
+      "Lebanese",
+      "Middle Eastern"
+    ],
+    "keywords": "beef and spinach stew, Lebanese Spinach Stew, middle eastern spinach stew, spinach in stew, Spinach Stew, spinach stew recipe",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "157 kcal",
+      "carbohydrateContent": "2 g",
+      "proteinContent": "14 g",
+      "fatContent": "10 g",
+      "saturatedFatContent": "2 g",
+      "cholesterolContent": "35 mg",
+      "sodiumContent": "765 mg",
+      "fiberContent": "1 g",
+      "sugarContent": "1 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://feelgoodfoodie.net/recipe/spinach-stew/#recipe",
+    "isPartOf": {
+      "@id": "https://feelgoodfoodie.net/recipe/spinach-stew/#article"
+    },
+    "mainEntityOfPage": "https://feelgoodfoodie.net/recipe/spinach-stew/"
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "unmapped:aggregateRating|review"
+  ]
+}

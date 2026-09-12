@@ -1,0 +1,539 @@
+{
+  "schemaVersion": 1,
+  "id": "madhur-jaffrey/thai-style-red-curry-with-chicken",
+  "slug": "thai-style-red-curry-with-chicken",
+  "chefId": "chef_madhur-jaffrey",
+  "chefSlug": "madhur-jaffrey",
+  "chefName": "Madhur Jaffrey",
+  "title": "Thai-style red curry with chicken",
+  "description": "Making your own Thai red curry paste takes time, but you'll be astonished at the difference. Leftover paste will keep in the fridge for about three weeks.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/chickenandbambooshoo_90183",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/chickenandbambooshoo_90183",
+    "retrievedAt": "2026-09-11T00:26:45.059Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Madhur Jaffrey"
+    ],
+    "datePublished": "2008-11-06T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "c2ed22c7b347bebeb52fc1ef4938c45df9289ed725333ae9f111ff5a04649bfe",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 3 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4-6"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 120,
+    "cookMinutes": 60,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Thai and South-East Asian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "top thai curry",
+    "Thai chicken curry",
+    "dairy free",
+    "egg free",
+    "gluten free",
+    "pregnancy friendly"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the tamarind paste (for use in the curry)",
+      "items": [
+        {
+          "raw": "30-55g/1-2oz dried tamarind pulp, from a block",
+          "quantity": 30,
+          "quantityText": "30-55",
+          "unit": "g",
+          "name": "/1-2oz dried tamarind pulp, from a block",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "hot water, to cover",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "hot water, to cover",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the red curry paste",
+      "items": [
+        {
+          "raw": "10-12 dried, hot red chillies (of the long, cayenne variety)",
+          "quantity": 10,
+          "quantityText": "10-12",
+          "unit": null,
+          "name": "dried, hot red chillies (of the long, cayenne variety)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "140g/5oz shallots, chopped",
+          "quantity": 140,
+          "quantityText": "140",
+          "unit": "g",
+          "name": "/5oz shallots",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "5 garlic cloves, peeled and chopped",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": null,
+          "name": "garlic cloves",
+          "note": "peeled and chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "3 thin slices peeled fresh galangal, or fresh ginger",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "thin slices peeled fresh galangal, or fresh ginger",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp fresh lemongrass that has been thinly sliced, crossways",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "fresh lemongrass that has been thinly sliced, crossways",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6-8 fresh coriander roots, washed well and coarsely chopped (use coriander leaves if unavailable)",
+          "quantity": 6,
+          "quantityText": "6-8",
+          "unit": null,
+          "name": "fresh coriander roots",
+          "note": "washed well and coarsely chopped (use coriander leaves if unavailable)",
+          "isOptional": false
+        },
+        {
+          "raw": "1 thin slice of fresh makrut lime rind, about 4cm x 0.5cm/1½in x ¼in, or dried rind, soaked in water for 30 minutes (substitute ordinary lime rind, without the white pith, if unavailable)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "thin slice of fresh makrut lime rind, about 4cm x 0.5cm/1½in x ¼in, or dried rind, soaked in water for 30 minutes (substitute ordinary lime rind, without the white pith, if unavailable)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp freshly ground white pepper",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "freshly ground white pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ tsp shrimp paste, or 2 anchovies from a can, chopped",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "tsp",
+          "name": "shrimp paste",
+          "note": "or 2 anchovies from a can, chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp ground cumin",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "ground cumin",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp ground coriander",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "ground coriander",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp paprika",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "paprika",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the curry",
+      "items": [
+        {
+          "raw": "450g/1lb boned and skinned chicken breasts",
+          "quantity": 450,
+          "quantityText": "450",
+          "unit": "g",
+          "name": "/1lb boned and skinned chicken breasts",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp vegetable or groundnut oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "vegetable or groundnut oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "400ml/14fl oz can of coconut milk, left undisturbed for three hours or more",
+          "quantity": 400,
+          "quantityText": "400",
+          "unit": "ml",
+          "name": "/14fl oz can of coconut milk, left undisturbed for three hours or more",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "5 tbsp red curry paste",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": "tbsp",
+          "name": "red curry paste",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "140g/5oz sliced bamboo shoots from a can, drained and rinsed",
+          "quantity": 140,
+          "quantityText": "140",
+          "unit": "g",
+          "name": "/5oz sliced bamboo shoots from a can",
+          "note": "drained and rinsed",
+          "isOptional": false
+        },
+        {
+          "raw": "4 fresh makrut lime leaves or 1 tsp lemon zest",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "fresh makrut lime leaves or 1 tsp lemon zest",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp fish sauce, or to taste",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "fish sauce",
+          "note": "or to taste",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp thick tamarind paste or lemon juice",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "thick tamarind paste or lemon juice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp palm sugar or brown sugar",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "palm sugar or brown sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "15-20 fresh Thai (holy) basil leaves or ordinary basil leaves",
+          "quantity": 15,
+          "quantityText": "15-20",
+          "unit": null,
+          "name": "fresh Thai (holy) basil leaves or ordinary basil leaves",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "If using tamarind paste, a couple of hours before you want to make the curry (or preferably the night before), place the tamarind pulp into a small bowl. Add hot or boiling water to cover (if the pulp is very dry, use boiling water). Soak the tamarind until it's very soft and pliable, for a few hours or preferably overnight.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "If using tamarind paste, a couple of hours before you want to make the curry (or preferably the night before), place the tamarind pulp into a small bowl. Add hot or boiling water to cover (if the pulp is very dry, use boiling water). Soak the tamarind until it's very soft and pliable, for a few hours or preferably overnight."
+    },
+    {
+      "order": 2,
+      "text": "To obtain the pulp, remove the tamarind seeds and any tough fibres with your fingers. Discard. Place the pulp into a sieve set over a bowl and press the pulp through the sieve.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "To obtain the pulp, remove the tamarind seeds and any tough fibres with your fingers. Discard. Place the pulp into a sieve set over a bowl and press the pulp through the sieve."
+    },
+    {
+      "order": 3,
+      "text": "For the curry paste, soak the chillies in five tablespoons of hot water for 1-2 hours. (You could also put them in a microwave oven for 2-3 minutes and then let them soak for about an hour.)",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the curry paste, soak the chillies in five tablespoons of hot water for 1-2 hours. (You could also put them in a microwave oven for 2-3 minutes and then let them soak for about an hour.)"
+    },
+    {
+      "order": 4,
+      "text": "Put the soaked chillies, together with their soaking liquid, into the bowl of a food processor, along with all the remaining paste ingredients in the order listed. Blend until you have a smooth paste. You may need to add a bit more water. This recipe will make about ten tablespoons of paste, so freeze or refrigerate what you don't use.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put the soaked chillies, together with their soaking liquid, into the bowl of a food processor, along with all the remaining paste ingredients in the order listed. Blend until you have a smooth paste. You may need to add a bit more water. This recipe will make about ten tablespoons of paste, so freeze or refrigerate what you don't use."
+    },
+    {
+      "order": 5,
+      "text": "For the curry, cut the chicken breasts crossways into 3mm/1/8in thick slices.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the curry, cut the chicken breasts crossways into 3mm/1/8in thick slices."
+    },
+    {
+      "order": 6,
+      "text": "Heat the oil in a wide, preferably non-stick, pan set over a medium-high heat.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat the oil in a wide, preferably non-stick, pan set over a medium-high heat."
+    },
+    {
+      "order": 7,
+      "text": "Carefully open the can of coconut milk without disturbing it too much. Remove four tablespoons of the thick coconut cream that will have settled at the top and place in a small bowl. Stir the remaining contents of the can well and set aside.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Carefully open the can of coconut milk without disturbing it too much. Remove four tablespoons of the thick coconut cream that will have settled at the top and place in a small bowl. Stir the remaining contents of the can well and set aside."
+    },
+    {
+      "order": 8,
+      "text": "When the pan is hot, add the coconut cream and stir. Add the curry paste and stir again. Stir fry for 3-4 minutes or until the oil separates and the paste is lightly browned.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "When the pan is hot, add the coconut cream and stir. Add the curry paste and stir again. Stir fry for 3-4 minutes or until the oil separates and the paste is lightly browned."
+    },
+    {
+      "order": 9,
+      "text": "Reduce the heat to low and add the chicken, bamboo shoots, reserved coconut milk, lime leaves (or lemon zest), fish sauce, tamarind paste (or lemon juice) and the palm sugar (or brown sugar).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Reduce the heat to low and add the chicken, bamboo shoots, reserved coconut milk, lime leaves (or lemon zest), fish sauce, tamarind paste (or lemon juice) and the palm sugar (or brown sugar)."
+    },
+    {
+      "order": 10,
+      "text": "Stir together well and bring to a simmer. The chicken should turn white and cook through by the time the first bubbles begin to appear. Simmer on a low heat for a further minute or two.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Stir together well and bring to a simmer. The chicken should turn white and cook through by the time the first bubbles begin to appear. Simmer on a low heat for a further minute or two."
+    },
+    {
+      "order": 11,
+      "text": "Just before serving, sprinkle the basil leaves over the curry, stir gently and remove from the heat. Serve with jasmine rice.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Just before serving, sprinkle the basil leaves over the curry, stir gently and remove from the heat. Serve with jasmine rice."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/chickenandbambooshoo_90183_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 6,
+      "ratingValue": 5
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Making your own Thai red curry paste takes time, but you'll be astonished at the difference. Leftover paste will keep in the fridge for about three weeks.",
+    "headline": "Thai-style red curry with chicken",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/chickenandbambooshoo_90183_16x9.jpg"
+    },
+    "name": "Thai-style red curry with chicken",
+    "author": {
+      "@type": "Person",
+      "name": "Madhur Jaffrey"
+    },
+    "datePublished": "2008-11-06T00:00:00.000Z",
+    "dateModified": "2023-07-24T15:46:19.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 6,
+      "ratingValue": 5
+    },
+    "prepTime": "PT2H",
+    "cookTime": "PT1H",
+    "keywords": "top thai curry, Thai chicken curry, dairy free, egg free, gluten free, pregnancy friendly",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Thai and South-East Asian",
+    "recipeIngredient": [
+      "30-55g/1-2oz dried tamarind pulp, from a block",
+      "hot water, to cover",
+      "10-12 dried, hot red chillies (of the long, cayenne variety)",
+      "140g/5oz shallots, chopped",
+      "5 garlic cloves, peeled and chopped",
+      "3 thin slices peeled fresh galangal, or fresh ginger",
+      "1 tbsp fresh lemongrass that has been thinly sliced, crossways",
+      "6-8 fresh coriander roots, washed well and coarsely chopped (use coriander leaves if unavailable)",
+      "1 thin slice of fresh makrut lime rind, about 4cm x 0.5cm/1½in x ¼in, or dried rind, soaked in water for 30 minutes (substitute ordinary lime rind, without the white pith, if unavailable)",
+      "½ tsp freshly ground white pepper",
+      "¼ tsp shrimp paste, or 2 anchovies from a can, chopped",
+      "½ tsp ground cumin",
+      "½ tsp ground coriander",
+      "2 tbsp paprika",
+      "450g/1lb boned and skinned chicken breasts",
+      "2 tbsp vegetable or groundnut oil",
+      "400ml/14fl oz can of coconut milk, left undisturbed for three hours or more",
+      "5 tbsp red curry paste",
+      "140g/5oz sliced bamboo shoots from a can, drained and rinsed",
+      "4 fresh makrut lime leaves or 1 tsp lemon zest",
+      "2 tbsp fish sauce, or to taste",
+      "1 tsp thick tamarind paste or lemon juice",
+      "1 tsp palm sugar or brown sugar",
+      "15-20 fresh Thai (holy) basil leaves or ordinary basil leaves"
+    ],
+    "recipeInstructions": [
+      "If using tamarind paste, a couple of hours before you want to make the curry (or preferably the night before), place the tamarind pulp into a small bowl. Add hot or boiling water to cover (if the pulp is very dry, use boiling water). Soak the tamarind until it's very soft and pliable, for a few hours or preferably overnight.",
+      "To obtain the pulp, remove the tamarind seeds and any tough fibres with your fingers. Discard. Place the pulp into a sieve set over a bowl and press the pulp through the sieve.",
+      "For the curry paste, soak the chillies in five tablespoons of hot water for 1-2 hours. (You could also put them in a microwave oven for 2-3 minutes and then let them soak for about an hour.)",
+      "Put the soaked chillies, together with their soaking liquid, into the bowl of a food processor, along with all the remaining paste ingredients in the order listed. Blend until you have a smooth paste. You may need to add a bit more water. This recipe will make about ten tablespoons of paste, so freeze or refrigerate what you don't use.",
+      "For the curry, cut the chicken breasts crossways into 3mm/1/8in thick slices.",
+      "Heat the oil in a wide, preferably non-stick, pan set over a medium-high heat.",
+      "Carefully open the can of coconut milk without disturbing it too much. Remove four tablespoons of the thick coconut cream that will have settled at the top and place in a small bowl. Stir the remaining contents of the can well and set aside.",
+      "When the pan is hot, add the coconut cream and stir. Add the curry paste and stir again. Stir fry for 3-4 minutes or until the oil separates and the paste is lightly browned.",
+      "Reduce the heat to low and add the chicken, bamboo shoots, reserved coconut milk, lime leaves (or lemon zest), fish sauce, tamarind paste (or lemon juice) and the palm sugar (or brown sugar).",
+      "Stir together well and bring to a simmer. The chicken should turn white and cook through by the time the first bubbles begin to appear. Simmer on a low heat for a further minute or two.",
+      "Just before serving, sprinkle the basil leaves over the curry, stir gently and remove from the heat. Serve with jasmine rice."
+    ],
+    "recipeYield": "Serves 4-6",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/GlutenFreeDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "range-quantity:4",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

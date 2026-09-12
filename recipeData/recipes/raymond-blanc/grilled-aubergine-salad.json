@@ -1,0 +1,410 @@
+{
+  "schemaVersion": 1,
+  "id": "raymond-blanc/grilled-aubergine-salad",
+  "slug": "grilled-aubergine-salad",
+  "chefId": "chef_raymond-blanc",
+  "chefSlug": "raymond-blanc",
+  "chefName": "Raymond Blanc",
+  "title": "Grilled aubergine salad",
+  "description": "A simple grilled aubergine salad with barbecued aubergine dressed with chilli, chickpeas, feta and mint. Perfect for barbecue season.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/burnt_aubergine_salad_22252",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/burnt_aubergine_salad_22252",
+    "retrievedAt": "2026-09-11T00:27:26.739Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Raymond Blanc"
+    ],
+    "datePublished": "2013-08-12T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "155b7c2fa8a8ae9fd46868395c9c60c7f06f97deadb5e2d1fe9dfb1897863b78",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": []
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Starters & nibbles"
+  ],
+  "keywords": [
+    "quick",
+    "big barbecue",
+    "epic summer salads",
+    "father's day bbq feast",
+    "feta salad",
+    "healthy barbecue",
+    "impressive barbecue",
+    "summery vegetarian salads",
+    "tinned bean salads",
+    "veggie barbecue ideas",
+    "barbecue",
+    "new year and hogmanay",
+    "salad",
+    "aubergine",
+    "egg free",
+    "vegetarian",
+    "Raymond Blanc: How to Cook Well"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "3 medium aubergines",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "medium aubergines",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 tbsp extra virgin olive oil, plus extra for drizzling",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "extra virgin olive oil, plus extra for drizzling",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ lemon, juice only",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": null,
+          "name": "lemon, juice only",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "10g/¼oz salt",
+          "quantity": 10,
+          "quantityText": "10",
+          "unit": "g",
+          "name": "/¼oz salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "8g ground black pepper",
+          "quantity": 8,
+          "quantityText": "8",
+          "unit": "g",
+          "name": "ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "pinch sugar",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "pinch",
+          "name": "sugar",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "80g/3oz drained cooked or tinned chickpeas",
+          "quantity": 80,
+          "quantityText": "80",
+          "unit": "g",
+          "name": "/3oz drained cooked or tinned chickpeas",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "10 dates, chopped",
+          "quantity": 10,
+          "quantityText": "10",
+          "unit": null,
+          "name": "dates",
+          "note": "chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 red pepper, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "red pepper",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "small bunch mint, leaves picked and chopped",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "small bunch mint",
+          "note": "leaves picked and chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "small bunch coriander, leaves picked and chopped",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "small bunch coriander",
+          "note": "leaves picked and chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "chilli, to taste, finely chopped",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "chilli",
+          "note": "to taste, finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 garlic clove, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "garlic clove",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "40g/1½oz feta, crumbled",
+          "quantity": 40,
+          "quantityText": "40",
+          "unit": "g",
+          "name": "/1½oz feta, crumbled",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "handful flaked almonds",
+          "quantity": null,
+          "quantityText": null,
+          "unit": "handful",
+          "name": "flaked almonds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "balsamic vinegar, for drizzling",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "balsamic vinegar, for drizzling",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "croûtons, to serve",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "croûtons",
+          "note": "to serve",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Prick the aubergines to allow moisture to escape while cooking.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Prick the aubergines to allow moisture to escape while cooking. "
+    },
+    {
+      "order": 2,
+      "text": "On a hot barbecue, cook the whole aubergines for 15 minutes, turning every five minutes until the aubergines are soft and the skin is blackened and blistered. Set aside until cool enough to handle.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "On a hot barbecue, cook the whole aubergines for 15 minutes, turning every five minutes until the aubergines are soft and the skin is blackened and blistered. Set aside until cool enough to handle. "
+    },
+    {
+      "order": 3,
+      "text": "On a small tray, slice the aubergine open lengthways, spoon out the excess water and seeds. Remove the flesh from the skin with a spoon and place into a large bowl.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "On a small tray, slice the aubergine open lengthways, spoon out the excess water and seeds. Remove the flesh from the skin with a spoon and place into a large bowl. "
+    },
+    {
+      "order": 4,
+      "text": "Drizzle with your best olive oil and the lemon juice. Season to taste with salt and freshly ground black pepper; then add a pinch of sugar.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Drizzle with your best olive oil and the lemon juice. Season to taste with salt and freshly ground black pepper; then add a pinch of sugar."
+    },
+    {
+      "order": 5,
+      "text": "Reserve some of the chickpeas, pepper and mint for garnish, then mix in the remaining chickpeas, dates, pepper, mint, coriander, chilli and garlic. Taste and correct the seasoning to your liking.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Reserve some of the chickpeas, pepper and mint for garnish, then mix in the remaining chickpeas, dates, pepper, mint, coriander, chilli and garlic. Taste and correct the seasoning to your liking."
+    },
+    {
+      "order": 6,
+      "text": "Spoon the aubergine into the middle of a serving plate and garnish with the feta, flaked almonds, reserved chickpeas, chopped mint and pepper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Spoon the aubergine into the middle of a serving plate and garnish with the feta, flaked almonds, reserved chickpeas, chopped mint and pepper."
+    },
+    {
+      "order": 7,
+      "text": "Drizzle with balsamic vinegar and a little more olive oil. Top with crisp croûtons and serve.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Drizzle with balsamic vinegar and a little more olive oil. Top with crisp croûtons and serve."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/burnt_aubergine_salad_22252_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 8,
+      "ratingValue": 4.75
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "A simple grilled aubergine salad with barbecued aubergine dressed with chilli, chickpeas, feta and mint. Perfect for barbecue season.",
+    "headline": "Grilled aubergine salad ",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/burnt_aubergine_salad_22252_16x9.jpg"
+    },
+    "name": "Grilled aubergine salad ",
+    "author": {
+      "@type": "Person",
+      "name": "Raymond Blanc"
+    },
+    "datePublished": "2013-08-12T00:00:00.000Z",
+    "dateModified": "2024-12-10T15:11:42.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 8,
+      "ratingValue": 4.75
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, big barbecue, epic summer salads, father's day bbq feast, feta salad, healthy barbecue, impressive barbecue, summery vegetarian salads, tinned bean salads, veggie barbecue ideas, barbecue, new year and hogmanay, salad, aubergine, egg free, vegetarian, Raymond Blanc: How to Cook Well",
+    "recipeCategory": "Starters & nibbles",
+    "recipeIngredient": [
+      "3 medium aubergines",
+      "4 tbsp extra virgin olive oil, plus extra for drizzling",
+      "½ lemon, juice only",
+      "10g/¼oz salt",
+      "8g ground black pepper",
+      "pinch sugar",
+      "80g/3oz drained cooked or tinned chickpeas",
+      "10 dates, chopped",
+      "1 red pepper, finely chopped",
+      "small bunch mint, leaves picked and chopped",
+      "small bunch coriander, leaves picked and chopped ",
+      "chilli, to taste, finely chopped",
+      "1 garlic clove, finely chopped",
+      "40g/1½oz feta, crumbled",
+      "handful flaked almonds ",
+      "balsamic vinegar, for drizzling",
+      "croûtons, to serve"
+    ],
+    "recipeInstructions": [
+      "Prick the aubergines to allow moisture to escape while cooking. ",
+      "On a hot barbecue, cook the whole aubergines for 15 minutes, turning every five minutes until the aubergines are soft and the skin is blackened and blistered. Set aside until cool enough to handle. ",
+      "On a small tray, slice the aubergine open lengthways, spoon out the excess water and seeds. Remove the flesh from the skin with a spoon and place into a large bowl. ",
+      "Drizzle with your best olive oil and the lemon juice. Season to taste with salt and freshly ground black pepper; then add a pinch of sugar.",
+      "Reserve some of the chickpeas, pepper and mint for garnish, then mix in the remaining chickpeas, dates, pepper, mint, coriander, chilli and garlic. Taste and correct the seasoning to your liking.",
+      "Spoon the aubergine into the middle of a serving plate and garnish with the feta, flaked almonds, reserved chickpeas, chopped mint and pepper.",
+      "Drizzle with balsamic vinegar and a little more olive oil. Top with crisp croûtons and serve."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:7",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

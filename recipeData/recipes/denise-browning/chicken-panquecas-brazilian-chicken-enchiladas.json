@@ -1,0 +1,588 @@
+{
+  "schemaVersion": 1,
+  "id": "denise-browning/chicken-panquecas-brazilian-chicken-enchiladas",
+  "slug": "chicken-panquecas-brazilian-chicken-enchiladas",
+  "chefId": "chef_denise-browning",
+  "chefSlug": "denise-browning",
+  "chefName": "Denise Browning",
+  "title": "Chicken Panquecas (Brazilian Chicken Enchiladas)",
+  "description": "Brazilian chicken enchiladas are thin savory pancakes filled with shredded chicken and topped with tomato sauce. It's a quick baked casserole served with a fresh salad or steamed vegetables!!!",
+  "source": {
+    "sourceUrl": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/",
+    "finalUrl": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/",
+    "retrievedAt": "2026-09-11T02:47:44.368Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2012-03-15T14:29:27+00:00",
+    "rights": "Easy and Delish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "eada2b50635696797386b5a7476c5b65326e6f4e5e1f7f99a3a8d3cb76f90208",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "8"
+    ],
+    "servings": 8
+  },
+  "timing": {
+    "prepMinutes": 8,
+    "cookMinutes": 26,
+    "totalMinutes": 34,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Brazilian"
+  ],
+  "category": [
+    "Entree"
+  ],
+  "keywords": [
+    "Brazilian chicken enchiladas"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the panquecas discs",
+      "items": [
+        {
+          "raw": "2 cups all-purpose flour ((or gluten-free flour))",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "cups",
+          "name": "all-purpose flour ((or gluten-free flour))",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 eggs",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "eggs",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 cups warm milk",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "cups",
+          "name": "warm milk",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/4 teaspoon salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/4 teaspoon salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tablespoons butter (melted)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "butter (melted)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the panquecas filling",
+      "items": [
+        {
+          "raw": "2 tablespoons vegetable oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "vegetable oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 pound skinless boneless chicken breast (about 1/2 kg)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "lb",
+          "name": "skinless boneless chicken breast (about 1/2 kg)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "Salt and pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "Salt and pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 teaspoons cumin powder",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "cumin powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 teaspoons garlic powder",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "garlic powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 teaspoons onion powder",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "onion powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 teaspoon chicken flavor bouillon Knorr",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "chicken flavor bouillon Knorr",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 small yellow onion (chopped)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "small yellow onion (chopped)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 cloves garlic (minced)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "cloves",
+          "name": "garlic (minced)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 cup frozen corn* (thawed)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "cup",
+          "name": "frozen corn* (thawed)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/4 cup green olives* (chopped)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/4 cup green olives* (chopped)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3/4 cup canned stewed tomatoes",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "/4 cup canned stewed tomatoes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 - 1/2 cups tomato sauce",
+          "quantity": 1,
+          "quantityText": "1 - 1",
+          "unit": null,
+          "name": "/2 cups tomato sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tablespoon heavy cream* (optional)",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "heavy cream* (optional)",
+          "note": null,
+          "isOptional": true
+        },
+        {
+          "raw": "1 cup shredded mozzarella*",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "cup",
+          "name": "shredded mozzarella*",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "* About 1 tablespoon dried oregano or ¼ cup fresh chopped parsley (both optional)",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "* About 1 tablespoon dried oregano or ¼ cup fresh chopped parsley (both optional)",
+          "note": null,
+          "isOptional": true
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "To make the panquecas discs: Blend all the ingredients together in a blender. Heat a lightly oiled, small frying pan over medium high heat. Pour or scoop the batter onto the pan, using approximately 1/4 to 1/3 cup for each panqueca. Tilt the pan with a circular motion so that the batter coats the surface evenly. Cook it for about 1 minute or until the bottom is light brown. Loosen with a spatula, turn and cook the other side. Reserve and prepare filling. I made about 8-12 small panquecas discs with this panquecas batter.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "To make the panquecas discs: Blend all the ingredients together in a blender. Heat a lightly oiled, small frying pan over medium high heat. Pour or scoop the batter onto the pan, using approximately 1/4 to 1/3 cup for each panqueca. Tilt the pan with a circular motion so that the batter coats the surface evenly. Cook it for about 1 minute or until the bottom is light brown. Loosen with a spatula, turn and cook the other side. Reserve and prepare filling. I made about 8-12 small panquecas discs with this panquecas batter.",
+        "name": "To make the panquecas discs: Blend all the ingredients together in a blender. Heat a lightly oiled, small frying pan over medium high heat. Pour or scoop the batter onto the pan, using approximately 1/4 to 1/3 cup for each panqueca. Tilt the pan with a circular motion so that the batter coats the surface evenly. Cook it for about 1 minute or until the bottom is light brown. Loosen with a spatula, turn and cook the other side. Reserve and prepare filling. I made about 8-12 small panquecas discs with this panquecas batter.",
+        "url": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/#wprm-recipe-47628-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "To prepare the panquecas filling: Rub chicken well with salt, pepper, cumin, chicken bouillon, garlic and onion powder. Coat a large sauté pan with oil and brown chicken over medium heat, allowing 7 minutes for each side or until no longer pink. Remove chicken to a platter, allow to cool.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "To prepare the panquecas filling:  Rub chicken well with salt, pepper, cumin, chicken bouillon, garlic and onion powder. Coat a large sauté pan with oil and brown chicken over medium heat, allowing 7 minutes for each side or until no longer pink. Remove chicken to a platter, allow to cool.",
+        "name": "To prepare the panquecas filling:  Rub chicken well with salt, pepper, cumin, chicken bouillon, garlic and onion powder. Coat a large sauté pan with oil and brown chicken over medium heat, allowing 7 minutes for each side or until no longer pink. Remove chicken to a platter, allow to cool.",
+        "url": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/#wprm-recipe-47628-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Sauté onion and then garlic in chicken drippings until tender. Add corn and olives. Stir well to combine. Add canned tomatoes, sauté for 1 minute.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Sauté onion and then garlic in chicken drippings until tender. Add corn and olives. Stir well to combine. Add canned tomatoes, sauté for 1 minute.",
+        "name": "Sauté onion and then garlic in chicken drippings until tender. Add corn and olives. Stir well to combine. Add canned tomatoes, sauté for 1 minute.",
+        "url": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/#wprm-recipe-47628-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Pull chicken breasts apart either by hand into shredded strips or use a food processor to shred the cooked chicken. Add shredded chicken to sauté pan, combine with vegetables.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Pull chicken breasts apart either by hand into shredded strips or use a food processor to shred the cooked chicken. Add shredded chicken to sauté pan, combine with vegetables.",
+        "name": "Pull chicken breasts apart either by hand into shredded strips or use a food processor to shred the cooked chicken. Add shredded chicken to sauté pan, combine with vegetables.",
+        "url": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/#wprm-recipe-47628-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "In a separate bowl, mix the tomato sauce with the heavy cream. Reserve.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In a separate bowl, mix the tomato sauce with the heavy cream. Reserve.",
+        "name": "In a separate bowl, mix the tomato sauce with the heavy cream. Reserve.",
+        "url": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/#wprm-recipe-47628-step-0-4"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Coat the bottom of a 13 by 9-inch glass pan with a ladle full of tomato sauce that has been mixed with heavy cream. Spoon about 1/4 to 1/3 cup chicken mixture onto a panqueca disc. Fold each disc over the filling. Place 8-12 filled panquecas in the pan with seam side down. Top with remaining sauce and cheese, and sprinkle the oregano. If using parsley, reserve to sprinkle just before serving the panquecas.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Coat the bottom of a 13 by 9-inch glass pan with a ladle full of tomato sauce that has been mixed with heavy cream. Spoon about 1/4 to 1/3 cup chicken mixture onto a panqueca disc. Fold each disc over the filling. Place 8-12 filled panquecas in the pan with seam side down. Top with remaining sauce and cheese, and sprinkle the oregano. If using parsley, reserve to sprinkle just before serving the panquecas.",
+        "name": "Coat the bottom of a 13 by 9-inch glass pan with a ladle full of tomato sauce that has been mixed with heavy cream. Spoon about 1/4 to 1/3 cup chicken mixture onto a panqueca disc. Fold each disc over the filling. Place 8-12 filled panquecas in the pan with seam side down. Top with remaining sauce and cheese, and sprinkle the oregano. If using parsley, reserve to sprinkle just before serving the panquecas.",
+        "url": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/#wprm-recipe-47628-step-0-5"
+      }
+    },
+    {
+      "order": 7,
+      "text": "Bake for about 10 minutes in a preheated 350 degree F (180° C) oven until cheese melts. Serve with fresh salad or steamed veggies.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": "180° C",
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Bake for about 10 minutes in a preheated 350 degree F (180° C) oven until cheese melts. Serve with fresh salad or steamed veggies.",
+        "name": "Bake for about 10 minutes in a preheated 350 degree F (180° C) oven until cheese melts. Serve with fresh salad or steamed veggies.",
+        "url": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/#wprm-recipe-47628-step-0-6"
+      }
+    },
+    {
+      "order": 8,
+      "text": "NOTE: * These ingredients are my personal touch to the traditional recipe, which most commonly uses ground beef. In my Aunt Elizabete's home in Recife, Brazil as well as in mine, we use shredded chicken.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "NOTE: * These ingredients are my personal touch to the traditional recipe, which most commonly uses ground beef. In my Aunt Elizabete's home in Recife, Brazil as well as in mine, we use shredded chicken.",
+        "name": "NOTE: * These ingredients are my personal touch to the traditional recipe, which most commonly uses ground beef. In my Aunt Elizabete's home in Recife, Brazil as well as in mine, we use shredded chicken.",
+        "url": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/#wprm-recipe-47628-step-0-7"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "380 kcal",
+    "carbohydrateContent": "36 g",
+    "proteinContent": "23 g",
+    "fatContent": "15 g",
+    "saturatedFatContent": "8 g",
+    "cholesterolContent": "105 mg",
+    "sodiumContent": "455 mg",
+    "fiberContent": "2 g",
+    "sugarContent": "4 g",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://www.easyanddelish.com/wp-content/uploads/2012/03/Chicken-panquecas-Brazilian-chicken-enchiladas.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/03/Chicken-panquecas-Brazilian-chicken-enchiladas-500x384.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/03/Chicken-panquecas-Brazilian-chicken-enchiladas-500x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/03/Chicken-panquecas-Brazilian-chicken-enchiladas-480x270.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "1",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This was very good.  I will use the panqueca \"pancakes\" instead of tortillas in my Mexican enchiladas from now on. There is a consensus in my family that they are better than tortillas for enchiladas.",
+        "author": {
+          "@type": "Person",
+          "name": "Diana"
+        },
+        "datePublished": "2022-11-14"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Chicken Panquecas (Brazilian Chicken Enchiladas)",
+    "author": {
+      "@id": "https://www.easyanddelish.com/#/schema/person/4aa289bf19bceaa733ca6900648cfc47"
+    },
+    "description": "Brazilian chicken enchiladas are thin savory pancakes filled with shredded chicken and topped with tomato sauce. It's a quick baked casserole served with a fresh salad or steamed vegetables!!!",
+    "datePublished": "2012-03-15T14:29:27+00:00",
+    "image": [
+      "https://www.easyanddelish.com/wp-content/uploads/2012/03/Chicken-panquecas-Brazilian-chicken-enchiladas.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/03/Chicken-panquecas-Brazilian-chicken-enchiladas-500x384.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/03/Chicken-panquecas-Brazilian-chicken-enchiladas-500x375.jpg",
+      "https://www.easyanddelish.com/wp-content/uploads/2012/03/Chicken-panquecas-Brazilian-chicken-enchiladas-480x270.jpg"
+    ],
+    "recipeYield": [
+      "8"
+    ],
+    "prepTime": "PT8M",
+    "cookTime": "PT26M",
+    "totalTime": "PT34M",
+    "recipeIngredient": [
+      "For the panquecas discs:",
+      "2 cups all-purpose flour ((or gluten-free flour))",
+      "2  eggs",
+      "2 cups warm milk",
+      "1/4 teaspoon salt",
+      "2 tablespoons butter (melted)",
+      "For the panquecas filling:",
+      "2 tablespoons vegetable oil",
+      "1 pound skinless boneless chicken breast (about 1/2 kg)",
+      "Salt and pepper",
+      "2 teaspoons cumin powder",
+      "2 teaspoons garlic powder",
+      "2 teaspoons onion powder",
+      "1 teaspoon chicken flavor bouillon Knorr",
+      "1  small yellow onion (chopped)",
+      "2 cloves garlic (minced)",
+      "1 cup frozen corn* (thawed)",
+      "1/4 cup green olives* (chopped)",
+      "3/4 cup canned stewed tomatoes",
+      "1 - 1/2 cups tomato sauce",
+      "2 tablespoon heavy cream* (optional)",
+      "1 cup shredded mozzarella*",
+      "* About 1 tablespoon dried oregano or ¼ cup fresh chopped parsley (both optional)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "To make the panquecas discs: Blend all the ingredients together in a blender. Heat a lightly oiled, small frying pan over medium high heat. Pour or scoop the batter onto the pan, using approximately 1/4 to 1/3 cup for each panqueca. Tilt the pan with a circular motion so that the batter coats the surface evenly. Cook it for about 1 minute or until the bottom is light brown. Loosen with a spatula, turn and cook the other side. Reserve and prepare filling. I made about 8-12 small panquecas discs with this panquecas batter.",
+        "name": "To make the panquecas discs: Blend all the ingredients together in a blender. Heat a lightly oiled, small frying pan over medium high heat. Pour or scoop the batter onto the pan, using approximately 1/4 to 1/3 cup for each panqueca. Tilt the pan with a circular motion so that the batter coats the surface evenly. Cook it for about 1 minute or until the bottom is light brown. Loosen with a spatula, turn and cook the other side. Reserve and prepare filling. I made about 8-12 small panquecas discs with this panquecas batter.",
+        "url": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/#wprm-recipe-47628-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "To prepare the panquecas filling:  Rub chicken well with salt, pepper, cumin, chicken bouillon, garlic and onion powder. Coat a large sauté pan with oil and brown chicken over medium heat, allowing 7 minutes for each side or until no longer pink. Remove chicken to a platter, allow to cool.",
+        "name": "To prepare the panquecas filling:  Rub chicken well with salt, pepper, cumin, chicken bouillon, garlic and onion powder. Coat a large sauté pan with oil and brown chicken over medium heat, allowing 7 minutes for each side or until no longer pink. Remove chicken to a platter, allow to cool.",
+        "url": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/#wprm-recipe-47628-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Sauté onion and then garlic in chicken drippings until tender. Add corn and olives. Stir well to combine. Add canned tomatoes, sauté for 1 minute.",
+        "name": "Sauté onion and then garlic in chicken drippings until tender. Add corn and olives. Stir well to combine. Add canned tomatoes, sauté for 1 minute.",
+        "url": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/#wprm-recipe-47628-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Pull chicken breasts apart either by hand into shredded strips or use a food processor to shred the cooked chicken. Add shredded chicken to sauté pan, combine with vegetables.",
+        "name": "Pull chicken breasts apart either by hand into shredded strips or use a food processor to shred the cooked chicken. Add shredded chicken to sauté pan, combine with vegetables.",
+        "url": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/#wprm-recipe-47628-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "In a separate bowl, mix the tomato sauce with the heavy cream. Reserve.",
+        "name": "In a separate bowl, mix the tomato sauce with the heavy cream. Reserve.",
+        "url": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/#wprm-recipe-47628-step-0-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Coat the bottom of a 13 by 9-inch glass pan with a ladle full of tomato sauce that has been mixed with heavy cream. Spoon about 1/4 to 1/3 cup chicken mixture onto a panqueca disc. Fold each disc over the filling. Place 8-12 filled panquecas in the pan with seam side down. Top with remaining sauce and cheese, and sprinkle the oregano. If using parsley, reserve to sprinkle just before serving the panquecas.",
+        "name": "Coat the bottom of a 13 by 9-inch glass pan with a ladle full of tomato sauce that has been mixed with heavy cream. Spoon about 1/4 to 1/3 cup chicken mixture onto a panqueca disc. Fold each disc over the filling. Place 8-12 filled panquecas in the pan with seam side down. Top with remaining sauce and cheese, and sprinkle the oregano. If using parsley, reserve to sprinkle just before serving the panquecas.",
+        "url": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/#wprm-recipe-47628-step-0-5"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Bake for about 10 minutes in a preheated 350 degree F (180° C) oven until cheese melts. Serve with fresh salad or steamed veggies.",
+        "name": "Bake for about 10 minutes in a preheated 350 degree F (180° C) oven until cheese melts. Serve with fresh salad or steamed veggies.",
+        "url": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/#wprm-recipe-47628-step-0-6"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "NOTE: * These ingredients are my personal touch to the traditional recipe, which most commonly uses ground beef. In my Aunt Elizabete's home in Recife, Brazil as well as in mine, we use shredded chicken.",
+        "name": "NOTE: * These ingredients are my personal touch to the traditional recipe, which most commonly uses ground beef. In my Aunt Elizabete's home in Recife, Brazil as well as in mine, we use shredded chicken.",
+        "url": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/#wprm-recipe-47628-step-0-7"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "1",
+      "reviewCount": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "This was very good.  I will use the panqueca \"pancakes\" instead of tortillas in my Mexican enchiladas from now on. There is a consensus in my family that they are better than tortillas for enchiladas.",
+        "author": {
+          "@type": "Person",
+          "name": "Diana"
+        },
+        "datePublished": "2022-11-14"
+      }
+    ],
+    "recipeCategory": [
+      "Entree"
+    ],
+    "recipeCuisine": [
+      "Brazilian"
+    ],
+    "keywords": "Brazilian chicken enchiladas",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "380 kcal",
+      "carbohydrateContent": "36 g",
+      "proteinContent": "23 g",
+      "fatContent": "15 g",
+      "saturatedFatContent": "8 g",
+      "cholesterolContent": "105 mg",
+      "sodiumContent": "455 mg",
+      "fiberContent": "2 g",
+      "sugarContent": "4 g",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/#recipe",
+    "isPartOf": {
+      "@id": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/#article"
+    },
+    "mainEntityOfPage": "https://www.easyanddelish.com/chicken-panquecas-brazilian-chicken-enchiladas/"
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "range-quantity:1",
+    "unmapped:aggregateRating|review"
+  ]
+}

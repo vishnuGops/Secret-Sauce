@@ -1,0 +1,484 @@
+{
+  "schemaVersion": 1,
+  "id": "chef-lola/lumpia-wrappers-spring-roll-wrappers",
+  "slug": "lumpia-wrappers-spring-roll-wrappers",
+  "chefId": "chef_chef-lola",
+  "chefSlug": "chef-lola",
+  "chefName": "Chef Lola",
+  "title": "Lumpia Wrappers (Spring Roll Wrappers)",
+  "description": "Lumpia wrappers are also referred to as Popiah and more generally as spring roll wrappers are thin paper-like skins. They are soft and light textured but they are strong enough to wrap and hold your fillings without breaking apart.",
+  "source": {
+    "sourceUrl": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/",
+    "finalUrl": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/",
+    "retrievedAt": "2026-09-11T02:47:31.497Z",
+    "publisher": null,
+    "authorRaw": [],
+    "datePublished": "2018-10-08T16:22:52+00:00",
+    "rights": "Chef Lola's Kitchen. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "7125b68c860eb9419b1dec31d4ce920b8f7ac40cbecf3946b0f95a3a1b87ce67",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "allows recipe paths; /wp-admin/, /wp-json/ and query URLs disallowed"
+  },
+  "yield": {
+    "raw": [
+      "15",
+      "15 Wraps"
+    ],
+    "servings": 15
+  },
+  "timing": {
+    "prepMinutes": 15,
+    "cookMinutes": 15,
+    "totalMinutes": 30,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Asian"
+  ],
+  "category": [
+    "Appetizer",
+    "Snack"
+  ],
+  "keywords": [
+    "egg roll wrappers",
+    "homemade",
+    "lumpia wrapper",
+    "spring roll wrappers"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "2 Cups Flour",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "cups",
+          "name": "Flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 Tbsp cornflour",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "cornflour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1/4 Tsp Salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "/4 Tsp Salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 Cup Water",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "cup",
+          "name": "Water",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Mix the Flour, cornflour, and Salt together in a large bowl",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Mix the Flour, cornflour, and Salt together in a large bowl",
+        "name": "Mix the Flour, cornflour, and Salt together in a large bowl",
+        "url": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#wprm-recipe-7210-step-0-0"
+      }
+    },
+    {
+      "order": 2,
+      "text": "Gradually add the water while mixing simultaneously until a soft and viscous batter is formed, now work the batter by lifting it and slamming it on the bowl",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Gradually add the water while mixing simultaneously until a soft and viscous batter is formed, now work the batter by lifting it and slamming it on the bowl",
+        "name": "Gradually add the water while mixing simultaneously until a soft and viscous batter is formed, now work the batter by lifting it and slamming it on the bowl",
+        "url": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#wprm-recipe-7210-step-0-1"
+      }
+    },
+    {
+      "order": 3,
+      "text": "After doing this for some minutes you will see the dough hold in a rope when you lift it (please see video above for this). At this point, the batter is well done.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "After doing this for some minutes you will see the dough hold in a rope when you lift it (please see video above for this). At this point, the batter is well done.",
+        "name": "After doing this for some minutes you will see the dough hold in a rope when you lift it (please see video above for this). At this point, the batter is well done.",
+        "url": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#wprm-recipe-7210-step-0-2"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Cover it up and leave it to rest in the fridge until it's really cold or better still leave it overnight.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Cover it up and leave it to rest in the fridge until it's really cold or better still leave it overnight.",
+        "name": "Cover it up and leave it to rest in the fridge until it's really cold or better still leave it overnight.",
+        "url": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#wprm-recipe-7210-step-0-3"
+      }
+    },
+    {
+      "order": 5,
+      "text": "The next day the Batter would have hardened up. Now work it a little bit just to be able to hold it in the cup of your hand - Please refer to the video.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "The next day the Batter would have hardened up. Now work it a little bit just to be able to hold it in the cup of your hand - Please refer to the video.",
+        "name": "The next day the Batter would have hardened up. Now work it a little bit just to be able to hold it in the cup of your hand - Please refer to the video.",
+        "url": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#wprm-recipe-7210-step-0-4"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Now preheat your pan on a medium to low heat for about 2 to 4 minutes (the amount of time for heating your pan is dependent on the thickness of your pan) and smear the dough in a fast circular motion on the heated pan.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Now preheat your pan on a medium to low heat for about 2 to 4 minutes (the amount of time for heating your pan is dependent on the thickness of your pan) and smear the dough in a fast circular motion on the heated pan.",
+        "name": "Now preheat your pan on a medium to low heat for about 2 to 4 minutes (the amount of time for heating your pan is dependent on the thickness of your pan) and smear the dough in a fast circular motion on the heated pan.",
+        "url": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#wprm-recipe-7210-step-0-5"
+      }
+    },
+    {
+      "order": 7,
+      "text": "After a couple of seconds, the edge of the wrap will start to curl up, carefully lift the wrap by the curled edge to lift the wrap off the pan.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "After a couple of seconds, the edge of the wrap will start to curl up, carefully lift the wrap by the curled edge to lift the wrap off the pan.",
+        "name": "After a couple of seconds, the edge of the wrap will start to curl up, carefully lift the wrap by the curled edge to lift the wrap off the pan.",
+        "url": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#wprm-recipe-7210-step-0-6"
+      }
+    },
+    {
+      "order": 8,
+      "text": "Place the wraps in a bowl and cover it with a damp towel to prevent it from drying up.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Place the wraps in a bowl and cover it with a damp towel to prevent it from drying up.",
+        "name": "Place the wraps in a bowl and cover it with a damp towel to prevent it from drying up.",
+        "url": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#wprm-recipe-7210-step-0-7"
+      }
+    },
+    {
+      "order": 9,
+      "text": "You can store the wraps in a plastic bag and store in the fridge for a couple of days or freeze for a couple of months. Enjoy!",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "You can store the wraps in a plastic bag and store in the fridge for a couple of days or freeze for a couple of months. Enjoy!",
+        "name": "You can store the wraps in a plastic bag and store in the fridge for a couple of days or freeze for a couple of months. Enjoy!",
+        "url": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#wprm-recipe-7210-step-0-8"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "calories": "60 kcal",
+    "carbohydrateContent": "12 g",
+    "proteinContent": "1 g",
+    "sodiumContent": "37 mg",
+    "servingSize": "1 serving"
+  },
+  "media": {
+    "coverImages": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2015/12/lumpia-wrapper-spring-roll-wrappers02.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2015/12/lumpia-wrapper-spring-roll-wrappers02-500x500.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2015/12/lumpia-wrapper-spring-roll-wrappers02-500x375.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2015/12/lumpia-wrapper-spring-roll-wrappers02-480x270.jpg"
+    ],
+    "video": {
+      "name": "How To Make Popiah/Spring Roll Wrappers/Skin",
+      "description": "I got quite a number of requests to make these spring roll wraps ever since I made the spring roll recipe and here is the video for you all I hope you enjoy it.\n\nFor more details visit my website http://www.cheflolaskitchen.com\n\nYou can also find me here;\nFacebook https://www.facebook.com/ChefLolasKit...\nInstagram https://www.instagram.com/cheflolaski...\n\n-~-~~-~~~-~~-~-\nLatest Video: \"Super Crispy Baked Potato Wedges\" \nhttps://www.youtube.com/watch?v=YaVCk-U-Vic\n-~-~~-~~~-~~-~-",
+      "uploadDate": "2015-12-07T05:44:29+00:00",
+      "duration": "PT4M30S",
+      "thumbnailUrl": "https://i.ytimg.com/vi/q9MNXNxeKjA/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/q9MNXNxeKjA?feature=oembed",
+      "contentUrl": "https://www.youtube.com/watch?v=q9MNXNxeKjA",
+      "@type": "VideoObject"
+    }
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "video": {
+      "name": "How To Make Popiah/Spring Roll Wrappers/Skin",
+      "description": "I got quite a number of requests to make these spring roll wraps ever since I made the spring roll recipe and here is the video for you all I hope you enjoy it.\n\nFor more details visit my website http://www.cheflolaskitchen.com\n\nYou can also find me here;\nFacebook https://www.facebook.com/ChefLolasKit...\nInstagram https://www.instagram.com/cheflolaski...\n\n-~-~~-~~~-~~-~-\nLatest Video: \"Super Crispy Baked Potato Wedges\" \nhttps://www.youtube.com/watch?v=YaVCk-U-Vic\n-~-~~-~~~-~~-~-",
+      "uploadDate": "2015-12-07T05:44:29+00:00",
+      "duration": "PT4M30S",
+      "thumbnailUrl": "https://i.ytimg.com/vi/q9MNXNxeKjA/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/q9MNXNxeKjA?feature=oembed",
+      "contentUrl": "https://www.youtube.com/watch?v=q9MNXNxeKjA",
+      "@type": "VideoObject"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.72",
+      "ratingCount": "28",
+      "reviewCount": "2"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Hi Lola! Thanks for the video! My parents used to make their own lumpia wrappers when I was growing up, exactly like this! There were no Filipino stores where they could purchase them at that time. It brought back great memories to watch your video. I’m inspired to try it myself!",
+        "author": {
+          "@type": "Person",
+          "name": "Sheri"
+        },
+        "datePublished": "2022-01-16"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Just wanted to share, what a great video.  Simple, clear concise and with such a beautiful accent narrating the whole adventure.  Thank you for taking the time to educate us with not only your passion but your kindness in teaching as well.  \r\nI can't wait to try and make these at home myself.",
+        "author": {
+          "@type": "Person",
+          "name": "Semam"
+        },
+        "datePublished": "2020-05-15"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@type": "Recipe",
+    "name": "Lumpia Wrappers (Spring Roll Wrappers)",
+    "author": {
+      "@id": "https://cheflolaskitchen.com/#/schema/person/210ab4ab02cd92f770d27cf2a114f9a5"
+    },
+    "description": "&nbsp;Lumpia wrappers are  also referred to as Popiah and more generally as spring roll wrappers are thin paper-like skins. They are soft and light textured but they are strong enough to wrap and hold your fillings without breaking apart.",
+    "datePublished": "2018-10-08T16:22:52+00:00",
+    "image": [
+      "https://cheflolaskitchen.com/wp-content/uploads/2015/12/lumpia-wrapper-spring-roll-wrappers02.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2015/12/lumpia-wrapper-spring-roll-wrappers02-500x500.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2015/12/lumpia-wrapper-spring-roll-wrappers02-500x375.jpg",
+      "https://cheflolaskitchen.com/wp-content/uploads/2015/12/lumpia-wrapper-spring-roll-wrappers02-480x270.jpg"
+    ],
+    "video": {
+      "name": "How To Make Popiah/Spring Roll Wrappers/Skin",
+      "description": "I got quite a number of requests to make these spring roll wraps ever since I made the spring roll recipe and here is the video for you all I hope you enjoy it.\n\nFor more details visit my website http://www.cheflolaskitchen.com\n\nYou can also find me here;\nFacebook https://www.facebook.com/ChefLolasKit...\nInstagram https://www.instagram.com/cheflolaski...\n\n-~-~~-~~~-~~-~-\nLatest Video: \"Super Crispy Baked Potato Wedges\" \nhttps://www.youtube.com/watch?v=YaVCk-U-Vic\n-~-~~-~~~-~~-~-",
+      "uploadDate": "2015-12-07T05:44:29+00:00",
+      "duration": "PT4M30S",
+      "thumbnailUrl": "https://i.ytimg.com/vi/q9MNXNxeKjA/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/q9MNXNxeKjA?feature=oembed",
+      "contentUrl": "https://www.youtube.com/watch?v=q9MNXNxeKjA",
+      "@type": "VideoObject"
+    },
+    "recipeYield": [
+      "15",
+      "15 Wraps"
+    ],
+    "prepTime": "PT15M",
+    "cookTime": "PT15M",
+    "totalTime": "PT30M",
+    "recipeIngredient": [
+      "2 Cups Flour",
+      "2 Tbsp cornflour",
+      "1/4 Tsp Salt",
+      "1 Cup Water"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Mix the Flour, cornflour, and Salt together in a large bowl",
+        "name": "Mix the Flour, cornflour, and Salt together in a large bowl",
+        "url": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#wprm-recipe-7210-step-0-0"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Gradually add the water while mixing simultaneously until a soft and viscous batter is formed, now work the batter by lifting it and slamming it on the bowl",
+        "name": "Gradually add the water while mixing simultaneously until a soft and viscous batter is formed, now work the batter by lifting it and slamming it on the bowl",
+        "url": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#wprm-recipe-7210-step-0-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "After doing this for some minutes you will see the dough hold in a rope when you lift it (please see video above for this). At this point, the batter is well done.",
+        "name": "After doing this for some minutes you will see the dough hold in a rope when you lift it (please see video above for this). At this point, the batter is well done.",
+        "url": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#wprm-recipe-7210-step-0-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Cover it up and leave it to rest in the fridge until it's really cold or better still leave it overnight.",
+        "name": "Cover it up and leave it to rest in the fridge until it's really cold or better still leave it overnight.",
+        "url": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#wprm-recipe-7210-step-0-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "The next day the Batter would have hardened up. Now work it a little bit just to be able to hold it in the cup of your hand - Please refer to the video.",
+        "name": "The next day the Batter would have hardened up. Now work it a little bit just to be able to hold it in the cup of your hand - Please refer to the video.",
+        "url": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#wprm-recipe-7210-step-0-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Now preheat your pan on a medium to low heat for about 2 to 4 minutes (the amount of time for heating your pan is dependent on the thickness of your pan) and smear the dough in a fast circular motion on the heated pan.",
+        "name": "Now preheat your pan on a medium to low heat for about 2 to 4 minutes (the amount of time for heating your pan is dependent on the thickness of your pan) and smear the dough in a fast circular motion on the heated pan.",
+        "url": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#wprm-recipe-7210-step-0-5"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "After a couple of seconds, the edge of the wrap will start to curl up, carefully lift the wrap by the curled edge to lift the wrap off the pan.",
+        "name": "After a couple of seconds, the edge of the wrap will start to curl up, carefully lift the wrap by the curled edge to lift the wrap off the pan.",
+        "url": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#wprm-recipe-7210-step-0-6"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Place the wraps in a bowl and cover it with a damp towel to prevent it from drying up.",
+        "name": "Place the wraps in a bowl and cover it with a damp towel to prevent it from drying up.",
+        "url": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#wprm-recipe-7210-step-0-7"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "You can store the wraps in a plastic bag and store in the fridge for a couple of days or freeze for a couple of months. Enjoy!",
+        "name": "You can store the wraps in a plastic bag and store in the fridge for a couple of days or freeze for a couple of months. Enjoy!",
+        "url": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#wprm-recipe-7210-step-0-8"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.72",
+      "ratingCount": "28",
+      "reviewCount": "2"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Hi Lola! Thanks for the video! My parents used to make their own lumpia wrappers when I was growing up, exactly like this! There were no Filipino stores where they could purchase them at that time. It brought back great memories to watch your video. I’m inspired to try it myself!",
+        "author": {
+          "@type": "Person",
+          "name": "Sheri"
+        },
+        "datePublished": "2022-01-16"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "Just wanted to share, what a great video.  Simple, clear concise and with such a beautiful accent narrating the whole adventure.  Thank you for taking the time to educate us with not only your passion but your kindness in teaching as well.  \r\nI can't wait to try and make these at home myself.",
+        "author": {
+          "@type": "Person",
+          "name": "Semam"
+        },
+        "datePublished": "2020-05-15"
+      }
+    ],
+    "recipeCategory": [
+      "Appetizer",
+      "Snack"
+    ],
+    "recipeCuisine": [
+      "Asian"
+    ],
+    "keywords": "egg roll wrappers, homemade, lumpia wrapper, spring roll wrappers",
+    "nutrition": {
+      "@type": "NutritionInformation",
+      "calories": "60 kcal",
+      "carbohydrateContent": "12 g",
+      "proteinContent": "1 g",
+      "sodiumContent": "37 mg",
+      "servingSize": "1 serving"
+    },
+    "@id": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#recipe",
+    "isPartOf": {
+      "@id": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/#article"
+    },
+    "mainEntityOfPage": "https://cheflolaskitchen.com/spring-roll-wrappers-lumpia-recipe/"
+  },
+  "audit": [
+    "unmapped:video|aggregateRating|review"
+  ]
+}

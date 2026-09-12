@@ -1,0 +1,312 @@
+{
+  "schemaVersion": 1,
+  "id": "nigella-lawson/devilled-eggs",
+  "slug": "devilled-eggs",
+  "chefId": "chef_nigella-lawson",
+  "chefSlug": "nigella-lawson",
+  "chefName": "Nigella Lawson",
+  "title": "Devilled eggs",
+  "description": "While devilled eggs had their moment in the UK – at about the same time the hostess trolley held sway – they are an essential part of the American entertaining tradition. There’s not much that can get me squeezing a fancy-nozzled piping bag, but this recipe – even if mine diverges somewhat – compelled me to. Although they are a bit fiddly to make, they’re not difficult, and they are always a major hit. And I’m talking about genuine enjoyment not ironic amusement. As many as I make, I never have a single one left over.\n\nFor this recipe you will need a piping bag fitted with a large star nozzle.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/devilled_eggs_96275",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/devilled_eggs_96275",
+    "retrievedAt": "2026-09-11T00:26:07.994Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Nigella Lawson"
+    ],
+    "datePublished": "2017-12-11T16:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "fdd81379a3e0906e83fd50778be3e567bb31072395e21468745bf1ddc42c2625",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Makes 18"
+    ],
+    "servings": 18
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [],
+  "category": [
+    "Starters & nibbles"
+  ],
+  "keywords": [
+    "quick",
+    "christmas buffet ideas",
+    "easter picnic",
+    "eurovision party ideas",
+    "halloween party food",
+    "new year's eve party",
+    "nigella's christmas",
+    "nigella's nye party food",
+    "christmas party food",
+    "retro british",
+    "vegetarian party food",
+    "vegetarian christmas nibbles",
+    "christmas",
+    "new year and hogmanay",
+    "party food",
+    "egg",
+    "nut free",
+    "pregnancy friendly",
+    "vegetarian",
+    "Nigella: At My Table"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "12 large free-range eggs, at room temperature (see recipe tip below)",
+          "quantity": 12,
+          "quantityText": "12",
+          "unit": null,
+          "name": "large free-range eggs",
+          "note": "at room temperature (see recipe tip below)",
+          "isOptional": false
+        },
+        {
+          "raw": "4 tbsp mayonnaise",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "mayonnaise",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1–2 tsp English mustard",
+          "quantity": 1,
+          "quantityText": "1–2",
+          "unit": "tsp",
+          "name": "English mustard",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp sea salt flakes",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "sea salt flakes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ paprika, plus extra for sprinkling",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": null,
+          "name": "paprika, plus extra for sprinkling",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "few drops Tabasco",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "few drops Tabasco",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp extra virgin olive oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "extra virgin olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2–3 tbsp water from a freshly boiled kettle",
+          "quantity": 2,
+          "quantityText": "2–3",
+          "unit": "tbsp",
+          "name": "water from a freshly boiled kettle",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp finely chopped chives",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "finely chopped chives",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Bring some water to the boil in a large saucepan and, once it’s boiling, add the eggs, one by one, into the pan and bring back to the boil. Boil for 1 minute, then turn the heat off and leave the eggs to stand in the pan for 12 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Bring some water to the boil in a large saucepan and, once it’s boiling, add the eggs, one by one, into the pan and bring back to the boil. Boil for 1 minute, then turn the heat off and leave the eggs to stand in the pan for 12 minutes."
+    },
+    {
+      "order": 2,
+      "text": "While you’re waiting for the eggs to cook, fill a large bowl with very cold water, and throw in a handful of ice cubes if you have them. As soon as the eggs have had their 12 minutes, spoon them into the cold water and leave for 15 minutes – no longer – before peeling patiently and carefully.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "While you’re waiting for the eggs to cook, fill a large bowl with very cold water, and throw in a handful of ice cubes if you have them. As soon as the eggs have had their 12 minutes, spoon them into the cold water and leave for 15 minutes – no longer – before peeling patiently and carefully."
+    },
+    {
+      "order": 3,
+      "text": "Halve the eggs lengthways and gently prise the yolk out of each half and pop them into a mixing bowl. Place the neatest looking 18 halved whites on a plate or two.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Halve the eggs lengthways and gently prise the yolk out of each half and pop them into a mixing bowl. Place the neatest looking 18 halved whites on a plate or two. "
+    },
+    {
+      "order": 4,
+      "text": "Add the mayonnaise, a teaspoon of English mustard, the salt and paprika to the egg yolks, and shake a few drops of Tabasco on top. Stir and mash with a fork, then blend with a stick blender or in a food processor. Add the oil and blend again until smooth. It will be very thick. Check for seasoning and also taste to see if you want this hotter. I generally go up to 2 teaspoons of mustard and quite a bit more Tabasco, but it’s best to proceed slowly. Now, by hand, stir in as much of the water as you need to help form a piping consistency (you may not need all the water).",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the mayonnaise, a teaspoon of English mustard, the salt and paprika to the egg yolks, and shake a few drops of Tabasco on top. Stir and mash with a fork, then blend with a stick blender or in a food processor. Add the oil and blend again until smooth. It will be very thick. Check for seasoning and also taste to see if you want this hotter. I generally go up to 2 teaspoons of mustard and quite a bit more Tabasco, but it’s best to proceed slowly. Now, by hand, stir in as much of the water as you need to help form a piping consistency (you may not need all the water)."
+    },
+    {
+      "order": 5,
+      "text": "Spoon the golden mixture into a piping bag with a star icing nozzle, making sure it is densely packed at the bottom of the bag. Then pipe away, filling the hollowed-out whites with golden rosettes. Or you can mound the yolk mixture using a pair of teaspoons. Sprinkle with paprika and chopped chives and serve with a flourish.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Spoon the golden mixture into a piping bag with a star icing nozzle, making sure it is densely packed at the bottom of the bag. Then pipe away, filling the hollowed-out whites with golden rosettes. Or you can mound the yolk mixture using a pair of teaspoons. Sprinkle with paprika and chopped chives and serve with a flourish."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/devilled_eggs_96275_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "It’s best to use eggs that are approaching their use-by date, as the fresher they are, the harder they are to peel. In order to help keep the yolk centred as the eggs cook, leave them lying on their sides in a dish (rather than sitting upright in their boxes) overnight before cooking them. It’s not a fail-safe guarantee, but it does seem to make a difference. You can boil the eggs a few days in advance, but they need to be stored in the fridge and once peeled should be eaten within 24 hours. In step 4, when adding water to form a piping consistency, take care not to add too much as the mixture should still be thick enough to hold its shape."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 44,
+      "ratingValue": 2.8181818181818183
+    },
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "While devilled eggs had their moment in the UK – at about the same time the hostess trolley held sway – they are an essential part of the American entertaining tradition. There’s not much that can get me squeezing a fancy-nozzled piping bag, but this recipe – even if mine diverges somewhat – compelled me to. Although they are a bit fiddly to make, they’re not difficult, and they are always a major hit. And I’m talking about genuine enjoyment not ironic amusement. As many as I make, I never have a single one left over.\r\n\r\nFor this recipe you will need a piping bag fitted with a large star nozzle. ",
+    "headline": "Devilled eggs",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/devilled_eggs_96275_16x9.jpg"
+    },
+    "name": "Devilled eggs",
+    "author": {
+      "@type": "Person",
+      "name": "Nigella Lawson"
+    },
+    "datePublished": "2017-12-11T16:00:00.000Z",
+    "dateModified": "2026-07-01T10:14:41.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 44,
+      "ratingValue": 2.8181818181818183
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, christmas buffet ideas, easter picnic, eurovision party ideas, halloween party food, new year's eve party, nigella's christmas, nigella's nye party food, christmas party food, retro british, vegetarian party food, vegetarian christmas nibbles, christmas, new year and hogmanay, party food, egg, nut free, pregnancy friendly, vegetarian, Nigella: At My Table",
+    "recipeCategory": "Starters & nibbles",
+    "recipeIngredient": [
+      "12 large free-range eggs, at room temperature (see recipe tip below)",
+      "4 tbsp mayonnaise ",
+      "1–2 tsp English mustard ",
+      "1 tsp sea salt flakes ",
+      "¼ paprika, plus extra for sprinkling",
+      "few drops Tabasco ",
+      "2 tbsp extra virgin olive oil ",
+      "2–3 tbsp water from a freshly boiled kettle ",
+      "2 tsp finely chopped chives "
+    ],
+    "recipeInstructions": [
+      "Bring some water to the boil in a large saucepan and, once it’s boiling, add the eggs, one by one, into the pan and bring back to the boil. Boil for 1 minute, then turn the heat off and leave the eggs to stand in the pan for 12 minutes.",
+      "While you’re waiting for the eggs to cook, fill a large bowl with very cold water, and throw in a handful of ice cubes if you have them. As soon as the eggs have had their 12 minutes, spoon them into the cold water and leave for 15 minutes – no longer – before peeling patiently and carefully.",
+      "Halve the eggs lengthways and gently prise the yolk out of each half and pop them into a mixing bowl. Place the neatest looking 18 halved whites on a plate or two. ",
+      "Add the mayonnaise, a teaspoon of English mustard, the salt and paprika to the egg yolks, and shake a few drops of Tabasco on top. Stir and mash with a fork, then blend with a stick blender or in a food processor. Add the oil and blend again until smooth. It will be very thick. Check for seasoning and also taste to see if you want this hotter. I generally go up to 2 teaspoons of mustard and quite a bit more Tabasco, but it’s best to proceed slowly. Now, by hand, stir in as much of the water as you need to help form a piping consistency (you may not need all the water).",
+      "Spoon the golden mixture into a piping bag with a star icing nozzle, making sure it is densely packed at the bottom of the bag. Then pipe away, filling the hollowed-out whites with golden rosettes. Or you can mound the yolk mixture using a pair of teaspoons. Sprinkle with paprika and chopped chives and serve with a flourish."
+    ],
+    "recipeYield": "Makes 18",
+    "suitableForDiet": [
+      "http://schema.org/VegetarianDiet"
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:1",
+    "range-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

@@ -1,0 +1,407 @@
+{
+  "schemaVersion": 1,
+  "id": "eli-giannopoulos/risotto-with-tomatoes-and-feta-cheese",
+  "slug": "risotto-with-tomatoes-and-feta-cheese",
+  "chefId": "chef_eli-giannopoulos",
+  "chefSlug": "eli-giannopoulos",
+  "chefName": "Eli K. Giannopoulos",
+  "title": "Risotto with Tomatoes and Feta cheese",
+  "description": "A super tasty and healthy Greek style risotto. The perfect comfort food for a cold winter's night!",
+  "source": {
+    "sourceUrl": "https://www.mygreekdish.com/recipe/risotto-with-tomatoes-and-feta-cheese/",
+    "finalUrl": "https://www.mygreekdish.com/recipe/risotto-with-tomatoes-and-feta-cheese/",
+    "retrievedAt": "2026-09-11T02:47:59.493Z",
+    "publisher": null,
+    "authorRaw": [
+      "Eli K. Giannopoulos"
+    ],
+    "datePublished": "2013-08-23",
+    "rights": "My Greek Dish. Functional content plus a link, for internal app testing. Not redistributed.",
+    "htmlSha256": "237360606b5148ff574fe755c967fcdf46cbc667af0f114912acd191e24cc8f2",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "wprm",
+      "notes": []
+    },
+    "robots": "Disallow: (empty) — all allowed"
+  },
+  "yield": {
+    "raw": [
+      "4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 10,
+    "cookMinutes": 20,
+    "totalMinutes": 30,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Greek"
+  ],
+  "category": [
+    "Main"
+  ],
+  "keywords": [
+    "Greek Risotto",
+    "greek style rice",
+    "vegetarian risotto"
+  ],
+  "ingredientGroups": [
+    {
+      "name": null,
+      "items": [
+        {
+          "raw": "200g/ 7 ounces risotto rice (Arbiorio or carnaroli)",
+          "quantity": 200,
+          "quantityText": "200",
+          "unit": "g",
+          "name": "/ 7 ounces risotto rice (Arbiorio or carnaroli)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3.5 cups vegetable stock",
+          "quantity": 3.5,
+          "quantityText": "3.5",
+          "unit": "cups",
+          "name": "vegetable stock",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 medium red onion, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "medium red onion",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 clove of garlic, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "clove",
+          "name": "of garlic",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "3 tomatoes, grated and 6 cherry tomatoes, cut into halves",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "tomatoes",
+          "note": "grated and 6 cherry tomatoes, cut into halves",
+          "isOptional": false
+        },
+        {
+          "raw": "150g feta cheese, crumbled (5-6 ounces)",
+          "quantity": 150,
+          "quantityText": "150",
+          "unit": "g",
+          "name": "feta cheese, crumbled (5-6 ounces)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp fresh or 1 tsp dry oregano",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "fresh or 1 tsp dry oregano",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 glass of dry white wine",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "glass of dry white wine",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "a knob of butter",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "a knob of butter",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsps extra virgin olive oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "extra virgin olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp ouzo (or sambuka)",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "ouzo (or sambuka)",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Heat the stock, according to package instructions.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Heat the stock, according to package instructions.",
+        "url": "https://www.mygreekdish.com/recipe/risotto-with-tomatoes-and-feta-cheese/#instruction-step-1"
+      }
+    },
+    {
+      "order": 2,
+      "text": "In another large saucepan, heat the olive oil into medium heat and add the onions and garlic. Sauté for 5 minutes, until the onions are softened, but not colored.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "In another large saucepan, heat the olive oil into medium heat and add the onions and garlic. Sauté for 5 minutes, until the onions are softened, but not colored.",
+        "url": "https://www.mygreekdish.com/recipe/risotto-with-tomatoes-and-feta-cheese/#instruction-step-2"
+      }
+    },
+    {
+      "order": 3,
+      "text": "Turn the heat up and add the rice. Saute the rice, whilst stirring it, until it becomes translucent. Pour in the wine and wait for it to evaporate whilst stirring.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Turn the heat up and add the rice. Saute the rice, whilst stirring it, until it becomes translucent. Pour in the wine and wait for it to evaporate whilst stirring.",
+        "url": "https://www.mygreekdish.com/recipe/risotto-with-tomatoes-and-feta-cheese/#instruction-step-3"
+      }
+    },
+    {
+      "order": 4,
+      "text": "Add the grated tomatoes. As soon as the rice starts to absorb the tomatoes, add your first ladle of hot stock and the cherry tomatoes and turn the heat down. Stir the rice and wait for the stock to be absorbed before adding the next ladle. Add the ouzo and repeat the procedure, with the rest of the stock. This should take about 15 minutes, until the rice is soft but with a slight bite.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Add the grated tomatoes. As soon as the rice starts to absorb the tomatoes, add your first ladle of hot stock and the cherry tomatoes and turn the heat down. Stir the rice and wait for the stock to be absorbed before adding the next ladle. Add the ouzo and repeat the procedure, with the rest of the stock. This should take about 15 minutes, until the rice is soft but with a slight bite.",
+        "url": "https://www.mygreekdish.com/recipe/risotto-with-tomatoes-and-feta-cheese/#instruction-step-4"
+      }
+    },
+    {
+      "order": 5,
+      "text": "Remove the pan from the stove and add the feta cheese, the oregano and the butter and stir well. Season to taste.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Remove the pan from the stove and add the feta cheese, the oregano and the butter and stir well. Season to taste.",
+        "url": "https://www.mygreekdish.com/recipe/risotto-with-tomatoes-and-feta-cheese/#instruction-step-5"
+      }
+    },
+    {
+      "order": 6,
+      "text": "Allow the risotto to sit for 2 minutes with the lid on and serve as soon as possible, while still hot.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": {
+        "@type": "HowToStep",
+        "text": "Allow the risotto to sit for 2 minutes with the lid on and serve as soon as possible, while still hot.",
+        "url": "https://www.mygreekdish.com/recipe/risotto-with-tomatoes-and-feta-cheese/#instruction-step-6"
+      }
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": {
+    "servingSize": "1 plate",
+    "calories": "291kcal",
+    "sugarContent": "6.9g",
+    "sodiumContent": "1412.7mg",
+    "fatContent": "18.2g",
+    "saturatedFatContent": "8.5g",
+    "unsaturatedFatContent": "8.8g",
+    "transFatContent": "0g",
+    "carbohydrateContent": "24.2g",
+    "fiberContent": "1.7g",
+    "proteinContent": "7.7g",
+    "cholesterolContent": "41mg"
+  },
+  "media": {
+    "coverImages": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/10/Risotto-with-Tomatoes-and-Feta-cheese2-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/10/Risotto-with-Tomatoes-and-Feta-cheese2-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/10/Risotto-with-Tomatoes-and-Feta-cheese2-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/10/Risotto-with-Tomatoes-and-Feta-cheese2-scaled.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "cookingMethod": "Boiled",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "599",
+      "ratingValue": "4.8"
+    }
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org/",
+    "@type": "Recipe",
+    "name": "Risotto with Tomatoes and Feta cheese",
+    "description": "A super tasty and healthy Greek style risotto. The perfect comfort food for a cold winter's night!",
+    "author": {
+      "@type": "Person",
+      "name": "Eli K. Giannopoulos"
+    },
+    "keywords": "Greek Risotto, greek style rice, vegetarian risotto",
+    "image": [
+      "https://www.mygreekdish.com/wp-content/uploads/2013/10/Risotto-with-Tomatoes-and-Feta-cheese2-225x225.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/10/Risotto-with-Tomatoes-and-Feta-cheese2-260x195.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/10/Risotto-with-Tomatoes-and-Feta-cheese2-320x180.jpg",
+      "https://www.mygreekdish.com/wp-content/uploads/2013/10/Risotto-with-Tomatoes-and-Feta-cheese2-scaled.jpg"
+    ],
+    "url": "https://www.mygreekdish.com/recipe/risotto-with-tomatoes-and-feta-cheese/",
+    "recipeIngredient": [
+      "200g/ 7 ounces risotto rice (Arbiorio or carnaroli)",
+      "3.5 cups vegetable stock",
+      "1 medium red onion, finely chopped",
+      "1 clove of garlic, finely chopped",
+      "3 tomatoes, grated and 6 cherry tomatoes, cut into halves",
+      "150g feta cheese, crumbled (5-6 ounces)",
+      "1 tbsp fresh or 1 tsp dry oregano",
+      "1 glass of dry white wine",
+      "a knob of butter",
+      "2 tbsps extra virgin olive oil",
+      "salt and freshly ground pepper",
+      "1 tbsp ouzo (or sambuka)"
+    ],
+    "recipeInstructions": [
+      {
+        "@type": "HowToStep",
+        "text": "Heat the stock, according to package instructions.",
+        "url": "https://www.mygreekdish.com/recipe/risotto-with-tomatoes-and-feta-cheese/#instruction-step-1"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "In another large saucepan, heat the olive oil into medium heat and add the onions and garlic. Sauté for 5 minutes, until the onions are softened, but not colored.",
+        "url": "https://www.mygreekdish.com/recipe/risotto-with-tomatoes-and-feta-cheese/#instruction-step-2"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Turn the heat up and add the rice. Saute the rice, whilst stirring it, until it becomes translucent. Pour in the wine and wait for it to evaporate whilst stirring.",
+        "url": "https://www.mygreekdish.com/recipe/risotto-with-tomatoes-and-feta-cheese/#instruction-step-3"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Add the grated tomatoes. As soon as the rice starts to absorb the tomatoes, add your first ladle of hot stock and the cherry tomatoes and turn the heat down. Stir the rice and wait for the stock to be absorbed before adding the next ladle. Add the ouzo and repeat the procedure, with the rest of the stock. This should take about 15 minutes, until the rice is soft but with a slight bite.",
+        "url": "https://www.mygreekdish.com/recipe/risotto-with-tomatoes-and-feta-cheese/#instruction-step-4"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Remove the pan from the stove and add the feta cheese, the oregano and the butter and stir well. Season to taste.",
+        "url": "https://www.mygreekdish.com/recipe/risotto-with-tomatoes-and-feta-cheese/#instruction-step-5"
+      },
+      {
+        "@type": "HowToStep",
+        "text": "Allow the risotto to sit for 2 minutes with the lid on and serve as soon as possible, while still hot.",
+        "url": "https://www.mygreekdish.com/recipe/risotto-with-tomatoes-and-feta-cheese/#instruction-step-6"
+      }
+    ],
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "totalTime": "PT30M",
+    "recipeYield": "4",
+    "recipeCategory": "Main",
+    "cookingMethod": "Boiled",
+    "recipeCuisine": "Greek",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "reviewCount": "599",
+      "ratingValue": "4.8"
+    },
+    "nutrition": {
+      "servingSize": "1 plate",
+      "calories": "291kcal",
+      "sugarContent": "6.9g",
+      "sodiumContent": "1412.7mg",
+      "fatContent": "18.2g",
+      "saturatedFatContent": "8.5g",
+      "unsaturatedFatContent": "8.8g",
+      "transFatContent": "0g",
+      "carbohydrateContent": "24.2g",
+      "fiberContent": "1.7g",
+      "proteinContent": "7.7g",
+      "cholesterolContent": "41mg",
+      "@type": "nutritionInformation"
+    },
+    "datePublished": "2013-08-23",
+    "@id": "https://www.mygreekdish.com/recipe/risotto-with-tomatoes-and-feta-cheese/#recipe",
+    "isPartOf": {
+      "@id": "https://www.mygreekdish.com/recipe/risotto-with-tomatoes-and-feta-cheese/#article"
+    },
+    "mainEntityOfPage": "https://www.mygreekdish.com/recipe/risotto-with-tomatoes-and-feta-cheese/"
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:cookingMethod|aggregateRating"
+  ]
+}

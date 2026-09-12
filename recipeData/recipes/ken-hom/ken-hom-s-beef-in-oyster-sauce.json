@@ -1,0 +1,462 @@
+{
+  "schemaVersion": 1,
+  "id": "ken-hom/ken-hom-s-beef-in-oyster-sauce",
+  "slug": "ken-hom-s-beef-in-oyster-sauce",
+  "chefId": "chef_ken-hom",
+  "chefSlug": "ken-hom",
+  "chefName": "Ken Hom",
+  "title": "Ken Hom's beef in oyster sauce",
+  "description": "Try Ken Hom's beef in oyster sauce recipe for a Chinese takeaway classic, served with spicy salad.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/beef_in_oyster_sauce_14507",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/beef_in_oyster_sauce_14507",
+    "retrievedAt": "2026-09-11T00:27:15.905Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Ken Hom"
+    ],
+    "datePublished": "2013-11-03T11:30:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "3041b0542cf6b0d371a38dd19f8d7fd2daa2778121edffef70bef82a2b40cfae",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 10,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Chinese"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "beef stir-fry",
+    "chinese-style dinner party",
+    "lunar new year",
+    "stir-fry",
+    "fillet of beef",
+    "oyster sauce",
+    "dairy free",
+    "egg free",
+    "2007-16"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the beef",
+      "items": [
+        {
+          "raw": "450g/1 lb fillet of beef, cut into 5cm/2in thin strips",
+          "quantity": 450,
+          "quantityText": "450",
+          "unit": "g",
+          "name": "/1 lb fillet of beef, cut into 5cm/2in thin strips",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp light soy sauce",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "light soy sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp sesame oil",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "sesame oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp Shaoxing rice wine or dry sherry",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "Shaoxing rice wine or dry sherry",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp cornflour",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "cornflour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp groundnut or vegetable oil",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "groundnut or vegetable oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp oyster sauce",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "oyster sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1½ tbsp finely chopped spring onions",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": null,
+          "name": "½ tbsp finely chopped spring onions",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the salad",
+      "items": [
+        {
+          "raw": "2 tsp Dijon mustard",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "Dijon mustard",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp Madras curry powder",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "Madras curry powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tbsp light soy sauce",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "light soy sauce",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2 tsp salt",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp freshly ground black pepper",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "4 tbsp extra virgin olive oil",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "extra virgin olive oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz broccoli florets, cut into small florets",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz broccoli florets, cut into small florets",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz French beans, trimmed",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz French beans",
+          "note": "trimmed",
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz cauliflower florets, cut into small florets",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz cauliflower florets, cut into small florets",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100g/3½oz peas",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "g",
+          "name": "/3½oz peas",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "225g/8oz fresh tomato, peeled, seeds removed, chopped",
+          "quantity": 225,
+          "quantityText": "225",
+          "unit": "g",
+          "name": "/8oz fresh tomato",
+          "note": "peeled, seeds removed, chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "50g/2 oz fresh water chestnuts, peeled, sliced",
+          "quantity": 50,
+          "quantityText": "50",
+          "unit": "g",
+          "name": "/2 oz fresh water chestnuts",
+          "note": "peeled, sliced",
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp finely chopped shallots, squeezed dry through a linen cloth",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "finely chopped shallots, squeezed dry through a linen cloth",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 tbsp finely chopped fresh chives",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": "tbsp",
+          "name": "finely chopped fresh chives",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Put the beef, soy sauce, sesame oil, Shaoxing rice wine or dry sherry and cornflour into a bowl and mix together until well combined. Set aside to marinate for 20 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put the beef, soy sauce, sesame oil, Shaoxing rice wine or dry sherry and cornflour into a bowl and mix together until well combined. Set aside to marinate for 20 minutes."
+    },
+    {
+      "order": 2,
+      "text": "Heat a wok or large frying-pan until it is very hot. Add the oil, and when it is very hot and slightly smoking, add the beef slices and stir-fry for 5-6 minutes or until they are browned. Remove the beef strips and set aside to drain in a colander over a bowl. Discard the drained oil.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Heat a wok or large frying-pan until it is very hot. Add the oil, and when it is very hot and slightly smoking, add the beef slices and stir-fry for 5-6 minutes or until they are browned. Remove the beef strips and set aside to drain in a colander over a bowl. Discard the drained oil."
+    },
+    {
+      "order": 3,
+      "text": "Wipe the wok or pan clean and reheat it over a high heat until it is hot. Add the oyster sauce, and bring to a simmer. Return the drained beef slices and mix them thoroughly with the sauce. Turn the mixture onto a serving platter and garnish with the spring onions.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Wipe the wok or pan clean and reheat it over a high heat until it is hot. Add the oyster sauce, and bring to a simmer. Return the drained beef slices and mix them thoroughly with the sauce. Turn the mixture onto a serving platter and garnish with the spring onions."
+    },
+    {
+      "order": 4,
+      "text": "Meanwhile, for the salad, mix the mustard, curry powder, soy sauce, salt, pepper and olive oil together in a bowl.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Meanwhile, for the salad, mix the mustard, curry powder, soy sauce, salt, pepper and olive oil together in a bowl. "
+    },
+    {
+      "order": 5,
+      "text": "Cook the broccoli, green beans and cauliflower in boiling water for 2-3 minutes, then add peas and cook for 1-2 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Cook the broccoli, green beans and cauliflower in boiling water for 2-3 minutes, then add peas and cook for 1-2 minutes."
+    },
+    {
+      "order": 6,
+      "text": "Drain the vegetables into a warm bowl, then add the water chestnuts and tomatoes, shallots and chives. Drizzle over the salad dressing and mix until well combined.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Drain the vegetables into a warm bowl, then add the water chestnuts and tomatoes, shallots and chives.  Drizzle over the salad dressing and mix until well combined."
+    },
+    {
+      "order": 7,
+      "text": "Serve the salad alongside the beef.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Serve the salad alongside the beef."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/beef_in_oyster_sauce_14507_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 13,
+      "ratingValue": 4.384615384615385
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Try Ken Hom's beef in oyster sauce recipe for a Chinese takeaway classic, served with spicy salad.",
+    "headline": "Ken Hom's beef in oyster sauce",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/beef_in_oyster_sauce_14507_16x9.jpg"
+    },
+    "name": "Ken Hom's beef in oyster sauce",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Hom"
+    },
+    "datePublished": "2013-11-03T11:30:00.000Z",
+    "dateModified": "2021-03-24T16:21:59.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 13,
+      "ratingValue": 4.384615384615385
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT10M",
+    "keywords": "quick, beef stir-fry, chinese-style dinner party, lunar new year, stir-fry, fillet of beef, oyster sauce, dairy free, egg free, 2007-16",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Chinese",
+    "recipeIngredient": [
+      "450g/1 lb fillet of beef, cut into 5cm/2in thin strips",
+      "1 tbsp light soy sauce",
+      "2 tsp sesame oil",
+      "1 tbsp Shaoxing rice wine or dry sherry",
+      "2 tsp cornflour",
+      "3 tbsp groundnut or vegetable oil",
+      "3 tbsp oyster sauce",
+      "1½ tbsp finely chopped spring onions",
+      "2 tsp Dijon mustard",
+      "2 tsp Madras curry powder",
+      "2 tbsp light soy sauce ",
+      "2 tsp salt",
+      "1 tsp freshly ground black pepper",
+      "4 tbsp extra virgin olive oil ",
+      "100g/3½oz broccoli florets, cut into small florets",
+      "100g/3½oz French beans, trimmed ",
+      "100g/3½oz cauliflower florets, cut into small florets",
+      "100g/3½oz peas",
+      "225g/8oz fresh tomato, peeled, seeds removed, chopped",
+      "50g/2 oz fresh water chestnuts, peeled, sliced",
+      "3 tbsp finely chopped shallots, squeezed dry through a linen cloth ",
+      "3 tbsp finely chopped fresh chives"
+    ],
+    "recipeInstructions": [
+      "Put the beef, soy sauce, sesame oil, Shaoxing rice wine or dry sherry and cornflour into a bowl and mix together until well combined. Set aside to marinate for 20 minutes.",
+      "Heat a wok or large frying-pan until it is very hot. Add the oil, and when it is very hot and slightly smoking, add the beef slices and stir-fry for 5-6 minutes or until they are browned. Remove the beef strips and set aside to drain in a colander over a bowl. Discard the drained oil.",
+      "Wipe the wok or pan clean and reheat it over a high heat until it is hot. Add the oyster sauce, and bring to a simmer. Return the drained beef slices and mix them thoroughly with the sauce. Turn the mixture onto a serving platter and garnish with the spring onions.",
+      "Meanwhile, for the salad, mix the mustard, curry powder, soy sauce, salt, pepper and olive oil together in a bowl. ",
+      "Cook the broccoli, green beans and cauliflower in boiling water for 2-3 minutes, then add peas and cook for 1-2 minutes.",
+      "Drain the vegetables into a warm bowl, then add the water chestnuts and tomatoes, shallots and chives.  Drizzle over the salad dressing and mix until well combined.",
+      "Serve the salad alongside the beef."
+    ],
+    "recipeYield": "Serves 4",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet"
+    ]
+  },
+  "audit": [
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}

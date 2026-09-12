@@ -1,0 +1,371 @@
+{
+  "schemaVersion": 1,
+  "id": "gennaro-contaldo/focaccia-with-garlic-and-rosemary",
+  "slug": "focaccia-with-garlic-and-rosemary",
+  "chefId": "chef_gennaro-contaldo",
+  "chefSlug": "gennaro-contaldo",
+  "chefName": "Gennaro Contaldo",
+  "title": "Focaccia with garlic and rosemary",
+  "description": "Gennaro's focaccia is relatively quick to make, and fairly hands-off if you use a mixer fitted with a dough hook. If you cut the squares in half, you can fill with prosciutto or cheese for a different sandwich.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/focaccia_with_garlic_and_35777",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/focaccia_with_garlic_and_35777",
+    "retrievedAt": "2026-09-11T00:27:49.880Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Gennaro Contaldo"
+    ],
+    "datePublished": "2014-02-17T13:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "5c77617bf149aaabbf5cbbc78a8ab7828a0974cb6db18b5cc4e62619b735ea27",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups",
+        "chef-tips: 1"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 12"
+    ],
+    "servings": 12
+  },
+  "timing": {
+    "prepMinutes": 120,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Italian"
+  ],
+  "category": [
+    "Cakes and baking"
+  ],
+  "keywords": [
+    "apero ideas",
+    "flavoured bread",
+    "best bread",
+    "buffet",
+    "easy bread",
+    "heavenly herbs",
+    "how to make bread",
+    "italian comfort food",
+    "vegetarian spring dinner party menu",
+    "weekend cooking projects",
+    "spring recipes",
+    "summer party",
+    "focaccia",
+    "strong white flour",
+    "rosemary",
+    "dairy free",
+    "egg free",
+    "nut free",
+    "pregnancy friendly",
+    "vegan",
+    "vegetarian",
+    "Saturday Kitchen Best Bites"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the dough",
+      "items": [
+        {
+          "raw": "500g/1lb 2oz strong white flour",
+          "quantity": 500,
+          "quantityText": "500",
+          "unit": "g",
+          "name": "/1lb 2oz strong white flour",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "7g instant yeast",
+          "quantity": 7,
+          "quantityText": "7",
+          "unit": "g",
+          "name": "instant yeast",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp salt",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "oil, for greasing",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "oil, for greasing",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the topping",
+      "items": [
+        {
+          "raw": "2 tbsp extra virgin olive oil, plus extra to drizzle after baking",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "extra virgin olive oil, plus extra to drizzle after baking",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "3 rosemary sprigs, leaves only, finely chopped",
+          "quantity": 3,
+          "quantityText": "3",
+          "unit": null,
+          "name": "rosemary sprigs",
+          "note": "leaves only, finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "2 large garlic cloves, finely chopped",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": null,
+          "name": "large garlic cloves",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp sea salt flakes",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "sea salt flakes",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "freshly ground black pepper",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "freshly ground black pepper",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "For the dough, combine the flour, yeast and salt with up to 350ml/12fl oz lukewarm water, until you have a soft dough. Knead for 10–15 minutes (you can do this by hand or in a free-standing mixer fitted with a dough hook). Transfer to an oiled bowl, cover with cling film and leave to rise for 30 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "For the dough, combine the flour, yeast and salt with up to 350ml/12fl oz lukewarm water, until you have a soft dough. Knead for 10–15 minutes (you can do this by hand or in a free-standing mixer fitted with a dough hook). Transfer to an oiled bowl, cover with cling film and leave to rise for 30 minutes."
+    },
+    {
+      "order": 2,
+      "text": "After 30 minutes, place into a lined and slightly warmed baking tray measuring 37x27cm/14½x10¾in. Drizzle with olive oil and top with the fresh rosemary, chopped garlic, sea salt and a little pepper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "After 30 minutes, place into a lined and slightly warmed baking tray measuring 37x27cm/14½x10¾in. Drizzle with olive oil and top with the fresh rosemary, chopped garlic, sea salt and a little pepper."
+    },
+    {
+      "order": 3,
+      "text": "Press your fingers into the dough to make dimples and then rest again for another 30 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Press your fingers into the dough to make dimples and then rest again for another 30 minutes."
+    },
+    {
+      "order": 4,
+      "text": "Preheat the oven to 240C/220C Fan/Gas 8.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 240C/220C Fan/Gas 8. "
+    },
+    {
+      "order": 5,
+      "text": "Bake for about 15 minutes, or until evenly golden-brown. Check the focaccia from time to time as domestic ovens can very often colour one side and not the other. Check and move the tray accordingly.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Bake for about 15 minutes, or until evenly golden-brown. Check the focaccia from time to time as domestic ovens can very often colour one side and not the other. Check and move the tray accordingly.  "
+    },
+    {
+      "order": 6,
+      "text": "Once cooked, remove from the oven and immediately drizzle some more olive oil all over. Leave to cool, then cut into squares.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Once cooked, remove from the oven and immediately drizzle some more olive oil all over. Leave to cool, then cut into squares.  "
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/focaccia_with_garlic_and_35777_16x9.jpg"
+    ],
+    "video": [
+      {
+        "description": "This bread is delicious eaten on the day it is baked, but it will keep for a few days and you can freshen it up in the oven for a few minutes just before serving.  If you cut the squares in half, you can fill with prosciutto or cheese for a different sandwich.",
+        "duration": "PT49S",
+        "name": "Focaccia with garlic and rosemary",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/focaccia_with_garlic_and_35777_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-08T00:36:52.000Z"
+      }
+    ]
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": [
+      "This focaccia is delicious eaten on the day it is baked, but it will keep for a few days and you can freshen it up in the oven for a few minutes just before serving."
+    ]
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 37,
+      "ratingValue": 4.945945945945946
+    },
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/VeganDiet",
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "This bread is delicious eaten on the day it is baked, but it will keep for a few days and you can freshen it up in the oven for a few minutes just before serving.  If you cut the squares in half, you can fill with prosciutto or cheese for a different sandwich.",
+        "duration": "PT49S",
+        "name": "Focaccia with garlic and rosemary",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/focaccia_with_garlic_and_35777_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-08T00:36:52.000Z"
+      }
+    ]
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "Gennaro's focaccia is relatively quick to make, and fairly hands-off if you use a mixer fitted with a dough hook.  If you cut the squares in half, you can fill with prosciutto or cheese for a different sandwich.  ",
+    "headline": "Focaccia with garlic and rosemary ",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/focaccia_with_garlic_and_35777_16x9.jpg"
+    },
+    "name": "Focaccia with garlic and rosemary ",
+    "author": {
+      "@type": "Person",
+      "name": "Gennaro Contaldo"
+    },
+    "datePublished": "2014-02-17T13:00:00.000Z",
+    "dateModified": "2026-06-23T16:12:37.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 37,
+      "ratingValue": 4.945945945945946
+    },
+    "prepTime": "PT2H",
+    "cookTime": "PT30M",
+    "keywords": "apero ideas, flavoured bread, best bread, buffet, easy bread, heavenly herbs, how to make bread, italian comfort food, vegetarian spring dinner party menu, weekend cooking projects, spring recipes , summer party, focaccia, strong white flour, rosemary, dairy free, egg free, nut free, pregnancy friendly, vegan, vegetarian, Saturday Kitchen Best Bites",
+    "recipeCategory": "Cakes and baking",
+    "recipeCuisine": "Italian",
+    "recipeIngredient": [
+      "500g/1lb 2oz strong white flour ",
+      "7g instant yeast ",
+      "1 tsp salt ",
+      "oil, for greasing",
+      "2 tbsp extra virgin olive oil, plus extra to drizzle after baking",
+      "3 rosemary sprigs, leaves only, finely chopped ",
+      "2 large garlic cloves, finely chopped ",
+      "1 tsp sea salt flakes",
+      "freshly ground black pepper "
+    ],
+    "recipeInstructions": [
+      "For the dough, combine the flour, yeast and salt with up to 350ml/12fl oz lukewarm water, until you have a soft dough. Knead for 10–15 minutes (you can do this by hand or in a free-standing mixer fitted with a dough hook). Transfer to an oiled bowl, cover with cling film and leave to rise for 30 minutes.",
+      "After 30 minutes, place into a lined and slightly warmed baking tray measuring 37x27cm/14½x10¾in. Drizzle with olive oil and top with the fresh rosemary, chopped garlic, sea salt and a little pepper.",
+      "Press your fingers into the dough to make dimples and then rest again for another 30 minutes.",
+      "Preheat the oven to 240C/220C Fan/Gas 8. ",
+      "Bake for about 15 minutes, or until evenly golden-brown. Check the focaccia from time to time as domestic ovens can very often colour one side and not the other. Check and move the tray accordingly.  ",
+      "Once cooked, remove from the oven and immediately drizzle some more olive oil all over. Leave to cool, then cut into squares.  "
+    ],
+    "recipeYield": "Serves 12",
+    "suitableForDiet": [
+      "http://schema.org/LowLactoseDiet",
+      "http://schema.org/VeganDiet",
+      "http://schema.org/VegetarianDiet"
+    ],
+    "video": [
+      {
+        "description": "This bread is delicious eaten on the day it is baked, but it will keep for a few days and you can freshen it up in the oven for a few minutes just before serving.  If you cut the squares in half, you can fill with prosciutto or cheese for a different sandwich.",
+        "duration": "PT49S",
+        "name": "Focaccia with garlic and rosemary",
+        "thumbnailUrl": [
+          "https://ichef.bbci.co.uk/food/ic/food_16x9_832/recipes/focaccia_with_garlic_and_35777_16x9.jpg"
+        ],
+        "uploadDate": "2023-03-08T00:36:52.000Z"
+      }
+    ]
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "unmapped:aggregateRating|suitableForDiet|video"
+  ]
+}

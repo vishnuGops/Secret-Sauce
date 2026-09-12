@@ -1,0 +1,584 @@
+[
+  {
+    "name": "madewithlau.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://madewithlau.com/"
+  },
+  {
+    "name": "thehongkongcookery.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thehongkongcookery.com/"
+  },
+  {
+    "name": "yireservation.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://yireservation.com/"
+  },
+  {
+    "name": "christieathome.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://christieathome.com/"
+  },
+  {
+    "name": "chinesehealthycooking.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://chinesehealthycooking.com/"
+  },
+  {
+    "name": "tasteasianfood.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://tasteasianfood.com/"
+  },
+  {
+    "name": "chinayummyfood.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://chinayummyfood.com/"
+  },
+  {
+    "name": "simplechinesefood.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://simplechinesefood.com/"
+  },
+  {
+    "name": "mychinesehomekitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://mychinesehomekitchen.com/"
+  },
+  {
+    "name": "earthtoveg.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://earthtoveg.com/"
+  },
+  {
+    "name": "cloudykitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://cloudykitchen.com/"
+  },
+  {
+    "name": "zoebakes.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://zoebakes.com/"
+  },
+  {
+    "name": "dessertfortwo.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://dessertfortwo.com/"
+  },
+  {
+    "name": "dessertfirstgirl.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://dessertfirstgirl.com/"
+  },
+  {
+    "name": "chocolatechocolateandmore.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://chocolatechocolateandmore.com/"
+  },
+  {
+    "name": "omgchocolatedesserts.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://omgchocolatedesserts.com/"
+  },
+  {
+    "name": "savingdessert.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://savingdessert.com/"
+  },
+  {
+    "name": "dessertnowdinnerlater.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://dessertnowdinnerlater.com/"
+  },
+  {
+    "name": "somethingswanky.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://somethingswanky.com/"
+  },
+  {
+    "name": "thebakingchocolatess.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thebakingchocolatess.com/"
+  },
+  {
+    "name": "dessertswithbenefits.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://dessertswithbenefits.com/"
+  },
+  {
+    "name": "domesticfits.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://domesticfits.com/"
+  },
+  {
+    "name": "dessertsrequired.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://dessertsrequired.com/"
+  },
+  {
+    "name": "busyinbrooklyn.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://busyinbrooklyn.com/"
+  },
+  {
+    "name": "daniscookings.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://daniscookings.com/"
+  },
+  {
+    "name": "baking-ginger.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://baking-ginger.com/"
+  },
+  {
+    "name": "ohmysugarhigh.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://ohmysugarhigh.com/"
+  },
+  {
+    "name": "buttersugarflowers.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://buttersugarflowers.com/"
+  },
+  {
+    "name": "spamellab.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://spamellab.com/"
+  },
+  {
+    "name": "italianfoodforever.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://italianfoodforever.com/"
+  },
+  {
+    "name": "theitaliandishblog.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://theitaliandishblog.com/"
+  },
+  {
+    "name": "vincenzosplate.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://vincenzosplate.com/"
+  },
+  {
+    "name": "elizabethminchilli.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://elizabethminchilli.com/"
+  },
+  {
+    "name": "the-pasta-project.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://the-pasta-project.com/"
+  },
+  {
+    "name": "ciaoitalia.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://ciaoitalia.com/"
+  },
+  {
+    "name": "cookingwithmammac.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://cookingwithmammac.com/"
+  },
+  {
+    "name": "shelovesbiscotti.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://shelovesbiscotti.com/"
+  },
+  {
+    "name": "savoringitaly.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://savoringitaly.com/"
+  },
+  {
+    "name": "italianbellavita.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://italianbellavita.com/"
+  },
+  {
+    "name": "ciaochowlinda.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://ciaochowlinda.com/"
+  },
+  {
+    "name": "orsararecipes.net",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://orsararecipes.net/"
+  },
+  {
+    "name": "sugarlovespices.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://sugarlovespices.com/"
+  },
+  {
+    "name": "allourway.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://allourway.com/"
+  },
+  {
+    "name": "mangiabedda.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://mangiabedda.com/"
+  },
+  {
+    "name": "yourguardianchef.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://yourguardianchef.com/"
+  },
+  {
+    "name": "flavorofitaly.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://flavorofitaly.com/"
+  },
+  {
+    "name": "cookingwithmanuela.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://cookingwithmanuela.com/"
+  },
+  {
+    "name": "italiankiwi.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://italiankiwi.com/"
+  },
+  {
+    "name": "marcellinaincucina.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://marcellinaincucina.com/"
+  },
+  {
+    "name": "buonapappa.net",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://buonapappa.net/"
+  },
+  {
+    "name": "whatscookinitalianstylecuisine.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://whatscookinitalianstylecuisine.com/"
+  },
+  {
+    "name": "mypinchofitaly.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://mypinchofitaly.co.uk/"
+  },
+  {
+    "name": "italianspoon.com.au",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://italianspoon.com.au/"
+  },
+  {
+    "name": "thetinyitalian.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thetinyitalian.com/"
+  },
+  {
+    "name": "pastaetal.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://pastaetal.com/"
+  },
+  {
+    "name": "nonnabox.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://nonnabox.com/"
+  },
+  {
+    "name": "italianfoodboss.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://italianfoodboss.com/"
+  },
+  {
+    "name": "anitaliandish.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://anitaliandish.com/"
+  },
+  {
+    "name": "emikodavies.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://emikodavies.com/"
+  },
+  {
+    "name": "julskitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://julskitchen.com/"
+  },
+  {
+    "name": "katieparla.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://katieparla.com/"
+  },
+  {
+    "name": "pinabresciani.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://pinabresciani.com/"
+  },
+  {
+    "name": "pastagrammar.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://pastagrammar.com/"
+  },
+  {
+    "name": "mexicanfoodjournal.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://mexicanfoodjournal.com/"
+  },
+  {
+    "name": "patijinich.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://patijinich.com/"
+  },
+  {
+    "name": "lacocinadeleslie.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://lacocinadeleslie.com/"
+  },
+  {
+    "name": "mexicanplease.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://mexicanplease.com/"
+  },
+  {
+    "name": "muybuenoblog.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://muybuenoblog.com/"
+  },
+  {
+    "name": "lolascocina.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://lolascocina.com/"
+  },
+  {
+    "name": "dorastable.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://dorastable.com/"
+  },
+  {
+    "name": "mexicanappetizersandmore.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://mexicanappetizersandmore.com/"
+  },
+  {
+    "name": "maricruzavalos.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://maricruzavalos.com/"
+  },
+  {
+    "name": "inmamamaggieskitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://inmamamaggieskitchen.com/"
+  },
+  {
+    "name": "holajalapeno.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://holajalapeno.com/"
+  },
+  {
+    "name": "mexicanmademeatless.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://mexicanmademeatless.com/"
+  },
+  {
+    "name": "chicanoeats.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://chicanoeats.com/"
+  },
+  {
+    "name": "mexicanfoodmemories.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://mexicanfoodmemories.co.uk/"
+  },
+  {
+    "name": "thejapanesekitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thejapanesekitchen.com/"
+  },
+  {
+    "name": "justhungry.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://justhungry.com/"
+  },
+  {
+    "name": "hirokoliston.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://hirokoliston.com/"
+  },
+  {
+    "name": "naokomoore.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://naokomoore.com/"
+  },
+  {
+    "name": "mayukoslittlekitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://mayukoslittlekitchen.com/"
+  },
+  {
+    "name": "princessbamboo.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://princessbamboo.com/"
+  },
+  {
+    "name": "contemplatingsweets.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://contemplatingsweets.com/"
+  },
+  {
+    "name": "japancentre.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://japancentre.com/"
+  },
+  {
+    "name": "pickledplum.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://pickledplum.com/"
+  },
+  {
+    "name": "foodsaketokyo.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://foodsaketokyo.com/"
+  },
+  {
+    "name": "umamibites.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://umamibites.com/"
+  },
+  {
+    "name": "naokoskitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://naokoskitchen.com/"
+  },
+  {
+    "name": "cookingwithyoshiko.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://cookingwithyoshiko.com/"
+  },
+  {
+    "name": "okonomikitchen.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://okonomikitchen.com/"
+  },
+  {
+    "name": "platesbynat.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://platesbynat.com/"
+  },
+  {
+    "name": "chefjacooks.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://chefjacooks.com/"
+  },
+  {
+    "name": "easypeasyjapanesey.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://easypeasyjapanesey.com/"
+  },
+  {
+    "name": "thehalalfoodblog.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://thehalalfoodblog.com/"
+  },
+  {
+    "name": "souschef.co.uk",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://souschef.co.uk/"
+  },
+  {
+    "name": "japanesetaste.com",
+    "nameAuto": true,
+    "kind": "chef",
+    "homepage": "https://japanesetaste.com/"
+  }
+]

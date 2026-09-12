@@ -1,0 +1,543 @@
+{
+  "schemaVersion": 1,
+  "id": "madhur-jaffrey/baked-chicken-curry",
+  "slug": "baked-chicken-curry",
+  "chefId": "chef_madhur-jaffrey",
+  "chefSlug": "madhur-jaffrey",
+  "chefName": "Madhur Jaffrey",
+  "title": "Baked chicken curry",
+  "description": "To accompany the dish, a simple rice dish and a vegetable or a salad would suffice. But if you're entertaining serve stir-fried cauliflower with ginger, garlic and green chillies and a bowl of rice with mushrooms as side dishes.",
+  "source": {
+    "sourceUrl": "https://www.bbc.co.uk/food/recipes/ovenkimurghichickenb_76546",
+    "finalUrl": "https://www.bbc.co.uk/food/recipes/ovenkimurghichickenb_76546",
+    "retrievedAt": "2026-09-11T00:26:57.368Z",
+    "publisher": "BBC",
+    "authorRaw": [
+      "Madhur Jaffrey"
+    ],
+    "datePublished": "2005-10-06T00:00:00.000Z",
+    "rights": "Recipe text belongs to the rights-holder. This corpus stores functional content (ingredients, quantities, steps) plus a link back to the source, for internal app testing only. Not for redistribution.",
+    "htmlSha256": "f550da7fefdfc62e428ac65225f3e19eb8c16d9e84c6533edd1dadb504a8378c",
+    "jsonLdBlockCount": 1,
+    "malformedJsonLdBlocks": [],
+    "enrichment": {
+      "site": "bbc.co.uk/food",
+      "notes": [
+        "regrouped-from-html: 2 groups"
+      ]
+    }
+  },
+  "yield": {
+    "raw": [
+      "Serves 4-6"
+    ],
+    "servings": 4
+  },
+  "timing": {
+    "prepMinutes": 30,
+    "cookMinutes": 30,
+    "totalMinutes": null,
+    "performMinutes": null
+  },
+  "difficulty": null,
+  "cuisine": [
+    "Indian"
+  ],
+  "category": [
+    "Main course"
+  ],
+  "keywords": [
+    "quick",
+    "cooking from scratch: curries",
+    "diwali",
+    "chicken curry",
+    "chicken breast",
+    "egg free",
+    "nut free",
+    "pregnancy friendly",
+    "Saturday Kitchen"
+  ],
+  "ingredientGroups": [
+    {
+      "name": "For the sauce",
+      "items": [
+        {
+          "raw": "2 tbsp tomato purée",
+          "quantity": 2,
+          "quantityText": "2",
+          "unit": "tbsp",
+          "name": "tomato purée",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp Dijon mustard",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "Dijon mustard",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp ground cumin",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "ground cumin",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tsp garam masala",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tsp",
+          "name": "garam masala",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 tbsp lemon juice",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "tbsp",
+          "name": "lemon juice",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp salt",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "salt",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "¼ tsp chilli powder",
+          "quantity": 0.25,
+          "quantityText": "¼",
+          "unit": "tsp",
+          "name": "chilli powder",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "100ml/3½fl oz single cream",
+          "quantity": 100,
+          "quantityText": "100",
+          "unit": "ml",
+          "name": "/3½fl oz single cream",
+          "note": null,
+          "isOptional": false
+        }
+      ]
+    },
+    {
+      "name": "For the curry",
+      "items": [
+        {
+          "raw": "4 boned, skinned chicken breasts (weighing approximately 560g/1 lb 4oz in total)",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": null,
+          "name": "boned, skinned chicken breasts (weighing approximately 560g/1 lb 4oz in total)",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "salt and freshly ground black pepper, to taste",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "salt and freshly ground black pepper",
+          "note": "to taste",
+          "isOptional": false
+        },
+        {
+          "raw": "4 tbsp vegetable oil",
+          "quantity": 4,
+          "quantityText": "4",
+          "unit": "tbsp",
+          "name": "vegetable oil",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "5cm/2in piece cinnamon stick",
+          "quantity": 5,
+          "quantityText": "5",
+          "unit": null,
+          "name": "cm/2in piece cinnamon stick",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 cardamom pods, cracked open",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": null,
+          "name": "cardamom pods, cracked open",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "6 cloves",
+          "quantity": 6,
+          "quantityText": "6",
+          "unit": "cloves",
+          "name": "6 cloves",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "140g/5oz onions, cut into fine half-rings",
+          "quantity": 140,
+          "quantityText": "140",
+          "unit": "g",
+          "name": "/5oz onions, cut into fine half-rings",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "2.5cm/1in piece fresh root ginger, peeled and cut into fine slices, then into fine strips",
+          "quantity": 2.5,
+          "quantityText": "2.5",
+          "unit": null,
+          "name": "cm/1in piece fresh root ginger",
+          "note": "peeled and cut into fine slices, then into fine strips",
+          "isOptional": false
+        },
+        {
+          "raw": "1-3 hot green chillies, cut at a diagonal into fine strips",
+          "quantity": 1,
+          "quantityText": "1-3",
+          "unit": null,
+          "name": "hot green chillies, cut at a diagonal into fine strips",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "½ tsp black or yellow mustard seeds",
+          "quantity": 0.5,
+          "quantityText": "½",
+          "unit": "tsp",
+          "name": "black or yellow mustard seeds",
+          "note": null,
+          "isOptional": false
+        },
+        {
+          "raw": "1 clove garlic, finely chopped",
+          "quantity": 1,
+          "quantityText": "1",
+          "unit": "clove",
+          "name": "garlic",
+          "note": "finely chopped",
+          "isOptional": false
+        },
+        {
+          "raw": "cooked basmati rice, to serve",
+          "quantity": null,
+          "quantityText": null,
+          "unit": null,
+          "name": "cooked basmati rice",
+          "note": "to serve",
+          "isOptional": false
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "text": "Preheat the oven to 180C/350F/Gas 4.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Preheat the oven to 180C/350F/Gas 4."
+    },
+    {
+      "order": 2,
+      "text": "Put the tomato purée in a bowl and mix with one tablespoon of water.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put the tomato purée in a bowl and mix with one tablespoon of water."
+    },
+    {
+      "order": 3,
+      "text": "Add all the remaining sauce ingredients, in the listed order, mixing as you go.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add all the remaining sauce ingredients, in the listed order, mixing as you go."
+    },
+    {
+      "order": 4,
+      "text": "Spread out the chicken breasts and season them generously on both sides with salt and freshly ground black pepper.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Spread out the chicken breasts and season them generously on both sides with salt and freshly ground black pepper."
+    },
+    {
+      "order": 5,
+      "text": "Put three tablespoons of the oil in a non-stick frying pan and place over a high heat.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Put three tablespoons of the oil in a non-stick frying pan and place over a high heat."
+    },
+    {
+      "order": 6,
+      "text": "When hot, add the cinnamon, cracked cardamom pods and cloves.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "When hot, add the cinnamon, cracked cardamom pods and cloves."
+    },
+    {
+      "order": 7,
+      "text": "After ten seconds, add the chicken breasts in a single layer and brown them lightly on both sides.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "After ten seconds, add the chicken breasts in a single layer and brown them lightly on both sides. "
+    },
+    {
+      "order": 8,
+      "text": "Remove with a slotted spoon and place in a single layer in an ovenproof dish.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove with a slotted spoon and place in a single layer in an ovenproof dish. "
+    },
+    {
+      "order": 9,
+      "text": "Add the onions, ginger, and green chillies to the same frying pan and fry them in the residual oil until they are golden-brown in colour.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the onions, ginger, and green chillies to the same frying pan and fry them in the residual oil until they are golden-brown in colour."
+    },
+    {
+      "order": 10,
+      "text": "Remove with a slotted spoon and spread evenly over the chicken breasts.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Remove with a slotted spoon and spread evenly over the chicken breasts."
+    },
+    {
+      "order": 11,
+      "text": "Add the remaining one tablespoon of oil to the frying pan. When hot, add the mustard seeds. As soon as they pop - this will be just a few seconds - add the garlic and stir.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Add the remaining one tablespoon of oil to the frying pan. When hot, add the mustard seeds. As soon as they pop - this will be just a few seconds - add the garlic and stir."
+    },
+    {
+      "order": 12,
+      "text": "As soon as the garlic starts to brown, pour in the sauce.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "As soon as the garlic starts to brown, pour in the sauce. "
+    },
+    {
+      "order": 13,
+      "text": "As soon as the sauce heats up and starts bubbling, pour it over and around the chicken without displacing the onion mixture.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "As soon as the sauce heats up and starts bubbling, pour it over and around the chicken without displacing the onion mixture."
+    },
+    {
+      "order": 14,
+      "text": "Place the ovenproof dish, uncovered, in the oven and bake for 25 minutes.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Place the ovenproof dish, uncovered, in the oven and bake for 25 minutes."
+    },
+    {
+      "order": 15,
+      "text": "Serve immediately with basmati rice.",
+      "stepGroup": null,
+      "subSteps": [],
+      "durationMinutes": null,
+      "temperature": null,
+      "utensils": [],
+      "imageUrl": null,
+      "tip": null,
+      "raw": "Serve immediately with basmati rice."
+    }
+  ],
+  "equipment": [],
+  "supplies": [],
+  "nutrition": null,
+  "media": {
+    "coverImages": [
+      "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/ovenkimurghichickenb_76546_16x9.jpg"
+    ],
+    "video": null
+  },
+  "notes": {
+    "makeAhead": null,
+    "storage": null,
+    "substitutions": [],
+    "variations": [],
+    "chefTips": []
+  },
+  "unmappedFields": {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 19,
+      "ratingValue": 4.578947368421052
+    },
+    "suitableForDiet": []
+  },
+  "rawJsonLd": {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "description": "To accompany the dish, a simple rice dish and a vegetable or a salad would suffice. But if you're entertaining serve stir-fried cauliflower with ginger, garlic and green chillies and a bowl of rice with mushrooms as side dishes.",
+    "headline": "Baked chicken curry",
+    "image": {
+      "@type": "ImageObject",
+      "width": 1600,
+      "height": 900,
+      "url": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/ovenkimurghichickenb_76546_16x9.jpg"
+    },
+    "name": "Baked chicken curry",
+    "author": {
+      "@type": "Person",
+      "name": "Madhur Jaffrey"
+    },
+    "datePublished": "2005-10-06T00:00:00.000Z",
+    "dateModified": "2018-09-24T13:04:10.000Z",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BBC",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.files.bbci.co.uk/core/website/assets/static/webcore/bbc_blocks_84x24.5b565ac136ea8f9cb3b0f8e02eca1e0f.svg",
+        "width": 84,
+        "height": 24
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 19,
+      "ratingValue": 4.578947368421052
+    },
+    "prepTime": "PT30M",
+    "cookTime": "PT30M",
+    "keywords": "quick, cooking from scratch: curries, diwali, chicken curry, chicken breast, egg free, nut free, pregnancy friendly, Saturday Kitchen",
+    "recipeCategory": "Main course",
+    "recipeCuisine": "Indian",
+    "recipeIngredient": [
+      "2 tbsp tomato purée",
+      "1 tbsp Dijon mustard",
+      "1 tsp ground cumin",
+      "1 tsp garam masala",
+      "1 tbsp lemon juice ",
+      "½ tsp salt ",
+      "¼ tsp chilli powder ",
+      "100ml/3½fl oz single cream",
+      "4 boned, skinned chicken breasts (weighing approximately 560g/1 lb 4oz in total)",
+      "salt and freshly ground black pepper, to taste",
+      "4 tbsp vegetable oil ",
+      "5cm/2in piece cinnamon stick ",
+      "6 cardamom pods, cracked open",
+      "6 cloves ",
+      "140g/5oz onions, cut into fine half-rings",
+      "2.5cm/1in piece fresh root ginger, peeled and cut into fine slices, then into fine strips",
+      "1-3 hot green chillies, cut at a diagonal into fine strips",
+      "½ tsp black or yellow mustard seeds",
+      "1 clove garlic, finely chopped",
+      "cooked basmati rice, to serve"
+    ],
+    "recipeInstructions": [
+      "Preheat the oven to 180C/350F/Gas 4.",
+      "Put the tomato purée in a bowl and mix with one tablespoon of water.",
+      "Add all the remaining sauce ingredients, in the listed order, mixing as you go.",
+      "Spread out the chicken breasts and season them generously on both sides with salt and freshly ground black pepper.",
+      "Put three tablespoons of the oil in a non-stick frying pan and place over a high heat.",
+      "When hot, add the cinnamon, cracked cardamom pods and cloves.",
+      "After ten seconds, add the chicken breasts in a single layer and brown them lightly on both sides. ",
+      "Remove with a slotted spoon and place in a single layer in an ovenproof dish. ",
+      "Add the onions, ginger, and green chillies to the same frying pan and fry them in the residual oil until they are golden-brown in colour.",
+      "Remove with a slotted spoon and spread evenly over the chicken breasts.",
+      "Add the remaining one tablespoon of oil to the frying pan. When hot, add the mustard seeds. As soon as they pop - this will be just a few seconds - add the garlic and stir.",
+      "As soon as the garlic starts to brown, pour in the sauce. ",
+      "As soon as the sauce heats up and starts bubbling, pour it over and around the chicken without displacing the onion mixture.",
+      "Place the ovenproof dish, uncovered, in the oven and bake for 25 minutes.",
+      "Serve immediately with basmati rice."
+    ],
+    "recipeYield": "Serves 4-6",
+    "suitableForDiet": []
+  },
+  "audit": [
+    "unparsed-quantity:2",
+    "range-quantity:1",
+    "unmapped:aggregateRating|suitableForDiet"
+  ]
+}
