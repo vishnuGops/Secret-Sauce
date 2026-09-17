@@ -2,8 +2,9 @@
 
 Source of truth for all 14 recipes the kitchen publishes. **Content**, deliberately
 separate from the **demo fixtures** in [`supabase/seed.sql`](../supabase/seed.sql)
-(fake chefs, taster accounts, engagement numbers) — those get deleted eventually,
-these do not. Every recipe is defined exactly once, here.
+(fake chefs, taster accounts, invented engagement) — which are now test-only and
+reach no real database (B113), while these are what a real database holds. Every
+recipe is defined exactly once, here.
 
 ```
 recipeData/
@@ -113,18 +114,25 @@ What is not fine is two files with the same `title`. `(owner_id, title)` is the
 import key, so a collision silently collapses to one row rather than failing;
 the validator rejects it as an error for exactly that reason.
 
-## The `demo` block
+## The `demo` block is retired — engagement is never authored (B112)
 
-Six recipes carry a `demo` block — likes, saves, views, and one rating per seeded taster. That is
-**fixture data, not content**: it exists so Discover and the chef leaderboard have a plausible
-order before there are real users, and it is what keeps the Kitchen's `chef_score` at 10189 now
-that these recipes no longer live in `seed.sql`. Delete those blocks along with `seed.sql` when
-there is real traffic; the recipes are unaffected.
+Six recipes used to carry a `demo` block: likes, saves, views, and one rating per seeded taster.
+It is **gone**, and the validator now **refuses the key** with a pointed error rather than
+reporting it as an unknown field.
 
-Ratings are applied through `seed.sql`'s taster accounts, so **`seed.sql` has to be applied
-first** — `melos run db:reset` and `config.toml` both order it that way. Applied the other way
-round, the recipes are created and the ratings skipped, with a notice; re-run `db:recipes` after
-`db:seed` to backfill.
+The reason it had to go rather than merely be unused: those numbers were arithmetically impossible.
+`recipes.like_count`, `save_count` and `rating_count` are recomputed from scratch by their triggers
+over the `recipe_likes` / `recipe_saves` / `recipe_ratings` rows, so
+`Brown Butter Chocolate Chip Cookies` claiming 412 likes with **zero** rows behind it was a number
+no code path could have produced. `melos run db:audit` now treats exactly that disagreement as its
+sharpest detection rule, which means leaving the block in place would have made the audit fail on
+the project's own content.
+
+A curated recipe therefore lands with every counter at **zero**, and `seed_recipes.sql` no longer
+touches `seed.sql`'s taster pool — so the two files are fully independent and the old
+"apply `seed.sql` first" ordering rule is gone with it. If you want a populated leaderboard to look
+at, build the fixtures explicitly (`melos run db:seed`, `melos run db:sim`) in a database you do
+not demo from.
 
 ## Unit spellings
 

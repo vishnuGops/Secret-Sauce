@@ -64,8 +64,9 @@ const _vocabTag = r'$sv$';
 /// No dish carries a `food` link yet — linking simData is 29d's optional
 /// curation — but the validator accepts the key now so promotion to
 /// recipeData never has to strip it.
+// `demo` needs no flag any more: engagement is never authored in EITHER
+// directory since B113, so the validator refuses the key outright for both.
 final _options = RecipeFormatOptions(
-  allowDemo: false, // engagement is generated, never authored
   allowSim: true,
   dollarTag: _tag,
   foodSlugs: loadFoodSlugs('nutritionData/foods.json'),

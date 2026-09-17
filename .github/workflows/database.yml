@@ -99,13 +99,57 @@ jobs:
       #
       # Through `tool/db.dart` rather than a bash transcription of it (32f2).
       # The ordering — drop, baseline, registry before recipes (29b's food_id
-      # FK), then the sim — used to live in three places (the tool, this file,
-      # and `config.toml`'s `db.seed.sql_paths`), and only two of them were ever
+      # FK) — used to live in three places (the tool, this file, and
+      # `config.toml`'s `db.seed.sql_paths`), and only two of them were ever
       # executed here. Now the file CI runs is the file a developer runs, so a
       # `db:reset` that breaks breaks here.
+      #
+      # `reset` produces REAL CONTENT ONLY since B113 — no demo accounts, no
+      # simulated population — and its last step is the data audit in STRICT
+      # mode. That is the gate: if anything in the default apply path ever
+      # fabricates a profile, a recipe or an account again, this step fails
+      # rather than a developer noticing invented chefs on the leaderboard
+      # months later. The fixtures the assertions below need are built by the
+      # next step, deliberately named so the log shows where fake data enters.
       # ------------------------------------------------------------------
-      - name: Fresh apply — db:reset through the real tool
-        run: dart run tool/db.dart reset --preset=small --seed=20260820
+      - name: Fresh apply — db:reset through the real tool (audits itself)
+        run: dart run tool/db.dart reset
+
+      # ------------------------------------------------------------------
+      # The test fixtures, as an explicit opt-in. Everything created here is
+      # fabricated by design and `db:audit` reports all of it as FAKE — which is
+      # correct, and is why the audit above runs BEFORE this step and never
+      # after it. This database is a throwaway container; the rule B113 exists
+      # to enforce is that no default path a human runs does this.
+      #
+      # `small` (250 accounts) rather than `tiny` (60): five assertions in
+      # `3_sim_verify.sql` gate on `v_users >= 250` — E3 (the exposure tail) and
+      # the whole of group G (which includes **G3, the only automated guard on
+      # `sim.fork_bias` and therefore on MOST FORKED ranking anything at all**),
+      # plus H6, the tag head-vs-tail spread, at 200 recipes. At `tiny` the shelf
+      # RPCs were executed but their row counts never asserted, so
+      # `ALL CHECKS PASSED` meant 48 of 53 and said nothing about them.
+      # ------------------------------------------------------------------
+      - name: Test fixtures — demo accounts + simulated population
+        run: |
+          dart run tool/db.dart seed
+          dart run tool/db.dart sim --preset=small --seed=20260820
+
+      # ------------------------------------------------------------------
+      # The audit's own behaviour, proved on a database that is now KNOWN to
+      # hold fabricated rows. A checker that cannot fail is not a checker, and
+      # the strict run above only ever demonstrates the clean direction — so
+      # this asserts the other one: `--strict` must exit non-zero here. (`reset`
+      # implies the flag; a bare `db:audit` reports without failing, so the flag
+      # is explicit in this step.)
+      # ------------------------------------------------------------------
+      - name: Audit — must FAIL on a database holding fixtures
+        run: |
+          if dart run tool/db.dart audit --strict; then
+            echo "::error::db:audit passed on a database seeded with demo accounts and a simulated population. The audit is not detecting fabricated rows."
+            exit 1
+          fi
+          echo "audit correctly rejected the fixture database"
 
       # ------------------------------------------------------------------
       # The RLS acceptance matrix (ROADMAP BL-7). Every other step in this job
@@ -142,16 +186,10 @@ jobs:
       - name: Nutrition fixtures — committed labels vs. the registry
         run: dart run tool/db.dart nutrition:verify
 
-      # The population is built by the `reset` above, at `small` (250 accounts)
-      # rather than `tiny` (60): five assertions in `3_sim_verify.sql` gate on
-      # `v_users >= 250` — E3 (the exposure tail) and the whole of group G
-      # (which includes **G3, the only automated guard on `sim.fork_bias` and
-      # therefore on MOST FORKED ranking anything at all**), plus H6, the tag
-      # head-vs-tail spread, at 200 recipes. At `tiny` the shelf RPCs were
-      # executed but their row counts never asserted, so `ALL CHECKS PASSED`
-      # meant 48 of 53 and said nothing about them.
-      # This step re-runs the assertions read-only, so the log names them as
-      # their own gate rather than burying them in the apply above.
+      # Re-runs the assertions read-only against the population built by the
+      # fixtures step, so the log names them as their own gate rather than
+      # burying them in the apply above. The preset rationale lives with the
+      # step that now chooses it.
       - name: Simulated population — assertions
         run: dart run tool/db.dart sim:verify
 

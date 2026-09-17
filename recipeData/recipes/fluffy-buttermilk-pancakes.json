@@ -73,11 +73,5 @@
         }
       ]
     }
-  ],
-  "demo": {
-    "like_count": 98,
-    "save_count": 61,
-    "view_count": 780,
-    "ratings": [4, 3.5, 4, 4.5, 3.5, 4]
-  }
+  ]
 }

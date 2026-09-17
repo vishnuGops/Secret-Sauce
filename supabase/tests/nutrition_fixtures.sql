@@ -14,8 +14,11 @@
 --      manual label, watch it survive).
 --
 -- REQUIRES a database that already has the registry AND the recipes:
---   drop → migrations → nutrition_foods.sql → seed.sql → seed_recipes.sql
--- which is `melos run db:reset` and `database.yml`'s fresh-apply step. It runs
+--   drop → migrations → nutrition_foods.sql → seed_recipes.sql
+-- which is `melos run db:reset` and `database.yml`'s fresh-apply step. (`seed.sql`
+-- used to sit between the last two and is no longer applied by either — B113 —
+-- which changes nothing here: this file reads the Kitchen's 14 recipes and never
+-- touched the demo accounts.) It runs
 -- as postgres inside ONE transaction that is ROLLED BACK, so the deliberate
 -- corruption in §3–§5 never survives.
 --

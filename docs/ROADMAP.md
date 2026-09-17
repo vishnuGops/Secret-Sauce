@@ -60,6 +60,7 @@ One line each here; open items they left behind are consolidated in the register
 | 31    | Chef page sort tabs (All / Popular / Trending) + `chef_trending_recipes`                       |
 | 32    | Audit remediation, six bands: SQL integrity + storage limits (32a), measured indexes (32b), app correctness incl. B084/B085 (32c), shared-package hygiene incl. B083/B086 (32d), the three coverage gaps (32e), CI + a restorable backup B087 (32f) |
 | OPT   | Hardening: 26 of 29 items (column grants B050, save_recipe RPC, search_tsv, paging, CI database job, RLS matrix…); remainder → Backlog BL-1/2/4 |
+| 36    | Fabricated-data cleanup (B112/B113/B114): `db:audit` + `db:purge:fake`; `seed.sql` and the sim removed from every default path; curated `demo` counters retired; 15 impersonation accounts for real named chefs deleted and `ingest.mjs` made incapable of creating them |
 
 ## Carried-over open items (from archived phases)
 
@@ -813,7 +814,13 @@ accounts as compromised.
 **Deferred once, knowingly (2026-08-25).** The Phase 29 hosted rollout had the pooler URI in a
 shell — precisely the stated trigger — and the owner's call was to skip it as non-priority. Noted
 so this does not keep reading as "the trigger has never come up": it has, once, and was declined.
-The trigger stands unchanged for the next such session.
+**Closed by absence, measured 2026-09-14 (B115).** `select count(*) from auth.users` on the hosted
+project returns **0**. There are no seeded accounts there to rotate, so there is no live credential
+behind this item and nothing to treat as compromised on production. It stays written down rather
+than deleted because the *local* stack is a different question and because the item's real lesson —
+a literal password in a seed file becomes a production account by documented procedure (Gotcha 7) —
+is still the rule. Re-open it the moment `seed.sql` is applied to a real database again; it is not
+in `db:reset` or `config.toml` any more (B113), so that would have to be deliberate.
 
 #### BL-2 — OPT-P11 — per-engagement-row `recompute_chef_stats` (accepted debt)
 
@@ -845,9 +852,24 @@ Not a task — the standing list of what the fixtures **cannot** demonstrate, so
 designed onto data that does not exist. See the "Seed-data fit" gate in
 [CLAUDE.md](../CLAUDE.md#seed-data-fit-mandatory). Known limits today:
 
+- **`seed.sql` and the sim are TEST-ONLY and reach no default path (B113).** This is the first
+  thing to plan around now: `melos run db:reset` builds the schema, the food registry and the 14
+  curated recipes and *nothing else*, so a surface that needs accounts, engagement, a population or
+  a ranked order is **empty after a reset** and needs `melos run db:seed` / `melos run db:sim` run
+  on purpose. Say that out loud in the plan. Do not resolve it by putting either back in `reset` or
+  in `config.toml` — `db:reset` ends in `db:audit --strict`, so that change fails CI by design, and
+  the honest reading of an empty leaderboard is that it *is* empty until real people arrive.
 - `seed.sql` **authors** counters (`like_count = 2500`) with no `recipe_likes` rows behind them, so
   any dated, windowed, or "who did this" query reads empty against demo data alone. The sim writes
   the rows and derives the counters — that is what makes SDS §10.8-style queries testable.
+  `melos run db:audit` treats an authored counter as a *contradiction* and reports it as FAKE, which
+  is correct for a fixture database and is why the audit runs before the fixtures in CI.
+- **Curated content carries no engagement at all (B112).** Six of the 14 recipes used to author
+  likes/saves/views/ratings through a `demo` block; it is retired and the validator refuses the key.
+  So the Kitchen's `chef_score` is **0**, Discover → Popular has no ratings to rank and falls back
+  to its site-mean prior, and a feature that needs a non-trivial engagement order needs the sim.
+  This is the register's single biggest change — anything that used to demo on "seed alone" because
+  of those six recipes now needs `db:sim`.
 - The sim's time anchor is `sim.epoch_end()`, **pinned**, not `now()` (B044) — a feature that keys
   off "recent" must be checked against that anchor, not the wall clock.
 - Teardown is registry-driven (B054 above), so a fixture a feature adds outside `sim.actor` /
@@ -872,8 +894,19 @@ designed onto data that does not exist. See the "Seed-data fit" gate in
   may present one as a fact about food. Sim labels carry **no `source`**, so they read as manual
   and `recompute_auto_nutrition()` never touches them — correct, but it means the _backfill_ has
   no sim coverage either; `supabase/tests/nutrition_fixtures.sql` is where it is exercised. The
-  **hosted project now carries 29d's labels** (2026-08-25) but still has no sim — see the hosted
-  rollout bullet below, which also corrects what this register used to claim about it.
+  **hosted project carried 29d's labels** as of 2026-08-25 — but see the measured-2026-09-14 bullet
+  directly below, which supersedes both that claim and the rollout note under it.
+- **Hosted is EMPTY and pre-Phase-35, measured 2026-09-14 (B115) — every hosted claim below this
+  line is stale.** The two bullets that follow describe the 2026-08-25 rollout and are kept for the
+  lesson in them, not as a description of the database. What is actually there now: **0 recipes, 0
+  profiles, 0 `auth.users`, 0 rows in every public table**, and a schema that predates 35a/35b/35c
+  (no `entities`, `entity_members`, `profile_claims`, `import_blocklist`; no `recipes.is_imported`
+  / `source_url` / `quality_score`; no `profiles.kind` / `auth_user_id` / `merged_into`;
+  `profiles.id` still carrying its `auth.users` FK). It also has **no
+  `supabase_migrations.schema_migrations` table**, which is why nothing caught the drift: there is
+  no recorded version to compare against. That gap is now closed by `melos run db:hosted:check`,
+  and the bullet above this one is the third time this register has been corrected by measurement —
+  which is the argument for a command that measures instead of a note that claims.
 - **Hosted was brought from Phase 27 to 29d on 2026-08-25 — and this register had it wrong.**
   It claimed hosted carried "the two all-10 placeholders and twelve nulls". It carried neither:
   Phase 28 had never been applied there, so `recipes.nutrition` did not exist as a column at all,
@@ -892,7 +925,8 @@ designed onto data that does not exist. See the "Seed-data fit" gate in
   `seed_recipe_v2` is not an upsert (Gotcha 16), delete-and-reseed is the _only_ way to push a
   content change to a database that already has the recipe, and whether that is acceptable is an
   engagement question to be answered with a query, not a guess.
-- **The hosted project has no simulated population at all** — only `seed.sql` + `seed_recipes.sql`.
+- **The hosted project has no simulated population at all** — and as of 2026-09-14 no content
+  either (see the measured bullet above; these numbers are from 2026-08-23 and no longer hold).
   Measured there 2026-08-23, straight after the schema apply: `recipes_quick` **10** rows,
   `recipes_projects` **1**, `recipes_most_forked` **0**. So `03 MOST FORKED` is legitimately empty
   on production until somebody forks something, and the shelf's own copy ("no public recipe has
@@ -970,3 +1004,39 @@ somewhere rather than derived. And `simData/` shares the validator, so the gate 
 corpora at once.
 **Trigger:** the next time a unit spelling is found wrong in review, or any change that touches
 `recipe_format.dart`'s validation rules.
+
+#### BL-9 — the hosted production rollout (tooling DONE, the deploy is an owner action)
+
+Target: take the app live. Blocking fact, measured 2026-09-14: the hosted project is **empty and
+three phases behind** (B115, and the corrected register bullet under BL-5). Shipping the current
+client against it fails on `/explore`, `/entity/:id` and every `current_profile_id()` call — the
+identity path, for every signed-in user.
+
+- [x] **Detect the drift at all.** `supabase/scripts/schema_fingerprint.sql` +
+      `tool/hosted_check.dart` → `melos run db:hosted:check`. Read-only; builds a fresh reference
+      database from the repo and diffs a catalogue inventory. Missing-on-target exits non-zero,
+      extra-on-target reports and does not (B116).
+- [x] **Make the deploy one idempotent command.** `melos run db:hosted:deploy` =
+      `create → nutrition → recipes → corpus → audit --strict`. No `drop`, so it is safe against a
+      database holding real accounts; `--yes`-gated with the target named in the refusal message.
+- [x] **Make `db:*` able to reach hosted from this machine at all.** `--docker` now applies to
+      every step, not just `backup` (B033 closed).
+- [x] **Rehearse the upgrade path rather than argue it.** Hosted's pre-change dump restored into a
+      scratch database, the repo's schema applied on top (0 errors), full deploy run end to end
+      (6m43s → 14 curated + 21,314 imported, **AUDIT CLEAN**), then `db:hosted:check` (in sync) and
+      `rls_matrix.sql` (**177 passed, 0 failed**). The negative case too: against the pre-35 schema
+      the checker reports 806 missing objects and exits 1.
+- [ ] **Run it against hosted.** Owner action. `db:backup -- --docker --out=<dir>` first — the free
+      tier has no PITR, so that dump is the only undo. Then `db:hosted:deploy -- --docker --yes`,
+      then `db:hosted:check`, then `db:rls`. Budget well over the local 6m43s: the corpus is 71 MB
+      of SQL over a Session pooler, not a loopback socket.
+- [ ] **Decide whether the 21,314 captured recipes ship.** This is a product and rights call, not a
+      technical one, and it is not settled by the tooling being ready. Without them production shows
+      **14** recipes; with them the catalogue is overwhelmingly scraped content, which is exactly
+      what the Rights page (35a) exists to state. `db:hosted:deploy` includes them; the
+      `create → nutrition → recipes` prefix is the answer if the call goes the other way.
+- [ ] **Size check before, not after.** The local database is **256 MB** against a 500 MB free-tier
+      ceiling, and `recipes` alone is 130 MB of that. There is room, and not a lot of it.
+
+**Trigger:** the next hosted session. Everything above the last three boxes is already built and
+verified; what remains needs the production credential and one product decision.

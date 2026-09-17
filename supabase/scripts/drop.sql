@@ -132,6 +132,11 @@ drop function if exists seed_ratings(uuid, jsonb) cascade;
 drop function if exists seed_recipe_v2(uuid, text, text, text, text, difficulty, int, int, int, recipe_visibility, text, jsonb, jsonb, int, int, int, jsonb) cascade;
 -- + p_nutrition jsonb (Phase 28).
 drop function if exists seed_recipe_v2(uuid, text, text, text, text, difficulty, int, int, int, recipe_visibility, text, jsonb, jsonb, int, int, int, jsonb, jsonb) cascade;
+-- B112 removed the four engagement arguments (p_likes/p_saves/p_views/p_ratings),
+-- taking the function to 14 arguments. Every earlier form stays listed: Postgres
+-- keys a drop by argument list, so a missed one survives and re-introduces the
+-- 42725 ambiguity the whole block exists to prevent.
+drop function if exists seed_recipe_v2(uuid, text, text, text, text, difficulty, int, int, int, recipe_visibility, text, jsonb, jsonb, jsonb) cascade;
 drop function if exists seed_recipe_v2_ratings(uuid, jsonb) cascade;
 
 -- The RLS matrix's helper (supabase/tests/rls_matrix.sql). It is created inside

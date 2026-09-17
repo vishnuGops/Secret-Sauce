@@ -321,6 +321,43 @@ The failure modes here all shipped once already (B042–B045):
   loudly relaxed at small presets) is a finding — that is exactly the B043 trap the suite was
   built to resist.
 
+## 9. Fabricated data reaching a real database — Critical
+
+Three mechanisms had each put invented rows in front of a reader, and none was visible from the
+app; all three were found by reading the database rather than by a failing test (B112/B113/B114).
+`supabase/tests/data_audit.sql` is the check that now exists, and `melos run db:audit` runs it.
+
+- **No fixture on a default path.** `db:reset` is `drop → create → nutrition → recipes → audit`
+  and must produce real content only. Flag any diff that adds `seed`, `sim`, or any other
+  fabricating step to the `reset` pipeline in `tool/db.dart`, or that adds `./seed.sql` back to
+  `config.toml`'s `db.seed.sql_paths`. Those two lists are two descriptions of the same thing
+  and they drifted before (B113); the `audit` step at the end of `reset` exists to catch it, so
+  **flag its removal or a downgrade of its `--strict`** as a finding in its own right.
+- **Engagement is earned or generated, never authored.** `recipes.like_count`, `save_count` and
+  `rating_count` are recomputed from scratch by their triggers, so any hand-written value is an
+  arithmetic contradiction the audit detects. Flag a new authored-counter field in
+  `recipeData/`/`simData/` JSON, in `seed_recipe_v2`'s arguments, or in any seed SQL. The retired
+  `demo` key is listed in `_retiredRecipeKeys` in `tool/recipe_format.dart` — flag its removal
+  from that map, which would silently downgrade a re-added block to "unknown field".
+- **`view_count` is exempt from that rule and must stay exempt.** Gotcha 10 makes it a deliberate
+  upper bound (anonymous rows uncounted, monotonic, `user_id` `on delete set null`), so a
+  legitimate recipe's counter routinely exceeds its log. Flag any audit or assertion that checks
+  `view_count` against `recipe_views` — it will flag real rows, which is how a checker stops
+  being trusted.
+- **A captured byline is `kind = 'imported'` and holds no account.** That is Phase 35b's design.
+  Flag anything that creates an `auth.users` row, or a `kind = 'member'` profile, named after a
+  real person captured from the web — `ingest.mjs` did exactly this for 15 named chefs and put
+  them on the leaderboard owning 158 provenance-less recipes (B114). Credit belongs in
+  `attribution` and the provenance columns. Flag the removal of that script's localhost-only
+  guard, and flag a `source_url`/`source_name`/`source_entity_id`-free row written with
+  `is_imported = true`.
+- **A purge is driven by a registry, a fixed id, or a reserved TLD — never a name or a date.**
+  Same rule as the sim teardown above, and `supabase/scripts/purge_fake.sql` reuses that file
+  rather than restating it. Flag a second copy of teardown logic, a widened filter, or a removed
+  pre-flight: the pre-flight aborts when one `is_imported` recipe is in the blast radius, because
+  a false positive deletes a real account with no undo. `.invalid` / `.test` are matchable only
+  because the RFCs reserve them.
+
 ## Project review settings
 
 - **Integration target: `main`.** It is the only branch and both CI triggers gate on it

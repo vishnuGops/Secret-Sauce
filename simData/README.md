@@ -20,12 +20,16 @@ by the same code — [`tool/recipe_format.dart`](../tool/recipe_format.dart). Th
 dish be promoted into the Kitchen's curated set by moving the file and deleting its `sim`
 block. Two directories with two definitions of "valid" would have drifted within a month.
 
-Exactly two keys differ:
+Exactly one key differs now:
 
 | Key | recipeData | simData | Why |
 | --- | --- | --- | --- |
-| `demo` | allowed | **rejected** | Engagement is *generated* from a modelled history, never authored. A hand-typed `like_count` is the thing Phase 24 exists to stop doing |
 | `sim` | rejected | allowed | Generation hints — see below |
+
+`demo` used to be the second: allowed in recipeData, rejected here. **It is rejected in both as of
+B112** — engagement is *generated* from a modelled history or earned from real readers, never
+authored. A hand-typed `like_count` is the thing Phase 24 exists to stop doing, and it turned out
+recipeData had been doing it for six recipes the whole time.
 
 ### Unit spellings are shared too
 

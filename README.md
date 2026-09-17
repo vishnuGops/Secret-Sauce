@@ -79,7 +79,8 @@ Copy-Item apps/app/env.example.json apps/app/env.local.json
 
 # 5. Apply the database schema
 supabase start          # or point at a hosted project
-supabase db reset       # applies supabase/migrations, then seed.sql + seed_recipes.sql
+supabase db reset       # applies supabase/migrations, then nutrition_foods.sql + seed_recipes.sql
+                        #   (NOT seed.sql — the demo fixtures are test-only, see "Seed data")
 ```
 
 Verify the setup:
@@ -202,23 +203,27 @@ Two SQL files, split on purpose:
 | File | What it is | Lifespan |
 | --- | --- | --- |
 | [`supabase/seed_recipes.sql`](supabase/seed_recipes.sql) | All 14 of the Secret Sauce Kitchen's recipes. **Generated** from [`recipeData/recipes/*.json`](recipeData/) — see [recipeData/README.md](recipeData/README.md) | permanent |
-| [`supabase/seed.sql`](supabase/seed.sql) | Demo fixtures: the system accounts, 8 tasters, 7 demo chefs and their recipes, and invented engagement so Discover and the leaderboard have a plausible order | delete when there is real traffic |
+| [`supabase/seed.sql`](supabase/seed.sql) | Demo fixtures: 8 tasters, 7 demo chefs and their recipes, and invented engagement | **test-only** — applied to no real database (B113) |
 
-Both bootstrap the same "Secret Sauce Kitchen" system account with conflict guards, and both are
-idempotent.
+> **`seed.sql` is no longer applied by any default path.** It used to be in both
+> `melos run db:reset` and `config.toml`'s `db.seed.sql_paths`, which meant every developer
+> database and the hosted project showed 7 invented chefs on the leaderboard as though they were
+> users. It is out of both. Run it explicitly only against a database you do not demo from, and
+> expect `melos run db:audit` to report everything it creates as FAKE — that is the correct
+> answer, not a bug. The same now applies to the simulated population (`melos run db:sim`).
 
-> **Apply `seed.sql` first.** Recipe *content* does not care about the order, but the demo star
-> ratings do: `seed_recipes.sql` borrows `seed.sql`'s taster accounts, so run the other way round
-> it creates every recipe and skips every rating (it says so, with a notice). Fix by re-running
-> `seed_recipes.sql` afterwards — re-running never touches existing recipe content, but it *does*
-> re-apply ratings, which is also how you backfill them after a schema upgrade.
+`seed_recipes.sql` is standalone: it bootstraps the "Secret Sauce Kitchen" system account itself,
+needs nothing from `seed.sql`, and is idempotent. Since B112 it also carries **no engagement** —
+the 14 curated recipes land with likes, saves, views and ratings all at zero, because the Kitchen
+has not earned any. (The old `demo` block in `recipeData/*.json` that authored those numbers is
+retired, and the validator refuses the key.)
 
-- **Hosted project:** Supabase dashboard → SQL Editor → paste `seed.sql`, Run, then
-  `seed_recipes.sql`, Run.
+- **Hosted project:** Supabase dashboard → SQL Editor → paste `nutrition_foods.sql`, Run, then
+  `seed_recipes.sql`, Run. Do **not** paste `seed.sql` there.
 - **Local CLI:** `supabase db reset` applies both in order — `config.toml` lists them under
   `db.seed.sql_paths`.
-- **`psql`:** `melos run db:seed` then `melos run db:recipes`, or `melos run db:reset` for
-  everything.
+- **`psql`:** `melos run db:recipes`, or `melos run db:reset` for everything (schema → food
+  registry → recipes → audit).
 
 > Editing a recipe that a database already has does **not** work by re-applying:
 > `seed_recipe_v2` returns early when `(owner_id, title)` exists — it is not an upsert. Delete
@@ -226,15 +231,30 @@ idempotent.
 
 > Both files create their own system user, so they need no existing account and won't touch any
 > real user's "My Recipes". `seed.sql` also creates 8 dummy **"Taster"** accounts
-> (`taster1..8@secretsauce.local`) that supply the star ratings on the curated recipes, so the
-> Discover → **Popular** tab (ranked by rating) has a meaningful order from the start.
+> (`taster1..8@secretsauce.local`); they used to supply the star ratings on the curated recipes,
+> which is what gave Discover → **Popular** an order from the start. Nothing does that now, and
+> that is deliberate: with no ratings anywhere, Popular falls through to its site-mean prior,
+> which is the honest ranking of a catalogue nobody has rated yet.
 >
-> All 9 seed accounts get a **random, discarded password** — they exist only because
-> `profiles.id` is a foreign key to `auth.users`, and nothing ever signs in as them. Never put a
-> literal password in `seed.sql`: this file is meant to be run against the hosted project, so a
-> committed credential is a live production credential (see B018). If you seeded a database
-> *before* this change, rotate or delete those 9 accounts — re-running the seed will not fix
-> them, because the insert is `on conflict (id) do nothing`.
+> Every seeded account gets a **random, discarded password**, and nothing ever signs in as them.
+> Never put a literal password in `seed.sql`: this file was meant to be run against the hosted
+> project, so a committed credential is a live production credential (see B018 and B111). If you
+> seeded a database *before* these changes, `melos run db:purge:fake -- --yes` removes those
+> accounts — re-running the seed will not, because the insert is `on conflict (id) do nothing`.
+
+### Is anything in this database fabricated?
+
+```powershell
+melos run db:audit                # classify every profile, recipe and account. READ-ONLY,
+                                  #   safe against hosted. Add --strict to exit non-zero.
+melos run db:purge:fake -- --yes  # DESTRUCTIVE: remove all of it and repair authored counters
+```
+
+`db:audit` is the last step of `db:reset` (in `--strict` mode, so a reset that fabricates anything
+fails), and it proves by positive evidence rather than by guessing — a registry row, a fixed id, a
+reserved TLD, or a counter that disagrees with the engagement rows behind it. It keeps the captured
+corpus, the imported bylines, Secret Sauce Kitchen and every real signup. Full reasoning is in the
+header of [`supabase/tests/data_audit.sql`](supabase/tests/data_audit.sql).
 
 ## Quality gates
 
@@ -289,16 +309,30 @@ and dot-source it in each shell you run database tasks from:
 ```powershell
 . .\db-url.local.ps1  # sets $env:SUPABASE_DB_URL for THIS shell only
 melos run db:create   # apply every supabase/migrations/*.sql, in filename order (psql -1 each)
-melos run db:seed     # load demo chefs/tasters/ratings (supabase/seed.sql)
+melos run db:seed     # TEST-ONLY: load demo chefs/tasters/ratings (supabase/seed.sql).
+                      #   Not in db:reset since B113 — db:audit flags all of it as FAKE
 melos run db:recipes  # load authored recipes (supabase/seed_recipes.sql)
 melos run db:clean    # truncate recipe data, keep schema + users
 melos run db:drop     # drop all app tables/types/functions
-melos run db:reset    # drop -> create -> nutrition -> seed -> recipes -> sim
+melos run db:reset    # drop -> create -> nutrition -> recipes -> audit (real content only)
 melos run db:rls      # RLS acceptance matrix as a SIGNED-IN user — writes, then rolls back
 melos run db:nutrition:estimate  # auto-nutrition arithmetic on fixture trees — rolls back
 melos run db:nutrition:verify    # committed labels vs. the loaded registry — rolls back
 melos run db:backup -- --docker  # two pg_dump files, timestamped — read-only (see Backups)
+
+# The hosted project, kept in sync with this repo (B115). See "Hosted sync" below.
+melos run db:hosted:check                     # READ-ONLY drift report vs. the repo
+melos run db:hosted:deploy -- --docker --yes  # schema + registry + recipes + corpus + audit
+melos run db:corpus                           # just the captured recipes (idempotent)
+melos run db:fingerprint                      # the raw schema inventory, read-only
 ```
+
+**Add `--docker` to any of these.** As of 2026-09-14 the flag applies to every `db:*` step, not
+just `backup`: the client runs inside `postgres:17-alpine` with the repo mounted read-only at
+`/repo`. On a machine with no PostgreSQL client installed — this one — that is the difference
+between the documented commands working and not (B033), and it is the right form for anything
+hosted regardless, because the image's major matches the hosted server (B079) and a volume mount
+means no shell re-encodes the bytes (B074).
 
 `db:rls` is the odd one out and the only safe-by-construction one: it applies
 `supabase/tests/rls_matrix.sql`, which creates three throwaway users and three recipes, re-runs 126
@@ -389,14 +423,48 @@ needs its own answer (the Storage API, not `pg_dump`).
 **Apply only the new migration to a hosted database.** `supabase/migrations/` is a numbered
 sequence and `0001_init.sql` is the frozen baseline (OPT-A9), so a project that already has it
 needs only the files added since. **There are none today** — the project is still pre-release, so
-Phase 26's shelf RPCs were folded into the baseline rather than shipped as `0002`. The hosted
-project was brought up to date with a full apply of `0001_init.sql` on **2026-08-23** (row counts
-unchanged; it also picked up the `search_tsv` triggers, `save_recipe` and
-`recipe_versions_set_current`, which it had been missing). Re-applying the baseline is safe — every statement is guarded —
-but it re-runs two whole-table backfills, which is the cost the sequence exists to stop paying. A
-project that has **never** had the baseline applied, or has not had it since the OPT phase, needs
-`0001_init.sql` once, first. The rules for writing the next migration are in
-[supabase/migrations/README.md](supabase/migrations/README.md).
+Phase 26's shelf RPCs were folded into the baseline rather than shipped as `0002`. Re-applying the
+baseline is safe — every statement is guarded — but it re-runs two whole-table backfills, which is
+the cost the sequence exists to stop paying. A project that has **never** had the baseline applied,
+or has not had it since the OPT phase, needs `0001_init.sql` once, first. The rules for writing the
+next migration are in [supabase/migrations/README.md](supabase/migrations/README.md).
+
+### Hosted sync
+
+**Do not trust a note about what the hosted project contains — run the check.** That advice is
+written from experience: the planning docs claimed hosted was at Phase 29d with the curated recipes
+loaded, and a probe on **2026-09-14** found it empty (0 recipes, 0 profiles, 0 `auth.users`) and
+three phases behind (B115). It had been wrong twice before, for the same reason: hosted has no
+`supabase_migrations.schema_migrations` table — it was applied by hand through psql, never by
+`supabase db push` — so there was no recorded version and nothing that could answer the question.
+
+```powershell
+. .\db-url.local.ps1                          # point the shell at hosted (uncomment that line)
+melos run db:hosted:check                     # READ-ONLY. What does hosted lack?
+melos run db:backup -- --docker --out=D:ackups\secret-sauce   # the only undo (no PITR)
+melos run db:hosted:deploy -- --docker --yes  # bring it up to the repo
+melos run db:hosted:check                     # prove it
+melos run db:rls                              # 177 checks as a signed-in user
+```
+
+`db:hosted:check` builds a **fresh reference database** from the repo — every migration, then
+`nutrition_foods.sql`, then `seed_recipes.sql` — inside the local Supabase container, fingerprints
+it and the target, and diffs. So it needs `supabase start`, and it compares against the repo rather
+than against your local database, which has its own accumulated history. Objects **missing** on the
+target exit non-zero; objects **extra** on it are reported and do not, because a leftover from an
+older schema cannot break the app and dropping one on a database holding real rows is a separate,
+deliberate decision (B116).
+
+`db:hosted:deploy` is `create → nutrition → recipes → corpus → audit --strict`. Every step is
+idempotent and there is **no `drop`** anywhere in it, so it is safe to point at a database holding
+real accounts and real recipes, and it is also the correct thing to re-run after a partial failure.
+It refuses to start without `--yes` and names the target when it refuses. The last step is the
+gate: `db:audit --strict` fails the run if any earlier step fabricated a row.
+
+Two things it does not decide for you. The corpus shards are **21,314 captured recipes** and
+whether they belong on production is a rights and product call, not a technical one — the
+`create → nutrition → recipes` prefix is the answer if the call goes the other way. And the local
+database is **256 MB** against a 500 MB free-tier ceiling, so check the headroom before, not after.
 
 > ⚠️ `SUPABASE_DB_URL` is a **superuser** connection string and belongs in your shell only. Never
 > put it in `apps/app/env.local.json` **or any other dart-define file**: those are passed to every
@@ -452,11 +520,12 @@ authored-over-extracted precedence rules, and the known vocabulary gaps.
 > fails. A database that already holds the recipes fixes itself instead:
 > `recompute_auto_nutrition()` runs on every apply of the schema.
 
-Building the simulated population itself needs a database. It is part of `db:reset`, so the usual
+Building the simulated population itself needs a database. It is **no longer** part of `db:reset`
+(B113 — it fabricates 250 accounts, and a default path must not), so build it explicitly. The usual
 reset brings everything back:
 
 ```powershell
-melos run db:reset                          # drop -> create -> nutrition -> seed -> recipes -> sim (~15s)
+melos run db:reset                          # drop -> create -> nutrition -> recipes -> audit
 melos run db:sim                            # schema -> the 3 pools -> generate -> verify
 melos run db:sim -- --preset=small --seed=7 # tiny | small | medium (default) | large
 melos run db:sim:verify                     # 53 assertions, read-only

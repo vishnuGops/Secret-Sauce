@@ -734,7 +734,11 @@ Both shelves keyed on time and the fork shelf are **empty on a seed-only databas
 authored recipes top out at 85 minutes, none is `hard`, and none has been forked. The page says so
 in place of the rail. **That includes the hosted project**, which carries no simulated population:
 measured there 2026-08-23, the shelves return 10 / 1 / **0** rows, so `MOST FORKED` is empty on
-production by construction until a real user forks something. See the BL-5 register in
+production by construction until a real user forks something. (**Superseded 2026-09-14, B115:**
+hosted is now empty of content entirely — 0 recipes, 0 profiles — and on a pre-Phase-35 schema, so
+all three shelves return 0 there. `melos run db:hosted:check` is the command that answers this
+rather than a sentence in a document; the 2026-08-23 numbers are kept because the *reasoning* about
+`MOST FORKED` is unchanged.) See the BL-5 register in
 [ROADMAP.md](./ROADMAP.md#bl-5--seed--sim-coverage-register-read-this-when-planning-a-feature)
 before "fixing" it — running the sim against hosted is a one-way door. The population comes from the sim, where a fork's source is drawn weighted by
 that recipe's reach (`sim.fork_bias` in `supabase/sim/0_sim_schema.sql`, applied in
@@ -1725,17 +1729,26 @@ signature is in `drop.sql` (Gotcha 5). Actual seeded standings:
 | d7 | Greta Lindqvist | 100 | 180 | 0 | **1200** | `sous_chef` | ties d3 via a different mix — proves `dense_rank` shares a rank |
 | — | tasters ×8 | — | — | — | 0 | `home_cook` | no recipes — guard for the `public_recipe_count > 0` filter |
 
-> **Since Phase 19, only the `d1`–`d7` rows come from `seed.sql`.** The Kitchen's recipes moved to
-> `recipeData/` → `seed_recipes.sql`, taking their engagement counters and ratings with them as
-> `demo` blocks. The 10189 / `head_chef` standing is unchanged and now comes from that file;
-> `public_recipe_count` is 15, because the nine newly authored recipes carry no engagement and
-> contribute 0 to the score. Verified after the move — see §11.
+> **This whole table is now a TEST-FIXTURE standing, not a seeded one (B113).** `seed.sql` is
+> applied by no default path, so a plain `melos run db:reset` produces none of the `d1`–`d7` rows.
+> Run `melos run db:seed` explicitly to reproduce the table; `melos run db:audit` will then report
+> every row in it as FAKE, which is correct.
+>
+> **And the Kitchen's row is now `0` / `home_cook`, not 10189 / `head_chef` (B112).** Its recipes
+> moved to `recipeData/` → `seed_recipes.sql` in Phase 19 and brought their counters along as
+> `demo` blocks; those blocks are retired, because 412 likes with zero `recipe_likes` rows behind
+> them is a number no trigger could have written. `public_recipe_count` is 14 and the score is 0
+> until real readers arrive. The d1–d7 pins above still prove what they were built to prove —
+> threshold inclusivity, `dense_rank` ties, the private-only exclusion — they just need the
+> fixture applied on purpose. See §11.0.
 
 > **This table describes a *freshly seeded* database, and real traffic moves it — by design.**
 > Checked against the hosted project on 2026-08-20: Amara reads **21000.2** and the Kitchen
 > **10189.6**, not the round numbers above, because four views logged by actual app use raised
 > `view_count` by 1 on each of four recipes and `chef_score` picked them up at 0.2 apiece. That is
-> `on_view_insert` (B012) working end to end in production. Reconcile against a database that has
+> `on_view_insert` (B012) working end to end in production. (Those rows are **gone as of
+> 2026-09-14** — hosted measures 0 profiles and 0 recipes, B115. The observation stands as evidence
+> about the trigger; it is no longer a description of that database.) Reconcile against a database that has
 > just been seeded — `melos run db:reset`, or the local stack — never against one the app has been
 > pointed at.
 
@@ -1819,29 +1832,77 @@ composite leads with `recipe_id`, which cannot serve "every like on the site in 
 
 ## 11. Recipe content vs. demo data
 
-Two seed files, split because they have different lifespans.
+Two seed files, split because they have different lifespans — and as of B113 only one of them
+reaches a real database.
 
 | | `supabase/seed.sql` | `supabase/seed_recipes.sql` |
 | --- | --- | --- |
-| What | Demo fixtures: the Kitchen + taster + chef **accounts**, the `d1`–`d7` demo recipes, and the rating machinery | All 14 of the Secret Sauce Kitchen's recipes |
+| What | Demo fixtures: taster + chef **accounts**, the `d1`–`d7` demo recipes, and the rating machinery | All 14 of the Secret Sauce Kitchen's recipes |
 | Authored in | the file itself | `recipeData/recipes/<slug>.json` |
 | Generated | no | **yes** — `tool/recipes.dart`, committed |
-| Lifespan | deleted once there is real traffic | permanent |
+| Applied by a default path | **no** — test fixture only (B113) | yes: `db:reset` and `config.toml` |
+| Lifespan | test fixture | permanent |
 | Helper | `seed_recipe` (flat, one unnamed group) | `seed_recipe_v2` (group-aware) |
 
-The Kitchen's six original recipes used to live in `seed.sql` as well; Phase 19 moved them out, so
-each recipe now has exactly one definition. Their engagement counters and taster ratings came with
-them as a `demo` block per recipe, and the resulting `chef_score` is byte-identical (10189,
-`head_chef`).
+### 11.0 Fabricated data is allowed to exist; it is not allowed on a default path
 
-Both files bootstrap the same Kitchen account (`…00aa`) with conflict guards.
+`seed.sql` was in `melos run db:reset` **and** in `config.toml`'s `db.seed.sql_paths`, and the
+250-account simulated population was in that same `reset`. The consequence was not a broken
+fixture — the fixtures were fine — it was that the default way to build a database produced one
+whose chef leaderboard was mostly invented, and the hosted project had been built that way too. On
+the local stack this was measured at **62 fabricated `kind = 'member'` profiles ranked on the
+leaderboard against one real one** (B113).
 
-**Content is order-independent; demo ratings are not.** `seed_recipes.sql` reaches `seed.sql`'s
-taster pool through a `to_regprocedure('seed_ratings(uuid, jsonb)')` guard rather than a hard
-dependency, so it keeps working after that file is deleted — but applied *first*, on a database
-that has no tasters yet, it creates every recipe and skips every rating with a notice. Re-running
-it after `seed.sql` backfills them via the early-return path (B014). `melos run db:reset` and
-`config.toml`'s `db.seed.sql_paths` both order them `seed` → `recipes`.
+Both are now test-only. `db:reset` is `drop → create → nutrition → recipes → audit` and produces
+the schema, the food registry and the 14 curated recipes — nothing else. Its last step is
+[`supabase/tests/data_audit.sql`](../supabase/tests/data_audit.sql) in `--strict` mode, so a reset
+that fabricates anything **fails** rather than being noticed months later. `melos run db:seed` and
+`melos run db:sim` still exist and are the right tools for a throwaway database; `db:audit` reports
+everything they create as FAKE, which is the correct answer.
+
+The destructive counterpart is `melos run db:purge:fake -- --yes`
+([`supabase/scripts/purge_fake.sql`](../supabase/scripts/purge_fake.sql)), which runs the sim's own
+registry-driven teardown, removes `seed.sql`'s fixed-id fixtures and `ingest.mjs`'s impersonation
+accounts (B114), repairs authored counters, and re-audits. It keeps the captured corpus, the
+harvester's imported bylines, the Kitchen and every real signup.
+
+**The audit classifies by positive evidence, never by a guess** — a registry row (`sim.actor`,
+`sim.recipe`, `sim.imported_profile`), a fixed id (`seed.sql` pins its 15 accounts), a reserved TLD
+(`.invalid` / `.test`, safe by RFC rather than by luck), or an arithmetic contradiction. That last
+one is the sharpest: `like_count` / `save_count` / `rating_count` are trigger-recomputed from
+scratch, so a counter that disagrees with the rows behind it cannot have been produced by any code
+path. Measured at **zero false positives** over 21,314 corpus rows and 452 sim rows, while catching
+exactly the 6 curated recipes that carried a `demo` block. `view_count` is deliberately **exempt**,
+because §10.8 and Gotcha 10 make it an upper bound that legitimately exceeds its log.
+
+### 11.0.1 Curated content carries no engagement (B112)
+
+Six of the 14 recipes used to carry a `demo` block in their JSON — likes, saves, views and one
+rating per seeded taster — which `tool/recipes.dart` compiled into
+`seed_recipe_v2(p_likes, p_saves, p_views, p_ratings)`. `Brown Butter Chocolate Chip Cookies`
+therefore claimed 412 likes, 358 saves and 3,050 views with **zero** `recipe_likes` rows behind any
+of it.
+
+The block is removed from the six files, from `recipeData/schema.json`, and from the validator —
+where it is listed in `_retiredRecipeKeys` and raises a pointed error rather than becoming an
+"unknown field", so it cannot come back by accident. `seed_recipe_v2` lost those four arguments
+(18 → 14; the superseded signature is dropped in the file that recreates it *and* in `drop.sql`,
+per B024) and `seed_recipe_v2_ratings` is deleted. A curated recipe now lands with every counter at
+zero.
+
+Two consequences worth stating: the Kitchen's `chef_score` is **0**, not 10189 (see §10.7), and
+Discover → **Popular** falls through to its site-mean Bayesian prior, because nothing in the
+database has been rated. Both are the honest reading of a catalogue no reader has touched yet.
+
+Both files bootstrap the same Kitchen account (`…00aa`) with conflict guards. The Kitchen's six
+original recipes used to live in `seed.sql` as well; Phase 19 moved them out, so each recipe now
+has exactly one definition.
+
+**Content is fully order-independent now.** `seed_recipes.sql` no longer reaches `seed.sql`'s
+taster pool at all — the `to_regprocedure('seed_ratings(uuid, jsonb)')` guard and the B014
+rating-backfill path are both gone with the ratings — so the old "apply `seed` first" rule no
+longer exists. `config.toml` lists `nutrition_foods.sql` → `seed_recipes.sql`, and that remaining
+order *is* load-bearing (29b's `food_id` FK).
 
 ### 11.1 Why the authoring format is not the scrape format
 
@@ -1926,7 +1987,9 @@ recipes. Replacing them with real values is named deferred work, not an aftertho
 `slug` is the filename and a **repo-level** identity only — `recipes` has no slug column, and
 `seed_recipe_v2` still dedupes on `(owner_id, title)`. So renaming `title` creates a second row,
 and `seed_recipe_v2` is **not an upsert**: it returns early when the title already exists, leaving
-content alone (it does still re-apply demo ratings — B014).
+content alone. That early-return path used to re-apply demo ratings (B014); since B112 removed the
+ratings argument entirely it now does nothing at all, so re-applying the file to a database that
+already holds a recipe is a genuine no-op for that recipe.
 
 **Title is the uniqueness rule; content is not.** One chef may publish two recipes for the same
 dish, however similar, provided the titles differ — that is a legitimate thing to do, and nothing

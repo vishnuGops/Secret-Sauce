@@ -216,7 +216,10 @@ scripts:
     run: dart run tool/db.dart create
 
   db:seed:
-    description: Load demo chefs, tasters, and ratings (supabase/seed.sql).
+    description: "TEST FIXTURE ONLY: load the 15 demo accounts (supabase/seed.sql).
+      NOT part of db:reset and not in config.toml's seed paths since B113 — it
+      fabricates chefs with authored counters. Run it only to populate a
+      throwaway database; db:audit reports every row it creates as FAKE."
     run: dart run tool/db.dart seed
 
   db:recipes:
@@ -236,10 +239,10 @@ scripts:
     run: dart run tool/db.dart clean
 
   db:reset:
-    description: Drop, re-create, load the food registry, seed, load the authored
-      recipes, and rebuild the simulated population. Safe for the pinned standings
-      in docs/SDS.md §10.7 — sim.config.engage_existing is false, so only the
-      ranks move.
+    description: "Drop, re-create, load the food registry, load the authored
+      recipes, then audit. Produces REAL CONTENT ONLY: no demo accounts and no
+      simulated population (B113), and the audit step fails the run if any step
+      fabricated a row. Add fixtures explicitly with db:seed / db:sim."
     run: dart run tool/db.dart reset
 
   # ---------------------------------------------------------------------------
@@ -248,7 +251,11 @@ scripts:
   #   melos run db:sim -- --preset=small --seed=7
   # ---------------------------------------------------------------------------
   db:sim:
-    description: Build the simulated population (schema, dishes, generate, verify).
+    description: "TEST FIXTURE ONLY: build the simulated population (schema,
+      dishes, generate, verify). NOT part of db:reset since B113. It is the only
+      source of dated engagement, so the ranking RPCs and the 53 sim assertions
+      need it — build it in a throwaway database, never one you demo from.
+      db:audit reports every row it creates as FAKE."
     run: dart run tool/db.dart sim
 
   db:sim:verify:
@@ -288,9 +295,68 @@ scripts:
     description: Dump public + auth data, timestamped. Read-only; see README.md#backups.
     run: dart run tool/db.dart backup
 
+  # ---------------------------------------------------------------------------
+  # Keeping the hosted project in sync with this repo.
+  #
+  # The hosted project has NO `supabase_migrations.schema_migrations` table — it
+  # was applied by hand through psql, never by `supabase db push` — so there is
+  # no recorded version to compare against. The check below therefore compares
+  # the thing that actually matters: a catalogue inventory of both schemas.
+  #
+  # Both commands need `--docker` on this machine (no psql on PATH, B033), and
+  # `--docker` is the right form for hosted regardless, because the local
+  # stack's client is 15.8 against a hosted 17.6 (B079).
+  # ---------------------------------------------------------------------------
+
+  db:corpus:
+    description: Apply corpus/_import/*.sql — the captured recipes (Phase 35c).
+      Idempotent; run `melos run corpus:import:gen` first to produce the files.
+      Not part of db:reset — a reset is the 14 curated recipes.
+    run: dart run tool/db.dart corpus
+
+  db:fingerprint:
+    description: Inventory the public schema — tables, columns, enums, function
+      signatures, RLS, policies, grants, indexes, triggers, constraints.
+      READ-ONLY. Redirect it to a file and diff two databases; db:hosted:check
+      does exactly that for you.
+    run: dart run tool/db.dart fingerprint
+
+  db:hosted:check:
+    description: "Has the hosted project drifted from this repo? Fingerprints
+      SUPABASE_DB_URL and the local stack and diffs them. READ-ONLY — safe to run
+      any time, and the thing to run before and after a deploy."
+    run: dart run tool/hosted_check.dart
+
+  db:hosted:deploy:
+    description: "Bring SUPABASE_DB_URL up to this repo: schema -> food registry
+      -> curated recipes -> captured corpus -> audit --strict. Additive and
+      idempotent, contains NO drop, so it is safe against a database holding real
+      accounts. Requires --yes. Take a db:backup first — the free tier has no PITR."
+    run: dart run tool/db.dart hosted:deploy
+
   db:rls:
     description: Run the RLS matrix as anon/owner/shared/stranger. Rolls back.
     run: dart run tool/db.dart rls
+
+  # ---------------------------------------------------------------------------
+  # Fabricated-data audit (B112/B113/B114). The audit is read-only and safe
+  # anywhere, including the hosted project; the purge deletes auth.users rows
+  # and is the one command here with no undo.
+  # ---------------------------------------------------------------------------
+
+  db:audit:
+    description: Classify every profile, recipe and account as real or fabricated,
+      and report per bucket. READ-ONLY — creates temporary tables and nothing else.
+      Runs as the last step of db:reset in strict mode, where a finding fails the run.
+    run: dart run tool/db.dart audit
+
+  db:purge:fake:
+    description: "DESTRUCTIVE: remove every fabricated row — sim teardown, then
+      seed.sql's fixed-id demo fixtures and ingest.mjs's impersonation accounts,
+      then repair authored counters — and re-audit. Keeps the captured corpus,
+      the harvester's imported bylines, Secret Sauce Kitchen and every real
+      signup. Deletes auth.users rows, so needs --yes; back up first (db:backup)."
+    run: dart run tool/db.dart purge:fake
 
   # ---------------------------------------------------------------------------
   # Auto-nutrition SQL (Phase 29). The estimator's arithmetic has no other

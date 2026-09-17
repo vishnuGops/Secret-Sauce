@@ -23,9 +23,18 @@ There is no `chefs` table. **A chef is a `profiles` row**, and `profiles.id` is 
   on `auth.users` insert, reading `display_name` out of the signup metadata.
 - **`display_name` is not unique.** `ProfileRepository.searchByName` returns a *list*, and the
   comment says why: an exact-match lookup "silently picked one of the Daras". So "look up the chef,
-  create only if absent" **cannot key on the chef's name**. Idempotency has to key on something
-  actually unique — the account email is the only candidate. Proposal: a deterministic
-  `<chefSlug>@corpus.invalid`, which makes re-runs safe by construction.
+  create only if absent" **cannot key on the chef's name**.
+
+  > **The proposal this bullet used to make was the wrong answer, and it shipped (B114).** It was a
+  > deterministic `<chefSlug>@corpus.invalid` account per chef, "safe by construction" for re-runs.
+  > It *was* idempotent — and it also gave 15 real named people log-in-able `kind = 'member'`
+  > profiles on the chef leaderboard, owning 158 provenance-less recipes credited as their own
+  > work. The mistake was treating "a chef needs a stable key" as "a chef needs an account".
+  >
+  > Phase 35b is the real answer: a captured byline is a `kind = 'imported'` profile with
+  > `auth_user_id` null, keyed by its source, holding no credential and ranked nowhere. The harness
+  > signs in as **one** obviously-robotic identity and the chef's name goes into `attribution`.
+  > Nothing here needs an address derived from a real person's name.
 - **A chef carries almost no data**: `display_name` (≤80, silently clamped by the trigger),
   `avatar_url`, `bio` (≤500). That is the entire writable set. No website, no social handles, no
   restaurant, no credentials, no specialty. Everything else on a profile

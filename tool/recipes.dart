@@ -36,12 +36,9 @@ const _ownerId = '00000000-0000-0000-0000-0000000000aa';
 /// nothing has to be escaped; the validator rejects content containing it.
 const _tag = r'$sr$';
 
-/// recipeData carries `demo` blocks and reaches seed.sql's 8 taster accounts.
 /// Not const: `foodSlugs` is read from nutritionData/foods.json so an
 /// ingredient's `food` link is validated against the registry (Phase 29b).
 final _options = RecipeFormatOptions(
-  allowDemo: true,
-  tasterCount: 8,
   dollarTag: _tag,
   foodSlugs: loadFoodSlugs('nutritionData/foods.json'),
 );
@@ -67,8 +64,14 @@ String _header() => '''
 -- fails if this file is stale.
 --
 -- Standalone and idempotent: it bootstraps the Secret Sauce Kitchen
--- account itself, so it can be applied before or after supabase/seed.sql,
--- and survives that file being deleted when the demo data is retired.
+-- account itself, and depends on nothing in supabase/seed.sql — which is why
+-- it is the one seed file still applied to a real database now that the demo
+-- fixtures are test-only (B113).
+--
+-- It carries NO engagement. Every recipe here lands with like_count,
+-- save_count, view_count and rating_count at zero, because Secret Sauce
+-- Kitchen has not earned any (B112). Counters move only when a real reader
+-- likes, saves, views or rates.
 -- Safe to paste into the hosted SQL editor. Contains no credentials —
 -- the kitchen account gets a random password it is never signed in with
 -- (B018: never put a literal credential in a file the README tells you
@@ -166,6 +169,18 @@ String _functionDdl() => '''
 -- layered on top — CLAUDE.md Gotcha 6) dies with `42725 … is not unique` while
 -- a fresh reset and a re-apply both stay green.
 drop function if exists seed_recipe_v2(uuid, text, text, text, text, difficulty, int, int, int, recipe_visibility, text, jsonb, jsonb, int, int, int, jsonb);
+-- B112 removed p_likes/p_saves/p_views/p_ratings: curated content no longer
+-- carries authored engagement. That takes the function from 18 arguments to 14,
+-- and every one of the 14 is also a prefix-match on the 18-arg form through its
+-- four defaults — so the old overload is not merely redundant here, it makes
+-- every generated call below ambiguous. Dropping it is what makes the upgrade
+-- path apply at all.
+drop function if exists seed_recipe_v2(uuid, text, text, text, text, difficulty, int, int, int, recipe_visibility, text, jsonb, jsonb, int, int, int, jsonb, jsonb);
+-- seed_recipe_v2_ratings() has no remaining caller for the same reason. It read
+-- from supabase/seed.sql's taster pool, which is no longer applied to any real
+-- database (B113), so leaving it defined would leave a row-writing function in
+-- `public` that exists only to backfill ratings nobody made.
+drop function if exists seed_recipe_v2_ratings(uuid, jsonb);
 -- ---------------------------------------------------------------------------
 create or replace function seed_recipe_v2(
   p_owner       uuid,
@@ -181,10 +196,6 @@ create or replace function seed_recipe_v2(
   p_attribution text,
   p_ingredients jsonb,   -- [{"name":"Crust","ingredients":[{"quantity":1.25,"unit":"cup","name":"flour","note":null,"is_optional":false,"food_id":"all-purpose-flour"}]}]
   p_steps       jsonb,   -- [{"name":"Crust","steps":[{"text":"…","duration_minutes":60,"temperature":"350°F","tip":null}]}]
-  p_likes       int   default 0,
-  p_saves       int   default 0,
-  p_views       int   default 0,
-  p_ratings     jsonb default '[]'::jsonb,
   -- Appended LAST and defaulted, so an existing call site that predates it
   -- still compiles. Per-serving label; null for a recipe with no data.
   p_nutrition   jsonb default null
@@ -203,18 +214,21 @@ declare
 begin
   select id into v_recipe from recipes where owner_id = p_owner and title = p_title;
   if v_recipe is not null then
-    perform seed_recipe_v2_ratings(v_recipe, p_ratings);
     return;   -- content is left alone; this is not an upsert
   end if;
 
+  -- like_count / save_count / view_count are deliberately absent: they keep
+  -- their column default of 0 and are only ever moved by the engagement
+  -- triggers thereafter. A curated recipe starts with no engagement because it
+  -- has had none (B112).
   insert into recipes (
     owner_id, title, description, cuisine, category, difficulty,
     prep_minutes, cook_minutes, servings, visibility, attribution,
-    like_count, save_count, view_count, nutrition
+    nutrition
   ) values (
     p_owner, p_title, p_description, p_cuisine, p_category, p_difficulty,
     p_prep, p_cook, p_servings, p_visibility, p_attribution,
-    p_likes, p_saves, p_views, p_nutrition
+    p_nutrition
   ) returning id into v_recipe;
 
   -- Groups and their children are numbered from 0 WITHIN each group, matching
@@ -270,8 +284,6 @@ begin
     v_gidx := v_gidx + 1;
   end loop;
 
-  perform seed_recipe_v2_ratings(v_recipe, p_ratings);
-
   insert into recipe_versions (recipe_id, version_number, author_id, change_summary, content_snapshot)
   values (v_recipe, 1, p_owner, 'Seeded recipe', '{}'::jsonb)
   returning id into v_version;
@@ -280,44 +292,20 @@ begin
 end
 \$fn\$;
 
--- Demo ratings are applied through supabase/seed.sql's taster accounts. That
--- file is scheduled for deletion, and this one has to keep working without it,
--- so the call is guarded on the helper still existing rather than declared as a
--- dependency. Also runs on the early-return path above, so a re-seed backfills
--- ratings onto already-seeded recipes (B014).
-create or replace function seed_recipe_v2_ratings(p_recipe uuid, p_ratings jsonb)
-returns void
-language plpgsql
-as \$fn\$
-begin
-  if p_ratings is null or jsonb_array_length(p_ratings) = 0 then
-    return;
-  end if;
-  if to_regprocedure('seed_ratings(uuid, jsonb)') is null then
-    raise notice 'seed_ratings() not present — skipping demo ratings for %', p_recipe;
-    return;
-  end if;
-  execute 'select seed_ratings(\$1, \$2)' using p_recipe, p_ratings;
-end
-\$fn\$;
-
--- PostgREST exposes every function in `public` as an RPC, and both of these
--- write rows. Invoker-rights (so RLS still applies) AND execute revoked, per
--- the trigger-rights rule in CLAUDE.md.
+-- PostgREST exposes every function in `public` as an RPC, and this one writes
+-- rows. Invoker-rights (so RLS still applies) AND execute revoked, per the
+-- trigger-rights rule in CLAUDE.md.
 do \$grants\$
 begin
-  execute 'revoke execute on function seed_recipe_v2(uuid, text, text, text, text, difficulty, int, int, int, recipe_visibility, text, jsonb, jsonb, int, int, int, jsonb, jsonb) from public';
-  execute 'revoke execute on function seed_recipe_v2_ratings(uuid, jsonb) from public';
+  execute 'revoke execute on function seed_recipe_v2(uuid, text, text, text, text, difficulty, int, int, int, recipe_visibility, text, jsonb, jsonb, jsonb) from public';
   if exists (select 1 from pg_roles where rolname = 'anon') then
-    execute 'revoke execute on function seed_recipe_v2(uuid, text, text, text, text, difficulty, int, int, int, recipe_visibility, text, jsonb, jsonb, int, int, int, jsonb, jsonb) from anon, authenticated';
-    execute 'revoke execute on function seed_recipe_v2_ratings(uuid, jsonb) from anon, authenticated';
+    execute 'revoke execute on function seed_recipe_v2(uuid, text, text, text, text, difficulty, int, int, int, recipe_visibility, text, jsonb, jsonb, jsonb) from anon, authenticated';
   end if;
 end \$grants\$;
 ''';
 
 String _call(AuthoredRecipe recipe) {
   final r = recipe.json;
-  final demo = (r['demo'] as Map<String, dynamic>?) ?? const {};
   final notes = r['notes'] as String?;
   // `recipes` has no notes column, so a recipe-level note is appended to the
   // description rather than dropped. A real column is the proper fix.
@@ -350,11 +338,6 @@ String _call(AuthoredRecipe recipe) {
         ..writeln('    ${_lit(r['attribution'])},')
         ..writeln('    $ingredients,')
         ..writeln('    $steps,')
-        ..writeln(
-          '    ${demo['like_count'] ?? 0}, ${demo['save_count'] ?? 0}, '
-          '${demo['view_count'] ?? 0},',
-        )
-        ..writeln('    ${_json(demo['ratings'] ?? const [])},')
         // `null` and an absent key mean the same thing — no label — and the
         // column's check constraint rejects `'null'::jsonb`, so the SQL NULL
         // has to be a bare NULL and not a json one.

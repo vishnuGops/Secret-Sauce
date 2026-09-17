@@ -79,6 +79,11 @@ secret-sauce/
 │   │                          #   `extracted` blocks (per-100g values, parsed portions)
 │   ├── units.json             #   canonical units: every spelling, class, factor
 │   └── README.md              #   authoring workflow + the known vocabulary gaps
+├── tool/hosted_check.dart     # has the TARGET database drifted from this repo? (`db:hosted:check`,
+│                              #   B115). Builds a fresh reference DB from migrations +
+│                              #   nutrition_foods + seed_recipes, fingerprints both, diffs.
+│                              #   READ-ONLY against the target; needs the local stack to
+│                              #   build the reference in
 ├── tool/db.dart               # psql wrapper behind the melos db:* scripts (db:create applies
 │                              #   every supabase/migrations/*.sql in order)
 ├── tool/corpus_import.dart    # corpus/ -> batched `select import_recipe(...)` SQL (35c). A JSON
@@ -150,8 +155,10 @@ secret-sauce/
     │   ├── README.md            #   the rules: numbering, guards, B024 drops, how to apply
     │   └── 0001_init.sql        #   the whole schema: tables, triggers, RLS, grants, storage,
     │                            #   RPCs (incl. the 3 Discover shelves). Editable while pre-release
-    ├── seed.sql                  # DEMO fixtures: accounts, demo chefs, ratings (idempotent)
-    ├── seed_recipes.sql          # GENERATED from recipeData/ — never hand-edit
+    ├── seed.sql                  # DEMO fixtures: 15 accounts + authored counters. TEST-ONLY
+    │                             #   since B113 — NOT in db:reset, NOT in config.toml
+    ├── seed_recipes.sql          # GENERATED from recipeData/ — never hand-edit. The only
+    │                             #   seed file a real database gets; carries NO engagement
     ├── nutrition_foods.sql       # GENERATED from nutritionData/ — never hand-edit;
     │                             #   applied BEFORE seed_recipes (29b's food_id FK)
     ├── sim/                      # simulated population (Phase 24); schema `sim`, never `public`
@@ -179,15 +186,36 @@ secret-sauce/
     │                             #   COMMITTED auto labels re-estimated against the REAL
     │                             #   registry (drift gate) + recompute_auto_nutrition()
     │                             #   broken on purpose, then ROLLS BACK
+    ├── tests/data_audit.sql      # is anything in this database FABRICATED? (`db:audit`,
+    │                             #   B112/B113/B114). READ-ONLY; the last step of db:reset,
+    │                             #   where `--strict` makes a finding fail the run
+    ├── scripts/purge_fake.sql    # the destructive counterpart (`db:purge:fake -- --yes`):
+    │                             #   fixed-id demo fixtures + impersonation accounts, then
+    │                             #   repairs authored counters. Keeps the corpus + Kitchen
+    ├── scripts/schema_fingerprint.sql  # READ-ONLY sorted inventory of `public` — tables,
+    │                             #   columns, enums, function signatures (+ prosecdef), RLS,
+    │                             #   policies, table AND column grants, function EXECUTE
+    │                             #   grants, indexes, triggers, constraints. The basis of
+    │                             #   db:hosted:check; safe against hosted
     └── scripts/{drop,clean}.sql · rotate_seed_passwords.sql (B018 — hosted, manual)
 ```
 
-`seed.sql` and `seed_recipes.sql` are split on purpose: the first is **demo data** with a
-deletion date, the second is **content** that outlives it. No recipe is defined in both.
-Both bootstrap the same Secret Sauce Kitchen account with conflict guards, so recipe content is
-order-independent — but **apply `seed.sql` first**: `seed_recipes.sql` borrows its taster
-accounts for the demo ratings and silently (well, with a notice) skips them otherwise.
-`melos run db:reset` and `config.toml`'s `db.seed.sql_paths` both order it correctly.
+`seed.sql` and `seed_recipes.sql` are split on purpose: the first is **demo data**, the second
+is **content** that outlives it. No recipe is defined in both.
+
+**`seed.sql` is now a test fixture and reaches no real database** (B113). It creates 15 accounts —
+7 leaderboard demo chefs with hand-written counters and 8 tasters — and it used to be applied by
+`melos run db:reset` *and* by `config.toml`'s `db.seed.sql_paths`, which is how every developer
+database and the hosted project ended up ranking invented chefs as if they were users. It is out
+of both paths. Run it explicitly (`melos run db:seed`) only against a throwaway database, and
+expect `db:audit` to report every row it makes as FAKE — that is the correct answer, not a bug.
+The same now goes for `melos run db:sim`.
+
+`seed_recipes.sql` is the only seed file a real database gets. It is standalone (it bootstraps the
+Secret Sauce Kitchen account itself) and needs nothing from `seed.sql` — it no longer applies demo
+ratings, and since B112 it carries **no engagement at all**: the 14 curated recipes land with
+`like_count`, `save_count`, `view_count` and `rating_count` all zero. The old `demo` block in
+`recipeData/*.json` that authored those numbers is retired and the validator refuses it.
 
 Note the `src/` layer: model files live at `packages/core/lib/src/models/`, **not**
 `packages/core/lib/models/`. Nothing outside a package imports below its barrel.
@@ -364,7 +392,21 @@ melos run db:seed     # load supabase/seed.sql (idempotent; also backfills ratin
 melos run db:recipes  # load supabase/seed_recipes.sql (idempotent; run recipes:gen first)
 melos run db:clean    # truncate recipe data, keep schema + users (SPARES the food registry)
 melos run db:drop     # drop all app tables/types/functions (spares auth.users)
-melos run db:reset    # drop -> create -> nutrition -> seed -> recipes -> sim (~15s from empty)
+melos run db:reset    # drop -> create -> nutrition -> recipes -> audit. REAL CONTENT ONLY:
+                      #   no demo accounts, no sim (B113). The audit step runs in --strict
+                      #   mode, so the reset FAILS if any step fabricated a row.
+                      #   NOTE: a reset does not restore the scraped corpus — re-apply
+                      #   corpus/_import/*.sql after one (see corpus:import:gen).
+
+# Is anything in this database fabricated? (B112/B113/B114)
+melos run db:audit               # classify every profile/recipe/account, report per bucket.
+                                 #   READ-ONLY — safe against hosted. Reports without failing;
+                                 #   add --strict to exit non-zero on a finding.
+melos run db:purge:fake -- --yes # DESTRUCTIVE: sim teardown, then seed.sql's fixed-id demo
+                                 #   fixtures and ingest.mjs's impersonation accounts, then
+                                 #   repair authored counters, then re-audit. KEEPS the
+                                 #   captured corpus, the imported bylines, Secret Sauce
+                                 #   Kitchen and every real signup. Back up first.
 
 # The RLS acceptance matrix as a SIGNED-IN user (BL-7). Additive only in the sense that
 # it writes and then rolls back — it leaves no user, no recipe, no helper function.
@@ -401,7 +443,31 @@ melos run db:sim:clean -- --yes           # DESTRUCTIVE: deletes the simulated a
 # aborts outright, and the local stack ships 15.8 against a hosted 17.x (B079).
 # Restore order is auth BEFORE public. Storage objects are NOT covered.
 melos run db:backup -- --docker --out=D:ackups\secret-sauce
+
+# Keeping the HOSTED project in sync with this repo (B115). Hosted has no
+# `supabase_migrations.schema_migrations` table — it was applied by hand, never by
+# `supabase db push` — so there is no recorded version to compare. The check builds a
+# fresh reference database from the repo (every migration, then nutrition_foods, then
+# seed_recipes), fingerprints both, and diffs. Needs the local stack running.
+melos run db:hosted:check                 # READ-ONLY drift report. Missing -> exit 1;
+                                          #   extra -> reported, exit 0 (a leftover cannot
+                                          #   break the app, and dropping one on a live
+                                          #   database is a separate decision — B116)
+melos run db:hosted:deploy -- --docker --yes
+                                          # create -> nutrition -> recipes -> corpus ->
+                                          #   audit --strict. Additive, idempotent, NO drop,
+                                          #   so it is safe against a database holding real
+                                          #   accounts. BACK UP FIRST — no PITR on free tier.
+melos run db:corpus                       # just the corpus shards (idempotent)
+melos run db:fingerprint                  # the raw inventory, read-only
 ```
+
+> **`--docker` now applies to every `db:*` step, not just `backup` (B033 closed).** It runs the
+> **client** inside `postgres:17-alpine` with the repo mounted read-only at `/repo`, so
+> `melos run db:create -- --docker` works on a machine with no PostgreSQL client installed. Use it
+> for anything hosted regardless: the image's major matches the hosted 17.x (B079), and a volume
+> mount means no shell decodes the bytes (B074). The Session-pooler host is still required — the
+> `db.<ref>.supabase.co` form is IPv6-only and a container has no route to it.
 
 > **The sim derives its counters; `seed.sql` authors them.** `seed.sql` writes `like_count = 2500`
 > with no `recipe_likes` rows behind it. The sim writes the rows and recomputes the counter, which
@@ -414,7 +480,13 @@ melos run db:backup -- --docker --out=D:ackups\secret-sauce
 > an email or id pattern: it deletes `auth.users` rows, and a pattern that is subtly wrong on the
 > hosted project has no undo.
 
-> **`melos run db:*` does not work on this machine as written (B033)** — `psql` is not installed,
+> **`melos run db:* -- --docker` is the working form on this machine (B033, closed 2026-09-14).**
+> `tool/db.dart` now runs the client inside `postgres:17-alpine` for **every** step when given
+> that flag, with the repo mounted read-only at `/repo`, so the documented commands work as
+> written with no PostgreSQL client installed. The hand-rolled forms below still apply when you
+> want to drive psql yourself, and the pooler requirement is unchanged.
+>
+> **Without `--docker`, `melos run db:*` still does not work here** — `psql` is not installed,
 > and the only client available is the one inside the Supabase Docker container. Applying a schema
 > change to the **hosted** project through that container also needs the **Session pooler** host:
 > `db.<ref>.supabase.co` is IPv6-only and the container has no IPv6 route. What works:
@@ -970,7 +1042,10 @@ the `code-review` skill). The ones you need while _writing_ code:
     `http://127.0.0.1:54621` is the practical way to drive real repository code; delete it after,
     since no CI job serves PostgREST (`database.yml` starts the database container only).
     **CI now applies the SQL** (`database.yml`, OPT-T1): fresh apply, re-apply, and the Gotcha 6
-    upgrade path, plus the sim's 53 assertions on a **`small`** population — `tiny` gates five of
+    upgrade path. The fresh apply is `db:reset`, which ends in `db:audit --strict` — so CI proves a
+    default path fabricates nothing — and a following step applies the fixtures on purpose and
+    asserts the audit **fails** there, because a checker that cannot fail is not a checker
+    (B112/B113/B114, Gotcha 29). Then the sim's 53 assertions on a **`small`** population — `tiny` gates five of
     them off, including the only guard on `MOST FORKED` ranking anything (B081). CI also runs
     `sim:rls`, the per-persona smoke, which is the policies as a **real account out of that
     population** rather than a purpose-built fixture. Every statement in *those*
@@ -1137,6 +1212,37 @@ recipe` lives on the My Recipes header and search in Discover's search bar; putt
     never as a pixel width: `flutter test`'s fixed-width font is far wider than Roboto, so a width
     assertion pins the harness while an implication survives the font swap.
 
+29. **Fabricated data may exist, but it may never be on a default path — and a real person is
+    never a fixture** (B112/B113/B114). Three separate mechanisms had put invented rows in front of
+    a reader and none of them was visible from the app: curated recipes carried authored
+    `like_count`s with no `recipe_likes` rows behind them, `db:reset` and `config.toml` both applied
+    `seed.sql`'s 15 demo accounts plus the 250-account sim, and `ingest.mjs` created log-in-able
+    accounts for **15 real named chefs** and posted scraped recipes as their own work. The rules
+    that follow:
+    - **`db:reset` produces real content only** — schema, food registry, the 14 curated recipes —
+      and its last step is `db:audit --strict`, so a step that fabricates a row fails the run.
+      Adding a fixture back to that pipeline, or to `config.toml`'s `db.seed.sql_paths`, breaks CI
+      by design. `melos run db:seed` / `db:sim` stay available and are for throwaway databases.
+    - **Engagement is earned or generated, never authored.** `recipes.like_count`, `save_count` and
+      `rating_count` are recomputed from scratch by their triggers, so a counter that disagrees
+      with the rows behind it is an arithmetic *contradiction* rather than a smell — which is the
+      audit's sharpest rule, and measured at zero false positives over 21,314 corpus rows. The
+      retired `demo` block is named in `_retiredRecipeKeys` in
+      [recipe_format.dart](tool/recipe_format.dart) so re-adding it is an error with a reason, not
+      an "unknown field". `view_count` is **exempt** and must stay exempt — Gotcha 10 makes it a
+      deliberate upper bound, so checking it would flag real rows.
+    - **A captured byline is `kind = 'imported'` and holds no account.** That is Phase 35b's whole
+      point. A tool that signs in *as* a real person to post their recipes has routed around it:
+      `ingest.mjs` now uses one obviously-robotic identity and refuses to run unless `APP_URL` is
+      localhost. Credit belongs in `attribution` and in the provenance columns, never in an
+      identity.
+    - **A purge is driven by a registry, a fixed id, or a reserved TLD — never a name, a locale or
+      a date.** `9_sim_teardown.sql` had this discipline first and
+      [purge_fake.sql](supabase/scripts/purge_fake.sql) reuses that file rather than restating it.
+      `.invalid` and `.test` are safe to pattern-match because the RFCs reserve them, not because
+      the string looks synthetic. The pre-flight aborts if one `is_imported` recipe is in the blast
+      radius, because the cost of a false positive is a real account with no undo.
+
 28. **The scraped corpus is not content, and the boundary is physical.** *(Phase 35c added one
     deliberate door through it — `import_recipe(jsonb)`, described at the end of this entry. The
     rule below is unchanged: what it forbids is corpus data becoming **seed** data.)* `corpus/` holds
@@ -1183,6 +1289,16 @@ exercisable, and testable?* Then one of three outcomes, stated explicitly in the
    - `simData/dishes/*.json` + `supabase/sim/2_sim_generate.sql` → `melos run db:sim` — **scale and
      engagement**. Add here when the feature needs a population, a distribution, dated rows, or
      anything ranked. New engagement kinds also need an assertion in `3_sim_verify.sql`.
+   - **Both of those last two are TEST-ONLY (B113).** They are not in `db:reset` and not in
+     `config.toml`, so "it works on my machine after a reset" no longer means the fixtures are
+     there — a plan that needs them has to say `melos run db:seed` / `db:sim` out loud, and say
+     that the surface will look empty on a plain reset. Never resolve that by putting them back in
+     a default path: the honest fix for "the leaderboard is empty" is that it *is* empty until real
+     people use it. `db:audit` reports everything these two create as FAKE, correctly.
+   - **Engagement is never authored into content.** A feature needing likes/saves/ratings gets them
+     from the sim (which writes the rows and lets the triggers derive the counters) — not from a
+     hand-written counter, which the audit now treats as a contradiction and the validator refuses
+     outright (B112, Gotcha 29).
    - Commit the generated `.sql` alongside the JSON — CI's `recipes:check` / `sim:check` fail on a
      stale file, and nothing reads the JSON at runtime (Gotcha 16).
 3. **It cannot be covered** — **say so, out loud, before building.** Name what is untestable, what

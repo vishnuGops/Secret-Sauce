@@ -3,9 +3,14 @@
 // Usage (via melos):
 //   melos run db:create | db:seed | db:recipes | db:drop | db:clean | db:reset
 //   melos run db:sim | db:sim:verify | db:sim:rls | db:sim:clean
+//   melos run db:audit | db:purge:fake
 //   melos run db:rls
+//   melos run db:hosted:check | db:hosted:deploy
 // Requires:
-//   * `psql` on PATH (PostgreSQL client).
+//   * `psql` on PATH (PostgreSQL client) — OR `--docker`, which runs the client
+//     inside `postgres:17-alpine` instead. On this machine there is no local
+//     client at all (B033), so `--docker` is the working form for everything,
+//     and it is the correct form for anything hosted regardless (B079).
 //   * SUPABASE_DB_URL env var — the connection string from the Supabase
 //     dashboard (Project Settings -> Database -> Connection string -> URI).
 //
@@ -25,7 +30,19 @@ import 'dart:io';
 /// stays the idempotent baseline — it is what a fresh database is built from —
 /// and every schema change after it is a **new** numbered file. See
 /// `supabase/migrations/README.md` for the rules that keeps honest.
-const _directories = <String, String>{'create': 'supabase/migrations'};
+const _directories = <String, String>{
+  'create': 'supabase/migrations',
+  // The captured corpus (Phase 35c), 500 recipes per shard. GENERATED and
+  // git-ignored — run `melos run corpus:import:gen` first, which is the step
+  // that reads 8.6 GB of scraped data; this one only applies the SQL it wrote,
+  // so the tool that touches the corpus never holds a database credential
+  // (Gotcha 7). Idempotent: `unique(source_entity_id, source_url)` means a
+  // re-apply inserts nothing, which is what makes it safe to re-run after a
+  // partial failure. Deliberately NOT part of `reset` — a reset is the 14
+  // curated recipes, and pulling 21k rows over a pooler is a minutes-long
+  // operation nobody wants inside a loop they run all day.
+  'corpus': 'corpus/_import',
+};
 
 /// Single-file steps, by name.
 const _files = <String, String>{
@@ -80,15 +97,42 @@ const _files = <String, String>{
   // check on the generated SQL, no database involved.
   'nutrition:estimate': 'supabase/tests/nutrition_estimate.sql',
   'nutrition:verify': 'supabase/tests/nutrition_fixtures.sql',
+  // Classify every profile, recipe and account as real or fabricated
+  // (B112/B113/B114). READ-ONLY — creates temporary tables and nothing else —
+  // so it is safe against the hosted project and is the last step of `reset`.
+  // `--strict` makes a finding an error, which is how CI proves that a default
+  // apply path cannot produce fabricated rows.
+  'audit': 'supabase/tests/data_audit.sql',
+  // A sorted catalogue inventory of the `public` schema — tables, columns,
+  // enums, function signatures, RLS, policies, grants, indexes, triggers and
+  // constraints. READ-ONLY, and the basis of `db:hosted:check`: the hosted
+  // project has no `supabase_migrations.schema_migrations` row to compare a
+  // version against (it was applied by hand), so the only honest way to ask
+  // whether it still matches the repo is to inventory both and diff.
+  'fingerprint': 'supabase/scripts/schema_fingerprint.sql',
+  // The destructive counterpart. Removes seed.sql's fixed-id demo fixtures and
+  // ingest.mjs's impersonation accounts, then repairs authored counters. The
+  // simulated population is NOT handled here — `purge:fake` runs the sim's own
+  // registry-driven teardown first, so there is only ever one copy of that
+  // logic (see the pipeline below).
+  'purge:fake:rows': 'supabase/scripts/purge_fake.sql',
 };
 
 /// Multi-step actions, in order.
 const _pipelines = <String, List<String>>{
-  // The sim is part of a reset on purpose. It is safe there because
-  // sim.config.engage_existing is false by default, so simulated users engage
-  // only with simulated recipes and every standing pinned in docs/SDS.md §10.7
-  // survives byte-identical — only the RANKS move.
-  'reset': ['drop', 'create', 'nutrition', 'seed', 'recipes', 'sim'],
+  // `seed` and `sim` are DELIBERATELY ABSENT (B113). Both fabricate data — 15
+  // demo accounts with authored counters, and a 250-account simulated
+  // population — and having them in the default reset meant every developer
+  // database, and the hosted project, showed invented chefs on the leaderboard
+  // as though they were users. They are now test-only: CI builds them in its
+  // throwaway Postgres, and `melos run db:seed` / `db:sim` still run them
+  // on demand for someone who wants a populated board to look at.
+  //
+  // What a reset produces now is exactly the real content: the schema, the food
+  // registry, and the 14 curated recipes under the first-party Secret Sauce
+  // Kitchen account, all with zero engagement. `audit` runs last and is the
+  // proof — it fails if any step above it fabricated a row.
+  'reset': ['drop', 'create', 'nutrition', 'recipes', 'audit'],
   'sim': [
     'sim:schema',
     'sim:dishes',
@@ -98,10 +142,39 @@ const _pipelines = <String, List<String>>{
     'sim:verify',
   ],
   'sim:clean': ['sim:teardown'],
+  // Order matters and the split is the point: the simulated population already
+  // has a reviewed, registry-driven teardown, so `purge:fake` reuses it rather
+  // than growing a second copy of that logic. `purge:fake:rows` then handles
+  // what it does not cover — the fixed-id demo fixtures, the impersonation
+  // accounts, and the authored-counter repair — and `audit` proves the result.
+  'purge:fake': ['sim:teardown', 'purge:fake:rows', 'audit'],
+  // Bring a database that is not this machine's local stack up to the repo:
+  // schema, food registry, the 14 curated recipes, the captured corpus, then
+  // the audit as proof. Every step is idempotent, so this is also the re-run
+  // after a partial failure and the routine way to push a schema change.
+  //
+  // It is NOT a reset and deliberately contains no `drop`: the whole point is
+  // that it can be pointed at a database holding real accounts and real
+  // recipes. `0001_init.sql` upgrades in place (Gotcha 5), `seed_recipe_v2`
+  // returns early on a recipe that already exists, and the corpus shards are
+  // keyed `unique(source_entity_id, source_url)`.
+  //
+  // `audit` runs last and in `--strict` mode via the hook below, so a deploy
+  // that somehow fabricated a row fails instead of reporting success.
+  'hosted:deploy': ['create', 'nutrition', 'recipes', 'corpus', 'audit'],
 };
 
 /// Actions that destroy data and therefore require an explicit `--yes`.
-const _destructive = {'sim:clean'};
+const _destructive = {'sim:clean', 'purge:fake', 'purge:fake:rows'};
+
+/// Actions that write a lot to a database that is probably not this machine's,
+/// and therefore also require `--yes` — with a different reason than
+/// [_destructive], so they get their own message rather than being told they
+/// delete `auth.users` rows, which they do not.
+///
+/// Nothing here is reversible in the sense that matters: the free tier has no
+/// PITR, so the undo for a bad deploy is the dump `db:backup` took beforehand.
+const _needsConfirmation = {'hosted:deploy'};
 
 /// The two dumps a restorable backup needs (B087, Phase 32f5).
 ///
@@ -146,24 +219,96 @@ const _transactional = {
   'nutrition',
   'drop',
   'clean',
+  // One transaction per corpus shard, matching the `-1` in the hand-run form
+  // CLAUDE.md documents. The shards carry no transaction control of their own
+  // (they are flat `select import_recipe(...)` lists), and B110 is the reason
+  // this matters: one malformed scraped page aborts its batch, and without `-1`
+  // the 300 rows ahead of it have already committed. The import is idempotent,
+  // so a re-run would finish the job either way — but "the next run starts from
+  // a state nothing describes" is the exact thing OPT-T6 added `-1` to prevent.
+  'corpus',
 };
+
+/// Whether every `psql` invocation runs inside `postgres:17-alpine` rather than
+/// using a client from PATH. Set once by the global `--docker` flag.
+///
+/// This is not a convenience flag (B033). On a Windows machine with no
+/// PostgreSQL client installed, the only `psql` available is the one inside the
+/// local Supabase stack's container — and that one is **15.8** while the hosted
+/// project runs **17.6**. `psql` tolerates that gap where `pg_dump` does not, so
+/// the stack's client appears to work right up until the day you need a backup
+/// (B079). Running the client from a pinned image whose major matches the server
+/// makes every `db:*` action behave the same from PowerShell and from Bash, with
+/// no shell in the path to re-encode a multibyte character (B074).
+bool _useDockerPsql = false;
+
+/// The repo root, mounted read-only at `/repo` inside the container so that the
+/// repo-relative `-f` paths in [_files] and [_directories] resolve unchanged.
+final String _repoRoot = Directory.current.absolute.path;
 
 Future<int> _psql(
   String url,
   List<String> args, {
   bool singleTransaction = false,
 }) async {
-  final proc = await Process.start('psql', [
-    url,
+  final psqlArgs = <String>[
     '-v',
     'ON_ERROR_STOP=1',
     if (singleTransaction) '-1',
     ...args,
+  ];
+
+  if (!_useDockerPsql) {
+    final proc = await Process.start('psql', [
+      url,
+      ...psqlArgs,
+    ], mode: ProcessStartMode.inheritStdio);
+    return proc.exitCode;
+  }
+
+  // Inside a container `127.0.0.1` is the container itself, so a loopback URL
+  // has to be pointed back at the host; a hosted URL is left alone, which is
+  // the case this form exists for.
+  final target = _dockerReachable(url);
+  final proc = await Process.start('docker', [
+    'run',
+    '--rm',
+    '-i',
+    if (target != url) '--add-host=host.docker.internal:host-gateway',
+    // Read-only: this mount carries the SQL in, never anything out.
+    '-v',
+    '$_repoRoot:/repo:ro',
+    '-w',
+    '/repo',
+    'postgres:17-alpine',
+    'psql',
+    target,
+    ..._containerPaths(psqlArgs),
   ], mode: ProcessStartMode.inheritStdio);
   return proc.exitCode;
 }
 
-Future<int> _applyFile(String url, String step) async {
+/// [args] with every `-f` operand rewritten to its path inside the container.
+///
+/// Paths in [_files] / [_directories] are repo-relative and may arrive with
+/// Windows separators, which `psql` inside a Linux container cannot open.
+List<String> _containerPaths(List<String> args) {
+  final out = <String>[];
+  for (var i = 0; i < args.length; i++) {
+    out.add(args[i]);
+    if (args[i] == '-f' && i + 1 < args.length) {
+      out.add('/repo/${args[i + 1].replaceAll(r'\', '/')}');
+      i++;
+    }
+  }
+  return out;
+}
+
+Future<int> _applyFile(
+  String url,
+  String step, {
+  Map<String, String> vars = const {},
+}) async {
   final dir = _directories[step];
   if (dir != null) return _applyDirectory(url, step, dir);
 
@@ -174,10 +319,35 @@ Future<int> _applyFile(String url, String step) async {
   }
   stdout.writeln('▶ $step  ($path)');
   return _psql(url, [
+    for (final entry in vars.entries) ...['-v', '${entry.key}=${entry.value}'],
     '-f',
     path,
   ], singleTransaction: _transactional.contains(step));
 }
+
+/// psql `-v` variables a given step needs, derived from the command-line flags.
+///
+/// Both consumers default themselves when the variable is absent
+/// (`\if :{?strict}` / `\if :{?confirm}`), so passing nothing is a valid state
+/// and a hand-run `psql -f` behaves the same as this wrapper — the same
+/// principle as the sim reading its knobs from `sim.config`.
+Map<String, String> _stepVars(
+  String step, {
+  required bool confirmed,
+  required bool strict,
+}) => switch (step) {
+  // Reports by default and only FAILS under `--strict`, because `db:audit` is
+  // the command someone runs to find out what is in a database — including
+  // right after `db:sim`, which fabricates a population on purpose. An
+  // informational command that exits non-zero for doing its job gets ignored.
+  //
+  // `reset` forces strict on (see main): there the claim being made is that a
+  // default apply path CANNOT fabricate a row, and a claim that only prints is
+  // not a gate.
+  'audit' => {'strict': strict ? 'on' : 'off'},
+  'purge:fake:rows' => {'confirm': confirmed ? 'yes' : 'no'},
+  _ => const {},
+};
 
 /// Applies every `.sql` file in [dir], sorted by name — the same order the
 /// Supabase CLI uses, so `melos run db:create` and `supabase db reset` cannot
@@ -351,16 +521,31 @@ usage: dart run tool/db.dart <action> [options]
   sim:rls                                  the RLS policies per persona, as a signed-in
                                            actor from sim.actor (rolls back)
   sim:clean                                DESTRUCTIVE teardown (requires --yes)
+  audit                                    classify every row as real or fabricated (read-only)
+  purge:fake                               DESTRUCTIVE sim teardown + fixture/impersonation
+                                           purge + audit (requires --yes)
   rls                                      the RLS matrix as a signed-in user (rolls back)
   nutrition:estimate                       estimator arithmetic on fixture trees (rolls back)
   nutrition:verify                         committed labels vs. the registry (rolls back)
+  corpus                                   apply corpus/_import/*.sql (idempotent; run
+                                           `melos run corpus:import:gen` first)
+  fingerprint                              inventory the public schema (read-only) — the
+                                           basis of the hosted drift check
+  hosted:deploy                            create -> nutrition -> recipes -> corpus ->
+                                           audit --strict. Additive, idempotent, no drop.
+                                           Requires --yes
   backup                                   pg_dump public + auth data, timestamped (read-only)
 
 options:
   --preset=<tiny|small|medium|large>       sim size (default: whatever sim.config holds)
   --seed=<int>                             sim random seed
   --out=<dir>                              backup destination (default: backups/)
-  --docker                                 run pg_dump in postgres:17-alpine (see B079)
+  --docker                                 run psql AND pg_dump in postgres:17-alpine.
+                                           Required on a machine with no PostgreSQL
+                                           client installed (B033), and the right form
+                                           for anything hosted (B079)
+  --strict                                 audit: exit non-zero on any finding
+                                           (implied by `reset`)
   --yes                                    confirm a destructive action
 ''');
 }
@@ -389,6 +574,12 @@ Future<void> main(List<String> args) async {
   final seedOpt = optionOf('seed');
   final outDir = optionOf('out') ?? 'backups';
   final confirmed = flags.contains('--yes');
+
+  // Applies to every step, not just `backup`: with no PostgreSQL client on
+  // PATH this is the only way `db:*` runs at all on this machine (B033), and
+  // against hosted it is the form that keeps the client major matched to the
+  // server (B079).
+  _useDockerPsql = flags.contains('--docker');
 
   if (seedOpt != null && int.tryParse(seedOpt) == null) {
     stderr.writeln('--seed must be an integer (got "$seedOpt")');
@@ -449,6 +640,17 @@ Future<void> main(List<String> args) async {
     exit(3);
   }
 
+  if (_needsConfirmation.contains(action) && !confirmed) {
+    stderr.writeln(
+      '✖ $action writes the schema, the food registry, the curated recipes and\n'
+      '  the whole captured corpus to ${_describeTarget(url)}.\n'
+      '  Take a backup first (`db:backup -- --docker --out=<dir>`); the free\n'
+      '  tier has no PITR, so that dump is the only undo.\n'
+      '  Re-run with --yes to confirm.',
+    );
+    exit(3);
+  }
+
   stdout.writeln('target: ${_describeTarget(url)}');
 
   // Flatten first: a pipeline entry may itself be a pipeline (`reset` contains
@@ -472,7 +674,21 @@ Future<void> main(List<String> args) async {
         exit(code);
       }
     }
-    final code = await _applyFile(url, leaf);
+    final code = await _applyFile(
+      url,
+      leaf,
+      vars: _stepVars(
+        leaf,
+        confirmed: confirmed,
+        // `reset` and `hosted:deploy` assert rather than report: the contract
+        // of both is that what they produce contains nothing fabricated, and
+        // for the second of those the database on the other end is production.
+        strict:
+            flags.contains('--strict') ||
+            action == 'reset' ||
+            action == 'hosted:deploy',
+      ),
+    );
     if (code != 0) {
       stderr.writeln('✖ $leaf failed (exit $code)');
       exit(code);

@@ -2,14 +2,14 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://secret-sauce.local/schema/sim-dish.json",
   "title": "Secret Sauce simulation dish",
-  "description": "One authored dish in the simulation LIBRARY. Identical to recipeData/schema.json except for two keys: `demo` is rejected (engagement is generated from a modelled history, never authored) and `sim` is allowed (generation hints). Every other field means exactly what it means there, and both directories are validated by the same code — tool/recipe_format.dart — so a dish can be promoted into the curated set by moving the file and deleting its `sim` block. Neither schema file is read at runtime (no JSON Schema dependency in the toolchain), so a rule added here must be added to tool/recipe_format.dart or tool/sim.dart as well. Directory-level rules (category/cuisine coverage) are not expressible in JSON Schema at all and live in tool/sim.dart — see simData/README.md.",
+  "description": "One authored dish in the simulation LIBRARY. Identical to recipeData/schema.json except for one key: `sim` is allowed (generation hints). `demo` is rejected in BOTH directories as of B112 — engagement is earned or generated, never authored — so the two formats differ only in that hint block. Every other field means exactly what it means there, and both directories are validated by the same code — tool/recipe_format.dart — so a dish can be promoted into the curated set by moving the file and deleting its `sim` block. Neither schema file is read at runtime (no JSON Schema dependency in the toolchain), so a rule added here must be added to tool/recipe_format.dart or tool/sim.dart as well. Directory-level rules (category/cuisine coverage) are not expressible in JSON Schema at all and live in tool/sim.dart — see simData/README.md.",
   "$ref": "../recipeData/schema.json",
   "type": "object",
   "unevaluatedProperties": false,
   "properties": {
     "demo": {
       "not": {},
-      "description": "REJECTED here. A hand-typed like_count is the exact practice Phase 24 replaces: supabase/sim/2_sim_generate.sql writes the engagement ROWS and lets the same arithmetic the triggers use derive the counters. Put a dish's expected popularity in `sim.weight` instead."
+      "description": "REJECTED here and in recipeData too (B112). A hand-typed like_count is the exact practice Phase 24 replaces: supabase/sim/2_sim_generate.sql writes the engagement ROWS and lets the same arithmetic the triggers use derive the counters. Put a dish's expected popularity in `sim.weight` instead."
     },
     "sim": {
       "type": "object",

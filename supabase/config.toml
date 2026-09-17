@@ -17,15 +17,24 @@ major_version = 15
 enabled = false
 port = 54629
 
-# `supabase db reset` applies these in order after the migrations. The order is
-# load-bearing twice over: nutrition_foods.sql must precede seed_recipes.sql
-# (Phase 29b gives ingredients a food_id FK into the registry), and
-# seed_recipes.sql reaches seed.sql's taster accounts for its demo ratings
-# through a to_regprocedure() guard, so running it first would create the
-# recipes but skip their ratings.
+# `supabase db reset` applies these in order after the migrations.
+#
+# `./seed.sql` is DELIBERATELY ABSENT (B113). It creates 15 demo accounts — 7
+# leaderboard chefs with authored counters and 8 taster accounts — and listing
+# it here meant `supabase db reset` put invented chefs on every developer's
+# leaderboard as though they were users. It is a test fixture now: CI applies it
+# to its throwaway Postgres and `melos run db:seed` still runs it on demand.
+# Keep this list to real content only, and keep it in step with the `reset`
+# pipeline in tool/db.dart — they are two descriptions of the same thing, and
+# the whole reason `reset` ends in an `audit` step is to catch them drifting.
+#
+# The remaining order is still load-bearing: nutrition_foods.sql must precede
+# seed_recipes.sql, because Phase 29b gives ingredients a food_id FK into the
+# registry. seed_recipes.sql needs nothing from seed.sql — it bootstraps the
+# Secret Sauce Kitchen account itself, and no longer applies demo ratings.
 [db.seed]
 enabled = true
-sql_paths = ["./nutrition_foods.sql", "./seed.sql", "./seed_recipes.sql"]
+sql_paths = ["./nutrition_foods.sql", "./seed_recipes.sql"]
 
 [studio]
 enabled = true

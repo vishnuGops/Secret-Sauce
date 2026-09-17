@@ -270,7 +270,11 @@ async function main() {
       bio: chef.bio,
       country: chef.country,
       homepage: chef.homepage,
-      corpusEmail: chef.slug + '@corpus.invalid',
+      // No `corpusEmail` (B114). This field existed to name a per-chef account
+      // that ingest.mjs then created and signed into, which turned 15 captured
+      // bylines into 15 log-in-able members on the chef leaderboard. A captured
+      // chef is `kind = 'imported'` and holds no account; the harness signs in
+      // as itself now, so nothing needs an address derived from a real name.
       appProfileId: byId.get(chef.id)?.appProfileId ?? null,
     });
 

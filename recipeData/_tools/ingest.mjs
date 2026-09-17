@@ -22,6 +22,51 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, '..');
 const BASE = process.env.APP_URL || 'http://localhost:5599';
+
+// ---------------------------------------------------------------------------
+// THIS HARNESS SIGNS IN AS ITSELF, NEVER AS THE CHEF (B114).
+//
+// It used to create one account per corpus chef — `nigella-lawson@corpus.invalid`
+// and fourteen more — and post scraped recipes through it. The result was 15 real
+// named people holding log-in-able `kind = 'member'` profiles, ranked on the chef
+// leaderboard, each credited as the author of recipes they had not published
+// here. Phase 35b exists specifically so a captured byline is `kind = 'imported'`
+// with no account; this script was routing around that design.
+//
+// What the harness actually needs is A account to drive the editor with. Whose it
+// is has no bearing on the round-trip diff it measures, and the chef's name is
+// already carried where it belongs — into the recipe's `Attribution` field, a few
+// hundred lines down. So there is one identity, it is obviously a robot, and it
+// owns whatever this script creates.
+const HARNESS_EMAIL = process.env.CORPUS_HARNESS_EMAIL || 'corpus-harness@secretsauce.local';
+const HARNESS_NAME = 'Corpus Import Harness';
+
+// And it may only ever point at a local stack. A schema-gap harness that types
+// into the real editor has no business writing to a database anyone else reads:
+// the 158 recipes it left behind were a byproduct of measuring the editor, not
+// content, and on a shared database they are indistinguishable from content.
+// `.invalid`/`localhost` checks are cheap; an accidental hosted run is not
+// reversible on the free tier.
+{
+  const host = new URL(BASE).hostname;
+  if (!['localhost', '127.0.0.1', '::1', '0.0.0.0'].includes(host)) {
+    console.error(
+      [
+        'APP_URL points at "' + host + '", which is not a local stack.',
+        '',
+        'ingest.mjs types scraped recipes into the real editor and saves them. It',
+        'is a schema-gap harness, not an importer — the rows it creates carry no',
+        'provenance and cannot be told apart from real content afterwards (B114).',
+        'The supported path from corpus/ to a database is `melos run',
+        'corpus:import:gen`, which writes is_imported rows with their source URL',
+        'attached.',
+        '',
+        'Run it against http://localhost:<port> or not at all.',
+      ].join('\n'),
+    );
+    process.exit(2);
+  }
+}
 // Never a literal (B018, and now B111). This script signs into the app as each
 // chef account it creates, so a hard-coded value here is a working credential
 // for every account it has ever made — and `ingest.mjs` drives whatever
@@ -267,9 +312,9 @@ async function hardGoto(page, route) {
  * substring by default, so the non-exact locator resolves to the toggle and the
  * form is never submitted. Every auth button here is matched exactly.
  */
-async function signUpOrIn(page, chef) {
+async function signUpOrIn(page) {
   await signOutIfNeeded(page);
-  const email = chef.corpusEmail || chef.slug + '@corpus.invalid';
+  const email = HARNESS_EMAIL;
 
   // Sign in first: on a re-run most chefs already exist, and a failed signup
   // leaves an error banner that complicates the fallback.
@@ -281,7 +326,7 @@ async function signUpOrIn(page, chef) {
   if (page.url().includes('/discover')) return { email, created: false };
 
   await hardGoto(page, '/auth?mode=signup');
-  await typeInto(page, page.getByRole('textbox', { name: /^Display name/ }), 'Display name', chef.name);
+  await typeInto(page, page.getByRole('textbox', { name: /^Display name/ }), 'Display name', HARNESS_NAME);
   await typeInto(page, page.getByRole('textbox', { name: /^Email/ }), 'Email', email);
   await typeInto(page, page.getByRole('textbox', { name: /^Password/ }), 'Password', PASSWORD);
   await clickBtn(page, page.getByRole('button', { name: 'Sign up', exact: true }), 'Sign up');
@@ -487,7 +532,7 @@ async function main() {
     console.log('\n=== ' + chef.name + ' (' + chef.slug + ')');
 
     try {
-      cs.account = await signUpOrIn(page, chef);
+      cs.account = await signUpOrIn(page);
       console.log('  account ' + cs.account.email + (cs.account.created ? ' (created)' : ' (existing)'));
     } catch (e) {
       console.log('  ACCOUNT FAIL ' + e.stack);

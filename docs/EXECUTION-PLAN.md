@@ -27,9 +27,15 @@ and `3_sim_verify.sql` passes all 53 assertions.
 **Two decisions below were reversed by what the build found**, and both are worth reading before
 trusting the rest of this section:
 
-- **`db:reset` now DOES run the sim** (the table said it should not). At the owner's request, and
-  safe: `engage_existing` is false, so the Kitchen and `d1`–`d7` counters stay byte-identical and
-  every standing pinned in SDS §10.7 survives. Only the ranks move, which is the point.
+- **`db:reset` ran the sim for three weeks, and no longer does (reversed again by B113).** The
+  2026-08-20 decision was to add it at the owner's request, on the grounds that `engage_existing`
+  is false so every pinned standing survived. That reasoning was sound and still is — the defect
+  was elsewhere: with the sim (and `seed.sql`) on the default path, the only convenient way to
+  build a database produced one whose chef leaderboard was 62 invented profiles against 1 real
+  one, and the hosted project had been built that way too. Both are test-only now and `reset`
+  ends in `db:audit --strict`, so the original table entry below ("**No.** Reset stays fast, and
+  the standings stay reproducible") is the state of the world again, for a second and stronger
+  reason. Build the population on purpose with `melos run db:sim`.
 - **`master_chef` is not organically reachable at `medium`**, and that is a finding about the
   product rather than the generator — see B043 and "What the dataset proved" below.
 
@@ -59,7 +65,15 @@ Still outstanding: 47 more dishes and a run at the `large` preset.
 
 **Problem.** The database has 21 accounts and 23 recipes, and every engagement number in it was
 typed by a human into `seed.sql` or a `demo` block. `recipes.like_count` was authored; the
-`recipe_likes` rows behind it were not. That was fine while the counters were the only thing being
+`recipe_likes` rows behind it were not.
+
+> **The `demo` block half of that is now gone (B112).** This section diagnosed authored engagement
+> as a *coverage* problem — too few rows to test ranking — and built the sim to fix it. It was also
+> an *honesty* problem, which took another three weeks to notice: those authored counters were
+> being served to readers as the Kitchen's real popularity. `recipeData`'s `demo` blocks are
+> retired and the validator refuses the key; `seed.sql` keeps its authored counters but reaches no
+> real database. The contrast drawn below is still exactly right, and is now the audit's detection
+> rule: a counter that disagrees with the rows behind it cannot have been written by a trigger. That was fine while the counters were the only thing being
 read, and it stopped being fine three phases ago:
 
 | What is untested | Why the current seed cannot test it |
@@ -836,8 +850,19 @@ detail. Key facts to keep in sync:
 - **Launcher icon:** `flutter_launcher_icons` config in `apps/app/pubspec.yaml`; source at
   `apps/app/assets/icon/app_icon.png`; generate with `melos run gen:icons`.
 - **DB tasks:** `melos run db:create | db:seed | db:clean | db:drop | db:reset | db:rls` via
-  `tool/db.dart` (needs `psql` + `SUPABASE_DB_URL`). Scripts in `supabase/scripts/`; the RLS
-  acceptance matrix in `supabase/tests/`.
+  `tool/db.dart` (needs `SUPABASE_DB_URL`, plus either `psql` on PATH **or** `--docker`). Scripts
+  in `supabase/scripts/`; the RLS acceptance matrix in `supabase/tests/`.
+- **`--docker` applies to every step**, not just `backup` (B033 closed 2026-09-14): the client runs
+  inside `postgres:17-alpine` with the repo mounted read-only at `/repo`. Required on a machine with
+  no PostgreSQL client, and the correct form for anything hosted regardless (B079/B074).
+- **Hosted sync (B115):** `melos run db:hosted:check` is a READ-ONLY drift report — it builds a
+  fresh reference database from the repo (migrations → `nutrition_foods.sql` → `seed_recipes.sql`),
+  fingerprints it and the target through `supabase/scripts/schema_fingerprint.sql`, and diffs.
+  `melos run db:hosted:deploy` is `create → nutrition → recipes → corpus → audit --strict`:
+  additive, idempotent, **no `drop`**, `--yes`-gated. The hosted project has no
+  `supabase_migrations.schema_migrations` table, so the fingerprint diff is the only thing that can
+  answer "is production current?" — and it is, because a written claim about it has now been wrong
+  three times (see ROADMAP BL-5 and BL-9).
 
 ---
 
@@ -848,6 +873,9 @@ detail. Key facts to keep in sync:
 2. `melos bootstrap` then `melos run build_runner --no-select` (codegen).
 3. ~~Generate platform runners~~ — web, android, ios, and windows runners are already committed
    under `apps/app/`. Only run `flutter create . --platforms=<missing>` to add a new platform.
-4. Create Supabase project; apply `supabase/migrations/0001_init.sql`; optionally run `supabase/seed.sql`.
+4. Create Supabase project; apply `supabase/migrations/0001_init.sql` (or
+   `melos run db:hosted:deploy -- --docker --yes`, which also loads the food registry, the curated
+   recipes and the captured corpus). `supabase/seed.sql` is TEST-ONLY — never apply it to a real
+   project (B113).
 5. Copy `apps/app/env.example.json` → `env.local.json` with `SUPABASE_URL` / `SUPABASE_ANON_KEY`.
 6. Run: `flutter run -d web-server --web-port 8080 --dart-define-from-file=env.local.json`.
