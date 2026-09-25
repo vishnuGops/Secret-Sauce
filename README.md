@@ -171,6 +171,12 @@ Supabase credentials are supplied via a local, git-ignored JSON file (never comm
    > `apps/app/env.hosted.local.json`. Swap the files to switch. Keep the `.local` in any such
    > filename — `env.local*` and `env.*.local*` are git-ignored, but `env.hosted.json` is **not**
    > (B010).
+   >
+   > **Signing in locally:** this machine's local stack has one test account with a known
+   > password. Its credentials are in the git-ignored `env.test-account.local.json` at the repo
+   > root and nowhere else. On any other machine, or after `db:reset`, sign up a new user and
+   > confirm it through Mailpit (`http://127.0.0.1:54624`). Never commit the file or copy its
+   > contents into `seed.sql` or a dart-define file (B018/B034).
 
 2. Run with the env file (Flutter's `--dart-define-from-file`). The most reliable option on
    Windows is the **web-server** device (open the printed URL in any browser):

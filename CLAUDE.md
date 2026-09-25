@@ -46,7 +46,9 @@ second app.
 ```
 secret-sauce/
 ├── CLAUDE.md · README.md · melos.yaml · pubspec.yaml · analysis_options.yaml
-├── .claude/skills/            # code-review + review-checklist (repo's own review criteria)
+├── .claude/skills/            # code-review + review-checklist (repo's own review criteria);
+│                             #   ui-overhaul: audit -> design system -> rebuild-from-reference,
+│                             #   writes docs/design/ (AUDIT.md, DESIGN.md, references/, REBUILD-LOG.md)
 ├── .github/workflows/        # ci.yml: format gate + analyze + test + a web release BUILD
 │                             #   (32f4, compile-only), pinned Flutter 3.44.8 / melos 6.3.3
 │                             # database.yml: schema/seed/sim on a real Postgres (OPT-T1) —
@@ -54,6 +56,9 @@ secret-sauce/
 │                             #   (32f2) on a PINNED supabase CLI; the RLS matrix and the sim
 │                             #   run after the upgrade path too. NEVER give it a DB secret
 ├── docs/                      # ROADMAP · EXECUTION-PLAN · SDS · BUG-TRACKER (see "Docs–code sync")
+│   ├── design/                #   ui-overhaul output (Phase 36): AUDIT.md (scored UX-0xx findings +
+│   │                          #   the Preserve list), then DESIGN.md, references/, REBUILD-LOG.md.
+│   │                          #   Kept current like the rest of docs/; re-runs APPEND dated sections
 │   └── archive/               #   shipped-phase history (frozen — completed phases move here)
 ├── recipeData/                # THE Secret Sauce Kitchen's 14 recipes (content)
 │   ├── recipes/<slug>.json    #   one per file — the filename IS the identity
@@ -303,9 +308,15 @@ npx serve -l 8099 build/web            # http://localhost:8099/#/discover
 > hosted project's credentials preserved beside it in `apps/app/env.hosted.local.json` — swap the
 > two files to switch back. Both names are git-ignored (`env.local*` / `env.*.local*`); a plain
 > `env.hosted.json` would **not** be — that is exactly the glob B010 was widened to catch, so never
-> save credentials under that name. The local stack needs `supabase start`, and no account in it has
-> a password anyone knows: every seeded account gets a random one (B018), so sign up a fresh user
-> and collect the confirmation mail from Mailpit at `http://127.0.0.1:54624`, not a real inbox.
+> save credentials under that name. The local stack needs `supabase start`. Every *seeded* account
+> gets a random password (B018). One **owner-created test account** on the local stack does have a
+> known password (added 2026-09-24 for the ui-overhaul signed-in audit, member profile "Testing"). Its
+> credentials live **only** in the git-ignored `env.test-account.local.json` at the repo root
+> (`**/env.*.local*`). Never copy them into `seed.sql`, a dart-define file, docs, or the hosted
+> project. It exists in *this* machine's local database only, so a `db:reset` or a fresh machine
+> does not have it: sign up again and collect the confirmation mail from Mailpit at
+> `http://127.0.0.1:54624`. `db:audit` counts it as a real signup, which is correct.
+> `.claude/skills/ui-overhaul/scripts/capture_signed_in.mjs` uses it for signed-in screenshots.
 
 > **`melos run format` is safe again (B027 fixed by OPT-T4).** It used to break
 > `melos run analyze`: `dart format` picks its style from the _package's_ language version, all

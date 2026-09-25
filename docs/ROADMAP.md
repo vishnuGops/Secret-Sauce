@@ -843,6 +843,28 @@ at 260 MB. Every guarantee below was checked against that, not against a fixture
 
 ---
 
+## Phase 36 — UI overhaul: audit → design system → reference rebuild (in progress)
+
+Driven by the `ui-overhaul` skill (`.claude/skills/ui-overhaul/`). Three gated phases, each writing
+to `docs/design/`. The next phase does not start until the previous one's file exists.
+
+- [x] **36a — Audit** (2026-09-24) → [docs/design/AUDIT.md](design/AUDIT.md). Live mode (light +
+      dark captures at 390/600/1000/1440) plus a static sweep. **Weighted 5.1 / 10**: strong layout
+      engineering, a generic default-M3 surface, weak accessibility (4/10). 4 Critical, 31 Major and
+      16 Minor findings; functional defects filed as **B125–B134**. Signed-in surfaces were captured live
+      with the local test account (see CLAUDE.md "Required environment"). Missing capabilities the
+      audit found: deleting a recipe (UX-037) and editing a profile (UX-038).
+- [ ] **36b — Design system + design language** → `docs/design/DESIGN.md` + token code
+      (`ThemeExtension` palette, full `TextTheme`, `AppMotion`) with a value-neutral migration and a
+      contrast guard test. Owner decisions pending: **fonts** (Newsreader + Manrope proposed; bundled
+      assets vs `google_fonts`) and whether the paprika seed stays.
+- [ ] **36c — Reference rebuild** — waits for the owner's reference images after 36b.
+- [ ] **Content gap the audit surfaced (seed-data fit):** the 14 curated recipes have no cover
+      photos, so Discover shows only placeholders (UX-034). A designed no-photo card is 36b/36c
+      work; the photographs themselves are an owner action.
+
+---
+
 ## Backlog — deferred, not scheduled
 
 Everything here is **known, decided, and not being worked on**. An item is in the backlog because

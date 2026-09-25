@@ -843,6 +843,31 @@ importer, the provenance columns and the attribution UI have something to run ag
 
 ---
 
+## Phase 36 — UI overhaul (36a done 2026-09-24; 36b next)
+
+**Procedure lives in the skill**, not here: `.claude/skills/ui-overhaul/SKILL.md` + `references/`
+(audit rubric, design-system spec, rebuild loop, ECC-web → Flutter translation). Run `/ui-overhaul`;
+it detects the phase from `docs/design/`.
+
+- **36a — done.** [docs/design/AUDIT.md](design/AUDIT.md): live captures in
+  `.playwright-mcp/captures/audit-2026-09-24/` (release build, headless Chromium, light + dark),
+  12-dimension score 5.1/10, `UX-001…055`, bugs B125–B134, and the Preserve list 36c must keep.
+  Signed-in captures came from `.claude/skills/ui-overhaul/scripts/capture_signed_in.mjs`
+  (password-grant session injected as `sb-127-auth-token`; credentials from the git-ignored
+  `env.test-account.local.json`).
+- **36b — next.** `DESIGN.md` + token layer. Order: direction and principles (owner confirms) →
+  token files + theme wiring (value-neutral) → migrate raw values feature by feature → token-shaped
+  audit fixes (B133 contrast, UX-031 type, UX-032 duplicates, UX-033 buttons) → contrast guard test →
+  docs. Blocked on two owner calls: fonts, seed color.
+- **36c — waits** for the owner's reference images. The bugs (B125–B132, B134) are independent of
+  the restyle and can be fixed at any time. Fixing them first shrinks what 36c has to preserve.
+
+**Seed-data fit:** the audit's live surfaces run on `db:reset` + the imported corpus. The curated
+14 have **no cover photos**, and engagement is zero, so image-led and ranked layouts can only be
+judged on a `db:sim` throwaway database or with owner-supplied photographs. Say which one a capture used.
+
+---
+
 ## Build, run & release (ops)
 
 Task runner is **melos** (`melos.yaml`); Gradle only builds Android. See `README.md` for full
