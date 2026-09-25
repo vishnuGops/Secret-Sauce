@@ -870,6 +870,10 @@ to `docs/design/`. The next phase does not start until the previous one's file e
         §10 lists the drift) — an owner-approved `DesignSync` write, not code.
   - [ ] Small shared tokens the migration asked for and deliberately did not add: a stroke/track
         thickness scale (1 / 2 / 3 / 4 / 8), a form measure (420 / 720), a 15px icon step.
+  - [ ] Screenshot-check the chefs hero's tier tiles near the 96px floor (~1000px window): the
+        labels are now `appText.overline` (w700, Manrope), and `MASTER CHEF` may ellipsize where
+        the old w500 fitted. It cannot overflow (`maxLines: 1`), and `flutter test`'s font cannot
+        measure it, so this is a capture item for the 36c pass (review finding, Low).
 - [ ] **36c — Reference rebuild** — waits for the owner's reference images after 36b.
 - [ ] **Content gap the audit surfaced (seed-data fit):** the 14 curated recipes have no cover
       photos, so Discover shows only placeholders (UX-034). A designed no-photo card is 36b/36c

@@ -60,7 +60,9 @@ class AppPalette extends ThemeExtension<AppPalette> {
 
   /// Chef tier accents (chip, ladder, spotlight card). Light home/sous/master
   /// were darkened (B133 follow-through): at the chip's 14% wash the old
-  /// shades measured 4.3 / 4.5 / 3.5:1 for 11px text.
+  /// shades measured 4.3 / 4.5 / 3.5:1 for 11px text. Measured on the page,
+  /// on a `Card` (`surfaceContainerLow` — where the standing card puts the
+  /// chip) and on `surfaceContainerLowest`.
   final Color tierHomeCook;
   final Color tierLineCook;
   final Color tierSousChef;
@@ -166,11 +168,11 @@ class AppPalette extends ThemeExtension<AppPalette> {
     difficultyEasy: Color(0xFF2A6E2E),
     difficultyMedium: Color(0xFF8A4F00),
     difficultyHard: Color(0xFF9F2B26),
-    tierHomeCook: Color(0xFF4F6873), // slate
+    tierHomeCook: Color(0xFF4A626D), // slate
     tierLineCook: Color(0xFF00695C), // teal
     tierSousChef: Color(0xFF1360B5), // blue
     tierHeadChef: Color(0xFF6A1B9A), // purple
-    tierMasterChef: Color(0xFF935300), // amber
+    tierMasterChef: Color(0xFF8F5000), // amber
     scrim: _black55,
     onImage: _white,
     imageControl: _black45,

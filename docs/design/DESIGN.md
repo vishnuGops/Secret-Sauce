@@ -141,7 +141,8 @@ spotlight card's near-white RANK pill (light — UX-012).
 `onImageTint .28`, `glow .30`, `rule .35`, `emphasis .45`, `muted .5`, `frosted .92`). A new tint
 picks one; it does not invent a number.
 
-**Contrast table** (generated from `AppTheme.light()` / `AppTheme.dark()` on 2026-09-25; asserted by
+**Contrast table** (generated from `AppTheme.light()` / `AppTheme.dark()` on 2026-09-25; a `Card` is
+`surfaceContainerLow` — M3's default, the theme sets no card colour; asserted by
 `packages/design_system/test/theme_contrast_test.dart`, which covers more pairs than are listed here):
 
 | Pair | Light fg / bg | Light | Dark fg / bg | Dark | Min | |
@@ -157,15 +158,18 @@ picks one; it does not invent a number.
 | onInverseSurface / inverseSurface | #FFEDE9 / #392E2C | 11.58 | #392E2C / #F1DFDB | 10.19 | 4.5 | pass |
 | outline / surface (UI) | #85736F / #FFF8F6 | 4.28 | #A08C88 / #1A110F | 5.84 | 3.0 | pass |
 | rating / surface (UI) | #B7700A / #FFF8F6 | 3.75 | #F2A93B / #1A110F | 9.30 | 3.0 | pass |
-| rating / card (UI) | #B7700A / #FFFFFF | 3.94 | #F2A93B / #140C0A | 9.67 | 3.0 | pass |
+| rating / surfaceContainerLowest (UI) | #B7700A / #FFFFFF | 3.94 | #F2A93B / #140C0A | 9.67 | 3.0 | pass |
+| rating / Card (surfaceContainerLow, UI) | #B7700A / #FFF0ED | 3.55 | #F2A93B / #231917 | 8.60 | 3.0 | pass |
 | difficulty easy / its 12% wash | #2A6E2E / #E5E7DE | 5.01 | #66BB6A / #23251A | 6.55 | 4.5 | pass |
 | difficulty medium / its 12% wash | #8A4F00 / #F1E4D8 | 5.25 | #FFA726 / #352312 | 7.70 | 4.5 | pass |
 | difficulty hard / its 12% wash | #9F2B26 / #F3DFDD | 5.78 | #FFB4A8 / #352521 | 8.60 | 4.5 | pass |
-| tier homeCook / its 14% wash | #4F6873 / #E6E4E4 | 4.66 | #B0BEC5 / #2F2928 | 7.48 | 4.5 | pass |
+| tier homeCook / its 14% wash | #4A626D / #E6E3E3 | 5.05 | #B0BEC5 / #2F2928 | 7.48 | 4.5 | pass |
+| tier homeCook / its 14% wash on a Card | #4A626D / #E6DCDB | 4.79 | #B0BEC5 / #37302F | 6.77 | 4.5 | pass |
 | tier lineCook / its 14% wash | #00695C / #DBE4E0 | 5.10 | #80CBC4 / #282B28 | 7.67 | 4.5 | pass |
 | tier sousChef / its 14% wash | #1360B5 / #DEE3ED | 4.83 | #90CAF9 / #2B2B30 | 8.07 | 4.5 | pass |
 | tier headChef / its 14% wash | #6A1B9A / #EAD9E9 | 6.98 | #CE93D8 / #33232B | 6.19 | 4.5 | pass |
-| tier masterChef / its 14% wash | #935300 / #F0E1D4 | 4.72 | #FFCC80 / #3A2B1F | 9.17 | 4.5 | pass |
+| tier masterChef / its 14% wash | #8F5000 / #EFE0D4 | 4.93 | #FFCC80 / #3A2B1F | 9.17 | 4.5 | pass |
+| tier masterChef / its 14% wash on a Card | #8F5000 / #EFDACC | 4.69 | #FFCC80 / #423226 | 8.28 | 4.5 | pass |
 | onImage / scrim over white | #FFFFFF / #737373 | 4.74 | #FFFFFF / #737373 | 4.74 | 4.5 | pass |
 | onImage / imageControl over white (UI) | #FFFFFF / #8C8C8C | 3.36 | #FFFFFF / #8C8C8C | 3.36 | 3.0 | pass |
 | onHeroMuted / hero end + heroFill | #D3CBC7 / #6D4F42 | 4.61 | #D3CBC7 / #6D4F42 | 4.61 | 4.5 | pass |
@@ -339,7 +343,7 @@ and `InkWell` supply them; a custom tappable must too (UX-013 is the open instan
 | Primary | `scheme.primary` | fromSeed | `#904B3B` | `#FFB4A3` |
 | Rating | `palette.rating` | app_palette.dart | `#B7700A` | `#F2A93B` |
 | Difficulty | `palette.difficultyEasy/Medium/Hard` | app_palette.dart | `#2A6E2E` `#8A4F00` `#9F2B26` | `#66BB6A` `#FFA726` `#FFB4A8` |
-| Tiers | `palette.tierHomeCook…tierMasterChef` | app_palette.dart | `#4F6873` `#00695C` `#1360B5` `#6A1B9A` `#935300` | `#B0BEC5` `#80CBC4` `#90CAF9` `#CE93D8` `#FFCC80` |
+| Tiers | `palette.tierHomeCook…tierMasterChef` | app_palette.dart | `#4A626D` `#00695C` `#1360B5` `#6A1B9A` `#8F5000` | `#B0BEC5` `#80CBC4` `#90CAF9` `#CE93D8` `#FFCC80` |
 | Photo scrim / control | `palette.scrim` / `imageControl` | app_palette.dart | black 55% / 45% | same |
 | Hero | `palette.heroGradient`, `onHero`, `onHeroMuted` | app_palette.dart | `#241A17 → #3B2823 → #5C3B2D`, white, white 70% | same |
 | Type ramp | `Theme.of(context).textTheme.*` | app_typography.dart | §3.2 | same |
@@ -376,6 +380,11 @@ food photograph carries the page; when there is none, the page is typeset.
   snackbars. Fixes: B133 / UX-010 / UX-011 / UX-012 (contrast), UX-031 (type ramp), UX-033 (button
   families), UX-049 (tabular figures, weight jitter), UX-050 (reduced motion). Guards:
   `theme_contrast_test.dart`, `theme_extensions_test.dart`, `apps/app/test/theme_fonts_test.dart`.
+  Code review (same day) caught three theme-level regressions before merge, fixed: a colourless
+  `ChipThemeData.labelStyle` and `NavigationBarThemeData.labelTextStyle` *replaced* M3's
+  state-resolved label colours (white chip labels on native); a theme-wide transparent tab divider
+  also removed compact My Recipes' hairline; and light homeCook / masterChef measured 4.4:1 on a
+  `Card` (`surfaceContainerLow`), a surface the first contrast test did not measure.
 
 ## 10. Drift against the Claude Design system (`_ds_bundle.css`, read 2026-09-25)
 
@@ -388,7 +397,7 @@ it. The bundle says it "mirrors packages/design_system" — as of this version i
 | Card fill | M3 `Card` default, `surfaceContainerLow` | `.card` / `.rcard` on `surfaceContainerLowest` (white) | The bundle is wrong about the app |
 | Rating (light) | `#B7700A` | `#F2A93B` in both | B133 / UX-011 |
 | Difficulty (light) | `#2A6E2E` `#8A4F00` `#9F2B26` | `#43A047` `#F57C00` `#BA1A1A` | B133 / UX-010 |
-| Tiers (light) | home `#4F6873`, sous `#1360B5`, master `#935300` | `#546E7A`, `#1565C0`, `#B26500` | B133 (the chip label on its wash) |
+| Tiers (light) | home `#4A626D`, sous `#1360B5`, master `#8F5000` | `#546E7A`, `#1565C0`, `#B26500` | B133 (the chip label on its wash) |
 | labelSmall | 700, +0.2 | 600, +0.02em | Kitchen-proof: the smallest text in the product |
 | Line heights | M3 (display-sm 44, headline-sm 32, title-md 24) | 1.14 / 1.25 / 1.4 (41 / 30 / 22.4px) | The repo keeps M3's so the envelope maths stays put |
 | Mono face | none — `appText.kicker` stands in | `--font-mono` ui-monospace | Two bundled families only (owner decision) |

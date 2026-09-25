@@ -95,7 +95,6 @@ class ChefScorePanel extends StatelessWidget {
                   text: '$gap points to ${next.label}',
                   style: theme.textTheme.labelMedium?.tabular,
                 ),
-
                 TextSpan(text: ' — about ${_closingLine(standing)}.'),
               ],
             ),

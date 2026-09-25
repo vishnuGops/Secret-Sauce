@@ -101,21 +101,24 @@ class AppTheme {
         extendedTextStyle: buttonText,
       ),
       // --- Selection controls -------------------------------------------
+      // No `labelStyle` here, and no `labelTextStyle` on the navigation bar
+      // below: a theme-level style *replaces* M3's state-resolved one, and the
+      // ramp's styles carry no colour, so chip and nav labels lost their
+      // enabled / selected / disabled colours (white text on a light chip on
+      // native). The M3 defaults already read our `labelLarge` / `labelMedium`
+      // from the ramp. `theme_extensions_test.dart` pins the resolved colours.
       chipTheme: ChipThemeData(
-        labelStyle: text.labelLarge,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadii.chip),
         ),
       ),
+      // TabBar colours its labels from `labelColor`, not from the style, so a
+      // colourless style is safe here.
       tabBarTheme: TabBarThemeData(
         labelStyle: text.titleSmall,
         unselectedLabelStyle: text.titleSmall,
-        // The tab row sits directly on the page; a full-width hairline under
-        // it read as a stray rule (it was cleared at the only call site).
-        dividerColor: Colors.transparent,
       ),
       navigationBarTheme: NavigationBarThemeData(
-        labelTextStyle: WidgetStatePropertyAll(text.labelMedium),
         indicatorColor: scheme.secondaryContainer,
       ),
       // --- Overlays -----------------------------------------------------

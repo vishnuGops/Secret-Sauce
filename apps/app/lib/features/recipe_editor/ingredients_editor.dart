@@ -119,11 +119,6 @@ class _IngredientRow extends ConsumerWidget {
   final VoidCallback onChanged;
   final VoidCallback onRemove;
 
-  /// Below this the quantity/unit/name row cannot hold a usable Name field:
-  /// its fixed children (two sized fields, two icon buttons, two gaps) come to
-  /// 248px, and the icon buttons do not shrink with the text scale while the
-  /// space a name needs grows with it. Narrower than this the row splits in
-  /// two so the name gets the full width instead of eight pixels of it.
   /// Fixed widths of the quantity and unit fields.
   static const double _quantityWidth = 64;
   static const double _unitWidth = 72;
@@ -133,6 +128,11 @@ class _IngredientRow extends ConsumerWidget {
   static const double _suggestionsMaxHeight = 240;
   static const double _suggestionsMaxWidth = 320;
 
+  /// Below this the quantity/unit/name row cannot hold a usable Name field:
+  /// its fixed children (two sized fields, two icon buttons, two gaps) come to
+  /// 248px, and the icon buttons do not shrink with the text scale while the
+  /// space a name needs grows with it. Narrower than this the row splits in
+  /// two so the name gets the full width instead of eight pixels of it.
   static double _wideThreshold(BuildContext context) =>
       248 + 120 * (MediaQuery.textScalerOf(context).scale(16) / 16);
 

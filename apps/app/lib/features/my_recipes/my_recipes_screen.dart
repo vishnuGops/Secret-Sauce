@@ -175,12 +175,12 @@ class _WebHeader extends StatelessWidget {
             tabs: MyRecipesScreen._tabs,
             isScrollable: true,
             tabAlignment: TabAlignment.start,
-            // No divider of its own (the theme's TabBarThemeData clears it):
-            // the box's bottom border is the rule, full width; the tab bar's
-            // would stop at the strip's scrollable extent.
             padding: EdgeInsets.only(
               left: (inset - tabLabelPadding).clamp(0.0, double.infinity),
             ),
+            // The box's own bottom border is the rule, full width; the tab
+            // bar's would stop at the strip's scrollable extent.
+            dividerColor: Colors.transparent,
           ),
         ],
       ),

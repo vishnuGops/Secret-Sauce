@@ -8,12 +8,13 @@ import 'package:app/routing/app_router.dart';
 import 'package:app/routing/pop_or_go.dart';
 import 'package:app/widgets/legal_footer.dart';
 
-/// Combined sign-in / sign-up screen with a mode toggle.
 /// The form's measure.
 const double _kFormMaxWidth = 420;
 
 /// Stroke of the submit button's in-flight spinner.
 const double _kSpinnerStroke = 2;
+
+/// Combined sign-in / sign-up screen with a mode toggle.
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key, this.startOnSignUp = false});

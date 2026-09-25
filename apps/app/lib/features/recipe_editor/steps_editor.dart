@@ -106,6 +106,12 @@ class StepsEditor extends StatelessWidget {
   }
 }
 
+/// The step-number bubble's radius (24 wide).
+const double _kBubbleRadius = 12;
+
+/// Where the step field starts: past the bubble and the gap beside it.
+const double _kStepIndent = 2 * _kBubbleRadius + AppSpacing.sm;
+
 /// One numbered instruction, its optional photo, plus the time / temperature /
 /// tip block that the recipe detail screen renders as chips. Those three are
 /// collapsed by default and revealed by the tune button; a step that already
@@ -114,12 +120,6 @@ class StepsEditor extends StatelessWidget {
 ///
 /// The photo is not behind that disclosure: it is the one piece of step content
 /// that has to be visible to be judged, so a step that has one always shows it.
-/// The step-number bubble's radius (24 wide).
-const double _kBubbleRadius = 12;
-
-/// Where the step field starts: past the bubble and the gap beside it.
-const double _kStepIndent = 2 * _kBubbleRadius + AppSpacing.sm;
-
 class _StepRow extends StatelessWidget {
   const _StepRow({
     required this.step,

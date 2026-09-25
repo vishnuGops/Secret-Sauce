@@ -15,14 +15,15 @@ import 'package:app/features/recipe_editor/recipe_editor_providers.dart';
 import 'package:app/features/recipe_editor/steps_editor.dart';
 import 'package:app/routing/app_router.dart';
 
-/// Create or edit a recipe. When [recipeId] is null, creates a new recipe;
-/// otherwise loads and edits the existing one. Saving an edit appends a new
-/// version via the repository.
 /// The form's measure on a wide window.
 const double _kFormMaxWidth = 720;
 
 /// Stroke of the Save button's in-flight spinner.
 const double _kSpinnerStroke = 2;
+
+/// Create or edit a recipe. When [recipeId] is null, creates a new recipe;
+/// otherwise loads and edits the existing one. Saving an edit appends a new
+/// version via the repository.
 
 class RecipeEditorScreen extends ConsumerStatefulWidget {
   const RecipeEditorScreen({super.key, this.recipeId});

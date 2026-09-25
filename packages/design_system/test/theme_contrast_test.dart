@@ -40,13 +40,18 @@ void main() {
     final p = theme.extension<AppPalette>()!;
     final name = brightness.name;
 
-    // The surfaces text actually sits on: the page, a card (lowest), and the
-    // highest tonal container (inputs, chips, the cook-mode timer track).
+    // The surfaces text actually sits on: the page; an M3 `Card`, whose
+    // default fill is `surfaceContainerLow` (the theme sets no card colour);
+    // the lowest container (sheets, the spotlight panel); and the highest
+    // (inputs, chips, the cook-mode timer track). The first three are where
+    // badges and chips sit.
     final surfaces = <String, Color>{
       'surface': s.surface,
+      'surfaceContainerLow (Card)': s.surfaceContainerLow,
       'surfaceContainerLowest': s.surfaceContainerLowest,
       'surfaceContainerHighest': s.surfaceContainerHighest,
     };
+    final badgeSurfaces = surfaces.entries.take(3);
 
     void expectPair(String label, Color fg, Color bg, double min) {
       test('$name · $label ≥ $min:1', () {
@@ -116,14 +121,14 @@ void main() {
 
     group('AppPalette', () {
       // UX-011: stars are UI graphics that carry the value.
-      for (final e in surfaces.entries.take(2)) {
+      for (final e in badgeSurfaces) {
         expectPair('rating on ${e.key}', p.rating, e.value, ui);
       }
 
       // UX-010: the badge's 11px word on its own wash, on a page and a card.
       for (final d in Difficulty.values) {
         final fg = p.difficulty(d);
-        for (final e in surfaces.entries.take(2)) {
+        for (final e in badgeSurfaces) {
           expectPair(
             'difficulty ${d.name} on its wash over ${e.key}',
             fg,
@@ -136,7 +141,7 @@ void main() {
       // The tier chip's 11px label on its wash, on a page and a card.
       for (final t in ChefTier.values) {
         final fg = p.tier(t);
-        for (final e in surfaces.entries.take(2)) {
+        for (final e in badgeSurfaces) {
           expectPair(
             'tier ${t.name} on its wash over ${e.key}',
             fg,
@@ -187,10 +192,15 @@ void main() {
     });
 
     // UX-012: the spotlight card's RANK pill is near-white in both themes, so
-    // its tier text resolves at light brightness. Measured on the pill over
-    // this theme's card surface.
+    // its tier text resolves at light brightness. It sits on the cover scrim
+    // over a photo; the worst backdrop is a black plate under the scrim.
     group('rank pill', () {
-      final pill = over(white, AppAlpha.frosted, s.surfaceContainerLow);
+      const black = Color(0xFF000000);
+      final pill = over(
+        white,
+        AppAlpha.frosted,
+        Color.alphaBlend(p.scrim, black),
+      );
       for (final t in ChefTier.values) {
         expectPair(
           'light tier ${t.name} on the rank pill',

@@ -104,6 +104,76 @@ void main() {
     });
   }
 
+  // A theme-level label style with no colour *replaces* the component's
+  // state-resolved one (review of 36b: chip labels rendered white on a light
+  // chip). Pin the colour each state actually resolves to.
+  group('label colours still resolve per state', () {
+    Color? labelColor(WidgetTester tester, String label) =>
+        tester
+            .widget<RichText>(
+              find
+                  .descendant(
+                    of: find.text(label),
+                    matching: find.byType(RichText),
+                  )
+                  .first,
+            )
+            .text
+            .style
+            ?.color;
+
+    for (final MapEntry(key: name, value: theme) in themes.entries) {
+      testWidgets('$name chips', (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme,
+            home: Scaffold(
+              body: Row(
+                children: [
+                  ChoiceChip(
+                    label: const Text('off'),
+                    selected: false,
+                    onSelected: (_) {},
+                  ),
+                  ChoiceChip(
+                    label: const Text('on'),
+                    selected: true,
+                    onSelected: (_) {},
+                  ),
+                  const ActionChip(label: Text('disabled')),
+                ],
+              ),
+            ),
+          ),
+        );
+        final s = theme.colorScheme;
+        expect(labelColor(tester, 'off'), s.onSurfaceVariant);
+        expect(labelColor(tester, 'on'), s.onSecondaryContainer);
+        expect(labelColor(tester, 'disabled'), isNotNull);
+        expect(labelColor(tester, 'disabled'), isNot(s.onSurfaceVariant));
+      });
+
+      testWidgets('$name navigation bar', (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme,
+            home: Scaffold(
+              bottomNavigationBar: NavigationBar(
+                destinations: const [
+                  NavigationDestination(icon: Icon(Icons.home), label: 'here'),
+                  NavigationDestination(icon: Icon(Icons.star), label: 'there'),
+                ],
+              ),
+            ),
+          ),
+        );
+        final s = theme.colorScheme;
+        expect(labelColor(tester, 'here'), s.onSurface);
+        expect(labelColor(tester, 'there'), s.onSurfaceVariant);
+      });
+    }
+  });
+
   // Here the package is the root, so the manifest lists bare family names;
   // a dependent (the app) sees them as `packages/design_system/<family>`,
   // which is what AppFonts resolves to — `apps/app/test/theme_fonts_test.dart`

@@ -202,11 +202,11 @@ class _ManualFields extends StatelessWidget {
   );
 }
 
-/// The Automatic pane: the honesty header (counted of total, refresh), the
-/// preview label, and the not-counted list with link suggestions.
 /// Widest a suggestion chip's food name gets before it ellipsises.
 const double _kSuggestionLabelMaxWidth = 200;
 
+/// The Automatic pane: the honesty header (counted of total, refresh), the
+/// preview label, and the not-counted list with link suggestions.
 class _AutoPane extends StatelessWidget {
   const _AutoPane({
     required this.groups,
