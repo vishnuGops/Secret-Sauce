@@ -13,12 +13,11 @@ class ChefKicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    // Counts land in here (`14 public recipes`), so the digits stay tabular.
     return Text(
       text.toUpperCase(),
-      style: theme.textTheme.labelSmall?.copyWith(
+      style: context.appText.overline.tabular.copyWith(
         color: theme.colorScheme.onSurfaceVariant,
-        fontWeight: FontWeight.w800,
-        letterSpacing: 0.8,
       ),
     );
   }
@@ -86,7 +85,7 @@ class ChefPillTabs<T> extends StatelessWidget {
     final scheme = theme.colorScheme;
 
     return Container(
-      padding: const EdgeInsets.all(3),
+      padding: AppInsets.segmentTrack,
       decoration: BoxDecoration(
         color: scheme.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(AppRadii.pill),
@@ -107,24 +106,28 @@ class ChefPillTabs<T> extends StatelessWidget {
                       borderRadius: BorderRadius.circular(AppRadii.pill),
                       child: Container(
                         alignment: Alignment.center,
-                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        // The segment's vertical inset only: each segment is
+                        // `Expanded`, so its width is the flex share, and a
+                        // horizontal inset would ellipsise labels sooner.
+                        padding: AppInsets.segment.copyWith(left: 0, right: 0),
                         decoration: BoxDecoration(
                           color:
                               isSelected ? scheme.surfaceContainerLowest : null,
                           borderRadius: BorderRadius.circular(AppRadii.pill),
                         ),
+                        // One weight for both states (UX-049): a heavier
+                        // selected label widened itself and shifted its
+                        // neighbours. The fill and the colour carry selection.
                         child: Text(
                           labelOf(option),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: theme.textTheme.labelSmall?.copyWith(
-                            fontWeight:
-                                isSelected ? FontWeight.w800 : FontWeight.w700,
                             color:
                                 isSelected
                                     ? scheme.onSurface
                                     : scheme.onSurfaceVariant.withValues(
-                                      alpha: enabled ? 1 : 0.5,
+                                      alpha: enabled ? 1 : AppAlpha.muted,
                                     ),
                           ),
                         ),

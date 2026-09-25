@@ -28,6 +28,10 @@ class ChefIdentityHeader extends StatelessWidget {
 
   final Color color;
 
+  /// Avatar radius on a phone and from compact up.
+  static const double _avatarRadiusCompact = 28;
+  static const double _avatarRadius = 36;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -60,7 +64,10 @@ class ChefIdentityHeader extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(compact ? AppSpacing.md : AppSpacing.lg),
       decoration: BoxDecoration(
-        color: Color.alphaBlend(color.withValues(alpha: 0.10), scheme.surface),
+        color: Color.alphaBlend(
+          color.withValues(alpha: AppAlpha.wash),
+          scheme.surface,
+        ),
         border: Border(bottom: BorderSide(color: scheme.outlineVariant)),
       ),
       child: Row(
@@ -69,12 +76,12 @@ class ChefIdentityHeader extends StatelessWidget {
           ChefAvatar(
             name: profile.displayName,
             avatarUrl: profile.avatarUrl,
-            radius: compact ? 28 : 36,
+            radius: compact ? _avatarRadiusCompact : _avatarRadius,
             tier: tier,
             ringColor: color,
             surfaceColor: scheme.surface,
             backgroundColor: Color.alphaBlend(
-              color.withValues(alpha: 0.16),
+              color.withValues(alpha: AppAlpha.tintStrong),
               scheme.surfaceContainerHigh,
             ),
             foregroundColor: color,
@@ -91,10 +98,10 @@ class ChefIdentityHeader extends StatelessWidget {
                   profile.displayName.isEmpty ? 'Chef' : profile.displayName,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: (compact
+                  style:
+                      compact
                           ? theme.textTheme.titleLarge
-                          : theme.textTheme.headlineSmall)
-                      ?.copyWith(fontWeight: FontWeight.w700),
+                          : theme.textTheme.headlineSmall,
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 // Wrap, not Row: the chip plus a three-clause fact line cannot
@@ -108,7 +115,8 @@ class ChefIdentityHeader extends StatelessWidget {
                     if (tier != null) TierChip(tier: tier),
                     Text(
                       facts.join(' · '),
-                      style: theme.textTheme.bodySmall?.copyWith(
+                      // Rank and recipe count: tabular (UX-049).
+                      style: theme.textTheme.bodySmall?.tabular.copyWith(
                         color: scheme.onSurfaceVariant,
                       ),
                     ),

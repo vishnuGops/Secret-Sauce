@@ -167,9 +167,10 @@ class _Strip extends StatelessWidget {
           children: [
             Text(
               index,
-              style: theme.textTheme.titleLarge?.copyWith(
+              // A number, so the stat role (sans, heavy, tabular) — the same
+              // numeral the populated rail's header sets.
+              style: context.appText.statLarge.copyWith(
                 color: accent,
-                fontWeight: FontWeight.w800,
                 height: 1,
               ),
             ),
@@ -179,10 +180,9 @@ class _Strip extends StatelessWidget {
                 title.toUpperCase(),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 1.4,
-                ),
+                // The index line (`01 UNDER 30`) at section level — the
+                // same role CardRail draws a populated shelf's heading in.
+                style: context.appText.kickerLarge,
               ),
             ),
           ],

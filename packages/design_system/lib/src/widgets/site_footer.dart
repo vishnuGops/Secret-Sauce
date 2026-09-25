@@ -80,7 +80,9 @@ class SiteFooter extends StatelessWidget {
           if (link.isCurrent)
             Text(
               link.label,
-              style: muted?.copyWith(fontWeight: FontWeight.w600),
+              style: theme.textTheme.labelMedium?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
             )
           else
             // A plain InkWell rather than a TextButton: three TextButtons carry

@@ -178,7 +178,7 @@ class QuietShelfCard extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: scheme.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppRadii.card),
           border: Border.all(color: scheme.outlineVariant),
         ),
         child: Padding(
@@ -193,9 +193,7 @@ class QuietShelfCard extends StatelessWidget {
                 'Nothing moved in the ${window.span}',
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
+                style: theme.textTheme.titleSmall,
               ),
               const SizedBox(height: AppSpacing.xs),
               Flexible(

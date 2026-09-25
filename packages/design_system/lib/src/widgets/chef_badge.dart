@@ -62,12 +62,17 @@ class ChefBadge extends StatelessWidget {
 
   final VoidCallback? onTap;
 
+  /// Avatar radius, full and [compact].
+  static const double _avatarRadius = 20;
+  static const double _avatarRadiusCompact = 12;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
-    final radius = compact ? 12.0 : 20.0;
-    final nameColor = onSurfaceImage ? Colors.white : scheme.onSurface;
+    final radius = compact ? _avatarRadiusCompact : _avatarRadius;
+    final nameColor =
+        onSurfaceImage ? context.palette.onImage : scheme.onSurface;
 
     final content = Row(
       mainAxisSize: MainAxisSize.min,
@@ -86,14 +91,14 @@ class ChefBadge extends StatelessWidget {
                 style: (compact
                         ? theme.textTheme.labelMedium
                         : theme.textTheme.titleMedium)
-                    ?.copyWith(fontWeight: FontWeight.w700, color: nameColor),
+                    ?.copyWith(color: nameColor),
               ),
               // The tier sits under the name, per the product requirement.
               // `onSurfaceImage` has to reach the chip too (B055) — the badge
               // was passing it to the name only, so on a cover photo the name
               // went white and the tier stayed in its light-surface shade.
               if (tier case final tier?) ...[
-                const SizedBox(height: 2),
+                const SizedBox(height: AppSpacing.xxs),
                 TierChip(tier: tier, dense: compact, onImage: onSurfaceImage),
               ],
             ],

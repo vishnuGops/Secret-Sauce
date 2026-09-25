@@ -105,7 +105,7 @@ class _Preamble extends ConsumerWidget {
           children: [
             TextButton.icon(
               onPressed: () => context.push(Routes.legal(LegalDoc.rights.slug)),
-              icon: const Icon(Icons.gavel_outlined, size: 18),
+              icon: const Icon(Icons.gavel_outlined, size: AppIconSize.button),
               label: const Text('How we credit these'),
             ),
           ],

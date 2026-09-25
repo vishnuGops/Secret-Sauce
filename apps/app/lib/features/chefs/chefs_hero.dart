@@ -9,9 +9,9 @@ import 'package:app/features/chefs/chefs_providers.dart';
 /// are ranked, and how they are spread across the five tiers.
 ///
 /// **Always dark, in both themes.** The gradient is a brand surface rather than
-/// a scheme colour, so its foreground colours are literals and the tier accents
-/// are resolved at [Brightness.dark] — the light-mode tier shades are unreadable
-/// on it.
+/// a scheme colour, so its colours are the palette's `hero*` fields (identical
+/// in light and dark) and the tier accents are resolved at [Brightness.dark] —
+/// the light-mode tier shades are unreadable on it.
 ///
 /// Web/expanded only. The compact board keeps its plain app bar; there is no
 /// room on a phone for five tiles and a filter without turning the page into a
@@ -19,21 +19,13 @@ import 'package:app/features/chefs/chefs_providers.dart';
 class ChefsHero extends ConsumerWidget {
   const ChefsHero({super.key});
 
-  /// The draft's `linear-gradient(104deg, …)`.
-  static const _gradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [Color(0xFF241A17), Color(0xFF3B2823), Color(0xFF5C3B2D)],
-    stops: [0, 0.52, 1],
-  );
-
-  static const _onHero = Colors.white;
-  static const _onHeroDim = Color(0xB3FFFFFF); // white @ 70%
-  static const _onHeroFaint = Color(0x94FFFFFF); // white @ 58%
-
   /// Width the three-part row needs at 1.0× text scale: an identity block wide
   /// enough for the strapline, five tier tiles, and the filter.
   static const double _rowWidth = 900;
+
+  /// The hero's drop-shadow geometry (its colour is `palette.heroShadow`).
+  static const double _shadowBlur = 34;
+  static const Offset _shadowOffset = Offset(0, 14);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -42,6 +34,7 @@ class ChefsHero extends ConsumerWidget {
 
     final identity = _Identity(total: total);
     final tiles = _TierTiles(counts: counts);
+    final palette = context.palette;
     final filter = _WindowFilter(
       selected: ref.watch(boardViewProvider).window,
       onSelected: ref.read(boardViewProvider.notifier).selectWindow,
@@ -49,13 +42,13 @@ class ChefsHero extends ConsumerWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        gradient: _gradient,
-        borderRadius: BorderRadius.circular(26),
-        boxShadow: const [
+        gradient: palette.heroGradient,
+        borderRadius: BorderRadius.circular(AppRadii.hero),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x42231917),
-            blurRadius: 34,
-            offset: Offset(0, 14),
+            color: palette.heroShadow,
+            blurRadius: _shadowBlur,
+            offset: _shadowOffset,
           ),
         ],
       ),
@@ -108,9 +101,13 @@ class _Identity extends StatelessWidget {
 
   final int? total;
 
+  /// Measure of the one-sentence ranking rule under the title.
+  static const double _ruleMaxWidth = 320;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final palette = context.palette;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,13 +121,10 @@ class _Identity extends StatelessWidget {
           'LIVE · UPDATES ON EVERY LIKE, SAVE AND VIEW',
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          // TODO(fonts): a mono face in the draft; approximated with letter
-          // spacing until the app-wide type decision lands.
-          style: theme.textTheme.labelSmall?.copyWith(
-            color: ChefsHero._onHeroFaint,
-            letterSpacing: 1.6,
-            fontWeight: FontWeight.w600,
-          ),
+          // The kicker role stands in for the draft's mono line. onHeroMuted,
+          // not the old 58% "faint" step: that measured 3.7:1 on the
+          // gradient's light end (B133).
+          style: context.appText.kicker.copyWith(color: palette.onHeroMuted),
         ),
         const SizedBox(height: AppSpacing.sm),
         Wrap(
@@ -142,10 +136,8 @@ class _Identity extends StatelessWidget {
               'Chefs',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              // TODO(fonts): the display face in the draft.
               style: theme.textTheme.displaySmall?.copyWith(
-                color: ChefsHero._onHero,
-                fontWeight: FontWeight.w600,
+                color: palette.onHero,
                 height: 1,
               ),
             ),
@@ -154,12 +146,12 @@ class _Identity extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.sm),
         ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 320),
+          constraints: const BoxConstraints(maxWidth: _ruleMaxWidth),
           child: Text(
             'Ranked on what public recipes earn — likes, saves and views, '
             'nothing else.',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: ChefsHero._onHeroDim,
+              color: palette.onHeroMuted,
               height: 1.4,
             ),
           ),
@@ -177,17 +169,18 @@ class _RankedPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final palette = context.palette;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: AppInsets.pill,
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.10),
+        color: palette.heroFill,
         borderRadius: BorderRadius.circular(AppRadii.pill),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.groups, size: 14, color: ChefsHero._onHeroDim),
+          Icon(Icons.groups, size: AppIconSize.xs, color: palette.onHeroMuted),
           const SizedBox(width: AppSpacing.xs),
           // Flexible: the pill is a `Wrap` child, so it is handed the identity
           // column's width rather than its own intrinsic one.
@@ -196,9 +189,8 @@ class _RankedPill extends StatelessWidget {
               '${groupedCount(total)} ranked',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: ChefsHero._onHeroDim,
-                fontWeight: FontWeight.w700,
+              style: theme.textTheme.labelSmall?.tabular.copyWith(
+                color: palette.onHeroMuted,
               ),
             ),
           ),
@@ -219,6 +211,9 @@ class _TierTiles extends StatelessWidget {
 
   final Map<ChefTier, int>? counts;
 
+  /// Narrowest tile that holds `MASTER CHEF` at 1.0×; below it, three across.
+  static const double _minTileWidth = 96;
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -227,7 +222,10 @@ class _TierTiles extends StatelessWidget {
         // Aim for five across, but never narrower than a tile that can hold
         // "MASTER CHEF" at 1.0x.
         final ideal = (constraints.maxWidth - gap * 4) / 5;
-        final width = ideal < 96 ? (constraints.maxWidth - gap * 2) / 3 : ideal;
+        final width =
+            ideal < _minTileWidth
+                ? (constraints.maxWidth - gap * 2) / 3
+                : ideal;
 
         return Wrap(
           spacing: gap,
@@ -251,33 +249,46 @@ class _TierTile extends StatelessWidget {
   final ChefTier tier;
   final int? count;
 
+  // Tile geometry from the draft: its inset and corner, the accent bar, and
+  // the gap between the bar, the count and the label.
+  static const EdgeInsets _padding = EdgeInsets.symmetric(
+    horizontal: AppSpacing.smPlus,
+    vertical: 10,
+  );
+  static const double _radius = 14;
+  static const Size _accentBar = Size(22, 3);
+  static const double _gap = 5;
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final palette = context.palette;
     // Always the dark-brightness accent: the hero is dark in both themes.
     final color = TierChip.colorFor(tier, Brightness.dark);
     final top = tier == ChefTier.masterChef;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: _padding,
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: top ? 0.10 : 0.07),
-        borderRadius: BorderRadius.circular(14),
-        border: top ? Border.all(color: color.withValues(alpha: 0.45)) : null,
+        color: top ? palette.heroFill : palette.heroFillSubtle,
+        borderRadius: BorderRadius.circular(_radius),
+        border:
+            top
+                ? Border.all(color: color.withValues(alpha: AppAlpha.emphasis))
+                : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 22,
-            height: 3,
+            width: _accentBar.width,
+            height: _accentBar.height,
             decoration: BoxDecoration(
               color: color,
               borderRadius: BorderRadius.circular(AppRadii.pill),
             ),
           ),
-          const SizedBox(height: 5),
+          const SizedBox(height: _gap),
           FittedBox(
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
@@ -286,21 +297,21 @@ class _TierTile extends StatelessWidget {
               // the hero does not jump when they land.
               count == null ? '—' : groupedCount(count!),
               maxLines: 1,
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: ChefsHero._onHero,
-                fontWeight: FontWeight.w800,
+              style: context.appText.stat.copyWith(
+                color: palette.onHero,
                 height: 1,
               ),
             ),
           ),
-          const SizedBox(height: 5),
+          const SizedBox(height: _gap),
           Text(
             tier.label.toUpperCase(),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.labelSmall?.copyWith(
-              color: ChefsHero._onHeroFaint,
-              letterSpacing: 0.8,
+            // onHeroMuted retires the 58% "faint" step (B133: 3.7:1 on the
+            // Master Chef tile).
+            style: context.appText.overline.copyWith(
+              color: palette.onHeroMuted,
             ),
           ),
         ],
@@ -325,11 +336,12 @@ class _WindowFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final palette = context.palette;
 
     return Container(
-      padding: const EdgeInsets.all(3),
+      padding: AppInsets.segmentTrack,
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.10),
+        color: palette.heroFill,
         borderRadius: BorderRadius.circular(AppRadii.pill),
       ),
       child: Row(
@@ -343,25 +355,21 @@ class _WindowFilter extends StatelessWidget {
                 onTap: () => onSelected(window),
                 borderRadius: BorderRadius.circular(AppRadii.pill),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 5,
-                  ),
+                  padding: AppInsets.segment,
                   decoration: BoxDecoration(
-                    color: window == selected ? Colors.white : null,
+                    color: window == selected ? palette.onHero : null,
                     borderRadius: BorderRadius.circular(AppRadii.pill),
                   ),
+                  // One weight for both states (UX-049): a heavier selected
+                  // label widened itself and shifted its neighbours. The fill
+                  // and the ink carry the selection.
                   child: Text(
                     window.label,
                     style: theme.textTheme.labelSmall?.copyWith(
                       color:
                           window == selected
-                              ? const Color(0xFF2C1F1B)
-                              : ChefsHero._onHeroDim,
-                      fontWeight:
-                          window == selected
-                              ? FontWeight.w800
-                              : FontWeight.w700,
+                              ? palette.heroSelectedInk
+                              : palette.onHeroMuted,
                     ),
                   ),
                 ),

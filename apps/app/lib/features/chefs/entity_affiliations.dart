@@ -40,7 +40,7 @@ class EntityAffiliations extends StatelessWidget {
           children: [
             for (final entity in entities)
               ActionChip(
-                avatar: Icon(_iconFor(entity.kind), size: 18),
+                avatar: Icon(_iconFor(entity.kind), size: AppIconSize.button),
                 label: Text(entity.name),
                 onPressed: () => context.push(Routes.entity(entity.id)),
               ),

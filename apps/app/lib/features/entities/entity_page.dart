@@ -193,6 +193,9 @@ class _MemberRow extends StatelessWidget {
 
   final EntityMember member;
 
+  /// A roster row's avatar — sized to a `ListTile` leading slot.
+  static const double _avatarRadius = 20;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -210,7 +213,7 @@ class _MemberRow extends StatelessWidget {
         // The tier dot is deliberately absent. An entity page is not a
         // ranking, and a member who happens to be a Head Chef elsewhere should
         // not read as this publisher's standing.
-        radius: 20,
+        radius: _avatarRadius,
       ),
       title: Text(name, maxLines: 1, overflow: TextOverflow.ellipsis),
       subtitle: Text(

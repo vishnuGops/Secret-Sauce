@@ -11,6 +11,9 @@ import 'package:app/features/recipe_detail/rating_actions.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/routing/app_router.dart';
 
+/// The finish screen's reading measure (canvas frame E).
+const double _kFinishMaxWidth = 560;
+
 /// The screen after the last step (canvas frame E).
 ///
 /// It exists to ask for the rating, and the reason it is worth a screen is
@@ -77,11 +80,15 @@ class CookFinishView extends ConsumerWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(AppSpacing.lg),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 560),
+            constraints: const BoxConstraints(maxWidth: _kFinishMaxWidth),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Icon(Icons.check_circle, size: 56, color: scheme.primary),
+                Icon(
+                  Icons.check_circle,
+                  size: AppIconSize.xxl,
+                  color: scheme.primary,
+                ),
                 const SizedBox(height: AppSpacing.md),
                 Text(
                   'That’s ${recipe.title} done',
@@ -169,7 +176,7 @@ class _FinishRating extends ConsumerWidget {
         children: [
           StarRatingInput(
             value: myRating,
-            size: 40,
+            size: AppIconSize.xl,
             onChanged: (_) {},
             onChangeEnd: (v) => saveRating(context, ref, recipe.id, v),
           ),

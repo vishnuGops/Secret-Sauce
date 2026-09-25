@@ -111,6 +111,13 @@ class _HeaderBand extends ConsumerWidget {
   final bool isOwner;
   final VoidCallback onFork;
 
+  /// The reading measure for the description and the credit blocks under it.
+  static const double _kProseMeasure = 620;
+
+  /// The header band's cover photo (canvas frame A).
+  static const double _kCoverWidth = 400;
+  static const double _kCoverHeight = 280;
+
   Future<void> _showVersions(BuildContext context, WidgetRef ref) async {
     final versions = await ref.read(recipeVersionsProvider(recipe.id).future);
     if (context.mounted) {
@@ -176,18 +183,18 @@ class _HeaderBand extends ConsumerWidget {
                             onTap: () => _showVersions(context, ref),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 4,
-                                vertical: 2,
+                                horizontal: AppSpacing.xs,
+                                vertical: AppSpacing.xxs,
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Icon(
                                     Icons.history,
-                                    size: 16,
+                                    size: AppIconSize.sm,
                                     color: scheme.onSurfaceVariant,
                                   ),
-                                  const SizedBox(width: 4),
+                                  const SizedBox(width: AppSpacing.xs),
                                   Text(
                                     versionLabel,
                                     style: textTheme.labelMedium?.copyWith(
@@ -205,7 +212,9 @@ class _HeaderBand extends ConsumerWidget {
                       if (recipe.description.isNotEmpty) ...[
                         const SizedBox(height: AppSpacing.md),
                         ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 620),
+                          constraints: const BoxConstraints(
+                            maxWidth: _kProseMeasure,
+                          ),
                           child: Text(
                             recipe.description,
                             style: textTheme.bodyLarge,
@@ -217,7 +226,9 @@ class _HeaderBand extends ConsumerWidget {
                       if (recipe.isImported) ...[
                         const SizedBox(height: AppSpacing.md),
                         ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 620),
+                          constraints: const BoxConstraints(
+                            maxWidth: _kProseMeasure,
+                          ),
                           child: SourceCredit(recipe: recipe),
                         ),
                       ],
@@ -225,7 +236,9 @@ class _HeaderBand extends ConsumerWidget {
                           recipe.attribution!.isNotEmpty) ...[
                         const SizedBox(height: AppSpacing.md),
                         ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 620),
+                          constraints: const BoxConstraints(
+                            maxWidth: _kProseMeasure,
+                          ),
                           child: AttributionBlock(text: recipe.attribution!),
                         ),
                       ],
@@ -246,7 +259,7 @@ class _HeaderBand extends ConsumerWidget {
                           StarRating(
                             rating: recipe.ratingAvg,
                             count: recipe.ratingCount,
-                            size: 20,
+                            size: AppIconSize.md,
                           ),
                         ],
                       ),
@@ -297,8 +310,8 @@ class _HeaderBand extends ConsumerWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(AppRadii.card),
                     child: SizedBox(
-                      width: 400,
-                      height: 280,
+                      width: _kCoverWidth,
+                      height: _kCoverHeight,
                       child: CachedNetworkImage(
                         imageUrl: recipe.displayCoverImageUrl!,
                         fit: BoxFit.cover,
@@ -488,7 +501,7 @@ class _FactCell extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.md,
-        vertical: 12,
+        vertical: AppSpacing.smPlus,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -496,18 +509,15 @@ class _FactCell extends StatelessWidget {
         children: [
           Text(
             label.toUpperCase(),
-            style: textTheme.labelSmall?.copyWith(
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.8,
+            style: context.appText.overline.copyWith(
               color: scheme.onSurfaceVariant,
             ),
           ),
-          const SizedBox(height: 2),
+          const SizedBox(height: AppSpacing.xxs),
           child ??
               Text(
                 value!,
                 style: textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w700,
                   color: dim ? scheme.onSurfaceVariant : null,
                 ),
               ),

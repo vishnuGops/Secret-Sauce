@@ -23,7 +23,7 @@ class ChefAvatar extends StatelessWidget {
     super.key,
     required this.name,
     this.avatarUrl,
-    this.radius = 20,
+    this.radius = _defaultRadius,
     this.tier,
     this.ringColor,
     this.surfaceColor,
@@ -53,8 +53,14 @@ class ChefAvatar extends StatelessWidget {
   final Color? backgroundColor;
   final Color? foregroundColor;
 
+  /// A 40px circle when the caller names no size.
+  static const double _defaultRadius = 20;
+
   static const double _ringGap = 2;
   static const double _ringWidth = 1.5;
+
+  /// The tier dot's cut-out border.
+  static const double _dotBorderWidth = 2;
 
   /// One letter from a single-word name, two from a longer one.
   static String initialsFor(String name) {
@@ -104,7 +110,7 @@ class ChefAvatar extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: TierChip.colorFor(tier!, theme.brightness),
-                border: Border.all(color: surface, width: 2),
+                border: Border.all(color: surface, width: _dotBorderWidth),
               ),
             ),
           ),
@@ -123,6 +129,11 @@ class ChefAvatar extends StatelessWidget {
         backgroundColor: background,
         child: Text(
           initialsFor(name),
+          // Not a ramp role on purpose: the initials scale with the circle
+          // (~14px on the 34px nav avatar, up to 35px on a spotlight
+          // monogram), so the size is computed from [radius] rather than
+          // picked from the ramp. w700 matches the ramp's titles, which is
+          // what the letters stand in for.
           style: TextStyle(
             fontSize: radius * 0.8,
             fontWeight: FontWeight.w700,

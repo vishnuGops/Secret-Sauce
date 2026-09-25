@@ -90,6 +90,12 @@ abstract final class AppTypography {
       FontWeight.w700,
       ls: 1.4,
     ).copyWith(fontFeatures: kTabularFigures),
+    kickerLarge: _ui(
+      14,
+      20,
+      FontWeight.w700,
+      ls: 1.4,
+    ).copyWith(fontFeatures: kTabularFigures),
     overline: _ui(11, 16, FontWeight.w700, ls: 0.8),
     stat: _ui(16, 24, FontWeight.w800).copyWith(fontFeatures: kTabularFigures),
     statLarge: _ui(
@@ -103,6 +109,13 @@ abstract final class AppTypography {
       FontWeight.w800,
     ).copyWith(fontFeatures: kTabularFigures),
     clock: _ui(24, 32, FontWeight.w600).copyWith(fontFeatures: kTabularFigures),
+    clockSmall: _ui(
+      22,
+      28,
+      FontWeight.w600,
+    ).copyWith(fontFeatures: kTabularFigures),
+    step: _ui(24, 32, FontWeight.w500),
+    stepLarge: _ui(36, 46, FontWeight.w500),
   );
 }
 
@@ -115,17 +128,26 @@ abstract final class AppTypography {
 class AppTextStyles extends ThemeExtension<AppTextStyles> {
   const AppTextStyles({
     required this.kicker,
+    required this.kickerLarge,
     required this.overline,
     required this.stat,
     required this.statLarge,
     required this.quantity,
     required this.clock,
+    required this.clockSmall,
+    required this.step,
+    required this.stepLarge,
   });
 
   /// **The index line** — DESIGN.md §1's memorable detail. A small, widely
   /// tracked, tabular kicker set above a heading: `01 UNDER 30`, section
   /// labels, the chefs hero strapline. Callers upper-case the string.
   final TextStyle kicker;
+
+  /// The index line at section level — a shelf's `01 UNDER 30`, Discover's
+  /// `EVERYTHING ELSE`: the same tracked, tabular caps at 14px, where the
+  /// line *is* the heading rather than a label above one.
+  final TextStyle kickerLarge;
 
   /// A small upper-case label with modest tracking — tier names under a
   /// count, a caption over a stat.
@@ -145,21 +167,40 @@ class AppTextStyles extends ThemeExtension<AppTextStyles> {
   /// A running countdown (cook mode).
   final TextStyle clock;
 
+  /// The same where the timer ring is smaller (cook mode's wide layout).
+  final TextStyle clockSmall;
+
+  /// A cook-mode step's instruction, read at arm's length. Sans on purpose:
+  /// at headline and display size the M3 roles are the serif, and a step is
+  /// something a cook acts on, not a heading (DESIGN.md §1, principle 1).
+  final TextStyle step;
+
+  /// The same on the wide cook-mode layout.
+  final TextStyle stepLarge;
+
   @override
   AppTextStyles copyWith({
     TextStyle? kicker,
+    TextStyle? kickerLarge,
     TextStyle? overline,
     TextStyle? stat,
     TextStyle? statLarge,
     TextStyle? quantity,
     TextStyle? clock,
+    TextStyle? clockSmall,
+    TextStyle? step,
+    TextStyle? stepLarge,
   }) => AppTextStyles(
     kicker: kicker ?? this.kicker,
+    kickerLarge: kickerLarge ?? this.kickerLarge,
     overline: overline ?? this.overline,
     stat: stat ?? this.stat,
     statLarge: statLarge ?? this.statLarge,
     quantity: quantity ?? this.quantity,
     clock: clock ?? this.clock,
+    clockSmall: clockSmall ?? this.clockSmall,
+    step: step ?? this.step,
+    stepLarge: stepLarge ?? this.stepLarge,
   );
 
   @override
@@ -168,11 +209,15 @@ class AppTextStyles extends ThemeExtension<AppTextStyles> {
     TextStyle l(TextStyle a, TextStyle b) => TextStyle.lerp(a, b, t)!;
     return AppTextStyles(
       kicker: l(kicker, other.kicker),
+      kickerLarge: l(kickerLarge, other.kickerLarge),
       overline: l(overline, other.overline),
       stat: l(stat, other.stat),
       statLarge: l(statLarge, other.statLarge),
       quantity: l(quantity, other.quantity),
       clock: l(clock, other.clock),
+      clockSmall: l(clockSmall, other.clockSmall),
+      step: l(step, other.step),
+      stepLarge: l(stepLarge, other.stepLarge),
     );
   }
 }

@@ -101,14 +101,15 @@ class TopNavBar extends ConsumerWidget implements PreferredSizeWidget {
 /// Bar height at 1.0x text scale.
 const double kTopNavHeight = 64;
 
-const double _kIconSize = 20;
+const double _kIconSize = AppIconSize.md;
 const double _kItemPadH = 14; // with a label
 const double _kItemPadIconH = 10; // icon only
-const double _kItemPadV = 8;
+const double _kItemPadV = AppSpacing.sm;
 const double _kIconLabelGap = AppSpacing.sm;
-const double _kTrackPad = 4;
-const double _kItemGapLabelled = 4;
-const double _kItemGapIcons = 2;
+const double _kTrackPad = AppSpacing.xs;
+const double _kItemGapLabelled = AppSpacing.xs;
+const double _kItemGapIcons = AppSpacing.xxs;
+const double _kActiveItemElevation = 1; // the design's 0 1px 2px shadow
 const double _kAvatarRadiusExpanded = 17; // 34px, per the design
 const double _kAvatarRadiusMedium = 16;
 
@@ -179,9 +180,7 @@ class _Brand extends StatelessWidget {
                 'Secret Sauce',
                 maxLines: 1,
                 softWrap: false,
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: theme.textTheme.titleLarge,
               ),
             ],
           ],
@@ -211,7 +210,10 @@ class _NavPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final style = theme.textTheme.titleSmall ?? const TextStyle(fontSize: 14);
+    // The theme's titleSmall carries the UI family, so the painter below
+    // measures the face the items actually render in.
+    final style =
+        theme.textTheme.titleSmall ?? AppTypography.textTheme.titleSmall!;
     final scaler = MediaQuery.textScalerOf(context);
 
     return LayoutBuilder(
@@ -338,7 +340,7 @@ class _NavItem extends StatelessWidget {
       // The active chip lifts back to the bar's own colour out of the darker
       // track, with the design's 0 1px 2px shadow.
       color: selected ? scheme.surfaceContainerLowest : Colors.transparent,
-      elevation: selected ? 1 : 0,
+      elevation: selected ? _kActiveItemElevation : 0,
       shape: const StadiumBorder(),
       child: InkWell(
         onTap: () => context.go(destination.route),
@@ -363,6 +365,9 @@ class _NavItem extends StatelessWidget {
                   maxLines: 1,
                   softWrap: false,
                   overflow: TextOverflow.clip,
+                  // Two weights on purpose: `_measure` reserves the w800 width
+                  // for every label, so the heavier selected label cannot push
+                  // its neighbours or overflow the pill.
                   style: theme.textTheme.titleSmall?.copyWith(
                     color: color,
                     fontWeight: selected ? FontWeight.w800 : FontWeight.w500,
@@ -437,9 +442,7 @@ class _AccountMenu extends ConsumerWidget {
                       name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                      style: theme.textTheme.titleSmall,
                     ),
                     const SizedBox(height: AppSpacing.xs),
                     TierChip(tier: profile.chefTier),

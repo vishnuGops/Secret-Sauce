@@ -69,10 +69,12 @@ void main() {
         final r = theme.extension<AppTextStyles>()!;
         for (final style in [
           r.kicker,
+          r.kickerLarge,
           r.stat,
           r.statLarge,
           r.quantity,
           r.clock,
+          r.clockSmall,
         ]) {
           expect(
             style.fontFeatures,

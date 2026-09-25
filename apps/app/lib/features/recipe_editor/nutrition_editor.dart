@@ -204,6 +204,9 @@ class _ManualFields extends StatelessWidget {
 
 /// The Automatic pane: the honesty header (counted of total, refresh), the
 /// preview label, and the not-counted list with link suggestions.
+/// Widest a suggestion chip's food name gets before it ellipsises.
+const double _kSuggestionLabelMaxWidth = 200;
+
 class _AutoPane extends StatelessWidget {
   const _AutoPane({
     required this.groups,
@@ -299,10 +302,11 @@ class _AutoPane extends StatelessWidget {
             Text(
               'Estimated from ${data.counted} of '
               '${countOf(data.total, 'ingredients')}',
-              style: textTheme.titleSmall,
+              // Tabular: the counts move as rows are linked (UX-049).
+              style: textTheme.titleSmall?.tabular,
             ),
             IconButton(
-              icon: const Icon(Icons.refresh, size: 18),
+              icon: const Icon(Icons.refresh, size: AppIconSize.button),
               tooltip: 'Recalculate estimate',
               onPressed: loading ? null : onRefresh,
             ),
@@ -405,11 +409,14 @@ class _AutoPane extends StatelessWidget {
                         children: [
                           for (final hit in suggestions[name]!)
                             ActionChip(
-                              avatar: const Icon(Icons.link, size: 16),
+                              avatar: const Icon(
+                                Icons.link,
+                                size: AppIconSize.sm,
+                              ),
                               visualDensity: VisualDensity.compact,
                               label: ConstrainedBox(
                                 constraints: const BoxConstraints(
-                                  maxWidth: 200,
+                                  maxWidth: _kSuggestionLabelMaxWidth,
                                 ),
                                 child: Text(
                                   hit.displayName,

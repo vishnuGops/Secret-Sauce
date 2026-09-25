@@ -41,6 +41,18 @@ const _kLookupDebounce = Duration(milliseconds: 300);
 /// "scroll".
 const _kMaxMatches = 8;
 
+/// The dialog's content width.
+const double _kDialogWidth = 420;
+
+/// The candidate list's height cap (see [_Matches]).
+const double _kMatchesMaxHeight = 220;
+
+/// A candidate's avatar.
+const double _kMatchAvatarRadius = 16;
+
+/// Stroke of the in-flight spinners (lookup, share).
+const double _kSpinnerStroke = 2;
+
 class _ShareDialogState extends ConsumerState<ShareDialog> {
   final _name = TextEditingController();
   Timer? _debounce;
@@ -150,7 +162,7 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
     return AlertDialog(
       title: const Text('Share recipe'),
       content: SizedBox(
-        width: 420,
+        width: _kDialogWidth,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -166,9 +178,11 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
                         ? const Padding(
                           padding: EdgeInsets.all(AppSpacing.sm),
                           child: SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: CircularProgressIndicator(strokeWidth: 2),
+                            width: AppIconSize.sm,
+                            height: AppIconSize.sm,
+                            child: CircularProgressIndicator(
+                              strokeWidth: _kSpinnerStroke,
+                            ),
                           ),
                         )
                         : null,
@@ -230,9 +244,11 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
           child:
               _busy
                   ? const SizedBox(
-                    height: 18,
-                    width: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                    height: AppIconSize.button,
+                    width: AppIconSize.button,
+                    child: CircularProgressIndicator(
+                      strokeWidth: _kSpinnerStroke,
+                    ),
                   )
                   : const Text('Share'),
         ),
@@ -268,7 +284,7 @@ class _Matches extends StatelessWidget {
     }
 
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxHeight: 220),
+      constraints: const BoxConstraints(maxHeight: _kMatchesMaxHeight),
       // `RadioGroup` owns the selection now; `RadioListTile.groupValue` /
       // `onChanged` are deprecated in the pinned Flutter (3.44.8).
       child: RadioGroup<String>(
@@ -299,7 +315,7 @@ class _Matches extends StatelessWidget {
               secondary: ChefAvatar(
                 name: person.displayName,
                 avatarUrl: person.avatarUrl,
-                radius: 16,
+                radius: _kMatchAvatarRadius,
                 tier: person.chefTier,
               ),
             );

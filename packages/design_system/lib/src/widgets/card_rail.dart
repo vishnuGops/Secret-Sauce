@@ -4,6 +4,21 @@ import 'package:flutter/material.dart';
 
 import 'package:design_system/src/theme/app_theme.dart';
 
+// Header geometry that is not on the spacing scale (UX-054).
+
+/// The badged header's icon tile, and its corner.
+const double _kBadgeTile = 30;
+const double _kBadgeTileRadius = 10;
+
+/// The numbered header's numeral box at 1.0× (it grows with text to 2.0×).
+const double _kNumeralBox = 30;
+
+/// Header widths (× text scale) below which the numbered header drops, in
+/// order: the controls, the `1–3 / 10` label, the kicker.
+const double _kControlsMinWidth = 460;
+const double _kLabelMinWidth = 620;
+const double _kKickerMinWidth = 700;
+
 /// How a rail introduces itself.
 enum CardRailVariant {
   /// A glyph in a rounded primary-container tile, then title over subtitle.
@@ -28,7 +43,8 @@ enum CardRailVariant {
 /// The draft animates a `transform: translateX` on a flex row. This scrolls a
 /// real [ListView] instead: on the web a rail also has to answer a trackpad, a
 /// drag and a scrollbar, and a transform answers none of them. The arrows are
-/// the same gesture expressed as [ScrollController.animateTo].
+/// the same gesture expressed as [AppMotion.animateScroll] — which jumps
+/// instead under reduced motion (UX-050).
 ///
 /// A variant rather than a second widget, on the [ChefStandingCard] precedent:
 /// the scroll controller, the pitch arithmetic and the `1–3 / 10` window are
@@ -143,10 +159,12 @@ class _CardRailState extends State<CardRail> {
     if (!_controller.hasClients) return;
     final target = (_first + delta).clamp(0, _maxFirst);
     unawaited(
-      _controller.animateTo(
+      AppMotion.animateScroll(
+        context,
+        _controller,
         target * _pitch,
-        duration: const Duration(milliseconds: 320),
-        curve: Curves.easeOutCubic,
+        duration: AppMotion.slow,
+        curve: AppMotion.emphasized,
       ),
     );
   }
@@ -166,9 +184,9 @@ class _CardRailState extends State<CardRail> {
       if (showLabel) ...[
         Text(
           '${_first + 1}–$last / ${widget.itemCount}',
-          style: theme.textTheme.labelSmall?.copyWith(
+          // Tabular: the window changes as the rail scrolls (UX-049).
+          style: context.appText.overline.tabular.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
-            letterSpacing: 0.6,
           ),
         ),
         const SizedBox(width: AppSpacing.xs),
@@ -234,13 +252,17 @@ class _CardRailState extends State<CardRail> {
     return Row(
       children: [
         Container(
-          width: 30,
-          height: 30,
+          width: _kBadgeTile,
+          height: _kBadgeTile,
           decoration: BoxDecoration(
             color: scheme.primaryContainer,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(_kBadgeTileRadius),
           ),
-          child: Icon(widget.icon, size: 20, color: scheme.onPrimaryContainer),
+          child: Icon(
+            widget.icon,
+            size: AppIconSize.md,
+            color: scheme.onPrimaryContainer,
+          ),
         ),
         const SizedBox(width: AppSpacing.sm),
         Expanded(
@@ -252,9 +274,7 @@ class _CardRailState extends State<CardRail> {
                 widget.title,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
+                style: theme.textTheme.titleMedium,
               ),
               Text(
                 widget.subtitle,
@@ -300,10 +320,11 @@ class _CardRailState extends State<CardRail> {
         // 2.0×, the envelope the card is contracted to (Gotcha 13); past that
         // the numeral scales down inside the box rather than pushing the title
         // along and taking the row with it.
-        final numeralWidth = 30 * scale.clamp(1.0, 2.0);
-        final showControls = _pages && width >= 460 * scale;
-        final showLabel = width >= 620 * scale;
-        final showKicker = widget.kicker != null && width >= 700 * scale;
+        final numeralWidth = _kNumeralBox * scale.clamp(1.0, 2.0);
+        final showControls = _pages && width >= _kControlsMinWidth * scale;
+        final showLabel = width >= _kLabelMinWidth * scale;
+        final showKicker =
+            widget.kicker != null && width >= _kKickerMinWidth * scale;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -319,12 +340,11 @@ class _CardRailState extends State<CardRail> {
                     child: Text(
                       widget.index!,
                       maxLines: 1,
-                      // TODO(fonts): the drafts set numerals in a mono face;
-                      // approximated with weight and tracking until the
-                      // app-wide type decision lands.
-                      style: theme.textTheme.titleLarge?.copyWith(
+                      // A number, so the stat role (sans, heavy, tabular) rather
+                      // than the serif titleLarge. The tight negative tracking
+                      // is the set numeral's own display tweak.
+                      style: context.appText.statLarge.copyWith(
                         color: accent,
-                        fontWeight: FontWeight.w800,
                         letterSpacing: -0.5,
                         height: 1,
                       ),
@@ -338,18 +358,16 @@ class _CardRailState extends State<CardRail> {
                     widget.title.toUpperCase(),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 1.4,
-                      height: 1,
-                    ),
+                    // The index line at section level (`01 UNDER 30`) — the
+                    // same role the empty shelf's heading uses.
+                    style: context.appText.kickerLarge.copyWith(height: 1),
                   ),
                 ),
                 const SizedBox(width: AppSpacing.sm),
                 Expanded(
                   child: Container(
                     height: 1,
-                    color: accent.withValues(alpha: 0.35),
+                    color: accent.withValues(alpha: AppAlpha.rule),
                   ),
                 ),
                 if (showKicker) ...[
@@ -366,10 +384,8 @@ class _CardRailState extends State<CardRail> {
                       widget.kicker!,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.labelSmall?.copyWith(
+                      style: context.appText.overline.copyWith(
                         color: scheme.onSurfaceVariant,
-                        letterSpacing: 1,
-                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
@@ -380,7 +396,7 @@ class _CardRailState extends State<CardRail> {
                 ],
               ],
             ),
-            const SizedBox(height: 2),
+            const SizedBox(height: AppSpacing.xxs),
             Padding(
               padding: EdgeInsets.only(left: numeralWidth + AppSpacing.sm),
               child: Text(
@@ -417,7 +433,7 @@ class _Arrow extends StatelessWidget {
     return IconButton(
       onPressed: onPressed,
       tooltip: tooltip,
-      icon: Icon(icon, size: 20),
+      icon: Icon(icon, size: AppIconSize.md),
       visualDensity: VisualDensity.compact,
       style: IconButton.styleFrom(
         backgroundColor: scheme.surfaceContainerHigh,
@@ -425,6 +441,8 @@ class _Arrow extends StatelessWidget {
         // Disabled arrows stay visible but recede, the way the draft dims them
         // to 35% rather than removing them — a rail that loses its controls at
         // the ends reads as broken.
+        // 0.4 / 0.38: M3's disabled container / content opacities, not
+        // AppAlpha tints.
         disabledBackgroundColor: scheme.surfaceContainerHigh.withValues(
           alpha: 0.4,
         ),

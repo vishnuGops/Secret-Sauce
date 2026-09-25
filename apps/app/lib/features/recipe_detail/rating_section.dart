@@ -16,6 +16,9 @@ class RatingSection extends ConsumerWidget {
   final Recipe recipe;
   final bool isOwner;
 
+  /// The half-star input's star — large enough to hit a half.
+  static const double _kStarSize = 34;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
@@ -51,7 +54,7 @@ class RatingSection extends ConsumerWidget {
         children: [
           StarRatingInput(
             value: myRating,
-            size: 34,
+            size: _kStarSize,
             onChanged: (_) {},
             onChangeEnd: (v) => saveRating(context, ref, recipe.id, v),
           ),
@@ -80,7 +83,8 @@ class RatingSection extends ConsumerWidget {
                 ? '${recipe.ratingLabel} out of 5 · ${recipe.ratingCount} '
                     'rating${recipe.ratingCount == 1 ? '' : 's'}'
                 : 'No ratings yet',
-            style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+            // Tabular: the average and the count move when you rate (UX-049).
+            style: textTheme.titleSmall?.tabular,
           ),
           const SizedBox(height: AppSpacing.sm),
           action,

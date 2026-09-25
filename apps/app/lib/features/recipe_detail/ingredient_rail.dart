@@ -6,6 +6,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app/features/recipe_detail/detail_layout.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 
+/// The check-off box in front of each row.
+const double _kCheckSize = 22;
+
+/// Drops the box onto the first line's cap height.
+const double _kCheckNudge = 1;
+
+/// The unchecked box's outline.
+const double _kCheckStroke = 2;
+
 /// The `Ingredients` pane: grouped check-off list with a fixed quantity
 /// gutter, plus its heading and clear-checks footer.
 ///
@@ -64,7 +73,8 @@ class IngredientRail extends ConsumerWidget {
             Text('Ingredients', style: textTheme.titleLarge),
             Text(
               '$gathered of ${all.length} gathered',
-              style: textTheme.labelMedium?.copyWith(
+              // Tabular: the count moves with every tap (UX-049).
+              style: textTheme.labelMedium?.tabular.copyWith(
                 color: scheme.onSurfaceVariant,
               ),
             ),
@@ -75,12 +85,13 @@ class IngredientRail extends ConsumerWidget {
         for (final group in recipe.ingredientGroups) ...[
           if (group.name.isNotEmpty)
             Padding(
-              padding: const EdgeInsets.only(top: 12, bottom: 2),
+              padding: const EdgeInsets.only(
+                top: AppSpacing.smPlus,
+                bottom: AppSpacing.xxs,
+              ),
               child: Text(
                 group.name.toUpperCase(),
-                style: textTheme.labelSmall?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 1,
+                style: context.appText.overline.copyWith(
                   color: scheme.onSurfaceVariant,
                 ),
               ),
@@ -94,7 +105,7 @@ class IngredientRail extends ConsumerWidget {
               onTap: () => toggle(ing.id),
             ),
         ],
-        const SizedBox(height: 12),
+        const SizedBox(height: AppSpacing.smPlus),
         const Divider(height: 1),
         const SizedBox(height: AppSpacing.xs),
         // Same reason as the servings row: the button is non-flex and is
@@ -153,8 +164,8 @@ class _IngredientRow extends StatelessWidget {
 
     final dimColor = scheme.onSurfaceVariant;
     final struck = done ? TextDecoration.lineThrough : null;
-    final qtyStyle = textTheme.bodyMedium?.copyWith(
-      fontWeight: FontWeight.w800,
+    // Heavy and tabular, so the gutter scans as a column of numbers (UX-049).
+    final qtyStyle = context.appText.quantity.copyWith(
       color:
           done
               ? dimColor
@@ -186,27 +197,36 @@ class _IngredientRow extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(AppRadii.button),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.xsPlus),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AnimatedContainer(
-              duration: const Duration(milliseconds: 150),
-              width: 22,
-              height: 22,
-              margin: const EdgeInsets.only(top: 1),
+              duration: AppMotion.of(context, AppMotion.fast),
+              width: _kCheckSize,
+              height: _kCheckSize,
+              margin: const EdgeInsets.only(top: _kCheckNudge),
               decoration: BoxDecoration(
                 color: done ? scheme.primary : null,
                 border:
-                    done ? null : Border.all(color: scheme.outline, width: 2),
-                borderRadius: BorderRadius.circular(6),
+                    done
+                        ? null
+                        : Border.all(
+                          color: scheme.outline,
+                          width: _kCheckStroke,
+                        ),
+                borderRadius: BorderRadius.circular(AppRadii.sm),
               ),
               child:
                   done
-                      ? Icon(Icons.check, size: 16, color: scheme.onPrimary)
+                      ? Icon(
+                        Icons.check,
+                        size: AppIconSize.sm,
+                        color: scheme.onPrimary,
+                      )
                       : null,
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: AppSpacing.smPlus),
             SizedBox(
               // The gutter is what makes the numbers scan as a column, so it
               // grows with the type rather than wrapping "1.25 cup" onto three

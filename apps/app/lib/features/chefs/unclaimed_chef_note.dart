@@ -49,7 +49,7 @@ class UnclaimedChefNote extends ConsumerWidget {
             children: [
               Icon(
                 Icons.person_outline,
-                size: 20,
+                size: AppIconSize.md,
                 color: scheme.onSurfaceVariant,
               ),
               const SizedBox(width: AppSpacing.sm),

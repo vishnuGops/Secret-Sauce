@@ -11,7 +11,7 @@ class StarRating extends StatelessWidget {
   const StarRating({
     super.key,
     required this.rating,
-    this.size = 16,
+    this.size = AppIconSize.sm,
     this.count,
     this.showValue = true,
   });
@@ -52,13 +52,16 @@ class StarRating extends StatelessWidget {
             ),
           if (showValue && !unrated) ...[
             SizedBox(width: size * 0.3),
-            Text(rating.toStringAsFixed(1), style: textTheme.labelMedium),
+            Text(
+              rating.toStringAsFixed(1),
+              style: textTheme.labelMedium?.tabular,
+            ),
           ],
           if (count != null) ...[
             SizedBox(width: size * 0.25),
             Text(
               unrated ? 'No ratings' : '($count)',
-              style: textTheme.labelSmall?.copyWith(
+              style: textTheme.labelSmall?.tabular.copyWith(
                 color: scheme.onSurfaceVariant,
               ),
             ),
@@ -75,8 +78,12 @@ class RatingPill extends StatelessWidget {
     super.key,
     required this.rating,
     this.count,
-    this.size = 15,
+    this.size = defaultSize,
   });
+
+  /// The star glyph — one px under [AppIconSize.sm], matching the recipe
+  /// card's clock glyph beside it.
+  static const double defaultSize = 15;
 
   final double rating;
   final int? count;
@@ -89,7 +96,7 @@ class RatingPill extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(Icons.star_rounded, size: size, color: context.palette.rating),
-        const SizedBox(width: 2),
+        const SizedBox(width: AppSpacing.xxs),
         // Both texts give up space when the host row is tight — callers place
         // this pill inside a Flexible. **The count yields first**, and that
         // needs the value to carry the *larger* flex, not the smaller (B080):
@@ -105,7 +112,7 @@ class RatingPill extends StatelessWidget {
             rating.toStringAsFixed(1),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: textTheme.labelMedium,
+            style: textTheme.labelMedium?.tabular,
           ),
         ),
         if (count != null)
@@ -114,7 +121,7 @@ class RatingPill extends StatelessWidget {
               ' ($count)',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: textTheme.labelSmall?.copyWith(
+              style: textTheme.labelSmall?.tabular.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
@@ -136,9 +143,12 @@ class StarRatingInput extends StatefulWidget {
     required this.value,
     required this.onChanged,
     this.onChangeEnd,
-    this.size = 36,
+    this.size = defaultSize,
     this.enabled = true,
   });
+
+  /// One star's width — a comfortable touch target per half-star.
+  static const double defaultSize = 36;
 
   /// Current rating, or null when the user has not rated yet.
   final double? value;
@@ -216,6 +226,7 @@ class _StarRatingInputState extends State<StarRatingInput> {
       ),
     );
 
+    // 0.6: a disabled control's fade, not an AppAlpha tint of a colour.
     if (!widget.enabled) return Opacity(opacity: 0.6, child: stars);
 
     return Semantics(

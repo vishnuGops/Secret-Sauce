@@ -59,7 +59,7 @@ class ServingsRow extends ConsumerWidget {
               children: [
                 IconButton.filledTonal(
                   tooltip: 'Fewer servings',
-                  icon: const Icon(Icons.remove, size: 20),
+                  icon: const Icon(Icons.remove, size: AppIconSize.md),
                   onPressed:
                       servings > 1
                           ? () =>
@@ -76,11 +76,15 @@ class ServingsRow extends ConsumerWidget {
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.sm,
                   ),
-                  child: Text('$servings', style: textTheme.titleMedium),
+                  // Tabular so 9 -> 10 does not shift the + button (UX-049).
+                  child: Text(
+                    '$servings',
+                    style: textTheme.titleMedium?.tabular,
+                  ),
                 ),
                 IconButton.filledTonal(
                   tooltip: 'More servings',
-                  icon: const Icon(Icons.add, size: 20),
+                  icon: const Icon(Icons.add, size: AppIconSize.md),
                   onPressed:
                       () =>
                           ref
@@ -101,9 +105,11 @@ class ServingsRow extends ConsumerWidget {
               children: [
                 TextSpan(
                   text: 'colour',
+                  // A legend for the scaled quantities, so it borrows their
+                  // weight from the quantity role rather than restating it.
                   style: TextStyle(
                     color: scheme.primary,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: context.appText.quantity.fontWeight,
                   ),
                 ),
                 const TextSpan(

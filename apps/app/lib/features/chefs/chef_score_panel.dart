@@ -48,10 +48,7 @@ class ChefScorePanel extends StatelessWidget {
                 standing.scoreLabel,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  color: color,
-                ),
+                style: context.appText.statLarge.copyWith(color: color),
               ),
             ),
             const SizedBox(width: AppSpacing.sm),
@@ -96,8 +93,9 @@ class ChefScorePanel extends StatelessWidget {
               children: [
                 TextSpan(
                   text: '$gap points to ${next.label}',
-                  style: const TextStyle(fontWeight: FontWeight.w700),
+                  style: theme.textTheme.labelMedium?.tabular,
                 ),
+
                 TextSpan(text: ' — about ${_closingLine(standing)}.'),
               ],
             ),

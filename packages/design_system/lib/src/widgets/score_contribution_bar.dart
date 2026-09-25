@@ -25,6 +25,9 @@ class ScoreContributionBar extends StatelessWidget {
   /// Tier accent for the fill.
   final Color color;
 
+  /// The share bar's thickness — the same track as the tier ladder's default.
+  static const double _barHeight = 8;
+
   /// `× 3`, `× 0.2` — the weight without a pointless trailing zero.
   static String weightLabel(double weight) =>
       weight == weight.roundToDouble()
@@ -50,16 +53,14 @@ class ScoreContributionBar extends StatelessWidget {
                 '× ${weightLabel(contribution.weight)}',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.labelLarge,
+                style: theme.textTheme.labelLarge?.tabular,
               ),
             ),
             const SizedBox(width: AppSpacing.sm),
             Text(
               groupedScore(contribution.points),
               maxLines: 1,
-              style: theme.textTheme.labelLarge?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+              style: theme.textTheme.titleSmall?.tabular,
             ),
           ],
         ),
@@ -68,7 +69,7 @@ class ScoreContributionBar extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppRadii.pill),
           child: LinearProgressIndicator(
             value: share,
-            minHeight: 8,
+            minHeight: _barHeight,
             backgroundColor: scheme.surfaceContainerHigh,
             valueColor: AlwaysStoppedAnimation<Color>(color),
           ),

@@ -124,6 +124,15 @@ class _IngredientRow extends ConsumerWidget {
   /// 248px, and the icon buttons do not shrink with the text scale while the
   /// space a name needs grows with it. Narrower than this the row splits in
   /// two so the name gets the full width instead of eight pixels of it.
+  /// Fixed widths of the quantity and unit fields.
+  static const double _quantityWidth = 64;
+  static const double _unitWidth = 72;
+
+  /// The typeahead dropdown: its lift and its largest extent.
+  static const double _suggestionsElevation = 4;
+  static const double _suggestionsMaxHeight = 240;
+  static const double _suggestionsMaxWidth = 320;
+
   static double _wideThreshold(BuildContext context) =>
       248 + 120 * (MediaQuery.textScalerOf(context).scale(16) / 16);
 
@@ -155,7 +164,7 @@ class _IngredientRow extends ConsumerWidget {
         ingredient.note.text.trim().isNotEmpty || ingredient.isOptional;
 
     final quantity = SizedBox(
-      width: 64,
+      width: _quantityWidth,
       child: TextFormField(
         controller: ingredient.quantity,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -177,7 +186,7 @@ class _IngredientRow extends ConsumerWidget {
       ),
     );
     final unit = SizedBox(
-      width: 72,
+      width: _unitWidth,
       child: TextField(
         controller: ingredient.unit,
         decoration: const InputDecoration(labelText: 'Unit', isDense: true),
@@ -208,13 +217,13 @@ class _IngredientRow extends ConsumerWidget {
           (context, onSelected, options) => Align(
             alignment: Alignment.topLeft,
             child: Material(
-              elevation: 4,
+              elevation: _suggestionsElevation,
               borderRadius: BorderRadius.circular(AppRadii.button),
               clipBehavior: Clip.antiAlias,
               child: ConstrainedBox(
                 constraints: const BoxConstraints(
-                  maxHeight: 240,
-                  maxWidth: 320,
+                  maxHeight: _suggestionsMaxHeight,
+                  maxWidth: _suggestionsMaxWidth,
                 ),
                 child: ListView.builder(
                   padding: EdgeInsets.zero,
@@ -239,7 +248,7 @@ class _IngredientRow extends ConsumerWidget {
     );
     final actions = [
       IconButton(
-        icon: const Icon(Icons.notes, size: 18),
+        icon: const Icon(Icons.notes, size: AppIconSize.button),
         color: marked ? scheme.primary : null,
         tooltip: 'Note & optional',
         onPressed: () {
@@ -248,14 +257,14 @@ class _IngredientRow extends ConsumerWidget {
         },
       ),
       IconButton(
-        icon: const Icon(Icons.close, size: 18),
+        icon: const Icon(Icons.close, size: AppIconSize.button),
         tooltip: 'Remove ingredient',
         onPressed: onRemove,
       ),
     ];
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
       child: Column(
         children: [
           LayoutBuilder(
@@ -302,7 +311,7 @@ class _IngredientRow extends ConsumerWidget {
                 children: [
                   Flexible(
                     child: InputChip(
-                      avatar: const Icon(Icons.link, size: 16),
+                      avatar: const Icon(Icons.link, size: AppIconSize.sm),
                       label: Text(
                         ingredient.foodLabel ?? 'Linked',
                         maxLines: 1,

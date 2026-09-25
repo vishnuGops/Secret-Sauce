@@ -9,6 +9,12 @@ import 'package:app/routing/pop_or_go.dart';
 import 'package:app/widgets/legal_footer.dart';
 
 /// Combined sign-in / sign-up screen with a mode toggle.
+/// The form's measure.
+const double _kFormMaxWidth = 420;
+
+/// Stroke of the submit button's in-flight spinner.
+const double _kSpinnerStroke = 2;
+
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key, this.startOnSignUp = false});
 
@@ -73,7 +79,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(AppSpacing.lg),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 420),
+            constraints: const BoxConstraints(maxWidth: _kFormMaxWidth),
             child: Form(
               key: _formKey,
               child: Column(
@@ -134,9 +140,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     child:
                         isLoading
                             ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
+                              height: AppIconSize.md,
+                              width: AppIconSize.md,
+                              child: CircularProgressIndicator(
+                                strokeWidth: _kSpinnerStroke,
+                              ),
                             )
                             : Text(_isSignUp ? 'Sign up' : 'Sign in'),
                   ),

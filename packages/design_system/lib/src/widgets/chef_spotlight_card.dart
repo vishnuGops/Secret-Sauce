@@ -28,6 +28,68 @@ const double kSpotlightCardHeight = 356;
 /// squeezing it to nothing.
 const double _kSpotlightTextGrowth = 168;
 
+// --- Foil-card geometry ------------------------------------------------------
+// The spotlight card is a fixed-size "foil trading card" (DESIGN.md Preserve
+// list). These are its own measurements, not steps on the spacing scale — a
+// re-skin that changes one of them is redrawing the card.
+
+/// Outer corner of the foil frame.
+const double _kFrameRadius = 18;
+
+/// The foil band between the frame's edge and the inset surface panel.
+const double _kFramePadding = 7;
+
+/// The panel's clip, concentric with the frame: outer radius minus the band.
+const double _kPanelClipRadius = _kFrameRadius - _kFramePadding; // 11
+
+/// The panel's highlight border, drawn outside the clip.
+const double _kPanelBorderWidth = 1;
+
+/// The panel's own corner: the clip plus its border.
+const double _kPanelRadius = _kPanelClipRadius + _kPanelBorderWidth; // 12
+
+/// The frame's lift off the rail.
+const double _kFrameShadowBlur = 26;
+const Offset _kFrameShadowOffset = Offset(0, 10);
+
+/// How far the gradient's top-left lerps toward white, and its lower edge
+/// toward [AppPalette.foilShade].
+const double _kFoilLift = 0.18;
+const double _kFoilShadeDepth = 0.38;
+
+/// Foil stripes: stroke width and the distance between stripe starts.
+const double _kFoilStripeWidth = 2;
+const double _kFoilStripePeriod = 9;
+
+/// Side inset shared by every band inside the panel.
+const double _kInset = 10;
+
+/// The looser vertical inset: header top, rarity band gap, footer bottom.
+const double _kInsetLoose = 9;
+
+/// The tighter vertical inset: header bottom, caption bottom, footer rule.
+const double _kInsetTight = 7;
+
+/// The portrait window's corner and tinted border; the photo inside is
+/// clipped concentric with it.
+const double _kPortraitRadius = 9;
+const double _kPortraitBorder = 3;
+const double _kPortraitClipRadius = _kPortraitRadius - _kPortraitBorder; // 6
+
+/// The RANK pill on the portrait caption.
+const EdgeInsets _kRankPillPadding = EdgeInsets.symmetric(
+  horizontal: 7,
+  vertical: AppSpacing.xxs,
+);
+
+/// The driver row's icon tile.
+const double _kDriverTileSize = 28;
+const double _kDriverTileRadius = 7;
+
+/// The footer's tier-ladder bar and the gap under it.
+const double _kLadderBarHeight = 4;
+const double _kLadderLabelGap = 3;
+
 /// The card's height at the ambient text scale.
 ///
 /// A fixed 356 would work at 1.0× and overflow at 2.0×, and the usual fix —
@@ -107,14 +169,14 @@ class ChefSpotlightCard extends StatelessWidget {
           type: MaterialType.transparency,
           child: InkWell(
             onTap: onTap,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(_kPanelRadius),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _Header(standing: standing, color: tier),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: _kInset),
                     child: _Portrait(
                       standing: standing,
                       color: tier,
@@ -156,46 +218,47 @@ class _FoilFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final dark = Theme.of(context).brightness == Brightness.dark;
+    final palette = context.palette;
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(_kFrameRadius),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Color.lerp(color, Colors.white, 0.18)!,
+            Color.lerp(color, palette.onImage, _kFoilLift)!,
             color,
-            Color.lerp(color, const Color(0xFF2A1D1A), 0.38)!,
+            Color.lerp(color, palette.foilShade, _kFoilShadeDepth)!,
             color,
           ],
           stops: const [0, 0.38, 0.72, 1],
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: dark ? 0.40 : 0.22),
-            blurRadius: 26,
-            offset: const Offset(0, 10),
+            color: palette.floatingShadow,
+            blurRadius: _kFrameShadowBlur,
+            offset: _kFrameShadowOffset,
           ),
         ],
       ),
       child: CustomPaint(
-        painter: _FoilPainter(opacity: foil),
+        painter: _FoilPainter(color: palette.onImage, opacity: foil),
         child: Padding(
-          padding: const EdgeInsets.all(7),
+          padding: const EdgeInsets.all(_kFramePadding),
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: scheme.surface,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(_kPanelRadius),
               border: Border.all(
                 // The draft's `inset 0 0 0 1px rgba(255,255,255,0.5)` reads as a
                 // highlight on a light panel and as glare on a dark one.
-                color: Colors.white.withValues(alpha: dark ? 0.12 : 0.5),
+                color: palette.foilHighlight,
+                width: _kPanelBorderWidth,
               ),
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(11),
+              borderRadius: BorderRadius.circular(_kPanelClipRadius),
               child: child,
             ),
           ),
@@ -211,8 +274,10 @@ class _FoilFrame extends StatelessWidget {
 /// mode cannot express "2px on, 7px off at an angle" without a transform whose
 /// period depends on the box size, and this is two lines of arithmetic.
 class _FoilPainter extends CustomPainter {
-  const _FoilPainter({required this.opacity});
+  const _FoilPainter({required this.color, required this.opacity});
 
+  /// The stripe colour at full strength; [opacity] is the foil intensity.
+  final Color color;
   final double opacity;
 
   @override
@@ -220,17 +285,24 @@ class _FoilPainter extends CustomPainter {
     if (opacity <= 0) return;
     final paint =
         Paint()
-          ..color = Colors.white.withValues(alpha: opacity)
-          ..strokeWidth = 2
+          ..color = color.withValues(alpha: opacity)
+          ..strokeWidth = _kFoilStripeWidth
           ..style = PaintingStyle.stroke;
 
     canvas.save();
     canvas.clipRRect(
-      RRect.fromRectAndRadius(Offset.zero & size, const Radius.circular(18)),
+      RRect.fromRectAndRadius(
+        Offset.zero & size,
+        const Radius.circular(_kFrameRadius),
+      ),
     );
     // Lines run down-right at 45°, so each one starts `height` to the left of
     // where it should finish. Starting at -height covers the top-right corner.
-    for (var x = -size.height; x < size.width + size.height; x += 9) {
+    for (
+      var x = -size.height;
+      x < size.width + size.height;
+      x += _kFoilStripePeriod
+    ) {
       canvas.drawLine(
         Offset(x, 0),
         Offset(x + size.height, size.height),
@@ -242,7 +314,7 @@ class _FoilPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_FoilPainter oldDelegate) =>
-      oldDelegate.opacity != opacity;
+      oldDelegate.opacity != opacity || oldDelegate.color != color;
 }
 
 /// Tier glyph, name, and the score where a trading card puts its HP.
@@ -257,7 +329,12 @@ class _Header extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 9, 10, 7),
+      padding: const EdgeInsets.fromLTRB(
+        _kInset,
+        _kInsetLoose,
+        _kInset,
+        _kInsetTight,
+      ),
       // The score is capped at half the row and takes its intrinsic width
       // inside that; the name takes everything left over. Two flex children
       // instead — `Expanded` name plus `Flexible` score — split the row 50/50
@@ -270,7 +347,7 @@ class _Header extends StatelessWidget {
               children: [
                 Icon(
                   TierChip.iconFor(standing.chefTier),
-                  size: 20,
+                  size: AppIconSize.md,
                   color: color,
                 ),
                 const SizedBox(width: AppSpacing.sm),
@@ -279,12 +356,10 @@ class _Header extends StatelessWidget {
                     standing.displayName,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    // TODO(fonts): the draft sets this in the display face
-                    // (Newsreader). Deferred with the rest of the type decision —
-                    // changing fonts is an app-wide change, not a /chefs one.
-                    style: theme.textTheme.labelLarge?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
+                    // The draft sets this in the display face, but the serif
+                    // roles start at titleLarge (22px) — more than this fixed
+                    // tile's header band can give. Sans titleSmall keeps 14/20.
+                    style: theme.textTheme.titleSmall,
                   ),
                 ),
                 const SizedBox(width: AppSpacing.sm),
@@ -306,18 +381,16 @@ class _Header extends StatelessWidget {
                         Text(
                           standing.scoreLabel,
                           maxLines: 1,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w800,
+                          style: context.appText.stat.copyWith(
                             color: color,
                             height: 1,
                           ),
                         ),
-                        const SizedBox(width: 2),
+                        const SizedBox(width: AppSpacing.xxs),
                         Text(
                           'PTS',
                           style: theme.textTheme.labelSmall?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
-                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ],
@@ -352,6 +425,7 @@ class _Portrait extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
+    final palette = context.palette;
     final url = standing.avatarUrl;
 
     // "004 / 148", or "004" until the count lands.
@@ -363,17 +437,17 @@ class _Portrait extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(9),
+        borderRadius: BorderRadius.circular(_kPortraitRadius),
         border: Border.all(
           color: Color.alphaBlend(
-            color.withValues(alpha: 0.30),
+            color.withValues(alpha: AppAlpha.glow),
             scheme.surfaceContainerHigh,
           ),
-          width: 3,
+          width: _kPortraitBorder,
         ),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(_kPortraitClipRadius),
         child: Stack(
           fit: StackFit.expand,
           children: [
@@ -398,15 +472,23 @@ class _Portrait extends StatelessWidget {
               right: 0,
               bottom: 0,
               child: DecoratedBox(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
-                    colors: [Color(0xC7140C0A), Color(0x00140C0A)],
+                    colors: [
+                      palette.coverScrim,
+                      palette.coverScrim.withValues(alpha: 0),
+                    ],
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(9, 10, 9, 7),
+                  padding: const EdgeInsets.fromLTRB(
+                    _kInsetLoose,
+                    _kInset,
+                    _kInsetLoose,
+                    _kInsetTight,
+                  ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
@@ -415,11 +497,9 @@ class _Portrait extends StatelessWidget {
                           serial,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          // TODO(fonts): a mono face in the draft; approximated
-                          // with letter spacing until the type decision lands.
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: Colors.white,
-                            letterSpacing: 0.8,
+                          // The draft's mono serial: tracked, tabular digits.
+                          style: context.appText.overline.tabular.copyWith(
+                            color: palette.onImage,
                           ),
                         ),
                       ),
@@ -434,7 +514,7 @@ class _Portrait extends StatelessWidget {
                           alignment: Alignment.centerRight,
                           child: _RankPill(
                             rank: standing.chefRank,
-                            color: color,
+                            tier: standing.chefTier,
                           ),
                         ),
                       ),
@@ -462,7 +542,7 @@ class _MonogramPortrait extends StatelessWidget {
 
     return ColoredBox(
       color: Color.alphaBlend(
-        color.withValues(alpha: 0.10),
+        color.withValues(alpha: AppAlpha.wash),
         scheme.surfaceContainerHighest,
       ),
       // The window is short at large text scales; scale the monogram down with
@@ -474,7 +554,7 @@ class _MonogramPortrait extends StatelessWidget {
                 name: standing.displayName,
                 radius: (constraints.maxHeight * 0.28).clamp(12.0, 44.0),
                 backgroundColor: Color.alphaBlend(
-                  color.withValues(alpha: 0.16),
+                  color.withValues(alpha: AppAlpha.tintStrong),
                   scheme.surfaceContainerHigh,
                 ),
                 foregroundColor: color,
@@ -486,33 +566,34 @@ class _MonogramPortrait extends StatelessWidget {
 }
 
 class _RankPill extends StatelessWidget {
-  const _RankPill({required this.rank, required this.color});
+  const _RankPill({required this.rank, required this.tier});
 
   final int rank;
-  final Color color;
+  final ChefTier tier;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    // The pill is near-white in both themes, so its ink resolves at *light*
+    // brightness whatever the page's is. The page-brightness tier colour is a
+    // pastel in dark mode and measured ~1.5:1 on this pill (UX-012).
+    final color = TierChip.colorFor(tier, Brightness.light);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+      padding: _kRankPillPadding,
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.92),
+        color: context.palette.onImage.withValues(alpha: AppAlpha.frosted),
         borderRadius: BorderRadius.circular(AppRadii.pill),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.workspace_premium, size: 14, color: color),
-          const SizedBox(width: 4),
+          Icon(Icons.workspace_premium, size: AppIconSize.xs, color: color),
+          const SizedBox(width: AppSpacing.xs),
           Text(
             'RANK $rank',
             maxLines: 1,
-            style: theme.textTheme.labelSmall?.copyWith(
-              color: color,
-              fontWeight: FontWeight.w800,
-            ),
+            style: theme.textTheme.labelSmall?.tabular.copyWith(color: color),
           ),
         ],
       ),
@@ -532,14 +613,17 @@ class _RarityBand extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      margin: const EdgeInsets.fromLTRB(10, 9, 10, 0),
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+      margin: const EdgeInsets.fromLTRB(_kInset, _kInsetLoose, _kInset, 0),
+      padding: const EdgeInsets.symmetric(
+        horizontal: _kInsetLoose,
+        vertical: AppSpacing.xs,
+      ),
       decoration: BoxDecoration(
         color: Color.alphaBlend(
-          color.withValues(alpha: 0.14),
+          color.withValues(alpha: AppAlpha.tint),
           theme.colorScheme.surface,
         ),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppRadii.chip),
       ),
       child: Row(
         children: [
@@ -548,11 +632,7 @@ class _RarityBand extends StatelessWidget {
               standing.chefTier.label.toUpperCase(),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: color,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 1,
-              ),
+              style: context.appText.overline.copyWith(color: color),
             ),
           ),
           const SizedBox(width: AppSpacing.sm),
@@ -564,10 +644,7 @@ class _RarityBand extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.end,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: color,
-                fontWeight: FontWeight.w700,
-              ),
+              style: theme.textTheme.labelSmall?.tabular.copyWith(color: color),
             ),
           ),
         ],
@@ -627,7 +704,10 @@ class _DriverRow extends StatelessWidget {
         w == null ? arithmetic : 'Driven by ${top.label} · $arithmetic';
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+      padding: const EdgeInsets.symmetric(
+        horizontal: _kInset,
+        vertical: AppSpacing.sm,
+      ),
       // Same allocation as the header: the points take their intrinsic width up
       // to a third of the row, the description takes the rest.
       child: LayoutBuilder(
@@ -635,16 +715,20 @@ class _DriverRow extends StatelessWidget {
             (context, constraints) => Row(
               children: [
                 Container(
-                  width: 28,
-                  height: 28,
+                  width: _kDriverTileSize,
+                  height: _kDriverTileSize,
                   decoration: BoxDecoration(
                     color: Color.alphaBlend(
-                      color.withValues(alpha: 0.16),
+                      color.withValues(alpha: AppAlpha.tintStrong),
                       scheme.surfaceContainerHigh,
                     ),
-                    borderRadius: BorderRadius.circular(7),
+                    borderRadius: BorderRadius.circular(_kDriverTileRadius),
                   ),
-                  child: Icon(_iconFor(top.label), size: 14, color: color),
+                  child: Icon(
+                    _iconFor(top.label),
+                    size: AppIconSize.xs,
+                    color: color,
+                  ),
                 ),
                 const SizedBox(width: AppSpacing.sm),
                 Expanded(
@@ -652,19 +736,18 @@ class _DriverRow extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      // Both lines carry counts (`+312`, `1,980 likes × 3`).
                       Text(
                         title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
+                        style: theme.textTheme.labelSmall?.tabular,
                       ),
                       Text(
                         detail,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.labelSmall?.copyWith(
+                        style: theme.textTheme.labelSmall?.tabular.copyWith(
                           color: scheme.onSurfaceVariant,
                         ),
                       ),
@@ -682,9 +765,7 @@ class _DriverRow extends StatelessWidget {
                     child: Text(
                       groupedScore(top.points),
                       maxLines: 1,
-                      style: theme.textTheme.labelLarge?.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
+                      style: theme.textTheme.titleSmall?.tabular,
                     ),
                   ),
                 ),
@@ -719,9 +800,7 @@ class _Footer extends StatelessWidget {
           child: Text(
             groupedCount(value),
             maxLines: 1,
-            style: theme.textTheme.labelSmall?.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
+            style: theme.textTheme.labelSmall?.tabular,
           ),
         ),
         Text(
@@ -736,13 +815,13 @@ class _Footer extends StatelessWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 9),
+      padding: const EdgeInsets.fromLTRB(_kInset, 0, _kInset, _kInsetLoose),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 7),
+            padding: const EdgeInsets.symmetric(vertical: _kInsetTight),
             decoration: BoxDecoration(
               border: Border(top: BorderSide(color: scheme.outlineVariant)),
             ),
@@ -760,12 +839,12 @@ class _Footer extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppRadii.pill),
             child: LinearProgressIndicator(
               value: standing.tierProgress,
-              minHeight: 4,
+              minHeight: _kLadderBarHeight,
               backgroundColor: scheme.surfaceContainerHigh,
               valueColor: AlwaysStoppedAnimation<Color>(color),
             ),
           ),
-          const SizedBox(height: 3),
+          const SizedBox(height: _kLadderLabelGap),
           Row(
             children: [
               // Expanded, not Flexible: the rung line is the one that can give
@@ -779,10 +858,8 @@ class _Footer extends StatelessWidget {
                           ' → ${next.label.split(' ').first.toUpperCase()}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  // TODO(fonts): mono in the draft.
-                  style: theme.textTheme.labelSmall?.copyWith(
+                  style: context.appText.overline.copyWith(
                     color: scheme.onSurfaceVariant,
-                    letterSpacing: 0.6,
                   ),
                 ),
               ),
@@ -793,9 +870,8 @@ class _Footer extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.end,
-                  style: theme.textTheme.labelSmall?.copyWith(
+                  style: theme.textTheme.labelSmall?.tabular.copyWith(
                     color: atTop ? color : scheme.onSurfaceVariant,
-                    fontWeight: atTop ? FontWeight.w700 : null,
                   ),
                 ),
               ),
@@ -825,6 +901,17 @@ class SpotlightCardPlaceholder extends StatelessWidget {
   /// reading as one repeated grey block.
   final ChefTier tier;
 
+  /// Foil intensity: under Home Cook's 0.06, so a placeholder is the flattest
+  /// frame on the rail.
+  static const double _foil = 0.05;
+
+  /// Skeleton bars — a text line, a taller one, and the widths that stand in
+  /// for the score and the driver line.
+  static const double _lineHeight = 12;
+  static const double _lineHeightTall = 14;
+  static const double _scoreWidth = 44;
+  static const double _driverWidth = 160;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -846,22 +933,23 @@ class SpotlightCardPlaceholder extends StatelessWidget {
       child: _FoilFrame(
         // Muted: a placeholder should not out-shine a real card beside it.
         color: Color.alphaBlend(
-          color.withValues(alpha: 0.35),
+          color.withValues(alpha: AppAlpha.rule),
           scheme.surfaceContainerHighest,
         ),
-        foil: 0.05,
+        foil: _foil,
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(_kInset),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  bar(20, 20),
+                  // Stands in for the header's tier glyph.
+                  bar(AppIconSize.md, AppIconSize.md),
                   const SizedBox(width: AppSpacing.sm),
-                  Expanded(child: bar(double.infinity, 12)),
+                  Expanded(child: bar(double.infinity, _lineHeight)),
                   const SizedBox(width: AppSpacing.sm),
-                  bar(44, 14),
+                  bar(_scoreWidth, _lineHeightTall),
                 ],
               ),
               const SizedBox(height: AppSpacing.md),
@@ -869,22 +957,24 @@ class SpotlightCardPlaceholder extends StatelessWidget {
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     color: scheme.surfaceContainerHigh,
-                    borderRadius: BorderRadius.circular(9),
+                    borderRadius: BorderRadius.circular(_kPortraitRadius),
                   ),
                   child: Center(
                     child: Icon(
                       Icons.hourglass_empty,
-                      color: scheme.onSurfaceVariant.withValues(alpha: 0.5),
+                      color: scheme.onSurfaceVariant.withValues(
+                        alpha: AppAlpha.muted,
+                      ),
                     ),
                   ),
                 ),
               ),
               const SizedBox(height: AppSpacing.md),
-              bar(double.infinity, 14),
+              bar(double.infinity, _lineHeightTall),
               const SizedBox(height: AppSpacing.sm),
-              bar(160, 12),
+              bar(_driverWidth, _lineHeight),
               const SizedBox(height: AppSpacing.sm),
-              bar(double.infinity, 4),
+              bar(double.infinity, _kLadderBarHeight),
             ],
           ),
         ),

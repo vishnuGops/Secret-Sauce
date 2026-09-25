@@ -18,6 +18,12 @@ import 'package:app/routing/app_router.dart';
 /// Create or edit a recipe. When [recipeId] is null, creates a new recipe;
 /// otherwise loads and edits the existing one. Saving an edit appends a new
 /// version via the repository.
+/// The form's measure on a wide window.
+const double _kFormMaxWidth = 720;
+
+/// Stroke of the Save button's in-flight spinner.
+const double _kSpinnerStroke = 2;
+
 class RecipeEditorScreen extends ConsumerStatefulWidget {
   const RecipeEditorScreen({super.key, this.recipeId});
 
@@ -690,9 +696,11 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
               icon:
                   _saving
                       ? const SizedBox(
-                        height: 16,
-                        width: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2),
+                        height: AppIconSize.sm,
+                        width: AppIconSize.sm,
+                        child: CircularProgressIndicator(
+                          strokeWidth: _kSpinnerStroke,
+                        ),
                       )
                       : const Icon(Icons.check),
               label: const Text('Save'),
@@ -704,7 +712,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
         key: _formKey,
         child: Center(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 720),
+            constraints: const BoxConstraints(maxWidth: _kFormMaxWidth),
             child: ListView(
               padding: const EdgeInsets.all(AppSpacing.lg),
               children: [

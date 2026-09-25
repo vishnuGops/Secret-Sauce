@@ -13,7 +13,10 @@ import 'package:design_system/src/widgets/tier_chip.dart';
 /// linear axis would squash Line Cook and Sous Chef into the first 5% and make
 /// the ladder useless for exactly the chefs who need to read it.
 class TierLadder extends StatelessWidget {
-  const TierLadder({super.key, required this.score, this.height = 8});
+  const TierLadder({super.key, required this.score, this.height = _barHeight});
+
+  /// The default track thickness.
+  static const double _barHeight = 8;
 
   /// The chef's score, in points.
   final double score;
@@ -87,9 +90,8 @@ class TierLadder extends StatelessWidget {
             Text(
               groupedCount(ChefScoring.thresholds[tier]!.round()),
               maxLines: 1,
-              style: theme.textTheme.labelSmall?.copyWith(
+              style: theme.textTheme.labelSmall?.tabular.copyWith(
                 color: tier == current ? color : scheme.onSurfaceVariant,
-                fontWeight: tier == current ? FontWeight.w800 : null,
               ),
             ),
         ]),
@@ -103,7 +105,6 @@ class TierLadder extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.labelSmall?.copyWith(
                 color: tier == current ? color : scheme.onSurfaceVariant,
-                fontWeight: tier == current ? FontWeight.w800 : null,
               ),
             ),
         ]),

@@ -53,25 +53,27 @@ class MethodColumn extends ConsumerWidget {
                 '$doneCount of ${allSteps.length} done · '
                 'tap a step to tick it off',
                 textAlign: TextAlign.end,
-                style: textTheme.labelMedium?.copyWith(
+                // Tabular: the count moves with every tap (UX-049).
+                style: textTheme.labelMedium?.tabular.copyWith(
                   color: scheme.onSurfaceVariant,
                 ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppSpacing.smPlus),
         for (final group in recipe.stepGroups) ...[
           if (showGroupHeaders)
             Padding(
-              padding: const EdgeInsets.only(top: 6, bottom: 12),
+              padding: const EdgeInsets.only(
+                top: AppSpacing.xsPlus,
+                bottom: AppSpacing.smPlus,
+              ),
               child: Row(
                 children: [
                   Text(
                     (group.name.isEmpty ? 'Steps' : group.name).toUpperCase(),
-                    style: textTheme.labelSmall?.copyWith(
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 1,
+                    style: context.appText.overline.copyWith(
                       color: scheme.onSurfaceVariant,
                     ),
                   ),
@@ -89,7 +91,7 @@ class MethodColumn extends ConsumerWidget {
             ),
           for (var i = 0; i < group.steps.length; i++)
             Padding(
-              padding: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.only(bottom: AppSpacing.smPlus),
               child: _StepCard(
                 step: group.steps[i],
                 number: i + 1,
@@ -98,7 +100,7 @@ class MethodColumn extends ConsumerWidget {
               ),
             ),
         ],
-        const SizedBox(height: 4),
+        const SizedBox(height: AppSpacing.xs),
         _CookModeTeaser(recipeId: recipe.id),
       ],
     );
@@ -126,7 +128,11 @@ class _CookModeTeaser extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final stacked = context.textScale > _kTeaserStackScale;
 
-    final icon = Icon(Icons.outdoor_grill, size: 24, color: scheme.primary);
+    final icon = Icon(
+      Icons.outdoor_grill,
+      size: AppIconSize.lg,
+      color: scheme.primary,
+    );
     final copy = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -192,14 +198,23 @@ class _StepCard extends StatelessWidget {
   final bool done;
   final VoidCallback onTap;
 
+  /// The numbered disc (a check once done).
+  static const double _kBadgeDiameter = 30;
+
+  /// Gap between the disc and the step text.
+  static const double _kBadgeGap = 14;
+
+  /// A done step's collapsed row — shorter than a card's full inset.
+  static const double _kDoneRowVertical = 10;
+
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
     final badge = Container(
-      width: 30,
-      height: 30,
+      width: _kBadgeDiameter,
+      height: _kBadgeDiameter,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: done ? scheme.primary : scheme.surfaceContainerHigh,
@@ -207,13 +222,12 @@ class _StepCard extends StatelessWidget {
       ),
       child:
           done
-              ? Icon(Icons.check, size: 18, color: scheme.onPrimary)
-              : Text(
-                '$number',
-                style: textTheme.labelLarge?.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
+              ? Icon(
+                Icons.check,
+                size: AppIconSize.button,
+                color: scheme.onPrimary,
+              )
+              : Text('$number', style: textTheme.titleSmall?.tabular),
     );
 
     if (done) {
@@ -222,13 +236,13 @@ class _StepCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadii.card),
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            vertical: 10,
+            vertical: _kDoneRowVertical,
             horizontal: AppSpacing.md,
           ),
           child: Row(
             children: [
               badge,
-              const SizedBox(width: 14),
+              const SizedBox(width: _kBadgeGap),
               Expanded(
                 child: Text(
                   step.text,
@@ -267,7 +281,7 @@ class _StepCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               badge,
-              const SizedBox(width: 14),
+              const SizedBox(width: _kBadgeGap),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -302,10 +316,10 @@ class _StepCard extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.lightbulb_outline,
-                              size: 16,
+                              size: AppIconSize.sm,
                               color: scheme.onSurfaceVariant,
                             ),
-                            const SizedBox(width: 4),
+                            const SizedBox(width: AppSpacing.xs),
                             Expanded(
                               child: Text(
                                 step.tip!,

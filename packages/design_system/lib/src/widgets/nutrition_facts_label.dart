@@ -4,6 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:design_system/src/layout/adaptive.dart';
 import 'package:design_system/src/theme/app_theme.dart';
 
+/// The label's heavy outer border — FDA label spec.
+const double _kOuterRule = 2;
+
+/// Vertical inset of a nutrient row, above and below its hairline.
+const double _kRowPad = 3;
+
 /// The nutrition panel, drawn like the label on a store product: heavy outer
 /// rule, `Nutrition Facts` masthead, an oversized Calories row, per-nutrient
 /// rows with a right-aligned `% Daily Value` column, and thick rules between
@@ -65,12 +71,12 @@ class NutritionFactsLabel extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: scheme.surface,
-        border: Border.all(color: ink, width: 2),
+        border: Border.all(color: ink, width: _kOuterRule),
         borderRadius: BorderRadius.circular(AppRadii.button),
       ),
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.md,
-        vertical: 12,
+        vertical: AppSpacing.smPlus,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,15 +84,16 @@ class NutritionFactsLabel extends StatelessWidget {
           Text(
             'Nutrition Facts',
             style: textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w900, // FDA label spec
               color: ink,
               height: 1.1,
             ),
           ),
-          const SizedBox(height: 2),
+          const SizedBox(height: AppSpacing.xxs),
           Text(
             '${countOf(servings, 'servings')} per recipe',
-            style: textTheme.bodyMedium?.copyWith(color: ink),
+            // Tabular: the stepper moves this count (UX-049).
+            style: textTheme.bodyMedium?.tabular.copyWith(color: ink),
           ),
           Text(
             'Amount per serving',
@@ -98,7 +105,7 @@ class NutritionFactsLabel extends StatelessWidget {
               'this recipe is written for $baseServings.',
               style: textTheme.bodySmall?.copyWith(color: dim),
             ),
-          _Rule(color: ink, thickness: 8),
+          _Rule(color: ink, thickness: _Rule.heavy),
           if (nutrition.calories != null) ...[
             // The one row a real label sets in display type. `Wrap` rather than
             // `Row` for the usual reason (Gotcha 21): both children are
@@ -106,7 +113,7 @@ class NutritionFactsLabel extends StatelessWidget {
             // each other — the number drops to its own line instead of
             // overflowing.
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
               child: Wrap(
                 alignment: WrapAlignment.spaceBetween,
                 crossAxisAlignment: WrapCrossAlignment.center,
@@ -115,14 +122,16 @@ class NutritionFactsLabel extends StatelessWidget {
                   Text(
                     'Calories',
                     style: textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w900, // FDA label spec
                       color: ink,
                     ),
                   ),
+                  // The oversized Calories figure: headline size is the
+                  // label's own (no stat role is 28px), made tabular.
                   Text(
                     formatNutritionValue(nutrition.calories!),
-                    style: textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.w900,
+                    style: textTheme.headlineMedium?.tabular.copyWith(
+                      fontWeight: FontWeight.w900, // FDA label spec
                       color: ink,
                     ),
                   ),
@@ -135,21 +144,21 @@ class NutritionFactsLabel extends StatelessWidget {
               Text(
                 '${countOf(servings, 'servings')} · '
                 '${groupedScore(totalCalories)} kcal total',
-                style: textTheme.bodySmall?.copyWith(color: dim),
+                style: textTheme.bodySmall?.tabular.copyWith(color: dim),
               ),
           ],
-          _Rule(color: ink, thickness: 4),
+          _Rule(color: ink, thickness: _Rule.medium),
           Align(
             alignment: Alignment.centerRight,
             child: Text(
               '% Daily Value*',
               style: textTheme.labelMedium?.copyWith(
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.w900, // FDA label spec
                 color: ink,
               ),
             ),
           ),
-          _Rule(color: scheme.outlineVariant, thickness: 1),
+          _Rule(color: scheme.outlineVariant, thickness: _Rule.hairline),
           _NutrientRow(
             label: 'Total Fat',
             value: nutrition.totalFatG,
@@ -218,13 +227,13 @@ class NutritionFactsLabel extends StatelessWidget {
             dailyValue: kDvProteinG,
             bold: true,
           ),
-          _Rule(color: ink, thickness: 4),
+          _Rule(color: ink, thickness: _Rule.medium),
           // The honesty line (Phase 29c): a computed label is a raw-ingredient
           // sum — cooking yield, evaporation, drained oil are unmodelled — so
           // it says so, always, and no copy may call it a measured analysis.
           if (isEstimated)
             Padding(
-              padding: const EdgeInsets.only(bottom: 4),
+              padding: const EdgeInsets.only(bottom: AppSpacing.xs),
               child: Text(
                 'Estimated from ingredients — not a measured analysis.',
                 style: textTheme.bodySmall?.copyWith(
@@ -281,18 +290,19 @@ class _NutrientRow extends StatelessWidget {
     final percent =
         dailyValue == null ? null : percentDailyValue(value, dailyValue!);
 
-    final style = textTheme.bodyMedium?.copyWith(
-      color: ink,
-      fontWeight: bold ? FontWeight.w800 : FontWeight.w400,
-    );
+    // A bold nutrient name is the titleSmall role (bold 14/20); the amount
+    // after it stays regular body, tabular.
+    final style = (bold ? textTheme.titleSmall : textTheme.bodyMedium)
+        ?.copyWith(color: ink);
+    final amountStyle = textTheme.bodyMedium?.tabular.copyWith(color: ink);
 
     return Padding(
       // The indent scales with the type: at 2.0× a fixed 12px inset stops
       // reading as a hierarchy against a doubled line height.
       padding: EdgeInsets.only(
-        left: indent * 12 * context.textScale.clamp(1.0, 2.0),
-        top: 3,
-        bottom: 3,
+        left: indent * AppSpacing.smPlus * context.textScale.clamp(1.0, 2.0),
+        top: _kRowPad,
+        bottom: _kRowPad,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -312,7 +322,7 @@ class _NutrientRow extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: ' ${formatNutritionValue(value!)} $unit',
-                      style: style?.copyWith(fontWeight: FontWeight.w400),
+                      style: amountStyle,
                     ),
                   ],
                 ),
@@ -321,14 +331,11 @@ class _NutrientRow extends StatelessWidget {
               if (percent != null)
                 Text(
                   '$percent%',
-                  style: textTheme.bodyMedium?.copyWith(
-                    color: ink,
-                    fontWeight: FontWeight.w800,
-                  ),
+                  style: context.appText.quantity.copyWith(color: ink),
                 ),
             ],
           ),
-          const SizedBox(height: 3),
+          const SizedBox(height: _kRowPad),
           Divider(height: 1, thickness: 1, color: scheme.outlineVariant),
         ],
       ),
@@ -344,6 +351,12 @@ class _NutrientRow extends StatelessWidget {
 class _Rule extends StatelessWidget {
   const _Rule({required this.color, required this.thickness});
 
+  /// Rule weights — FDA label spec: the bar under the masthead, the bars
+  /// around the nutrient block, and the hairline under the column heading.
+  static const double heavy = 8;
+  static const double medium = 4;
+  static const double hairline = 1;
+
   final Color color;
   final double thickness;
 
@@ -351,6 +364,6 @@ class _Rule extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     height: thickness,
     color: color,
-    margin: const EdgeInsets.symmetric(vertical: 4),
+    margin: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
   );
 }

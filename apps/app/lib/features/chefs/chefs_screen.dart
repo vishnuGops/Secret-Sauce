@@ -41,6 +41,21 @@ class ChefsScreen extends ConsumerWidget {
   /// scroll, which has no such constraint.
   static const double maxTwoColumnTextScale = 1.3;
 
+  /// The board panel's header inset (top 14, bottom 10 — the draft's).
+  static const EdgeInsets _panelHeaderPadding = EdgeInsets.fromLTRB(
+    AppSpacing.md,
+    14,
+    AppSpacing.md,
+    10,
+  );
+
+  /// The panel footer's left inset: lines the footnote up with a board row's
+  /// text rather than with the panel edge.
+  static const double _panelFooterStart = 14;
+
+  /// The inline `Load more` spinner's stroke.
+  static const double _spinnerStroke = 2;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (context.isCompact) return const _CompactBoard();
@@ -318,7 +333,7 @@ class _BoardPanel extends ConsumerWidget {
         shrinkWrap: !scrollable,
         physics: scrollable ? null : const NeverScrollableScrollPhysics(),
         itemCount: page.rows.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 6),
+        separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.xsPlus),
         itemBuilder:
             (context, i) => _BoardCard(
               row: page.rows[i],
@@ -335,35 +350,32 @@ class _BoardPanel extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.md,
-              14,
-              AppSpacing.md,
-              10,
-            ),
+            padding: ChefsScreen._panelHeaderPadding,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
                   children: [
-                    Icon(Icons.leaderboard, size: 20, color: scheme.primary),
+                    Icon(
+                      Icons.leaderboard,
+                      size: AppIconSize.md,
+                      color: scheme.primary,
+                    ),
                     const SizedBox(width: AppSpacing.sm),
                     Expanded(
                       child: Text(
                         'Leaderboard',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: theme.textTheme.titleMedium,
                       ),
                     ),
                     const SizedBox(width: AppSpacing.sm),
                     Text(
                       _shownLabel(page?.rows.length, total, view.sort),
-                      style: theme.textTheme.labelSmall?.copyWith(
+                      // `TOP 25 / 148`: counts, so tabular (UX-049).
+                      style: context.appText.overline.tabular.copyWith(
                         color: scheme.onSurfaceVariant,
-                        letterSpacing: 0.6,
                       ),
                     ),
                   ],
@@ -410,7 +422,12 @@ class _PanelFooter extends StatelessWidget {
     final more = page?.hasMore ?? false;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(14, AppSpacing.sm, AppSpacing.sm, 6),
+      padding: const EdgeInsets.fromLTRB(
+        ChefsScreen._panelFooterStart,
+        AppSpacing.sm,
+        AppSpacing.sm,
+        AppSpacing.xsPlus,
+      ),
       child: Row(
         children: [
           Expanded(
@@ -470,9 +487,11 @@ class _LoadMoreButton extends ConsumerWidget {
         icon:
             loading
                 ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2),
+                  width: AppIconSize.sm,
+                  height: AppIconSize.sm,
+                  child: CircularProgressIndicator(
+                    strokeWidth: ChefsScreen._spinnerStroke,
+                  ),
                 )
                 : const Icon(Icons.expand_more),
         label: label,

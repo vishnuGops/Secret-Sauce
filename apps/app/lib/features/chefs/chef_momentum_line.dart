@@ -39,17 +39,15 @@ class ChefMomentumLine extends ConsumerWidget {
       data: (w) {
         if (w == null) return const SizedBox.shrink();
 
-        final muted = theme.textTheme.bodySmall?.copyWith(
+        // Tabular: every clause but the quiet one is a count (UX-049).
+        final muted = theme.textTheme.bodySmall?.tabular.copyWith(
           color: scheme.onSurfaceVariant,
         );
         final facts = <Widget>[
           if (w.moved)
             Text(
               '${w.gainLabel} points',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: scheme.primary,
-                fontWeight: FontWeight.w800,
-              ),
+              style: context.appText.quantity.copyWith(color: scheme.primary),
             )
           else
             // A quiet window is an answer, not an absence: say it, the way the

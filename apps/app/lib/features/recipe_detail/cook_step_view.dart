@@ -26,6 +26,31 @@ const double kCookTwoColumnMin = 1180;
 /// is actually reading.
 const double kCookStackScale = 1.35;
 
+/// The canvas's step column (frame H) — the measure of 40px step text.
+const double _kStepColumnMaxWidth = 720;
+
+/// The canvas's rail beside it.
+const double _kRailWidth = 400;
+
+/// The compact advance target — big enough to hit with a knuckle.
+const double _kAdvanceTarget = 52;
+
+/// The wide layout's Previous / advance height.
+const double _kWideActionHeight = 56;
+
+/// The numbered disc in front of an upcoming step.
+const double _kStepNumberDiameter = 30;
+
+/// The progress bar's segments: thin on compact, thick on the web frame.
+const double _kProgressThin = 4;
+const double _kProgressThick = 6;
+const double _kProgressRadius = 2;
+
+/// The running timer's ring — smaller where it sits beside the controls.
+const double _kRingSize = 150;
+const double _kRingSizeWide = 132;
+const double _kRingStroke = 12;
+
 /// One step of cook mode: the step the cook is on, its timer, and what it needs.
 ///
 /// Compact and expanded are genuinely different layouts (canvas frames C/D and
@@ -167,7 +192,7 @@ class _Compact extends ConsumerWidget {
                 ),
                 // Balances the close button so the title reads centred without
                 // a Stack. Not an affordance — nothing to put here yet.
-                const SizedBox(width: 48),
+                const SizedBox(width: kMinInteractiveDimension),
               ],
             ),
           ),
@@ -199,10 +224,9 @@ class _Compact extends ConsumerWidget {
                   _RingingBanner(recipe: recipe, steps: steps),
                   Text(
                     current.step.text,
-                    style: textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      height: 1.32,
-                    ),
+                    // Sans, not the serif headline: a step is something the
+                    // cook acts on. The 1.32 leading is this frame's own.
+                    style: context.appText.step.copyWith(height: 1.32),
                   ),
                   _StepChips(step: current.step),
                   _TimerPanel(recipe: recipe, step: current.step),
@@ -256,25 +280,25 @@ class _BottomBar extends StatelessWidget {
       ),
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.md,
-        12,
+        AppSpacing.smPlus,
         AppSpacing.md,
         AppSpacing.md,
       ),
       child: Row(
         children: [
           SizedBox(
-            width: 52,
-            height: 52,
+            width: _kAdvanceTarget,
+            height: _kAdvanceTarget,
             child: IconButton.filledTonal(
               tooltip: 'Previous step',
               onPressed: canGoBack ? onPrevious : null,
               icon: const Icon(Icons.arrow_back),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.smPlus),
           Expanded(
             child: SizedBox(
-              height: 52,
+              height: _kAdvanceTarget,
               child: FilledButton.icon(
                 onPressed: onNext,
                 icon: Icon(isLast ? Icons.flag : Icons.check),
@@ -305,7 +329,7 @@ class _NeededStrip extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return Container(
       margin: const EdgeInsets.only(top: AppSpacing.md),
-      padding: const EdgeInsets.only(top: 12),
+      padding: const EdgeInsets.only(top: AppSpacing.smPlus),
       decoration: BoxDecoration(
         border: Border(top: BorderSide(color: scheme.outlineVariant)),
       ),
@@ -396,13 +420,11 @@ class _Wide extends ConsumerWidget {
         _RingingBanner(recipe: recipe, steps: steps),
         Text(
           current.step.text,
-          // 40px in the canvas — readable from a metre away. Uses the theme's
-          // displaySmall rather than a literal so it still scales with the
-          // platform text setting.
-          style: textTheme.displaySmall?.copyWith(
-            fontWeight: FontWeight.w500,
-            height: 1.28,
-          ),
+          // 40px in the canvas — readable from a metre away. Uses the stepLarge
+          // role rather than a literal so it still scales with the platform
+          // text setting; sans, like the compact step. 1.28 is this frame's
+          // own leading.
+          style: context.appText.stepLarge.copyWith(height: 1.28),
         ),
         _StepChips(step: current.step),
         _TimerPanel(recipe: recipe, step: current.step, wide: !stacked),
@@ -446,12 +468,14 @@ class _Wide extends ConsumerWidget {
                       children: [
                         Expanded(
                           child: ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 720),
+                            constraints: const BoxConstraints(
+                              maxWidth: _kStepColumnMaxWidth,
+                            ),
                             child: stepColumn,
                           ),
                         ),
                         const SizedBox(width: AppSpacing.xl),
-                        SizedBox(width: 400, child: rail),
+                        SizedBox(width: _kRailWidth, child: rail),
                       ],
                     ),
           ),
@@ -477,7 +501,7 @@ class _WideTopBar extends StatelessWidget {
       ),
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.lg,
-        vertical: 12,
+        vertical: AppSpacing.smPlus,
       ),
       // The LayoutBuilder sits **outside** the Row on purpose. Inside it, as a
       // non-flex Row child, `constraints.maxWidth` is *infinity* — a non-flex
@@ -568,12 +592,12 @@ class _WideActions extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     return Wrap(
-      spacing: 12,
+      spacing: AppSpacing.smPlus,
       runSpacing: AppSpacing.sm,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         SizedBox(
-          height: 56,
+          height: _kWideActionHeight,
           child: FilledButton.tonalIcon(
             onPressed: canGoBack ? onPrevious : null,
             icon: const Icon(Icons.arrow_back),
@@ -581,7 +605,7 @@ class _WideActions extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 56,
+          height: _kWideActionHeight,
           child: FilledButton.icon(
             onPressed: onNext,
             icon: Icon(isLast ? Icons.flag : Icons.check),
@@ -678,9 +702,7 @@ class _CookRail extends StatelessWidget {
                               context.textScale.clamp(1.0, kDetailRailMaxScale),
                           child: Text(
                             ingredientQuantityLabel(ing, factor: factor),
-                            style: textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w800,
-                            ),
+                            style: context.appText.quantity,
                           ),
                         ),
                         Expanded(
@@ -720,8 +742,8 @@ class _CookRail extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: 30,
-                  height: 30,
+                  width: _kStepNumberDiameter,
+                  height: _kStepNumberDiameter,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: scheme.surfaceContainerHigh,
@@ -729,12 +751,10 @@ class _CookRail extends StatelessWidget {
                   ),
                   child: Text(
                     '${s.indexInGroup + 1}',
-                    style: textTheme.labelLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
+                    style: textTheme.titleSmall?.tabular,
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppSpacing.smPlus),
                 Expanded(
                   child: Text(
                     s.step.text,
@@ -795,13 +815,13 @@ class _Progress extends StatelessWidget {
         Row(
           children: [
             for (var i = 0; i < segments.length; i++) ...[
-              if (i > 0) const SizedBox(width: 4),
+              if (i > 0) const SizedBox(width: AppSpacing.xs),
               Expanded(
                 flex: segments[i].stepCount,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(_kProgressRadius),
                   child: SizedBox(
-                    height: thick ? 6 : 4,
+                    height: thick ? _kProgressThick : _kProgressThin,
                     child: LinearProgressIndicator(
                       value: segments[i].fill,
                       backgroundColor: scheme.surfaceContainerHighest,
@@ -874,7 +894,7 @@ class _StepChips extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.lightbulb_outline,
-                    size: 18,
+                    size: AppIconSize.button,
                     color: scheme.primary,
                   ),
                   const SizedBox(width: AppSpacing.sm),
@@ -917,7 +937,12 @@ class _RingingBanner extends ConsumerWidget {
         for (final stepId in session.ringing)
           Container(
             margin: const EdgeInsets.only(bottom: AppSpacing.md),
-            padding: const EdgeInsets.fromLTRB(AppSpacing.md, 8, 8, 8),
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.md,
+              AppSpacing.sm,
+              AppSpacing.sm,
+              AppSpacing.sm,
+            ),
             decoration: BoxDecoration(
               color: scheme.primaryContainer,
               borderRadius: BorderRadius.circular(AppRadii.card),
@@ -929,9 +954,8 @@ class _RingingBanner extends ConsumerWidget {
                 Expanded(
                   child: Text(
                     _label(stepId),
-                    style: textTheme.bodyMedium?.copyWith(
+                    style: textTheme.titleSmall?.copyWith(
                       color: scheme.onPrimaryContainer,
-                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
@@ -988,18 +1012,25 @@ class _TimerPanel extends ConsumerWidget {
         border: Border.all(color: scheme.outlineVariant),
         borderRadius: BorderRadius.circular(AppRadii.card),
       ),
-      padding: const EdgeInsets.all(14),
+      padding: AppInsets.callout,
       child:
           timer == null
               ? Row(
                 children: [
-                  Icon(Icons.timer_outlined, size: 24, color: scheme.primary),
-                  const SizedBox(width: 12),
+                  Icon(
+                    Icons.timer_outlined,
+                    size: AppIconSize.lg,
+                    color: scheme.primary,
+                  ),
+                  const SizedBox(width: AppSpacing.smPlus),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(formatClock(total), style: textTheme.titleMedium),
+                        Text(
+                          formatClock(total),
+                          style: textTheme.titleMedium?.tabular,
+                        ),
                         Text(
                           'Timer for this step',
                           style: textTheme.bodySmall?.copyWith(
@@ -1052,15 +1083,15 @@ class _RunningTimer extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     final ring = SizedBox(
-      width: wide ? 132 : 150,
-      height: wide ? 132 : 150,
+      width: wide ? _kRingSizeWide : _kRingSize,
+      height: wide ? _kRingSizeWide : _kRingSize,
       child: Stack(
         alignment: Alignment.center,
         children: [
           Positioned.fill(
             child: CircularProgressIndicator(
               value: timer.elapsedFraction,
-              strokeWidth: 12,
+              strokeWidth: _kRingStroke,
               backgroundColor: scheme.surfaceContainerHighest,
               color: timer.isDone ? scheme.tertiary : scheme.primary,
             ),
@@ -1070,11 +1101,8 @@ class _RunningTimer extends StatelessWidget {
             children: [
               Text(
                 formatClock(timer.remaining),
-                style: (wide ? textTheme.titleLarge : textTheme.headlineSmall)
-                    ?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      fontFeatures: const [FontFeature.tabularFigures()],
-                    ),
+                style:
+                    wide ? context.appText.clockSmall : context.appText.clock,
               ),
               Text(
                 'of ${formatClock(timer.total)}',

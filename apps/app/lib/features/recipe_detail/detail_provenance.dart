@@ -43,8 +43,8 @@ class ForkedLabel extends StatelessWidget {
     return Row(
       mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
       children: [
-        Icon(Icons.call_split, size: 16, color: scheme.primary),
-        const SizedBox(width: 4),
+        Icon(Icons.call_split, size: AppIconSize.sm, color: scheme.primary),
+        const SizedBox(width: AppSpacing.xs),
         if (expand) Expanded(child: label) else label,
       ],
     );
@@ -73,7 +73,11 @@ class AttributionBlock extends StatelessWidget {
     final row = Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(Icons.auto_stories, size: 20, color: scheme.onSurfaceVariant),
+        Icon(
+          Icons.auto_stories,
+          size: AppIconSize.md,
+          color: scheme.onSurfaceVariant,
+        ),
         const SizedBox(width: AppSpacing.sm),
         Expanded(
           child: Text(
@@ -91,7 +95,7 @@ class AttributionBlock extends StatelessWidget {
 
     if (!boxed) return row;
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: AppInsets.callout,
       decoration: BoxDecoration(
         color: scheme.surfaceContainerLowest,
         border: Border.all(color: scheme.outlineVariant),
@@ -227,18 +231,16 @@ class SourceCredit extends StatelessWidget {
             children: [
               Icon(
                 Icons.travel_explore_outlined,
-                size: 16,
+                size: AppIconSize.sm,
                 color: scheme.onSurfaceVariant,
               ),
-              const SizedBox(width: 6),
+              const SizedBox(width: AppSpacing.xsPlus),
               // The icon is the non-flex child and the text takes what is left
               // (Gotcha 21).
               Expanded(
                 child: Text(
                   'FROM AROUND THE WEB',
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.8,
+                  style: context.appText.overline.copyWith(
                     color: scheme.onSurfaceVariant,
                   ),
                 ),
@@ -303,12 +305,15 @@ class SourceCredit extends StatelessWidget {
             style: muted,
           ),
           TextButton.icon(
+            // Shape and label weight come from the theme (UX-033). Only the
+            // inset stays: a near-zero, compact padding keeps this link flush
+            // with the credit text above it instead of indented like a button.
             style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
               visualDensity: VisualDensity.compact,
             ),
             onPressed: () => context.push(Routes.legal(LegalDoc.rights.slug)),
-            icon: const Icon(Icons.gavel_outlined, size: 16),
+            icon: const Icon(Icons.gavel_outlined, size: AppIconSize.sm),
             label: const Text('How we credit recipes'),
           ),
         ],
@@ -361,7 +366,7 @@ class _CreditLine extends StatelessWidget {
       ),
     );
 
-    const pad = EdgeInsets.symmetric(vertical: 6);
+    const pad = EdgeInsets.symmetric(vertical: AppSpacing.xsPlus);
     if (onTap == null) return Padding(padding: pad, child: text);
 
     return InkWell(
@@ -374,7 +379,11 @@ class _CreditLine extends StatelessWidget {
           children: [
             Expanded(child: text),
             const SizedBox(width: AppSpacing.xs),
-            Icon(Icons.chevron_right, size: 18, color: scheme.onSurfaceVariant),
+            Icon(
+              Icons.chevron_right,
+              size: AppIconSize.button,
+              color: scheme.onSurfaceVariant,
+            ),
           ],
         ),
       ),
@@ -397,7 +406,7 @@ class _OriginalButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const icon = Icon(Icons.open_in_new, size: 18);
+    const icon = Icon(Icons.open_in_new, size: AppIconSize.button);
     // The label wraps rather than ellipsising: a host is unbounded, and a
     // half-printed address is the one thing a link must never be.
     final label = Text('Read the original on $host');

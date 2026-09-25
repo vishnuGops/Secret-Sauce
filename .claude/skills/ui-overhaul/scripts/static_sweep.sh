@@ -1,47 +1,66 @@
 #!/usr/bin/env bash
 # Phase 1 static sweep, as a script, so a re-audit measures the same thing the
 # baseline did. Run from the repo root (Git Bash / Linux):
-#   bash .claude/skills/ui-overhaul/scripts/static_sweep.sh
-# Counts are matching LINES over apps/app/lib + packages/design_system/lib.
-# "outside theme" excludes packages/design_system/lib/src/theme/, where literal
-# values are supposed to live.
+#   bash .claude/skills/ui-overhaul/scripts/static_sweep.sh [ROOT]
+# ROOT defaults to the current directory; point it at an exported old tree
+# (`git archive <rev> | tar -x -C <dir>`) to measure a baseline.
+# Counts are matching LINES over apps/app/lib + packages/design_system/lib,
+# comment lines excluded. "outside theme" excludes
+# packages/design_system/lib/src/theme/, where literal values belong.
 set -euo pipefail
+cd "${1:-.}"
 D=(apps/app/lib packages/design_system/lib)
 
-count() { # count <regex> [exclude-theme]
+matches() { # matches <regex> [x = exclude theme] — file:line:text, no comments
   local out
   out=$(grep -rnE --include='*.dart' "$1" "${D[@]}" || true)
+  out=$(printf '%s\n' "$out" | grep -vE '^[^:]+:[0-9]+:\s*//' || true)
   if [ "${2:-}" = x ]; then out=$(printf '%s\n' "$out" | grep -v 'src/theme/' || true); fi
-  printf '%s\n' "$out" | grep -c . || true
+  printf '%s\n' "$out" | grep . || true
 }
-worst() { # worst <regex> — top 3 files outside the theme
-  grep -rcE --include='*.dart' "$1" "${D[@]}" 2>/dev/null | grep -v 'src/theme/' |
-    grep -v ':0$' | sort -t: -k2 -nr | head -3 | sed 's|.*/||' | tr '\n' ' '
+count() { matches "$@" | grep -c . || true; }
+worst() { # top 3 files outside the theme
+  matches "$1" x | cut -d: -f1 | sort | uniq -c | sort -nr | head -3 |
+    awk '{n=split($2,p,"/"); printf "%s:%s ", p[n], $1}'
 }
 row() { printf '| %s | %s | %s |\n' "$1" "$2" "$3"; }
 
+COLORS='Colors\.[a-z]'
+HEX='Color\(0x'
+ALPHA_RAW='withValues\(alpha: [0-9.]|withOpacity\('
+WEIGHT='FontWeight\.'
+SIZE='fontSize:'
+TRACK='letterSpacing:'
+COPY='(textTheme\.[a-zA-Z]+|style)[!?]?\.copyWith\('
+INSETS='EdgeInsets\.[a-zA-Z]*\([^)]*[1-9]'
+BOX='SizedBox\((height|width): [0-9]'
+RADIUS='(BorderRadius|Radius)\.circular\([0-9]'
+DUR='Duration\(milliseconds'
+TAB='tabularFigures|kTabularFigures|\.tabular\b|appText\.(stat|statLarge|quantity|clock|clockSmall|kicker|kickerLarge)\b'
+
 echo '| Signal | Count | Worst files |'
 echo '| --- | --- | --- |'
-row 'Colors. (outside theme)' "$(count 'Colors\.[a-z]' x)" "$(worst 'Colors\.[a-z]')"
-row 'Color(0x (outside theme)' "$(count 'Color\(0x' x)" "$(worst 'Color\(0x')"
-row 'withValues(alpha / withOpacity (outside theme)' "$(count 'withOpacity|withValues\(alpha' x)" "$(worst 'withOpacity|withValues\(alpha')"
-row 'FontWeight. (outside theme)' "$(count 'FontWeight\.' x)" "$(worst 'FontWeight\.')"
-row 'fontSize: (outside theme)' "$(count 'fontSize:' x)" "$(worst 'fontSize:')"
-row 'letterSpacing: (outside theme)' "$(count 'letterSpacing:' x)" "$(worst 'letterSpacing:')"
-row 'Text-style copyWith' "$(count '(textTheme\.[a-zA-Z]+|style)[!?]?\.copyWith\(' x)" "$(worst '(textTheme\.[a-zA-Z]+|style)[!?]?\.copyWith\(')"
-row 'tabularFigures' "$(count 'tabularFigures')" ''
-row 'ThemeExtension' "$(count 'extends ThemeExtension')" ''
+row 'Colors.* (outside theme; `transparent` included)' "$(count "$COLORS" x)" "$(worst "$COLORS")"
+row 'Color(0x… (outside theme)' "$(count "$HEX" x)" "$(worst "$HEX")"
+row 'Raw numeric alpha (outside theme)' "$(count "$ALPHA_RAW" x)" "$(worst "$ALPHA_RAW")"
+row 'FontWeight.* (outside theme)' "$(count "$WEIGHT" x)" "$(worst "$WEIGHT")"
+row 'fontSize: (outside theme)' "$(count "$SIZE" x)" "$(worst "$SIZE")"
+row 'letterSpacing: (outside theme)' "$(count "$TRACK" x)" "$(worst "$TRACK")"
+row 'Text-style copyWith (outside theme)' "$(count "$COPY" x)" "$(worst "$COPY")"
+row 'Tabular-figure sites' "$(count "$TAB" x)" ''
+row 'ThemeExtension classes' "$(count 'extends ThemeExtension')" ''
 row 'AppSpacing uses' "$(count 'AppSpacing\.')" ''
-row 'Raw EdgeInsets number (outside theme)' "$(count 'EdgeInsets\.[a-zA-Z]*\([^)]*[0-9]' x)" "$(worst 'EdgeInsets\.[a-zA-Z]*\([^)]*[0-9]')"
-row 'Raw SizedBox number' "$(count 'SizedBox\((height|width): [0-9]' x)" "$(worst 'SizedBox\((height|width): [0-9]')"
-row 'Raw BorderRadius/Radius.circular(n) (outside theme)' "$(count '(BorderRadius|Radius)\.circular\([0-9]' x)" "$(worst '(BorderRadius|Radius)\.circular\([0-9]')"
+row 'Raw non-zero EdgeInsets number (outside theme)' "$(count "$INSETS" x)" "$(worst "$INSETS")"
+row 'Raw SizedBox number (outside theme)' "$(count "$BOX" x)" "$(worst "$BOX")"
+row 'Raw (Border)Radius.circular(n) (outside theme)' "$(count "$RADIUS" x)" "$(worst "$RADIUS")"
 row 'AppRadii uses' "$(count 'AppRadii\.')" ''
-row 'Duration(milliseconds (outside theme)' "$(count 'Duration\(milliseconds' x)" "$(worst 'Duration\(milliseconds')"
-row 'Curves. (outside theme)' "$(count 'Curves\.' x)" ''
+row 'Duration(milliseconds (outside theme)' "$(count "$DUR" x)" "$(worst "$DUR")"
+row 'Curves.* (outside theme)' "$(count 'Curves\.' x)" ''
 row 'AppMotion uses' "$(count 'AppMotion\.')" ''
-row 'disableAnimationsOf / AppMotion.of' "$(count 'disableAnimationsOf|AppMotion\.of\(')" ''
+row 'Reduced-motion reads (disableAnimationsOf / AppMotion.of / animateScroll)' "$(count 'disableAnimationsOf|AppMotion\.(of|animateScroll)\(')" ''
 row 'BoxShadow(' "$(count 'BoxShadow\(')" ''
-row 'IconButton(' "$(count 'IconButton(\.[a-zA-Z]+)?\(')" ''
+row 'IconButton( (outside theme)' "$(count 'IconButton(\.[a-zA-Z]+)?\(' x)" ''
 row 'Semantics(' "$(count '\bSemantics\(')" ''
-row 'Button themes in ThemeData' "$(grep -chE '(filled|outlined|text|elevated|icon|segmented)ButtonTheme:' packages/design_system/lib/src/theme/*.dart | awk '{s+=$1} END {print s}')" ''
-row 'Component themes in ThemeData' "$(grep -chE '^\s+[a-zA-Z]+Theme: ' packages/design_system/lib/src/theme/*.dart | awk '{s+=$1} END {print s}')" ''
+THEME=packages/design_system/lib/src/theme
+row 'Button themes in ThemeData' "$(cat "$THEME"/*.dart | grep -cE '(filled|outlined|text|elevated|icon|segmented)ButtonTheme:' || true)" ''
+row 'Component themes in ThemeData' "$(cat "$THEME"/*.dart | grep -cE '^\s+[a-zA-Z]+Theme: ' || true)" ''

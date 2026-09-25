@@ -7,6 +7,9 @@ import 'package:go_router/go_router.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:app/widgets/legal_footer.dart';
 
+/// The profile's avatar (88 wide).
+const double _kAvatarRadius = 44;
+
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
@@ -36,7 +39,7 @@ class ProfileScreen extends ConsumerWidget {
             children: [
               Center(
                 child: CircleAvatar(
-                  radius: 44,
+                  radius: _kAvatarRadius,
                   backgroundColor: scheme.primaryContainer,
                   backgroundImage:
                       (profile.avatarUrl?.isNotEmpty ?? false)

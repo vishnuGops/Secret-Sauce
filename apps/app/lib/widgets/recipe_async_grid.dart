@@ -143,6 +143,9 @@ class RecipeAsyncSliverGrid<N extends PagedRecipesNotifier>
 /// decision: an explicit tap is the only version that works identically on a
 /// phone flick and a desktop scrollbar, and it never fetches a page the reader
 /// did not ask for.
+/// Stroke of the Load-more button's in-flight spinner.
+const double _kSpinnerStroke = 2;
+
 class _LoadMoreButton extends StatelessWidget {
   const _LoadMoreButton({required this.loading, required this.onPressed});
 
@@ -174,9 +177,11 @@ class _LoadMoreButton extends StatelessWidget {
           icon:
               loading
                   ? const SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                    width: AppIconSize.sm,
+                    height: AppIconSize.sm,
+                    child: CircularProgressIndicator(
+                      strokeWidth: _kSpinnerStroke,
+                    ),
                   )
                   : const Icon(Icons.expand_more),
           label: Text(loading ? 'Loading…' : 'Load more'),

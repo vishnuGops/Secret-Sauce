@@ -2,6 +2,12 @@ import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
+/// A one-pixel rule — the hairline under the kicker and the masthead.
+const double _kHairline = 1;
+
+/// The square printer's mark that opens the kicker.
+const double _kMarkSize = 7;
+
 /// The top of Discover: a printed masthead, not a hero.
 ///
 /// `/chefs` opens with a dark brand gradient. Doing that twice would make the
@@ -31,6 +37,13 @@ class DiscoverMasthead extends StatelessWidget {
   /// Below this the title and the search field stack.
   static const double _rowWidth = 720;
 
+  /// Measure of the one line of copy under the title.
+  static const double _copyMaxWidth = 460;
+
+  /// The accent stroke that opens the closing rule.
+  static const double _strokeWidth = 56;
+  static const double _strokeHeight = 3;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -48,16 +61,11 @@ class DiscoverMasthead extends StatelessWidget {
               'Discover',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              // TODO(fonts): the drafts set this in Newsreader; a font change
-              // is app-wide, not a Discover change (Phase 23, D7).
-              style: theme.textTheme.displaySmall?.copyWith(
-                fontWeight: FontWeight.w600,
-                height: 1,
-              ),
+              style: theme.textTheme.displaySmall?.copyWith(height: 1),
             ),
             const SizedBox(height: AppSpacing.sm),
             ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 460),
+              constraints: const BoxConstraints(maxWidth: _copyMaxWidth),
               child: Text(
                 'Three shelves for three kinds of hunger — then everything '
                 'else the vault has made public.',
@@ -103,15 +111,18 @@ class DiscoverMasthead extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  width: 56,
-                  height: 3,
+                  width: _strokeWidth,
+                  height: _strokeHeight,
                   decoration: BoxDecoration(
                     color: scheme.primary,
                     borderRadius: BorderRadius.circular(AppRadii.pill),
                   ),
                 ),
                 Expanded(
-                  child: Container(height: 1, color: scheme.outlineVariant),
+                  child: Container(
+                    height: _kHairline,
+                    color: scheme.outlineVariant,
+                  ),
                 ),
               ],
             ),
@@ -137,10 +148,9 @@ class _Kicker extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
-    final style = theme.textTheme.labelSmall?.copyWith(
+    // The index line (UX-031/UX-032): tracking consolidated 1.8 → 1.4.
+    final style = context.appText.kicker.copyWith(
       color: scheme.onSurfaceVariant,
-      letterSpacing: 1.8,
-      fontWeight: FontWeight.w700,
     );
 
     // The rule is the only flex child. Three flex children — which is what a
@@ -167,11 +177,20 @@ class _Kicker extends StatelessWidget {
 
         return Row(
           children: [
-            Container(width: 7, height: 7, color: scheme.primary),
+            Container(
+              width: _kMarkSize,
+              height: _kMarkSize,
+              color: scheme.primary,
+            ),
             const SizedBox(width: AppSpacing.sm),
             label('THE PASS', TextAlign.left, 0.3),
             const SizedBox(width: AppSpacing.md),
-            Expanded(child: Container(height: 1, color: scheme.outlineVariant)),
+            Expanded(
+              child: Container(
+                height: _kHairline,
+                color: scheme.outlineVariant,
+              ),
+            ),
             const SizedBox(width: AppSpacing.md),
             label(
               // A dash, not a hidden line, until the count lands: the row keeps

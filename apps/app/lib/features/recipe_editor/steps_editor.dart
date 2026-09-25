@@ -114,6 +114,12 @@ class StepsEditor extends StatelessWidget {
 ///
 /// The photo is not behind that disclosure: it is the one piece of step content
 /// that has to be visible to be judged, so a step that has one always shows it.
+/// The step-number bubble's radius (24 wide).
+const double _kBubbleRadius = 12;
+
+/// Where the step field starts: past the bubble and the gap beside it.
+const double _kStepIndent = 2 * _kBubbleRadius + AppSpacing.sm;
+
 class _StepRow extends StatelessWidget {
   const _StepRow({
     required this.step,
@@ -133,13 +139,13 @@ class _StepRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
       child: Column(
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(radius: 12, child: Text('$number')),
+              CircleAvatar(radius: _kBubbleRadius, child: Text('$number')),
               const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: TextField(
@@ -152,13 +158,16 @@ class _StepRow extends StatelessWidget {
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.add_a_photo_outlined, size: 18),
+                icon: const Icon(
+                  Icons.add_a_photo_outlined,
+                  size: AppIconSize.button,
+                ),
                 color: step.hasImage ? scheme.primary : null,
                 tooltip: 'Step photo',
                 onPressed: () => onPickImage(step),
               ),
               IconButton(
-                icon: const Icon(Icons.tune, size: 18),
+                icon: const Icon(Icons.tune, size: AppIconSize.button),
                 color: step.hasDetails ? scheme.primary : null,
                 tooltip: 'Time, temperature & tip',
                 onPressed: () {
@@ -167,7 +176,7 @@ class _StepRow extends StatelessWidget {
                 },
               ),
               IconButton(
-                icon: const Icon(Icons.close, size: 18),
+                icon: const Icon(Icons.close, size: AppIconSize.button),
                 tooltip: 'Remove step',
                 onPressed: onRemove,
               ),
@@ -179,7 +188,7 @@ class _StepRow extends StatelessWidget {
               // the gap beside it is `sm`, the same sum the detail block below
               // uses.
               padding: const EdgeInsets.only(
-                left: AppSpacing.lg + AppSpacing.sm,
+                left: _kStepIndent,
                 top: AppSpacing.xs,
                 bottom: AppSpacing.sm,
               ),
@@ -195,7 +204,7 @@ class _StepRow extends StatelessWidget {
           if (step.showDetails)
             Padding(
               padding: const EdgeInsets.only(
-                left: AppSpacing.lg + AppSpacing.sm,
+                left: _kStepIndent,
                 top: AppSpacing.xs,
                 bottom: AppSpacing.sm,
               ),
@@ -309,7 +318,7 @@ class _StepImage extends StatelessWidget {
           right: AppSpacing.xs,
           child: IconButton.filledTonal(
             visualDensity: VisualDensity.compact,
-            icon: const Icon(Icons.close, size: 18),
+            icon: const Icon(Icons.close, size: AppIconSize.button),
             tooltip: 'Remove photo',
             onPressed: onRemove,
           ),

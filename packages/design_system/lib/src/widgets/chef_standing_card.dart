@@ -77,6 +77,15 @@ class ChefStandingCard extends StatelessWidget {
   /// Width of the tier spine on the card's leading edge.
   static const double spineWidth = 6;
 
+  /// The podium row's gap between rank, avatar, text and score at full width
+  /// (compact uses [AppSpacing.smPlus]).
+  static const double _gapWide = 14;
+
+  /// Avatar radius on the full-width podium row, and on the compact podium and
+  /// the board row.
+  static const double _avatarRadius = 22;
+  static const double _avatarRadiusCompact = 18;
+
   /// Medal glyph for a podium rank, or null below the top three.
   static IconData? medalFor(int rank) => switch (rank) {
     1 => Icons.workspace_premium,
@@ -102,7 +111,7 @@ class ChefStandingCard extends StatelessWidget {
     }
 
     final compact = dense ?? context.isCompact;
-    final gap = compact ? 12.0 : 14.0;
+    final gap = compact ? AppSpacing.smPlus : _gapWide;
 
     return Card(
       // The spine runs to the card's edge, so the child has to be clipped to
@@ -119,10 +128,10 @@ class ChefStandingCard extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.fromLTRB(
-                (compact ? 12 : AppSpacing.md) + spineWidth,
-                12,
-                compact ? 12 : AppSpacing.md,
-                12,
+                (compact ? AppSpacing.smPlus : AppSpacing.md) + spineWidth,
+                AppSpacing.smPlus,
+                compact ? AppSpacing.smPlus : AppSpacing.md,
+                AppSpacing.smPlus,
               ),
               child: Row(
                 children: [
@@ -131,9 +140,9 @@ class ChefStandingCard extends StatelessWidget {
                   ChefAvatar(
                     name: standing.displayName,
                     avatarUrl: standing.avatarUrl,
-                    radius: compact ? 18 : 22,
+                    radius: compact ? _avatarRadiusCompact : _avatarRadius,
                     backgroundColor: Color.alphaBlend(
-                      tier.withValues(alpha: 0.18),
+                      tier.withValues(alpha: AppAlpha.tintStrong),
                       scheme.surfaceContainerHigh,
                     ),
                     foregroundColor: tier,
@@ -208,6 +217,12 @@ class _BoardRow extends StatelessWidget {
   final String? windowLabel;
   final String? note;
 
+  /// The row's vertical inset.
+  static const double _verticalInset = 9;
+
+  /// The tier bar across the bottom edge.
+  static const double _barHeight = 3;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -222,7 +237,10 @@ class _BoardRow extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(12, 9, 12, 9),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.smPlus,
+                vertical: _verticalInset,
+              ),
               child: Row(
                 children: [
                   _RankPill(rank: standing.chefRank, color: color),
@@ -230,11 +248,11 @@ class _BoardRow extends StatelessWidget {
                   ChefAvatar(
                     name: standing.displayName,
                     avatarUrl: standing.avatarUrl,
-                    radius: 18,
+                    radius: ChefStandingCard._avatarRadiusCompact,
                     tier: standing.chefTier,
                     surfaceColor: scheme.surface,
                     backgroundColor: Color.alphaBlend(
-                      color.withValues(alpha: 0.16),
+                      color.withValues(alpha: AppAlpha.tintStrong),
                       scheme.surfaceContainerHigh,
                     ),
                     foregroundColor: color,
@@ -249,16 +267,14 @@ class _BoardRow extends StatelessWidget {
                           standing.displayName,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.labelLarge?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
+                          style: theme.textTheme.titleSmall,
                         ),
-                        const SizedBox(height: 2),
+                        const SizedBox(height: AppSpacing.xxs),
                         // Wrap, not Row: at 2.0x text scale the chip alone is
                         // most of a 404px panel's text column.
                         Wrap(
                           spacing: AppSpacing.sm,
-                          runSpacing: 2,
+                          runSpacing: AppSpacing.xxs,
                           crossAxisAlignment: WrapCrossAlignment.center,
                           children: [
                             TierChip(tier: standing.chefTier, dense: true),
@@ -266,9 +282,8 @@ class _BoardRow extends StatelessWidget {
                               countOf(standing.publicRecipeCount, 'recipes'),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                color: scheme.onSurfaceVariant,
-                              ),
+                              style: theme.textTheme.labelSmall?.tabular
+                                  .copyWith(color: scheme.onSurfaceVariant),
                             ),
                             if (note != null)
                               Text(
@@ -296,10 +311,10 @@ class _BoardRow extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 3,
+              height: _barHeight,
               child: LinearProgressIndicator(
                 value: standing.tierProgress,
-                minHeight: 3,
+                minHeight: _barHeight,
                 backgroundColor: scheme.surfaceContainerHigh,
                 valueColor: AlwaysStoppedAnimation<Color>(color),
               ),
@@ -318,31 +333,33 @@ class _RankPill extends StatelessWidget {
   final int rank;
   final Color color;
 
+  /// The disc's diameter, and the side padding that keeps a numeral off its
+  /// curve.
+  static const double _size = 28;
+  static const double _padding = 3;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Container(
-      width: 28,
-      height: 28,
+      width: _size,
+      height: _size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: color.withValues(alpha: 0.14),
+        color: color.withValues(alpha: AppAlpha.tint),
       ),
       // Ranks past two digits would otherwise clip the disc, as would 2.0x
       // text scale on a two-digit rank.
       child: FittedBox(
         fit: BoxFit.scaleDown,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 3),
+          padding: const EdgeInsets.symmetric(horizontal: _padding),
           child: Text(
             '$rank',
             maxLines: 1,
-            style: theme.textTheme.labelLarge?.copyWith(
-              color: color,
-              fontWeight: FontWeight.w800,
-            ),
+            style: theme.textTheme.titleSmall?.tabular.copyWith(color: color),
           ),
         ),
       ),
@@ -364,11 +381,17 @@ class _RankBlock extends StatelessWidget {
   final Color color;
   final bool compact;
 
+  /// Column width and medal glyph size, full and compact.
+  static const double _width = 46;
+  static const double _widthCompact = 38;
+  static const double _medalSize = 26;
+  static const double _medalSizeCompact = 22;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final medal = ChefStandingCard.medalFor(standing.chefRank);
-    final width = compact ? 38.0 : 46.0;
+    final width = compact ? _widthCompact : _width;
 
     return SizedBox(
       width: width,
@@ -376,14 +399,17 @@ class _RankBlock extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (medal != null)
-            Icon(medal, size: compact ? 22 : 26, color: color)
+            Icon(
+              medal,
+              size: compact ? _medalSizeCompact : _medalSize,
+              color: color,
+            )
           else
             FittedBox(
               child: Text(
                 '${standing.chefRank}',
-                style: theme.textTheme.titleLarge?.copyWith(
+                style: context.appText.statLarge.copyWith(
                   color: color,
-                  fontWeight: FontWeight.w800,
                   height: 1.1,
                 ),
               ),
@@ -391,10 +417,9 @@ class _RankBlock extends StatelessWidget {
           FittedBox(
             child: Text(
               medal != null ? '#${standing.chefRank}' : 'rank',
-              style: theme.textTheme.labelSmall?.copyWith(
+              style: theme.textTheme.labelSmall?.tabular.copyWith(
                 color:
                     medal != null ? color : theme.colorScheme.onSurfaceVariant,
-                fontWeight: medal != null ? FontWeight.w800 : null,
               ),
             ),
           ),
@@ -424,10 +449,7 @@ class _NameLine extends StatelessWidget {
       standing.displayName,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style: (compact
-              ? theme.textTheme.titleSmall
-              : theme.textTheme.titleMedium)
-          ?.copyWith(fontWeight: FontWeight.w700),
+      style: compact ? theme.textTheme.titleSmall : theme.textTheme.titleMedium,
     );
     final chip = TierChip(tier: standing.chefTier, dense: true);
 
@@ -435,7 +457,7 @@ class _NameLine extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: [name, const SizedBox(height: 2), chip],
+        children: [name, const SizedBox(height: AppSpacing.xxs), chip],
       );
     }
 
@@ -477,8 +499,8 @@ class _Stats extends StatelessWidget {
     Widget stat(IconData icon, int value, String label) => Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 14, color: scheme.onSurfaceVariant),
-        const SizedBox(width: 4),
+        Icon(icon, size: AppIconSize.xs, color: scheme.onSurfaceVariant),
+        const SizedBox(width: AppSpacing.xs),
         Flexible(
           child: Text(
             // `countOf` drops the plural's "s" at one — "1 recipes" was on
@@ -486,9 +508,8 @@ class _Stats extends StatelessWidget {
             compact ? groupedCount(value) : countOf(value, label),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.labelSmall?.copyWith(
+            style: theme.textTheme.labelSmall?.tabular.copyWith(
               color: scheme.onSurfaceVariant,
-              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -497,7 +518,7 @@ class _Stats extends StatelessWidget {
 
     final w = window;
     return Wrap(
-      spacing: compact ? 12 : AppSpacing.md,
+      spacing: compact ? AppSpacing.smPlus : AppSpacing.md,
       runSpacing: AppSpacing.xs,
       children: [
         if (w == null) ...[
@@ -547,14 +568,19 @@ class _ScoreBlock extends StatelessWidget {
   final ChefWindowStats? window;
   final String? windowLabel;
 
+  /// The column's width cap, full and compact.
+  static const double _maxWidth = 116;
+  static const double _maxWidthCompact = 92;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final w = window;
+    final maxWidth = compact ? _maxWidthCompact : _maxWidth;
     if (w != null) {
       return ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: compact ? 92 : 116),
+        constraints: BoxConstraints(maxWidth: maxWidth),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisSize: MainAxisSize.min,
@@ -565,8 +591,7 @@ class _ScoreBlock extends StatelessWidget {
               child: Text(
                 w.gainLabel,
                 maxLines: 1,
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w800,
+                style: context.appText.statLarge.copyWith(
                   height: 1.1,
                   color: w.moved ? scheme.primary : null,
                 ),
@@ -589,7 +614,7 @@ class _ScoreBlock extends StatelessWidget {
     final atTop = next == null;
 
     return ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: compact ? 92 : 116),
+      constraints: BoxConstraints(maxWidth: maxWidth),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
@@ -600,8 +625,7 @@ class _ScoreBlock extends StatelessWidget {
             child: Text(
               standing.scoreLabel,
               maxLines: 1,
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w800,
+              style: context.appText.statLarge.copyWith(
                 height: 1.1,
                 color: atTop ? color : null,
               ),
@@ -614,7 +638,6 @@ class _ScoreBlock extends StatelessWidget {
             textAlign: TextAlign.end,
             style: theme.textTheme.labelSmall?.copyWith(
               color: atTop ? color : scheme.onSurfaceVariant,
-              fontWeight: atTop ? FontWeight.w700 : null,
             ),
           ),
         ],

@@ -80,8 +80,9 @@ class _RecipeDetailCompactState extends ConsumerState<RecipeDetailCompact> {
     if (ctx == null) return;
     await Scrollable.ensureVisible(
       ctx,
-      duration: const Duration(milliseconds: 250),
-      curve: Curves.easeOut,
+      // Collapses to a jump under reduced motion (UX-050).
+      duration: AppMotion.of(context, AppMotion.normal),
+      curve: AppMotion.decelerate,
       // Leaves the pinned jump bar's own height clear of the heading it just
       // scrolled to, instead of parking the heading underneath it.
       alignment: 0.08,
@@ -166,6 +167,13 @@ class _Cover extends ConsumerWidget {
   final Recipe recipe;
   final bool isOwner;
 
+  /// The band's height with a photo, and without one.
+  static const double _kPhotoHeight = 210;
+  static const double _kFlatHeight = 96;
+
+  /// Past this text scale the band stops growing with the type.
+  static const double _kMaxGrowth = 1.6;
+
   Future<void> _showVersions(BuildContext context, WidgetRef ref) async {
     final versions = await ref.read(recipeVersionsProvider(recipe.id).future);
     if (context.mounted) await VersionHistorySheet.show(context, versions);
@@ -182,7 +190,8 @@ class _Cover extends ConsumerWidget {
     // Bounded against text scale like every other fixed-height region here: the
     // bar of icon buttons on top of it grows with the type (Gotcha 22).
     final height =
-        (hasCover ? 210.0 : 96.0) * context.textScale.clamp(1.0, 1.6);
+        (hasCover ? _kPhotoHeight : _kFlatHeight) *
+        context.textScale.clamp(1.0, _kMaxGrowth);
 
     return SizedBox(
       height: height,
@@ -242,19 +251,16 @@ class _Cover extends ConsumerWidget {
               left: AppSpacing.md,
               bottom: AppSpacing.sm,
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
+                padding: AppInsets.pill,
                 decoration: BoxDecoration(
-                  color: scheme.surface.withValues(alpha: 0.9),
+                  color: scheme.surface.withValues(alpha: AppAlpha.frosted),
                   borderRadius: BorderRadius.circular(AppRadii.pill),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.lock, size: 14),
-                    const SizedBox(width: 4),
+                    const Icon(Icons.lock, size: AppIconSize.xs),
+                    const SizedBox(width: AppSpacing.xs),
                     Text(
                       'Private',
                       style: Theme.of(context).textTheme.labelSmall,
@@ -295,12 +301,13 @@ class _ScrimButton extends StatelessWidget {
         onPressed: onPressed,
       );
     }
+    final palette = context.palette;
     return IconButton(
       tooltip: tooltip,
       icon: Icon(icon),
       style: IconButton.styleFrom(
-        backgroundColor: Colors.black.withValues(alpha: 0.4),
-        foregroundColor: Colors.white,
+        backgroundColor: palette.imageControl,
+        foregroundColor: palette.onImage,
       ),
       onPressed: onPressed,
     );
@@ -356,7 +363,7 @@ class _IdentityBand extends StatelessWidget {
               StarRating(
                 rating: recipe.ratingAvg,
                 count: recipe.ratingCount,
-                size: 18,
+                size: AppIconSize.button,
               ),
             ],
           ),
@@ -407,7 +414,11 @@ class _JumpBarDelegate extends SliverPersistentHeaderDelegate {
   /// Null for the owner — you cannot fork your own recipe.
   final VoidCallback? onFork;
 
-  double get _extent => 56 * textScale.clamp(1.0, 1.8);
+  /// The bar's height at 1.0×, and the text scale past which it stops growing.
+  static const double _kBarHeight = 56;
+  static const double _kMaxGrowth = 1.8;
+
+  double get _extent => _kBarHeight * textScale.clamp(1.0, _kMaxGrowth);
 
   @override
   double get minExtent => _extent;
@@ -442,7 +453,7 @@ class _JumpBarDelegate extends SliverPersistentHeaderDelegate {
             if (onFork != null) ...[
               const SizedBox(width: AppSpacing.sm),
               ActionChip(
-                avatar: const Icon(Icons.call_split, size: 16),
+                avatar: const Icon(Icons.call_split, size: AppIconSize.sm),
                 label: const Text('Fork'),
                 onPressed: onFork,
               ),
@@ -526,7 +537,7 @@ class _ReadyToCookBar extends StatelessWidget {
       ),
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.md,
-        12,
+        AppSpacing.smPlus,
         AppSpacing.md,
         AppSpacing.md,
       ),

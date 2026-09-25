@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:design_system/src/theme/app_theme.dart';
 
+/// The error glyph — between [AppIconSize.xl] and [AppIconSize.xxl], a notch
+/// quieter than the empty state's.
+const double _kErrorIconSize = 48;
+
 /// Centered progress indicator.
 class LoadingView extends StatelessWidget {
   const LoadingView({super.key});
@@ -35,7 +39,7 @@ class EmptyView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 56, color: scheme.onSurfaceVariant),
+            Icon(icon, size: AppIconSize.xxl, color: scheme.onSurfaceVariant),
             const SizedBox(height: AppSpacing.md),
             Text(title, style: Theme.of(context).textTheme.titleMedium),
             if (message != null) ...[
@@ -75,7 +79,11 @@ class ErrorView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.error_outline, size: 48, color: scheme.error),
+            Icon(
+              Icons.error_outline,
+              size: _kErrorIconSize,
+              color: scheme.error,
+            ),
             const SizedBox(height: AppSpacing.md),
             Text(message, textAlign: TextAlign.center),
             if (onRetry != null) ...[

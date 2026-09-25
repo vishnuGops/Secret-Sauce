@@ -29,7 +29,7 @@ class MetaChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.sm,
-        vertical: 4,
+        vertical: AppSpacing.xs,
       ),
       decoration: BoxDecoration(
         color: scheme.surfaceContainerHighest,
@@ -39,8 +39,8 @@ class MetaChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[
-            Icon(icon, size: 14, color: scheme.onSurfaceVariant),
-            const SizedBox(width: 4),
+            Icon(icon, size: AppIconSize.xs, color: scheme.onSurfaceVariant),
+            const SizedBox(width: AppSpacing.xs),
           ],
           // Flexible, and wrapping to two lines, because the label is not
           // always a short fact. Cook mode puts a whole ingredient
@@ -187,13 +187,17 @@ class CountAction extends StatelessWidget {
         onPressed: () => onTap(active),
         icon: Icon(
           active ? activeIcon : icon,
-          size: 18,
+          size: AppIconSize.button,
           color: active ? scheme.primary : null,
         ),
         // Grouped, like every other counter in the product (B031's family):
         // a recipe with 1,500 likes read `1500` here and `1,500` on the chef
-        // card three taps away.
-        label: Text(groupedCount(count)),
+        // card three taps away. Tabular so a like that takes 9 to 10 does not
+        // shift the icon (UX-049); merged over the button's label style.
+        label: Text(
+          groupedCount(count),
+          style: const TextStyle(fontFeatures: kTabularFigures),
+        ),
       ),
     );
   }

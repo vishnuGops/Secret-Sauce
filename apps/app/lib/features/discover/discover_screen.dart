@@ -9,6 +9,19 @@ import 'package:app/features/discover/discover_shelf.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:app/widgets/recipe_async_grid.dart';
 
+/// Bottom clearance on compact for the shell's extended FAB and NavigationBar.
+const double _kCompactChromeClearance = 96;
+
+/// Browse-header width (× text scale) below which the sort drops under the
+/// heading.
+const double _kBrowseHeaderRowWidth = 560;
+
+/// The heavier rule that opens the browse grid.
+const double _kBrowseRule = 2;
+
+/// The sort link's underline stroke.
+const double _kSortUnderline = 2;
+
 /// Public discovery: a masthead, three numbered shelves, then everything else.
 ///
 /// **The tabs are gone.** Discover was Popular / Trending / Recent — one corpus
@@ -131,7 +144,9 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
             // and a NavigationBar over the bottom of this scroll, and the last
             // thing in it is a `Load more` button.
             SliverToBoxAdapter(
-              child: SizedBox(height: wide ? AppSpacing.xl : 96),
+              child: SizedBox(
+                height: wide ? AppSpacing.xl : _kCompactChromeClearance,
+              ),
             ),
           ],
         ),
@@ -203,10 +218,9 @@ class _BrowseHeader extends ConsumerWidget {
           'EVERYTHING ELSE',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: theme.textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.w800,
-            letterSpacing: 1.4,
-          ),
+          // The index line at section level (UX-031/UX-032 kicker
+          // consolidation) — the shelves' heading role.
+          style: context.appText.kickerLarge,
         ),
         Text(
           'The whole public vault, one page at a time.',
@@ -236,12 +250,13 @@ class _BrowseHeader extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(height: 2, color: scheme.outlineVariant),
+        Container(height: _kBrowseRule, color: scheme.outlineVariant),
         const SizedBox(height: AppSpacing.md),
         LayoutBuilder(
           builder:
               (context, constraints) =>
-                  constraints.maxWidth >= 560 * context.textScale
+                  constraints.maxWidth >=
+                          _kBrowseHeaderRowWidth * context.textScale
                       ? Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
@@ -302,12 +317,12 @@ class _SortLink extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.xs,
-          vertical: 6,
+          vertical: AppSpacing.xsPlus,
         ),
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              width: 2,
+              width: _kSortUnderline,
               // Drawn in both states so selecting one does not move the row.
               color: selected ? scheme.primary : Colors.transparent,
             ),
@@ -315,8 +330,10 @@ class _SortLink extends StatelessWidget {
         ),
         child: Text(
           label,
+          // One weight in both states (UX-049): a heavier selected label
+          // widened itself and pushed its neighbours along. Selection is the
+          // colour and the underline.
           style: theme.textTheme.labelLarge?.copyWith(
-            fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
             color: selected ? scheme.onSurface : scheme.onSurfaceVariant,
           ),
         ),

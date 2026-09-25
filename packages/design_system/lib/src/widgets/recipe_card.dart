@@ -105,6 +105,33 @@ const int kRecipeGridMaxColumns = 6;
 /// above the metadata row goes with it, because it separated the two.
 const double kRecipeCardDescriptionMaxScale = 2.0;
 
+// Card geometry that is not on the spacing scale (UX-054) — named here so the
+// numbers the envelope tests were measured against stay put.
+
+/// The banner's (and its placeholder's) horizontal inset.
+const double _kBannerHPad = 14;
+
+/// Gap between the footer's divider and the metadata row under it.
+const double _kFooterRuleGap = 10;
+
+/// The metadata row's clock glyph — one px under [AppIconSize.sm] so it sits
+/// inside a `labelMedium` line box.
+const double _kMetaIconSize = 15;
+
+/// Placeholder bar sizes: each mimics the text line it stands in for.
+const double _kPlaceholderTitleBar = 13;
+const double _kPlaceholderLineBar = 10;
+const double _kPlaceholderMetaBar = 12;
+const double _kPlaceholderShortLine = 140;
+const double _kPlaceholderTimeBar = 58;
+const double _kPlaceholderBadgeBar = 72;
+
+/// Placeholder gap above its metadata row — stands in for the divider band.
+const double _kPlaceholderMetaGap = 14;
+
+/// The placeholder's cover glyph.
+const double _kPlaceholderIconSize = 34;
+
 /// The primary recipe tile used on Discover and My Recipes (v2 layout).
 ///
 /// Top to bottom: a **title banner** on `colorScheme.primary`, the cover image,
@@ -232,11 +259,11 @@ class RecipeCard extends StatelessWidget {
                     Container(
                       margin:
                           showDescription
-                              ? const EdgeInsets.only(top: 6)
+                              ? const EdgeInsets.only(top: AppSpacing.xsPlus)
                               : EdgeInsets.zero,
                       padding:
                           showDescription
-                              ? const EdgeInsets.only(top: 10)
+                              ? const EdgeInsets.only(top: _kFooterRuleGap)
                               : EdgeInsets.zero,
                       decoration:
                           showDescription
@@ -265,10 +292,10 @@ class RecipeCard extends StatelessWidget {
                                     children: [
                                       Icon(
                                         Icons.schedule,
-                                        size: 15,
+                                        size: _kMetaIconSize,
                                         color: scheme.onSurfaceVariant,
                                       ),
-                                      const SizedBox(width: 4),
+                                      const SizedBox(width: AppSpacing.xs),
                                       // Flex **1 against the rating's 2**, not
                                       // the even split this was (B080). Equal
                                       // factors hand each child half the free
@@ -370,16 +397,18 @@ class RecipeCardPlaceholder extends StatelessWidget {
                   kRecipeCardBannerHeight *
                   context.textScale.clamp(1.0, kRecipeCardBannerMaxScale),
               color: scheme.surfaceContainerHigh,
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              child: Center(child: bar(double.infinity, 13)),
+              padding: const EdgeInsets.symmetric(horizontal: _kBannerHPad),
+              child: Center(child: bar(double.infinity, _kPlaceholderTitleBar)),
             ),
             Expanded(
               child: Container(
                 color: scheme.surfaceContainerHighest,
                 child: Icon(
                   Icons.restaurant_menu,
-                  size: 34,
-                  color: scheme.onSurfaceVariant.withValues(alpha: 0.35),
+                  size: _kPlaceholderIconSize,
+                  color: scheme.onSurfaceVariant.withValues(
+                    alpha: AppAlpha.rule,
+                  ),
                 ),
               ),
             ),
@@ -388,11 +417,17 @@ class RecipeCardPlaceholder extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  bar(double.infinity, 10),
-                  const SizedBox(height: 6),
-                  bar(140, 10),
-                  const SizedBox(height: 14),
-                  Row(children: [bar(58, 12), const Spacer(), bar(72, 12)]),
+                  bar(double.infinity, _kPlaceholderLineBar),
+                  const SizedBox(height: AppSpacing.xsPlus),
+                  bar(_kPlaceholderShortLine, _kPlaceholderLineBar),
+                  const SizedBox(height: _kPlaceholderMetaGap),
+                  Row(
+                    children: [
+                      bar(_kPlaceholderTimeBar, _kPlaceholderMetaBar),
+                      const Spacer(),
+                      bar(_kPlaceholderBadgeBar, _kPlaceholderMetaBar),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -432,7 +467,10 @@ class _TitleBanner extends StatelessWidget {
             kRecipeCardBannerHeight *
             context.textScale.clamp(1.0, kRecipeCardBannerMaxScale),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      padding: const EdgeInsets.symmetric(
+        horizontal: _kBannerHPad,
+        vertical: AppSpacing.sm,
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -443,7 +481,8 @@ class _TitleBanner extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.titleMedium?.copyWith(
                 color: scheme.onPrimary,
-                fontWeight: FontWeight.w700,
+                // A hair of tracking for the white-on-primary name: the
+                // banner's own tweak, not a ramp role.
                 letterSpacing: 0.16,
               ),
             ),
@@ -484,7 +523,7 @@ class _ChefOverlay extends StatelessWidget {
     return Material(
       // Scrim: cover photos are arbitrary, so the badge carries its own
       // contrast rather than relying on the image being dark.
-      color: Colors.black.withValues(alpha: 0.55),
+      color: context.palette.scrim,
       shape: const StadiumBorder(),
       clipBehavior: Clip.antiAlias,
       child: Padding(
@@ -522,13 +561,13 @@ class _VisibilityBadge extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(AppSpacing.xs),
         decoration: BoxDecoration(
-          color: scheme.surface.withValues(alpha: 0.92),
+          color: scheme.surface.withValues(alpha: AppAlpha.frosted),
           borderRadius: BorderRadius.circular(AppRadii.pill),
           border: Border.all(color: scheme.outlineVariant),
         ),
         child: Icon(
           isPublic ? Icons.public : Icons.lock_outline,
-          size: 14,
+          size: AppIconSize.xs,
           color: scheme.onSurfaceVariant,
         ),
       ),
@@ -549,7 +588,7 @@ class _CoverImage extends StatelessWidget {
         color: scheme.surfaceContainerHighest,
         child: Icon(
           Icons.restaurant_menu,
-          size: 40,
+          size: AppIconSize.xl,
           color: scheme.onSurfaceVariant,
         ),
       );
