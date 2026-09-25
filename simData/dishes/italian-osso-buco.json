@@ -1,0 +1,89 @@
+{
+  "slug": "italian-osso-buco",
+  "title": "Osso Buco",
+  "description": "Cross-cut veal shanks braised slowly in white wine and tomato until the marrow softens, finished with a sharp gremolata of lemon, garlic, and parsley.",
+  "cuisine": "Italian",
+  "category": "Main",
+  "difficulty": "hard",
+  "prep_minutes": 30,
+  "cook_minutes": 150,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Ask the butcher for hind shanks — they are meatier than the fore. Serve with risotto alla milanese or soft polenta, and a small spoon each for the marrow.",
+  "ingredient_groups": [
+    {
+      "name": "Braise",
+      "ingredients": [
+        { "quantity": 4, "unit": null, "name": "veal shanks", "note": "cross-cut, about 4 cm thick" },
+        { "quantity": 2, "unit": "tbsp", "name": "all-purpose flour", "note": "for dusting", "food": "all-purpose-flour" },
+        { "quantity": 3, "unit": "tbsp", "name": "olive oil", "food": "olive-oil" },
+        { "quantity": 30, "unit": "g", "name": "butter", "food": "butter" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "finely diced", "food": "onion" },
+        { "quantity": 1, "unit": null, "name": "carrot", "note": "finely diced" },
+        { "quantity": 1, "unit": "stalk", "name": "celery", "note": "finely diced" },
+        { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "minced", "food": "garlic" },
+        { "quantity": 200, "unit": "ml", "name": "dry white wine" },
+        { "quantity": 400, "unit": "g", "name": "tinned tomatoes", "note": "chopped", "food": "san-marzano-tomatoes" },
+        { "quantity": 400, "unit": "ml", "name": "chicken stock", "note": "or veal stock" },
+        { "quantity": 1, "unit": null, "name": "bay leaf" }
+      ]
+    },
+    {
+      "name": "Gremolata",
+      "ingredients": [
+        { "quantity": 1, "unit": "tbsp", "name": "lemon zest", "note": "finely grated", "food": "lemon-zest" },
+        { "quantity": 1, "unit": "clove", "name": "garlic", "note": "very finely chopped", "food": "garlic" },
+        { "quantity": 1, "unit": "handful", "name": "flat-leaf parsley", "note": "leaves only", "food": "flat-leaf-parsley" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Braise",
+      "steps": [
+        {
+          "text": "Tie each veal shank around its circumference with string so the meat stays on the bone, then season and dust lightly with the flour.",
+          "tip": "Snip the membrane around the edge in two or three places as well, or it contracts in the heat and the shank curls up in the pan."
+        },
+        {
+          "text": "Brown the shanks in the olive oil on both flat sides, then set aside.",
+          "duration_minutes": 10,
+          "temperature": "medium-high"
+        },
+        {
+          "text": "Lower the heat, add the butter, and soften the onion, carrot, celery, and garlic.",
+          "duration_minutes": 10,
+          "temperature": "medium"
+        },
+        {
+          "text": "Pour in the white wine and let it bubble until reduced by half.",
+          "duration_minutes": 4
+        },
+        {
+          "text": "Add the tomatoes, stock, and bay leaf, return the shanks in a single layer, cover, and braise very gently until the meat is yielding.",
+          "duration_minutes": 120,
+          "temperature": "low",
+          "tip": "They should sit no more than halfway submerged. Turn them once, halfway through, so the tops do not dry out."
+        }
+      ]
+    },
+    {
+      "name": "Gremolata and serve",
+      "steps": [
+        {
+          "text": "Chop the parsley with the garlic and lemon zest until fine."
+        },
+        {
+          "text": "Lift out the shanks, snip off the string, and reduce the sauce if it is thin. Spoon it over and scatter the gremolata just before serving.",
+          "duration_minutes": 5,
+          "tip": "Gremolata goes on at the table, raw. Stirred into the pot it loses the brightness that is its whole job."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.6,
+    "variant_titles": ["Milanese {title}", "Sunday {title}"]
+  }
+}

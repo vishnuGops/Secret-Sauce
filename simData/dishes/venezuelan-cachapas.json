@@ -1,0 +1,55 @@
+{
+  "slug": "venezuelan-cachapas",
+  "title": "Cachapas",
+  "description": "Thick, sweet fresh-corn pancakes folded over slices of soft white cheese that melt against the hot griddle cake.",
+  "cuisine": "Venezuelan",
+  "category": "Breakfast",
+  "difficulty": "easy",
+  "prep_minutes": 10,
+  "cook_minutes": 20,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Queso de mano is the classic cheese. Fresh mozzarella is the nearest easy substitute.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 600, "unit": "g", "name": "sweet corn kernels", "note": "fresh from about 5 cobs, or frozen" },
+        { "quantity": 60, "unit": "g", "name": "precooked cornmeal", "note": "masarepa" },
+        { "quantity": 2, "unit": "tbsp", "name": "sugar", "food": "granulated-sugar" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 60, "unit": "ml", "name": "whole milk", "food": "whole-milk" },
+        { "quantity": 1, "unit": null, "name": "egg", "food": "egg" },
+        { "quantity": 30, "unit": "g", "name": "butter", "note": "for the griddle", "food": "butter" },
+        { "quantity": 250, "unit": "g", "name": "queso de mano", "note": "thickly sliced" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Blend the corn kernels, precooked cornmeal, sugar, salt, milk, and egg to a thick, slightly coarse batter."
+        },
+        {
+          "text": "Melt a little butter on a griddle and pour on a ladle of batter, spreading it into a 15 cm round.",
+          "temperature": "medium"
+        },
+        {
+          "text": "Cook until bubbles break the surface and the underside is browned, then flip and cook the other side.",
+          "duration_minutes": 4,
+          "tip": "The batter is wetter than a pancake's. Flip once, carefully, with a wide spatula."
+        },
+        {
+          "text": "Lay a thick slice of queso de mano on half, fold over, and serve warm so the cheese softens."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.9,
+    "variant_titles": ["{title} with Ham", "Street-Style {title}"]
+  }
+}

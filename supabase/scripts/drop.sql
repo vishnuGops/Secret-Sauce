@@ -67,6 +67,8 @@ drop function if exists is_entity_member(uuid) cascade;
 drop function if exists is_entity_owner(uuid) cascade;
 drop function if exists approve_profile_claim(uuid) cascade;
 drop function if exists reject_profile_claim(uuid, text) cascade;
+drop function if exists on_profile_claim_cap() cascade;
+drop function if exists profile_claim_pending_cap() cascade;
 -- Phase 35c.
 drop function if exists recipes_corpus(int, int, text) cascade;
 drop function if exists import_recipe(jsonb) cascade;

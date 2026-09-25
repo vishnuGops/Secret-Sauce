@@ -134,6 +134,19 @@ would otherwise mean 6,000 whole-catalogue aggregates. `claimant_auth_user_id` i
 rather than a profile id on purpose: the merge moves the link, so a profile id recorded there would
 point at a tombstone the moment the claim succeeded.
 
+**Filing is capped** (B117): at most `profile_claim_pending_cap()` = **5** `pending` claims per
+claimant, raised as `P0001 'profile claim limit reached'` (HTTP 400 through PostgREST; `54000` would
+have been a 500) by the AFTER trigger `profile_claims_pending_cap` on `insert or update of status`.
+Three choices in it: a **trigger**, because a refusal inside `with check` is an anonymous `42501`
+indistinguishable from "you may not claim that" and a count subquery there races two concurrent
+inserts; **AFTER**, because RLS's `with check` runs before AFTER triggers, so a claim filed on
+someone else's behalf is refused by the policy before the count and the cap cannot be used to probe
+another account's queue (G31); and `pg_advisory_xact_lock` keyed on the claimant ahead of the count,
+so one account's concurrent filings serialise. Only `pending` counts — the cap bounds the review
+queue, not a person's history, so an approved or rejected claim frees its slot. Five, because no
+imported display name repeats more than four times across publishers. It does not stop someone
+using many accounts; signup is that axis. `rls_matrix.sql` G29–G34.
+
 The three `chef_*` columns and the three `total_*` columns are **denormalized aggregates** over
 the engagement counters of the profile's *public* recipes — never written by the client; the
 `on_recipe_stats_change` trigger recomputes them from scratch. See §10.
@@ -598,13 +611,14 @@ It creates three throwaway `auth.users` (an owner, someone the owner shares a pr
 an unrelated signed-in stranger) plus a private and a public recipe with content, re-runs the whole
 matrix under `set local role authenticated` + `request.jwt.claims`, and **rolls the transaction
 back** — so it leaves no user, no recipe and no helper function behind and is safe against any
-database. **177 checks** (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
+database. **186 checks** (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
 ingredient food link, in 29b; B22c and B22d, the auto-estimate source-smuggling guard and its
 nothing-counted case, in 29c — B22d found **B075** on its first run; **E10**, that
 `recompute_auto_nutrition()` is not callable as a signed-in user, in 29d — a whole-table rewrite
 whose only lock is a `revoke execute`; **§F**, `chef_standing` / `chefs_leaderboard` /
 `chef_top_recipes` / `chef_trending_recipes` F1–F10, in Phases 30–31; **§G**, Phase 35b's
-imported profiles, entities, claims and the claim merge, 28 checks; **§H**, Phase 35c's
+imported profiles, entities, claims and the claim merge, 28 checks, plus G29–G34 for the
+pending-claim cap (B117) and F22–F24 for `recompute_chef_stats`'s no-op guard; **§H**, Phase 35c's
 provenance columns, the corpus surface and the blocklist, 12 checks). A failure names the check and
 what actually happened.
 
@@ -846,8 +860,15 @@ Reached from a link below Discover's browse grid, deliberately *below* it: Disco
 door to Secret-Sauce, not to the web. Root navigator, signed-out safe, no nav destination
 (Gotcha 18).
 
-**Provenance is rendered, not just stored.** `SourceCredit` on both recipe-detail layouts names the
-publisher and prints the source URL, and it is not decoration: the rights position only holds
+**Provenance is rendered, not just stored.** `SourceCredit` (`detail_provenance.dart`) is the
+attribution block on both recipe-detail layouts, and renders nothing for a member recipe. Top to
+bottom: `FROM AROUND THE WEB`; `Recipe by <chef> ›` → `/chef/:id`, **omitted** when the owner's name
+equals `source_name` (the importer's no-byline case, where the publisher is the author — the Rights
+page promises such recipes are credited to the publisher and nobody else); `Published by
+<publisher> ›` → `/entity/:id` when `source_entity_id` is set, plain text otherwise; `Read the
+original on <host>`, a `url_launcher` `Link` so it is a real anchor on web, for `http`/`https` only
+(anything else prints as selectable text); the rights sentence; and `How we credit recipes` →
+`/legal/rights`. The expanded page caps it at the description's 620px measure. It is not decoration: the rights position only holds
 because the credit and the link travel with the content. The image policy is enforced through a
 single getter — `Recipe.displayCoverImageUrl` returns null when `image_mode` is `none` — rather than
 at each of the five places that render a cover, because the sixth is the one that would get it
@@ -1116,6 +1137,12 @@ The cap belongs to the **grid**, not the card: a grid cell hands its child tight
 which win over any `ConstrainedBox` inside `RecipeCard`, so the only way to hold a tile at 340 is
 to hand the delegate less width to divide (that is what the gutter is). `FlowGridMetrics` is pure,
 so it is unit-tested directly across a continuous 288→2400 sweep rather than at sampled widths.
+It also takes `maxColumns`: `recipeGridMetrics()` passes `kRecipeGridMaxColumns` (6 — what 1920px
+already packs), so past full HD the extra width becomes a **right-hand** margin (`FlowGridMetrics.trailing`;
+rows ≤ 2120px) instead of more, smaller columns — left-aligned rather than centred, because every
+header above a grid sits at the page's own inset and a centred block drifted 900px away from them
+(B123, B059's shared edge); a 3840px window is six columns, not twelve (B049). Capping by column count
+rather than pixels keeps a capped row from ever being one card short.
 
 ## 8. RecipeCard contract
 
@@ -1146,8 +1173,9 @@ needs more grows the band (and costs the cover) rather than overflowing. The fac
 `kRecipeCardBannerMaxScale` (2.0): the card's total height is fixed, so an unbounded band starves
 the cover and then overflows — 65 × 3.0 is 195px of banner in a 352px card. Past the ceiling the
 title's own two lines drive the band, and 130px still holds them at 3.0×, so the one-line /
-two-line match survives the clamp. The card's 3.0× height budget is a separate, pre-existing
-problem (B049).
+two-line match survives the clamp. Past `kRecipeCardDescriptionMaxScale` (2.0) the description
+and the divider above the metadata row are dropped, which is what holds the 352px card at 3.0×
+(B049) — degrade rather than grow, so no grid or shelf has to size its rows by text scale.
 `packages/design_system/test/recipe_card_test.dart`'s `title banner` group pins both halves —
 the two line counts share a centre, and a longer title clamps at two lines instead of adding a
 third.
@@ -1358,7 +1386,8 @@ Follows the `recipes.rating_*` precedent exactly — denormalized aggregates, re
 (added via `alter table … add column if not exists`, per the idempotency rule).
 
 - `recompute_chef_stats(p_chef uuid)` — one set-based UPDATE aggregating that chef's public
-  recipes. Invoker-rights, EXECUTE **revoked** from `public`/`anon`/`authenticated` (the
+  recipes, guarded by `is distinct from` so a recompute that changes nothing writes no tuple
+  (pinned by `rls_matrix.sql` F22–F24, which compare the row's `ctid`). Invoker-rights, EXECUTE **revoked** from `public`/`anon`/`authenticated` (the
   `bump_count` rule — every `public` function is otherwise a PostgREST RPC).
 - `recompute_all_chef_stats()` — the whole-table form, same revokes. Three callers need exactly
   this statement (the idempotent backfill, `sim/2_sim_generate.sql`'s bulk load with the trigger
@@ -1586,11 +1615,21 @@ ordering's rows, which is Gotcha 24 one level in.
   than thrown: everything else in the card comes from the `ChefStanding` the board already holds,
   so a database without `chef_top_recipes` applied loses one section instead of the whole dialog.
 
-  `leaderboardPagesProvider` (a `StateProvider<int>`) is what `Show all 148` bumps.
-  `chefsLeaderboardProvider` watches it and requests `kLeaderboardPageSize × pages`, so "more" is a
-  **wider first page**, not a second one stitched on. The RPC ranks the whole table and returns a
-  prefix, so re-reading 50 ranked rows costs less than the bookkeeping to avoid it and cannot drift
-  out of order the way an accumulated list can.
+  **The board pages (Phase 33).** `chefBoardProvider` (`ChefBoardNotifier`) reads `limit`/`offset`
+  pages of 25 over whichever ordering `boardViewProvider` holds, de-duplicates by id, and exposes
+  `loadMore` behind the `Load more` button on web and compact. It replaced
+  `leaderboardPagesProvider` / `chefsLeaderboardProvider`, which widened one first page instead.
+  Three orderings, three calls: **Score** is `chefs_leaderboard`; **Momentum** is
+  `chefs_leaderboard_windowed(days, …, since)` with page 1 sent **without** `p_since` and
+  page 1's `window_start` echoed on every later page (Gotcha 24, one level out — and the server's
+  clock, the one the rails use, not the device's; B121). A per-build generation counter drops a
+  `loadMore` that started under a previous ordering, and `loadMore` refuses while a re-sort is
+  loading; re-selecting the current tab is a no-op (`updateShouldNotify` by value); and
+  **New** is `chefs_leaderboard(p_limit: null)` re-ordered `created_at desc, id` and ranged by
+  PostgREST outside the function, so `dense_rank` still ranks everyone. `ChefRepository` gained
+  `newest`, `windowedLeaderboard` and `windowStats` for these, decoding into `ChefWindowStats` /
+  `ChefWindowStanding` (`chef_window.dart`); `ChefStanding` gained `createdAt`. Also here:
+  `popularChefsProvider`, `windowRailProvider(window)` and `chefMomentumProvider(chefId)`.
 
 ### 10.6 UI
 
@@ -1636,7 +1675,7 @@ ordering's rows, which is Gotcha 24 one level in.
   own `max-height: 675px` scroll container, and the Flutter equivalent of sticky is a nested-scroll
   arrangement with more to get wrong.
 
-  The panel's footer carries `Show all N`, which widens the page rather than appending one.
+  The panel's footer carries `Load more` beside a footnote that changes with the sort.
 - **`ChefsHero`** (`features/chefs/chefs_hero.dart`) — the banner: the live-recompute kicker, the
   population pill from `chefCountProvider`, the one-line ranking rule, five tier tiles from
   `chefTierCountsProvider`, and the All time / Month / Week filter. **Always dark, in both themes** —
@@ -1644,12 +1683,18 @@ ordering's rows, which is Gotcha 24 one level in.
   accents resolve at `Brightness.dark` (the light shades are unreadable on it). Its three parts row
   only while the width clears `900 × textScale`, and stack below that: a fixed 900px meant the
   identity block was handed ~168px at 2.0× and the strapline wrapped to seven lines (B037).
-- **Rails.** Three `CardRail`s of `ChefSpotlightCard`. Only **Popular** (all-time, straight off the
-  leaderboard payload) has data; Trending and "best of the month" rank on engagement earned inside
-  a time window, which nothing computes yet, so they render `SpotlightCardPlaceholder`s under a
-  footnote saying why. The `Momentum` / `New` sort tabs and the hero's Month / Week are rendered
-  **disabled with a tooltip** for the same reason — a control that is visibly not ready reads
-  better than a drawn feature that silently does nothing. See §10.8.
+- **Rails** (`chefs_rails.dart`). Three `CardRail`s of `ChefSpotlightCard`: **Popular** (all-time,
+  off the leaderboard), **Trending** (7 days) and **Best of the month** (30 days), the last two the
+  top 10 **movers** of `chefs_leaderboard_windowed`, each card reading `+192 · last 7 days` over its
+  all-time driver line. A window where nobody moved is a `QuietShelfCard` ("Nothing moved in the last
+  7 days"), never placeholders and never a spinner.
+- **Sort and window are one state** (`BoardView`, Phase 33). The Score / Momentum / New tabs and the
+  hero's All time / Month / Week are both live and coupled: Month or Week turns the board to Momentum
+  over that span, Momentum from All time takes Month, All time turns Momentum back into Score. An
+  empty Momentum window is an `EmptyView` with a "Show all-time scores" action.
+- **`/chef/:id` momentum line** (`chef_momentum_line.dart`): `LAST 30 DAYS · +N points · likes ·
+  saves · views · new recipes · ratings` from `chef_window_stats(p_chef)`, ranked chefs only; a
+  quiet month says so in words, and a failed read costs the line, not the page.
 - **`ChefStandingCard`** (`design_system`, exported) — the board row since Phase 22, the design's
   "podium" draft, and since Phase 23 the `board` variant too (see §8). A 6 px tier spine on the
   leading edge, a medal glyph for ranks 1–3 (a numeral
@@ -1767,11 +1812,9 @@ signature is in `drop.sql` (Gotcha 5). Actual seeded standings:
   point of the card — a chef could not otherwise tell what moves their score — but it also tells
   a would-be gamer that a save is worth 5× a view. Accepted alongside §10.8's self-engagement
   limit, which is the larger hole.
-- **The windowed score exists in SQL, and nothing renders it yet** (Phase 33). Every number the
-  client shows on `/chefs` is still all-time: the Trending and best-of-the-month rails, the
-  `Momentum` sort and the hero's Month / Week filter remain drawn, disabled and tooltipped
-  (Phase 23, decision D4). What changed is that the query behind them is now built, tested and
-  callable — see §10.9.
+- **`New` ranks the whole population on every page** — `chefs_leaderboard` with no inner limit,
+  ordered and ranged outside it. Fine at current scale; at ~10⁵ members the answer is a
+  `chefs_leaderboard_newest(limit, offset)` with the same `dense_rank` CTE (§10.9).
 - Rank is recomputed per request (no caching); fine at current scale.
 
 ### 10.9 Windowed engagement (Phase 33)
@@ -1828,6 +1871,13 @@ and `(viewed_at desc, recipe_id, user_id) where user_id is not null` on views. E
 composite leads with `recipe_id`, which cannot serve "every like on the site in the last 7 days".
 
 `rls_matrix.sql` §F pins the lot as `anon` — F12–F19 for the board, F20/F21 for B092.
+
+**Client (2026-09-24).** Momentum lists only chefs with `window_score > 0`; because the RPC orders
+by window score first, the first quiet row ends paging. Page 1 sends no `p_since`; its first row's
+`window_start` is echoed on every later page, so the boundary is the server's clock (B121). A web
+`DateTime` truncates the echo to milliseconds — a window under a millisecond wider, which no count
+can see. `window_views` is distinct signed-in viewers **per recipe**, summed, so the client labels it
+`views` like the all-time figure, never `readers`. See §10.5 for the provider shape.
 
 
 ## 11. Recipe content vs. demo data

@@ -14,6 +14,16 @@
 //   dart run tool/corpus_import.dart plan --tier=all
 //   dart run tool/corpus_import.dart gen --limit=20000    # -> corpus/_import/*.sql
 //
+//   # The committed fixture shard (CI coverage for this transform):
+//   dart run tool/corpus_import.dart gen --corpus=corpus/_fixtures \
+//     --out=corpus/_import_fixture --batch=3
+//
+// `--corpus=DIR` is the directory holding `sources.json` and `recipes/`; it
+// defaults to `corpus`. It exists for `corpus/_fixtures/`, a handful of
+// synthetic records in the real harvester shape that
+// `supabase/tests/corpus_import_fixture.sql` imports and asserts field by
+// field — without it, this transform was proven only by having been run.
+//
 // Applying the generated files is deliberately a separate, manual step. They
 // are ordinary SQL and go through the documented psql path (see CLAUDE.md's
 // "DB tasks" note — `psql` is not installed on the development machine, so the
@@ -110,17 +120,40 @@ void main(List<String> args) {
   final limit = int.tryParse(flags['limit'] ?? '') ?? 0;
   final perSource = int.tryParse(flags['per-source'] ?? '') ?? 0;
   final batchSize = int.tryParse(flags['batch'] ?? '') ?? 500;
-  final outDir = flags['out'] ?? 'corpus/_import';
+  final corpusDir = flags['corpus'] ?? 'corpus';
+  // A non-default corpus is the fixture (or a scratch copy), and its output
+  // must never land where `db:corpus` / `db:hosted:deploy` read the REAL
+  // import from: overwriting `corpus/_import/0001.sql` with synthetic rows is
+  // a fabricated recipe on a real database (Gotcha 29) that the audit only
+  // catches after the shard has committed. So the default follows the input,
+  // and pointing a non-default corpus at the real directory is refused.
+  final realCorpus = _normPath(corpusDir) == 'corpus';
+  final outDir =
+      flags['out'] ??
+      (realCorpus ? 'corpus/_import' : 'corpus/_import_fixture');
+  if (!realCorpus && _normPath(outDir) == 'corpus/_import') {
+    _die(
+      '--corpus=$corpusDir would write into corpus/_import/, which db:corpus '
+      'and db:hosted:deploy apply as the real import. Use another --out.',
+    );
+  }
 
   switch (command) {
     case 'plan':
-      _run(tier: tier, gate: gate, limit: limit, perSource: perSource);
+      _run(
+        tier: tier,
+        gate: gate,
+        limit: limit,
+        perSource: perSource,
+        corpusDir: corpusDir,
+      );
     case 'gen':
       _run(
         tier: tier,
         gate: gate,
         limit: limit,
         perSource: perSource,
+        corpusDir: corpusDir,
         outDir: outDir,
         batchSize: batchSize,
       );
@@ -128,7 +161,7 @@ void main(List<String> args) {
       stderr.writeln(
         'usage: dart run tool/corpus_import.dart <plan|gen> '
         '[--tier=english|all] [--limit=N] [--per-source=N] '
-        '[--batch=N] [--out=DIR]',
+        '[--batch=N] [--out=DIR] [--corpus=DIR]',
       );
       exit(64);
   }
@@ -144,12 +177,15 @@ void _run({
   required Gate gate,
   required int limit,
   required int perSource,
+  required String corpusDir,
   String? outDir,
   int batchSize = 500,
 }) {
-  final registry = File('corpus/sources.json');
+  final registry = File('$corpusDir/sources.json');
   if (!registry.existsSync()) {
-    _die('corpus/sources.json not found — run this from the repository root');
+    _die(
+      '$corpusDir/sources.json not found — run this from the repository root',
+    );
   }
 
   final sources =
@@ -171,7 +207,7 @@ void _run({
   for (final source in eligible) {
     final slug = source['slug'] as String?;
     if (slug == null) continue;
-    final shard = File('corpus/recipes/$slug.jsonl');
+    final shard = File('$corpusDir/recipes/$slug.jsonl');
     if (!shard.existsSync()) continue;
 
     var takenHere = 0;
@@ -393,6 +429,17 @@ List<Map<String, dynamic>> _stepGroups(Map<String, dynamic> record) {
 /// `psql -1` per file is the granularity that makes a resume mean something.
 /// The idempotency key does the rest — re-running a file that already applied
 /// inserts nothing.
+String _normPath(String p) {
+  var s = p.replaceAll(r'\', '/');
+  while (s.startsWith('./')) {
+    s = s.substring(2);
+  }
+  while (s.endsWith('/')) {
+    s = s.substring(0, s.length - 1);
+  }
+  return s;
+}
+
 class _BatchWriter {
   _BatchWriter(this.dir, this.batchSize);
 
@@ -425,8 +472,17 @@ class _BatchWriter {
   /// `StreamSink is bound to a stream` rather than as anything legible.
   void close() {
     if (dir == null || _buffer.isEmpty) return;
-    files++;
     final directory = Directory(dir!)..createSync(recursive: true);
+    // A smaller re-`gen` must not leave a previous run's higher-numbered
+    // batches behind for `db:corpus` to apply alongside it. Only this tool's
+    // own `NNNN.sql` names are touched, and only in its own output directory.
+    if (files == 0) {
+      final ours = RegExp(r'^\d{4}\.sql$');
+      for (final f in directory.listSync().whereType<File>()) {
+        if (ours.hasMatch(f.uri.pathSegments.last)) f.deleteSync();
+      }
+    }
+    files++;
     final file = File(
       '${directory.path}/${files.toString().padLeft(4, '0')}.sql',
     );

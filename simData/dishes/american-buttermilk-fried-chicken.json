@@ -1,0 +1,77 @@
+{
+  "slug": "american-buttermilk-fried-chicken",
+  "title": "Buttermilk Fried Chicken",
+  "description": "Bone-in chicken brined overnight in salted buttermilk, then fried in a craggy, well-seasoned flour crust. Crisp outside, juicy to the bone.",
+  "cuisine": "American",
+  "category": "Main",
+  "difficulty": "medium",
+  "prep_minutes": 30,
+  "cook_minutes": 30,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Thighs and drumsticks forgive more than breast. If you use breast, halve it so it cooks in the same time.",
+  "ingredient_groups": [
+    {
+      "name": "Brine",
+      "ingredients": [
+        { "quantity": 1.6, "unit": "kg", "name": "chicken pieces", "note": "bone-in, skin-on thighs and drumsticks" },
+        { "quantity": 500, "unit": "ml", "name": "buttermilk", "food": "buttermilk" },
+        { "quantity": 1, "unit": "tbsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 1, "unit": "tbsp", "name": "hot sauce" },
+        { "quantity": 2, "unit": "tsp", "name": "garlic powder", "food": "garlic-powder" }
+      ]
+    },
+    {
+      "name": "Coating",
+      "ingredients": [
+        { "quantity": 300, "unit": "g", "name": "all-purpose flour", "food": "all-purpose-flour" },
+        { "quantity": 50, "unit": "g", "name": "cornstarch", "food": "cornstarch" },
+        { "quantity": 2, "unit": "tsp", "name": "smoked paprika", "food": "smoked-paprika" },
+        { "quantity": 1, "unit": "tsp", "name": "cayenne", "food": "red-pepper-flakes" },
+        { "quantity": 2, "unit": "tsp", "name": "black pepper", "food": "black-pepper" },
+        { "quantity": 2, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 1, "unit": "tsp", "name": "baking powder", "food": "baking-powder" },
+        { "quantity": 1.5, "unit": "L", "name": "neutral oil", "note": "for deep frying", "food": "canola-oil" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "The night before",
+      "steps": [
+        {
+          "text": "Whisk the buttermilk with the salt, hot sauce, and garlic powder, submerge the chicken pieces, and refrigerate overnight.",
+          "duration_minutes": 720,
+          "tip": "The salt does the brining and the acid tenderises. Twelve hours is ideal; past a day the texture starts to turn soft."
+        }
+      ]
+    },
+    {
+      "name": "Coat and fry",
+      "steps": [
+        {
+          "text": "Mix the flour, cornstarch, paprika, cayenne, black pepper, salt, and baking powder. Rub in 3 tablespoons of the buttermilk brine with your fingers to make shaggy clumps.",
+          "tip": "Those clumps become the craggy crust. Without them the coating fries smooth and thin."
+        },
+        {
+          "text": "Lift the chicken from the brine, let it drip, then press firmly into the coating on all sides. Rest on a rack while the oil heats.",
+          "duration_minutes": 15,
+          "tip": "Resting lets the coating hydrate and stick, so it does not fall off in the fryer."
+        },
+        {
+          "text": "Fry in batches in a deep, heavy pot, turning occasionally, until the crust is deep brown and the thickest piece reads 74°C inside.",
+          "duration_minutes": 14,
+          "temperature": "160°C / 320°F"
+        },
+        {
+          "text": "Drain on a rack and salt again while hot."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.4,
+    "variant_titles": ["Nashville-Style {title}", "Sunday {title}", "Extra-Crispy {title}"]
+  }
+}

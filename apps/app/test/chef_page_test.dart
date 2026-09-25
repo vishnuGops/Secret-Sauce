@@ -5,7 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:app/features/chefs/chef_identity_header.dart';
 import 'package:app/features/chefs/chef_page.dart';
+import 'package:app/features/chefs/chefs_providers.dart';
 import 'package:app/routing/app_router.dart';
 
 /// `/chef/:id` — the page that replaced the expanded chef dialog (Phase 30).
@@ -32,13 +34,64 @@ const _kitchen = ChefStanding(
 Recipe _recipe(String id, String title) =>
     Recipe(id: id, ownerId: 'ssk', title: title);
 
+/// The chef's last 30 days, as `chef_window_stats(p_chef)` returns it. Big
+/// numbers on purpose: the envelope loop at the bottom renders this line too.
+final _busyMonth = ChefWindowStats(
+  id: 'ssk',
+  windowStart: DateTime.utc(2026, 8, 25),
+  likes: 124000,
+  saves: 98000,
+  viewers: 310000,
+  ratings: 12,
+  newRecipes: 3,
+  score: 924000,
+);
+
 class _FakeChefRepository implements ChefRepository {
-  _FakeChefRepository({this.result = _kitchen, this.fail = false});
+  _FakeChefRepository({
+    this.result = _kitchen,
+    this.fail = false,
+    ChefWindowStats? window,
+    this.noWindow = false,
+    this.windowFails = false,
+  }) : window = window ?? _busyMonth;
 
   /// The standing to answer with. Null models a real profile that holds no
   /// board row — the private-only case, not an error.
   final ChefStanding? result;
   final bool fail;
+
+  /// The momentum line's answer (Phase 33). [noWindow] models the zero-row
+  /// reply an unranked profile gets; [windowFails] a failed request.
+  final ChefWindowStats window;
+  final bool noWindow;
+  final bool windowFails;
+
+  /// Every `windowStats` call: (chef, days).
+  final List<(String, int)> windowCalls = [];
+
+  @override
+  Future<ChefWindowStats?> windowStats(
+    String chefId, {
+    required int days,
+    DateTime? since,
+  }) {
+    windowCalls.add((chefId, days));
+    if (windowFails) return Future.error(Exception('window down'));
+    return Future.value(noWindow ? null : window);
+  }
+
+  @override
+  Future<List<ChefStanding>> newest({int limit = 50, int offset = 0}) =>
+      throw UnimplementedError();
+
+  @override
+  Future<List<ChefWindowStanding>> windowedLeaderboard({
+    required int days,
+    int limit = 50,
+    int offset = 0,
+    DateTime? since,
+  }) => throw UnimplementedError();
 
   /// Every ranking the page asked for: which RPC, for whom, and the page
   /// window. The two tabs are indistinguishable on screen — same cards, one
@@ -395,6 +448,108 @@ void main() {
     });
   });
 
+  // Phase 33. `chef_window_stats` with `p_chef` — the same function the
+  // Momentum board ranks, so the line and the board cannot disagree.
+  group('the momentum line', () {
+    testWidgets('says what the last 30 days earned', (tester) async {
+      _size(tester, 1000, 2000);
+      final chefs = _FakeChefRepository(
+        window: ChefWindowStats(
+          id: 'ssk',
+          windowStart: DateTime.utc(2026, 8, 25),
+          likes: 40,
+          saves: 12,
+          viewers: 60,
+          newRecipes: 1,
+          score: 192,
+        ),
+      );
+      await tester.pumpWidget(_app(chefs: chefs, pages: const [[]]));
+      await tester.pumpAndSettle();
+
+      expect(chefs.windowCalls.single, ('ssk', kChefMomentumDays));
+      expect(find.text('LAST 30 DAYS'), findsOneWidget);
+      expect(find.text('+192 points'), findsOneWidget);
+      expect(find.text('40 likes'), findsOneWidget);
+      // Distinct signed-in readers (B012), and singular at one (B031).
+      expect(find.text('60 views'), findsOneWidget);
+      expect(find.text('1 new recipe'), findsOneWidget);
+      // No ratings in the window: the clause is absent, not "0 ratings".
+      expect(find.textContaining('rating'), findsNothing);
+    });
+
+    testWidgets('a quiet month is a sentence, not a row of zeros', (
+      tester,
+    ) async {
+      _size(tester, 1000, 2000);
+      final chefs = _FakeChefRepository(
+        window: ChefWindowStats(
+          id: 'ssk',
+          windowStart: DateTime.utc(2026, 8, 25),
+        ),
+      );
+      await tester.pumpWidget(_app(chefs: chefs, pages: const [[]]));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('No likes, saves or views on public recipes'),
+        findsOneWidget,
+      );
+      expect(find.text('+0 points'), findsNothing);
+      expect(find.text('0 likes'), findsNothing);
+    });
+
+    testWidgets('a failed window costs the line, not the page', (tester) async {
+      _size(tester, 1000, 2000);
+      await tester.pumpWidget(
+        _app(chefs: _FakeChefRepository(windowFails: true), pages: const [[]]),
+      );
+      await tester.pumpAndSettle();
+
+      // The page is still the page: the score panel rendered.
+      expect(find.byType(TierLadder), findsOneWidget);
+      expect(find.byType(ErrorView), findsNothing);
+      expect(find.text('LAST 30 DAYS'), findsNothing);
+    });
+
+    testWidgets('zero window rows draw no line rather than an error', (
+      tester,
+    ) async {
+      // `chef_window_stats` answers zero rows for a profile outside the board's
+      // population — which a ranked page can meet if the chef's last public
+      // recipe went private between the two reads. A state, not a failure.
+      _size(tester, 1000, 2000);
+      await tester.pumpWidget(
+        _app(chefs: _FakeChefRepository(noWindow: true), pages: const [[]]),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('LAST 30 DAYS'), findsNothing);
+      expect(find.byType(TierLadder), findsOneWidget);
+      expect(find.byType(ErrorView), findsNothing);
+    });
+
+    testWidgets('an unranked chef is never asked for a window', (tester) async {
+      _size(tester, 1000);
+      final chefs = _FakeChefRepository(result: null);
+      await tester.pumpWidget(
+        _app(
+          chefs: chefs,
+          profile: Profile(
+            id: 'd6',
+            displayName: 'Farid Haddad',
+            createdAt: DateTime(2025, 6, 1),
+          ),
+          chefId: 'd6',
+          pages: const [[]],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(chefs.windowCalls, isEmpty);
+    });
+  });
+
   group('a chef with no rank', () {
     testWidgets('is a page, not an error', (tester) async {
       _size(tester, 1000);
@@ -515,6 +670,28 @@ void main() {
         find.textContaining('has not signed up for Secret-Sauce'),
         findsOneWidget,
       );
+    });
+
+    // B118: the header printed the `home_cook` column default as a tier chip
+    // beside "Not ranked yet" — a standing, on a page that has none.
+    testWidgets('shows no tier and says it is not ranked, without "yet"', (
+      tester,
+    ) async {
+      _size(tester, 1000);
+      await tester.pumpWidget(
+        _app(standing: null, profile: imported(), pages: const [[]]),
+      );
+      await tester.pumpAndSettle();
+
+      expect(
+        find.descendant(
+          of: find.byType(ChefIdentityHeader),
+          matching: find.byType(TierChip),
+        ),
+        findsNothing,
+      );
+      expect(find.textContaining('Not ranked ·'), findsOneWidget);
+      expect(find.textContaining('Not ranked yet'), findsNothing);
     });
 
     testWidgets('does not show the brand-new-member note instead', (

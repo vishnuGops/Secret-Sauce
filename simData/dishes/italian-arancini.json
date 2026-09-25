@@ -1,0 +1,96 @@
+{
+  "slug": "italian-arancini",
+  "title": "Arancini",
+  "description": "Saffron risotto chilled until firm, shaped around mozzarella, peas, and ragù, then crumbed and fried. Sicily's street food. Makes about 16.",
+  "cuisine": "Italian",
+  "category": "Appetizer",
+  "difficulty": "hard",
+  "prep_minutes": 45,
+  "cook_minutes": 60,
+  "servings": 8,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The best arancini start as yesterday's risotto. Without ragù, a cube of ham with the mozzarella is the Palermo alternative.",
+  "ingredient_groups": [
+    {
+      "name": "Risotto",
+      "ingredients": [
+        { "quantity": 1, "unit": null, "name": "onion", "note": "finely chopped", "food": "onion" },
+        { "quantity": 40, "unit": "g", "name": "butter", "note": "divided", "food": "butter" },
+        { "quantity": 400, "unit": "g", "name": "arborio rice" },
+        { "quantity": 1.2, "unit": "L", "name": "chicken stock", "note": "kept hot" },
+        { "quantity": 1, "unit": "pinch", "name": "saffron" },
+        { "quantity": 60, "unit": "g", "name": "parmesan", "note": "grated", "food": "parmesan" }
+      ]
+    },
+    {
+      "name": "Filling",
+      "ingredients": [
+        { "quantity": 125, "unit": "g", "name": "mozzarella", "note": "in 16 cubes", "food": "mozzarella" },
+        { "quantity": 100, "unit": "g", "name": "peas", "note": "thawed if frozen", "food": "peas" },
+        { "quantity": 150, "unit": "g", "name": "ragù", "note": "thick, leftover" }
+      ]
+    },
+    {
+      "name": "Coating and frying",
+      "ingredients": [
+        { "quantity": 100, "unit": "g", "name": "all-purpose flour", "food": "all-purpose-flour" },
+        { "quantity": 2, "unit": null, "name": "eggs", "note": "beaten", "food": "egg" },
+        { "quantity": 150, "unit": "g", "name": "breadcrumbs", "note": "fine, dry", "food": "panko" },
+        { "quantity": 1.5, "unit": "L", "name": "neutral oil", "note": "for deep frying", "food": "canola-oil" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Risotto",
+      "steps": [
+        {
+          "text": "Soften the onion in half the butter, add the arborio rice, and toast for a minute.",
+          "duration_minutes": 5,
+          "temperature": "medium"
+        },
+        {
+          "text": "Add the hot stock a ladle at a time with the saffron, stirring, until the rice is just cooked and quite dry.",
+          "duration_minutes": 20,
+          "tip": "Drier than a risotto you would serve. Wet rice will not hold a shape."
+        },
+        {
+          "text": "Beat in the remaining butter and the parmesan, spread thinly on a tray, and chill until firm.",
+          "duration_minutes": 240
+        }
+      ]
+    },
+    {
+      "name": "Shape",
+      "steps": [
+        {
+          "text": "With wet hands, flatten a golf ball of rice in your palm, add a cube of mozzarella, a few peas, and a spoonful of ragù, and close the rice around it into a ball.",
+          "tip": "Keep a bowl of water beside you. Rice sticks to dry hands and tears."
+        },
+        {
+          "text": "Roll each in flour, then beaten egg, then breadcrumbs."
+        }
+      ]
+    },
+    {
+      "name": "Fry",
+      "steps": [
+        {
+          "text": "Fry in batches in the hot oil until deep golden, turning so they colour evenly.",
+          "duration_minutes": 12,
+          "temperature": "175°C / 345°F",
+          "tip": "Too cool and they soak up oil and split. Use a thermometer."
+        },
+        {
+          "text": "Drain and rest for a few minutes so the mozzarella sets slightly before serving.",
+          "duration_minutes": 3
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.6,
+    "variant_titles": ["Sicilian {title}", "Leftover-Risotto {title}"]
+  }
+}

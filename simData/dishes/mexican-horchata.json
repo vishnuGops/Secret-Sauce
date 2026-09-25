@@ -1,0 +1,54 @@
+{
+  "slug": "mexican-horchata",
+  "title": "Horchata",
+  "description": "Rice and cinnamon soaked overnight, blended, and strained into a cool, milky, lightly sweet agua fresca.",
+  "cuisine": "Mexican",
+  "category": "Drink",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 0,
+  "servings": 8,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Keeps three days in the fridge. Stir before pouring; it settles.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 200, "unit": "g", "name": "long-grain white rice" },
+        { "quantity": 1, "unit": "stick", "name": "cinnamon", "note": "Mexican canela, broken" },
+        { "quantity": 50, "unit": "g", "name": "blanched almonds", "is_optional": true },
+        { "quantity": 1.5, "unit": "L", "name": "water", "note": "divided", "food": "water" },
+        { "quantity": 100, "unit": "g", "name": "sugar", "food": "granulated-sugar" },
+        { "quantity": 250, "unit": "ml", "name": "whole milk", "food": "whole-milk" },
+        { "quantity": 1, "unit": "tsp", "name": "vanilla extract", "food": "vanilla-extract" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Rinse the rice, then soak it with the cinnamon and almonds in 1 L of the water overnight.",
+          "duration_minutes": 720
+        },
+        {
+          "text": "Blend the rice, cinnamon, almonds, and soaking water until the rice is as fine as possible.",
+          "duration_minutes": 3
+        },
+        {
+          "text": "Strain through a fine sieve lined with muslin, squeezing out every drop.",
+          "tip": "Strain twice if you want it silky. Gritty horchata is the usual complaint."
+        },
+        {
+          "text": "Stir in the remaining water, the sugar, milk, and vanilla until dissolved. Serve over ice."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.1,
+    "variant_titles": ["Cinnamon {title}", "Vegan {title}"]
+  }
+}

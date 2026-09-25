@@ -1,0 +1,57 @@
+{
+  "slug": "moroccan-carrot-salad",
+  "title": "Moroccan Carrot Salad",
+  "description": "Just-tender carrots dressed warm in cumin, paprika, cinnamon, lemon, and a little honey, then left to soak it up. Part of any Moroccan spread of salads.",
+  "cuisine": "Moroccan",
+  "category": "Salad",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 10,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Better after a few hours, and keeps two days.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 600, "unit": "g", "name": "carrots", "note": "peeled, in coins" },
+        { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "peeled, whole", "food": "garlic" },
+        { "quantity": 1, "unit": "tsp", "name": "cumin", "note": "ground" },
+        { "quantity": 1, "unit": "tsp", "name": "sweet paprika", "food": "smoked-paprika" },
+        { "quantity": 0.5, "unit": "tsp", "name": "cinnamon", "note": "ground" },
+        { "quantity": 2, "unit": "tbsp", "name": "lemon juice", "food": "lemon-juice" },
+        { "quantity": 3, "unit": "tbsp", "name": "olive oil", "food": "olive-oil" },
+        { "quantity": 1, "unit": "tsp", "name": "honey", "food": "honey" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 1, "unit": "handful", "name": "cilantro", "note": "chopped", "food": "coriander" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Boil the carrots with the whole garlic cloves until just tender but still with some bite.",
+          "duration_minutes": 8,
+          "tip": "Overcooked, they turn to baby food once the dressing goes on."
+        },
+        {
+          "text": "Drain, then crush the garlic and whisk it with the cumin, paprika, cinnamon, lemon juice, olive oil, honey, and salt."
+        },
+        {
+          "text": "Toss the warm carrots in the dressing and leave to absorb it.",
+          "duration_minutes": 30
+        },
+        {
+          "text": "Serve at room temperature, scattered with cilantro."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1,
+    "variant_titles": ["Spiced {title}", "Mezze {title}"]
+  }
+}

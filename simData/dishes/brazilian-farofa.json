@@ -1,0 +1,58 @@
+{
+  "slug": "brazilian-farofa",
+  "title": "Farofa",
+  "description": "Toasted manioc flour fried in butter with bacon and onion until sandy and golden — the crunchy, savoury sprinkle on every Brazilian plate.",
+  "cuisine": "Brazilian",
+  "category": "Side",
+  "difficulty": "easy",
+  "prep_minutes": 10,
+  "cook_minutes": 15,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Serve alongside feijoada, grilled meat, or beans. Leave out the bacon and add sliced banana for a vegetarian farofa de banana.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 150, "unit": "g", "name": "bacon", "note": "diced" },
+        { "quantity": 60, "unit": "g", "name": "butter", "food": "butter" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "finely chopped", "food": "onion" },
+        { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "minced", "food": "garlic" },
+        { "quantity": 2, "unit": null, "name": "eggs", "is_optional": true, "food": "egg" },
+        { "quantity": 250, "unit": "g", "name": "manioc flour", "note": "farinha de mandioca" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 1, "unit": "handful", "name": "parsley", "note": "chopped", "food": "flat-leaf-parsley" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Cook the bacon until crisp, then add the butter, onion, and garlic and cook until golden.",
+          "duration_minutes": 8,
+          "temperature": "medium"
+        },
+        {
+          "text": "Push everything to one side and scramble the eggs in the fat, if using.",
+          "duration_minutes": 2
+        },
+        {
+          "text": "Add the manioc flour and stir constantly until it smells toasty and turns sandy gold.",
+          "duration_minutes": 5,
+          "temperature": "low",
+          "tip": "It burns quickly once it colours. Keep it moving."
+        },
+        {
+          "text": "Season with salt and stir in the parsley."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.9,
+    "variant_titles": ["{title} de Banana", "Churrasco {title}"]
+  }
+}

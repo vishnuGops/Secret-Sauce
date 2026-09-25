@@ -1,0 +1,56 @@
+{
+  "slug": "lebanese-baba-ghanoush",
+  "title": "Baba Ghanoush",
+  "description": "Eggplant charred over an open flame until it collapses, then mashed with tahini, garlic, and lemon. Smoky, silky, and eaten with bread.",
+  "cuisine": "Lebanese",
+  "category": "Appetizer",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 30,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Keeps three days in the fridge. Bring it back to room temperature before serving.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 2, "unit": null, "name": "large eggplants", "food": "eggplant" },
+        { "quantity": 3, "unit": "tbsp", "name": "tahini" },
+        { "quantity": 1, "unit": "clove", "name": "garlic", "note": "crushed", "food": "garlic" },
+        { "quantity": 3, "unit": "tbsp", "name": "lemon juice", "food": "lemon-juice" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 2, "unit": "tbsp", "name": "olive oil", "food": "olive-oil" },
+        { "quantity": 1, "unit": "handful", "name": "parsley", "note": "chopped", "food": "flat-leaf-parsley" },
+        { "quantity": 1, "unit": "tbsp", "name": "pomegranate seeds", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Char the eggplants directly over a gas flame, on a barbecue, or under a very hot grill, turning, until the skin is black and they collapse.",
+          "duration_minutes": 30,
+          "temperature": "high",
+          "tip": "The smoke is the whole dish. Oven-roasted eggplant makes a pleasant dip that is not baba ghanoush."
+        },
+        {
+          "text": "Split them and leave to drain in a colander, cut side down, so the bitter juices run off.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Scrape the flesh from the skin and mash with a fork — not a blender — with the tahini, garlic, lemon juice, and salt."
+        },
+        {
+          "text": "Spread in a shallow bowl, drizzle with olive oil, and finish with parsley and pomegranate seeds."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.2,
+    "variant_titles": ["Smoky {title}", "Mezze {title}"]
+  }
+}

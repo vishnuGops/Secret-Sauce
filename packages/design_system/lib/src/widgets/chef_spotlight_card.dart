@@ -58,9 +58,21 @@ class ChefSpotlightCard extends StatelessWidget {
     required this.standing,
     required this.onTap,
     this.totalChefs,
+    this.window,
+    this.windowLabel,
   });
 
   final ChefStanding standing;
+
+  /// What the chef earned inside a time window (Phase 33) — the Trending and
+  /// month rails. When set, the driver row reads the window instead of the
+  /// lifetime totals: `+312 · last 7 days`, then the input doing most of that
+  /// work. Same two lines as the all-time row, so the fixed-size tile's budget
+  /// is unchanged (Gotcha 13). Everything else on the card stays all-time.
+  final ChefWindowStats? window;
+
+  /// The span [window] covers — `last 7 days`. Ignored without a [window].
+  final String? windowLabel;
 
   /// Opens the expanded chef card. Required for the same reason the leaderboard
   /// row's is: a card with no destination is what this design set out to fix.
@@ -111,7 +123,12 @@ class ChefSpotlightCard extends StatelessWidget {
                   ),
                 ),
                 _RarityBand(standing: standing, color: tier),
-                _DriverRow(standing: standing, color: tier),
+                _DriverRow(
+                  standing: standing,
+                  color: tier,
+                  window: window,
+                  windowLabel: windowLabel,
+                ),
                 _Footer(standing: standing, color: tier),
               ],
             ),
@@ -563,16 +580,25 @@ class _RarityBand extends StatelessWidget {
 /// the arithmetic behind it and what it is worth.
 ///
 /// The draft puts the chef's signature dish here. That needs a per-chef recipe
-/// read, which would turn a ten-card rail into eleven round trips, and the
-/// windowed variants of it ("+330 this week") need engagement timestamps the
-/// seed does not carry yet.
+/// read, which would turn a ten-card rail into eleven round trips.
+///
+/// The draft's windowed variant ("+330 this week") is what a [window] draws
+/// (Phase 33): the gain and its span on top, then the input that earned most of
+/// it, all counted inside the window.
 // TODO(rails): swap this for `Signature · <dish>` once `chef_spotlights` batches
 // the top recipe into the rail's single call.
 class _DriverRow extends StatelessWidget {
-  const _DriverRow({required this.standing, required this.color});
+  const _DriverRow({
+    required this.standing,
+    required this.color,
+    this.window,
+    this.windowLabel,
+  });
 
   final ChefStanding standing;
   final Color color;
+  final ChefWindowStats? window;
+  final String? windowLabel;
 
   static IconData _iconFor(String label) => switch (label) {
     'likes' => Icons.favorite,
@@ -584,12 +610,21 @@ class _DriverRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
+    final w = window;
     final top =
         ChefScoring.breakdown(
-          likes: standing.totalLikes,
-          saves: standing.totalSaves,
-          views: standing.totalViews,
+          likes: w?.likes ?? standing.totalLikes,
+          saves: w?.saves ?? standing.totalSaves,
+          views: w?.viewers ?? standing.totalViews,
         ).first;
+    final arithmetic =
+        '${countOf(top.count, top.label)} × ${groupedScore(top.weight)}';
+    final title =
+        w == null
+            ? 'Driven by ${top.label}'
+            : '${w.gainLabel} · ${windowLabel ?? 'in window'}';
+    final detail =
+        w == null ? arithmetic : 'Driven by ${top.label} · $arithmetic';
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
@@ -618,7 +653,7 @@ class _DriverRow extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Driven by ${top.label}',
+                        title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.labelSmall?.copyWith(
@@ -626,8 +661,7 @@ class _DriverRow extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${countOf(top.count, top.label)} × '
-                        '${groupedScore(top.weight)}',
+                        detail,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.labelSmall?.copyWith(

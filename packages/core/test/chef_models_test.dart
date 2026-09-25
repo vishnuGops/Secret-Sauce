@@ -160,6 +160,7 @@ void main() {
       'total_likes': 4000,
       'total_saves': 1600,
       'total_views': 5000,
+      'created_at': '2025-03-14T09:30:00.5+00:00',
     };
 
     test('decodes every column of the RPC row', () {
@@ -174,6 +175,8 @@ void main() {
       expect(s.totalLikes, 4000);
       expect(s.totalSaves, 1600);
       expect(s.totalViews, 5000);
+      // Phase 33: returned by both leaderboard RPCs, in lockstep.
+      expect(s.createdAt, DateTime.utc(2025, 3, 14, 9, 30, 0, 500));
     });
 
     test('chef_score decodes as double from both int and double JSON', () {
@@ -190,6 +193,8 @@ void main() {
       expect(s.chefScore, 0);
       expect(s.publicRecipeCount, 0);
       expect(s.totalViews, 0);
+      // An older server that does not return the column still decodes.
+      expect(s.createdAt, isNull);
     });
 
     // Grouped since Phase 22 — the board and the expanded card both print
@@ -401,6 +406,84 @@ void main() {
       for (final field in ['id', 'display_name', 'avatar_url', 'chef_tier']) {
         expect(kRecipeSelect, contains(field), reason: field);
       }
+    });
+
+    // B118: `Profile.kind` defaults to member, so dropping `kind` from the
+    // owner embed would silently put `Home Cook` back on every captured byline.
+    // Matched inside the embed, because `recipes` has no `kind` column and a
+    // bare `contains('kind')` would pass on an unrelated substring.
+    test('embeds the owner kind, so an imported chef shows no tier', () {
+      final embed = RegExp(
+        r'owner:profiles!recipes_owner_id_fkey\(([^)]*)\)',
+      ).firstMatch(kRecipeSelect);
+      expect(embed, isNotNull);
+      expect(embed!.group(1)!.split(','), contains('kind'));
+    });
+  });
+
+  // Phase 33. Keys are `chef_window_stats`' RETURNS TABLE column names — the
+  // windowed board returns the same six beside the board's eleven.
+  group('ChefWindowStats', () {
+    Map<String, dynamic> row({Object score = 312, int likes = 40}) => {
+      'id': 'd1',
+      'window_start': '2026-09-17T12:00:00+00:00',
+      'window_likes': likes,
+      'window_saves': 30,
+      'window_views': 60,
+      'window_ratings': 2,
+      'window_recipes': 1,
+      'window_score': score,
+    };
+
+    test('decodes every column', () {
+      final w = ChefWindowStats.fromJson(row());
+      expect(w.id, 'd1');
+      expect(w.windowStart, DateTime.utc(2026, 9, 17, 12));
+      expect(w.likes, 40);
+      expect(w.saves, 30);
+      expect(w.viewers, 60);
+      expect(w.ratings, 2);
+      expect(w.newRecipes, 1);
+      expect(w.score, 312.0);
+    });
+
+    test('window_score survives an int or a double (Gotcha 12)', () {
+      expect(ChefWindowStats.fromJson(row(score: 0)).score, 0.0);
+      expect(ChefWindowStats.fromJson(row(score: 12.4)).score, 12.4);
+    });
+
+    test(
+      'moved is a positive score; idle also needs no ratings or recipes',
+      () {
+        final quiet = ChefWindowStats.fromJson(row(score: 0, likes: 0));
+        expect(quiet.moved, isFalse);
+        // Published a recipe and got two ratings: did not move, was not idle.
+        expect(quiet.isIdle, isFalse);
+        expect(quiet.copyWith(ratings: 0, newRecipes: 0).isIdle, isTrue);
+        expect(ChefWindowStats.fromJson(row()).moved, isTrue);
+      },
+    );
+
+    test('gainLabel is grouped and signed', () {
+      expect(ChefWindowStats.fromJson(row(score: 1312)).gainLabel, '+1,312');
+      expect(ChefWindowStats.fromJson(row(score: 12.4)).gainLabel, '+12.4');
+      expect(ChefWindowStats.fromJson(row(score: 0)).gainLabel, '+0');
+    });
+
+    test('a windowed board row splits into its two halves', () {
+      final r = ChefWindowStanding.fromRow({
+        ...row(),
+        'chef_rank': 3,
+        'display_name': 'Chen Wei',
+        'chef_score': 1200,
+        'total_likes': 200,
+      });
+      expect(r.id, 'd1');
+      // The rank on a windowed row is the rank IN THE WINDOW.
+      expect(r.standing.chefRank, 3);
+      expect(r.standing.chefScore, 1200.0);
+      expect(r.standing.totalLikes, 200);
+      expect(r.window.likes, 40);
     });
   });
 }

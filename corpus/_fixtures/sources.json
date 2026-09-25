@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "note": "FIXTURE registry for tool/corpus_import.dart (CI: .github/workflows/database.yml, asserted by supabase/tests/corpus_import_fixture.sql). Every record under recipes/ is SYNTHETIC - written for this test in the real harvester shape, with no scraped text, on the reserved .test TLD. Never copy a real capture in here: the corpus's prose is the publisher's (CLAUDE.md Gotcha 28), and this directory is committed. Changing a record means changing the expectations in corpus_import_fixture.sql in the same commit.",
+  "sources": [
+    {
+      "id": "src_fixture-chef-blog",
+      "slug": "fixture-chef-blog",
+      "name": "Fixture Chef Blog",
+      "kind": "chef",
+      "homepage": "https://chef-blog.example.test/",
+      "country": null,
+      "language": null,
+      "enabled": true
+    },
+    {
+      "id": "src_fixture-brand",
+      "slug": "fixture-brand",
+      "name": "Fixture Brand Kitchen",
+      "kind": "brand",
+      "homepage": "https://brand.example.test/",
+      "country": "GB",
+      "language": "en",
+      "enabled": true
+    },
+    {
+      "id": "src_fixture-foreign",
+      "slug": "fixture-foreign",
+      "name": "Fixture Foreign Site",
+      "kind": "publication",
+      "homepage": "https://foreign.example.test/",
+      "country": "IT",
+      "language": "it",
+      "enabled": true
+    },
+    {
+      "id": "src_fixture-missing-shard",
+      "slug": "fixture-missing-shard",
+      "name": "Fixture Source With No Shard",
+      "kind": "community",
+      "homepage": "https://missing.example.test/",
+      "country": null,
+      "language": null,
+      "enabled": true
+    }
+  ],
+  "updatedAt": "2026-09-24"
+}

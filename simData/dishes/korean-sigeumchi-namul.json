@@ -1,0 +1,50 @@
+{
+  "slug": "korean-sigeumchi-namul",
+  "title": "Sigeumchi Namul",
+  "description": "Blanched spinach squeezed dry and dressed with garlic, soy, and toasted sesame. The simplest banchan and one of the most eaten.",
+  "cuisine": "Korean",
+  "category": "Side",
+  "difficulty": "easy",
+  "prep_minutes": 10,
+  "cook_minutes": 2,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Keeps three days in the fridge. The same dressing works on bean sprouts.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "spinach", "note": "washed, roots trimmed" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 1, "unit": "clove", "name": "garlic", "note": "grated", "food": "garlic" },
+        { "quantity": 1, "unit": "tbsp", "name": "soy sauce", "food": "tamari" },
+        { "quantity": 2, "unit": "tsp", "name": "sesame oil" },
+        { "quantity": 1, "unit": null, "name": "green onion", "note": "finely chopped", "food": "green-onions" },
+        { "quantity": 1, "unit": "tsp", "name": "toasted sesame seeds" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Blanch the spinach in boiling salted water for thirty seconds, then refresh in cold water.",
+          "duration_minutes": 1,
+          "tip": "Thirty seconds, no more. The leaves should still be vivid."
+        },
+        {
+          "text": "Squeeze out as much water as you can, a handful at a time, then cut into 5 cm lengths."
+        },
+        {
+          "text": "Toss with the garlic, soy sauce, sesame oil, green onion, and sesame seeds, loosening the clumps with your fingers. Taste and adjust the salt."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1,
+    "variant_titles": ["Banchan {title}", "Quick {title}"]
+  }
+}

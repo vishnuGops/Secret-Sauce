@@ -1,0 +1,62 @@
+{
+  "slug": "ethiopian-gomen",
+  "title": "Gomen",
+  "description": "Collard greens braised soft with red onion, garlic, ginger, and green chilli in spiced Ethiopian butter. A fixture of any shared injera platter.",
+  "cuisine": "Ethiopian",
+  "category": "Side",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 30,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Olive oil in place of the niter kibbeh makes it vegan and fit for fasting days.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 700, "unit": "g", "name": "collard greens" },
+        { "quantity": 3, "unit": "tbsp", "name": "niter kibbeh", "note": "Ethiopian spiced butter; or butter with a pinch of cardamom" },
+        { "quantity": 1, "unit": null, "name": "red onion", "note": "finely chopped", "food": "onion" },
+        { "quantity": 3, "unit": "cloves", "name": "garlic", "note": "minced", "food": "garlic" },
+        { "quantity": 1, "unit": "tbsp", "name": "ginger", "note": "grated", "food": "ginger" },
+        { "quantity": 2, "unit": null, "name": "green chillies", "note": "slit lengthways" },
+        { "quantity": 125, "unit": "ml", "name": "water", "food": "water" },
+        { "quantity": 1, "unit": "tsp", "name": "salt", "food": "kosher-salt" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Strip the collard greens from their stems and chop the leaves into small pieces."
+        },
+        {
+          "text": "Cook the red onion in the niter kibbeh until soft.",
+          "duration_minutes": 6,
+          "temperature": "medium"
+        },
+        {
+          "text": "Add the garlic, ginger, and green chillies and stir for a minute.",
+          "duration_minutes": 1
+        },
+        {
+          "text": "Add the collards and water, cover, and cook until completely tender.",
+          "duration_minutes": 20,
+          "temperature": "low",
+          "tip": "Ethiopian gomen is cooked soft, not bright and crunchy."
+        },
+        {
+          "text": "Uncover, season with salt, and cook off any remaining liquid.",
+          "duration_minutes": 3
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.8,
+    "variant_titles": ["Fasting-Day {title}", "{title} with Beef"]
+  }
+}

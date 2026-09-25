@@ -9,6 +9,20 @@ FlowGridMetrics fit(double available) => FlowGridMetrics.fit(
   spacing: AppSpacing.md,
 );
 
+/// [fit] with the grid's real column cap, as `SliverRecipeGrid` calls it.
+FlowGridMetrics fitCapped(double available) => FlowGridMetrics.fit(
+  available: available,
+  minTileWidth: kRecipeCardMinWidth,
+  maxTileWidth: kRecipeCardMaxWidth,
+  spacing: AppSpacing.md,
+  maxColumns: kRecipeGridMaxColumns,
+);
+
+/// The widest row the capped grid can produce.
+const double _maxRow =
+    kRecipeCardMaxWidth * kRecipeGridMaxColumns +
+    AppSpacing.md * (kRecipeGridMaxColumns - 1);
+
 void main() {
   group('FlowGridMetrics', () {
     test('one capped column on a phone', () {
@@ -73,7 +87,7 @@ void main() {
           reason: 'card squeezed under its min at $width',
         );
         expect(
-          rowWidth + m.gutter * 2,
+          rowWidth + m.gutter * 2 + m.trailing,
           closeTo(width, 0.001),
           reason: 'row plus gutters must account for every pixel at $width',
         );
@@ -98,6 +112,76 @@ void main() {
           reason: 'another column would have fit at $width',
         );
       }
+    });
+  });
+
+  // B049's second half: nothing capped the grid, so a 3840px window laid out
+  // twelve columns. The cap is a column count, and it must change nothing up to
+  // the widest common desktop viewport.
+  group('FlowGridMetrics with a column cap', () {
+    test('a 4K window gets a left-aligned block, not twelve columns', () {
+      // 3840 minus the grid's 16px padding each side.
+      final uncapped = fit(3808);
+      expect(uncapped.columns, 12, reason: 'the pre-cap behaviour');
+
+      final m = fitCapped(3808);
+      expect(m.columns, kRecipeGridMaxColumns);
+      expect(m.tileWidth, kRecipeCardMaxWidth);
+      // Left-aligned: the slack is all trailing, so the first card keeps the
+      // page's left edge (B059).
+      expect(m.gutter, 0);
+      expect(m.trailing, 3808 - _maxRow);
+    });
+
+    test('changes nothing on any window up to 1920px', () {
+      // 1920 - 32 = 1888 is the widest grid extent a full-HD window hands it.
+      for (var width = 0.0; width <= 1888; width += 1) {
+        final a = fit(width);
+        final b = fitCapped(width);
+        expect(b.columns, a.columns, reason: 'columns moved at $width');
+        expect(b.tileWidth, a.tileWidth, reason: 'tiles moved at $width');
+        expect(b.gutter, a.gutter, reason: 'gutter moved at $width');
+        expect(b.trailing, 0, reason: 'trailing slack at $width');
+      }
+    });
+
+    test('holds its invariants on the way out to 8K', () {
+      var previousColumns = 0;
+      for (var width = kRecipeCardMinWidth; width <= 7680; width += 3) {
+        final m = fitCapped(width);
+        final rowWidth =
+            m.tileWidth * m.columns + AppSpacing.md * (m.columns - 1);
+
+        expect(m.columns, lessThanOrEqualTo(kRecipeGridMaxColumns));
+        expect(m.tileWidth, lessThanOrEqualTo(kRecipeCardMaxWidth));
+        expect(m.tileWidth, greaterThanOrEqualTo(kRecipeCardMinWidth));
+        expect(rowWidth, lessThanOrEqualTo(_maxRow + 0.001));
+        expect(
+          rowWidth + m.gutter * 2 + m.trailing,
+          closeTo(width, 0.001),
+          reason: 'row plus gutters must account for every pixel at $width',
+        );
+        expect(
+          m.columns,
+          greaterThanOrEqualTo(previousColumns),
+          reason: 'columns went down as the window got wider at $width',
+        );
+        previousColumns = m.columns;
+      }
+    });
+
+    test('a cap of one is a single left-aligned column', () {
+      final m = FlowGridMetrics.fit(
+        available: 1000,
+        minTileWidth: kRecipeCardMinWidth,
+        maxTileWidth: kRecipeCardMaxWidth,
+        spacing: AppSpacing.md,
+        maxColumns: 1,
+      );
+      expect(m.columns, 1);
+      expect(m.tileWidth, kRecipeCardMaxWidth);
+      expect(m.gutter, 0);
+      expect(m.trailing, 1000 - kRecipeCardMaxWidth);
     });
   });
 }

@@ -1,10 +1,11 @@
 import 'dart:async';
 
 // Overrides `chefRepositoryProvider` (core) rather than the screen's own
-// provider, so the FutureProvider wiring in chefs_providers.dart is exercised
-// too instead of being stubbed out.
+// providers, so the notifier and provider wiring in chefs_providers.dart is
+// exercised too instead of being stubbed out.
 import 'package:app/features/chefs/chefs_hero.dart';
 import 'package:app/features/chefs/chefs_providers.dart';
+import 'package:app/features/chefs/chefs_rails.dart';
 import 'package:app/features/chefs/chefs_screen.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:core/core.dart';
@@ -14,31 +15,91 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
+/// One recorded page request: which query, and the window it asked for.
+typedef _Call =
+    ({String rpc, int limit, int offset, int? days, DateTime? since});
+
 /// Stand-in for the RPCs. `ChefRepository` is an abstract interface precisely
 /// so it can be swapped like this — no Supabase client is constructed.
 class _FakeChefRepository implements ChefRepository {
-  _FakeChefRepository(this._result);
+  _FakeChefRepository(this._result, {this.windowed = const []});
 
   /// A `List<ChefStanding>` to return, an `Exception` to throw, or null to
   /// hang forever (so the loading state can be observed).
   final Object? _result;
 
+  /// What `chefs_leaderboard_windowed` answers, in its own order: movers first,
+  /// quiet chefs (score 0) last, the way the RPC orders them.
+  final List<ChefWindowStanding> windowed;
+
   /// Fixed: the header renders "Rank 2 of 148" from this.
   static const count = 148;
 
-  /// Every `leaderboard` call, so the paging test can prove the limit grew.
-  final List<int> limits = [];
+  /// Every page request, board and rails alike. The board asks for
+  /// [kLeaderboardPageSize] rows and the rails for [kChefRailLength], which is
+  /// how the assertions below tell them apart.
+  final List<_Call> calls = [];
+
+  Iterable<_Call> boardCalls(String rpc) =>
+      calls.where((c) => c.rpc == rpc && c.limit == kLeaderboardPageSize);
+
+  List<ChefStanding> get _all => _result as List<ChefStanding>;
 
   @override
   Future<List<ChefStanding>> leaderboard({int limit = 50, int offset = 0}) {
-    limits.add(limit);
+    calls.add((
+      rpc: 'leaderboard',
+      limit: limit,
+      offset: offset,
+      days: null,
+      since: null,
+    ));
     if (_result == null) return Completer<List<ChefStanding>>().future;
     if (_result is Exception) return Future.error(_result);
-    // Honour the limit the way the RPC does — the board asks for a wider first
-    // page rather than a second one, so `Show all` has to change this.
-    final all = _result as List<ChefStanding>;
-    return Future.value(all.take(limit).toList());
+    // Honour the window the way the RPC does: `limit` rows from `offset`.
+    return Future.value(_all.skip(offset).take(limit).toList());
   }
+
+  @override
+  Future<List<ChefStanding>> newest({int limit = 50, int offset = 0}) {
+    calls.add((
+      rpc: 'newest',
+      limit: limit,
+      offset: offset,
+      days: null,
+      since: null,
+    ));
+    if (_result is! List<ChefStanding>) return Future.value(const []);
+    final sorted = [..._all]..sort(
+      (a, b) =>
+          (b.createdAt ?? DateTime(0)).compareTo(a.createdAt ?? DateTime(0)),
+    );
+    return Future.value(sorted.skip(offset).take(limit).toList());
+  }
+
+  @override
+  Future<List<ChefWindowStanding>> windowedLeaderboard({
+    required int days,
+    int limit = 50,
+    int offset = 0,
+    DateTime? since,
+  }) {
+    calls.add((
+      rpc: 'windowed',
+      limit: limit,
+      offset: offset,
+      days: days,
+      since: since,
+    ));
+    return Future.value(windowed.skip(offset).take(limit).toList());
+  }
+
+  @override
+  Future<ChefWindowStats?> windowStats(
+    String chefId, {
+    required int days,
+    DateTime? since,
+  }) async => null;
 
   // Nothing on this screen calls it since Phase 30 replaced the expanded card —
   // which listed top recipes — with `/chef/:id`, which lists all of them.
@@ -59,9 +120,7 @@ class _FakeChefRepository implements ChefRepository {
   @override
   Future<ChefStanding?> standing(String chefId) async {
     if (_result is! List<ChefStanding>) return null;
-    // Mirrors the RPC: zero rows for a profile that holds no board row, which
-    // the client turns into null rather than an error.
-    for (final s in _result) {
+    for (final s in _all) {
       if (s.id == chefId) return s;
     }
     return null;
@@ -95,7 +154,7 @@ class _FakeProfileRepository implements ProfileRepository {
   Future<Profile> updateMine(Profile profile) async => profile;
 }
 
-const _board = [
+final _board = [
   ChefStanding(
     chefRank: 1,
     id: 'd1',
@@ -106,6 +165,7 @@ const _board = [
     totalLikes: 4000,
     totalSaves: 1600,
     totalViews: 5000,
+    createdAt: DateTime.utc(2024, 1, 5),
   ),
   // Tied pair — dense_rank gives both rank 4, which must render as two "4"s.
   ChefStanding(
@@ -115,6 +175,7 @@ const _board = [
     chefTier: ChefTier.sousChef,
     chefScore: 1200,
     publicRecipeCount: 1,
+    createdAt: DateTime.utc(2026, 9, 20),
   ),
   ChefStanding(
     chefRank: 4,
@@ -123,6 +184,7 @@ const _board = [
     chefTier: ChefTier.sousChef,
     chefScore: 1200,
     publicRecipeCount: 1,
+    createdAt: DateTime.utc(2025, 6, 1),
   ),
 ];
 
@@ -138,7 +200,36 @@ const _kitchen = ChefStanding(
   totalViews: 1745,
 );
 
-/// Sizes the test window, since the screen now renders three different layouts.
+/// A windowed row: [standing] with what it earned, ranked [rank] in the window.
+ChefWindowStanding _moved(
+  ChefStanding standing, {
+  required int rank,
+  int likes = 0,
+  int saves = 0,
+  int viewers = 0,
+}) => ChefWindowStanding(
+  standing: standing.copyWith(chefRank: rank),
+  window: ChefWindowStats(
+    id: standing.id,
+    windowStart: DateTime.utc(2026, 8, 25),
+    likes: likes,
+    saves: saves,
+    viewers: viewers,
+    // What `chef_score()` would say — computed here from the same formula the
+    // Dart mirror pins (Gotcha 19), never used by the widgets for arithmetic.
+    score: ChefScoring.score(likes: likes, saves: saves, views: viewers),
+  ),
+);
+
+/// Chen moved most this window, Amara a little, Greta not at all — so the
+/// Momentum order is not the Score order, and one row is quiet.
+final _window = [
+  _moved(_board[1], rank: 1, likes: 40, saves: 12, viewers: 60),
+  _moved(_board[0], rank: 2, likes: 2),
+  _moved(_board[2], rank: 3),
+];
+
+/// Sizes the test window, since the screen renders three different layouts.
 /// 400 is the phone board, 1440 the two-column page.
 void _size(WidgetTester tester, double width, [double height = 1000]) {
   tester.view.physicalSize = Size(width, height);
@@ -149,8 +240,12 @@ void _size(WidgetTester tester, double width, [double height = 1000]) {
 
 _FakeChefRepository? _lastRepo;
 
-Widget _app(Object? result, {double textScale = 1.0}) {
-  final repo = _FakeChefRepository(result);
+Widget _app(
+  Object? result, {
+  double textScale = 1.0,
+  List<ChefWindowStanding> windowed = const [],
+}) {
+  final repo = _FakeChefRepository(result, windowed: windowed);
   _lastRepo = repo;
   return ProviderScope(
     overrides: [
@@ -174,13 +269,12 @@ Widget _app(Object? result, {double textScale = 1.0}) {
   );
 }
 
-/// The board now **navigates** instead of opening a dialog, so these tests need
-/// a real router: `context.push` throws without one.
+/// The board **navigates** instead of opening a dialog, so these tests need a
+/// real router: `context.push` throws without one.
 ///
-/// `/chef/:id` lands on a probe rather than the real [ChefPage] — this suite is
+/// `/chef/:id` lands on a probe rather than the real `ChefPage` — this suite is
 /// about the board sending you to the right chef, and the page's own content is
-/// covered by `chef_page_test.dart` with its own fakes. Routing a stub also
-/// keeps a `RecipeRepository` out of this file, which the board does not use.
+/// covered by `chef_page_test.dart` with its own fakes.
 GoRouter _router() => GoRouter(
   initialLocation: Routes.chefs,
   routes: [
@@ -197,18 +291,84 @@ GoRouter _router() => GoRouter(
   ],
 );
 
+ProviderContainer _container(WidgetTester tester) =>
+    ProviderScope.containerOf(tester.element(find.byType(ChefsScreen)));
+
+List<ChefStanding> _many(int n) => [
+  for (var i = 0; i < n; i++)
+    ChefStanding(
+      chefRank: i + 1,
+      id: 'c$i',
+      displayName: 'Chef $i',
+      chefScore: (9000 - i * 100).toDouble(),
+      publicRecipeCount: 1,
+      createdAt: DateTime.utc(2026, 1, 1).add(Duration(days: i)),
+    ),
+];
+
 void main() {
   // OPT-P10 removed `chefCount()`; `chefCountProvider` now sums the tier counts
-  // instead, which is only correct because both cover the same population —
-  // profiles with at least one public recipe. `chefs_tier_counts()` enforces
-  // that server-side; this pins it for the fake, so every "of 148" assertion
-  // below keeps meaning what it says.
+  // instead, which is only correct because both cover the same population.
   test('the fake tier counts sum to the board total', () async {
     final counts = await _FakeChefRepository(const []).tierCounts();
     expect(
       counts.values.fold<int>(0, (sum, n) => sum + n),
       _FakeChefRepository.count,
     );
+  });
+
+  // The coupling between the hero's window and the board's tabs is the one
+  // piece of logic here with no widget in it — so it is pinned without one.
+  group('BoardView coupling', () {
+    BoardViewNotifier notifier(ProviderContainer c) =>
+        c.read(boardViewProvider.notifier);
+
+    test('starts on Score, all time', () {
+      final c = ProviderContainer();
+      addTearDown(c.dispose);
+      c.listen(boardViewProvider, (_, __) {});
+      expect(c.read(boardViewProvider), const BoardView());
+      expect(c.read(boardViewProvider).days, isNull);
+    });
+
+    test('Momentum from All time takes a month', () {
+      final c = ProviderContainer();
+      addTearDown(c.dispose);
+      c.listen(boardViewProvider, (_, __) {});
+      notifier(c).selectSort(BoardSort.momentum);
+      expect(
+        c.read(boardViewProvider),
+        const BoardView(sort: BoardSort.momentum, window: ChefsWindow.month),
+      );
+      expect(c.read(boardViewProvider).days, 30);
+    });
+
+    test('a window turns the board to Momentum; All time turns it back', () {
+      final c = ProviderContainer();
+      addTearDown(c.dispose);
+      c.listen(boardViewProvider, (_, __) {});
+      notifier(c).selectWindow(ChefsWindow.week);
+      expect(c.read(boardViewProvider).sort, BoardSort.momentum);
+      expect(c.read(boardViewProvider).days, 7);
+
+      notifier(c).selectWindow(ChefsWindow.allTime);
+      expect(c.read(boardViewProvider), const BoardView());
+    });
+
+    test('Score and New are all-time boards', () {
+      final c = ProviderContainer();
+      addTearDown(c.dispose);
+      c.listen(boardViewProvider, (_, __) {});
+      notifier(c).selectWindow(ChefsWindow.week);
+      notifier(c).selectSort(BoardSort.newest);
+      expect(
+        c.read(boardViewProvider),
+        const BoardView(sort: BoardSort.newest),
+      );
+      // All time leaves New alone rather than resetting it to Score.
+      notifier(c).selectWindow(ChefsWindow.allTime);
+      expect(c.read(boardViewProvider).sort, BoardSort.newest);
+    });
   });
 
   group('compact board', () {
@@ -228,14 +388,38 @@ void main() {
       expect(find.byIcon(Icons.workspace_premium), findsOneWidget);
       expect(find.text('#1'), findsOneWidget);
 
-      // Tied chefs share a rank: two rows both showing "4", both below the
-      // podium so both render the numeral.
+      // Tied chefs share a rank: two rows both showing "4".
       expect(find.text('4'), findsNWidgets(2));
       expect(find.text('Sous Chef'), findsNWidgets(2));
 
       // The page chrome is web-only.
       expect(find.byType(ChefsHero), findsNothing);
       expect(find.byType(CardRail), findsNothing);
+    });
+
+    testWidgets('carries the three orderings the hero-less layout needs', (
+      tester,
+    ) async {
+      _size(tester, 400);
+      await tester.pumpWidget(_app(_board, windowed: _window));
+      await tester.pumpAndSettle();
+
+      for (final label in ['Score', 'Momentum', 'New']) {
+        expect(find.text(label), findsOneWidget);
+      }
+      // No window pill until Momentum asks for one.
+      expect(find.text('Week'), findsNothing);
+
+      await tester.tap(find.text('Momentum'));
+      await tester.pumpAndSettle();
+      expect(find.text('Month'), findsOneWidget);
+      expect(_lastRepo!.boardCalls('windowed').last.days, 30);
+
+      await tester.tap(find.text('Week'));
+      await tester.pumpAndSettle();
+      expect(_lastRepo!.boardCalls('windowed').last.days, 7);
+      // All time is the Score tab, not a Momentum window.
+      expect(find.text('All time'), findsNothing);
     });
 
     testWidgets('shows the empty state when nobody qualifies', (tester) async {
@@ -266,6 +450,58 @@ void main() {
       expect(find.byType(LoadingView), findsOneWidget);
       expect(find.byType(ChefStandingCard), findsNothing);
     });
+
+    testWidgets('pages with Load more at the end of the list', (tester) async {
+      _size(tester, 400, 900);
+      await tester.pumpWidget(_app(_many(30)));
+      await tester.pumpAndSettle();
+
+      await tester.scrollUntilVisible(find.text('Load more'), 400);
+      await tester.tap(find.text('Load more'));
+      await tester.pumpAndSettle();
+
+      final pages = _lastRepo!.boardCalls('leaderboard').toList();
+      expect(pages.map((c) => c.offset), [0, kLeaderboardPageSize]);
+      await tester.scrollUntilVisible(find.text('Chef 29'), 400);
+      expect(find.text('Chef 29'), findsOneWidget);
+      // A short second page is the end: no button promising a third.
+      expect(find.text('Load more'), findsNothing);
+    });
+  });
+
+  // The Phase 21 carry-over: the web shell draws `TopNavBar` above every shell
+  // screen, so the screen's own `AppBar` was a second bar stacked under it.
+  // Compact has no top bar, so the phone board keeps its title bar.
+  group('app bar', () {
+    AppBar? screenAppBar(WidgetTester tester) {
+      final bars = find.descendant(
+        of: find.byType(ChefsScreen),
+        matching: find.byType(AppBar),
+      );
+      return bars.evaluate().isEmpty ? null : tester.widget<AppBar>(bars);
+    }
+
+    testWidgets('the phone board has its own', (tester) async {
+      _size(tester, 400);
+      await tester.pumpWidget(_app(_board));
+      await tester.pumpAndSettle();
+
+      expect(screenAppBar(tester), isNotNull);
+    });
+
+    for (final width in <double>[600, 1000, 1440]) {
+      testWidgets('none at ${width}px, where the web top bar is', (
+        tester,
+      ) async {
+        _size(tester, width, 1200);
+        await tester.pumpWidget(_app(_board));
+        await tester.pumpAndSettle();
+
+        expect(screenAppBar(tester), isNull);
+        // The hero's display title is the page title instead.
+        expect(find.byType(ChefsHero), findsOneWidget);
+      });
+    }
   });
 
   group('the page', () {
@@ -273,13 +509,11 @@ void main() {
       tester,
     ) async {
       // Tall enough that the rails column builds all three: a `ListView` only
-      // builds what is on screen, so a 1000px window would legitimately show
-      // two and this would be testing the viewport, not the page.
+      // builds what is on screen.
       _size(tester, 1440, 2200);
       await tester.pumpWidget(_app(_board));
       await tester.pumpAndSettle();
 
-      // Hero: population, ranking rule, and the five tier tiles.
       expect(find.byType(ChefsHero), findsOneWidget);
       expect(find.text('148 ranked'), findsOneWidget);
       expect(find.text('61'), findsOneWidget); // Home Cook tile
@@ -290,7 +524,6 @@ void main() {
       expect(find.textContaining('RECOMPUTED'), findsNothing);
       expect(find.textContaining('LIVE ·'), findsOneWidget);
 
-      // Board panel, in its dense variant.
       expect(find.text('Leaderboard'), findsOneWidget);
       expect(find.text('TOP 3 / 148'), findsOneWidget);
       expect(find.text('Ties share a rank.'), findsOneWidget);
@@ -301,7 +534,6 @@ void main() {
         isTrue,
       );
 
-      // Three rails, the first of them real cards.
       expect(find.byType(CardRail), findsNWidgets(3));
       expect(find.text('Popular chefs'), findsOneWidget);
       expect(find.text('Trending chefs'), findsOneWidget);
@@ -309,32 +541,7 @@ void main() {
       expect(find.byType(ChefSpotlightCard), findsWidgets);
     });
 
-    testWidgets('the windowed rails are honest placeholders', (tester) async {
-      _size(tester, 1440, 2200);
-      await tester.pumpWidget(_app(_board));
-      await tester.pumpAndSettle();
-
-      expect(find.byType(SpotlightCardPlaceholder), findsWidgets);
-      expect(
-        find.textContaining('needs dated likes and saves'),
-        findsNWidgets(2),
-      );
-    });
-
-    testWidgets('an empty board shows no Popular shelf at all', (tester) async {
-      _size(tester, 1440, 2200);
-      await tester.pumpWidget(_app(<ChefStanding>[]));
-      await tester.pumpAndSettle();
-
-      // A loaded-and-empty board must not render placeholder cards: that reads
-      // as "still loading" and claims chefs the panel's empty state denies.
-      expect(find.text('Popular chefs'), findsNothing);
-      expect(find.byType(EmptyView), findsOneWidget);
-      // The two windowed shelves are placeholders by design and stay.
-      expect(find.byType(CardRail), findsNWidgets(2));
-    });
-
-    testWidgets('the disabled orderings and windows are inert, not hidden', (
+    testWidgets('every control is live — nothing is drawn and disabled', (
       tester,
     ) async {
       _size(tester, 1440);
@@ -347,40 +554,23 @@ void main() {
       for (final label in ['All time', 'Month', 'Week']) {
         expect(find.text(label), findsOneWidget);
       }
-
-      // Tapping a disabled tab changes nothing.
-      await tester.tap(find.text('Momentum'));
-      await tester.pumpAndSettle();
-      final container = ProviderScope.containerOf(
-        tester.element(find.byType(ChefsScreen)),
-      );
-      expect(container.read(boardSortProvider), BoardSort.score);
+      // The Phase 23 "not wired up yet" tooltips are gone with the reason.
+      expect(find.textContaining('not wired up'), findsNothing);
+      expect(find.textContaining('Placeholder cards'), findsNothing);
     });
 
-    testWidgets('`Show all` asks the RPC for a wider page', (tester) async {
-      _size(tester, 1440);
-      final many = [
-        for (var i = 0; i < 30; i++)
-          ChefStanding(
-            chefRank: i + 1,
-            id: 'c$i',
-            displayName: 'Chef $i',
-            chefScore: (3000 - i * 100).toDouble(),
-            publicRecipeCount: 1,
-          ),
-      ];
-
-      await tester.pumpWidget(_app(many));
+    testWidgets('an empty board shows no Popular shelf at all', (tester) async {
+      _size(tester, 1440, 2200);
+      await tester.pumpWidget(_app(<ChefStanding>[]));
       await tester.pumpAndSettle();
 
-      expect(_lastRepo!.limits.first, kLeaderboardPageSize);
-      expect(find.text('TOP 25 / 148'), findsOneWidget);
-
-      await tester.tap(find.text('Show all 148'));
-      await tester.pumpAndSettle();
-
-      expect(_lastRepo!.limits.last, kLeaderboardPageSize * 2);
-      expect(find.text('TOP 30 / 148'), findsOneWidget);
+      // A loaded-and-empty board must not render placeholder cards: that reads
+      // as "still loading" and claims chefs the panel's empty state denies.
+      expect(find.text('Popular chefs'), findsNothing);
+      expect(find.text('No chefs yet'), findsOneWidget);
+      // The two windowed shelves stay, each saying nothing moved.
+      expect(find.byType(CardRail), findsNWidgets(2));
+      expect(find.byType(QuietShelfCard), findsNWidgets(2));
     });
 
     testWidgets('a spotlight card carries the score and its top driver', (
@@ -390,8 +580,6 @@ void main() {
       await tester.pumpWidget(_app(const [_kitchen]));
       await tester.pumpAndSettle();
 
-      // 780 saves x 5 = 3,900 beats 1,980 likes x 3 = 5,940? No — likes lead,
-      // which is exactly what the card must say.
       expect(find.text('Driven by likes'), findsOneWidget);
       expect(find.text('1,980 likes × 3'), findsOneWidget);
       expect(find.text('RANK 2'), findsOneWidget);
@@ -410,16 +598,286 @@ void main() {
       await tester.tap(find.byType(ChefSpotlightCard).first);
       await tester.pumpAndSettle();
 
-      // The id matters, not just that something opened: the rails render more
-      // than one chef, and a card wired to the wrong index would still navigate.
       expect(find.text('CHEF PAGE ssk'), findsOneWidget);
     });
   });
 
-  // Phase 30 replaced the expanded dialog with `/chef/:id`. These are the same
-  // five interactions the dialog suite asserted, rewritten as navigation —
-  // deleting them instead would have ended the phase with less coverage than it
-  // started. What the dialog *rendered* is now asserted in `chef_page_test.dart`.
+  // Phase 22's carry-over: the board was one `limit: 25 × n` read that
+  // `Show all` widened. It is a real `limit`/`offset` pager now.
+  group('paging', () {
+    testWidgets('Load more asks for the next offset, not a wider page', (
+      tester,
+    ) async {
+      _size(tester, 1440);
+      await tester.pumpWidget(_app(_many(30)));
+      await tester.pumpAndSettle();
+
+      expect(find.text('TOP 25 / 148'), findsOneWidget);
+      expect(find.textContaining('Show all'), findsNothing);
+
+      await tester.tap(find.text('Load more'));
+      await tester.pumpAndSettle();
+
+      final pages = _lastRepo!.boardCalls('leaderboard').toList();
+      expect(pages.map((c) => (c.limit, c.offset)), [
+        (kLeaderboardPageSize, 0),
+        (kLeaderboardPageSize, kLeaderboardPageSize),
+      ]);
+      expect(find.text('TOP 30 / 148'), findsOneWidget);
+      // A short page means the end.
+      expect(find.text('Load more'), findsNothing);
+    });
+
+    testWidgets('a re-sort starts again at offset 0', (tester) async {
+      // Gotcha 24 one level in: carrying an offset across a re-sort pages one
+      // ordering's window against another ordering's rows.
+      _size(tester, 1440);
+      await tester.pumpWidget(_app(_many(30)));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Load more'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('New'));
+      await tester.pumpAndSettle();
+
+      expect(_lastRepo!.boardCalls('newest').single.offset, 0);
+      expect(find.text('NEWEST 25 / 148'), findsOneWidget);
+    });
+  });
+
+  group('Momentum', () {
+    testWidgets('ranks by the window and says so on every row', (tester) async {
+      _size(tester, 1440);
+      await tester.pumpWidget(_app(_board, windowed: _window));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Momentum'));
+      await tester.pumpAndSettle();
+
+      final call = _lastRepo!.boardCalls('windowed').single;
+      expect(call.days, 30);
+      // The hero's pill followed the tab: Momentum over All time is meaningless.
+      expect(
+        _container(tester).read(boardViewProvider).window,
+        ChefsWindow.month,
+      );
+
+      // Chen moved most: 40 × 3 + 12 × 5 + 60 × 0.2 = 192.
+      expect(find.text('+192'), findsOneWidget);
+      expect(find.text('+6'), findsOneWidget); // Amara, 2 likes
+      expect(find.text('last 30 days'), findsNWidgets(2));
+      expect(find.text('Points earned in the last 30 days.'), findsOneWidget);
+      // Momentum has no denominator — it lists movers, not the population.
+      expect(find.text('TOP 2'), findsOneWidget);
+    });
+
+    testWidgets('lists only chefs who moved', (tester) async {
+      // Greta's window is all zeros. The RPC returns her (last), and listing
+      // her would be the all-time board wearing the Momentum tab's name.
+      _size(tester, 1440);
+      await tester.pumpWidget(_app(_board, windowed: _window));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Momentum'));
+      await tester.pumpAndSettle();
+
+      final names =
+          tester
+              .widgetList<ChefStandingCard>(find.byType(ChefStandingCard))
+              .map((c) => c.standing.displayName)
+              .toList();
+      expect(names, ['Chen Wei', 'Amara Okonkwo']);
+    });
+
+    testWidgets('the hero window drives the board', (tester) async {
+      _size(tester, 1440);
+      await tester.pumpWidget(_app(_board, windowed: _window));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Week'));
+      await tester.pumpAndSettle();
+      expect(
+        _container(tester).read(boardViewProvider).sort,
+        BoardSort.momentum,
+      );
+      expect(_lastRepo!.boardCalls('windowed').last.days, 7);
+      expect(find.text('last 7 days'), findsWidgets);
+
+      await tester.tap(find.text('All time'));
+      await tester.pumpAndSettle();
+      expect(_container(tester).read(boardViewProvider), const BoardView());
+      expect(find.text('TOP 3 / 148'), findsOneWidget);
+    });
+
+    testWidgets('pins page 1 window_start and sends it on page 2', (
+      tester,
+    ) async {
+      // The second half of Gotcha 24: a window measured from `now()` moves
+      // between two requests, so `offset` lies even over a total order unless
+      // every page sends the same boundary.
+      final movers = [
+        for (final (i, s) in _many(30).indexed)
+          _moved(s, rank: i + 1, likes: 100 - i),
+      ];
+      _size(tester, 1440);
+      await tester.pumpWidget(_app(_many(30), windowed: movers));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Week'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Load more'));
+      await tester.pumpAndSettle();
+
+      final pages = _lastRepo!.boardCalls('windowed').toList();
+      expect(pages.map((c) => c.offset), [0, kLeaderboardPageSize]);
+      // Page 1 lets the server pick the boundary (its clock, the same one the
+      // rails use); page 2 echoes it back rather than trusting the device.
+      expect(pages.first.since, isNull);
+      expect(pages.last.since, movers.first.window.windowStart);
+      expect(find.text('TOP 30'), findsOneWidget);
+    });
+
+    testWidgets('re-tapping the selected tab keeps the loaded pages', (
+      tester,
+    ) async {
+      _size(tester, 1440);
+      await tester.pumpWidget(_app(_many(30)));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Load more'));
+      await tester.pumpAndSettle();
+      final before = _lastRepo!.boardCalls('leaderboard').length;
+
+      await tester.tap(find.text('Score'));
+      await tester.pumpAndSettle();
+
+      expect(_lastRepo!.boardCalls('leaderboard').length, before);
+      expect(find.text('TOP 30 / 148'), findsOneWidget);
+    });
+
+    testWidgets('stops paging at the first quiet chef', (tester) async {
+      // A full page whose last row is quiet means every row behind it is quiet
+      // too (the RPC orders by window score first), so there is no next page
+      // worth asking for.
+      final page = [
+        for (final (i, s) in _many(25).indexed)
+          _moved(s, rank: i + 1, likes: i < 20 ? 50 - i : 0),
+      ];
+      _size(tester, 1440);
+      await tester.pumpWidget(_app(_many(25), windowed: page));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Momentum'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('TOP 20'), findsOneWidget);
+      expect(find.text('Load more'), findsNothing);
+    });
+
+    // The Phase 33 empty state. A simulated database whose `sim.epoch_end()`
+    // anchor has gone stale returns every chef with a zero window — correctly.
+    // That is old data, and it must read as a statement, never a spinner.
+    testWidgets('a window where nobody moved is a real empty state', (
+      tester,
+    ) async {
+      final quiet = [for (final s in _board) _moved(s, rank: 1)];
+      _size(tester, 1440);
+      await tester.pumpWidget(_app(_board, windowed: quiet));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Week'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.descendant(
+          of: find.byType(EmptyView),
+          matching: find.text('Nothing moved in the last 7 days'),
+        ),
+        findsOneWidget,
+      );
+      expect(find.byType(LoadingView), findsNothing);
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+      expect(find.byType(ChefStandingCard), findsNothing);
+
+      await tester.tap(find.text('Show all-time scores'));
+      await tester.pumpAndSettle();
+      expect(_container(tester).read(boardViewProvider), const BoardView());
+      expect(find.byType(ChefStandingCard), findsNWidgets(3));
+    });
+
+    testWidgets('the phone board has the same empty state', (tester) async {
+      final quiet = [for (final s in _board) _moved(s, rank: 1)];
+      _size(tester, 400);
+      await tester.pumpWidget(_app(_board, windowed: quiet));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Momentum'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Nothing moved in the last 30 days'), findsOneWidget);
+      // The tabs that lead back out of it are still on screen.
+      expect(find.text('Score'), findsOneWidget);
+    });
+  });
+
+  group('New', () {
+    testWidgets('orders by join date and says when each chef joined', (
+      tester,
+    ) async {
+      _size(tester, 1440);
+      await tester.pumpWidget(_app(_board));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('New'));
+      await tester.pumpAndSettle();
+
+      final names =
+          tester
+              .widgetList<ChefStandingCard>(find.byType(ChefStandingCard))
+              .map((c) => c.standing.displayName)
+              .toList();
+      expect(names, ['Chen Wei', 'Greta Lindqvist', 'Amara Okonkwo']);
+      expect(find.text('joined Sep 2026'), findsOneWidget);
+      // The rank pill is still the all-time rank, which the footer says.
+      expect(find.text('Newest first. Ranks are all-time.'), findsOneWidget);
+      expect(find.text('NEWEST 3 / 148'), findsOneWidget);
+    });
+  });
+
+  group('the windowed rails', () {
+    testWidgets('show the movers with what they earned', (tester) async {
+      _size(tester, 1440, 2200);
+      await tester.pumpWidget(_app(_board, windowed: _window));
+      await tester.pumpAndSettle();
+
+      final rails =
+          _lastRepo!.calls.where((c) => c.limit == kChefRailLength).toList();
+      expect(
+        rails.where((c) => c.rpc == 'windowed').map((c) => c.days),
+        unorderedEquals([7, 30]),
+      );
+      // Two movers on each windowed rail (Greta is quiet), plus the three
+      // Popular cards.
+      expect(find.byType(ChefSpotlightCard), findsNWidgets(3 + 2 + 2));
+      expect(find.text('+192 · last 7 days'), findsOneWidget);
+      expect(find.text('+192 · last 30 days'), findsOneWidget);
+      expect(find.byType(QuietShelfCard), findsNothing);
+      expect(find.byType(SpotlightCardPlaceholder), findsNothing);
+    });
+
+    testWidgets('a quiet window is a quiet shelf, not placeholders', (
+      tester,
+    ) async {
+      _size(tester, 1440, 2200);
+      await tester.pumpWidget(_app(_board));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(QuietShelfCard), findsNWidgets(2));
+      expect(find.text('Nothing moved in the last 7 days'), findsOneWidget);
+      expect(find.text('Nothing moved in the last 30 days'), findsOneWidget);
+      expect(find.byType(SpotlightCardPlaceholder), findsNothing);
+    });
+  });
+
+  // Phase 30 replaced the expanded dialog with `/chef/:id`.
   group('opening a chef', () {
     testWidgets('a board row navigates to that chef', (tester) async {
       _size(tester, 1200, 900);
@@ -436,6 +894,18 @@ void main() {
       expect(find.text('CHEF PAGE ssk'), findsOneWidget);
     });
 
+    testWidgets('a Momentum row navigates too', (tester) async {
+      _size(tester, 1440);
+      await tester.pumpWidget(_app(_board, windowed: _window));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Momentum'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Chen Wei').first);
+      await tester.pumpAndSettle();
+      expect(find.text('CHEF PAGE d3'), findsOneWidget);
+    });
+
     testWidgets('a phone board navigates too — no sheet, no dialog', (
       tester,
     ) async {
@@ -448,8 +918,6 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('CHEF PAGE ssk'), findsOneWidget);
-      // The two presentations the dialog used to pick between are gone on
-      // purpose; a phone gets the same destination a desktop does.
       expect(find.byType(BottomSheet), findsNothing);
       expect(find.byType(Dialog), findsNothing);
     });
@@ -473,53 +941,125 @@ void main() {
 
   // Worst realistic envelope for a leaderboard row: the narrowest phone, 2.0x
   // accessibility scaling, the longest tier label, a long display name, and
-  // six-figure counts. Two real overflows were found here before the score
-  // column was bounded and the stat labels made Flexible.
-  const stress = [
-    ChefStanding(
-      chefRank: 1,
-      id: 'x',
-      displayName: 'Bartholomew Featherstonehaugh-Wentworth',
-      chefTier: ChefTier.masterChef,
-      chefScore: 987654.5,
-      publicRecipeCount: 128,
-      totalLikes: 240000,
-      totalSaves: 180000,
-      totalViews: 990000,
+  // six-figure counts.
+  final stress = ChefStanding(
+    chefRank: 1,
+    id: 'x',
+    displayName: 'Bartholomew Featherstonehaugh-Wentworth',
+    chefTier: ChefTier.masterChef,
+    chefScore: 987654.5,
+    publicRecipeCount: 128,
+    totalLikes: 240000,
+    totalSaves: 180000,
+    totalViews: 990000,
+    createdAt: DateTime.utc(2026, 9, 1),
+  );
+  final stressWindow = [
+    ChefWindowStanding(
+      standing: stress.copyWith(chefRank: 1),
+      window: ChefWindowStats(
+        id: 'x',
+        windowStart: DateTime.utc(2026, 8, 25),
+        likes: 240000,
+        saves: 180000,
+        viewers: 990000,
+        ratings: 1200,
+        newRecipes: 128,
+        score: 1818000,
+      ),
     ),
   ];
 
-  // 320/360 are the phone board; 600 is the stacked page and 1000/1440 the
-  // two-column one, so this sweeps all three layouts at the accessibility
-  // envelope.
-  for (final width in <double>[320, 360, 600, 1000, 1440]) {
-    testWidgets('the chefs page fits at ${width}px, textScale 2.0', (
-      tester,
-    ) async {
-      _size(tester, width, 1200);
+  // 320/360/390 are the phone board; 600 is the stacked page and 1000/1440 the
+  // two-column one, so this sweeps all three layouts — and, with the windowed
+  // rows, the Momentum and New variants of every row and card — at both ends
+  // of the text-scale envelope.
+  for (final sort in BoardSort.values) {
+    for (final width in <double>[320, 360, 390, 600, 1000, 1440]) {
+      for (final scale in <double>[1.0, 2.0]) {
+        // Two heights: 1200 is the real window the two-column layout has to
+        // fit (Gotcha 22); 4000 builds everything a lazy list would otherwise
+        // leave unbuilt below the fold — at 600px the panel sits under three
+        // rails, and a test that never builds a row cannot see it overflow.
+        for (final height in <double>[1200, 4000]) {
+          testWidgets('the chefs page fits at ${width}x${height.toInt()}, '
+              'textScale $scale, ${sort.label}', (tester) async {
+            _size(tester, width, height);
 
-      await tester.pumpWidget(_app(stress, textScale: 2.0));
-      await tester.pumpAndSettle();
+            await tester.pumpWidget(
+              _app([stress], textScale: scale, windowed: stressWindow),
+            );
+            await tester.pumpAndSettle();
+            _container(
+              tester,
+            ).read(boardViewProvider.notifier).selectSort(sort);
+            await tester.pumpAndSettle();
 
-      expect(
-        tester.takeException(),
-        isNull,
-        reason: 'overflow at ${width}px @ 2.0x',
-      );
-    });
+            // The tall run must actually have built a row to prove anything.
+            if (height > 1200) {
+              expect(find.byType(ChefStandingCard), findsWidgets);
+            }
+            expect(
+              tester.takeException(),
+              isNull,
+              reason: 'overflow at ${width}px @ ${scale}x on ${sort.label}',
+            );
+          });
+        }
+      }
+    }
   }
 
-  testWidgets('the expanded card fits a 360px phone at 2.0x text scale', (
+  // Gotcha 18's envelope for a pill of labels: 600px at 2.0x. The board pill
+  // sits in the stacked page's panel there; ellipsis is allowed, overflow and
+  // lost segments are not.
+  testWidgets('the ordering pill keeps three segments at 600px, 2.0x', (
     tester,
   ) async {
-    _size(tester, 360, 900);
-
-    await tester.pumpWidget(_app(const [_kitchen], textScale: 2.0));
+    // Tall: at 600px the panel sits below the rails in one lazy scroll.
+    _size(tester, 600, 4000);
+    await tester.pumpWidget(_app(_board, textScale: 2.0));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Secret Sauce Kitchen'));
+    expect(tester.takeException(), isNull);
+    for (final label in ['Score', 'Momentum', 'New']) {
+      expect(find.text(label), findsOneWidget);
+    }
+  });
+
+  // The empty Momentum state is a new region with a title that grows with the
+  // span; at 1440 x 1.0 it sits in the 404px panel.
+  for (final width in <double>[320, 390, 600, 1000, 1440]) {
+    for (final scale in <double>[1.0, 2.0]) {
+      testWidgets('an empty Momentum week fits at ${width}px, ${scale}x', (
+        tester,
+      ) async {
+        _size(tester, width, 4000);
+        await tester.pumpWidget(
+          _app(
+            _board,
+            textScale: scale,
+            windowed: [for (final s in _board) _moved(s, rank: 1)],
+          ),
+        );
+        await tester.pumpAndSettle();
+        _container(
+          tester,
+        ).read(boardViewProvider.notifier).selectWindow(ChefsWindow.week);
+        await tester.pumpAndSettle();
+
+        expect(find.text('Show all-time scores'), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      });
+    }
+  }
+
+  testWidgets('a quiet shelf fits its tile at 2.0x', (tester) async {
+    _size(tester, 1440, 2600);
+    await tester.pumpWidget(_app(_board, textScale: 2.0));
     await tester.pumpAndSettle();
 
-    expect(tester.takeException(), isNull, reason: 'overflow in the sheet');
+    expect(find.byType(QuietShelfCard), findsNWidgets(2));
+    expect(tester.takeException(), isNull);
   });
 }

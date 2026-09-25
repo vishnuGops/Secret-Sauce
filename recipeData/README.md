@@ -151,13 +151,27 @@ the JSON is what a cook reads. Two rules, and `schema.json` carries the full lis
   `3 clove garlic`, and the estimator accepts both spellings anyway, so the singular buys
   nothing and costs English.
 
-**The linter does not check any of this** — `unit` is free text in
-[tool/recipe_format.dart](../tool/recipe_format.dart) (it only asserts the type). The
-whole corpus was swept once; drift comes back one recipe at a time.
+**The linter checks this** (BL-8), in
+[tool/recipe_format.dart](../tool/recipe_format.dart), for `recipeData/` and `simData/`
+alike. The canon is declared in [units.json](../nutritionData/units.json) as each unit's
+`display` form, plus `plural` for a word unit — it cannot be derived from the registry's
+keys, because of `L` and the plurals. Two severities:
 
-A spelling that is not in `units.json` contributes **nothing** to an auto nutrition
-estimate, silently — `tbsps` was in 7 ingredients and had been resolving to zero grams.
-A genuinely new unit belongs in `units.json` first, then in a recipe.
+- **Error** — the spelling resolves to a registry unit but is not how this repo prints
+  it: `Tbsp`, `tablespoons`, `grams`, `teaspoon`, `pounds`, `lbs`, `l`, `package`; a word
+  unit whose number disagrees with the quantity (`3 clove`, `1 cups` — above 1 takes the
+  plural, exactly 1 the singular, below 1 or no quantity either); a wrongly cased
+  deliberate non-unit (`Pinch`); or a blank / padded string (a bare count is `null`).
+- **Warning** — the spelling is not in `units.json` at all (`sprigs`, `pods`, `knob`).
+  It still prints as written, but contributes **nothing** to an auto nutrition estimate,
+  silently — `tbsps` was in 7 ingredients and had been resolving to zero grams. A warning
+  rather than an error because it is usually a real authoring decision the registry has
+  not caught up with. A genuinely new unit belongs in `units.json` first — with its
+  `display` (and `plural`) — then in a recipe.
+
+One thing the lint cannot see: the servings scaler multiplies the quantity and prints
+the unit unchanged, so an authored `1 clove` reads `2 clove` at double servings. The
+canon holds at the authored quantity only.
 
 ## What the linter cannot check
 

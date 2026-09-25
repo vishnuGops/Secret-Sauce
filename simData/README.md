@@ -33,10 +33,12 @@ recipeData had been doing it for six recipes the whole time.
 
 ### Unit spellings are shared too
 
-Because the format is shared, so is the unit convention, and it is not something the linter
-enforces — `unit` is free text. Abbreviation units are lowercase and invariant (`g` `kg` `ml`
-`L` `tsp` `tbsp` `oz` `lb`, never `Tbsp` or `tablespoons`); word units keep the plural a cook
-would read (`3 cloves garlic`, not `3 clove garlic`). The app prints the unit verbatim, so the
+Because the format is shared, so is the unit convention — and the shared validator enforces it
+(BL-8). Abbreviation units are lowercase and invariant (`g` `kg` `ml` `L` `tsp` `tbsp` `oz`
+`lb`, never `Tbsp` or `tablespoons`); word units keep the plural a cook would read
+(`3 cloves garlic`, not `3 clove garlic`). A resolvable but non-canonical spelling is an
+**error**; a spelling absent from `nutritionData/units.json` is a **warning** (`pods`, `sprigs`,
+`heads` — the library carries a few, each deliberate). The app prints the unit verbatim, so the
 spelling in this file is what a reader sees. Full rules and the reasoning:
 [recipeData/README.md](../recipeData/README.md#unit-spellings).
 
@@ -113,7 +115,9 @@ Discover page that is 90% mains, and nothing downstream would flag it.
 - the largest dish serves at least 8 (the servings scaler needs range to be worth testing)
 
 Below 100 dishes these report as **warnings** — the library is authored in batches and a
-partial batch legitimately misses categories. At 100 and above they become **errors**.
+partial batch legitimately misses categories. At 100 and above they become **errors**, which
+is where the library now sits: **120 dishes**, 80 cuisines, every category from 7 (Drink, Sauce) to
+32 (Main), all three difficulties.
 
 ## Adding a dish
 

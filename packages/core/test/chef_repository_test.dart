@@ -38,6 +38,24 @@ Map<String, dynamic> _row({
   'total_likes': 1980,
   'total_saves': 640,
   'total_views': 6035,
+  'created_at': '2025-03-14T09:30:00+00:00',
+};
+
+/// One `chefs_leaderboard_windowed` row: the board's eleven columns plus the
+/// six window ones, flat, the way the RPC returns them.
+Map<String, dynamic> _windowRow({
+  int rank = 1,
+  String id = 'd1',
+  Object windowScore = 312,
+}) => {
+  ..._row(rank: rank, id: id),
+  'window_start': '2026-09-17T12:00:00.123456+00:00',
+  'window_likes': 40,
+  'window_saves': 30,
+  'window_views': 60,
+  'window_ratings': 2,
+  'window_recipes': 1,
+  'window_score': windowScore,
 };
 
 void main() {
@@ -125,6 +143,105 @@ void main() {
     expect(req.select, contains('owner:profiles!recipes_owner_id_fkey'));
   });
 
+  test('leaderboard rows carry the join date (Phase 33)', () async {
+    final (:http, :repo) = _repo([_row()]);
+
+    final rows = await repo.leaderboard();
+
+    expect(rows.single.createdAt, DateTime.utc(2025, 3, 14, 9, 30));
+  });
+
+  test('newest re-orders the whole ranked board, totally, and pages it', () async {
+    // The `New` sort. `chefs_leaderboard` is called with NO inner limit, so its
+    // `dense_rank()` still ranks everyone; the order and the page are applied by
+    // PostgREST outside the function. `id` last is what makes the order total —
+    // without it two chefs who joined in the same instant can swap between
+    // page 1 and page 2 (Gotcha 24).
+    final (:http, :repo) = _repo([_row(rank: 3)]);
+
+    final rows = await repo.newest(limit: 25, offset: 50);
+
+    final req = http.requests.single;
+    expect(req.url.path, endsWith('/rpc/chefs_leaderboard'));
+    expect(req.json, {'p_limit': null, 'p_offset': 0});
+    expect(req.order, 'created_at.desc.nullslast,id.asc.nullslast');
+    expect(req.param('offset'), '50');
+    expect(req.param('limit'), '25');
+    // The all-time rank survives the re-order.
+    expect(rows.single.chefRank, 3);
+  });
+
+  test('windowedLeaderboard sends the window and splits each row', () async {
+    final (:http, :repo) = _repo([
+      _windowRow(),
+      _windowRow(rank: 2, id: 'd2', windowScore: 12.4),
+    ]);
+
+    final rows = await repo.windowedLeaderboard(days: 7, limit: 25);
+
+    final req = http.requests.single;
+    expect(req.url.path, endsWith('/rpc/chefs_leaderboard_windowed'));
+    // No `p_since` on a first page: the server anchors the window at now().
+    expect(req.json, {'p_days': 7, 'p_limit': 25, 'p_offset': 0});
+
+    final first = rows.first;
+    expect(first.id, 'd1');
+    expect(first.standing.chefRank, 1);
+    expect(first.standing.totalLikes, 1980); // the all-time half
+    expect(first.window.likes, 40); // the window half
+    expect(first.window.viewers, 60);
+    expect(first.window.newRecipes, 1);
+    expect(first.window.score, 312.0); // an int on the wire (Gotcha 12)
+    expect(rows.last.window.score, 12.4);
+    expect(
+      first.window.windowStart,
+      DateTime.parse('2026-09-17T12:00:00.123456+00:00'),
+    );
+  });
+
+  test('windowedLeaderboard pins the boundary with p_since', () async {
+    // Every page after the first must send the same instant, or the window
+    // moves between requests and `offset` lies.
+    final (:http, :repo) = _repo();
+    final since = DateTime.utc(2026, 9, 17, 12);
+
+    await repo.windowedLeaderboard(
+      days: 30,
+      limit: 25,
+      offset: 25,
+      since: since,
+    );
+
+    expect(http.requests.single.json, {
+      'p_days': 30,
+      'p_limit': 25,
+      'p_offset': 25,
+      'p_since': '2026-09-17T12:00:00.000Z',
+    });
+  });
+
+  test('windowStats asks for one chef and decodes the row', () async {
+    final row = Map<String, dynamic>.of(_windowRow())
+      ..removeWhere((k, _) => !k.startsWith('window_') && k != 'id');
+    final (:http, :repo) = _repo([row]);
+
+    final stats = await repo.windowStats('d1', days: 30);
+
+    final req = http.requests.single;
+    expect(req.url.path, endsWith('/rpc/chef_window_stats'));
+    expect(req.json, {'p_days': 30, 'p_chef': 'd1'});
+    expect(stats!.saves, 30);
+    expect(stats.gainLabel, '+312');
+  });
+
+  test('windowStats is null for a profile that holds no rank', () async {
+    // The function carries the board's population filter, so an imported or
+    // private-only profile returns zero rows — a state, not an error.
+    final (:http, :repo) = _repo();
+
+    expect(await repo.windowStats('d6', days: 7), isNull);
+  });
+
   test('tierCounts returns a complete map, empty tiers included', () async {
     // The hero draws a fixed five-tile row, so the RPC emits a row per tier and
     // the map must carry the zeros rather than leaving callers a null check.
@@ -157,6 +274,9 @@ void main() {
           {'tier': 'home_cook', 'chefs': 1},
         ]),
       ),
+      (200, jsonEncode([_row()])),
+      (200, jsonEncode([_windowRow()])),
+      (200, jsonEncode(<Object>[])),
     ]);
     final client = fakeSupabase(http);
     final repo = SupabaseChefRepository(client);
@@ -167,7 +287,10 @@ void main() {
     await repo.topRecipes('d1');
     await repo.trendingRecipes('d1');
     await repo.tierCounts();
+    await repo.newest();
+    await repo.windowedLeaderboard(days: 7);
+    await repo.windowStats('d1', days: 30);
 
-    expect(http.requests, hasLength(5));
+    expect(http.requests, hasLength(8));
   });
 }

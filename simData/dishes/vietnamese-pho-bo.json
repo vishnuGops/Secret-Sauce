@@ -1,0 +1,103 @@
+{
+  "slug": "vietnamese-pho-bo",
+  "title": "Phở Bò",
+  "description": "A clear, deeply beefy broth perfumed with charred onion, ginger, star anise, and cinnamon, ladled boiling over rice noodles and raw sirloin.",
+  "cuisine": "Vietnamese",
+  "category": "Soup",
+  "difficulty": "hard",
+  "prep_minutes": 40,
+  "cook_minutes": 270,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The broth freezes perfectly. Ask the butcher to cut the bones into short lengths so the marrow is exposed.",
+  "ingredient_groups": [
+    {
+      "name": "Broth",
+      "ingredients": [
+        { "quantity": 2, "unit": "kg", "name": "beef bones", "note": "marrow and knuckle" },
+        { "quantity": 500, "unit": "g", "name": "beef brisket", "note": "in one piece" },
+        { "quantity": 2, "unit": null, "name": "onions", "note": "halved, unpeeled", "food": "onion" },
+        { "quantity": 100, "unit": "g", "name": "ginger", "note": "unpeeled, halved lengthways", "food": "ginger" },
+        { "quantity": 5, "unit": null, "name": "star anise" },
+        { "quantity": 1, "unit": "stick", "name": "cinnamon" },
+        { "quantity": 6, "unit": null, "name": "whole cloves" },
+        { "quantity": 1, "unit": "tbsp", "name": "coriander seeds" },
+        { "quantity": 1, "unit": null, "name": "black cardamom pod" },
+        { "quantity": 5, "unit": "L", "name": "water", "food": "water" },
+        { "quantity": 3, "unit": "tbsp", "name": "fish sauce" },
+        { "quantity": 20, "unit": "g", "name": "rock sugar" },
+        { "quantity": 1, "unit": "tbsp", "name": "salt", "food": "kosher-salt" }
+      ]
+    },
+    {
+      "name": "Bowls",
+      "ingredients": [
+        { "quantity": 600, "unit": "g", "name": "flat rice noodles", "note": "bánh phở, fresh or dried" },
+        { "quantity": 300, "unit": "g", "name": "beef sirloin", "note": "sliced paper-thin" },
+        { "quantity": 1, "unit": null, "name": "white onion", "note": "sliced paper-thin", "food": "onion" },
+        { "quantity": 3, "unit": null, "name": "green onions", "note": "sliced", "food": "green-onions" },
+        { "quantity": 1, "unit": "bunch", "name": "Thai basil" },
+        { "quantity": 1, "unit": "bunch", "name": "cilantro", "food": "coriander" },
+        { "quantity": 200, "unit": "g", "name": "bean sprouts" },
+        { "quantity": 2, "unit": null, "name": "limes", "note": "in wedges", "food": "lime" },
+        { "quantity": 2, "unit": null, "name": "bird's eye chillies", "note": "sliced" },
+        { "quantity": 3, "unit": "tbsp", "name": "hoisin sauce", "note": "to serve", "is_optional": true },
+        { "quantity": 3, "unit": "tbsp", "name": "sriracha", "note": "to serve", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Broth",
+      "steps": [
+        {
+          "text": "Cover the beef bones with cold water, boil hard for five minutes, then drain and rinse the bones and the pot.",
+          "duration_minutes": 15,
+          "tip": "Parboiling removes the scum that would cloud the broth. Skipping it is the usual reason homemade phở is murky."
+        },
+        {
+          "text": "Char the onions and ginger directly over a flame or under the grill until blackened in patches.",
+          "duration_minutes": 10,
+          "temperature": "high"
+        },
+        {
+          "text": "Toast the star anise, cinnamon, whole cloves, coriander seeds, and black cardamom in a dry pan until fragrant, then tie them in muslin.",
+          "duration_minutes": 3
+        },
+        {
+          "text": "Return the bones to the pot with the 5 L of water, the brisket, and the charred onions and ginger. Bring to a bare simmer and skim.",
+          "duration_minutes": 20
+        },
+        {
+          "text": "Add the spice bag and simmer gently, uncovered, skimming now and then. Lift out the brisket when tender, after about 90 minutes, and chill it.",
+          "duration_minutes": 210,
+          "temperature": "low"
+        },
+        {
+          "text": "Strain the broth and season with the fish sauce, rock sugar, and salt.",
+          "tip": "It should taste slightly too salty on its own. The noodles take it down."
+        }
+      ]
+    },
+    {
+      "name": "Bowls",
+      "steps": [
+        {
+          "text": "Soak or blanch the rice noodles and divide between deep bowls. Top with thin slices of the cooked brisket and the raw sirloin, fanned out."
+        },
+        {
+          "text": "Bring the broth to a rolling boil and ladle it over, so it cooks the sirloin pink. Scatter with the white onion and green onions.",
+          "tip": "Boiling, not merely hot — or the raw beef stays raw."
+        },
+        {
+          "text": "Serve with a plate of Thai basil, cilantro, bean sprouts, limes, and chillies, with hoisin sauce and sriracha on the table."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.8,
+    "variant_titles": ["Weekend {title}", "Hanoi-Style {title}", "{title} Tái Chín"]
+  }
+}

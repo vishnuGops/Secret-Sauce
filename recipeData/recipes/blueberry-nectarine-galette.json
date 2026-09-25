@@ -30,7 +30,7 @@
       "name": "Filling",
       "ingredients": [
         { "quantity": 2, "unit": null, "name": "nectarines", "note": "chopped", "food": "nectarine" },
-        { "quantity": 1.5, "unit": "cup", "name": "fresh blueberries", "food": "blueberries" },
+        { "quantity": 1.5, "unit": "cups", "name": "fresh blueberries", "food": "blueberries" },
         { "quantity": 0.5, "unit": "tbsp", "name": "lemon zest", "food": "lemon-zest" },
         { "quantity": 1, "unit": "tbsp", "name": "fresh lemon juice", "food": "lemon-juice" },
         { "quantity": 0.25, "unit": "cup", "name": "organic cane sugar", "note": "adjust to the sweetness of the fruit", "food": "granulated-sugar" },

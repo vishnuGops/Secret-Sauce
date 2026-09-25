@@ -1,0 +1,65 @@
+{
+  "slug": "japanese-onigiri",
+  "title": "Onigiri",
+  "description": "Hand-pressed triangles of warm, lightly salted rice around grilled salmon or sour umeboshi, wrapped in crisp nori. Makes 8.",
+  "cuisine": "Japanese",
+  "category": "Snack",
+  "difficulty": "easy",
+  "prep_minutes": 20,
+  "cook_minutes": 40,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Wrap the nori just before eating so it stays crisp. Tuna with mayonnaise is the convenience-store favourite filling.",
+  "ingredient_groups": [
+    {
+      "name": "Rice",
+      "ingredients": [
+        { "quantity": 400, "unit": "g", "name": "short-grain rice" },
+        { "quantity": 480, "unit": "ml", "name": "water", "food": "water" },
+        { "quantity": 1, "unit": "tsp", "name": "salt", "note": "for your hands", "food": "kosher-salt" }
+      ]
+    },
+    {
+      "name": "Fillings",
+      "ingredients": [
+        { "quantity": 150, "unit": "g", "name": "salted salmon", "note": "or salmon fillet sprinkled with salt" },
+        { "quantity": 2, "unit": null, "name": "umeboshi", "note": "pitted and torn" },
+        { "quantity": 4, "unit": null, "name": "nori", "note": "full sheets, halved" },
+        { "quantity": 1, "unit": "tsp", "name": "toasted sesame seeds" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Rinse the rice until the water runs nearly clear, then soak it in the measured water.",
+          "duration_minutes": 30
+        },
+        {
+          "text": "Bring to a boil, cover, and cook on the lowest heat, then rest off the heat with the lid on.",
+          "duration_minutes": 25,
+          "temperature": "lowest",
+          "tip": "Resting finishes the steaming. Lifting the lid early leaves a wet top and a scorched base."
+        },
+        {
+          "text": "Grill the salted salmon until cooked, then flake it.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "With wet hands rubbed with a little of the salt, take a handful of warm rice, press a hollow into it, add salmon or umeboshi, and close it. Press into a triangle with firm, even squeezes.",
+          "tip": "Three or four presses. Squeezing harder makes a dense rice cake."
+        },
+        {
+          "text": "Wrap each with a strip of nori and sprinkle with sesame seeds."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.1,
+    "variant_titles": ["Lunchbox {title}", "Tuna-Mayo {title}"]
+  }
+}

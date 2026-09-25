@@ -1,0 +1,71 @@
+{
+  "slug": "burmese-lahpet-thoke",
+  "title": "Lahpet Thoke",
+  "description": "Burmese tea leaf salad — soaked green tea leaves pounded into an oily, bitter-bright dressing and mixed at the table with cabbage and a dozen crunchy things.",
+  "cuisine": "Burmese",
+  "category": "Salad",
+  "difficulty": "medium",
+  "prep_minutes": 30,
+  "cook_minutes": 0,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Fried split peas and crispy garlic are sold ready-made in Asian grocers. Real lahpet is fermented for weeks; the overnight soak here is the home shortcut.",
+  "ingredient_groups": [
+    {
+      "name": "Lahpet dressing",
+      "ingredients": [
+        { "quantity": 20, "unit": "g", "name": "green tea leaves", "note": "good loose-leaf" },
+        { "quantity": 2, "unit": "cloves", "name": "garlic", "food": "garlic" },
+        { "quantity": 1, "unit": null, "name": "green chilli" },
+        { "quantity": 3, "unit": "tbsp", "name": "lime juice" },
+        { "quantity": 1, "unit": "tbsp", "name": "fish sauce" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 4, "unit": "tbsp", "name": "peanut oil" }
+      ]
+    },
+    {
+      "name": "Salad",
+      "ingredients": [
+        { "quantity": 150, "unit": "g", "name": "napa cabbage", "note": "finely shredded" },
+        { "quantity": 2, "unit": null, "name": "tomatoes", "note": "in thin wedges" },
+        { "quantity": 60, "unit": "g", "name": "fried yellow split peas" },
+        { "quantity": 50, "unit": "g", "name": "roasted peanuts" },
+        { "quantity": 2, "unit": "tbsp", "name": "toasted sesame seeds" },
+        { "quantity": 3, "unit": "tbsp", "name": "crispy fried garlic" },
+        { "quantity": 2, "unit": "tbsp", "name": "dried shrimp", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Lahpet dressing",
+      "steps": [
+        {
+          "text": "Steep the green tea leaves in hot water and drain. Repeat twice more, then cover with cold water and soak overnight to draw out the bitterness.",
+          "duration_minutes": 720,
+          "tip": "The repeated steeping is what makes the leaves edible rather than harsh."
+        },
+        {
+          "text": "Squeeze the leaves dry and pound or blend with the garlic, green chilli, lime juice, fish sauce, salt, and peanut oil into a coarse, oily paste."
+        }
+      ]
+    },
+    {
+      "name": "Salad",
+      "steps": [
+        {
+          "text": "Arrange the napa cabbage, tomatoes, split peas, peanuts, sesame seeds, fried garlic, and dried shrimp in separate piles around the lahpet.",
+          "tip": "Served in piles and mixed at the table — the contrast of textures is the point."
+        },
+        {
+          "text": "Mix everything together just before eating, adding more lime juice or fish sauce to taste."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.6,
+    "variant_titles": ["Yangon {title}", "Vegetarian {title}"]
+  }
+}

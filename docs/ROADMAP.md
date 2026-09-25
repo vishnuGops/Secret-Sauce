@@ -35,6 +35,9 @@ restaurant page needs the same shape).
 
 Phases 0–23, 26–32 and Phase OPT are **done** and their full task lists, verification logs, and
 decision history have moved to [archive/ROADMAP-phases-0-31.md](./archive/ROADMAP-phases-0-31.md).
+**Phases 33 and 35 have also shipped but still sit in full below** — `docs/archive/` is frozen, so
+moving them means starting a new archive file (e.g. `archive/ROADMAP-phases-32-35.md` and its
+EXECUTION-PLAN twin) rather than appending to the old one; an owner call, not done yet.
 One line each here; open items they left behind are consolidated in the register below, in the
 [Backlog](#backlog--deferred-not-scheduled), or in [Phase 32](#phase-32--audit-remediation--shipped-2026-08-26).
 
@@ -60,6 +63,7 @@ One line each here; open items they left behind are consolidated in the register
 | 31    | Chef page sort tabs (All / Popular / Trending) + `chef_trending_recipes`                       |
 | 32    | Audit remediation, six bands: SQL integrity + storage limits (32a), measured indexes (32b), app correctness incl. B084/B085 (32c), shared-package hygiene incl. B083/B086 (32d), the three coverage gaps (32e), CI + a restorable backup B087 (32f) |
 | OPT   | Hardening: 26 of 29 items (column grants B050, save_recipe RPC, search_tsv, paging, CI database job, RLS matrix…); remainder → Backlog BL-1/2/4 |
+| 33    | Windowed leaderboard: `chef_window_stats` + `chefs_leaderboard_windowed` (SQL), then Momentum / Month / Week / `New`, paged board, windowed rails and the `/chef/:id` momentum line (client) — section kept in place below |
 | 36    | Fabricated-data cleanup (B112/B113/B114): `db:audit` + `db:purge:fake`; `seed.sql` and the sim removed from every default path; curated `demo` counters retired; 15 impersonation accounts for real named chefs deleted and `ingest.mjs` made incapable of creating them |
 
 ## Carried-over open items (from archived phases)
@@ -76,10 +80,8 @@ origin phase; detail is in the archive.
       (Gotcha 11). One shared pick path (`imagePickerProvider`) means one 5 MB guard (32a4), not
       two. Removing a photo deliberately leaves the stored object alone — a removal that is never
       saved must not destroy the image the recipe still points at
-- [~] Chefs windowed half (Ph 23) — **now Phase 33**, which owns the remainder. The SQL half is
-      done and pinned (`chef_window_stats`, `chefs_leaderboard_windowed`, `created_at` on both
-      leaderboard RPCs, B012's exclusion); the Momentum tab, the Month/Week hero toggle, the
-      Trending/month rails and the `New` sort are still drawn and disabled
+- [x] Chefs windowed half (Ph 23) — done by Phase 33 (SQL 2026-09-10, client 2026-09-24): Momentum,
+      Month/Week, the `New` sort and the Trending/month rails are all live
 - [ ] Spotlight card as a mobile sheet (draft 1f) + unused `large` 400×560 size (Ph 23)
 - [ ] Shelves do not page ("see all" route); no personalisation; fork count on card needs a
       denormalized `recipes.fork_count` (Ph 26)
@@ -100,34 +102,47 @@ origin phase; detail is in the archive.
       a Discover → chef link that is not a card badge (Ph 30)
 - [ ] `recipes.notes` column (today appended to description); reverse-direction ingredient lint;
       retire `seed.sql` once there is real traffic (Ph 19)
-- [ ] Web: Chefs + My Recipes still stack their own `AppBar` under the top bar (Ph 21)
+- [x] Web: Chefs + My Recipes stacked their own `AppBar` under the top bar (Ph 21) — done
+      2026-09-24. Web now carries an in-page header aligned to the grid's first card; compact keeps
+      its `AppBar`, because compact has no top bar to title the page
 - [ ] "Joined <month year>" reads the profile row's age, not the account's (Ph 22)
-- [ ] `/chefs` board is one `limit: 50` page client-side, though the RPC takes an offset (Ph 22)
+- [x] `/chefs` board was one `limit: 50` page client-side (Ph 22) — done 2026-09-24:
+      `ChefBoardNotifier` pages 25 at a time behind `Load more`, on web and compact
 - [ ] Recipe-detail check-offs are session state, not persisted — the copy says so (Ph 27)
 - [ ] Card cover photography is placeholder in the design; real shots may move the 352px card
       height (Ph 20)
 
 **Quality / verification**
 
-- [ ] B049 — card overflows at 3.0× text scale (contract is 2.0×); nothing caps the grid on 4K (Ph 20)
-- [ ] Phase 31 pill has no screenshot pass — Gotcha 23's screenshot-only classes unproven
+- [x] B049 — card overflowed at 3.0× text scale; nothing capped the grid on 4K (Ph 20) — fixed
+      2026-09-24. Past `kRecipeCardDescriptionMaxScale` (2.0) the description and its divider yield,
+      so the 352px card holds at 3.0×; the grid stops at `kRecipeGridMaxColumns` (6, what 1920px
+      already packs), so 3840px is six left-aligned columns rather than twelve, the slack on
+      the right so the first card keeps the page headers' edge (B059, B123)
+- [x] Phase 31 pill screenshot pass — done 2026-09-24 (release build + Playwright, local stack):
+      All / Popular / Trending on `/chef/:id` at 390 and 1440 for the Kitchen and an imported chef;
+      no clipping, ellipsis or stacking. The same pass found B118's header half and B123
 - [ ] Phase 29's editor Auto pane has no screenshot pass either — blocked, the headless driver
       cannot sign in (B028); covered by widget envelopes only
 - [ ] `ChefAvatar`'s real-photo path renders nowhere — no seeded or sim profile carries an
       `avatar_url` (Ph 21/24, a standing BL-5 limit)
-- [ ] `recompute_chef_stats`'s `is distinct from` guard has no direct assertion (Ph 18)
+- [x] `recompute_chef_stats`'s `is distinct from` guard has no direct assertion (Ph 18) — done
+      2026-09-24: `rls_matrix.sql` **F22–F24** compare the profile row's `ctid` (a no-op recompute
+      and a sharee's rating write no tuple; a like does, which proves `ctid` sees writes). Removing
+      the guard fails F22 and F23
+- [x] Imported chefs showed a `Home Cook` tier chip (recipe detail, card overlay, and `/chef/:id`'s
+      own header) because the owner embed carried no `kind` — fixed 2026-09-24, B118
 - [ ] Real-phone pass — nothing was ever exercised on a device (all phases; BL-6)
 
 ---
 
 ## Phase 24 — Simulated population: a realistic user + engagement dataset
 
-**Status: in progress — only the dish count and a `large` run are left.** The `sim` schema, the
+**Status: in progress — only a `large` run is left.** The `sim` schema, the
 generator, its 53 assertions, and the CI wiring shipped in the first pass. Phase 33 closed the
 content half: `people.json` and `vocab.json` are authored and loaded, `sim.rand_zipf` draws the
 tag vocabulary, and the per-persona RLS smoke runs (`melos run db:sim:rls`). What remains open
-below is the dish library (73 of 120 — already past every coverage target) and a `large`-preset
-run. Full design, distribution model, and the
+below is a `large`-preset run; the dish library reached 120 on 2026-09-24. Full design, distribution model, and the
 edge-case catalogue in
 [EXECUTION-PLAN.md Phase 24](./EXECUTION-PLAN.md#phase-24--simulated-population-a-realistic-user--engagement-dataset).
 
@@ -152,7 +167,9 @@ denormalized counters derived from it (the reverse of how `seed.sql` works).
 
 ### Content — the dish library
 
-- [~] `simData/dishes/<slug>.json` — **73 of 120** authored dishes, same format as
+- [x] `simData/dishes/<slug>.json` — **120 of 120** authored dishes (2026-09-24: +47, weighted away
+  from Main, 80 cuisines, the new 47 carrying 278 `food` links — so `nutrition_foods.sql` must be
+  loaded before `db:sim`), same format as
   `recipeData/recipes/*.json` so a dish can be promoted into the curated set by moving the file.
   Written fresh, not copied (ingredient lists are not copyrightable; step prose is). Sequenced
   for **coverage before count** — all 7 targets below passed at 25, so the remaining 47 add
@@ -429,9 +446,9 @@ still owed.
 
 ---
 
-## Phase 33 — The windowed leaderboard (SQL built; client not started)
+## Phase 33 — The windowed leaderboard (SHIPPED 2026-09-24)
 
-**Status: `[~]`.** Everything on `/chefs` above this phase is **all-time**: `profiles.chef_score`
+**Status: `[x]` — SQL 2026-09-10, client 2026-09-24.** Everything on `/chefs` before this phase is **all-time**: `profiles.chef_score`
 and the three totals beside it are lifetime counters with no date on them, so nothing in the
 schema could answer *who moved this month*. That is why Phase 23's `Momentum` sort and the hero's
 Month / Week toggle shipped **drawn and disabled**. The engagement logs can answer it, so a
@@ -439,9 +456,8 @@ windowed score is a query rather than a new snapshot table — and Phase 24's si
 is what finally gave those logs anything to read (SDS §10.8 called this out as needing its own
 answer first).
 
-This phase built and pinned the SQL. **No Dart, no widget, no route** — the `Momentum` tab, the
-Month/Week toggle and the `New` sort are still drawn and disabled, and closing that is what
-remains.
+The SQL was built and pinned first; the client followed on 2026-09-24 and needed **no new SQL** —
+`New` runs on the existing `chefs_leaderboard`.
 
 ### Schema — `0001_init.sql` (done)
 
@@ -502,20 +518,32 @@ remains.
       `chefs_leaderboard` (which is what fails if the drop line is ever removed) and a
       three-argument `chefs_leaderboard_windowed` call to exercise `p_since`'s default (B024)
 
-### Client — not started
+### Client — done 2026-09-24
 
-- [ ] `ChefWindowStanding` model + repository method + provider for
-      `chefs_leaderboard_windowed`; `created_at` decoded on the existing leaderboard model
-- [ ] `Momentum` sort on `/chefs` and the hero's Month / Week toggle — both already drawn and
-      disabled; the board must **pin `p_since` from page 1** for paging to be sound
-- [ ] The `New` sort, which is a different ordering and therefore a different query, not a
-      tie-break bolted onto `chefs_leaderboard`
-- [ ] Trending/month rails, and a per-chef momentum line on `/chef/:id` (`chef_window_stats`
-      already takes a `p_chef`)
-- [ ] A real **empty state**: a simulated database whose `sim.epoch_end()` anchor has gone stale
-      returns an empty week, correctly. That is old data, not a broken query, and it must not
-      render as a spinner
-
+- [x] `ChefWindowStats` / `ChefWindowStanding` (`chef_window.dart`, freezed) + `ChefRepository.
+      windowedLeaderboard` / `windowStats` / `newest`; `created_at` decoded on `ChefStanding`.
+      Every request pinned through the recording fake (RPC, params, order, range)
+- [x] `Momentum` sort and the hero's All time / Month / Week — **one coupled state** (`BoardView`):
+      Month or Week turns the board to Momentum over that span, Momentum from All time takes Month,
+      All time turns Momentum back into Score. On `ChefBoardNotifier`'s Momentum board page 1 goes
+      without `p_since` and page 1's `window_start` is echoed on every later page — the server's
+      clock, not the device's (B121; a test asserts page 2 sends page 1's `window_start`). A page
+      from a previous ordering is dropped by a per-build generation guard, so a re-sort can never
+      land an old `loadMore` on the new board (B121). Momentum lists only chefs who moved (`window_score > 0`); the first quiet row ends
+      paging, because the RPC orders by window score first
+- [x] `New` — `chefs_leaderboard(p_limit: null, p_offset: 0)` re-ordered `created_at desc, id` and
+      ranged by PostgREST **outside** the function, so `dense_rank` still ranks everyone and the
+      order is total. Rows read `joined Mon YYYY`; the rank pill stays the all-time rank. At ~10⁵
+      members this ranks the whole population per page — the answer then is a
+      `chefs_leaderboard_newest(limit, offset)` with the same CTE, not needed now
+- [x] Trending (7 days) and Best of the month (30 days) rails (`chefs_rails.dart`) — top 10 movers
+      with the gain on each spotlight card; `/chef/:id` shows `LAST 30 DAYS · +N points · …` from
+      `chef_window_stats(p_chef)` (`chef_momentum_line.dart`), ranked chefs only, and a failure
+      there costs that line, not the page
+- [x] Empty state: an empty Momentum window is an `EmptyView` ("Nothing moved in the last 7 days")
+      with a "Show all-time scores" action; an empty rail is a `QuietShelfCard`; a re-sort shows a
+      spinner rather than the previous ordering's rows. Screenshot-checked 2026-09-24 against the
+      local stack, where it is the real state (one member, no engagement)
 ---
 
 ## Phase 34 — The scraped recipe corpus at scale (in progress)
@@ -656,10 +684,17 @@ that reopens the day a non-English tier is imported, and it is a re-index of eve
       region — and `LegalFacts.isComplete` drives a red "Draft — not in force" banner at the top
       of every document until all four are filled in. Nothing was invented: a Terms page naming
       the wrong company is a false statement, not a placeholder
+- [x] The recipe-detail attribution block (2026-09-24) — `SourceCredit` in
+      `detail_provenance.dart`, on both layouts, nothing for a member recipe. `FROM AROUND THE WEB`,
+      then `Recipe by <chef> ›` → `/chef/:id` (omitted when the owner *is* the publisher — the
+      no-byline case, 1,187 local rows), `Published by <publisher> ›` → `/entity/:id`, `Read the
+      original on <host>` (a `url_launcher` `Link`, http(s) only), the rights sentence, and `How we
+      credit recipes` → `/legal/rights`
 - [ ] Still open from the plan: whether corpus content is public at all or flag-gated (a 35c
-      decision, not a page); the recipe-detail attribution block, which has no imported content to
-      attribute until 35c lands; and a screenshot pass — the chrome bar sits in a `Scaffold` slot,
-      which is exactly the class Gotcha 23 says widget tests do not see
+      decision, not a page). The screenshot pass is **done** (2026-09-24): Privacy at 390, Terms at
+      1000, Rights at 1440 render the draft banner and the 720px measure cleanly, and the web
+      footer sits in its `Scaffold` slot on the shell pages (`/chefs`, `/discover` at 1440 and
+      3840); the recipe-detail attribution block was shot at 390 and 1440, bylined and no-byline
 
 ### 35b — Identity: `profiles` decoupled from `auth.users` — **DONE 2026-09-12**
 
@@ -763,7 +798,13 @@ at 260 MB. Every guarantee below was checked against that, not against a fixture
 - [x] The curated tier came in at **260 MB total database** — 21,334 recipes, 243k ingredient
       rows, 158k step rows — which fits the free tier with room to spare. The 3-4 GB figure was for
       the whole 558k corpus and still is; the tier is what avoided it
-- [ ] Committed fixture shard under `corpus/_fixtures/` so the **importer** has CI coverage. The
+- [x] Committed fixture shard under `corpus/_fixtures/` so the **importer** has CI coverage — done
+      2026-09-24. Nine synthetic lines in real harvester shape (`.test` URLs, no scraped text; the
+      `description` is a sentinel the generated SQL must not contain) exercising the gate, the
+      English tier, dedupe and a truncated last line. `tool/corpus_import.dart --corpus=` points
+      the tool at it; `supabase/tests/corpus_import_fixture.sql` asserts the rows field by field,
+      re-applies, asserts nothing changed, and rolls back. CI runs it after the fresh apply and
+      again after the upgrade path. Originally: the
       SQL half is covered (`rls_matrix.sql` §H, `3_sim_verify.sql` group I) and the app half is
       covered (`explore_screen_test.dart`, the repository tests); what is not is the JSON→document
       transform in `tool/corpus_import.dart`, which today is proven only by having been run
@@ -775,7 +816,9 @@ at 260 MB. Every guarantee below was checked against that, not against a fixture
       under a reserved `src:` prefix that `entities_slug_namespace` forbids a member to write.
       Pinned by `rls_matrix.sql` **H8b** (the prefix is refused, 23514) and **H8c** (the same insert
       outside it succeeds, so H8b is not refusing everything)
-- [ ] **Bound claim filing** (same review). `claims_insert` allows one pending claim per
+- [x] **Bound claim filing** (same review) — done 2026-09-24 (B117): at most
+      `profile_claim_pending_cap()` = **5** pending claims per account, enforced by the AFTER
+      trigger `profile_claims_pending_cap` (P0001), pinned by `rls_matrix.sql` G29–G34. Originally: `claims_insert` allows one pending claim per
       (profile, claimant) and nothing caps the number of profiles one account may file against, so
       a script can open 19,681 claims. Harmless while approval is manual SQL and the table is
       private to its claimant, but it wants a rate limit or a per-account cap before any claim UI
@@ -783,6 +826,20 @@ at 260 MB. Every guarantee below was checked against that, not against a fixture
 - [ ] Keyset pagination and BL-2's per-row `recompute_chef_stats` are **deferred, explicitly** —
       imported rows carry no engagement so the recompute never fires, and ranked surfaces exclude
       them. They return the day corpus rows start collecting real engagement
+- [ ] **Owner decision — engagement on imported recipes.** Recipe detail still offers the rating
+      input, like and save on a captured recipe (found 2026-09-24 while building the attribution
+      block). Allowing it means corpus rows start collecting engagement, which is exactly the
+      trigger for the deferred item above (per-row `recompute_chef_stats` on 19k profiles) and puts
+      real counters on content the Rights page describes as someone else's. Refusing it is a UI
+      change on both detail layouts plus a policy (`with check` on `recipes.is_imported = false`)
+      for each of `recipe_likes` / `recipe_saves` / `recipe_ratings`, with `rls_matrix.sql` checks
+- [ ] **Owner decision — the header badge on a no-byline recipe.** When the importer makes the
+      publisher the author (1,187 local rows, e.g. `Mutti`), the attribution block correctly omits
+      `Recipe by`, but the header `ChefBadge` above it still renders the publisher's imported
+      profile as a chef — avatar, name, a link to `/chef/:id`. It names the publisher and nobody
+      else, so it does not break the Rights page's promise, but it *looks* like a person. Options:
+      keep it; restyle it as a publisher mark linking to `/entity/:id`; or hide it when
+      `SourceCredit.creditedChef(recipe) == null`. The recipe-card cover overlay makes the same call
 
 ---
 
@@ -795,9 +852,9 @@ forgotten. Each one names the condition that would pull it back into a phase.
 **What is open elsewhere in this document**, so the backlog is not mistaken for the whole picture:
 shipped phases (0–23, 26–31, OPT) are archived, and every open item they left behind now lives in
 the [Carried-over open items](#carried-over-open-items-from-archived-phases) register above;
-**Phase 24 is `[~]` in progress** — everything but the dish count (73 of 120) and a `large`-preset
-run is done, Phase 33 having closed the content half; **Phase 33 is `[~]`** — the windowed
-leaderboard's SQL is built and pinned, its client is not;
+**Phase 24 is `[~]` in progress** — everything but a `large`-preset
+run is done, Phase 33 having closed the content half; **Phase 33 shipped 2026-09-24** (SQL and
+client; not yet moved to the archive);
 **Phase 25 is designed-not-started** behind one remaining prerequisite (B043's tier calibration —
 the public chef page and the SQL harness are both done) **and its schema is now superseded by
 Phase 35b's `entities`**; **Phase 35 shipped 2026-09-12** — the legal pages, the identity
@@ -970,7 +1027,8 @@ up headlessly, so there are no DOM nodes to target and navigation has to be driv
 #### BL-7 — the RLS acceptance matrix as a _signed-in_ user — **DONE (2026-08-23)**
 
 Closed: [supabase/tests/rls_matrix.sql](../supabase/tests/rls_matrix.sql) (`melos run db:rls`) —
-**177 checks** as of Phase 35c (102 when BL-7 closed, 137 after Phase 33, 165 after 35b) across
+**186 checks** as of 2026-09-24 (102 when BL-7 closed, 137 after Phase 33, 165 after 35b, 177
+after 35c) across
 anon / owner / shared-with / stranger / imported chef, rolled back, wired into CI
 (`database.yml`). Found B061 on its first complete run. **Standing rule:** any change to a policy,
 a `security definer` function, or the column grants → run it, and add a check for any new surface
@@ -979,7 +1037,20 @@ container, not SQL — though 32a4 exercised the bucket contract itself against 
 and the PostgREST edge (`packages/core/test/`'s recording client is the other half). Full history
 and the coverage table: [archive/ROADMAP-phases-0-31.md](./archive/ROADMAP-phases-0-31.md#bl-7--the-rls-acceptance-matrix-as-a-signed-in-user--done-2026-08-23).
 
-#### BL-8 — lint the ingredient unit vocabulary (B094 follow-up)
+#### BL-8 — lint the ingredient unit vocabulary (B094 follow-up) — **DONE (2026-09-24)**
+
+Closed: the canon is declared as `display` (+ `plural` for word units) on each unit in
+`nutritionData/units.json` — `l` displays as `L`; cup, clove, stalk, stick, bunch, pouch, slice and
+pint pluralise; the rest are invariant — and `loadUnitCanon()` / `_lintUnit()` in
+`tool/recipe_format.dart` enforce it on both `recipeData/` and `simData/`. **Errors:** a spelling
+that resolves to a known unit but is not its display form (`Tbsp`, `tablespoons`, `grams`, `lbs`,
+`l`, `package`); a word unit that disagrees with its quantity (`3 clove`, `1 cups` — below 1 or no
+quantity accepts either); a mis-cased deliberate non-unit (`Pinch`); a blank or padded unit.
+**Warnings:** a spelling absent from `units.json` (8 survive: `pods`, `pieces`, `sprig`, …). It
+found two curated misses (B120). `tool/nutrition.dart` ignores both new keys, so
+`nutrition_foods.sql` is byte-identical. What it cannot fix is the scaler: see BL-10.
+
+The original framing, kept for the reasoning:
 
 `unit` is free text in [tool/recipe_format.dart](../tool/recipe_format.dart) — it asserts the type
 and nothing else. So the 2026-09-11 sweep that collapsed five spellings of tbsp/tsp into one
@@ -1037,6 +1108,35 @@ identity path, for every signed-in user.
       `create → nutrition → recipes` prefix is the answer if the call goes the other way.
 - [ ] **Size check before, not after.** The local database is **256 MB** against a 500 MB free-tier
       ceiling, and `recipes` alone is 130 MB of that. There is room, and not a lot of it.
+- [ ] **The 2026-09-24 batch is not on hosted either.** It added `profile_claim_pending_cap()`,
+      `on_profile_claim_cap()` and the `profile_claims_pending_cap` trigger to `0001_init.sql`, so
+      `db:hosted:check` will list those three as MISSING until the deploy runs — expected, and the
+      same one command closes it. The two curated `cup` → `cups` fixes (B120) reach only a
+      database seeded after them, because `seed_recipe_v2` is not an upsert
+- [ ] **Unreachable as of 2026-09-24.** `utvcrtibnszgaoewxvso.supabase.co` returned NXDOMAIN from
+      three resolvers (Comcast, 8.8.8.8, 1.1.1.1) while `supabase.co` and the pooler resolved — the
+      signature of a free-tier project **paused** after ~7 days idle (last touched 2026-09-14).
+      Restore it from the dashboard before any step above; if it was deleted instead, a new
+      project means a new URL and keys in `env.hosted.local.json` and `db-url.local.ps1`
+- [ ] **Web hosting does not exist yet.** No Firebase / Vercel / Netlify / Cloudflare config and no
+      domain anywhere in the repo; `ci.yml` builds web release as a compile check only. A launch
+      needs: a host, a release build with the hosted `--dart-define-from-file`, DNS, and the
+      hosted project's Auth **Site URL + redirect URLs** set to the domain (`config.toml`'s
+      `site_url` is the local stack only) — or confirmation mail links to localhost. Supabase's
+      built-in SMTP is rate-limited to a handful of mails an hour, so real signups need a custom
+      SMTP provider
+- [ ] **`LegalFacts.hostingRegion` is wrong for the current project.** It says `eu-west-2
+      (London)`; the hosted pooler is `aws-0-us-east-2`. It is one of 35a's four owner facts, but
+      this one can be read off the project rather than decided — confirm and fix it with the other
+      three before `provisional` goes false
 
 **Trigger:** the next hosted session. Everything above the last three boxes is already built and
 verified; what remains needs the production credential and one product decision.
+
+#### BL-10 — the servings scaler prints the unit verbatim (B119)
+
+BL-8 guarantees the canon at the **authored** quantity only. `formatText` is `'$amount $unit'`, so
+`1 clove` at ×2 prints `2 clove` and `0.5 cup` at ×4 prints `2 cup`. The fix is the same
+`display`/`plural` pair reaching the client — which means either a column the client reads or a
+Dart mirror of `units.json`, and a mirror is a second source of truth (Gotcha 19's shape).
+**Trigger:** the next change to the servings scaler or `formatText`.

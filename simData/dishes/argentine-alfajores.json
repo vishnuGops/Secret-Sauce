@@ -1,0 +1,74 @@
+{
+  "slug": "argentine-alfajores",
+  "title": "Alfajores de Maicena",
+  "description": "Crumbly cornstarch cookies sandwiched with thick dulce de leche and rolled in coconut. Makes about 24 small alfajores.",
+  "cuisine": "Argentine",
+  "category": "Dessert",
+  "difficulty": "medium",
+  "prep_minutes": 30,
+  "cook_minutes": 12,
+  "servings": 12,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "They are better the next day, once the cookies have softened slightly against the filling.",
+  "ingredient_groups": [
+    {
+      "name": "Cookies",
+      "ingredients": [
+        { "quantity": 100, "unit": "g", "name": "butter", "note": "softened", "food": "butter" },
+        { "quantity": 75, "unit": "g", "name": "caster sugar", "food": "granulated-sugar" },
+        { "quantity": 2, "unit": null, "name": "egg yolks", "food": "egg-yolk" },
+        { "quantity": 1, "unit": "tbsp", "name": "brandy", "is_optional": true },
+        { "quantity": 1, "unit": "tsp", "name": "vanilla extract", "food": "vanilla-extract" },
+        { "quantity": 1, "unit": "tsp", "name": "lemon zest", "food": "lemon-zest" },
+        { "quantity": 200, "unit": "g", "name": "cornstarch", "food": "cornstarch" },
+        { "quantity": 100, "unit": "g", "name": "all-purpose flour", "food": "all-purpose-flour" },
+        { "quantity": 1, "unit": "tsp", "name": "baking powder", "food": "baking-powder" }
+      ]
+    },
+    {
+      "name": "Filling",
+      "ingredients": [
+        { "quantity": 400, "unit": "g", "name": "dulce de leche", "note": "the thick repostero kind" },
+        { "quantity": 40, "unit": "g", "name": "desiccated coconut" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Dough",
+      "steps": [
+        {
+          "text": "Beat the butter and caster sugar until pale, then beat in the egg yolks, vanilla, lemon zest, and brandy.",
+          "duration_minutes": 4
+        },
+        {
+          "text": "Sift in the cornstarch, flour, and baking powder and bring together into a soft dough without kneading. Wrap and chill.",
+          "duration_minutes": 30,
+          "tip": "Cornstarch has no gluten, so the dough is fragile. Chilling is what makes it possible to roll."
+        },
+        {
+          "text": "Roll to 5 mm, cut 5 cm rounds, and bake until set but still pale.",
+          "duration_minutes": 10,
+          "temperature": "170°C / 340°F",
+          "tip": "They should not colour at all. Browned edges mean a dry cookie."
+        }
+      ]
+    },
+    {
+      "name": "Assemble",
+      "steps": [
+        {
+          "text": "Cool completely, then sandwich pairs with a thick layer of dulce de leche."
+        },
+        {
+          "text": "Roll the exposed edges in the coconut."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.9,
+    "variant_titles": ["Chocolate-Dipped {title}", "Mini {title}"]
+  }
+}

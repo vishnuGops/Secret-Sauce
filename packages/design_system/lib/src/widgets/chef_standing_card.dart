@@ -38,9 +38,29 @@ class ChefStandingCard extends StatelessWidget {
     required this.onTap,
     this.dense,
     this.variant = ChefCardVariant.podium,
+    this.window,
+    this.windowLabel,
+    this.note,
   });
 
   final ChefStanding standing;
+
+  /// What this chef earned inside the board's time window (Phase 33's
+  /// `Momentum` sort). When set, the score column shows the **gain** — `+312`
+  /// over [windowLabel] — instead of the all-time score, and the podium's stat
+  /// chips count the window rather than the lifetime totals, so every number on
+  /// the row measures the same span. The tier, the chip and the progress bar
+  /// stay all-time: a tier is earned over a career, not a week.
+  final ChefWindowStats? window;
+
+  /// The span [window] covers, under the gain — `last 7 days`. Ignored without
+  /// a [window].
+  final String? windowLabel;
+
+  /// One extra muted fact, appended to the row's wrapping detail line — the
+  /// board's `New` sort passes `joined Sep 2026`. A `Wrap` child, so a long
+  /// note costs the row a line rather than overflowing it.
+  final String? note;
 
   /// Opens the expanded card. Required: a row with no destination was the
   /// complaint this design answers.
@@ -71,7 +91,14 @@ class ChefStandingCard extends StatelessWidget {
     final tier = TierChip.colorFor(standing.chefTier, theme.brightness);
 
     if (variant == ChefCardVariant.board) {
-      return _BoardRow(standing: standing, onTap: onTap, color: tier);
+      return _BoardRow(
+        standing: standing,
+        onTap: onTap,
+        color: tier,
+        window: window,
+        windowLabel: windowLabel,
+        note: note,
+      );
     }
 
     final compact = dense ?? context.isCompact;
@@ -119,7 +146,12 @@ class ChefStandingCard extends StatelessWidget {
                       children: [
                         _NameLine(standing: standing, compact: compact),
                         const SizedBox(height: AppSpacing.xs),
-                        _Stats(standing: standing, compact: compact),
+                        _Stats(
+                          standing: standing,
+                          compact: compact,
+                          window: window,
+                          note: note,
+                        ),
                       ],
                     ),
                   ),
@@ -128,6 +160,8 @@ class ChefStandingCard extends StatelessWidget {
                     standing: standing,
                     color: tier,
                     compact: compact,
+                    window: window,
+                    windowLabel: windowLabel,
                   ),
                 ],
               ),
@@ -162,11 +196,17 @@ class _BoardRow extends StatelessWidget {
     required this.standing,
     required this.onTap,
     required this.color,
+    this.window,
+    this.windowLabel,
+    this.note,
   });
 
   final ChefStanding standing;
   final VoidCallback onTap;
   final Color color;
+  final ChefWindowStats? window;
+  final String? windowLabel;
+  final String? note;
 
   @override
   Widget build(BuildContext context) {
@@ -230,13 +270,28 @@ class _BoardRow extends StatelessWidget {
                                 color: scheme.onSurfaceVariant,
                               ),
                             ),
+                            if (note != null)
+                              Text(
+                                note!,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  color: scheme.onSurfaceVariant,
+                                ),
+                              ),
                           ],
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(width: AppSpacing.sm),
-                  _ScoreBlock(standing: standing, color: color, compact: true),
+                  _ScoreBlock(
+                    standing: standing,
+                    color: color,
+                    compact: true,
+                    window: window,
+                    windowLabel: windowLabel,
+                  ),
                 ],
               ),
             ),
@@ -396,11 +451,23 @@ class _NameLine extends StatelessWidget {
 
 /// The four engagement chips. Labels drop when [compact]; a `Wrap` because at
 /// 2.0× text scale on a narrow phone these cannot share one line (B016).
+///
+/// With a [window] the chips count the window instead — new recipes, likes,
+/// saves and views (distinct signed-in viewers per recipe, summed — the
+/// all-time `views` rule) — so they add up to the gain in the score column
+/// rather than to a lifetime total printed beside it.
 class _Stats extends StatelessWidget {
-  const _Stats({required this.standing, required this.compact});
+  const _Stats({
+    required this.standing,
+    required this.compact,
+    this.window,
+    this.note,
+  });
 
   final ChefStanding standing;
   final bool compact;
+  final ChefWindowStats? window;
+  final String? note;
 
   @override
   Widget build(BuildContext context) {
@@ -428,14 +495,31 @@ class _Stats extends StatelessWidget {
       ],
     );
 
+    final w = window;
     return Wrap(
       spacing: compact ? 12 : AppSpacing.md,
       runSpacing: AppSpacing.xs,
       children: [
-        stat(Icons.menu_book_outlined, standing.publicRecipeCount, 'recipes'),
-        stat(Icons.favorite_outline, standing.totalLikes, 'likes'),
-        stat(Icons.bookmark_outline, standing.totalSaves, 'saves'),
-        stat(Icons.visibility_outlined, standing.totalViews, 'views'),
+        if (w == null) ...[
+          stat(Icons.menu_book_outlined, standing.publicRecipeCount, 'recipes'),
+          stat(Icons.favorite_outline, standing.totalLikes, 'likes'),
+          stat(Icons.bookmark_outline, standing.totalSaves, 'saves'),
+          stat(Icons.visibility_outlined, standing.totalViews, 'views'),
+        ] else ...[
+          stat(Icons.menu_book_outlined, w.newRecipes, 'new recipes'),
+          stat(Icons.favorite_outline, w.likes, 'likes'),
+          stat(Icons.bookmark_outline, w.saves, 'saves'),
+          stat(Icons.visibility_outlined, w.viewers, 'views'),
+        ],
+        if (note != null)
+          Text(
+            note!,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: scheme.onSurfaceVariant,
+            ),
+          ),
       ],
     );
   }
@@ -444,21 +528,63 @@ class _Stats extends StatelessWidget {
 /// Score, then how far to the next tier. The score is a [FittedBox] rather than
 /// an ellipsis: a truncated number is worse than a smaller one, and a
 /// six-figure score at 2.0× text scale does not fit any sane column width.
+///
+/// With a window the same two lines read `+312` over `last 7 days`: the gain is
+/// what the Momentum board is sorted by, so it sits where the eye expects the
+/// ranking key.
 class _ScoreBlock extends StatelessWidget {
   const _ScoreBlock({
     required this.standing,
     required this.color,
     required this.compact,
+    this.window,
+    this.windowLabel,
   });
 
   final ChefStanding standing;
   final Color color;
   final bool compact;
+  final ChefWindowStats? window;
+  final String? windowLabel;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
+    final w = window;
+    if (w != null) {
+      return ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: compact ? 92 : 116),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerRight,
+              child: Text(
+                w.gainLabel,
+                maxLines: 1,
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  height: 1.1,
+                  color: w.moved ? scheme.primary : null,
+                ),
+              ),
+            ),
+            Text(
+              windowLabel ?? 'in window',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.end,
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
     final next = standing.nextTierLabel;
     final atTop = next == null;
 

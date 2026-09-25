@@ -54,13 +54,12 @@ class _OneShared extends SharedWithMeNotifier {
       Future.value(offset == 0 ? const [_owned] : const []);
 }
 
-/// `New recipe` moved off the web top navigation and onto this header, which is
-/// a **fixed-height** `AppBar` toolbar — the shape that produced B001/B002/B016
-/// elsewhere. A labelled `FilledButton` carries 28px of vertical padding on top
-/// of its line height, so at 2.0x text scale it wants ~68px inside a 56px
-/// toolbar. Measured rather than assumed: the toolbar **clamps** it, with no
-/// `RenderFlex` overflow, so the label stays at every scale — and that is what
-/// the envelope below is here to keep true.
+/// `New recipe` moved off the web top navigation and onto this page (Phase 21).
+/// On web it sits in an in-content header — the page no longer stacks its own
+/// `AppBar` under the shell's top bar — and on compact in the `AppBar`, which
+/// is the only top chrome a phone has. The web header is content-sized, so text
+/// scale grows it rather than clamping a 68px button into a 56px toolbar the
+/// way the old web `AppBar` did; the envelope below keeps both chromes honest.
 Future<void> _pump(
   WidgetTester tester, {
   required double width,
@@ -102,7 +101,7 @@ Future<void> _pump(
 /// Header only — the empty state under it has its own labelled `New recipe`
 /// button, so an unscoped finder matches either one.
 final _headerLabel = find.descendant(
-  of: find.byType(AppBar),
+  of: find.byKey(MyRecipesScreen.newRecipeButtonKey),
   matching: find.text('New recipe'),
 );
 
@@ -116,6 +115,39 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  // Phase 21's carried-over item: on web the shell's top bar is already a
+  // toolbar over this page, and a second one under it was two bars of chrome
+  // before the first card.
+  testWidgets('web stacks no AppBar under the shell top bar', (tester) async {
+    await _pump(tester, width: 1400);
+
+    expect(find.byType(AppBar), findsNothing);
+    // The page still titles itself — in content, not in a toolbar — and the
+    // tab strip survived the move. `My Recipes` is both the title and a tab.
+    expect(find.text('My Recipes'), findsNWidgets(2));
+    expect(find.byType(TabBar), findsOneWidget);
+    expect(find.text('Shared with me'), findsOneWidget);
+  });
+
+  testWidgets('compact keeps its AppBar — a phone has no other top bar', (
+    tester,
+  ) async {
+    await _pump(tester, width: 390);
+
+    expect(find.byType(AppBar), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(AppBar),
+        matching: find.text('My Recipes'),
+      ),
+      findsNWidgets(2), // title + first tab
+    );
+    expect(
+      find.descendant(of: find.byType(AppBar), matching: find.byType(TabBar)),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('compact keeps the icon — the FAB is the labelled action there', (
     tester,
   ) async {
@@ -123,6 +155,19 @@ void main() {
 
     expect(_headerLabel, findsNothing);
     expect(find.byTooltip('New recipe'), findsOneWidget);
+  });
+
+  // The header lines up with the grid's first card, not with the window —
+  // pumped on a 4K window, past the six-column cap (B049), where the capped
+  // block keeps its left edge and puts the slack on the right.
+  testWidgets('web header aligns with the first card on a 4K window', (
+    tester,
+  ) async {
+    await _pump(tester, width: 3840, populated: true);
+
+    final card = tester.getRect(find.byType(RecipeCard).first);
+    final title = tester.getRect(find.text('My Recipes').first);
+    expect(title.left, closeTo(card.left, 0.001));
   });
 
   testWidgets('2.0x text scale keeps the label and does not overflow', (
@@ -171,6 +216,12 @@ void main() {
     (700, 1.3),
     (1000, 2.0),
     (1400, 2.0),
+    // Compact's AppBar, and web's header where the title and the button stop
+    // sharing a line.
+    (390, 1.0),
+    (390, 2.0),
+    (600, 2.0),
+    (3840, 1.0),
   ]) {
     testWidgets('header fits at ${width}px, textScale $scale', (tester) async {
       await _pump(tester, width: width, textScale: scale);

@@ -1,0 +1,57 @@
+{
+  "slug": "greek-horiatiki",
+  "title": "Horiatiki",
+  "description": "The Greek village salad: ripe tomato, cucumber, onion, and pepper, a slab of feta on top, oregano, and far more olive oil than seems wise.",
+  "cuisine": "Greek",
+  "category": "Salad",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 0,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Only worth making when tomatoes are in season. There is no lettuce in it.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 4, "unit": null, "name": "ripe tomatoes", "note": "in wedges" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 1, "unit": null, "name": "cucumber", "note": "in thick half-moons", "food": "cucumber" },
+        { "quantity": 1, "unit": null, "name": "red onion", "note": "thinly sliced", "food": "onion" },
+        { "quantity": 1, "unit": null, "name": "green bell pepper", "note": "in rings" },
+        { "quantity": 80, "unit": "g", "name": "Kalamata olives" },
+        { "quantity": 1, "unit": "tbsp", "name": "capers", "is_optional": true },
+        { "quantity": 1, "unit": "tbsp", "name": "red wine vinegar" },
+        { "quantity": 200, "unit": "g", "name": "feta", "note": "in one slab" },
+        { "quantity": 1, "unit": "tsp", "name": "dried oregano" },
+        { "quantity": 80, "unit": "ml", "name": "olive oil", "food": "olive-oil" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Salt the tomatoes lightly in a wide bowl.",
+          "tip": "The salt draws out juice, and the juice becomes the dressing with the oil."
+        },
+        {
+          "text": "Add the cucumber, red onion, green bell pepper, olives, and capers and toss with the vinegar."
+        },
+        {
+          "text": "Lay the feta on top as one slab, sprinkle everything with the oregano, and pour over the olive oil.",
+          "tip": "The feta is never crumbled in the kitchen. It is broken at the table."
+        },
+        {
+          "text": "Serve with bread to mop up the juices."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.3,
+    "variant_titles": ["Summer {title}", "Village {title}"]
+  }
+}

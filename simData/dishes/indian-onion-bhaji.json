@@ -1,0 +1,61 @@
+{
+  "slug": "indian-onion-bhaji",
+  "title": "Onion Bhaji",
+  "description": "Thin-sliced onion bound in a spiced gram flour batter and fried in loose, craggy clusters. Makes about 12.",
+  "cuisine": "Indian",
+  "category": "Snack",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 20,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Serve with mint chutney or tamarind chutney, while they are still crackling.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 3, "unit": null, "name": "onions", "note": "halved and thinly sliced", "food": "onion" },
+        { "quantity": 1, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 150, "unit": "g", "name": "gram flour", "note": "besan" },
+        { "quantity": 2, "unit": "tbsp", "name": "rice flour" },
+        { "quantity": 1, "unit": "tsp", "name": "cumin seeds" },
+        { "quantity": 0.5, "unit": "tsp", "name": "turmeric" },
+        { "quantity": 0.5, "unit": "tsp", "name": "Kashmiri chilli powder" },
+        { "quantity": 1, "unit": null, "name": "green chilli", "note": "finely chopped" },
+        { "quantity": 1, "unit": "tbsp", "name": "ginger", "note": "grated", "food": "ginger" },
+        { "quantity": 1, "unit": "handful", "name": "cilantro", "note": "chopped", "food": "coriander" },
+        { "quantity": 80, "unit": "ml", "name": "water", "food": "water" },
+        { "quantity": 1, "unit": "L", "name": "neutral oil", "note": "for deep frying", "food": "canola-oil" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Toss the sliced onions with the salt and leave until they soften and release their juice.",
+          "duration_minutes": 10,
+          "tip": "The onion juice is most of the liquid in the batter. Add water only after this."
+        },
+        {
+          "text": "Add the gram flour, rice flour, cumin seeds, turmeric, chilli powder, green chilli, ginger, and cilantro and mix, adding the water a spoonful at a time, until the onions are just coated in a thick batter."
+        },
+        {
+          "text": "Drop loose, craggy spoonfuls into the hot oil and fry, turning, until deep golden and crisp.",
+          "duration_minutes": 8,
+          "temperature": "170°C / 340°F",
+          "tip": "Loose is right — the stray strands are the best part."
+        },
+        {
+          "text": "Drain on a rack and serve hot."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.3,
+    "variant_titles": ["Monsoon {title}", "Crispy {title}"]
+  }
+}

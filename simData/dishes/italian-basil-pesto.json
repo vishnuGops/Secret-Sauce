@@ -1,0 +1,49 @@
+{
+  "slug": "italian-basil-pesto",
+  "title": "Pesto alla Genovese",
+  "description": "Basil, garlic, pine nuts, parmesan, and pecorino ground in a mortar with Ligurian olive oil. Enough for 400 g of pasta.",
+  "cuisine": "Italian",
+  "category": "Sauce",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 0,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Toss with trofie or linguine and a spoonful of the pasta water. It freezes well without the cheese; add that after thawing.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 1, "unit": "clove", "name": "garlic", "food": "garlic" },
+        { "quantity": 0.5, "unit": "tsp", "name": "coarse salt", "food": "kosher-salt" },
+        { "quantity": 30, "unit": "g", "name": "pine nuts" },
+        { "quantity": 60, "unit": "g", "name": "basil leaves", "note": "small leaves if possible", "food": "basil-fresh" },
+        { "quantity": 40, "unit": "g", "name": "parmesan", "note": "finely grated", "food": "parmesan" },
+        { "quantity": 20, "unit": "g", "name": "pecorino", "note": "sardo or romano, finely grated" },
+        { "quantity": 100, "unit": "ml", "name": "olive oil", "note": "a mild extra-virgin", "food": "olive-oil" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Pound the garlic and salt in a mortar to a paste, then add the pine nuts and pound until creamy."
+        },
+        {
+          "text": "Add the basil leaves a handful at a time, grinding with a circular motion against the side rather than pounding.",
+          "tip": "Grinding tears the leaves and releases their oil without bruising them black. A blender works — pulse, and chill the bowl first."
+        },
+        {
+          "text": "Work in the parmesan and pecorino, then the olive oil in a thin stream, until loose and glossy."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.3,
+    "variant_titles": ["Genoese {title}", "Classic {title}", "{title} with Trofie"]
+  }
+}

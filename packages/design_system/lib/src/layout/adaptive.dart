@@ -73,6 +73,7 @@ class FlowGridMetrics {
     required this.columns,
     required this.tileWidth,
     required this.gutter,
+    this.trailing = 0,
   });
 
   /// Fits [minTileWidth]-wide tiles across [available], capped at
@@ -81,25 +82,41 @@ class FlowGridMetrics {
   /// Below one minimum-width tile the single column is allowed to shrink under
   /// [minTileWidth] — a tile that refuses to get smaller than its container is
   /// an overflow, and the card is built to degrade instead.
+  ///
+  /// [maxColumns], when given, caps the count however wide [available] is
+  /// (B049). The tiles then hit [maxTileWidth] and everything past the capped
+  /// row becomes [trailing] — slack on the **end** side only, so the block
+  /// stays left-aligned. Centring it would move the first card away from every
+  /// header drawn above the grid at the page's own inset (Discover's
+  /// masthead and shelves, the chef and entity headers), which is B059's
+  /// shared left edge broken by 900px on a 4K window. Uncapped, a row this wide
+  /// had no gutter at all, so left-aligned is also the continuous answer.
+  /// Null keeps the uncapped behaviour.
   factory FlowGridMetrics.fit({
     required double available,
     required double minTileWidth,
     required double maxTileWidth,
     required double spacing,
+    int? maxColumns,
   }) {
     assert(minTileWidth <= maxTileWidth, 'min tile width exceeds the max');
+    assert(maxColumns == null || maxColumns >= 1, 'maxColumns must be >= 1');
     final width = available.isFinite && available > 0 ? available : 0.0;
     // How many (tile + spacing) slots fit, counting the last tile's missing
     // trailing spacing. At least one column, however narrow the container.
     final fits = (width + spacing) ~/ (minTileWidth + spacing);
-    final columns = fits < 1 ? 1 : fits;
+    var columns = fits < 1 ? 1 : fits;
+    final capped = maxColumns != null && columns > maxColumns;
+    if (capped) columns = maxColumns;
     final shared = (width - spacing * (columns - 1)) / columns;
     final tileWidth = shared.clamp(0.0, maxTileWidth);
     final rowWidth = tileWidth * columns + spacing * (columns - 1);
+    final leftover = (width - rowWidth).clamp(0.0, double.infinity);
     return FlowGridMetrics(
       columns: columns,
       tileWidth: tileWidth,
-      gutter: ((width - rowWidth) / 2).clamp(0.0, double.infinity),
+      gutter: capped ? 0 : leftover / 2,
+      trailing: capped ? leftover : 0,
     );
   }
 
@@ -110,6 +127,11 @@ class FlowGridMetrics {
   final double tileWidth;
 
   /// Leftover space to inset on **each** side so the row stays centred. Zero
-  /// unless the tiles hit their maximum width.
+  /// unless the tiles hit their maximum width, and zero when the column cap
+  /// applied (see [trailing]).
   final double gutter;
+
+  /// Leftover space to inset on the **end** side only — what a column cap
+  /// leaves past the capped row. Zero unless `maxColumns` bound the count.
+  final double trailing;
 }

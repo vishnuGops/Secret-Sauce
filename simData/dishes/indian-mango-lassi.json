@@ -1,0 +1,46 @@
+{
+  "slug": "indian-mango-lassi",
+  "title": "Mango Lassi",
+  "description": "Ripe mango blended with yogurt, cold milk, and a pinch of cardamom until thick and frothy.",
+  "cuisine": "Indian",
+  "category": "Drink",
+  "difficulty": "easy",
+  "prep_minutes": 5,
+  "cook_minutes": 0,
+  "servings": 2,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Tinned Alphonso or Kesar pulp gives the most reliable result outside mango season.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 250, "unit": "g", "name": "mango pulp", "note": "fresh or tinned" },
+        { "quantity": 250, "unit": "g", "name": "plain yogurt", "food": "yogurt" },
+        { "quantity": 120, "unit": "ml", "name": "whole milk", "note": "cold", "food": "whole-milk" },
+        { "quantity": 1, "unit": "tbsp", "name": "sugar", "is_optional": true, "food": "granulated-sugar" },
+        { "quantity": 0.25, "unit": "tsp", "name": "cardamom", "note": "ground" },
+        { "quantity": 4, "unit": null, "name": "ice cubes" },
+        { "quantity": 1, "unit": "pinch", "name": "saffron", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Blend the mango pulp, yogurt, milk, sugar, and cardamom until smooth and frothy.",
+          "tip": "Taste before adding the sugar — tinned pulp is usually sweetened already."
+        },
+        {
+          "text": "Add the ice cubes and blend again briefly. Pour into chilled glasses and top with a few threads of saffron."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.3,
+    "variant_titles": ["Saffron {title}", "Summer {title}"]
+  }
+}

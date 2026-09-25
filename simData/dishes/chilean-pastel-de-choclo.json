@@ -1,0 +1,80 @@
+{
+  "slug": "chilean-pastel-de-choclo",
+  "title": "Pastel de Choclo",
+  "description": "A spiced beef pino with olives, raisins, and egg under a thick layer of fresh corn purée, sugared and baked until blistered. Chile in summer.",
+  "cuisine": "Chilean",
+  "category": "Main",
+  "difficulty": "medium",
+  "prep_minutes": 30,
+  "cook_minutes": 60,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The sweet-savoury contrast is intended — the sugar on top is not optional in Chile. Make the pino a day ahead if you can; it tastes better rested.",
+  "ingredient_groups": [
+    {
+      "name": "Pino",
+      "ingredients": [
+        { "quantity": 2, "unit": "tbsp", "name": "olive oil", "food": "olive-oil" },
+        { "quantity": 2, "unit": null, "name": "onions", "note": "finely diced", "food": "onion" },
+        { "quantity": 500, "unit": "g", "name": "minced beef" },
+        { "quantity": 2, "unit": "tsp", "name": "cumin", "note": "ground" },
+        { "quantity": 2, "unit": "tsp", "name": "paprika", "food": "smoked-paprika" },
+        { "quantity": 1, "unit": "tsp", "name": "dried oregano" },
+        { "quantity": 300, "unit": "g", "name": "cooked chicken", "note": "in large shreds" },
+        { "quantity": 3, "unit": null, "name": "eggs", "note": "hard-boiled and quartered", "food": "egg" },
+        { "quantity": 80, "unit": "g", "name": "black olives" },
+        { "quantity": 50, "unit": "g", "name": "raisins" }
+      ]
+    },
+    {
+      "name": "Corn topping",
+      "ingredients": [
+        { "quantity": 1, "unit": "kg", "name": "corn kernels", "note": "fresh or frozen" },
+        { "quantity": 250, "unit": "ml", "name": "whole milk", "food": "whole-milk" },
+        { "quantity": 1, "unit": "handful", "name": "basil", "note": "leaves", "food": "basil-fresh" },
+        { "quantity": 30, "unit": "g", "name": "butter", "food": "butter" },
+        { "quantity": 1, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 1, "unit": "tbsp", "name": "sugar", "note": "for the top", "food": "granulated-sugar" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Pino",
+      "steps": [
+        {
+          "text": "Soften the onions in the olive oil, then add the minced beef, cumin, paprika, and oregano and cook until the meat is browned and the pan nearly dry.",
+          "duration_minutes": 20,
+          "temperature": "medium"
+        },
+        {
+          "text": "Season well and spread over the base of a large baking dish. Dot with the cooked chicken, eggs, olives, and raisins."
+        }
+      ]
+    },
+    {
+      "name": "Topping and bake",
+      "steps": [
+        {
+          "text": "Blend the corn kernels with the milk and basil until mostly smooth, keeping a little texture."
+        },
+        {
+          "text": "Cook the corn purée with the butter and salt, stirring constantly, until thick enough to hold a trail.",
+          "duration_minutes": 10,
+          "temperature": "low",
+          "tip": "It catches quickly. Keep scraping the base of the pan."
+        },
+        {
+          "text": "Spread the corn over the filling, sprinkle with the sugar, and bake until the top is blistered and golden.",
+          "duration_minutes": 30,
+          "temperature": "200°C / 390°F"
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.8,
+    "variant_titles": ["Summer {title}", "Grandma's {title}"]
+  }
+}

@@ -555,8 +555,9 @@ select
   coalesce((i.value ->> 'is_optional')::boolean, false),
   i.ord,
   -- Phase 29b pass-through. Every dish doc carries the key (the normaliser
-  -- makes optional keys explicit) but none links a food yet — that is 29d's
-  -- optional curation — so this is null across the population today.
+  -- makes optional keys explicit). The original 73 dishes link no food; the
+  -- 47 added in the 120-dish batch do, so this column is an FK write and
+  -- nutrition_foods.sql must be loaded before the sim runs.
   i.value ->> 'food_id'
 from sim_titled t
 cross join lateral (

@@ -19,7 +19,7 @@
 # The pooler user is `postgres.<project-ref>`, not a bare `postgres`.
 
 # Local stack (supabase start) — the default, and the safe target:
-$env:SUPABASE_DB_URL = "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
+$env:SUPABASE_DB_URL = "postgresql://postgres:postgres@127.0.0.1:54622/postgres"
 
 # Hosted (Session pooler) — uncomment ONLY for a deliberate production task, and
 # comment out the local line above when you do. These are sequential assignments,

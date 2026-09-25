@@ -1,0 +1,89 @@
+{
+  "slug": "indonesian-chicken-satay",
+  "title": "Sate Ayam",
+  "description": "Skewers of chicken thigh marinated in sweet soy, grilled over high heat until charred, with a thick peanut sauce sharpened by tamarind.",
+  "cuisine": "Indonesian",
+  "category": "Appetizer",
+  "difficulty": "medium",
+  "prep_minutes": 30,
+  "cook_minutes": 20,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Kecap manis is the sweet, syrupy Indonesian soy sauce. There is no substitute worth making.",
+  "ingredient_groups": [
+    {
+      "name": "Chicken",
+      "ingredients": [
+        { "quantity": 800, "unit": "g", "name": "chicken thighs", "note": "boneless, in 2 cm pieces", "food": "chicken-thigh" },
+        { "quantity": 3, "unit": "tbsp", "name": "kecap manis" },
+        { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "grated", "food": "garlic" },
+        { "quantity": 1, "unit": "tsp", "name": "ground coriander" },
+        { "quantity": 1, "unit": "tbsp", "name": "neutral oil", "food": "canola-oil" }
+      ]
+    },
+    {
+      "name": "Peanut sauce",
+      "ingredients": [
+        { "quantity": 200, "unit": "g", "name": "roasted peanuts", "note": "unsalted" },
+        { "quantity": 2, "unit": null, "name": "shallots", "note": "chopped" },
+        { "quantity": 2, "unit": "cloves", "name": "garlic", "food": "garlic" },
+        { "quantity": 2, "unit": null, "name": "red chillies", "note": "chopped" },
+        { "quantity": 1, "unit": "tbsp", "name": "neutral oil", "food": "canola-oil" },
+        { "quantity": 250, "unit": "ml", "name": "water", "food": "water" },
+        { "quantity": 1, "unit": "tbsp", "name": "palm sugar", "note": "grated" },
+        { "quantity": 2, "unit": "tbsp", "name": "kecap manis" },
+        { "quantity": 1, "unit": "tbsp", "name": "tamarind paste" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt", "food": "kosher-salt" }
+      ]
+    },
+    {
+      "name": "To serve",
+      "ingredients": [
+        { "quantity": 1, "unit": null, "name": "lime", "note": "in wedges", "food": "lime" },
+        { "quantity": 1, "unit": null, "name": "cucumber", "note": "sliced", "food": "cucumber" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Chicken",
+      "steps": [
+        {
+          "text": "Toss the chicken thighs with the kecap manis, garlic, ground coriander, and oil and leave to marinate.",
+          "duration_minutes": 120
+        },
+        {
+          "text": "Soak bamboo skewers in water while the chicken marinates, then thread the chicken on tightly."
+        },
+        {
+          "text": "Grill over high heat, turning often, until charred at the edges and cooked through.",
+          "duration_minutes": 10,
+          "temperature": "high"
+        }
+      ]
+    },
+    {
+      "name": "Peanut sauce",
+      "steps": [
+        {
+          "text": "Blend the roasted peanuts to a coarse paste. Fry the shallots, garlic, and red chillies in the oil until soft, then blend them in too.",
+          "duration_minutes": 5
+        },
+        {
+          "text": "Simmer the paste with the water, palm sugar, kecap manis, tamarind, and salt until thick and glossy.",
+          "duration_minutes": 8,
+          "temperature": "low",
+          "tip": "It thickens as it cools — stop while it still pours."
+        },
+        {
+          "text": "Serve the skewers with the peanut sauce, lime, and cucumber."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.1,
+    "variant_titles": ["Street-Cart {title}", "Party {title}"]
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "slug": "yemeni-zhoug",
+  "title": "Zhoug",
+  "description": "A fierce green Yemeni chilli sauce of cilantro, green chilli, garlic, cardamom, and cumin, loosened with olive oil and lemon.",
+  "cuisine": "Yemeni",
+  "category": "Sauce",
+  "difficulty": "easy",
+  "prep_minutes": 10,
+  "cook_minutes": 0,
+  "servings": 8,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Keeps a week in the fridge under a film of oil. Spoon it over eggs, grilled meat, falafel, or soup.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 2, "unit": "bunches", "name": "cilantro", "note": "stems included", "food": "coriander" },
+        { "quantity": 1, "unit": "handful", "name": "parsley", "food": "flat-leaf-parsley" },
+        { "quantity": 4, "unit": null, "name": "green chillies", "note": "roughly chopped" },
+        { "quantity": 3, "unit": "cloves", "name": "garlic", "food": "garlic" },
+        { "quantity": 1, "unit": "tsp", "name": "cumin", "note": "ground" },
+        { "quantity": 0.5, "unit": "tsp", "name": "cardamom", "note": "ground" },
+        { "quantity": 0.25, "unit": "tsp", "name": "ground cloves" },
+        { "quantity": 1, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 80, "unit": "ml", "name": "olive oil", "food": "olive-oil" },
+        { "quantity": 2, "unit": "tbsp", "name": "lemon juice", "food": "lemon-juice" },
+        { "quantity": 1, "unit": "tbsp", "name": "water", "food": "water" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Roughly chop the cilantro and parsley, stems and all.",
+          "tip": "The stems carry more flavour than the leaves."
+        },
+        {
+          "text": "Blend or finely chop with the green chillies, garlic, cumin, cardamom, cloves, and salt."
+        },
+        {
+          "text": "Stir in the olive oil, lemon juice, and water to a loose, spoonable sauce, and rest before using.",
+          "duration_minutes": 30
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.8,
+    "variant_titles": ["Red {title}", "Mild {title}"]
+  }
+}

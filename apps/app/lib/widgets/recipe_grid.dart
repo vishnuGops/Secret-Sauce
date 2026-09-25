@@ -5,15 +5,30 @@ import 'package:go_router/go_router.dart';
 
 import 'package:app/routing/app_router.dart';
 
-/// A responsive grid of [RecipeCard]s that navigates to detail on tap.
+/// The flow metrics a [SliverRecipeGrid] lays its cards out with, for a sliver
+/// [extent] wide and padded by [padding].
 ///
-/// The column count comes from the width actually available, not from a
-/// breakpoint: as many columns as can each hold `kRecipeCardMinWidth`, with
-/// every card capped at `kRecipeCardMaxWidth` and the row centred once they
-/// are. Widening the window therefore adds a column instead of stretching the
-/// cards, and because the rule is a pure function of width
-/// ([FlowGridMetrics.fit], recomputed on every layout) a drag-resize reflows
-/// continuously rather than jumping at 600 and 1000.
+/// The one definition of the grid's sizing rule — card 288–340 wide, 16px
+/// gaps, at most `kRecipeGridMaxColumns` across (B049) — so that something
+/// drawn *above* a grid can line its left edge up with the first card rather
+/// than with the window. My Recipes' web header does; without this it would
+/// restate the rule and drift from it the first time either side changed.
+FlowGridMetrics recipeGridMetrics(
+  double extent, {
+  EdgeInsets padding = const EdgeInsets.all(AppSpacing.md),
+}) => FlowGridMetrics.fit(
+  available: extent - padding.horizontal,
+  minTileWidth: kRecipeCardMinWidth,
+  maxTileWidth: kRecipeCardMaxWidth,
+  spacing: AppSpacing.md,
+  // Six is what a 1920px window already packs, so the cap changes nothing up
+  // to full HD and turns a 4K window's extra width into a right-hand margin
+  // instead of twelve columns — left-aligned so the first card stays under
+  // every header drawn at the page's inset (B059). The reasoning lives on the
+  // constant and on `FlowGridMetrics.fit`.
+  maxColumns: kRecipeGridMaxColumns,
+);
+
 /// [RecipeGrid] as a **sliver**, for pages that put a grid inside a scroll they
 /// do not own — Discover, where three shelves and a masthead sit above it.
 ///
@@ -52,11 +67,9 @@ class SliverRecipeGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverLayoutBuilder(
       builder: (context, constraints) {
-        final metrics = FlowGridMetrics.fit(
-          available: constraints.crossAxisExtent - padding.horizontal,
-          minTileWidth: kRecipeCardMinWidth,
-          maxTileWidth: kRecipeCardMaxWidth,
-          spacing: AppSpacing.md,
+        final metrics = recipeGridMetrics(
+          constraints.crossAxisExtent,
+          padding: padding,
         );
         // The gutter is what keeps the cards at their maximum width: the
         // delegate always divides the full cross-axis extent between the
@@ -64,7 +77,7 @@ class SliverRecipeGrid extends StatelessWidget {
         // width to divide.
         final gridPadding = padding.copyWith(
           left: padding.left + metrics.gutter,
-          right: padding.right + metrics.gutter,
+          right: padding.right + metrics.gutter + metrics.trailing,
         );
         return SliverMainAxisGroup(
           slivers: [
@@ -131,6 +144,16 @@ class SliverRecipeGrid extends StatelessWidget {
   }
 }
 
+/// A responsive grid of [RecipeCard]s that navigates to detail on tap.
+///
+/// The column count comes from the width actually available, not from a
+/// breakpoint: as many columns as can each hold `kRecipeCardMinWidth`, with
+/// every card capped at `kRecipeCardMaxWidth` and the row centred once they
+/// are. Widening the window therefore adds a column instead of stretching the
+/// cards, and because the rule is a pure function of width
+/// ([FlowGridMetrics.fit], recomputed on every layout) a drag-resize reflows
+/// continuously rather than jumping at 600 and 1000. Past
+/// `kRecipeGridMaxColumns` a wider window adds gutter, not columns (B049).
 class RecipeGrid extends StatelessWidget {
   const RecipeGrid({
     super.key,

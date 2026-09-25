@@ -1,0 +1,75 @@
+{
+  "slug": "chinese-mapo-tofu",
+  "title": "Mapo Tofu",
+  "description": "Soft tofu in a glossy, fiery sauce of chilli bean paste and fermented black beans, with crisp pork and the numbing tingle of Sichuan pepper.",
+  "cuisine": "Chinese",
+  "category": "Main",
+  "difficulty": "medium",
+  "prep_minutes": 15,
+  "cook_minutes": 20,
+  "servings": 3,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Pixian doubanjiang is the one ingredient not to substitute. Leave out the pork and use mushroom stock for a vegetarian version.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "soft tofu", "note": "in 2 cm cubes" },
+        { "quantity": 1, "unit": "tsp", "name": "salt", "note": "for the blanching water", "food": "kosher-salt" },
+        { "quantity": 150, "unit": "g", "name": "minced pork" },
+        { "quantity": 3, "unit": "tbsp", "name": "neutral oil", "food": "canola-oil" },
+        { "quantity": 2, "unit": "tbsp", "name": "doubanjiang", "note": "Pixian chilli bean paste" },
+        { "quantity": 1, "unit": "tbsp", "name": "fermented black beans", "note": "rinsed, roughly chopped" },
+        { "quantity": 1, "unit": "tsp", "name": "chilli flakes", "food": "red-pepper-flakes" },
+        { "quantity": 3, "unit": "cloves", "name": "garlic", "note": "minced", "food": "garlic" },
+        { "quantity": 1, "unit": "tbsp", "name": "ginger", "note": "minced", "food": "ginger" },
+        { "quantity": 250, "unit": "ml", "name": "chicken stock" },
+        { "quantity": 1, "unit": "tbsp", "name": "soy sauce", "food": "tamari" },
+        { "quantity": 1, "unit": "tbsp", "name": "cornstarch", "food": "cornstarch" },
+        { "quantity": 2, "unit": "tbsp", "name": "water", "food": "water" },
+        { "quantity": 2, "unit": "tsp", "name": "Sichuan peppercorns", "note": "toasted and ground" },
+        { "quantity": 2, "unit": null, "name": "green onions", "note": "sliced", "food": "green-onions" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Bring a pan of water to a simmer with the salt, slide in the tofu for a minute to firm it, then drain gently.",
+          "duration_minutes": 2,
+          "tip": "Salted water seasons the tofu and sets its surface, so the cubes survive the sauce."
+        },
+        {
+          "text": "Fry the minced pork in the neutral oil until crisp and browned.",
+          "duration_minutes": 5,
+          "temperature": "high"
+        },
+        {
+          "text": "Lower the heat, add the doubanjiang, and fry until the oil turns red. Add the black beans, chilli flakes, garlic, and ginger.",
+          "duration_minutes": 2,
+          "temperature": "medium"
+        },
+        {
+          "text": "Pour in the stock and soy sauce, add the tofu, and nudge it in with the back of a spatula rather than stirring. Simmer.",
+          "duration_minutes": 5,
+          "temperature": "low"
+        },
+        {
+          "text": "Stir the cornstarch into the water and add it in two or three additions, until the sauce clings.",
+          "duration_minutes": 1,
+          "tip": "All at once makes a paste. In stages you can stop the moment it glosses."
+        },
+        {
+          "text": "Serve with rice, scattered with the ground Sichuan peppercorns and green onions."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.2,
+    "variant_titles": ["Weeknight {title}", "Vegetarian {title}", "Extra-Numbing {title}"]
+  }
+}

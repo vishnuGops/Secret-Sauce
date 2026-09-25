@@ -212,9 +212,14 @@ class _HeaderBand extends ConsumerWidget {
                           ),
                         ),
                       ],
+                      // Same measure as the description above it: the credit
+                      // is prose about the recipe, not a band across the page.
                       if (recipe.isImported) ...[
                         const SizedBox(height: AppSpacing.md),
-                        SourceCredit(recipe: recipe),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 620),
+                          child: SourceCredit(recipe: recipe),
+                        ),
                       ],
                       if (recipe.attribution != null &&
                           recipe.attribution!.isNotEmpty) ...[

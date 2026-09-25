@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:app/features/chefs/chef_detail_common.dart';
 import 'package:app/features/chefs/chef_identity_header.dart';
+import 'package:app/features/chefs/chef_momentum_line.dart';
 import 'package:app/features/chefs/chef_score_panel.dart';
 import 'package:app/features/chefs/entity_affiliations.dart';
 import 'package:app/features/chefs/unclaimed_chef_note.dart';
@@ -123,6 +124,12 @@ class _Loaded extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ChefScorePanel(standing: standing, color: tier),
+                  const SizedBox(height: AppSpacing.md),
+                  // Phase 33: the all-time panel above explains the score; this
+                  // says what moved it lately. Ranked chefs only — the window
+                  // function carries the board's population filter, so an
+                  // unranked chef would get nothing back anyway.
+                  ChefMomentumLine(chefId: data.profile.id),
                   const SizedBox(height: AppSpacing.md),
                   // Carried over from the panel the dialog used to show. The
                   // mockup said "recomputes nightly"; this build recomputes on

@@ -22,6 +22,21 @@ void main() {
     },
   );
 
+  test('the claim cap (B117) is translated; any other P0001 is not', () {
+    final capped = friendlyError(
+      const PostgrestException(
+        message: 'profile claim limit reached',
+        code: 'P0001',
+      ),
+    );
+    expect(capped, contains('claims open'));
+
+    final other = friendlyError(
+      const PostgrestException(message: 'internal detail', code: 'P0001'),
+    );
+    expect(other, isNot(contains('internal detail')));
+  });
+
   test(
     '42501 is the permission sentence, not "permission denied for table"',
     () {

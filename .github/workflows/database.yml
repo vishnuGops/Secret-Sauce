@@ -21,6 +21,7 @@ on:
       - 'simData/**'
       - 'nutritionData/**'
       - 'tool/**'
+      - 'corpus/_fixtures/**'
       - '.github/workflows/database.yml'
   pull_request:
     branches: [main]
@@ -30,6 +31,7 @@ on:
       - 'simData/**'
       - 'nutritionData/**'
       - 'tool/**'
+      - 'corpus/_fixtures/**'
       - '.github/workflows/database.yml'
 
 env:
@@ -186,6 +188,38 @@ jobs:
       - name: Nutrition fixtures — committed labels vs. the registry
         run: dart run tool/db.dart nutrition:verify
 
+      # ------------------------------------------------------------------
+      # The corpus importer (Phase 35c), end to end on a COMMITTED fixture.
+      # `tool/corpus_import.dart` (JSON -> SQL) and `import_recipe(jsonb)` (SQL
+      # -> rows) were proven only by having been run once over the real
+      # 8.6 GB corpus, which is git-ignored and never in CI. `corpus/_fixtures/`
+      # is a handful of SYNTHETIC records in the harvester's shape, one per
+      # rule: the gate's three refusals, the English-first tier, a duplicate
+      # URL, a byline-less page, a total-only time, an unparseable date, a
+      # literal `$ci$` inside the text, a truncated last line.
+      #
+      # Three gates. The plan's counts pin the gate. The grep pins the one
+      # thing no database check can see: the captured `description` never
+      # leaves the tool (Phase 35a — linked, not reproduced). The SQL imports
+      # both batch files, asserts the rows field by field, applies them AGAIN
+      # and asserts nothing changed — then rolls back. `--batch=3` is part of
+      # that file's contract (five documents, exactly two files).
+      # ------------------------------------------------------------------
+      - name: Corpus importer — committed fixture, end to end
+        run: |
+          dart run tool/corpus_import.dart plan --corpus=corpus/_fixtures | tee /tmp/corpus_plan.txt
+          grep -qx 'would import    5  from 2 source(s)' /tmp/corpus_plan.txt || {
+            echo "::error::corpus_import plan over corpus/_fixtures no longer keeps 5 documents from 2 sources"
+            exit 1
+          }
+          rm -rf corpus/_import_fixture
+          dart run tool/corpus_import.dart gen --corpus=corpus/_fixtures --out=corpus/_import_fixture --batch=3
+          if grep -q 'FIXTURE-PROSE-MUST-NOT-IMPORT' corpus/_import_fixture/*.sql; then
+            echo "::error::a captured description reached the generated import SQL"
+            exit 1
+          fi
+          $PSQL "$DB_URL" -o /dev/null -f supabase/tests/corpus_import_fixture.sql
+
       # Re-runs the assertions read-only against the population built by the
       # fixtures step, so the log names them as their own gate rather than
       # burying them in the apply above. The preset rationale lives with the
@@ -263,6 +297,11 @@ jobs:
       # ------------------------------------------------------------------
       - name: RLS matrix — after the upgrade path
         run: dart run tool/db.dart rls
+
+      # `import_recipe` on the UPGRADED schema. The files are the ones the
+      # fixture step generated; the test rolls back, as before.
+      - name: Corpus importer — after the upgrade path
+        run: $PSQL "$DB_URL" -o /dev/null -f supabase/tests/corpus_import_fixture.sql
 
       - name: Simulated population — rebuilt on the upgraded schema
         run: |

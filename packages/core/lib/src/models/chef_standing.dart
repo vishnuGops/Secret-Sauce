@@ -7,7 +7,12 @@ import 'package:core/src/models/enums.dart';
 part 'chef_standing.freezed.dart';
 part 'chef_standing.g.dart';
 
-/// One row of the `chefs_leaderboard(p_limit, p_offset)` RPC.
+/// One row of the `chefs_leaderboard(p_limit, p_offset)` RPC — and of
+/// `chef_standing(p_chef)`, which returns the same shape for one chef.
+///
+/// `chefs_leaderboard_windowed` returns this shape too, plus six window columns
+/// (see `ChefWindowStanding`). On a windowed row [chefRank] is the rank **in
+/// the window**, not the all-time rank.
 ///
 /// [chefRank] is a `dense_rank()` over `chef_score`, so tied chefs share a rank
 /// and the sequence has no gaps. The board only lists chefs with at least one
@@ -31,6 +36,11 @@ class ChefStanding with _$ChefStanding {
     @JsonKey(name: 'total_likes') @Default(0) int totalLikes,
     @JsonKey(name: 'total_saves') @Default(0) int totalSaves,
     @JsonKey(name: 'total_views') @Default(0) int totalViews,
+    // The profile's join date (Phase 33). `chefs_leaderboard`, `chef_standing`
+    // and `chefs_leaderboard_windowed` all return it, in lockstep, so the `New`
+    // sort and the `joined <month year>` line read it off the row they already
+    // have. Nullable so a row from an older server still decodes.
+    @JsonKey(name: 'created_at') DateTime? createdAt,
   }) = _ChefStanding;
 
   factory ChefStanding.fromJson(Map<String, dynamic> json) =>

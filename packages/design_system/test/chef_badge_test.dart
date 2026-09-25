@@ -125,6 +125,25 @@ void main() {
       expect(find.text('Head Chef'), findsOneWidget);
     });
 
+    // B118: a captured byline is browsable, never ranked, so the badge must
+    // not print the `Home Cook` the column defaults to.
+    testWidgets('fromProfile drops the tier for an imported chef', (
+      tester,
+    ) async {
+      const profile = Profile(
+        id: 'i1',
+        displayName: 'Joss Dyckson',
+        kind: ProfileKind.imported,
+      );
+      for (final compact in [false, true]) {
+        await tester.pumpWidget(
+          _wrap(ChefBadge.fromProfile(profile, compact: compact), width: 320),
+        );
+        expect(find.text('Joss Dyckson'), findsOneWidget);
+        expect(find.byType(TierChip), findsNothing);
+      }
+    });
+
     // The avatar-URL branch. No seeded profile carries an `avatar_url`
     // (a standing BL-5 limit), so initials are what every screenshot and every
     // other test has ever rendered — this is the only thing that walks the

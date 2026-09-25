@@ -89,6 +89,27 @@ class _FakeChefRepository implements ChefRepository {
 
   @override
   Future<Map<ChefTier, int>> tierCounts() async => const {};
+
+  // Phase 33's board sorts and windowed rails. Empty is the honest answer for
+  // a fake with no chefs; nothing here asserts on the board's contents.
+  @override
+  Future<List<ChefStanding>> newest({int limit = 50, int offset = 0}) async =>
+      const [];
+
+  @override
+  Future<List<ChefWindowStanding>> windowedLeaderboard({
+    required int days,
+    int limit = 50,
+    int offset = 0,
+    DateTime? since,
+  }) async => const [];
+
+  @override
+  Future<ChefWindowStats?> windowStats(
+    String chefId, {
+    required int days,
+    DateTime? since,
+  }) async => null;
 }
 
 Future<GoRouter> _pumpAt(

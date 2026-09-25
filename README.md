@@ -444,7 +444,7 @@ melos run db:hosted:check                     # READ-ONLY. What does hosted lack
 melos run db:backup -- --docker --out=D:ackups\secret-sauce   # the only undo (no PITR)
 melos run db:hosted:deploy -- --docker --yes  # bring it up to the repo
 melos run db:hosted:check                     # prove it
-melos run db:rls                              # 177 checks as a signed-in user
+melos run db:rls                              # 186 checks as a signed-in user
 ```
 
 `db:hosted:check` builds a **fresh reference database** from the repo — every migration, then
@@ -565,6 +565,11 @@ melos run build:apk:split   # per-ABI APKs (arm64 is ~20 MB) under the same fold
 melos run build:appbundle   # -> ...outputs/bundle/release/app-release.aab (Play Store)
 ```
 
+`url_launcher` is a **direct** app dependency since 2026-09-24 (the recipe-detail attribution
+block's "Read the original" link). It was already in the lockfile through `supabase_flutter`, so
+it adds no plugin, and it needs no Android `<queries>` or iOS `LSApplicationQueriesSchemes`
+entry: the `Link` widget calls `launchUrl` directly and never `canLaunchUrl`.
+
 Install the APK on a phone:
 
 - **Copy & sideload:** transfer `app-release.apk` (USB / Drive / chat) → tap it → allow
@@ -617,6 +622,8 @@ Phase 35c added one deliberate path from it into a database:
 ```powershell
 melos run corpus:import:plan   # what the curated English-first tier would import (no database)
 melos run corpus:import:gen    # -> corpus/_import/*.sql (git-ignored), 500 recipes per file
+melos run corpus:import:fixture  # the committed corpus/_fixtures/ shard -> corpus/_import_fixture/
+                                 #   (CI then runs supabase/tests/corpus_import_fixture.sql over it)
 ```
 
 Applying those files is a **separate, manual** step, so the tool that reads the corpus never holds

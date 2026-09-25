@@ -1,0 +1,65 @@
+{
+  "slug": "portuguese-caldo-verde",
+  "title": "Caldo Verde",
+  "description": "Smooth potato soup with ribbons of collard greens cut fine as grass, served with slices of smoky chouriço and a thread of olive oil.",
+  "cuisine": "Portuguese",
+  "category": "Soup",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 35,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Kale works if you cannot find collards. Spanish chorizo is a fair stand-in for chouriço.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 4, "unit": "tbsp", "name": "olive oil", "note": "divided", "food": "olive-oil" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "chopped", "food": "onion" },
+        { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "sliced", "food": "garlic" },
+        { "quantity": 800, "unit": "g", "name": "floury potatoes", "note": "peeled, chunked" },
+        { "quantity": 1.5, "unit": "L", "name": "water", "food": "water" },
+        { "quantity": 1.5, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 250, "unit": "g", "name": "chouriço", "note": "thinly sliced" },
+        { "quantity": 300, "unit": "g", "name": "collard greens", "note": "stems removed" },
+        { "quantity": 0.5, "unit": "tsp", "name": "black pepper", "food": "black-pepper" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Soften the onion and garlic in half the olive oil.",
+          "duration_minutes": 8,
+          "temperature": "medium"
+        },
+        {
+          "text": "Add the potatoes, water, and salt and simmer until the potatoes collapse.",
+          "duration_minutes": 20
+        },
+        {
+          "text": "Blend until completely smooth."
+        },
+        {
+          "text": "Meanwhile, fry the chouriço slices in a dry pan until the fat runs.",
+          "duration_minutes": 5
+        },
+        {
+          "text": "Roll the collard greens into a tight cigar and slice as thinly as you can, then add them to the simmering soup and cook just until bright green.",
+          "duration_minutes": 3,
+          "tip": "The ribbons should be like fine grass. Thick strips make a cabbage soup."
+        },
+        {
+          "text": "Serve with a few slices of chouriço in each bowl, a thread of the remaining olive oil, and black pepper."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.1,
+    "variant_titles": ["Weeknight {title}", "Vegetarian {title}"]
+  }
+}

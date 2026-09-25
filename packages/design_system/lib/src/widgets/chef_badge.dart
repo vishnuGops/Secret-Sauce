@@ -22,7 +22,7 @@ class ChefBadge extends StatelessWidget {
   const ChefBadge({
     super.key,
     required this.name,
-    required this.tier,
+    this.tier,
     this.avatarUrl,
     this.compact = false,
     this.onSurfaceImage = false,
@@ -39,7 +39,10 @@ class ChefBadge extends StatelessWidget {
   }) => ChefBadge(
     key: key,
     name: profile.displayName,
-    tier: profile.chefTier,
+    // An imported chef is browsable, never ranked (Phase 35b), so it carries
+    // no tier to print — `Home Cook` on a captured byline reads as a ranking
+    // the leaderboard deliberately never gave it (B118).
+    tier: profile.kind.isImported ? null : profile.chefTier,
     avatarUrl: profile.avatarUrl,
     compact: compact,
     onSurfaceImage: onSurfaceImage,
@@ -47,7 +50,9 @@ class ChefBadge extends StatelessWidget {
   );
 
   final String name;
-  final ChefTier tier;
+
+  /// Null hides the chip: an imported chef has no standing (B118).
+  final ChefTier? tier;
   final String? avatarUrl;
   final bool compact;
 
@@ -83,12 +88,14 @@ class ChefBadge extends StatelessWidget {
                         : theme.textTheme.titleMedium)
                     ?.copyWith(fontWeight: FontWeight.w700, color: nameColor),
               ),
-              const SizedBox(height: 2),
               // The tier sits under the name, per the product requirement.
               // `onSurfaceImage` has to reach the chip too (B055) — the badge
               // was passing it to the name only, so on a cover photo the name
               // went white and the tier stayed in its light-surface shade.
-              TierChip(tier: tier, dense: compact, onImage: onSurfaceImage),
+              if (tier case final tier?) ...[
+                const SizedBox(height: 2),
+                TierChip(tier: tier, dense: compact, onImage: onSurfaceImage),
+              ],
             ],
           ),
         ),

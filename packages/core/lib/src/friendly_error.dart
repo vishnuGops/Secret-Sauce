@@ -72,6 +72,14 @@ String _postgrest(PostgrestException e) {
     // built against a schema the project has not had applied yet.
     case 'PGRST202':
       return 'This feature is not available on the server yet.';
+    // A `raise exception` from our own SQL. Only messages this file names are
+    // translated; any other P0001 is a message written for a developer.
+    case 'P0001':
+      if (e.message == 'profile claim limit reached') {
+        return 'You already have the most claims open that we allow. Wait for '
+            'one to be reviewed, then try again.';
+      }
+      return _generic;
     default:
       return _generic;
   }

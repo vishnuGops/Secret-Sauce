@@ -1,0 +1,80 @@
+{
+  "slug": "cuban-ropa-vieja",
+  "title": "Ropa Vieja",
+  "description": "Flank steak simmered until it falls into threads, then stewed in a sofrito of peppers, tomato, and wine with green olives. Named for the old clothes it resembles.",
+  "cuisine": "Cuban",
+  "category": "Main",
+  "difficulty": "easy",
+  "prep_minutes": 20,
+  "cook_minutes": 180,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Serve with white rice, black beans, and fried sweet plantains. Better the next day.",
+  "ingredient_groups": [
+    {
+      "name": "Beef",
+      "ingredients": [
+        { "quantity": 1.2, "unit": "kg", "name": "flank steak" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "halved", "food": "onion" },
+        { "quantity": 1, "unit": null, "name": "bay leaf" },
+        { "quantity": 2, "unit": "L", "name": "water", "food": "water" }
+      ]
+    },
+    {
+      "name": "Sofrito",
+      "ingredients": [
+        { "quantity": 3, "unit": "tbsp", "name": "olive oil", "food": "olive-oil" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "sliced", "food": "onion" },
+        { "quantity": 1, "unit": null, "name": "red bell pepper", "note": "in strips", "food": "red-bell-pepper" },
+        { "quantity": 1, "unit": null, "name": "green bell pepper", "note": "in strips" },
+        { "quantity": 4, "unit": "cloves", "name": "garlic", "note": "minced", "food": "garlic" },
+        { "quantity": 2, "unit": "tsp", "name": "cumin", "note": "ground" },
+        { "quantity": 1, "unit": "tsp", "name": "dried oregano" },
+        { "quantity": 125, "unit": "ml", "name": "dry white wine" },
+        { "quantity": 400, "unit": "g", "name": "tomato passata", "food": "tomato-passata" },
+        { "quantity": 80, "unit": "g", "name": "pimento-stuffed green olives", "note": "halved" },
+        { "quantity": 1, "unit": "tbsp", "name": "capers", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Beef",
+      "steps": [
+        {
+          "text": "Simmer the flank steak with the halved onion and bay leaf in the water until it pulls apart easily.",
+          "duration_minutes": 150,
+          "temperature": "low",
+          "tip": "Keep the cooking liquid. A cup of it goes into the sauce and the rest makes a fine soup."
+        },
+        {
+          "text": "Cool slightly, then shred the beef along the grain with two forks."
+        }
+      ]
+    },
+    {
+      "name": "Sofrito",
+      "steps": [
+        {
+          "text": "Cook the sliced onion and both peppers in the olive oil until soft.",
+          "duration_minutes": 10,
+          "temperature": "medium"
+        },
+        {
+          "text": "Add the garlic, cumin, and oregano for a minute, then the white wine, passata, and 250 ml of the beef cooking liquid.",
+          "duration_minutes": 2
+        },
+        {
+          "text": "Stir in the shredded beef, olives, and capers and simmer until the sauce thickens around the meat.",
+          "duration_minutes": 20,
+          "temperature": "low"
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1,
+    "variant_titles": ["Slow-Cooker {title}", "Havana {title}"]
+  }
+}

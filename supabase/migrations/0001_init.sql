@@ -4836,3 +4836,85 @@ begin
     execute 'revoke execute on function reject_profile_claim(uuid, text) from anon, authenticated';
   end if;
 end $$;
+
+-- ----------------------------------------------------------------------------
+-- The pending-claim cap (Phase 35c)
+-- ----------------------------------------------------------------------------
+-- `profile_claims_one_pending_idx` stops one account filing the same claim
+-- twice, and nothing stopped it filing against every imported profile there
+-- is: a loop over `/chef/:id` could open a claim on each of the corpus's
+-- bylines, and every one of them lands in a review queue that a person works
+-- through by hand. So an account may hold at most `profile_claim_pending_cap()`
+-- claims that are still PENDING. A decided claim — approved or rejected — frees
+-- its slot, because the cap bounds the reviewer's queue, not a person's
+-- history: a chef whose first claim was rejected for thin evidence has to be
+-- able to file again.
+--
+-- **Why 5.** The legitimate reason to hold more than one is a real person who
+-- appears under several bylines, and the corpus says how many that is: of the
+-- imported profiles on the local stack (2026-09-24), the most any one display
+-- name repeats is 4, and a named chef who writes for several publishers (one
+-- appears under 3 of them) is the shape that matters. 5 covers that with a
+-- spare, and turns "every imported profile" into five rows per account.
+-- It is not a defence against an attacker with many accounts — signup is that
+-- axis, and it is not this table's to close — it is what makes one account
+-- unable to flood the queue.
+--
+-- **A trigger, not a clause in `claims_insert`,** for three reasons. A policy
+-- refusal is an anonymous 42501, indistinguishable from "you may not claim
+-- that profile", where this one has a reason a UI can show. A policy subquery
+-- is racy: two concurrent inserts each count the other's row as invisible and
+-- both pass. And an AFTER trigger fires only for a row that has already passed
+-- `claims_insert`'s `with check` (Postgres enforces it before queueing after
+-- triggers), so a refused insert — filing as somebody else, say — never
+-- reaches the count, and the cap cannot be used to probe how many claims
+-- ANOTHER account has open.
+--
+-- The advisory lock is keyed on the claimant, so it serialises one account's
+-- filings against each other and nobody else's. Under READ COMMITTED (what
+-- PostgREST runs) the count after the lock takes a fresh snapshot, so it sees
+-- a concurrent filing that committed while this one waited.
+--
+-- `security definer` so the count reads every pending claim of the claimant's
+-- whatever `claims_select` says: the cap must not quietly loosen the day that
+-- policy is narrowed. It reads one account's rows and writes nothing.
+create or replace function profile_claim_pending_cap()
+returns int language sql immutable as $$ select 5 $$;
+
+create or replace function on_profile_claim_cap()
+returns trigger language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_pending int;
+begin
+  perform pg_advisory_xact_lock(
+    hashtextextended('profile_claims:' || new.claimant_auth_user_id::text, 0));
+
+  select count(*) into v_pending
+  from profile_claims
+  where claimant_auth_user_id = new.claimant_auth_user_id
+    and status = 'pending';
+
+  -- `>`, not `>=`: this is an AFTER trigger, so the row being filed is already
+  -- in the count.
+  if v_pending > profile_claim_pending_cap() then
+    raise exception 'profile claim limit reached'
+      using errcode = 'P0001',
+            detail  = format('An account may have at most %s pending profile claims at once.',
+                             profile_claim_pending_cap()),
+            hint    = 'Wait for one of your pending claims to be reviewed, then file again.';
+  end if;
+  return null;
+end;
+$$;
+
+-- `update of status` as well as insert, so a reviewer re-opening a decided
+-- claim by hand is held to the same cap as a new filing. The WHEN clause keeps
+-- every approve/reject — the only other updates this table sees — out of it.
+drop trigger if exists profile_claims_pending_cap on profile_claims;
+create trigger profile_claims_pending_cap
+  after insert or update of status on profile_claims
+  for each row when (new.status = 'pending')
+  execute function on_profile_claim_cap();

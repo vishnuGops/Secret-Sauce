@@ -1,0 +1,70 @@
+{
+  "slug": "danish-aebleskiver",
+  "title": "Æbleskiver",
+  "description": "Round, puffy Danish pancakes turned with a knitting needle in a special dimpled pan, scented with cardamom and eaten hot with jam. Makes about 28.",
+  "cuisine": "Danish",
+  "category": "Dessert",
+  "difficulty": "medium",
+  "prep_minutes": 15,
+  "cook_minutes": 25,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "You need an æbleskiver pan — cast iron with seven round wells. A takoyaki pan works too.",
+  "ingredient_groups": [
+    {
+      "name": "Batter",
+      "ingredients": [
+        { "quantity": 250, "unit": "g", "name": "all-purpose flour", "food": "all-purpose-flour" },
+        { "quantity": 1, "unit": "tsp", "name": "baking powder", "food": "baking-powder" },
+        { "quantity": 0.5, "unit": "tsp", "name": "baking soda", "food": "baking-soda" },
+        { "quantity": 1, "unit": "tbsp", "name": "sugar", "food": "granulated-sugar" },
+        { "quantity": 0.5, "unit": "tsp", "name": "cardamom", "note": "ground" },
+        { "quantity": 0.25, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 3, "unit": null, "name": "eggs", "note": "separated", "food": "egg" },
+        { "quantity": 400, "unit": "ml", "name": "buttermilk", "food": "buttermilk" },
+        { "quantity": 50, "unit": "g", "name": "butter", "note": "melted, plus more for the pan", "food": "butter" },
+        { "quantity": 1, "unit": "tsp", "name": "lemon zest", "food": "lemon-zest" }
+      ]
+    },
+    {
+      "name": "To serve",
+      "ingredients": [
+        { "quantity": 3, "unit": "tbsp", "name": "powdered sugar" },
+        { "quantity": 150, "unit": "g", "name": "raspberry jam" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Whisk the flour, baking powder, baking soda, sugar, cardamom, and salt. Beat in the egg yolks, buttermilk, melted butter, and lemon zest to a smooth batter."
+        },
+        {
+          "text": "Whisk the egg whites to stiff peaks and fold them in.",
+          "tip": "The whites are what make them hollow and light. Fold, do not stir."
+        },
+        {
+          "text": "Heat the pan and brush each well with butter. Fill each almost to the top.",
+          "duration_minutes": 3,
+          "temperature": "medium"
+        },
+        {
+          "text": "As the edges set, turn each ball a quarter-turn with a knitting needle or skewer, letting the raw batter run into the well, and keep turning until round and golden all over.",
+          "duration_minutes": 20,
+          "temperature": "medium",
+          "tip": "The quarter-turn is the whole technique. The first batch is always lopsided."
+        },
+        {
+          "text": "Dust with powdered sugar and serve hot with the raspberry jam for dipping."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.7,
+    "variant_titles": ["Christmas {title}", "Apple-Filled {title}"]
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "slug": "thai-tom-yum-goong",
+  "title": "Tom Yum Goong",
+  "description": "A hot and sour prawn soup — lemongrass, galangal, and lime leaf in a quick shell stock, sharpened with lime and chilli jam.",
+  "cuisine": "Thai",
+  "category": "Soup",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 20,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Stir in 100 ml of evaporated milk at the end for the creamy nam khon version.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "large prawns", "note": "shell-on" },
+        { "quantity": 1, "unit": "L", "name": "water", "food": "water" },
+        { "quantity": 3, "unit": "stalks", "name": "lemongrass", "note": "bruised, in 5 cm lengths" },
+        { "quantity": 5, "unit": "slices", "name": "galangal" },
+        { "quantity": 6, "unit": null, "name": "makrut lime leaves", "note": "torn" },
+        { "quantity": 200, "unit": "g", "name": "oyster mushrooms", "note": "torn" },
+        { "quantity": 3, "unit": null, "name": "bird's eye chillies", "note": "bruised" },
+        { "quantity": 3, "unit": "tbsp", "name": "fish sauce" },
+        { "quantity": 2, "unit": "tbsp", "name": "nam prik pao", "note": "Thai chilli jam" },
+        { "quantity": 4, "unit": "tbsp", "name": "lime juice" },
+        { "quantity": 1, "unit": "handful", "name": "cilantro", "note": "leaves", "food": "coriander" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Peel the prawns, keeping the tails on, and simmer the shells and heads in the water for a quick stock. Strain.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Add the lemongrass, galangal, and lime leaves and simmer to infuse.",
+          "duration_minutes": 5,
+          "tip": "None of these are eaten. They are there for fragrance and get pushed to the side of the bowl."
+        },
+        {
+          "text": "Add the oyster mushrooms and chillies, then the prawns, and cook just until they turn pink.",
+          "duration_minutes": 2
+        },
+        {
+          "text": "Off the heat, stir in the fish sauce, nam prik pao, and lime juice. Taste — sour first, then salty, then hot. Finish with cilantro.",
+          "tip": "Lime juice goes in off the heat. Boiled, it turns bitter."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.3,
+    "variant_titles": ["Creamy {title}", "Quick {title}"]
+  }
+}

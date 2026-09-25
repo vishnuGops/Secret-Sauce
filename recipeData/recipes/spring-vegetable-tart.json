@@ -28,7 +28,7 @@
     {
       "name": "Crust",
       "ingredients": [
-        { "quantity": 1.25, "unit": "cup", "name": "organic unbleached wheat flour", "food": "unbleached-flour" },
+        { "quantity": 1.25, "unit": "cups", "name": "organic unbleached wheat flour", "food": "unbleached-flour" },
         { "quantity": 0.5, "unit": "tsp", "name": "kosher salt", "food": "kosher-salt" },
         { "quantity": 6, "unit": "tbsp", "name": "butter", "note": "cold, cut into 1/2-inch cubes", "food": "butter" },
         { "quantity": 3, "unit": "tbsp", "name": "ice water", "note": "start with 2 Tbsp and add as needed", "food": "water" }

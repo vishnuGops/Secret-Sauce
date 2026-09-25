@@ -1,0 +1,86 @@
+{
+  "slug": "chinese-scallion-pancakes",
+  "title": "Scallion Pancakes",
+  "description": "Flaky, layered flatbreads of hot-water dough rolled with oil and green onion, pan-fried and scrunched to open the layers.",
+  "cuisine": "Chinese",
+  "category": "Snack",
+  "difficulty": "medium",
+  "prep_minutes": 40,
+  "cook_minutes": 20,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Shaped, uncooked pancakes freeze well between sheets of paper. Cook from frozen.",
+  "ingredient_groups": [
+    {
+      "name": "Dough",
+      "ingredients": [
+        { "quantity": 300, "unit": "g", "name": "all-purpose flour", "food": "all-purpose-flour" },
+        { "quantity": 120, "unit": "ml", "name": "boiling water", "food": "water" },
+        { "quantity": 60, "unit": "ml", "name": "cold water", "food": "water" }
+      ]
+    },
+    {
+      "name": "Filling",
+      "ingredients": [
+        { "quantity": 3, "unit": "tbsp", "name": "neutral oil", "note": "plus more for frying", "food": "canola-oil" },
+        { "quantity": 1, "unit": "tbsp", "name": "flour", "food": "all-purpose-flour" },
+        { "quantity": 1, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 0.5, "unit": "tsp", "name": "five-spice powder", "is_optional": true },
+        { "quantity": 6, "unit": null, "name": "green onions", "note": "finely sliced", "food": "green-onions" }
+      ]
+    },
+    {
+      "name": "Dipping sauce",
+      "ingredients": [
+        { "quantity": 2, "unit": "tbsp", "name": "soy sauce", "food": "tamari" },
+        { "quantity": 1, "unit": "tbsp", "name": "black vinegar" },
+        { "quantity": 1, "unit": "tsp", "name": "chilli oil", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Dough",
+      "steps": [
+        {
+          "text": "Stir the boiling water into the flour with chopsticks, then add the cold water and knead to a soft, smooth dough. Rest it covered.",
+          "duration_minutes": 30,
+          "tip": "Hot water weakens some of the gluten — that is why these are tender rather than chewy."
+        }
+      ]
+    },
+    {
+      "name": "Shape",
+      "steps": [
+        {
+          "text": "Mix the oil, flour, salt, and five-spice into a paste."
+        },
+        {
+          "text": "Roll a quarter of the dough into a thin rectangle, spread with a quarter of the paste, scatter with green onions, and roll up like a cigar. Coil the rope into a snail, tuck the end under, and rest.",
+          "duration_minutes": 15
+        },
+        {
+          "text": "Roll each snail gently into an 18 cm pancake."
+        }
+      ]
+    },
+    {
+      "name": "Cook",
+      "steps": [
+        {
+          "text": "Pan-fry in a little oil until golden and crisp on both sides.",
+          "duration_minutes": 6,
+          "temperature": "medium"
+        },
+        {
+          "text": "Scrunch the hot pancake from the sides with two spatulas to open up the layers, then cut into wedges and serve with the soy sauce, black vinegar, and chilli oil mixed together."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1,
+    "variant_titles": ["Flaky {title}", "Street-Stall {title}"]
+  }
+}

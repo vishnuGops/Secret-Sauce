@@ -1,0 +1,59 @@
+{
+  "slug": "irish-colcannon",
+  "title": "Colcannon",
+  "description": "Buttery mashed potato with savoy cabbage and green onions warmed in milk, served with a pool of melting butter in the middle.",
+  "cuisine": "Irish",
+  "category": "Side",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 25,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Kale is the other traditional green. Leftovers fry into excellent potato cakes.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 1.2, "unit": "kg", "name": "floury potatoes", "note": "peeled, halved" },
+        { "quantity": 1, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 100, "unit": "g", "name": "butter", "note": "plus more to serve", "food": "butter" },
+        { "quantity": 300, "unit": "g", "name": "savoy cabbage", "note": "finely shredded" },
+        { "quantity": 200, "unit": "ml", "name": "whole milk", "food": "whole-milk" },
+        { "quantity": 4, "unit": null, "name": "green onions", "note": "sliced", "food": "green-onions" },
+        { "quantity": 0.5, "unit": "tsp", "name": "black pepper", "food": "black-pepper" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Boil the potatoes in salted water until tender, then drain and leave them to steam dry.",
+          "duration_minutes": 20
+        },
+        {
+          "text": "Meanwhile, melt a third of the butter and cook the savoy cabbage until wilted and sweet.",
+          "duration_minutes": 6,
+          "temperature": "medium"
+        },
+        {
+          "text": "Warm the milk with the green onions for a couple of minutes.",
+          "duration_minutes": 3
+        },
+        {
+          "text": "Mash the potatoes with the remaining butter, beat in the hot milk and onions, and fold through the cabbage. Season with the salt and pepper.",
+          "tip": "Hot milk into hot potato. Cold milk makes it gluey."
+        },
+        {
+          "text": "Serve with a well in the middle and a knob of butter melting into it."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1,
+    "variant_titles": ["{title} with Kale", "Halloween {title}"]
+  }
+}

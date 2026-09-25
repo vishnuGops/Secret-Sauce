@@ -70,6 +70,41 @@ const double kRecipeCardBannerMaxScale = 2.0;
 /// their maximum.
 const double kRecipeCardMaxWidth = 340;
 
+/// Most columns a recipe grid ever lays out, however wide the window (B049).
+///
+/// **6, because that is what a 1920px window already packs** — the widest
+/// common desktop viewport, (1920 − 32 + 16) ÷ (288 + 16) = 6.26. So the cap
+/// changes nothing on any window up to full HD, and past it the extra width
+/// becomes a centred gutter instead of a seventh … twelfth column: a 3840px
+/// window used to lay out twelve cards per row, a wall no reader scans as a
+/// row. The widest a grid row can get is therefore
+/// `6 × kRecipeCardMaxWidth + 5 × 16` = 2120px, which is still wider than any
+/// other page in the app (recipe detail measures 1140).
+///
+/// A column **count** rather than a pixel width on purpose: the cards already
+/// cap their own width, so a count is the one number that says how much a row
+/// holds, and it cannot leave a row one tile short of full the way a width cap
+/// that is not a multiple of a tile can.
+const int kRecipeGridMaxColumns = 6;
+
+/// Above this text scale the card drops its description (B049).
+///
+/// The card is a fixed-height tile, and its contract scale is 2.0×. Past that
+/// the banner (two lines of `titleMedium`) and the footer (two lines of
+/// description over the metadata row) together outgrow [kRecipeCardHeight] and
+/// the cover — the only flexible band — has nothing left to give, which was a
+/// 13px `RenderFlex` overflow at 3.0× (iOS accessibility sizes reach it).
+///
+/// The fix degrades rather than grows. Growing the tile would make
+/// `kRecipeCardHeight` a function of text scale and `mainAxisExtent` with it,
+/// in every grid and every shelf, to preserve the one line on the card a reader
+/// can do without: the description is a teaser for the page one tap away, the
+/// title and the time / rating / difficulty row are what a card is *for*, and
+/// the corpus's imported recipes carry no description at all — so a card
+/// without one is already an ordinary state, not a broken one. The divider
+/// above the metadata row goes with it, because it separated the two.
+const double kRecipeCardDescriptionMaxScale = 2.0;
+
 /// The primary recipe tile used on Discover and My Recipes (v2 layout).
 ///
 /// Top to bottom: a **title banner** on `colorScheme.primary`, the cover image,
@@ -85,6 +120,9 @@ const double kRecipeCardMaxWidth = 340;
 /// The banner is a fixed band and the footer is intrinsic; the cover is the
 /// only flexible child, so text-scale growth eats cover height instead of
 /// overflowing (B001/B002/B016 all came from a card row that could not shrink).
+/// Past the 2.0× contract the cover alone cannot absorb it, so the description
+/// yields too ([kRecipeCardDescriptionMaxScale], B049) and the tile stays
+/// [kRecipeCardHeight] tall at 3.0×.
 class RecipeCard extends StatelessWidget {
   const RecipeCard({
     super.key,
@@ -128,6 +166,12 @@ class RecipeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final scheme = Theme.of(context).colorScheme;
+    // B049: past the contract scale the description yields its two lines so
+    // the fixed-height tile still fits — see the constant. Keyed on the scale
+    // alone, never on whether this recipe *has* a description: an empty one
+    // still holds its line below the limit, so a described and an undescribed
+    // card side by side keep the same cover height (B047's rule).
+    final showDescription = context.textScale <= kRecipeCardDescriptionMaxScale;
 
     return SizedBox(
       // Tight height so the cover's Expanded always has a bound, including in
@@ -176,22 +220,32 @@ class RecipeCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      recipe.description,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: textTheme.bodySmall?.copyWith(
-                        color: scheme.onSurfaceVariant,
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 6),
-                      padding: const EdgeInsets.only(top: 10),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          top: BorderSide(color: scheme.outlineVariant),
+                    if (showDescription)
+                      Text(
+                        recipe.description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: textTheme.bodySmall?.copyWith(
+                          color: scheme.onSurfaceVariant,
                         ),
                       ),
+                    Container(
+                      margin:
+                          showDescription
+                              ? const EdgeInsets.only(top: 6)
+                              : EdgeInsets.zero,
+                      padding:
+                          showDescription
+                              ? const EdgeInsets.only(top: 10)
+                              : EdgeInsets.zero,
+                      decoration:
+                          showDescription
+                              ? BoxDecoration(
+                                border: Border(
+                                  top: BorderSide(color: scheme.outlineVariant),
+                                ),
+                              )
+                              : null,
                       // The badge takes its intrinsic width, capped at half the
                       // row; the time + rating group takes everything left over
                       // and ellipsizes inside it. Two flex children instead

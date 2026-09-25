@@ -1,0 +1,72 @@
+{
+  "slug": "french-bearnaise",
+  "title": "Béarnaise Sauce",
+  "description": "Warm butter emulsified into egg yolks and a sharp tarragon-shallot reduction. The sauce for steak frites.",
+  "cuisine": "French",
+  "category": "Sauce",
+  "difficulty": "hard",
+  "prep_minutes": 10,
+  "cook_minutes": 15,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "It holds for an hour in a warm (not hot) place — a thermos is the restaurant trick. If it splits, whisk a spoon of it into a fresh yolk and add the rest slowly.",
+  "ingredient_groups": [
+    {
+      "name": "Reduction",
+      "ingredients": [
+        { "quantity": 60, "unit": "ml", "name": "white wine vinegar" },
+        { "quantity": 60, "unit": "ml", "name": "dry white wine" },
+        { "quantity": 1, "unit": null, "name": "shallot", "note": "finely chopped" },
+        { "quantity": 5, "unit": null, "name": "black peppercorns", "note": "crushed" },
+        { "quantity": 2, "unit": "tbsp", "name": "tarragon", "note": "chopped, divided" }
+      ]
+    },
+    {
+      "name": "Sauce",
+      "ingredients": [
+        { "quantity": 3, "unit": null, "name": "egg yolks", "food": "egg-yolk" },
+        { "quantity": 200, "unit": "g", "name": "butter", "note": "clarified and warm", "food": "butter" },
+        { "quantity": 0.25, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 1, "unit": "tbsp", "name": "chervil", "note": "chopped", "is_optional": true }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Reduction",
+      "steps": [
+        {
+          "text": "Simmer the white wine vinegar, white wine, shallot, peppercorns, and half the tarragon until reduced to about 2 tablespoons.",
+          "duration_minutes": 8,
+          "temperature": "medium",
+          "tip": "Reduce it properly. Too much liquid left and the sauce is sharp and thin."
+        },
+        {
+          "text": "Strain and cool slightly."
+        }
+      ]
+    },
+    {
+      "name": "Emulsify",
+      "steps": [
+        {
+          "text": "Whisk the reduction with the egg yolks in a heatproof bowl over barely simmering water until thick and pale and the whisk leaves trails.",
+          "duration_minutes": 4,
+          "temperature": "low",
+          "tip": "If the yolks start to scramble at the edges, lift the bowl off the heat and keep whisking."
+        },
+        {
+          "text": "Off the heat, whisk in the warm clarified butter in a thin stream until thick and glossy."
+        },
+        {
+          "text": "Season with salt and stir in the remaining tarragon and the chervil. Serve warm, never hot."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.6,
+    "variant_titles": ["Steakhouse {title}", "Classic {title}"]
+  }
+}

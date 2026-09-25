@@ -1,0 +1,101 @@
+{
+  "slug": "indian-masala-dosa",
+  "title": "Masala Dosa",
+  "description": "Paper-thin fermented rice and lentil crêpes, crisp at the edges, folded around a turmeric potato filling. The South Indian breakfast.",
+  "cuisine": "Indian",
+  "category": "Breakfast",
+  "difficulty": "hard",
+  "prep_minutes": 40,
+  "cook_minutes": 40,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "The batter keeps four days in the fridge and gets pleasantly sourer. Serve with coconut chutney and sambar.",
+  "ingredient_groups": [
+    {
+      "name": "Batter",
+      "ingredients": [
+        { "quantity": 300, "unit": "g", "name": "idli rice", "note": "or parboiled rice" },
+        { "quantity": 100, "unit": "g", "name": "urad dal", "note": "split, skinned" },
+        { "quantity": 0.5, "unit": "tsp", "name": "fenugreek seeds" },
+        { "quantity": 1.5, "unit": "tsp", "name": "salt", "food": "kosher-salt" }
+      ]
+    },
+    {
+      "name": "Potato masala",
+      "ingredients": [
+        { "quantity": 600, "unit": "g", "name": "potatoes", "note": "boiled and peeled" },
+        { "quantity": 2, "unit": "tbsp", "name": "neutral oil", "food": "canola-oil" },
+        { "quantity": 1, "unit": "tsp", "name": "mustard seeds" },
+        { "quantity": 10, "unit": null, "name": "curry leaves" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "sliced", "food": "onion" },
+        { "quantity": 2, "unit": null, "name": "green chillies", "note": "slit" },
+        { "quantity": 1, "unit": "tbsp", "name": "ginger", "note": "finely chopped", "food": "ginger" },
+        { "quantity": 0.5, "unit": "tsp", "name": "turmeric" },
+        { "quantity": 1, "unit": "tsp", "name": "salt", "food": "kosher-salt" }
+      ]
+    },
+    {
+      "name": "To cook",
+      "ingredients": [
+        { "quantity": 4, "unit": "tbsp", "name": "ghee" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Batter",
+      "steps": [
+        {
+          "text": "Rinse the idli rice, and separately the urad dal with the fenugreek seeds, then soak each in plenty of water.",
+          "duration_minutes": 300
+        },
+        {
+          "text": "Grind the dal to a light, fluffy paste and the rice slightly coarser, using as little water as possible. Mix together with the salt.",
+          "duration_minutes": 15,
+          "tip": "The dal should look like whipped cream. That air is what the fermentation builds on."
+        },
+        {
+          "text": "Cover and ferment in a warm place overnight, until risen and sour-smelling.",
+          "duration_minutes": 720,
+          "tip": "Below about 25°C it can take a full day. An oven with only its light on is warm enough."
+        }
+      ]
+    },
+    {
+      "name": "Potato masala",
+      "steps": [
+        {
+          "text": "Fry the mustard seeds in the neutral oil until they pop, then add the curry leaves, onion, green chillies, and ginger and cook until soft.",
+          "duration_minutes": 8,
+          "temperature": "medium"
+        },
+        {
+          "text": "Add the turmeric and salt, then the potatoes, roughly crushed, and a splash of water. Stir until it holds together loosely.",
+          "duration_minutes": 5
+        }
+      ]
+    },
+    {
+      "name": "Dosa",
+      "steps": [
+        {
+          "text": "Thin the batter with water to a pouring consistency. Heat a flat griddle, wipe it with a little ghee, and ladle batter into the centre, spreading it in a fast outward spiral with the back of the ladle.",
+          "temperature": "medium-high",
+          "tip": "If the batter sticks and will not spread, the griddle is too hot — sprinkle it with water and wipe."
+        },
+        {
+          "text": "Drizzle ghee around the edge and cook until the underside is golden and crisp and the edges lift.",
+          "duration_minutes": 3
+        },
+        {
+          "text": "Spoon potato masala down the middle, fold, and serve at once."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.7,
+    "variant_titles": ["Mysore {title}", "Sunday {title}"]
+  }
+}

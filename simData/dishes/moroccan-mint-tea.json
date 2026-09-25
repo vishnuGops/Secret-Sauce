@@ -1,0 +1,53 @@
+{
+  "slug": "moroccan-mint-tea",
+  "title": "Moroccan Mint Tea",
+  "description": "Gunpowder green tea brewed with a fistful of fresh spearmint and plenty of sugar, poured from a height into small glasses.",
+  "cuisine": "Moroccan",
+  "category": "Drink",
+  "difficulty": "easy",
+  "prep_minutes": 5,
+  "cook_minutes": 10,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Adjust the sugar down if you like, but in Morocco it is sweet.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 1, "unit": "tbsp", "name": "gunpowder green tea" },
+        { "quantity": 1, "unit": "L", "name": "water", "note": "boiling", "food": "water" },
+        { "quantity": 1, "unit": "bunch", "name": "spearmint", "note": "fresh" },
+        { "quantity": 4, "unit": "tbsp", "name": "sugar", "food": "granulated-sugar" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Rinse the gunpowder green tea in the pot with a little of the boiling water, swirl, and pour it away.",
+          "duration_minutes": 1,
+          "tip": "The rinse takes the harsh edge off. Moroccans call it washing the tea."
+        },
+        {
+          "text": "Add the spearmint and sugar, fill with the rest of the water, and simmer.",
+          "duration_minutes": 5,
+          "temperature": "low"
+        },
+        {
+          "text": "Pour a glass from a height and return it to the pot two or three times to mix.",
+          "tip": "Pouring from high aerates the tea and raises the foam that marks a good glass."
+        },
+        {
+          "text": "Serve in small glasses, poured from as high as you dare."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1,
+    "variant_titles": ["Marrakech {title}", "Sweet {title}"]
+  }
+}

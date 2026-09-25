@@ -43,6 +43,7 @@ class RecipeFormatOptions {
     this.allowSim = false,
     this.dollarTag = r'$sr$',
     this.foodSlugs,
+    this.units,
   });
 
   /// `sim` — generation hints for the population seed. simData only.
@@ -54,6 +55,11 @@ class RecipeFormatOptions {
   /// applied rather than per slug typo'd. Null skips the existence check (the
   /// key is still type-checked); both generators pass it.
   final Set<String>? foodSlugs;
+
+  /// The unit canon from nutritionData/units.json (via [loadUnitCanon]), so an
+  /// ingredient's `unit` spelling is linted (BL-8). Null skips the lint (the
+  /// key is still type-checked); both generators pass it.
+  final UnitCanon? units;
 
   /// Every string literal in the generated SQL is dollar-quoted with this tag
   /// and never escaped, so content containing it would terminate the literal
@@ -217,6 +223,105 @@ Set<String> loadFoodSlugs(String path) {
     for (final f in foods)
       if (f is Map && f['slug'] is String) f['slug'] as String,
   };
+}
+
+/// One registry unit as an AUTHORED recipe must spell it.
+class _CanonUnit {
+  const _CanonUnit(this.display, this.plural);
+
+  /// The singular, or the only form for an invariant unit (`tbsp`, `L`).
+  final String display;
+
+  /// The plural of a word unit (`cups`), null for an invariant one.
+  final String? plural;
+}
+
+/// The unit canon (BL-8): which spellings an authored `unit` may use.
+///
+/// The app prints `unit` verbatim (`formatText` is `'$amount $unit'`), so the
+/// spelling in a recipe file is the spelling a cook reads — and B094 showed it
+/// drifts one recipe at a time once nothing checks it. The canon lives in
+/// nutritionData/units.json beside the spellings it narrows, as `display` (+
+/// `plural` for a word unit), because it cannot be derived from them: key `l`
+/// displays as `L` (a lowercase l reads as a 1), and word units keep the
+/// plural a reader expects (`3 cloves`, never `3 clove`).
+///
+/// Resolution stays case-insensitive — that is what the estimator does — so a
+/// spelling can resolve and still be wrong: `Tbsp` resolves to `tbsp` and is
+/// an error here, because it prints as `Tbsp`.
+class UnitCanon {
+  const UnitCanon._(this._bySpelling, this._unresolvable);
+
+  /// Lowercased accepted spelling -> the unit it resolves to.
+  final Map<String, _CanonUnit> _bySpelling;
+
+  /// units.json `unresolvable`: spellings the estimator skips ON PURPOSE
+  /// (`pinch`, `handful`). Known, so not warned about — but still lowercase.
+  final Set<String> _unresolvable;
+}
+
+/// Reads nutritionData/units.json into a [UnitCanon] for
+/// [RecipeFormatOptions.units].
+///
+/// Exits on a malformed registry for the same reason [loadFoodSlugs] does: a
+/// unit with no `display` would turn every recipe that uses it into an error
+/// that points at the recipe, when the broken thing is the registry.
+UnitCanon loadUnitCanon(String path) {
+  final file = File(path);
+  if (!file.existsSync()) {
+    stderr.writeln('Missing unit registry: $path');
+    exit(1);
+  }
+  final decoded = jsonDecode(file.readAsStringSync());
+  final units = decoded is Map<String, dynamic> ? decoded['units'] : null;
+  if (units is! List) {
+    stderr.writeln('$path: expected a top-level "units" array');
+    exit(1);
+  }
+  Never fail(String msg) {
+    stderr.writeln('$path: $msg');
+    exit(1);
+  }
+
+  final bySpelling = <String, _CanonUnit>{};
+  for (final u in units) {
+    if (u is! Map) fail('every unit must be an object');
+    final key = u['key'];
+    final spellings = u['spellings'];
+    if (key is! String || spellings is! List) {
+      fail('every unit needs a string "key" and a "spellings" array');
+    }
+    final forms = spellings.whereType<String>().toSet();
+    // The bare-count marker: an authored unit is null there, never "", so
+    // there is nothing to display and nothing to resolve.
+    if (forms.every((s) => s.isEmpty)) continue;
+
+    final display = u['display'];
+    final plural = u['plural'];
+    if (display is! String || display.isEmpty) {
+      fail('units.$key has no "display" — the spelling authored recipes use');
+    }
+    if (plural != null && (plural is! String || plural.isEmpty)) {
+      fail('units.$key: "plural" must be a non-empty string when present');
+    }
+    for (final form in [display, if (plural is String) plural]) {
+      if (!forms.contains(form.toLowerCase())) {
+        fail(
+          'units.$key: display form "$form" does not resolve to one of its '
+          'own spellings',
+        );
+      }
+    }
+    final canon = _CanonUnit(display, plural as String?);
+    for (final s in forms) {
+      if (s.isNotEmpty) bySpelling[s] = canon;
+    }
+  }
+
+  final unresolvable = (decoded as Map<String, dynamic>)['unresolvable'];
+  return UnitCanon._(bySpelling, {
+    if (unresolvable is List) ...unresolvable.whereType<String>(),
+  });
 }
 
 /// Loads every `*.json` in [dir], sorted by filename so generated SQL is stable,
@@ -496,8 +601,11 @@ class _Validator {
         if (qty != null && (qty is! num || qty <= 0)) {
           _err(file, '$iat.quantity must be a positive number or null');
         }
-        if (item['unit'] != null && item['unit'] is! String) {
+        final unit = item['unit'];
+        if (unit != null && unit is! String) {
           _err(file, '$iat.unit must be a string or null');
+        } else if (unit is String) {
+          _lintUnit(file, iat, unit, qty is num ? qty : null);
         }
         if (item['note'] != null && item['note'] is! String) {
           _err(file, '$iat.note must be a string or null');
@@ -525,6 +633,89 @@ class _Validator {
           _warn(file, '$iat.name says "optional" — use "is_optional": true');
         }
       }
+    }
+  }
+
+  /// The unit canon (BL-8). Two severities, on purpose:
+  ///
+  /// - ERROR: the spelling resolves to a registry unit but is not how this
+  ///   repo prints it — `Tbsp`, `tablespoons`, `grams`, `l`, `lbs`, a word unit
+  ///   whose number disagrees with the quantity (`3 clove`, `1 cups`), or an
+  ///   empty string. Each has exactly one right answer, which the message names.
+  /// - WARNING: the spelling is not in units.json at all (`sprigs`, `knob`).
+  ///   That is usually a real authoring decision the registry has not caught up
+  ///   with, and it costs the estimator nothing it was not already losing — so
+  ///   blocking it would block content on a registry gap.
+  ///
+  /// Word-unit agreement: a quantity above 1 takes the plural, exactly 1 takes
+  /// the singular, and below 1 or no quantity accepts either (`0.5 cup` and
+  /// `0.5 cups` are both English). Nothing pluralises at render time
+  /// (`formatText` is `'$amount $unit'`), so this is the only place it happens.
+  void _lintUnit(String file, String iat, String unit, num? qty) {
+    final canon = options.units;
+    if (canon == null) return;
+    final at = '$iat.unit "$unit"';
+
+    if (unit.trim().isEmpty) {
+      _err(file, '$iat.unit is blank — use null for a bare count ("2 eggs")');
+      return;
+    }
+    if (unit != unit.trim()) {
+      _err(file, '$at has leading or trailing whitespace');
+      return;
+    }
+
+    final lower = unit.toLowerCase();
+    final u = canon._bySpelling[lower];
+    if (u == null) {
+      if (canon._unresolvable.contains(lower)) {
+        // Known and deliberately unresolved (`pinch`, `handful`) — only the
+        // case can be wrong, since the app prints it as written.
+        if (unit != lower) _err(file, '$at is not canonical — write "$lower"');
+        return;
+      }
+      _warn(
+        file,
+        '$at is not in nutritionData/units.json — it prints as written and '
+        'contributes nothing to an auto nutrition estimate (add it there if '
+        'it is a real unit)',
+      );
+      return;
+    }
+
+    final plural = u.plural;
+    if (plural == null) {
+      // Invariant (abbreviations, `pkg`): one spelling at every quantity.
+      if (unit != u.display) {
+        _err(
+          file,
+          '$at is not canonical — write "${u.display}" (${u.display} is '
+          'invariant: the same spelling at every quantity)',
+        );
+      }
+      return;
+    }
+
+    // A word unit: the singular or the plural, agreeing with the quantity.
+    final String want;
+    if (qty != null && qty > 1) {
+      want = plural;
+    } else if (qty == 1) {
+      want = u.display;
+    } else {
+      // No quantity, or a fraction below 1: either number is English, so keep
+      // the one the author reached for and only fix its spelling.
+      want = lower == plural.toLowerCase() ? plural : u.display;
+    }
+    if (unit == want) return;
+    if (unit == u.display || unit == plural) {
+      _err(
+        file,
+        '$at does not agree with quantity $qty — write "$want" '
+        '(nothing pluralises a unit at render time)',
+      );
+    } else {
+      _err(file, '$at is not canonical — write "$want"');
     }
   }
 

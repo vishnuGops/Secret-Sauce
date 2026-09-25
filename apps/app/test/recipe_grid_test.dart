@@ -51,6 +51,10 @@ void main() {
     (1000, 3),
     (1440, 4), // four real cards, not three stretched ones
     (2000, 6), // ultrawide
+    // B049: capped at `kRecipeGridMaxColumns`. Uncapped, 2560 was 8 columns
+    // and 3840 was 12 — more than this fixture's eight cards.
+    (2560, kRecipeGridMaxColumns),
+    (3840, kRecipeGridMaxColumns),
   ]) {
     testWidgets('$width px lays out $expectedColumns columns', (tester) async {
       tester.view.physicalSize = Size(width, 900);
@@ -100,6 +104,31 @@ void main() {
       row.first.left - grid.left,
       greaterThan(AppSpacing.md),
       reason: 'a capped row should actually be inset beyond the padding',
+    );
+  });
+
+  // B049: past the column cap, extra width is a right-hand margin, so the
+  // first card keeps the page's left edge (B059) instead of drifting 860px in.
+  testWidgets('a 4K window left-aligns a capped block of six', (tester) async {
+    tester.view.physicalSize = const Size(3840, 900);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(_grid(3840));
+
+    final grid = tester.getRect(find.byType(RecipeGrid));
+    final row = _firstRow(tester);
+    expect(row.length, kRecipeGridMaxColumns);
+    expect(row.first.width, kRecipeCardMaxWidth);
+    final left = row.first.left - grid.left;
+    final right = grid.right - row.last.right;
+    expect(left, closeTo(AppSpacing.md, 0.001));
+    // 3840 - 6 x 340 - 5 x 16 = 1720 of margin, all of it trailing.
+    expect(right, closeTo(1720 - AppSpacing.md, 0.001));
+    // And the metrics a header aligns with say the same thing.
+    expect(
+      AppSpacing.md + recipeGridMetrics(3840).gutter,
+      closeTo(left, 0.001),
     );
   });
 

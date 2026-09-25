@@ -1,0 +1,57 @@
+{
+  "slug": "spanish-gambas-al-ajillo",
+  "title": "Gambas al Ajillo",
+  "description": "Prawns sizzled in a shallow pool of olive oil with sliced garlic and dried chilli, served still spitting, with bread for the oil.",
+  "cuisine": "Spanish",
+  "category": "Appetizer",
+  "difficulty": "easy",
+  "prep_minutes": 10,
+  "cook_minutes": 6,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "A terracotta cazuela is traditional and holds the heat at the table. Any small heavy pan works.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "raw prawns", "note": "peeled, tails on" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 120, "unit": "ml", "name": "olive oil", "food": "olive-oil" },
+        { "quantity": 8, "unit": "cloves", "name": "garlic", "note": "thinly sliced", "food": "garlic" },
+        { "quantity": 2, "unit": null, "name": "dried guindilla chillies", "note": "or 0.5 tsp chilli flakes" },
+        { "quantity": 2, "unit": "tbsp", "name": "fino sherry" },
+        { "quantity": 1, "unit": "tsp", "name": "sweet paprika", "food": "smoked-paprika" },
+        { "quantity": 1, "unit": "handful", "name": "parsley", "note": "chopped", "food": "flat-leaf-parsley" },
+        { "quantity": 1, "unit": null, "name": "baguette", "note": "to serve" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Pat the raw prawns dry and season with the salt."
+        },
+        {
+          "text": "Warm the olive oil with the garlic and chillies until the garlic just begins to turn golden.",
+          "duration_minutes": 3,
+          "temperature": "medium",
+          "tip": "Start the garlic in cool oil. Dropped into hot oil it scorches before it flavours anything."
+        },
+        {
+          "text": "Add the prawns and cook, turning once, until pink.",
+          "duration_minutes": 2
+        },
+        {
+          "text": "Add the sherry and paprika, let it sizzle, and scatter with parsley. Serve sizzling, with the baguette torn for the oil."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.2,
+    "variant_titles": ["Tapas-Bar {title}", "Quick {title}"]
+  }
+}

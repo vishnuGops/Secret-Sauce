@@ -1,0 +1,87 @@
+{
+  "slug": "mexican-tres-leches-cake",
+  "title": "Tres Leches Cake",
+  "description": "A light sponge soaked overnight in three milks until it is almost pudding, under whipped cream and a dusting of cinnamon.",
+  "cuisine": "Mexican",
+  "category": "Dessert",
+  "difficulty": "medium",
+  "prep_minutes": 30,
+  "cook_minutes": 25,
+  "servings": 12,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Baked in a 23 x 33 cm tin. It needs the night in the fridge — made the same day it is just a wet cake.",
+  "ingredient_groups": [
+    {
+      "name": "Sponge",
+      "ingredients": [
+        { "quantity": 5, "unit": null, "name": "eggs", "note": "separated", "food": "egg" },
+        { "quantity": 200, "unit": "g", "name": "sugar", "food": "granulated-sugar" },
+        { "quantity": 150, "unit": "g", "name": "all-purpose flour", "food": "all-purpose-flour" },
+        { "quantity": 1.5, "unit": "tsp", "name": "baking powder", "food": "baking-powder" },
+        { "quantity": 80, "unit": "ml", "name": "whole milk", "food": "whole-milk" },
+        { "quantity": 1, "unit": "tsp", "name": "vanilla extract", "food": "vanilla-extract" }
+      ]
+    },
+    {
+      "name": "Soak",
+      "ingredients": [
+        { "quantity": 400, "unit": "g", "name": "sweetened condensed milk" },
+        { "quantity": 350, "unit": "ml", "name": "evaporated milk" },
+        { "quantity": 200, "unit": "ml", "name": "heavy cream", "food": "heavy-cream" }
+      ]
+    },
+    {
+      "name": "Topping",
+      "ingredients": [
+        { "quantity": 300, "unit": "ml", "name": "heavy cream", "food": "heavy-cream" },
+        { "quantity": 2, "unit": "tbsp", "name": "sugar", "food": "granulated-sugar" },
+        { "quantity": 1, "unit": "tsp", "name": "cinnamon", "note": "ground, to dust" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Sponge",
+      "steps": [
+        {
+          "text": "Whisk the egg whites to soft peaks, then gradually add the sugar and whisk to stiff, glossy peaks.",
+          "duration_minutes": 5
+        },
+        {
+          "text": "Beat in the yolks one at a time, then fold in the flour and baking powder alternately with the milk and vanilla."
+        },
+        {
+          "text": "Pour into a buttered tin and bake until springy and golden.",
+          "duration_minutes": 25,
+          "temperature": "180°C / 355°F"
+        }
+      ]
+    },
+    {
+      "name": "Soak",
+      "steps": [
+        {
+          "text": "Whisk the condensed milk, evaporated milk, and cream together. Prick the warm cake all over with a fork and pour the milks over slowly, letting each addition sink in.",
+          "tip": "It looks like far too much liquid. It is not — the sponge takes all of it overnight."
+        },
+        {
+          "text": "Cover and refrigerate overnight.",
+          "duration_minutes": 720
+        }
+      ]
+    },
+    {
+      "name": "Finish",
+      "steps": [
+        {
+          "text": "Whip the cream with the sugar to soft peaks, spread over the cake, and dust with cinnamon."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.2,
+    "variant_titles": ["Birthday {title}", "Coconut {title}", "{title} with Strawberries"]
+  }
+}

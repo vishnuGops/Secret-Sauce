@@ -1,0 +1,52 @@
+{
+  "slug": "vietnamese-ca-phe-sua-da",
+  "title": "Cà Phê Sữa Đá",
+  "description": "Strong dark-roast coffee dripped slowly through a phin filter onto sweetened condensed milk, then poured over ice.",
+  "cuisine": "Vietnamese",
+  "category": "Drink",
+  "difficulty": "easy",
+  "prep_minutes": 2,
+  "cook_minutes": 6,
+  "servings": 1,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Vietnamese robusta, coarsely ground, is traditional. A French press at double strength is the fallback without a phin.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 2, "unit": "tbsp", "name": "sweetened condensed milk" },
+        { "quantity": 20, "unit": "g", "name": "dark-roast coffee", "note": "coarsely ground" },
+        { "quantity": 100, "unit": "ml", "name": "hot water", "note": "just off the boil", "food": "water" },
+        { "quantity": 1, "unit": "cup", "name": "ice" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Spoon the condensed milk into a heatproof glass."
+        },
+        {
+          "text": "Put the coffee in the phin over the glass, press lightly, and add a splash of the hot water to bloom.",
+          "duration_minutes": 1,
+          "tip": "Blooming lets the grounds swell, so the rest of the water drips slowly rather than rushing through."
+        },
+        {
+          "text": "Fill with the remaining water, cover, and let it drip through.",
+          "duration_minutes": 5,
+          "tip": "Four to five minutes is right. Much faster means the grind is too coarse."
+        },
+        {
+          "text": "Stir the coffee into the condensed milk and pour over a glass of ice."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.2,
+    "variant_titles": ["Saigon {title}", "Morning {title}"]
+  }
+}

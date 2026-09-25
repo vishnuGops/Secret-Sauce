@@ -157,6 +157,13 @@ scripts:
       Corpus -> corpus/_import/*.sql, one `import_recipe()` call per recipe.
       Applying them is a separate, manual psql step — see tool/corpus_import.dart.
 
+  corpus:import:fixture:
+    run: dart run tool/corpus_import.dart gen --corpus=corpus/_fixtures --out=corpus/_import_fixture --batch=3
+    description: >
+      The committed SYNTHETIC fixture (corpus/_fixtures/) -> corpus/_import_fixture/*.sql
+      (git-ignored). No database. supabase/tests/corpus_import_fixture.sql then
+      imports it, asserts every field, re-applies it and ROLLS BACK — CI runs both.
+
   corpus:export:
     description: Convert the corpus into the app's recipeData shape (staging only).
     run: node recipeData/_tools/corpus_export.mjs

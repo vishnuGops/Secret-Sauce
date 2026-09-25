@@ -152,6 +152,18 @@ declare
   v_err2         text;
   s2             text;
 
+  -- F22-F24 (the recompute guard): a row's physical address before and after.
+  v_ctid1        text;
+  v_ctid2        text;
+  v_likes1       bigint;
+  v_likes2       bigint;
+
+  -- G29-G34 (the pending-claim cap). Sized from `profile_claim_pending_cap()`
+  -- rather than a literal, so moving the number does not break the matrix.
+  v_cap          int;
+  v_cap_profiles uuid[];
+  v_msg          text;
+
   -- results
   v_log      text[] := '{}';
   v_pass     int := 0;
@@ -1383,6 +1395,71 @@ begin
            v_trend_anon is not distinct from v_trend_owner));
 
   -- ==========================================================================
+  -- F22-F24: `recompute_chef_stats` writes NOTHING when nothing moved.
+  --
+  -- 0001 calls its `is distinct from` guard load-bearing: `recipes_chef_stats`
+  -- also watches rating_sum/rating_count, the v1 formula ignores both, so
+  -- without the guard every rating anyone writes rewrites the chef's profile
+  -- with byte-identical values and leaves a dead tuple on the table every
+  -- leaderboard query and every recipe embed reads. No other check here could
+  -- see that go: the VALUES are right either way, which is exactly why it had
+  -- no assertion (ROADMAP carried-over, Phase 18).
+  --
+  -- So it is asserted on the one thing an UPDATE cannot avoid changing — the
+  -- row's physical address. Every UPDATE writes a new tuple version, HOT or
+  -- not, so an unchanged `ctid` means no UPDATE touched the row, and within one
+  -- transaction that is a stronger signal than `xmin` (which would not move).
+  -- F24 is the control that makes the other two discriminating: a like DOES
+  -- move the numbers, so it must move the ctid — otherwise ctid is not
+  -- measuring what F22/F23 claim it measures.
+  -- ==========================================================================
+  execute 'reset role';
+  perform set_config('request.jwt.claims', '', true);
+
+  -- Settled first, so F22 compares a converged row with itself rather than
+  -- depending on every trigger in §A-§F having left it exact.
+  perform recompute_chef_stats(v_owner);
+  select ctid::text into v_ctid1 from profiles where id = v_owner;
+  perform recompute_chef_stats(v_owner);
+  select ctid::text into v_ctid2 from profiles where id = v_owner;
+  v_log := v_log || format(E'%s\tF22 recompute_chef_stats with nothing changed writes no tuple\t%s',
+    v_ctid1 = v_ctid2, format('profile ctid %s -> %s', v_ctid1, v_ctid2));
+
+  -- F23: the case the guard was written for, through the real path — a
+  -- signed-in reader rates the chef's public recipe, `recipe_ratings_agg`
+  -- moves rating_sum/rating_count, `recipes_chef_stats` fires, and the chef's
+  -- profile must come out of it untouched. The rating landing is part of the
+  -- claim: a refused rating would leave the ctid alone for the wrong reason.
+  execute 'set local role authenticated';
+  perform set_config('request.jwt.claims', json_build_object('sub', v_sharee)::text, true);
+  select err into v_err from rls_matrix_do(format(
+    'insert into recipe_ratings (user_id, recipe_id, rating) values (%L, %L, 4.0)',
+    v_sharee, v_trend_read));
+  execute 'reset role';
+  perform set_config('request.jwt.claims', '', true);
+  select rating_count into n from recipes where id = v_trend_read;
+  select ctid::text into v_ctid2 from profiles where id = v_owner;
+  v_log := v_log || format(E'%s\tF23 a rating leaves the chef''s profile row unwritten\t%s',
+    v_err is null and n = 1 and v_ctid1 = v_ctid2,
+    format('rating %s, rating_count %s, profile ctid %s -> %s',
+           coalesce(v_err, 'ok'), n, v_ctid1, v_ctid2));
+
+  -- F24: the control. A like changes `total_likes`, so the same trigger path
+  -- has to write the row this time.
+  select total_likes into v_likes1 from profiles where id = v_owner;
+  execute 'set local role authenticated';
+  perform set_config('request.jwt.claims', json_build_object('sub', v_sharee)::text, true);
+  select err into v_err from rls_matrix_do(format(
+    'insert into recipe_likes (user_id, recipe_id) values (%L, %L)', v_sharee, v_trend_read));
+  execute 'reset role';
+  perform set_config('request.jwt.claims', '', true);
+  select ctid::text, total_likes into v_ctid2, v_likes2 from profiles where id = v_owner;
+  v_log := v_log || format(E'%s\tF24 control · a like DOES rewrite the chef''s profile row\t%s',
+    v_err is null and v_likes2 = v_likes1 + 1 and v_ctid1 <> v_ctid2,
+    format('like %s, total_likes %s -> %s, profile ctid %s -> %s',
+           coalesce(v_err, 'ok'), v_likes1, v_likes2, v_ctid1, v_ctid2));
+
+  -- ==========================================================================
   -- G1-G24: Phase 35b — identity decoupled from `auth.users`, entities, claims.
   --
   -- Sections A-F above are the proof that the decoupling is BEHAVIOUR-
@@ -1679,6 +1756,129 @@ begin
   select status::text into s2 from profile_claims where id = v_claim;
   v_log := v_log || format(E'%s\tG28 merge · one profile holds the link, claim is approved\t%s',
     n = 1 and s2 = 'approved', format('%s profile(s), status %s', n, s2));
+
+  -- ==========================================================================
+  -- G29-G34: the pending-claim cap (Phase 35c).
+  --
+  -- `claims_insert` allows one pending claim per (profile, claimant) and
+  -- nothing else bounded it, so one account could open a claim on every
+  -- imported profile in the corpus — each a row a person reviews by hand.
+  -- `profile_claims_pending_cap` (an AFTER trigger) holds an account to
+  -- `profile_claim_pending_cap()` PENDING claims; a decided one frees its slot.
+  --
+  -- The stranger files here, not the owner: the owner's account was merged at
+  -- G24, and a cap check that passes because the claimant quietly became
+  -- somebody else is the H8b failure mode again. These run LAST in §G because
+  -- G33 approves one of the stranger's claims, which moves that account's link
+  -- too — nothing after this section signs in as the stranger.
+  -- ==========================================================================
+  execute 'reset role';
+  perform set_config('request.jwt.claims', '', true);
+  v_cap := profile_claim_pending_cap();
+  v_cap_profiles := '{}';
+  for i in 1 .. v_cap + 2 loop
+    insert into profiles (id, display_name, kind)
+    values (gen_random_uuid(), format('BL-7 cap fixture %s', i), 'imported')
+    returning id into v_new;
+    v_cap_profiles := v_cap_profiles || v_new;
+  end loop;
+
+  execute 'set local role authenticated';
+  perform set_config('request.jwt.claims', json_build_object('sub', v_other)::text, true);
+
+  -- G29: up to the cap, every filing lands.
+  v_n := 0;
+  for i in 1 .. v_cap loop
+    select err into v_err from rls_matrix_do(format(
+      'insert into profile_claims (profile_id, claimant_auth_user_id) values (%L, %L)',
+      v_cap_profiles[i], v_other));
+    if v_err is null then v_n := v_n + 1; end if;
+  end loop;
+  select count(*) into n from profile_claims
+   where claimant_auth_user_id = v_other and status = 'pending';
+  v_log := v_log || format(E'%s\tG29 stranger · file claims up to the cap\t%s',
+    v_n = v_cap and n = v_cap,
+    format('%s of %s filed, %s pending', v_n, v_cap, n));
+
+  -- G30: the next one is refused — by the CAP, which is why the message is
+  -- asserted and not only the SQLSTATE: a P0001 from anything else would
+  -- otherwise pass. Caught here rather than through `rls_matrix_do` because
+  -- that helper returns the code alone.
+  begin
+    insert into profile_claims (profile_id, claimant_auth_user_id)
+    values (v_cap_profiles[v_cap + 1], v_other);
+    v_err := null;
+    v_msg := null;
+  exception when others then
+    v_err := sqlstate;
+    v_msg := sqlerrm;
+  end;
+  select count(*) into n from profile_claims
+   where claimant_auth_user_id = v_other and status = 'pending';
+  v_log := v_log || format(E'%s\tG30 stranger · the cap+1th pending claim must FAIL\t%s',
+    v_err = 'P0001' and v_msg = 'profile claim limit reached' and n = v_cap,
+    format('%s (%s), %s pending', coalesce(v_err, 'no error'), coalesce(v_msg, '-'), n));
+
+  -- G31: and the cap cannot be used to PROBE another account. Filing on the
+  -- capped account's behalf is refused by `claims_insert` (42501), exactly as
+  -- G10 is — not by the cap (P0001), which would tell the caller that account
+  -- has claims open. This is what the trigger being AFTER, not BEFORE, buys:
+  -- the policy's `with check` runs first and the count never sees the row.
+  perform set_config('request.jwt.claims', json_build_object('sub', v_owner)::text, true);
+  select err into v_err from rls_matrix_do(format(
+    'insert into profile_claims (profile_id, claimant_auth_user_id) values (%L, %L)',
+    v_cap_profiles[v_cap + 1], v_other));
+  v_log := v_log || format(E'%s\tG31 owner · filing for a capped account is the POLICY''s 42501\t%s',
+    v_err = '42501', coalesce(v_err, 'no error'));
+
+  -- G32: a REJECTED claim frees its slot. The cap bounds the review queue, not
+  -- a person's history — a chef turned down for thin evidence must be able to
+  -- file again.
+  execute 'reset role';
+  perform set_config('request.jwt.claims', '', true);
+  select id into v_new from profile_claims
+   where claimant_auth_user_id = v_other and profile_id = v_cap_profiles[1];
+  perform reject_profile_claim(v_new, 'BL-7: rejected to free a slot');
+
+  execute 'set local role authenticated';
+  perform set_config('request.jwt.claims', json_build_object('sub', v_other)::text, true);
+  select err into v_err from rls_matrix_do(format(
+    'insert into profile_claims (profile_id, claimant_auth_user_id) values (%L, %L)',
+    v_cap_profiles[v_cap + 1], v_other));
+  select count(*) into n from profile_claims
+   where claimant_auth_user_id = v_other and status = 'pending';
+  v_log := v_log || format(E'%s\tG32 stranger · a rejected claim frees its slot\t%s',
+    v_err is null and n = v_cap,
+    format('file %s, %s pending', coalesce(v_err, 'ok'), n));
+
+  -- G33: and so does an APPROVED one. Approval goes through the real merge,
+  -- which is also what moves this account's link (see the section header).
+  execute 'reset role';
+  perform set_config('request.jwt.claims', '', true);
+  select id into v_new from profile_claims
+   where claimant_auth_user_id = v_other and profile_id = v_cap_profiles[2];
+  perform approve_profile_claim(v_new);
+
+  execute 'set local role authenticated';
+  perform set_config('request.jwt.claims', json_build_object('sub', v_other)::text, true);
+  select err into v_err from rls_matrix_do(format(
+    'insert into profile_claims (profile_id, claimant_auth_user_id) values (%L, %L)',
+    v_cap_profiles[v_cap + 2], v_other));
+  select count(*) into n from profile_claims
+   where claimant_auth_user_id = v_other and status = 'pending';
+  v_log := v_log || format(E'%s\tG33 stranger · an approved claim frees its slot\t%s',
+    v_err is null and n = v_cap,
+    format('file %s, %s pending', coalesce(v_err, 'ok'), n));
+
+  -- G34: the cap is per ACCOUNT, not per table. The stranger is at the cap
+  -- again; the owner holds no pending claim (theirs was approved at G24), so
+  -- they can file on the profile the stranger's rejected claim released.
+  perform set_config('request.jwt.claims', json_build_object('sub', v_owner)::text, true);
+  select err into v_err from rls_matrix_do(format(
+    'insert into profile_claims (profile_id, claimant_auth_user_id) values (%L, %L)',
+    v_cap_profiles[1], v_owner));
+  v_log := v_log || format(E'%s\tG34 owner · another account at the cap does not block this one\t%s',
+    v_err is null, coalesce(v_err, 'ok'));
 
   -- ==========================================================================
   -- H1-H8: Phase 35c — provenance, the corpus surface, and the blocklist.

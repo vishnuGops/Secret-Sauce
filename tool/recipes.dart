@@ -41,6 +41,7 @@ const _tag = r'$sr$';
 final _options = RecipeFormatOptions(
   dollarTag: _tag,
   foodSlugs: loadFoodSlugs('nutritionData/foods.json'),
+  units: loadUnitCanon('nutritionData/units.json'),
 );
 
 // ---------------------------------------------------------------------------

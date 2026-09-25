@@ -53,7 +53,7 @@ const _kRecipeColumns =
 
 const kRecipeSelect =
     '$_kRecipeColumns,'
-    'owner:profiles!recipes_owner_id_fkey(id,display_name,avatar_url,chef_tier)';
+    'owner:profiles!recipes_owner_id_fkey(id,display_name,avatar_url,chef_tier,kind)';
 
 /// [kRecipeSelect] plus the recipe's grouped content, as a single nested embed
 /// (OPT-P3). Replaces the old 2 + G + S round trips — one query per ingredient

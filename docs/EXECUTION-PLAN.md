@@ -19,7 +19,7 @@ Roadmap: [ROADMAP.md Phase 24](./ROADMAP.md#phase-24--simulated-population-a-rea
 Design: [SDS §12](./SDS.md#12-the-simulated-population) (written 2026-08-25)
 
 **Status: working end to end at the `medium` preset.** Built 2026-08-20: the shared validator,
-`tool/sim.dart`, `simData/` with **73 of 120** dishes, all eight `supabase/sim/*.sql` files, the
+`tool/sim.dart`, `simData/` with **73 of 120** dishes (120 since 2026-09-24), all eight `supabase/sim/*.sql` files, the
 `melos run sim:* / db:sim*` scripts, and the CI gate. `melos run db:reset` now rebuilds the whole
 thing — 1,694 recipes, 1,016 profiles, ~118k view rows — from an empty database in **~15 seconds**,
 and `3_sim_verify.sql` passes all 53 assertions.
@@ -397,9 +397,9 @@ follow-ups to the bands but decisions nobody has taken:
 - **Web browser Back in the recipe editor** — `PopScope` covers the platform gesture and nothing
   covers the browser's button (32c2). Closing it needs something Flutter does not expose today.
 
-## Phase 33 — The windowed leaderboard (SQL shipped 2026-09-10; client open)
+## Phase 33 — The windowed leaderboard (SQL shipped 2026-09-10; client shipped 2026-09-24)
 
-Roadmap: [ROADMAP.md Phase 33](./ROADMAP.md#phase-33--the-windowed-leaderboard-sql-built-client-not-started) ·
+Roadmap: [ROADMAP.md Phase 33](./ROADMAP.md#phase-33--the-windowed-leaderboard-shipped-2026-09-24) ·
 Design: [SDS §10.9](./SDS.md#109-windowed-engagement-phase-33)
 
 **Problem.** `/chefs` is entirely all-time, because `profiles.chef_score` and the three totals
@@ -443,7 +443,19 @@ zeros), plus CI smoke calls on the upgrade path. Every expected value in §F is 
 database rather than written as a literal, because sections A–E leave their own engagement rows on
 the same fixtures.
 
-**Open — the whole client.** `ChefWindowStanding` and its repository/provider, the `Momentum` sort,
+**Client — shipped 2026-09-24, no new SQL.** Four decisions carry the weight. (1) Sort and window
+are **one** state (`BoardView`), because Month/Week without Momentum has no meaning and Momentum
+without a span has no window. (2) Page 1 goes without `p_since` and its `window_start` is echoed
+on every later page — the **server's** clock, because the rails beside the board send no boundary
+and a device clock off by hours would otherwise measure two windows under one label (the first cut
+used the device clock; review caught it, B121). Web `DateTime` truncates the echo to milliseconds,
+a window under a millisecond wider. (3) Momentum lists **movers
+only**; since the RPC orders by window score first, the first zero row ends paging. (4) `New` is
+`chefs_leaderboard` with no inner limit, re-ordered and ranged by PostgREST outside the function —
+`dense_rank` still sees everyone, and the order is total. The empty window is a state
+(`EmptyView`, `QuietShelfCard`), never a spinner.
+
+**What the client was, before it shipped.** `ChefWindowStanding` and its repository/provider, the `Momentum` sort,
 the Month / Week toggle, the `New` sort, the Trending/month rails, a per-chef momentum line, and a
 real empty state (a stale `sim.epoch_end()` anchor correctly returns an empty week; that must not
 render as a spinner). Two smaller pieces shipped alongside the SQL because they were carried-over

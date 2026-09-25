@@ -95,6 +95,11 @@ void main() {
     (264, 2.0),
     (kRecipeCardMinWidth, 2.0),
     (kRecipeCardMaxWidth, 2.0),
+    // B049: past the 2.0x contract the card drops its description rather than
+    // overflowing. 3.0x is where iOS accessibility sizes put it.
+    (264, 3.0),
+    (kRecipeCardMinWidth, 3.0),
+    (kRecipeCardMaxWidth, 3.0),
   ]) {
     testWidgets(
       'RecipeCard metadata row fits at ${width}px, textScale $scale',
@@ -124,6 +129,88 @@ void main() {
       },
     );
   }
+
+  // B049. The envelope above uses `longMeta` bare; the real worst case at 3.0x
+  // also carries every optional band — the visibility chip in the banner, the
+  // chef overlay on the cover, a title that clamps at two lines — because each
+  // one competes for the same fixed 352px.
+  group('3.0x text scale (B049)', () {
+    final everything = longMeta.copyWith(
+      title: 'Slow-Braised Short Rib Ragu with Gremolata and Soft Polenta',
+      owner: const Profile(
+        id: 'u1',
+        displayName: 'Amara Baptiste-Okonkwo',
+        chefTier: ChefTier.masterChef,
+      ),
+    );
+
+    Future<void> pump(WidgetTester tester, double width, double scale) =>
+        tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.light(),
+            home: MediaQuery(
+              data: MediaQueryData(textScaler: TextScaler.linear(scale)),
+              child: Scaffold(
+                body: Center(
+                  child: SizedBox(
+                    width: width,
+                    child: RecipeCard(recipe: everything, showVisibility: true),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+
+    for (final width in [264.0, kRecipeCardMinWidth, kRecipeCardMaxWidth]) {
+      for (final scale in [2.5, 3.0]) {
+        testWidgets('every band at ${width}px, textScale $scale fits', (
+          tester,
+        ) async {
+          await pump(tester, width, scale);
+          expect(
+            tester.takeException(),
+            isNull,
+            reason: 'overflow at ${width}px @ ${scale}x',
+          );
+          expect(
+            tester.getSize(find.byType(RecipeCard)).height,
+            kRecipeCardHeight,
+            reason: 'the fix degrades the card; it must not grow it',
+          );
+        });
+      }
+    }
+
+    testWidgets('the description is what yields, and only past 2.0x', (
+      tester,
+    ) async {
+      await pump(tester, kRecipeCardMinWidth, kRecipeCardDescriptionMaxScale);
+      expect(find.text(everything.description), findsOneWidget);
+
+      await pump(tester, kRecipeCardMinWidth, 3.0);
+      expect(find.text(everything.description), findsNothing);
+      // The parts a card is *for* stay.
+      expect(find.text(everything.title), findsOneWidget);
+      expect(find.text(everything.difficulty.label), findsOneWidget);
+      expect(find.byType(RatingPill), findsOneWidget);
+    });
+
+    testWidgets('the cover keeps some height at 3.0x', (tester) async {
+      await pump(tester, kRecipeCardMinWidth, 3.0);
+      // The placeholder icon lives in the cover band; if the band were starved
+      // to zero the icon would be laid out in no space at all.
+      final cover = tester.getSize(
+        find
+            .ancestor(
+              of: find.byIcon(Icons.restaurant_menu),
+              matching: find.byType(Container),
+            )
+            .first,
+      );
+      expect(cover.height, greaterThan(40));
+    });
+  });
 
   // B080 — the half the envelope suite above cannot see. An ellipsis is not a
   // `RenderFlex` overflow, so `takeException()` stays null while the row quietly

@@ -270,6 +270,169 @@ void main() {
       });
     }
   });
+  // Phase 33: the Momentum board hands every row what the chef earned in the
+  // window, and the New board a join date. Both have to read as the same row.
+  group('windowed rows', () {
+    final week = ChefWindowStats(
+      id: 'c1',
+      windowStart: DateTime.utc(2026, 9, 17),
+      likes: 40,
+      saves: 12,
+      viewers: 60,
+      newRecipes: 1,
+      score: 192,
+    );
+
+    Widget row(
+      ChefStanding standing, {
+      ChefWindowStats? window,
+      String? note,
+      ChefCardVariant variant = ChefCardVariant.podium,
+      double width = 760,
+      double textScale = 1.0,
+    }) => MaterialApp(
+      theme: AppTheme.light(),
+      home: Scaffold(
+        body: MediaQuery(
+          data: MediaQueryData(
+            size: Size(width, 900),
+            textScaler: TextScaler.linear(textScale),
+          ),
+          child: Center(
+            child: SizedBox(
+              width: width,
+              child: ChefStandingCard(
+                standing: standing,
+                variant: variant,
+                dense: width < 600,
+                window: window,
+                windowLabel: 'last 7 days',
+                note: note,
+                onTap: () {},
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    testWidgets('the score column shows the gain and its span', (tester) async {
+      await tester.pumpWidget(row(_standing(), window: week));
+
+      expect(find.text('+192'), findsOneWidget);
+      expect(find.text('last 7 days'), findsOneWidget);
+      // The all-time score and its tier line give way to the window's.
+      expect(find.text('21,000'), findsNothing);
+      expect(find.text('top tier reached'), findsNothing);
+    });
+
+    testWidgets('the podium chips count the window, not the lifetime', (
+      tester,
+    ) async {
+      await tester.pumpWidget(row(_standing(), window: week));
+
+      expect(find.text('40 likes'), findsOneWidget);
+      expect(find.text('12 saves'), findsOneWidget);
+      expect(find.text('60 views'), findsOneWidget);
+      expect(find.text('1 new recipe'), findsOneWidget);
+      expect(find.text('4,000 likes'), findsNothing);
+    });
+
+    testWidgets('the board row shows the gain too', (tester) async {
+      await tester.pumpWidget(
+        row(
+          _standing(),
+          window: week,
+          variant: ChefCardVariant.board,
+          width: ChefsPanelWidth.value,
+        ),
+      );
+
+      expect(find.text('+192'), findsOneWidget);
+      expect(find.text('21,000'), findsNothing);
+      // The tier bar stays all-time: a tier is a career, not a week.
+      expect(find.byType(LinearProgressIndicator), findsOneWidget);
+    });
+
+    testWidgets('a note joins the detail line on both shapes', (tester) async {
+      await tester.pumpWidget(row(_standing(), note: 'joined Sep 2026'));
+      expect(find.text('joined Sep 2026'), findsOneWidget);
+
+      await tester.pumpWidget(
+        row(
+          _standing(),
+          note: 'joined Sep 2026',
+          variant: ChefCardVariant.board,
+          width: ChefsPanelWidth.value,
+        ),
+      );
+      expect(find.text('joined Sep 2026'), findsOneWidget);
+    });
+
+    final stressWindow = ChefWindowStats(
+      id: 'x',
+      windowStart: DateTime.utc(2026, 9, 17),
+      likes: 240000,
+      saves: 180000,
+      viewers: 990000,
+      newRecipes: 128,
+      score: 1818000,
+    );
+    final stress = _standing(
+      rank: 128,
+      name: 'Bartholomew Featherstonehaugh-Wentworth',
+      score: 987654.5,
+    );
+
+    for (final width in <double>[320, 360, 390, 600, 760]) {
+      for (final scale in <double>[1.0, 2.0]) {
+        testWidgets('a windowed podium row fits at ${width}px, ${scale}x', (
+          tester,
+        ) async {
+          tester.view.physicalSize = Size(width, 900);
+          tester.view.devicePixelRatio = 1.0;
+          addTearDown(tester.view.resetPhysicalSize);
+          addTearDown(tester.view.resetDevicePixelRatio);
+
+          await tester.pumpWidget(
+            row(
+              stress,
+              window: stressWindow,
+              note: 'joined Sep 2026',
+              width: width,
+              textScale: scale,
+            ),
+          );
+          await tester.pumpAndSettle();
+          expect(tester.takeException(), isNull);
+        });
+      }
+    }
+
+    for (final scale in <double>[1.0, 1.5, 2.0]) {
+      testWidgets('a windowed board row fits the panel at ${scale}x', (
+        tester,
+      ) async {
+        tester.view.physicalSize = const Size(1440, 900);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        await tester.pumpWidget(
+          row(
+            stress,
+            window: stressWindow,
+            note: 'joined Sep 2026',
+            variant: ChefCardVariant.board,
+            width: ChefsPanelWidth.value,
+            textScale: scale,
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+      });
+    }
+  });
 }
 
 /// The chefs page's panel width, restated here so the row's envelope test pins

@@ -1,0 +1,61 @@
+{
+  "slug": "korean-kimchi-jjigae",
+  "title": "Kimchi Jjigae",
+  "description": "A bubbling, sour-spicy stew of old kimchi and pork belly with soft tofu. The dish that uses up a jar that has gone too far.",
+  "cuisine": "Korean",
+  "category": "Soup",
+  "difficulty": "easy",
+  "prep_minutes": 10,
+  "cook_minutes": 25,
+  "servings": 3,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Tinned tuna in place of the pork is a classic, cheaper version.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 200, "unit": "g", "name": "pork belly", "note": "thinly sliced" },
+        { "quantity": 300, "unit": "g", "name": "well-fermented kimchi", "note": "chopped, plus 60 ml of its juice" },
+        { "quantity": 1, "unit": "tbsp", "name": "gochugaru" },
+        { "quantity": 1, "unit": "tbsp", "name": "gochujang" },
+        { "quantity": 1, "unit": "tsp", "name": "sugar", "food": "granulated-sugar" },
+        { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "minced", "food": "garlic" },
+        { "quantity": 500, "unit": "ml", "name": "water", "note": "or anchovy stock", "food": "water" },
+        { "quantity": 300, "unit": "g", "name": "firm tofu", "note": "in thick slices" },
+        { "quantity": 2, "unit": null, "name": "green onions", "note": "sliced", "food": "green-onions" },
+        { "quantity": 1, "unit": "tsp", "name": "sesame oil" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Fry the pork belly in a pot until it renders some fat, then add the kimchi and cook until it softens and darkens.",
+          "duration_minutes": 8,
+          "temperature": "medium",
+          "tip": "Old, sour kimchi is the point. If yours is young, add a splash of rice vinegar."
+        },
+        {
+          "text": "Stir in the gochugaru, gochujang, sugar, and garlic, then add the kimchi juice and water.",
+          "duration_minutes": 1
+        },
+        {
+          "text": "Cover and simmer so the kimchi gives up its flavour to the broth.",
+          "duration_minutes": 15,
+          "temperature": "low"
+        },
+        {
+          "text": "Slide in the tofu and simmer until heated through. Finish with green onions and sesame oil and serve bubbling, with rice.",
+          "duration_minutes": 5
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.3,
+    "variant_titles": ["Tuna {title}", "Late-Night {title}"]
+  }
+}

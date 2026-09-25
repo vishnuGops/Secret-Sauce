@@ -1,0 +1,97 @@
+{
+  "slug": "tibetan-beef-momo",
+  "title": "Beef Momo",
+  "description": "Pleated Tibetan dumplings of juicy spiced beef, steamed until the wrappers turn translucent, with a fiery tomato-chilli sepen. Makes about 36.",
+  "cuisine": "Tibetan",
+  "category": "Appetizer",
+  "difficulty": "hard",
+  "prep_minutes": 60,
+  "cook_minutes": 30,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Uncooked momo freeze well on a tray; steam from frozen for an extra four minutes.",
+  "ingredient_groups": [
+    {
+      "name": "Dough",
+      "ingredients": [
+        { "quantity": 400, "unit": "g", "name": "all-purpose flour", "food": "all-purpose-flour" },
+        { "quantity": 220, "unit": "ml", "name": "water", "food": "water" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt", "food": "kosher-salt" }
+      ]
+    },
+    {
+      "name": "Filling",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "minced beef", "note": "not too lean — about 20% fat" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "very finely chopped", "food": "onion" },
+        { "quantity": 3, "unit": "cloves", "name": "garlic", "note": "minced", "food": "garlic" },
+        { "quantity": 1, "unit": "tbsp", "name": "ginger", "note": "grated", "food": "ginger" },
+        { "quantity": 1, "unit": "handful", "name": "cilantro", "note": "chopped", "food": "coriander" },
+        { "quantity": 2, "unit": "tbsp", "name": "soy sauce", "food": "tamari" },
+        { "quantity": 0.5, "unit": "tsp", "name": "Sichuan pepper", "note": "ground" },
+        { "quantity": 1, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 60, "unit": "ml", "name": "cold water", "food": "water" }
+      ]
+    },
+    {
+      "name": "Sepen",
+      "ingredients": [
+        { "quantity": 10, "unit": null, "name": "dried red chillies" },
+        { "quantity": 2, "unit": null, "name": "tomatoes" },
+        { "quantity": 2, "unit": "cloves", "name": "garlic", "food": "garlic" },
+        { "quantity": 1, "unit": "tbsp", "name": "neutral oil", "food": "canola-oil" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt", "food": "kosher-salt" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Dough",
+      "steps": [
+        {
+          "text": "Mix the flour, water, and salt into a firm dough, knead until smooth, and rest it covered.",
+          "duration_minutes": 30
+        }
+      ]
+    },
+    {
+      "name": "Filling",
+      "steps": [
+        {
+          "text": "Mix the minced beef with the onion, garlic, ginger, cilantro, soy sauce, Sichuan pepper, and salt, then beat in the cold water a little at a time until the mixture is sticky.",
+          "tip": "The water turns to broth inside the dumpling as it steams — that is the momo's soup."
+        }
+      ]
+    },
+    {
+      "name": "Shape and steam",
+      "steps": [
+        {
+          "text": "Roll the dough into a log, cut into 36 pieces, and roll each into a thin 8 cm round, thinner at the edges than in the centre."
+        },
+        {
+          "text": "Place a spoonful of filling in the middle and pleat the edges up and around into a closed purse.",
+          "tip": "Twist the top shut. Any gap leaks the juice."
+        },
+        {
+          "text": "Steam on an oiled rack, in batches, until the wrappers are translucent.",
+          "duration_minutes": 12
+        }
+      ]
+    },
+    {
+      "name": "Sepen",
+      "steps": [
+        {
+          "text": "Boil the dried red chillies and tomatoes for five minutes, then blend with the garlic, salt, and oil until smooth.",
+          "duration_minutes": 5
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.7,
+    "variant_titles": ["Himalayan {title}", "Pan-Fried {title}"]
+  }
+}

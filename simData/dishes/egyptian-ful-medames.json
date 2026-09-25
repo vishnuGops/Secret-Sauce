@@ -1,0 +1,59 @@
+{
+  "slug": "egyptian-ful-medames",
+  "title": "Ful Medames",
+  "description": "Slow-cooked fava beans mashed with garlic, cumin, and lemon, drowned in olive oil and topped with tomato and parsley. Egypt's everyday breakfast.",
+  "cuisine": "Egyptian",
+  "category": "Breakfast",
+  "difficulty": "easy",
+  "prep_minutes": 10,
+  "cook_minutes": 120,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Two 400 g tins of ful, drained, skip the soak and most of the cooking — warm them through with a splash of water.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 400, "unit": "g", "name": "dried fava beans", "note": "the small brown ful beans" },
+        { "quantity": 3, "unit": "cloves", "name": "garlic", "food": "garlic" },
+        { "quantity": 1, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 1, "unit": "tsp", "name": "cumin", "note": "ground" },
+        { "quantity": 3, "unit": "tbsp", "name": "lemon juice", "food": "lemon-juice" },
+        { "quantity": 4, "unit": "tbsp", "name": "olive oil", "food": "olive-oil" },
+        { "quantity": 2, "unit": null, "name": "tomatoes", "note": "diced" },
+        { "quantity": 1, "unit": "handful", "name": "parsley", "note": "chopped", "food": "flat-leaf-parsley" },
+        { "quantity": 0.5, "unit": "tsp", "name": "chilli flakes", "food": "red-pepper-flakes" },
+        { "quantity": 4, "unit": null, "name": "pita breads", "note": "warmed" },
+        { "quantity": 4, "unit": null, "name": "eggs", "note": "hard-boiled", "is_optional": true, "food": "egg" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Soak the dried fava beans overnight in plenty of cold water.",
+          "duration_minutes": 720
+        },
+        {
+          "text": "Drain, cover with fresh water, and simmer very gently until completely tender.",
+          "duration_minutes": 120,
+          "temperature": "low",
+          "tip": "Ful is traditionally cooked overnight in a pot-bellied qidra. A lid and the lowest flame are the home version."
+        },
+        {
+          "text": "Crush the garlic with the salt and cumin, then mash half the beans with it, the lemon juice, and some of the cooking water until creamy but still chunky."
+        },
+        {
+          "text": "Spoon into bowls, pour over plenty of olive oil, and top with the tomatoes, parsley, and chilli flakes. Serve with the pita breads and halved eggs."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1,
+    "variant_titles": ["Weekend {title}", "Spicy {title}"]
+  }
+}

@@ -49,9 +49,9 @@ class ChefNote extends StatelessWidget {
 ///
 /// Generic over the enum because the two pages switch different things but must
 /// not look like two different controls — the board's pill was here first, and a
-/// hand-copied second one is how two surfaces in one feature drift apart. The
-/// board still needs [enabledOf]: two of its three options are deliberately
-/// inert. The chef page passes neither, so every segment is live.
+/// hand-copied second one is how two surfaces in one feature drift apart. Since
+/// Phase 33 every option on both pages is live, so neither passes [enabledOf];
+/// it stays for the next control that has to ship drawn-but-not-ready.
 ///
 /// **Every segment is `Expanded` inside a `Row`,** so this must be given a
 /// bounded width — a `Row` with flex children under unbounded constraints is an

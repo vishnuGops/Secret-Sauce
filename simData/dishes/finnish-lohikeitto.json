@@ -1,0 +1,64 @@
+{
+  "slug": "finnish-lohikeitto",
+  "title": "Lohikeitto",
+  "description": "Finnish salmon soup — potatoes, leek, and allspice in a light cream broth, with the salmon poached off the heat and a great deal of dill.",
+  "cuisine": "Finnish",
+  "category": "Soup",
+  "difficulty": "easy",
+  "prep_minutes": 15,
+  "cook_minutes": 30,
+  "servings": 4,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Serve with dark rye bread and butter.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 20, "unit": "g", "name": "butter", "food": "butter" },
+        { "quantity": 1, "unit": null, "name": "leek", "note": "sliced", "food": "leek" },
+        { "quantity": 1, "unit": null, "name": "carrot", "note": "diced" },
+        { "quantity": 600, "unit": "g", "name": "waxy potatoes", "note": "in 2 cm cubes" },
+        { "quantity": 1, "unit": "L", "name": "fish stock" },
+        { "quantity": 1, "unit": null, "name": "bay leaf" },
+        { "quantity": 5, "unit": null, "name": "allspice berries" },
+        { "quantity": 200, "unit": "ml", "name": "heavy cream", "food": "heavy-cream" },
+        { "quantity": 1, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 500, "unit": "g", "name": "salmon fillet", "note": "skinless, in 3 cm cubes" },
+        { "quantity": 1, "unit": "bunch", "name": "dill", "note": "chopped", "food": "dill" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Soften the leek and carrot in the butter without colouring.",
+          "duration_minutes": 6,
+          "temperature": "medium"
+        },
+        {
+          "text": "Add the potatoes, fish stock, bay leaf, and allspice berries and simmer until the potatoes are just tender.",
+          "duration_minutes": 15
+        },
+        {
+          "text": "Pour in the cream, season with salt, and bring back to a bare simmer.",
+          "duration_minutes": 2
+        },
+        {
+          "text": "Add the salmon, cover, take the pot off the heat, and let it poach in the residual heat.",
+          "duration_minutes": 5,
+          "tip": "Boiling toughens salmon and breaks it into flakes. Off the heat it stays in cubes, barely opaque."
+        },
+        {
+          "text": "Stir through plenty of dill and serve."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.9,
+    "variant_titles": ["Creamy {title}", "Helsinki {title}"]
+  }
+}

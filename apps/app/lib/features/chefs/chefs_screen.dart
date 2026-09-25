@@ -7,14 +7,22 @@ import 'package:go_router/go_router.dart';
 import 'package:app/features/chefs/chef_detail_common.dart';
 import 'package:app/features/chefs/chefs_hero.dart';
 import 'package:app/features/chefs/chefs_providers.dart';
+import 'package:app/features/chefs/chefs_rails.dart';
 import 'package:app/routing/app_router.dart';
 
-/// Chefs leaderboard — ranked by chef score over each chef's public recipes.
+/// Chefs leaderboard — ranked by chef score over each chef's public recipes, or
+/// (Phase 33) by what they earned this month or week, or by join date.
 ///
-/// Two layouts, one screen. On a phone this is the board and nothing else, the
-/// way it has always been. From [Breakpoints.compact] up it is the page from the
-/// redraw: a hero stating the population and the ranking rule, the board demoted
-/// to a panel on the left, and rails of spotlight cards on the right.
+/// Two layouts, one screen. On a phone this is the board and nothing else. From
+/// [Breakpoints.compact] up it is the page from the redraw: a hero stating the
+/// population and the ranking rule, the board demoted to a panel on the left,
+/// and rails of spotlight cards on the right.
+///
+/// **No `AppBar` from compact up** (the Phase 21 carry-over, for this screen):
+/// the web shell already draws `TopNavBar` above every shell screen, so a
+/// second bar under it was chrome stacked on chrome — and the hero's `Chefs`
+/// display title is the page title there. A phone has no top bar, so the
+/// compact board keeps its own. `chefs_screen_test.dart` pins both halves.
 ///
 /// Signed-out safe, like Discover: every read behind it is `anon`-callable, so
 /// this route is deliberately absent from the router's `needsAuth` list.
@@ -70,7 +78,7 @@ class ChefsScreen extends ConsumerWidget {
                             child: _BoardPanel(scrollable: true),
                           ),
                           const SizedBox(width: AppSpacing.lg),
-                          Expanded(child: _Rails(height: railHeight)),
+                          Expanded(child: ChefsRails(height: railHeight)),
                         ],
                       ),
                     ),
@@ -83,7 +91,7 @@ class ChefsScreen extends ConsumerWidget {
                   children: [
                     const ChefsHero(),
                     const SizedBox(height: AppSpacing.lg),
-                    _Rails(height: railHeight, shrinkWrap: true),
+                    ChefsRails(height: railHeight, shrinkWrap: true),
                     const SizedBox(height: AppSpacing.lg),
                     const _BoardPanel(scrollable: false),
                   ],
@@ -93,54 +101,186 @@ class ChefsScreen extends ConsumerWidget {
   }
 }
 
-/// The phone board: unchanged by the page redraw.
+/// The phone board: the ranked rows under the two controls the web hero and
+/// panel carry — the ordering, and (on Momentum) the window.
+///
+/// One scroll holding the controls **and** whatever state the board is in, so
+/// an empty Momentum week still shows the tabs that lead back out of it, and a
+/// pull-to-refresh works from every state.
 class _CompactBoard extends ConsumerWidget {
   const _CompactBoard();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final async = ref.watch(chefsLeaderboardProvider);
+    final async = ref.watch(chefBoardProvider);
+    final view = ref.watch(boardViewProvider);
+    final page = async.valueOrNull;
+
+    final Widget? state = switch (async) {
+      _ when _showsSpinner(async) => const Padding(
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.xl),
+        child: LoadingView(),
+      ),
+      AsyncValue(:final error?) => ErrorView(
+        message: friendlyError(error),
+        onRetry: () => ref.invalidate(chefBoardProvider),
+      ),
+      _ when page != null && page.rows.isEmpty => _BoardEmpty(view: view),
+      _ => null,
+    };
+    final rows = state == null ? page!.rows : const <ChefBoardRow>[];
 
     return Scaffold(
       appBar: AppBar(title: const Text('Chefs')),
-      body: async.when(
-        loading: () => const LoadingView(),
-        error:
-            (e, _) => ErrorView(
-              message: friendlyError(e),
-              onRetry: () => ref.invalidate(chefsLeaderboardProvider),
-            ),
-        data:
-            (chefs) =>
-                chefs.isEmpty
-                    ? const EmptyView(
-                      title: 'No chefs yet',
-                      message: 'Publish a recipe and you will show up here.',
-                      icon: Icons.emoji_events_outlined,
-                    )
-                    : RefreshIndicator(
-                      onRefresh:
-                          () async => ref.invalidate(chefsLeaderboardProvider),
-                      child: ListView.separated(
-                        padding: const EdgeInsets.all(AppSpacing.md),
-                        itemCount: chefs.length,
-                        separatorBuilder:
-                            (_, __) => const SizedBox(height: AppSpacing.sm),
-                        itemBuilder:
-                            (context, i) => ChefStandingCard(
-                              standing: chefs[i],
-                              onTap:
-                                  () => context.push(Routes.chef(chefs[i].id)),
-                            ),
-                      ),
-                    ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          // A failed refresh lands in the error state above; the indicator
+          // only needs to know the attempt finished.
+          try {
+            ref.invalidate(chefBoardProvider);
+            await ref.read(chefBoardProvider.future);
+          } catch (_) {}
+        },
+        child: ListView.separated(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(AppSpacing.md),
+          // Controls, then either the one state widget or every row, then the
+          // footer.
+          itemCount: 1 + (state == null ? rows.length : 1) + 1,
+          separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
+          itemBuilder: (context, i) {
+            if (i == 0) return const _BoardControls(showWindow: true);
+            if (state != null) {
+              return i == 1 ? state : const SizedBox.shrink();
+            }
+            if (i <= rows.length) {
+              return _BoardCard(row: rows[i - 1], view: view);
+            }
+            return page!.hasMore
+                ? _LoadMoreButton(loading: page.loadingMore)
+                : const SizedBox.shrink();
+          },
+        ),
+      ),
+    );
+  }
+}
+
+/// Whether the board should show a spinner rather than rows: the first load,
+/// and a **re-sort**. Riverpod keeps the previous value while a provider
+/// rebuilds for a changed dependency (`isReloading`), which here would leave
+/// the last ordering's rows on screen under the new tab — a Momentum week's
+/// gains labelled as last month's. A pull-to-refresh (`isRefreshing`) keeps
+/// its rows, because they are still the right ordering.
+bool _showsSpinner(AsyncValue<ChefBoardPage> async) =>
+    async.isLoading && (!async.hasValue || async.isReloading);
+
+/// The ordering pill, and — on a phone, where there is no hero — the window
+/// pill under it while Momentum is selected.
+class _BoardControls extends ConsumerWidget {
+  const _BoardControls({required this.showWindow});
+
+  /// True on compact, where the hero (and its Month / Week) is absent.
+  final bool showWindow;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final view = ref.watch(boardViewProvider);
+    final notifier = ref.read(boardViewProvider.notifier);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ChefPillTabs<BoardSort>(
+          options: BoardSort.values,
+          selected: view.sort,
+          labelOf: (sort) => sort.label,
+          onSelected: notifier.selectSort,
+        ),
+        if (showWindow && view.sort == BoardSort.momentum) ...[
+          const SizedBox(height: AppSpacing.sm),
+          ChefPillTabs<ChefsWindow>(
+            // All time is not a Momentum window — it is the Score tab.
+            options: const [ChefsWindow.month, ChefsWindow.week],
+            selected: view.window,
+            labelOf: (window) => window.label,
+            onSelected: notifier.selectWindow,
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+/// One board row, in whichever shape the layout asks for, carrying the window
+/// on Momentum and the join date on `New`.
+class _BoardCard extends StatelessWidget {
+  const _BoardCard({required this.row, required this.view, this.variant});
+
+  final ChefBoardRow row;
+  final BoardView view;
+
+  /// Null is the podium row, sized for the ambient width.
+  final ChefCardVariant? variant;
+
+  @override
+  Widget build(BuildContext context) {
+    final joined = row.standing.createdAt;
+    return ChefStandingCard(
+      standing: row.standing,
+      variant: variant ?? ChefCardVariant.podium,
+      window: row.window,
+      windowLabel: view.window.span,
+      note:
+          view.sort == BoardSort.newest && joined != null
+              ? 'joined ${monthYear(joined.toLocal())}'
+              : null,
+      onTap: () => context.push(Routes.chef(row.standing.id)),
+    );
+  }
+}
+
+/// A loaded board with no rows — two different sentences.
+///
+/// On Score or New it means nobody has published yet. On Momentum it means
+/// nobody **moved** in the window, which is a statement about the data, not a
+/// failure: a simulated database whose `sim.epoch_end()` anchor has gone stale
+/// returns exactly this, correctly. Hence a real state with a way back to the
+/// all-time board, never a spinner.
+class _BoardEmpty extends ConsumerWidget {
+  const _BoardEmpty({required this.view});
+
+  final BoardView view;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (view.sort != BoardSort.momentum) {
+      return const EmptyView(
+        title: 'No chefs yet',
+        message: 'Publish a recipe and you will show up here.',
+        icon: Icons.emoji_events_outlined,
+      );
+    }
+    return EmptyView(
+      title: 'Nothing moved in the ${view.window.span}',
+      message:
+          'No public recipe earned a like, save or view in that time. '
+          'The Score board still ranks every chef on all-time points.',
+      icon: Icons.hourglass_empty,
+      action: TextButton(
+        onPressed:
+            () => ref
+                .read(boardViewProvider.notifier)
+                .selectSort(BoardSort.score),
+        child: const Text('Show all-time scores'),
       ),
     );
   }
 }
 
 /// The ranked board, as a panel: header, ordering tabs, rows, and a footer that
-/// widens the page.
+/// loads the next page.
 class _BoardPanel extends ConsumerWidget {
   const _BoardPanel({required this.scrollable});
 
@@ -152,52 +292,41 @@ class _BoardPanel extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
-    final async = ref.watch(chefsLeaderboardProvider);
+    final async = ref.watch(chefBoardProvider);
     final total = ref.watch(chefCountProvider).valueOrNull;
-    final sort = ref.watch(boardSortProvider);
+    final view = ref.watch(boardViewProvider);
+    final page = async.valueOrNull;
 
-    final rows = async.when(
-      loading:
-          () => const Padding(
-            padding: EdgeInsets.symmetric(vertical: AppSpacing.xl),
-            child: LoadingView(),
-          ),
-      error:
-          (e, _) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
-            child: ErrorView(
-              message: friendlyError(e),
-              onRetry: () => ref.invalidate(chefsLeaderboardProvider),
+    final Widget rows = switch (async) {
+      _ when _showsSpinner(async) => const Padding(
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.xl),
+        child: LoadingView(),
+      ),
+      AsyncValue(:final error?) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+        child: ErrorView(
+          message: friendlyError(error),
+          onRetry: () => ref.invalidate(chefBoardProvider),
+        ),
+      ),
+      _ when page!.rows.isEmpty => Padding(
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
+        child: _BoardEmpty(view: view),
+      ),
+      _ => ListView.separated(
+        padding: const EdgeInsets.all(AppSpacing.sm),
+        shrinkWrap: !scrollable,
+        physics: scrollable ? null : const NeverScrollableScrollPhysics(),
+        itemCount: page.rows.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 6),
+        itemBuilder:
+            (context, i) => _BoardCard(
+              row: page.rows[i],
+              view: view,
+              variant: ChefCardVariant.board,
             ),
-          ),
-      data:
-          (chefs) =>
-              chefs.isEmpty
-                  ? const Padding(
-                    padding: EdgeInsets.symmetric(vertical: AppSpacing.lg),
-                    child: EmptyView(
-                      title: 'No chefs yet',
-                      message: 'Publish a recipe and you will show up here.',
-                      icon: Icons.emoji_events_outlined,
-                    ),
-                  )
-                  : ListView.separated(
-                    padding: const EdgeInsets.all(AppSpacing.sm),
-                    shrinkWrap: !scrollable,
-                    physics:
-                        scrollable
-                            ? null
-                            : const NeverScrollableScrollPhysics(),
-                    itemCount: chefs.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 6),
-                    itemBuilder:
-                        (context, i) => ChefStandingCard(
-                          standing: chefs[i],
-                          variant: ChefCardVariant.board,
-                          onTap: () => context.push(Routes.chef(chefs[i].id)),
-                        ),
-                  ),
-    );
+      ),
+    };
 
     return Card(
       margin: EdgeInsets.zero,
@@ -231,7 +360,7 @@ class _BoardPanel extends ConsumerWidget {
                     ),
                     const SizedBox(width: AppSpacing.sm),
                     Text(
-                      _shownLabel(async.valueOrNull?.length, total),
+                      _shownLabel(page?.rows.length, total, view.sort),
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: scheme.onSurfaceVariant,
                         letterSpacing: 0.6,
@@ -240,41 +369,45 @@ class _BoardPanel extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: AppSpacing.sm),
-                _SortTabs(
-                  selected: sort,
-                  onSelected:
-                      (s) => ref.read(boardSortProvider.notifier).state = s,
-                ),
+                // The hero carries Month / Week on this layout.
+                const _BoardControls(showWindow: false),
               ],
             ),
           ),
           Divider(height: 1, color: scheme.outlineVariant),
           if (scrollable) Expanded(child: rows) else rows,
           Divider(height: 1, color: scheme.outlineVariant),
-          _PanelFooter(loaded: async.valueOrNull?.length, total: total),
+          // No footer button under a re-sort's spinner: `page` is still the
+          // previous ordering's, and paging it would mix two orderings.
+          _PanelFooter(page: _showsSpinner(async) ? null : page, view: view),
         ],
       ),
     );
   }
 
-  /// `TOP 25 / 148` — or just the total until the rows land.
-  static String _shownLabel(int? loaded, int? total) {
+  /// `TOP 25 / 148` — or just the total until the rows land. Momentum has no
+  /// denominator: it lists only the chefs who moved, and how many that is is
+  /// not known until the last page.
+  static String _shownLabel(int? loaded, int? total, BoardSort sort) {
+    final prefix = sort == BoardSort.newest ? 'NEWEST' : 'TOP';
     if (loaded == null) return total == null ? '' : groupedCount(total);
-    if (total == null) return 'TOP ${groupedCount(loaded)}';
-    return 'TOP ${groupedCount(loaded)} / ${groupedCount(total)}';
+    if (total == null || sort == BoardSort.momentum) {
+      return '$prefix ${groupedCount(loaded)}';
+    }
+    return '$prefix ${groupedCount(loaded)} / ${groupedCount(total)}';
   }
 }
 
-class _PanelFooter extends ConsumerWidget {
-  const _PanelFooter({required this.loaded, required this.total});
+class _PanelFooter extends StatelessWidget {
+  const _PanelFooter({required this.page, required this.view});
 
-  final int? loaded;
-  final int? total;
+  final ChefBoardPage? page;
+  final BoardView view;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final more = loaded != null && total != null && loaded! < total!;
+    final more = page?.hasMore ?? false;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, AppSpacing.sm, AppSpacing.sm, 6),
@@ -282,144 +415,68 @@ class _PanelFooter extends ConsumerWidget {
         children: [
           Expanded(
             child: Text(
-              'Ties share a rank.',
-              maxLines: 1,
+              switch (view.sort) {
+                // The rank pill on a `New` row is still the all-time rank,
+                // which reads as out of order unless it is said.
+                BoardSort.newest => 'Newest first. Ranks are all-time.',
+                BoardSort.momentum =>
+                  'Points earned in the ${view.window.span}.',
+                BoardSort.score => 'Ties share a rank.',
+              },
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.labelSmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
           ),
-          if (more)
-            TextButton(
-              // One more page is one wider read — see `leaderboardPagesProvider`.
-              onPressed:
-                  () => ref.read(leaderboardPagesProvider.notifier).state++,
-              child: Text('Show all ${groupedCount(total!)}'),
-            ),
+          if (more) _LoadMoreButton(loading: page!.loadingMore, dense: true),
         ],
       ),
     );
   }
 }
 
-/// Score / Momentum / New. Two of the three are disabled — see [BoardSort].
-///
-/// The pill itself moved to [ChefPillTabs] (Phase 31) so `/chef/:id` renders the
-/// same control rather than a look-alike.
-class _SortTabs extends StatelessWidget {
-  const _SortTabs({required this.selected, required this.onSelected});
+/// `Load more` — a button rather than infinite scroll, like every paged recipe
+/// surface (`recipe_async_grid.dart`): an explicit tap never fetches a page the
+/// reader did not ask for. A failed page keeps the rows already loaded and says
+/// so in a snackbar.
+class _LoadMoreButton extends ConsumerWidget {
+  const _LoadMoreButton({required this.loading, this.dense = false});
 
-  final BoardSort selected;
-  final ValueChanged<BoardSort> onSelected;
+  final bool loading;
 
-  @override
-  Widget build(BuildContext context) {
-    return ChefPillTabs<BoardSort>(
-      options: BoardSort.values,
-      selected: selected,
-      labelOf: (sort) => sort.label,
-      onSelected: onSelected,
-      enabledOf: (sort) => sort.enabled,
-      disabledMessage: 'Needs a score history — not wired up yet',
-    );
-  }
-}
-
-/// The three shelves beside the board.
-///
-/// Only the first has data. Trending and "best of the month" rank on engagement
-/// earned inside a time window, which is derivable from the `created_at` /
-/// `viewed_at` columns on the like, save and view tables — but the seed writes
-/// the counters straight onto `recipes` and leaves those logs almost empty, so
-/// today they would render three empty shelves.
-// TODO(rails): swap the placeholders for real cards once there is dated
-// engagement to rank and the windowed RPC exists (EXECUTION-PLAN Phase 23).
-class _Rails extends ConsumerWidget {
-  const _Rails({required this.height, this.shrinkWrap = false});
-
-  final double height;
-  final bool shrinkWrap;
-
-  static const _placeholderNote =
-      'Placeholder cards — this shelf needs dated likes and saves to rank, '
-      'and the seeded data carries totals only.';
+  /// The panel footer's inline form, beside the footnote.
+  final bool dense;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final async = ref.watch(chefsLeaderboardProvider);
-    final total = ref.watch(chefCountProvider).valueOrNull;
+    final label = Text(loading ? 'Loading…' : 'Load more');
+    Future<void> load() async {
+      final messenger = ScaffoldMessenger.of(context);
+      try {
+        await ref.read(chefBoardProvider.notifier).loadMore();
+      } catch (e) {
+        messenger.showSnackBar(SnackBar(content: Text(friendlyError(e))));
+      }
+    }
 
-    final popular = async.valueOrNull ?? const <ChefStanding>[];
-    // Three states, not two. A board that has loaded and is genuinely empty
-    // must not render a shelf of placeholders — that reads as "loading
-    // forever" and claims a population the empty state right beside it denies.
-    final loading = async.isLoading && popular.isEmpty;
-
-    return ListView(
-      shrinkWrap: shrinkWrap,
-      physics: shrinkWrap ? const NeverScrollableScrollPhysics() : null,
-      padding: EdgeInsets.zero,
-      children: [
-        if (async.hasError)
-          ErrorView(
-            message: friendlyError(async.error),
-            onRetry: () => ref.invalidate(chefsLeaderboardProvider),
-          )
-        else if (popular.isNotEmpty || loading)
-          CardRail(
-            icon: Icons.favorite,
-            title: 'Popular chefs',
-            subtitle: 'Most decorated kitchens, all time',
-            height: height,
-            cardWidth: kSpotlightCardWidth,
-            // Placeholders while the board is still loading, so the shelf keeps
-            // its height instead of collapsing and shoving the rails below it.
-            itemCount:
-                loading
-                    ? kChefRailLength
-                    : popular.length.clamp(1, kChefRailLength),
-            itemBuilder:
-                (context, i) =>
-                    loading
-                        ? SpotlightCardPlaceholder(
-                          tier: ChefTier.values[i % ChefTier.values.length],
-                        )
-                        : ChefSpotlightCard(
-                          standing: popular[i],
-                          totalChefs: total,
-                          onTap: () => context.push(Routes.chef(popular[i].id)),
-                        ),
-          ),
-        const SizedBox(height: AppSpacing.lg),
-        CardRail(
-          icon: Icons.trending_up,
-          title: 'Trending chefs',
-          subtitle: 'Fastest score gain in the last 7 days',
-          height: height,
-          cardWidth: kSpotlightCardWidth,
-          itemCount: 6,
-          footnote: _placeholderNote,
-          itemBuilder:
-              (context, i) => SpotlightCardPlaceholder(
-                tier: ChefTier.values[i % ChefTier.values.length],
-              ),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        CardRail(
-          icon: Icons.calendar_month,
-          title: 'Best chefs of the month',
-          subtitle: 'Ranked on saves earned this month',
-          height: height,
-          cardWidth: kSpotlightCardWidth,
-          itemCount: 6,
-          footnote: _placeholderNote,
-          itemBuilder:
-              (context, i) => SpotlightCardPlaceholder(
-                tier: ChefTier.values[(i + 2) % ChefTier.values.length],
-              ),
-        ),
-      ],
+    if (dense) {
+      return TextButton(onPressed: loading ? null : load, child: label);
+    }
+    return Center(
+      child: OutlinedButton.icon(
+        onPressed: loading ? null : load,
+        icon:
+            loading
+                ? const SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+                : const Icon(Icons.expand_more),
+        label: label,
+      ),
     );
   }
 }

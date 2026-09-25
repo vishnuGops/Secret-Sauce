@@ -1,6 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:core/src/models/chef_standing.dart';
+import 'package:core/src/models/chef_window.dart';
 import 'package:core/src/models/enums.dart';
 import 'package:core/src/models/recipe.dart';
 import 'package:core/src/repositories/recipe_queries.dart';
@@ -14,6 +15,41 @@ abstract interface class ChefRepository {
   /// Chefs ranked by `chef_score`, highest first. Only chefs with at least one
   /// public recipe appear.
   Future<List<ChefStanding>> leaderboard({int limit, int offset});
+
+  /// The same population and the same rows, **newest member first** — the
+  /// board's `New` sort (Phase 33).
+  ///
+  /// A different ordering, so a different query rather than a tie-break bolted
+  /// onto [leaderboard]'s (`0001_init.sql` says exactly that above
+  /// `chefs_leaderboard`). It is still `chefs_leaderboard`, called with no inner
+  /// limit so `dense_rank()` ranks the whole population, and re-ordered and
+  /// paged by PostgREST **outside** the function: `created_at desc, id asc`.
+  /// The trailing `id` is what makes that order total, so `offset` cannot show
+  /// one chef twice (Gotcha 24). `chefRank` stays the all-time rank.
+  Future<List<ChefStanding>> newest({int limit, int offset});
+
+  /// Chefs ranked by what they earned in the last [days] days
+  /// (`chefs_leaderboard_windowed`) — the `Momentum` board and the windowed
+  /// rails. Every ranked chef is returned, zeros included, quiet ones last.
+  ///
+  /// **Pass [since] for every page after the first.** A window measured from
+  /// `now()` moves between two requests, which makes `offset` lie even over the
+  /// RPC's total order; `p_since` overrides [days] and holds the boundary still.
+  Future<List<ChefWindowStanding>> windowedLeaderboard({
+    required int days,
+    int limit,
+    int offset,
+    DateTime? since,
+  });
+
+  /// One chef's window (`chef_window_stats` with `p_chef`) — the momentum line
+  /// on `/chef/:id`. Null when the profile holds no rank, for the same reason
+  /// [standing] is: the function carries the board's population filter.
+  Future<ChefWindowStats?> windowStats(
+    String chefId, {
+    required int days,
+    DateTime? since,
+  });
 
   /// One chef's leaderboard row by id — score, tier, totals, and the `chef_rank`
   /// that `/chef/:id` cannot compute for itself.
@@ -74,6 +110,65 @@ class SupabaseChefRepository implements ChefRepository {
     return (rows as List)
         .map((r) => ChefStanding.fromJson(r as Map<String, dynamic>))
         .toList();
+  }
+
+  @override
+  Future<List<ChefStanding>> newest({int limit = 50, int offset = 0}) async {
+    // `p_limit: null` is `limit null` inside the function — Postgres reads that
+    // as LIMIT ALL — so the rank is computed over every chef and the page is cut
+    // by the `limit`/`offset` PostgREST applies to the function's result.
+    // Cost: the function ranks the whole member population per page, which is
+    // a scan of the chefs, not of recipes.
+    final rows = await _client
+        .rpc('chefs_leaderboard', params: {'p_limit': null, 'p_offset': 0})
+        .order('created_at', ascending: false)
+        .order('id', ascending: true)
+        .range(offset, offset + limit - 1);
+    return (rows as List)
+        .map((r) => ChefStanding.fromJson(r as Map<String, dynamic>))
+        .toList();
+  }
+
+  @override
+  Future<List<ChefWindowStanding>> windowedLeaderboard({
+    required int days,
+    int limit = 50,
+    int offset = 0,
+    DateTime? since,
+  }) async {
+    final rows = await _client.rpc(
+      'chefs_leaderboard_windowed',
+      params: {
+        'p_days': days,
+        'p_limit': limit,
+        'p_offset': offset,
+        if (since != null) 'p_since': since.toUtc().toIso8601String(),
+      },
+    );
+    return (rows as List)
+        .map((r) => ChefWindowStanding.fromRow(r as Map<String, dynamic>))
+        .toList();
+  }
+
+  @override
+  Future<ChefWindowStats?> windowStats(
+    String chefId, {
+    required int days,
+    DateTime? since,
+  }) async {
+    // `returns table`, so an array either way — zero rows is the legitimate
+    // "not a ranked chef" answer, exactly as in [standing].
+    final rows = await _client.rpc(
+      'chef_window_stats',
+      params: {
+        'p_days': days,
+        if (since != null) 'p_since': since.toUtc().toIso8601String(),
+        'p_chef': chefId,
+      },
+    );
+    final list = rows as List;
+    if (list.isEmpty) return null;
+    return ChefWindowStats.fromJson(list.first as Map<String, dynamic>);
   }
 
   @override

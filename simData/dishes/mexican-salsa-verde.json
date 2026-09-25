@@ -1,0 +1,50 @@
+{
+  "slug": "mexican-salsa-verde",
+  "title": "Salsa Verde",
+  "description": "Tomatillos, jalapeños, onion, and garlic charred until blistered, then blended with cilantro and lime. Tart, smoky, and made in fifteen minutes.",
+  "cuisine": "Mexican",
+  "category": "Sauce",
+  "difficulty": "easy",
+  "prep_minutes": 10,
+  "cook_minutes": 12,
+  "servings": 8,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Keeps five days in the fridge. Boiled rather than charred is the other classic — brighter and sharper.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "tomatillos", "note": "husked and rinsed" },
+        { "quantity": 2, "unit": null, "name": "jalapeños", "note": "or serranos", "food": "jalapeno" },
+        { "quantity": 0.5, "unit": null, "name": "white onion", "note": "in thick slices", "food": "onion" },
+        { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "unpeeled", "food": "garlic" },
+        { "quantity": 1, "unit": "handful", "name": "cilantro", "food": "coriander" },
+        { "quantity": 1, "unit": "tbsp", "name": "lime juice" },
+        { "quantity": 1, "unit": "tsp", "name": "salt", "food": "kosher-salt" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Roast the tomatillos, jalapeños, onion, and unpeeled garlic on a dry comal or under a hot grill, turning, until blistered and softened.",
+          "duration_minutes": 12,
+          "temperature": "high"
+        },
+        {
+          "text": "Squeeze the garlic from its skin and blend everything with the cilantro, lime juice, and salt to a chunky purée."
+        },
+        {
+          "text": "Taste and add a splash of water if it is too thick."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.3,
+    "variant_titles": ["Charred {title}", "Taquería {title}"]
+  }
+}

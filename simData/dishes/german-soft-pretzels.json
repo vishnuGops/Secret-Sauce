@@ -1,0 +1,87 @@
+{
+  "slug": "german-soft-pretzels",
+  "title": "Laugenbrezeln",
+  "description": "Bavarian lye-style pretzels with a deep mahogany crust, a soft chewy crumb, and coarse salt — made at home with baked baking soda.",
+  "cuisine": "German",
+  "category": "Snack",
+  "difficulty": "medium",
+  "prep_minutes": 40,
+  "cook_minutes": 15,
+  "servings": 8,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Best eaten the day they are baked, with butter or sweet mustard.",
+  "ingredient_groups": [
+    {
+      "name": "Dough",
+      "ingredients": [
+        { "quantity": 500, "unit": "g", "name": "bread flour" },
+        { "quantity": 7, "unit": "g", "name": "instant yeast", "food": "active-dry-yeast" },
+        { "quantity": 1, "unit": "tsp", "name": "sugar", "food": "granulated-sugar" },
+        { "quantity": 10, "unit": "g", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 25, "unit": "g", "name": "butter", "note": "softened", "food": "butter" },
+        { "quantity": 300, "unit": "ml", "name": "warm water", "food": "water" }
+      ]
+    },
+    {
+      "name": "Bath and topping",
+      "ingredients": [
+        { "quantity": 60, "unit": "g", "name": "baking soda", "food": "baking-soda" },
+        { "quantity": 2, "unit": "L", "name": "water", "food": "water" },
+        { "quantity": 2, "unit": "tbsp", "name": "pretzel salt", "note": "or coarse sea salt" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Dough",
+      "steps": [
+        {
+          "text": "Mix the bread flour, yeast, sugar, salt, butter, and warm water and knead to a firm, smooth dough.",
+          "duration_minutes": 10
+        },
+        {
+          "text": "Cover and leave to rise until puffy.",
+          "duration_minutes": 60
+        }
+      ]
+    },
+    {
+      "name": "Shape",
+      "steps": [
+        {
+          "text": "Divide into 8, roll each into a 60 cm rope, thicker in the middle, and twist into a pretzel.",
+          "tip": "Lift both ends, cross them twice, and press them onto the fat belly."
+        },
+        {
+          "text": "Refrigerate uncovered so a skin forms.",
+          "duration_minutes": 60,
+          "tip": "The skin keeps the shape crisp in the bath."
+        }
+      ]
+    },
+    {
+      "name": "Bath and bake",
+      "steps": [
+        {
+          "text": "Spread the baking soda on a tray and bake it for an hour first, which turns it into a stronger alkali. Dissolve it in the water and bring to a simmer.",
+          "duration_minutes": 60,
+          "temperature": "120°C / 250°F",
+          "tip": "Wear gloves. Baked soda is caustic enough to irritate skin."
+        },
+        {
+          "text": "Dip each pretzel for 20 seconds, lift onto a lined tray, slash the belly, and sprinkle with pretzel salt."
+        },
+        {
+          "text": "Bake until deep mahogany.",
+          "duration_minutes": 15,
+          "temperature": "220°C / 430°F"
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 0.8,
+    "variant_titles": ["Oktoberfest {title}", "Butter {title}"]
+  }
+}

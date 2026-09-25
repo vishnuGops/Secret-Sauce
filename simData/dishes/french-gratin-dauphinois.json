@@ -1,0 +1,60 @@
+{
+  "slug": "french-gratin-dauphinois",
+  "title": "Gratin Dauphinois",
+  "description": "Thin slices of potato baked slowly in garlic-scented cream until soft right through and deeply browned on top. No cheese, in the Dauphiné tradition.",
+  "cuisine": "French",
+  "category": "Side",
+  "difficulty": "medium",
+  "prep_minutes": 20,
+  "cook_minutes": 75,
+  "servings": 6,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "It reheats well, so it can be baked a day ahead and warmed through while the meat rests.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 1.2, "unit": "kg", "name": "waxy potatoes", "note": "peeled" },
+        { "quantity": 400, "unit": "ml", "name": "heavy cream", "food": "heavy-cream" },
+        { "quantity": 200, "unit": "ml", "name": "whole milk", "food": "whole-milk" },
+        { "quantity": 2, "unit": "cloves", "name": "garlic", "note": "crushed", "food": "garlic" },
+        { "quantity": 1, "unit": "tsp", "name": "salt", "food": "kosher-salt" },
+        { "quantity": 0.25, "unit": "tsp", "name": "nutmeg", "note": "freshly grated" },
+        { "quantity": 20, "unit": "g", "name": "butter", "note": "for the dish", "food": "butter" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Slice the potatoes 3 mm thick. Do not rinse them.",
+          "tip": "The starch on the slices is what thickens the cream. Rinsed potatoes give a watery gratin."
+        },
+        {
+          "text": "Bring the cream, milk, garlic, salt, and nutmeg to a simmer with the potato slices and cook, stirring gently, until the liquid starts to thicken.",
+          "duration_minutes": 10,
+          "temperature": "medium-low"
+        },
+        {
+          "text": "Rub a gratin dish with the butter, tip in the potatoes and cream, and level the top."
+        },
+        {
+          "text": "Bake until deeply browned on top and a knife meets no resistance.",
+          "duration_minutes": 60,
+          "temperature": "160°C / 320°F"
+        },
+        {
+          "text": "Rest before serving so it sets enough to cut.",
+          "duration_minutes": 15
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1,
+    "variant_titles": ["Holiday {title}", "Make-Ahead {title}"]
+  }
+}

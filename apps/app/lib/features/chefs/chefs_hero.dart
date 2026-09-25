@@ -43,8 +43,8 @@ class ChefsHero extends ConsumerWidget {
     final identity = _Identity(total: total);
     final tiles = _TierTiles(counts: counts);
     final filter = _WindowFilter(
-      selected: ref.watch(chefsWindowProvider),
-      onSelected: (w) => ref.read(chefsWindowProvider.notifier).state = w,
+      selected: ref.watch(boardViewProvider).window,
+      onSelected: ref.read(boardViewProvider.notifier).selectWindow,
     );
 
     return DecoratedBox(
@@ -309,7 +309,13 @@ class _TierTile extends StatelessWidget {
   }
 }
 
-/// All time / Month / Week. Two of the three are disabled — see [ChefsWindow].
+/// All time / Month / Week — the span the board beside the hero measures.
+///
+/// Month or Week turns the board to **Momentum** over that span, and All time
+/// turns it back (see [BoardViewNotifier]), so the pill never claims a window
+/// the numbers under it are not measured over. The tier tiles beside it stay
+/// all-time on purpose: a tier is a career, and five tiles re-counting who is
+/// a Master Chef *this week* would be a different product.
 class _WindowFilter extends StatelessWidget {
   const _WindowFilter({required this.selected, required this.onSelected});
 
@@ -330,11 +336,11 @@ class _WindowFilter extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           for (final window in ChefsWindow.values)
-            notYetTooltip(
-              enabled: window.enabled,
-              message: 'Needs dated engagement data — not wired up yet',
+            Semantics(
+              button: true,
+              selected: window == selected,
               child: InkWell(
-                onTap: window.enabled ? () => onSelected(window) : null,
+                onTap: () => onSelected(window),
                 borderRadius: BorderRadius.circular(AppRadii.pill),
                 child: Container(
                   padding: const EdgeInsets.symmetric(
@@ -351,9 +357,7 @@ class _WindowFilter extends StatelessWidget {
                       color:
                           window == selected
                               ? const Color(0xFF2C1F1B)
-                              : window.enabled
-                              ? ChefsHero._onHeroDim
-                              : ChefsHero._onHeroFaint,
+                              : ChefsHero._onHeroDim,
                       fontWeight:
                           window == selected
                               ? FontWeight.w800

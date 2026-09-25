@@ -1,0 +1,58 @@
+{
+  "slug": "thai-som-tam",
+  "title": "Som Tam",
+  "description": "Shredded green papaya pounded in a mortar with chilli, garlic, lime, fish sauce, and palm sugar. Crunchy, sour, and very hot.",
+  "cuisine": "Thai",
+  "category": "Salad",
+  "difficulty": "easy",
+  "prep_minutes": 20,
+  "cook_minutes": 0,
+  "servings": 2,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "In Thailand the number of chillies is the customer's order. Three is medium; one is polite.",
+  "ingredient_groups": [
+    {
+      "name": "",
+      "ingredients": [
+        { "quantity": 2, "unit": "cloves", "name": "garlic", "food": "garlic" },
+        { "quantity": 3, "unit": null, "name": "bird's eye chillies" },
+        { "quantity": 1, "unit": "tbsp", "name": "palm sugar" },
+        { "quantity": 2, "unit": "tbsp", "name": "dried shrimp" },
+        { "quantity": 50, "unit": "g", "name": "yard-long beans", "note": "in 3 cm lengths" },
+        { "quantity": 8, "unit": null, "name": "cherry tomatoes", "note": "halved", "food": "cherry-tomatoes" },
+        { "quantity": 300, "unit": "g", "name": "green papaya", "note": "peeled and finely shredded" },
+        { "quantity": 2, "unit": "tbsp", "name": "fish sauce" },
+        { "quantity": 3, "unit": "tbsp", "name": "lime juice" },
+        { "quantity": 2, "unit": "tbsp", "name": "roasted peanuts", "note": "crushed" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "",
+      "steps": [
+        {
+          "text": "Pound the garlic and chillies to a rough paste in a large mortar."
+        },
+        {
+          "text": "Add the palm sugar and dried shrimp and pound until the sugar dissolves into the paste."
+        },
+        {
+          "text": "Add the yard-long beans and cherry tomatoes and bruise them lightly."
+        },
+        {
+          "text": "Add the green papaya, fish sauce, and lime juice and pound-and-toss with a spoon, turning the salad over as you go, just until it softens.",
+          "tip": "A bruise, not a mash. The papaya should still crunch."
+        },
+        {
+          "text": "Taste for sour, salty, and sweet in balance, then serve scattered with the peanuts."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1.1,
+    "variant_titles": ["Isaan {title}", "Mild {title}"]
+  }
+}

@@ -33,13 +33,23 @@ class ChefIdentityHeader extends StatelessWidget {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final compact = context.isCompact;
-    final tier = standing?.chefTier ?? profile.chefTier;
+    // An imported chef is browsable, never ranked (Phase 35b), so it has no
+    // tier to show — the column's `home_cook` default would read as a standing
+    // the leaderboard deliberately never gave it (B118).
+    final imported = profile.kind.isImported;
+    final ChefTier? tier =
+        imported ? null : standing?.chefTier ?? profile.chefTier;
 
     // "Rank 4 of 172 · 14 public recipes · joined Mar 2025", minus whatever
     // does not apply. An unranked chef says so in words rather than printing a
     // rank it does not have.
     final facts = <String>[
-      if (standing != null) 'Rank ${standing!.chefRank}' else 'Not ranked yet',
+      if (standing != null)
+        'Rank ${standing!.chefRank}'
+      else if (imported)
+        'Not ranked'
+      else
+        'Not ranked yet',
       // From the profile row, not the standing: it is present either way, and
       // an unranked chef still gets an honest count rather than a hard zero.
       countOf(profile.publicRecipeCount, 'public recipes'),
@@ -95,7 +105,7 @@ class ChefIdentityHeader extends StatelessWidget {
                   runSpacing: AppSpacing.xs,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    TierChip(tier: tier),
+                    if (tier != null) TierChip(tier: tier),
                     Text(
                       facts.join(' · '),
                       style: theme.textTheme.bodySmall?.copyWith(

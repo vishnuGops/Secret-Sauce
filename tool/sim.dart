@@ -23,7 +23,7 @@
 // difference is what each directory is FOR:
 //
 //   recipeData/  the Secret Sauce Kitchen's own recipes. Permanent content,
-//                owned by one fixed account, carries `demo` engagement blocks.
+//                owned by one fixed account. Carries NO engagement (B112).
 //   simData/     an owner-agnostic LIBRARY. Nothing here is a recipe in the
 //                database; supabase/sim/2_sim_generate.sql draws from it,
 //                assigns an owner, applies a variant, and dates it. No `demo`
@@ -60,16 +60,18 @@ const _tag = r'$sd$';
 const _peopleTag = r'$sp$';
 const _vocabTag = r'$sv$';
 
-/// Not const: `foodSlugs` is read from nutritionData/foods.json (Phase 29b).
-/// No dish carries a `food` link yet — linking simData is 29d's optional
-/// curation — but the validator accepts the key now so promotion to
-/// recipeData never has to strip it.
+/// Not const: `foodSlugs` and `units` are read from nutritionData/ (Phase 29b,
+/// BL-8). The 47 dishes added in the 73 -> 120 batch carry `food` links; the
+/// first 73 do not yet. A link makes the generated recipes' ingredients point
+/// at the registry through a real FK, so `nutrition_foods.sql` has to be
+/// applied before `db:sim` — which every documented path already does.
 // `demo` needs no flag any more: engagement is never authored in EITHER
 // directory since B113, so the validator refuses the key outright for both.
 final _options = RecipeFormatOptions(
   allowSim: true,
   dollarTag: _tag,
   foodSlugs: loadFoodSlugs('nutritionData/foods.json'),
+  units: loadUnitCanon('nutritionData/units.json'),
 );
 
 /// Keys allowed inside the optional `sim` block.

@@ -19,6 +19,12 @@ dependencies:
   supabase_flutter: ^2.5.6
   cached_network_image: ^3.3.1
   image_picker: ^1.1.2
+  # Already resolved transitively through supabase_flutter (its OAuth flow
+  # uses it), so declaring it adds no package and no plugin registration — it
+  # only lets the recipe-detail credit (Phase 35a/35c) link out to the page a
+  # captured recipe came from, which is the half of the rights position a
+  # printed address cannot deliver. Keep the bound on the locked 6.3.x.
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   # No build_runner here on purpose: `apps/app` has no freezed/json/riverpod

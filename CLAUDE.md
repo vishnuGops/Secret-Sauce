@@ -36,6 +36,7 @@ origin) and carry a **version history** so legacy/family recipes stay intact and
 | Backend          | **Supabase** — Postgres, Auth, Storage, Row-Level Security          |
 | Monorepo         | **melos** (Dart workspaces)                                         |
 | Images           | `cached_network_image`, `image_picker`                              |
+| Outbound links   | `url_launcher` (`Link`) — the attribution block's link to the original |
 
 There is **one** app entry point — web/mobile/desktop differences are responsive layouts, never a
 second app.
@@ -59,7 +60,7 @@ secret-sauce/
 │   ├── schema.json            #   the format, field by field, mapped to columns
 │   └── README.md              #   authoring workflow
 ├── simData/                   # everything the simulated population is authored from (Phase 24)
-│   ├── dishes/<slug>.json     #   the dish LIBRARY, 73/120. Owner-agnostic; NOT recipes until
+│   ├── dishes/<slug>.json     #   the dish LIBRARY, 120. Owner-agnostic; NOT recipes until
 │   │                          #   the generator runs
 │   ├── people.json            #   17 locales x given/family names + bio templates. One locale
 │   │                          #   per actor, so a name is coherent (check H3)
@@ -69,6 +70,8 @@ secret-sauce/
 │   ├── people.schema.json · vocab.schema.json   # the pool formats, rule by rule
 │   └── README.md              #   authoring workflow + directory coverage rules
 ├── corpus/                    # SCRAPED recipe corpus (Phase 34) — attribution-first, at scale
+│   ├── _fixtures/             #   COMMITTED synthetic shard (.test URLs, no scraped text) —
+│   │                          #   the importer's CI input. Everything else here is ignored
 │   ├── sources.json           #   the registry: every site the harvester may crawl, with
 │   │                          #   kind = chef | restaurant | brand | publication | community
 │   ├── recipes/<slug>.jsonl   #   one append-only JSONL shard per source (git-ignored)
@@ -176,10 +179,15 @@ secret-sauce/
     │   │                         #   (`db:sim:rls`) — writes, then rolls back. NOT in db:sim
     │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
     ├── tests/rls_matrix.sql      # the RLS matrix as a SIGNED-IN user (BL-7, `db:rls`) —
-    │                             #   177 checks; makes its own users, then ROLLS BACK.
-    │                             #   §G is Phase 35b (imported profiles, entities, claims, and
-    │                             #   the claim MERGE end to end); §H is 35c (provenance is
-    │                             #   server-owned, the corpus surface, the blocklist)
+    │                             #   186 checks; makes its own users, then ROLLS BACK.
+    │                             #   §G is Phase 35b (imported profiles, entities, claims, the
+    │                             #   claim MERGE end to end, and B117's pending-claim cap);
+    │                             #   §H is 35c (provenance is server-owned, the corpus surface,
+    │                             #   the blocklist); F22-F24 pin recompute_chef_stats's no-op
+    │                             #   guard by ctid
+    ├── tests/corpus_import_fixture.sql  # the IMPORTER end to end over corpus/_fixtures/ —
+    │                             #   tool output -> rows, field by field, then a re-apply
+    │                             #   that must change nothing. ROLLS BACK; in CI
     ├── tests/nutrition_estimate.sql  # the estimator's ONLY coverage (Phase 29c): fixture
     │                             #   foods/units/trees -> exact labels, then ROLLS BACK
     ├── tests/nutrition_fixtures.sql  # the other half (29d, `db:nutrition:verify`): the
@@ -362,6 +370,8 @@ melos run corpus:import:gen    # -> corpus/_import/*.sql, 500 recipes per file
 #   docker exec supabase_db_secret-sauce psql -U postgres -d postgres \
 #     -v ON_ERROR_STOP=1 -1 -f /tmp/i.sql
 # Idempotent: `unique(source_entity_id, source_url)` makes a re-apply insert nothing.
+melos run corpus:import:fixture  # the committed fixture -> corpus/_import_fixture/*.sql, then
+#   psql -f supabase/tests/corpus_import_fixture.sql  (asserts + re-applies, ROLLS BACK)
 
 # The same tools directly, for the flags the melos scripts fix:
 cd recipeData/_tools
@@ -411,7 +421,7 @@ melos run db:purge:fake -- --yes # DESTRUCTIVE: sim teardown, then seed.sql's fi
 # The RLS acceptance matrix as a SIGNED-IN user (BL-7). Additive only in the sense that
 # it writes and then rolls back — it leaves no user, no recipe, no helper function.
 # Run it after ANY change to a policy, a `security definer` function, or the column grants.
-melos run db:rls      # 177 checks across anon / owner / shared-with / stranger / imported
+melos run db:rls      # 186 checks across anon / owner / shared-with / stranger / imported
 
 # Auto-nutrition SQL. Both roll back; run them after touching the estimator, the
 # backfill, nutritionData/, or an auto recipe's ingredients.
@@ -742,8 +752,13 @@ things carry over to any caller: anonymous views are excluded and a viewer count
 it (Phase 30's lesson), and **`p_since` pins the boundary** — a window measured from `now()` moves
 between page 1 and page 2, which makes `offset` lie even over a total order (Gotcha 24, one level
 out). `chefs_leaderboard` and `chef_standing` gained `created_at` in the same change, in lockstep,
-because they share a return shape on purpose. **There is no client for any of this yet** — the
-Momentum tab, the Month/Week toggle and the `New` sort are still drawn and disabled.
+because they share a return shape on purpose. **The client (2026-09-24) is `ChefBoardNotifier`**:
+Momentum echoes page 1's server `window_start` as `p_since` on every later page (B121), drops a
+`loadMore` begun under a previous ordering, and lists only chefs with
+`window_score > 0`, the Trending / month rails do the same, `New` is `chefs_leaderboard` with
+`p_limit null` re-ordered `created_at desc, id` by PostgREST outside the function, and `/chef/:id`
+shows a 30-day line from `chef_window_stats(p_chef)`. Sort and window are one coupled state
+(`BoardView`) — Month/Week means Momentum.
 Details: [SDS §10](./docs/SDS.md#10-chefs-tiers--leaderboard).
 
 **Identity: `profiles.id` is no longer `auth.uid()` (Phase 35b).** `profiles` used to be 1:1 with
@@ -779,7 +794,10 @@ by hand. It moves recipes, versions, likes, saves, ratings, shares, views and me
 claimed profile (`on conflict do nothing`, because a person cannot like one recipe twice), leaves
 the old profile as a `merged_into` **tombstone** rather than deleting an id that is already in
 URLs, and parks the `recipes_chef_stats` trigger for the duration the way the sim's bulk load does.
-`rls_matrix.sql` §G exercises all of it, merge included.
+`rls_matrix.sql` §G exercises all of it, merge included. Filing is capped (B117): at most
+`profile_claim_pending_cap()` = 5 **pending** claims per account, raised as `P0001` by the AFTER
+trigger `profile_claims_pending_cap` — AFTER so RLS's `with check` refuses a claim filed as someone
+else before the count runs, which keeps the cap from probing another account's queue.
 
 All nine Postgres enums are mirrored in
 [enums.dart](packages/core/lib/src/models/enums.dart): `difficulty`, `recipe_visibility`,
@@ -793,9 +811,9 @@ All nine Postgres enums are mirrored in
 | `/`                               | — (no screen)            | **Redirect-only** → `/discover`. `features/home` was retired 2026-08-20; see the note under the table                    |
 | `/auth`                           | `features/auth`          | `authControllerProvider` (AsyncNotifier); redirects to `/discover` when signed in; `?mode=signup` opens the sign-up side |
 | `/discover`                       | `features/discover`      | Masthead + search, three **shelves** (`01 UNDER 30` / `02 WEEKEND PROJECTS` / `03 MOST FORKED` — `discover_shelf.dart`), then one browse grid whose sort is the old Popular / Trending / Recent. No `AppBar` — the masthead is the title. Signed-out safe |
-| `/chefs`                          | `features/chefs`         | Web: `chefs_hero.dart` + a 404px leaderboard panel + rails of `ChefSpotlightCard`. Compact: the plain board. A row or card **navigates to `/chef/:id`** (Phase 30 retired the dialog — `chef_detail_sheet.dart` is deleted); signed-out safe |
+| `/chefs`                          | `features/chefs`         | Web: `chefs_hero.dart` + a 404px leaderboard panel + rails of `ChefSpotlightCard` (`chefs_rails.dart`: Popular, Trending 7d, Best of the month). Compact: the plain board with its own Month/Week pill under Momentum. Score / Momentum / New tabs and All time / Month / Week are **one coupled state** (`BoardView`); the board pages 25 at a time behind `Load more` (`ChefBoardNotifier`). `/chef/:id` adds a 30-day momentum line (`chef_momentum_line.dart`). A row or card **navigates to `/chef/:id`** (Phase 30 retired the dialog — `chef_detail_sheet.dart` is deleted); signed-out safe |
 | `/chef/:id`                       | `features/chefs`         | **One chef's public page** (Phase 30). `chef_identity_header.dart` (profile + *optional* `ChefStanding`) → `ChefScorePanel` → **All / Popular / Trending** pill (`ChefPillTabs`, Phase 31) → paged `RecipeAsyncSliverGrid`. The tabs are a **sort, not a filter** — same set, three orders; `all` is a plain `listByChef` table read, the other two are RPCs. Root navigator, signed-out safe, **no nav destination** (Gotcha 18). Needs `chef_standing(p_chef)` because a URL carries only a uuid and `chef_rank` is a `dense_rank()` over the whole population |
-| `/my`                             | `features/my_recipes`    | My / Shared-with-me tabs, both paged. Sharing is `widgets/share_dialog.dart` (opened from recipe detail; it writes `recipe_shares`) |
+| `/my`                             | `features/my_recipes`    | My / Shared-with-me tabs, both paged. Compact titles the page with an `AppBar`; web has **no** `AppBar` (the top bar is the chrome) and an in-page header aligned to the grid's first card. Sharing is `widgets/share_dialog.dart` (opened from recipe detail; it writes `recipe_shares`) |
 | `/recipe/:id`                     | `features/recipe_detail` | **Two v2 layouts, one `context.isExpanded` branch (Phase 27).** ≥1000: `recipe_detail_expanded.dart` — measured 1140px page, header band, facts strip. <1000 (compact **and** medium): `recipe_detail_compact.dart` — cover-first, facts quad, pinned jump bar, `Ready to cook?` bar. Both place `rail_panel.dart` (`bordered:` is the only difference) and `method_column.dart`. The v1 hero and `recipe_content_views.dart` are **deleted** — don't reintroduce a third layout for the 600–1000 band. `RailPanel` is the tab host (Phase 28): `servings_row.dart` on top, then `Ingredients` / `Nutrition` chips, then `ingredient_rail.dart` or `nutrition_tab.dart`. Rating, like/save, fork, version history; signed-out safe |
 | `/recipe/:id/cook`                | `features/recipe_detail` | **Cook mode** — full-screen, one step at a time, **always dark** (`AppTheme.dark()`, the only screen that overrides the theme; the phone is propped under kitchen lights). `cook_mode_screen.dart` (route + shortcuts) → `cook_step_view.dart` (compact frames C/D, web frame H) → `cook_finish_view.dart` (frame E). Pure derivations in `cook_mode_model.dart`, session + timers in `cook_mode_providers.dart`. Signed-out safe; **not** in `needsAuth`. See "Cook mode" below |
 | `/recipe/new`, `/recipe/:id/edit` | `features/recipe_editor` | `edit_models.dart` holds mutable draft types; save appends a version. Images — the cover and each step's photo (Phase 33) — go through the one `imagePickerProvider` pick and its 5 MB guard, are held as **bytes on the draft**, and are uploaded inside `_save`: an abandoned edit leaves no orphan object in the bucket |
@@ -1005,13 +1023,18 @@ the `code-review` skill). The ones you need while _writing_ code:
     band (`kRecipeCardBannerHeight` 65 × `context.textScale`, capped at
     `kRecipeCardBannerMaxScale` 2.0 so it cannot starve the cover, title vertically centred,
     clamped to two lines) so one-line and two-line names give the same card (B047); the footer is
-    intrinsic. The card still overflows at **3.0×** and always has (B049) — its contract is 2.0×.
+    intrinsic. Past `kRecipeCardDescriptionMaxScale` (2.0) the description and its divider yield
+    (B049), so the card holds at 3.0× without growing; its contract is still 2.0×.
     Whatever you add to either comes out of a fixed budget, and a longer title eats cover height
     rather than growing the card.
     **The card grid flows; it does not switch at breakpoints.** `FlowGridMetrics.fit`
     (`adaptive.dart`) fits as many columns as can each hold `kRecipeCardMinWidth` (288 — the floor
     at which the metadata row fits *uncut*; it was 264 until B048), caps every
-    tile at `kRecipeCardMaxWidth` (340), and returns the gutter that centres a capped row;
+    tile at `kRecipeCardMaxWidth` (340), stops at `kRecipeGridMaxColumns` (6 — what 1920px
+    already packs, so a 4K window gets six rather than twelve; B049), and returns the `gutter`
+    that centres a row of maximum-width tiles. Slack left by the **column** cap is `trailing`
+    instead — right-hand only, so the capped block keeps the page headers' left edge (B123).
+    `recipeGridMetrics()` in `recipe_grid.dart` is the one call site that passes the cap;
     `RecipeGrid` feeds that into a `LayoutBuilder` + `SliverGridDelegateWithFixedCrossAxisCount`.
     The delegate always divides the **whole** cross-axis extent between its columns, so a tile can
     only be capped by handing the grid less width — that is what the gutter padding is for; a
@@ -1052,7 +1075,7 @@ the `code-review` skill). The ones you need while _writing_ code:
     steps runs as `postgres`, which bypasses policies — so CI also runs
     [supabase/tests/rls_matrix.sql](supabase/tests/rls_matrix.sql) (**BL-7**, `melos run db:rls`),
     which is the only thing here that exercises RLS as a **signed-in** user. It switches to
-    `set local role authenticated`, runs 177 checks across anon / owner / shared-with / unrelated
+    `set local role authenticated`, runs 186 checks across anon / owner / shared-with / unrelated
     stranger / imported chef, and rolls the whole transaction back. It closed the class B053 lived in and found
     B061 on its first complete run. **Run it, and add a check to it, whenever you touch a policy, a
     `security definer` function, or the column grants** — a new table with new policies that the
@@ -1078,8 +1101,12 @@ the `code-review` skill). The ones you need while _writing_ code:
     deliberate departure from that file's `l` key, because a lowercase `l` reads as a `1`;
     resolution is case-insensitive, so it costs nothing. A spelling absent from
     `nutritionData/units.json` contributes **nothing** to an auto nutrition estimate and raises no
-    error, so a new unit goes in that file first. Nothing enforces any of this yet — see ROADMAP
-    BL-8.
+    error, so a new unit goes in that file first — **with its `display` form** (and `plural` for a
+    word unit). That pair is the canon, and `tool/recipe_format.dart` enforces it on both
+    `recipeData/` and `simData/` (BL-8): a spelling that resolves but is not the display form, or a
+    word unit that disagrees with its quantity (`3 clove`), is an **error**; a spelling absent from
+    `units.json` is a warning. The canon holds at the authored quantity only — the scaler still
+    prints the unit verbatim (B119, BL-10).
 17. **Embedding `profiles` into a recipe query needs the FK hint.** `recipes` and `profiles` are
     related five ways (`owner_id`, plus many-to-many through likes/ratings/saves/shares), so the
     obvious `owner:profiles(...)` fails with `PGRST201: Could not embed because more than one

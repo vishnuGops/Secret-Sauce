@@ -7,7 +7,11 @@ The committed source for the auto-nutrition food registry. Two files:
   `tool/fdc.dart` writes from the USDA FoodData Central CSV bundle.
 - **`units.json`** — the canonical unit registry: every accepted spelling, its
   class (mass / volume / count), and its conversion factor. The estimator's
-  unit arithmetic starts here; nothing in SQL restates a conversion.
+  unit arithmetic starts here; nothing in SQL restates a conversion. Each unit
+  also carries `display` (+ `plural` for a word unit): the one spelling an
+  authored recipe may use, which `tool/recipe_format.dart` lints against (BL-8).
+  The generator ignores both keys, so adding a unit means giving it a `display`
+  too, or every recipe validation stops at the registry.
 
 `tool/nutrition.dart` generates `supabase/nutrition_foods.sql` from these two
 files alone — no CSV in sight, so CI's `nutrition:check` works offline, exactly

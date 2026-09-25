@@ -1,0 +1,74 @@
+{
+  "slug": "filipino-leche-flan",
+  "title": "Leche Flan",
+  "description": "A dense, silky Filipino custard of egg yolks and condensed milk, steamed over dark caramel and turned out glossy.",
+  "cuisine": "Filipino",
+  "category": "Dessert",
+  "difficulty": "medium",
+  "prep_minutes": 20,
+  "cook_minutes": 55,
+  "servings": 8,
+  "visibility": "public",
+  "attribution": null,
+  "notes": "Traditionally made in an oval llanera; a 20 cm round tin works. Save the whites for meringues.",
+  "ingredient_groups": [
+    {
+      "name": "Caramel",
+      "ingredients": [
+        { "quantity": 150, "unit": "g", "name": "sugar", "food": "granulated-sugar" },
+        { "quantity": 3, "unit": "tbsp", "name": "water", "food": "water" }
+      ]
+    },
+    {
+      "name": "Custard",
+      "ingredients": [
+        { "quantity": 10, "unit": null, "name": "egg yolks", "food": "egg-yolk" },
+        { "quantity": 400, "unit": "g", "name": "sweetened condensed milk" },
+        { "quantity": 350, "unit": "ml", "name": "evaporated milk" },
+        { "quantity": 1, "unit": "tsp", "name": "vanilla extract", "food": "vanilla-extract" },
+        { "quantity": 1, "unit": "tsp", "name": "lime zest", "note": "or calamansi zest" }
+      ]
+    }
+  ],
+  "step_groups": [
+    {
+      "name": "Caramel",
+      "steps": [
+        {
+          "text": "Melt the sugar with the water in a small pan without stirring, swirling instead, until deep amber.",
+          "duration_minutes": 8,
+          "temperature": "medium",
+          "tip": "Take it a shade darker than feels safe — pale caramel only tastes sweet."
+        },
+        {
+          "text": "Pour immediately into the llanera or tin and tilt to coat the base."
+        }
+      ]
+    },
+    {
+      "name": "Custard",
+      "steps": [
+        {
+          "text": "Stir the egg yolks gently with the condensed milk, evaporated milk, vanilla, and lime zest. Do not whisk in air."
+        },
+        {
+          "text": "Strain twice onto the caramel, cover tightly with foil, and steam until just set with a slight jiggle.",
+          "duration_minutes": 45,
+          "temperature": "low",
+          "tip": "A rolling boil puts holes in it. The water should barely tremble."
+        },
+        {
+          "text": "Cool, then chill until cold.",
+          "duration_minutes": 240
+        },
+        {
+          "text": "Run a knife around the edge and invert onto a plate with a lip to catch the syrup."
+        }
+      ]
+    }
+  ],
+  "sim": {
+    "weight": 1,
+    "variant_titles": ["Lola's {title}", "Ube {title}"]
+  }
+}

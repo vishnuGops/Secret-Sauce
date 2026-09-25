@@ -235,6 +235,68 @@ void main() {
     });
   }
 
+  // Phase 33: the Trending and month rails hand each card its window. Only the
+  // driver row changes, and it keeps its two lines, so the tile's fixed height
+  // budget is the same one the all-time card is pinned to above.
+  group('windowed', () {
+    final week = ChefWindowStats(
+      id: 'c2',
+      windowStart: DateTime.utc(2026, 9, 17),
+      likes: 40,
+      saves: 12,
+      viewers: 60,
+      score: 192,
+    );
+
+    testWidgets('the driver row reads the window', (tester) async {
+      await tester.pumpWidget(
+        _host(
+          ChefSpotlightCard(
+            standing: _standing(),
+            window: week,
+            windowLabel: 'last 7 days',
+            onTap: () {},
+          ),
+        ),
+      );
+
+      expect(find.text('+192 · last 7 days'), findsOneWidget);
+      // 40 × 3 = 120 beats 12 × 5 = 60 and 60 × 0.2 = 12.
+      expect(find.text('Driven by likes · 40 likes × 3'), findsOneWidget);
+      expect(find.text('120'), findsOneWidget);
+      // The lifetime driver is gone from this card, not printed beside it.
+      expect(find.text('1,980 likes × 3'), findsNothing);
+    });
+
+    for (final scale in <double>[1.0, 1.3, 1.6, 2.0, 3.0]) {
+      testWidgets('fits its own tile at textScale $scale', (tester) async {
+        await tester.pumpWidget(
+          _host(
+            ChefSpotlightCard(
+              standing: _standing(
+                name: 'Bartholomew Featherstonehaugh-Wentworth',
+                score: 987654.5,
+                recipes: 128,
+              ),
+              window: ChefWindowStats(
+                id: 'x',
+                windowStart: DateTime.utc(2026, 9, 17),
+                likes: 240000,
+                saves: 180000,
+                viewers: 990000,
+                score: 1818000,
+              ),
+              windowLabel: 'last 30 days',
+              onTap: () {},
+            ),
+            textScale: scale,
+          ),
+        );
+        expect(tester.takeException(), isNull);
+      });
+    }
+  });
+
   testWidgets('renders on a dark theme without exploding', (tester) async {
     await tester.pumpWidget(
       _host(
