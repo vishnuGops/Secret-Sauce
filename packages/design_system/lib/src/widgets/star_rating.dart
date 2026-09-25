@@ -48,7 +48,7 @@ class StarRating extends StatelessWidget {
             Icon(
               iconFor(rating, i),
               size: size,
-              color: unrated ? scheme.outlineVariant : AppTheme.rating,
+              color: unrated ? scheme.outlineVariant : context.palette.rating,
             ),
           if (showValue && !unrated) ...[
             SizedBox(width: size * 0.3),
@@ -88,7 +88,7 @@ class RatingPill extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(Icons.star_rounded, size: size, color: AppTheme.rating),
+        Icon(Icons.star_rounded, size: size, color: context.palette.rating),
         const SizedBox(width: 2),
         // Both texts give up space when the host row is tight — callers place
         // this pill inside a Flexible. **The count yields first**, and that
@@ -207,7 +207,7 @@ class _StarRatingInputState extends State<StarRatingInput> {
               size: widget.size,
               color:
                   shown - i >= 0.25
-                      ? AppTheme.rating
+                      ? context.palette.rating
                       : (widget.enabled
                           ? scheme.outline
                           : scheme.outlineVariant),

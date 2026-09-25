@@ -2,6 +2,9 @@
 library design_system;
 
 export 'src/theme/app_theme.dart';
+export 'src/theme/app_motion.dart';
+export 'src/theme/app_palette.dart';
+export 'src/theme/app_typography.dart';
 export 'src/layout/adaptive.dart';
 export 'src/widgets/recipe_card.dart';
 export 'src/widgets/difficulty_badge.dart';

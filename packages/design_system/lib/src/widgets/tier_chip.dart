@@ -41,22 +41,11 @@ class TierChip extends StatelessWidget {
     ChefTier.masterChef => Icons.workspace_premium_outlined,
   };
 
-  /// Accent color for [tier], readable on that brightness' surfaces.
-  static Color colorFor(ChefTier tier, Brightness brightness) {
-    final dark = brightness == Brightness.dark;
-    return switch (tier) {
-      ChefTier.homeCook =>
-        dark ? const Color(0xFFB0BEC5) : const Color(0xFF546E7A), // slate
-      ChefTier.lineCook =>
-        dark ? const Color(0xFF80CBC4) : const Color(0xFF00695C), // teal
-      ChefTier.sousChef =>
-        dark ? const Color(0xFF90CAF9) : const Color(0xFF1565C0), // blue
-      ChefTier.headChef =>
-        dark ? const Color(0xFFCE93D8) : const Color(0xFF6A1B9A), // purple
-      ChefTier.masterChef =>
-        dark ? const Color(0xFFFFCC80) : const Color(0xFFB26500), // amber
-    };
-  }
+  /// Accent color for [tier], readable on that brightness' surfaces — the
+  /// [AppPalette] pair for that brightness (light shades darkened in 36b so
+  /// the 11px label clears 4.5:1 on the chip's own wash; B133).
+  static Color colorFor(ChefTier tier, Brightness brightness) =>
+      AppPalette.of(brightness).tier(tier);
 
   @override
   Widget build(BuildContext context) {
@@ -66,22 +55,23 @@ class TierChip extends StatelessWidget {
     final color = colorFor(tier, onImage ? Brightness.dark : theme.brightness);
 
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: dense ? 6 : AppSpacing.sm,
-        vertical: dense ? 1 : 2,
-      ),
+      padding: dense ? AppInsets.badgeDense : AppInsets.badge,
       decoration: BoxDecoration(
         // A heavier wash on a scrim: 14% of a pale colour over black is
         // indistinguishable from the scrim itself.
-        color: color.withValues(alpha: onImage ? 0.28 : 0.14),
+        color: color.withValues(
+          alpha: onImage ? AppAlpha.onImageTint : AppAlpha.tint,
+        ),
         borderRadius: BorderRadius.circular(AppRadii.pill),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (!dense) ...[
+            // 13, not AppIconSize.xs: the chip is the densest row in the
+            // product and the glyph sits inside an 11px label's line box.
             Icon(iconFor(tier), size: 13, color: color),
-            const SizedBox(width: 4),
+            const SizedBox(width: AppSpacing.xs),
           ],
           // Flexible so the chip degrades instead of overflowing when a caller
           // puts it in a tight row — the RecipeCard tile cannot grow
@@ -91,10 +81,7 @@ class TierChip extends StatelessWidget {
               tier.label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: color,
-                fontWeight: FontWeight.w700,
-              ),
+              style: theme.textTheme.labelSmall?.copyWith(color: color),
             ),
           ),
         ],
