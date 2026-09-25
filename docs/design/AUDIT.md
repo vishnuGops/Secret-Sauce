@@ -209,3 +209,65 @@ carries no imported marker.
 | editor-edit-{top,mid,low}-1440-signedin, editor-edit-mid-390-signedin | Edit recipe (fork) | | light | nutrition above ingredients (UX-039) |
 | recipe-owner-{390,1440}-signedin | Detail, owner (fork) | | light | no delete (UX-037), unlinked fork (UX-036) |
 | recipe-nonowner-{390,1440}-signedin, -bottom-* | Detail, signed-in reader | | light | rating at the page bottom (UX-055) |
+
+## Re-sweep — 2026-09-25 (after Phase 36b, design system)
+
+**Mode: static + a live spot check.** The static sweep is now a script,
+`.claude/skills/ui-overhaul/scripts/static_sweep.sh`, and both columns below come from it: "before"
+ran against the pre-36b tree (`git archive ec959c8`) and "after" against the 36b branch. Its
+patterns are stricter than the hand-run 2026-09-24 table above: comment lines are excluded, only
+non-zero `EdgeInsets` numbers count, and raw numeric alpha is counted apart from `AppAlpha` tints.
+So the "before" column restates the baseline under the new rules, and some of its numbers differ
+from the hand-run table above. **Scores are not re-graded here.** The live
+spot check was a release web build with **no local stack** (Docker was down), which covers only
+chrome, static pages and error states: `.playwright-mcp/captures/design-2026-09-25/` (legal-1440,
+chefs-1440, discover-390, all light). It confirms that Newsreader and Manrope load under CanvasKit
+and that the button families share a corner. A full re-audit (Phase 1 again) belongs after 36c.
+
+| Signal | Before (`ec959c8`) | After (36b) | Remaining in |
+| --- | --- | --- | --- |
+| Colors.* (outside theme; `transparent` included) | 21 | 3 | top_nav_bar.dart:2 discover_screen.dart:1 |
+| Color(0x… (outside theme) | 12 | 0 |  |
+| Raw numeric alpha (outside theme) | 23 | 1 | chef_spotlight_card.dart:1 |
+| FontWeight.* (outside theme) | 79 | 7 | nutrition_facts_label.dart:4 top_nav_bar.dart:2 chef_avatar.dart:1 |
+| fontSize: (outside theme) | 2 | 1 | chef_avatar.dart:1 |
+| letterSpacing: (outside theme) | 19 | 2 | recipe_card.dart:1 card_rail.dart:1 |
+| Text-style copyWith (outside theme) | 168 | 102 | cook_step_view.dart:18 nutrition_facts_label.dart:7 nutrition_editor.dart:6 |
+| Tabular-figure sites | 1 | 58 |  |
+| ThemeExtension classes | 0 | 2 |  |
+| AppSpacing uses | 471 | 547 |  |
+| Raw non-zero EdgeInsets number (outside theme) | 39 | 0 |  |
+| Raw SizedBox number (outside theme) | 38 | 0 |  |
+| Raw (Border)Radius.circular(n) (outside theme) | 16 | 0 |  |
+| AppRadii uses | 59 | 66 |  |
+| Duration(milliseconds (outside theme) | 7 | 4 | share_dialog.dart:1 recipe_editor_screen.dart:1 ingredients_editor.dart:1 |
+| Curves.* (outside theme) | 2 | 0 |  |
+| AppMotion uses | 0 | 6 |  |
+| Reduced-motion reads (disableAnimationsOf / AppMotion.of / animateScroll) | 0 | 3 |  |
+| BoxShadow( | 2 | 2 |  |
+| IconButton( (outside theme) | 28 | 28 |  |
+| Semantics( | 3 | 3 |  |
+| Button themes in ThemeData | 1 | 6 |  |
+| Component themes in ThemeData | 3 | 15 |  |
+
+**What the survivors are, each commented at its site:** 3 × `Colors.transparent` ("no colour"); the
+spotlight caption's gradient end (`coverScrim` at alpha 0); 4 × w900 on the FDA nutrition label (the
+label's own spec); the top nav's two weights (it measures labels at worst-case w800, so the heavier
+selected label cannot move its neighbours — Preserve); the avatar's initials size and weight
+(computed from the circle); the recipe-card banner's 0.16 tracking and the rail numeral's −0.5; four
+debounces (behaviour, not motion). The ~102 remaining text-style `copyWith`s set colour or a
+line height inside a fixed box, not weight or size.
+
+**Findings closed by 36b** (static evidence plus the guard tests; visual confirmation waits for the
+post-36c re-audit):
+
+| ID | Status | Evidence |
+| --- | --- | --- |
+| UX-010, UX-011 (B133) | fixed | `AppPalette`; `theme_contrast_test.dart` (difficulty ≥ 5.0:1 on its wash, rating ≥ 3.75:1) |
+| UX-012 | fixed | RANK pill ink resolved at light brightness; the contrast test covers the pill in both themes |
+| UX-031 | fixed | The full `TextTheme` in bundled Newsreader + Manrope, plus `AppTextStyles`; `FontWeight` overrides 79 → 7 |
+| UX-032 | partial | Kickers ×6 → `appText.kicker` / `kickerLarge`. Segmented controls, rank badges, Load more and avatars are carried to 36c (DESIGN.md §4) |
+| UX-033 | fixed | One corner and one label weight for every button family; ~48dp container buttons (`theme_extensions_test.dart`) |
+| UX-049 | fixed | Tabular-figure sites 1 → 58; the selected sort, window and pill labels keep one weight |
+| UX-050 | fixed | `AppMotion.of` / `animateScroll` at every animation (3 sites); cook-step transitions remain a 36c design item |
+| UX-054 | fixed | Raw insets, `SizedBox` numbers and radii → 0 (half-steps named; component geometry named per widget) |

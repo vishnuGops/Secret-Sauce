@@ -843,7 +843,7 @@ importer, the provenance columns and the attribution UI have something to run ag
 
 ---
 
-## Phase 36 — UI overhaul (36a done 2026-09-24; 36b next)
+## Phase 36 — UI overhaul (36a done 2026-09-24; 36b done 2026-09-25; 36c next)
 
 **Procedure lives in the skill**, not here: `.claude/skills/ui-overhaul/SKILL.md` + `references/`
 (audit rubric, design-system spec, rebuild loop, ECC-web → Flutter translation). Run `/ui-overhaul`;
@@ -855,12 +855,20 @@ it detects the phase from `docs/design/`.
   Signed-in captures came from `.claude/skills/ui-overhaul/scripts/capture_signed_in.mjs`
   (password-grant session injected as `sb-127-auth-token`; credentials from the git-ignored
   `env.test-account.local.json`).
-- **36b — next.** `DESIGN.md` + token layer. Order: direction and principles (owner confirms) →
-  token files + theme wiring (value-neutral) → migrate raw values feature by feature → token-shaped
-  audit fixes (B133 contrast, UX-031 type, UX-032 duplicates, UX-033 buttons) → contrast guard test →
-  docs. Blocked on two owner calls: fonts, seed color.
-- **36c — waits** for the owner's reference images. The bugs (B125–B132, B134) are independent of
-  the restyle and can be fixed at any time. Fixing them first shrinks what 36c has to preserve.
+- **36b — done.** [docs/design/DESIGN.md](design/DESIGN.md) v1 and the token layer
+  (`packages/design_system/lib/src/theme/`: `app_theme`, `app_palette`, `app_typography`,
+  `app_motion`; fonts under `packages/design_system/fonts/`). Ran in the planned order: direction
+  and principles approved → tokens + theme wiring → a feature-by-feature value-neutral migration
+  (five disjoint file sets) → token-shaped fixes (B133, UX-031, UX-033, UX-049, UX-050) → guard tests
+  → docs. The **UX-032 consolidation** (duplicate segmented controls, rank badges, Load more,
+  avatars) was scoped out of 36b and carried into 36c; only the kicker half landed
+  (`appText.kicker` / `kickerLarge`). `.claude/skills/ui-overhaul/scripts/static_sweep.sh` is the
+  re-runnable sweep; AUDIT.md's 2026-09-25 section has the before/after.
+- **36c — next, waits** for the owner's reference images (DESIGN.md / the Phase 2 exit list names
+  which). Tokens change first, screens after.
+- **Independent of the restyle:** the bugs B125–B132 and B134, and UX-037/038/039 (delete a
+  recipe, edit a profile, the editor order), can be fixed at any time. Fixing them first shrinks
+  what 36c has to preserve.
 
 **Seed-data fit:** the audit's live surfaces run on `db:reset` + the imported corpus. The curated
 14 have **no cover photos**, and engagement is zero, so image-led and ranked layouts can only be

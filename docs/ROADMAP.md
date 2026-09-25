@@ -854,10 +854,22 @@ to `docs/design/`. The next phase does not start until the previous one's file e
       16 Minor findings; functional defects filed as **B125–B134**. Signed-in surfaces were captured live
       with the local test account (see CLAUDE.md "Required environment"). Missing capabilities the
       audit found: deleting a recipe (UX-037) and editing a profile (UX-038).
-- [ ] **36b — Design system + design language** → `docs/design/DESIGN.md` + token code
-      (`ThemeExtension` palette, full `TextTheme`, `AppMotion`) with a value-neutral migration and a
-      contrast guard test. Owner decisions pending: **fonts** (Newsreader + Manrope proposed; bundled
-      assets vs `google_fonts`) and whether the paprika seed stays.
+- [x] **36b — Design system + design language** (2026-09-25) →
+      [docs/design/DESIGN.md](design/DESIGN.md) + the token layer in
+      `packages/design_system/lib/src/theme/`. Owner calls: **Newsreader + Manrope bundled as
+      assets**, paprika seed kept, tone "warm editorial cookbook". `AppPalette` + `AppTextStyles`
+      extensions, the full `TextTheme`, `AppMotion`, `AppInsets` / `AppAlpha` / `AppIconSize`, and
+      component themes for every button family, chips, tabs, nav bar, dialogs, snackbars. Value-neutral
+      migration of every feature; the static sweep went from 12 hex literals / 79 weight overrides /
+      39 raw insets / 16 raw radii to 0 / 7 / 0 / 0 (AUDIT.md re-sweep). Fixed: **B133** (+ UX-010/011/012),
+      UX-031, UX-033, UX-049, UX-050. Guards: `theme_contrast_test`, `theme_extensions_test`,
+      `theme_fonts_test`.
+  - [ ] Consolidate the duplicate components DESIGN.md §4 names (one `SegmentedTabs`, one
+        `RankBadge`, one Load more, `ChefAvatar` on profile) — UX-032's structural half; 36c.
+  - [ ] Bring the Claude Design system's `_ds_bundle.css` back in line with the repo (DESIGN.md
+        §10 lists the drift) — an owner-approved `DesignSync` write, not code.
+  - [ ] Small shared tokens the migration asked for and deliberately did not add: a stroke/track
+        thickness scale (1 / 2 / 3 / 4 / 8), a form measure (420 / 720), a 15px icon step.
 - [ ] **36c — Reference rebuild** — waits for the owner's reference images after 36b.
 - [ ] **Content gap the audit surfaced (seed-data fit):** the 14 curated recipes have no cover
       photos, so Discover shows only placeholders (UX-034). A designed no-photo card is 36b/36c

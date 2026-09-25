@@ -48,7 +48,9 @@ secret-sauce/
 ├── CLAUDE.md · README.md · melos.yaml · pubspec.yaml · analysis_options.yaml
 ├── .claude/skills/            # code-review + review-checklist (repo's own review criteria);
 │                             #   ui-overhaul: audit -> design system -> rebuild-from-reference,
-│                             #   writes docs/design/ (AUDIT.md, DESIGN.md, references/, REBUILD-LOG.md)
+│                             #   writes docs/design/ (AUDIT.md, DESIGN.md, references/, REBUILD-LOG.md);
+│                             #   scripts/static_sweep.sh = the audit's raw-value counts, re-runnable
+│                             #   against any tree (`bash … [ROOT]`)
 ├── .github/workflows/        # ci.yml: format gate + analyze + test + a web release BUILD
 │                             #   (32f4, compile-only), pinned Flutter 3.44.8 / melos 6.3.3
 │                             # database.yml: schema/seed/sim on a real Postgres (OPT-T1) —
@@ -117,10 +119,20 @@ secret-sauce/
 │   │                              # http.BaseClient under a real SupabaseClient
 │   └── design_system/lib/
 │       ├── design_system.dart     # BARREL — export new widgets here or app can't import them
-│       ├── src/{theme,layout,widgets}/
+│       ├── src/theme/             # THE token layer (Phase 36b) — app_theme.dart (AppTheme +
+│       │                          #   component themes, AppSpacing/AppInsets/AppRadii/AppIconSize;
+│       │                          #   re-exports the rest), app_palette.dart (AppPalette extension,
+│       │                          #   AppAlpha), app_typography.dart (AppFonts, the TextTheme,
+│       │                          #   AppTextStyles = context.appText), app_motion.dart (AppMotion)
+│       ├── src/{layout,widgets}/
+│       ├── ../fonts/              # Newsreader + Manrope static TTFs + OFL licences, declared in
+│       │                          #   the package pubspec (resolve as packages/design_system/<family>)
 │       └── ../test/               # recipe_card_test.dart, star_rating_test.dart,
 │                                  # chef_badge_test.dart, flow_grid_test.dart, +4 chef widgets,
-│                                  # nutrition_facts_label_test.dart
+│                                  # nutrition_facts_label_test.dart, theme_contrast_test.dart
+│                                  # (WCAG AA for every role pair, light + dark),
+│                                  # theme_extensions_test.dart (both extensions present, the
+│                                  # ramp in the bundled families, reduced motion)
 ├── apps/app/
 │   ├── lib/features/          # auth, discover, chefs, my_recipes, recipe_detail,
 │   │                          # recipe_editor, profile, legal (35a: three documents as Dart
@@ -147,7 +159,7 @@ secret-sauce/
 │   │                          recipe_detail_v2_test,cook_mode_test,my_recipes_header_test,
 │   │                          recipe_grid_test,discover_screen_test,discover_search_test,
 │   │                          paging_test,share_dialog_test,auth_screen_test,
-│   │                          profile_screen_test}.dart
+│   │                          profile_screen_test,theme_fonts_test}.dart
 │   │                          # the two detail suites split by window: recipe_detail_test covers
 │   │                          # the COMPACT layout (engagement at the default 800x600, plus its
 │   │                          # own 390/600/800 x {1.0,2.0} envelope), recipe_detail_v2_test the
@@ -917,6 +929,16 @@ Four things about `/recipe/:id/cook` are load-bearing:
   end — 32d6 swept 22 literal `circular(999)`s into it) and `AdaptiveLayout` / `context.isCompact`
   / `FlowGridMetrics` from `design_system`; breakpoints are 600 (compact) and 1000 (medium) —
   don't hard-code widths.
+- **Every visual value is a token** (Phase 36b, [docs/design/DESIGN.md](docs/design/DESIGN.md)).
+  Colour: a `ColorScheme` role or `context.palette.<field>` — never a hex, never a
+  `Brightness` branch in a widget (`AppPalette.of(brightness)` is the escape hatch). Type: a
+  `TextTheme` role or `context.appText.<role>` — **never re-bold a role**; a repeated weight
+  override is a missing role, added in `app_typography.dart`. Numbers that change or line up are
+  tabular (`style.tabular`). Motion: `AppMotion` durations read through `AppMotion.of(context, …)`
+  (reduced motion collapses them; `AppMotion.animateScroll` for `ScrollController`). A value that
+  is none of these is component geometry: a named `const` on its widget, with a comment.
+  `theme_contrast_test.dart` fails if a palette or scheme change drops a pair below WCAG AA —
+  fix the colour, not the threshold.
 - **Every error a user sees goes through `friendlyError()`** (core, OPT-A4). Screens rendered
   `e.toString()`, so a denied save read as a `PostgrestException(...)` dump with the table name in
   it. The mapper is the one place that translates and therefore the one place that logs the raw

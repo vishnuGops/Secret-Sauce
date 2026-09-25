@@ -46,7 +46,7 @@ flowchart TD
 | Layer         | Location                     | Responsibility                         |
 | ------------- | ---------------------------- | -------------------------------------- |
 | Presentation  | `apps/app/features/*`        | Screens, adaptive layout               |
-| Design system | `packages/design_system`     | Theme, reusable widgets (`RecipeCard`) |
+| Design system | `packages/design_system`     | Theme + design tokens (§7.3), bundled fonts, reusable widgets (`RecipeCard`) |
 | State         | `apps/app` (Riverpod)        | Controllers, view-models               |
 | Domain/Data   | `packages/core/repositories` | Contracts + Supabase impls             |
 | Services      | `packages/core/services`     | Client bootstrap, auth, storage        |
@@ -1080,6 +1080,28 @@ elapsed against `recipe.totalMinutes`, and is a *state* of the session, not a de
 back to the last step" returns. The canvas's "note for next time" is **not drawn**, because
 `recipe_ratings` has no column for it (see ROADMAP Phase 27 for what adding one costs).
 
+### 7.3 Design system and tokens (Phase 36b)
+
+The full language and every value live in [docs/design/DESIGN.md](./design/DESIGN.md); this section
+is the architecture. **Every colour, type style, spacing step, radius, tint, icon size and
+duration in `apps/app` and `packages/design_system` flows from a token** in
+`packages/design_system/lib/src/theme/`, so a re-skin edits values there, not screens:
+
+| File | Holds |
+| --- | --- |
+| `app_theme.dart` | `AppTheme.light()/dark()` — `ColorScheme.fromSeed(0xFFD2492A)`, the `TextTheme`, both extensions, and component themes for Filled / Outlined / Elevated / Text / Icon / Segmented buttons, FAB, chips, tabs, `NavigationBar`, dialogs, snackbars, cards, inputs. Also `AppSpacing` (2 4 6 8 12 16 24 32 48), `AppInsets`, `AppRadii` (6 8 12 16 26 28 999), `AppIconSize`. Re-exports the three files below |
+| `app_palette.dart` | `AppPalette` — a `ThemeExtension` with light and dark instances for what M3 has no role for: rating, difficulty, tiers, photo scrims, spotlight foil, the always-dark chefs hero. `context.palette`; `AppPalette.of(brightness)` where a colour must resolve at another brightness. `AppAlpha` tint steps |
+| `app_typography.dart` | `AppFonts` (Newsreader + Manrope, bundled under `packages/design_system/fonts/`, OFL), `AppTypography.textTheme` (M3 sizes and line heights, our families and weights), `AppTextStyles` extension (`kicker`, `kickerLarge`, `overline`, `stat`, `statLarge`, `quantity`, `clock`, `clockSmall`, `step`, `stepLarge`) read as `context.appText`, and `kTabularFigures` / `style.tabular` |
+| `app_motion.dart` | `AppMotion` durations and curves; `AppMotion.of(context, d)` returns zero under reduced motion, `AppMotion.animateScroll` jumps instead of animating |
+
+Three rules follow. **Call sites pick a role, never a weight:** a repeated weight override is a
+missing role. **Widgets never branch on `Brightness` to pick a colour** — both themes carry an
+`AppPalette`, and `theme_contrast_test.dart` asserts WCAG AA for every foreground/background pair in
+both. **The bundled families resolve as `packages/design_system/<family>`** in a dependent package
+(the app) and as the bare family inside `design_system`'s own tests; `apps/app/test/theme_fonts_test.dart`
+fails if the app would silently fall back to the platform font. `flutter test` renders every family
+in its fixed-width test font, so the envelope suites are unaffected by the font choice.
+
 ### Adaptive behavior
 
 - Narrow (< 600): bottom navigation, single-column lists.
@@ -1195,9 +1217,10 @@ intrinsically-sized child to a band that had no slack. The cover has slack; the 
 do not — which is also why the visibility chip is **icon-only with the label as a `Tooltip`**: a
 "Private" label next to a two-line title is the first thing to overflow at 2.0× text scale.
 
-The banner is drawn in the theme's `titleMedium`. The Claude Design mockup sets it in Newsreader;
-shipping that is the app-wide typography decision (`google_fonts` + a `textTheme` in
-`app_theme.dart`), not a card-level choice — see ROADMAP Phase 20.
+The banner is drawn in the theme's `titleMedium` — Manrope 16/24 w700 since Phase 36b (§7.3). The
+Claude Design mockup sets it in Newsreader; the ramp keeps `titleMedium` sans, so a serif banner is
+a Phase 36c decision about this one role, not a card-level override. The line height is M3's 24px
+either way, which is what the fixed 65px band (B047) is budgeted against.
 
 ### Rating widgets (`design_system`)
 
@@ -1634,8 +1657,8 @@ ordering's rows, which is Gotcha 24 one level in.
 ### 10.6 UI
 
 - **`TierChip`** (`design_system`, exported from the barrel): compact pill with tier icon +
-  label. Fixed English labels ("Home Cook" … "Master Chef"); per-tier accent colors defined as
-  theme-aware tokens (must pass light + dark).
+  label. Fixed English labels ("Home Cook" … "Master Chef"); per-tier accent colors live in
+  `AppPalette` (light + dark), asserted ≥ 4.5:1 on the chip's own wash by `theme_contrast_test.dart`.
 - **`ChefBadge`** (`design_system`, exported): avatar + display name with the `TierChip` **under
   the name** (per the product requirement), plus a `compact` variant and an `onSurfaceImage` flag
   for the cover overlay. Falls back to initials without an avatar, and to "Unnamed chef" on an
