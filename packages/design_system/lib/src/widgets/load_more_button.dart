@@ -43,7 +43,7 @@ class LoadMoreButton extends StatelessWidget {
   final bool dense;
 
   /// Stroke of the in-flight spinner, at [AppIconSize.sm].
-  static const double _spinnerStroke = 2;
+  static const double _spinnerStroke = AppStroke.thin;
 
   Future<void> _load(BuildContext context) async {
     // Captured before the await: the button may be gone when the page lands.

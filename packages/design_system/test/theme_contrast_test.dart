@@ -224,6 +224,23 @@ void main() {
         p.onHero,
         text,
       );
+      // UX-054: the band has to be told apart from the page it sits on — by
+      // its own colour (light: a dark band on white) or by its outline (dark:
+      // the band is within a hair of the page, and a shadow cannot show).
+      test('$name · the hero band has a visible edge on the page ≥ $ui:1', () {
+        final outline = contrast(
+          Color.alphaBlend(p.heroOutline, s.surface),
+          s.surface,
+        );
+        final band = contrast(p.heroStart, s.surface);
+        expect(
+          outline > band ? outline : band,
+          greaterThanOrEqualTo(ui),
+          reason:
+              'outline ${outline.toStringAsFixed(2)}, '
+              'band ${band.toStringAsFixed(2)}',
+        );
+      });
     });
 
     // UX-012: the spotlight card's RANK pill is near-white in both themes, so

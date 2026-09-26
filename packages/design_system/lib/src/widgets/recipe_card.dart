@@ -120,7 +120,7 @@ const double _kFooterRuleGap = 10;
 
 /// The metadata row's clock glyph — one px under [AppIconSize.sm] so it sits
 /// inside a `labelMedium` line box.
-const double _kMetaIconSize = 15;
+const double _kMetaIconSize = AppIconSize.xsPlus;
 
 /// Placeholder bar sizes: each mimics the text line it stands in for.
 const double _kPlaceholderTitleBar = 13;
@@ -696,14 +696,19 @@ class _CoverImage extends StatelessWidget {
     if (url == null || url!.isEmpty) {
       return _block();
     }
-    return CachedNetworkImage(
-      imageUrl: url!,
-      fit: BoxFit.cover,
-      placeholder: (_, __) => Container(color: scheme.surfaceContainerHighest),
-      // A photo that fails to load falls back to the same colour block a
-      // recipe without one gets, not a broken-image glyph (UX-029's hotlink
-      // failure read as a fault).
-      errorWidget: (_, __, ___) => _block(),
+    // Decorative here (UX-047): the card's one node already reads the title,
+    // and "image" in the middle of it is noise.
+    return ExcludeSemantics(
+      child: CachedNetworkImage(
+        imageUrl: url!,
+        fit: BoxFit.cover,
+        placeholder:
+            (_, __) => Container(color: scheme.surfaceContainerHighest),
+        // A photo that fails to load falls back to the same colour block a
+        // recipe without one gets, not a broken-image glyph (UX-029's hotlink
+        // failure read as a fault).
+        errorWidget: (_, __, ___) => _block(),
+      ),
     );
   }
 }

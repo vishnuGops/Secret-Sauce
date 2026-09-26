@@ -356,3 +356,43 @@ Still open from this audit: UX-025, UX-029 (owner),
 UX-030, UX-034 (owner content), UX-035, UX-036, UX-039, UX-040, UX-042, UX-045, UX-047's image
 labels and `LoadingView`, UX-049's remaining sites, UX-050's cook-step transitions, UX-052, UX-054's
 dark hero edge, and UX-055's compact duplicates.
+
+## Findings closed — 2026-09-26 (Phase 38, UX remediation round 2)
+
+Branch `feat/phase-38-ux-remediation-2`, waves A–D, each commit gated on its own. Every fix carries a
+regression test checked by reverting it. Evidence is the named tests; scores are not re-graded here
+(a Phase 1 re-audit would). Static sweep, same script, Phase 37's tip (`cde7fbc`) vs this branch:
+
+| Signal | After 37 | After 38 |
+| --- | --- | --- |
+| Colors.* / Color(0x… / raw insets / raw SizedBox / raw radii (outside theme) | 7 / 0 / 0 / 0 / 0 | 7 / 0 / 0 / 0 / 0 |
+| FontWeight.* (outside theme) | 7 | 7 |
+| Text-style copyWith (outside theme) | 107 | 110 |
+| Tabular-figure sites | 68 | 75 |
+| AppSpacing uses | 598 | 622 |
+| AppMotion uses / reduced-motion reads | 11 / 6 | 17 / 9 |
+| Semantics( | 34 | 46 |
+| IconButton( (outside theme) | 30 | 29 (every one with a tooltip) |
+| `meetsGuideline` test files | 2 | 16 |
+
+| ID | Status | Evidence |
+| --- | --- | --- |
+| UX-025 | fixed | other steps' running / paused timers as a chip strip on every step; "Cook again" (`restart()`); `cook_mode_test` "other steps' timers", "Cook again" |
+| UX-036 | fixed | "Forked from <title> by <author>", linked; private / gone parent says so; `recipe_detail_test` "fork lineage", `recipe_detail_v2_test` "fork lineage (expanded)". No curated recipe is a fork — fixtures only |
+| UX-050 | fixed | cook-step cross-fade through `AppMotion.of`; `cook_mode_test` "step transitions" (reduced motion: one frame) |
+| UX-053 | fixed | loading and error states of `/recipe/:id` have Back; `recipe_detail_test` "loading and error exits" |
+| UX-035, UX-039, UX-052 | fixed | editor order, empty defaults (Servings / Difficulty required), inline step time + `1h 30m`, fraction quantities, reorder, group-delete confirm, collapsed compact row, version view; `recipe_editor_test` "Phase 38 editor", `steps_editor_test`, `version_view_test`. Found B142–B145 |
+| UX-040 | fixed | letters-only initials; `chef_avatar_test` |
+| UX-042 | fixed | chef / publisher names in the app bar, no "joined" on an import, "Chef" not repeated; `chef_page_test`, `entity_page_test` |
+| UX-045 | fixed | empty rails keep their heading and say why; short shelves end in a note; the rails column was never capped (a one-chef database); `chefs_screen_test` |
+| UX-047 | fixed | covers named on the detail pages, decorative photos excluded, editor photos are named buttons, `LoadingView` named; `image_semantics_test` (app + design_system) |
+| UX-048 | fixed | every main screen passes `androidTapTargetGuideline` (the web nav, legal links, editor chips, star input, rows, version link, badge were under 48). Found B147. Guideline blind spot inside centred scroll views — CLAUDE.md Gotcha 30 |
+| UX-049 | fixed | the last proportional counters in cook mode; `cook_mode_test` "are tabular" |
+| UX-054 | fixed | `palette.heroOutline`; `theme_contrast_test` "the hero band has a visible edge" (dark fails without it) |
+| UX-055 | fixed | one New recipe per layout; labelled owner Share / Edit, a desktop Private pill, a "Rate this recipe" prompt; `my_recipes_header_test`, `recipe_detail_v2_test` "owner actions", `recipe_detail_test` "rating". Step-card hover: moot since 36c's neutral panels |
+| B141 (+ B146) | fixed | `deleteOwnAvatar`; `storage_service_test`, `profile_screen_test` |
+| Spoken quantities (new) | fixed | `spokenQuantity`; `formatting_test`, `reading_a11y_test`, `cook_mode_test` "spoken quantities" |
+
+Still open from this audit: UX-029 (owner), UX-030 (Wave E, blocked on the unit registry carrying
+display forms where SQL can read them — ROADMAP Phase 38), UX-034 (owner content). One new open
+question: desktop web's adaptive density leaves a `TextButton` ~32px tall (DESIGN §3.6).

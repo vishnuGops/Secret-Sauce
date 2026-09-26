@@ -43,6 +43,9 @@ class ChefsHero extends ConsumerWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         gradient: palette.heroGradient,
+        // Transparent in light; in dark the band's own colour is within a
+        // hair of the page's, so this is its edge (UX-054).
+        border: Border.all(color: palette.heroOutline),
         borderRadius: BorderRadius.circular(AppRadii.hero),
         boxShadow: [
           BoxShadow(

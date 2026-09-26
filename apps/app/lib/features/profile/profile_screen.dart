@@ -15,7 +15,7 @@ const double _kAvatarRadius = 44;
 /// The page's reading measure (UX-038). At 1440 the buttons used to stretch
 /// the full 1392px; the page is a short column of identity and actions, so it
 /// is centred at a width a form would have.
-const double kProfileMaxWidth = 560;
+const double kProfileMaxWidth = AppMeasure.column;
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});

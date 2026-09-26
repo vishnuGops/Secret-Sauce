@@ -212,6 +212,10 @@ Widget _routedApp(_FakeDiscover repo) => ProviderScope(
   ),
 );
 
+/// How far the UX-048 check scrolls between evaluations: two thirds of its
+/// 900px viewport, so consecutive windows overlap.
+const double _guidelineStep = 600;
+
 void main() {
   testWidgets('the masthead states the corpus, not a page title', (
     tester,
@@ -501,6 +505,51 @@ void main() {
       tester.getSemantics(find.text('Top rated')),
       isSemantics(isSelected: false),
     );
+    handle.dispose();
+  });
+
+  // UX-048: every control on the page is at least 48 × 48 (WCAG 2.5.8 via
+  // Flutter's Android guideline, the stricter of the two it ships). The
+  // shelf rows carry no owner, so no card draws the compact chef badge — the
+  // one accepted secondary target inside a larger tappable tile.
+  //
+  // The search pill is the other one. `SearchBar`'s whole 56px pill is an
+  // `InkWell` that focuses the field, but the text field's own semantics node
+  // is the 24px line inside it, and `SearchBar` exposes nothing that grows it
+  // without moving the text. So the pill and the Explore link are measured
+  // directly, and the guideline runs from just past the pill to the end of
+  // the page — every category tile, shelf, sort and card still in front of
+  // it.
+  testWidgets('every tap target meets the 48dp guideline', (tester) async {
+    final handle = tester.ensureSemantics();
+    for (final width in [390.0, 1440.0]) {
+      _size(tester, width, 900);
+      await tester.pumpWidget(const SizedBox()); // a fresh scroll position
+      await tester.pumpWidget(_app(_stocked()));
+      await tester.pumpAndSettle();
+
+      expect(
+        tester.getSize(find.byType(SearchBar)).height,
+        greaterThanOrEqualTo(kMinInteractiveDimension),
+      );
+      expect(
+        tester.getSize(find.byKey(DiscoverMasthead.exploreLinkKey)).height,
+        greaterThanOrEqualTo(kMinInteractiveDimension),
+      );
+
+      final position =
+          tester.state<ScrollableState>(find.byType(Scrollable).first).position;
+      // Viewport-sized steps that overlap by a third, from just past the pill
+      // to the end: every control below the masthead is wholly on screen in
+      // at least one of them (a node touching an edge is skipped).
+      final start = tester.getRect(find.byType(SearchBar)).bottom + 1;
+      for (var offset = start; ; offset += _guidelineStep) {
+        position.jumpTo(offset.clamp(0, position.maxScrollExtent));
+        await tester.pumpAndSettle();
+        await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+        if (offset >= position.maxScrollExtent) break;
+      }
+    }
     handle.dispose();
   });
 

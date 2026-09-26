@@ -26,7 +26,7 @@ class ScoreContributionBar extends StatelessWidget {
   final Color color;
 
   /// The share bar's thickness — the same track as the tier ladder's default.
-  static const double _barHeight = 8;
+  static const double _barHeight = AppStroke.bar;
 
   /// `× 3`, `× 0.2` — the weight without a pointless trailing zero.
   static String weightLabel(double weight) =>

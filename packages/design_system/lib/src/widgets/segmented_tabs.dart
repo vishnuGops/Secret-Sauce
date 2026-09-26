@@ -96,7 +96,7 @@ class SegmentedTabs<T> extends StatelessWidget {
   /// Stroke of the keyboard focus ring — WCAG 2.4.13's 2px minimum. The
   /// ring sits on a flat fill here, not a photo, so it does not need
   /// `InteractiveTile`'s third pixel.
-  static const double focusRingWidth = 2;
+  static const double focusRingWidth = AppStroke.thin;
 
   /// Key of the focus ring, which exists only while a segment holds
   /// **keyboard** focus. For tests.

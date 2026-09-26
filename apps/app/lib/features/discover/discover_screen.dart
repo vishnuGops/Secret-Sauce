@@ -22,7 +22,7 @@ const double _kCompactChromeClearance = 96;
 const double _kBrowseHeaderRowWidth = 560;
 
 /// The heavier rule that opens the browse grid.
-const double _kBrowseRule = 2;
+const double _kBrowseRule = AppStroke.thin;
 
 /// Public discovery: a masthead, three numbered shelves, then everything else.
 ///

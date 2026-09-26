@@ -11,7 +11,7 @@ import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/routing/auth_return.dart';
 
 /// The finish screen's reading measure (canvas frame E).
-const double _kFinishMaxWidth = 560;
+const double _kFinishMaxWidth = AppMeasure.column;
 
 /// The screen after the last step (canvas frame E).
 ///

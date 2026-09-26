@@ -87,7 +87,7 @@ class RatingPill extends StatelessWidget {
 
   /// The star glyph — one px under [AppIconSize.sm], matching the recipe
   /// card's clock glyph beside it.
-  static const double defaultSize = 15;
+  static const double defaultSize = AppIconSize.xsPlus;
 
   final double rating;
   final int? count;
@@ -163,7 +163,7 @@ class StarRatingInput extends StatefulWidget {
 
   /// The keyboard focus ring's stroke. Drawn as a foreground decoration inside
   /// the stars' own box, so showing it never changes the widget's size.
-  static const double focusRingWidth = 2;
+  static const double focusRingWidth = AppStroke.thin;
 
   /// How long keyboard / assistive-technology steps must pause before they
   /// settle. Each step previews and reports [onChanged] at once, but
@@ -362,21 +362,35 @@ class _StarRatingInputState extends State<StarRatingInput> {
           onHorizontalDragUpdate: (d) => _update(d.localPosition.dx),
           onHorizontalDragEnd: (_) => _settle(),
           onHorizontalDragCancel: _cancel,
-          // Foreground, inside the box: the ring never moves or resizes the
-          // stars (UX-003's visible focus indicator, WCAG 2.4.7).
-          child: DecoratedBox(
-            position: DecorationPosition.foreground,
-            decoration:
-                _focusHighlight
-                    ? BoxDecoration(
-                      border: Border.all(
-                        color: scheme.primary,
-                        width: StarRatingInput.focusRingWidth,
-                      ),
-                      borderRadius: BorderRadius.circular(AppRadii.md),
-                    )
-                    : const BoxDecoration(),
-            child: stars,
+          // 48dp target (UX-048): the row is one star tall — 40px on the
+          // cook-mode finish screen, 36 by default. The box grows the area
+          // that answers taps and drags; the stars and their ring keep their
+          // size, centred in it, and the width (so each half-star's dx) is
+          // unchanged.
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              minHeight: kMinInteractiveDimension,
+            ),
+            child: Align(
+              widthFactor: 1,
+              heightFactor: 1,
+              // Foreground, inside the box: the ring never moves or resizes
+              // the stars (UX-003's visible focus indicator, WCAG 2.4.7).
+              child: DecoratedBox(
+                position: DecorationPosition.foreground,
+                decoration:
+                    _focusHighlight
+                        ? BoxDecoration(
+                          border: Border.all(
+                            color: scheme.primary,
+                            width: StarRatingInput.focusRingWidth,
+                          ),
+                          borderRadius: BorderRadius.circular(AppRadii.md),
+                        )
+                        : const BoxDecoration(),
+                child: stars,
+              ),
+            ),
           ),
         ),
       ),

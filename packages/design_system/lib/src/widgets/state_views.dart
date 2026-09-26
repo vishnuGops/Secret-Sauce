@@ -8,11 +8,15 @@ const double _kErrorIconSize = 48;
 
 /// Centered progress indicator.
 class LoadingView extends StatelessWidget {
-  const LoadingView({super.key});
+  const LoadingView({super.key, this.label = 'Loading'});
+
+  /// What a screen reader says for the spinner (UX-047) — it was a bare
+  /// progress bar with no name.
+  final String label;
 
   @override
   Widget build(BuildContext context) =>
-      const Center(child: CircularProgressIndicator());
+      Center(child: CircularProgressIndicator(semanticsLabel: label));
 }
 
 /// Friendly empty-state placeholder.

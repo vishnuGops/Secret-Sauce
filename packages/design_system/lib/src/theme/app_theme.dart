@@ -341,10 +341,44 @@ class AppRadii {
 /// icon buttons; `xl`/`xxl` are empty-state and placeholder glyphs.
 abstract final class AppIconSize {
   static const double xs = 14;
+
+  /// A glyph set inside a line of 12–14px metadata — the recipe card's time
+  /// and rating row and `StarRating`'s default star (Phase 38: two named
+  /// per-widget 15s collapsed into it).
+  static const double xsPlus = 15;
   static const double sm = 16;
   static const double button = 18;
   static const double md = 20;
   static const double lg = 24;
   static const double xl = 40;
   static const double xxl = 56;
+}
+
+/// Line and bar thicknesses (Phase 38). Named per widget until two or more
+/// consts agreed on a value; these are the values that did.
+///
+/// `hairline` an inner focus hairline or a panel edge · `thin` a spinner's
+/// stroke, a check box's outline, a focus ring on a small control, a rule ·
+/// `medium` the keyboard focus ring on a tile, a selected ring, a portrait
+/// border · `thick` a slim progress or ladder bar · `bar` a score or tier bar.
+abstract final class AppStroke {
+  static const double hairline = 1;
+  static const double thin = 2;
+  static const double medium = 3;
+  static const double thick = 4;
+  static const double bar = 8;
+}
+
+/// Content measures — the widest a single column of a given kind may run
+/// (Phase 38). Breakpoints decide the layout; these decide how wide one column
+/// of it reads.
+///
+/// `narrow` a single-field form or a small dialog (sign in, share) ·
+/// `column` a single-column page of controls (profile, cook mode's finish) ·
+/// `reading` a long form or running prose (the recipe editor, the legal
+/// documents, cook mode's step text).
+abstract final class AppMeasure {
+  static const double narrow = 420;
+  static const double column = 560;
+  static const double reading = 720;
 }

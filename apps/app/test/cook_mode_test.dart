@@ -679,6 +679,27 @@ void main() {
       expect(button.onPressed, isNull);
     });
 
+    // UX-049: counters that change while watched keep their width.
+    testWidgets('the step count and the timer total are tabular', (
+      tester,
+    ) async {
+      bool tabular(Finder f) =>
+          tester
+              .widget<Text>(f)
+              .style
+              ?.fontFeatures
+              ?.contains(const FontFeature.tabularFigures()) ??
+          false;
+      await _pump(tester);
+      expect(tabular(find.text('Step 1 of 4')), isTrue);
+
+      await tester.tap(find.text('Done — next step'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Start'));
+      await tester.pump();
+      expect(tabular(find.text('of 60:00')), isTrue);
+    });
+
     testWidgets('the step timer counts down and can be paused', (tester) async {
       await _pump(tester);
       // Step 2 is the 60-minute chill.
@@ -1243,6 +1264,42 @@ void main() {
       }
     }
   });
+
+  // UX-048: every control in cook mode is at least 48 × 48 (WCAG 2.5.8 via
+  // Flutter's Android guideline, the stricter of the two it ships): a step
+  // with its timer running, the next step with that timer in the strip, the
+  // same step once it rings, and the finish screen signed in, where the
+  // rating panel is live.
+  for (final size in const [Size(390, 844), Size(1440, 1000)]) {
+    testWidgets('every tap target meets the 48dp guideline at '
+        '${size.width}px', (tester) async {
+      final handle = tester.ensureSemantics();
+      await _pump(tester, size: size, uid: 'me');
+
+      await tester.tap(find.text('Done — next step'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Start'));
+      await tester.pump();
+      expect(find.text('Pause'), findsOneWidget);
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+
+      await tester.tap(find.text('Done — next step'));
+      await tester.pumpAndSettle();
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.textContaining('Crust step 2 ·'), findsOneWidget);
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+
+      await tester.pump(const Duration(minutes: 61));
+      await tester.pump();
+      expect(_session(tester).state.ringing, isNotEmpty);
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+
+      await _walkFrom(tester, 2);
+      expect(find.text('Cook again'), findsOneWidget);
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      handle.dispose();
+    });
+  }
 
   // UX-025a. Timers outlive their step by design, and until this one running
   // on another step was invisible until it rang.

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:design_system/src/theme/app_theme.dart';
+
 /// A tappable tile whose states paint **over** its content (UX-013).
 ///
 /// `RecipeCard` and `ChefSpotlightCard` are opaque all the way down — a cover
@@ -17,12 +19,12 @@ import 'package:flutter/material.dart';
 /// 3px, not the 2px minimum WCAG 2.4.13 asks for: the ring lies over an
 /// arbitrary cover photo, and the extra pixel is what keeps it readable on a
 /// busy one.
-const double kTileFocusRingWidth = 3;
+const double kTileFocusRingWidth = AppStroke.medium;
 
 /// The hairline inside the focus ring, in the page's surface colour — the
 /// second tone that keeps the ring visible on a photo the same hue as
 /// `colorScheme.primary`.
-const double _kFocusRingInnerWidth = 1;
+const double _kFocusRingInnerWidth = AppStroke.hairline;
 
 /// Key of [InteractiveTile]'s focus ring, for tests.
 const Key kTileFocusRingKey = ValueKey('tile-focus-ring');

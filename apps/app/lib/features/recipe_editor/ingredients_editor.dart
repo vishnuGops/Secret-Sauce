@@ -683,7 +683,8 @@ class _IngredientRowState extends ConsumerState<_IngredientRow> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                visualDensity: VisualDensity.compact,
+                // 48dp target (UX-048): `VisualDensity.compact` took 8px off
+                // the chip's padded target and its delete button, to 40.
                 deleteButtonTooltipMessage: 'Remove link',
                 onDeleted: () {
                   _ingredient.foodId = null;

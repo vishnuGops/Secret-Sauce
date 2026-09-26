@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
+import 'package:design_system/src/theme/app_theme.dart';
+
 import 'package:design_system/src/widgets/tier_chip.dart';
 
 /// Circular chef avatar: the profile photo when there is one, the chef's
@@ -60,7 +62,7 @@ class ChefAvatar extends StatelessWidget {
   static const double _ringWidth = 1.5;
 
   /// The tier dot's cut-out border.
-  static const double _dotBorderWidth = 2;
+  static const double _dotBorderWidth = AppStroke.thin;
 
   /// One letter from a single-word name, two from a longer one — first word
   /// and last — and `?` when the name holds no word at all.
@@ -169,21 +171,25 @@ class ChefAvatar extends StatelessWidget {
       );
     }
 
+    // Decorative (UX-047): an avatar sits beside the name it pictures, or
+    // inside a control that carries its own label.
     return ClipOval(
-      child: CachedNetworkImage(
-        imageUrl: avatarUrl!,
-        width: radius * 2,
-        height: radius * 2,
-        fit: BoxFit.cover,
-        placeholder:
-            (_, __) =>
-                CircleAvatar(radius: radius, backgroundColor: background),
-        errorWidget:
-            (_, __, ___) => CircleAvatar(
-              radius: radius,
-              backgroundColor: background,
-              child: Icon(Icons.person_outline, color: foreground),
-            ),
+      child: ExcludeSemantics(
+        child: CachedNetworkImage(
+          imageUrl: avatarUrl!,
+          width: radius * 2,
+          height: radius * 2,
+          fit: BoxFit.cover,
+          placeholder:
+              (_, __) =>
+                  CircleAvatar(radius: radius, backgroundColor: background),
+          errorWidget:
+              (_, __, ___) => CircleAvatar(
+                radius: radius,
+                backgroundColor: background,
+                child: Icon(Icons.person_outline, color: foreground),
+              ),
+        ),
       ),
     );
   }

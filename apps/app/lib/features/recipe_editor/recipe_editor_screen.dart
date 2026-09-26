@@ -18,10 +18,10 @@ import 'package:app/routing/app_router.dart';
 import 'package:app/widgets/route_title.dart';
 
 /// The form's measure on a wide window.
-const double _kFormMaxWidth = 720;
+const double _kFormMaxWidth = AppMeasure.reading;
 
 /// Stroke of the Save button's in-flight spinner.
-const double _kSpinnerStroke = 2;
+const double _kSpinnerStroke = AppStroke.thin;
 
 /// Where a refused save scrolls the first error to: a little below the top
 /// edge, so the field's label and the line above it stay in view.

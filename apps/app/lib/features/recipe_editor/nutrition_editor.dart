@@ -431,7 +431,8 @@ class _AutoPane extends StatelessWidget {
                                 Icons.link,
                                 size: AppIconSize.sm,
                               ),
-                              visualDensity: VisualDensity.compact,
+                              // 48dp target (UX-048): compact density
+                              // shrank the padded target to 40.
                               label: ConstrainedBox(
                                 constraints: const BoxConstraints(
                                   maxWidth: _kSuggestionLabelMaxWidth,

@@ -28,7 +28,7 @@ const double kCookTwoColumnMin = 1180;
 const double kCookStackScale = 1.35;
 
 /// The canvas's step column (frame H) — the measure of 40px step text.
-const double _kStepColumnMaxWidth = 720;
+const double _kStepColumnMaxWidth = AppMeasure.reading;
 
 /// The canvas's rail beside it.
 const double _kRailWidth = 400;
@@ -43,7 +43,7 @@ const double _kWideActionHeight = 56;
 const double _kStepNumberDiameter = 30;
 
 /// The progress bar's segments: thin on compact, thick on the web frame.
-const double _kProgressThin = 4;
+const double _kProgressThin = AppStroke.thick;
 const double _kProgressThick = 6;
 const double _kProgressRadius = 2;
 
@@ -467,7 +467,8 @@ class _Wide extends ConsumerWidget {
             if (showGroup)
               Text(
                 'Step ${index + 1} of ${steps.length}',
-                style: textTheme.labelMedium?.copyWith(
+                // Tabular: it moves with every step (UX-049).
+                style: textTheme.labelMedium?.tabular.copyWith(
                   color: scheme.onSurfaceVariant,
                 ),
               ),
@@ -743,7 +744,8 @@ class _CookRail extends StatelessWidget {
                     needed.isEmpty
                         ? 'not named'
                         : countOf(needed.length, 'items'),
-                    style: textTheme.labelMedium?.copyWith(
+                    // Tabular: it changes with every step (UX-049).
+                    style: textTheme.labelMedium?.tabular.copyWith(
                       color: scheme.onSurfaceVariant,
                     ),
                   ),
@@ -937,7 +939,8 @@ class _Progress extends StatelessWidget {
               if (overallLabel != null)
                 Text(
                   overallLabel!,
-                  style: textTheme.labelSmall?.copyWith(
+                  // Tabular: `Step 5 of 9` moves with every step (UX-049).
+                  style: textTheme.labelSmall?.tabular.copyWith(
                     color: scheme.onSurfaceVariant,
                   ),
                 ),
@@ -1430,7 +1433,8 @@ class _RunningTimer extends StatelessWidget {
               ),
               Text(
                 'of ${formatClock(timer.total)}',
-                style: textTheme.labelSmall?.copyWith(
+                // Tabular: `+1 min` moves it (UX-049).
+                style: textTheme.labelSmall?.tabular.copyWith(
                   color: scheme.onSurfaceVariant,
                 ),
               ),

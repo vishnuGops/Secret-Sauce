@@ -36,7 +36,7 @@ class CategoryTile extends StatelessWidget {
   final VoidCallback? onTap;
 
   /// Width of the selected ring.
-  static const double _ringWidth = 3;
+  static const double _ringWidth = AppStroke.medium;
 
   @override
   Widget build(BuildContext context) {

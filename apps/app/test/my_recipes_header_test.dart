@@ -352,6 +352,21 @@ void main() {
     });
   });
 
+  // UX-048: every control on the page is at least 48 × 48 (WCAG 2.5.8 via
+  // Flutter's Android guideline, the stricter of the two it ships) — a
+  // populated My Recipes tab inside the real shell, so the phone's bottom bar
+  // and FAB and the web top bar and footer are measured with it.
+  for (final width in [390.0, 1440.0]) {
+    testWidgets('every tap target meets the 48dp guideline at ${width}px', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      await _pumpInShell(tester, width: width, populated: true);
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      handle.dispose();
+    });
+  }
+
   for (final (width, scale) in <(double, double)>[
     (600, 1.0),
     (700, 1.3),

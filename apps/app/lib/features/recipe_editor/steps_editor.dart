@@ -490,12 +490,20 @@ class _StepImage extends StatelessWidget {
 
     final tile = Stack(
       children: [
-        InkWell(
-          onTap: onReplace,
-          borderRadius: BorderRadius.circular(AppRadii.card),
-          child: ClipRRect(
+        // One named button (UX-047): the photo inside it was an unlabeled
+        // image in an unlabeled button.
+        Semantics(
+          button: true,
+          label: 'Step photo, tap to replace',
+          child: InkWell(
+            onTap: onReplace,
             borderRadius: BorderRadius.circular(AppRadii.card),
-            child: AspectRatio(aspectRatio: 16 / 9, child: image),
+            child: ExcludeSemantics(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(AppRadii.card),
+                child: AspectRatio(aspectRatio: 16 / 9, child: image),
+              ),
+            ),
           ),
         ),
         Positioned(

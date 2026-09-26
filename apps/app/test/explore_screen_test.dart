@@ -245,6 +245,29 @@ void main() {
     expect(find.text('Lemon Garlic Scallops'), findsOneWidget);
   });
 
+  // UX-048: every control on the page is at least 48 × 48 (WCAG 2.5.8 via
+  // Flutter's Android guideline, the stricter of the two it ships).
+  for (final width in [390.0, 1440.0]) {
+    testWidgets('every tap target meets the 48dp guideline at ${width}px', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      _size(tester, width, 2400);
+      await _pump(
+        tester,
+        discover: _FakeDiscover(
+          count: 21334,
+          rows: [
+            _recipe('r1', 'Lemon Garlic Scallops'),
+            _recipe('r2', 'Slow-Braised Short Rib'),
+          ],
+        ),
+      );
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      handle.dispose();
+    });
+  }
+
   group('envelope', () {
     for (final width in <double>[390, 600, 1000, 1440]) {
       for (final scale in <double>[1.0, 2.0]) {

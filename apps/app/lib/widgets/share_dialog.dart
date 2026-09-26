@@ -42,7 +42,7 @@ const _kLookupDebounce = Duration(milliseconds: 300);
 const _kMaxMatches = 8;
 
 /// The dialog's content width.
-const double _kDialogWidth = 420;
+const double _kDialogWidth = AppMeasure.narrow;
 
 /// The candidate list's height cap (see [_Matches]).
 const double _kMatchesMaxHeight = 220;
@@ -51,7 +51,7 @@ const double _kMatchesMaxHeight = 220;
 const double _kMatchAvatarRadius = 16;
 
 /// Stroke of the in-flight spinners (lookup, share).
-const double _kSpinnerStroke = 2;
+const double _kSpinnerStroke = AppStroke.thin;
 
 class _ShareDialogState extends ConsumerState<ShareDialog> {
   final _name = TextEditingController();

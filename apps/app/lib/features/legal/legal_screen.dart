@@ -23,7 +23,7 @@ class LegalScreen extends StatelessWidget {
   /// Long-form prose wants a measured column, not the window. 720 is the usual
   /// comfortable reading measure and is narrower than the 1140 the expanded
   /// recipe page uses, because that page is a layout and this one is text.
-  static const double maxReadingWidth = 720;
+  static const double maxReadingWidth = AppMeasure.reading;
 
   @override
   Widget build(BuildContext context) {

@@ -246,7 +246,14 @@ class _Cover extends ConsumerWidget {
       fit: StackFit.expand,
       children: [
         if (coverUrl != null)
-          CachedNetworkImage(imageUrl: coverUrl, fit: BoxFit.cover)
+          // Named for a screen reader (UX-047): the cover is the page's one
+          // picture of the dish.
+          Semantics(
+            image: true,
+            label: 'Photo of ${recipe.title}',
+            excludeSemantics: true,
+            child: CachedNetworkImage(imageUrl: coverUrl, fit: BoxFit.cover),
+          )
         else
           // The block runs on under the sheet's corners; its label is lifted
           // clear of the overlap so the sheet never cuts it.

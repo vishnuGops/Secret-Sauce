@@ -1287,6 +1287,14 @@ recipe` lives on the My Recipes header and search in Discover's search bar; putt
     never as a pixel width: `flutter test`'s fixed-width font is far wider than Roboto, so a width
     assertion pins the harness while an implication survives the font swap.
 
+30. **`meetsGuideline(androidTapTargetGuideline)` has a blind spot** (Phase 38). It skips any node
+    it judges to touch the edge of a scroll view, and gets that judgement wrong by one coordinate
+    transform inside a **centred or offset** scroll view (the auth form, the editor's measured
+    column, cook mode's finish screen) — so a 24px link there passes silently. Every main screen
+    runs the guideline; where the page is centred, the test also measures the controls directly
+    (`tester.getSize(...) >= 48`). A new custom tappable grows its hit area with a
+    `ConstrainedBox(minHeight: kMinInteractiveDimension)` inside its `InkWell`, not its paint.
+
 29. **Fabricated data may exist, but it may never be on a default path — and a real person is
     never a fixture** (B112/B113/B114). Three separate mechanisms had put invented rows in front of
     a reader and none of them was visible from the app: curated recipes carried authored

@@ -793,6 +793,33 @@ void main() {
     expect((button.center.dx - 720).abs(), lessThan(1));
   });
 
+  // UX-048: every control on the page is at least 48 × 48 (WCAG 2.5.8 via
+  // Flutter's Android guideline, the stricter of the two it ships) — the
+  // page, then the edit dialog with both photo buttons showing.
+  for (final width in [390.0, 1440.0]) {
+    testWidgets('every tap target meets the 48dp guideline at ${width}px', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      await _pump(
+        tester,
+        profiles: _FakeProfiles(profile: _amara),
+        width: width,
+        height: 1400,
+        pick: () async => _png,
+      );
+      await tester.pumpAndSettle();
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+
+      await _openEditor(tester);
+      await tester.tap(find.text('Add photo'));
+      await tester.pumpAndSettle();
+      expect(find.text('Remove photo'), findsOneWidget);
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      handle.dispose();
+    });
+  }
+
   for (final width in <double>[390, 600, 1000, 1440]) {
     for (final scale in <double>[1.0, 2.0]) {
       testWidgets('fits at ${width}px, textScale $scale: page and dialog', (

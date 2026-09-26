@@ -24,7 +24,7 @@ const double _kAvatarRadius = 36;
 
 /// The spinner inside the Save button while a save is in flight.
 const double _kSpinnerSize = AppIconSize.sm;
-const double _kSpinnerStroke = 2;
+const double _kSpinnerStroke = AppStroke.thin;
 
 /// Opens the profile editor (UX-038). Resolves to true when a save landed.
 ///

@@ -412,6 +412,25 @@ void main() {
     });
   }
 
+  // UX-048: every control in the web chrome is at least 48 × 48 (WCAG 2.5.8
+  // via Flutter's Android guideline, the stricter of the two it ships) — the
+  // brand, the pill's destinations, the account cluster and the legal bar,
+  // signed in and out, with labels (1440) and as bare icons (800).
+  for (final (width, uid) in <(double, String?)>[
+    (1440, 'user-1'),
+    (1440, null),
+    (800, 'user-1'),
+    (800, null),
+  ]) {
+    testWidgets('every tap target meets the 48dp guideline at ${width}px, '
+        '${uid == null ? 'signed out' : 'signed in'}', (tester) async {
+      final handle = tester.ensureSemantics();
+      await _pump(tester, width: width, uid: uid);
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      handle.dispose();
+    });
+  }
+
   // Phase 37 wave C (UX-014).
   group('semantics', () {
     testWidgets('the current destination is selected, and only it', (

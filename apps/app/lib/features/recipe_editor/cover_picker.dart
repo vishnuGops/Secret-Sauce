@@ -15,39 +15,52 @@ class CoverPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    return InkWell(
-      onTap: onPick,
-      borderRadius: BorderRadius.circular(AppRadii.card),
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: Container(
-          decoration: BoxDecoration(
-            color: scheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(AppRadii.card),
-            image:
-                bytes != null
-                    ? DecorationImage(
-                      image: MemoryImage(bytes!),
-                      fit: BoxFit.cover,
-                    )
-                    : (url != null && url!.isNotEmpty
+    final hasPhoto = bytes != null || (url != null && url!.isNotEmpty);
+    // A `DecorationImage` has no semantics, so with a photo in place this was
+    // an unnamed button (UX-047).
+    return Semantics(
+      button: true,
+      label: hasPhoto ? 'Cover photo, tap to replace' : 'Add cover photo',
+      child: InkWell(
+        onTap: onPick,
+        borderRadius: BorderRadius.circular(AppRadii.card),
+        // The label above says it; the empty state's own text would repeat it.
+        child: ExcludeSemantics(
+          child: AspectRatio(
+            aspectRatio: 16 / 9,
+            child: Container(
+              decoration: BoxDecoration(
+                color: scheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(AppRadii.card),
+                image:
+                    bytes != null
                         ? DecorationImage(
-                          image: NetworkImage(url!),
+                          image: MemoryImage(bytes!),
                           fit: BoxFit.cover,
                         )
-                        : null),
+                        : (url != null && url!.isNotEmpty
+                            ? DecorationImage(
+                              image: NetworkImage(url!),
+                              fit: BoxFit.cover,
+                            )
+                            : null),
+              ),
+              child:
+                  (bytes == null && (url == null || url!.isEmpty))
+                      ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.add_a_photo,
+                            color: scheme.onSurfaceVariant,
+                          ),
+                          const SizedBox(height: AppSpacing.sm),
+                          const Text('Add cover photo'),
+                        ],
+                      )
+                      : null,
+            ),
           ),
-          child:
-              (bytes == null && (url == null || url!.isEmpty))
-                  ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.add_a_photo, color: scheme.onSurfaceVariant),
-                      const SizedBox(height: AppSpacing.sm),
-                      const Text('Add cover photo'),
-                    ],
-                  )
-                  : null,
         ),
       ),
     );

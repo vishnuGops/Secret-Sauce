@@ -1244,4 +1244,21 @@ void main() {
     expect(selected(BoardSort.newest.label), Tristate.isFalse);
     handle.dispose();
   });
+
+  // UX-048: every control on the page is at least 48 × 48 (WCAG 2.5.8 via
+  // Flutter's Android guideline, the stricter of the two it ships) — the
+  // phone board, and both web layouts, where the hero's window filter is a
+  // row of `SegmentedTabs` segments.
+  for (final width in [390.0, 1000.0, 1440.0]) {
+    testWidgets('every tap target meets the 48dp guideline at ${width}px', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      _size(tester, width, 2200);
+      await tester.pumpWidget(_app(_board, windowed: _window));
+      await tester.pumpAndSettle();
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      handle.dispose();
+    });
+  }
 }

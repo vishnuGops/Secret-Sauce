@@ -13,7 +13,7 @@ const double _kCheckSize = 22;
 const double _kCheckNudge = 1;
 
 /// The unchecked box's outline.
-const double _kCheckStroke = 2;
+const double _kCheckStroke = AppStroke.thin;
 
 /// The `Ingredients` pane: grouped check-off list with a fixed quantity
 /// gutter, plus its gathered counter and clear-checks footer.

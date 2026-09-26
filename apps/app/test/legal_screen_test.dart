@@ -261,6 +261,31 @@ void main() {
     });
   });
 
+  // UX-048: every control on the page is at least 48 × 48 (WCAG 2.5.8 via
+  // Flutter's Android guideline, the stricter of the two it ships) — the back
+  // arrow at the top, then the sibling links at the end of the document.
+  for (final width in [390.0, 1440.0]) {
+    testWidgets('every tap target meets the 48dp guideline at ${width}px', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      await _pumpAt(tester, Routes.legal('privacy'), size: Size(width, 1600));
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+
+      // To the very end rather than `_scrollToFooter`, which stops as soon as
+      // the links touch the viewport — and a node touching the edge is one
+      // the guideline skips.
+      await _scrollToFooter(tester);
+      final position =
+          tester.state<ScrollableState>(find.byType(Scrollable).first).position;
+      position.jumpTo(position.maxScrollExtent);
+      await tester.pumpAndSettle();
+      expect(find.text(LegalDoc.terms.shortLabel), findsOneWidget);
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      handle.dispose();
+    });
+  }
+
   // Phase 37 wave C (UX-014 / UX-047 / UX-051).
   group('accessibility', () {
     testWidgets('the title and every section heading are headings', (

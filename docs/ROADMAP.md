@@ -871,8 +871,8 @@ to `docs/design/`. The next phase does not start until the previous one's file e
   - [x] Consolidate the duplicate components DESIGN.md §4 names — done in Phase 37 wave D.
   - [ ] Bring the Claude Design system's `_ds_bundle.css` back in line with the repo (DESIGN.md
         §10 lists the drift) — an owner-approved `DesignSync` write, not code.
-  - [ ] Small shared tokens the migration asked for and deliberately did not add: a stroke/track
-        thickness scale (1 / 2 / 3 / 4 / 8), a form measure (420 / 720), a 15px icon step.
+  - [x] Small shared tokens the migration asked for and deliberately did not add — done in Phase
+        38 wave D: `AppStroke`, `AppMeasure`, `AppIconSize.xsPlus` (DESIGN §3.8–§3.9).
   - [x] Screenshot-check the chefs hero's tier tiles near the 96px floor (~1000px window) — done in
         Phase 37 wave D: `MASTER CHEF` sets whole at 1000px. Original note: the
         labels are now `appText.overline` (w700, Manrope), and `MASTER CHEF` may ellipsize where
@@ -1017,14 +1017,28 @@ decision.
 
 **Wave D — accessibility and tokens**
 
-- [ ] UX-047 — image semantics; `LoadingView` label
-- [ ] UX-049 — remaining proportional numbers
-- [ ] UX-054 — the dark chefs hero's edge
-- [ ] UX-048 — `androidTapTargetGuideline` on each main screen
-- [ ] Tokens 36b left out: stroke scale, form measure, 15px icon step (each only where two or more
-      named per-widget consts collapse into it); static sweep re-run, appended to AUDIT.md
+- [x] UX-047 — covers on the detail pages are named ("Photo of …"); card, spotlight and avatar
+      photos are decorative (`ExcludeSemantics`); the editor's cover and step photos are named
+      buttons (they were unnamed); `LoadingView` says "Loading"
+- [x] UX-049 — the last proportional counters (cook mode's step count, timer total, "N items")
+- [x] UX-054 — the dark chefs hero has an edge (`palette.heroOutline`, ≥ 3:1 on the page)
+- [x] UX-048 — `meetsGuideline(androidTapTargetGuideline)` on every main screen (Discover,
+      Explore, Chefs, chef page, entity, My Recipes, profile, auth, legal, editor, cook mode, the
+      web top bar, both recipe layouts). Fixed: the web brand mark and nav destinations, the legal
+      links, the editor's food chips, `StarRatingInput`, ingredient and step rows, the version
+      link, the full `ChefBadge`. Found B147 (an auth envelope that never ran at its widths)
+- [x] Tokens 36b left out: `AppStroke` (1 / 2 / 3 / 4 / 8), `AppMeasure` (420 / 560 / 720),
+      `AppIconSize.xsPlus` (15) — each replacing two or more named consts, which now read from
+      them; static sweep appended to AUDIT.md
+- [ ] Open, owner's call: desktop web keeps Flutter's adaptive (compact) density, so a text
+      button there is ~32px tall — DESIGN §3.6 accepts it; the tests run as Android (48dp)
 
-**Wave E (optional) — UX-030 unit canon at import** — not started.
+**Wave E (optional) — UX-030 unit canon at import** — not started. It needs the display forms
+where SQL can read them: `food_unit` (generated from `nutritionData/units.json`) carries spellings
+and factors but no `display` / `plural`, and it is loaded *after* `0001_init.sql`, so a
+canonicaliser in 0001 cannot read it during the backfill. A hand-copied map in SQL would be a
+second copy of the canon (B094's rule). Carried: extend `tool/nutrition.dart` to emit the display
+columns, then canonicalise in `import_recipe` + a backfill that runs after the registry loads.
 
 ---
 

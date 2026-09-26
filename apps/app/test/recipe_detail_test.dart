@@ -1445,6 +1445,21 @@ void main() {
     });
   });
 
+  // UX-047: the cover photo was an unnamed image.
+  testWidgets('the cover photo is named for a screen reader', (tester) async {
+    final handle = tester.ensureSemantics();
+    final repo = _FakeRecipeRepository(
+      recipe: _fullRecipe.copyWith(coverImageUrl: 'https://img.test/t.jpg'),
+    );
+    await _pump(tester, repo: repo, uid: 'me', size: _phone, settle: false);
+    await tester.pump();
+    expect(
+      find.bySemanticsLabel('Photo of Spring Vegetable Tart'),
+      findsOneWidget,
+    );
+    handle.dispose();
+  });
+
   // A screen reader said `1 1⁄3 cup` as "1 fraction slash 3".
   group('spoken quantities', () {
     testWidgets('the gutter reads a third as words; the print is unchanged', (

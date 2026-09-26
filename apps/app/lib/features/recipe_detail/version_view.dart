@@ -8,7 +8,7 @@ import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 /// The widest the version view gets on a window wider than a phone — a
 /// reading measure, the same order as the detail page's method column, so a
 /// 1440px window does not stretch one ingredient line across the screen.
-const double _kVersionViewMaxWidth = 640;
+const double _kVersionViewMaxWidth = AppMeasure.reading;
 
 /// A recipe as it stood at one version, read-only (UX-052).
 ///

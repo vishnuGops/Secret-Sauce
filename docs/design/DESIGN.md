@@ -278,7 +278,11 @@ depth with the tonal `surfaceContainer*` steps.
 `VisualDensity.adaptivePlatformDensity` (Flutter's default: compact on desktop/web, standard on
 touch). Interactive targets are **48dp** minimum (`kMinInteractiveDimension`); Filled, Outlined and
 Elevated buttons are ~48dp tall through `AppInsets.button`, and text buttons keep M3's padded tap
-target.
+target. A custom tappable grows its **hit area**, not its paint: a `minHeight:
+kMinInteractiveDimension` box inside the `InkWell` (the web nav pill keeps a 36px chip in a 48px
+target; its track is 48 tall, was 44; the web legal bar is 49, was 41). Phase 38 checks every main
+screen with `androidTapTargetGuideline`. Open, owner's call: on desktop web the adaptive density
+leaves a `TextButton` ~32px tall; the tests run as Android.
 
 ### 3.7 Motion
 
@@ -291,7 +295,31 @@ under `MediaQuery.disableAnimationsOf` (UX-050); `AppMotion.animateScroll` jumps
 
 ### 3.8 Iconography
 
-`AppIconSize`: `xs 14 · sm 16 · button 18 · md 20 · lg 24 · xl 40 · xxl 56`. Material Icons; see §2.3.
+`AppIconSize`: `xs 14 · xsPlus 15 · sm 16 · button 18 · md 20 · lg 24 · xl 40 · xxl 56`. Material
+Icons; see §2.3. `xsPlus` (Phase 38) is the glyph inside a 12–14px metadata line — the recipe card's
+time and rating row and `StarRating`'s default star, the two per-widget 15s it replaced.
+
+### 3.9 Strokes and measures (Phase 38)
+
+Added only where two or more named per-widget consts already agreed on a value (36b deliberately
+left them out until then). The widgets keep their named consts — `_kSpinnerStroke`,
+`kTileFocusRingWidth`, `_barHeight` — and those now read from the token, so the name still says
+what the line is for and the value has one home.
+
+| Token | Value | Replaces |
+| --- | --- | --- |
+| `AppStroke.hairline` | 1 | the spotlight panel border, `InteractiveTile`'s inner focus hairline |
+| `AppStroke.thin` | 2 | five spinner strokes (auth, profile dialog, editor, share dialog, `LoadMoreButton`), the check box outline, Discover's browse rule, the avatar tier-dot cut-out, the focus rings of `SegmentedTabs` and `StarRatingInput`, the foil stripe |
+| `AppStroke.medium` | 3 | `InteractiveTile`'s keyboard focus ring, the category tile's selected ring, the spotlight portrait border, the standing card's bar |
+| `AppStroke.thick` | 4 | cook mode's thin progress bar, the spotlight ladder bar |
+| `AppStroke.bar` | 8 | the tier ladder and score contribution bars |
+| `AppMeasure.narrow` | 420 | the auth form, the share dialog |
+| `AppMeasure.column` | 560 | the profile page, cook mode's finish screen |
+| `AppMeasure.reading` | 720 | the recipe editor's form, the legal documents, cook mode's step column, the version view (was 640) |
+
+Not collapsed, on purpose: widths that are **thresholds** rather than measures (Discover's masthead
+row at 720, the browse header row at 560, the chef page's tab cap at 420) — a threshold decides a
+layout, a measure caps a column, and sharing a number is not sharing a meaning.
 
 ## 4. Components
 
@@ -304,15 +332,15 @@ pumps it at (Gotcha 26: a new caller re-opens it).
 | `DifficultyBadge` | `difficulty_badge.dart` | easy / medium / hard | via the card suite | palette.difficulty, AppInsets.badge | UX-010 fixed (B133) |
 | `TierChip` | `tier_chip.dart` | normal / dense / onImage | via card + chef suites | palette.tier, AppInsets.badge(Dense), AppAlpha | B055; B133 tiers |
 | `StarRating` / `RatingPill` / `StarRatingInput` | `star_rating.dart` | display, pill, input (enabled / disabled) | star_rating_test | palette.rating | UX-003 fixed (B126): arrows / Home / End, semantics increase / decrease, focus ring |
-| `ChefAvatar` | `chef_avatar.dart` | image / initials | chef suites | scheme | UX-040 initials; the profile uses it since Phase 37 (UX-032) |
+| `ChefAvatar` | `chef_avatar.dart` | image / initials | chef suites, chef_avatar_test | scheme | UX-040 fixed (letters only, @handles skipped — Phase 38); the photo is decorative (`ExcludeSemantics`, UX-047); the profile uses it since Phase 37 (UX-032) |
 | `ChefBadge` | `chef_badge.dart` | on surface / on image | chef_badge_test | palette.onImage | — |
 | `ChefSpotlightCard` (+ placeholder) | `chef_spotlight_card.dart` | per tier, foil, RANK pill | chef_spotlight_card_test | palette foil / cover / shadow, local geometry consts | UX-012 fixed; UX-013 fixed (`InteractiveTile`); rank via `RankBadge.pill` |
 | `ChefStandingCard` | `chef_standing_card.dart` | ranked / unranked | chef_standing_card_test | stat roles | UX-049 ranks tabular; rank via `RankBadge.podium` / `.disc` |
-| `CardRail` | `card_rail.dart` | paging, empty | card_rail_test | AppMotion.slow via animateScroll | UX-045 empty rail box; UX-050 fixed |
+| `CardRail` | `card_rail.dart` | paging, empty | card_rail_test | AppMotion.slow via animateScroll | UX-045 fixed (an empty chefs shelf is the rail's header with the reason as its footnote, Phase 38); UX-050 fixed |
 | `TierLadder`, `ScoreContributionBar` | `tier_ladder.dart`, `score_contribution_bar.dart` | — | tier_ladder_test | palette.tier | — |
 | `NutritionFactsLabel` | `nutrition_facts_label.dart` | full / per serving | nutrition_facts_label_test | FDA label weights kept as the label's own spec | — |
 | `SiteFooter` / `LegalFooter` | `site_footer.dart`, `apps/app/lib/widgets/legal_footer.dart` | dense (web chrome) / page | site_footer_test 360–1440 × 1.0–2.0 | — | — |
-| `LoadingView` / `EmptyView` / `ErrorView` | `state_views.dart` | — | via the grid suites | — | UX-027 fixed (retry on every grid); UX-047 LoadingView unlabeled |
+| `LoadingView` / `EmptyView` / `ErrorView` | `state_views.dart` | — | via the grid suites | — | UX-027 fixed (retry on every grid); UX-047 fixed (`LoadingView(label: 'Loading')`, Phase 38) |
 | `NotYetTooltip` | `not_yet_tooltip.dart` | — | — | — | — |
 | `RecipeGrid` / `SliverRecipeGrid` | `apps/app/lib/widgets/recipe_grid.dart` | box / sliver | recipe_grid_test 2560/3840 | FlowGridMetrics | — |
 | `RecipeAsyncGrid` / `…SliverGrid` | `apps/app/lib/widgets/recipe_async_grid.dart` | loading / error / empty / grid / load more | paging_test | state views, `LoadMoreButton` | **The only ladder** (Gotcha 24); retry (UX-027) |
@@ -360,7 +388,7 @@ and `InkWell` supply them; a custom tappable over opaque content uses `Interacti
 | 1.4.3 / 1.4.11 contrast | 4.5:1 text, 3:1 UI, light and dark | `theme_contrast_test.dart` |
 | 1.4.1 colour not only | Difficulty and tier carry a word; errors carry text | review |
 | 1.4.4 / 1.4.10 resize, reflow | 2.0× text, no overflow at 390 / 600 / 1000 / 1440 | the envelope suites |
-| 2.5.8 target size | ≥ 48dp; container buttons ~48dp | component themes |
+| 2.5.8 target size | ≥ 48dp; container buttons ~48dp; custom tappables grow their hit area with a `minHeight: kMinInteractiveDimension` box (Phase 38) | component themes; `meetsGuideline(androidTapTargetGuideline)` on every main screen (Phase 38) |
 | 2.4.7 focus visible | M3 focus on buttons; a custom tappable over opaque content paints its states **above** it through `InteractiveTile` (3px primary ring + 1px surface hairline, keyboard focus only; Phase 37, UX-013) | `recipe_card_test`, `chef_spotlight_card_test` |
 | 2.1.1 keyboard | every control operable — `StarRatingInput` by arrows / Home / End (B126); cook mode's Space reaches a focused button (B130); Enter submits auth | `star_rating_test`, `cook_mode_test`, `auth_screen_test` |
 | 4.1.2 name, role, value | `tooltip` on every `IconButton`; `semanticLabel` or `excludeFromSemantics` on images; heading / checked / selected semantics on kickers, rail titles, check-off rows, sort links, pills and nav items; the ringing timer is a live region; every page names its browser tab (`RouteTitle`) (Phase 37: UX-014, UX-047, UX-051) | `reading_a11y_test`, `chrome_a11y_test`, `card_rail_test` |
@@ -430,6 +458,15 @@ food photograph carries the page; when there is none, the page is typeset.
   time label is capped at its flex share (~57px at the 288px floor) and the long form clipped at
   1.0× — tried in Phase 37 and put back after review. A width budget, not a second style. `MetaChip(large: true)` for cook mode's step facts (UX-024). One brand spelling in UI
   copy, "Secret Sauce" (UX-041; the legal documents keep the entity name as an owner fact).
+
+- **v2.2 — 2026-09-26 (Phase 38).** New tokens (§3.8, §3.9): `AppIconSize.xsPlus` (15),
+  `AppStroke` (1 / 2 / 3 / 4 / 8), `AppMeasure` (420 / 560 / 720) — each replacing two or more named
+  per-widget consts, which now read from them. New palette field `heroOutline` (transparent in
+  light, white at .35 in dark): the dark chefs hero dissolved into the page (UX-054), guarded by a
+  ≥ 3:1 edge assertion in `theme_contrast_test`. Accessibility: images are named or excluded and
+  `LoadingView` is named (UX-047); quantities have a spoken form (`spokenQuantity`); every main
+  screen passes `androidTapTargetGuideline` (UX-048). Motion: cook-step cross-fade through
+  `AppMotion.of` (UX-050). No other value moved.
 
 ## 10. Drift against the Claude Design system (`_ds_bundle.css`, read 2026-09-25)
 

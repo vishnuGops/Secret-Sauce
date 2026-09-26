@@ -16,7 +16,7 @@ class TierLadder extends StatelessWidget {
   const TierLadder({super.key, required this.score, this.height = _barHeight});
 
   /// The default track thickness.
-  static const double _barHeight = 8;
+  static const double _barHeight = AppStroke.bar;
 
   /// The chef's score, in points.
   final double score;

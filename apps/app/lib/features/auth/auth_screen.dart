@@ -11,10 +11,10 @@ import 'package:app/widgets/legal_footer.dart';
 import 'package:app/widgets/route_title.dart';
 
 /// The form's measure.
-const double _kFormMaxWidth = 420;
+const double _kFormMaxWidth = AppMeasure.narrow;
 
 /// Stroke of the submit button's in-flight spinner.
-const double _kSpinnerStroke = 2;
+const double _kSpinnerStroke = AppStroke.thin;
 
 /// Combined sign-in / sign-up screen with a mode toggle.
 

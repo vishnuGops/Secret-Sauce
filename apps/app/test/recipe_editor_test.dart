@@ -1939,6 +1939,64 @@ void main() {
       }
     }
   });
+
+  // UX-048: every control in the editor is at least 48 × 48 (WCAG 2.5.8 via
+  // Flutter's Android guideline, the stricter of the two it ships) — a loaded
+  // recipe with two ingredient rows, a detailed step and the Auto nutrition
+  // pane, so every row control and group action is on screen.
+  for (final width in [390.0, 1440.0]) {
+    testWidgets('every tap target meets the 48dp guideline at ${width}px', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      tester.view.physicalSize = Size(width, 6000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      final recipe = _autoRecipe().copyWith(
+        description: 'A weeknight flatbread.',
+        stepGroups: [
+          StepGroup(
+            id: 'g1',
+            recipeId: 'r1',
+            name: 'Method',
+            steps: [
+              // No photo: a network image never settles, and the photo
+              // tile's buttons are covered by the step photo group.
+              _fullStep.copyWith(imageUrl: null),
+              const RecipeStep(
+                id: 's2',
+                groupId: 'g1',
+                stepOrder: 4,
+                text: 'Rest for five minutes.',
+                sortOrder: 4,
+              ),
+            ],
+          ),
+        ],
+      );
+      await tester.pumpWidget(_editApp(_LoadedRecipeRepository(recipe)));
+      await tester.pumpAndSettle();
+      expect(find.text('Rest for five minutes.'), findsOneWidget);
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      // The food chips are measured directly as well: the guideline skips a
+      // node it judges to be at a scrollable's edge, and it judged the Auto
+      // pane's suggestion chip to be at one while it sat mid-form at 40px.
+      // (The link chip shows only on an open row — the wide layout's.)
+      final suggestion = find.widgetWithText(ActionChip, 'All-purpose flour');
+      expect(suggestion, findsOneWidget);
+      for (final chip in [find.byType(InputChip), suggestion]) {
+        for (final element in chip.evaluate()) {
+          expect(
+            tester.getSize(find.byWidget(element.widget)).height,
+            greaterThanOrEqualTo(kMinInteractiveDimension),
+          );
+        }
+      }
+      handle.dispose();
+    });
+  }
 }
 
 /// The editor in edit mode (`recipeId` non-null) over stub repositories.

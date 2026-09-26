@@ -86,25 +86,36 @@ class SiteFooter extends StatelessWidget {
             )
           else
             // A plain InkWell rather than a TextButton: three TextButtons carry
-            // ~48px of built-in padding each, which is most of the height
-            // budget the web bar has.
+            // horizontal padding and a minimum width the row cannot spare.
             InkWell(
               onTap: link.onTap,
               borderRadius: BorderRadius.circular(AppRadii.md),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.xs,
-                  vertical: AppSpacing.xs,
+              // 48dp target (UX-048): the label alone was 24px tall. The box
+              // grows the hit area; the text keeps its size, centred in it.
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  minWidth: kMinInteractiveDimension,
+                  minHeight: kMinInteractiveDimension,
                 ),
-                child: Text(
-                  link.label,
-                  // The footer ink is the deep brown (36c, reference 3's
-                  // brown band) — the links are the part that is brown, the
-                  // copyright stays muted, so a link still reads as a link.
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: scheme.secondary,
-                    decoration: TextDecoration.underline,
-                    decorationColor: scheme.secondary,
+                child: Align(
+                  widthFactor: 1,
+                  heightFactor: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.xs,
+                    ),
+                    child: Text(
+                      link.label,
+                      // The footer ink is the deep brown (36c, reference 3's
+                      // brown band) — the links are the part that is brown,
+                      // the copyright stays muted, so a link still reads as a
+                      // link.
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: scheme.secondary,
+                        decoration: TextDecoration.underline,
+                        decorationColor: scheme.secondary,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -120,10 +131,10 @@ class SiteFooter extends StatelessWidget {
         top: false,
         child: Container(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md,
-            vertical: AppSpacing.sm,
-          ),
+          // No vertical padding: the links' 48dp boxes (UX-048) are the
+          // bar's height now, so padding on top of them would only spend
+          // viewport. The bar is 49px, up from 41.
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           // A BorderSide on the box that holds the content, never a sibling
           // divider above it (B060): a zero-height box in an unbounded position
           // draws nothing, and this one sits in a slot whose constraints are

@@ -111,7 +111,14 @@ const double _kItemPadV = AppSpacing.sm;
 const double _kIconLabelGap = AppSpacing.sm;
 const double _kTrackPad = AppSpacing.xs;
 const double _kItemGapLabelled = AppSpacing.xs;
-const double _kItemGapIcons = AppSpacing.xxs;
+// Icons-only: no gap and no track padding (UX-048). Each 40px chip sits in
+// its own 48px target, whose 4px margins are the inset and the spacing — the
+// same 4px from the track's edge as before, and three targets still fit the
+// ~150px the pill is left at 1000px × 2.0.
+const double _kItemGapIcons = 0;
+
+double _trackPadFor(_LabelMode mode) =>
+    mode == _LabelMode.none ? 0 : _kTrackPad;
 const double _kAvatarRadiusExpanded = 17; // 34px, per the design
 const double _kAvatarRadiusMedium = 16;
 
@@ -176,25 +183,38 @@ class _Brand extends StatelessWidget {
     final mark = InkWell(
       onTap: () => context.go(Routes.discover),
       borderRadius: BorderRadius.circular(AppRadii.md),
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xs),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.restaurant_menu, color: theme.colorScheme.primary),
-            if (expanded) ...[
-              const SizedBox(width: AppSpacing.sm),
-              Text(
-                'Secret Sauce',
-                maxLines: 1,
-                softWrap: false,
-                // The wordmark in the brand tomato, like the mark beside it.
-                style: theme.textTheme.titleLarge?.copyWith(
-                  color: theme.colorScheme.primary,
-                ),
-              ),
-            ],
-          ],
+      // 48dp target (UX-048): the mark and wordmark were 36px tall, the bare
+      // glyph at medium 32px square.
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minWidth: kMinInteractiveDimension,
+          minHeight: kMinInteractiveDimension,
+        ),
+        child: Align(
+          widthFactor: 1,
+          heightFactor: 1,
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.xs),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.restaurant_menu, color: theme.colorScheme.primary),
+                if (expanded) ...[
+                  const SizedBox(width: AppSpacing.sm),
+                  Text(
+                    'Secret Sauce',
+                    maxLines: 1,
+                    softWrap: false,
+                    // The wordmark in the brand tomato, like the mark beside
+                    // it.
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      color: theme.colorScheme.primary,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -247,7 +267,10 @@ class _NavPill extends StatelessWidget {
             mode == _LabelMode.none ? _kItemGapIcons : _kItemGapLabelled;
 
         return Container(
-          padding: const EdgeInsets.all(_kTrackPad),
+          // Horizontal only: each item carries the vertical track padding
+          // inside its own 48dp box (UX-048), so the track is 48px tall at
+          // 1.0x rather than 44, and the chips sit 6px in from its edge.
+          padding: EdgeInsets.symmetric(horizontal: _trackPadFor(mode)),
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerHigh,
             borderRadius: BorderRadius.circular(AppRadii.pill),
@@ -287,7 +310,11 @@ class _NavPill extends StatelessWidget {
             : [_LabelMode.activeOnly];
     if (!available.isFinite) return wanted.first;
 
-    const iconOnly = _kItemPadIconH * 2 + _kIconSize;
+    // An icon-only chip is 40px wide, but its target is 48 (UX-048).
+    final iconOnly = math.max(
+      kMinInteractiveDimension,
+      _kItemPadIconH * 2 + _kIconSize,
+    );
     double labelled(NavDestination d) =>
         _kItemPadH * 2 +
         _kIconSize +
@@ -296,7 +323,7 @@ class _NavPill extends StatelessWidget {
 
     double total(_LabelMode mode) {
       final gap = mode == _LabelMode.none ? _kItemGapIcons : _kItemGapLabelled;
-      var width = _kTrackPad * 2 + gap * (destinations.length - 1);
+      var width = _trackPadFor(mode) * 2 + gap * (destinations.length - 1);
       for (var i = 0; i < destinations.length; i++) {
         final showLabel =
             mode == _LabelMode.all ||
@@ -311,7 +338,8 @@ class _NavPill extends StatelessWidget {
     }
     // Icons-only is the floor, and nothing below it degrades — a pill that
     // cannot fit even icons overflows silently, in fixed-height chrome. Today
-    // three icons need ~132px against the ~460px the 600px bar leaves; a fourth
+    // three 48px icon targets need 144px against the ~460px the 600px bar
+    // leaves (and ~150 at 1000px × 2.0, the tightest case); a fourth
     // destination or a wider actions cluster is what would break it.
     assert(
       total(_LabelMode.none) <= available || !available.isFinite,
@@ -411,6 +439,31 @@ class _NavItem extends StatelessWidget {
     // "you are here" to the eye only. An icon-only item takes its name from a
     // label rather than the tooltip, so it is announced the same way either
     // way; the tooltip stays for the pointer.
+    // 48dp target (UX-048): the chip is 36px tall (40 wide as an icon). The
+    // box around it answers taps over 48 × 48 while the chip keeps its paint —
+    // the way `MaterialTapTargetSize.padded` pads a button without drawing it
+    // bigger. A tap on the chip itself still lands on its InkWell, the deeper
+    // recognizer, so the ink is unchanged; only the margin is new.
+    final target = GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      excludeFromSemantics: true,
+      onTap: () => context.go(destination.route),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minWidth: kMinInteractiveDimension,
+          minHeight: kMinInteractiveDimension,
+        ),
+        child: Align(
+          widthFactor: 1,
+          heightFactor: 1,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: _kTrackPad),
+            child: item,
+          ),
+        ),
+      ),
+    );
+
     return Semantics(
       container: true,
       button: true,
@@ -418,11 +471,11 @@ class _NavItem extends StatelessWidget {
       label: showLabel ? null : destination.label,
       child:
           showLabel
-              ? item
+              ? target
               : Tooltip(
                 message: destination.label,
                 excludeFromSemantics: true,
-                child: item,
+                child: target,
               ),
     );
   }

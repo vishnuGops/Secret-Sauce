@@ -382,9 +382,15 @@ class _HeaderBand extends ConsumerWidget {
                     height: _kCoverHeight,
                     child:
                         coverUrl != null
-                            ? CachedNetworkImage(
-                              imageUrl: coverUrl,
-                              fit: BoxFit.cover,
+                            // Named for a screen reader (UX-047).
+                            ? Semantics(
+                              image: true,
+                              label: 'Photo of ${recipe.title}',
+                              excludeSemantics: true,
+                              child: CachedNetworkImage(
+                                imageUrl: coverUrl,
+                                fit: BoxFit.cover,
+                              ),
                             )
                             : CategoryCover(
                               category: recipe.category,

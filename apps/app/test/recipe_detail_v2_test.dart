@@ -609,6 +609,20 @@ void main() {
     });
   });
 
+  // UX-047: the cover photo was an unnamed image.
+  testWidgets('the cover photo is named for a screen reader', (tester) async {
+    final handle = tester.ensureSemantics();
+    await _pump(
+      tester,
+      recipe: _recipe.copyWith(coverImageUrl: 'https://img.test/s.jpg'),
+    );
+    expect(
+      find.bySemanticsLabel('Photo of Suya-Spiced Lamb Skewers'),
+      findsOneWidget,
+    );
+    handle.dispose();
+  });
+
   // UX-055: the owner's Share and Edit were bare icon circles beside the
   // labelled Start cooking / Fork pills.
   group('owner actions (expanded)', () {

@@ -43,6 +43,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
     required this.heroFillSubtle,
     required this.heroSelectedInk,
     required this.heroShadow,
+    required this.heroOutline,
     required this.surfaceWarm,
     required this.categoryYellow,
     required this.categoryCoral,
@@ -136,6 +137,13 @@ class AppPalette extends ThemeExtension<AppPalette> {
 
   /// The hero's drop shadow.
   final Color heroShadow;
+
+  /// The hero's edge (UX-054). Nothing in light — the dark band on a white
+  /// page is its own edge, and the shadow lifts it. In dark the band starts at
+  /// `#241A17` on a `#161616` page (~1.1:1) and a shadow cannot show on a dark
+  /// page, so the band dissolved into it; a hairline gives it back an edge
+  /// (≥ 3:1 against the page, `theme_contrast_test`).
+  final Color heroOutline;
 
   /// The warm cream band a page opens on — Discover's masthead (reference
   /// 2's `#FBF7F4`). A section surface, not a card.
@@ -264,6 +272,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
     heroFillSubtle: _white7,
     heroSelectedInk: _heroInk,
     heroShadow: _heroShadow,
+    heroOutline: Color(0x00FFFFFF),
     surfaceWarm: Color(0xFFFBF7F4),
     categoryYellow: _yellow,
     categoryCoral: _coral,
@@ -304,6 +313,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
     heroFillSubtle: _white7,
     heroSelectedInk: _heroInk,
     heroShadow: _heroShadow,
+    heroOutline: Color(0x59FFFFFF), // white at AppAlpha.rule (.35)
     surfaceWarm: Color(0xFF1E1B19),
     categoryYellow: _yellow,
     categoryCoral: _coral,
@@ -353,6 +363,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
     Color? heroFillSubtle,
     Color? heroSelectedInk,
     Color? heroShadow,
+    Color? heroOutline,
     Color? surfaceWarm,
     Color? categoryYellow,
     Color? categoryCoral,
@@ -391,6 +402,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
     heroFillSubtle: heroFillSubtle ?? this.heroFillSubtle,
     heroSelectedInk: heroSelectedInk ?? this.heroSelectedInk,
     heroShadow: heroShadow ?? this.heroShadow,
+    heroOutline: heroOutline ?? this.heroOutline,
     surfaceWarm: surfaceWarm ?? this.surfaceWarm,
     categoryYellow: categoryYellow ?? this.categoryYellow,
     categoryCoral: categoryCoral ?? this.categoryCoral,
@@ -435,6 +447,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
       heroFillSubtle: l(heroFillSubtle, other.heroFillSubtle),
       heroSelectedInk: l(heroSelectedInk, other.heroSelectedInk),
       heroShadow: l(heroShadow, other.heroShadow),
+      heroOutline: l(heroOutline, other.heroOutline),
       surfaceWarm: l(surfaceWarm, other.surfaceWarm),
       categoryYellow: l(categoryYellow, other.categoryYellow),
       categoryCoral: l(categoryCoral, other.categoryCoral),

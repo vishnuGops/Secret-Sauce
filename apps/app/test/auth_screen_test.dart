@@ -145,9 +145,10 @@ class _FakeDiscover implements DiscoverRepository {
 Future<GoRouter> _pumpAt(
   WidgetTester tester,
   String location,
-  _FakeAuth auth,
-) async {
-  tester.view.physicalSize = const Size(1000, 1200);
+  _FakeAuth auth, {
+  Size size = const Size(1000, 1200),
+}) async {
+  tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
 
@@ -439,6 +440,38 @@ void main() {
     });
   });
 
+  // UX-048: every control on the screen is at least 48 × 48 (WCAG 2.5.8 via
+  // Flutter's Android guideline, the stricter of the two it ships) — both
+  // sides, and the legal links under the form.
+  for (final width in [390.0, 1440.0]) {
+    for (final location in [Routes.auth, Routes.signUp]) {
+      testWidgets('every tap target meets the 48dp guideline at ${width}px, '
+          '$location', (tester) async {
+        final handle = tester.ensureSemantics();
+        await _pumpAt(tester, location, _FakeAuth(), size: Size(width, 1400));
+        await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+        // The form is a centred scroll view, and the guideline compares a
+        // node against its scrollable's rect one transform level off — so it
+        // treats the bottom of a centred form as "at the edge" and skips the
+        // legal links there. Measured directly instead.
+        for (final label in ['Privacy', 'Terms', 'Rights']) {
+          final size = tester.getSemantics(find.text(label)).rect.size;
+          expect(
+            size.width,
+            greaterThanOrEqualTo(kMinInteractiveDimension),
+            reason: label,
+          );
+          expect(
+            size.height,
+            greaterThanOrEqualTo(kMinInteractiveDimension),
+            reason: label,
+          );
+        }
+        handle.dispose();
+      });
+    }
+  }
+
   // UX-018. With email confirmation on (the hosted default) GoTrue returns no
   // session; the screen used to leave anyway, dropping a signed-out user on
   // Discover with no word about the mail.
@@ -481,6 +514,7 @@ void main() {
             tester,
             Routes.signUp,
             _FakeAuth(signUpOutcome: SignUpOutcome.confirmEmail),
+            size: Size(width, 900),
           );
           await _fill(
             tester,

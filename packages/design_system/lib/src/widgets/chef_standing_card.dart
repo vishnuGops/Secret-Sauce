@@ -219,7 +219,7 @@ class _BoardRow extends StatelessWidget {
   static const double _verticalInset = 9;
 
   /// The tier bar across the bottom edge.
-  static const double _barHeight = 3;
+  static const double _barHeight = AppStroke.medium;
 
   @override
   Widget build(BuildContext context) {

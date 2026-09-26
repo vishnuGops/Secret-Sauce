@@ -366,9 +366,12 @@ void main() {
           expect(tester.takeException(), isNull, reason: '$width x $scale');
           expect(
             tester.getSize(find.byType(StarRatingInput)),
+            // Contract change (Phase 38, UX-048): the hit box is at least
+            // 48dp tall; the stars keep their size, centred in it. What this
+            // pins is unchanged — focus does not resize the control.
             const Size(
               StarRatingInput.defaultSize * 5,
-              StarRatingInput.defaultSize,
+              kMinInteractiveDimension,
             ),
           );
         }

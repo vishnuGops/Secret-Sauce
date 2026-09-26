@@ -45,7 +45,7 @@ const double _kFramePadding = 7;
 const double _kPanelClipRadius = _kFrameRadius - _kFramePadding; // 11
 
 /// The panel's highlight border, drawn outside the clip.
-const double _kPanelBorderWidth = 1;
+const double _kPanelBorderWidth = AppStroke.hairline;
 
 /// The panel's own corner: the clip plus its border.
 const double _kPanelRadius = _kPanelClipRadius + _kPanelBorderWidth; // 12
@@ -60,7 +60,7 @@ const double _kFoilLift = 0.18;
 const double _kFoilShadeDepth = 0.38;
 
 /// Foil stripes: stroke width and the distance between stripe starts.
-const double _kFoilStripeWidth = 2;
+const double _kFoilStripeWidth = AppStroke.thin;
 const double _kFoilStripePeriod = 9;
 
 /// Side inset shared by every band inside the panel.
@@ -75,7 +75,7 @@ const double _kInsetTight = 7;
 /// The portrait window's corner and tinted border; the photo inside is
 /// clipped concentric with it.
 const double _kPortraitRadius = 9;
-const double _kPortraitBorder = 3;
+const double _kPortraitBorder = AppStroke.medium;
 const double _kPortraitClipRadius = _kPortraitRadius - _kPortraitBorder; // 6
 
 /// The driver row's icon tile.
@@ -83,7 +83,7 @@ const double _kDriverTileSize = 28;
 const double _kDriverTileRadius = 7;
 
 /// The footer's tier-ladder bar and the gap under it.
-const double _kLadderBarHeight = 4;
+const double _kLadderBarHeight = AppStroke.thick;
 const double _kLadderLabelGap = 3;
 
 /// The card's height at the ambient text scale.
@@ -448,16 +448,19 @@ class _Portrait extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
+            // Decorative (UX-047): the card names the chef in words.
             if (url != null && url.isNotEmpty)
-              CachedNetworkImage(
-                imageUrl: url,
-                fit: BoxFit.cover,
-                placeholder:
-                    (_, __) =>
-                        ColoredBox(color: scheme.surfaceContainerHighest),
-                errorWidget:
-                    (_, __, ___) =>
-                        _MonogramPortrait(standing: standing, color: color),
+              ExcludeSemantics(
+                child: CachedNetworkImage(
+                  imageUrl: url,
+                  fit: BoxFit.cover,
+                  placeholder:
+                      (_, __) =>
+                          ColoredBox(color: scheme.surfaceContainerHighest),
+                  errorWidget:
+                      (_, __, ___) =>
+                          _MonogramPortrait(standing: standing, color: color),
+                ),
               )
             else
               // TODO(portrait): there is no chef portrait asset and no column

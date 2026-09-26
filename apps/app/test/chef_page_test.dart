@@ -926,6 +926,36 @@ void main() {
       handle.dispose();
     });
 
+    // UX-048: every control on the page is at least 48 × 48 (WCAG 2.5.8 via
+    // Flutter's Android guideline, the stricter of the two it ships) — a
+    // ranked chef with an affiliation chip and a recipe, phone and web.
+    for (final width in [390.0, 1440.0]) {
+      testWidgets('every tap target meets the 48dp guideline at ${width}px', (
+        tester,
+      ) async {
+        _size(tester, width, 2400);
+        final handle = tester.ensureSemantics();
+        await tester.pumpWidget(
+          _app(
+            pages: [
+              [_recipe('r1', 'Chicken Tikka Masala')],
+            ],
+            entities: const [
+              Entity(
+                id: 'e1',
+                slug: 'northern-bakehouse',
+                name: 'Northern Bakehouse',
+                kind: EntityKind.brand,
+              ),
+            ],
+          ),
+        );
+        await tester.pumpAndSettle();
+        await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+        handle.dispose();
+      });
+    }
+
     testWidgets("the chef's name titles the tab", (tester) async {
       _size(tester, 1000);
       await tester.pumpWidget(_app());
