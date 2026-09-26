@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:design_system/src/layout/adaptive.dart';
 import 'package:design_system/src/theme/app_theme.dart';
 import 'package:design_system/src/widgets/chef_avatar.dart';
+import 'package:design_system/src/widgets/rank_badge.dart';
 import 'package:design_system/src/widgets/tier_chip.dart';
 
 /// Which shape a [ChefStandingCard] takes.
@@ -86,13 +87,6 @@ class ChefStandingCard extends StatelessWidget {
   static const double _avatarRadius = 22;
   static const double _avatarRadiusCompact = 18;
 
-  /// Medal glyph for a podium rank, or null below the top three.
-  static IconData? medalFor(int rank) => switch (rank) {
-    1 => Icons.workspace_premium,
-    2 || 3 => Icons.military_tech,
-    _ => null,
-  };
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -135,7 +129,11 @@ class ChefStandingCard extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  _RankBlock(standing: standing, color: tier, compact: compact),
+                  RankBadge.podium(
+                    rank: standing.chefRank,
+                    tier: standing.chefTier,
+                    dense: compact,
+                  ),
                   SizedBox(width: gap),
                   ChefAvatar(
                     name: standing.displayName,
@@ -243,7 +241,10 @@ class _BoardRow extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  _RankPill(rank: standing.chefRank, color: color),
+                  RankBadge.disc(
+                    rank: standing.chefRank,
+                    tier: standing.chefTier,
+                  ),
                   const SizedBox(width: AppSpacing.md),
                   ChefAvatar(
                     name: standing.displayName,
@@ -321,109 +322,6 @@ class _BoardRow extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-/// The rank as a tinted disc. Ties share a rank, so two discs can read `4`.
-class _RankPill extends StatelessWidget {
-  const _RankPill({required this.rank, required this.color});
-
-  final int rank;
-  final Color color;
-
-  /// The disc's diameter, and the side padding that keeps a numeral off its
-  /// curve.
-  static const double _size = 28;
-  static const double _padding = 3;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Container(
-      width: _size,
-      height: _size,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: color.withValues(alpha: AppAlpha.tint),
-      ),
-      // Ranks past two digits would otherwise clip the disc, as would 2.0x
-      // text scale on a two-digit rank.
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: _padding),
-          child: Text(
-            '$rank',
-            maxLines: 1,
-            style: theme.textTheme.titleSmall?.tabular.copyWith(color: color),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Medal + `#1` for the podium, numeral + `rank` for everyone below it. Ties
-/// share a rank (`dense_rank`), so two rows can both read `4` — and two rows
-/// can both wear the same medal.
-class _RankBlock extends StatelessWidget {
-  const _RankBlock({
-    required this.standing,
-    required this.color,
-    required this.compact,
-  });
-
-  final ChefStanding standing;
-  final Color color;
-  final bool compact;
-
-  /// Column width and medal glyph size, full and compact.
-  static const double _width = 46;
-  static const double _widthCompact = 38;
-  static const double _medalSize = 26;
-  static const double _medalSizeCompact = 22;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final medal = ChefStandingCard.medalFor(standing.chefRank);
-    final width = compact ? _widthCompact : _width;
-
-    return SizedBox(
-      width: width,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (medal != null)
-            Icon(
-              medal,
-              size: compact ? _medalSizeCompact : _medalSize,
-              color: color,
-            )
-          else
-            FittedBox(
-              child: Text(
-                '${standing.chefRank}',
-                style: context.appText.statLarge.copyWith(
-                  color: color,
-                  height: 1.1,
-                ),
-              ),
-            ),
-          FittedBox(
-            child: Text(
-              medal != null ? '#${standing.chefRank}' : 'rank',
-              style: theme.textTheme.labelSmall?.tabular.copyWith(
-                color:
-                    medal != null ? color : theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

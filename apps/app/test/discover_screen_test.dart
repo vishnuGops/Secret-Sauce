@@ -425,74 +425,55 @@ void main() {
   testWidgets('the selected sort is drawn at every width (B060)', (
     tester,
   ) async {
-    // The underline used to be a width-less box under the label in a Column,
-    // which takes `constraints.biggest` when bounded and `smallest` when not:
-    // full-width in the stacked layout (so each link took its own line) and
-    // zero-width — invisible — in the row layout, where the `Wrap` is a
-    // non-flex child. Neither overflows, so this measures instead.
-    final links = find.byWidgetPredicate(
-      (w) => w.runtimeType.toString() == '_SortLink',
+    // B060: the old sort links' underline was a width-less box that took
+    // `constraints.biggest` when bounded (full-width links, one per line) and
+    // `smallest` when not (zero-width, invisible, in the row layout). The
+    // sort is the `SegmentedTabs` pill since UX-032; this keeps both halves of
+    // the guard on it — each segment is the width of its own label, and the
+    // selected one is the one actually filled — in both header layouts.
+    final pill = find.byType(SegmentedTabs<BrowseSort>);
+    Finder chip(String label) => find.ancestor(
+      of: find.text(label),
+      matching: find.descendant(
+        of: pill,
+        matching: find.byType(AnimatedContainer),
+      ),
     );
+    Color? fillOf(String label) =>
+        (tester.widget<AnimatedContainer>(chip(label)).decoration
+                as BoxDecoration?)
+            ?.color;
 
     for (final width in [1400.0, 390.0]) {
       _size(tester, width);
       await tester.pumpWidget(_app(_stocked()));
       await tester.pumpAndSettle();
 
-      expect(links, findsNWidgets(3));
-      final boxes = [for (var i = 0; i < 3; i++) tester.getRect(links.at(i))];
-
-      // Each link is the width of its own label. That is the property that
-      // was broken — a full-width link is *why* the three stacked — and it is
-      // the one this harness can assert: `flutter test` renders in a
-      // fixed-width font much wider than Roboto, so "one row at 390px" is true
-      // in a browser and false here for reasons that have nothing to do with
-      // the bug.
-      for (final b in boxes) {
-        expect(
-          b.width,
-          lessThan(200),
-          reason: 'a sort link stretched to ${b.width} at ${width}px',
-        );
+      expect(pill, findsOneWidget);
+      for (final label in ['Top rated', 'Trending', 'Newest']) {
+        // Measured in `flutter test`'s fixed-width font, much wider than the
+        // real one; 200 is "its label", not "the row".
+        final w = tester.getRect(chip(label)).width;
+        expect(w, lessThan(200), reason: '$label stretched to $w at $width');
+        expect(w, greaterThan(0), reason: '$label is undrawn at $width');
       }
 
-      // And the selected one is actually *drawn* as selected — the half of
-      // this that a width check cannot see, because the invisible underline
-      // was zero-width by definition. Asserted as a *difference* between the
-      // selected link and the other two: "an underline exists" would still
-      // pass if every link grew one.
-      BorderSide underlineOf(int i) =>
-          (tester
-                      .widget<Container>(
-                        find
-                            .descendant(
-                              of: links.at(i),
-                              matching: find.byType(Container),
-                            )
-                            .first,
-                      )
-                      .decoration!
-                  as BoxDecoration)
-              .border!
-              .bottom;
-
       expect(
-        underlineOf(0).color,
-        isNot(Colors.transparent),
-        reason: 'the selected sort has no underline at ${width}px',
+        fillOf('Top rated'),
+        isNotNull,
+        reason: 'the selected sort is not filled at ${width}px',
       );
-      expect(underlineOf(0).width, greaterThan(0));
-      for (final i in [1, 2]) {
+      for (final label in ['Trending', 'Newest']) {
         expect(
-          underlineOf(i).color,
-          Colors.transparent,
-          reason: 'an unselected sort is underlined at ${width}px',
+          fillOf(label),
+          isNull,
+          reason: 'an unselected sort is filled at ${width}px',
         );
       }
     }
   });
 
-  // UX-014: the underline and colour are all a screen reader never sees. The
+  // UX-014: the fill and colour are all a screen reader never sees. The
   // selected sort has to say so in the semantics tree, and move with a tap.
   testWidgets('the sort links announce which one is selected', (tester) async {
     final handle = tester.ensureSemantics();

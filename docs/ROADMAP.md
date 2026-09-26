@@ -867,13 +867,13 @@ to `docs/design/`. The next phase does not start until the previous one's file e
       39 raw insets / 16 raw radii to 0 / 7 / 0 / 0 (AUDIT.md re-sweep). Fixed: **B133** (+ UX-010/011/012),
       UX-031, UX-033, UX-049, UX-050. Guards: `theme_contrast_test`, `theme_extensions_test`,
       `theme_fonts_test`.
-  - [ ] Consolidate the duplicate components DESIGN.md §4 names (one `SegmentedTabs`, one
-        `RankBadge`, one Load more, `ChefAvatar` on profile) — UX-032's structural half; 36c.
+  - [x] Consolidate the duplicate components DESIGN.md §4 names — done in Phase 37 wave D.
   - [ ] Bring the Claude Design system's `_ds_bundle.css` back in line with the repo (DESIGN.md
         §10 lists the drift) — an owner-approved `DesignSync` write, not code.
   - [ ] Small shared tokens the migration asked for and deliberately did not add: a stroke/track
         thickness scale (1 / 2 / 3 / 4 / 8), a form measure (420 / 720), a 15px icon step.
-  - [ ] Screenshot-check the chefs hero's tier tiles near the 96px floor (~1000px window): the
+  - [x] Screenshot-check the chefs hero's tier tiles near the 96px floor (~1000px window) — done in
+        Phase 37 wave D: `MASTER CHEF` sets whole at 1000px. Original note: the
         labels are now `appText.overline` (w700, Manrope), and `MASTER CHEF` may ellipsize where
         the old w500 fitted. It cannot overflow (`maxLines: 1`), and `flutter test`'s font cannot
         measure it, so this is a capture item for the 36c pass (review finding, Low).
@@ -889,8 +889,9 @@ to `docs/design/`. The next phase does not start until the previous one's file e
   - [ ] The final font (the owner chose "basic for now"; a display face is one constant + files).
   - [ ] Cover photographs for the 14 curated recipes (owner content; `recipeData/` needs a cover
         field) — the colour block is the designed fallback until then.
-  - [ ] Compact category row does not scroll to a deep-linked tile that starts off-screen; the
-        grid heading and clear chip still name the selection.
+  - [x] Compact category row does not scroll to a deep-linked tile that starts off-screen — fixed
+        in Phase 37 wave D (the row lays out all six tiles so its extent is exact, then centres
+        the selected one).
 - [ ] **Content gap the audit surfaced (seed-data fit):** the 14 curated recipes have no cover
       photos, so Discover shows only placeholders (UX-034). A designed no-photo card is 36b/36c
       work; the photographs themselves are an owner action.
@@ -939,9 +940,12 @@ redesigns of Chefs / My Recipes / editor / auth / profile, and every owner decis
 
 **Wave D — design follow-ups**
 
-- [ ] UX-032 consolidation (`SegmentedTabs`, `RankBadge`, one Load more, `ChefAvatar` on profile)
-- [ ] Compact category row scrolls a deep-linked tile into view
-- [ ] Chefs hero `MASTER CHEF` tile capture near the 96px floor
+- [x] UX-032 consolidation (`SegmentedTabs`, `RankBadge`, `LoadMoreButton`; `ChefAvatar` on profile
+      came with UX-038). Found on the way: the empty `/chefs` board overflowed its fixed-height panel
+      at 1000px once the window filter grew 48px targets — its non-list states now scroll
+- [x] Compact category row scrolls a deep-linked tile into view
+- [x] Chefs hero `MASTER CHEF` tile capture near the 96px floor — release build + Playwright at
+      1000 / 1040 / 1440 px (2026-09-26): the label sets whole, no ellipsis; nothing to fix
 - [x] Doc hygiene (the superseded typography item)
 
 ---

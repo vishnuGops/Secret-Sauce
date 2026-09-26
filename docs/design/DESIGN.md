@@ -299,33 +299,39 @@ pumps it at (Gotcha 26: a new caller re-opens it).
 
 | Component | File | Variants / states | Envelope tested | Tokens | Findings |
 | --- | --- | --- | --- | --- | --- |
-| `RecipeCard` (+ placeholder) | `recipe_card.dart` | cover / no-cover, banner, footer, chef badge on scrim | 264/288/340 × 1.0/2.0/3.0 | palette.scrim, AppAlpha.frosted, card theme | UX-013 focus hidden under the banner; UX-034 no-photo state is an icon |
+| `RecipeCard` (+ placeholder) | `recipe_card.dart` | cover / no-cover, banner, footer, chef badge on scrim | 264/288/340 × 1.0/2.0/3.0 | palette.scrim, AppAlpha.frosted, card theme | UX-013 fixed (`InteractiveTile`); UX-034 no-photo state is the category colour block (36c) |
 | `DifficultyBadge` | `difficulty_badge.dart` | easy / medium / hard | via the card suite | palette.difficulty, AppInsets.badge | UX-010 fixed (B133) |
 | `TierChip` | `tier_chip.dart` | normal / dense / onImage | via card + chef suites | palette.tier, AppInsets.badge(Dense), AppAlpha | B055; B133 tiers |
-| `StarRating` / `RatingPill` / `StarRatingInput` | `star_rating.dart` | display, pill, input (enabled / disabled) | star_rating_test | palette.rating | UX-003 input not keyboard-operable (B126, open) |
-| `ChefAvatar` | `chef_avatar.dart` | image / initials | chef suites | scheme | UX-040 initials; duplicated by `CircleAvatar` on profile (UX-032) |
+| `StarRating` / `RatingPill` / `StarRatingInput` | `star_rating.dart` | display, pill, input (enabled / disabled) | star_rating_test | palette.rating | UX-003 fixed (B126): arrows / Home / End, semantics increase / decrease, focus ring |
+| `ChefAvatar` | `chef_avatar.dart` | image / initials | chef suites | scheme | UX-040 initials; the profile uses it since Phase 37 (UX-032) |
 | `ChefBadge` | `chef_badge.dart` | on surface / on image | chef_badge_test | palette.onImage | — |
-| `ChefSpotlightCard` (+ placeholder) | `chef_spotlight_card.dart` | per tier, foil, RANK pill | chef_spotlight_card_test | palette foil / cover / shadow, local geometry consts | UX-012 fixed; UX-013 focus |
-| `ChefStandingCard` | `chef_standing_card.dart` | ranked / unranked | chef_standing_card_test | stat roles | UX-049 ranks tabular |
+| `ChefSpotlightCard` (+ placeholder) | `chef_spotlight_card.dart` | per tier, foil, RANK pill | chef_spotlight_card_test | palette foil / cover / shadow, local geometry consts | UX-012 fixed; UX-013 fixed (`InteractiveTile`); rank via `RankBadge.pill` |
+| `ChefStandingCard` | `chef_standing_card.dart` | ranked / unranked | chef_standing_card_test | stat roles | UX-049 ranks tabular; rank via `RankBadge.podium` / `.disc` |
 | `CardRail` | `card_rail.dart` | paging, empty | card_rail_test | AppMotion.slow via animateScroll | UX-045 empty rail box; UX-050 fixed |
 | `TierLadder`, `ScoreContributionBar` | `tier_ladder.dart`, `score_contribution_bar.dart` | — | tier_ladder_test | palette.tier | — |
 | `NutritionFactsLabel` | `nutrition_facts_label.dart` | full / per serving | nutrition_facts_label_test | FDA label weights kept as the label's own spec | — |
 | `SiteFooter` / `LegalFooter` | `site_footer.dart`, `apps/app/lib/widgets/legal_footer.dart` | dense (web chrome) / page | site_footer_test 360–1440 × 1.0–2.0 | — | — |
-| `LoadingView` / `EmptyView` / `ErrorView` | `state_views.dart` | — | via the grid suites | — | UX-027 no retry on grids; UX-047 LoadingView unlabeled |
+| `LoadingView` / `EmptyView` / `ErrorView` | `state_views.dart` | — | via the grid suites | — | UX-027 fixed (retry on every grid); UX-047 LoadingView unlabeled |
 | `NotYetTooltip` | `not_yet_tooltip.dart` | — | — | — | — |
 | `RecipeGrid` / `SliverRecipeGrid` | `apps/app/lib/widgets/recipe_grid.dart` | box / sliver | recipe_grid_test 2560/3840 | FlowGridMetrics | — |
-| `RecipeAsyncGrid` / `…SliverGrid` | `apps/app/lib/widgets/recipe_async_grid.dart` | loading / error / empty / grid / load more | paging_test | state views | **The only ladder** (Gotcha 24); UX-027 |
+| `RecipeAsyncGrid` / `…SliverGrid` | `apps/app/lib/widgets/recipe_async_grid.dart` | loading / error / empty / grid / load more | paging_test | state views, `LoadMoreButton` | **The only ladder** (Gotcha 24); retry (UX-027) |
 | `ShareDialog` | `apps/app/lib/widgets/share_dialog.dart` | lookup / list | share_dialog_test | dialog theme | no 2.0× suite |
+| `InteractiveTile` (Phase 37) | `interactive_tile.dart` | idle / hover / pressed / keyboard focus | via recipe_card_test, chef_spotlight_card_test | primary ring 3px + surface hairline, theme hover / highlight | UX-013 |
+| `SegmentedTabs` (Phase 37) | `segmented_tabs.dart` | `surface` / `onHero` tone; content-sized (scrolls when bounded) / `expand` | segmented_tabs_test 288–1440 × 1.0/2.0 | `labelLarge.tabular`, one weight; ≥ 48 × 48 segments over a ~32px band; AppMotion.fast | UX-032, UX-048, UX-049 |
+| `RankBadge` (Phase 37) | `rank_badge.dart` | `.pill` (on imagery) / `.disc` (board row) / `.podium` (medal or numeral) | rank_badge_test 390–1440 × 1.0/2.0, pill ink ≥ 4.5:1 per tier | tier ink at light brightness on the pill (UX-012) | UX-032; one `Rank N` node |
+| `LoadMoreButton` (Phase 37) | `load_more_button.dart` | outlined / dense text; idle / loading (same size) | load_more_button_test 288–1440 × 1.0/2.0 | — | UX-032; owns the friendlyError snackbar |
+| `RouteTitle` (Phase 37) | `apps/app/lib/widgets/route_title.dart` | — | chrome_a11y_test | scheme.primary | UX-051 |
 
-**Duplicates to consolidate** (UX-032 — survivor in bold; the consolidation itself is Phase 3 work):
-segmented controls → **one pill `SegmentedTabs`** grown from `ChefPillTabs` (replaces
-`_WindowFilter`, the `_SortLink` row and the rail panel's `ChoiceChip`s; `TabBar` and
-`SegmentedButton` stay where they are the M3-correct control); rank badges ×3 → **one `RankBadge`**;
-kickers ×6 → **`appText.kicker` / `kickerLarge`** (done in 36b); Load more ×2 → **the `RecipeAsyncSliverGrid`
-footer**; avatars → **`ChefAvatar`**.
+**Duplicates consolidated** (UX-032, done in Phase 37): segmented controls → **`SegmentedTabs`**
+(`ChefPillTabs` is now a thin `expand: true` wrapper over it; `_WindowFilter`, the `_SortLink` row
+and the rail's `ChoiceChip`s are gone; `TabBar` and `SegmentedButton` stay where they are the
+M3-correct control); rank badges → **`RankBadge`** (the chefs hero's `N ranked` tile is a *count*,
+not a rank, and deliberately stays its own widget — a `Rank N` label there would lie to a screen
+reader); kickers → **`appText.kicker` / `kickerLarge`** (36b); Load more ×2 → **`LoadMoreButton`**;
+avatars → **`ChefAvatar`**.
 
 **States are part of the component.** Hover and focus on web are required, not polish: M3 buttons
-and `InkWell` supply them; a custom tappable must too (UX-013 is the open instance).
+and `InkWell` supply them; a custom tappable over opaque content uses `InteractiveTile` (UX-013).
 
 ## 5. Patterns
 

@@ -53,9 +53,6 @@ class ChefsScreen extends ConsumerWidget {
   /// text rather than with the panel edge.
   static const double _panelFooterStart = 14;
 
-  /// The inline `Load more` spinner's stroke.
-  static const double _spinnerStroke = 2;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (context.isCompact) return const _CompactBoard();
@@ -392,7 +389,18 @@ class _BoardPanel extends ConsumerWidget {
             ),
           ),
           Divider(height: 1, color: scheme.outlineVariant),
-          if (scrollable) Expanded(child: rows) else rows,
+          if (scrollable)
+            Expanded(
+              // The list scrolls itself; the spinner, error and empty states
+              // do not, and in the two-column layout this panel's height is
+              // fixed by the page (Gotcha 22). The empty board — the real state
+              // until real people use it (B113) — overflowed by 12px at 1000px
+              // once the window filter grew its 48px targets (UX-048).
+              child:
+                  rows is ListView ? rows : SingleChildScrollView(child: rows),
+            )
+          else
+            rows,
           Divider(height: 1, color: scheme.outlineVariant),
           // No footer button under a re-sort's spinner: `page` is still the
           // previous ordering's, and paging it would mix two orderings.
@@ -459,10 +467,9 @@ class _PanelFooter extends StatelessWidget {
   }
 }
 
-/// `Load more` — a button rather than infinite scroll, like every paged recipe
-/// surface (`recipe_async_grid.dart`): an explicit tap never fetches a page the
-/// reader did not ask for. A failed page keeps the rows already loaded and says
-/// so in a snackbar.
+/// `Load more` for the board, wired to [chefBoardProvider]. The control itself
+/// — disabled spinner while in flight, the snackbar on a failed page — is the
+/// shared [LoadMoreButton] every paged recipe grid uses too (UX-032).
 class _LoadMoreButton extends ConsumerWidget {
   const _LoadMoreButton({required this.loading, this.dense = false});
 
@@ -473,34 +480,11 @@ class _LoadMoreButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final label = Text(loading ? 'Loading…' : 'Load more');
-    Future<void> load() async {
-      final messenger = ScaffoldMessenger.of(context);
-      try {
-        await ref.read(chefBoardProvider.notifier).loadMore();
-      } catch (e) {
-        messenger.showSnackBar(SnackBar(content: Text(friendlyError(e))));
-      }
-    }
-
-    if (dense) {
-      return TextButton(onPressed: loading ? null : load, child: label);
-    }
-    return Center(
-      child: OutlinedButton.icon(
-        onPressed: loading ? null : load,
-        icon:
-            loading
-                ? const SizedBox(
-                  width: AppIconSize.sm,
-                  height: AppIconSize.sm,
-                  child: CircularProgressIndicator(
-                    strokeWidth: ChefsScreen._spinnerStroke,
-                  ),
-                )
-                : const Icon(Icons.expand_more),
-        label: label,
-      ),
+    final button = LoadMoreButton(
+      loading: loading,
+      dense: dense,
+      onPressed: () => ref.read(chefBoardProvider.notifier).loadMore(),
     );
+    return dense ? button : Center(child: button);
   }
 }

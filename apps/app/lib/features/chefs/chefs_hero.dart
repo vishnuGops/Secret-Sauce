@@ -334,6 +334,12 @@ class _TierTile extends StatelessWidget {
 /// the numbers under it are not measured over. The tier tiles beside it stay
 /// all-time on purpose: a tier is a career, and five tiles re-counting who is
 /// a Master Chef *this week* would be a different product.
+///
+/// The design system's [SegmentedTabs] on its `onHero` tone (UX-032): the
+/// same `heroFill` track, `onHero` fill and `heroSelectedInk` label it always
+/// drew, now with a 48px target per segment (UX-048) and a keyboard focus ring.
+/// Sized to its labels — a non-flex child of the hero's row layout, which only
+/// appears once the row has room for it.
 class _WindowFilter extends StatelessWidget {
   const _WindowFilter({required this.selected, required this.onSelected});
 
@@ -341,49 +347,12 @@ class _WindowFilter extends StatelessWidget {
   final ValueChanged<ChefsWindow> onSelected;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final palette = context.palette;
-
-    return Container(
-      padding: AppInsets.segmentTrack,
-      decoration: BoxDecoration(
-        color: palette.heroFill,
-        borderRadius: BorderRadius.circular(AppRadii.pill),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          for (final window in ChefsWindow.values)
-            Semantics(
-              button: true,
-              selected: window == selected,
-              child: InkWell(
-                onTap: () => onSelected(window),
-                borderRadius: BorderRadius.circular(AppRadii.pill),
-                child: Container(
-                  padding: AppInsets.segment,
-                  decoration: BoxDecoration(
-                    color: window == selected ? palette.onHero : null,
-                    borderRadius: BorderRadius.circular(AppRadii.pill),
-                  ),
-                  // One weight for both states (UX-049): a heavier selected
-                  // label widened itself and shifted its neighbours. The fill
-                  // and the ink carry the selection.
-                  child: Text(
-                    window.label,
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color:
-                          window == selected
-                              ? palette.heroSelectedInk
-                              : palette.onHeroMuted,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => SegmentedTabs<ChefsWindow>(
+    values: ChefsWindow.values,
+    selected: selected,
+    onSelected: onSelected,
+    labelOf: (window) => window.label,
+    tone: SegmentedTabsTone.onHero,
+    semanticLabel: 'Ranking window',
+  );
 }

@@ -22,10 +22,13 @@ import 'package:app/features/recipe_detail/servings_row.dart';
 ///   * the **container lives here** — and so does the section heading (36c),
 ///     so switching panes happens inside one frame rather than swapping two
 ///     differently-framed boxes;
-///   * the tabs are two [ChoiceChip]s in a [Wrap], **not** a `SegmentedButton`.
-///     Compact's content box is 358 px and a segmented control is one intrinsic
-///     `Row` with no reflow escape (Gotcha 21); chips wrap instead, which is the
-///     move the three rows inside the ingredient pane already make.
+///   * the tabs are the design system's [SegmentedTabs] (UX-032, Phase 37),
+///     **not** a `SegmentedButton`. Compact's content box is 358 px and a
+///     `SegmentedButton` is one intrinsic `Row` with no reflow escape (Gotcha
+///     21) — which is why this was two `ChoiceChip`s in a `Wrap`. The pill
+///     sized to its labels has the escape built in: under a bounded width it
+///     scrolls sideways rather than overflow, and two short labels never need
+///     it at 358 px x 2.0.
 class RailPanel extends ConsumerWidget {
   const RailPanel({super.key, required this.recipe, this.bordered = true});
 
@@ -80,25 +83,18 @@ class RailPanel extends ConsumerWidget {
             const SizedBox(height: AppSpacing.smPlus),
             ServingsRow(recipe: recipe),
             const SizedBox(height: AppSpacing.sm),
-            Wrap(
-              spacing: AppSpacing.sm,
-              runSpacing: AppSpacing.xs,
-              children: [
-                for (final entry
-                    in const {
-                      RailTab.ingredients: 'Ingredients',
-                      RailTab.nutrition: 'Nutrition',
-                    }.entries)
-                  ChoiceChip(
-                    label: Text(entry.value),
-                    selected: tab == entry.key,
-                    onSelected:
-                        (_) =>
-                            ref
-                                .read(railTabProvider(recipe.id).notifier)
-                                .state = entry.key,
-                  ),
-              ],
+            SegmentedTabs<RailTab>(
+              values: RailTab.values,
+              selected: tab,
+              labelOf:
+                  (value) => switch (value) {
+                    RailTab.ingredients => 'Ingredients',
+                    RailTab.nutrition => 'Nutrition',
+                  },
+              onSelected:
+                  (value) =>
+                      ref.read(railTabProvider(recipe.id).notifier).state =
+                          value,
             ),
             const SizedBox(height: AppSpacing.sm),
             switch (tab) {

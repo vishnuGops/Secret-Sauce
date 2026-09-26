@@ -23,9 +23,6 @@ const double _kBrowseHeaderRowWidth = 560;
 /// The heavier rule that opens the browse grid.
 const double _kBrowseRule = 2;
 
-/// The sort link's underline stroke.
-const double _kSortUnderline = 2;
-
 /// Public discovery: a masthead, three numbered shelves, then everything else.
 ///
 /// **The tabs are gone.** Discover was Popular / Trending / Recent — one corpus
@@ -381,7 +378,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
 /// controls on the same line. The shelves are an edit; this is the archive.
 ///
 /// While a category tile is selected the heading names it (`MAINS`) and the
-/// sort links give way to a clear chip: the filtered grid has one order,
+/// sort pill gives way to a clear chip: the filtered grid has one order,
 /// newest first, so offering three would be offering two that do nothing.
 class _BrowseHeader extends ConsumerWidget {
   const _BrowseHeader({
@@ -435,20 +432,20 @@ class _BrowseHeader extends ConsumerWidget {
               tooltip: 'Clear the category filter',
               onPressed: onClear,
             )
-            : Wrap(
-              spacing: AppSpacing.lg,
-              runSpacing: AppSpacing.sm,
-              children: [
-                for (final option in BrowseSort.values)
-                  _SortLink(
-                    label: option.label,
-                    selected: option == sort,
-                    onTap:
-                        () =>
-                            ref.read(browseSortProvider.notifier).state =
-                                option,
-                  ),
-              ],
+            // The one pill segmented control (UX-032). It used to be three
+            // underlined text links, "deliberately not the pill the chefs board
+            // uses" — DESIGN.md §4 reversed that: one job, one control, and the
+            // pill's 48px targets (UX-048) and keyboard ring came with it.
+            // Sized to its labels; in the stacked layout it scrolls sideways
+            // rather than overflow at 390px x 2.0.
+            : SegmentedTabs<BrowseSort>(
+              values: BrowseSort.values,
+              selected: sort,
+              labelOf: (option) => option.label,
+              onSelected:
+                  (option) =>
+                      ref.read(browseSortProvider.notifier).state = option,
+              semanticLabel: 'Sort recipes',
             );
 
     return Column(
@@ -481,76 +478,6 @@ class _BrowseHeader extends ConsumerWidget {
                       ),
         ),
       ],
-    );
-  }
-}
-
-/// One sort option: a label that gains an accent underline when it is the
-/// active one.
-///
-/// Deliberately not the pill the chefs board uses. Two pages, two jobs — the
-/// board's control switches a ranking *within* a leaderboard, this one reorders
-/// an archive, and copying the pill here would leave the two pages looking like
-/// one page with different data in it.
-class _SortLink extends StatelessWidget {
-  const _SortLink({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
-
-    // UX-014: the underline and the colour say which sort is on; this says
-    // it to a screen reader, which sees neither.
-    return Semantics(
-      button: true,
-      selected: selected,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadii.md),
-        // The underline is a **border on the box that holds the text**, not a
-        // `Container` under it in a `Column` (B060). A box with no child and no
-        // width takes `constraints.biggest` when it is bounded and
-        // `constraints.smallest` when it is not — so the same widget rendered a
-        // full-width rule that forced each link onto its own line in the stacked
-        // layout, and a zero-width, invisible one in the row layout, where the
-        // `Wrap` is a non-flex child laid out unbounded. Selected state was
-        // therefore undrawn at exactly the width most people use.
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.xs,
-            vertical: AppSpacing.xsPlus,
-          ),
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                width: _kSortUnderline,
-                // Drawn in both states so selecting one does not move the row.
-                color: selected ? scheme.primary : Colors.transparent,
-              ),
-            ),
-          ),
-          child: Text(
-            label,
-            // One weight in both states (UX-049): a heavier selected label
-            // widened itself and pushed its neighbours along. Selection is the
-            // colour and the underline.
-            // The selected one in the brand colour, matching its underline —
-            // the link colour everywhere since 36c.
-            style: theme.textTheme.labelLarge?.copyWith(
-              color: selected ? scheme.primary : scheme.onSurfaceVariant,
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

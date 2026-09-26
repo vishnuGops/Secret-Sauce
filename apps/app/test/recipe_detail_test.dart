@@ -997,8 +997,8 @@ void main() {
       final repo = _FakeRecipeRepository(recipe: _labelledRecipe);
       await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 1600));
 
-      expect(find.widgetWithText(ChoiceChip, 'Ingredients'), findsOneWidget);
-      expect(find.widgetWithText(ChoiceChip, 'Nutrition'), findsOneWidget);
+      expect(_railTab('Ingredients'), findsOneWidget);
+      expect(_railTab('Nutrition'), findsOneWidget);
       // The ingredient list, not the label.
       expect(find.text('Wheat flour'), findsOneWidget);
       expect(find.text('Nutrition Facts'), findsNothing);
@@ -1010,7 +1010,7 @@ void main() {
       final repo = _FakeRecipeRepository(recipe: _labelledRecipe);
       await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 1600));
 
-      await tester.tap(find.widgetWithText(ChoiceChip, 'Nutrition'));
+      await tester.tap(_railTab('Nutrition'));
       await tester.pumpAndSettle();
 
       expect(find.text('Nutrition Facts'), findsOneWidget);
@@ -1028,7 +1028,7 @@ void main() {
       final repo = _FakeRecipeRepository(recipe: _labelledRecipe);
       await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 1600));
 
-      await tester.tap(find.widgetWithText(ChoiceChip, 'Nutrition'));
+      await tester.tap(_railTab('Nutrition'));
       await tester.pumpAndSettle();
 
       // 8 servings × 320 kcal.
@@ -1062,7 +1062,7 @@ void main() {
       final repo = _FakeRecipeRepository(recipe: _fullRecipe);
       await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 1600));
 
-      await tester.tap(find.widgetWithText(ChoiceChip, 'Nutrition'));
+      await tester.tap(_railTab('Nutrition'));
       await tester.pumpAndSettle();
 
       expect(find.text('No nutrition info available'), findsOneWidget);
@@ -1081,7 +1081,7 @@ void main() {
       );
       await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 1600));
 
-      await tester.tap(find.widgetWithText(ChoiceChip, 'Nutrition'));
+      await tester.tap(_railTab('Nutrition'));
       await tester.pumpAndSettle();
 
       expect(find.textContaining('Estimated from ingredients'), findsOneWidget);
@@ -1113,7 +1113,7 @@ void main() {
       final repo = _FakeRecipeRepository(recipe: _labelledRecipe);
       await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 1600));
 
-      await tester.tap(find.widgetWithText(ChoiceChip, 'Nutrition'));
+      await tester.tap(_railTab('Nutrition'));
       await tester.pumpAndSettle();
       expect(find.text('Wheat flour'), findsNothing);
 
@@ -1259,3 +1259,10 @@ void main() {
     }
   });
 }
+
+/// A rail tab by its label — the segment itself, not the centre of the pill
+/// (`widgetWithText` would tap the pill's middle).
+Finder _railTab(String label) => find.descendant(
+  of: find.byType(SegmentedTabs<RailTab>),
+  matching: find.text(label),
+);

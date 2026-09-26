@@ -6,6 +6,7 @@ import 'package:design_system/src/layout/adaptive.dart';
 import 'package:design_system/src/theme/app_theme.dart';
 import 'package:design_system/src/widgets/chef_avatar.dart';
 import 'package:design_system/src/widgets/interactive_tile.dart';
+import 'package:design_system/src/widgets/rank_badge.dart';
 import 'package:design_system/src/widgets/tier_chip.dart';
 
 /// Width of every [ChefSpotlightCard]. The rails pack cards at this width and
@@ -76,12 +77,6 @@ const double _kInsetTight = 7;
 const double _kPortraitRadius = 9;
 const double _kPortraitBorder = 3;
 const double _kPortraitClipRadius = _kPortraitRadius - _kPortraitBorder; // 6
-
-/// The RANK pill on the portrait caption.
-const EdgeInsets _kRankPillPadding = EdgeInsets.symmetric(
-  horizontal: 7,
-  vertical: AppSpacing.xxs,
-);
 
 /// The driver row's icon tile.
 const double _kDriverTileSize = 28;
@@ -514,7 +509,7 @@ class _Portrait extends StatelessWidget {
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
                           alignment: Alignment.centerRight,
-                          child: _RankPill(
+                          child: RankBadge.pill(
                             rank: standing.chefRank,
                             tier: standing.chefTier,
                           ),
@@ -562,42 +557,6 @@ class _MonogramPortrait extends StatelessWidget {
                 foregroundColor: color,
               ),
             ),
-      ),
-    );
-  }
-}
-
-class _RankPill extends StatelessWidget {
-  const _RankPill({required this.rank, required this.tier});
-
-  final int rank;
-  final ChefTier tier;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    // The pill is near-white in both themes, so its ink resolves at *light*
-    // brightness whatever the page's is. The page-brightness tier colour is a
-    // pastel in dark mode and measured ~1.5:1 on this pill (UX-012).
-    final color = TierChip.colorFor(tier, Brightness.light);
-
-    return Container(
-      padding: _kRankPillPadding,
-      decoration: BoxDecoration(
-        color: context.palette.onImage.withValues(alpha: AppAlpha.frosted),
-        borderRadius: BorderRadius.circular(AppRadii.pill),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.workspace_premium, size: AppIconSize.xs, color: color),
-          const SizedBox(width: AppSpacing.xs),
-          Text(
-            'RANK $rank',
-            maxLines: 1,
-            style: theme.textTheme.labelSmall?.tabular.copyWith(color: color),
-          ),
-        ],
       ),
     );
   }

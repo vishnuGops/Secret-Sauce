@@ -139,65 +139,23 @@ class RecipeAsyncSliverGrid<N extends PagedRecipesNotifier>
                     onChefTap: onChefTap,
                     footer:
                         page.hasMore
-                            ? _LoadMoreButton(
-                              loading: page.loadingMore,
-                              onPressed:
-                                  () => ref.read(provider.notifier).loadMore(),
+                            ? Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  top: AppSpacing.sm,
+                                ),
+                                child: LoadMoreButton(
+                                  loading: page.loadingMore,
+                                  onPressed:
+                                      () =>
+                                          ref
+                                              .read(provider.notifier)
+                                              .loadMore(),
+                                ),
+                              ),
                             )
                             : null,
                   ),
-    );
-  }
-}
-
-/// Stroke of the Load-more button's in-flight spinner.
-const double _kSpinnerStroke = 2;
-
-/// The `Load more` control. A button rather than infinite scroll by product
-/// decision: an explicit tap is the only version that works identically on a
-/// phone flick and a desktop scrollbar, and it never fetches a page the reader
-/// did not ask for.
-class _LoadMoreButton extends StatelessWidget {
-  const _LoadMoreButton({required this.loading, required this.onPressed});
-
-  final bool loading;
-  final Future<void> Function() onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.only(top: AppSpacing.sm),
-        child: OutlinedButton.icon(
-          onPressed:
-              loading
-                  ? null
-                  : () async {
-                    final messenger = ScaffoldMessenger.of(context);
-                    try {
-                      await onPressed();
-                    } catch (e) {
-                      // The rows already loaded survive a failed page (see
-                      // `PagedRecipesNotifier.loadMore`), so this is a snackbar
-                      // rather than an error screen.
-                      messenger.showSnackBar(
-                        SnackBar(content: Text(friendlyError(e))),
-                      );
-                    }
-                  },
-          icon:
-              loading
-                  ? const SizedBox(
-                    width: AppIconSize.sm,
-                    height: AppIconSize.sm,
-                    child: CircularProgressIndicator(
-                      strokeWidth: _kSpinnerStroke,
-                    ),
-                  )
-                  : const Icon(Icons.expand_more),
-          label: Text(loading ? 'Loading…' : 'Load more'),
-        ),
-      ),
     );
   }
 }

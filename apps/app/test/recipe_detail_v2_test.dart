@@ -455,7 +455,7 @@ void main() {
       expect(find.text('Boneless chicken thigh'), findsOneWidget);
       expect(find.text('Nutrition Facts'), findsNothing);
 
-      await tester.tap(find.widgetWithText(ChoiceChip, 'Nutrition'));
+      await tester.tap(_railTab('Nutrition'));
       await tester.pumpAndSettle();
 
       expect(find.text('Nutrition Facts'), findsOneWidget);
@@ -468,7 +468,7 @@ void main() {
     ) async {
       await _pump(tester, recipe: _labelledRecipe);
 
-      await tester.tap(find.widgetWithText(ChoiceChip, 'Nutrition'));
+      await tester.tap(_railTab('Nutrition'));
       await tester.pumpAndSettle();
       expect(find.textContaining('4 servings · 1,720 kcal total'), findsOne);
 
@@ -493,7 +493,7 @@ void main() {
     testWidgets('a recipe with no data shows the empty state', (tester) async {
       await _pump(tester);
 
-      await tester.tap(find.widgetWithText(ChoiceChip, 'Nutrition'));
+      await tester.tap(_railTab('Nutrition'));
       await tester.pumpAndSettle();
 
       expect(find.text('No nutrition info available'), findsOneWidget);
@@ -611,3 +611,10 @@ void main() {
     }
   });
 }
+
+/// A rail tab by its label — the segment itself, not the centre of the pill
+/// (`widgetWithText` would tap the pill's middle).
+Finder _railTab(String label) => find.descendant(
+  of: find.byType(SegmentedTabs<RailTab>),
+  matching: find.text(label),
+);

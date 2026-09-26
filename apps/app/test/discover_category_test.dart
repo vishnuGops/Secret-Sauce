@@ -412,6 +412,48 @@ void main() {
     );
   });
 
+  // Phase 37: a deep link to a tile that starts off the compact row's right
+  // edge used to leave it there — the selection was invisible where it lives.
+  for (final scale in [1.0, 2.0]) {
+    testWidgets(
+      '390px × $scale: a deep-linked last tile is scrolled into view',
+      (tester) async {
+        final last = DiscoverCategory.values.last;
+        await _pumpAt(
+          tester,
+          Routes.discoverCategory(last.slug),
+          _FakeDiscover(),
+          width: 390,
+          textScale: scale,
+        );
+        await tester.pumpAndSettle();
+
+        final rect = tester.getRect(_tile(last));
+        expect(rect.left, greaterThanOrEqualTo(0));
+        expect(rect.right, lessThanOrEqualTo(390));
+      },
+    );
+  }
+
+  testWidgets('390px: the first tile needs no scroll and gets none', (
+    tester,
+  ) async {
+    final first = DiscoverCategory.values.first;
+    await _pumpAt(
+      tester,
+      Routes.discoverCategory(first.slug),
+      _FakeDiscover(),
+      width: 390,
+    );
+    await tester.pumpAndSettle();
+
+    // Flush with the section heading above it: the row did not move.
+    expect(
+      tester.getRect(_tile(first)).left,
+      tester.getRect(find.text('BROWSE BY CATEGORY')).left,
+    );
+  });
+
   // The tile row's envelope (Gotchas 13, 22, 26): the widths the app renders
   // at × the contract scales, compact (a scrolling row) and wide (full rows).
   for (final width in [390.0, 600.0, 1000.0, 1440.0]) {
