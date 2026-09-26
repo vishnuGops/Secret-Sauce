@@ -956,7 +956,7 @@ fixtures. Task 5: none (a decision).
 | 2 — seed snapshots, forks | done | `tool/recipes.dart` (seeded snapshot + backfill, regenerated), `2_sim_generate.sql` §5b, `3_sim_verify.sql` E8b. Verified: local stack 14 empty → 0 then `UPDATE 0`; `ss_p39` fresh path 0 of 14 empty; sim `small` ALL CHECKS PASSED, `sim:rls` 130 passed; E8b fails when a current snapshot is emptied; `db:audit` clean |
 | 3 — top-nav envelope | done | 1 subagent. Signed out fits at every width; B153 (the avatar's target and semantics) fixed and mutation-checked. The label check is a width relation, not `didExceedMaxLines` — the pill labels are `softWrap: false` + clip, where that flag never goes true |
 | 4 — editor drag auto-scroll | done | 1 subagent (B155). Three editor files + their tests; `chrome_a11y_test` / `image_semantics_test` host the editors in a `CustomScrollView` now that they are slivers. Two new tests, each failing on the change it guards (the old structure; the default cache extent) |
-| 5 — desktop density | not started | |
+| 5 — desktop density | done | Asked the owner (2026-09-26): keep compact on desktop. DESIGN §3.6 records it; no code change, so no test to re-run |
 
 ## Build, run & release (ops)
 

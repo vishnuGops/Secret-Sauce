@@ -1030,8 +1030,8 @@ decision.
 - [x] Tokens 36b left out: `AppStroke` (1 / 2 / 3 / 4 / 8), `AppMeasure` (420 / 560 / 720),
       `AppIconSize.xsPlus` (15) — each replacing two or more named consts, which now read from
       them; static sweep appended to AUDIT.md
-- [ ] Open, owner's call: desktop web keeps Flutter's adaptive (compact) density, so a text
-      button there is ~32px tall — DESIGN §3.6 accepts it; the tests run as Android (48dp)
+- [x] Desktop web keeps Flutter's adaptive (compact) density (a text button ~32px tall) — the
+      owner decided to keep it in Phase 39; recorded in DESIGN §3.6
 
 **Code review (`/code-review`, three parallel reviewers over `cde7fbc..HEAD`)** — no Critical or
 High. Fixed with regression tests, each mutation-checked: B149 (Medium, pre-existing: typing in a
@@ -1085,7 +1085,8 @@ owner decision.
 - [x] **Editor drag auto-scroll** (B155, Phase 38's accepted limitation) — the page is a
       `CustomScrollView` with each group a `SliverReorderableList` in its viewport, kept fully built
       by a `1e7`px cache extent (B142); Move up / Move down unchanged
-- [ ] Desktop-web density — the owner's decision, recorded
+- [x] **Desktop-web density** — asked; the owner keeps the adaptive (compact) density on desktop.
+      No theme change; the decision and its reasoning are in DESIGN §3.6
 
 ---
 

@@ -281,8 +281,13 @@ Elevated buttons are ~48dp tall through `AppInsets.button`, and text buttons kee
 target. A custom tappable grows its **hit area**, not its paint: a `minHeight:
 kMinInteractiveDimension` box inside the `InkWell` (the web nav pill keeps a 36px chip in a 48px
 target; its track is 48 tall, was 44; the web legal bar is 49, was 41). Phase 38 checks every main
-screen with `androidTapTargetGuideline`. Open, owner's call: on desktop web the adaptive density
-leaves a `TextButton` ~32px tall; the tests run as Android.
+screen with `androidTapTargetGuideline`. **Desktop keeps the adaptive (compact) density — owner's
+decision, 2026-09-26 (Phase 39).** On desktop web a `TextButton` is ~32px tall: a mouse pointer
+does not need a 48dp finger target, 32 is Material's desktop norm, and forcing `standard` density
+would make every dense web row (the nav, chips, text buttons) taller for no pointer benefit. The
+tests run as Android (48dp), so the guideline still guards every touch layout. Custom tappables are
+unaffected: their hit areas are explicit 48dp boxes, not density-derived. Revisit only with a
+touch-first desktop target (a tablet-in-browser pass) in hand.
 
 ### 3.7 Motion
 
