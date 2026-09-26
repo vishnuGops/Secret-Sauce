@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
@@ -25,14 +26,62 @@ class StepsEditor extends StatelessWidget {
   /// Asks the screen to pick (and later upload) a photo for this step.
   final void Function(EditStep step) onPickImage;
 
+  /// Removes [group] — at once when it holds no written step, otherwise only
+  /// after the cook confirms (UX-052): a section is the one delete in this
+  /// editor that can take a dozen steps with it in a single tap.
+  ///
+  /// The group is found again by identity after the dialog, not by the index
+  /// it had when the button was pressed: the list is the screen's, and nothing
+  /// stops it changing while the dialog is up.
+  Future<void> _removeGroup(BuildContext context, EditStepGroup group) async {
+    final written = group.steps.where((s) => s.text.text.trim().isNotEmpty);
+    if (written.isNotEmpty) {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        // The editor is pushed on the root navigator already; saying so keeps
+        // the dialog above any chrome if that ever changes (Gotcha 23).
+        useRootNavigator: true,
+        builder:
+            (context) => AlertDialog(
+              title: const Text('Remove this section?'),
+              content: Text(
+                'Its ${countOf(written.length, 'steps')} will be removed too.',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text('Keep'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: const Text('Remove'),
+                ),
+              ],
+            ),
+      );
+      if (confirmed != true) return;
+    }
+    final index = groups.indexOf(group);
+    if (index < 0) return;
+    // Remove, rebuild, then dispose — same order as `IngredientsEditor` and
+    // for the same reason (32c4): the controllers are still attached to the
+    // fields of the frame being torn down.
+    final removed = groups.removeAt(index);
+    onChanged();
+    WidgetsBinding.instance.addPostFrameCallback((_) => removed.dispose());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Instructions', style: Theme.of(context).textTheme.titleLarge),
-        for (var gi = 0; gi < groups.length; gi++)
+        for (final group in groups)
           Card(
+            // Keyed by the draft object so a removed section's fields are not
+            // handed to the section that slides into its slot.
+            key: ObjectKey(group),
             margin: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
             child: Padding(
               padding: const EdgeInsets.all(AppSpacing.md),
@@ -42,7 +91,7 @@ class StepsEditor extends StatelessWidget {
                     children: [
                       Expanded(
                         child: TextField(
-                          controller: groups[gi].name,
+                          controller: group.name,
                           decoration: const InputDecoration(
                             labelText: 'Section name (optional)',
                             hintText: 'e.g. Prepare the dough',
@@ -54,37 +103,20 @@ class StepsEditor extends StatelessWidget {
                           icon: const Icon(Icons.delete_outline),
                           // UX-047: without it this is an unnamed button.
                           tooltip: 'Remove section',
-                          // Remove, rebuild, then dispose — same order as
-                          // `IngredientsEditor` and for the same reason (32c4).
-                          onPressed: () {
-                            final removed = groups.removeAt(gi);
-                            onChanged();
-                            WidgetsBinding.instance.addPostFrameCallback(
-                              (_) => removed.dispose(),
-                            );
-                          },
+                          onPressed: () => _removeGroup(context, group),
                         ),
                     ],
                   ),
-                  for (var si = 0; si < groups[gi].steps.length; si++)
-                    _StepRow(
-                      step: groups[gi].steps[si],
-                      number: si + 1,
-                      onChanged: onChanged,
-                      onPickImage: onPickImage,
-                      onRemove: () {
-                        final removed = groups[gi].steps.removeAt(si);
-                        onChanged();
-                        WidgetsBinding.instance.addPostFrameCallback(
-                          (_) => removed.dispose(),
-                        );
-                      },
-                    ),
+                  _StepList(
+                    group: group,
+                    onChanged: onChanged,
+                    onPickImage: onPickImage,
+                  ),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: TextButton.icon(
                       onPressed: () {
-                        groups[gi].steps.add(EditStep());
+                        group.steps.add(EditStep());
                         onChanged();
                       },
                       icon: const Icon(Icons.add),
@@ -108,38 +140,124 @@ class StepsEditor extends StatelessWidget {
   }
 }
 
+/// One section's steps, reorderable two ways (UX-035): by the drag handle,
+/// and by each row's **Move up / Move down** menu — the handle is a pointer
+/// gesture, so the menu is what a keyboard or a screen reader reaches.
+///
+/// Reordering moves the draft objects themselves, and `EditStepGroup.toModel`
+/// numbers them by list index, so the new order is what saves — ascending, as
+/// every nested read expects (B022). Rows are keyed by their draft, so the
+/// text fields travel with the step rather than staying in their slot.
+class _StepList extends StatelessWidget {
+  const _StepList({
+    required this.group,
+    required this.onChanged,
+    required this.onPickImage,
+  });
+
+  final EditStepGroup group;
+  final VoidCallback onChanged;
+  final void Function(EditStep step) onPickImage;
+
+  void _move(int from, int to) {
+    final steps = group.steps;
+    if (from == to || to < 0 || to >= steps.length) return;
+    steps.insert(to, steps.removeAt(from));
+    onChanged();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final steps = group.steps;
+    return ReorderableListView(
+      // The page is the scroll: this list only lays its rows out.
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      buildDefaultDragHandles: false,
+      // `onReorderItem` hands over the index the item lands at once it has
+      // been removed — exactly what `_move` wants.
+      onReorderItem: _move,
+      children: [
+        for (var si = 0; si < steps.length; si++)
+          _StepRow(
+            key: ObjectKey(steps[si]),
+            step: steps[si],
+            index: si,
+            count: steps.length,
+            onChanged: onChanged,
+            onPickImage: onPickImage,
+            onMove: (to) => _move(si, to),
+            onRemove: () {
+              final removed = steps.removeAt(si);
+              onChanged();
+              WidgetsBinding.instance.addPostFrameCallback(
+                (_) => removed.dispose(),
+              );
+            },
+          ),
+      ],
+    );
+  }
+}
+
 /// The step-number bubble's radius (24 wide).
 const double _kBubbleRadius = 12;
 
-/// Where the step field starts: past the bubble and the gap beside it.
-const double _kStepIndent = 2 * _kBubbleRadius + AppSpacing.sm;
+/// The drag handle's column: the 24px icon plus a hair of breathing room, so
+/// the bubble beside it does not read as part of the grip.
+const double _kHandleWidth = AppIconSize.lg + AppSpacing.xs;
 
-/// One numbered instruction, its optional photo, plus the time / temperature /
-/// tip block that the recipe detail screen renders as chips. Those three are
-/// collapsed by default and revealed by the tune button; a step that already
-/// carries any of them opens expanded, so an edit can never hide (and then
+/// Where the step field starts: past the handle, the bubble and the gap
+/// beside it. Everything under the step text (time, details, photo) indents
+/// to this so the row reads as one step.
+const double _kStepIndent = _kHandleWidth + 2 * _kBubbleRadius + AppSpacing.sm;
+
+/// The per-row menu's two entries.
+enum _StepMove { up, down }
+
+/// One numbered instruction, its step timer, the temperature / tip block, and
+/// its optional photo.
+///
+/// The **Time** field is always shown (UX-035): it was hidden behind the tune
+/// button, which is where a cook never looked for the one field that turns a
+/// step into a timer in cook mode. It reads `90`, `1h`, `1h 30m`,
+/// `1 h 30 min`; anything else fails the form instead of saving no timer.
+/// Temperature and tip stay behind the disclosure — a step that already
+/// carries either opens with them shown, so an edit can never hide (and then
 /// drop) them (B035).
 ///
 /// The photo is not behind that disclosure: it is the one piece of step content
 /// that has to be visible to be judged, so a step that has one always shows it.
 class _StepRow extends StatelessWidget {
   const _StepRow({
+    super.key,
     required this.step,
-    required this.number,
+    required this.index,
+    required this.count,
     required this.onChanged,
     required this.onPickImage,
+    required this.onMove,
     required this.onRemove,
   });
 
   final EditStep step;
-  final int number;
+
+  /// Position in the section, 0-based; the bubble prints `index + 1`.
+  final int index;
+
+  /// Steps in the section — where Move down stops.
+  final int count;
   final VoidCallback onChanged;
   final void Function(EditStep step) onPickImage;
+  final void Function(int to) onMove;
   final VoidCallback onRemove;
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final hasExtras =
+        step.temperature.text.trim().isNotEmpty ||
+        step.tip.text.trim().isNotEmpty;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
       child: Column(
@@ -147,7 +265,29 @@ class _StepRow extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(radius: _kBubbleRadius, child: Text('$number')),
+              ReorderableDragStartListener(
+                index: index,
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.grab,
+                  // The menu beside the field is the accessible way to move a
+                  // step; the grip is a pointer affordance only.
+                  child: ExcludeSemantics(
+                    child: SizedBox(
+                      width: _kHandleWidth,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: AppSpacing.xs,
+                        ),
+                        child: Icon(
+                          Icons.drag_indicator,
+                          color: scheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              CircleAvatar(radius: _kBubbleRadius, child: Text('${index + 1}')),
               const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: TextField(
@@ -168,14 +308,35 @@ class _StepRow extends StatelessWidget {
                 tooltip: 'Step photo',
                 onPressed: () => onPickImage(step),
               ),
-              IconButton(
-                icon: const Icon(Icons.tune, size: AppIconSize.button),
-                color: step.hasDetails ? scheme.primary : null,
-                tooltip: 'Time, temperature & tip',
-                onPressed: () {
-                  step.showDetails = !step.showDetails;
-                  onChanged();
-                },
+              PopupMenuButton<_StepMove>(
+                tooltip: 'Move step',
+                icon: const Icon(Icons.swap_vert, size: AppIconSize.button),
+                onSelected:
+                    (move) =>
+                        onMove(move == _StepMove.up ? index - 1 : index + 1),
+                itemBuilder:
+                    (context) => [
+                      PopupMenuItem(
+                        value: _StepMove.up,
+                        enabled: index > 0,
+                        child: ListTile(
+                          enabled: index > 0,
+                          contentPadding: EdgeInsets.zero,
+                          leading: const Icon(Icons.arrow_upward),
+                          title: const Text('Move up'),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: _StepMove.down,
+                        enabled: index < count - 1,
+                        child: ListTile(
+                          enabled: index < count - 1,
+                          contentPadding: EdgeInsets.zero,
+                          leading: const Icon(Icons.arrow_downward),
+                          title: const Text('Move down'),
+                        ),
+                      ),
+                    ],
               ),
               IconButton(
                 icon: const Icon(Icons.close, size: AppIconSize.button),
@@ -184,58 +345,64 @@ class _StepRow extends StatelessWidget {
               ),
             ],
           ),
-          if (step.hasImage)
-            Padding(
-              // Indented to the step field: the number bubble is 24 wide and
-              // the gap beside it is `sm`, the same sum the detail block below
-              // uses.
-              padding: const EdgeInsets.only(
-                left: _kStepIndent,
-                top: AppSpacing.xs,
-                bottom: AppSpacing.sm,
-              ),
-              child: _StepImage(
-                step: step,
-                onReplace: () => onPickImage(step),
-                onRemove: () {
-                  step.clearImage();
-                  onChanged();
-                },
-              ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: _kStepIndent,
+              top: AppSpacing.xs,
             ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: step.duration,
+                    decoration: const InputDecoration(
+                      labelText: 'Time',
+                      hintText: 'e.g. 1h 30m',
+                      isDense: true,
+                      // The message is a sentence; at 2.0× on a phone it
+                      // needs a second line rather than an ellipsis.
+                      errorMaxLines: 3,
+                    ),
+                    // On leaving the field, not per keystroke: `1h 3` on the
+                    // way to `1h 30m` is not a mistake yet.
+                    autovalidateMode: AutovalidateMode.onUnfocus,
+                    validator:
+                        (_) =>
+                            step.hasInvalidDuration
+                                ? 'Try 90, 1h or 1h 30m'
+                                : null,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.tune, size: AppIconSize.button),
+                  color: hasExtras ? scheme.primary : null,
+                  tooltip: 'Temperature & tip',
+                  onPressed: () {
+                    step.showDetails = !step.showDetails;
+                    onChanged();
+                  },
+                ),
+              ],
+            ),
+          ),
+          // Collapsing hides the fields, never their text: `toModel` reads
+          // the controllers either way, and the tinted button says so.
           if (step.showDetails)
             Padding(
               padding: const EdgeInsets.only(
                 left: _kStepIndent,
-                top: AppSpacing.xs,
-                bottom: AppSpacing.sm,
+                top: AppSpacing.sm,
               ),
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: step.duration,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            labelText: 'Time (min)',
-                            isDense: true,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: AppSpacing.sm),
-                      Expanded(
-                        child: TextField(
-                          controller: step.temperature,
-                          decoration: const InputDecoration(
-                            labelText: 'Temperature',
-                            hintText: 'e.g. 180°C',
-                            isDense: true,
-                          ),
-                        ),
-                      ),
-                    ],
+                  TextField(
+                    controller: step.temperature,
+                    decoration: const InputDecoration(
+                      labelText: 'Temperature',
+                      hintText: 'e.g. 180°C',
+                      isDense: true,
+                    ),
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   TextField(
@@ -247,6 +414,22 @@ class _StepRow extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
+            ),
+          if (step.hasImage)
+            Padding(
+              padding: const EdgeInsets.only(
+                left: _kStepIndent,
+                top: AppSpacing.sm,
+                bottom: AppSpacing.xs,
+              ),
+              child: _StepImage(
+                step: step,
+                onReplace: () => onPickImage(step),
+                onRemove: () {
+                  step.clearImage();
+                  onChanged();
+                },
               ),
             ),
         ],

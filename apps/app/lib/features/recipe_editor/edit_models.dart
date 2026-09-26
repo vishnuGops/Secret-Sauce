@@ -169,6 +169,7 @@ class EditIngredient {
     String note = '',
     this.isOptional = false,
     this.foodId,
+    this.editing = true,
   }) : quantity = TextEditingController(text: quantity),
        unit = TextEditingController(text: unit),
        name = TextEditingController(text: name),
@@ -176,14 +177,29 @@ class EditIngredient {
        nameFocus = FocusNode(),
        showDetails = note.isNotEmpty || isOptional;
 
-  factory EditIngredient.fromModel(Ingredient i) => EditIngredient(
-    quantity: i.quantity?.toString() ?? '',
-    unit: i.unit ?? '',
-    name: i.name,
-    note: i.note ?? '',
-    isOptional: i.isOptional,
-    foodId: i.foodId,
-  );
+  /// The quantity is shown as a cook reads it (`1⁄3`, `1½`), not as the stored
+  /// `0.3333333333333333` — the same `formatQuantity` the recipe page prints.
+  /// An untouched field saves the **loaded** value back exactly, so opening and
+  /// saving a recipe cannot nudge a stored `0.33` to `0.3333…` (B035's rule:
+  /// the editor never changes what the cook did not).
+  factory EditIngredient.fromModel(Ingredient i) {
+    final shown = i.quantity == null ? '' : formatQuantity(i.quantity!, i.unit);
+    return EditIngredient(
+        quantity: shown,
+        unit: i.unit ?? '',
+        name: i.name,
+        note: i.note ?? '',
+        isOptional: i.isOptional,
+        foodId: i.foodId,
+        // A loaded row opens as its one-line summary on compact (UX-039).
+        editing: false,
+      )
+      .._loadedQuantity = i.quantity
+      .._loadedQuantityText = shown;
+  }
+
+  double? _loadedQuantity;
+  String? _loadedQuantityText;
 
   final TextEditingController quantity;
   final TextEditingController unit;
@@ -212,10 +228,31 @@ class EditIngredient {
   /// ingredient already uses either, so an edit cannot hide existing content.
   bool showDetails;
 
+  /// Whether the row shows its fields rather than its one-line summary — the
+  /// compact editor's collapsed row (UX-039). A new row starts open (there is
+  /// nothing to summarise); a loaded one starts closed.
+  bool editing;
+
+  /// The quantity as it will be saved: the loaded value when the field is
+  /// untouched, otherwise [parseQuantity] of what was typed (`1/2`, `1 1/2`,
+  /// `½` → a decimal, Gotcha 16). Null for an empty field — and for an
+  /// unreadable one, which [hasInvalidQuantity] reports first.
+  double? get parsedQuantity {
+    final text = quantity.text.trim();
+    if (_loadedQuantityText != null && text == _loadedQuantityText!.trim()) {
+      return _loadedQuantity;
+    }
+    return parseQuantity(text);
+  }
+
+  /// Non-empty and unreadable — the validator's "not a quantity" case.
+  bool get hasInvalidQuantity =>
+      quantity.text.trim().isNotEmpty && parsedQuantity == null;
+
   Ingredient toModel(int sortOrder) => Ingredient(
     id: '',
     groupId: '',
-    quantity: double.tryParse(quantity.text.trim()),
+    quantity: parsedQuantity,
     unit: _orNull(unit),
     name: name.text.trim(),
     note: _orNull(note),
@@ -279,9 +316,17 @@ class EditStep {
        showDetails =
            duration.isNotEmpty || temperature.isNotEmpty || tip.isNotEmpty;
 
+  /// The duration reads as the recipe page prints it (`1 h 30 min`), and
+  /// [parseDurationMinutes] reads that back exactly. A stored non-positive
+  /// value is shown as its number, since `formatMinutes` prints `—` for it and
+  /// that would not survive a save (B035).
   factory EditStep.fromModel(RecipeStep s) => EditStep(
     text: s.text,
-    duration: s.durationMinutes?.toString() ?? '',
+    duration: switch (s.durationMinutes) {
+      null => '',
+      final m when m <= 0 => '$m',
+      final m => formatMinutes(m),
+    },
     temperature: s.temperature ?? '',
     tip: s.tip ?? '',
     imageUrl: s.imageUrl,
@@ -328,6 +373,15 @@ class EditStep {
       temperature.text.trim().isNotEmpty ||
       tip.text.trim().isNotEmpty;
 
+  /// The step timer in minutes: `90`, `1h`, `1h 30m`, `1 h 30 min`
+  /// (UX-035 — `int.tryParse` dropped `1h` and saved no timer). Null when
+  /// empty, and when unreadable, which [hasInvalidDuration] reports first.
+  int? get parsedDuration => parseDurationMinutes(duration.text);
+
+  /// Non-empty and unreadable — the validator's "not a time" case.
+  bool get hasInvalidDuration =>
+      duration.text.trim().isNotEmpty && parsedDuration == null;
+
   RecipeStep toModel(int order) => RecipeStep(
     id: '',
     groupId: '',
@@ -335,7 +389,7 @@ class EditStep {
     sortOrder: order,
     text: text.text.trim(),
     imageUrl: imageUrl,
-    durationMinutes: int.tryParse(duration.text.trim()),
+    durationMinutes: parsedDuration,
     temperature: _orNull(temperature),
     tip: _orNull(tip),
   );

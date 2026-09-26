@@ -924,7 +924,7 @@ upload, so it is proven with `fake_supabase` request tests and the profile dialo
 | Wave | Status | Notes |
 | --- | --- | --- |
 | A — cook mode, recipe page | done | 1 subagent (cook mode) + lead (core `spokenQuantity`, `findSummary`, `versionContent`, parsers; fork lineage; loading Back; UX-055 / UX-048 detail halves) |
-| B — editor | pending commit | 2 subagents |
+| B — editor | done | 2 subagents (editor screen + ingredients; steps + version view) + lead (`edit_models` on core `parsing.dart`, Prep / Cook parsing). Found B142–B145. `onReorderItem`, not the deprecated `onReorder`, on the pinned Flutter |
 | C — chefs, entities, profile, My Recipes | pending commit | 2 subagents |
 | D — a11y, tokens | not started | |
 

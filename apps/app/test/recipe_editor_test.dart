@@ -20,6 +20,7 @@ import 'package:app/routing/app_router.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -268,9 +269,9 @@ void main() {
   });
 
   group('editor inputs', () {
-    // The form is a plain `ListView(children: …)`, so anything below the fold
-    // is never built and no finder can reach it. Give the tests a viewport tall
-    // enough to build the whole form instead of scripting scrolls.
+    // The form is one scroll view, so every field is built — but a tap still
+    // needs its target on screen. A viewport tall enough to show the whole
+    // form beats scripting scrolls.
     void sizeView(WidgetTester tester, double width) {
       tester.view.physicalSize = Size(width, 4000);
       tester.view.devicePixelRatio = 1.0;
@@ -278,19 +279,19 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
     }
 
-    testWidgets('step details reveal time, temperature and tip', (
-      tester,
-    ) async {
+    // UX-035 put the step timer in plain sight; temperature and tip stay
+    // behind the disclosure.
+    testWidgets('step details reveal temperature and tip', (tester) async {
       sizeView(tester, 800);
       await tester.pumpWidget(_app());
       await tester.pumpAndSettle();
 
+      expect(find.text('Time'), findsOneWidget);
       expect(find.text('Temperature'), findsNothing);
 
-      await tester.tap(find.byTooltip('Time, temperature & tip'));
+      await tester.tap(find.byTooltip('Temperature & tip'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Time (min)'), findsOneWidget);
       expect(find.text('Temperature'), findsOneWidget);
       expect(find.text('Tip'), findsOneWidget);
     });
@@ -327,25 +328,31 @@ void main() {
       await tester.pumpAndSettle();
 
       await tester.enterText(find.widgetWithText(TextFormField, 'Title'), 'X');
-      await tester.enterText(find.widgetWithText(TextFormField, 'Qty'), '-2');
+      await tester.enterText(find.widgetWithText(TextField, 'Qty'), '-2');
       await tester.tap(find.widgetWithText(FilledButton, 'Save'));
       await tester.pumpAndSettle();
       expect(find.text('Must be > 0'), findsOneWidget);
 
-      // The remaining cases are asked of the validator directly rather than
-      // through Save: a form that *passes* validation goes on to read the
-      // repository provider, which needs a live Supabase client this suite does
-      // not have. Empty is the "to taste" ingredient and stays valid — the SQL
-      // check allows NULL for the same reason, and that is the half that would
-      // break real recipes if the rule were written as "required".
-      final qty = tester.widget<TextFormField>(
-        find.widgetWithText(TextFormField, 'Qty'),
-      );
-      expect(qty.validator!(''), isNull);
-      expect(qty.validator!('  '), isNull);
-      expect(qty.validator!('0'), 'Must be > 0');
-      expect(qty.validator!('1/2'), 'Numbers only');
-      expect(qty.validator!('1.5'), isNull);
+      // The remaining cases are asked of the rule directly rather than through
+      // Save: the row's validator and the screen's "which collapsed rows must
+      // open" both call `ingredientQuantityError`. Empty is the "to taste"
+      // ingredient and stays valid — the SQL check allows NULL for the same
+      // reason, and that is the half that would break real recipes if the
+      // rule were written as "required".
+      String? rule(String text) =>
+          ingredientQuantityError(EditIngredient(quantity: text));
+      expect(rule(''), isNull);
+      expect(rule('  '), isNull);
+      expect(rule('0'), 'Must be > 0');
+      expect(rule('0/4'), 'Must be > 0');
+      // UX-052: a fraction is a quantity now, and only the unreadable is not.
+      expect(rule('1/2'), isNull);
+      expect(rule('1 1/2'), isNull);
+      expect(rule('½'), isNull);
+      expect(rule('1,5'), isNull);
+      expect(rule('1.5'), isNull);
+      expect(rule('a pinch'), 'Try 1/2 or 0.5');
+      expect(rule('1/0'), 'Try 1/2 or 0.5');
     });
 
     // Phase 28, reshaped by 29c: the panel is collapsed on a new recipe, and
@@ -500,7 +507,7 @@ void main() {
           reason: 'ingredient note row overflows at ${width}px @ 2.0x',
         );
 
-        await tester.tap(find.byTooltip('Time, temperature & tip'));
+        await tester.tap(find.byTooltip('Temperature & tip'));
         await tester.pumpAndSettle();
         expect(
           tester.takeException(),
@@ -645,9 +652,8 @@ void main() {
   // linked rows with a quantity, null label at zero), so these are the same
   // shapes the real RPC produces.
   group('nutrition modes (Phase 29c)', () {
-    // The form is a plain ListView — the nutrition panel sits below the fold
-    // at 600px and is never built there (same reason as the editor-inputs
-    // group). Tall viewport instead of scripted scrolls.
+    // The nutrition panel is the last thing on the page (UX-039). Tall
+    // viewport instead of scripted scrolls.
     void sizeView(WidgetTester tester, double width) {
       tester.view.physicalSize = Size(width, 6000);
       tester.view.devicePixelRatio = 1.0;
@@ -903,7 +909,7 @@ void main() {
       // Nothing to show, and nothing to remove, before a pick.
       expect(find.byTooltip('Remove photo'), findsNothing);
 
-      await tester.enterText(_titleField, 'Suya-Spiced Lamb');
+      await _fillRequired(tester);
       await tester.enterText(
         find.widgetWithText(TextField, 'Step'),
         'Sear the lamb hard on one side.',
@@ -1051,7 +1057,7 @@ void main() {
           reason: 'step row + photo overflows at ${width}px @ 2.0x',
         );
 
-        await tester.tap(find.byTooltip('Time, temperature & tip'));
+        await tester.tap(find.byTooltip('Temperature & tip'));
         await tester.pumpAndSettle();
         expect(
           tester.takeException(),
@@ -1120,7 +1126,7 @@ void main() {
       await tester.pumpWidget(_routedNewApp(repo));
       await tester.pumpAndSettle();
 
-      await tester.enterText(_titleField, 'Suya-Spiced Lamb');
+      await _fillRequired(tester);
       await tester.tap(find.widgetWithText(FilledButton, 'Save'));
       await tester.pumpAndSettle();
 
@@ -1210,7 +1216,7 @@ void main() {
       await tester.pumpWidget(_routedNewApp(repo));
       await tester.pumpAndSettle();
 
-      await tester.enterText(_titleField, 'Suya-Spiced Lamb');
+      await _fillRequired(tester);
       await tester.tap(find.widgetWithText(FilledButton, 'Save'));
       await tester.pumpAndSettle();
 
@@ -1335,14 +1341,9 @@ void main() {
 
       // The ingredients editor reports through `onChanged`, which is the other
       // half of the dirty signal — a recipe can be changed without a keystroke
-      // in any of the seven text fields. It is far enough down the `ListView`
-      // that it is not built yet, hence the drag.
+      // in any of the seven text fields. It is below the fold, hence the scroll.
       final add = find.widgetWithText(TextButton, 'Add ingredient');
-      await tester.dragUntilVisible(
-        add,
-        find.byType(ListView),
-        const Offset(0, -200),
-      );
+      await tester.ensureVisible(add);
       await tester.pumpAndSettle();
       await tester.tap(add);
       await tester.pumpAndSettle();
@@ -1352,6 +1353,591 @@ void main() {
 
       expect(find.text('Discard changes?'), findsOneWidget);
     });
+  });
+
+  // Phase 38 (UX-035 / UX-039 / UX-052): the editor's order, its honest empty
+  // defaults, fraction quantities, reordering, the group-delete confirm, the
+  // compact one-line ingredient row, and the not-counted list.
+  group('Phase 38 editor', () {
+    void sizeView(WidgetTester tester, double width, [double height = 5000]) {
+      tester.view.physicalSize = Size(width, height);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+    }
+
+    Future<void> save(WidgetTester tester) async {
+      await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+      await tester.pumpAndSettle();
+    }
+
+    List<Ingredient> savedIngredients(_RecordingRecipeRepository repo) => [
+      for (final g in repo.updated.single.$1.ingredientGroups) ...g.ingredients,
+    ];
+
+    testWidgets('the order is Ingredients, then Steps, then Nutrition', (
+      tester,
+    ) async {
+      sizeView(tester, 800);
+      await tester.pumpWidget(_app());
+      await tester.pumpAndSettle();
+
+      double top(String text) => tester.getTopLeft(find.text(text)).dy;
+      expect(top('Ingredients'), lessThan(top('Instructions')));
+      expect(top('Instructions'), lessThan(top('Nutrition facts')));
+    });
+
+    testWidgets('a new recipe opens with no invented numbers', (tester) async {
+      sizeView(tester, 800);
+      await tester.pumpWidget(_routedNewApp(_RecordingRecipeRepository()));
+      await tester.pumpAndSettle();
+
+      String text(String label) =>
+          tester
+              .widget<TextFormField>(
+                find.ancestor(
+                  of: find.text(label),
+                  matching: find.byType(TextFormField),
+                ),
+              )
+              .controller!
+              .text;
+      expect(text('Prep (min)'), isEmpty);
+      expect(text('Cook (min)'), isEmpty);
+      expect(text('Servings'), isEmpty);
+      // No preselected difficulty — the hint stands in for it.
+      expect(find.text('Choose…'), findsOneWidget);
+      expect(find.text('Easy'), findsNothing);
+    });
+
+    testWidgets('servings and difficulty are required', (tester) async {
+      sizeView(tester, 800);
+      final repo = _RecordingRecipeRepository();
+      await tester.pumpWidget(_routedNewApp(repo));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(_titleField, 'Suya-Spiced Lamb');
+      await save(tester);
+
+      expect(repo.created, isEmpty);
+      expect(find.text('How many does it serve?'), findsOneWidget);
+      expect(find.text('Pick one'), findsOneWidget);
+    });
+
+    testWidgets('empty prep and cook save 0; the picks save as chosen', (
+      tester,
+    ) async {
+      sizeView(tester, 800);
+      final repo = _RecordingRecipeRepository();
+      await tester.pumpWidget(_routedNewApp(repo));
+      await tester.pumpAndSettle();
+
+      await _fillRequired(tester, servings: '6');
+      await save(tester);
+
+      final saved = repo.created.single;
+      expect(saved.prepMinutes, 0);
+      expect(saved.cookMinutes, 0);
+      expect(saved.servings, 6);
+      expect(saved.difficulty, Difficulty.medium);
+    });
+
+    // UX-035 in the header: `int.tryParse` saved a typed `1h` as no time.
+    testWidgets('prep and cook read 1h 30m; unreadable is refused', (
+      tester,
+    ) async {
+      sizeView(tester, 800);
+      final repo = _RecordingRecipeRepository();
+      await tester.pumpWidget(_routedNewApp(repo));
+      await tester.pumpAndSettle();
+
+      await _fillRequired(tester, servings: '4');
+      final prep = find.widgetWithText(TextFormField, 'Prep (min)');
+      final cook = find.widgetWithText(TextFormField, 'Cook (min)');
+      await tester.enterText(prep, '1h 30m');
+      await tester.enterText(cook, 'a while');
+      await save(tester);
+      expect(repo.created, isEmpty);
+      expect(find.text('Try 45, 1h or 1h 30m'), findsOneWidget);
+
+      await tester.enterText(cook, '45');
+      await save(tester);
+      expect(repo.created.single.prepMinutes, 90);
+      expect(repo.created.single.cookMinutes, 45);
+    });
+
+    testWidgets('an untouched new recipe is not dirty', (tester) async {
+      sizeView(tester, 800);
+      await tester.pumpWidget(_routedNewApp(_RecordingRecipeRepository()));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byTooltip('Cancel'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Discard changes?'), findsNothing);
+      expect(find.text('MY RECIPES'), findsOneWidget);
+    });
+
+    testWidgets('a stored 0 prep shows empty and saves 0 again', (
+      tester,
+    ) async {
+      sizeView(tester, 800);
+      final repo = _RecordingRecipeRepository(
+        loaded: const Recipe(
+          id: 'r1',
+          ownerId: 'me',
+          title: 'Loaded Recipe',
+          servings: 4,
+          cookMinutes: 25,
+          difficulty: Difficulty.hard,
+        ),
+      );
+      await tester.pumpWidget(_routedEditApp(repo));
+      await tester.pumpAndSettle();
+
+      final prep = tester.widget<TextFormField>(
+        find.ancestor(
+          of: find.text('Prep (min)'),
+          matching: find.byType(TextFormField),
+        ),
+      );
+      expect(prep.controller!.text, isEmpty);
+      expect(find.widgetWithText(TextFormField, '25'), findsOneWidget);
+      expect(find.widgetWithText(TextFormField, '4'), findsOneWidget);
+      await save(tester);
+
+      final saved = repo.updated.single.$1;
+      expect(saved.prepMinutes, 0);
+      expect(saved.cookMinutes, 25);
+      expect(saved.servings, 4);
+      expect(saved.difficulty, Difficulty.hard);
+    });
+
+    // B035 (UX-052): the box shows a loaded quantity as a cook reads it, and
+    // an untouched box saves the loaded number back exactly — `1⁄3` must not
+    // become 0.3333… — while a typed fraction saves its decimal.
+    test('a loaded 0.33 cup shows as 1⁄3 and saves back as 0.33', () {
+      final draft = EditIngredient.fromModel(
+        const Ingredient(
+          id: 'i1',
+          groupId: 'g1',
+          quantity: 0.33,
+          unit: 'cup',
+          name: 'milk',
+          isOptional: false,
+          sortOrder: 0,
+        ),
+      );
+      expect(draft.quantity.text, '1⁄3');
+      expect(draft.toModel(0).quantity, 0.33);
+      expect(ingredientQuantityError(draft), isNull);
+
+      draft.quantity.text = '1/2';
+      expect(draft.toModel(0).quantity, 0.5);
+      draft.dispose();
+    });
+
+    testWidgets('a typed 1/2 saves 0.5; an untouched 1⁄3 saves 0.33', (
+      tester,
+    ) async {
+      sizeView(tester, 800);
+      final repo = _RecordingRecipeRepository(loaded: _twoIngredients());
+      await tester.pumpWidget(_routedEditApp(repo));
+      await tester.pumpAndSettle();
+
+      expect(find.widgetWithText(TextField, '1⁄3'), findsOneWidget);
+      await tester.enterText(find.widgetWithText(TextField, '2'), '1/2');
+      await save(tester);
+
+      final saved = savedIngredients(repo);
+      expect(saved.map((i) => i.name), ['milk', 'flour']);
+      expect(saved[0].quantity, 0.33);
+      expect(saved[1].quantity, 0.5);
+    });
+
+    testWidgets('an unreadable quantity blocks Save with a hint', (
+      tester,
+    ) async {
+      sizeView(tester, 800);
+      final repo = _RecordingRecipeRepository(loaded: _twoIngredients());
+      await tester.pumpWidget(_routedEditApp(repo));
+      await tester.pumpAndSettle();
+
+      // A full keyboard: the numeric keypads have no `/`.
+      expect(
+        tester
+            .widget<TextField>(find.widgetWithText(TextField, '2'))
+            .keyboardType,
+        TextInputType.text,
+      );
+      await tester.enterText(find.widgetWithText(TextField, '2'), 'a pinch');
+      await save(tester);
+
+      expect(repo.updated, isEmpty);
+      expect(find.text('Try 1/2 or 0.5'), findsOneWidget);
+
+      // The complaint clears as soon as the entry reads.
+      await tester.enterText(find.widgetWithText(TextField, 'a pinch'), '½');
+      await tester.pumpAndSettle();
+      expect(find.text('Try 1/2 or 0.5'), findsNothing);
+    });
+
+    // UX-052: the message used to live inside the fixed 64px field, where it
+    // clipped to a letter or two at 2.0×. It is a line of its own now; prove
+    // the whole sentence is laid out, at the phone width it failed at.
+    testWidgets('the quantity error is laid out whole at 390px, 2.0x', (
+      tester,
+    ) async {
+      sizeView(tester, 390);
+      await tester.pumpWidget(
+        _routedNewApp(_RecordingRecipeRepository(), textScale: 2.0),
+      );
+      await tester.pumpAndSettle();
+
+      final qty = find.widgetWithText(TextField, 'Qty');
+      await tester.ensureVisible(qty);
+      await tester.enterText(qty, 'abc');
+      await save(tester);
+      expect(tester.takeException(), isNull);
+
+      final message = find.text('Try 1/2 or 0.5');
+      expect(message, findsOneWidget);
+      final paragraph = tester.renderObject<RenderParagraph>(message);
+      expect(paragraph.didExceedMaxLines, isFalse);
+      // …and it is not squeezed into the field's width.
+      expect(
+        tester.getSize(message).width,
+        greaterThan(tester.getSize(qty).width),
+      );
+    });
+
+    testWidgets('Move up / Move down reorder, and the save keeps it', (
+      tester,
+    ) async {
+      sizeView(tester, 800);
+      final repo = _RecordingRecipeRepository(loaded: _twoIngredients());
+      await tester.pumpWidget(_routedEditApp(repo));
+      await tester.pumpAndSettle();
+
+      // The first row cannot move up.
+      await tester.tap(find.byTooltip('Move ingredient').first);
+      await tester.pumpAndSettle();
+      final up = tester.widget<PopupMenuItem<int>>(
+        find.widgetWithText(PopupMenuItem<int>, 'Move up'),
+      );
+      expect(up.enabled, isFalse);
+      await tester.tapAt(Offset.zero); // dismiss
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byTooltip('Move ingredient').at(1));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Move up'));
+      await tester.pumpAndSettle();
+      await save(tester);
+
+      final saved = savedIngredients(repo);
+      expect(saved.map((i) => i.name), ['flour', 'milk']);
+      expect(saved.map((i) => i.sortOrder), [0, 1]);
+      // The rows moved with their values, not just their names.
+      expect(saved[0].quantity, 2);
+      expect(saved[1].quantity, 0.33);
+    });
+
+    testWidgets('the drag handle reorders too', (tester) async {
+      sizeView(tester, 800);
+      final repo = _RecordingRecipeRepository(loaded: _twoIngredients());
+      await tester.pumpWidget(_routedEditApp(repo));
+      await tester.pumpAndSettle();
+
+      final handle = find.byIcon(Icons.drag_indicator).at(1);
+      final gesture = await tester.startGesture(tester.getCenter(handle));
+      for (var i = 0; i < 10; i++) {
+        await gesture.moveBy(const Offset(0, -12));
+        await tester.pump(const Duration(milliseconds: 16));
+      }
+      await gesture.up();
+      await tester.pumpAndSettle();
+      await save(tester);
+
+      expect(savedIngredients(repo).map((i) => i.name), ['flour', 'milk']);
+    });
+
+    testWidgets('removing a group with ingredients asks first', (tester) async {
+      final groups = [
+        EditIngredientGroup(
+          name: 'Dough',
+          ingredients: [
+            EditIngredient(name: 'flour'),
+            EditIngredient(name: 'water'),
+            EditIngredient(), // blank rows are not counted
+          ],
+        ),
+        EditIngredientGroup(ingredients: [EditIngredient(name: 'salt')]),
+        EditIngredientGroup(),
+      ];
+      final all = [...groups];
+      addTearDown(() {
+        for (final g in all) {
+          if (groups.contains(g)) g.dispose();
+        }
+      });
+      sizeView(tester, 800);
+      await tester.pumpWidget(_ingredientsApp(groups));
+      await tester.pumpAndSettle();
+
+      // An empty group goes at once.
+      await tester.tap(find.byTooltip('Remove group').at(2));
+      await tester.pumpAndSettle();
+      expect(find.text('Remove this group?'), findsNothing);
+      expect(groups, hasLength(2));
+
+      await tester.tap(find.byTooltip('Remove group').first);
+      await tester.pumpAndSettle();
+      expect(find.text('Remove this group?'), findsOneWidget);
+      expect(
+        find.text('Its 2 ingredients will be removed too.'),
+        findsOneWidget,
+      );
+      await tester.tap(find.text('Keep'));
+      await tester.pumpAndSettle();
+      expect(groups, hasLength(2));
+
+      await tester.tap(find.byTooltip('Remove group').last);
+      await tester.pumpAndSettle();
+      expect(
+        find.text('Its 1 ingredient will be removed too.'),
+        findsOneWidget,
+      );
+      await tester.tap(find.widgetWithText(FilledButton, 'Remove'));
+      await tester.pumpAndSettle();
+      expect(groups, hasLength(1));
+      expect(groups.single.name.text, 'Dough');
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('on a phone a saved row is one line that opens on tap', (
+      tester,
+    ) async {
+      sizeView(tester, 390);
+      final semantics = tester.ensureSemantics();
+      await tester.pumpWidget(_routedEditApp(_loadedFlour()));
+      await tester.pumpAndSettle();
+
+      // The summary, through core's one chain: `1½ cup Wheat flour`.
+      expect(find.widgetWithText(TextField, 'Qty'), findsNothing);
+      expect(find.text('1½ cup Wheat flour'), findsOneWidget);
+      expect(find.text('sifted · optional'), findsOneWidget);
+      expect(find.byIcon(Icons.link), findsOneWidget);
+      final summary = find.bySemanticsLabel(
+        'Edit 1 and 1 half cup Wheat flour, sifted, optional, '
+        'linked to a food',
+      );
+      expect(summary, findsOneWidget);
+
+      await tester.tap(summary);
+      await tester.pumpAndSettle();
+      expect(find.widgetWithText(TextField, 'Qty'), findsOneWidget);
+
+      await tester.tap(find.widgetWithText(TextButton, 'Done'));
+      await tester.pumpAndSettle();
+      expect(find.widgetWithText(TextField, 'Qty'), findsNothing);
+
+      // Opening and closing a row is not an edit.
+      await tester.tap(find.byTooltip('Cancel'));
+      await tester.pumpAndSettle();
+      expect(find.text('Discard changes?'), findsNothing);
+      semantics.dispose();
+    });
+
+    testWidgets('a wide window always shows the fields; new rows open', (
+      tester,
+    ) async {
+      sizeView(tester, 1000);
+      await tester.pumpWidget(_routedEditApp(_loadedFlour()));
+      await tester.pumpAndSettle();
+      expect(find.widgetWithText(TextField, 'Qty'), findsOneWidget);
+      expect(find.widgetWithText(TextButton, 'Done'), findsNothing);
+
+      tester.view.physicalSize = const Size(390, 5000);
+      await tester.pumpAndSettle();
+      expect(find.widgetWithText(TextField, 'Qty'), findsNothing);
+
+      final add = find.widgetWithText(TextButton, 'Add ingredient');
+      await tester.ensureVisible(add);
+      await tester.tap(add);
+      await tester.pumpAndSettle();
+      // The new row is open; the saved one stays a summary.
+      expect(find.widgetWithText(TextField, 'Qty'), findsOneWidget);
+      expect(find.text('1½ cup Wheat flour'), findsOneWidget);
+    });
+
+    // A collapsed row hides its fields — it must not hide an unreadable
+    // quantity from the save. Typed on a wide window, then the window
+    // narrows: the row folds to its summary with the bad value inside it.
+    testWidgets('a collapsed row with a bad quantity blocks Save and opens', (
+      tester,
+    ) async {
+      sizeView(tester, 1000);
+      final repo = _RecordingRecipeRepository(loaded: _loadedFlour().loaded);
+      await tester.pumpWidget(_routedEditApp(repo));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.widgetWithText(TextField, '1½'), 'lots');
+      tester.view.physicalSize = const Size(390, 5000);
+      await tester.pumpAndSettle();
+      expect(find.widgetWithText(TextField, 'Qty'), findsNothing);
+
+      await save(tester);
+
+      expect(repo.updated, isEmpty, reason: 'saved a null quantity silently');
+      expect(find.widgetWithText(TextField, 'lots'), findsOneWidget);
+      expect(find.text('Try 1/2 or 0.5'), findsOneWidget);
+    });
+
+    // UX-039: nutrition moved to the bottom of the page. A manual entry
+    // there that is wrong has to (a) still be validated after the cook has
+    // scrolled away from it, and (b) be scrolled back into view when it is
+    // what refused the save — at a real phone's height, not a 5000px one.
+    testWidgets('a bad nutrition entry far below is validated and revealed', (
+      tester,
+    ) async {
+      sizeView(tester, 390, 844);
+      final repo = _RecordingRecipeRepository();
+      await tester.pumpWidget(_routedNewApp(repo));
+      await tester.pumpAndSettle();
+
+      final add = find.widgetWithText(TextButton, 'Add');
+      await tester.ensureVisible(add);
+      await tester.pumpAndSettle();
+      await tester.tap(add);
+      await tester.pumpAndSettle();
+      final manual = find.widgetWithText(ChoiceChip, 'Manual');
+      await tester.ensureVisible(manual);
+      await tester.pumpAndSettle();
+      await tester.tap(manual);
+      await tester.pumpAndSettle();
+      final calories = find.widgetWithText(TextFormField, 'Calories');
+      await tester.ensureVisible(calories);
+      await tester.pumpAndSettle();
+      await tester.enterText(calories, '1/2');
+
+      // Back to the top; focus leaves the Calories box for Title.
+      await tester.ensureVisible(_titleField);
+      await tester.pumpAndSettle();
+      await _fillRequired(tester);
+      await tester.ensureVisible(_titleField);
+      await tester.pumpAndSettle();
+
+      await save(tester);
+
+      expect(repo.created, isEmpty, reason: 'the bad entry was not validated');
+      final error = find.textContaining('Numbers only');
+      expect(error, findsOneWidget);
+      final view = Offset.zero & const Size(390, 844);
+      expect(
+        view.contains(tester.getCenter(error)),
+        isTrue,
+        reason: 'the refused save left its reason off screen',
+      );
+    });
+
+    testWidgets('Not counted lists a repeated ingredient once', (tester) async {
+      sizeView(tester, 800);
+      await tester.pumpWidget(
+        _editApp(_LoadedRecipeRepository(_repeatedOnionRecipe())),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('not linked to a food'), findsOneWidget);
+      // First spelling kept.
+      expect(
+        find.textContaining('onion — not linked to a food'),
+        findsOneWidget,
+      );
+
+      // One confirmation links both rows.
+      await tester.tap(find.widgetWithText(ActionChip, 'All-purpose flour'));
+      await tester.pumpAndSettle();
+      expect(
+        find.textContaining('Estimated from 3 of 3 ingredients'),
+        findsOneWidget,
+      );
+    });
+
+    // The Auto pane read the quantity box with `double.tryParse`, which the
+    // fraction display (`1½`) fails — every fractional amount read as
+    // "no quantity".
+    testWidgets('a fractional quantity is not reported as missing', (
+      tester,
+    ) async {
+      sizeView(tester, 800);
+      await tester.pumpWidget(
+        _editApp(
+          _LoadedRecipeRepository(
+            _autoRecipe(flourQuantity: 1.5, flourUnit: 'cup'),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.widgetWithText(TextField, '1½'), findsOneWidget);
+      expect(find.textContaining('no quantity'), findsNothing);
+    });
+
+    // The envelope (Gotcha 13/22/26): the whole editor, collapsed rows and
+    // open ones, with a quantity error showing, at four widths × two scales.
+    for (final width in <double>[390, 600, 1000, 1440]) {
+      for (final scale in <double>[1.0, 2.0]) {
+        testWidgets('the editor fits at ${width}px, textScale $scale', (
+          tester,
+        ) async {
+          sizeView(tester, width, 8000);
+          final repo = _RecordingRecipeRepository(loaded: _envelopeRecipe);
+          await tester.pumpWidget(_routedEditApp(repo, textScale: scale));
+          await tester.pumpAndSettle();
+          expect(
+            tester.takeException(),
+            isNull,
+            reason: 'editor overflows at ${width}px @ ${scale}x',
+          );
+
+          if (width < 600) {
+            // Collapsed first; open every row.
+            expect(find.widgetWithText(TextField, 'Qty'), findsNothing);
+            for (var i = 0; i < 3; i++) {
+              final summary = find.byIcon(Icons.edit_outlined).first;
+              await tester.ensureVisible(summary);
+              await tester.tap(summary);
+              await tester.pumpAndSettle();
+            }
+          }
+          expect(find.widgetWithText(TextField, 'Qty'), findsNWidgets(3));
+          expect(
+            tester.takeException(),
+            isNull,
+            reason: 'open rows overflow at ${width}px @ ${scale}x',
+          );
+
+          await tester.enterText(
+            find.widgetWithText(TextField, 'Qty').first,
+            'lots',
+          );
+          await save(tester);
+          expect(repo.updated, isEmpty);
+          expect(
+            tester.takeException(),
+            isNull,
+            reason: 'quantity error overflows at ${width}px @ ${scale}x',
+          );
+          final message = find.text('Try 1/2 or 0.5');
+          expect(message, findsOneWidget);
+          expect(
+            tester.renderObject<RenderParagraph>(message).didExceedMaxLines,
+            isFalse,
+          );
+        });
+      }
+    }
   });
 }
 
@@ -1405,6 +1991,31 @@ final Finder _titleField = find.ancestor(
   of: find.text('Title'),
   matching: find.byType(TextFormField),
 );
+
+/// The Servings field, by its label.
+final Finder _servingsField = find.ancestor(
+  of: find.text('Servings'),
+  matching: find.byType(TextFormField),
+);
+
+/// A new recipe's required fields (UX-039): a title, a serving count and a
+/// difficulty — the last two have no default any more, so a save that skips
+/// them is refused.
+Future<void> _fillRequired(
+  WidgetTester tester, {
+  String title = 'Suya-Spiced Lamb',
+  String servings = '4',
+}) async {
+  await tester.enterText(_titleField, title);
+  await tester.enterText(_servingsField, servings);
+  final difficulty = find.byType(DropdownButtonFormField<Difficulty>);
+  await tester.ensureVisible(difficulty);
+  await tester.pumpAndSettle();
+  await tester.tap(difficulty);
+  await tester.pumpAndSettle();
+  await tester.tap(find.text('Medium').last);
+  await tester.pumpAndSettle();
+}
 
 /// Records what `_save` sent, and can refuse (32e2).
 ///
@@ -1472,6 +2083,7 @@ Widget _routedNewApp(
   RecipeRepository repo, {
   ImagePickFn? pick,
   StorageService? storage,
+  double textScale = 1.0,
 }) => ProviderScope(
   overrides: [
     recipeRepositoryProvider.overrideWithValue(repo),
@@ -1482,6 +2094,7 @@ Widget _routedNewApp(
   ],
   child: MaterialApp.router(
     theme: AppTheme.light(),
+    builder: (context, child) => _scaled(context, child!, textScale),
     routerConfig: GoRouter(
       initialLocation: Routes.newRecipe,
       routes: [
@@ -1517,6 +2130,7 @@ Widget _routedEditApp(
   RecipeRepository repo, {
   ImagePickFn? pick,
   StorageService? storage,
+  double textScale = 1.0,
 }) => ProviderScope(
   overrides: [
     recipeRepositoryProvider.overrideWithValue(repo),
@@ -1527,6 +2141,7 @@ Widget _routedEditApp(
   ],
   child: MaterialApp.router(
     theme: AppTheme.light(),
+    builder: (context, child) => _scaled(context, child!, textScale),
     routerConfig: GoRouter(
       initialLocation: '/recipe/r1/edit',
       routes: [
@@ -1548,6 +2163,186 @@ Widget _routedEditApp(
     ),
   ),
 );
+
+/// [child] under a text scale — the routed apps' envelope knob.
+Widget _scaled(BuildContext context, Widget child, double textScale) =>
+    MediaQuery(
+      data: MediaQuery.of(
+        context,
+      ).copyWith(textScaler: TextScaler.linear(textScale)),
+      child: child,
+    );
+
+/// `IngredientsEditor` on its own, the way the food-link group pumps it.
+Widget _ingredientsApp(
+  List<EditIngredientGroup> groups, {
+  double textScale = 1.0,
+}) => ProviderScope(
+  overrides: [foodRepositoryProvider.overrideWithValue(_StubFoodRepository())],
+  child: MaterialApp(
+    theme: AppTheme.light(),
+    builder: (context, child) => _scaled(context, child!, textScale),
+    home: Scaffold(
+      body: SingleChildScrollView(
+        child: StatefulBuilder(
+          builder:
+              (context, setState) => IngredientsEditor(
+                groups: groups,
+                onChanged: () => setState(() {}),
+              ),
+        ),
+      ),
+    ),
+  ),
+);
+
+/// Two rows in one group: a loaded `0.33 cup` (shown as `1⁄3`) and a plain
+/// `2 cups` — for the reorder and fraction tests.
+Recipe _twoIngredients() => const Recipe(
+  id: 'r1',
+  ownerId: 'me',
+  title: 'Loaded Recipe',
+  servings: 4,
+  ingredientGroups: [
+    IngredientGroup(
+      id: 'g1',
+      recipeId: 'r1',
+      name: '',
+      ingredients: [
+        Ingredient(
+          id: 'i1',
+          groupId: 'g1',
+          quantity: 0.33,
+          unit: 'cup',
+          name: 'milk',
+          isOptional: false,
+          sortOrder: 0,
+        ),
+        Ingredient(
+          id: 'i2',
+          groupId: 'g1',
+          quantity: 2,
+          unit: 'cups',
+          name: 'flour',
+          isOptional: false,
+          sortOrder: 1,
+        ),
+      ],
+    ),
+  ],
+);
+
+/// One linked, noted, optional `1.5 cup wheat flour` — the compact summary's
+/// fixture (`1½ cup Wheat flour`).
+_RecordingRecipeRepository _loadedFlour() => _RecordingRecipeRepository(
+  loaded: const Recipe(
+    id: 'r1',
+    ownerId: 'me',
+    title: 'Loaded Recipe',
+    servings: 4,
+    ingredientGroups: [
+      IngredientGroup(
+        id: 'g1',
+        recipeId: 'r1',
+        name: '',
+        ingredients: [
+          Ingredient(
+            id: 'i1',
+            groupId: 'g1',
+            quantity: 1.5,
+            unit: 'cup',
+            name: 'wheat flour',
+            note: 'sifted',
+            isOptional: true,
+            sortOrder: 0,
+            foodId: 'all-purpose-flour',
+          ),
+        ],
+      ),
+    ],
+  ),
+);
+
+/// Two groups and three rows with every marker a row can carry — the
+/// envelope's fixture.
+const Recipe _envelopeRecipe = Recipe(
+  id: 'r1',
+  ownerId: 'me',
+  title: 'Slow-Roasted Pork Shoulder with Crackling and Apple Sauce',
+  servings: 12,
+  prepMinutes: 30,
+  cookMinutes: 360,
+  ingredientGroups: [
+    IngredientGroup(
+      id: 'g1',
+      recipeId: 'r1',
+      name: 'For the pork and its overnight dry brine',
+      ingredients: [
+        Ingredient(
+          id: 'i1',
+          groupId: 'g1',
+          quantity: 2.75,
+          unit: 'tablespoons',
+          name: 'coarse flaky sea salt, preferably Maldon or Halen Môn',
+          note: 'crushed between your fingers',
+          isOptional: true,
+          sortOrder: 0,
+          foodId: 'salt',
+        ),
+        Ingredient(
+          id: 'i2',
+          groupId: 'g1',
+          name: 'black pepper',
+          note: 'to taste',
+          isOptional: false,
+          sortOrder: 1,
+        ),
+      ],
+    ),
+    IngredientGroup(
+      id: 'g2',
+      recipeId: 'r1',
+      name: 'Apple sauce',
+      ingredients: [
+        Ingredient(
+          id: 'i3',
+          groupId: 'g2',
+          quantity: 1.3333333333333333,
+          unit: 'kg',
+          name: 'Bramley apples',
+          isOptional: false,
+          sortOrder: 0,
+        ),
+      ],
+    ),
+  ],
+);
+
+/// [_autoRecipe] with the same free-text ingredient in both groups, spelled
+/// two ways — the not-counted list must name it once.
+Recipe _repeatedOnionRecipe() {
+  final base = _autoRecipe();
+  return base.copyWith(
+    ingredientGroups: [
+      ...base.ingredientGroups,
+      const IngredientGroup(
+        id: 'g2',
+        recipeId: 'r1',
+        name: 'Topping',
+        ingredients: [
+          Ingredient(
+            id: 'i3',
+            groupId: 'g2',
+            quantity: 1,
+            name: 'Onion',
+            isOptional: false,
+            sortOrder: 0,
+          ),
+        ],
+      ),
+    ],
+  );
+}
 
 /// Registry stub for the typeahead: two flours for a `flo…` query, nothing for
 /// anything else — enough to cover pick, free-text, and empty-result paths.
@@ -1627,7 +2422,11 @@ class _RecordingFoodRepository extends _StubFoodRepository {
 /// deliberately NOT what the stub estimates — the pane must show the fresh
 /// estimate, and Auto -> Manual must seed the fresh values, never the stale
 /// stored ones). One linked row with a quantity, one free-text row.
-Recipe _autoRecipe({bool linked = true}) => Recipe(
+Recipe _autoRecipe({
+  bool linked = true,
+  double flourQuantity = 200,
+  String flourUnit = 'g',
+}) => Recipe(
   id: 'r1',
   ownerId: 'me',
   title: 'Auto Recipe',
@@ -1640,11 +2439,11 @@ Recipe _autoRecipe({bool linked = true}) => Recipe(
       name: 'Main',
       ingredients: [
         if (linked)
-          const Ingredient(
+          Ingredient(
             id: 'i1',
             groupId: 'g1',
-            quantity: 200,
-            unit: 'g',
+            quantity: flourQuantity,
+            unit: flourUnit,
             name: 'flour',
             isOptional: false,
             sortOrder: 0,

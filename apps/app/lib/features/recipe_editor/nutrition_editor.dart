@@ -40,9 +40,9 @@ class NutritionEditor extends StatelessWidget {
   final EditNutrition nutrition;
 
   /// Collapsed when the recipe has no label, expanded when it does. Most
-  /// recipes have none, and the whole panel between Attribution and
-  /// Ingredients would push the parts of the form everyone uses off the first
-  /// screen — but a recipe that already carries values must never hide them.
+  /// recipes have none, and the whole panel would add a screen of boxes to a
+  /// form that does not need them — but a recipe that already carries values
+  /// must never hide them.
   final bool expanded;
 
   final VoidCallback onToggle;
@@ -67,7 +67,10 @@ class NutritionEditor extends StatelessWidget {
   final Map<String, List<FoodHit>> suggestions;
 
   final VoidCallback onRefreshEstimate;
-  final void Function(EditIngredient row, FoodHit hit) onPickSuggestion;
+
+  /// A tapped suggestion: link every unlinked row in `rows` — the rows the
+  /// not-counted list folded under one name — to `hit`.
+  final void Function(List<EditIngredient> rows, FoodHit hit) onPickSuggestion;
 
   static const _helperText = {
     EditNutritionMode.auto:
@@ -226,16 +229,22 @@ class _AutoPane extends StatelessWidget {
   final String? error;
   final Map<String, List<FoodHit>> suggestions;
   final VoidCallback onRefresh;
-  final void Function(EditIngredient row, FoodHit hit) onPickSuggestion;
+  final void Function(List<EditIngredient> rows, FoodHit hit) onPickSuggestion;
 
   /// The not-counted rows, with the reason each contributed nothing. The
   /// local facts (optional, unlinked, no quantity) are derived from the draft
   /// so the list is right even before the RPC answers; only "the registry
   /// cannot convert this unit for this food" needs the server's word, which
   /// is what [NutritionEstimate.unmatched] adds.
-  List<(EditIngredient, String, String)> _uncounted() {
+  ///
+  /// **One entry per name** (UX-039): an ingredient used twice — butter in the
+  /// dough and again in the filling — was listed twice, reading like a
+  /// duplicate row. Folded case-insensitively, first spelling and first
+  /// position kept, and the distinct reasons joined, so two rows that fail
+  /// for different reasons still say both.
+  List<_Uncounted> _uncounted() {
     final unmatched = {...?estimate?.unmatched};
-    final rows = <(EditIngredient, String, String)>[];
+    final byName = <String, _Uncounted>{};
     for (final g in groups) {
       for (final i in g.ingredients) {
         final name = i.name.text.trim();
@@ -245,17 +254,26 @@ class _AutoPane extends StatelessWidget {
           reason = 'optional';
         } else if (i.foodId == null) {
           reason = 'not linked to a food';
-        } else if (double.tryParse(i.quantity.text.trim()) == null) {
+        } else if (i.parsedQuantity == null) {
+          // `parsedQuantity`, not `double.tryParse` of the box: the box shows
+          // a loaded `1.5` as `1½`, which `tryParse` cannot read — every
+          // fractional quantity would be reported as missing.
           reason = 'no quantity';
         } else if (unmatched.contains(name)) {
           reason = 'unit cannot be converted';
         } else {
           reason = null;
         }
-        if (reason != null) rows.add((i, name, reason));
+        if (reason == null) continue;
+        final entry = byName.putIfAbsent(
+          name.toLowerCase(),
+          () => _Uncounted(name),
+        );
+        entry.rows.add(i);
+        if (!entry.reasons.contains(reason)) entry.reasons.add(reason);
       }
     }
-    return rows;
+    return byName.values.toList();
   }
 
   @override
@@ -375,7 +393,7 @@ class _AutoPane extends StatelessWidget {
               color: scheme.onSurfaceVariant,
             ),
           ),
-          for (final (row, name, reason) in uncounted)
+          for (final entry in uncounted)
             Padding(
               padding: const EdgeInsets.only(top: AppSpacing.xs),
               child: Column(
@@ -383,10 +401,10 @@ class _AutoPane extends StatelessWidget {
                 children: [
                   Text.rich(
                     TextSpan(
-                      text: name,
+                      text: entry.name,
                       children: [
                         TextSpan(
-                          text: ' — $reason',
+                          text: ' — ${entry.reasons.join(', ')}',
                           style: textTheme.bodySmall?.copyWith(
                             color: scheme.onSurfaceVariant,
                           ),
@@ -400,14 +418,14 @@ class _AutoPane extends StatelessWidget {
                   // the human confirms, and only the confirmed link is
                   // stored. Chips wrap, and a long food name ellipsises
                   // inside its chip rather than overflowing (Gotcha 21).
-                  if ((suggestions[name] ?? const []).isNotEmpty)
+                  if (entry.suggestionsFrom(suggestions).isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(top: AppSpacing.xs),
                       child: Wrap(
                         spacing: AppSpacing.xs,
                         runSpacing: AppSpacing.xs,
                         children: [
-                          for (final hit in suggestions[name]!)
+                          for (final hit in entry.suggestionsFrom(suggestions))
                             ActionChip(
                               avatar: const Icon(
                                 Icons.link,
@@ -424,7 +442,8 @@ class _AutoPane extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              onPressed: () => onPickSuggestion(row, hit),
+                              onPressed:
+                                  () => onPickSuggestion(entry.unlinked, hit),
                             ),
                         ],
                       ),
@@ -435,6 +454,33 @@ class _AutoPane extends StatelessWidget {
         ],
       ],
     );
+  }
+}
+
+/// One line of the not-counted list: every row sharing a name
+/// (case-insensitively), under the first spelling seen.
+class _Uncounted {
+  _Uncounted(this.name);
+
+  final String name;
+  final List<EditIngredient> rows = [];
+  final List<String> reasons = [];
+
+  /// The rows a suggestion would link — only the ones not linked already.
+  List<EditIngredient> get unlinked => [
+    for (final r in rows)
+      if (r.foodId == null) r,
+  ];
+
+  /// `match_foods` candidates for this entry. Suggestions are keyed by each
+  /// row's own spelling, so ask for every unlinked row's name until one has
+  /// candidates; a fully linked entry offers none.
+  List<FoodHit> suggestionsFrom(Map<String, List<FoodHit>> suggestions) {
+    for (final r in unlinked) {
+      final hits = suggestions[r.name.text.trim()];
+      if (hits != null && hits.isNotEmpty) return hits;
+    }
+    return const [];
   }
 }
 

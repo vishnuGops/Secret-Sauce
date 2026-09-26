@@ -993,13 +993,17 @@ decision.
 
 **Wave B — the editor**
 
-- [ ] UX-039 — Ingredients → Steps → Nutrition; empty Prep / Cook / Servings / Difficulty with
-      hints (Servings and Difficulty required); a collapsed one-line ingredient row on compact
-- [ ] UX-035 — the step timer inline, parsing `90`, `1h`, `1h 30m`, `1:30`; ingredients and
-      steps reorder (drag handle + Move up / Move down)
-- [ ] UX-052 — Qty accepts `1/2`, `1 1/2`, `½` (stored as a decimal), its error does not clip at
-      2.0×; removing a non-empty group or section asks first; version-history rows open a
-      read-only view of that version
+- [x] UX-039 — Ingredients → Steps → Nutrition; empty Prep / Cook / Servings / Difficulty with
+      hints (Servings and Difficulty required); a collapsed one-line ingredient row on compact;
+      "Not counted" lists a repeated ingredient once
+- [x] UX-035 — the step timer inline, parsing `90`, `1h`, `1h 30m`, `1:30` (Prep and Cook too);
+      ingredients and steps reorder (drag handle + Move up / Move down)
+- [x] UX-052 — Qty accepts `1/2`, `1 1/2`, `½` (stored as a decimal), its error is its own line
+      and does not clip at 2.0×; removing a non-empty group or section asks first;
+      version-history rows open a read-only view of that version
+- [x] Found on the way: B142 (a lazy form skipped validating off-screen fields), B143 (the note
+      toggle marked the editor dirty), B144 (unparseable Servings saved as 1; a 0 reached the
+      estimator), B145 (the history sheet's Current chip squeezed the row at 2.0×)
 
 **Wave C — chefs, entities, profile, My Recipes**
 

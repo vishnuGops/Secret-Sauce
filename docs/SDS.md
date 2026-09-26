@@ -406,6 +406,22 @@ picker today and is carried through verbatim for exactly this reason. Adding a c
 model means adding it to the draft in the same change; `recipe_editor_test.dart`'s round-trip group
 is what fails if it is not.
 
+**What a cook types, and what is stored (Phase 38).** The editor reads its free-text numbers
+through core's `parsing.dart`, the inverse of `formatting.dart` and tested as a round trip with it:
+`parseQuantity` takes `1.5`, `1,5`, `1/2`, `1 1/2`, `1-1/2`, `½`, `1½`, `1 1⁄3` and returns the
+decimal the column stores (Gotcha 16); `parseDurationMinutes` takes `90`, `1h`, `1h 30m`,
+`1 h 30 min`, `1.5 hours`, `1:30` for a step's timer and for Prep / Cook. Both return null for
+empty **and** for unreadable input, and the form refuses the unreadable case — `int.tryParse`
+used to save `1h` as no timer. A loaded quantity is shown through `formatQuantity` (`1⁄3`, not
+`0.3333…`) and an **untouched** field saves the loaded value back exactly, so opening and saving a
+recipe cannot nudge a stored `0.33`. A new recipe opens with Prep, Cook, Servings and Difficulty
+**empty** (UX-039): empty Prep / Cook save `0`, which every surface prints as `—`; Servings and
+Difficulty are `not null` with no honest default, so the form requires them. The form is a
+`SingleChildScrollView`, not a lazy `ListView`: an unbuilt `FormField` is skipped by
+`Form.validate()`, so a lazy list let an off-screen invalid field save silently (B142). Order on
+screen is Ingredients → Steps → Nutrition; ingredients and steps reorder by drag handle or a Move
+up / Move down menu, and `toModel(i)` writes the list index as `sort_order`, ascending (B022).
+
 **tags**: `id`, `name (unique)`. **recipe_tags**: `recipe_id`, `tag_id` (PK pair).
 Tags are a **shared, unowned namespace**: readable by all, creatable by any signed-in user (a tag
 must exist before a recipe can reference it), never updatable, and deletable only while nothing
@@ -672,6 +688,12 @@ Two shapes it is built around, because both look exactly like working code:
   row** (RLS hides a parent that went private, or one deleted since the fork loaded) prints
   "Forked from a recipe that is private or no longer exists". A parent deleted *before* the load is
   not a case: `on delete set null` clears the id and the recipe is simply not a fork.
+- **Opening a version** (Phase 38, UX-052) → a history row opens a read-only `VersionView` of that
+  version, decoded from its own `content_snapshot` by `RecipeRepository.versionContent(versionId)`
+  (`versionContentProvider`) — one row, on demand. `kRecipeVersionSelect` still omits the column
+  (B065). `recipeFromSnapshot` reads `recipe_snapshot()`'s `{recipe, ingredient_groups,
+  step_groups}` shape; an empty `{}` (every seeded version) decodes to null, and the view says the
+  version predates stored copies. Quantities print through the one chain; no check-offs, no scaler.
 - **Future PR flow** → `recipe_suggestions` reserved so a fork can later propose changes upstream.
 
 ## 6. Discovery & ranking
