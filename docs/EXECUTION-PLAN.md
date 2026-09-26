@@ -843,7 +843,7 @@ importer, the provenance columns and the attribution UI have something to run ag
 
 ---
 
-## Phase 36 — UI overhaul (36a done 2026-09-24; 36b done 2026-09-25; 36c next)
+## Phase 36 — UI overhaul (36a done 2026-09-24; 36b + 36c done 2026-09-25)
 
 **Procedure lives in the skill**, not here: `.claude/skills/ui-overhaul/SKILL.md` + `references/`
 (audit rubric, design-system spec, rebuild loop, ECC-web → Flutter translation). Run `/ui-overhaul`;
@@ -864,8 +864,12 @@ it detects the phase from `docs/design/`.
   avatars) was scoped out of 36b and carried into 36c; only the kicker half landed
   (`appText.kicker` / `kickerLarge`). `.claude/skills/ui-overhaul/scripts/static_sweep.sh` is the
   re-runnable sweep; AUDIT.md's 2026-09-25 section has the before/after.
-- **36c — next, waits** for the owner's reference images (DESIGN.md / the Phase 2 exit list names
-  which). Tokens change first, screens after.
+- **36c — done.** [docs/design/REBUILD-LOG.md](design/REBUILD-LOG.md): intake → transcribed specs
+  (`docs/design/references/`) → delta table → six owner decisions → layers (tokens, primitives,
+  screens — Discover and Recipe detail by two parallel agents on disjoint files) → fidelity loop
+  (captures on the local stack, Discover 8.35 / detail 8.5) → code review (B135 and three
+  pre-merge regressions fixed) → Claude Design bundle and v3 canvases. DESIGN.md is v2. Carried:
+  the other surfaces' bespoke pass, the final font, curated cover photos.
 - **Independent of the restyle:** the bugs B125–B132 and B134, and UX-037/038/039 (delete a
   recipe, edit a profile, the editor order), can be fixed at any time. Fixing them first shrinks
   what 36c has to preserve.

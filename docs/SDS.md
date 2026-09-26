@@ -1080,7 +1080,7 @@ elapsed against `recipe.totalMinutes`, and is a *state* of the session, not a de
 back to the last step" returns. The canvas's "note for next time" is **not drawn**, because
 `recipe_ratings` has no column for it (see ROADMAP Phase 27 for what adding one costs).
 
-### 7.3 Design system and tokens (Phase 36b)
+### 7.3 Design system and tokens (Phase 36b; v2 values Phase 36c)
 
 The full language and every value live in [docs/design/DESIGN.md](./design/DESIGN.md); this section
 is the architecture. **Every colour, type style, spacing step, radius, tint, icon size and
@@ -1089,9 +1089,9 @@ duration in `apps/app` and `packages/design_system` flows from a token** in
 
 | File | Holds |
 | --- | --- |
-| `app_theme.dart` | `AppTheme.light()/dark()` — `ColorScheme.fromSeed(0xFFD2492A)`, the `TextTheme`, both extensions, and component themes for Filled / Outlined / Elevated / Text / Icon / Segmented buttons, FAB, chips, tabs, `NavigationBar`, dialogs, snackbars, cards, inputs. Also `AppSpacing` (2 4 6 8 12 16 24 32 48), `AppInsets`, `AppRadii` (6 8 12 16 26 28 999), `AppIconSize`. Re-exports the three files below |
+| `app_theme.dart` | `AppTheme.light()/dark()` — explicit light and dark `ColorScheme`s since 36c (tomato primary, deep-brown secondary, burnt-orange tertiary, neutral white / near-black surfaces; `fromSeed(0xFFBE3526)` only fills the roles they do not name), the `TextTheme`, both extensions, and component themes for Filled / Outlined / Elevated / Text / Icon / Segmented buttons, FAB, chips, tabs, `NavigationBar`, dialogs, snackbars, cards, inputs. Also `AppSpacing` (2 4 6 8 12 16 24 32 48), `AppInsets`, `AppRadii` (6 8 12 16 26 28 999), `AppIconSize`. Re-exports the three files below |
 | `app_palette.dart` | `AppPalette` — a `ThemeExtension` with light and dark instances for what M3 has no role for: rating, difficulty, tiers, photo scrims, spotlight foil, the always-dark chefs hero. `context.palette`; `AppPalette.of(brightness)` where a colour must resolve at another brightness. `AppAlpha` tint steps |
-| `app_typography.dart` | `AppFonts` (Newsreader + Manrope, bundled under `packages/design_system/fonts/`, OFL), `AppTypography.textTheme` (M3 sizes and line heights, our families and weights), `AppTextStyles` extension (`kicker`, `kickerLarge`, `overline`, `stat`, `statLarge`, `quantity`, `clock`, `clockSmall`, `step`, `stepLarge`) read as `context.appText`, and `kTabularFigures` / `style.tabular` |
+| `app_typography.dart` | `AppFonts` (Manrope only since 36c — `display` resolves to it; bundled under `packages/design_system/fonts/`, OFL), `AppTypography.textTheme` (M3 sizes and line heights, our families and weights), `AppTextStyles` extension (`kicker`, `kickerLarge`, `overline`, `stat`, `statLarge`, `quantity`, `clock`, `clockSmall`, `step`, `stepLarge`) read as `context.appText`, and `kTabularFigures` / `style.tabular` |
 | `app_motion.dart` | `AppMotion` durations and curves; `AppMotion.of(context, d)` returns zero under reduced motion, `AppMotion.animateScroll` jumps instead of animating |
 
 Three rules follow. **Call sites pick a role, never a weight:** a repeated weight override is a
@@ -1101,6 +1101,32 @@ both. **The bundled families resolve as `packages/design_system/<family>`** in a
 (the app) and as the bare family inside `design_system`'s own tests; `apps/app/test/theme_fonts_test.dart`
 fails if the app would silently fall back to the platform font. `flutter test` renders every family
 in its fixed-width test font, so the envelope suites are unaffected by the font choice.
+
+#### Phase 36c primitives and screens
+
+- **`RecipeCard` v3** — no `Card` chrome: the rounded cover is the one flexible band, the fixed
+  title band (65 × textScale, capped at 2.0 — B047) sits **under** it, and the footer reserves two
+  description lines so neighbouring cards keep one cover / title line. Optional `rank` hangs a
+  ribbon (`1st`, `2nd` …) from the cover. A recipe with no cover URL, or a photo that fails, draws
+  **`CategoryCover`** — the category-colour block (`AppPalette.category`, derived from core's
+  `DiscoverCategory` so colour and filter agree), category as a small corner index line on a card,
+  large on the detail page; never the dish name.
+- **`TagPill`**, **`NutritionSummary`** (calories / fat / carbs / protein; %DV only where the FDA
+  label prints one — none for calories; gated by `NutritionSummary.hasAny`), **`CategoryTile`**
+  (button + selected semantics, a ring for selection).
+- **Discover category filter** — `DiscoverCategory` (core) is six tiles, each a group of raw
+  `recipes.category` spellings (the corpus writes `Main`, `Main Course`, `Dinner` …).
+  `DiscoverRepository.byCategories(values, limit, offset)` mirrors `recent` plus
+  `.inFilter('category', values)`, ordered `created_at desc, id desc` (Gotcha 24). The selected tile
+  is URL state, `/discover?category=<slug>`; an unknown slug is ignored. Like `recent`, it includes
+  imported rows. `PagedRecipesNotifier` carries a **generation guard** (B135): a `loadMore` begun
+  before a rebuild — a new tile or query on the same notifier instance — is dropped.
+- **Recipe detail** — compact: cover + a sheet with `AppRadii.sheet` top corners overlapping it by
+  28px (one `Stack`; the jump bar and pinned *Ready to cook?* bar unchanged); `RECIPE` kicker, tag
+  pills, label-over-value facts, `NutritionSummary`, Ingredients / Method as open tonal panels
+  (`Material`s, so row ink shows). `RailPanel`'s `bordered` now means the tonal panel on both
+  layouts. Expanded: the same header language at 1140px with the cover (or colour block) on the
+  right.
 
 ### Adaptive behavior
 

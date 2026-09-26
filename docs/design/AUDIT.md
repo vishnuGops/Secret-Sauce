@@ -271,3 +271,37 @@ post-36c re-audit):
 | UX-049 | fixed | Tabular-figure sites 1 → 58; the selected sort, window and pill labels keep one weight |
 | UX-050 | fixed | `AppMotion.of` / `animateScroll` at every animation (3 sites); cook-step transitions remain a 36c design item |
 | UX-054 | fixed | Raw insets, `SizedBox` numbers and radii → 0 (half-steps named; component geometry named per widget) |
+
+## Re-sweep — 2026-09-25 (after Phase 36c, reference rebuild)
+
+Same script (`static_sweep.sh`), 36b branch tip vs the 36c screens commit. The token discipline
+held through a visual rebuild: no hex, radius, inset or `SizedBox` literal came back; tabular sites
+and `AppSpacing`/`AppRadii` uses grew with the new surfaces. The one new `Colors.` hit is the
+restored `dividerColor: Colors.transparent` on My Recipes' web tab bar (36b review). Scores are not
+re-graded; the fidelity scores are in [REBUILD-LOG.md](REBUILD-LOG.md).
+
+| Signal | After 36b | After 36c |
+| --- | --- | --- |
+| Colors.* (outside theme; `transparent` included) | 3 | 4 |
+| Color(0x… (outside theme) | 0 | 0 |
+| Raw numeric alpha (outside theme) | 1 | 1 |
+| FontWeight.* (outside theme) | 7 | 7 |
+| fontSize: (outside theme) | 1 | 1 |
+| letterSpacing: (outside theme) | 2 | 1 |
+| Text-style copyWith (outside theme) | 102 | 107 |
+| Tabular-figure sites | 58 | 67 |
+| ThemeExtension classes | 2 | 2 |
+| AppSpacing uses | 547 | 579 |
+| Raw non-zero EdgeInsets number (outside theme) | 0 | 0 |
+| Raw SizedBox number (outside theme) | 0 | 0 |
+| Raw (Border)Radius.circular(n) (outside theme) | 0 | 0 |
+| AppRadii uses | 66 | 72 |
+| Duration(milliseconds (outside theme) | 4 | 4 |
+| Curves.* (outside theme) | 0 | 0 |
+| AppMotion uses | 6 | 8 |
+| Reduced-motion reads (disableAnimationsOf / AppMotion.of / animateScroll) | 3 | 4 |
+| BoxShadow( | 2 | 2 |
+| IconButton( (outside theme) | 28 | 27 |
+| Semantics( | 3 | 6 |
+| Button themes in ThemeData | 6 | 6 |
+| Component themes in ThemeData | 15 | 16 |

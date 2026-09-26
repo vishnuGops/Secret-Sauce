@@ -874,7 +874,20 @@ to `docs/design/`. The next phase does not start until the previous one's file e
         labels are now `appText.overline` (w700, Manrope), and `MASTER CHEF` may ellipsize where
         the old w500 fitted. It cannot overflow (`maxLines: 1`), and `flutter test`'s font cannot
         measure it, so this is a capture item for the 36c pass (review finding, Low).
-- [ ] **36c — Reference rebuild** — waits for the owner's reference images after 36b.
+- [x] **36c — Reference rebuild** (2026-09-25) → [docs/design/REBUILD-LOG.md](design/REBUILD-LOG.md),
+      references in [docs/design/references/](design/references/). Five owner references; six
+      decisions (colour-block no-photo cover, Manrope only, tomato + brown + orange, open detail
+      panels, neutral dark, a real category filter). Tokens, primitives (RecipeCard v3,
+      CategoryCover, TagPill, NutritionSummary, CategoryTile), Discover (cream masthead,
+      `/discover?category=`, ranked shelf) and Recipe detail (sheet over cover) rebuilt; fidelity
+      8.35 / 8.5. Claude Design bundle + two v3 canvases updated. Fixed on the way: **B135**.
+  - [ ] Chefs, My Recipes, editor, auth and profile inherit the v2 tokens but got no bespoke
+        redesign — a follow-up pass with references if wanted.
+  - [ ] The final font (the owner chose "basic for now"; a display face is one constant + files).
+  - [ ] Cover photographs for the 14 curated recipes (owner content; `recipeData/` needs a cover
+        field) — the colour block is the designed fallback until then.
+  - [ ] Compact category row does not scroll to a deep-linked tile that starts off-screen; the
+        grid heading and clear chip still name the selection.
 - [ ] **Content gap the audit surfaced (seed-data fit):** the 14 curated recipes have no cover
       photos, so Discover shows only placeholders (UX-034). A designed no-photo card is 36b/36c
       work; the photographs themselves are an owner action.

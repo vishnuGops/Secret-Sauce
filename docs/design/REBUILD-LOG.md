@@ -104,3 +104,44 @@ share) on compact detail.
 
 Claude Design MCP reconnected after the owner's `/design-login` (2026-09-25): the three Secret Sauce
 projects are readable. No writes without asking.
+
+## 2026-09-25 — build
+
+Layers in order, `melos run analyze` + `melos run test --no-select` green after each:
+
+| Layer | Commit | What |
+| --- | --- | --- |
+| 1 Tokens | `4f24f09` | Explicit light/dark schemes, palette (hero band, category blocks, ribbon), Manrope only, pill buttons/chips, borderless tonal cards, tomato nav |
+| 3 Primitives | `13cc6b5` | RecipeCard v3, CategoryCover, TagPill, NutritionSummary, CategoryTile |
+| 4–5 Chrome + screens | `acb5693` | Discover (masthead, category filter, ranked shelf), Recipe detail (sheet over cover, panels), top bar / footer |
+| Fidelity fix | `80fa803` | Card colour-block label to a corner (collided with the chef badge) |
+| Review fixes | `b8d2792` | Paging generation guard (B135), description reservation, one category mapping, panel ink |
+
+Contract changes (each commented at the test site): nav active colour is tomato; the card's title
+band is measured from its own top (it moved under the cover); the 3.0× cover check measures the
+colour block; RailPanel is a panel on compact too; the method heading is the `METHOD` kicker; the
+detail kicker is always `RECIPE`; the compact detail test viewport is 390×1200 so below-the-fold
+panels build under the test font; the Desserts / Starters / Salads groups gained spellings.
+
+## 2026-09-25 — fidelity loop
+
+Captures: `.playwright-mcp/captures/rebuild-2026-09-25/` (git-ignored), release web build against the
+**local stack** (14 curated recipes, 0 covers, 21,314 corpus rows, zero engagement — B113).
+
+| Surface | Iter. | Layout .30 | Type .20 | Colour .20 | Craft .20 | Behaviour .10 | Weighted | Gates |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Discover | 1 | 8.5 | 7.5 | 8.5 | 6.5 | 10 | 8.05 | fail: card label under the chef badge at 390 (`discover-390`) |
+| Discover | 2 | 8.5 | 7.5 | 8.5 | 8 | 10 | **8.35** | green (`p2-discover-*`, dark included) |
+| Recipe detail | 1 | 9 | 7.5 | 8.5 | 8 | 10 | **8.5** | green (`detail-390-full`, `detail-1440`, `p2-detail-390-dark`) |
+
+Type is held at 7.5 by the owner's "basic for now" font call, not by a defect; the references set
+display serifs. Cook mode (`p2-cook-390`) keeps its layout and picks up the neutral dark scheme.
+Not captured: Chefs, My Recipes, editor, auth, profile — they inherit tokens and component themes
+with no bespoke redesign in this pass.
+
+## 2026-09-25 — Claude Design
+
+Owner-approved writes: `_ds_bundle.css` (design-system project) regenerated from the v2 tokens;
+`tokens.css` in both screens projects replaced by it; `Discover v3.dc.html` and
+`Recipe Detail v3.dc.html` added to both (the v2 canvases stay as history). Discover v3 verified by
+rendering it.

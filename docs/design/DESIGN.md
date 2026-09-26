@@ -1,12 +1,37 @@
-# Secret-Sauce Design Language & System — v1 (2026-09-25)
+# Secret-Sauce Design Language & System — v2 (2026-09-25)
 
 Phase 2 of the `ui-overhaul` skill. Reads [AUDIT.md](AUDIT.md) (2026-09-24, 5.1/10); Phase 3
 (reference rebuild) reads this file and changes **token values** before it touches a screen.
 Dart is the source of truth: `packages/design_system/lib/src/theme/`. Where this document and the
 code disagree, the code wins and this file is wrong — fix it the same day.
 
-Owner decisions (2026-09-25): **Newsreader + Manrope**, bundled as assets · seed stays **paprika
-`0xFFD2492A`** · tone **warm editorial cookbook, kitchen-proof; the food photo carries the page**.
+Owner decisions — v1 (Phase 36b): Newsreader + Manrope bundled · paprika seed · tone "warm
+editorial cookbook". **v2 (Phase 36c, reference rebuild, same day) supersedes them:** one bundled
+family (**Manrope**, "basic for now") · **tomato / deep brown / burnt orange** on neutral white
+pages · a **neutral near-black** dark mode · tone **bright, photo-first, modern recipe app** (five
+owner references, [references/](references/), [REBUILD-LOG.md](REBUILD-LOG.md)). §1's principles
+stand unchanged; where a v1 value below differs from §0, §0 and the code win.
+
+## 0. v2 — the reference rebuild (Phase 36c)
+
+What changed from v1, in the order a re-skin reads it. Everything is still one token away.
+
+| Area | v2 value | Where |
+| --- | --- | --- |
+| Colour scheme | **Explicit** light and dark schemes (not `fromSeed` alone): light primary tomato `#BE3526` (5.6:1 with white), secondary deep brown `#492511`, tertiary burnt orange `#AD4A00` (kickers, step numbers, nutrition figures), surface `#FFFFFF`, neutral warm-grey containers (`#FAF8F6 … #ECE7E2`); dark surface `#161616`, neutral containers, lifted accents (`#FF8A78`, `#E9C4AE`, `#FFB77A`) | `app_theme.dart` `_lightScheme` / `_darkScheme` |
+| Palette additions | `surfaceWarm` (the cream hero band, `#FBF7F4` / `#1E1B19`); six **category blocks** (coral, yellow, pink, brown, sage, sky) with their inks, read through `category(cat)`, which derives from core's `DiscoverCategory` so a cover's colour and the tile that filters it agree; `rankRibbon` + ink | `app_palette.dart` |
+| Type | One family, **Manrope** (Newsreader removed from the bundle); display / headline / titleLarge **w700** with slight negative tracking; `appText.kickerLarge` is the section index line | `app_typography.dart` |
+| Shape | Buttons and chips are **pills** (`AppRadii.button = pill`); `AppRadii.md` (12) takes inputs and 12px boxes; `AppRadii.sheet` (28) for the detail sheet; cards are **borderless tonal panels** (`surfaceContainerLow`) | `app_theme.dart` |
+| Navigation | Active destination tomato (bottom bar: `primaryContainer` pill, `primary` icon + label; web: flat `primaryContainer` chip with `onPrimaryContainer` ink — `primary` on it is 3.8:1 in dark) | `app_theme.dart`, `top_nav_bar.dart` |
+| Recipe card (v3) | **No chrome**: rounded cover first (the one flexible band), the fixed 65 × scale title band **under** it, the footer reserving two description lines so neighbours line up; visibility chip, chef badge and an optional **rank ribbon** on the cover | `recipe_card.dart` |
+| No-photo state | `CategoryCover`: a flat category-colour block; on a card the category as a small index line in a corner, on the detail page set large bottom-left. Never the dish name (it is one line away) | `category_cover.dart` |
+| New primitives | `TagPill` (cuisine / category), `NutritionSummary` (calories, fat, carbs, protein — %DV only where the FDA label prints one), `CategoryTile` (Discover's filter tiles) | `design_system/lib/src/widgets/` |
+| Discover | Cream masthead band + pill search; **browse by category** (`/discover?category=<slug>`, a paged filter over a group of raw spellings); numbered shelves in the tertiary index line; `03 MOST FORKED` ranked | `features/discover/` |
+| Recipe detail | Compact: cover + a sheet with 28px top corners over it; `RECIPE` kicker, bold title, tag pills, label-over-value facts, nutrition summary, Ingredients / Method as **open** tonal panels (owner's Q4). Expanded: the same language at 1140px | `features/recipe_detail/` |
+
+The v1 contrast table in §3.1 and the token map in §7 were regenerated for v2 where values moved;
+`theme_contrast_test.dart` asserts every pair (it grew the tertiary / secondary text pairs, the
+hero band, the category blocks, the rank ribbon and the tag pill in 36c).
 
 ## 1. Direction
 
@@ -339,8 +364,9 @@ and `InkWell` supply them; a custom tappable must too (UX-013 is the open instan
 | Token | Dart symbol | File | Light | Dark |
 | --- | --- | --- | --- | --- |
 | Seed | `AppTheme.seed` | app_theme.dart | `#D2492A` | same |
-| Surface / onSurface | `scheme.surface` / `onSurface` | fromSeed | `#FFF8F6` / `#231917` | `#1A110F` / `#F1DFDB` |
-| Primary | `scheme.primary` | fromSeed | `#904B3B` | `#FFB4A3` |
+| Surface / onSurface | `scheme.surface` / `onSurface` | `_lightScheme` / `_darkScheme` | `#FFFFFF` / `#1F1A17` | `#161616` / `#EDEAE7` |
+| Primary / secondary / tertiary | `scheme.primary` / `secondary` / `tertiary` | explicit schemes | `#BE3526` / `#492511` / `#AD4A00` | `#FF8A78` / `#E9C4AE` / `#FFB77A` |
+| Hero band / category blocks | `palette.surfaceWarm` / `palette.category(c)` | app_palette.dart | `#FBF7F4` / coral `#FF6449` yellow `#FED801` pink `#FDB5C0` brown `#8C4411` sage `#A8D08D` sky `#9FD3E6` | `#1E1B19` / same blocks |
 | Rating | `palette.rating` | app_palette.dart | `#B7700A` | `#F2A93B` |
 | Difficulty | `palette.difficultyEasy/Medium/Hard` | app_palette.dart | `#2A6E2E` `#8A4F00` `#9F2B26` | `#66BB6A` `#FFA726` `#FFB4A8` |
 | Tiers | `palette.tierHomeCook…tierMasterChef` | app_palette.dart | `#4A626D` `#00695C` `#1360B5` `#6A1B9A` `#8F5000` | `#B0BEC5` `#80CBC4` `#90CAF9` `#CE93D8` `#FFCC80` |
@@ -354,7 +380,7 @@ and `InkWell` supply them; a custom tappable must too (UX-013 is the open instan
 | Tints | `AppAlpha.*` | app_palette.dart | §3.1 | — |
 | Motion | `AppMotion.*` | app_motion.dart | §3.7 | — |
 | Icon sizes | `AppIconSize.*` | app_theme.dart | 14 16 18 20 24 40 56 | — |
-| Fonts | `AppFonts.*` | app_typography.dart | Newsreader, Manrope | — |
+| Fonts | `AppFonts.*` | app_typography.dart | Manrope (display resolves to it, v2) | — |
 
 ## 8. Do / Don't
 
@@ -388,6 +414,12 @@ food photograph carries the page; when there is none, the page is typeset.
 
 ## 10. Drift against the Claude Design system (`_ds_bundle.css`, read 2026-09-25)
 
+> **Resolved 2026-09-25 (Phase 36c, owner-approved write).** `_ds_bundle.css` in the design-system
+> project was regenerated from the v2 tokens (explicit schemes, category blocks, Manrope, pills,
+> the v3 card as the opt-in `.rcard.v3` beside the legacy v2 card rules so undrawn canvases keep
+> rendering), copied into both screens projects' `tokens.css`, and `Discover v3.dc.html` +
+> `Recipe Detail v3.dc.html` were drawn from the shipped app. The table below is the v1-era record.
+
 A read-only comparison with the design-system project's `_ds_bundle.css`; nothing was written to
 it. The bundle says it "mirrors packages/design_system" — as of this version it does not:
 
@@ -405,3 +437,11 @@ it. The bundle says it "mirrors packages/design_system" — as of this version i
 
 Updating the bundle to match is a separate, owner-approved write (a `DesignSync` plan), not part of
 this phase.
+- **v2 — 2026-09-25 (Phase 36c, reference rebuild: Discover, Recipe detail, chrome).** Five owner
+  references (bright category grid, cream editorial home, dark kitchen phone, bright recipe app) →
+  §0. Owner decisions Q1–Q6 in [REBUILD-LOG.md](REBUILD-LOG.md): colour-block no-photo cover,
+  Manrope only, tomato + brown + orange, open detail panels, neutral dark, a real category filter.
+  Fidelity loop: Discover 8.35, Recipe detail 8.5 (pass ≥ 8.0) after one fix (the card's colour-block
+  label collided with the chef badge at 390px). Code review fixes: a stale-page race in
+  `PagedRecipesNotifier` (B135), neighbouring card titles misaligned by the description's line
+  count, one category mapping instead of two, panel ink restored.
