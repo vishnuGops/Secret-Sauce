@@ -11,6 +11,7 @@ import 'package:app/features/discover/discover_masthead.dart';
 import 'package:app/features/discover/discover_providers.dart';
 import 'package:app/features/discover/discover_shelf.dart';
 import 'package:app/routing/app_router.dart';
+import 'package:app/routing/auth_return.dart';
 import 'package:app/widgets/recipe_async_grid.dart';
 
 /// Bottom clearance on compact for the shell's extended FAB and NavigationBar.
@@ -127,9 +128,22 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
   /// without a router (a bare widget test) simply has no URL to keep.
   void _writeUrlQuery(String query) {
     if (!mounted || query == _lastUrlQuery) return;
-    _lastUrlQuery = query;
     final router = GoRouter.maybeOf(context);
-    if (router == null) return;
+    if (router == null) {
+      _lastUrlQuery = query;
+      return;
+    }
+    // Discover stays mounted in the shell under anything pushed on the root
+    // navigator, and `go` replaces the whole stack: a debounce that fired
+    // after the reader tapped a result tore the recipe down and brought
+    // Discover back (Phase 37 review). Held until Discover is on top again.
+    if (currentLocation(router).path != Routes.discover) {
+      _pendingUrlQuery = query;
+      _listenForReturn(router);
+      return;
+    }
+    _pendingUrlQuery = null;
+    _lastUrlQuery = query;
     Router.neglect(
       context,
       () => router.go(
@@ -172,8 +186,35 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
     }
   }
 
+  /// A `?q=` write held while another page covered Discover.
+  String? _pendingUrlQuery;
+
+  /// The router whose changes [_onRouteChanged] watches, while a write waits.
+  GoRouter? _watchedRouter;
+
+  void _listenForReturn(GoRouter router) {
+    if (_watchedRouter == router) return;
+    _watchedRouter?.routerDelegate.removeListener(_onRouteChanged);
+    _watchedRouter = router..routerDelegate.addListener(_onRouteChanged);
+  }
+
+  void _onRouteChanged() {
+    final router = _watchedRouter;
+    final pending = _pendingUrlQuery;
+    if (!mounted || router == null || pending == null) return;
+    if (currentLocation(router).path != Routes.discover) return;
+    router.routerDelegate.removeListener(_onRouteChanged);
+    _watchedRouter = null;
+    // After the frame: this runs inside the router's own notification, and a
+    // `go` from there would re-enter it.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _pendingUrlQuery == pending) _writeUrlQuery(pending);
+    });
+  }
+
   @override
   void dispose() {
+    _watchedRouter?.routerDelegate.removeListener(_onRouteChanged);
     _urlSync?.cancel();
     _searchController.dispose();
     super.dispose();

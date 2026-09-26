@@ -381,6 +381,51 @@ void main() {
     expect(find.text('MY RECIPES'), findsOneWidget);
   });
 
+  // Phase 37 review: navigation used to hinge on the *caller's* mounted flag.
+  // Tapping Edit while the delete was out unmounted the menu, so a successful
+  // delete left the reader in the editor of a recipe that no longer existed.
+  testWidgets('leaving for the editor mid-delete still lands on My Recipes', (
+    tester,
+  ) async {
+    final hold = Completer<void>();
+    final repo = _DeleteRepo(_mine, hold: hold);
+    final router = await _pump(tester, repo: repo);
+    await _openConfirm(tester);
+    await tester.tap(_confirmButton);
+    await tester.pumpAndSettle();
+
+    router.go(Routes.editRecipe('r1'));
+    await tester.pumpAndSettle();
+    hold.complete();
+    await tester.pumpAndSettle();
+
+    expect(
+      router.routerDelegate.currentConfiguration.uri.path,
+      Routes.myRecipes,
+    );
+  });
+
+  testWidgets('a reader who went elsewhere mid-delete is left there', (
+    tester,
+  ) async {
+    final hold = Completer<void>();
+    final repo = _DeleteRepo(_mine, hold: hold);
+    final router = await _pump(tester, repo: repo);
+    await _openConfirm(tester);
+    await tester.tap(_confirmButton);
+    await tester.pumpAndSettle();
+
+    router.go(Routes.discover);
+    await tester.pumpAndSettle();
+    hold.complete();
+    await tester.pumpAndSettle();
+
+    expect(
+      router.routerDelegate.currentConfiguration.uri.path,
+      Routes.discover,
+    );
+  });
+
   group('editor', () {
     testWidgets('overflow deletes without the discard prompt', (tester) async {
       final repo = _DeleteRepo(_mine);

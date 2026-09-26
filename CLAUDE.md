@@ -132,7 +132,9 @@ secret-sauce/
 │                                  # nutrition_facts_label_test.dart, theme_contrast_test.dart
 │                                  # (WCAG AA for every role pair, light + dark),
 │                                  # theme_extensions_test.dart (both extensions present, the
-│                                  # ramp in the bundled families, reduced motion)
+│                                  # ramp in the bundled families, reduced motion),
+│                                  # segmented_tabs_test, rank_badge_test, load_more_button_test,
+│                                  # card_rail_test (Phase 37's consolidated primitives)
 ├── apps/app/
 │   ├── lib/features/          # auth, discover, chefs, my_recipes, recipe_detail,
 │   │                          # recipe_editor, profile, legal (35a: three documents as Dart
@@ -145,13 +147,16 @@ secret-sauce/
 │   │                          #  dead screen file was deleted by OPT-A2)
 │   ├── lib/routing/           # app_router.dart (routes + redirect), app_shell.dart (picks the
 │   │                          #   chrome), top_nav_bar.dart (web), nav_destinations.dart (lists),
-│   │                          #   pop_or_go.dart (leave a pushed screen: pop, else go — 32c5)
+│   │                          #   pop_or_go.dart (leave a pushed screen: pop, else go — 32c5),
+│   │                          #   auth_return.dart (goToSignIn / safeReturnPath / currentLocation:
+│   │                          #   `?from=` without an open redirect — Phase 37)
 │   ├── lib/widgets/           # app-level shared widgets — anything two features both reach:
 │   │                          #   legal_footer.dart (the Privacy/Terms/Rights links, reached by
 │   │                          #   the shell, profile, auth and the legal pages themselves),
 │   │                          #   recipe_grid.dart, recipe_async_grid.dart (the paged list every
 │   │                          #   browsing surface renders through — each exports a Sliver* twin
-│   │                          #   for pages that own their scroll), share_dialog.dart
+│   │                          #   for pages that own their scroll), share_dialog.dart,
+│   │                          #   route_title.dart (RouteTitle: the browser tab names the page)
 │   │                          #   (not_yet_tooltip.dart moved to design_system — 32d6)
 │   ├── lib/main.dart · test/{widget_test,chefs_screen_test,chefs_routing_test,
 │   │                          chef_page_test,top_nav_bar_test,recipe_editor_test,
@@ -159,7 +164,11 @@ secret-sauce/
 │   │                          recipe_detail_v2_test,cook_mode_test,my_recipes_header_test,
 │   │                          recipe_grid_test,discover_screen_test,discover_search_test,
 │   │                          paging_test,share_dialog_test,auth_screen_test,
-│   │                          profile_screen_test,theme_fonts_test}.dart
+│   │                          profile_screen_test,theme_fonts_test,
+│   │                          auth_return_test,chrome_a11y_test,reading_a11y_test,
+│   │                          step_photo_test,recipe_delete_test,my_recipes_saved_test,
+│   │                          discover_category_test,explore_screen_test,entity_page_test,
+│   │                          legal_screen_test,recipe_detail_attribution_test}.dart
 │   │                          # the two detail suites split by window: recipe_detail_test covers
 │   │                          # the COMPACT layout (engagement at the default 800x600, plus its
 │   │                          # own 390/600/800 x {1.0,2.0} envelope), recipe_detail_v2_test the
@@ -837,9 +846,9 @@ All nine Postgres enums are mirrored in
 | `/chefs`                          | `features/chefs`         | Web: `chefs_hero.dart` + a 404px leaderboard panel + rails of `ChefSpotlightCard` (`chefs_rails.dart`: Popular, Trending 7d, Best of the month). Compact: the plain board with its own Month/Week pill under Momentum. Score / Momentum / New tabs and All time / Month / Week are **one coupled state** (`BoardView`); the board pages 25 at a time behind `Load more` (`ChefBoardNotifier`). `/chef/:id` adds a 30-day momentum line (`chef_momentum_line.dart`). A row or card **navigates to `/chef/:id`** (Phase 30 retired the dialog — `chef_detail_sheet.dart` is deleted); signed-out safe |
 | `/chef/:id`                       | `features/chefs`         | **One chef's public page** (Phase 30). `chef_identity_header.dart` (profile + *optional* `ChefStanding`) → `ChefScorePanel` → **All / Popular / Trending** pill (`ChefPillTabs`, Phase 31) → paged `RecipeAsyncSliverGrid`. The tabs are a **sort, not a filter** — same set, three orders; `all` is a plain `listByChef` table read, the other two are RPCs. Root navigator, signed-out safe, **no nav destination** (Gotcha 18). Needs `chef_standing(p_chef)` because a URL carries only a uuid and `chef_rank` is a `dense_rank()` over the whole population |
 | `/my`                             | `features/my_recipes`    | My / Shared-with-me / **Saved** tabs, all paged (Saved = `listSaved` over `recipe_saves`, `recipes!inner` embed; the detail page's save toggle invalidates it, Phase 37). Compact titles the page with an `AppBar`; web has **no** `AppBar` (the top bar is the chrome) and an in-page header aligned to the grid's first card. Sharing is `widgets/share_dialog.dart` (opened from recipe detail; it writes `recipe_shares`) |
-| `/recipe/:id`                     | `features/recipe_detail` | **Two v2 layouts, one `context.isExpanded` branch (Phase 27).** ≥1000: `recipe_detail_expanded.dart` — measured 1140px page, header band, facts strip. <1000 (compact **and** medium): `recipe_detail_compact.dart` — cover-first, facts quad, pinned jump bar, `Ready to cook?` bar. Since 36c compact is a cover + a sheet with 28px top corners over it (a colour-block `CategoryCover` when there is no photo), both carry the `RECIPE` kicker, `TagPill`s, label-over-value facts and `NutritionSummary`, and both place `rail_panel.dart` and `method_column.dart` as open tonal panels (`bordered: true` on both layouts now). The v1 hero and `recipe_content_views.dart` are **deleted** — don't reintroduce a third layout for the 600–1000 band. `RailPanel` is the tab host (Phase 28): `servings_row.dart` on top, then `Ingredients` / `Nutrition` chips, then `ingredient_rail.dart` or `nutrition_tab.dart`. Rating, like/save, fork, version history; signed-out safe |
+| `/recipe/:id`                     | `features/recipe_detail` | **Two v2 layouts, one `context.isExpanded` branch (Phase 27).** ≥1000: `recipe_detail_expanded.dart` — measured 1140px page, header band, facts strip. <1000 (compact **and** medium): `recipe_detail_compact.dart` — cover-first, facts quad, pinned jump bar, `Ready to cook?` bar. Since 36c compact is a cover + a sheet with 28px top corners over it (a colour-block `CategoryCover` when there is no photo), both carry the `RECIPE` kicker, `TagPill`s, label-over-value facts and `NutritionSummary`, and both place `rail_panel.dart` and `method_column.dart` as open tonal panels (`bordered: true` on both layouts now). The v1 hero and `recipe_content_views.dart` are **deleted** — don't reintroduce a third layout for the 600–1000 band. `RailPanel` is the tab host (Phase 28): `servings_row.dart` on top, then an `Ingredients` / `Nutrition` `SegmentedTabs` (chips until Phase 37), then `ingredient_rail.dart` or `nutrition_tab.dart`. Rating, like/save, fork, version history; signed-out safe. Owners get a **More** overflow with Delete, and ownership compares the **profile** id (`ownershipIdProvider`, falling back to the auth uid only if that lookup failed — B128, Phase 37) |
 | `/recipe/:id/cook`                | `features/recipe_detail` | **Cook mode** — full-screen, one step at a time, **always dark** (`AppTheme.dark()`, the only screen that overrides the theme; the phone is propped under kitchen lights). `cook_mode_screen.dart` (route + shortcuts) → `cook_step_view.dart` (compact frames C/D, web frame H) → `cook_finish_view.dart` (frame E). Pure derivations in `cook_mode_model.dart`, session + timers in `cook_mode_providers.dart`. Signed-out safe; **not** in `needsAuth`. See "Cook mode" below |
-| `/recipe/new`, `/recipe/:id/edit` | `features/recipe_editor` | `edit_models.dart` holds mutable draft types; save appends a version. Images — the cover and each step's photo (Phase 33) — go through the one `imagePickerProvider` pick and its 5 MB guard, are held as **bytes on the draft**, and are uploaded inside `_save`: an abandoned edit leaves no orphan object in the bucket An existing recipe's AppBar overflow deletes it (`recipe_detail/delete_action.dart`, shared with the detail pages' owner overflow; Phase 37) |
+| `/recipe/new`, `/recipe/:id/edit` | `features/recipe_editor` | `edit_models.dart` holds mutable draft types; save appends a version. Images — the cover and each step's photo (Phase 33) — go through the one `imagePickerProvider` pick and its 5 MB guard, are held as **bytes on the draft**, and are uploaded inside `_save`: an abandoned edit leaves no orphan object in the bucket. An existing recipe's AppBar overflow deletes it (`recipe_detail/delete_action.dart`, shared with the detail pages' owner overflow; Phase 37) |
 | `/profile`                        | `features/profile`       | Current user; reached from the bottom bar on mobile and the avatar menu on web (`myProfileProvider`). `ChefAvatar`, Edit profile (`edit_profile_dialog.dart`: name / bio / avatar, the three granted columns; avatar uploaded on Save only), View my chef page; 560px measure; `LegalFooter` on compact only (Phase 37) |
 | `/explore`                        | `features/explore`       | **The corpus** (Phase 35c) — recipes captured from the public web, paged over `recipes_corpus` and ordered by `quality_score` because they carry no engagement. A preamble states what the collection is *above the first card* and links to the Rights page; that introduction is the point of the separate page, not decoration. Reached from a link **below** Discover's browse grid — Discover is the front door to Secret-Sauce, not to the web. Root navigator, signed-out safe, no nav destination |
 | `/entity/:id`                     | `features/entities`      | **One publisher's page** (Phase 35b) — a brand, restaurant, magazine or community site. Header (name, kind, country, homepage, description) → roster of member chefs, each row linking to `/chef/:id` → signature dishes as a `SliverRecipeGrid`. An entity is **not a principal**: no score, no tier, no engagement of its own. Root navigator, signed-out safe, **no nav destination** (Gotcha 18). An empty roster or signature list is a state; only a missing entity is a 404 |

@@ -122,3 +122,20 @@ final checkedIngredientsProvider = StateProvider.family<Set<String>, String>(
 final doneStepsProvider = StateProvider.family<Set<String>, String>(
   (ref, recipeId) => const {},
 );
+
+/// The id to compare with `recipe.ownerId` when deciding "is this mine?"
+/// (B128): the signed-in account's **profile** id, which differs from the auth
+/// uid only for a member who has claimed an imported chef page.
+///
+/// Null while it resolves (reads as "not the owner" for a frame). If the
+/// lookup **fails** it falls back to the auth uid rather than staying null:
+/// `currentProfileIdProvider` is not `autoDispose` and re-runs only on an auth
+/// event, so one failed RPC would otherwise hide Edit, Share and Delete on
+/// every recipe the owner opens until they sign out (Phase 37 review). The two
+/// ids agree for every member who has not claimed a page, so the fallback is
+/// right for all but that one case — which RLS still guards either way.
+final ownershipIdProvider = Provider<String?>((ref) {
+  final profileId = ref.watch(currentProfileIdProvider);
+  if (profileId.hasError) return ref.watch(currentUserIdProvider);
+  return profileId.valueOrNull;
+});

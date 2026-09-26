@@ -207,6 +207,10 @@ void main() {
 
       await perform(tester, SemanticsAction.increase);
       expect(changed, [5.0]);
+      // Reported at once, persisted only once the steps pause (Phase 37
+      // review: per-step saves raced).
+      expect(settled, isEmpty);
+      await tester.pump(StarRatingInput.settleDelay);
       expect(settled, [5.0]);
       expect(find.byIcon(Icons.star_rounded), findsNWidgets(5));
 
@@ -217,6 +221,7 @@ void main() {
 
       await perform(tester, SemanticsAction.decrease);
       expect(changed, [5.0, 4.5]);
+      await tester.pump(StarRatingInput.settleDelay);
       expect(settled, [5.0, 4.5]);
       handle.dispose();
     });
@@ -252,38 +257,42 @@ void main() {
       await tester.sendKeyEvent(LogicalKeyboardKey.tab);
       await tester.pump();
 
+      Future<void> settle() => tester.pump(StarRatingInput.settleDelay);
+
+      // A run of presses previews every step and persists only where it
+      // stopped: one save, not a race of them (Phase 37 review).
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
       await tester.pump();
-      expect(settled, [0.5, 1.0]);
+      expect(changed, [0.5, 1.0]);
+      expect(settled, isEmpty);
+      await settle();
+      expect(settled, [1.0]);
 
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
-      await tester.pump();
-      expect(settled, [0.5, 1.0, 0.5]);
+      await settle();
+      expect(settled, [1.0, 0.5]);
 
       // Already at the minimum: nothing to report.
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
-      await tester.pump();
-      expect(settled, [0.5, 1.0, 0.5]);
+      await settle();
+      expect(settled, [1.0, 0.5]);
 
       await tester.sendKeyEvent(LogicalKeyboardKey.end);
-      await tester.pump();
+      await settle();
       expect(settled.last, 5.0);
       expect(find.byIcon(Icons.star_rounded), findsNWidgets(5));
 
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
-      await tester.pump();
-      expect(settled.last, 5.0, reason: 'already at the maximum');
-      expect(settled, hasLength(4));
+      await settle();
+      expect(settled, hasLength(3), reason: 'already at the maximum');
 
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
       await tester.sendKeyEvent(LogicalKeyboardKey.home);
-      await tester.pump();
-      expect(settled.sublist(4), [4.5, 0.5]);
-
-      // A key press is a settled gesture: every change was also an end.
-      expect(changed, settled);
+      await settle();
+      expect(settled.sublist(3), [0.5]);
+      expect(changed.sublist(changed.length - 2), [4.5, 0.5]);
     });
 
     testWidgets('keyboard focus draws a ring without changing the size', (

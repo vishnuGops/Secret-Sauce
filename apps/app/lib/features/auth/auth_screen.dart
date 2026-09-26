@@ -153,7 +153,14 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
         leading: IconButton(
           tooltip: 'Back',
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => popOrGo(context, Routes.discover),
+          // Back to the page that sent them (UX-017's `returnTo`) — unless
+          // that page is itself guarded, which would bounce straight back
+          // here (Phase 37 review).
+          onPressed:
+              () => popOrGo(context, switch (widget.returnTo) {
+                final to? when !Routes.needsAuth(Uri.parse(to).path) => to,
+                _ => Routes.discover,
+              }),
         ),
         title: const Text('Secret Sauce'),
       ),

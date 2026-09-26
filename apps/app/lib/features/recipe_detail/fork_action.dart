@@ -44,11 +44,12 @@ Future<void> forkRecipe(
   }
   final inFlight = ref.read(forkInFlightProvider(recipeId).notifier);
   if (inFlight.state) return;
-  inFlight.state = true;
   // Captured before the await: `context.go` below unmounts this subtree, and
   // `ScaffoldMessenger.of` on a dead context is the failure this pattern exists
-  // to avoid (the `recipe_async_grid.dart` shape).
+  // to avoid (the `recipe_async_grid.dart` shape). Before the flag, too: a
+  // lookup that throws must not leave the flag set for the session.
   final messenger = ScaffoldMessenger.of(context);
+  inFlight.state = true;
   try {
     final newId = await ref.read(recipeRepositoryProvider).fork(recipeId);
     if (!context.mounted) return;

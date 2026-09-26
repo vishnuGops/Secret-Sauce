@@ -130,7 +130,10 @@ final _labelledRecipe = _fullRecipe.copyWith(
 const _phone = Size(390, 1200);
 
 class _FakeAuth implements AuthRepository {
-  _FakeAuth(this.uid, {this.profileId});
+  _FakeAuth(this.uid, {this.profileId, this.profileFails = false});
+
+  /// The `current_profile_id` RPC fails (a network blip on its first call).
+  final bool profileFails;
 
   final String? uid;
 
@@ -144,7 +147,10 @@ class _FakeAuth implements AuthRepository {
   // Phase 35b: `profiles.id` and the auth uid are the same value for a member,
   // which every fixture in this file is.
   @override
-  Future<String?> currentProfileId() async => profileId ?? uid;
+  Future<String?> currentProfileId() async {
+    if (profileFails) throw Exception('network');
+    return profileId ?? uid;
+  }
 
   @override
   Stream<AuthState> authStateChanges() => const Stream.empty();
@@ -191,6 +197,9 @@ class _FakeRecipeRepository implements RecipeRepository {
   /// Make the next fork fail, to drive the snackbar path.
   bool forkFails = false;
 
+  /// When set, `setSaved()` waits on it — the reader can leave mid-write.
+  Completer<void>? saveGate;
+
   /// When set, `fork()` waits on it — holds the RPC in flight so a second tap
   /// lands while the first is outstanding (B129).
   Completer<String>? forkGate;
@@ -224,6 +233,7 @@ class _FakeRecipeRepository implements RecipeRepository {
 
   @override
   Future<void> setSaved(String recipeId, {required bool saved}) async {
+    if (saveGate != null) await saveGate!.future;
     saveWrites.add(saved);
     this.saved = saved;
   }
@@ -320,6 +330,7 @@ Future<GoRouter> _pump(
   required _FakeRecipeRepository repo,
   required String? uid,
   String? profileId,
+  bool profileFails = false,
   Size? size,
   double textScale = 1,
   RailTab? railTab,
@@ -368,7 +379,7 @@ Future<GoRouter> _pump(
       overrides: [
         recipeRepositoryProvider.overrideWithValue(repo),
         authRepositoryProvider.overrideWithValue(
-          _FakeAuth(uid, profileId: profileId),
+          _FakeAuth(uid, profileId: profileId, profileFails: profileFails),
         ),
         // Lets the envelope matrix run per TAB without depending on the chip
         // being scrolled into view first — at 2.0× on a 390px page it is not.
@@ -475,6 +486,31 @@ void main() {
     expect(repo.savedReads, 1);
 
     await tester.tap(find.byIcon(Icons.bookmark));
+    await tester.pumpAndSettle();
+
+    expect(repo.savedReads, 2);
+  });
+
+  // Phase 37 review: the refresh ran through the button's `ref`, which throws
+  // once the reader has left — silently, inside the catch.
+  testWidgets('the Saved tab refreshes even if the reader leaves mid-write', (
+    tester,
+  ) async {
+    final repo = _FakeRecipeRepository(saved: true)..saveGate = Completer();
+    final router = await _pump(tester, repo: repo, uid: 'me');
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(RecipeDetailScreen)),
+    );
+    final keepAlive = container.listen(savedRecipesProvider, (_, __) {});
+    addTearDown(keepAlive.close);
+    await tester.pumpAndSettle();
+    expect(repo.savedReads, 1);
+
+    await tester.tap(find.byIcon(Icons.bookmark));
+    await tester.pump();
+    router.go(Routes.auth);
+    await tester.pumpAndSettle();
+    repo.saveGate!.complete();
     await tester.pumpAndSettle();
 
     expect(repo.savedReads, 2);
@@ -779,6 +815,23 @@ void main() {
 
       expect(find.byTooltip('Edit'), findsOneWidget);
       expect(find.widgetWithText(ActionChip, 'Fork'), findsNothing);
+    });
+
+    // Phase 37 review: one failed lookup used to hide the owner's controls on
+    // every recipe until the next auth event.
+    testWidgets('a failed profile lookup falls back to the auth uid', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(
+        tester,
+        repo: repo,
+        uid: 'someone-else',
+        profileFails: true,
+        size: _phone,
+      );
+
+      expect(find.byTooltip('Edit'), findsOneWidget);
     });
 
     testWidgets('an auth uid equal to ownerId is not ownership', (

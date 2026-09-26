@@ -10,6 +10,7 @@ import 'package:app/features/chefs/chefs_providers.dart';
 import 'package:app/features/discover/discover_providers.dart';
 import 'package:app/features/my_recipes/my_recipes_providers.dart';
 import 'package:app/routing/app_router.dart';
+import 'package:app/routing/auth_return.dart';
 
 /// True while a delete of this recipe is in flight (UX-037).
 ///
@@ -72,14 +73,16 @@ Future<bool> confirmAndDeleteRecipeById(
   // Re-checked after the dialog: two confirm dialogs opened before either was
   // answered would otherwise both get this far.
   if (inFlight.state) return false;
-  inFlight.state = true;
 
-  // Captured before the await. The container rather than `ref`: `router.go`
-  // below disposes the page that owns `ref`, and if the owner leaves while the
-  // request is out, a `ref.invalidate` on the dead element throws.
+  // Captured before the await — and before the flag is set, so a lookup that
+  // throws cannot leave a non-autoDispose flag stuck on for the session. The
+  // container rather than `ref`: `router.go` below disposes the page that
+  // owns `ref`, and if the owner leaves while the request is out, a
+  // `ref.invalidate` on the dead element throws.
   final messenger = ScaffoldMessenger.of(context);
   final router = GoRouter.of(context);
   final container = ProviderScope.containerOf(context, listen: false);
+  inFlight.state = true;
   try {
     await container.read(recipeRepositoryProvider).delete(recipeId);
     // Every list that could still be holding the row. Most of these are
@@ -110,9 +113,15 @@ Future<bool> confirmAndDeleteRecipeById(
       container.invalidate(provider);
     }
     messenger.showSnackBar(const SnackBar(content: Text('Recipe deleted')));
-    // Only if the caller is still on screen: an owner who walked away while
-    // the request was out is not dragged back to My Recipes.
-    if (context.mounted) router.go(Routes.myRecipes);
+    // Leave only if the reader is still somewhere on this recipe — the page,
+    // its editor or cook mode. Asked of the **router**, not of `context`: the
+    // caller unmounts for reasons that do not mean "walked away" (Edit tapped
+    // mid-request, a web window resized across the 1000px layout switch), and
+    // `context.mounted` then left the reader on a recipe that no longer
+    // exists (Phase 37 review). Someone who really did go elsewhere stays put.
+    final here = currentLocation(router).path;
+    final page = Routes.recipe(recipeId);
+    if (here == page || here.startsWith('$page/')) router.go(Routes.myRecipes);
     return true;
   } catch (e) {
     messenger.showSnackBar(

@@ -7,11 +7,14 @@
 // anyone. These tests drive the provider directly through a ProviderContainer —
 // no widget needed, and `async` timers advance under `fakeAsync` via
 // `FakeAsync`-backed `pump`-less control.
+import 'dart:async';
+
 import 'package:app/features/discover/discover_masthead.dart';
 import 'package:app/features/discover/discover_providers.dart';
 import 'package:app/features/discover/discover_screen.dart';
 import 'package:app/features/explore/explore_screen.dart';
 import 'package:app/routing/app_router.dart';
+import 'package:app/routing/auth_return.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
@@ -143,6 +146,28 @@ void main() {
       expect(_uri(router).queryParameters['q'], 'soup');
       expect(repo.searches, ['soup']);
       expect(find.text('Soup hit'), findsOneWidget);
+    });
+
+    // Phase 37 review: the debounced `go` fired after the reader had opened
+    // something on the root navigator, and replaced it with Discover.
+    testWidgets('a page opened mid-debounce survives; the URL catches up', (
+      tester,
+    ) async {
+      final repo = _RoutedDiscover();
+      final router = await _pumpAt(tester, Routes.discover, repo);
+
+      await tester.enterText(find.byType(SearchBar), 'soup');
+      await tester.pump(const Duration(milliseconds: 50));
+      unawaited(router.push(Routes.legal('terms')));
+      await tester.pump(kSearchDebounce * 2);
+      await tester.pumpAndSettle();
+
+      expect(currentLocation(router).path, Routes.legal('terms'));
+
+      router.pop();
+      await tester.pumpAndSettle();
+      expect(_uri(router).path, Routes.discover);
+      expect(_uri(router).queryParameters['q'], 'soup');
     });
 
     testWidgets('the URL echo never rewrites what the reader typed', (

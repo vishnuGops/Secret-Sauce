@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -163,6 +165,14 @@ class StarRatingInput extends StatefulWidget {
   /// the stars' own box, so showing it never changes the widget's size.
   static const double focusRingWidth = 2;
 
+  /// How long keyboard / assistive-technology steps must pause before they
+  /// settle. Each step previews and reports [onChanged] at once, but
+  /// [onChangeEnd] — where callers persist — waits for the reader to stop:
+  /// four arrow presses from 3.0 are one save of 5.0, not four racing upserts
+  /// that may land in any order (Phase 37 review). Behaviour, not motion, so
+  /// it is not an `AppMotion` duration.
+  static const Duration settleDelay = Duration(milliseconds: 400);
+
   /// Current rating, or null when the user has not rated yet.
   final double? value;
   final ValueChanged<double> onChanged;
@@ -230,12 +240,26 @@ class _StarRatingInputState extends State<StarRatingInput> {
     return next == current ? null : next;
   }
 
-  /// A keyboard or assistive-technology step is a whole gesture: preview it,
-  /// report it, and settle it in one go.
+  /// Pending settle for a run of keyboard / semantics steps.
+  Timer? _keySettle;
+
+  /// A keyboard or assistive-technology step: preview and report it now, and
+  /// settle the run once the steps pause ([StarRatingInput.settleDelay]).
   void _commit(double value) {
     setState(() => _preview = value);
     widget.onChanged(value);
-    widget.onChangeEnd?.call(value);
+    _keySettle?.cancel();
+    _keySettle = Timer(StarRatingInput.settleDelay, () {
+      if (mounted) widget.onChangeEnd?.call(value);
+    });
+  }
+
+  @override
+  void dispose() {
+    // A run abandoned by leaving the page is dropped rather than saved from a
+    // dead widget — the same as a drag the scroll view took over (B017).
+    _keySettle?.cancel();
+    super.dispose();
   }
 
   static String _describe(double value) =>
@@ -274,8 +298,11 @@ class _StarRatingInputState extends State<StarRatingInput> {
   void didUpdateWidget(StarRatingInput oldWidget) {
     super.didUpdateWidget(oldWidget);
     // The owner confirmed (or cleared) the rating — drop the local preview so
-    // the widget follows [value] again.
-    if (oldWidget.value != widget.value) _preview = null;
+    // the widget follows [value] again. Not while a keyboard run is still
+    // settling: the stars would jump back under the reader's arrow keys.
+    if (oldWidget.value != widget.value && !(_keySettle?.isActive ?? false)) {
+      _preview = null;
+    }
   }
 
   @override

@@ -610,6 +610,11 @@ void main() {
       // on, so a swallowed failure would render a chef with no rank and no
       // score as though that were the truth.
       expect(find.byType(ErrorView), findsOneWidget);
+      // Phase 37 review: the tab still names the page, not the one under it.
+      expect(
+        tester.widgetList<Title>(find.byType(Title)).map((t) => t.title),
+        contains('Chef · Secret Sauce'),
+      );
     });
   });
 

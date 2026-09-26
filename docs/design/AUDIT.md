@@ -305,3 +305,52 @@ re-graded; the fidelity scores are in [REBUILD-LOG.md](REBUILD-LOG.md).
 | Semantics( | 3 | 6 |
 | Button themes in ThemeData | 6 | 6 |
 | Component themes in ThemeData | 15 | 16 |
+
+## Findings closed — 2026-09-26 (Phase 37, UX remediation)
+
+Branch `feat/phase-37-ux-remediation`, four commits (waves A–D). Every fix carries a regression test
+checked by reverting it. Evidence is the named test plus a live pass on a release web build against
+the local stack (`127.0.0.1:54621`, 1000 / 1040 / 1440 / 390 px, signed out and as the test account).
+Scores are not re-graded here; a Phase 1 re-audit would. Static sweep, same script as above:
+
+| Signal | After 36c | After 37 |
+| --- | --- | --- |
+| Colors.* (outside theme; `transparent` included) | 4 | 7 (all `transparent`, commented) |
+| Color(0x… / raw insets / raw SizedBox / raw radii (outside theme) | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 |
+| FontWeight.* (outside theme) | 7 | 7 |
+| Tabular-figure sites | 67 | 68 |
+| AppSpacing uses | 579 | 598 |
+| AppMotion uses / reduced-motion reads | 8 / 4 | 11 / 6 |
+| Semantics( | 6 | 34 |
+| IconButton( (outside theme) | 27 | 30 (every one with a tooltip) |
+
+| ID | Status | Evidence |
+| --- | --- | --- |
+| UX-001 (B125) | fixed | `StepPhoto` in the method panel and cook mode; `step_photo_test`, `cook_mode_test` (fixture URL — no seeded step photo) |
+| UX-002 (B131), UX-005 (B132) | fixed | `popOrGo` Back on `/auth` and the deep-linked expanded page; live capture `recipe-1440` |
+| UX-003 (B126) | fixed | `star_rating_test` keyboard + semantics group |
+| UX-013 | fixed | `InteractiveTile`; `recipe_card_test`, `chef_spotlight_card_test` |
+| UX-014 | fixed | headings (kickers, rail titles, legal, entity, chef), `checked` check-offs, `selected` sort / pills / nav; `reading_a11y_test`, `chrome_a11y_test`, `card_rail_test` |
+| UX-015 | fixed | `AutofillGroup`, hints, input actions, Enter submits; `auth_screen_test` |
+| UX-016 (B130) | fixed | Space only on the page's own focus; `cook_mode_test` |
+| UX-017, UX-018 | fixed | `goToSignIn` + `safeReturnPath` (no open redirect); `SignUpOutcome`; `auth_return_test`, `auth_screen_test` |
+| UX-019 (B128) | fixed | profile-id ownership; claimed-member fixtures in `recipe_detail_test`, `cook_mode_test` |
+| UX-020 | fixed | Saved tab over `listSaved` (`recipes!inner`); live stack returned a saved recipe |
+| UX-021, UX-022 | fixed | `/discover?q=`, miss state with Clear + Explore, masthead link; live: typing replaces the history entry |
+| UX-023 | fixed | fractions in the one chain (`formatQuantity`); thirds/eighths print flat — Manrope has no stacked glyphs for them |
+| UX-024 | fixed | `MetaChip(large:)` in cook mode, ≥ 16px asserted |
+| UX-026 (B129) | fixed | `forkInFlightProvider`; two tests (disabled chip; direct double call) |
+| UX-027 | fixed | retry on every `RecipeAsyncSliverGrid` error; `paging_test`, `explore_screen_test` |
+| UX-032 | fixed | `SegmentedTabs`, `RankBadge`, `LoadMoreButton`, `ChefAvatar` on profile |
+| UX-037 | fixed | owner overflow + editor delete; `recipe_delete_test` |
+| UX-038, UX-053 | fixed | edit profile, View my chef page, 560px measure, compact-only legal links; `profile_screen_test` |
+| UX-041 | fixed | "Secret Sauce" in UI copy (the legal documents and the footer copyright keep the entity name) |
+| UX-043, UX-044, UX-046 | fixed | one duration format (the card keeps `1h 10m` by width — the long form clipped at 288 × 1.0); step count once; deduped "you'll need"; `1 rating`; honest nutrition and Explore copy |
+| UX-047 (partial), UX-048 (chef pill), UX-051 | fixed | tooltips + live ringing banner; 48px segments; `RouteTitle` on every page |
+| UX-055 (partial) | fixed on web | one New recipe on web's empty My Recipes; compact still shows the AppBar icon, the empty state and the FAB |
+| Chefs hero `MASTER CHEF` near 96px | no defect | captured at 1000 / 1040 px: sets whole |
+
+Still open from this audit: UX-004 / UX-028 (B127, B134 — import-time data), UX-025, UX-029 (owner),
+UX-030, UX-034 (owner content), UX-035, UX-036, UX-039, UX-040, UX-042, UX-045, UX-047's image
+labels and `LoadingView`, UX-049's remaining sites, UX-050's cook-step transitions, UX-052, UX-054's
+dark hero edge, and UX-055's compact duplicates.

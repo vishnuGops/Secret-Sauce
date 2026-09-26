@@ -74,15 +74,19 @@ String isoDate(DateTime date) =>
 /// timer is the one exception — `formatClock` in cook mode is a countdown, not
 /// a duration label.
 ///
-/// There is no narrow variant any more. `RecipeCard` used a spaceless `1h 10m`
-/// to save two characters; Phase 37 retired it for the one format, because the
-/// card's metadata row already degrades time first (B080) — a long label
-/// ellipsizes before the rating beside it gives anything up.
-String formatMinutes(int minutes) {
+/// [compact] — `1h 10m` — is the one exception, and it has exactly one caller,
+/// `RecipeCard`'s time label. It is a **width** decision: the card is a fixed
+/// tile whose metadata row caps the time label at its flex share, and at the
+/// 288px floor that share is ~57px — `2 h 20 min` measures 57.1 and clips at
+/// 1.0× text scale, `12 h 45 min` 62.1 (Manrope, measured in the Phase 37
+/// review). Phase 37 tried the long form on the card and put this back.
+/// Nothing else should pass it.
+String formatMinutes(int minutes, {bool compact = false}) {
   if (minutes <= 0) return '—';
   final hours = minutes ~/ 60;
   final rest = minutes % 60;
   if (hours == 0) return '$rest min';
+  if (compact) return rest == 0 ? '${hours}h' : '${hours}h ${rest}m';
   if (rest == 0) return '$hours h';
   return '$hours h $rest min';
 }
@@ -135,16 +139,17 @@ const _kDecimalUnits = <String>{
 const _kFractionSnap = 0.02;
 
 /// The three fractions Manrope draws as one glyph. Thirds and eighths have no
-/// precomposed glyph in the bundled face, so they are set as digits around
-/// U+2044 FRACTION SLASH, which the font's `frac` feature stacks.
+/// precomposed glyph in the bundled face, so they are set **flat** as digits
+/// around U+2044 FRACTION SLASH (`1 1⁄3`). Manrope's `frac` feature does not
+/// help: its GSUB ligates only ASCII `1/2`, `1/4` and `3/4` (measured, Phase
+/// 37). A display face with a fuller `frac` would stack them.
 const _kPrecomposedFractions = <String, String>{
   '1/2': '½',
   '1/4': '¼',
   '3/4': '¾',
 };
 
-/// U+2044 FRACTION SLASH — not `/`, which reads as a date or a ratio and which
-/// no font's `frac` feature stacks.
+/// U+2044 FRACTION SLASH — not `/`, which reads as a date or a ratio.
 const _kFractionSlash = '⁄';
 
 /// A quantity as a cook reads it in [unit]: `½ cup`, `1¼ tsp`, `1 1⁄3 cups`,
@@ -162,7 +167,7 @@ const _kFractionSlash = '⁄';
 /// `11⁄3`.
 String formatQuantity(double v, String? unit) {
   final u = (unit ?? '').trim().toLowerCase();
-  if (v <= 0 || _kDecimalUnits.contains(u)) return trimDecimal(v);
+  if (v <= 0 || _kDecimalUnits.contains(u)) return _decimalQuantity(v);
 
   final whole = v.floor();
   final rest = v - whole;
@@ -179,9 +184,9 @@ String formatQuantity(double v, String? unit) {
       }
     }
   }
-  if (best > _kFractionSnap) return trimDecimal(v);
+  if (best > _kFractionSnap) return _decimalQuantity(v);
   if (numerator == den) return '${whole + 1}';
-  if (numerator == 0) return whole == 0 ? trimDecimal(v) : '$whole';
+  if (numerator == 0) return whole == 0 ? _decimalQuantity(v) : '$whole';
 
   final g = numerator.gcd(den);
   final key = '${numerator ~/ g}/${den ~/ g}';
@@ -189,6 +194,15 @@ String formatQuantity(double v, String? unit) {
   if (glyph != null) return whole == 0 ? glyph : '$whole$glyph';
   final slashed = '${numerator ~/ g}$_kFractionSlash${den ~/ g}';
   return whole == 0 ? slashed : '$whole $slashed';
+}
+
+/// [trimDecimal], except that a positive amount never prints as `0`: two
+/// decimal places round a heavily scaled pinch (⅛ tsp in a 32-serving recipe
+/// scaled to 1 is 0.004) to nothing, and "0 tsp" tells the cook to leave it
+/// out. One significant figure keeps it visible.
+String _decimalQuantity(double v) {
+  final t = trimDecimal(v);
+  return v > 0 && t == '0' ? v.toStringAsPrecision(1) : t;
 }
 
 /// True when [ingredient] has nothing but its note to put in a quantity column,

@@ -77,7 +77,7 @@ class CookFinishView extends ConsumerWidget {
     // imported chef page (Phase 35b, B128/UX-019). Still loading counts as not
     // the owner: the rating the owner branch would hide is denied by RLS
     // anyway, and the frame after resolution corrects it.
-    final myProfileId = ref.watch(currentProfileIdProvider).valueOrNull;
+    final myProfileId = ref.watch(ownershipIdProvider);
     final isOwner = myProfileId != null && myProfileId == recipe.ownerId;
 
     return SafeArea(

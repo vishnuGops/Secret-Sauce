@@ -194,14 +194,14 @@ class RecipeCard extends StatelessWidget {
   /// default) on every unranked surface.
   final int? rank;
 
-  /// `45 min`, `1 h 10 min`, `2 h`, `—` — core's formatter in the **one**
-  /// duration format the product prints (UX-043, DESIGN.md §2.1). This card
-  /// used the compact `1h 10m` on the grounds that the label is the first thing
-  /// the metadata row gives up under width pressure (B080); that is still true,
-  /// and it is why a longer label is acceptable here — at 288px × 2.0× it
-  /// ellipsizes before the rating does, which is the degradation order working,
-  /// not a regression. A second spelling of the same duration is.
-  String get _timeLabel => formatMinutes(recipe.totalMinutes);
+  /// `45 min`, `1h 10m`, `2h`, `—` — core's formatter in its **compact** form,
+  /// the one documented exception to the product's single duration format
+  /// (UX-043, DESIGN.md §2.1). Phase 37 tried the long form here: the label is
+  /// capped at its flex share of the metadata row (~57px at the 288px floor),
+  /// and `2 h 20 min` (57.1px) already clipped at 1.0× text scale — at the
+  /// width Gotcha 13 promises fits uncut. The compact form is a width budget,
+  /// not a style.
+  String get _timeLabel => formatMinutes(recipe.totalMinutes, compact: true);
 
   /// Two lines of the description's style at the ambient text scale.
   static double _descriptionHeight(BuildContext context, TextTheme textTheme) {

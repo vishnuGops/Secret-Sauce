@@ -960,8 +960,8 @@ medium**: the canvas draws no medium screen, a single-column cover-first page re
 The two content panels are **one implementation each**, differing only in `bordered`. That is
 deliberate: B066 was two copies of the ingredient list disagreeing across this very branch.
 
-**The rail is a tab host (Phase 28).** `RailPanel` renders, top to bottom: `ServingsRow` → two
-`ChoiceChip`s → the active pane, which is `IngredientRail` or `NutritionTab`. Four parts of that
+**The rail is a tab host (Phase 28).** `RailPanel` renders, top to bottom: `ServingsRow` → a two-segment
+`SegmentedTabs` (Ingredients / Nutrition; `ChoiceChip`s until Phase 37) → the active pane, which is `IngredientRail` or `NutritionTab`. Four parts of that
 shape are load-bearing:
 
 - **The stepper is above the tabs, not inside a pane.** Nutrition depends on the serving count
@@ -971,9 +971,10 @@ shape are load-bearing:
   one `selectedServingsProvider`.
 - **The card border belongs to the host**, which is why `bordered` moved off `IngredientRail`. The
   pane swap then happens inside one frame instead of exchanging two differently-bordered boxes.
-- **The tabs are `ChoiceChip`s in a `Wrap`, not a `SegmentedButton`.** Compact's content box is
-  358px and a segmented control is one intrinsic `Row` with no reflow escape (Gotcha 21) — the
-  same reason the three rows inside the ingredient pane are `Wrap`s.
+- **The tabs are the shared `SegmentedTabs`, not a `SegmentedButton`** (Phase 37, UX-032). Compact's
+  content box is 358px and an M3 segmented control is one intrinsic `Row` with no reflow escape
+  (Gotcha 21); `SegmentedTabs` sizes each segment to its label and scrolls sideways when bounded,
+  so it cannot overflow — the reason the rail used `Wrap`ed chips before it existed.
 - **`railTabProvider` is `autoDispose`**, so every visit opens on Ingredients. Compact's
   `_jumpToIngredients` tear-off also resets it, so the pinned jump chip cannot scroll to a section
   whose list is hidden behind the other tab.
@@ -1297,7 +1298,11 @@ either way, which is what the fixed 65px band (B047) is budgeted against.
 | ----------------- | ------------------------------------------------------------------- |
 | `StarRating`      | Read-only 5-star display with half stars, value, and rating count   |
 | `RatingPill`      | Compact single star + value, for dense surfaces (`RecipeCard`)      |
-| `StarRatingInput` | Interactive half-star input; `onChangeEnd` fires when a gesture ends |
+| `StarRatingInput` | Interactive half-star input; `onChangeEnd` fires when a gesture ends, or when a run of keyboard / screen-reader steps pauses (`settleDelay`, Phase 37) |
+| `SegmentedTabs` (Phase 37) | The one pill segmented control: `surface` / `onHero` tone, content-sized (scrolls when bounded) or `expand`; each segment a ≥ 48 × 48 `Semantics(button, selected)` node over a ~32px painted band; labels `labelLarge.tabular` at one weight |
+| `RankBadge` (Phase 37) | `.pill` (on imagery; ink at light brightness — UX-012), `.disc` (board row), `.podium` (medal for 1–3, else numeral); tabular; one `Rank N` node. Not used for the chefs hero's `N ranked` count, which is not a rank |
+| `LoadMoreButton` (Phase 37) | Outlined (or `dense` text) button with a same-size spinner while loading; owns the `friendlyError` snackbar, messenger captured before the await |
+| `InteractiveTile` (Phase 37) | Tap / focus / semantics via an `InkWell` with its own ink off; hover-press wash and a keyboard-only focus ring painted **over** the child behind `IgnorePointer` — `RecipeCard` and `ChefSpotlightCard`, whose covers are opaque |
 
 ### Nutrition widgets (`design_system`)
 
@@ -1315,10 +1320,10 @@ either way, which is what the fixed 65px band (B047) is budgeted against.
 
 | Widget      | Use                                                                                    |
 | ----------- | -------------------------------------------------------------------------------------- |
-| `TierChip`  | Tier pill (icon + label); `dense` drops the icon. `colorFor(tier, brightness)` is the shared accent, also used by the leaderboard rank medallion |
+| `TierChip`  | Tier pill (icon + label); `dense` drops the icon. `colorFor(tier, brightness)` is the shared accent |
 | `ChefAvatar` | The circle alone: photo when there is one, `initialsFor(name)` when there is not. Optional `ringColor` (a `surfaceColor` gap then a ring) and `tier` (rank dot, bottom-right) — both used by the web top navigation, where the avatar *is* the account control and has to carry rank at 34px. Ring and dot are drawn **outside** the circle, so a ringed avatar is wider than `radius * 2` |
 | `ChefBadge` | `ChefAvatar` + name with the `TierChip` **under** the name; `compact` for dense surfaces, `onSurfaceImage` for the card's cover overlay. `ChefBadge.fromProfile(recipe.owner!)` is the usual call |
-| `ChefStandingCard` | One leaderboard row, in two shapes chosen by `variant`. `podium` (default) is the full-width row: tier spine, medal for ranks 1–3, four labelled stat chips, `34% to Master`. `board` is the dense row for the chefs page's 404px panel: rank pill instead of a medal, no stat chips, a 3px tier progress bar on the bottom edge. One widget, not two, so the two rows cannot drift |
+| `ChefStandingCard` | One leaderboard row, in two shapes chosen by `variant`. `podium` (default) is the full-width row: tier spine, medal for ranks 1–3, four labelled stat chips, `34% to Master`. `board` is the dense row for the chefs page's 404px panel: `RankBadge.disc` instead of the podium's `RankBadge.podium`, no stat chips, a 3px tier progress bar on the bottom edge. One widget, not two, so the two rows cannot drift |
 | `ChefSpotlightCard` | A chef as a collectible card (draft `1e`): tier-gradient foil frame, portrait window with serial and rank, rarity band, a "driver" row naming the input contributing most, the four totals, and the tier-ladder bar. Renders entirely from one `ChefStanding` — **no per-card fetch** |
 | `SpotlightCardPlaceholder` | The same frame and geometry with neutral bands. Holds a shelf whose data does not exist yet, or one still loading |
 | `CardRail` | A titled horizontal shelf of fixed-width cards with prev/next arrows and a `1–3 / 10` position label. Generic over its children (the **caller** sizes its tiles — a horizontal `ListView` gives a child a tight height and an unbounded width); a horizontal `ListView` + `animateTo`, so a trackpad and a drag work as well as the arrows. Two headers, chosen by `variant`: `badged` is the chefs page's icon tile over title/subtitle; `numbered` is Discover's set numeral, spaced-caps title, hairline rule and ranking kicker (§6.0). One widget, because the scroll controller, the pitch arithmetic and the position window are the substance and neither header changes them |
@@ -1330,6 +1335,9 @@ surfaces and vice versa, so `colorFor` resolves against `Theme.of(context).brigh
 
 `StarRatingInput` maps the left half of star _n_ to `n - 0.5` and the right half to `n`, and
 previews during a drag; the caller persists on `onChangeEnd` so a drag writes once, not per frame.
+Keyboard (arrows, Home, End) and screen-reader increase / decrease steps (B126) preview and call
+`onChanged` at once but settle together: `onChangeEnd` fires once the steps pause for
+`settleDelay` (400 ms), so four presses are one save, not four upserts racing in any order.
 If the gesture is **cancelled** — an ancestor scroll view claims it after a press-and-hold — the
 preview is dropped and `onChangeEnd` never fires, so the stars never show an unsaved value (B017).
 

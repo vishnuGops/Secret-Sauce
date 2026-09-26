@@ -28,13 +28,20 @@ Future<void> saveRating(
   double value,
 ) async {
   final messenger = ScaffoldMessenger.of(context);
+  // The container too (Phase 37 review): after a cook taps a star and backs
+  // out, `ref.invalidate` on the dead element threw into the catch below and a
+  // rating that **was** saved reported "Could not save rating".
+  final container = ProviderScope.containerOf(context, listen: false);
   try {
-    await ref.read(recipeRepositoryProvider).setRating(recipeId, value);
-    ref.invalidate(myRatingProvider(recipeId));
-    ref.invalidate(recipeProvider(recipeId));
-    messenger.showSnackBar(
-      SnackBar(content: Text('Rated ${value.toStringAsFixed(1)} stars')),
-    );
+    await container.read(recipeRepositoryProvider).setRating(recipeId, value);
+    container.invalidate(myRatingProvider(recipeId));
+    container.invalidate(recipeProvider(recipeId));
+    messenger
+      // One confirmation on screen, not a queue of them.
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(content: Text('Rated ${value.toStringAsFixed(1)} stars')),
+      );
   } catch (e) {
     messenger.showSnackBar(
       SnackBar(content: Text('Could not save rating — ${friendlyError(e)}')),

@@ -27,7 +27,7 @@ class RecipeDetailScreen extends ConsumerWidget {
     // recipes. Null while it resolves, which reads as "not the owner" for one
     // frame; the reverse (an owner's controls flashing for a reader) would be
     // the worse flicker.
-    final profileId = ref.watch(currentProfileIdProvider).valueOrNull;
+    final profileId = ref.watch(ownershipIdProvider);
     final forking = ref.watch(forkInFlightProvider(recipeId));
 
     // UX-051: the tab names the recipe once it has loaded.

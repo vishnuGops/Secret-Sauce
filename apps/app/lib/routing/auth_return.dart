@@ -51,6 +51,21 @@ String authLocation({String? from, bool signUp = false}) {
   ).toString();
 }
 
+/// Where the reader actually is, including a page opened with `push`.
+///
+/// `routerDelegate.currentConfiguration.uri` is the location of the last `go`
+/// — a recipe pushed from Discover leaves it saying `/discover`. The pushed
+/// page lives in the list as an [ImperativeRouteMatch] carrying its own match
+/// list, so the top one is asked first (Phase 37 review: `?from=` pointed back
+/// at Discover, and a delete could not tell the reader was still on the
+/// recipe).
+Uri currentLocation(GoRouter router) {
+  final config = router.routerDelegate.currentConfiguration;
+  if (config.isEmpty) return config.uri;
+  final top = config.last;
+  return top is ImperativeRouteMatch ? top.matches.uri : config.uri;
+}
+
 /// Send a signed-out visitor to `/auth`, remembering where they were so a
 /// successful sign-in brings them back (UX-017) — to the recipe they tried to
 /// like, fork or rate, not to Discover.
@@ -60,6 +75,6 @@ String authLocation({String? from, bool signUp = false}) {
 /// the web top bar is built by the shell and would throw there.
 void goToSignIn(BuildContext context, {bool signUp = false}) {
   final router = GoRouter.of(context);
-  final here = router.routerDelegate.currentConfiguration.uri.toString();
+  final here = currentLocation(router).toString();
   router.go(authLocation(from: here, signUp: signUp));
 }

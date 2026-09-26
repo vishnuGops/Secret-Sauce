@@ -29,19 +29,26 @@ class EntityPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(entityPageProvider(entityId));
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Publisher'),
-        leading: BackButton(onPressed: () => popOrGo(context, Routes.discover)),
-      ),
-      body: async.when(
-        loading: () => const LoadingView(),
-        error:
-            (e, _) => ErrorView(
-              message: friendlyError(e),
-              onRetry: () => ref.invalidate(entityPageProvider(entityId)),
-            ),
-        data: (data) => _Loaded(data: data),
+    // UX-051 (Phase 37 review): titled while loading or failed too — the
+    // loaded header's own title, nested inside, replaces this one.
+    return RouteTitle(
+      page: 'Publisher',
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Publisher'),
+          leading: BackButton(
+            onPressed: () => popOrGo(context, Routes.discover),
+          ),
+        ),
+        body: async.when(
+          loading: () => const LoadingView(),
+          error:
+              (e, _) => ErrorView(
+                message: friendlyError(e),
+                onRetry: () => ref.invalidate(entityPageProvider(entityId)),
+              ),
+          data: (data) => _Loaded(data: data),
+        ),
       ),
     );
   }

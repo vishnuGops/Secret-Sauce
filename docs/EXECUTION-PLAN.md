@@ -900,6 +900,7 @@ My Recipes are empty for a new account until it saves or writes something — th
 | A — open bugs (B125, B126, B128–B132) | done | 3 subagents + lead; app 534 → 578 tests, design_system 425 → 433 |
 | B — delete, profile editing, `?from=`, sign-up confirm, Saved tab | done | 3 subagents + lead; no SQL (existing RLS/grants cover it; D24 pins saves); live stack confirmed `listSaved`'s `!inner` embed and the profile PATCH; app 578 → 650, core 173 → 175 |
 | C — a11y semantics, search, retry, fractions, copy | done | 4 subagents + lead (`InteractiveTile` and `RouteTitle` moved to their own files; rail headings; brand spelling); core 175 → 181, design_system 433 → 446, app 650 → 737. Seed data covers all of it — the 14 curated recipes carry cup/tsp quantities and multi-group methods |
+| Review — `/code-review` over the branch | done | 3 reviewers; 16 findings, 0 Critical, 1 High (B136, found by two). All fixed with a regression test except B141 (deferred, logged); see ROADMAP |
 | D — component consolidation, doc hygiene | done | 2 subagents + lead: `SegmentedTabs` (labels kept at `labelLarge` — the first cut dropped the sort and rail to 11px), `RankBadge`, `LoadMoreButton`; category-row reveal; the empty `/chefs` board's overflow at 1000px (found by the gate); live pass on a release build — hero tile, search URL replaces history, tab titles, deep-linked Back; design_system 446 → 591, app 737 → 740 |
 
 ## Build, run & release (ops)

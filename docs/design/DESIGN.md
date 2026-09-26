@@ -102,7 +102,8 @@ slot has a designed no-photo state · the Preserve list in AUDIT.md.
   never promise what a plugin we have not added would do.
 - **One brand spelling in UI copy: "Secret Sauce"** (the product name as a reader says it);
   `Secret-Sauce` survives only as the repo name (UX-041 — a behaviour/copy fix, logged here as the rule).
-- **Durations one way:** `1 h 10 min`, `45 min` (UX-043 — the rule; the unification is a copy fix).
+- **Durations one way:** `1 h 10 min`, `45 min` (UX-043, done in Phase 37). One exception, by width:
+  the recipe card's `1h 10m` (see §9 v2.1).
 
 ### 2.2 Imagery
 
@@ -323,9 +324,9 @@ pumps it at (Gotcha 26: a new caller re-opens it).
 | `RouteTitle` (Phase 37) | `apps/app/lib/widgets/route_title.dart` | — | chrome_a11y_test | scheme.primary | UX-051 |
 
 **Duplicates consolidated** (UX-032, done in Phase 37): segmented controls → **`SegmentedTabs`**
-(`ChefPillTabs` is now a thin `expand: true` wrapper over it; `_WindowFilter`, the `_SortLink` row
-and the rail's `ChoiceChip`s are gone; `TabBar` and `SegmentedButton` stay where they are the
-M3-correct control); rank badges → **`RankBadge`** (the chefs hero's `N ranked` tile is a *count*,
+(`ChefPillTabs` and the hero's `_WindowFilter` survive only as thin wrappers that pick `expand` / the
+`onHero` tone; the `_SortLink` row and the rail's `ChoiceChip`s are gone; `TabBar` and
+`SegmentedButton` stay where they are the M3-correct control); rank badges → **`RankBadge`** (the chefs hero's `N ranked` tile is a *count*,
 not a rank, and deliberately stays its own widget — a `Rank N` label there would lie to a screen
 reader); kickers → **`appText.kicker` / `kickerLarge`** (36b); Load more ×2 → **`LoadMoreButton`**;
 avatars → **`ChefAvatar`**.
@@ -425,8 +426,9 @@ food photograph carries the page; when there is none, the page is typeset.
   feature list. Quantities print fractions for non-metric units (`1¼ cup`, `½ tsp`); Manrope has
   precomposed ½ ¼ ¾ only and its `frac` feature ligates ASCII `1/2 1/4 3/4` only, so thirds and
   eighths print flat around U+2044 (`1 1⁄3`) — a display face with fuller `frac` would stack them.
-  One duration format everywhere, the card included (`1 h 10 min`; the spaceless card variant is
-  retired). `MetaChip(large: true)` for cook mode's step facts (UX-024). One brand spelling in UI
+  One duration format everywhere (`1 h 10 min`) **except the recipe card**, which keeps `1h 10m`: its
+  time label is capped at its flex share (~57px at the 288px floor) and the long form clipped at
+  1.0× — tried in Phase 37 and put back after review. A width budget, not a second style. `MetaChip(large: true)` for cook mode's step facts (UX-024). One brand spelling in UI
   copy, "Secret Sauce" (UX-041; the legal documents keep the entity name as an owner fact).
 
 ## 10. Drift against the Claude Design system (`_ds_bundle.css`, read 2026-09-25)

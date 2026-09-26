@@ -33,9 +33,10 @@ void main() {
 
     expect(find.text('Grandma Sauce'), findsOneWidget);
     expect(find.text('Slow-cooked Sunday sauce'), findsOneWidget);
-    // 60 minutes total, in the one duration format (UX-043) — asked of core's
-    // formatter rather than spelled here, so the card cannot drift from it.
-    expect(find.text(formatMinutes(60)), findsOneWidget);
+    // 60 minutes total, in the card's compact form — the one width exception
+    // to UX-043's single format (the long form clipped at 288 × 1.0, Phase 37
+    // review). Asked of core's formatter rather than spelled here.
+    expect(find.text(formatMinutes(60, compact: true)), findsOneWidget);
     expect(find.text('Medium'), findsOneWidget);
     expect(find.byType(RatingPill), findsNothing); // unrated -> no pill
   });
@@ -306,7 +307,7 @@ void main() {
             // "1 h 5 min", 765 -> "12 h 45 min" — longer than the compact form
             // it replaced, which is what makes this implication worth
             // re-running rather than assuming.
-            final timeLabel = formatMinutes(recipe.totalMinutes);
+            final timeLabel = formatMinutes(recipe.totalMinutes, compact: true);
             final timeCut = clipped(tester, find.text(timeLabel));
 
             expect(

@@ -15,6 +15,7 @@ import 'package:app/features/chefs/chefs_providers.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:app/routing/pop_or_go.dart';
 import 'package:app/widgets/recipe_async_grid.dart';
+import 'package:app/widgets/route_title.dart';
 
 /// `/chef/:id` — one chef's public page (Phase 30).
 ///
@@ -65,16 +66,21 @@ class _ChefPageBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(chefPageProvider(chefId));
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Chef'), leading: const _BackButton()),
-      body: async.when(
-        loading: () => const LoadingView(),
-        error:
-            (e, _) => ErrorView(
-              message: friendlyError(e),
-              onRetry: () => ref.invalidate(chefPageProvider(chefId)),
-            ),
-        data: (data) => _Loaded(data: data),
+    // UX-051 (Phase 37 review): titled while loading or failed too — the
+    // loaded header's own title, nested inside, replaces this one.
+    return RouteTitle(
+      page: 'Chef',
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Chef'), leading: const _BackButton()),
+        body: async.when(
+          loading: () => const LoadingView(),
+          error:
+              (e, _) => ErrorView(
+                message: friendlyError(e),
+                onRetry: () => ref.invalidate(chefPageProvider(chefId)),
+              ),
+          data: (data) => _Loaded(data: data),
+        ),
       ),
     );
   }

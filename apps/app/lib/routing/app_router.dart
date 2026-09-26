@@ -125,6 +125,16 @@ class Routes {
   /// collection of other people's work has to introduce itself before its first
   /// card. Reached from Discover; **not** a nav destination (Gotcha 18).
   static const explore = '/explore';
+
+  /// The routes a signed-out visitor is redirected away from — UX only, RLS is
+  /// the real gate. One list, read by the redirect below and by `/auth`'s Back
+  /// (which must not send a visitor back into one: it would bounce straight
+  /// to `/auth` again).
+  static bool needsAuth(String path) =>
+      path == myRecipes ||
+      path == profile ||
+      path == newRecipe ||
+      path.endsWith('/edit');
 }
 
 final _rootKey = GlobalKey<NavigatorState>();
@@ -145,11 +155,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final signedIn = authRepo.currentUserId != null;
       final loc = state.matchedLocation;
-      final needsAuth =
-          loc == Routes.myRecipes ||
-          loc == Routes.profile ||
-          loc == Routes.newRecipe ||
-          loc.endsWith('/edit');
+      final needsAuth = Routes.needsAuth(loc);
       // UX-017: the guarded location rides along as `?from=`, so signing in
       // lands on the editor or My Recipes the visitor asked for, not on
       // Discover. Both ends go through `safeReturnPath` — `from` is whatever a

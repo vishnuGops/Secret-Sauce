@@ -935,7 +935,7 @@ redesigns of Chefs / My Recipes / editor / auth / profile, and every owner decis
 - [x] UX-021 / UX-022 search-miss state + `/discover?q=` (+ an Explore link in the masthead)
 - [x] UX-027 retry on every grid error
 - [x] UX-023 fractions (thirds/eighths print flat — Manrope has no stacked glyphs for them) ·
-      UX-024 cook-mode chips · UX-043 one duration format · UX-044 duplicate step count and
+      UX-024 cook-mode chips · UX-043 one duration format (the card keeps `1h 10m` by width) · UX-044 duplicate step count and
       "you'll need" line · UX-046 copy
 
 **Wave D — design follow-ups**
@@ -947,6 +947,15 @@ redesigns of Chefs / My Recipes / editor / auth / profile, and every owner decis
 - [x] Chefs hero `MASTER CHEF` tile capture near the 96px floor — release build + Playwright at
       1000 / 1040 / 1440 px (2026-09-26): the label sets whole, no ellipsis; nothing to fix
 - [x] Doc hygiene (the superseded typography item)
+
+**Code review (`/code-review`, three parallel reviewers over the branch diff)** — 16 findings, no
+Critical. Fixed with regression tests: B136 (High: `?from=` recorded the page under a pushed recipe),
+B137, B138, B139 (the card keeps `1h 10m` by width), B140 (five writes that outlived their widget),
+auth Back honouring `returnTo`, chef/entity tab titles while loading, a scaled pinch printing `0`,
+and the doc drift (SDS rail/§8, CLAUDE.md layout, DESIGN §4, the `frac` comments). Deferred:
+
+- [ ] B141 — a removed or replaced avatar stays in the public bucket (best-effort delete of the
+      previous object after a successful save)
 
 ---
 

@@ -30,11 +30,15 @@ void main() {
     expect(formatMinutes(-5), '—');
   });
 
-  // UX-043: one format everywhere, the card included — the spaceless `1h 10m`
-  // compact variant is gone.
-  test('formatMinutes has one rendering', () {
+  // UX-043: one format everywhere except the fixed-width card, whose time
+  // label clips at 288px in the long form (Phase 37 review).
+  test('formatMinutes compact drops the spaces and nothing else', () {
     expect(formatMinutes(765), '12 h 45 min');
-    expect(formatMinutes(120), '2 h');
+    expect(formatMinutes(70, compact: true), '1h 10m');
+    expect(formatMinutes(120, compact: true), '2h');
+    expect(formatMinutes(765, compact: true), '12h 45m');
+    expect(formatMinutes(40, compact: true), '40 min');
+    expect(formatMinutes(0, compact: true), '—');
   });
 
   // One trimmer for the two places a stored `numeric` reaches a label (32d2).
@@ -112,6 +116,9 @@ void main() {
       // Too small to snap to anything but zero: keep the honest decimal
       // rather than printing a quantity of nothing.
       expect(formatQuantity(0.01, 'tsp'), '0.01');
+      // Phase 37 review: two decimals rounded a scaled pinch to `0 tsp`.
+      expect(formatQuantity(0.004, 'tsp'), '0.004');
+      expect(formatQuantity(0.004, 'g'), '0.004');
     });
   });
 

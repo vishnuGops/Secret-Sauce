@@ -346,6 +346,32 @@ void main() {
     expect(_location(router), Routes.discover);
   });
 
+  // Phase 37 review: Back ignored `from`, so a visitor who changed their mind
+  // lost the recipe they came from — but a guarded `from` must not loop.
+  testWidgets('Back returns to an open from', (tester) async {
+    final router = await _pumpAt(
+      tester,
+      authLocation(from: '/legal/terms'),
+      _FakeAuth(),
+    );
+    await tester.tap(find.byTooltip('Back'));
+    await tester.pumpAndSettle();
+    expect(_location(router), '/legal/terms');
+  });
+
+  testWidgets('Back never returns to a guarded from, which would loop', (
+    tester,
+  ) async {
+    final router = await _pumpAt(
+      tester,
+      authLocation(from: Routes.myRecipes),
+      _FakeAuth(),
+    );
+    await tester.tap(find.byTooltip('Back'));
+    await tester.pumpAndSettle();
+    expect(_location(router), Routes.discover);
+  });
+
   // UX-017. Like, Fork, Rate and every guarded route used to drop the visitor
   // on Discover after signing in. `/legal/terms` stands in for "the page they
   // were on": it needs no repository, so the landing is all this asserts.

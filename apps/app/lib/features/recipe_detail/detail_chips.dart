@@ -236,12 +236,17 @@ Future<void> _toggleEngagement(
     goToSignIn(context);
     return;
   }
+  // The container, captured before the await: a reader who backs out while
+  // the write is in flight unmounts this element, and `ref.invalidate` on a
+  // dead element throws — into the catch below, silently — so the Saved tab
+  // under the page kept an unsaved recipe (Phase 37 review).
+  final container = ProviderScope.containerOf(context, listen: false);
   try {
-    await write(ref.read(recipeRepositoryProvider), !active);
-    ref.invalidate(stateProvider);
-    ref.invalidate(recipeProvider(recipeId));
+    await write(container.read(recipeRepositoryProvider), !active);
+    container.invalidate(stateProvider);
+    container.invalidate(recipeProvider(recipeId));
     for (final provider in alsoRefresh) {
-      ref.invalidate(provider);
+      container.invalidate(provider);
     }
   } catch (e) {
     if (context.mounted) {
