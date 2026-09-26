@@ -8,7 +8,9 @@ import 'package:app/routing/app_router.dart';
 import 'package:app/widgets/recipe_async_grid.dart';
 import 'package:app/widgets/recipe_grid.dart';
 
-/// My Recipes with two tabs: recipes I own and recipes shared with me.
+/// My Recipes with three tabs: recipes I own, recipes shared with me, and
+/// recipes I saved (UX-020 — the bookmark on a recipe used to write a row no
+/// screen listed).
 ///
 /// **Two chromes, on the shell's own split** (`context.isCompact`, the same
 /// test `AppShell` uses to pick a bottom bar or the web top bar):
@@ -27,14 +29,20 @@ import 'package:app/widgets/recipe_grid.dart';
 class MyRecipesScreen extends ConsumerWidget {
   const MyRecipesScreen({super.key});
 
-  /// The web header's labelled `New recipe` button. The empty state carries a
-  /// button with the same label, so a test needs a way to tell them apart.
+  /// The web header's labelled `New recipe` button. The compact empty state
+  /// carries a button with the same label, so a test needs a way to tell them
+  /// apart.
   static const newRecipeButtonKey = ValueKey('my-recipes-new-recipe');
 
-  static const _tabs = [Tab(text: 'My Recipes'), Tab(text: 'Shared with me')];
+  static const _tabs = [
+    Tab(text: 'My Recipes'),
+    Tab(text: 'Shared with me'),
+    Tab(text: 'Saved'),
+  ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final compact = context.isCompact;
     final grids = TabBarView(
       children: [
         RecipeAsyncGrid(
@@ -47,11 +55,18 @@ class MyRecipesScreen extends ConsumerWidget {
             title: 'No recipes yet',
             message: 'Create your first recipe to start your vault.',
             icon: Icons.menu_book_outlined,
-            action: FilledButton.icon(
-              onPressed: () => context.go(Routes.newRecipe),
-              icon: const Icon(Icons.add),
-              label: const Text('New recipe'),
-            ),
+            // Compact only (UX-055): on web the header's labelled `New recipe`
+            // sits directly above this, and two identical buttons one card
+            // apart read as two different actions. A phone's AppBar has only
+            // an icon, so the empty state keeps the labelled one there.
+            action:
+                compact
+                    ? FilledButton.icon(
+                      onPressed: () => context.go(Routes.newRecipe),
+                      icon: const Icon(Icons.add),
+                      label: const Text('New recipe'),
+                    )
+                    : null,
           ),
         ),
         RecipeAsyncGrid(
@@ -62,16 +77,40 @@ class MyRecipesScreen extends ConsumerWidget {
             icon: Icons.group_outlined,
           ),
         ),
+        // Other people's recipes, like Shared with me: the chef badge says
+        // whose, and visibility is the owner's setting, not the saver's.
+        RecipeAsyncGrid(
+          provider: savedRecipesProvider,
+          empty: EmptyView(
+            title: 'Nothing saved yet',
+            message:
+                'Tap the bookmark on any recipe to save it here for later.',
+            icon: Icons.bookmark_border,
+            action: FilledButton.icon(
+              onPressed: () => context.go(Routes.discover),
+              icon: const Icon(Icons.explore_outlined),
+              label: const Text('Browse recipes'),
+            ),
+          ),
+        ),
       ],
     );
 
-    if (context.isCompact) {
+    if (compact) {
       return DefaultTabController(
         length: _tabs.length,
         child: Scaffold(
           appBar: AppBar(
             title: const Text('My Recipes'),
-            bottom: const TabBar(tabs: _tabs),
+            // Scrollable since the third tab (UX-020): a fixed strip gives
+            // each label a third of the phone, and at 2.0x `Shared with me`
+            // needs more than that. `Tab` fades rather than overflows, so the
+            // cut label threw nothing — the saved-tab suite measures it.
+            bottom: const TabBar(
+              tabs: _tabs,
+              isScrollable: true,
+              tabAlignment: TabAlignment.start,
+            ),
             actions: [
               // Icon only: the shell's FAB is already the labelled call to
               // action on a phone.

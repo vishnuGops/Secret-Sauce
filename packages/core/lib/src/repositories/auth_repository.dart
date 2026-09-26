@@ -2,6 +2,22 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:core/src/repositories/profile_id.dart';
 
+/// What a successful [AuthRepository.signUp] left behind (UX-018).
+///
+/// With email confirmation **on** — the hosted project's default — GoTrue
+/// creates the user and returns **no session**: the account exists, nobody is
+/// signed in, and the next step is the confirmation mail. With it off (the
+/// local stack's `config.toml`) the same call signs the user in. The UI has to
+/// say different things in the two cases, so the repository reports which one
+/// happened instead of the screen guessing from the auth stream.
+enum SignUpOutcome {
+  /// A session came back: the user is signed in.
+  signedIn,
+
+  /// No session: the account waits on the confirmation email.
+  confirmEmail,
+}
+
 /// Authentication contract. UI depends on this, not on Supabase directly.
 abstract interface class AuthRepository {
   /// The currently authenticated user id, or null.
@@ -23,7 +39,7 @@ abstract interface class AuthRepository {
 
   Future<void> signIn({required String email, required String password});
 
-  Future<void> signUp({
+  Future<SignUpOutcome> signUp({
     required String email,
     required String password,
     required String displayName,
@@ -58,16 +74,19 @@ class SupabaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<void> signUp({
+  Future<SignUpOutcome> signUp({
     required String email,
     required String password,
     required String displayName,
   }) async {
-    await _client.auth.signUp(
+    final response = await _client.auth.signUp(
       email: email,
       password: password,
       data: {'display_name': displayName},
     );
+    return response.session == null
+        ? SignUpOutcome.confirmEmail
+        : SignUpOutcome.signedIn;
   }
 
   @override

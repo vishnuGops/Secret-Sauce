@@ -7,8 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// `MyRecipesScreen`: the header the `New recipe` button moved onto (Phase 21)
-/// and the two grids under it, whose per-tab flags are the screen's only other
-/// wiring.
+/// and the grids under it, whose per-tab flags are the screen's only other
+/// wiring. The Saved tab (UX-020) has its own suite, `my_recipes_saved_test`.
 ///
 /// Both tabs are paged notifiers (OPT-P9), so the override supplies a page
 /// rather than a future: `fetchPage` is the one seam, and stubbing it keeps the
@@ -98,8 +98,8 @@ Future<void> _pump(
   await tester.pumpAndSettle();
 }
 
-/// Header only — the empty state under it has its own labelled `New recipe`
-/// button, so an unscoped finder matches either one.
+/// Header only. Compact's empty state has its own labelled `New recipe` (web's
+/// dropped it for UX-055), so an unscoped finder would not say which one.
 final _headerLabel = find.descendant(
   of: find.byKey(MyRecipesScreen.newRecipeButtonKey),
   matching: find.text('New recipe'),

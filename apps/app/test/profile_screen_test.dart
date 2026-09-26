@@ -7,30 +7,48 @@
 // `currentUserIdProvider`, which watches the auth stream) is exercised rather
 // than stubbed out — the same choice `recipe_detail_test.dart` makes.
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:app/features/profile/edit_profile_dialog.dart';
 import 'package:app/features/profile/profile_screen.dart';
+import 'package:app/features/recipe_editor/recipe_editor_providers.dart';
 import 'package:app/routing/app_router.dart';
+import 'package:app/widgets/legal_footer.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' show PostgrestException;
+
+/// A 1x1 PNG: real image bytes, so the dialog's `Image.memory` preview
+/// decodes rather than throwing into the test.
+final Uint8List _png = base64Decode(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk'
+  '+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+);
 
 class _FakeAuth implements AuthRepository {
-  _FakeAuth(this.uid);
+  _FakeAuth(this.uid, {this.profileId});
 
   String? uid;
   int signOuts = 0;
+
+  /// `profiles.id` when it differs from the auth uid: a member who claimed an
+  /// imported chef page (Phase 35b). Null means "the same as [uid]".
+  final String? profileId;
 
   @override
   String? get currentUserId => uid;
 
   // Phase 35b: the profile a screen shows is keyed on `profiles.id`, which is
   // the auth uid for a member. The fake states that equality rather than
-  // inheriting it, so a future test can make them differ.
+  // inheriting it, so a test can make them differ.
   @override
-  Future<String?> currentProfileId() async => uid;
+  Future<String?> currentProfileId() async =>
+      uid == null ? null : profileId ?? uid;
 
   @override
   Stream<AuthState> authStateChanges() => const Stream.empty();
@@ -49,17 +67,40 @@ class _FakeAuth implements AuthRepository {
 class _FakeProfiles implements ProfileRepository {
   _FakeProfiles({this.profile, this.error, this.hang = false});
 
-  final Profile? profile;
+  /// Mutable: a successful [updateMine] replaces it, so a re-read after the
+  /// save returns what the server would.
+  Profile? profile;
   final Object? error;
 
   /// Never completes — the loading state has to be reachable without a race.
   final bool hang;
 
+  int reads = 0;
+
+  /// Every profile handed to [updateMine], in order.
+  final List<Profile> updates = [];
+
+  /// Thrown by [updateMine] when set.
+  Object? updateError;
+
+  /// When set, [updateMine] waits on it: the saving state, held open.
+  Completer<void>? updateGate;
+
   @override
   Future<Profile?> getById(String id) {
+    reads++;
     if (hang) return Completer<Profile?>().future;
     if (error != null) return Future.error(error!);
     return Future.value(profile);
+  }
+
+  @override
+  Future<Profile> updateMine(Profile next) async {
+    updates.add(next);
+    if (updateGate != null) await updateGate!.future;
+    if (updateError != null) throw updateError!;
+    profile = next;
+    return next;
   }
 
   @override
@@ -67,42 +108,121 @@ class _FakeProfiles implements ProfileRepository {
       throw UnimplementedError('${invocation.memberName} not stubbed');
 }
 
+/// Records avatar uploads and hands back a public URL, the shape
+/// `StorageService` really returns. Implemented rather than subclassed: the
+/// real one needs a `SupabaseClient`.
+class _FakeStorage implements StorageService {
+  /// (fileName, byte length) per upload.
+  final List<(String, int)> uploads = [];
+
+  @override
+  Future<String> uploadAvatar({
+    required String fileName,
+    required List<int> bytes,
+    String contentType = 'image/jpeg',
+  }) async {
+    uploads.add((fileName, bytes.length));
+    return 'https://cdn.test/$fileName';
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) =>
+      throw UnimplementedError('${invocation.memberName} not stubbed');
+}
+
+late GoRouter _router;
+
 Future<_FakeAuth> _pump(
   WidgetTester tester, {
   required _FakeProfiles profiles,
   String? uid = 'u1',
+  String? profileId,
+  double? width,
+  double height = 900,
+  double textScale = 1.0,
+  ImagePickFn? pick,
+  StorageService? storage,
 }) async {
-  final auth = _FakeAuth(uid);
-  final router = GoRouter(
-    initialLocation: Routes.profile,
-    routes: [
-      GoRoute(path: Routes.profile, builder: (_, __) => const ProfileScreen()),
-      GoRoute(
-        path: Routes.discover,
-        builder: (_, __) => const Scaffold(body: Text('DISCOVER')),
-      ),
-      GoRoute(
-        path: Routes.auth,
-        builder: (_, __) => const Scaffold(body: Text('AUTH SCREEN')),
-      ),
-      GoRoute(
-        path: Routes.newRecipe,
-        builder: (_, __) => const Scaffold(body: Text('NEW RECIPE')),
-      ),
-    ],
-  );
+  if (width != null) {
+    tester.view.physicalSize = Size(width, height);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+  }
+  final auth = _FakeAuth(uid, profileId: profileId);
+  final router =
+      _router = GoRouter(
+        initialLocation: Routes.profile,
+        routes: [
+          GoRoute(
+            path: Routes.profile,
+            builder: (_, __) => const ProfileScreen(),
+          ),
+          GoRoute(
+            path: Routes.chefPattern,
+            builder:
+                (_, state) =>
+                    Scaffold(body: Text('CHEF ${state.pathParameters['id']}')),
+          ),
+          GoRoute(
+            path: Routes.discover,
+            builder: (_, __) => const Scaffold(body: Text('DISCOVER')),
+          ),
+          GoRoute(
+            path: Routes.auth,
+            builder: (_, __) => const Scaffold(body: Text('AUTH SCREEN')),
+          ),
+          GoRoute(
+            path: Routes.newRecipe,
+            builder: (_, __) => const Scaffold(body: Text('NEW RECIPE')),
+          ),
+        ],
+      );
 
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
         authRepositoryProvider.overrideWithValue(auth),
         profileRepositoryProvider.overrideWithValue(profiles),
+        if (pick != null) imagePickerProvider.overrideWithValue(pick),
+        if (storage != null) storageServiceProvider.overrideWithValue(storage),
       ],
-      child: MaterialApp.router(theme: AppTheme.light(), routerConfig: router),
+      child: MaterialApp.router(
+        theme: AppTheme.light(),
+        routerConfig: router,
+        builder:
+            (context, child) => MediaQuery(
+              data: MediaQuery.of(
+                context,
+              ).copyWith(textScaler: TextScaler.linear(textScale)),
+              child: child!,
+            ),
+      ),
     ),
   );
   return auth;
 }
+
+const _amara = Profile(
+  id: 'u1',
+  displayName: 'Amara Baptiste',
+  bio: 'Sunday cook, weekday improviser.',
+  chefTier: ChefTier.sousChef,
+  chefScore: 1234,
+  publicRecipeCount: 3,
+);
+
+/// Opens the editor from a loaded profile screen.
+Future<void> _openEditor(WidgetTester tester) async {
+  await tester.pumpAndSettle();
+  await tester.tap(find.text('Edit profile'));
+  await tester.pumpAndSettle();
+  expect(find.byType(EditProfileDialog), findsOneWidget);
+}
+
+Finder get _nameField => find.widgetWithText(TextFormField, 'Display name');
+Finder get _bioField => find.widgetWithText(TextFormField, 'Bio');
+Finder get _saveButton => find.widgetWithText(FilledButton, 'Save');
 
 void main() {
   testWidgets('shows a spinner while the profile is loading', (tester) async {
@@ -180,6 +300,10 @@ void main() {
     await tester.tap(find.text('Sign in'));
     await tester.pumpAndSettle();
     expect(find.text('AUTH SCREEN'), findsOneWidget);
+    // UX-017: the way in remembers the way back.
+    final uri = _router.routerDelegate.currentConfiguration.uri;
+    expect(uri.path, Routes.auth);
+    expect(uri.queryParameters['from'], Routes.profile);
   });
 
   testWidgets('sign out lands on /discover, not on `/`', (tester) async {
@@ -215,4 +339,310 @@ void main() {
 
     expect(find.text('NEW RECIPE'), findsOneWidget);
   });
+
+  testWidgets('the avatar is ChefAvatar, with the tier under the name', (
+    tester,
+  ) async {
+    await _pump(tester, profiles: _FakeProfiles(profile: _amara));
+    await tester.pumpAndSettle();
+
+    // UX-053: a bare NetworkImage drew a blank circle for a broken URL;
+    // ChefAvatar carries the error fallback (UX-032: one avatar).
+    expect(find.byType(ChefAvatar), findsOneWidget);
+    expect(find.byType(TierChip), findsOneWidget);
+    expect(find.text('Sous Chef'), findsOneWidget);
+  });
+
+  group('edit profile (UX-038)', () {
+    testWidgets('saves name and bio, and nothing else changes', (tester) async {
+      final profiles = _FakeProfiles(profile: _amara);
+      await _pump(tester, profiles: profiles);
+      await _openEditor(tester);
+      final readsBefore = profiles.reads;
+
+      await tester.enterText(_nameField, '  Amara B.  ');
+      await tester.enterText(_bioField, 'Braises, mostly.');
+      await tester.tap(_saveButton);
+      await tester.pumpAndSettle();
+
+      // Exactly the two edited fields moved; id, tier, score and the photo
+      // travel through unchanged (the name is trimmed).
+      expect(profiles.updates, [
+        _amara.copyWith(displayName: 'Amara B.', bio: 'Braises, mostly.'),
+      ]);
+      expect(find.byType(EditProfileDialog), findsNothing);
+      // `myProfileProvider` was invalidated and re-read the profile.
+      expect(profiles.reads, greaterThan(readsBefore));
+      expect(find.text('Amara B.'), findsOneWidget);
+      expect(find.text('Braises, mostly.'), findsOneWidget);
+      expect(find.text('Profile updated'), findsOneWidget);
+    });
+
+    testWidgets('an empty bio is saved as null, not as an empty string', (
+      tester,
+    ) async {
+      final profiles = _FakeProfiles(profile: _amara);
+      await _pump(tester, profiles: profiles);
+      await _openEditor(tester);
+
+      await tester.enterText(_bioField, '   ');
+      await tester.tap(_saveButton);
+      await tester.pumpAndSettle();
+
+      expect(profiles.updates.single.bio, isNull);
+    });
+
+    testWidgets('an empty name is refused before any write', (tester) async {
+      final profiles = _FakeProfiles(profile: _amara);
+      await _pump(tester, profiles: profiles);
+      await _openEditor(tester);
+
+      await tester.enterText(_nameField, '   ');
+      await tester.tap(_saveButton);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Enter a display name'), findsOneWidget);
+      expect(profiles.updates, isEmpty);
+      expect(find.byType(EditProfileDialog), findsOneWidget);
+    });
+
+    testWidgets('the fields mirror profiles_text_lengths', (tester) async {
+      await _pump(tester, profiles: _FakeProfiles(profile: _amara));
+      await _openEditor(tester);
+
+      TextField field(Finder f) => tester.widget<TextField>(
+        find.descendant(of: f, matching: find.byType(TextField)),
+      );
+      expect(field(_nameField).maxLength, 80);
+      expect(field(_bioField).maxLength, 500);
+    });
+
+    testWidgets('a failed save stays open with a friendly message', (
+      tester,
+    ) async {
+      final profiles = _FakeProfiles(profile: _amara)
+        ..updateError = const PostgrestException(
+          message: 'permission denied for table profiles',
+          code: '42501',
+        );
+      await _pump(tester, profiles: profiles);
+      await _openEditor(tester);
+
+      await tester.enterText(_nameField, 'Amara B.');
+      await tester.tap(_saveButton);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(EditProfileDialog), findsOneWidget);
+      expect(
+        find.text('You do not have permission to do that.'),
+        findsOneWidget,
+      );
+      expect(find.textContaining('PostgrestException'), findsNothing);
+      // What the reader typed survives for the retry.
+      expect(find.text('Amara B.'), findsWidgets);
+      expect(
+        tester.widget<FilledButton>(_saveButton).onPressed,
+        isNotNull,
+        reason: 'Save re-enables after a failure',
+      );
+    });
+
+    testWidgets('Save is disabled while the save is in flight', (tester) async {
+      final profiles = _FakeProfiles(profile: _amara)..updateGate = Completer();
+      await _pump(tester, profiles: profiles);
+      await _openEditor(tester);
+
+      await tester.tap(_saveButton);
+      await tester.pump();
+
+      final save = find.ancestor(
+        of: find.byType(CircularProgressIndicator),
+        matching: find.byType(FilledButton),
+      );
+      expect(tester.widget<FilledButton>(save).onPressed, isNull);
+
+      profiles.updateGate!.complete();
+      await tester.pumpAndSettle();
+      expect(profiles.updates, hasLength(1));
+      expect(find.byType(EditProfileDialog), findsNothing);
+    });
+
+    testWidgets('a picked photo is uploaded on Save, not on pick', (
+      tester,
+    ) async {
+      final profiles = _FakeProfiles(profile: _amara);
+      final storage = _FakeStorage();
+      await _pump(
+        tester,
+        profiles: profiles,
+        pick: () async => _png,
+        storage: storage,
+      );
+      await _openEditor(tester);
+
+      await tester.tap(find.text('Add photo'));
+      await tester.pumpAndSettle();
+      expect(find.byType(Image), findsWidgets); // previewed from memory
+      expect(storage.uploads, isEmpty, reason: 'upload belongs to the save');
+
+      await tester.tap(_saveButton);
+      await tester.pumpAndSettle();
+
+      expect(storage.uploads, hasLength(1));
+      expect(storage.uploads.single.$1, startsWith('avatar_'));
+      expect(storage.uploads.single.$2, _png.length);
+      expect(
+        profiles.updates.single,
+        _amara.copyWith(
+          avatarUrl: 'https://cdn.test/${storage.uploads.single.$1}',
+        ),
+      );
+    });
+
+    testWidgets('a pick abandoned with Cancel uploads nothing', (tester) async {
+      final profiles = _FakeProfiles(profile: _amara);
+      final storage = _FakeStorage();
+      await _pump(
+        tester,
+        profiles: profiles,
+        pick: () async => _png,
+        storage: storage,
+      );
+      await _openEditor(tester);
+
+      await tester.tap(find.text('Add photo'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Cancel'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(EditProfileDialog), findsNothing);
+      expect(storage.uploads, isEmpty);
+      expect(profiles.updates, isEmpty);
+    });
+
+    testWidgets("an over-size pick is refused in the editor's words", (
+      tester,
+    ) async {
+      final storage = _FakeStorage();
+      await _pump(
+        tester,
+        profiles: _FakeProfiles(profile: _amara),
+        pick: () async => Uint8List(kMaxUploadBytes + 1),
+        storage: storage,
+      );
+      await _openEditor(tester);
+
+      await tester.tap(find.text('Add photo'));
+      await tester.pumpAndSettle();
+
+      // The same sentence recipe_editor_test pins for the step photo.
+      expect(
+        find.text('That image is over 5 MB. Please pick a smaller one.'),
+        findsOneWidget,
+      );
+      expect(find.text('Remove photo'), findsNothing);
+      expect(storage.uploads, isEmpty);
+    });
+
+    testWidgets('Remove photo saves avatar_url as null', (tester) async {
+      final profiles = _FakeProfiles(
+        profile: _amara.copyWith(avatarUrl: 'https://cdn.test/old.jpg'),
+      );
+      final storage = _FakeStorage();
+      await _pump(tester, profiles: profiles, storage: storage);
+      await _openEditor(tester);
+
+      await tester.tap(find.text('Remove photo'));
+      await tester.pumpAndSettle();
+      await tester.tap(_saveButton);
+      await tester.pumpAndSettle();
+
+      expect(profiles.updates.single.avatarUrl, isNull);
+      expect(profiles.updates.single.displayName, _amara.displayName);
+      expect(storage.uploads, isEmpty);
+    });
+  });
+
+  testWidgets('View my chef page opens /chef/<profiles.id>', (tester) async {
+    // A claimed member: `profiles.id` is not the auth uid, and `/chef/:id`
+    // takes the former (Phase 35b).
+    await _pump(
+      tester,
+      uid: 'auth-uid',
+      profileId: 'p-claimed',
+      profiles: _FakeProfiles(profile: _amara.copyWith(id: 'p-claimed')),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('View my chef page'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('CHEF p-claimed'), findsOneWidget);
+  });
+
+  testWidgets('legal links are page content on compact only', (tester) async {
+    await _pump(tester, profiles: _FakeProfiles(profile: _amara), width: 390);
+    await tester.pumpAndSettle();
+    // The one route a signed-in phone reader has to Privacy / Terms / Rights.
+    expect(find.byType(LegalFooter), findsOneWidget);
+  });
+
+  testWidgets('wider, the web chrome carries the legal links instead', (
+    tester,
+  ) async {
+    await _pump(tester, profiles: _FakeProfiles(profile: _amara), width: 1440);
+    await tester.pumpAndSettle();
+    expect(find.byType(LegalFooter), findsNothing);
+  });
+
+  testWidgets('at 1440 the page keeps a readable measure', (tester) async {
+    await _pump(tester, profiles: _FakeProfiles(profile: _amara), width: 1440);
+    await tester.pumpAndSettle();
+
+    final button = tester.getRect(
+      find.widgetWithText(FilledButton, 'Edit profile'),
+    );
+    expect(button.width, lessThanOrEqualTo(kProfileMaxWidth));
+    // Centred, not left-aligned.
+    expect((button.center.dx - 720).abs(), lessThan(1));
+  });
+
+  for (final width in <double>[390, 600, 1000, 1440]) {
+    for (final scale in <double>[1.0, 2.0]) {
+      testWidgets('fits at ${width}px, textScale $scale: page and dialog', (
+        tester,
+      ) async {
+        await _pump(
+          tester,
+          profiles: _FakeProfiles(
+            profile: _amara.copyWith(
+              displayName: 'Amara Baptiste-Okonkwo de la Cruz',
+              bio: 'Sunday cook, weekday improviser. ' * 6,
+            ),
+          ),
+          width: width,
+          textScale: scale,
+          pick: () async => _png,
+        );
+        await tester.pumpAndSettle();
+        expect(
+          tester.takeException(),
+          isNull,
+          reason: 'page overflow at ${width}px @ ${scale}x',
+        );
+
+        await tester.ensureVisible(find.text('Edit profile'));
+        await _openEditor(tester);
+        // Both photo buttons on screen: the widest state of the avatar row.
+        await tester.tap(find.text('Add photo'));
+        await tester.pumpAndSettle();
+        expect(find.text('Remove photo'), findsOneWidget);
+        expect(
+          tester.takeException(),
+          isNull,
+          reason: 'dialog overflow at ${width}px @ ${scale}x',
+        );
+      });
+    }
+  }
 }

@@ -20,19 +20,24 @@ class AuthController extends AutoDisposeAsyncNotifier<void> {
     );
   }
 
-  Future<void> signUp({
+  /// Null when the sign-up failed (the error is in [state]); otherwise whether
+  /// the new account is signed in or waiting on its confirmation mail
+  /// (UX-018).
+  Future<SignUpOutcome?> signUp({
     required String email,
     required String password,
     required String displayName,
   }) async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(
-      () => _repo.signUp(
+    SignUpOutcome? outcome;
+    state = await AsyncValue.guard(() async {
+      outcome = await _repo.signUp(
         email: email,
         password: password,
         displayName: displayName,
-      ),
-    );
+      );
+    });
+    return outcome;
   }
 }
 

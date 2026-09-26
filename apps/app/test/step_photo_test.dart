@@ -95,11 +95,11 @@ class _FakeAuth implements AuthRepository {
   }) async {}
 
   @override
-  Future<void> signUp({
+  Future<SignUpOutcome> signUp({
     required String email,
     required String password,
     required String displayName,
-  }) async {}
+  }) async => SignUpOutcome.signedIn;
 
   @override
   Future<void> signOut() async {}
@@ -152,6 +152,12 @@ class _FakeRecipeRepository implements RecipeRepository {
 
   @override
   Future<List<Recipe>> listMine({
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) => throw UnimplementedError();
+
+  @override
+  Future<List<Recipe>> listSaved({
     int limit = kRecipePageSize,
     int offset = 0,
   }) => throw UnimplementedError();

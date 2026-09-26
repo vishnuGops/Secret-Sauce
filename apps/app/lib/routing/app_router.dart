@@ -19,6 +19,7 @@ import 'package:app/features/recipe_detail/cook_mode_screen.dart';
 import 'package:app/features/recipe_detail/recipe_detail_screen.dart';
 import 'package:app/features/recipe_editor/recipe_editor_screen.dart';
 import 'package:app/routing/app_shell.dart';
+import 'package:app/routing/auth_return.dart';
 
 /// Route path constants.
 class Routes {
@@ -132,8 +133,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           loc == Routes.profile ||
           loc == Routes.newRecipe ||
           loc.endsWith('/edit');
-      if (!signedIn && needsAuth) return Routes.auth;
-      if (signedIn && loc == Routes.auth) return Routes.discover;
+      // UX-017: the guarded location rides along as `?from=`, so signing in
+      // lands on the editor or My Recipes the visitor asked for, not on
+      // Discover. Both ends go through `safeReturnPath` — `from` is whatever a
+      // link said, and an unchecked value is an open redirect.
+      if (!signedIn && needsAuth) {
+        return authLocation(from: state.uri.toString());
+      }
+      if (signedIn && loc == Routes.auth) {
+        return safeReturnPath(state.uri.queryParameters[kAuthFromParam]) ??
+            Routes.discover;
+      }
       return null;
     },
     routes: [
@@ -147,6 +157,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder:
             (context, state) => AuthScreen(
               startOnSignUp: state.uri.queryParameters['mode'] == 'signup',
+              returnTo: safeReturnPath(
+                state.uri.queryParameters[kAuthFromParam],
+              ),
             ),
       ),
       GoRoute(

@@ -891,11 +891,14 @@ commit. Every fix carries a regression test verified by reverting the fix.
 recipe has a step photo, so the photo path is proven only with a fixture URL (`step_photo_test.dart`,
 `cook_mode_test.dart`); the claimed-member case of B128 is a fake `AuthRepository` whose profile id
 differs from its auth uid (the SQL half is `rls_matrix.sql` §G).
+Wave B: covered by fixtures plus the local test account. On a plain `db:reset` the Saved tab and
+My Recipes are empty for a new account until it saves or writes something — that is the honest state
+(B113), and the live check saved one curated recipe and removed it again.
 
 | Wave | Status | Notes |
 | --- | --- | --- |
 | A — open bugs (B125, B126, B128–B132) | done | 3 subagents + lead; app 534 → 578 tests, design_system 425 → 433 |
-| B — delete, profile editing, `?from=`, sign-up confirm, Saved tab | open | |
+| B — delete, profile editing, `?from=`, sign-up confirm, Saved tab | done | 3 subagents + lead; no SQL (existing RLS/grants cover it; D24 pins saves); live stack confirmed `listSaved`'s `!inner` embed and the profile PATCH; app 578 → 650, core 173 → 175 |
 | C — a11y semantics, search, retry, fractions, copy | open | |
 | D — component consolidation, doc hygiene | open | |
 

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:core/core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -9,6 +10,14 @@ typedef ImagePickFn = Future<Uint8List?> Function();
 
 /// The gallery pick, behind a provider.
 ///
+/// What every image pick says when it is over the bucket's limit — the editor's
+/// cover and step photos and the profile's avatar. Derived from
+/// [kMaxUploadBytes] rather than restating the number: the limit has one source
+/// of truth (32a4), and a second literal is how the two surfaces drift.
+const String kImageTooLargeMessage =
+    'That image is over ${kMaxUploadBytes ~/ (1024 * 1024)} MB. '
+    'Please pick a smaller one.';
+
 /// One function for the cover tile and every step photo — the two used to be
 /// one method with the cover's `setState` welded onto it, and a second copy is
 /// how the size guard and the error path start disagreeing.

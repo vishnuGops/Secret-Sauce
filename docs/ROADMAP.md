@@ -915,12 +915,13 @@ redesigns of Chefs / My Recipes / editor / auth / profile, and every owner decis
 
 **Wave B — missing capabilities**
 
-- [ ] UX-037 — owners can delete a recipe (detail + editor, confirm, back to My Recipes)
-- [ ] UX-038 — profile editing, "View my chef page", constrained desktop width, legal links
+- [x] UX-037 — owners can delete a recipe (detail + editor, confirm, back to My Recipes)
+- [x] UX-038 — profile editing, "View my chef page", constrained desktop width, legal links
       compact-only
-- [ ] UX-017 — `?from=` carried through sign-in (in-app paths only)
-- [ ] UX-018 — sign-up with email confirmation shows "check your inbox"
-- [ ] UX-020 — a Saved tab on My Recipes
+- [x] UX-017 — `?from=` carried through sign-in (in-app paths only)
+- [x] UX-018 — sign-up with email confirmation shows "check your inbox"
+- [x] UX-020 — a Saved tab on My Recipes (+ UX-055's duplicate web New recipe; UX-053's broken
+      avatar and the profile half of UX-032's `ChefAvatar` came with UX-038)
 
 **Wave C — accessibility, search, formatting**
 

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:app/routing/app_router.dart';
+import 'package:app/routing/auth_return.dart';
 
 /// True while a fork of this recipe is in flight (B129 / UX-026).
 ///
@@ -37,7 +38,8 @@ Future<void> forkRecipe(
   String recipeId,
 ) async {
   if (ref.read(currentUserIdProvider) == null) {
-    context.go(Routes.auth);
+    // UX-017: back to this recipe after signing in, not to Discover.
+    goToSignIn(context);
     return;
   }
   final inFlight = ref.read(forkInFlightProvider(recipeId).notifier);

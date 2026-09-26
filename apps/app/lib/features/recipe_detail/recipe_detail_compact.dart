@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:app/features/recipe_detail/delete_action.dart';
 import 'package:app/features/recipe_detail/detail_chips.dart';
 import 'package:app/features/recipe_detail/detail_provenance.dart';
 import 'package:app/features/recipe_detail/rail_panel.dart';
@@ -294,6 +295,15 @@ class _Cover extends ConsumerWidget {
                       tooltip: 'Edit',
                       onPressed: () => context.go(Routes.editRecipe(recipe.id)),
                     ),
+                    const SizedBox(width: AppSpacing.xs),
+                    // UX-037: Delete behind "More", in the same scrim as its
+                    // neighbours. Fixed-size icon buttons, so the row stays
+                    // back + four at every text scale (Gotcha 21 has nothing
+                    // to grow here).
+                    RecipeOwnerMenu(
+                      recipe: recipe,
+                      style: _ScrimButton.styleOf(context),
+                    ),
                   ],
                 ],
               ),
@@ -320,16 +330,22 @@ class _ScrimButton extends StatelessWidget {
   final String tooltip;
   final VoidCallback onPressed;
 
+  /// The scrim, as a style — shared with the owner's "More" menu trigger,
+  /// which is a `PopupMenuButton` rather than this widget (UX-037).
+  static ButtonStyle styleOf(BuildContext context) {
+    final palette = context.palette;
+    return IconButton.styleFrom(
+      backgroundColor: palette.imageControl,
+      foregroundColor: palette.onImage,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final palette = context.palette;
     return IconButton(
       tooltip: tooltip,
       icon: Icon(icon),
-      style: IconButton.styleFrom(
-        backgroundColor: palette.imageControl,
-        foregroundColor: palette.onImage,
-      ),
+      style: styleOf(context),
       onPressed: onPressed,
     );
   }

@@ -22,6 +22,14 @@ abstract interface class RecipeRepository {
   /// Recipes shared with the current user, same paging contract as [listMine].
   Future<List<Recipe>> listSharedWithMe({int limit, int offset});
 
+  /// Recipes the current user has **saved** (bookmarked), most recently saved
+  /// first — My Recipes' Saved tab (UX-020). Save used to write a row no
+  /// screen ever listed.
+  ///
+  /// Throws the signed-out `StateError` like the other two "mine" lists; the
+  /// tab sits behind `/my`, which the router guards.
+  Future<List<Recipe>> listSaved({int limit, int offset});
+
   /// One chef's **public** recipes, newest first — the grid on `/chef/:id`.
   ///
   /// Signed-out safe (Gotcha 9): it takes the chef's id as an argument and never
@@ -171,6 +179,36 @@ class SupabaseRecipeRepository implements RecipeRepository {
         .from('recipe_shares')
         .select('recipes($kRecipeSelect)')
         .eq('shared_with_user_id', await _profileIds.require())
+        .order('created_at', ascending: false)
+        .order('recipe_id', ascending: false)
+        .range(offset, offset + limit - 1);
+    return rows
+        .map<Recipe>(
+          (r) => Recipe.fromJson(r['recipes'] as Map<String, dynamic>),
+        )
+        .toList();
+  }
+
+  @override
+  Future<List<Recipe>> listSaved({
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) async {
+    // `recipe_saves` is the table paged, so it carries the order: newest save
+    // first, `recipe_id` breaking the tie (Gotcha 24 — two saves in one second
+    // must not swap between pages). `saves_select` is
+    // `user_id = current_profile_id()`, so the filter below restates what RLS
+    // already enforces; it is here so the query plan uses the primary key.
+    //
+    // `!inner` is load-bearing: a recipe saved while public and made private
+    // since is filtered out of the embed by `recipes_select`, which without
+    // `!inner` arrives as `recipes: null` and fails the decode below — one
+    // owner's privacy change would break every saver's tab. With it the row is
+    // dropped **server-side**, before `range`, so the page windows stay exact.
+    final rows = await _client
+        .from('recipe_saves')
+        .select('recipes!inner($kRecipeSelect)')
+        .eq('user_id', await _profileIds.require())
         .order('created_at', ascending: false)
         .order('recipe_id', ascending: false)
         .range(offset, offset + limit - 1);

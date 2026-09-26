@@ -9,6 +9,7 @@
 // path at all.
 import 'package:app/features/auth/auth_screen.dart';
 import 'package:app/routing/app_router.dart';
+import 'package:app/routing/auth_return.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
@@ -21,13 +22,24 @@ import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' show AuthException;
 
 class _FakeAuth implements AuthRepository {
-  _FakeAuth({this.failWith});
+  _FakeAuth({
+    this.failWith,
+    this.signUpOutcome = SignUpOutcome.signedIn,
+    this.uid,
+  });
+
+  /// Non-null for an already signed-in visitor.
+  final String? uid;
 
   final Object? failWith;
+
+  /// What a successful sign-up reports — [SignUpOutcome.confirmEmail] models
+  /// the hosted project, where GoTrue returns no session (UX-018).
+  final SignUpOutcome signUpOutcome;
   final List<String> calls = [];
 
   @override
-  String? get currentUserId => null;
+  String? get currentUserId => uid;
 
   // Phase 35b: `profiles.id` and the auth uid are the same value for a member,
   // which every fixture in this file is.
@@ -44,13 +56,14 @@ class _FakeAuth implements AuthRepository {
   }
 
   @override
-  Future<void> signUp({
+  Future<SignUpOutcome> signUp({
     required String email,
     required String password,
     required String displayName,
   }) async {
     calls.add('signUp:$email:$displayName');
     if (failWith != null) throw failWith!;
+    return signUpOutcome;
   }
 
   @override
@@ -270,5 +283,132 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(_location(router), Routes.discover);
+  });
+
+  // UX-017. Like, Fork, Rate and every guarded route used to drop the visitor
+  // on Discover after signing in. `/legal/terms` stands in for "the page they
+  // were on": it needs no repository, so the landing is all this asserts.
+  group('?from= (UX-017)', () {
+    testWidgets('a guarded route sends its own location along', (tester) async {
+      final router = await _pumpAt(tester, Routes.myRecipes, _FakeAuth());
+
+      final uri = router.routerDelegate.currentConfiguration.uri;
+      expect(uri.path, Routes.auth);
+      expect(uri.queryParameters['from'], Routes.myRecipes);
+    });
+
+    testWidgets('a sign-in returns to where the visitor came from', (
+      tester,
+    ) async {
+      final auth = _FakeAuth();
+      final router = await _pumpAt(
+        tester,
+        authLocation(from: '/legal/terms'),
+        auth,
+      );
+
+      await _fill(
+        tester,
+        email: 'cook@example.test',
+        password: 'good-password',
+      );
+      await tester.tap(find.text('Sign in'));
+      await tester.pumpAndSettle();
+
+      expect(auth.calls, ['signIn:cook@example.test']);
+      expect(_location(router), '/legal/terms');
+    });
+
+    testWidgets('signed in, /auth?from= forwards straight there', (
+      tester,
+    ) async {
+      final router = await _pumpAt(
+        tester,
+        authLocation(from: '/legal/terms'),
+        _FakeAuth(uid: 'me'),
+      );
+
+      expect(_location(router), '/legal/terms');
+    });
+
+    testWidgets('an off-site from is ignored: Discover, not the link', (
+      tester,
+    ) async {
+      final router = await _pumpAt(
+        tester,
+        '${Routes.auth}?from=${Uri.encodeQueryComponent('https://evil.test/')}',
+        _FakeAuth(),
+      );
+
+      await _fill(
+        tester,
+        email: 'cook@example.test',
+        password: 'good-password',
+      );
+      await tester.tap(find.text('Sign in'));
+      await tester.pumpAndSettle();
+
+      expect(_location(router), Routes.discover);
+    });
+  });
+
+  // UX-018. With email confirmation on (the hosted default) GoTrue returns no
+  // session; the screen used to leave anyway, dropping a signed-out user on
+  // Discover with no word about the mail.
+  group('sign-up needing confirmation (UX-018)', () {
+    testWidgets('says check your inbox, and stays', (tester) async {
+      final auth = _FakeAuth(signUpOutcome: SignUpOutcome.confirmEmail);
+      final router = await _pumpAt(tester, Routes.signUp, auth);
+
+      await _fill(
+        tester,
+        email: 'cook@example.test',
+        password: 'good-password',
+        name: 'Dara',
+      );
+      await tester.tap(find.text('Sign up'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Check your inbox'), findsOneWidget);
+      expect(find.textContaining('cook@example.test'), findsOneWidget);
+      expect(_location(router), Routes.auth);
+
+      await tester.tap(find.text('Back to sign in'));
+      await tester.pumpAndSettle();
+      expect(find.text('Welcome back'), findsOneWidget);
+    });
+
+    for (final width in [390.0, 1440.0]) {
+      for (final scale in [1.0, 2.0]) {
+        testWidgets('the inbox state fits at ${width.toInt()} × $scale', (
+          tester,
+        ) async {
+          tester.view.physicalSize = Size(width, 900);
+          tester.view.devicePixelRatio = 1;
+          addTearDown(tester.view.resetPhysicalSize);
+          addTearDown(tester.view.resetDevicePixelRatio);
+          tester.platformDispatcher.textScaleFactorTestValue = scale;
+          addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+
+          await _pumpAt(
+            tester,
+            Routes.signUp,
+            _FakeAuth(signUpOutcome: SignUpOutcome.confirmEmail),
+          );
+          await _fill(
+            tester,
+            email: 'a-rather-long-address@example.test',
+            password: 'good-password',
+            name: 'Dara',
+          );
+          await tester.ensureVisible(find.text('Sign up'));
+          await tester.tap(find.text('Sign up'));
+          await tester.pumpAndSettle();
+
+          expect(find.text('Check your inbox'), findsOneWidget);
+          expect(tester.takeException(), isNull);
+        });
+      }
+    }
   });
 }

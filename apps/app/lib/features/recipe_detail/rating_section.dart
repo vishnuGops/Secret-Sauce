@@ -2,11 +2,10 @@ import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:app/features/recipe_detail/rating_actions.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
-import 'package:app/routing/app_router.dart';
+import 'package:app/routing/auth_return.dart';
 
 /// "Rate this recipe" block: half-star input for signed-in non-owners, plus the
 /// current average. Owners see why they can't rate (RLS rejects self-ratings).
@@ -44,7 +43,7 @@ class RatingSection extends ConsumerWidget {
             ),
           ),
           TextButton(
-            onPressed: () => context.go(Routes.auth),
+            onPressed: () => goToSignIn(context),
             child: const Text('Sign in'),
           ),
         ],

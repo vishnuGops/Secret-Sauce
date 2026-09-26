@@ -794,13 +794,50 @@ id desc`; `listSharedWithMe` `recipe_shares.created_at desc, recipe_id desc` (th
 | Screen         | Route                             | Notes                                                                                 |
 | -------------- | --------------------------------- | ------------------------------------------------------------------------------------- |
 | _(none)_       | `/`                               | **Redirect-only** — forwards to `/discover`. The landing screen was retired: it had no entry point in either chrome (the web brand mark already went to Discover), so it was reachable only by cold start. |
-| Sign in / up   | `/auth`                           | Supabase auth                                                                         |
+| Sign in / up   | `/auth`                           | Supabase auth. `?from=` returns the visitor to where they were; a sign-up without a session shows "check your inbox" (§7.0d) |
 | Discover       | `/discover`                       | Masthead + search, three shelves (`01 UNDER 30`, `02 WEEKEND PROJECTS`, `03 MOST FORKED` — §6.0), then one browse grid sorted Top rated / Trending / Newest. No `AppBar`: the masthead is the title. Public, no sign-in |
 | Chefs          | `/chefs`                          | Leaderboard ranked by chef score (public, no sign-in)                                 |
-| My Recipes     | `/my`                             | Tabs: My / Shared-with-me; `RecipeCard` grid with Public/Private badges                |
+| My Recipes     | `/my`                             | Tabs: My / Shared-with-me / **Saved** (§7.0d); `RecipeCard` grid with Public/Private badges on My |
 | Recipe detail  | `/recipe/:id`                     | **Two layouts, one screen (§7.1).** Expanded (≥ 1000) renders the v2 reading page: measured 1140px column, header band, facts strip, ingredients rail / method column. Compact **and medium** render the v2 compact page — cover-first, facts quad, pinned jump bar, `Ready to cook?` bar; the v1 hero was deleted when compact v2 landed, so there is no third design for the 600–1000 band. Both: servings scaler, rating, like/save **toggles**, fork, versions (public recipes viewable signed-out; like/save/rate/**fork** send a signed-out visitor to `/auth` rather than calling the repository — B051, and B084 for fork) |
-| Recipe editor  | `/recipe/new`, `/recipe/:id/edit` | Structured create/edit                                                                |
-| Profile        | `/profile`                        | Current user                                                                          |
+| Recipe editor  | `/recipe/new`, `/recipe/:id/edit` | Structured create/edit; an existing recipe's overflow deletes it (§7.0d)              |
+| Profile        | `/profile`                        | Current user: edit name / bio / avatar, "View my chef page" (§7.0d)                   |
+
+### 7.0d Account flows (Phase 37)
+
+Five capabilities the 36a audit found missing, all client-side over existing SQL — no schema
+change, so no new `rls_matrix.sql` check; the live stack confirmed each query shape.
+
+- **Return after sign-in (UX-017).** `routing/auth_return.dart`: `goToSignIn(context)` sends a
+  signed-out visitor to `/auth?from=<current location>`; the router does the same for every
+  `needsAuth` path. `from` is attacker-controllable, so both ends pass it through
+  `safeReturnPath` — exactly one leading `/`, no backslash or control character, no scheme or
+  authority, not `/auth` itself — and anything else falls back to Discover. A signed-in visit to
+  `/auth?from=…` forwards straight there. Callers: like/save, fork, rate (detail and cook finish),
+  the profile's and the web top bar's Sign in / Sign up.
+- **Sign-up that needs confirming (UX-018).** `AuthRepository.signUp` returns `SignUpOutcome`
+  (`signedIn` / `confirmEmail`, from whether GoTrue returned a session). `confirmEmail` — the hosted
+  default — replaces the form with "Check your inbox" and a way back to sign in, instead of leaving
+  the screen signed out.
+- **Delete (UX-037).** `recipe_detail/delete_action.dart`: an owner-only overflow on both detail
+  layouts and in the editor opens a root-navigator confirm that states what goes (versions, ratings,
+  likes, saves cascade) and what stays (other cooks' forks keep their copy; the lineage FKs are `on
+  delete set null`). `RecipeRepository.delete` already throws `WriteDeniedException` on an RLS miss
+  (Gotcha 2). `deleteInFlightProvider` guards a second confirm; success invalidates every list that
+  could still show the row and goes to `/my`. `recipeProvider(id)` is deliberately not invalidated —
+  it would refetch a deleted row.
+- **Profile editing (UX-038).** `features/profile/edit_profile_dialog.dart` writes only the three
+  granted columns (`display_name`, `avatar_url`, `bio`) through `ProfileRepository.updateMine`, with
+  the `profiles_text_lengths` limits (80 / 500) as `maxLength`. An avatar pick is held as bytes and
+  uploaded to the `avatars` bucket only on Save (the editor's rule: an abandoned edit leaves no
+  object), behind the shared `kMaxUploadBytes` guard and `kImageTooLargeMessage`. "View my chef page"
+  (profile screen and web account menu) pushes `/chef/<profiles.id>`. The page is capped at 560px;
+  its `LegalFooter` renders on compact only, since web carries it in the chrome.
+- **Saved (UX-020).** `RecipeRepository.listSaved` pages `recipe_saves` (newest save first,
+  `recipe_id` tie-break — Gotcha 24) with a `recipes!inner(…)` embed, so a saved recipe that has since
+  gone private is dropped server-side, before `range`, instead of arriving as `null`. `saves_select` is
+  `user_id = current_profile_id()`; `rls_matrix.sql` D24 already pins that a stranger sees nobody
+  else's saves. The save toggle on the detail page invalidates `savedRecipesProvider`, because the tab
+  stays mounted in the shell under the pushed page.
 
 ### 7.0a Legal pages and the footer (Phase 35a)
 

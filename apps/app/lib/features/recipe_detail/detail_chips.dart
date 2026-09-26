@@ -2,10 +2,10 @@ import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
+import 'package:app/features/my_recipes/my_recipes_providers.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
-import 'package:app/routing/app_router.dart';
+import 'package:app/routing/auth_return.dart';
 
 /// The small controls the detail screen's header row is built from: the
 /// kicker and tag pills (36c), a read-only metadata chip, the like/save
@@ -180,6 +180,10 @@ class LikeSaveButtons extends ConsumerWidget {
                 write: (repo, next) => repo.setSaved(recipe.id, saved: next),
                 active: active,
                 failure: 'Could not update your save',
+                // The Saved tab (UX-020) sits in the shell under this pushed
+                // page, so it stays alive; without this an unsaved recipe is
+                // still listed when the reader backs out to it.
+                alsoRefresh: [savedRecipesProvider],
               ),
         ),
       ],
@@ -203,15 +207,21 @@ Future<void> _toggleEngagement(
   required Future<void> Function(RecipeRepository repo, bool next) write,
   required bool active,
   required String failure,
+  List<ProviderOrFamily> alsoRefresh = const [],
 }) async {
   if (ref.read(currentUserIdProvider) == null) {
-    context.go(Routes.auth);
+    // UX-017: `?from=` brings the visitor back to this recipe to finish the
+    // like or save they started.
+    goToSignIn(context);
     return;
   }
   try {
     await write(ref.read(recipeRepositoryProvider), !active);
     ref.invalidate(stateProvider);
     ref.invalidate(recipeProvider(recipeId));
+    for (final provider in alsoRefresh) {
+      ref.invalidate(provider);
+    }
   } catch (e) {
     if (context.mounted) {
       ScaffoldMessenger.of(

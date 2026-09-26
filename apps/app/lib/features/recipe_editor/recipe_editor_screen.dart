@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:app/features/recipe_detail/delete_action.dart';
 import 'package:app/features/recipe_editor/cover_picker.dart';
 import 'package:app/features/recipe_editor/edit_models.dart';
 import 'package:app/features/recipe_editor/ingredients_editor.dart';
@@ -145,6 +146,11 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
 
   bool get _canSave => !widget.isEditing || _loaded;
 
+  /// The title as it was **loaded**, for the delete confirm (UX-037): the
+  /// dialog names the recipe that will be deleted, which is the stored one,
+  /// not whatever half-typed title the draft holds.
+  String _loadedTitle = '';
+
   @override
   void initState() {
     super.initState();
@@ -202,6 +208,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
           .read(recipeRepositoryProvider)
           .getById(widget.recipeId!);
       _title.text = recipe.title;
+      _loadedTitle = recipe.title;
       _description.text = recipe.description;
       _cuisine.text = recipe.cuisine ?? '';
       _category.text = recipe.category ?? '';
@@ -451,13 +458,9 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
     // where the file was chosen.
     if (bytes.length > kMaxUploadBytes) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'That image is over 5 MB. Please pick a smaller one.',
-            ),
-          ),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text(kImageTooLargeMessage)));
       }
       return null;
     }
@@ -566,6 +569,20 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       );
     }
   }
+
+  /// Delete from the editor's overflow (UX-037), through the reading page's
+  /// one delete path.
+  ///
+  /// It does **not** go through [_cancel] or trip the discard prompt, and does
+  /// not need to disarm it: a successful delete leaves by `router.go`, which
+  /// replaces the page stack rather than popping, and `PopScope` is consulted
+  /// only on a pop. Deleting is itself the answer to "discard changes?".
+  Future<void> _delete() => confirmAndDeleteRecipeById(
+    context,
+    ref,
+    recipeId: widget.recipeId!,
+    title: _loadedTitle,
+  );
 
   Future<void> _save() async {
     // Belt and braces behind the build-time guard: an unloaded edit draft holds
@@ -681,6 +698,10 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
         ),
       );
     }
+    // A delete in flight disables Save and the overflow: saving a recipe that
+    // is being deleted can only end in a `WriteDeniedException` (UX-037).
+    final deleting =
+        widget.isEditing && ref.watch(deleteInFlightProvider(widget.recipeId!));
     final form = Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -693,7 +714,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
           Padding(
             padding: const EdgeInsets.only(right: AppSpacing.sm),
             child: FilledButton.icon(
-              onPressed: (_saving || !_canSave) ? null : _save,
+              onPressed: (_saving || deleting || !_canSave) ? null : _save,
               icon:
                   _saving
                       ? const SizedBox(
@@ -707,6 +728,22 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
               label: const Text('Save'),
             ),
           ),
+          // Only for a loaded recipe: there is nothing to delete while
+          // creating, and an edit whose load failed never reaches this form.
+          if (widget.isEditing && _loaded)
+            PopupMenuButton<RecipeOwnerAction>(
+              tooltip: 'More',
+              icon: const Icon(Icons.more_vert),
+              enabled: !_saving && !deleting,
+              useRootNavigator: true,
+              onSelected: (action) {
+                switch (action) {
+                  case RecipeOwnerAction.delete:
+                    unawaited(_delete());
+                }
+              },
+              itemBuilder: (context) => [deleteRecipeMenuItem(context)],
+            ),
         ],
       ),
       body: Form(

@@ -1,3 +1,4 @@
+import 'package:app/features/chefs/chef_page.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:app/routing/top_nav_bar.dart';
 import 'package:core/core.dart';
@@ -5,6 +6,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
 /// The web top navigation is fixed-height chrome with a centred pill, which is
 /// the same shape of problem as the recipe card (B001/B002/B016): the row
@@ -34,11 +36,11 @@ class _FakeAuth implements AuthRepository {
   }) async {}
 
   @override
-  Future<void> signUp({
+  Future<SignUpOutcome> signUp({
     required String email,
     required String password,
     required String displayName,
-  }) async {}
+  }) async => SignUpOutcome.signedIn;
 
   @override
   Future<void> signOut() async {}
@@ -113,8 +115,9 @@ class _FakeChefRepository implements ChefRepository {
   }) async => null;
 }
 
-/// Pumps the real router (so the shell picks the chrome) at [location].
-Future<void> _pump(
+/// Pumps the real router (so the shell picks the chrome) at [location], and
+/// returns it so a test can read where a tap went.
+Future<GoRouter> _pump(
   WidgetTester tester, {
   required double width,
   String location = Routes.chefs,
@@ -155,7 +158,11 @@ Future<void> _pump(
     ),
   );
   await tester.pumpAndSettle();
+  return router;
 }
+
+/// The router's current location, query included.
+Uri _here(GoRouter router) => router.routerDelegate.currentConfiguration.uri;
 
 /// Only text drawn inside the bar — the hosting screen has an app bar with the
 /// same title, so an unscoped `find.text` would match either.
@@ -227,8 +234,25 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Profile'), findsOneWidget);
+    expect(find.text('View my chef page'), findsOneWidget);
     expect(find.text('Sign out'), findsOneWidget);
     expect(find.text('Sous Chef'), findsOneWidget); // tier in the menu header
+  });
+
+  // UX-038: nothing linked a member to their own public page.
+  testWidgets('the account menu opens my chef page', (tester) async {
+    await _pump(tester, width: 1400, uid: 'user-1');
+
+    await tester.tap(find.byType(ChefAvatar));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('View my chef page'));
+    await tester.pumpAndSettle();
+
+    // Pushed, so asserted on the page rather than the base location. The fake
+    // profile echoes the id it was asked for, so this is the loaded
+    // `profiles.id`, which is what `/chef/:id` takes (Phase 35b).
+    expect(find.byType(ChefPage), findsOneWidget);
+    expect(tester.widget<ChefPage>(find.byType(ChefPage)).chefId, 'user-1');
   });
 
   testWidgets('signed out: Sign in / Sign up, and no My Recipes', (
@@ -315,6 +339,40 @@ void main() {
 
     expect(find.text('Welcome back'), findsOneWidget);
     expect(find.text('Display name'), findsNothing);
+  });
+
+  // UX-017: every way into /auth from the chrome remembers the page the
+  // visitor was on, so signing in brings them back to it.
+  testWidgets('Sign in carries ?from= the current page', (tester) async {
+    final router = await _pump(tester, width: 1400);
+
+    await tester.tap(_inBar('Sign in'));
+    await tester.pumpAndSettle();
+
+    expect(_here(router).path, Routes.auth);
+    expect(_here(router).queryParameters['from'], Routes.chefs);
+    expect(_here(router).queryParameters['mode'], isNull);
+  });
+
+  testWidgets('Sign up carries ?from= as well as mode=signup', (tester) async {
+    final router = await _pump(tester, width: 1400);
+
+    await tester.tap(_inBar('Sign up'));
+    await tester.pumpAndSettle();
+
+    expect(_here(router).path, Routes.auth);
+    expect(_here(router).queryParameters['mode'], 'signup');
+    expect(_here(router).queryParameters['from'], Routes.chefs);
+  });
+
+  testWidgets('the medium login button carries ?from= too', (tester) async {
+    final router = await _pump(tester, width: 760);
+
+    await tester.tap(find.byTooltip('Sign in or sign up'));
+    await tester.pumpAndSettle();
+
+    expect(_here(router).path, Routes.auth);
+    expect(_here(router).queryParameters['from'], Routes.chefs);
   });
 
   testWidgets('tapping a destination navigates', (tester) async {

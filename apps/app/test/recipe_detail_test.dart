@@ -18,6 +18,7 @@ import 'dart:async';
 // untouched, which is the point of testing behaviour rather than widget trees:
 // they assert what reached the repository, not what the page looked like. The
 // layout's own assertions are in the two groups at the bottom.
+import 'package:app/features/my_recipes/my_recipes_providers.dart';
 import 'package:app/features/recipe_detail/fork_action.dart';
 import 'package:app/features/recipe_detail/rail_panel.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
@@ -155,11 +156,11 @@ class _FakeAuth implements AuthRepository {
   }) async {}
 
   @override
-  Future<void> signUp({
+  Future<SignUpOutcome> signUp({
     required String email,
     required String password,
     required String displayName,
-  }) async {}
+  }) async => SignUpOutcome.signedIn;
 
   @override
   Future<void> signOut() async {}
@@ -260,6 +261,19 @@ class _FakeRecipeRepository implements RecipeRepository {
     int limit = kRecipePageSize,
     int offset = 0,
   }) => throw UnimplementedError();
+
+  /// How many times the Saved tab's list was read — the save toggle must
+  /// refresh it (UX-020).
+  int savedReads = 0;
+
+  @override
+  Future<List<Recipe>> listSaved({
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) async {
+    savedReads++;
+    return const [];
+  }
 
   @override
   Future<List<Recipe>> listSharedWithMe({
@@ -382,12 +396,17 @@ void main() {
     tester,
   ) async {
     final repo = _FakeRecipeRepository();
-    await _pump(tester, repo: repo, uid: null);
+    final router = await _pump(tester, repo: repo, uid: null);
 
     await tester.tap(find.byIcon(Icons.favorite_border));
     await tester.pumpAndSettle();
 
     expect(find.text('AUTH SCREEN'), findsOneWidget);
+    // UX-017: the recipe rides along, so signing in lands back here.
+    expect(
+      router.routerDelegate.currentConfiguration.uri.queryParameters['from'],
+      '/recipe/r1',
+    );
     expect(
       repo.likeWrites,
       isEmpty,
@@ -438,6 +457,27 @@ void main() {
       false,
     ], reason: 'the action must be a toggle, not a one-way like');
     expect(find.byIcon(Icons.favorite_border), findsOneWidget);
+  });
+
+  // UX-020: the Saved tab lives in the shell under this pushed page, so its
+  // provider stays alive while the reader unsaves; the toggle must refresh it.
+  testWidgets('a save toggle refreshes the Saved tab behind the page', (
+    tester,
+  ) async {
+    final repo = _FakeRecipeRepository(saved: true);
+    await _pump(tester, repo: repo, uid: 'me');
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(RecipeDetailScreen)),
+    );
+    final keepAlive = container.listen(savedRecipesProvider, (_, __) {});
+    addTearDown(keepAlive.close);
+    await tester.pumpAndSettle();
+    expect(repo.savedReads, 1);
+
+    await tester.tap(find.byIcon(Icons.bookmark));
+    await tester.pumpAndSettle();
+
+    expect(repo.savedReads, 2);
   });
 
   testWidgets('already saved: the icon is filled and the tap UNSAVES', (

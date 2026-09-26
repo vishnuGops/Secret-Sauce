@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:app/routing/app_router.dart';
+import 'package:app/routing/auth_return.dart';
 import 'package:app/routing/nav_destinations.dart';
 
 /// Web top navigation: brand, a centred segmented pill of destinations, and
@@ -391,7 +392,7 @@ class _NavItem extends StatelessWidget {
   }
 }
 
-enum _AccountAction { profile, signOut }
+enum _AccountAction { profile, chefPage, signOut }
 
 /// Identity at the far right: the avatar is the account control, and the menu
 /// behind it is where Profile and Sign out moved to.
@@ -404,10 +405,17 @@ class _AccountMenu extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     _AccountAction action,
+    Profile? profile,
   ) async {
     switch (action) {
       case _AccountAction.profile:
         context.go(Routes.profile);
+      case _AccountAction.chefPage:
+        // UX-038: the member's own public page. `profile.id` is `profiles.id`,
+        // the key `/chef/:id` takes — not the auth uid (Phase 35b). The item
+        // is only offered once the profile has loaded, so it is never null
+        // here; the guard is for the type.
+        if (profile != null) await context.push(Routes.chef(profile.id));
       case _AccountAction.signOut:
         // The repository, not `features/auth`'s controller (OPT-A3): the nav
         // chrome is not part of the auth feature, and sign-out has no form
@@ -434,7 +442,7 @@ class _AccountMenu extends ConsumerWidget {
       tooltip: name,
       position: PopupMenuPosition.under,
       onSelected: (action) async {
-        await _run(context, ref, action);
+        await _run(context, ref, action, profile);
       },
       itemBuilder:
           (context) => [
@@ -466,6 +474,16 @@ class _AccountMenu extends ConsumerWidget {
                 title: Text('Profile'),
               ),
             ),
+            if (profile != null)
+              const PopupMenuItem(
+                value: _AccountAction.chefPage,
+                child: ListTile(
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                  leading: Icon(Icons.storefront_outlined),
+                  title: Text('View my chef page'),
+                ),
+              ),
             const PopupMenuItem(
               value: _AccountAction.signOut,
               child: ListTile(
@@ -513,7 +531,7 @@ class _SignedOutActions extends StatelessWidget {
       // login button lands on the same screen.
       return IconButton.filled(
         tooltip: 'Sign in or sign up',
-        onPressed: () => context.go(Routes.auth),
+        onPressed: () => goToSignIn(context),
         icon: const Icon(Icons.login, size: _kIconSize),
       );
     }
@@ -521,13 +539,15 @@ class _SignedOutActions extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
+        // UX-017: both carry `?from=` the page the visitor is on, so signing
+        // in brings them back to it rather than to Discover.
         TextButton(
-          onPressed: () => context.go(Routes.auth),
+          onPressed: () => goToSignIn(context),
           child: const Text('Sign in'),
         ),
         const SizedBox(width: AppSpacing.sm),
         FilledButton(
-          onPressed: () => context.go(Routes.signUp),
+          onPressed: () => goToSignIn(context, signUp: true),
           child: const Text('Sign up'),
         ),
       ],

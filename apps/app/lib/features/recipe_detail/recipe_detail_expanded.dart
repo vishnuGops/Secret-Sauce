@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:app/features/recipe_detail/delete_action.dart';
 import 'package:app/features/recipe_detail/detail_chips.dart';
 import 'package:app/features/recipe_detail/detail_layout.dart';
 import 'package:app/features/recipe_detail/detail_provenance.dart';
@@ -329,6 +330,21 @@ class _HeaderBand extends ConsumerWidget {
                               onPressed:
                                   () =>
                                       context.go(Routes.editRecipe(recipe.id)),
+                            ),
+                            // UX-037: Delete, one step behind an overflow.
+                            // Outlined like its two neighbours: the standard
+                            // IconButton under a PopupMenuButton takes the
+                            // outline from `side` and the icon colour from
+                            // `foregroundColor` — the two things
+                            // `IconButton.outlined` sets that the plain
+                            // variant does not (PopupMenuButton would
+                            // otherwise paint the ambient IconTheme colour).
+                            RecipeOwnerMenu(
+                              recipe: recipe,
+                              style: IconButton.styleFrom(
+                                foregroundColor: scheme.onSurfaceVariant,
+                                side: BorderSide(color: scheme.outline),
+                              ),
                             ),
                           ],
                         ],

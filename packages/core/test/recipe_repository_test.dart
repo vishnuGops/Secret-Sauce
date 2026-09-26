@@ -201,6 +201,42 @@ void main() {
     });
   });
 
+  // UX-020: the Saved tab. Paged over `recipe_saves`, so that table carries the
+  // total order, and the embed is `!inner` so a saved recipe that has since
+  // gone private drops out server-side instead of arriving as `null`.
+  group('listSaved', () {
+    test('pages recipe_saves in a total order, with an inner embed', () async {
+      final (:http, :client, :repo) = _repo([
+        (200, jsonEncode(_uid)),
+        (
+          200,
+          jsonEncode([
+            {'recipes': _recipeRow()},
+          ]),
+        ),
+      ]);
+      await signInAs(client, _uid);
+
+      final saved = await repo.listSaved(offset: kRecipePageSize);
+
+      final req = http.requests.last;
+      expect(req.url.path, endsWith('/recipe_saves'));
+      expect(req.param('user_id'), 'eq.$_uid');
+      expect(req.param('select'), startsWith('recipes!inner('));
+      expect(req.order, 'created_at.desc.nullslast,recipe_id.desc.nullslast');
+      expect(req.param('offset'), '$kRecipePageSize');
+      expect(req.param('limit'), '$kRecipePageSize');
+      expect(saved.single.id, 'r1');
+    });
+
+    test('signed out, it throws before reaching the network', () async {
+      final (:http, :client, :repo) = _repo([]);
+
+      await expectLater(repo.listSaved(), throwsA(isA<StateError>()));
+      expect(http.requests, isEmpty);
+    });
+  });
+
   // Phase 35b. `profiles.id` stopped being the auth uid for one person: a
   // member who has claimed an imported chef page. These pin the two properties
   // that make that person's writes land — the repository filters on the

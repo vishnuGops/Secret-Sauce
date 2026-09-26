@@ -2,14 +2,13 @@ import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:app/features/recipe_detail/cook_mode_model.dart';
 import 'package:app/features/recipe_detail/cook_mode_providers.dart';
 import 'package:app/features/recipe_detail/fork_action.dart';
 import 'package:app/features/recipe_detail/rating_actions.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
-import 'package:app/routing/app_router.dart';
+import 'package:app/routing/auth_return.dart';
 
 /// The finish screen's reading measure (canvas frame E).
 const double _kFinishMaxWidth = 560;
@@ -171,7 +170,7 @@ class _FinishRating extends ConsumerWidget {
             ),
           ),
           TextButton(
-            onPressed: () => context.go(Routes.auth),
+            onPressed: () => goToSignIn(context),
             child: const Text('Sign in'),
           ),
         ],
