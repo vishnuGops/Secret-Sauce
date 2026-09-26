@@ -19,6 +19,32 @@ Widget _wrap(Widget child, {double? width, double scale = 1.0, Brightness? b}) {
 }
 
 void main() {
+  // Phase 38 review: the 48dp box around a tappable badge centred it under a
+  // tight width and grew it to a bounded height; it keeps its place and size.
+  testWidgets('a tappable badge keeps its place under tight constraints', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.light(),
+        home: Scaffold(
+          // A tight width (stretch) and a bounded, loose height.
+          body: SizedBox(
+            width: 400,
+            height: 200,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [ChefBadge(name: 'Amara Okonkwo', onTap: () {})],
+            ),
+          ),
+        ),
+      ),
+    );
+    final avatar = tester.getTopLeft(find.byType(ChefAvatar));
+    expect(avatar.dx, 0);
+    expect(tester.getSize(find.byType(InkWell)).height, lessThan(200));
+  });
+
   _b055();
   group('TierChip', () {
     testWidgets('renders the label for every tier', (tester) async {

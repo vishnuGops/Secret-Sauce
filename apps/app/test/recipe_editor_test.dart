@@ -1353,6 +1353,65 @@ void main() {
 
       expect(find.text('Discard changes?'), findsOneWidget);
     });
+
+    // B149: no draft field reported a keystroke, so changing an ingredient's
+    // name or a step's text and backing out threw the edit away unasked.
+    for (final label in ['Name', 'Step']) {
+      testWidgets('typing in a draft $label field is an edit', (tester) async {
+        await tester.pumpWidget(_routedEditApp(_loadedRepo()));
+        await tester.pumpAndSettle();
+
+        final field = find.widgetWithText(TextField, label).first;
+        await tester.ensureVisible(field);
+        await tester.pumpAndSettle();
+        await tester.enterText(field, 'changed');
+        await tester.pumpAndSettle();
+
+        await tester.binding.handlePopRoute();
+        await tester.pumpAndSettle();
+        expect(find.text('Discard changes?'), findsOneWidget);
+      });
+    }
+
+    // Phase 38 review: showing a step's temperature and tip is not an edit
+    // (the steps twin of B143).
+    testWidgets('opening Temperature & tip is not an edit', (tester) async {
+      await tester.pumpWidget(_routedEditApp(_loadedRepo()));
+      await tester.pumpAndSettle();
+
+      final toggle = find.byTooltip('Temperature & tip').first;
+      await tester.ensureVisible(toggle);
+      await tester.pumpAndSettle();
+      await tester.tap(toggle);
+      await tester.pumpAndSettle();
+      await tester.tap(toggle);
+      await tester.pumpAndSettle();
+
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.text('Discard changes?'), findsNothing);
+    });
+  });
+
+  // Phase 38 review: a stored duration the parser refuses (a negative — the
+  // column has no check — or one past a week) saves back untouched instead of
+  // blocking the save of a step the cook never touched.
+  test('an untouched out-of-range step time saves back as it was', () {
+    for (final stored in [-5, kMaxDurationMinutes + 60]) {
+      final draft = EditStep.fromModel(
+        RecipeStep(
+          id: 's',
+          groupId: 'g',
+          text: 'Rest.',
+          durationMinutes: stored,
+        ),
+      );
+      expect(draft.hasInvalidDuration, isFalse, reason: '$stored');
+      expect(draft.toModel(0).durationMinutes, stored);
+      draft.duration.text = '1h 30m';
+      expect(draft.toModel(0).durationMinutes, 90);
+      draft.dispose();
+    }
   });
 
   // Phase 38 (UX-035 / UX-039 / UX-052): the editor's order, its honest empty

@@ -268,8 +268,9 @@ String _spokenFraction(int numerator, int denominator) {
   return '$numerator ${numerator == 1 ? words.$1 : words.$2}';
 }
 
-/// Whole-and-glyph (`1½`) or a bare glyph (`½`).
-final _glyphPattern = RegExp(r'(\d+)?([½¼¾])');
+/// Whole-and-glyph (`1½`, or `1 ½` as a cook types it into a note) or a bare
+/// glyph (`½`).
+final _glyphPattern = RegExp(r'(?:(\d+) ?)?([½¼¾])');
 
 /// Whole-and-slashed (`1 1⁄3`) or a bare slashed fraction (`2⁄3`).
 final _slashedPattern = RegExp(r'(?:(\d+) )?(\d+)⁄(\d+)');

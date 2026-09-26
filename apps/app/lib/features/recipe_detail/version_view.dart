@@ -120,8 +120,10 @@ class VersionView extends ConsumerWidget {
                 icon: Icons.history,
                 title: 'Nothing saved for this version',
                 message:
-                    'This version was saved before Secret Sauce kept a copy '
-                    'of each version, so there is nothing to show.',
+                    // Accurate for today's data too: the seeded recipes'
+                    // first versions are written as `{}` (Phase 38 review).
+                    'No copy of this version was kept, so there is nothing '
+                    'to show.',
               ),
             ),
             AsyncError(:final error) => SingleChildScrollView(

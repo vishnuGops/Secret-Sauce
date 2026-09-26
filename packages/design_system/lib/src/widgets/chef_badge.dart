@@ -121,7 +121,15 @@ class ChefBadge extends StatelessWidget {
                 constraints: const BoxConstraints(
                   minHeight: kMinInteractiveDimension,
                 ),
-                child: Align(widthFactor: 1, child: content),
+                // Start-aligned and shrink-wrapped both ways, so under a
+                // tight width or a bounded height the badge keeps its old
+                // place and size (Phase 38 review).
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  widthFactor: 1,
+                  heightFactor: 1,
+                  child: content,
+                ),
               ),
     );
   }

@@ -393,6 +393,9 @@ regression test checked by reverting it. Evidence is the named tests; scores are
 | B141 (+ B146) | fixed | `deleteOwnAvatar`; `storage_service_test`, `profile_screen_test` |
 | Spoken quantities (new) | fixed | `spokenQuantity`; `formatting_test`, `reading_a11y_test`, `cook_mode_test` "spoken quantities" |
 
+The branch's `/code-review` (three reviewers) found no Critical or High; B149–B152 were fixed with
+regression tests before the final commit (BUG-TRACKER).
+
 Still open from this audit: UX-029 (owner), UX-030 (Wave E, blocked on the unit registry carrying
 display forms where SQL can read them — ROADMAP Phase 38), UX-034 (owner content). One new open
 question: desktop web's adaptive density leaves a `TextButton` ~32px tall (DESIGN §3.6).

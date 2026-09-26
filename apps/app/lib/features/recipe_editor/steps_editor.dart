@@ -59,7 +59,8 @@ class StepsEditor extends StatelessWidget {
               ],
             ),
       );
-      if (confirmed != true) return;
+      // B140's rule: the editor can be gone by the time the dialog answers.
+      if (confirmed != true || !context.mounted) return;
     }
     final index = groups.indexOf(group);
     if (index < 0) return;
@@ -96,6 +97,8 @@ class StepsEditor extends StatelessWidget {
                             labelText: 'Section name (optional)',
                             hintText: 'e.g. Prepare the dough',
                           ),
+                          // Typing is an edit (B149).
+                          onChanged: (_) => onChanged(),
                         ),
                       ),
                       if (groups.length > 1)
@@ -252,8 +255,19 @@ class _StepRow extends StatelessWidget {
   final void Function(int to) onMove;
   final VoidCallback onRemove;
 
+  /// The disclosure rebuilds only this row: showing a field is not an edit,
+  /// and it used to mark the editor dirty (the steps twin of B143 — Phase 38
+  /// review).
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => StatefulBuilder(
+    builder:
+        (context, setLocal) => _body(
+          context,
+          () => setLocal(() => step.showDetails = !step.showDetails),
+        ),
+  );
+
+  Widget _body(BuildContext context, VoidCallback toggleDetails) {
     final scheme = Theme.of(context).colorScheme;
     final hasExtras =
         step.temperature.text.trim().isNotEmpty ||
@@ -297,6 +311,7 @@ class _StepRow extends StatelessWidget {
                     labelText: 'Step',
                     isDense: true,
                   ),
+                  onChanged: (_) => onChanged(),
                 ),
               ),
               IconButton(
@@ -356,6 +371,7 @@ class _StepRow extends StatelessWidget {
                 Expanded(
                   child: TextFormField(
                     controller: step.duration,
+                    onChanged: (_) => onChanged(),
                     decoration: const InputDecoration(
                       labelText: 'Time',
                       hintText: 'e.g. 1h 30m',
@@ -378,10 +394,7 @@ class _StepRow extends StatelessWidget {
                   icon: const Icon(Icons.tune, size: AppIconSize.button),
                   color: hasExtras ? scheme.primary : null,
                   tooltip: 'Temperature & tip',
-                  onPressed: () {
-                    step.showDetails = !step.showDetails;
-                    onChanged();
-                  },
+                  onPressed: toggleDetails,
                 ),
               ],
             ),
@@ -398,6 +411,7 @@ class _StepRow extends StatelessWidget {
                 children: [
                   TextField(
                     controller: step.temperature,
+                    onChanged: (_) => onChanged(),
                     decoration: const InputDecoration(
                       labelText: 'Temperature',
                       hintText: 'e.g. 180°C',
@@ -407,6 +421,7 @@ class _StepRow extends StatelessWidget {
                   const SizedBox(height: AppSpacing.sm),
                   TextField(
                     controller: step.tip,
+                    onChanged: (_) => onChanged(),
                     decoration: const InputDecoration(
                       labelText: 'Tip',
                       hintText: "e.g. don't overmix",

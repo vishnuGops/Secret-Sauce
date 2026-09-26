@@ -372,6 +372,11 @@ class _StarRatingInputState extends State<StarRatingInput> {
               minHeight: kMinInteractiveDimension,
             ),
             child: Align(
+              // Start, not the default centre: `_ratingAt` measures dx from
+              // the detector's left edge, so under a tight wider width a
+              // centred row would map taps to the wrong half-star (Phase 38
+              // review).
+              alignment: AlignmentDirectional.centerStart,
               widthFactor: 1,
               heightFactor: 1,
               // Foreground, inside the box: the ring never moves or resizes

@@ -89,7 +89,14 @@ class ProfileScreen extends ConsumerWidget {
                       ],
                       const SizedBox(height: AppSpacing.xl),
                       FilledButton.icon(
-                        onPressed: () => _edit(context, profile),
+                        // Not while the profile refreshes (Phase 38 review):
+                        // the page shows the previous row until it lands,
+                        // and a dialog opened on it would write back a photo
+                        // URL the last save already deleted (B141).
+                        onPressed:
+                            async.isRefreshing
+                                ? null
+                                : () => _edit(context, profile),
                         icon: const Icon(Icons.edit_outlined),
                         label: const Text('Edit profile'),
                       ),

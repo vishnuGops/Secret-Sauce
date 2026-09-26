@@ -247,6 +247,8 @@ void main() {
       expect(spokenQuantity('½ tsp'), '1 half tsp');
       expect(spokenQuantity('1¼ cup'), '1 and 1 quarter cup');
       expect(spokenQuantity('2¾ cups'), '2 and 3 quarters cups');
+      // As a cook types it into a note (Phase 38 review).
+      expect(spokenQuantity('1 ½ cups'), '1 and 1 half cups');
     });
 
     test('everything else passes through', () {

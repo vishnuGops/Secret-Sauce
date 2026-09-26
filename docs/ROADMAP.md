@@ -966,7 +966,7 @@ and the doc drift (SDS rail/§8, CLAUDE.md layout, DESIGN §4, the `frac` commen
 
 ---
 
-## Phase 38 — UX remediation, round 2: the audit's remaining unblocked findings (in progress)
+## Phase 38 — UX remediation, round 2: the audit's remaining unblocked findings (waves A–D done 2026-09-26; optional E not started)
 
 Branch `feat/phase-38-ux-remediation-2` (from Phase 37's `cde7fbc`). The unblocked findings Phase 37
 left open, in four waves, each committed behind a green format + analyze + test gate with a
@@ -1032,6 +1032,18 @@ decision.
       them; static sweep appended to AUDIT.md
 - [ ] Open, owner's call: desktop web keeps Flutter's adaptive (compact) density, so a text
       button there is ~32px tall — DESIGN §3.6 accepts it; the tests run as Android (48dp)
+
+**Code review (`/code-review`, three parallel reviewers over `cde7fbc..HEAD`)** — no Critical or
+High. Fixed with regression tests, each mutation-checked: B149 (Medium, pre-existing: typing in a
+draft field never marked the editor dirty), B150 (Medium: `1,000` read as 1; parsers threw on long
+digit runs; no duration ceiling), B151 (Medium: closing the profile dialog mid-save deleted the
+photo being set; stale Edit during a refresh), B152 (Low: the chefs end note counted by a screen
+reader, star / badge alignment under a tight width, the steps disclosure dirtying the form, a
+missing `mounted` check, empty-state copy). Accepted:
+
+- [ ] Dragging an ingredient or step cannot auto-scroll the page (each list is shrink-wrapped
+      inside the page's scroll); Move up / Move down is the long-distance path. A fix is a
+      `SliverReorderableList` inside a `CustomScrollView` page
 
 **Wave E (optional) — UX-030 unit canon at import** — not started. It needs the display forms
 where SQL can read them: `food_unit` (generated from `nutritionData/units.json`) carries spellings

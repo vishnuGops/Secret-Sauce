@@ -93,15 +93,17 @@ class ChefsRails extends ConsumerWidget {
             itemCount:
                 loading
                     ? kChefRailLength
-                    : _withEndNote(popular.length.clamp(1, kChefRailLength)),
+                    : popular.length.clamp(1, kChefRailLength),
+            trailing:
+                loading || !_isShort(popular.length)
+                    ? null
+                    : _RailEndNote(text: popularEndNote, height: height),
             itemBuilder:
                 (context, i) =>
                     loading
                         ? SpotlightCardPlaceholder(
                           tier: ChefTier.values[i % ChefTier.values.length],
                         )
-                        : i >= popular.length
-                        ? _RailEndNote(text: popularEndNote, height: height)
                         : ChefSpotlightCard(
                           standing: popular[i],
                           totalChefs: total,
@@ -131,16 +133,16 @@ class ChefsRails extends ConsumerWidget {
 /// which the chefs rails keep.
 const int _kRailPage = 3;
 
-/// [cards] plus one for the end note, when the shelf is short (UX-045).
+/// Whether a shelf of [cards] ends in a note (UX-045).
 ///
 /// A shelf of one or two chefs left the rest of its row blank — about 45% of a
 /// 1440px page with the one-chef population a fresh database has. The row is
 /// not too narrow or capped (it already takes everything beside the 404px
 /// board panel); it simply has nothing more to hold, and the honest thing to
 /// put in that space is the sentence saying so. Only below a page
-/// ([_kRailPage]): at three items or fewer the rail draws no arrows and no
-/// `1–3 / n` label, so the note can never be counted as a chef.
-int _withEndNote(int cards) => cards < _kRailPage ? cards + 1 : cards;
+/// ([_kRailPage]). The note is the rail's `trailing`, outside its item count,
+/// so neither the pager nor a screen reader counts it as a chef.
+bool _isShort(int cards) => cards < _kRailPage;
 
 /// One windowed shelf: loading placeholders, an error, a quiet window, or the
 /// chefs who moved, ranked by the points they earned in it.
@@ -209,22 +211,23 @@ class _WindowRail extends ConsumerWidget {
       subtitle: subtitle,
       height: height,
       cardWidth: kSpotlightCardWidth,
-      itemCount: _withEndNote(chefs.length),
+      itemCount: chefs.length,
+      trailing:
+          _isShort(chefs.length)
+              ? _RailEndNote(
+                text: ChefsRails.windowEndNote(window),
+                height: height,
+              )
+              : null,
       itemBuilder:
-          (context, i) =>
-              i >= chefs.length
-                  ? _RailEndNote(
-                    text: ChefsRails.windowEndNote(window),
-                    height: height,
-                  )
-                  : ChefSpotlightCard(
-                    standing: chefs[i].standing,
-                    window: chefs[i].window,
-                    windowLabel: window.span,
-                    // No denominator: the rank here is the rank *in the
-                    // window*, and "4 / 148" would read as the all-time board.
-                    onTap: () => context.push(Routes.chef(chefs[i].id)),
-                  ),
+          (context, i) => ChefSpotlightCard(
+            standing: chefs[i].standing,
+            window: chefs[i].window,
+            windowLabel: window.span,
+            // No denominator: the rank here is the rank *in the
+            // window*, and "4 / 148" would read as the all-time board.
+            onTap: () => context.push(Routes.chef(chefs[i].id)),
+          ),
     );
   }
 }

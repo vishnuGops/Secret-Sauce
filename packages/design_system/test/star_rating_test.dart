@@ -35,6 +35,38 @@ void main() {
     expect(find.text('No ratings'), findsOneWidget);
   });
 
+  // Phase 38 review: the 48dp hit box aligned its stars to the centre, while
+  // `_ratingAt` measures from the left edge — under a tight, wider width a
+  // tap on the first star rated the middle one.
+  testWidgets('under a tight wide width the stars stay where the taps land', (
+    tester,
+  ) async {
+    final changes = <double>[];
+    const size = 40.0;
+    await pump(
+      tester,
+      SizedBox(
+        width: 400,
+        child: StarRatingInput(
+          value: null,
+          size: size,
+          onChanged: (_) {},
+          onChangeEnd: changes.add,
+        ),
+      ),
+    );
+    final firstStar =
+        find
+            .descendant(
+              of: find.byType(StarRatingInput),
+              matching: find.byType(Icon),
+            )
+            .first;
+    await tester.tap(firstStar);
+    await tester.pump();
+    expect(changes.single, lessThanOrEqualTo(1.0));
+  });
+
   testWidgets('StarRatingInput snaps taps to half stars', (tester) async {
     final changes = <double>[];
     const size = 40.0;

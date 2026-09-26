@@ -83,6 +83,38 @@ bool _enabled(WidgetTester tester, int index) =>
     tester.widgetList<IconButton>(_arrows).elementAt(index).onPressed != null;
 
 void main() {
+  // Phase 38 review: a short chefs shelf's closing sentence was one more item,
+  // announced as "item 2 of 2". `trailing` follows the cards uncounted.
+  testWidgets('trailing follows the cards and is not an indexed child', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.light(),
+        home: Scaffold(
+          body: CardRail(
+            icon: Icons.star,
+            title: 'Rail',
+            subtitle: 'Sub',
+            height: 100,
+            cardWidth: 100,
+            itemCount: 1,
+            itemBuilder:
+                (_, __) => const SizedBox(width: 100, child: Text('card')),
+            trailing: const Text('that is all'),
+          ),
+        ),
+      ),
+    );
+    expect(find.text('card'), findsOneWidget);
+    expect(find.text('that is all'), findsOneWidget);
+    expect(find.byType(IndexedSemantics), findsOneWidget);
+    expect(
+      tester.widget<ListView>(find.byType(ListView)).semanticChildCount,
+      1,
+    );
+  });
+
   testWidgets('shows the title, subtitle and window position', (tester) async {
     await tester.pumpWidget(_host());
     expect(find.text('Trending chefs'), findsOneWidget);

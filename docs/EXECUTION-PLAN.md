@@ -904,7 +904,7 @@ My Recipes are empty for a new account until it saves or writes something — th
 | Review — `/code-review` over the branch | done | 3 reviewers; 16 findings, 0 Critical, 1 High (B136, found by two). All fixed with a regression test except B141 (deferred, logged); see ROADMAP |
 | D — component consolidation, doc hygiene | done | 2 subagents + lead: `SegmentedTabs` (labels kept at `labelLarge` — the first cut dropped the sort and rail to 11px), `RankBadge`, `LoadMoreButton`; category-row reveal; the empty `/chefs` board's overflow at 1000px (found by the gate); live pass on a release build — hero tile, search URL replaces history, tab titles, deep-linked Back; design_system 446 → 591, app 737 → 740 |
 
-## Phase 38 — UX remediation, round 2 (in progress, 2026-09-26)
+## Phase 38 — UX remediation, round 2 (waves A–D done 2026-09-26)
 
 Same method as Phase 37: waves on `feat/phase-38-ux-remediation-2`, parallel subagents on disjoint
 files under a shared rules file, the lead writes the shared core pieces first (so no two agents
@@ -928,6 +928,7 @@ upload, so it is proven with `fake_supabase` request tests and the profile dialo
 | C — chefs, entities, profile, My Recipes | done | 2 subagents + lead (the chip wording moved into core's `EntityKind.label`; B146). `deleteOwnAvatar` is proven by `fake_supabase` request tests — 17 cases, most of them "no request" |
 | D — a11y, tokens | done | 1 subagent (the tap-target sweep: 13 screens, five kinds of undersized control) + lead (image semantics, `LoadingView`, `heroOutline`, `AppStroke` / `AppMeasure` / `AppIconSize.xsPlus` with the migration, the last tabular counters). Flutter's guideline skips nodes it judges to touch a scroll edge and gets that wrong inside centred / offset scroll views — direct size checks cover those |
 | Live pass | done | Release web build on the local stack, signed in as the test account, 390 / 1440: fork lineage names its parent, labelled owner actions and the Private pill, the editor's empty defaults and collapsed rows, cook mode, the chefs end note, one New recipe. Found B148. The temporary fork was deleted (0 forks left). Note: a stale server held the chosen port and `npx serve` silently moved to another — check its log before trusting a capture |
+| Review — `/code-review` over the branch | done | 3 reviewers (cook/detail/core, editor/version view, chefs/profile/design system); 0 Critical, 0 High; B149–B152 fixed with mutation-checked tests; one accepted limitation (drag auto-scroll) |
 | E — unit canon at import (optional) | not started | Needs `food_unit` to carry display forms first; see ROADMAP |
 
 ## Build, run & release (ops)

@@ -214,7 +214,7 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('Nothing saved for this version'), findsOneWidget);
-    expect(find.textContaining('saved before Secret Sauce kept'), findsOne);
+    expect(find.textContaining('No copy of this version was kept'), findsOne);
   });
 
   testWidgets('a failed load shows a friendly error with Retry', (

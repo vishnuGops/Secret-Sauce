@@ -336,7 +336,7 @@ pumps it at (Gotcha 26: a new caller re-opens it).
 | `ChefBadge` | `chef_badge.dart` | on surface / on image | chef_badge_test | palette.onImage | — |
 | `ChefSpotlightCard` (+ placeholder) | `chef_spotlight_card.dart` | per tier, foil, RANK pill | chef_spotlight_card_test | palette foil / cover / shadow, local geometry consts | UX-012 fixed; UX-013 fixed (`InteractiveTile`); rank via `RankBadge.pill` |
 | `ChefStandingCard` | `chef_standing_card.dart` | ranked / unranked | chef_standing_card_test | stat roles | UX-049 ranks tabular; rank via `RankBadge.podium` / `.disc` |
-| `CardRail` | `card_rail.dart` | paging, empty | card_rail_test | AppMotion.slow via animateScroll | UX-045 fixed (an empty chefs shelf is the rail's header with the reason as its footnote, Phase 38); UX-050 fixed |
+| `CardRail` | `card_rail.dart` | paging, empty | card_rail_test | AppMotion.slow via animateScroll | `trailing` (Phase 38): a widget after the cards, outside the count and the semantic indexes; UX-045 fixed (an empty chefs shelf is the rail's header with the reason as its footnote, Phase 38); UX-050 fixed |
 | `TierLadder`, `ScoreContributionBar` | `tier_ladder.dart`, `score_contribution_bar.dart` | — | tier_ladder_test | palette.tier | — |
 | `NutritionFactsLabel` | `nutrition_facts_label.dart` | full / per serving | nutrition_facts_label_test | FDA label weights kept as the label's own spec | — |
 | `SiteFooter` / `LegalFooter` | `site_footer.dart`, `apps/app/lib/widgets/legal_footer.dart` | dense (web chrome) / page | site_footer_test 360–1440 × 1.0–2.0 | — | — |

@@ -40,6 +40,22 @@ void main() {
       expect(parseQuantity('-1'), isNull);
     });
 
+    // Phase 38 review: `1,000` read as `1.000` saved a kilo as a gram.
+    test('a thousands comma is refused, not read as a decimal', () {
+      expect(parseQuantity('1,000'), isNull);
+      expect(parseQuantity('1,25'), 1.25);
+    });
+
+    // Phase 38 review: they are called from form validators, so they must
+    // return null — never throw — for a pasted run of digits.
+    test('overlong input is null, not an exception', () {
+      final many = '9' * 25;
+      expect(parseQuantity('$many/2'), isNull);
+      expect(parseQuantity('1/$many'), isNull);
+      expect(parseQuantity('$many ½'), isNull);
+      expect(parseQuantity('9' * 400), isNull);
+    });
+
     test('reads back everything formatQuantity prints', () {
       for (final unit in ['cup', 'tsp', 'g', null]) {
         for (final v in [0.25, 0.5, 0.75, 1 / 3, 2 / 3, 1.125, 2.5, 250.0]) {
@@ -81,6 +97,15 @@ void main() {
       expect(parseDurationMinutes('1h 30x'), isNull);
       expect(parseDurationMinutes('about 1h'), isNull);
       expect(parseDurationMinutes('1:75'), isNull);
+    });
+
+    test('overlong or absurd durations are null, not an exception', () {
+      expect(parseDurationMinutes('9' * 25), isNull);
+      expect(parseDurationMinutes('${'9' * 400}h'), isNull);
+      expect(parseDurationMinutes('3000000000'), isNull);
+      // The ceiling: a week, and not a minute more.
+      expect(parseDurationMinutes('$kMaxDurationMinutes'), kMaxDurationMinutes);
+      expect(parseDurationMinutes('${kMaxDurationMinutes + 1}'), isNull);
     });
 
     test('reads back everything formatMinutes prints', () {

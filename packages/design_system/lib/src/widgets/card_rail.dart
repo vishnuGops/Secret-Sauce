@@ -66,6 +66,7 @@ class CardRail extends StatefulWidget {
     this.gap = AppSpacing.md,
     this.page = 3,
     this.footnote,
+    this.trailing,
   }) : assert(
          variant == CardRailVariant.badged ? icon != null : index != null,
          'a badged rail needs an icon; a numbered rail needs an index',
@@ -113,12 +114,25 @@ class CardRail extends StatefulWidget {
   /// Optional line under the rail, for saying why a shelf looks the way it does.
   final String? footnote;
 
+  /// Optional widget after the last card, **outside the item count** (Phase
+  /// 38 review): it is not paged, not in the `1–3 / n` window, and not an
+  /// indexed child to a screen reader — a short shelf's closing sentence
+  /// (UX-045) used to be built as one more item and was announced as
+  /// "item 2 of 2" on a one-chef shelf.
+  final Widget? trailing;
+
   @override
   State<CardRail> createState() => _CardRailState();
 }
 
 class _CardRailState extends State<CardRail> {
   final ScrollController _controller = ScrollController();
+
+  /// Cards and [CardRail.trailing], with a gap between each pair.
+  int get _childCount {
+    final entries = widget.itemCount + (widget.trailing == null ? 0 : 1);
+    return entries == 0 ? 0 : entries * 2 - 1;
+  }
 
   /// Index of the leftmost card, derived from the scroll offset. Kept in state
   /// so the position label and the arrow states can rebuild without rebuilding
@@ -224,13 +238,27 @@ class _CardRailState extends State<CardRail> {
         ),
         SizedBox(
           height: widget.height,
-          child: ListView.separated(
+          // `ListView.separated` by hand, so [CardRail.trailing] can follow
+          // the cards without being counted as one: children alternate card /
+          // gap, and only the cards carry a semantic index.
+          child: ListView.custom(
             controller: _controller,
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.zero,
-            itemCount: widget.itemCount,
-            separatorBuilder: (_, __) => SizedBox(width: widget.gap),
-            itemBuilder: widget.itemBuilder,
+            semanticChildCount: widget.itemCount,
+            childrenDelegate: SliverChildBuilderDelegate(
+              (context, i) {
+                if (i.isOdd) return SizedBox(width: widget.gap);
+                final item = i ~/ 2;
+                return item < widget.itemCount
+                    ? widget.itemBuilder(context, item)
+                    : widget.trailing!;
+              },
+              childCount: _childCount,
+              semanticIndexCallback:
+                  (_, i) =>
+                      i.isEven && i ~/ 2 < widget.itemCount ? i ~/ 2 : null,
+            ),
           ),
         ),
         if (widget.footnote != null)

@@ -318,19 +318,31 @@ class EditStep {
 
   /// The duration reads as the recipe page prints it (`1 h 30 min`), and
   /// [parseDurationMinutes] reads that back exactly. A stored non-positive
-  /// value is shown as its number, since `formatMinutes` prints `—` for it and
-  /// that would not survive a save (B035).
-  factory EditStep.fromModel(RecipeStep s) => EditStep(
-    text: s.text,
-    duration: switch (s.durationMinutes) {
+  /// value is shown as its number, since `formatMinutes` prints `—` for it.
+  /// An **untouched** field saves the loaded value back as it was (B035) —
+  /// including one the parser would refuse (a negative, or past
+  /// `kMaxDurationMinutes`, which the column does not forbid and an import
+  /// can write), so a step the cook never touched cannot block the save
+  /// (Phase 38 review).
+  factory EditStep.fromModel(RecipeStep s) {
+    final shown = switch (s.durationMinutes) {
       null => '',
       final m when m <= 0 => '$m',
       final m => formatMinutes(m),
-    },
-    temperature: s.temperature ?? '',
-    tip: s.tip ?? '',
-    imageUrl: s.imageUrl,
-  );
+    };
+    return EditStep(
+        text: s.text,
+        duration: shown,
+        temperature: s.temperature ?? '',
+        tip: s.tip ?? '',
+        imageUrl: s.imageUrl,
+      )
+      .._loadedDuration = s.durationMinutes
+      .._loadedDurationText = shown;
+  }
+
+  int? _loadedDuration;
+  String? _loadedDurationText;
 
   final TextEditingController text;
   final TextEditingController duration;
@@ -376,7 +388,13 @@ class EditStep {
   /// The step timer in minutes: `90`, `1h`, `1h 30m`, `1 h 30 min`
   /// (UX-035 — `int.tryParse` dropped `1h` and saved no timer). Null when
   /// empty, and when unreadable, which [hasInvalidDuration] reports first.
-  int? get parsedDuration => parseDurationMinutes(duration.text);
+  int? get parsedDuration {
+    if (_loadedDurationText != null &&
+        duration.text.trim() == _loadedDurationText!.trim()) {
+      return _loadedDuration;
+    }
+    return parseDurationMinutes(duration.text);
+  }
 
   /// Non-empty and unreadable — the validator's "not a time" case.
   bool get hasInvalidDuration =>

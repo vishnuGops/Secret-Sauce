@@ -109,12 +109,18 @@ class _EditProfileDialogState extends ConsumerState<EditProfileDialog> {
   @override
   void dispose() {
     // Closed without a save: nothing this dialog uploaded is on the profile.
+    // Closed *during* one (web's browser Back is not a pop, so `PopScope`
+    // cannot hold the dialog open): the current upload may be what that save
+    // is about to point the profile at, so it is left to `_save`, which
+    // deletes it only if the write fails (Phase 38 review). The strays are
+    // strays either way.
     final container = _container;
     if (!_saved && container != null) {
-      _forgetUpload();
+      if (!_saving) _forgetUpload();
       for (final url in _strayUploads) {
         unawaited(_deletePreviousAvatar(container, url));
       }
+      _strayUploads.clear();
     }
     _name.dispose();
     _bio.dispose();
@@ -216,8 +222,20 @@ class _EditProfileDialogState extends ConsumerState<EditProfileDialog> {
       // One read feeds this screen and the web avatar menu; refreshing it is
       // what moves both to the new name at once.
       container.invalidate(myProfileProvider);
-      if (mounted) Navigator.of(context).pop(true);
+      // Only while the dialog is still the top route: one already leaving
+      // (closed mid-save) is still mounted during its exit, and popping then
+      // would pop the page beneath it (Phase 38 review).
+      if (mounted && (ModalRoute.of(context)?.isCurrent ?? false)) {
+        Navigator.of(context).pop(true);
+      }
     } catch (e) {
+      // Closed mid-save and the write failed: the upload is on no profile and
+      // nobody is left to retry it, so it goes (B146's rule, from here
+      // because `dispose` left it to us).
+      final orphan = _uploadedUrl;
+      if (!mounted && orphan != null) {
+        unawaited(_deletePreviousAvatar(container, orphan));
+      }
       // The dialog stays open with what the reader typed, so a failed save is
       // a retry rather than a re-type.
       if (mounted) {

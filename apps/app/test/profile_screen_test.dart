@@ -86,9 +86,13 @@ class _FakeProfiles implements ProfileRepository {
   /// When set, [updateMine] waits on it: the saving state, held open.
   Completer<void>? updateGate;
 
+  /// When set, [getById] waits on it — a refresh held in flight.
+  Completer<void>? readGate;
+
   @override
-  Future<Profile?> getById(String id) {
+  Future<Profile?> getById(String id) async {
     reads++;
+    if (readGate != null) await readGate!.future;
     if (hang) return Completer<Profile?>().future;
     if (error != null) return Future.error(error!);
     return Future.value(profile);
@@ -724,6 +728,52 @@ void main() {
       );
     });
 
+    // Phase 38 review: web's browser Back is new route information, not a
+    // pop, so `PopScope` is never asked and the dialog goes with its page
+    // while a save is in flight. The upload may be what that save is about
+    // to set, so dispose must not delete it — the save decides.
+    Future<void> closeMidSave(WidgetTester tester) async {
+      await tester.tap(find.text('Change photo'));
+      await tester.pumpAndSettle();
+      await tester.tap(_saveButton);
+      await tester.pump();
+      _router.go(Routes.discover);
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.byType(EditProfileDialog), findsNothing);
+    }
+
+    testWidgets('closed mid-save that lands: the new photo survives', (
+      tester,
+    ) async {
+      final (profiles, storage) = await open(tester);
+      profiles.updateGate = Completer();
+      await closeMidSave(tester);
+      expect(storage.deletes, isEmpty);
+
+      profiles.updateGate!.complete();
+      await tester.pumpAndSettle();
+      final newUrl = profiles.updates.single.avatarUrl;
+      expect(newUrl, startsWith('https://cdn.test/avatar_'));
+      expect(storage.deletes.map((d) => d.$1), [oldUrl]);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('closed mid-save that fails: the upload goes', (tester) async {
+      final (profiles, storage) = await open(
+        tester,
+        updateError: const PostgrestException(message: 'nope', code: '500'),
+      );
+      profiles.updateGate = Completer();
+      await closeMidSave(tester);
+
+      profiles.updateGate!.complete();
+      await tester.pumpAndSettle();
+      final urls = storage.deletes.map((d) => d.$1).toList();
+      expect(urls, hasLength(1));
+      expect(urls.single, startsWith('https://cdn.test/avatar_'));
+    });
+
     testWidgets('a failing delete does not fail the save or show an error', (
       tester,
     ) async {
@@ -747,6 +797,33 @@ void main() {
       );
       expect(tester.takeException(), isNull);
     });
+  });
+
+  // Phase 38 review: while the profile refreshes the page shows the previous
+  // row, and a dialog opened on it would write back a photo URL the last
+  // save already deleted (B141). Edit waits for the refresh.
+  testWidgets('Edit profile waits out a refresh', (tester) async {
+    final profiles = _FakeProfiles(profile: _amara);
+    await _pump(tester, profiles: profiles);
+    await tester.pumpAndSettle();
+    final edit = find.ancestor(
+      of: find.text('Edit profile'),
+      matching: find.byWidgetPredicate((w) => w is ButtonStyleButton),
+    );
+    expect(tester.widget<ButtonStyleButton>(edit).onPressed, isNotNull);
+
+    profiles.readGate = Completer();
+    ProviderScope.containerOf(
+      tester.element(find.byType(ProfileScreen)),
+    ).invalidate(myProfileProvider);
+    await tester.pump();
+    await tester.pump();
+    expect(profiles.reads, 2, reason: 'the refresh is in flight');
+    expect(tester.widget<ButtonStyleButton>(edit).onPressed, isNull);
+
+    profiles.readGate!.complete();
+    await tester.pumpAndSettle();
+    expect(tester.widget<ButtonStyleButton>(edit).onPressed, isNotNull);
   });
 
   testWidgets('View my chef page opens /chef/<profiles.id>', (tester) async {

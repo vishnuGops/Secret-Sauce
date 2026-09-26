@@ -411,7 +411,9 @@ through core's `parsing.dart`, the inverse of `formatting.dart` and tested as a 
 `parseQuantity` takes `1.5`, `1,5`, `1/2`, `1 1/2`, `1-1/2`, `½`, `1½`, `1 1⁄3` and returns the
 decimal the column stores (Gotcha 16); `parseDurationMinutes` takes `90`, `1h`, `1h 30m`,
 `1 h 30 min`, `1.5 hours`, `1:30` for a step's timer and for Prep / Cook. Both return null for
-empty **and** for unreadable input, and the form refuses the unreadable case — `int.tryParse`
+empty **and** for unreadable input — never throw, whatever is pasted — a comma is a decimal only
+as `1,5` (`1,000` is refused, B150), and a duration past `kMaxDurationMinutes` (a week) is refused
+rather than overflowing the `int` column; the form refuses the unreadable case — `int.tryParse`
 used to save `1h` as no timer. A loaded quantity is shown through `formatQuantity` (`1⁄3`, not
 `0.3333…`) and an **untouched** field saves the loaded value back exactly, so opening and saving a
 recipe cannot nudge a stored `0.33`. A new recipe opens with Prep, Cook, Servings and Difficulty
@@ -1862,8 +1864,9 @@ ordering's rows, which is Gotcha 24 one level in.
   placeholders, never a spinner, and no longer a card-sized bordered `QuietShelfCard`, whose
   centred sentence sat below the fold of the fixed-height layout so the audit saw an empty box. An
   error keeps the heading too. A shelf shorter than a page (< 3 chefs) ends in a plain-text note
-  ("That is every ranked chef so far…") where the next card would be; the rail draws no pager at
-  that size, so the note is never counted as a chef. The rails column was never capped — it takes
+  ("That is every ranked chef so far…") where the next card would be, passed as
+  `CardRail.trailing` — outside the item count, the pager and the semantic indexes, so neither the
+  `1–n / n` label nor a screen reader counts it as a chef (B152). The rails column was never capped — it takes
   everything beside the 404px panel; the 1440 blank was a one-chef database.
 - **Sort and window are one state** (`BoardView`, Phase 33). The Score / Momentum / New tabs and the
   hero's All time / Month / Week are both live and coupled: Month or Week turns the board to Momentum

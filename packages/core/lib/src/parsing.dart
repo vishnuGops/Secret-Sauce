@@ -47,29 +47,37 @@ final _glyph = RegExp(r'^(\d+)?\s*([½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞])
 double? parseQuantity(String raw) {
   var text = raw.trim();
   if (text.isEmpty) return null;
-  // A decimal comma, but only when it is the only separator: `1,5` is one and
-  // a half; `1,500.5` is not a quantity anyone types into a 64px box.
-  if (text.contains(',') && !text.contains('.')) {
-    text = text.replaceFirst(',', '.');
-  }
-  if (_decimal.hasMatch(text)) return double.parse(text);
+  // A decimal comma — `1,5` — but only with one or two digits after it. `1,000`
+  // is a thousands separator, and reading it as `1.000` saved a kilo of flour
+  // as one gram (Phase 38 review); it is refused instead.
+  if (_decimalComma.hasMatch(text)) text = text.replaceFirst(',', '.');
+  if (_decimal.hasMatch(text)) return _finite(double.tryParse(text));
 
   final slashed = _slashed.firstMatch(text);
   if (slashed != null) {
-    final whole = int.parse(slashed.group(1) ?? '0');
-    final numerator = int.parse(slashed.group(2)!);
-    final denominator = int.parse(slashed.group(3)!);
+    final whole = int.tryParse(slashed.group(1) ?? '0');
+    final numerator = int.tryParse(slashed.group(2)!);
+    final denominator = int.tryParse(slashed.group(3)!);
+    if (whole == null || numerator == null || denominator == null) return null;
     if (denominator == 0) return null;
-    return whole + numerator / denominator;
+    return _finite(whole + numerator / denominator);
   }
 
   final glyph = _glyph.firstMatch(text);
   if (glyph != null) {
-    final whole = int.parse(glyph.group(1) ?? '0');
-    return whole + _kVulgarFractions[glyph.group(2)!]!;
+    final whole = int.tryParse(glyph.group(1) ?? '0');
+    if (whole == null) return null;
+    return _finite(whole + _kVulgarFractions[glyph.group(2)!]!);
   }
   return null;
 }
+
+final _decimalComma = RegExp(r'^\d+,\d{1,2}$');
+
+/// Null for a value too large to be a quantity: the parsers return null for
+/// anything they cannot read, and a pasted run of digits must not throw from
+/// inside a form validator (Phase 38 review).
+double? _finite(double? v) => v == null || !v.isFinite ? null : v;
 
 final _clock = RegExp(r'^(\d+):([0-5]\d)$');
 
@@ -86,11 +94,15 @@ final _durationTerm = RegExp(
 int? parseDurationMinutes(String raw) {
   final text = raw.trim().toLowerCase();
   if (text.isEmpty) return null;
-  if (RegExp(r'^\d+$').hasMatch(text)) return int.parse(text);
+  if (RegExp(r'^\d+$').hasMatch(text)) {
+    return _minutesOrNull(int.tryParse(text));
+  }
 
   final clock = _clock.firstMatch(text);
   if (clock != null) {
-    return int.parse(clock.group(1)!) * 60 + int.parse(clock.group(2)!);
+    final hours = int.tryParse(clock.group(1)!);
+    if (hours == null) return null;
+    return _minutesOrNull(hours * 60 + int.parse(clock.group(2)!));
   }
 
   var minutes = 0.0;
@@ -100,11 +112,22 @@ int? parseDurationMinutes(String raw) {
     // Only spaces, commas or "and" may sit between two terms.
     final gap = text.substring(consumed, m.start).trim();
     if (gap.isNotEmpty && gap != ',' && gap != 'and') return null;
-    final value = double.parse(m.group(1)!);
+    final value = double.tryParse(m.group(1)!);
+    if (value == null) return null;
     minutes += m.group(2)!.startsWith('h') ? value * 60 : value;
     consumed = m.end;
     terms++;
   }
   if (terms == 0 || text.substring(consumed).trim().isNotEmpty) return null;
-  return minutes.round();
+  if (!minutes.isFinite) return null;
+  return _minutesOrNull(minutes.round());
 }
+
+/// The longest duration a step, Prep or Cook may claim: a week. The columns
+/// are `int`, so without a ceiling a pasted `3000000000` passed the form and
+/// failed the save with a generic overflow; a week is longer than any
+/// fermentation or cure a recipe here times, and past it the number is a typo.
+const int kMaxDurationMinutes = 7 * 24 * 60;
+
+int? _minutesOrNull(int? m) =>
+    m == null || m < 0 || m > kMaxDurationMinutes ? null : m;

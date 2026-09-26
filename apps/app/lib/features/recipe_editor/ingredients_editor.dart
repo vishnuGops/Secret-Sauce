@@ -124,6 +124,7 @@ class IngredientsEditor extends StatelessWidget {
                             labelText: 'Group name (optional)',
                             hintText: 'e.g. For the sauce',
                           ),
+                          onChanged: (_) => onChanged(),
                         ),
                       ),
                       if (groups.length > 1)
@@ -541,8 +542,12 @@ class _IngredientRowState extends ConsumerState<_IngredientRow> {
         ),
         // Once the field has complained, clear the complaint as soon as the
         // entry reads — not only on the next Save.
+        // Typing is an edit (Phase 38 review — no draft field reported one,
+        // so a changed quantity was thrown away by a system back without a
+        // word, B149).
         onChanged: (_) {
           if (field.hasError) field.validate();
+          widget.onChanged();
         },
       ),
     );
@@ -551,6 +556,7 @@ class _IngredientRowState extends ConsumerState<_IngredientRow> {
       child: TextField(
         controller: _ingredient.unit,
         decoration: const InputDecoration(labelText: 'Unit', isDense: true),
+        onChanged: (_) => widget.onChanged(),
       ),
     );
     // The name is free text with a registry typeahead over it: picking a
@@ -572,6 +578,7 @@ class _IngredientRowState extends ConsumerState<_IngredientRow> {
             controller: controller,
             focusNode: focusNode,
             decoration: const InputDecoration(labelText: 'Name', isDense: true),
+            onChanged: (_) => widget.onChanged(),
             onSubmitted: (_) => onFieldSubmitted(),
           ),
       optionsViewBuilder:
@@ -713,6 +720,7 @@ class _IngredientRowState extends ConsumerState<_IngredientRow> {
                 hintText: 'e.g. finely chopped',
                 isDense: true,
               ),
+              onChanged: (_) => widget.onChanged(),
             ),
             // A checkbox rather than a chip: a chip sizes to its label, and
             // "Optional" at 2.0x text scale is wider than a 320px phone leaves
