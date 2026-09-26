@@ -390,15 +390,22 @@ class RecipeCard extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              const SizedBox(width: AppSpacing.sm),
-                              ConstrainedBox(
-                                constraints: BoxConstraints(
-                                  maxWidth: constraints.maxWidth / 2,
+                              // Not on an imported recipe (B134 / UX-028):
+                              // its difficulty is the column default the
+                              // importer had to write, not anything the
+                              // publisher said, and a badge would state it
+                              // as fact on every Explore card.
+                              if (!recipe.isImported) ...[
+                                const SizedBox(width: AppSpacing.sm),
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxWidth: constraints.maxWidth / 2,
+                                  ),
+                                  child: DifficultyBadge(
+                                    difficulty: recipe.difficulty,
+                                  ),
                                 ),
-                                child: DifficultyBadge(
-                                  difficulty: recipe.difficulty,
-                                ),
-                              ),
+                              ],
                             ],
                           ),
                     ),

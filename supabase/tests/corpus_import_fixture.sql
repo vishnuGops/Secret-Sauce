@@ -265,5 +265,78 @@ begin
 end
 $again$;
 
+-- ============================================================================
+-- 6. Import-time cleaning (Phase 37 — B127 bylines, B134 titles). The pure
+--    functions on the corpus's real shapes, then one document end to end, so
+--    `import_recipe` is proven to call them rather than merely compile beside
+--    them.
+-- ============================================================================
+do $clean$
+declare
+  v_id   uuid;
+  v_name text;
+begin
+  assert byline_person('Adapted from <a href="https://x.test/y">Silk Canada</a>') is null,
+    'a credit line is not a person';
+  assert byline_person('Jennifer Segal, adapted from <a href="http://a.test">Mix</a>') = 'Jennifer Segal',
+    'provenance after the name is dropped';
+  assert byline_person('Isabelle Boucher (<a href="https://c.test">Crumb</a>)') = 'Isabelle Boucher (Crumb)',
+    'markup inside a name is stripped, the text kept';
+  assert byline_person('Linda &amp; Alex') = 'Linda & Alex', 'entities decode';
+  assert byline_person('kannamma @ https://k.test/') = 'kannamma', 'a trailing URL goes';
+  assert byline_person(repeat('word ', 20)) is null, 'a sentence is not a name';
+  assert clean_byline_text('Adapted from <a href="x">Silk</a>') = 'Adapted from Silk',
+    'the readable fallback carries no markup';
+  assert clean_import_title('Pumpkin Muffin Recipe + VIDEO') = 'Pumpkin Muffin';
+  assert clean_import_title('Mondongo Soup [Video+Recipe] Tripe Stew') = 'Mondongo Soup Tripe Stew';
+  assert clean_import_title('Easy Recipe') = 'Easy Recipe', 'Recipe goes only after two words';
+  -- One pass left `… - VIDEO` behind, so a re-apply of the backfill changed
+  -- rows again; the cleaner has to be idempotent.
+  assert clean_import_title('Vanilla Mousse - VIDEO Recipe') = 'Vanilla Mousse',
+    'the cleaner runs to a fixed point';
+  assert clean_import_title('Fixture Brown Butter Shortbread') = 'Fixture Brown Butter Shortbread',
+    'a clean title is untouched';
+
+  v_id := import_recipe(jsonb_build_object(
+    'source_url', 'https://clean.example.test/muffins/',
+    'entity_slug', 'fixture-clean',
+    'entity_name', 'Fixture Clean Kitchen',
+    'entity_kind', 'chef_site',
+    'title', 'Fixture Muffin Recipe + VIDEO',
+    'chef_name', 'Fixture Baker, adapted from <a href="https://b.test">A Book</a>',
+    'ingredient_groups', jsonb_build_array(jsonb_build_object('name', '',
+      'ingredients', jsonb_build_array(jsonb_build_object('name', 'flour', 'quantity', 1, 'unit', 'cup')))),
+    'step_groups', jsonb_build_array(jsonb_build_object('name', '',
+      'steps', jsonb_build_array(jsonb_build_object('text', 'Bake.'))))
+  ));
+  assert v_id is not null, 'the cleaning fixture imported';
+  assert (select title from recipes where id = v_id) = 'Fixture Muffin',
+    'import_recipe stores the cleaned title';
+  select p.display_name into v_name
+    from recipes r join profiles p on p.id = r.owner_id where r.id = v_id;
+  assert v_name = 'Fixture Baker', format('import_recipe credits the cleaned byline, got %s', v_name);
+
+  -- A byline that names nobody credits the publisher, not a sentence.
+  v_id := import_recipe(jsonb_build_object(
+    'source_url', 'https://clean.example.test/cake/',
+    'entity_slug', 'fixture-clean',
+    'entity_name', 'Fixture Clean Kitchen',
+    'entity_kind', 'chef_site',
+    'title', 'Fixture Cake',
+    'chef_name', 'Adapted from <a href="https://b.test">A Book</a>',
+    'ingredient_groups', jsonb_build_array(jsonb_build_object('name', '',
+      'ingredients', jsonb_build_array(jsonb_build_object('name', 'flour', 'quantity', 1, 'unit', 'cup')))),
+    'step_groups', jsonb_build_array(jsonb_build_object('name', '',
+      'steps', jsonb_build_array(jsonb_build_object('text', 'Bake.'))))
+  ));
+  select p.display_name into v_name
+    from recipes r join profiles p on p.id = r.owner_id where r.id = v_id;
+  assert v_name = 'Fixture Clean Kitchen',
+    format('a credit line falls back to the publisher, got %s', v_name);
+
+  raise notice 'corpus_import_fixture: import-time cleaning — all assertions passed';
+end
+$clean$;
+
 -- Nothing this file wrote is meant to survive it.
 rollback;

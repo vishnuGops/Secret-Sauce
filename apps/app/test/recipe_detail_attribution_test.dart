@@ -18,6 +18,7 @@ import 'package:app/features/recipe_detail/recipe_detail_expanded.dart';
 import 'package:app/features/recipe_detail/recipe_detail_screen.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:core/core.dart';
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -205,6 +206,15 @@ Finder _rich(String text) => find.text(text, findRichText: true);
 void main() {
   group('an imported recipe', () {
     for (final (name, width) in _layouts) {
+      // B134 / UX-028: the stored difficulty is the importer's default.
+      testWidgets('states no difficulty it was never given ($name)', (
+        tester,
+      ) async {
+        await _pump(tester, _imported, width: width);
+        expect(find.byType(DifficultyBadge), findsNothing);
+        expect(find.text('Medium'), findsNothing);
+      });
+
       testWidgets('credits chef, publisher and the original ($name)', (
         tester,
       ) async {

@@ -1342,7 +1342,12 @@ recipe` lives on the My Recipes header and search in Discover's search bar; putt
     `recipeData/` and being compiled into `seed_recipes.sql` under the Kitchen's name.
     The importer also **declines the publisher's prose**: `description` is captured but
     never imported, because that is the expressive half the rights position links
-    rather than reproduces.
+    rather than reproduces. And it **cleans what it credits** (Phase 37, B127/B134):
+    `byline_person` strips markup and provenance from a byline and treats a credit line
+    (`Adapted from …`) as no byline, and `clean_import_title` drops scrape noise —
+    both in `import_recipe` *and* an idempotent backfill in 0001, so a re-import and an
+    existing row follow one rule. An imported recipe's `difficulty` is the column
+    default and the UI never shows it.
 
 
 ## Seed-data fit (MANDATORY)

@@ -948,6 +948,13 @@ redesigns of Chefs / My Recipes / editor / auth / profile, and every owner decis
       1000 / 1040 / 1440 px (2026-09-26): the label sets whole, no ellipsis; nothing to fix
 - [x] Doc hygiene (the superseded typography item)
 
+**Wave E (optional) — import-time data**
+
+- [x] B127 / UX-004 — imported bylines: markup, entities and provenance stripped in
+      `import_recipe`; a credit line credits the publisher; idempotent backfill
+- [x] B134 / UX-028 — imported recipes no longer claim `Medium` (card + detail facts), and titles
+      lose scrape noise (`Recipe + VIDEO`, `[Video+Recipe]`) in `import_recipe` + backfill
+
 **Code review (`/code-review`, three parallel reviewers over the branch diff)** — 16 findings, no
 Critical. Fixed with regression tests: B136 (High: `?from=` recorded the page under a pushed recipe),
 B137, B138, B139 (the card keeps `1h 10m` by width), B140 (five writes that outlived their widget),

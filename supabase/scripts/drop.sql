@@ -72,6 +72,9 @@ drop function if exists profile_claim_pending_cap() cascade;
 -- Phase 35c.
 drop function if exists recipes_corpus(int, int, text) cascade;
 drop function if exists import_recipe(jsonb) cascade;
+drop function if exists clean_byline_text(text) cascade;
+drop function if exists byline_person(text) cascade;
+drop function if exists clean_import_title(text) cascade;
 -- Food registry typeahead (Phase 29a).
 drop function if exists search_foods(text, int) cascade;
 -- Auto-nutrition estimator + batched link candidates (Phase 29c) and the

@@ -7,6 +7,31 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  // B134 / UX-028: every imported row carries the importer's default
+  // difficulty, and the card printed "Medium" on each Explore card as fact.
+  testWidgets('an imported recipe shows no difficulty badge', (tester) async {
+    const recipe = Recipe(
+      id: '1',
+      ownerId: 'u1',
+      title: 'Captured Soup',
+      difficulty: Difficulty.medium,
+      isImported: true,
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.light(),
+        home: const Scaffold(
+          body: Center(
+            child: SizedBox(width: 320, child: RecipeCard(recipe: recipe)),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(find.byType(DifficultyBadge), findsNothing);
+    expect(find.text('Medium'), findsNothing);
+  });
+
   testWidgets('RecipeCard shows title, description, time and difficulty', (
     tester,
   ) async {

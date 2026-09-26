@@ -350,7 +350,9 @@ Scores are not re-graded here; a Phase 1 re-audit would. Static sweep, same scri
 | UX-055 (partial) | fixed on web | one New recipe on web's empty My Recipes; compact still shows the AppBar icon, the empty state and the FAB |
 | Chefs hero `MASTER CHEF` near 96px | no defect | captured at 1000 / 1040 px: sets whole |
 
-Still open from this audit: UX-004 / UX-028 (B127, B134 — import-time data), UX-025, UX-029 (owner),
+| UX-004 (B127), UX-028 (B134) | fixed | import-time cleaning in `import_recipe` + backfill; imported difficulty not shown; `corpus_import_fixture.sql` §6 |
+
+Still open from this audit: UX-025, UX-029 (owner),
 UX-030, UX-034 (owner content), UX-035, UX-036, UX-039, UX-040, UX-042, UX-045, UX-047's image
 labels and `LoadingView`, UX-049's remaining sites, UX-050's cook-step transitions, UX-052, UX-054's
 dark hero edge, and UX-055's compact duplicates.

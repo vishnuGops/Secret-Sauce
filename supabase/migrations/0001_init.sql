@@ -4381,6 +4381,119 @@ end $$;
 --     nobody made would be a gigabyte of fiction.
 --   * `nutrition` — the captured block is strings ("345 kcal") and the
 --     estimator cannot read non-English ingredient names. Null is honest.
+-- ============================================================================
+-- Import-time cleaning (Phase 37 — B127 bylines, B134 titles)
+-- ============================================================================
+-- A scraped byline is whatever the page put in its author slot, and at 21,000
+-- records that includes `Adapted from <a href="…">Silk Canada</a>` and whole
+-- sentences — which the chef page printed as its title, its "credit, not an
+-- account" body and its avatar initials. A scraped title carries SEO noise
+-- (`… Recipe + VIDEO`, `[Video+Recipe]`). Three pure functions, called by
+-- `import_recipe` and by the one-time backfill after it, so a re-import and an
+-- existing row are cleaned by the same rule. Immutable and side-effect free;
+-- EXECUTE is still revoked from the API roles below, because PostgREST exposes
+-- every function in `public` and nothing on the client needs these.
+
+-- Markup and entities out, whitespace collapsed. What a byline becomes when it
+-- is not a person's name: readable, never HTML.
+create or replace function clean_byline_text(p text)
+returns text
+language sql
+immutable
+set search_path = public
+as $$
+  select nullif(
+    btrim(
+      regexp_replace(
+        regexp_replace(
+          replace(replace(replace(replace(replace(replace(
+            regexp_replace(coalesce(p, ''), '<[^>]*>', '', 'g'),
+            '&nbsp;', ' '), '&amp;', '&'), '&quot;', '"'), '&#39;', ''''),
+            '&lt;', '<'), '&gt;', '>'),
+          '[{}]', '', 'g'),
+        '\s+', ' ', 'g'),
+      ' ,;:|-'),
+    '')
+$$;
+
+-- The person a byline names, or null when it names nobody. A credit line
+-- (`Adapted from …`, `Reprinted with permission …`, `All images and text ©…`)
+-- is not a person, and the importer then credits the publisher — the honest
+-- reading of a page that names nobody. Otherwise the provenance after the name
+-- (`, adapted from …`, `(with kind permission …)`, ` | Site`, ` @ url`) goes.
+-- Longer than 60 characters after that is a sentence, not a name.
+create or replace function byline_person(p text)
+returns text
+language plpgsql
+immutable
+set search_path = public
+as $$
+declare
+  v text := clean_byline_text(p);
+begin
+  if v is null then
+    return null;
+  end if;
+  if v ~* '^(adapted|reprinted|recipe (adapted|courtesy|by)|courtesy of|all images|photos?\M|by )' then
+    return null;
+  end if;
+  v := regexp_replace(
+    v,
+    '\s*[,(]?\s*\m(adapted|reprinted|inspired|with kind permission|with permission)\M.*$',
+    '', 'i');
+  v := regexp_replace(v, '\s+(\||@|•|–|—)\s.*$', '');
+  v := btrim(v, ' ,;:|-');
+  if v = '' or char_length(v) > 60 then
+    return null;
+  end if;
+  return v;
+end;
+$$;
+
+-- A title without the scrape's video banners and its trailing `Recipe`.
+-- `Recipe` goes only after at least two words, so `Easy Recipe` survives; a
+-- result shorter than three characters keeps the original.
+create or replace function clean_import_title(p text)
+returns text
+language plpgsql
+immutable
+set search_path = public
+as $$
+declare
+  v    text := coalesce(p, '');
+  prev text;
+begin
+  -- To a fixed point: removing a trailing `Recipe` can expose a trailing
+  -- `VIDEO` (`… - VIDEO Recipe`), so one pass is not idempotent — and the
+  -- backfill below relies on `clean(clean(x)) = clean(x)` to touch nothing on
+  -- a re-apply. Every step only shortens, so this ends.
+  loop
+    prev := v;
+    v := regexp_replace(v, '\s*[\[\(\{][^\]\)\}]*video[^\]\)\}]*[\]\)\}]', '', 'gi');
+    v := regexp_replace(v, '\s*(\+|-|–|—|with)\s*video!?\s*$', '', 'i');
+    v := regexp_replace(v, '^(\S+\s+\S+.*?)\s+recipe\s*$', '\1', 'i');
+    v := btrim(regexp_replace(v, '\s+', ' ', 'g'), ' |:-–—');
+    exit when v = prev;
+  end loop;
+  if char_length(v) < 3 then
+    return p;
+  end if;
+  return v;
+end;
+$$;
+
+do $$
+begin
+  execute 'revoke execute on function clean_byline_text(text) from public';
+  execute 'revoke execute on function byline_person(text) from public';
+  execute 'revoke execute on function clean_import_title(text) from public';
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'revoke execute on function clean_byline_text(text) from anon, authenticated';
+    execute 'revoke execute on function byline_person(text) from anon, authenticated';
+    execute 'revoke execute on function clean_import_title(text) from anon, authenticated';
+  end if;
+end $$;
+
 create or replace function import_recipe(p_doc jsonb)
 returns uuid
 language plpgsql
@@ -4394,7 +4507,9 @@ declare
   v_published timestamptz;
   v_url      text := p_doc ->> 'source_url';
   v_slug     text := p_doc ->> 'entity_slug';
-  v_chefname text := nullif(trim(coalesce(p_doc ->> 'chef_name', '')), '');
+  -- Cleaned (B127): markup stripped, provenance dropped, a credit line that
+  -- names nobody read as no byline at all.
+  v_chefname text := byline_person(p_doc ->> 'chef_name');
   v_quality  int;
   v_group    uuid;
   v_g        jsonb;
@@ -4533,7 +4648,7 @@ begin
     imported_at, rights_mode, image_mode, created_at, updated_at
   ) values (
     v_chef,
-    left(p_doc ->> 'title', 200),
+    left(clean_import_title(p_doc ->> 'title'), 200),
     '',
     -- `recipes_text_lengths` caps the URL at 2048, and a truncated URL is a
     -- broken image rather than a shorter one — so an over-long cover is
@@ -4639,6 +4754,28 @@ begin
     execute 'revoke execute on function import_recipe(jsonb) from anon, authenticated';
   end if;
 end $$;
+
+-- Phase 37 backfill (B127 / B134): rows imported before the cleaners existed.
+-- Idempotent — each `where` excludes a row already clean, so a re-apply
+-- touches nothing and costs one scan of the imported rows. A byline that names
+-- nobody keeps its (now readable) credit text rather than being renamed: the
+-- profile already owns recipes and is already in URLs.
+update profiles p
+   set display_name = left(c.clean, 80)
+  from (
+    select id,
+           coalesce(byline_person(display_name), clean_byline_text(display_name)) as clean
+      from profiles
+     where kind = 'imported'
+  ) c
+ where p.id = c.id
+   and c.clean is not null
+   and p.display_name is distinct from left(c.clean, 80);
+
+update recipes r
+   set title = clean_import_title(r.title)
+ where r.is_imported
+   and r.title is distinct from clean_import_title(r.title);
 
 -- ============================================================================
 -- Profile claims (Phase 35b) — a real chef taking over their imported page

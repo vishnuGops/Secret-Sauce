@@ -420,10 +420,15 @@ class FactsStrip extends StatelessWidget {
       label: 'Hands on',
       value: formatMinutes(recipe.prepMinutes),
     );
-    final difficulty = _FactCell(
-      label: 'Difficulty',
-      child: DifficultyBadge(difficulty: recipe.difficulty),
-    );
+    // An imported recipe's difficulty is the importer's column default, not
+    // the publisher's word (B134 / UX-028): it reads as unknown, not Medium.
+    final difficulty =
+        recipe.isImported
+            ? const _FactCell(label: 'Difficulty', value: '—')
+            : _FactCell(
+              label: 'Difficulty',
+              child: DifficultyBadge(difficulty: recipe.difficulty),
+            );
     final longestWait = _FactCell(
       label: 'Longest wait',
       value: formatMinutes(_longestStepMinutes),

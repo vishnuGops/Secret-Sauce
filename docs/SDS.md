@@ -878,6 +878,14 @@ behaviour and the photograph position that Phase 35c's importer has to implement
 
 ### 7.0c `/explore` — the corpus (Phase 35c)
 
+**Import-time cleaning (Phase 37).** `import_recipe(jsonb)` passes the byline through
+`byline_person` (tags and entities out; `Adapted from …`, `Reprinted …`, `All images …` name nobody,
+so the publisher is credited; provenance after a name is dropped; over 60 characters is a sentence)
+and the title through `clean_import_title` (bracketed video banners, a trailing `+ VIDEO` and a
+trailing `Recipe` after two words, run to a fixed point). The same functions backfill existing rows
+on every apply of 0001, idempotently. `difficulty` is `not null`, so an import still stores the
+default — `RecipeCard` and the detail facts do not present it for `isImported` rows.
+
 Recipes captured from the public web, on their own page rather than as a fourth sort on Discover.
 Two reasons, and the second is the one that decides it:
 
