@@ -2022,6 +2022,26 @@ void main() {
     // scrolled the page, and a long list could only be reordered a screen at
     // a time. The rows are a `SliverReorderableList` in the page's viewport
     // now, and holding a drag at the bottom edge scrolls the page.
+    // B159: every group list drops the focus when a drag starts, so a caret
+    // handle is never left painted under the drag proxy (the steps half is
+    // exercised end to end in steps_editor_test).
+    testWidgets('every group list clears focus as a drag starts', (
+      tester,
+    ) async {
+      sizeView(tester, 390, 844);
+      final repo = _RecordingRecipeRepository(loaded: _manyIngredients(3));
+      await tester.pumpWidget(_routedEditApp(repo));
+      await tester.pumpAndSettle();
+
+      final lists = tester.widgetList<SliverReorderableList>(
+        find.byType(SliverReorderableList, skipOffstage: false),
+      );
+      expect(lists.length, greaterThanOrEqualTo(2)); // ingredients + steps
+      for (final list in lists) {
+        expect(list.onReorderStart, same(editorReorderStart));
+      }
+    });
+
     testWidgets('dragging a row to the window edge scrolls the page', (
       tester,
     ) async {

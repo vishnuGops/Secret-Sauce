@@ -184,6 +184,7 @@ class _StepList extends StatelessWidget {
       // `onReorderItem` hands over the index the item lands at once it has
       // been removed — exactly what `_move` wants.
       onReorderItem: _move,
+      onReorderStart: editorReorderStart,
       proxyDecorator: editorDragProxy,
       itemBuilder:
           (context, si) => editorRow(

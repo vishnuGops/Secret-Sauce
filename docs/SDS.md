@@ -433,7 +433,8 @@ silently (B142). A `1e7`px `scrollCacheExtent` keeps every row built wherever th
 draft object, as `ReorderableListView` keys its children, so a moved row keeps its state. A drag
 starts from `EditorDragHandle` only when the row fits the viewport: the page's edge auto-scroller
 cannot carry an item taller than itself and would scroll to the end (B156); such a row moves with
-Move up / Move down. Order on
+Move up / Move down. A drag start also drops the focus (`editorReorderStart`), so no caret handle is left
+painted under the drag proxy (B159). Order on
 screen is Ingredients → Steps → Nutrition; ingredients and steps reorder by drag handle or a Move
 up / Move down menu, and `toModel(i)` writes the list index as `sort_order`, ascending (B022).
 

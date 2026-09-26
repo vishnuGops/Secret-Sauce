@@ -413,5 +413,5 @@ regression test, checked by reverting the fix.
 | Desktop density (open question from Phase 38) | decided | the owner keeps the adaptive (compact) density on desktop web; DESIGN §3.6 |
 
 The branch's `/code-review` (three reviewers) found no Critical or High; B156–B157 were fixed with
-regression tests before the final commit (BUG-TRACKER). Still open from this audit: UX-029 (owner),
+regression tests before the final commit, and B159 after it (BUG-TRACKER). Still open from this audit: UX-029 (owner),
 UX-034 (owner content).

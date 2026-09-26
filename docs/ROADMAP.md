@@ -1093,9 +1093,14 @@ the editor's slivers, the gutter + nav + docs)** — no Critical or High. Fixed 
 tests, each mutation-checked: **B156** (Medium, introduced by B155 and caught before it shipped:
 dragging a row taller than the window ran the page to its end — `EditorDragHandle` starts a drag
 only when the row fits the viewport) and **B157** (Low: the avatar node's name, a gutter-test
-guard that could not fail, two SQL comments that over-claimed, doc drift). Noted, pre-existing:
-dragging a row whose field shows a caret handle logs `LeaderLayer anchor must come before
-FollowerLayer` — the old tree does the same.
+guard that could not fail, two SQL comments that over-claimed, doc drift). Also noted there, and
+pre-existing: dragging a row whose field showed a caret handle asserted every frame — fixed after
+the review as **B159** (the lists drop the focus as a drag starts).
+
+- [ ] **B158 — `401 PGRST303 "JWT issued at future"` on the first request of a cold signed-in
+      load** (open). Seen twice in the live pass on the local stack; not reproducible with direct
+      requests. The cause is in PostgREST's `iat` check, so the fix is deferred: reproduce against
+      hosted first, then add a one-shot client retry on PGRST303 if it happens there
 
 ---
 

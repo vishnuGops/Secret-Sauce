@@ -278,6 +278,45 @@ void main() {
       expect(_savedTexts(groups[0]), ['Bravo', 'Charlie', 'Alpha']);
     });
 
+    // B159: a field with a caret handle showing, then a drag. The proxy is an
+    // overlay entry above the selection handles, so the handle's follower
+    // layer came before its leader and every frame of the drag asserted
+    // `LeaderLayer anchor must come before FollowerLayer`.
+    testWidgets('dragging while a field shows its caret handle is quiet', (
+      tester,
+    ) async {
+      _size(tester, 800);
+      final groups = _groups([
+        ['Alpha', 'Bravo', 'Charlie'],
+      ]);
+      _disposeLater(groups);
+      await tester.pumpWidget(_app(groups));
+      await tester.pumpAndSettle();
+
+      // A touch tap puts the caret and its handle in the first step.
+      await tester.tap(find.widgetWithText(TextField, 'Step').first);
+      await tester.pumpAndSettle();
+
+      final start = tester.getCenter(find.byIcon(Icons.drag_indicator).first);
+      final below = tester.getBottomLeft(find.text('Charlie')).dy + 40;
+      final gesture = await tester.startGesture(start);
+      final errors = <FlutterErrorDetails>[];
+      final previous = FlutterError.onError;
+      FlutterError.onError = errors.add;
+      for (var i = 1; i <= 10; i++) {
+        await gesture.moveTo(
+          Offset(start.dx, start.dy + (below - start.dy) * i / 10),
+        );
+        await tester.pump(const Duration(milliseconds: 16));
+      }
+      await gesture.up();
+      await tester.pumpAndSettle();
+      FlutterError.onError = previous;
+
+      expect(errors.map((e) => e.exceptionAsString()), isEmpty);
+      expect(_savedTexts(groups[0]), ['Bravo', 'Charlie', 'Alpha']);
+    });
+
     // B156 (Phase 39 review): the rows share the page's viewport, whose edge
     // auto-scroller cannot carry an item taller than itself — it asserted in
     // debug and, in release, scrolled to the end and dropped the step last.

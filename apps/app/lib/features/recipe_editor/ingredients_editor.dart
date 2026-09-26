@@ -163,6 +163,15 @@ class EditorDragHandle extends ReorderableDragStartListener {
   );
 }
 
+/// A group list's `onReorderStart`: drop the focus before the row lifts.
+///
+/// A focused field shows a caret handle — a follower layer tied to the field —
+/// and the drag proxy is an overlay entry painted above it, so every frame of
+/// the drag asserted `LeaderLayer anchor must come before FollowerLayer` and
+/// the handle floated where the row used to be (B159). Clearing the focus
+/// removes the handle; the cook taps back in after the move.
+void editorReorderStart(int _) => FocusManager.instance.primaryFocus?.unfocus();
+
 /// [editorRow]'s key. Its own type, so it cannot collide with another
 /// `GlobalObjectKey` over the same draft.
 class _EditorRowKey extends GlobalObjectKey {
@@ -357,6 +366,7 @@ class _IngredientList extends StatelessWidget {
       // `onReorderItem` hands over the index the row lands at *after* its
       // removal, so it is a plain remove-then-insert.
       onReorderItem: _move,
+      onReorderStart: editorReorderStart,
       proxyDecorator: editorDragProxy,
       itemBuilder:
           (context, ii) => editorRow(
