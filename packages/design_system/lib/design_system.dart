@@ -6,6 +6,7 @@ export 'src/theme/app_motion.dart';
 export 'src/theme/app_palette.dart';
 export 'src/theme/app_typography.dart';
 export 'src/layout/adaptive.dart';
+export 'src/widgets/interactive_tile.dart';
 export 'src/widgets/recipe_card.dart';
 export 'src/widgets/category_cover.dart';
 export 'src/widgets/category_tile.dart';

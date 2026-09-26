@@ -132,13 +132,20 @@ class _Identity extends StatelessWidget {
           runSpacing: AppSpacing.sm,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            Text(
-              'Chefs',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.displaySmall?.copyWith(
-                color: palette.onHero,
-                height: 1,
+            // The page title from compact up, where there is no AppBar to
+            // carry one — so it is the heading assistive tech lands on
+            // (UX-014).
+            Semantics(
+              container: true,
+              header: true,
+              child: Text(
+                'Chefs',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.displaySmall?.copyWith(
+                  color: palette.onHero,
+                  height: 1,
+                ),
               ),
             ),
             if (total != null) _RankedPill(total: total!),

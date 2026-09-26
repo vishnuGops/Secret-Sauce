@@ -49,6 +49,8 @@ class IngredientsEditor extends StatelessWidget {
                       if (groups.length > 1)
                         IconButton(
                           icon: const Icon(Icons.delete_outline),
+                          // UX-047: without it this is an unnamed button.
+                          tooltip: 'Remove group',
                           // Remove, rebuild, *then* dispose (32c4). Disposing
                           // first leaves controllers that a still-mounted
                           // `TextField` is attached to; it survives today only

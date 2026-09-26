@@ -2,6 +2,8 @@ import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
+import 'package:app/widgets/route_title.dart';
+
 /// Who this chef is, at the top of `/chef/:id` (Phase 30).
 ///
 /// Moved out of `chef_detail_sheet.dart`'s private `_Header` when the dialog was
@@ -60,81 +62,94 @@ class ChefIdentityHeader extends StatelessWidget {
       if (profile.createdAt != null) 'joined ${monthYear(profile.createdAt!)}',
     ];
 
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(compact ? AppSpacing.md : AppSpacing.lg),
-      decoration: BoxDecoration(
-        color: Color.alphaBlend(
-          color.withValues(alpha: AppAlpha.wash),
-          scheme.surface,
-        ),
-        border: Border(bottom: BorderSide(color: scheme.outlineVariant)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ChefAvatar(
-            name: profile.displayName,
-            avatarUrl: profile.avatarUrl,
-            radius: compact ? _avatarRadiusCompact : _avatarRadius,
-            tier: tier,
-            ringColor: color,
-            surfaceColor: scheme.surface,
-            backgroundColor: Color.alphaBlend(
-              color.withValues(alpha: AppAlpha.tintStrong),
-              scheme.surfaceContainerHigh,
-            ),
-            foregroundColor: color,
+    // `display_name` defaults to '' rather than null, so an unnamed profile
+    // needs a visible fallback, not a blank line.
+    final name = profile.displayName.isEmpty ? 'Chef' : profile.displayName;
+
+    // The chef's name titles the browser tab (UX-051) — this header is the
+    // one place on the page that always has the profile in hand.
+    return RouteTitle(
+      page: name,
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(compact ? AppSpacing.md : AppSpacing.lg),
+        decoration: BoxDecoration(
+          color: Color.alphaBlend(
+            color.withValues(alpha: AppAlpha.wash),
+            scheme.surface,
           ),
-          SizedBox(width: compact ? AppSpacing.md : AppSpacing.lg),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  // `display_name` defaults to '' rather than null, so an
-                  // unnamed profile needs a visible fallback, not a blank line.
-                  profile.displayName.isEmpty ? 'Chef' : profile.displayName,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style:
-                      compact
-                          ? theme.textTheme.titleLarge
-                          : theme.textTheme.headlineSmall,
-                ),
-                const SizedBox(height: AppSpacing.xs),
-                // Wrap, not Row: the chip plus a three-clause fact line cannot
-                // share one line on a phone at 2.0x text scale (inherited from
-                // the dialog, where it was the fix for exactly that).
-                Wrap(
-                  spacing: AppSpacing.sm,
-                  runSpacing: AppSpacing.xs,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    if (tier != null) TierChip(tier: tier),
+          border: Border(bottom: BorderSide(color: scheme.outlineVariant)),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ChefAvatar(
+              name: profile.displayName,
+              avatarUrl: profile.avatarUrl,
+              radius: compact ? _avatarRadiusCompact : _avatarRadius,
+              tier: tier,
+              ringColor: color,
+              surfaceColor: scheme.surface,
+              backgroundColor: Color.alphaBlend(
+                color.withValues(alpha: AppAlpha.tintStrong),
+                scheme.surfaceContainerHigh,
+              ),
+              foregroundColor: color,
+            ),
+            SizedBox(width: compact ? AppSpacing.md : AppSpacing.lg),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // The page's top heading (UX-014).
+                  Semantics(
+                    container: true,
+                    header: true,
+                    child: Text(
+                      name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style:
+                          compact
+                              ? theme.textTheme.titleLarge
+                              : theme.textTheme.headlineSmall,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  // Wrap, not Row: the chip plus a three-clause fact line cannot
+                  // share one line on a phone at 2.0x text scale (inherited from
+                  // the dialog, where it was the fix for exactly that).
+                  Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.xs,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      if (tier != null) TierChip(tier: tier),
+                      Text(
+                        facts.join(' · '),
+                        // Rank and recipe count: tabular (UX-049).
+                        style: theme.textTheme.bodySmall?.tabular.copyWith(
+                          color: scheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (profile.bio != null &&
+                      profile.bio!.trim().isNotEmpty) ...[
+                    const SizedBox(height: AppSpacing.sm),
                     Text(
-                      facts.join(' · '),
-                      // Rank and recipe count: tabular (UX-049).
-                      style: theme.textTheme.bodySmall?.tabular.copyWith(
+                      profile.bio!,
+                      style: theme.textTheme.bodyMedium?.copyWith(
                         color: scheme.onSurfaceVariant,
                       ),
                     ),
                   ],
-                ),
-                if (profile.bio != null && profile.bio!.trim().isNotEmpty) ...[
-                  const SizedBox(height: AppSpacing.sm),
-                  Text(
-                    profile.bio!,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: scheme.onSurfaceVariant,
-                    ),
-                  ),
                 ],
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

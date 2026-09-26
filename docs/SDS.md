@@ -1098,6 +1098,12 @@ for one ingredient is the B066 class of bug, which is also why both quantity gut
 clamp** (32c5 — the cook rail had a hardcoded 74px that did not grow with the type, so the same
 `1.25 cup` sat on one line while reading and wrapped to three while cooking).
 
+**Fractions (Phase 37, UX-023).** The chain's number goes through `formatQuantity(value, unit)`:
+non-metric units and unitless counts snap to the nearest eighth or third within 0.02 after scaling
+(`1¼ cup`, `½ tsp`, `1 1⁄3 cup`); metric units (g, kg, mg, ml, cl, dl, L, mm, cm) and values that do not
+snap keep `trimDecimal`. Nutrition never uses it. It is still **one** chain, so the reading rail,
+cook mode and the scaler agree by construction (B066).
+
 **Timers are deadlines, not counters (32c4).** A running `CookTimer` stores `endsAt` on the wall
 clock; the one `Timer.periodic` prompts a recompute rather than subtracting a second. The
 difference only shows up where it matters — a suspended or backgrounded app receives no ticks, and a

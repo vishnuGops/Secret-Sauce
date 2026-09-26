@@ -561,7 +561,7 @@ void main() {
       expect(find.text('INGREDIENTS'), findsOneWidget);
       expect(find.text('METHOD'), findsOneWidget);
       expect(find.text('Ready to cook?'), findsOneWidget);
-      expect(find.text('3 steps · 1 h 25 m'), findsOneWidget);
+      expect(find.text('3 steps · 1 h 25 min'), findsOneWidget); // UX-043
       // The attribution box (frame F).
       expect(find.textContaining('Rosa’s kitchen'), findsOneWidget);
 
@@ -590,7 +590,7 @@ void main() {
 
       // Same widget as the expanded page's left column — scaled quantity in the
       // gutter, sentence-cased name, check-off counter.
-      expect(find.text('1.25 cup'), findsOneWidget);
+      expect(find.text('1¼ cup'), findsOneWidget); // UX-023
       expect(find.text('Wheat flour'), findsOneWidget);
       expect(find.text('0 of 1 gathered'), findsOneWidget);
       // And it is a panel here too. It was bare on compact (`bordered: false`)
@@ -754,6 +754,16 @@ void main() {
   // B128 / UX-019. `isOwner` compared the auth uid with `ownerId`, which is a
   // `profiles.id`. The two agree for every member except one who has claimed
   // an imported chef page — exactly the account these fixtures model.
+  // UX-051: the browser tab names the recipe once it has loaded.
+  testWidgets('the tab title is the recipe', (tester) async {
+    await _pump(tester, repo: _FakeRecipeRepository(), uid: null);
+
+    final titles = tester
+        .widgetList<Title>(find.byType(Title))
+        .map((t) => t.title);
+    expect(titles, contains('Suya-Spiced Lamb Skewers · Secret Sauce'));
+  });
+
   group('ownership is the profile id (B128)', () {
     testWidgets('a claimed member owns the claimed profile’s recipe', (
       tester,
@@ -1094,7 +1104,7 @@ void main() {
 
       expect(find.textContaining('Scaled from'), findsNothing);
       // The quantity is unscaled, which is what makes the absent banner right.
-      expect(find.text('1.25 cup'), findsOneWidget);
+      expect(find.text('1¼ cup'), findsOneWidget); // UX-023
     });
 
     testWidgets('the jump chip sends the rail back to Ingredients', (

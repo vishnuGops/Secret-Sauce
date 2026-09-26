@@ -46,10 +46,15 @@ class _FakeDiscover implements DiscoverRepository {
 
   final List<Recipe> rows;
   final int count;
-  final bool fail;
+
+  /// Flipped off by a test to model a read that recovers (UX-027).
+  bool fail;
 
   /// Every (limit, offset) the page asked for.
   final List<(int, int)> calls = [];
+
+  /// Every `corpus` call, failed ones included.
+  int attempts = 0;
 
   @override
   Future<List<Recipe>> corpus({
@@ -57,6 +62,7 @@ class _FakeDiscover implements DiscoverRepository {
     int offset = 0,
     String? cuisine,
   }) async {
+    attempts++;
     if (fail) throw Exception('boom');
     calls.add((limit, offset));
     return offset == 0 ? rows : const [];
@@ -185,15 +191,58 @@ void main() {
     _size(tester, 1000);
     await _pump(tester, discover: _FakeDiscover());
 
-    expect(find.text('Nothing imported yet'), findsOneWidget);
+    expect(find.text('Nothing from the web yet'), findsOneWidget);
     expect(find.byType(ErrorView), findsNothing);
   });
 
-  testWidgets('a failed read offers a retry', (tester) async {
+  // UX-046: the empty state was developer copy — "an import that has not been
+  // run against this database". A reader gets what the page is for and a way
+  // on, and none of the machinery.
+  testWidgets('the empty state is written for a reader, not a developer', (
+    tester,
+  ) async {
     _size(tester, 1000);
-    await _pump(tester, discover: _FakeDiscover(fail: true));
+    final router = await _pump(tester, discover: _FakeDiscover());
+
+    final empty = find.byType(EmptyView);
+    expect(empty, findsOneWidget);
+    final copy =
+        [
+          for (final t in tester.widgetList<Text>(
+            find.descendant(of: empty, matching: find.byType(Text)),
+          ))
+            t.data ?? '',
+        ].join(' ').toLowerCase();
+    for (final word in ['import', 'database', 'run against', 'seed', 'sql']) {
+      expect(copy, isNot(contains(word)), reason: 'developer word "$word"');
+    }
+    expect(copy, contains('credited'));
+
+    await tester.tap(find.text('Go to Discover'));
+    await tester.pumpAndSettle();
+    expect(router.state.matchedLocation, Routes.discover);
+  });
+
+  testWidgets('a failed read offers a retry that re-fetches (UX-027)', (
+    tester,
+  ) async {
+    _size(tester, 1000);
+    final discover = _FakeDiscover(
+      fail: true,
+      rows: [_recipe('r1', 'Lemon Garlic Scallops')],
+    );
+    await _pump(tester, discover: discover);
 
     expect(find.byType(ErrorView), findsOneWidget);
+    expect(discover.attempts, 1);
+
+    discover.fail = false;
+    await tester.tap(find.text('Retry'));
+    await tester.pumpAndSettle();
+
+    expect(discover.attempts, 2);
+    expect(find.byType(ErrorView), findsNothing);
+    expect(find.text('Lemon Garlic Scallops'), findsOneWidget);
   });
 
   group('envelope', () {

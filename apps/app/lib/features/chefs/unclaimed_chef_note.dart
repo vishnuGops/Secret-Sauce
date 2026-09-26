@@ -66,7 +66,7 @@ class UnclaimedChefNote extends ConsumerWidget {
           const SizedBox(height: AppSpacing.sm),
           Text(
             '${data.profile.displayName.isEmpty ? 'This chef' : data.profile.displayName} '
-            'has not signed up for Secret-Sauce. The recipes below are credited '
+            'has not signed up for Secret Sauce. The recipes below are credited '
             'to them because they published them elsewhere, and each one links '
             'back to where it came from. There is no score or rank here, and '
             'this page is deliberately absent from the chefs leaderboard.',

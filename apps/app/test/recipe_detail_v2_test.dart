@@ -329,7 +329,7 @@ void main() {
   testWidgets('facts strip formats times and longest wait', (tester) async {
     await _pump(tester);
 
-    expect(find.text('1 h 10 m'), findsOneWidget); // total 70
+    expect(find.text('1 h 10 min'), findsOneWidget); // total 70 (UX-043)
     expect(find.text('40 min'), findsOneWidget); // cook
     // Three "30 min": the Hands on cell, the Longest wait cell (= the longest
     // single step duration), and step 1's own duration chip.

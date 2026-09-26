@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:app/routing/nav_destinations.dart';
 import 'package:app/routing/top_nav_bar.dart';
+import 'package:app/widgets/route_title.dart';
 import 'package:app/widgets/legal_footer.dart';
 
 /// Responsive shell: bottom navigation on compact screens, the web
@@ -26,8 +27,23 @@ class AppShell extends ConsumerWidget {
     return i < 0 ? 0 : i;
   }
 
+  /// The destination this location belongs to, for the tab title (UX-051).
+  /// Null for a shell location that is none of them.
+  String? get _pageName {
+    for (final d in kMobileDestinations) {
+      if (location.startsWith(d.route)) return d.label;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // One wrapper over both chromes, so switching layout at a breakpoint does
+    // not remount the page under it.
+    return RouteTitle(page: _pageName, child: _chrome(context));
+  }
+
+  Widget _chrome(BuildContext context) {
     final wide = !context.isCompact;
 
     if (wide) {

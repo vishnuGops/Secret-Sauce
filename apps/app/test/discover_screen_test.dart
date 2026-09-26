@@ -492,6 +492,37 @@ void main() {
     }
   });
 
+  // UX-014: the underline and colour are all a screen reader never sees. The
+  // selected sort has to say so in the semantics tree, and move with a tap.
+  testWidgets('the sort links announce which one is selected', (tester) async {
+    final handle = tester.ensureSemantics();
+    _size(tester, 1400);
+    await tester.pumpWidget(_app(_stocked()));
+    await tester.pumpAndSettle();
+
+    expect(
+      tester.getSemantics(find.text('Top rated')),
+      isSemantics(isButton: true, isSelected: true),
+    );
+    expect(
+      tester.getSemantics(find.text('Newest')),
+      isSemantics(isButton: true, isSelected: false),
+    );
+
+    await tester.tap(find.text('Newest'));
+    await tester.pumpAndSettle();
+
+    expect(
+      tester.getSemantics(find.text('Newest')),
+      isSemantics(isSelected: true),
+    );
+    expect(
+      tester.getSemantics(find.text('Top rated')),
+      isSemantics(isSelected: false),
+    );
+    handle.dispose();
+  });
+
   testWidgets('the page holds together from a phone to a wide window', (
     tester,
   ) async {

@@ -277,6 +277,50 @@ void main() {
       expect(find.text('Load more'), findsNothing);
     });
 
+    // UX-027: the error state had no Retry, on every surface this widget
+    // serves. The retry re-runs the provider — one more request, then rows —
+    // and shows a spinner while it runs rather than a button that looks dead.
+    testWidgets('a failed first page offers Retry, which re-fetches', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(1000, 1200);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      final repo = _PagingDiscoverRepository(total: 5)
+        ..failNext = Exception('offline');
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [discoverRepositoryProvider.overrideWithValue(repo)],
+          child: MaterialApp(
+            theme: AppTheme.light(),
+            home: Scaffold(
+              body: RecipeAsyncGrid(
+                provider: popularRecipesProvider,
+                empty: const EmptyView(title: 'none', icon: Icons.no_food),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ErrorView), findsOneWidget);
+      expect(repo.calls, hasLength(1));
+
+      await tester.tap(find.text('Retry'));
+      await tester.pump();
+      // In flight: the spinner, not the stale error.
+      expect(find.byType(ErrorView), findsNothing);
+      expect(find.byType(LoadingView), findsOneWidget);
+
+      await tester.pumpAndSettle();
+      expect(repo.calls, hasLength(2));
+      expect(repo.calls.last, (kRecipePageSize, 0));
+      expect(find.text('Recipe 0'), findsOneWidget);
+      expect(find.byType(ErrorView), findsNothing);
+    });
+
     testWidgets('the footer survives the narrow envelope at 2.0x text scale', (
       tester,
     ) async {

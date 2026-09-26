@@ -227,10 +227,15 @@ class _Compact extends ConsumerWidget {
               horizontal: AppSpacing.md,
               vertical: AppSpacing.sm,
             ),
+            // The overall count only where it says something the title does
+            // not: with one unnamed group the title already reads `Step 1 of
+            // 6`, and printing it twice was UX-044.
             child: _Progress(
               steps: steps,
               index: index,
-              overallLabel: 'Step ${index + 1} of ${steps.length}',
+              showHint: true,
+              overallLabel:
+                  showGroup ? 'Step ${index + 1} of ${steps.length}' : null,
             ),
           ),
           // The middle scrolls. At 2.0× the step text alone can be taller than a
@@ -436,12 +441,15 @@ class _Wide extends ConsumerWidget {
                 style: textTheme.titleMedium?.copyWith(color: scheme.primary),
               ),
             ),
-            Text(
-              'Step ${index + 1} of ${steps.length}',
-              style: textTheme.labelMedium?.copyWith(
-                color: scheme.onSurfaceVariant,
+            // Same rule as compact (UX-044): only when the header names a
+            // group, so the two counts differ.
+            if (showGroup)
+              Text(
+                'Step ${index + 1} of ${steps.length}',
+                style: textTheme.labelMedium?.copyWith(
+                  color: scheme.onSurfaceVariant,
+                ),
               ),
-            ),
           ],
         ),
         const SizedBox(height: AppSpacing.sm),
@@ -725,7 +733,7 @@ class _CookRail extends StatelessWidget {
                         SizedBox(
                           // The reading rail's gutter, on the reading rail's
                           // terms (32c5): a bare 74 does not grow with the type,
-                          // so `1.25 cup` at 2.0× wrapped onto three lines here
+                          // so `1 1⁄3 cup` at 2.0× wrapped onto three lines here
                           // while the same string sat on one line on the recipe
                           // page. One constant, one clamp, two surfaces.
                           width:
@@ -794,10 +802,11 @@ class _CookRail extends StatelessWidget {
                     style: textTheme.bodyMedium,
                   ),
                 ),
-                if (s.step.durationMinutes != null) ...[
+                // The one duration format (UX-043); zero is no duration.
+                if ((s.step.durationMinutes ?? 0) > 0) ...[
                   const SizedBox(width: AppSpacing.sm),
                   Text(
-                    '${s.step.durationMinutes} m',
+                    formatMinutes(s.step.durationMinutes!),
                     style: textTheme.labelMedium?.copyWith(
                       color: scheme.onSurfaceVariant,
                     ),
@@ -826,12 +835,19 @@ class _Progress extends StatelessWidget {
     required this.steps,
     required this.index,
     this.overallLabel,
+    this.showHint = false,
     this.thick = false,
   });
 
   final List<CookStep> steps;
   final int index;
+
+  /// `Step 5 of 9` across every group, or null when the title already says it.
   final String? overallLabel;
+
+  /// The `Keep this screen open` line under the bar (compact only — the web
+  /// frame says it in the top bar).
+  final bool showHint;
   final bool thick;
 
   @override
@@ -864,24 +880,28 @@ class _Progress extends StatelessWidget {
             ],
           ],
         ),
-        if (overallLabel != null) ...[
+        if (showHint || overallLabel != null) ...[
           const SizedBox(height: AppSpacing.xs),
           Row(
             children: [
               Expanded(
-                child: Text(
-                  'Keep this screen open',
+                child:
+                    showHint
+                        ? Text(
+                          'Keep this screen open',
+                          style: textTheme.labelSmall?.copyWith(
+                            color: scheme.onSurfaceVariant,
+                          ),
+                        )
+                        : const SizedBox.shrink(),
+              ),
+              if (overallLabel != null)
+                Text(
+                  overallLabel!,
                   style: textTheme.labelSmall?.copyWith(
                     color: scheme.onSurfaceVariant,
                   ),
                 ),
-              ),
-              Text(
-                overallLabel!,
-                style: textTheme.labelSmall?.copyWith(
-                  color: scheme.onSurfaceVariant,
-                ),
-              ),
             ],
           ),
         ],
@@ -892,6 +912,10 @@ class _Progress extends StatelessWidget {
 
 /// Temperature and tip as chips beside the step. A duration is deliberately
 /// absent — it is the timer panel below, not a label.
+///
+/// The temperature is the [MetaChip.large] variant (UX-024): an oven setting
+/// at the reading page's 11px beside 24–36px step text is unreadable from
+/// arm's length, which is the one distance cook mode is for.
 class _StepChips extends StatelessWidget {
   const _StepChips({required this.step});
 
@@ -911,7 +935,11 @@ class _StepChips extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (hasTemp)
-            MetaChip(icon: Icons.thermostat, label: step.temperature!),
+            MetaChip(
+              icon: Icons.thermostat,
+              label: step.temperature!,
+              large: true,
+            ),
           // The canvas hides the tip behind a lightbulb toggle in the top bar.
           // Shown inline instead, and as a *row* rather than a chip: a tip is a
           // sentence, and a chip is a pill that cannot wrap — the one thing on a
@@ -966,35 +994,43 @@ class _RingingBanner extends ConsumerWidget {
     return Column(
       children: [
         for (final stepId in session.ringing)
-          Container(
-            margin: const EdgeInsets.only(bottom: AppSpacing.md),
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.md,
-              AppSpacing.sm,
-              AppSpacing.sm,
-              AppSpacing.sm,
-            ),
-            decoration: BoxDecoration(
-              color: scheme.primaryContainer,
-              borderRadius: BorderRadius.circular(AppRadii.card),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.alarm_on, color: scheme.onPrimaryContainer),
-                const SizedBox(width: AppSpacing.sm),
-                Expanded(
-                  child: Text(
-                    _label(stepId),
-                    style: textTheme.titleSmall?.copyWith(
-                      color: scheme.onPrimaryContainer,
+          // A live region (UX-047): the banner appears while the cook is
+          // looking at something else, and a screen reader announces it
+          // instead of waiting for focus to wander onto it. The chime is the
+          // audible half of the same alarm; this is the spoken half.
+          Semantics(
+            container: true,
+            liveRegion: true,
+            child: Container(
+              margin: const EdgeInsets.only(bottom: AppSpacing.md),
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.md,
+                AppSpacing.sm,
+                AppSpacing.sm,
+                AppSpacing.sm,
+              ),
+              decoration: BoxDecoration(
+                color: scheme.primaryContainer,
+                borderRadius: BorderRadius.circular(AppRadii.card),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.alarm_on, color: scheme.onPrimaryContainer),
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: Text(
+                      _label(stepId),
+                      style: textTheme.titleSmall?.copyWith(
+                        color: scheme.onPrimaryContainer,
+                      ),
                     ),
                   ),
-                ),
-                TextButton(
-                  onPressed: () => notifier.dismissAlarm(stepId),
-                  child: const Text('Got it'),
-                ),
-              ],
+                  TextButton(
+                    onPressed: () => notifier.dismissAlarm(stepId),
+                    child: const Text('Got it'),
+                  ),
+                ],
+              ),
             ),
           ),
       ],

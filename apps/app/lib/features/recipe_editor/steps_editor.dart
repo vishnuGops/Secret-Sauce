@@ -52,6 +52,8 @@ class StepsEditor extends StatelessWidget {
                       if (groups.length > 1)
                         IconButton(
                           icon: const Icon(Icons.delete_outline),
+                          // UX-047: without it this is an unnamed button.
+                          tooltip: 'Remove section',
                           // Remove, rebuild, then dispose — same order as
                           // `IngredientsEditor` and for the same reason (32c4).
                           onPressed: () {

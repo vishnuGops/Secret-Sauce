@@ -29,6 +29,22 @@ abstract final class AppFonts {
 /// the servings stepper (UX-049).
 const List<FontFeature> kTabularFigures = [FontFeature.tabularFigures()];
 
+/// Tabular digits plus the OpenType `frac` feature — the ingredient quantity
+/// role (UX-023).
+///
+/// **What `frac` does in Manrope, measured from the font's GSUB, not assumed:**
+/// it is three ligatures — `1/2` `1/4` `3/4` (ASCII `/` only) to `½` `¼` `¾`.
+/// It does not stack an arbitrary `n⁄d`, does not act on U+2044 FRACTION SLASH,
+/// and the family has no `⅓` `⅔` `⅛` glyphs. So this makes an ASCII half or
+/// quarter typeset, and leaves every other string — a plain number, `12 g`,
+/// `1 1⁄3` — exactly as it was. Stacking thirds and eighths needs the digits
+/// themselves changed (Manrope does carry the `numr`/`dnom` superior and
+/// inferior figures), which is the formatter's job, not a role's.
+const List<FontFeature> kQuantityFigures = [
+  ...kTabularFigures,
+  FontFeature.fractions(),
+];
+
 /// The type ramp: the full Material 3 `TextTheme`, every role defined.
 ///
 /// Sizes and line heights are Material 3's (so the 2.0× envelope maths —
@@ -110,7 +126,7 @@ abstract final class AppTypography {
       14,
       20,
       FontWeight.w800,
-    ).copyWith(fontFeatures: kTabularFigures),
+    ).copyWith(fontFeatures: kQuantityFigures),
     clock: _ui(24, 32, FontWeight.w600).copyWith(fontFeatures: kTabularFigures),
     clockSmall: _ui(
       22,
@@ -236,5 +252,13 @@ extension AppTextStylesContext on BuildContext {
 extension TabularFiguresStyle on TextStyle {
   /// This style with tabular digits (UX-049) — for a role that is usually
   /// proportional but shows a changing number at this call site.
-  TextStyle get tabular => copyWith(fontFeatures: kTabularFigures);
+  ///
+  /// **Adds** the feature rather than replacing the list: a role that already
+  /// carries others (`quantity`'s `frac`) keeps them, so `.tabular` on it is a
+  /// no-op instead of a silent loss.
+  TextStyle get tabular {
+    final features = fontFeatures ?? const <FontFeature>[];
+    if (features.contains(const FontFeature.tabularFigures())) return this;
+    return copyWith(fontFeatures: [...features, ...kTabularFigures]);
+  }
 }

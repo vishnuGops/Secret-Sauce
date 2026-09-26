@@ -45,6 +45,23 @@ class Routes {
   /// one is ignored by the builder below and Discover opens unfiltered.
   static String discoverCategory(String slug) =>
       Uri(path: discover, queryParameters: {'category': slug}).toString();
+
+  /// Discover with a search in it (UX-022): `/discover?q=soup`, so a search
+  /// can be linked, bookmarked and survives a refresh. [category] rides along
+  /// when a tile was selected before the search, so clearing the search lands
+  /// back on that tile's grid rather than on the unfiltered page. An empty
+  /// [query] drops `q` — `discoverSearch('')` is plain [discover].
+  static String discoverSearch(String query, {String? category}) {
+    final params = {
+      if (query.isNotEmpty) 'q': query,
+      if (category != null) 'category': category,
+    };
+    return Uri(
+      path: discover,
+      queryParameters: params.isEmpty ? null : params,
+    ).toString();
+  }
+
   static const chefs = '/chefs';
   static const myRecipes = '/my';
   static const profile = '/profile';
@@ -236,12 +253,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: Routes.discover,
             // The selected category is URL state, read here the way `/auth`
             // reads `mode` — so a deep link, the back button and a tap on a
-            // tile all reach the screen by the same road.
+            // tile all reach the screen by the same road. The search query is
+            // too (UX-022): `?q=` pre-fills the field and runs the search.
             builder:
                 (context, state) => DiscoverScreen(
                   category: DiscoverCategory.fromSlug(
                     state.uri.queryParameters['category'],
                   ),
+                  query: state.uri.queryParameters['q']?.trim() ?? '',
                 ),
           ),
           // Signed-out safe, like Discover — deliberately absent from the

@@ -73,7 +73,10 @@ origin phase; detail is in the archive.
 
 **Product / UX**
 
-- [ ] Typography upgrade — Newsreader + Manrope via `google_fonts`, app-wide decision (Ph 20/23)
+- [x] Typography upgrade (Ph 20/23) — superseded, not built as written: no `google_fonts`. Phase 36b
+      bundled Newsreader + Manrope as assets (CanvasKit cannot fetch a font without a flash) and
+      36c narrowed it to **Manrope only** ("basic for now"). The final display face is an owner
+      decision tracked under Phase 36c, not here
 - [x] Per-step image upload picker (Ph 9, B035) — done in Phase 33. Bytes are held on the draft
       and uploaded inside `_save`, exactly as the cover is, so an abandoned edit leaves no orphan
       object in the bucket and nothing reaches the recipe outside the one `save_recipe` call
@@ -925,17 +928,21 @@ redesigns of Chefs / My Recipes / editor / auth / profile, and every owner decis
 
 **Wave C — accessibility, search, formatting**
 
-- [ ] UX-013 card focus · UX-014 heading/checked/selected semantics · UX-015 auth autofill
-- [ ] UX-021 / UX-022 search-miss state + `/discover?q=`
-- [ ] UX-027 retry on every grid error
-- [ ] UX-023 fractions · UX-024 cook-mode chips · UX-043 / UX-046 copy
+- [x] UX-013 card focus (`InteractiveTile`) · UX-014 heading/checked/selected semantics · UX-015 auth
+      autofill · UX-047 tooltips + live region · UX-048 chef pill 48px targets · UX-051 per-route tab
+      titles (`RouteTitle`) · UX-041 one brand spelling in UI copy
+- [x] UX-021 / UX-022 search-miss state + `/discover?q=` (+ an Explore link in the masthead)
+- [x] UX-027 retry on every grid error
+- [x] UX-023 fractions (thirds/eighths print flat — Manrope has no stacked glyphs for them) ·
+      UX-024 cook-mode chips · UX-043 one duration format · UX-044 duplicate step count and
+      "you'll need" line · UX-046 copy
 
 **Wave D — design follow-ups**
 
 - [ ] UX-032 consolidation (`SegmentedTabs`, `RankBadge`, one Load more, `ChefAvatar` on profile)
 - [ ] Compact category row scrolls a deep-linked tile into view
 - [ ] Chefs hero `MASTER CHEF` tile capture near the 96px floor
-- [ ] Doc hygiene (the superseded typography item)
+- [x] Doc hygiene (the superseded typography item)
 
 ---
 

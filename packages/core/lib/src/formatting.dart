@@ -65,27 +65,26 @@ String isoDate(DateTime date) =>
     '${date.month.toString().padLeft(2, '0')}-'
     '${date.day.toString().padLeft(2, '0')}';
 
-/// `70` → `1 h 10 m`, `40` → `40 min`, `120` → `2 h`, `0`/negative → `—`.
+/// `70` → `1 h 10 min`, `40` → `40 min`, `120` → `2 h`, `0`/negative → `—`.
 ///
-/// The recipe-detail facts strip reads durations side by side, so hours are
-/// split out instead of showing `70 min`. Chips inside a step keep the raw
-/// `N min` form — a step long enough to need hours is a data problem, not a
-/// formatting one.
+/// **The** duration format (UX-043, DESIGN §2.1): the facts strip, the method
+/// list's step chips and cook mode's "coming up" rail all read through here, so
+/// one recipe no longer says `1 h 10 m`, `70 min` and `70 m` on three surfaces.
+/// Hours are split out because durations are read side by side. A running
+/// timer is the one exception — `formatClock` in cook mode is a countdown, not
+/// a duration label.
 ///
-/// [compact] drops the spaces — `1h 10m` — and exists for exactly one caller,
-/// `RecipeCard`'s time label (32d2, which merged the card's own private copy of
-/// this arithmetic into this function). It is a **width** decision, not a style
-/// one: the card is a fixed-size tile whose metadata row degrades time → count
-/// → value under pressure (B080), so the two characters the spaces cost come
-/// straight out of the rating beside it. Nothing else should pass it.
-String formatMinutes(int minutes, {bool compact = false}) {
+/// There is no narrow variant any more. `RecipeCard` used a spaceless `1h 10m`
+/// to save two characters; Phase 37 retired it for the one format, because the
+/// card's metadata row already degrades time first (B080) — a long label
+/// ellipsizes before the rating beside it gives anything up.
+String formatMinutes(int minutes) {
   if (minutes <= 0) return '—';
   final hours = minutes ~/ 60;
   final rest = minutes % 60;
   if (hours == 0) return '$rest min';
-  if (compact) return rest == 0 ? '${hours}h' : '${hours}h ${rest}m';
   if (rest == 0) return '$hours h';
-  return '$hours h $rest m';
+  return '$hours h $rest min';
 }
 
 /// `Plain yoghurt` from `plain yoghurt`.
@@ -100,8 +99,9 @@ String sentenceCase(String s) =>
 /// The shortest honest decimal for [v]: `2`, `1.5`, `1.25`.
 ///
 /// One implementation for the two places a stored `numeric` reaches a label —
-/// a scaled ingredient quantity and a nutrition value (32d2, where the two
-/// bodies were byte-identical in two files). Two decimal places is the ceiling
+/// a nutrition value, and an ingredient quantity that [formatQuantity] does not
+/// set as a fraction (a metric unit, or a value near no eighth or third) — 32d2,
+/// where the two bodies were byte-identical in two files. Two decimal places is the ceiling
 /// in both: quantities are scaled by a servings ratio, nutrition data is never
 /// finer, and `10.0 g` reads like a precision nobody entered.
 String trimDecimal(double v) {
@@ -110,6 +110,85 @@ String trimDecimal(double v) {
       .toStringAsFixed(2)
       .replaceFirst(RegExp(r'0+$'), '')
       .replaceFirst(RegExp(r'\.$'), '');
+}
+
+/// Units a cook reads as decimals: SI mass, volume and length, every spelling
+/// `nutritionData/units.json` accepts plus the ones it does not register
+/// (`mg`, `cl`, `dl`, `mm`). Matched case-insensitively, so the display form
+/// `L` and the lookup key `l` are one unit. Everything else — cups, spoons,
+/// ounces, pounds, a bare count, a word unit like `cloves` — is read as a
+/// fraction (UX-023).
+const _kDecimalUnits = <String>{
+  'mg', 'milligram', 'milligrams', //
+  'g', 'gram', 'grams', //
+  'kg', 'kilogram', 'kilograms', //
+  'ml', 'millilitre', 'millilitres', 'milliliter', 'milliliters', //
+  'cl', 'centilitre', 'centilitres', 'centiliter', 'centiliters', //
+  'dl', 'decilitre', 'decilitres', 'deciliter', 'deciliters', //
+  'l', 'litre', 'litres', 'liter', 'liters', //
+  'mm', 'cm',
+};
+
+/// How far a scaled value may sit from an eighth or a third and still print as
+/// one. Wide enough to absorb a stored `0.33` / `0.666` and a servings ratio's
+/// float residue, narrow enough that `2.4 cup` (0.025 from `3⁄8`) stays `2.4`.
+const _kFractionSnap = 0.02;
+
+/// The three fractions Manrope draws as one glyph. Thirds and eighths have no
+/// precomposed glyph in the bundled face, so they are set as digits around
+/// U+2044 FRACTION SLASH, which the font's `frac` feature stacks.
+const _kPrecomposedFractions = <String, String>{
+  '1/2': '½',
+  '1/4': '¼',
+  '3/4': '¾',
+};
+
+/// U+2044 FRACTION SLASH — not `/`, which reads as a date or a ratio and which
+/// no font's `frac` feature stacks.
+const _kFractionSlash = '⁄';
+
+/// A quantity as a cook reads it in [unit]: `½ cup`, `1¼ tsp`, `1 1⁄3 cups`,
+/// `3 cloves`, but `250 g` and `1.5 L` (UX-023).
+///
+/// Cups, spoons, ounces, pounds, bare counts and word units snap to the
+/// nearest eighth or third when [v] is within [_kFractionSnap] of one; a value
+/// that does not snap, and every metric unit, keeps [trimDecimal]. Called on
+/// the **scaled** value, so `0.75 cup` doubled is `1½ cup`, and a servings
+/// ratio's `2.0000001` is `2`. A tiny positive value that would snap to zero
+/// keeps its decimal rather than printing `0`.
+///
+/// No space before a precomposed glyph (`1½`), a space before a slashed one
+/// (`1 1⁄3`) — without it the whole part and the numerator run together as
+/// `11⁄3`.
+String formatQuantity(double v, String? unit) {
+  final u = (unit ?? '').trim().toLowerCase();
+  if (v <= 0 || _kDecimalUnits.contains(u)) return trimDecimal(v);
+
+  final whole = v.floor();
+  final rest = v - whole;
+  var numerator = 0;
+  var den = 1;
+  var best = double.infinity;
+  for (final d in const [8, 3]) {
+    for (var n = 0; n <= d; n++) {
+      final diff = (rest - n / d).abs();
+      if (diff < best) {
+        best = diff;
+        numerator = n;
+        den = d;
+      }
+    }
+  }
+  if (best > _kFractionSnap) return trimDecimal(v);
+  if (numerator == den) return '${whole + 1}';
+  if (numerator == 0) return whole == 0 ? trimDecimal(v) : '$whole';
+
+  final g = numerator.gcd(den);
+  final key = '${numerator ~/ g}/${den ~/ g}';
+  final glyph = _kPrecomposedFractions[key];
+  if (glyph != null) return whole == 0 ? glyph : '$whole$glyph';
+  final slashed = '${numerator ~/ g}$_kFractionSlash${den ~/ g}';
+  return whole == 0 ? slashed : '$whole $slashed';
 }
 
 /// True when [ingredient] has nothing but its note to put in a quantity column,
@@ -141,7 +220,7 @@ String ingredientQuantityLabel(Ingredient ingredient, {double factor = 1}) {
     final note = ingredient.note;
     return (note ?? '').isEmpty ? '—' : note!;
   }
-  final amount = trimDecimal(quantity * factor);
+  final amount = formatQuantity(quantity * factor, unit);
   return hasUnit ? '$amount $unit' : amount;
 }
 

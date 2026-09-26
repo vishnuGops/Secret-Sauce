@@ -64,13 +64,17 @@ class RailPanel extends ConsumerWidget {
             // The panel's heading names what the panel is showing, so it follows
             // the tab — `INGREDIENTS` over a nutrition label would be the heading
             // lying about its section.
-            Text(
-              switch (tab) {
-                RailTab.ingredients => 'INGREDIENTS',
-                RailTab.nutrition => 'NUTRITION',
-              },
-              style: context.appText.kickerLarge.copyWith(
-                color: scheme.tertiary,
+            // A heading to a screen reader as well (UX-014).
+            Semantics(
+              header: true,
+              child: Text(
+                switch (tab) {
+                  RailTab.ingredients => 'INGREDIENTS',
+                  RailTab.nutrition => 'NUTRITION',
+                },
+                style: context.appText.kickerLarge.copyWith(
+                  color: scheme.tertiary,
+                ),
               ),
             ),
             const SizedBox(height: AppSpacing.smPlus),

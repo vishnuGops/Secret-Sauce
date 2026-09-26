@@ -274,6 +274,67 @@ void main() {
     );
   });
 
+  // UX-015: no AutofillGroup, no hints, and Enter did nothing on the web.
+  TextField textField(WidgetTester tester, String label) => tester.widget(
+    find.descendant(
+      of: find.widgetWithText(TextFormField, label),
+      matching: find.byType(TextField),
+    ),
+  );
+
+  testWidgets('sign-in fields carry autofill hints and keyboard actions', (
+    tester,
+  ) async {
+    await _pumpAt(tester, Routes.auth, _FakeAuth());
+
+    expect(find.byType(AutofillGroup), findsOneWidget);
+    final email = textField(tester, 'Email');
+    final password = textField(tester, 'Password');
+    expect(email.autofillHints, [AutofillHints.email]);
+    expect(email.textInputAction, TextInputAction.next);
+    expect(password.autofillHints, [AutofillHints.password]);
+    expect(password.textInputAction, TextInputAction.done);
+  });
+
+  testWidgets('sign-up asks for a new password and a name', (tester) async {
+    await _pumpAt(tester, Routes.signUp, _FakeAuth());
+
+    final name = textField(tester, 'Display name');
+    expect(name.autofillHints, [AutofillHints.name]);
+    expect(name.textInputAction, TextInputAction.next);
+    expect(textField(tester, 'Email').autofillHints, [AutofillHints.email]);
+    expect(textField(tester, 'Password').autofillHints, [
+      AutofillHints.newPassword,
+    ]);
+  });
+
+  testWidgets('Enter in the password field submits', (tester) async {
+    final auth = _FakeAuth();
+    final router = await _pumpAt(tester, Routes.auth, auth);
+
+    // `_fill` types the password last, so it holds the focus.
+    await _fill(tester, email: 'cook@example.test', password: 'good-password');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+
+    expect(auth.calls, ['signIn:cook@example.test']);
+    expect(_location(router), Routes.discover);
+  });
+
+  testWidgets('Enter on an invalid form validates and sends nothing', (
+    tester,
+  ) async {
+    final auth = _FakeAuth();
+    await _pumpAt(tester, Routes.auth, auth);
+
+    await _fill(tester, email: 'nope', password: 'short');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+
+    expect(auth.calls, isEmpty);
+    expect(find.text('Enter a valid email'), findsOneWidget);
+  });
+
   // B131 / UX-002. Every entry to `/auth` is a `go`, so there is nothing to pop
   // and the AppBar used to draw no back button: a stranded phone user.
   testWidgets('Back leaves a cold /auth for Discover', (tester) async {

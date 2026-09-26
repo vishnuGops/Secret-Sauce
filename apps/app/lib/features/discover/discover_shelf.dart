@@ -171,30 +171,37 @@ class _Strip extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Row(
-          children: [
-            Text(
-              index,
-              // A number, so the stat role (sans, heavy, tabular) — the same
-              // numeral the populated rail's header sets.
-              style: context.appText.statLarge.copyWith(
-                color: accent,
-                height: 1,
+        // A heading (UX-014): `01 UNDER 30` opens a section of the page, and
+        // an empty or failed shelf is still one — heading navigation should
+        // land on all three shelves whatever they hold.
+        Semantics(
+          container: true,
+          header: true,
+          child: Row(
+            children: [
+              Text(
+                index,
+                // A number, so the stat role (sans, heavy, tabular) — the same
+                // numeral the populated rail's header sets.
+                style: context.appText.statLarge.copyWith(
+                  color: accent,
+                  height: 1,
+                ),
               ),
-            ),
-            const SizedBox(width: AppSpacing.sm),
-            Flexible(
-              child: Text(
-                title.toUpperCase(),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                // The index line (`01 UNDER 30`) at section level — the
-                // same role and accent CardRail draws a populated shelf's
-                // heading in.
-                style: context.appText.kickerLarge.copyWith(color: accent),
+              const SizedBox(width: AppSpacing.sm),
+              Flexible(
+                child: Text(
+                  title.toUpperCase(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  // The index line (`01 UNDER 30`) at section level — the
+                  // same role and accent CardRail draws a populated shelf's
+                  // heading in.
+                  style: context.appText.kickerLarge.copyWith(color: accent),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         const SizedBox(height: AppSpacing.sm),
         DecoratedBox(

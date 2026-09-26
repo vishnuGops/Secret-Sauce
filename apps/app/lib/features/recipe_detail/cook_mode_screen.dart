@@ -11,6 +11,7 @@ import 'package:app/features/recipe_detail/cook_step_view.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:app/routing/pop_or_go.dart';
+import 'package:app/widgets/route_title.dart';
 
 /// Cook mode — the full-screen, one-step-at-a-time mode behind every
 /// "Start cooking" control (canvas frames C, D, E, H).
@@ -52,7 +53,12 @@ class CookModeScreen extends ConsumerWidget {
                       message: friendlyError(e),
                       onRetry: () => ref.invalidate(recipeProvider(recipeId)),
                     ),
-                data: (recipe) => _CookMode(recipe: recipe),
+                // UX-051.
+                data:
+                    (recipe) => RouteTitle(
+                      page: 'Cooking ${recipe.title}',
+                      child: _CookMode(recipe: recipe),
+                    ),
               ),
             ),
       ),

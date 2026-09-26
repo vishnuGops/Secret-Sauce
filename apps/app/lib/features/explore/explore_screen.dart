@@ -8,6 +8,7 @@ import 'package:app/features/legal/legal_document.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:app/routing/pop_or_go.dart';
 import 'package:app/widgets/recipe_async_grid.dart';
+import 'package:app/widgets/route_title.dart';
 
 /// `/explore` — recipes captured from the public web (Phase 35c).
 ///
@@ -32,35 +33,51 @@ class ExploreScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pad = context.isCompact ? AppSpacing.md : AppSpacing.lg;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('From around the web'),
-        leading: BackButton(onPressed: () => popOrGo(context, Routes.discover)),
-      ),
-      // The page owns its scroll, so the grid has to be the SLIVER form
-      // (Gotcha 24): `RecipeAsyncGrid` is a `CustomScrollView` and putting one
-      // inside another is a scrollable inside a scrollable.
-      body: CustomScrollView(
-        slivers: [
-          SliverPadding(
-            padding: EdgeInsets.fromLTRB(pad, pad, pad, AppSpacing.md),
-            sliver: const SliverToBoxAdapter(child: _Preamble()),
+    return RouteTitle(
+      // UX-051.
+      page: 'Explore',
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('From around the web'),
+          leading: BackButton(
+            onPressed: () => popOrGo(context, Routes.discover),
           ),
-          RecipeAsyncSliverGrid<CorpusRecipesNotifier>(
-            provider: corpusRecipesProvider,
-            padding: EdgeInsets.fromLTRB(pad, 0, pad, pad),
-            empty: const Padding(
-              padding: EdgeInsets.all(AppSpacing.xl),
-              child: EmptyView(
-                icon: Icons.travel_explore_outlined,
-                title: 'Nothing imported yet',
-                message:
-                    'This collection is built by an import that has not been '
-                    'run against this database.',
+        ),
+        // The page owns its scroll, so the grid has to be the SLIVER form
+        // (Gotcha 24): `RecipeAsyncGrid` is a `CustomScrollView` and putting one
+        // inside another is a scrollable inside a scrollable.
+        body: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: EdgeInsets.fromLTRB(pad, pad, pad, AppSpacing.md),
+              sliver: const SliverToBoxAdapter(child: _Preamble()),
+            ),
+            RecipeAsyncSliverGrid<CorpusRecipesNotifier>(
+              provider: corpusRecipesProvider,
+              padding: EdgeInsets.fromLTRB(pad, 0, pad, pad),
+              // UX-046: written for a reader. It used to explain that an import
+              // had not been run "against this database" — true, and nothing a
+              // cook can act on. It says what will be here, why it can be empty,
+              // and where the recipes that do exist are.
+              empty: Padding(
+                padding: const EdgeInsets.all(AppSpacing.xl),
+                child: EmptyView(
+                  icon: Icons.travel_explore_outlined,
+                  title: 'Nothing from the web yet',
+                  message:
+                      'This is where recipes published elsewhere will appear, '
+                      'each credited to its cook with a link back to the '
+                      'original. None have been added yet — in the meantime, '
+                      'Discover has everything cooks here have shared.',
+                  action: TextButton(
+                    onPressed: () => popOrGo(context, Routes.discover),
+                    child: const Text('Go to Discover'),
+                  ),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

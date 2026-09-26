@@ -88,18 +88,35 @@ class DetailTags extends StatelessWidget {
 class MetaChip extends StatelessWidget {
   /// [icon] is optional: cook mode's "you'll need" chips are ingredient names,
   /// where an icon in front of every one of six chips is noise.
-  const MetaChip({super.key, this.icon, required this.label});
+  const MetaChip({
+    super.key,
+    this.icon,
+    required this.label,
+    this.large = false,
+  });
   final IconData? icon;
   final String label;
+
+  /// Cook mode's step facts (UX-024): `titleMedium` text and a
+  /// [AppIconSize.lg] icon, read from across a counter. The reading page and
+  /// cook mode's informational chips keep the small `labelSmall` pill.
+  final bool large;
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.sm,
-        vertical: AppSpacing.xs,
-      ),
+      padding:
+          large
+              ? const EdgeInsets.symmetric(
+                horizontal: AppSpacing.smPlus,
+                vertical: AppSpacing.xsPlus,
+              )
+              : const EdgeInsets.symmetric(
+                horizontal: AppSpacing.sm,
+                vertical: AppSpacing.xs,
+              ),
       decoration: BoxDecoration(
         color: scheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(AppRadii.pill),
@@ -108,12 +125,16 @@ class MetaChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[
-            Icon(icon, size: AppIconSize.xs, color: scheme.onSurfaceVariant),
-            const SizedBox(width: AppSpacing.xs),
+            Icon(
+              icon,
+              size: large ? AppIconSize.lg : AppIconSize.xs,
+              color: scheme.onSurfaceVariant,
+            ),
+            SizedBox(width: large ? AppSpacing.sm : AppSpacing.xs),
           ],
           // Flexible, and wrapping to two lines, because the label is not
           // always a short fact. Cook mode puts a whole ingredient
-          // ("1.25 cup Unbleached wheat flour") in one of these, which is wider
+          // ("1¼ cup Unbleached wheat flour") in one of these, which is wider
           // than a 390px phone can hold — and a `Text` in a `Row` with no
           // flexible sibling is laid out at its intrinsic width and overflows
           // rather than shrinking (Gotcha 21). Two lines instead of one so a
@@ -124,7 +145,7 @@ class MetaChip extends StatelessWidget {
               label,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.labelSmall,
+              style: large ? textTheme.titleMedium : textTheme.labelSmall,
             ),
           ),
         ],

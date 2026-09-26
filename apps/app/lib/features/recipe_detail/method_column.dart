@@ -61,10 +61,15 @@ class MethodColumn extends ConsumerWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
-                  'METHOD',
-                  style: context.appText.kickerLarge.copyWith(
-                    color: scheme.tertiary,
+                // A heading to a screen reader as well as to the eye (UX-014),
+                // so the method is one swipe-by-heading away.
+                Semantics(
+                  header: true,
+                  child: Text(
+                    'METHOD',
+                    style: context.appText.kickerLarge.copyWith(
+                      color: scheme.tertiary,
+                    ),
                   ),
                 ),
                 const SizedBox(width: AppSpacing.md),
@@ -91,11 +96,14 @@ class MethodColumn extends ConsumerWidget {
                   ),
                   child: Row(
                     children: [
-                      Text(
-                        (group.name.isEmpty ? 'Steps' : group.name)
-                            .toUpperCase(),
-                        style: context.appText.overline.copyWith(
-                          color: scheme.onSurfaceVariant,
+                      Semantics(
+                        header: true,
+                        child: Text(
+                          (group.name.isEmpty ? 'Steps' : group.name)
+                              .toUpperCase(),
+                          style: context.appText.overline.copyWith(
+                            color: scheme.onSurfaceVariant,
+                          ),
                         ),
                       ),
                       const SizedBox(width: AppSpacing.sm),
@@ -264,34 +272,48 @@ class _StepCard extends StatelessWidget {
               ),
     );
 
+    // One node per step, announced as a checkable item (UX-014): "Step 2,
+    // checked, <text>". The disc's bare number is excluded because the label
+    // already says it — otherwise a reader hears "Step 2, 2".
+    Widget checkable(Widget child) => MergeSemantics(
+      child: Semantics(checked: done, label: 'Step $number', child: child),
+    );
+
+    // The step's duration in the one format (UX-043) — `1 h 30 min`, not
+    // `90 min` here and `1 h 30 m` in the facts strip. Zero is no duration.
+    final minutes = step.durationMinutes ?? 0;
+    final duration = minutes > 0 ? formatMinutes(minutes) : null;
+
     if (done) {
-      return InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadii.card),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-          child: Row(
-            children: [
-              badge,
-              const SizedBox(width: _kBadgeGap),
-              Expanded(
-                child: Text(
-                  step.text,
-                  style: textTheme.bodyLarge?.copyWith(
-                    color: scheme.onSurfaceVariant,
+      return checkable(
+        InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppRadii.card),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+            child: Row(
+              children: [
+                ExcludeSemantics(child: badge),
+                const SizedBox(width: _kBadgeGap),
+                Expanded(
+                  child: Text(
+                    step.text,
+                    style: textTheme.bodyLarge?.copyWith(
+                      color: scheme.onSurfaceVariant,
+                    ),
                   ),
                 ),
-              ),
-              if (step.durationMinutes != null) ...[
-                const SizedBox(width: AppSpacing.sm),
-                Text(
-                  '${step.durationMinutes} min',
-                  style: textTheme.labelMedium?.copyWith(
-                    color: scheme.onSurfaceVariant,
+                if (duration != null) ...[
+                  const SizedBox(width: AppSpacing.sm),
+                  Text(
+                    duration,
+                    style: textTheme.labelMedium?.copyWith(
+                      color: scheme.onSurfaceVariant,
+                    ),
                   ),
-                ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       );
@@ -299,81 +321,83 @@ class _StepCard extends StatelessWidget {
 
     // No card: inside the method panel a step is a row, as in reference 5's
     // open method list. Transparent material so the ink still has a surface.
-    return Material(
-      type: MaterialType.transparency,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadii.card),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              badge,
-              const SizedBox(width: _kBadgeGap),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(step.text, style: textTheme.bodyLarge),
-                    // Under the text, full width of its column (DESIGN §2.2).
-                    // Only on a step still to do: a done step is one dim line,
-                    // and a photo would undo the collapse that makes the next
-                    // step the first full-size row on screen.
-                    if (photoUrl != null)
-                      StepPhoto(
-                        url: photoUrl!,
-                        stepNumber: number,
-                        radius: AppRadii.md,
-                      ),
-                    if (step.durationMinutes != null ||
-                        (step.temperature?.isNotEmpty ?? false))
-                      Padding(
-                        padding: const EdgeInsets.only(top: AppSpacing.sm),
-                        child: Wrap(
-                          spacing: AppSpacing.sm,
-                          runSpacing: AppSpacing.xs,
-                          children: [
-                            if (step.durationMinutes != null)
-                              MetaChip(
-                                icon: Icons.timer_outlined,
-                                label: '${step.durationMinutes} min',
-                              ),
-                            if (step.temperature?.isNotEmpty ?? false)
-                              MetaChip(
-                                icon: Icons.thermostat,
-                                label: step.temperature!,
-                              ),
-                          ],
+    return checkable(
+      Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppRadii.card),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ExcludeSemantics(child: badge),
+                const SizedBox(width: _kBadgeGap),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(step.text, style: textTheme.bodyLarge),
+                      // Under the text, full width of its column (DESIGN §2.2).
+                      // Only on a step still to do: a done step is one dim line,
+                      // and a photo would undo the collapse that makes the next
+                      // step the first full-size row on screen.
+                      if (photoUrl != null)
+                        StepPhoto(
+                          url: photoUrl!,
+                          stepNumber: number,
+                          radius: AppRadii.md,
                         ),
-                      ),
-                    if (step.tip?.isNotEmpty ?? false)
-                      Padding(
-                        padding: const EdgeInsets.only(top: AppSpacing.sm),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.lightbulb_outline,
-                              size: AppIconSize.sm,
-                              color: scheme.onSurfaceVariant,
-                            ),
-                            const SizedBox(width: AppSpacing.xs),
-                            Expanded(
-                              child: Text(
-                                step.tip!,
-                                style: textTheme.bodySmall?.copyWith(
-                                  color: scheme.onSurfaceVariant,
+                      if (duration != null ||
+                          (step.temperature?.isNotEmpty ?? false))
+                        Padding(
+                          padding: const EdgeInsets.only(top: AppSpacing.sm),
+                          child: Wrap(
+                            spacing: AppSpacing.sm,
+                            runSpacing: AppSpacing.xs,
+                            children: [
+                              if (duration != null)
+                                MetaChip(
+                                  icon: Icons.timer_outlined,
+                                  label: duration,
+                                ),
+                              if (step.temperature?.isNotEmpty ?? false)
+                                MetaChip(
+                                  icon: Icons.thermostat,
+                                  label: step.temperature!,
+                                ),
+                            ],
+                          ),
+                        ),
+                      if (step.tip?.isNotEmpty ?? false)
+                        Padding(
+                          padding: const EdgeInsets.only(top: AppSpacing.sm),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.lightbulb_outline,
+                                size: AppIconSize.sm,
+                                color: scheme.onSurfaceVariant,
+                              ),
+                              const SizedBox(width: AppSpacing.xs),
+                              Expanded(
+                                child: Text(
+                                  step.tip!,
+                                  style: textTheme.bodySmall?.copyWith(
+                                    color: scheme.onSurfaceVariant,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

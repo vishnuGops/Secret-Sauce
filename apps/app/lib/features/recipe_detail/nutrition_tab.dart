@@ -45,10 +45,11 @@ class NutritionTab extends ConsumerWidget {
 
 /// What the tab says when there is nothing to draw.
 ///
-/// Deliberately no "Add nutrition" button: auto-calculate is not built, and the
-/// only way to add values is the editor, which the owner reaches from the page
-/// chrome. A drawn-but-dead affordance is worse than absence — the Phase 27
-/// rule.
+/// Deliberately no "Add nutrition" button: the only way to add a label is the
+/// editor — typed in (Manual), or estimated from the ingredients linked to the
+/// food registry (Automatic, Phase 29c) — which the owner reaches from the page
+/// chrome, and a reader here usually is not the owner. The copy says both
+/// routes exist; it used to claim auto-calculation was not built (UX-046).
 class _NoNutrition extends StatelessWidget {
   const _NoNutrition();
 
@@ -77,8 +78,9 @@ class _NoNutrition extends StatelessWidget {
           Text('No nutrition info available', style: textTheme.titleMedium),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Nutrition facts are entered by whoever wrote the recipe, and '
-            'this one has none yet.',
+            'This recipe has no nutrition label yet. Its author can type one '
+            'in the editor, or choose Automatic there to estimate it from '
+            'the ingredients.',
             style: textTheme.bodySmall?.copyWith(
               color: scheme.onSurfaceVariant,
             ),

@@ -363,11 +363,16 @@ class _BoardPanel extends ConsumerWidget {
                     ),
                     const SizedBox(width: AppSpacing.sm),
                     Expanded(
-                      child: Text(
-                        'Leaderboard',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.titleMedium,
+                      // The panel's section heading (UX-014).
+                      child: Semantics(
+                        container: true,
+                        header: true,
+                        child: Text(
+                          'Leaderboard',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.titleMedium,
+                        ),
                       ),
                     ),
                     const SizedBox(width: AppSpacing.sm),

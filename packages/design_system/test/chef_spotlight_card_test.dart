@@ -1,6 +1,8 @@
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 ChefStanding _standing({
@@ -306,5 +308,63 @@ void main() {
     );
     expect(tester.takeException(), isNull);
     expect(find.text('10,189'), findsOneWidget);
+  });
+
+  // UX-013: the portrait is opaque, so the `InkWell`'s own focus highlight
+  // showed only on the bands around it. The ring now lies over the whole panel.
+  group('interaction states (UX-013)', () {
+    for (final scale in [1.0, 2.0]) {
+      testWidgets('Tab shows a ring over the portrait, ${scale}x', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          _host(
+            ChefSpotlightCard(standing: _standing(), onTap: () {}),
+            textScale: scale,
+          ),
+        );
+        final before = tester.getRect(find.byType(ChefSpotlightCard));
+        expect(find.byKey(kTileFocusRingKey), findsNothing);
+
+        await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+        await tester.pump();
+
+        final ring = find.byKey(kTileFocusRingKey);
+        expect(ring, findsOneWidget, reason: 'keyboard focus is invisible');
+        final portrait = tester.getRect(find.byType(ChefAvatar));
+        expect(tester.getRect(ring).contains(portrait.center), isTrue);
+        expect(tester.getRect(find.byType(ChefSpotlightCard)), before);
+        expect(tester.takeException(), isNull);
+      });
+    }
+
+    testWidgets('hover washes the portrait', (tester) async {
+      await tester.pumpWidget(
+        _host(ChefSpotlightCard(standing: _standing(), onTap: () {})),
+      );
+      final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+      await mouse.addPointer(location: Offset.zero);
+      addTearDown(mouse.removePointer);
+      final portrait = tester.getCenter(find.byType(ChefAvatar));
+      await mouse.moveTo(portrait);
+      await tester.pump();
+
+      final wash = find.byKey(kTileInkWashKey);
+      expect(wash, findsOneWidget);
+      expect(tester.getRect(wash).contains(portrait), isTrue);
+    });
+
+    testWidgets('the card still takes a tap with the ring up', (tester) async {
+      var taps = 0;
+      await tester.pumpWidget(
+        _host(ChefSpotlightCard(standing: _standing(), onTap: () => taps++)),
+      );
+      await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+      await tester.pump();
+      expect(find.byKey(kTileFocusRingKey), findsOneWidget);
+      await tester.tap(find.byType(ChefAvatar));
+      await tester.pump();
+      expect(taps, 1);
+    });
   });
 }

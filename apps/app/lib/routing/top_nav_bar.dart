@@ -163,11 +163,17 @@ class _Brand extends StatelessWidget {
 
   final bool expanded;
 
+  /// What the mark says to assistive tech and on hover (UX-014). At medium
+  /// the brand is a bare glyph, which read as an unlabelled button; the label
+  /// names the destination as well as the brand, because that is what the tap
+  /// does.
+  static const String semanticLabel = 'Secret Sauce — Discover';
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return InkWell(
+    final mark = InkWell(
       onTap: () => context.go(Routes.discover),
       borderRadius: BorderRadius.circular(AppRadii.md),
       child: Padding(
@@ -191,6 +197,19 @@ class _Brand extends StatelessWidget {
           ],
         ),
       ),
+    );
+
+    // One labelled button node in place of the InkWell's unlabelled one and
+    // the wordmark's text (which would otherwise be read after the label).
+    return Semantics(
+      container: true,
+      button: true,
+      label: semanticLabel,
+      onTap: () => context.go(Routes.discover),
+      excludeSemantics: true,
+      // The wordmark says "Secret Sauce" at expanded; the glyph alone at
+      // medium needs the hover text a sighted mouse user gets from a label.
+      child: expanded ? mark : Tooltip(message: semanticLabel, child: mark),
     );
   }
 }
@@ -388,7 +407,24 @@ class _NavItem extends StatelessWidget {
       ),
     );
 
-    return showLabel ? item : Tooltip(message: destination.label, child: item);
+    // `selected` for assistive tech (UX-014): the fill and the weight say
+    // "you are here" to the eye only. An icon-only item takes its name from a
+    // label rather than the tooltip, so it is announced the same way either
+    // way; the tooltip stays for the pointer.
+    return Semantics(
+      container: true,
+      button: true,
+      selected: selected,
+      label: showLabel ? null : destination.label,
+      child:
+          showLabel
+              ? item
+              : Tooltip(
+                message: destination.label,
+                excludeFromSemantics: true,
+                child: item,
+              ),
+    );
   }
 }
 

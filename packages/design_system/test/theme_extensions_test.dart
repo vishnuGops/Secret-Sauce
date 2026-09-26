@@ -86,6 +86,22 @@ void main() {
         }
       });
 
+      // UX-023: quantities are printed as fractions, so the gutter's role asks
+      // the font for them — and keeps the tabular digits it already had.
+      test('the quantity role carries tabular figures AND fractions', () {
+        final q = theme.extension<AppTextStyles>()!.quantity;
+        expect(
+          q.fontFeatures,
+          containsAll(const [
+            FontFeature.tabularFigures(),
+            FontFeature.fractions(),
+          ]),
+        );
+        // `.tabular` adds, it does not replace: re-applying it on a call site
+        // must not strip `frac` off the role.
+        expect(q.tabular.fontFeatures, contains(const FontFeature.fractions()));
+      });
+
       test('every button family shares the button corner (UX-033)', () {
         const corner = BorderRadius.all(Radius.circular(AppRadii.button));
         final styles = {

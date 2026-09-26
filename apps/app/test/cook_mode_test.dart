@@ -359,6 +359,41 @@ final _photoRecipe = _recipe.copyWith(
   ],
 );
 
+/// UX-024's fixture: an oven step with the longest temperature label a recipe
+/// plausibly carries and a 90-minute bake, then a 90-minute rest, so the web
+/// rail's "coming up" line has an hour-plus duration to format (UX-043). One
+/// unnamed group, so the header reads `Step 1 of 2` — UX-044's case.
+const _ovenRecipe = Recipe(
+  id: 'r1',
+  ownerId: 'someone-else',
+  title: 'Slow-roast shoulder',
+  servings: 4,
+  visibility: RecipeVisibility.public,
+  stepGroups: [
+    StepGroup(
+      id: 'sg1',
+      recipeId: 'r1',
+      steps: [
+        RecipeStep(
+          id: 's1',
+          groupId: 'sg1',
+          text: 'Roast the shoulder, covered, until it pulls apart.',
+          durationMinutes: 90,
+          temperature: _kLongTemperature,
+        ),
+        RecipeStep(
+          id: 's2',
+          groupId: 'sg1',
+          text: 'Rest it under foil.',
+          durationMinutes: 90,
+        ),
+      ],
+    ),
+  ],
+);
+
+const _kLongTemperature = '220°C / 425°F fan';
+
 /// Walks the four steps of [_recipe] to the finish screen (frame E).
 Future<void> _walkToFinish(WidgetTester tester) async {
   for (var i = 0; i < 4; i++) {
@@ -506,6 +541,48 @@ void main() {
       const butter = Ingredient(id: 'y', groupId: 'g', name: 'butter');
       expect(stepIngredients(step, const [butter]), hasLength(1));
     });
+
+    // UX-044: the tikka recipe's marinade and sauce groups both call for
+    // `1 tbsp tikka spice blend`, and step 1's strip printed that chip twice.
+    test(
+      'a line two groups share is listed once, a different amount is not',
+      () {
+        const marinade = Ingredient(
+          id: 'a',
+          groupId: 'g1',
+          quantity: 1,
+          unit: 'tbsp',
+          name: 'tikka spice blend',
+        );
+        const sauce = Ingredient(
+          id: 'b',
+          groupId: 'g2',
+          quantity: 1,
+          unit: 'tbsp',
+          name: 'Tikka spice blend',
+        );
+        const more = Ingredient(
+          id: 'c',
+          groupId: 'g2',
+          quantity: 2,
+          unit: 'tbsp',
+          name: 'tikka spice blend',
+        );
+        const step = RecipeStep(
+          id: 's',
+          groupId: 'g',
+          text: 'Rub the tikka spice blend into the chicken.',
+        );
+        final ids = stepIngredients(step, const [
+          marinade,
+          sauce,
+          more,
+        ]).map((i) => i.id);
+        // First occurrence kept; the 2 tbsp line is a different quantity and a
+        // cook who needs both amounts has to see both.
+        expect(ids, ['a', 'c']);
+      },
+    );
 
     test('a stop word alone does not attach an ingredient', () {
       // "chopped" appears in half the names and a third of the steps; matching
@@ -700,9 +777,27 @@ void main() {
       // The alarm is state, not an event, so it is visible on the step the cook
       // has moved on to.
       expect(find.textContaining('Time’s up'), findsOneWidget);
+      // And a screen reader announces it (UX-047): the banner is a live region.
+      final semantics = tester.ensureSemantics();
+      expect(
+        tester.getSemantics(find.textContaining('Time’s up')),
+        isSemantics(isLiveRegion: true),
+      );
+      semantics.dispose();
       await tester.tap(find.text('Got it'));
       await tester.pumpAndSettle();
       expect(find.textContaining('Time’s up'), findsNothing);
+    });
+
+    // UX-044: with one unnamed group the title already says `Step 1 of 2`;
+    // the progress line under the bar said it again.
+    testWidgets('a single unnamed group prints its step count once', (
+      tester,
+    ) async {
+      await _pump(tester, recipe: _ovenRecipe);
+      expect(find.text('Step 1 of 2'), findsOneWidget);
+      // The hint the overall count shared a row with is still there.
+      expect(find.text('Keep this screen open'), findsOneWidget);
     });
 
     testWidgets('close leaves cook mode', (tester) async {
@@ -887,7 +982,7 @@ void main() {
       expect(find.text('Butter'), findsOneWidget);
       expect(find.text('Unbleached wheat flour'), findsOneWidget);
       expect(find.text('6 tbsp'), findsOneWidget);
-      expect(find.text('1.25 cup'), findsOneWidget);
+      expect(find.text('1¼ cup'), findsOneWidget); // UX-023
       // "Serve warm" names nothing, and the rail says so rather than lying.
       await tester.tap(find.text('Done — next step'));
       await tester.pumpAndSettle();
@@ -1050,6 +1145,56 @@ void main() {
           );
           expect(find.byType(CachedNetworkImage), findsOneWidget);
           expect(tester.takeException(), isNull);
+        });
+      }
+    }
+  });
+
+  // UX-024: an oven setting at 11px beside 24–36px step text, in the one mode
+  // read from arm's length. The temperature is the large chip now; the
+  // duration is the timer panel, already titleMedium.
+  group('arm’s-length step facts (UX-024)', () {
+    testWidgets('the temperature chip is at least 16px on both layouts', (
+      tester,
+    ) async {
+      for (final size in [const Size(390, 844), const Size(1440, 1000)]) {
+        await _pump(tester, recipe: _ovenRecipe, size: size);
+        final style = tester.widget<Text>(find.text(_kLongTemperature)).style;
+        expect(style?.fontSize, greaterThanOrEqualTo(16), reason: '$size');
+        // The timer panel carries the duration, at the same size or more.
+        final clock = tester.widget<Text>(find.text('90:00')).style;
+        expect(clock?.fontSize, greaterThanOrEqualTo(16), reason: '$size');
+      }
+    });
+
+    testWidgets('the web rail says an upcoming 90-minute step as 1 h 30 min', (
+      tester,
+    ) async {
+      // UX-043: this line printed `90 m` beside a facts strip saying `1 h 30 m`.
+      await _pump(tester, recipe: _ovenRecipe, size: const Size(1440, 1000));
+      expect(find.text('1 h 30 min'), findsOneWidget);
+      expect(find.text('90 m'), findsNothing);
+      // Single unnamed group: the header's count is the only count (UX-044).
+      expect(find.text('Step 1 of 2'), findsOneWidget);
+    });
+
+    for (final size in [
+      const Size(390, 844),
+      const Size(1000, 1200),
+      const Size(1440, 1000),
+    ]) {
+      for (final scale in [1.0, 2.0]) {
+        testWidgets('large chips fit at ${size.width}px, textScale $scale', (
+          tester,
+        ) async {
+          await _pump(
+            tester,
+            recipe: _ovenRecipe,
+            size: size,
+            textScale: scale,
+          );
+          expect(tester.takeException(), isNull);
+          expect(find.text(_kLongTemperature), findsOneWidget);
         });
       }
     }

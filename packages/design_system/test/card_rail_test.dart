@@ -1,5 +1,6 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 const double _cardWidth = 200;
@@ -238,6 +239,35 @@ void main() {
           );
         }
       }
+    });
+  });
+
+  // UX-014: a rail title is a section heading — the populated Discover shelves
+  // and the /chefs rails are how a screen-reader user skims those pages.
+  group('heading semantics', () {
+    bool isHeader(SemanticsNode node) =>
+        node.getSemanticsData().flagsCollection.isHeader;
+
+    testWidgets('the badged header title is a heading', (tester) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(_host());
+      expect(
+        isHeader(tester.getSemantics(find.text('Trending chefs'))),
+        isTrue,
+      );
+      handle.dispose();
+    });
+
+    testWidgets('the numbered title is a heading, read as written', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(_numbered());
+      final node = tester.getSemantics(
+        find.bySemanticsLabel('Weekend projects'),
+      );
+      expect(isHeader(node), isTrue);
+      handle.dispose();
     });
   });
 }

@@ -79,10 +79,14 @@ class IngredientRail extends ConsumerWidget {
                 top: AppSpacing.smPlus,
                 bottom: AppSpacing.xxs,
               ),
-              child: Text(
-                group.name.toUpperCase(),
-                style: context.appText.overline.copyWith(
-                  color: scheme.onSurfaceVariant,
+              // A heading to a screen reader too (UX-014).
+              child: Semantics(
+                header: true,
+                child: Text(
+                  group.name.toUpperCase(),
+                  style: context.appText.overline.copyWith(
+                    color: scheme.onSurfaceVariant,
+                  ),
                 ),
               ),
             ),
@@ -183,67 +187,77 @@ class _IngredientRow extends StatelessWidget {
         (ingredient.note ?? '').isNotEmpty &&
         !ingredientNoteIsQuantity(ingredient);
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppRadii.md),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: AppSpacing.xsPlus),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AnimatedContainer(
-              duration: AppMotion.of(context, AppMotion.fast),
-              width: _kCheckSize,
-              height: _kCheckSize,
-              margin: const EdgeInsets.only(top: _kCheckNudge),
-              decoration: BoxDecoration(
-                color: done ? scheme.primary : null,
-                border:
-                    done
-                        ? null
-                        : Border.all(
-                          color: scheme.outline,
-                          width: _kCheckStroke,
-                        ),
-                borderRadius: BorderRadius.circular(AppRadii.sm),
-              ),
-              child:
-                  done
-                      ? Icon(
-                        Icons.check,
-                        size: AppIconSize.sm,
-                        color: scheme.onPrimary,
-                      )
-                      : null,
-            ),
-            const SizedBox(width: AppSpacing.smPlus),
-            SizedBox(
-              // The gutter is what makes the numbers scan as a column, so it
-              // grows with the type rather than wrapping "1.25 cup" onto three
-              // lines. Same clamp as the rail that holds it.
-              width:
-                  kIngredientQuantityGutter *
-                  context.textScale.clamp(1.0, kDetailRailMaxScale),
-              child: Text(
-                ingredientQuantityLabel(ingredient, factor: factor),
-                style: qtyStyle,
-              ),
-            ),
-            Expanded(
-              child: Text.rich(
-                TextSpan(
-                  text: sentenceCase(ingredient.name),
-                  children: [
-                    if (showNote)
-                      TextSpan(text: ' (${ingredient.note})', style: noteStyle),
-                    if (ingredient.isOptional)
-                      TextSpan(text: ' — optional', style: noteStyle),
-                  ],
+    // One checkable node per row (UX-014): the quantity, name and note merge
+    // into its label and `checked` carries the tick the box only draws.
+    return MergeSemantics(
+      child: Semantics(
+        checked: done,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppRadii.md),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.xsPlus),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AnimatedContainer(
+                  duration: AppMotion.of(context, AppMotion.fast),
+                  width: _kCheckSize,
+                  height: _kCheckSize,
+                  margin: const EdgeInsets.only(top: _kCheckNudge),
+                  decoration: BoxDecoration(
+                    color: done ? scheme.primary : null,
+                    border:
+                        done
+                            ? null
+                            : Border.all(
+                              color: scheme.outline,
+                              width: _kCheckStroke,
+                            ),
+                    borderRadius: BorderRadius.circular(AppRadii.sm),
+                  ),
+                  child:
+                      done
+                          ? Icon(
+                            Icons.check,
+                            size: AppIconSize.sm,
+                            color: scheme.onPrimary,
+                          )
+                          : null,
                 ),
-                style: nameStyle,
-              ),
+                const SizedBox(width: AppSpacing.smPlus),
+                SizedBox(
+                  // The gutter is what makes the numbers scan as a column, so it
+                  // grows with the type rather than wrapping "1 1⁄3 cup" onto three
+                  // lines. Same clamp as the rail that holds it.
+                  width:
+                      kIngredientQuantityGutter *
+                      context.textScale.clamp(1.0, kDetailRailMaxScale),
+                  child: Text(
+                    ingredientQuantityLabel(ingredient, factor: factor),
+                    style: qtyStyle,
+                  ),
+                ),
+                Expanded(
+                  child: Text.rich(
+                    TextSpan(
+                      text: sentenceCase(ingredient.name),
+                      children: [
+                        if (showNote)
+                          TextSpan(
+                            text: ' (${ingredient.note})',
+                            style: noteStyle,
+                          ),
+                        if (ingredient.isOptional)
+                          TextSpan(text: ' — optional', style: noteStyle),
+                      ],
+                    ),
+                    style: nameStyle,
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

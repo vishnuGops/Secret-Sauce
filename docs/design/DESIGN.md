@@ -354,9 +354,9 @@ and `InkWell` supply them; a custom tappable must too (UX-013 is the open instan
 | 1.4.1 colour not only | Difficulty and tier carry a word; errors carry text | review |
 | 1.4.4 / 1.4.10 resize, reflow | 2.0× text, no overflow at 390 / 600 / 1000 / 1440 | the envelope suites |
 | 2.5.8 target size | ≥ 48dp; container buttons ~48dp | component themes |
-| 2.4.7 focus visible | M3 focus on buttons; custom tappables must draw focus (UX-013 open) | manual keyboard pass |
-| 2.1.1 keyboard | every control operable (UX-003 / B126 open) | — |
-| 4.1.2 name, role, value | `tooltip` on every `IconButton`; `semanticLabel` or `excludeFromSemantics` on images; heading / checked / selected semantics (UX-014, UX-047 open) | review |
+| 2.4.7 focus visible | M3 focus on buttons; a custom tappable over opaque content paints its states **above** it through `InteractiveTile` (3px primary ring + 1px surface hairline, keyboard focus only; Phase 37, UX-013) | `recipe_card_test`, `chef_spotlight_card_test` |
+| 2.1.1 keyboard | every control operable — `StarRatingInput` by arrows / Home / End (B126); cook mode's Space reaches a focused button (B130); Enter submits auth | `star_rating_test`, `cook_mode_test`, `auth_screen_test` |
+| 4.1.2 name, role, value | `tooltip` on every `IconButton`; `semanticLabel` or `excludeFromSemantics` on images; heading / checked / selected semantics on kickers, rail titles, check-off rows, sort links, pills and nav items; the ringing timer is a live region; every page names its browser tab (`RouteTitle`) (Phase 37: UX-014, UX-047, UX-051) | `reading_a11y_test`, `chrome_a11y_test`, `card_rail_test` |
 | 2.3.3 motion | `AppMotion.of` everywhere; reduced motion collapses to zero | `theme_extensions_test.dart` |
 
 ## 7. Token ↔ code map
@@ -411,6 +411,17 @@ food photograph carries the page; when there is none, the page is typeset.
   state-resolved label colours (white chip labels on native); a theme-wide transparent tab divider
   also removed compact My Recipes' hairline; and light homeCook / masterChef measured 4.4:1 on a
   `Card` (`surfaceContainerLow`), a surface the first contrast test did not measure.
+
+- **v2.1 — 2026-09-26 (Phase 37).** No token values moved. New primitive `InteractiveTile`
+  (`interactive_tile.dart`): tap/focus/semantics through an `InkWell` with its own ink off, wash and
+  focus ring painted over the child behind `IgnorePointer`. `appText.quantity` carries
+  `FontFeature.fractions()`, and `.tabular` now *adds* tabular figures rather than replacing the
+  feature list. Quantities print fractions for non-metric units (`1¼ cup`, `½ tsp`); Manrope has
+  precomposed ½ ¼ ¾ only and its `frac` feature ligates ASCII `1/2 1/4 3/4` only, so thirds and
+  eighths print flat around U+2044 (`1 1⁄3`) — a display face with fuller `frac` would stack them.
+  One duration format everywhere, the card included (`1 h 10 min`; the spaceless card variant is
+  retired). `MetaChip(large: true)` for cook mode's step facts (UX-024). One brand spelling in UI
+  copy, "Secret Sauce" (UX-041; the legal documents keep the entity name as an owner fact).
 
 ## 10. Drift against the Claude Design system (`_ds_bundle.css`, read 2026-09-25)
 

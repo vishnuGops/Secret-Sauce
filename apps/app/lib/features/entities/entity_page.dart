@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:app/features/entities/entity_providers.dart';
 import 'package:app/routing/app_router.dart';
+import 'package:app/widgets/route_title.dart';
 import 'package:app/routing/pop_or_go.dart';
 import 'package:app/widgets/recipe_grid.dart';
 
@@ -69,9 +70,13 @@ class _Loaded extends StatelessWidget {
         SliverPadding(
           padding: EdgeInsets.fromLTRB(pad, AppSpacing.lg, pad, AppSpacing.sm),
           sliver: SliverToBoxAdapter(
-            child: Text(
-              'Signature dishes',
-              style: Theme.of(context).textTheme.titleMedium,
+            child: Semantics(
+              container: true,
+              header: true,
+              child: Text(
+                'Signature dishes',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
             ),
           ),
         ),
@@ -106,59 +111,69 @@ class _Header extends StatelessWidget {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(entity.name, style: theme.textTheme.headlineSmall),
-        const SizedBox(height: AppSpacing.sm),
-        // Wrap: kind, country and the link are three intrinsically-sized chips
-        // with no flexible child between them, which is B016's shape in a Row.
-        Wrap(
-          spacing: AppSpacing.sm,
-          runSpacing: AppSpacing.xs,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: [
-            Chip(
-              label: Text(entity.kind.label),
-              visualDensity: VisualDensity.compact,
-            ),
-            if (entity.country != null && entity.country!.isNotEmpty)
-              Text(
-                entity.country!,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: scheme.onSurfaceVariant,
-                ),
-              ),
-            if (entity.homepage != null && entity.homepage!.isNotEmpty)
-              // Printed, not launched. `url_launcher` is already a dependency
-              // of the app, but an outbound tap from a directory page is a
-              // decision (which links open, and whether they are marked
-              // `noopener`) rather than a convenience, and Phase 35c is what
-              // brings real publisher URLs. Until then the address is the fact
-              // worth showing.
-              Text(
-                entity.homepage!,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: scheme.onSurfaceVariant,
-                ),
-              ),
-          ],
-        ),
-        if (entity.description != null && entity.description!.isNotEmpty) ...[
-          const SizedBox(height: AppSpacing.md),
-          Text(entity.description!, style: theme.textTheme.bodyMedium),
-        ],
-        if (entity.isImported) ...[
-          const SizedBox(height: AppSpacing.md),
-          Text(
-            'This publisher was added from the public web. Nobody on '
-            'Secret-Sauce manages this page yet.',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: scheme.onSurfaceVariant,
-            ),
+    // The publisher's name titles the browser tab (UX-051); the AppBar only
+    // says "Publisher".
+    return RouteTitle(
+      page: entity.name,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // The page's top heading (UX-014).
+          Semantics(
+            container: true,
+            header: true,
+            child: Text(entity.name, style: theme.textTheme.headlineSmall),
           ),
+          const SizedBox(height: AppSpacing.sm),
+          // Wrap: kind, country and the link are three intrinsically-sized chips
+          // with no flexible child between them, which is B016's shape in a Row.
+          Wrap(
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.xs,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Chip(
+                label: Text(entity.kind.label),
+                visualDensity: VisualDensity.compact,
+              ),
+              if (entity.country != null && entity.country!.isNotEmpty)
+                Text(
+                  entity.country!,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: scheme.onSurfaceVariant,
+                  ),
+                ),
+              if (entity.homepage != null && entity.homepage!.isNotEmpty)
+                // Printed, not launched. `url_launcher` is already a dependency
+                // of the app, but an outbound tap from a directory page is a
+                // decision (which links open, and whether they are marked
+                // `noopener`) rather than a convenience, and Phase 35c is what
+                // brings real publisher URLs. Until then the address is the fact
+                // worth showing.
+                Text(
+                  entity.homepage!,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: scheme.onSurfaceVariant,
+                  ),
+                ),
+            ],
+          ),
+          if (entity.description != null && entity.description!.isNotEmpty) ...[
+            const SizedBox(height: AppSpacing.md),
+            Text(entity.description!, style: theme.textTheme.bodyMedium),
+          ],
+          if (entity.isImported) ...[
+            const SizedBox(height: AppSpacing.md),
+            Text(
+              'This publisher was added from the public web. Nobody on '
+              'Secret Sauce manages this page yet.',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
+            ),
+          ],
         ],
-      ],
+      ),
     );
   }
 }
@@ -176,9 +191,13 @@ class _Roster extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          members.length == 1 ? 'Chef' : 'Chefs',
-          style: theme.textTheme.titleMedium,
+        Semantics(
+          container: true,
+          header: true,
+          child: Text(
+            members.length == 1 ? 'Chef' : 'Chefs',
+            style: theme.textTheme.titleMedium,
+          ),
         ),
         const SizedBox(height: AppSpacing.sm),
         for (final member in members)

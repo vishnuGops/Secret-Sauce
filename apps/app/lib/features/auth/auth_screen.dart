@@ -8,6 +8,7 @@ import 'package:app/features/auth/auth_controller.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:app/routing/pop_or_go.dart';
 import 'package:app/widgets/legal_footer.dart';
+import 'package:app/widgets/route_title.dart';
 
 /// The form's measure.
 const double _kFormMaxWidth = 420;
@@ -133,8 +134,14 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     );
   }
 
+  // UX-051: the tab follows the side the form is on.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => RouteTitle(
+    page: _isSignUp ? 'Create account' : 'Sign in',
+    child: _buildPage(context),
+  );
+
+  Widget _buildPage(BuildContext context) {
     final isLoading = ref.watch(authControllerProvider).isLoading;
 
     return Scaffold(
@@ -148,7 +155,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => popOrGo(context, Routes.discover),
         ),
-        title: const Text('Secret-Sauce'),
+        title: const Text('Secret Sauce'),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -166,106 +173,130 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   }
 
   Widget _form(BuildContext context, bool isLoading) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            _isSignUp ? 'Create your account' : 'Welcome back',
-            style: Theme.of(context).textTheme.headlineSmall,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          if (_isSignUp) ...[
-            TextFormField(
-              controller: _name,
-              // `handle_new_user` clamps this to 80 with `left(…, 80)`
-              // rather than letting `profiles_text_lengths` refuse the
-              // signup (32a2) — so without a limit here a long name is
-              // silently truncated and the cook is never told. The field
-              // is where that gets said.
-              maxLength: 80,
-              decoration: const InputDecoration(
-                labelText: 'Display name',
-                counterText: '',
-              ),
-              validator:
-                  (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
-            ),
-            const SizedBox(height: AppSpacing.md),
-          ],
-          TextFormField(
-            controller: _email,
-            keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(labelText: 'Email'),
-            validator:
-                (v) =>
-                    (v == null || !v.contains('@'))
-                        ? 'Enter a valid email'
-                        : null,
-          ),
-          const SizedBox(height: AppSpacing.md),
-          TextFormField(
-            controller: _password,
-            obscureText: true,
-            decoration: const InputDecoration(labelText: 'Password'),
-            validator:
-                (v) => (v == null || v.length < 6) ? 'Min 6 characters' : null,
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          FilledButton(
-            onPressed: isLoading ? null : _submit,
-            child:
-                isLoading
-                    ? const SizedBox(
-                      height: AppIconSize.md,
-                      width: AppIconSize.md,
-                      child: CircularProgressIndicator(
-                        strokeWidth: _kSpinnerStroke,
-                      ),
-                    )
-                    : Text(_isSignUp ? 'Sign up' : 'Sign in'),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          TextButton(
-            onPressed:
-                isLoading ? null : () => setState(() => _isSignUp = !_isSignUp),
-            child: Text(
-              _isSignUp
-                  ? 'Already have an account? Sign in'
-                  : "Don't have an account? Sign up",
-            ),
-          ),
-          // Phase 35a. Two jobs, and they are different.
-          //
-          // The sentence is the consent point: the one moment in the
-          // product where somebody agrees to the terms, so it says so
-          // at the moment they do it rather than in a checkbox nobody
-          // reads. It is plain text with the links directly beneath
-          // rather than tappable spans inside it — an inline recogniser
-          // needs a dispose that a StatelessWidget cannot give it, and
-          // a leaked one is a real bug for a cosmetic gain.
-          //
-          // The footer is the access point, and it is here in BOTH
-          // modes because on a phone this is the only signed-out screen
-          // that can carry it: the web chrome has its own bar, and the
-          // compact bottom slot belongs to the NavigationBar.
-          if (_isSignUp) ...[
-            const SizedBox(height: AppSpacing.md),
+    // UX-015: one AutofillGroup, so a password manager fills the address and
+    // password together and offers to save them after a sign-up; hints on
+    // every field; Next/Next/Done on the keyboard, and Enter on the last field
+    // submits — on the web that is what a reader presses.
+    return AutofillGroup(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
             Text(
-              'By creating an account you agree to the Terms of '
-              'Service and acknowledge the Privacy Policy.',
+              _isSignUp ? 'Create your account' : 'Welcome back',
+              style: Theme.of(context).textTheme.headlineSmall,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            if (_isSignUp) ...[
+              TextFormField(
+                controller: _name,
+                // `handle_new_user` clamps this to 80 with `left(…, 80)`
+                // rather than letting `profiles_text_lengths` refuse the
+                // signup (32a2) — so without a limit here a long name is
+                // silently truncated and the cook is never told. The field
+                // is where that gets said.
+                maxLength: 80,
+                autofillHints: const [AutofillHints.name],
+                textInputAction: TextInputAction.next,
+                textCapitalization: TextCapitalization.words,
+                decoration: const InputDecoration(
+                  labelText: 'Display name',
+                  counterText: '',
+                ),
+                validator:
+                    (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
+              ),
+              const SizedBox(height: AppSpacing.md),
+            ],
+            TextFormField(
+              controller: _email,
+              keyboardType: TextInputType.emailAddress,
+              autofillHints: const [AutofillHints.email],
+              textInputAction: TextInputAction.next,
+              autocorrect: false,
+              decoration: const InputDecoration(labelText: 'Email'),
+              validator:
+                  (v) =>
+                      (v == null || !v.contains('@'))
+                          ? 'Enter a valid email'
+                          : null,
+            ),
+            const SizedBox(height: AppSpacing.md),
+            TextFormField(
+              controller: _password,
+              obscureText: true,
+              // `newPassword` on sign-up is what makes a manager offer to
+              // generate one; `password` on sign-in makes it offer the saved one.
+              autofillHints: [
+                _isSignUp ? AutofillHints.newPassword : AutofillHints.password,
+              ],
+              textInputAction: TextInputAction.done,
+              onFieldSubmitted: (_) async {
+                if (!isLoading) await _submit();
+              },
+              decoration: const InputDecoration(labelText: 'Password'),
+              validator:
+                  (v) =>
+                      (v == null || v.length < 6) ? 'Min 6 characters' : null,
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            FilledButton(
+              onPressed: isLoading ? null : _submit,
+              child:
+                  isLoading
+                      ? const SizedBox(
+                        height: AppIconSize.md,
+                        width: AppIconSize.md,
+                        child: CircularProgressIndicator(
+                          strokeWidth: _kSpinnerStroke,
+                        ),
+                      )
+                      : Text(_isSignUp ? 'Sign up' : 'Sign in'),
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            TextButton(
+              onPressed:
+                  isLoading
+                      ? null
+                      : () => setState(() => _isSignUp = !_isSignUp),
+              child: Text(
+                _isSignUp
+                    ? 'Already have an account? Sign in'
+                    : "Don't have an account? Sign up",
               ),
             ),
+            // Phase 35a. Two jobs, and they are different.
+            //
+            // The sentence is the consent point: the one moment in the
+            // product where somebody agrees to the terms, so it says so
+            // at the moment they do it rather than in a checkbox nobody
+            // reads. It is plain text with the links directly beneath
+            // rather than tappable spans inside it — an inline recogniser
+            // needs a dispose that a StatelessWidget cannot give it, and
+            // a leaked one is a real bug for a cosmetic gain.
+            //
+            // The footer is the access point, and it is here in BOTH
+            // modes because on a phone this is the only signed-out screen
+            // that can carry it: the web chrome has its own bar, and the
+            // compact bottom slot belongs to the NavigationBar.
+            if (_isSignUp) ...[
+              const SizedBox(height: AppSpacing.md),
+              Text(
+                'By creating an account you agree to the Terms of '
+                'Service and acknowledge the Privacy Policy.',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+            const SizedBox(height: AppSpacing.md),
+            const LegalFooter(),
           ],
-          const SizedBox(height: AppSpacing.md),
-          const LegalFooter(),
-        ],
+        ),
       ),
     );
   }

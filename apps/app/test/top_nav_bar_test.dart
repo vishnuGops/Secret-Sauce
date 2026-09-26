@@ -1,9 +1,12 @@
+import 'dart:ui' show Tristate;
+
 import 'package:app/features/chefs/chef_page.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:app/routing/top_nav_bar.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -168,6 +171,9 @@ Uri _here(GoRouter router) => router.routerDelegate.currentConfiguration.uri;
 /// same title, so an unscoped `find.text` would match either.
 Finder _inBar(String text) =>
     find.descendant(of: find.byType(TopNavBar), matching: find.text(text));
+
+SemanticsData _a11y(WidgetTester tester, Finder finder) =>
+    tester.getSemantics(finder).getSemanticsData();
 
 void main() {
   testWidgets('expanded, signed in: destinations, no Profile, no New recipe', (
@@ -405,4 +411,56 @@ void main() {
       );
     });
   }
+
+  // Phase 37 wave C (UX-014).
+  group('semantics', () {
+    testWidgets('the current destination is selected, and only it', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      await _pump(tester, width: 1400, uid: 'user-1');
+
+      Tristate selected(String label) =>
+          _a11y(tester, _inBar(label)).flagsCollection.isSelected;
+      expect(selected('Chefs'), Tristate.isTrue);
+      expect(selected('Discover'), Tristate.isFalse);
+      expect(selected('My Recipes'), Tristate.isFalse);
+      expect(_a11y(tester, _inBar('Chefs')).flagsCollection.isButton, isTrue);
+      handle.dispose();
+    });
+
+    testWidgets('an icon-only destination keeps its name', (tester) async {
+      final handle = tester.ensureSemantics();
+      await _pump(tester, width: 700, uid: 'user-1');
+
+      final discover = find.bySemanticsLabel('Discover');
+      expect(discover, findsOneWidget);
+      expect(
+        _a11y(tester, discover).flagsCollection.isSelected,
+        Tristate.isFalse,
+      );
+      handle.dispose();
+    });
+
+    for (final width in <double>[700, 1400]) {
+      testWidgets('the brand is a labelled button at ${width}px', (
+        tester,
+      ) async {
+        final handle = tester.ensureSemantics();
+        await _pump(tester, width: width);
+
+        final brand = find.bySemanticsLabel('Secret Sauce — Discover');
+        expect(brand, findsOneWidget);
+        final data = _a11y(tester, brand);
+        expect(data.flagsCollection.isButton, isTrue);
+        expect(data.hasAction(SemanticsAction.tap), isTrue);
+        handle.dispose();
+      });
+    }
+
+    testWidgets('the bare mark at medium has hover text too', (tester) async {
+      await _pump(tester, width: 700);
+      expect(find.byTooltip('Secret Sauce — Discover'), findsOneWidget);
+    });
+  });
 }

@@ -272,11 +272,16 @@ class _CardRailState extends State<CardRail> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                widget.title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.titleMedium,
+              // A section heading for assistive tech (UX-014): a rail title
+              // is how a screen-reader user skims Discover and /chefs.
+              Semantics(
+                header: true,
+                child: Text(
+                  widget.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.titleMedium,
+                ),
               ),
               Text(
                 widget.subtitle,
@@ -356,16 +361,24 @@ class _CardRailState extends State<CardRail> {
                 const SizedBox(width: AppSpacing.sm),
                 ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: width * 0.55),
-                  child: Text(
-                    widget.title.toUpperCase(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    // The index line at section level (`01 UNDER 30`) — the
-                    // same role the empty shelf's heading uses, in the
-                    // numeral's accent so the whole line reads as one mark.
-                    style: context.appText.kickerLarge.copyWith(
-                      color: accent,
-                      height: 1,
+                  // UX-014: the numbered shelf title is a section heading,
+                  // announced as the caller wrote it — caps are the look, and
+                  // a screen reader may spell an all-caps word out.
+                  child: Semantics(
+                    header: true,
+                    label: widget.title,
+                    excludeSemantics: true,
+                    child: Text(
+                      widget.title.toUpperCase(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      // The index line at section level (`01 UNDER 30`) — the
+                      // same role the empty shelf's heading uses, in the
+                      // numeral's accent so the whole line reads as one mark.
+                      style: context.appText.kickerLarge.copyWith(
+                        color: accent,
+                        height: 1,
+                      ),
                     ),
                   ),
                 ),

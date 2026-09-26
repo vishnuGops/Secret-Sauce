@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:app/features/legal/legal_document.dart';
 import 'package:app/routing/app_router.dart';
+import 'package:app/widgets/route_title.dart';
 import 'package:app/routing/pop_or_go.dart';
 import 'package:app/widgets/legal_footer.dart';
 
@@ -28,48 +29,60 @@ class LegalScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(doc.title),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => popOrGo(context, Routes.discover),
+    // The document names the browser tab (UX-051).
+    return RouteTitle(
+      page: doc.title,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(doc.title),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            // UX-047: an icon button needs a name, or it is read as "button".
+            // The platform's own word, as BackButton uses.
+            tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+            onPressed: () => popOrGo(context, Routes.discover),
+          ),
         ),
-      ),
-      body: Align(
-        alignment: Alignment.topCenter,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: maxReadingWidth),
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.lg,
-              AppSpacing.lg,
-              AppSpacing.lg,
-              AppSpacing.xxl,
-            ),
-            children: [
-              Text(doc.title, style: theme.textTheme.headlineSmall),
-              const SizedBox(height: AppSpacing.xs),
-              Text(
-                'Last updated $kLegalLastUpdated',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
+        body: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: maxReadingWidth),
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                AppSpacing.lg,
+                AppSpacing.lg,
+                AppSpacing.xxl,
               ),
-              if (!LegalFacts.isComplete) ...[
+              children: [
+                // The document's top heading (UX-014).
+                Semantics(
+                  container: true,
+                  header: true,
+                  child: Text(doc.title, style: theme.textTheme.headlineSmall),
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  'Last updated $kLegalLastUpdated',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                if (!LegalFacts.isComplete) ...[
+                  const SizedBox(height: AppSpacing.md),
+                  const _DraftNotice(),
+                ],
+                const SizedBox(height: AppSpacing.lg),
+                for (final block in doc.blocks) _BlockView(block: block),
+                const SizedBox(height: AppSpacing.xl),
+                const Divider(),
                 const SizedBox(height: AppSpacing.md),
-                const _DraftNotice(),
+                // Every document links to its two siblings. Someone who arrives
+                // on one of these by a shared link has no navigation around them
+                // otherwise — there is no nav chrome on this screen by design.
+                LegalFooter(current: doc),
               ],
-              const SizedBox(height: AppSpacing.lg),
-              for (final block in doc.blocks) _BlockView(block: block),
-              const SizedBox(height: AppSpacing.xl),
-              const Divider(),
-              const SizedBox(height: AppSpacing.md),
-              // Every document links to its two siblings. Someone who arrives
-              // on one of these by a shared link has no navigation around them
-              // otherwise — there is no nav chrome on this screen by design.
-              LegalFooter(current: doc),
-            ],
+            ),
           ),
         ),
       ),
@@ -135,7 +148,13 @@ class _BlockView extends StatelessWidget {
           top: AppSpacing.lg,
           bottom: AppSpacing.sm,
         ),
-        child: Text(text, style: theme.textTheme.titleMedium),
+        // A section heading of the document (UX-014): the sealed type is the
+        // one place that knows which lines are headings.
+        child: Semantics(
+          container: true,
+          header: true,
+          child: Text(text, style: theme.textTheme.titleMedium),
+        ),
       ),
       LegalParagraph(:final text) => Padding(
         padding: const EdgeInsets.only(bottom: AppSpacing.md),

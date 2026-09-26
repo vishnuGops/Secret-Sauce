@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui' show Tristate;
 
 // Overrides `chefRepositoryProvider` (core) rather than the screen's own
 // providers, so the notifier and provider wiring in chefs_providers.dart is
@@ -11,6 +12,7 @@ import 'package:app/routing/app_router.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -305,6 +307,9 @@ List<ChefStanding> _many(int n) => [
       createdAt: DateTime.utc(2026, 1, 1).add(Duration(days: i)),
     ),
 ];
+
+SemanticsData _a11y(WidgetTester tester, Finder finder) =>
+    tester.getSemantics(finder).getSemanticsData();
 
 void main() {
   // OPT-P10 removed `chefCount()`; `chefCountProvider` now sums the tier counts
@@ -1061,5 +1066,44 @@ void main() {
 
     expect(find.byType(QuietShelfCard), findsNWidgets(2));
     expect(tester.takeException(), isNull);
+  });
+
+  // Phase 37 wave C (UX-014): the page's two headings on the web layout.
+  testWidgets('the hero title and the board panel are headings', (
+    tester,
+  ) async {
+    _size(tester, 1440, 1200);
+    final handle = tester.ensureSemantics();
+    await tester.pumpWidget(_app(_board));
+    await tester.pumpAndSettle();
+
+    final title = find.descendant(
+      of: find.byType(ChefsHero),
+      matching: find.text('Chefs'),
+    );
+    expect(_a11y(tester, title).flagsCollection.isHeader, isTrue);
+    expect(
+      _a11y(tester, find.text('Leaderboard')).flagsCollection.isHeader,
+      isTrue,
+    );
+    // The board rows under it are not.
+    expect(
+      _a11y(tester, find.text('Ties share a rank.')).flagsCollection.isHeader,
+      isFalse,
+    );
+    handle.dispose();
+  });
+
+  testWidgets('the board pill says which ordering is selected', (tester) async {
+    _size(tester, 1440, 1200);
+    final handle = tester.ensureSemantics();
+    await tester.pumpWidget(_app(_board));
+    await tester.pumpAndSettle();
+
+    Tristate selected(String label) =>
+        _a11y(tester, find.bySemanticsLabel(label)).flagsCollection.isSelected;
+    expect(selected(BoardSort.score.label), Tristate.isTrue);
+    expect(selected(BoardSort.newest.label), Tristate.isFalse);
+    handle.dispose();
   });
 }

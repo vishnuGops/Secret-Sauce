@@ -7,6 +7,7 @@ import 'package:app/features/recipe_detail/fork_action.dart';
 import 'package:app/features/recipe_detail/recipe_detail_compact.dart';
 import 'package:app/features/recipe_detail/recipe_detail_expanded.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
+import 'package:app/widgets/route_title.dart';
 
 class RecipeDetailScreen extends ConsumerWidget {
   const RecipeDetailScreen({super.key, required this.recipeId});
@@ -29,39 +30,43 @@ class RecipeDetailScreen extends ConsumerWidget {
     final profileId = ref.watch(currentProfileIdProvider).valueOrNull;
     final forking = ref.watch(forkInFlightProvider(recipeId));
 
-    return Scaffold(
-      body: async.when(
-        loading: () => const Scaffold(body: LoadingView()),
-        error:
-            (e, _) => Scaffold(
-              appBar: AppBar(),
-              body: ErrorView(
-                message: friendlyError(e),
-                onRetry: () => ref.invalidate(recipeProvider(recipeId)),
+    // UX-051: the tab names the recipe once it has loaded.
+    return RouteTitle(
+      page: async.valueOrNull?.title,
+      child: Scaffold(
+        body: async.when(
+          loading: () => const Scaffold(body: LoadingView()),
+          error:
+              (e, _) => Scaffold(
+                appBar: AppBar(),
+                body: ErrorView(
+                  message: friendlyError(e),
+                  onRetry: () => ref.invalidate(recipeProvider(recipeId)),
+                ),
               ),
-            ),
-        data: (recipe) {
-          final isOwner = profileId != null && profileId == recipe.ownerId;
-          // The whole page is v2 now, in two layouts on one
-          // `context.isExpanded` branch. The v1 hero — a 240px `SliverAppBar`
-          // over one padded `Column` — is **gone**, not kept for narrow
-          // windows: keeping it would have meant a third design for the
-          // 600–1000 band nobody drew, and the compact page reads correctly at
-          // 800px. `recipe_detail_test.dart` moved onto this layout with it.
-          return context.isExpanded
-              ? RecipeDetailExpanded(
-                recipe: recipe,
-                isOwner: isOwner,
-                forking: forking,
-                onFork: () => forkRecipe(context, ref, recipeId),
-              )
-              : RecipeDetailCompact(
-                recipe: recipe,
-                isOwner: isOwner,
-                forking: forking,
-                onFork: () => forkRecipe(context, ref, recipeId),
-              );
-        },
+          data: (recipe) {
+            final isOwner = profileId != null && profileId == recipe.ownerId;
+            // The whole page is v2 now, in two layouts on one
+            // `context.isExpanded` branch. The v1 hero — a 240px `SliverAppBar`
+            // over one padded `Column` — is **gone**, not kept for narrow
+            // windows: keeping it would have meant a third design for the
+            // 600–1000 band nobody drew, and the compact page reads correctly at
+            // 800px. `recipe_detail_test.dart` moved onto this layout with it.
+            return context.isExpanded
+                ? RecipeDetailExpanded(
+                  recipe: recipe,
+                  isOwner: isOwner,
+                  forking: forking,
+                  onFork: () => forkRecipe(context, ref, recipeId),
+                )
+                : RecipeDetailCompact(
+                  recipe: recipe,
+                  isOwner: isOwner,
+                  forking: forking,
+                  onFork: () => forkRecipe(context, ref, recipeId),
+                );
+          },
+        ),
       ),
     );
   }

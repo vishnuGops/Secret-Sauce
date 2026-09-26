@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
@@ -50,13 +52,25 @@ const double _kSortUnderline = 2;
 /// a deep link, the back button and a tap all take the same road. Search still
 /// wins over a category while the query is non-empty.
 ///
+/// **The search is URL state too (UX-022)** — `/discover?q=soup` — but typed
+/// rather than tapped, so the two directions are wired differently. Typing
+/// writes [searchQueryProvider] on every keystroke (its debounce is what keeps
+/// the server quiet) and, after the same pause, *replaces* the address with
+/// `?q=` via `Router.neglect`, so a search is linkable without a history entry
+/// per word. A `q` that arrives from outside — a deep link, the back button —
+/// is copied into the field and the provider after the frame, because a
+/// provider cannot be written from a widget lifecycle method.
+///
 /// Signed-out safe, like `/chefs` — every read behind it is `anon`-callable.
 class DiscoverScreen extends ConsumerStatefulWidget {
-  const DiscoverScreen({super.key, this.category});
+  const DiscoverScreen({super.key, this.category, this.query = ''});
 
   /// The category tile the URL selects, or null for the unfiltered page. An
   /// unknown slug has already become null in the router.
   final DiscoverCategory? category;
+
+  /// The search the URL carries (`?q=`, trimmed), or empty for none.
+  final String query;
 
   @override
   ConsumerState<DiscoverScreen> createState() => _DiscoverScreenState();
@@ -70,9 +84,81 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
   /// screen reads as a tap that did nothing.
   final _browseKey = GlobalKey();
 
+  /// Debounces the address-bar update behind the typing.
+  Timer? _urlSync;
+
+  /// The last `q` this screen put in the URL (or received from it). A route
+  /// rebuild carrying this value is our own echo and must not touch the
+  /// field: by the time it lands the reader may have typed on.
+  late String _lastUrlQuery = widget.query;
+
+  /// A URL query on its way into [searchQueryProvider], which cannot be
+  /// written until the frame is done. Non-null for exactly that one frame;
+  /// the build reads it in place of the provider so the page does not flash
+  /// the unsearched shelves first.
+  String? _seed;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.query.isNotEmpty) _adoptUrlQuery(widget.query);
+  }
+
+  /// Takes a query that arrived from the URL: into the field now, into the
+  /// provider after the frame.
+  void _adoptUrlQuery(String query) {
+    _urlSync?.cancel();
+    _lastUrlQuery = query;
+    _searchController.text = query;
+    _seed = query;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _seed != query) return;
+      ref.read(searchQueryProvider.notifier).state = query;
+      setState(() => _seed = null);
+    });
+  }
+
+  void _onSearchChanged(String value) {
+    ref.read(searchQueryProvider.notifier).state = value;
+    _urlSync?.cancel();
+    _urlSync = Timer(kSearchDebounce, () => _writeUrlQuery(value.trim()));
+  }
+
+  /// Puts [query] in the address bar, keeping the selected tile. `neglect`
+  /// replaces the current history entry instead of pushing one, so Back
+  /// leaves the search rather than un-typing it a word at a time. A host
+  /// without a router (a bare widget test) simply has no URL to keep.
+  void _writeUrlQuery(String query) {
+    if (!mounted || query == _lastUrlQuery) return;
+    _lastUrlQuery = query;
+    final router = GoRouter.maybeOf(context);
+    if (router == null) return;
+    Router.neglect(
+      context,
+      () => router.go(
+        Routes.discoverSearch(query, category: widget.category?.slug),
+      ),
+    );
+  }
+
+  /// The clear button, and the miss state's **Clear search** (UX-022): an
+  /// empty field, no `q`, and back to whatever the URL's tile selects.
+  void _clearSearch() {
+    _urlSync?.cancel();
+    _searchController.clear();
+    ref.read(searchQueryProvider.notifier).state = '';
+    setState(() => _seed = null);
+    _writeUrlQuery('');
+  }
+
   @override
   void didUpdateWidget(DiscoverScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
+    // A `q` that changed under us — the back button, a link, the Discover tab
+    // (no `q`) — as opposed to the echo of our own debounced write.
+    if (widget.query != oldWidget.query && widget.query != _lastUrlQuery) {
+      _adoptUrlQuery(widget.query);
+    }
     // Only on a change *to* a tile made while the page is open. A deep link
     // opens at the top, where the tiles show which one is selected; clearing
     // leaves the reader where they are.
@@ -91,6 +177,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
 
   @override
   void dispose() {
+    _urlSync?.cancel();
     _searchController.dispose();
     super.dispose();
   }
@@ -108,7 +195,9 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final category = widget.category;
-    final query = ref.watch(searchQueryProvider);
+    // Watched unconditionally, so the seed frame still subscribes.
+    final live = ref.watch(searchQueryProvider);
+    final query = _seed ?? live;
     final searching = query.trim().isNotEmpty;
     final wide = !context.isCompact;
     final side = wide ? AppSpacing.xl : AppSpacing.md;
@@ -139,6 +228,10 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                 child: DiscoverMasthead(
                   gutter: side,
                   publicCount: ref.watch(publicRecipeCountProvider).valueOrNull,
+                  // UX-021: the corpus is reachable from the top of the page,
+                  // searching or not — the link under the grid is a screen of
+                  // infinite scroll away, and hidden while a search is up.
+                  onExplore: () => context.push(Routes.explore),
                   search: DiscoverSearchField(
                     controller: _searchController,
                     trailing: [
@@ -146,14 +239,10 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                         IconButton(
                           icon: const Icon(Icons.clear),
                           tooltip: 'Clear search',
-                          onPressed: () {
-                            _searchController.clear();
-                            ref.read(searchQueryProvider.notifier).state = '';
-                          },
+                          onPressed: _clearSearch,
                         ),
                     ],
-                    onChanged:
-                        (v) => ref.read(searchQueryProvider.notifier).state = v,
+                    onChanged: _onSearchChanged,
                   ),
                 ),
               ),
@@ -161,11 +250,25 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
               // Searching replaces the whole page below the masthead. A shelf of
               // quick dinners under a list of search results is noise: the reader
               // has already said what they want.
-              if (searching)
+              if (searching && _seed != null)
+                // The one frame before a URL query reaches the provider: the
+                // grid would read the old query and could flash a miss.
+                const SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Padding(
+                    padding: EdgeInsets.all(AppSpacing.xl),
+                    child: LoadingView(),
+                  ),
+                )
+              else if (searching)
                 RecipeAsyncSliverGrid(
                   provider: searchResultsProvider,
                   padding: gridPadding,
-                  empty: _empty('No matches'),
+                  empty: _SearchMiss(
+                    key: kDiscoverSearchMissKey,
+                    query: query.trim(),
+                    onClear: _clearSearch,
+                  ),
                 )
               else ...[
                 SliverPadding(
@@ -405,40 +508,46 @@ class _SortLink extends StatelessWidget {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppRadii.md),
-      // The underline is a **border on the box that holds the text**, not a
-      // `Container` under it in a `Column` (B060). A box with no child and no
-      // width takes `constraints.biggest` when it is bounded and
-      // `constraints.smallest` when it is not — so the same widget rendered a
-      // full-width rule that forced each link onto its own line in the stacked
-      // layout, and a zero-width, invisible one in the row layout, where the
-      // `Wrap` is a non-flex child laid out unbounded. Selected state was
-      // therefore undrawn at exactly the width most people use.
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.xs,
-          vertical: AppSpacing.xsPlus,
-        ),
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              width: _kSortUnderline,
-              // Drawn in both states so selecting one does not move the row.
-              color: selected ? scheme.primary : Colors.transparent,
+    // UX-014: the underline and the colour say which sort is on; this says
+    // it to a screen reader, which sees neither.
+    return Semantics(
+      button: true,
+      selected: selected,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadii.md),
+        // The underline is a **border on the box that holds the text**, not a
+        // `Container` under it in a `Column` (B060). A box with no child and no
+        // width takes `constraints.biggest` when it is bounded and
+        // `constraints.smallest` when it is not — so the same widget rendered a
+        // full-width rule that forced each link onto its own line in the stacked
+        // layout, and a zero-width, invisible one in the row layout, where the
+        // `Wrap` is a non-flex child laid out unbounded. Selected state was
+        // therefore undrawn at exactly the width most people use.
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.xs,
+            vertical: AppSpacing.xsPlus,
+          ),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                width: _kSortUnderline,
+                // Drawn in both states so selecting one does not move the row.
+                color: selected ? scheme.primary : Colors.transparent,
+              ),
             ),
           ),
-        ),
-        child: Text(
-          label,
-          // One weight in both states (UX-049): a heavier selected label
-          // widened itself and pushed its neighbours along. Selection is the
-          // colour and the underline.
-          // The selected one in the brand colour, matching its underline —
-          // the link colour everywhere since 36c.
-          style: theme.textTheme.labelLarge?.copyWith(
-            color: selected ? scheme.primary : scheme.onSurfaceVariant,
+          child: Text(
+            label,
+            // One weight in both states (UX-049): a heavier selected label
+            // widened itself and pushed its neighbours along. Selection is the
+            // colour and the underline.
+            // The selected one in the brand colour, matching its underline —
+            // the link colour everywhere since 36c.
+            style: theme.textTheme.labelLarge?.copyWith(
+              color: selected ? scheme.primary : scheme.onSurfaceVariant,
+            ),
           ),
         ),
       ),
@@ -508,6 +617,62 @@ EmptyView _empty(String title) => EmptyView(
   icon: Icons.local_dining_outlined,
   message: 'Public recipes will appear here.',
 );
+
+/// The miss state's key — for tests.
+const kDiscoverSearchMissKey = Key('discover-search-miss');
+
+/// Longest slice of the query the miss state's title repeats back. A pasted
+/// paragraph would otherwise become the heading.
+const int _kMissQueryMaxChars = 40;
+
+/// A search that found nothing (UX-022 / UX-021).
+///
+/// It used to borrow the browse grid's "No matches / Public recipes will
+/// appear here" — wrong (the reader searched; nothing is on its way) and a
+/// dead end. It now repeats the query and offers the two ways on: clear the
+/// search, or the web collection on `/explore`, which this search does not
+/// reach.
+class _SearchMiss extends StatelessWidget {
+  const _SearchMiss({super.key, required this.query, required this.onClear});
+
+  final String query;
+  final VoidCallback onClear;
+
+  @override
+  Widget build(BuildContext context) {
+    final shown =
+        query.length > _kMissQueryMaxChars
+            ? '${query.substring(0, _kMissQueryMaxChars)}…'
+            : query;
+    return EmptyView(
+      title: 'No recipes match “$shown”',
+      icon: Icons.search_off,
+      message:
+          'Nothing public in the vault matches that. Try fewer or different '
+          'words — or browse recipes published elsewhere on the web, kept '
+          'with their credit and a link back.',
+      // Wrap, so the two buttons stack rather than overflow on a phone at
+      // 2.0× text.
+      action: Wrap(
+        alignment: WrapAlignment.center,
+        spacing: AppSpacing.sm,
+        runSpacing: AppSpacing.sm,
+        children: [
+          OutlinedButton.icon(
+            onPressed: onClear,
+            icon: const Icon(Icons.clear),
+            label: const Text('Clear search'),
+          ),
+          TextButton.icon(
+            onPressed: () => context.push(Routes.explore),
+            icon: const Icon(Icons.travel_explore_outlined),
+            label: const Text('Browse the web collection'),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 /// The link to `/explore` (Phase 35c).
 ///

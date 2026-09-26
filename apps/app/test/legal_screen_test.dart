@@ -18,6 +18,7 @@ import 'package:app/routing/app_router.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -86,6 +87,13 @@ Future<void> _scrollToFooter(WidgetTester tester) async {
   );
   await tester.pumpAndSettle();
 }
+
+SemanticsData _a11y(WidgetTester tester, Finder finder) =>
+    tester.getSemantics(finder).getSemanticsData();
+
+/// The titles every `Title` in the tree carries (UX-051).
+Iterable<String> _titles(WidgetTester tester) =>
+    tester.widgetList<Title>(find.byType(Title)).map((t) => t.title);
 
 void main() {
   group('routing', () {
@@ -249,6 +257,48 @@ void main() {
             reason: 'overflowed at ${width}px x $scale',
           );
         }
+      }
+    });
+  });
+
+  // Phase 37 wave C (UX-014 / UX-047 / UX-051).
+  group('accessibility', () {
+    testWidgets('the title and every section heading are headings', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      await _pumpAt(tester, Routes.legal('privacy'));
+
+      final title = find.descendant(
+        of: find.byType(ListView),
+        matching: find.text(LegalDoc.privacy.title),
+      );
+      expect(_a11y(tester, title).flagsCollection.isHeader, isTrue);
+
+      final heading =
+          LegalDoc.privacy.blocks.whereType<LegalHeading>().first.text;
+      expect(
+        _a11y(tester, find.text(heading)).flagsCollection.isHeader,
+        isTrue,
+      );
+      final paragraph =
+          LegalDoc.privacy.blocks.whereType<LegalParagraph>().first.text;
+      expect(
+        _a11y(tester, find.text(paragraph)).flagsCollection.isHeader,
+        isFalse,
+      );
+      handle.dispose();
+    });
+
+    testWidgets('the back arrow has a name', (tester) async {
+      await _pumpAt(tester, Routes.legal('terms'));
+      expect(find.byTooltip('Back'), findsOneWidget);
+    });
+
+    testWidgets('the document titles the tab', (tester) async {
+      for (final doc in LegalDoc.values) {
+        await _pumpAt(tester, Routes.legal(doc.slug));
+        expect(_titles(tester), contains('${doc.title} · Secret Sauce'));
       }
     });
   });

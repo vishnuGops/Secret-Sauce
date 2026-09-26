@@ -18,6 +18,7 @@ import 'package:app/routing/app_router.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -142,6 +143,13 @@ Future<GoRouter> _pump(
   return router;
 }
 
+SemanticsData _a11y(WidgetTester tester, Finder finder) =>
+    tester.getSemantics(finder).getSemanticsData();
+
+/// The titles every `Title` in the tree carries (UX-051).
+Iterable<String> _titles(WidgetTester tester) =>
+    tester.widgetList<Title>(find.byType(Title)).map((t) => t.title);
+
 void main() {
   testWidgets('opens signed out — no redirect to /auth', (tester) async {
     _size(tester, 1000);
@@ -166,7 +174,7 @@ void main() {
     await _pump(tester, entities: _FakeEntities());
 
     expect(
-      find.textContaining('Nobody on Secret-Sauce manages this page yet'),
+      find.textContaining('Nobody on Secret Sauce manages this page yet'),
       findsOneWidget,
     );
   });
@@ -284,5 +292,51 @@ void main() {
         });
       }
     }
+  });
+
+  // Phase 37 wave C (UX-014 / UX-051).
+  group('accessibility', () {
+    testWidgets('the name, the roster and the dishes are headings', (
+      tester,
+    ) async {
+      _size(tester, 1000);
+      final handle = tester.ensureSemantics();
+      await _pump(
+        tester,
+        entities: _FakeEntities(
+          members: [
+            EntityMember(
+              entityId: 'e1',
+              profileId: 'p1',
+              profile: _profile('p1', 'Marta Kovac'),
+            ),
+            EntityMember(
+              entityId: 'e1',
+              profileId: 'p2',
+              profile: _profile('p2', 'Ines Duarte'),
+            ),
+          ],
+        ),
+      );
+
+      for (final text in ['Northern Bakehouse', 'Chefs', 'Signature dishes']) {
+        expect(
+          _a11y(tester, find.text(text)).flagsCollection.isHeader,
+          isTrue,
+          reason: text,
+        );
+      }
+      expect(
+        _a11y(tester, find.text('Marta Kovac')).flagsCollection.isHeader,
+        isFalse,
+      );
+      handle.dispose();
+    });
+
+    testWidgets("the publisher's name titles the tab", (tester) async {
+      _size(tester, 1000);
+      await _pump(tester, entities: _FakeEntities());
+      expect(_titles(tester), contains('Northern Bakehouse · Secret Sauce'));
+    });
   });
 }

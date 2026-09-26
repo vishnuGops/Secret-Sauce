@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:design_system/src/layout/adaptive.dart';
 import 'package:design_system/src/theme/app_theme.dart';
 import 'package:design_system/src/widgets/chef_avatar.dart';
+import 'package:design_system/src/widgets/interactive_tile.dart';
 import 'package:design_system/src/widgets/tier_chip.dart';
 
 /// Width of every [ChefSpotlightCard]. The rails pack cards at this width and
@@ -165,35 +166,36 @@ class ChefSpotlightCard extends StatelessWidget {
       child: _FoilFrame(
         color: tier,
         foil: foilFor(standing.chefTier),
-        child: Material(
-          type: MaterialType.transparency,
-          child: InkWell(
-            onTap: onTap,
-            borderRadius: BorderRadius.circular(_kPanelRadius),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _Header(standing: standing, color: tier),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: _kInset),
-                    child: _Portrait(
-                      standing: standing,
-                      color: tier,
-                      totalChefs: totalChefs,
-                    ),
+        // The portrait is opaque, so an `InkWell`'s own focus highlight showed
+        // only on the bands around it (UX-013). [InteractiveTile] paints the
+        // ring and the hover wash over the whole panel instead — at the panel's
+        // clip radius, because the frame's clip is what it is drawn inside.
+        child: InteractiveTile(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(_kPanelClipRadius),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _Header(standing: standing, color: tier),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: _kInset),
+                  child: _Portrait(
+                    standing: standing,
+                    color: tier,
+                    totalChefs: totalChefs,
                   ),
                 ),
-                _RarityBand(standing: standing, color: tier),
-                _DriverRow(
-                  standing: standing,
-                  color: tier,
-                  window: window,
-                  windowLabel: windowLabel,
-                ),
-                _Footer(standing: standing, color: tier),
-              ],
-            ),
+              ),
+              _RarityBand(standing: standing, color: tier),
+              _DriverRow(
+                standing: standing,
+                color: tier,
+                window: window,
+                windowLabel: windowLabel,
+              ),
+              _Footer(standing: standing, color: tier),
+            ],
           ),
         ),
       ),

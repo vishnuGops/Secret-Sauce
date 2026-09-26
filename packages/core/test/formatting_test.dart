@@ -18,26 +18,23 @@ void main() {
     expect(isoDate(DateTime(2026, 1, 1)), '2026-01-01');
   });
 
+  // UX-043: one duration format everywhere — `1 h 10 min`, never `1 h 10 m`.
   test('formatMinutes splits hours out and dashes the empty case', () {
     expect(formatMinutes(40), '40 min');
-    expect(formatMinutes(70), '1 h 10 m');
+    expect(formatMinutes(70), '1 h 10 min');
+    expect(formatMinutes(90), '1 h 30 min');
+    expect(formatMinutes(765), '12 h 45 min');
     expect(formatMinutes(120), '2 h');
     expect(formatMinutes(60), '1 h');
     expect(formatMinutes(0), '—');
     expect(formatMinutes(-5), '—');
   });
 
-  // 32d2: `RecipeCard` had its own copy of this arithmetic, rendering the same
-  // duration two characters narrower. It is the same function now, and the
-  // narrow rendering is an argument — the card's metadata row spends those two
-  // characters on the rating beside it (B080).
-  test('formatMinutes compact drops the spaces and nothing else', () {
-    expect(formatMinutes(70, compact: true), '1h 10m');
-    expect(formatMinutes(120, compact: true), '2h');
-    expect(formatMinutes(765, compact: true), '12h 45m');
-    // Under an hour and the empty case are identical in both renderings.
-    expect(formatMinutes(40, compact: true), '40 min');
-    expect(formatMinutes(0, compact: true), '—');
+  // UX-043: one format everywhere, the card included — the spaceless `1h 10m`
+  // compact variant is gone.
+  test('formatMinutes has one rendering', () {
+    expect(formatMinutes(765), '12 h 45 min');
+    expect(formatMinutes(120), '2 h');
   });
 
   // One trimmer for the two places a stored `numeric` reaches a label (32d2).
@@ -50,6 +47,72 @@ void main() {
     // Two places is the ceiling — a scaled third of a cup rounds rather than
     // printing 0.3333333333333333.
     expect(trimDecimal(1 / 3), '0.33');
+  });
+
+  // UX-023: cooks read ⅓ and ¾, not 0.33 and 0.75. Fractions for US volume,
+  // imperial weight, bare counts and word units; metric keeps its decimal.
+  group('formatQuantity', () {
+    const half = '½';
+    const quarter = '¼';
+    const threeQuarters = '¾';
+    const slash = '⁄';
+
+    test('halves and quarters are the precomposed glyphs', () {
+      expect(formatQuantity(0.5, 'cup'), half);
+      expect(formatQuantity(0.25, 'tsp'), quarter);
+      expect(formatQuantity(0.75, 'tbsp'), threeQuarters);
+      // No space before a glyph: `1¼`, `2¾`.
+      expect(formatQuantity(1.25, 'cup'), '1$quarter');
+      expect(formatQuantity(2.75, 'cups'), '2$threeQuarters');
+      // Eighths reduce before choosing: 4/8 is a half, 6/8 three quarters.
+      expect(formatQuantity(1.5, 'Tablespoons'), '1$half');
+    });
+
+    test('thirds and odd eighths are digits around the fraction slash', () {
+      expect(formatQuantity(0.33, 'cup'), '1${slash}3');
+      expect(formatQuantity(1 / 3, 'cup'), '1${slash}3');
+      expect(formatQuantity(0.666, 'cup'), '2${slash}3');
+      expect(formatQuantity(0.375, 'tsp'), '3${slash}8');
+      // A space after a whole part, or `1 1⁄8` reads as eleven-eighths.
+      expect(formatQuantity(1.125, 'tsp'), '1 1${slash}8');
+      expect(formatQuantity(2.333, 'oz'), '2 1${slash}3');
+      expect(formatQuantity(1.875, 'lb'), '1 7${slash}8');
+    });
+
+    test('bare counts and word units read as fractions', () {
+      expect(formatQuantity(1.5, null), '1$half');
+      expect(formatQuantity(0.5, ''), half);
+      expect(formatQuantity(3, 'cloves'), '3');
+      expect(formatQuantity(0.5, 'stick'), half);
+      expect(formatQuantity(1.5, 'pinch'), '1$half');
+    });
+
+    test('metric units keep the shortest decimal', () {
+      expect(formatQuantity(250, 'g'), '250');
+      expect(formatQuantity(1.5, 'L'), '1.5');
+      expect(formatQuantity(1.5, 'l'), '1.5');
+      expect(formatQuantity(0.5, 'kg'), '0.5');
+      expect(formatQuantity(0.25, 'ml'), '0.25');
+      expect(formatQuantity(2.5, 'Grams'), '2.5');
+      expect(formatQuantity(0.75, 'dl'), '0.75');
+    });
+
+    test('a value near no eighth or third keeps its decimal', () {
+      // 0.4 is 0.025 from 3/8 — just outside the snap.
+      expect(formatQuantity(2.4, 'cup'), '2.4');
+      expect(formatQuantity(0.1, 'tsp'), '0.1');
+    });
+
+    test('whole numbers, zero and float residue', () {
+      expect(formatQuantity(0, 'cup'), '0');
+      expect(formatQuantity(2, 'cup'), '2');
+      expect(formatQuantity(2.001, 'cup'), '2');
+      expect(formatQuantity(1.999, 'tsp'), '2');
+      expect(formatQuantity(0.99, null), '1');
+      // Too small to snap to anything but zero: keep the honest decimal
+      // rather than printing a quantity of nothing.
+      expect(formatQuantity(0.01, 'tsp'), '0.01');
+    });
   });
 
   test('formatNutritionValue is that trimmer, under its own name', () {
@@ -72,10 +135,10 @@ void main() {
   group('ingredientQuantityLabel', () {
     const base = Ingredient(id: 'i', groupId: 'g', name: 'yoghurt');
 
-    test('quantity and unit together, trimmed to the shortest honest form', () {
+    test('quantity and unit together, as a cook reads them', () {
       expect(
         ingredientQuantityLabel(base.copyWith(quantity: 1.5, unit: 'cup')),
-        '1.5 cup',
+        '1½ cup',
       );
       expect(
         ingredientQuantityLabel(base.copyWith(quantity: 2, unit: 'cup')),
@@ -83,7 +146,12 @@ void main() {
       );
       expect(
         ingredientQuantityLabel(base.copyWith(quantity: 1.25, unit: 'cup')),
-        '1.25 cup',
+        '1¼ cup',
+      );
+      // Metric keeps its decimal (UX-023).
+      expect(
+        ingredientQuantityLabel(base.copyWith(quantity: 1.5, unit: 'L')),
+        '1.5 L',
       );
       expect(ingredientQuantityLabel(base.copyWith(quantity: 600)), '600');
     });
@@ -120,6 +188,22 @@ void main() {
     test('the factor scales the number and never the unit', () {
       final ing = base.copyWith(quantity: 600, unit: 'g');
       expect(ingredientQuantityLabel(ing, factor: 1.25), '750 g');
+      // The fraction is chosen AFTER scaling: ¾ cup doubled is 1½ cup.
+      expect(
+        ingredientQuantityLabel(
+          base.copyWith(quantity: 0.75, unit: 'cup'),
+          factor: 2,
+        ),
+        '1½ cup',
+      );
+      // A servings ratio's float residue never reaches the label.
+      expect(
+        ingredientQuantityLabel(
+          base.copyWith(quantity: 3, unit: 'cloves'),
+          factor: (0.1 + 0.2) / 0.3,
+        ),
+        '3 cloves',
+      );
       // A unit-only row has no number to scale, so the factor cannot corrupt it.
       expect(
         ingredientQuantityLabel(base.copyWith(unit: 'cup'), factor: 3),
@@ -132,7 +216,7 @@ void main() {
     const base = Ingredient(id: 'i', groupId: 'g', name: 'yoghurt');
     expect(
       ingredientOneLine(base.copyWith(quantity: 1.5, unit: 'cup')),
-      '1.5 cup Yoghurt',
+      '1½ cup Yoghurt',
     );
     // No quantity, no unit, no note — the name alone, not "— Yoghurt".
     expect(ingredientOneLine(base), 'Yoghurt');

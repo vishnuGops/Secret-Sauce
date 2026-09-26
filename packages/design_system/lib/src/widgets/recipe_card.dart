@@ -7,6 +7,7 @@ import 'package:design_system/src/theme/app_theme.dart';
 import 'package:design_system/src/widgets/category_cover.dart';
 import 'package:design_system/src/widgets/chef_badge.dart';
 import 'package:design_system/src/widgets/difficulty_badge.dart';
+import 'package:design_system/src/widgets/interactive_tile.dart';
 import 'package:design_system/src/widgets/star_rating.dart';
 
 /// Height of every [RecipeCard], in logical pixels.
@@ -178,7 +179,9 @@ class RecipeCard extends StatelessWidget {
   /// When both are set the badge wins **its own hit area only**: it is deeper
   /// in the hit-test path than the card's `InkWell`, so its recognizer enters
   /// the gesture arena first and takes the sweep. Everywhere else on the card —
-  /// the rest of the cover included — still opens the recipe.
+  /// the rest of the cover included — still opens the recipe. The focus ring
+  /// and hover wash [InteractiveTile] paints above the cover are
+  /// [IgnorePointer]s, so they never sit between the badge and the pointer.
   final VoidCallback? onChefTap;
 
   final bool showVisibility;
@@ -191,12 +194,14 @@ class RecipeCard extends StatelessWidget {
   /// default) on every unranked surface.
   final int? rank;
 
-  /// `45 min`, `1h 10m`, `—`. Core's formatter in its compact rendering (32d2):
-  /// the card had its own copy of the same arithmetic, so `1 h 10 m` and
-  /// `1h 10m` were two functions' opinions rather than one decision. The spaces
-  /// stay off **here** because this label is the first thing the metadata row
-  /// sacrifices when it runs out of width (B080).
-  String get _timeLabel => formatMinutes(recipe.totalMinutes, compact: true);
+  /// `45 min`, `1 h 10 min`, `2 h`, `—` — core's formatter in the **one**
+  /// duration format the product prints (UX-043, DESIGN.md §2.1). This card
+  /// used the compact `1h 10m` on the grounds that the label is the first thing
+  /// the metadata row gives up under width pressure (B080); that is still true,
+  /// and it is why a longer label is acceptable here — at 288px × 2.0× it
+  /// ellipsizes before the rating does, which is the degradation order working,
+  /// not a regression. A second spelling of the same duration is.
+  String get _timeLabel => formatMinutes(recipe.totalMinutes);
 
   /// Two lines of the description's style at the ambient text scale.
   static double _descriptionHeight(BuildContext context, TextTheme textTheme) {
@@ -220,191 +225,188 @@ class RecipeCard extends StatelessWidget {
       // Tight height so the cover's Expanded always has a bound, including in
       // tests and any caller that lays the card out with unbounded height.
       height: kRecipeCardHeight,
-      // No `Card`: the tile has no chrome since 36c. A transparent `Material`
-      // is still needed so the `InkWell`'s ripple and focus highlight have
-      // somewhere to paint.
-      child: Material(
-        type: MaterialType.transparency,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(AppRadii.card),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(AppRadii.card),
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      // `displayCoverImageUrl` honours the publisher's image
-                      // policy (Phase 35c); no URL means the colour block.
-                      _CoverImage(
-                        url: recipe.displayCoverImageUrl,
-                        category: recipe.category,
-                        ranked: rank != null,
-                      ),
-                      if (rank != null)
-                        Positioned(
-                          top: 0,
-                          left: AppSpacing.smPlus,
-                          child: _RankRibbon(rank: rank!),
-                        ),
-                      if (showVisibility)
-                        Positioned(
-                          top: AppSpacing.sm,
-                          right: AppSpacing.sm,
-                          child: _VisibilityBadge(
-                            visibility: recipe.visibility,
-                            scheme: scheme,
-                          ),
-                        ),
-                      if (showChef && recipe.owner != null)
-                        Positioned(
-                          left: AppSpacing.sm,
-                          right: AppSpacing.sm,
-                          bottom: AppSpacing.sm,
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: _ChefOverlay(
-                              owner: recipe.owner!,
-                              onTap: onChefTap,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-              _TitleBand(title: recipe.title),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  _kTextHPad,
-                  0,
-                  _kTextHPad,
-                  AppSpacing.sm,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      // No `Card`: the tile has no chrome since 36c. [InteractiveTile] owns the
+      // tap target and paints hover, press and keyboard focus *over* the cover
+      // rather than under it (UX-013).
+      child: InteractiveTile(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadii.card),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(AppRadii.card),
+                child: Stack(
+                  fit: StackFit.expand,
                   children: [
-                    if (showDescription)
-                      // Always two lines tall, whatever the text (36c review):
-                      // the title band now sits *under* the cover, so a
-                      // one-line description beside a two-line one would
-                      // shift the neighbour's cover and title by a line.
-                      // `strutStyle` + two lines' height pins it; empty
-                      // strings reserve the same space (B047's rule).
-                      SizedBox(
-                        height: _descriptionHeight(context, textTheme),
-                        child: Text(
-                          recipe.description,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: textTheme.bodySmall?.copyWith(
-                            color: scheme.onSurfaceVariant,
+                    // `displayCoverImageUrl` honours the publisher's image
+                    // policy (Phase 35c); no URL means the colour block.
+                    _CoverImage(
+                      url: recipe.displayCoverImageUrl,
+                      category: recipe.category,
+                      ranked: rank != null,
+                    ),
+                    if (rank != null)
+                      Positioned(
+                        top: 0,
+                        left: AppSpacing.smPlus,
+                        child: _RankRibbon(rank: rank!),
+                      ),
+                    if (showVisibility)
+                      Positioned(
+                        top: AppSpacing.sm,
+                        right: AppSpacing.sm,
+                        child: _VisibilityBadge(
+                          visibility: recipe.visibility,
+                          scheme: scheme,
+                        ),
+                      ),
+                    if (showChef && recipe.owner != null)
+                      Positioned(
+                        left: AppSpacing.sm,
+                        right: AppSpacing.sm,
+                        bottom: AppSpacing.sm,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: _ChefOverlay(
+                            owner: recipe.owner!,
+                            onTap: onChefTap,
                           ),
                         ),
                       ),
-                    Container(
-                      margin:
-                          showDescription
-                              ? const EdgeInsets.only(top: AppSpacing.xsPlus)
-                              : EdgeInsets.zero,
-                      padding:
-                          showDescription
-                              ? const EdgeInsets.only(top: _kFooterRuleGap)
-                              : EdgeInsets.zero,
-                      decoration:
-                          showDescription
-                              ? BoxDecoration(
-                                border: Border(
-                                  top: BorderSide(color: scheme.outlineVariant),
-                                ),
-                              )
-                              : null,
-                      // The badge takes its intrinsic width, capped at half the
-                      // row; the time + rating group takes everything left over
-                      // and ellipsizes inside it. Two flex children instead
-                      // (what this was) split the row 50/50 whatever the
-                      // content, which truncated "4.9 (8)" to "4…" at
-                      // one-column widths; a bare intrinsic badge overflows by
-                      // 1px at the narrowest column / 2.0x. The cap is what
-                      // degrades in the right order (B016) — and
-                      // `kRecipeCardMinWidth` is set so that at default scale
-                      // this row never has to degrade at all (B048).
-                      child: LayoutBuilder(
-                        builder:
-                            (context, constraints) => Row(
-                              children: [
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.schedule,
-                                        size: _kMetaIconSize,
-                                        color: scheme.onSurfaceVariant,
-                                      ),
-                                      const SizedBox(width: AppSpacing.xs),
-                                      // Flex **1 against the rating's 2**, not
-                                      // the even split this was (B080). Equal
-                                      // factors hand each child half the free
-                                      // space whatever it needs, so beside a
-                                      // `Medium` badge at 288px the short time
-                                      // label sat on ~30px it had no use for
-                                      // while `5.0 (1)` was cut to `5…` — the
-                                      // same B026/B038 mechanism the badge
-                                      // below was fixed for, one level in.
-                                      // Both stay flex on purpose: a non-flex
-                                      // child of a `Row` is laid out with an
-                                      // unbounded main axis and overflows
-                                      // rather than ellipsizing (B039), and a
-                                      // fixed-fraction `ConstrainedBox` cap
-                                      // instead starves the pill until its own
-                                      // `Row` overflows — measured, not
-                                      // assumed: `maxWidth / 3` here failed
-                                      // four cases of the envelope suite below,
-                                      // at 264 × 1.0 and at 2.0× on every
-                                      // width.
-                                      Flexible(
-                                        child: Text(
-                                          _timeLabel,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: textTheme.labelMedium,
-                                        ),
-                                      ),
-                                      if (recipe.hasRatings) ...[
-                                        const SizedBox(width: AppSpacing.sm),
-                                        Flexible(
-                                          flex: 2,
-                                          child: RatingPill(
-                                            rating: recipe.ratingAvg,
-                                            count: recipe.ratingCount,
-                                          ),
-                                        ),
-                                      ],
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(width: AppSpacing.sm),
-                                ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                    maxWidth: constraints.maxWidth / 2,
-                                  ),
-                                  child: DifficultyBadge(
-                                    difficulty: recipe.difficulty,
-                                  ),
-                                ),
-                              ],
-                            ),
-                      ),
-                    ),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+            _TitleBand(title: recipe.title),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                _kTextHPad,
+                0,
+                _kTextHPad,
+                AppSpacing.sm,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (showDescription)
+                    // Always two lines tall, whatever the text (36c review):
+                    // the title band now sits *under* the cover, so a
+                    // one-line description beside a two-line one would
+                    // shift the neighbour's cover and title by a line.
+                    // `strutStyle` + two lines' height pins it; empty
+                    // strings reserve the same space (B047's rule).
+                    SizedBox(
+                      height: _descriptionHeight(context, textTheme),
+                      child: Text(
+                        recipe.description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: textTheme.bodySmall?.copyWith(
+                          color: scheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                  Container(
+                    margin:
+                        showDescription
+                            ? const EdgeInsets.only(top: AppSpacing.xsPlus)
+                            : EdgeInsets.zero,
+                    padding:
+                        showDescription
+                            ? const EdgeInsets.only(top: _kFooterRuleGap)
+                            : EdgeInsets.zero,
+                    decoration:
+                        showDescription
+                            ? BoxDecoration(
+                              border: Border(
+                                top: BorderSide(color: scheme.outlineVariant),
+                              ),
+                            )
+                            : null,
+                    // The badge takes its intrinsic width, capped at half the
+                    // row; the time + rating group takes everything left over
+                    // and ellipsizes inside it. Two flex children instead
+                    // (what this was) split the row 50/50 whatever the
+                    // content, which truncated "4.9 (8)" to "4…" at
+                    // one-column widths; a bare intrinsic badge overflows by
+                    // 1px at the narrowest column / 2.0x. The cap is what
+                    // degrades in the right order (B016) — and
+                    // `kRecipeCardMinWidth` is set so that at default scale
+                    // this row never has to degrade at all (B048).
+                    child: LayoutBuilder(
+                      builder:
+                          (context, constraints) => Row(
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.schedule,
+                                      size: _kMetaIconSize,
+                                      color: scheme.onSurfaceVariant,
+                                    ),
+                                    const SizedBox(width: AppSpacing.xs),
+                                    // Flex **1 against the rating's 2**, not
+                                    // the even split this was (B080). Equal
+                                    // factors hand each child half the free
+                                    // space whatever it needs, so beside a
+                                    // `Medium` badge at 288px the short time
+                                    // label sat on ~30px it had no use for
+                                    // while `5.0 (1)` was cut to `5…` — the
+                                    // same B026/B038 mechanism the badge
+                                    // below was fixed for, one level in.
+                                    // Both stay flex on purpose: a non-flex
+                                    // child of a `Row` is laid out with an
+                                    // unbounded main axis and overflows
+                                    // rather than ellipsizing (B039), and a
+                                    // fixed-fraction `ConstrainedBox` cap
+                                    // instead starves the pill until its own
+                                    // `Row` overflows — measured, not
+                                    // assumed: `maxWidth / 3` here failed
+                                    // four cases of the envelope suite below,
+                                    // at 264 × 1.0 and at 2.0× on every
+                                    // width.
+                                    Flexible(
+                                      child: Text(
+                                        _timeLabel,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: textTheme.labelMedium,
+                                      ),
+                                    ),
+                                    if (recipe.hasRatings) ...[
+                                      const SizedBox(width: AppSpacing.sm),
+                                      Flexible(
+                                        flex: 2,
+                                        child: RatingPill(
+                                          rating: recipe.ratingAvg,
+                                          count: recipe.ratingCount,
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: AppSpacing.sm),
+                              ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  maxWidth: constraints.maxWidth / 2,
+                                ),
+                                child: DifficultyBadge(
+                                  difficulty: recipe.difficulty,
+                                ),
+                              ),
+                            ],
+                          ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

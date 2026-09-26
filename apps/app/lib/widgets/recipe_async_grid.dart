@@ -95,6 +95,17 @@ class RecipeAsyncSliverGrid<N extends PagedRecipesNotifier>
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(provider);
+    const loadingSliver = SliverFillRemaining(
+      hasScrollBody: false,
+      child: Padding(
+        padding: EdgeInsets.all(AppSpacing.xl),
+        child: LoadingView(),
+      ),
+    );
+    // A retry (or a new query) after a failed read: the old error rides along
+    // on the loading state, and `when` would keep painting it until the answer
+    // lands — a Retry button that looks like it did nothing (UX-027).
+    if (async.isLoading && async.hasError) return loadingSliver;
     return async.when(
       // A rebuild (a new search query) keeps the previous rows on screen until
       // the new ones arrive, instead of flashing a spinner between every
@@ -103,18 +114,18 @@ class RecipeAsyncSliverGrid<N extends PagedRecipesNotifier>
       // `hasScrollBody: false` on all three: when the shelves above have
       // already filled the viewport there is no remaining extent to hand a
       // scroll body, and a spinner of height zero is a page that looks done.
-      loading:
-          () => const SliverFillRemaining(
-            hasScrollBody: false,
-            child: Padding(
-              padding: EdgeInsets.all(AppSpacing.xl),
-              child: LoadingView(),
-            ),
-          ),
+      loading: () => loadingSliver,
+      // UX-027: every paged surface (Discover's browse, search and category
+      // grids, My / Shared / Saved, Explore, a chef's catalogue) comes through
+      // here, so this one Retry is theirs too. It re-runs the provider's first
+      // page; a reload of the whole app was the only way back before.
       error:
           (e, _) => SliverFillRemaining(
             hasScrollBody: false,
-            child: ErrorView(message: friendlyError(e)),
+            child: ErrorView(
+              message: friendlyError(e),
+              onRetry: () => ref.invalidate(provider),
+            ),
           ),
       data:
           (page) =>

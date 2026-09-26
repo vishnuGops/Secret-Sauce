@@ -1,6 +1,9 @@
+import 'dart:ui' show Tristate;
+
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -270,6 +273,13 @@ void _size(WidgetTester tester, double width, [double height = 1200]) {
   addTearDown(tester.view.resetPhysicalSize);
   addTearDown(tester.view.resetDevicePixelRatio);
 }
+
+SemanticsData _a11y(WidgetTester tester, Finder finder) =>
+    tester.getSemantics(finder).getSemanticsData();
+
+/// The titles every `Title` in the tree carries (UX-051).
+Iterable<String> _titles(WidgetTester tester) =>
+    tester.widgetList<Title>(find.byType(Title)).map((t) => t.title);
 
 void main() {
   group('a ranked chef', () {
@@ -667,7 +677,7 @@ void main() {
         findsOneWidget,
       );
       expect(
-        find.textContaining('has not signed up for Secret-Sauce'),
+        find.textContaining('has not signed up for Secret Sauce'),
         findsOneWidget,
       );
     });
@@ -773,6 +783,81 @@ void main() {
 
       expect(find.text('Appears in'), findsOneWidget);
       expect(find.text('Northern Bakehouse'), findsOneWidget);
+    });
+  });
+
+  // Phase 37 wave C (UX-014 / UX-048 / UX-051).
+  group('accessibility', () {
+    testWidgets('the name and every section kicker are headings', (
+      tester,
+    ) async {
+      _size(tester, 1000, 2000);
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(_app());
+      await tester.pumpAndSettle();
+
+      final name = find.descendant(
+        of: find.byType(ChefIdentityHeader),
+        matching: find.text('Secret Sauce Kitchen'),
+      );
+      expect(_a11y(tester, name).flagsCollection.isHeader, isTrue);
+      for (final kicker in [
+        'WHY THIS SCORE',
+        'TIER LADDER',
+        '14 PUBLIC RECIPES',
+      ]) {
+        expect(
+          _a11y(tester, find.text(kicker)).flagsCollection.isHeader,
+          isTrue,
+          reason: kicker,
+        );
+      }
+      handle.dispose();
+    });
+
+    testWidgets('the sort pill says which tab is selected', (tester) async {
+      _size(tester, 1000, 2000);
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(_app());
+      await tester.pumpAndSettle();
+
+      Tristate selected(String label) =>
+          _a11y(
+            tester,
+            find.bySemanticsLabel(label),
+          ).flagsCollection.isSelected;
+      expect(selected('All'), Tristate.isTrue);
+      expect(selected('Popular'), Tristate.isFalse);
+
+      await tester.tap(find.text('Popular'));
+      await tester.pumpAndSettle();
+      expect(selected('All'), Tristate.isFalse);
+      expect(selected('Popular'), Tristate.isTrue);
+      handle.dispose();
+    });
+
+    testWidgets('each pill segment is a 48px target', (tester) async {
+      _size(tester, 390, 2000);
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(_app());
+      await tester.pumpAndSettle();
+
+      for (final label in ['All', 'Popular', 'Trending']) {
+        expect(
+          tester.getSemantics(find.bySemanticsLabel(label)).rect.height,
+          greaterThanOrEqualTo(kMinInteractiveDimension),
+          reason: label,
+        );
+      }
+      handle.dispose();
+    });
+
+    testWidgets("the chef's name titles the tab", (tester) async {
+      _size(tester, 1000);
+      await tester.pumpWidget(_app());
+      await tester.pumpAndSettle();
+
+      expect(_titles(tester), contains('Secret Sauce Kitchen · Secret Sauce'));
     });
   });
 }

@@ -14,10 +14,17 @@ class ChefKicker extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     // Counts land in here (`14 public recipes`), so the digits stay tabular.
-    return Text(
-      text.toUpperCase(),
-      style: context.appText.overline.tabular.copyWith(
-        color: theme.colorScheme.onSurfaceVariant,
+    // A heading to assistive tech (UX-014): every use opens a section —
+    // `Why this score`, `Tier ladder`, the catalogue count, the momentum span —
+    // and heading navigation is how a screen reader skims a long page.
+    return Semantics(
+      container: true,
+      header: true,
+      child: Text(
+        text.toUpperCase(),
+        style: context.appText.overline.tabular.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
       ),
     );
   }
@@ -79,11 +86,74 @@ class ChefPillTabs<T> extends StatelessWidget {
   /// Shown on hover over a disabled segment. Ignored when [enabledOf] is null.
   final String disabledMessage;
 
+  /// The height a segment answers taps over (UX-048): Material's 48px
+  /// minimum. The painted pill is ~30px and stays that way — the difference is
+  /// a transparent margin above and below it that still selects the segment
+  /// under the pointer, the way `MaterialTapTargetSize.padded` pads a button
+  /// without drawing it bigger.
+  static const double minHitHeight = kMinInteractiveDimension;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
+    const track = AppInsets.segmentTrack;
 
+    // Two layers over one geometry. The hit layer is full height, one opaque
+    // target per segment, and the only thing assistive tech sees — each option
+    // is a 48px `button` node that says whether it is `selected` (UX-014). The
+    // painted layer on top is the pill as it always looked; its InkWells still
+    // take a tap that lands on the paint (a Stack hit tests top-down and stops
+    // at the first hit), and its semantics are excluded so no option is
+    // announced twice.
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: minHitHeight),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned.fill(
+            child: Padding(
+              // The track's inset, so a hit column lines up with the segment
+              // painted above it rather than drifting by the track padding.
+              padding: EdgeInsets.only(left: track.left, right: track.right),
+              child: Row(
+                children: [
+                  for (final option in options)
+                    Expanded(child: _hitTarget(option)),
+                ],
+              ),
+            ),
+          ),
+          ExcludeSemantics(child: _painted(theme, scheme)),
+        ],
+      ),
+    );
+  }
+
+  Widget _hitTarget(T option) {
+    final enabled = enabledOf?.call(option) ?? true;
+    final VoidCallback? onTap = enabled ? () => onSelected(option) : null;
+    return Semantics(
+      container: true,
+      button: true,
+      enabled: enabled,
+      selected: option == selected,
+      label: labelOf(option),
+      onTap: onTap,
+      child: MouseRegion(
+        cursor: enabled ? SystemMouseCursors.click : MouseCursor.defer,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          // The Semantics above carries the action; a second one here would be
+          // a duplicate tap target in the tree.
+          excludeFromSemantics: true,
+          onTap: onTap,
+        ),
+      ),
+    );
+  }
+
+  Widget _painted(ThemeData theme, ColorScheme scheme) {
     return Container(
       padding: AppInsets.segmentTrack,
       decoration: BoxDecoration(

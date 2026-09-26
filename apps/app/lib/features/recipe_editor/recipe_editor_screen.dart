@@ -15,6 +15,7 @@ import 'package:app/features/recipe_editor/nutrition_editor.dart';
 import 'package:app/features/recipe_editor/recipe_editor_providers.dart';
 import 'package:app/features/recipe_editor/steps_editor.dart';
 import 'package:app/routing/app_router.dart';
+import 'package:app/widgets/route_title.dart';
 
 /// The form's measure on a wide window.
 const double _kFormMaxWidth = 720;
@@ -672,8 +673,14 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
     }
   }
 
+  // UX-051: the tab says which form this is.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => RouteTitle(
+    page: widget.recipeId == null ? 'New recipe' : 'Edit recipe',
+    child: _buildPage(context),
+  );
+
+  Widget _buildPage(BuildContext context) {
     if (_loading) {
       return const Scaffold(body: LoadingView());
     }

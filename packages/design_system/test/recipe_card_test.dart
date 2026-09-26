@@ -1,7 +1,9 @@
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -31,7 +33,9 @@ void main() {
 
     expect(find.text('Grandma Sauce'), findsOneWidget);
     expect(find.text('Slow-cooked Sunday sauce'), findsOneWidget);
-    expect(find.text('1h'), findsOneWidget); // 60 minutes total
+    // 60 minutes total, in the one duration format (UX-043) — asked of core's
+    // formatter rather than spelled here, so the card cannot drift from it.
+    expect(find.text(formatMinutes(60)), findsOneWidget);
     expect(find.text('Medium'), findsOneWidget);
     expect(find.byType(RatingPill), findsNothing); // unrated -> no pill
   });
@@ -83,7 +87,7 @@ void main() {
     description: 'Long enough to ellipsize over two lines.',
     difficulty: Difficulty.medium,
     prepMinutes: 90,
-    cookMinutes: 675, // "12h 45m"
+    cookMinutes: 675, // 12 h 45 min in total
     ratingAvg: 4.5,
     ratingCount: 1250,
   );
@@ -243,7 +247,7 @@ void main() {
       title: 'Weeknight Curry Laksa',
       description: 'Noodles in a coconut curry broth.',
       difficulty: Difficulty.medium,
-      cookMinutes: 65, // "1h 5m"
+      cookMinutes: 65, // 1 h 5 min
       ratingAvg: 5,
       ratingCount: 1,
     );
@@ -298,11 +302,11 @@ void main() {
               tester,
               find.text(' (${recipe.ratingCount})'),
             );
-            // Mirrors the card's own `_timeLabel`, which is private. Both
-            // fixtures are over an hour and not on the hour, so one form covers
-            // them: 65 -> "1h 5m", 765 -> "12h 45m".
-            final timeLabel =
-                '${recipe.totalMinutes ~/ 60}h ${recipe.totalMinutes % 60}m';
+            // The card prints core's one duration format (UX-043): 65 ->
+            // "1 h 5 min", 765 -> "12 h 45 min" — longer than the compact form
+            // it replaced, which is what makes this implication worth
+            // re-running rather than assuming.
+            final timeLabel = formatMinutes(recipe.totalMinutes);
             final timeCut = clipped(tester, find.text(timeLabel));
 
             expect(
@@ -574,4 +578,149 @@ void main() {
       },
     );
   }
+
+  // UX-013. The card's `InkWell` painted focus on the transparent Material
+  // *under* the cover, so a keyboard user tabbing through a grid saw focus on
+  // a footer strip at best (WCAG 2.4.7). `InteractiveTile` paints it over the
+  // whole tile instead — without moving a pixel of the geometry the envelope
+  // suites above pin, and without getting between the chef badge and a tap.
+  group('interaction states over the cover (UX-013)', () {
+    const owner = Profile(
+      id: 'u1',
+      displayName: 'Amara Baptiste-Okonkwo',
+      chefTier: ChefTier.masterChef,
+    );
+
+    Future<void> pump(
+      WidgetTester tester, {
+      Recipe recipe = longMeta,
+      VoidCallback? onTap,
+      VoidCallback? onChefTap,
+      double scale = 1.0,
+    }) => tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.light(),
+        home: MediaQuery(
+          data: MediaQueryData(textScaler: TextScaler.linear(scale)),
+          child: Scaffold(
+            body: Center(
+              child: SizedBox(
+                width: kRecipeCardMinWidth,
+                child: RecipeCard(
+                  recipe: recipe,
+                  onTap: onTap ?? () {},
+                  onChefTap: onChefTap,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    Future<void> tabToCard(WidgetTester tester) async {
+      await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+      await tester.pump();
+    }
+
+    for (final scale in [1.0, 2.0]) {
+      testWidgets('Tab shows a ring over the whole tile, ${scale}x', (
+        tester,
+      ) async {
+        await pump(tester, scale: scale);
+        final before = tester.getRect(find.byType(RecipeCard));
+        expect(find.byKey(kTileFocusRingKey), findsNothing);
+
+        await tabToCard(tester);
+
+        final ring = find.byKey(kTileFocusRingKey);
+        expect(ring, findsOneWidget, reason: 'keyboard focus is invisible');
+        // Over the cover, not only the text under it: the ring spans the
+        // tile and is painted after (above) the cover in the same Stack.
+        expect(tester.getRect(ring), before);
+        expect(
+          tester.getRect(find.byType(CategoryCover)).top,
+          tester.getRect(ring).top,
+        );
+        final border =
+            (tester.widget<DecoratedBox>(ring).decoration as BoxDecoration)
+                    .border!
+                as Border;
+        expect(border.top.color, AppTheme.light().colorScheme.primary);
+        expect(border.top.width, kTileFocusRingWidth);
+        // Geometry is untouched (Preserve: the fixed 352 tile).
+        expect(tester.getRect(find.byType(RecipeCard)), before);
+        expect(before.height, kRecipeCardHeight);
+        expect(tester.takeException(), isNull);
+      });
+    }
+
+    testWidgets('a focus that did not come from the keyboard shows no ring', (
+      tester,
+    ) async {
+      FocusManager.instance.highlightStrategy =
+          FocusHighlightStrategy.alwaysTouch;
+      addTearDown(
+        () =>
+            FocusManager.instance.highlightStrategy =
+                FocusHighlightStrategy.automatic,
+      );
+      await pump(tester);
+      Focus.of(tester.element(find.byType(CategoryCover))).requestFocus();
+      await tester.pump();
+      expect(find.byKey(kTileFocusRingKey), findsNothing);
+    });
+
+    testWidgets('hover washes the cover too, not just the text band', (
+      tester,
+    ) async {
+      await pump(tester);
+      final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+      await mouse.addPointer(location: Offset.zero);
+      addTearDown(mouse.removePointer);
+      await mouse.moveTo(tester.getCenter(find.byType(CategoryCover)));
+      await tester.pump();
+
+      final wash = find.byKey(kTileInkWashKey);
+      expect(wash, findsOneWidget);
+      expect(
+        tester
+            .getRect(wash)
+            .contains(tester.getCenter(find.byType(CategoryCover))),
+        isTrue,
+      );
+    });
+
+    testWidgets('the chef badge still takes its own tap with the ring up', (
+      tester,
+    ) async {
+      var cardTaps = 0;
+      var chefTaps = 0;
+      await pump(
+        tester,
+        recipe: longMeta.copyWith(owner: owner),
+        onTap: () => cardTaps++,
+        onChefTap: () => chefTaps++,
+      );
+      // Focus the card itself (the badge is a focus stop of its own, so Tab
+      // order is not what this test is about), from the keyboard.
+      await tester.sendKeyEvent(LogicalKeyboardKey.shiftLeft);
+      Focus.of(tester.element(find.byType(CategoryCover))).requestFocus();
+      await tester.pump();
+      expect(find.byKey(kTileFocusRingKey), findsOneWidget);
+
+      await tester.tap(find.byType(ChefBadge));
+      await tester.pump();
+      expect(chefTaps, 1, reason: 'the overlay swallowed the badge tap');
+      expect(cardTaps, 0);
+
+      // And the rest of the cover still opens the recipe.
+      await tester.tapAt(
+        tester.getRect(find.byType(CategoryCover)).topLeft +
+            const Offset(40, 40),
+      );
+      await tester.pump();
+      expect(cardTaps, 1);
+    });
+  });
 }

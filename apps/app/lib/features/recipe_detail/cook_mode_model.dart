@@ -174,29 +174,37 @@ final _kWordSplit = RegExp(r'[^a-z0-9]+');
 /// ("Serve with rice") returns empty and the panel is hidden, and a step that
 /// says "add the remaining spices" gets nothing. It is a hint, never a
 /// checklist — which is why cook mode also keeps a link to the full list.
+///
+/// A line is listed **once** (UX-044). A recipe whose marinade and sauce groups
+/// both call for `1 tbsp spice blend` matches the word twice, and the strip
+/// printed the same chip twice — which reads as "2 tbsp" to nobody and as a
+/// bug to everybody. The key is what the chip prints, quantity label plus
+/// name, so two *different* amounts of one ingredient both stay: a cook who
+/// needs 1 tbsp now and 2 tbsp later has to see both.
 List<Ingredient> stepIngredients(RecipeStep step, List<Ingredient> all) {
   final haystack = step.text.toLowerCase();
   if (haystack.isEmpty) return const [];
   final out = <Ingredient>[];
+  final seen = <String>{};
   for (final ing in all) {
     final words = ing.name
         .toLowerCase()
         .split(_kWordSplit)
         .where((w) => w.length >= 3 && !_kIngredientStopWords.contains(w));
-    for (final w in words) {
-      if (RegExp('\\b${RegExp.escape(w)}\\b').hasMatch(haystack)) {
-        out.add(ing);
-        break;
-      }
-    }
+    final matches = words.any(
+      (w) => RegExp('\\b${RegExp.escape(w)}\\b').hasMatch(haystack),
+    );
+    final key =
+        '${ingredientQuantityLabel(ing)}|${ing.name.trim().toLowerCase()}';
+    if (matches && seen.add(key)) out.add(ing);
   }
   return out;
 }
 
 /// `1:05` / `12:00` / `0:09` — a countdown, not a duration label.
 ///
-/// Deliberately not [formatMinutes]: that reads `1 h 10 m` for a *fact* about a
-/// recipe, and a running clock has to be scannable at a glance from across a
+/// Deliberately not [formatMinutes]: that reads `1 h 10 min` for a *fact* about
+/// a recipe, and a running clock has to be scannable at a glance from across a
 /// kitchen, which means fixed-width minutes and seconds. Negative clamps to
 /// zero so an overshoot never renders `-0:01`.
 String formatClock(Duration d) {

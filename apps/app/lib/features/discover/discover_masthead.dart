@@ -30,7 +30,14 @@ class DiscoverMasthead extends StatelessWidget {
     required this.search,
     this.publicCount,
     this.gutter = AppSpacing.md,
+    this.onExplore,
   });
+
+  /// Key of the masthead's link to `/explore` — for tests.
+  static const exploreLinkKey = Key('discover-masthead-explore');
+
+  /// Opens the web collection (UX-021). Null hides the link.
+  final VoidCallback? onExplore;
 
   /// The search field. Supplied by the screen, which owns the controller.
   final Widget search;
@@ -98,6 +105,28 @@ class DiscoverMasthead extends StatelessWidget {
                     ),
                   ),
                 ),
+                // UX-021: the one door to the corpus used to sit under the
+                // infinite grid, and vanished while searching — 21,000
+                // recipes nobody could find. A quiet text link here, in the
+                // title block so it keeps its place in both layouts; the
+                // card under the grid stays for the reader who scrolls.
+                if (onExplore != null) ...[
+                  const SizedBox(height: AppSpacing.xs),
+                  TextButton.icon(
+                    key: exploreLinkKey,
+                    onPressed: onExplore,
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.xs,
+                      ),
+                    ),
+                    icon: const Icon(
+                      Icons.travel_explore_outlined,
+                      size: AppIconSize.button,
+                    ),
+                    label: const Text('Recipes from around the web'),
+                  ),
+                ],
               ],
             );
 
