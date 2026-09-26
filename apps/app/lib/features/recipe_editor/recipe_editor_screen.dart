@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -26,6 +27,15 @@ const double _kSpinnerStroke = AppStroke.thin;
 /// Where a refused save scrolls the first error to: a little below the top
 /// edge, so the field's label and the line above it stay in view.
 const double _kRevealAlignment = 0.1;
+
+/// The page's cache extent, in logical pixels: how far above and below the
+/// window the editor keeps its slivers built. Far past any recipe (ten
+/// million pixels is ~100,000 ingredient rows), so in practice the whole form
+/// is built wherever it is scrolled and every `FormField` is in
+/// `Form.validate()` (B142). Finite on purpose: the viewport doubles it and
+/// subtracts it from itself, and `double.infinity` turns that into NaN — tried,
+/// and the editor's test suite fails wholesale under it.
+const double _kBuildEverything = 1e7;
 
 /// Create or edit a recipe. When [recipeId] is null, creates a new recipe;
 /// otherwise loads and edits the existing one. Saving an edit appends a new
@@ -570,8 +580,9 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
   }
 
   /// The first form field, in page order, that is showing an error — what a
-  /// refused save scrolls to. Page order is tree order here: the form is one
-  /// `Column`, top to bottom.
+  /// refused save scrolls to. Page order is tree order here: the form's
+  /// slivers, and the rows in each list, are children in top-to-bottom order,
+  /// and every one of them is built (see [_kBuildEverything]).
   BuildContext? _firstFieldWithError() {
     BuildContext? found;
     void visit(Element element) {
@@ -861,245 +872,56 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: _kFormMaxWidth),
-            // One scroll view over one Column, not a `ListView`: a lazy list
-            // only builds what is near the viewport, and a `FormField` that is
-            // not built is not in `Form.validate()`. With Nutrition at the
-            // bottom of the page (UX-039), a manual label typed there and then
-            // scrolled away from would be dropped by `tryParse` on save
-            // without a word — B072's shape, by distance instead of by
-            // collapse. A recipe form is a few dozen fields; building all of
+            // Slivers, so each group's rows are a `SliverReorderableList` in
+            // THIS viewport and a drag toward the window's edge scrolls the
+            // page (a shrink-wrapped list inside a `SingleChildScrollView`
+            // auto-scrolled only its own zero-extent scrollable).
+            //
+            // And fully built, never lazy (B142): a `FormField` that is not
+            // built is not in `Form.validate()`, so a manual nutrition value
+            // or a quantity the cook had scrolled away from would be dropped
+            // by `tryParse` on save without a word — B072's shape, by
+            // distance. Slivers build lazily by default; the cache extent
+            // below is what keeps every row built wherever the page is
+            // scrolled. A recipe form is a few dozen fields; building all of
             // them is the cheap half of that trade.
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(AppSpacing.lg),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  CoverPicker(
-                    url: _coverUrl,
-                    bytes: _pendingCoverBytes,
-                    onPick: _pickCover,
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  TextFormField(
-                    controller: _title,
-                    // `recipes_text_lengths` (32a2) caps these in the database, so
-                    // the field enforces the same numbers here — a save refused by
-                    // a check constraint reads as "something went wrong", while a
-                    // field that stops accepting characters explains itself.
-                    maxLength: 200,
-                    // `counterText: ''` keeps the enforcement and drops the
-                    // `0/200` counter: nobody writing a recipe title is budgeting
-                    // characters, and the counter is a new band of text under two
-                    // fields the editor's envelope suite measures at 2.0×.
-                    // Approximate on purpose: `maxLength` counts grapheme
-                    // clusters and `char_length()` counts code points, so a title
-                    // of composed emoji can satisfy this and still trip the
-                    // constraint. SQL is authoritative; this is the courtesy.
-                    decoration: const InputDecoration(
-                      labelText: 'Title',
-                      counterText: '',
-                    ),
-                    validator:
-                        (v) =>
-                            (v == null || v.trim().isEmpty) ? 'Required' : null,
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  TextFormField(
-                    controller: _description,
-                    maxLines: 2,
-                    maxLength: 10000,
-                    decoration: const InputDecoration(
-                      labelText: 'Short description',
-                      counterText: '',
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          controller: _prep,
-                          // Text, not a number pad: `1h 30m` needs letters.
-                          keyboardType: TextInputType.text,
-                          decoration: const InputDecoration(
-                            labelText: 'Prep',
-                            hintText: 'e.g. 15 min or 1h',
-                          ),
-                          validator: _minutes,
-                        ),
-                      ),
-                      const SizedBox(width: AppSpacing.md),
-                      Expanded(
-                        child: TextFormField(
-                          controller: _cook,
-                          keyboardType: TextInputType.text,
-                          decoration: const InputDecoration(
-                            labelText: 'Cook',
-                            hintText: 'e.g. 30 min or 1h',
-                          ),
-                          validator: _minutes,
-                        ),
-                      ),
-                      const SizedBox(width: AppSpacing.md),
-                      Expanded(
-                        child: TextFormField(
-                          controller: _servings,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            labelText: 'Servings',
-                            hintText: 'e.g. 4',
-                            // The required message is longer than a third of a
-                            // phone; let it wrap rather than clip.
-                            errorMaxLines: 3,
-                          ),
-                          validator: _servingsError,
-                          // The estimate is *per serving*, so this number is a
-                          // divisor: 4 → 8 halves every row. Re-estimate, or the
-                          // pane prints per-4 values under an "8 servings" line.
-                          onChanged: (_) {
-                            setState(() {});
-                            _scheduleEstimate();
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: DropdownButtonFormField<Difficulty>(
-                          initialValue: _difficulty,
-                          // No preselected value on a new recipe (UX-039): an
-                          // untouched "Easy" was a claim the cook never made.
-                          hint: const Text(
-                            'Choose…',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          validator: (v) => v == null ? 'Pick one' : null,
-                          // `isExpanded` + an ellipsising label: without it the
-                          // dropdown's internal [label, arrow] row is intrinsic,
-                          // and half of a 360px phone at 2.0x text scale is not
-                          // enough for "Medium" + the arrow (B036).
-                          isExpanded: true,
-                          decoration: const InputDecoration(
-                            labelText: 'Difficulty',
-                          ),
-                          items: [
-                            for (final d in Difficulty.values)
-                              DropdownMenuItem(
-                                value: d,
-                                child: Text(
-                                  d.label,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                          ],
-                          onChanged: (v) {
-                            setState(() => _difficulty = v);
-                            _markDirty();
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: AppSpacing.md),
-                      Expanded(
-                        child: TextFormField(
-                          controller: _cuisine,
-                          decoration: const InputDecoration(
-                            labelText: 'Cuisine',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  TextFormField(
-                    controller: _category,
-                    maxLength: 80,
-                    decoration: const InputDecoration(
-                      labelText: 'Category',
-                      counterText: '',
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  SwitchListTile(
-                    value: _visibility.isPublic,
-                    onChanged: (v) {
-                      setState(
-                        () =>
-                            _visibility =
-                                v
-                                    ? RecipeVisibility.public
-                                    : RecipeVisibility.private,
-                      );
-                      _markDirty();
-                    },
-                    title: const Text('Public'),
-                    subtitle: const Text('Anyone can find this on Discover'),
-                    contentPadding: EdgeInsets.zero,
-                  ),
-                  TextFormField(
-                    controller: _attribution,
-                    maxLines: 2,
-                    decoration: const InputDecoration(
-                      labelText: 'Attribution / story (optional)',
-                      hintText: "e.g. Grandma Rosa's Sunday sauce",
-                    ),
-                  ),
-                  const Divider(height: AppSpacing.xl),
-                  IngredientsEditor(
-                    groups: _ingredientGroups,
-                    onChanged: () {
-                      setState(() {});
-                      _markDirty();
-                      // Linking a food down here is what the Auto pane's own
-                      // copy tells the cook to do, so the estimate has to follow.
-                      _scheduleEstimate();
-                    },
-                  ),
-                  const Divider(height: AppSpacing.xl),
-                  StepsEditor(
-                    groups: _stepGroups,
-                    onChanged: () {
-                      setState(() {});
-                      _markDirty();
-                    },
-                    onPickImage: _pickStepImage,
-                  ),
-                  const Divider(height: AppSpacing.xl),
-                  // Ingredients -> Steps -> Nutrition (UX-039): the label is
-                  // estimated FROM the ingredient list, so it reads after it.
-                  // It used to sit on top, a ~540px FDA panel above the
-                  // ingredients it summarises. A refused save still reaches it —
-                  // `_revealFirstError` scrolls there when it is the reason.
-                  NutritionEditor(
-                    mode: _nutritionMode,
-                    onModeSelected:
-                        (mode) => unawaited(_selectNutritionMode(mode)),
-                    nutrition: _nutrition,
-                    expanded: _nutritionExpanded,
-                    onToggle:
-                        () => setState(
-                          () => _nutritionExpanded = !_nutritionExpanded,
-                        ),
-                    onChanged: () {
-                      setState(() {});
-                      _markDirty();
-                    },
-                    groups: _ingredientGroups,
-                    servings: _estimateServings,
-                    estimate: _estimate,
-                    estimateLoading: _estimateLoading,
-                    estimateError: _estimateError,
-                    suggestions: _matchSuggestions,
-                    onRefreshEstimate: () => unawaited(_refreshEstimate()),
-                    onPickSuggestion: _linkSuggestion,
-                  ),
-                  const SizedBox(height: AppSpacing.xxl),
-                ],
+            child: CustomScrollView(
+              scrollCacheExtent: const ScrollCacheExtent.pixels(
+                _kBuildEverything,
               ),
+              slivers: [
+                SliverPadding(
+                  padding: const EdgeInsets.all(AppSpacing.lg),
+                  sliver: SliverMainAxisGroup(
+                    slivers: [
+                      SliverToBoxAdapter(child: _header()),
+                      IngredientsEditor(
+                        groups: _ingredientGroups,
+                        onChanged: () {
+                          setState(() {});
+                          _markDirty();
+                          // Linking a food down here is what the Auto pane's
+                          // own copy tells the cook to do, so the estimate has
+                          // to follow.
+                          _scheduleEstimate();
+                        },
+                      ),
+                      const SliverToBoxAdapter(
+                        child: Divider(height: AppSpacing.xl),
+                      ),
+                      StepsEditor(
+                        groups: _stepGroups,
+                        onChanged: () {
+                          setState(() {});
+                          _markDirty();
+                        },
+                        onPickImage: _pickStepImage,
+                      ),
+                      SliverToBoxAdapter(child: _footer()),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -1125,4 +947,210 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       child: form,
     );
   }
+
+  /// Everything above the ingredients: cover, title, the facts, visibility
+  /// and the story.
+  Widget _header() => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      CoverPicker(
+        url: _coverUrl,
+        bytes: _pendingCoverBytes,
+        onPick: _pickCover,
+      ),
+      const SizedBox(height: AppSpacing.md),
+      TextFormField(
+        controller: _title,
+        // `recipes_text_lengths` (32a2) caps these in the database, so
+        // the field enforces the same numbers here — a save refused by
+        // a check constraint reads as "something went wrong", while a
+        // field that stops accepting characters explains itself.
+        maxLength: 200,
+        // `counterText: ''` keeps the enforcement and drops the
+        // `0/200` counter: nobody writing a recipe title is budgeting
+        // characters, and the counter is a new band of text under two
+        // fields the editor's envelope suite measures at 2.0×.
+        // Approximate on purpose: `maxLength` counts grapheme
+        // clusters and `char_length()` counts code points, so a title
+        // of composed emoji can satisfy this and still trip the
+        // constraint. SQL is authoritative; this is the courtesy.
+        decoration: const InputDecoration(labelText: 'Title', counterText: ''),
+        validator: (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
+      ),
+      const SizedBox(height: AppSpacing.md),
+      TextFormField(
+        controller: _description,
+        maxLines: 2,
+        maxLength: 10000,
+        decoration: const InputDecoration(
+          labelText: 'Short description',
+          counterText: '',
+        ),
+      ),
+      const SizedBox(height: AppSpacing.md),
+      Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              controller: _prep,
+              // Text, not a number pad: `1h 30m` needs letters.
+              keyboardType: TextInputType.text,
+              decoration: const InputDecoration(
+                labelText: 'Prep',
+                hintText: 'e.g. 15 min or 1h',
+              ),
+              validator: _minutes,
+            ),
+          ),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: TextFormField(
+              controller: _cook,
+              keyboardType: TextInputType.text,
+              decoration: const InputDecoration(
+                labelText: 'Cook',
+                hintText: 'e.g. 30 min or 1h',
+              ),
+              validator: _minutes,
+            ),
+          ),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: TextFormField(
+              controller: _servings,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Servings',
+                hintText: 'e.g. 4',
+                // The required message is longer than a third of a
+                // phone; let it wrap rather than clip.
+                errorMaxLines: 3,
+              ),
+              validator: _servingsError,
+              // The estimate is *per serving*, so this number is a
+              // divisor: 4 → 8 halves every row. Re-estimate, or the
+              // pane prints per-4 values under an "8 servings" line.
+              onChanged: (_) {
+                setState(() {});
+                _scheduleEstimate();
+              },
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: AppSpacing.md),
+      Row(
+        children: [
+          Expanded(
+            child: DropdownButtonFormField<Difficulty>(
+              initialValue: _difficulty,
+              // No preselected value on a new recipe (UX-039): an
+              // untouched "Easy" was a claim the cook never made.
+              hint: const Text(
+                'Choose…',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              validator: (v) => v == null ? 'Pick one' : null,
+              // `isExpanded` + an ellipsising label: without it the
+              // dropdown's internal [label, arrow] row is intrinsic,
+              // and half of a 360px phone at 2.0x text scale is not
+              // enough for "Medium" + the arrow (B036).
+              isExpanded: true,
+              decoration: const InputDecoration(labelText: 'Difficulty'),
+              items: [
+                for (final d in Difficulty.values)
+                  DropdownMenuItem(
+                    value: d,
+                    child: Text(
+                      d.label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+              ],
+              onChanged: (v) {
+                setState(() => _difficulty = v);
+                _markDirty();
+              },
+            ),
+          ),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: TextFormField(
+              controller: _cuisine,
+              decoration: const InputDecoration(labelText: 'Cuisine'),
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: AppSpacing.md),
+      TextFormField(
+        controller: _category,
+        maxLength: 80,
+        decoration: const InputDecoration(
+          labelText: 'Category',
+          counterText: '',
+        ),
+      ),
+      const SizedBox(height: AppSpacing.md),
+      SwitchListTile(
+        value: _visibility.isPublic,
+        onChanged: (v) {
+          setState(
+            () =>
+                _visibility =
+                    v ? RecipeVisibility.public : RecipeVisibility.private,
+          );
+          _markDirty();
+        },
+        title: const Text('Public'),
+        subtitle: const Text('Anyone can find this on Discover'),
+        contentPadding: EdgeInsets.zero,
+      ),
+      TextFormField(
+        controller: _attribution,
+        maxLines: 2,
+        decoration: const InputDecoration(
+          labelText: 'Attribution / story (optional)',
+          hintText: "e.g. Grandma Rosa's Sunday sauce",
+        ),
+      ),
+      const Divider(height: AppSpacing.xl),
+    ],
+  );
+
+  /// Everything below the steps: the nutrition panel.
+  Widget _footer() => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      const Divider(height: AppSpacing.xl),
+      // Ingredients -> Steps -> Nutrition (UX-039): the label is
+      // estimated FROM the ingredient list, so it reads after it.
+      // It used to sit on top, a ~540px FDA panel above the
+      // ingredients it summarises. A refused save still reaches it —
+      // `_revealFirstError` scrolls there when it is the reason.
+      NutritionEditor(
+        mode: _nutritionMode,
+        onModeSelected: (mode) => unawaited(_selectNutritionMode(mode)),
+        nutrition: _nutrition,
+        expanded: _nutritionExpanded,
+        onToggle:
+            () => setState(() => _nutritionExpanded = !_nutritionExpanded),
+        onChanged: () {
+          setState(() {});
+          _markDirty();
+        },
+        groups: _ingredientGroups,
+        servings: _estimateServings,
+        estimate: _estimate,
+        estimateLoading: _estimateLoading,
+        estimateError: _estimateError,
+        suggestions: _matchSuggestions,
+        onRefreshEstimate: () => unawaited(_refreshEstimate()),
+        onPickSuggestion: _linkSuggestion,
+      ),
+      const SizedBox(height: AppSpacing.xxl),
+    ],
+  );
 }

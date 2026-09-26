@@ -367,8 +367,10 @@ void main() {
           child: MaterialApp(
             theme: AppTheme.light(),
             home: Scaffold(
-              body: SingleChildScrollView(
-                child: IngredientsEditor(groups: groups, onChanged: () {}),
+              // The editor is a sliver (Phase 39), hosted the way the
+              // page hosts it.
+              body: CustomScrollView(
+                slivers: [IngredientsEditor(groups: groups, onChanged: () {})],
               ),
             ),
           ),
@@ -389,12 +391,14 @@ void main() {
           child: MaterialApp(
             theme: AppTheme.light(),
             home: Scaffold(
-              body: SingleChildScrollView(
-                child: StepsEditor(
-                  groups: groups,
-                  onChanged: () {},
-                  onPickImage: (_) {},
-                ),
+              body: CustomScrollView(
+                slivers: [
+                  StepsEditor(
+                    groups: groups,
+                    onChanged: () {},
+                    onPickImage: (_) {},
+                  ),
+                ],
               ),
             ),
           ),

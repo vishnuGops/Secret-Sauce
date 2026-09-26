@@ -409,3 +409,4 @@ regression test, checked by reverting the fix.
 | --- | --- | --- |
 | UX-030 | fixed | imported units are stored in the house canon (`canonical_unit()`, read from `food_unit`'s generated `display` / `plural`; unknown spellings unchanged) and existing rows backfilled — local stack 59,258 non-canonical → 0; both quantity gutters keep an `AppSpacing.sm` gap so a long unknown unit wraps inside the gutter. `corpus_import_fixture.sql` §7, `ingredient_gutter_test` (390 / 1440 × 1.0 / 2.0, cook mode at 1000 / 1440) |
 | UX-048 (web avatar) | fixed | B153 — the account menu's 48dp target and its own button node; `top_nav_bar_test` "envelope" |
+| UX-035 (drag across the fold) | fixed | B155 — a dragged row scrolls the editor page; `recipe_editor_test` "dragging a row to the window edge scrolls the page" |

@@ -536,15 +536,19 @@ void main() {
                   ).copyWith(textScaler: TextScaler.linear(textScale)),
                   child: child!,
                 ),
+            // The editor is a sliver: it goes in a `CustomScrollView`, the
+            // way the screen hosts it.
             home: Scaffold(
-              body: SingleChildScrollView(
-                child: StatefulBuilder(
-                  builder:
-                      (context, setState) => IngredientsEditor(
-                        groups: groups,
-                        onChanged: () => setState(() {}),
-                      ),
-                ),
+              body: CustomScrollView(
+                slivers: [
+                  StatefulBuilder(
+                    builder:
+                        (context, setState) => IngredientsEditor(
+                          groups: groups,
+                          onChanged: () => setState(() {}),
+                        ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -1341,8 +1345,13 @@ void main() {
 
       // The ingredients editor reports through `onChanged`, which is the other
       // half of the dirty signal — a recipe can be changed without a keystroke
-      // in any of the seven text fields. It is below the fold, hence the scroll.
-      final add = find.widgetWithText(TextButton, 'Add ingredient');
+      // in any of the seven text fields. It is below the fold, hence the scroll
+      // — built (B142) but off screen, so the finder has to look off stage.
+      final add = find.widgetWithText(
+        TextButton,
+        'Add ingredient',
+        skipOffstage: false,
+      );
       await tester.ensureVisible(add);
       await tester.pumpAndSettle();
       await tester.tap(add);
@@ -1361,7 +1370,8 @@ void main() {
         await tester.pumpWidget(_routedEditApp(_loadedRepo()));
         await tester.pumpAndSettle();
 
-        final field = find.widgetWithText(TextField, label).first;
+        final field =
+            find.widgetWithText(TextField, label, skipOffstage: false).first;
         await tester.ensureVisible(field);
         await tester.pumpAndSettle();
         await tester.enterText(field, 'changed');
@@ -1379,7 +1389,8 @@ void main() {
       await tester.pumpWidget(_routedEditApp(_loadedRepo()));
       await tester.pumpAndSettle();
 
-      final toggle = find.byTooltip('Temperature & tip').first;
+      final toggle =
+          find.byTooltip('Temperature & tip', skipOffstage: false).first;
       await tester.ensureVisible(toggle);
       await tester.pumpAndSettle();
       await tester.tap(toggle);
@@ -1886,20 +1897,33 @@ void main() {
       await tester.pumpWidget(_routedNewApp(repo));
       await tester.pumpAndSettle();
 
-      final add = find.widgetWithText(TextButton, 'Add');
+      // Off stage but built (B142) — hence `skipOffstage: false` to reach
+      // what is below the fold.
+      final add = find.widgetWithText(TextButton, 'Add', skipOffstage: false);
       await tester.ensureVisible(add);
       await tester.pumpAndSettle();
       await tester.tap(add);
       await tester.pumpAndSettle();
-      final manual = find.widgetWithText(ChoiceChip, 'Manual');
+      final manual = find.widgetWithText(
+        ChoiceChip,
+        'Manual',
+        skipOffstage: false,
+      );
       await tester.ensureVisible(manual);
       await tester.pumpAndSettle();
       await tester.tap(manual);
       await tester.pumpAndSettle();
-      final calories = find.widgetWithText(TextFormField, 'Calories');
+      final calories = find.widgetWithText(
+        TextFormField,
+        'Calories',
+        skipOffstage: false,
+      );
       await tester.ensureVisible(calories);
       await tester.pumpAndSettle();
       await tester.enterText(calories, '1/2');
+      // Let the field's caret-into-view scroll finish first, or it lands after
+      // the scroll below and carries the page back down to Calories.
+      await tester.pumpAndSettle();
 
       // Back to the top; focus leaves the Calories box for Title.
       await tester.ensureVisible(_titleField);
@@ -1919,6 +1943,158 @@ void main() {
         isTrue,
         reason: 'the refused save left its reason off screen',
       );
+    });
+
+    // Phase 39: the page is slivers now (so a drag can scroll it), and slivers
+    // build lazily. B142 needs every row built wherever the page is scrolled:
+    // a quantity typed far down a long list, then scrolled away from, must
+    // still refuse the save and be brought back into view.
+    testWidgets('a bad quantity far down a long list is validated and '
+        'revealed (B142)', (tester) async {
+      sizeView(tester, 390, 844);
+      final repo = _RecordingRecipeRepository(loaded: _manyIngredients(60));
+      await tester.pumpWidget(_routedEditApp(repo));
+      await tester.pumpAndSettle();
+
+      // Built without a scroll: every row, the last one included, is in the
+      // tree — though the last is far below the window, so a default
+      // (on-stage) finder does not see it.
+      final last = find.textContaining(_row(60), skipOffstage: false);
+      expect(last, findsOneWidget);
+      expect(find.textContaining(_row(60)), findsNothing);
+      expect(
+        find.byType(ReorderableDragStartListener, skipOffstage: false),
+        findsAtLeastNWidgets(60),
+      );
+
+      // Scroll down to the last row the way a cook does, open it and type
+      // something unreadable into it…
+      await tester.scrollUntilVisible(
+        find.textContaining(_row(60)),
+        200,
+        scrollable:
+            find
+                .descendant(
+                  of: find.byType(CustomScrollView),
+                  matching: find.byType(Scrollable),
+                )
+                .first,
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.textContaining(_row(60)));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.widgetWithText(TextField, 'Qty'), 'lots');
+      await tester.pumpAndSettle();
+
+      // …then go back to the top and put the focus there, so nothing is
+      // keeping the row alive but the page itself.
+      final title = find.widgetWithText(
+        TextFormField,
+        'Loaded Recipe',
+        skipOffstage: false,
+      );
+      await tester.ensureVisible(title);
+      await tester.pumpAndSettle();
+      await tester.enterText(title, 'Loaded Recipe');
+      await tester.pumpAndSettle();
+      expect(find.widgetWithText(TextField, 'lots'), findsNothing);
+      expect(
+        find.widgetWithText(TextField, 'lots', skipOffstage: false),
+        findsOneWidget,
+        reason: 'the row was thrown away once scrolled off',
+      );
+
+      await save(tester);
+
+      expect(repo.updated, isEmpty, reason: 'saved a null quantity silently');
+      final error = find.text('Try 1/2 or 0.5');
+      expect(error, findsOneWidget);
+      expect(
+        (Offset.zero & const Size(390, 844)).contains(tester.getCenter(error)),
+        isTrue,
+        reason: 'the refused save left its reason off screen',
+      );
+    });
+
+    // Phase 39: each group's rows used to be a shrink-wrapped
+    // `ReorderableListView`, whose drag auto-scroller drove the list's own
+    // zero-extent scrollable — so a row dragged to the window's edge never
+    // scrolled the page, and a long list could only be reordered a screen at
+    // a time. The rows are a `SliverReorderableList` in the page's viewport
+    // now, and holding a drag at the bottom edge scrolls the page.
+    testWidgets('dragging a row to the window edge scrolls the page', (
+      tester,
+    ) async {
+      sizeView(tester, 390, 844);
+      final repo = _RecordingRecipeRepository(loaded: _manyIngredients(30));
+      await tester.pumpWidget(_routedEditApp(repo));
+      await tester.pumpAndSettle();
+
+      // The page's own scrollable: the outermost one, first in tree order
+      // (every other — a text field's, an old nested list's — is inside it).
+      final page = tester.state<ScrollableState>(find.byType(Scrollable).first);
+
+      // The first row near the top of the window.
+      final handle =
+          find.byIcon(Icons.drag_indicator, skipOffstage: false).first;
+      await tester.ensureVisible(handle);
+      await tester.pumpAndSettle();
+      page.position.jumpTo(
+        page.position.pixels + tester.getTopLeft(handle).dy - 200,
+      );
+      await tester.pumpAndSettle();
+
+      final before = page.position.pixels;
+      // The last row whose top is inside the window — measured rather than
+      // asked of an on-stage finder, so the same test runs against the old
+      // shrink-wrapped layout (where every row counts as on stage).
+      double top(int i) =>
+          tester
+              .getTopLeft(find.textContaining(_row(i), skipOffstage: false))
+              .dy;
+      final lastVisible =
+          [
+            for (var i = 1; i <= 30; i++)
+              if (top(i) < 844) i,
+          ].last;
+      expect(lastVisible, lessThan(30), reason: 'the list must overflow');
+
+      // Drag row 1 to the bottom edge of the window, and hold it there.
+      final start = tester.getCenter(handle);
+      final gesture = await tester.startGesture(start);
+      const edge = 844.0 - AppSpacing.xs;
+      for (var i = 1; i <= 10; i++) {
+        await gesture.moveTo(
+          Offset(start.dx, start.dy + (edge - start.dy) * i / 10),
+        );
+        await tester.pump(const Duration(milliseconds: 16));
+      }
+      for (var i = 0; i < 90; i++) {
+        await tester.pump(const Duration(milliseconds: 16));
+      }
+
+      expect(
+        page.position.pixels,
+        greaterThan(before),
+        reason: 'holding a drag at the edge did not scroll the page',
+      );
+
+      await gesture.up();
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      await save(tester);
+
+      // The order is the draft's, and it saves (B022: ascending by position).
+      final names = [for (final i in savedIngredients(repo)) i.name];
+      expect(names, hasLength(30));
+      expect(
+        names.indexOf('row 01'),
+        greaterThan(lastVisible - 1),
+        reason: 'row 01 did not travel past the rows visible when it started',
+      );
+      expect(savedIngredients(repo).map((i) => i.sortOrder), [
+        for (var i = 0; i < 30; i++) i,
+      ]);
     });
 
     testWidgets('Not counted lists a repeated ingredient once', (tester) async {
@@ -2125,15 +2301,17 @@ class _FakeAuth implements AuthRepository {
 }
 
 /// The Title field of an empty editor, found by its label rather than its value.
+/// Off stage included: the page is slivers, so a header scrolled out of view is
+/// built but not "on stage" to a default finder (B142 keeps it built).
 final Finder _titleField = find.ancestor(
-  of: find.text('Title'),
-  matching: find.byType(TextFormField),
+  of: find.text('Title', skipOffstage: false),
+  matching: find.byType(TextFormField, skipOffstage: false),
 );
 
 /// The Servings field, by its label.
 final Finder _servingsField = find.ancestor(
-  of: find.text('Servings'),
-  matching: find.byType(TextFormField),
+  of: find.text('Servings', skipOffstage: false),
+  matching: find.byType(TextFormField, skipOffstage: false),
 );
 
 /// A new recipe's required fields (UX-039): a title, a serving count and a
@@ -2321,14 +2499,16 @@ Widget _ingredientsApp(
     theme: AppTheme.light(),
     builder: (context, child) => _scaled(context, child!, textScale),
     home: Scaffold(
-      body: SingleChildScrollView(
-        child: StatefulBuilder(
-          builder:
-              (context, setState) => IngredientsEditor(
-                groups: groups,
-                onChanged: () => setState(() {}),
-              ),
-        ),
+      body: CustomScrollView(
+        slivers: [
+          StatefulBuilder(
+            builder:
+                (context, setState) => IngredientsEditor(
+                  groups: groups,
+                  onChanged: () => setState(() {}),
+                ),
+          ),
+        ],
       ),
     ),
   ),
@@ -2369,6 +2549,39 @@ Recipe _twoIngredients() => const Recipe(
     ),
   ],
 );
+
+/// A loaded recipe with one group of [count] plain rows, `row 01` … — for the
+/// long-list tests (B142 at length, and the drag auto-scroll).
+Recipe _manyIngredients(int count) => Recipe(
+  id: 'r1',
+  ownerId: 'me',
+  title: 'Loaded Recipe',
+  servings: 4,
+  ingredientGroups: [
+    IngredientGroup(
+      id: 'g1',
+      recipeId: 'r1',
+      name: '',
+      ingredients: [
+        for (var i = 1; i <= count; i++)
+          Ingredient(
+            id: 'i$i',
+            groupId: 'g1',
+            quantity: 1,
+            unit: 'cup',
+            name: 'row ${i.toString().padLeft(2, '0')}',
+            isOptional: false,
+            sortOrder: i - 1,
+          ),
+      ],
+    ),
+  ],
+);
+
+/// Row [i] of [_manyIngredients], as a pattern over its one-line summary
+/// (which capitalises the name).
+Pattern _row(int i) =>
+    RegExp('row ${i.toString().padLeft(2, '0')}\$', caseSensitive: false);
 
 /// One linked, noted, optional `1.5 cup wheat flour` — the compact summary's
 /// fixture (`1½ cup Wheat flour`).
@@ -2656,13 +2869,17 @@ Widget _stepsApp(List<EditStepGroup> groups, {double textScale = 1.0}) =>
       home: Scaffold(
         body: StatefulBuilder(
           builder:
-              (context, setState) => SingleChildScrollView(
-                padding: const EdgeInsets.all(AppSpacing.lg),
-                child: StepsEditor(
-                  groups: groups,
-                  onChanged: () => setState(() {}),
-                  onPickImage: (_) {},
-                ),
+              (context, setState) => CustomScrollView(
+                slivers: [
+                  SliverPadding(
+                    padding: const EdgeInsets.all(AppSpacing.lg),
+                    sliver: StepsEditor(
+                      groups: groups,
+                      onChanged: () => setState(() {}),
+                      onPickImage: (_) {},
+                    ),
+                  ),
+                ],
               ),
         ),
       ),

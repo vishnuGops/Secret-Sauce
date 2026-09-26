@@ -34,14 +34,19 @@ Widget _app(
       key: formKey,
       child: StatefulBuilder(
         builder:
-            (context, setState) => SingleChildScrollView(
-              // The editor's own `ListView` padding.
-              padding: const EdgeInsets.all(AppSpacing.lg),
-              child: StepsEditor(
-                groups: groups,
-                onChanged: () => setState(() {}),
-                onPickImage: (_) {},
-              ),
+            // A sliver, hosted the way the screen hosts it.
+            (context, setState) => CustomScrollView(
+              slivers: [
+                SliverPadding(
+                  // The editor's own page padding.
+                  padding: const EdgeInsets.all(AppSpacing.lg),
+                  sliver: StepsEditor(
+                    groups: groups,
+                    onChanged: () => setState(() {}),
+                    onPickImage: (_) {},
+                  ),
+                ),
+              ],
             ),
       ),
     ),

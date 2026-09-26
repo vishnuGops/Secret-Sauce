@@ -3,6 +3,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app/features/recipe_editor/edit_models.dart';
+import 'package:app/features/recipe_editor/ingredients_editor.dart';
 
 /// The steps half of the editor — the other seam (OPT-A8). Same contract as
 /// `IngredientsEditor`: it renders the draft it is handed and reports every
@@ -74,69 +75,72 @@ class StepsEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Instructions', style: Theme.of(context).textTheme.titleLarge),
+    // A sliver, like `IngredientsEditor` and for the same reason: the step
+    // lists have to sit in the page's viewport for a drag to scroll it.
+    return SliverMainAxisGroup(
+      slivers: [
+        SliverToBoxAdapter(
+          child: Text(
+            'Instructions',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+        ),
         for (final group in groups)
-          Card(
+          EditorGroupSliver(
             // Keyed by the draft object so a removed section's fields are not
             // handed to the section that slides into its slot.
             key: ObjectKey(group),
-            margin: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-            child: Padding(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: group.name,
-                          decoration: const InputDecoration(
-                            labelText: 'Section name (optional)',
-                            hintText: 'e.g. Prepare the dough',
-                          ),
-                          // Typing is an edit (B149).
-                          onChanged: (_) => onChanged(),
-                        ),
-                      ),
-                      if (groups.length > 1)
-                        IconButton(
-                          icon: const Icon(Icons.delete_outline),
-                          // UX-047: without it this is an unnamed button.
-                          tooltip: 'Remove section',
-                          onPressed: () => _removeGroup(context, group),
-                        ),
-                    ],
-                  ),
-                  _StepList(
-                    group: group,
-                    onChanged: onChanged,
-                    onPickImage: onPickImage,
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextButton.icon(
-                      onPressed: () {
-                        group.steps.add(EditStep());
-                        onChanged();
-                      },
-                      icon: const Icon(Icons.add),
-                      label: const Text('Add step'),
+            header: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: group.name,
+                    decoration: const InputDecoration(
+                      labelText: 'Section name (optional)',
+                      hintText: 'e.g. Prepare the dough',
                     ),
+                    // Typing is an edit (B149).
+                    onChanged: (_) => onChanged(),
                   ),
-                ],
+                ),
+                if (groups.length > 1)
+                  IconButton(
+                    icon: const Icon(Icons.delete_outline),
+                    // UX-047: without it this is an unnamed button.
+                    tooltip: 'Remove section',
+                    onPressed: () => _removeGroup(context, group),
+                  ),
+              ],
+            ),
+            rows: _StepList(
+              group: group,
+              onChanged: onChanged,
+              onPickImage: onPickImage,
+            ),
+            footer: Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton.icon(
+                onPressed: () {
+                  group.steps.add(EditStep());
+                  onChanged();
+                },
+                icon: const Icon(Icons.add),
+                label: const Text('Add step'),
               ),
             ),
           ),
-        OutlinedButton.icon(
-          onPressed: () {
-            groups.add(EditStepGroup());
-            onChanged();
-          },
-          icon: const Icon(Icons.add),
-          label: const Text('Add section'),
+        SliverToBoxAdapter(
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: OutlinedButton.icon(
+              onPressed: () {
+                groups.add(EditStepGroup());
+                onChanged();
+              },
+              icon: const Icon(Icons.add),
+              label: const Text('Add section'),
+            ),
+          ),
         ),
       ],
     );
@@ -172,33 +176,34 @@ class _StepList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final steps = group.steps;
-    return ReorderableListView(
-      // The page is the scroll: this list only lays its rows out.
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      buildDefaultDragHandles: false,
+    // In the page's viewport — the page is the scroll, and a drag toward the
+    // window's edge scrolls it. Every row stays built through the page's
+    // cache extent (B142).
+    return SliverReorderableList(
+      itemCount: steps.length,
       // `onReorderItem` hands over the index the item lands at once it has
       // been removed — exactly what `_move` wants.
       onReorderItem: _move,
-      children: [
-        for (var si = 0; si < steps.length; si++)
-          _StepRow(
-            key: ObjectKey(steps[si]),
-            step: steps[si],
-            index: si,
-            count: steps.length,
-            onChanged: onChanged,
-            onPickImage: onPickImage,
-            onMove: (to) => _move(si, to),
-            onRemove: () {
-              final removed = steps.removeAt(si);
-              onChanged();
-              WidgetsBinding.instance.addPostFrameCallback(
-                (_) => removed.dispose(),
-              );
-            },
+      proxyDecorator: editorDragProxy,
+      itemBuilder:
+          (context, si) => editorRow(
+            steps[si],
+            _StepRow(
+              step: steps[si],
+              index: si,
+              count: steps.length,
+              onChanged: onChanged,
+              onPickImage: onPickImage,
+              onMove: (to) => _move(si, to),
+              onRemove: () {
+                final removed = steps.removeAt(si);
+                onChanged();
+                WidgetsBinding.instance.addPostFrameCallback(
+                  (_) => removed.dispose(),
+                );
+              },
+            ),
           ),
-      ],
     );
   }
 }
@@ -233,7 +238,6 @@ enum _StepMove { up, down }
 /// that has to be visible to be judged, so a step that has one always shows it.
 class _StepRow extends StatelessWidget {
   const _StepRow({
-    super.key,
     required this.step,
     required this.index,
     required this.count,

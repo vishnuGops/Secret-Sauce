@@ -46,15 +46,24 @@ void main() {
   testWidgets('a step photo in the editor is a named button', (tester) async {
     final handle = tester.ensureSemantics();
     final step = EditStep(text: 'Bake.')..pendingImageBytes = _png;
+    // `StepsEditor` is a sliver since Phase 39 (the editor page's drag
+    // auto-scroll), so it is hosted the way the page hosts it.
     await tester.pumpWidget(
-      _app(
-        Form(
-          child: StepsEditor(
-            groups: [
-              EditStepGroup(steps: [step]),
-            ],
-            onChanged: () {},
-            onPickImage: (_) {},
+      MaterialApp(
+        theme: AppTheme.light(),
+        home: Scaffold(
+          body: Form(
+            child: CustomScrollView(
+              slivers: [
+                StepsEditor(
+                  groups: [
+                    EditStepGroup(steps: [step]),
+                  ],
+                  onChanged: () {},
+                  onPickImage: (_) {},
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -423,8 +423,14 @@ used to save `1h` as no timer. A loaded quantity is shown through `formatQuantit
 recipe cannot nudge a stored `0.33`. A new recipe opens with Prep, Cook, Servings and Difficulty
 **empty** (UX-039): empty Prep / Cook save `0`, which every surface prints as `—`; Servings and
 Difficulty are `not null` with no honest default, so the form requires them. The form is a
-`SingleChildScrollView`, not a lazy `ListView`: an unbuilt `FormField` is skipped by
-`Form.validate()`, so a lazy list let an off-screen invalid field save silently (B142). Order on
+`CustomScrollView` (Phase 39): each group's rows are a `SliverReorderableList` in the page's own
+viewport, so dragging a row to the window's edge scrolls the page — the shrink-wrapped
+`ReorderableListView`s inside a `SingleChildScrollView` could only auto-scroll their own
+zero-extent scrollables (B155). It is still **fully built**: slivers build lazily, and an unbuilt
+`FormField` is skipped by `Form.validate()`, so a lazy form let an off-screen invalid field save
+silently (B142). A `1e7`px `scrollCacheExtent` keeps every row built wherever the page is scrolled
+(`double.infinity` makes the viewport's arithmetic NaN). Rows are keyed by a global key on their
+draft object, as `ReorderableListView` keys its children, so a moved row keeps its state. Order on
 screen is Ingredients → Steps → Nutrition; ingredients and steps reorder by drag handle or a Move
 up / Move down menu, and `toModel(i)` writes the list index as `sort_order`, ascending (B022).
 

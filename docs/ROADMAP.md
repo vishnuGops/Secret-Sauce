@@ -1041,9 +1041,7 @@ photo being set; stale Edit during a refresh), B152 (Low: the chefs end note cou
 reader, star / badge alignment under a tight width, the steps disclosure dirtying the form, a
 missing `mounted` check, empty-state copy). Accepted:
 
-- [ ] Dragging an ingredient or step cannot auto-scroll the page (each list is shrink-wrapped
-      inside the page's scroll); Move up / Move down is the long-distance path. A fix is a
-      `SliverReorderableList` inside a `CustomScrollView` page
+- [x] Dragging an ingredient or step cannot auto-scroll the page — fixed in Phase 39 (B155)
 
 **Wave E (optional) — UX-030 unit canon at import** — **moved to Phase 39 and done there.** It needed
 the display forms where SQL can read them: `food_unit` (generated from `nutritionData/units.json`) carries spellings
@@ -1084,7 +1082,9 @@ owner decision.
       signed-in bar at 600 and 1000 × 2.0 (`top_nav_bar_test` "envelope", 8 cases). Signed out
       holds everywhere; the envelope found **B153** on the signed-in side — the avatar menu was a
       39px target that the guideline never saw (its tap merged into the title's header node)
-- [ ] Editor drag auto-scroll (Phase 38's accepted limitation)
+- [x] **Editor drag auto-scroll** (B155, Phase 38's accepted limitation) — the page is a
+      `CustomScrollView` with each group a `SliverReorderableList` in its viewport, kept fully built
+      by a `1e7`px cache extent (B142); Move up / Move down unchanged
 - [ ] Desktop-web density — the owner's decision, recorded
 
 ---

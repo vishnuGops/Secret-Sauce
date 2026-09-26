@@ -37,9 +37,113 @@ String? ingredientQuantityError(EditIngredient ingredient) {
 bool _hasContent(EditIngredient i) =>
     [i.quantity, i.unit, i.name, i.note].any((c) => c.text.trim().isNotEmpty);
 
+/// How far a dragged row lifts off the card. `ReorderableListView`'s own
+/// default proxy, which is what these rows used before they became slivers.
+const double _kDragElevation = 6;
+
+/// One group of the editor — an ingredient group or a step section — as
+/// slivers: what used to be a `Card` holding a header, the group's rows and an
+/// Add button.
+///
+/// Slivers, not a `Card`, so the rows' [SliverReorderableList] sits directly in
+/// the **page's** viewport. A drag's edge auto-scroller drives the nearest
+/// `Scrollable`; when each group was a shrink-wrapped `ReorderableListView`,
+/// that was the list's own zero-extent scrollable, so a row dragged to the
+/// window's edge never scrolled the page. The card's look is the theme's
+/// `cardTheme` painted by a [DecoratedSliver].
+class EditorGroupSliver extends StatelessWidget {
+  const EditorGroupSliver({
+    super.key,
+    required this.header,
+    required this.rows,
+    required this.footer,
+  });
+
+  /// The group's name field and its remove button.
+  final Widget header;
+
+  /// The group's rows — a sliver ([SliverReorderableList]).
+  final Widget rows;
+
+  /// The group's Add button.
+  final Widget footer;
+
+  @override
+  Widget build(BuildContext context) {
+    final card = Theme.of(context).cardTheme;
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+      sliver: DecoratedSliver(
+        decoration: ShapeDecoration(
+          color:
+              card.color ?? Theme.of(context).colorScheme.surfaceContainerLow,
+          shape:
+              card.shape ??
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppRadii.card),
+              ),
+        ),
+        sliver: SliverPadding(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          sliver: SliverMainAxisGroup(
+            slivers: [
+              SliverToBoxAdapter(child: header),
+              rows,
+              SliverToBoxAdapter(child: footer),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A row of a group's [SliverReorderableList], ready for the list: keyed and
+/// given an ink surface.
+///
+/// The key is **global** and belongs to the draft object, the way
+/// `ReorderableListView` keys its children: the list keys each item by its
+/// *index* as well, so without a key that follows the draft a moved row would
+/// be rebuilt from scratch (losing focus and the typeahead) instead of moved.
+/// The transparent [Material] is the ink surface: the card is now painted by
+/// a [DecoratedSliver] over the page's `Material`, which would otherwise hide
+/// every splash in the row underneath it.
+Widget editorRow(Object draft, Widget row) => KeyedSubtree(
+  key: _EditorRowKey(draft),
+  child: Material(type: MaterialType.transparency, child: row),
+);
+
+/// [editorRow]'s key. Its own type, so it cannot collide with another
+/// `GlobalObjectKey` over the same draft.
+class _EditorRowKey extends GlobalObjectKey {
+  const _EditorRowKey(super.value);
+}
+
+/// The dragged row, lifted onto a card-coloured surface. A proxy is built in
+/// the `Overlay`, outside the card, so it needs its own `Material` — the text
+/// fields in it require one — and its own background.
+Widget editorDragProxy(Widget child, int index, Animation<double> animation) =>
+    AnimatedBuilder(
+      animation: animation,
+      builder: (context, child) {
+        final theme = Theme.of(context);
+        return Material(
+          elevation:
+              _kDragElevation * Curves.easeInOut.transform(animation.value),
+          color: theme.cardTheme.color ?? theme.colorScheme.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(AppRadii.md),
+          child: child,
+        );
+      },
+      child: child,
+    );
+
 /// The ingredients half of the editor — groups, their rows, and the buttons
 /// that add, remove and reorder both. One of the two natural seams in what was
 /// an 880-line screen (OPT-A8).
+///
+/// A **sliver** (see [EditorGroupSliver]): it goes straight into the editor's
+/// `CustomScrollView`, never inside a box.
 ///
 /// Stateless on purpose: the draft lives in `_RecipeEditorScreenState`, and
 /// every mutation here calls [onChanged] so the one `setState` that owns the
@@ -104,62 +208,66 @@ class IngredientsEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Ingredients', style: Theme.of(context).textTheme.titleLarge),
+    return SliverMainAxisGroup(
+      slivers: [
+        SliverToBoxAdapter(
+          child: Text(
+            'Ingredients',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+        ),
         for (final group in groups)
-          Card(
-            margin: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-            child: Padding(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: group.name,
-                          decoration: const InputDecoration(
-                            labelText: 'Group name (optional)',
-                            hintText: 'e.g. For the sauce',
-                          ),
-                          onChanged: (_) => onChanged(),
-                        ),
-                      ),
-                      if (groups.length > 1)
-                        IconButton(
-                          icon: const Icon(Icons.delete_outline),
-                          // UX-047: without it this is an unnamed button.
-                          tooltip: 'Remove group',
-                          onPressed: () => _removeGroup(context, group),
-                        ),
-                    ],
-                  ),
-                  _IngredientList(group: group, onChanged: onChanged),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextButton.icon(
-                      onPressed: () {
-                        // Starts open: a new row has nothing to summarise.
-                        group.ingredients.add(EditIngredient());
-                        onChanged();
-                      },
-                      icon: const Icon(Icons.add),
-                      label: const Text('Add ingredient'),
+          EditorGroupSliver(
+            // Keyed by the draft so a removed group's fields are not handed
+            // to the group that slides into its slot.
+            key: ObjectKey(group),
+            header: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: group.name,
+                    decoration: const InputDecoration(
+                      labelText: 'Group name (optional)',
+                      hintText: 'e.g. For the sauce',
                     ),
+                    onChanged: (_) => onChanged(),
                   ),
-                ],
+                ),
+                if (groups.length > 1)
+                  IconButton(
+                    icon: const Icon(Icons.delete_outline),
+                    // UX-047: without it this is an unnamed button.
+                    tooltip: 'Remove group',
+                    onPressed: () => _removeGroup(context, group),
+                  ),
+              ],
+            ),
+            rows: _IngredientList(group: group, onChanged: onChanged),
+            footer: Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton.icon(
+                onPressed: () {
+                  // Starts open: a new row has nothing to summarise.
+                  group.ingredients.add(EditIngredient());
+                  onChanged();
+                },
+                icon: const Icon(Icons.add),
+                label: const Text('Add ingredient'),
               ),
             ),
           ),
-        OutlinedButton.icon(
-          onPressed: () {
-            groups.add(EditIngredientGroup());
-            onChanged();
-          },
-          icon: const Icon(Icons.add),
-          label: const Text('Add ingredient group'),
+        SliverToBoxAdapter(
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: OutlinedButton.icon(
+              onPressed: () {
+                groups.add(EditIngredientGroup());
+                onChanged();
+              },
+              icon: const Icon(Icons.add),
+              label: const Text('Add ingredient group'),
+            ),
+          ),
         ),
       ],
     );
@@ -190,42 +298,41 @@ class _IngredientList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final rows = group.ingredients;
-    // The page scrolls, not this list: it lays out at its full height inside
-    // the editor's one scroll view.
-    return ReorderableListView(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.zero,
-      buildDefaultDragHandles: false,
+    // A sliver in the page's own viewport, so a drag toward the window's edge
+    // scrolls the page (see [EditorGroupSliver]). It builds lazily like any
+    // sliver list; the page's cache extent is what keeps every row built, and
+    // so inside `Form.validate()` (B142).
+    return SliverReorderableList(
+      itemCount: rows.length,
       // `onReorderItem` hands over the index the row lands at *after* its
       // removal, so it is a plain remove-then-insert.
       onReorderItem: _move,
-      children: [
-        for (var ii = 0; ii < rows.length; ii++)
-          _IngredientRow(
-            key: ObjectKey(rows[ii]),
-            ingredient: rows[ii],
-            index: ii,
-            count: rows.length,
-            onChanged: onChanged,
-            onMove: (delta) => _move(ii, ii + delta),
-            // Same remove-rebuild-dispose order as a group (32c4).
-            onRemove: () {
-              final removed = rows.removeAt(ii);
-              onChanged();
-              WidgetsBinding.instance.addPostFrameCallback(
-                (_) => removed.dispose(),
-              );
-            },
+      proxyDecorator: editorDragProxy,
+      itemBuilder:
+          (context, ii) => editorRow(
+            rows[ii],
+            _IngredientRow(
+              ingredient: rows[ii],
+              index: ii,
+              count: rows.length,
+              onChanged: onChanged,
+              onMove: (delta) => _move(ii, ii + delta),
+              // Same remove-rebuild-dispose order as a group (32c4).
+              onRemove: () {
+                final removed = rows.removeAt(ii);
+                onChanged();
+                WidgetsBinding.instance.addPostFrameCallback(
+                  (_) => removed.dispose(),
+                );
+              },
+            ),
           ),
-      ],
     );
   }
 }
 
 class _IngredientRow extends ConsumerStatefulWidget {
   const _IngredientRow({
-    super.key,
     required this.ingredient,
     required this.index,
     required this.count,
