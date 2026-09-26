@@ -1,5 +1,6 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:design_system/src/theme/app_theme.dart';
 
@@ -39,7 +40,8 @@ class StarRating extends StatelessWidget {
           unrated
               ? 'Not rated yet'
               : '${rating.toStringAsFixed(1)} out of 5 stars'
-                  '${count == null ? '' : ', $count ratings'}',
+                  // UX-046: `1 rating`, not `1 ratings`.
+                  '${count == null ? '' : ', ${countOf(count!, 'ratings')}'}',
       excludeSemantics: true,
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -137,6 +139,13 @@ class RatingPill extends StatelessWidget {
 /// `n`. Dragging across the row previews continuously; [onChangeEnd] fires
 /// once the gesture settles, so callers can persist there instead of on every
 /// intermediate value.
+///
+/// It is also a keyboard- and screen-reader-operable slider (B126 / UX-003,
+/// WCAG 2.1.1): focusable, ArrowRight/ArrowUp and ArrowLeft/ArrowDown step by
+/// [kRatingStep], Home/End jump to [kMinRating]/[kMaxRating], and the
+/// semantics node carries the matching increase/decrease actions. A key press
+/// or an assistive-technology action is a settled gesture, so it fires
+/// [onChanged] **and** [onChangeEnd].
 class StarRatingInput extends StatefulWidget {
   const StarRatingInput({
     super.key,
@@ -150,6 +159,10 @@ class StarRatingInput extends StatefulWidget {
   /// One star's width — a comfortable touch target per half-star.
   static const double defaultSize = 36;
 
+  /// The keyboard focus ring's stroke. Drawn as a foreground decoration inside
+  /// the stars' own box, so showing it never changes the widget's size.
+  static const double focusRingWidth = 2;
+
   /// Current rating, or null when the user has not rated yet.
   final double? value;
   final ValueChanged<double> onChanged;
@@ -161,8 +174,72 @@ class StarRatingInput extends StatefulWidget {
   State<StarRatingInput> createState() => _StarRatingInputState();
 }
 
+/// Move the rating one [kRatingStep] up (`direction > 0`) or down.
+class _RatingStepIntent extends Intent {
+  const _RatingStepIntent(this.direction);
+  final int direction;
+}
+
+/// Jump straight to [target] — Home / End.
+class _RatingJumpIntent extends Intent {
+  const _RatingJumpIntent(this.target);
+  final double target;
+}
+
 class _StarRatingInputState extends State<StarRatingInput> {
   double? _preview;
+  bool _focusHighlight = false;
+
+  static const Map<ShortcutActivator, Intent> _shortcuts = {
+    SingleActivator(LogicalKeyboardKey.arrowRight): _RatingStepIntent(1),
+    SingleActivator(LogicalKeyboardKey.arrowUp): _RatingStepIntent(1),
+    SingleActivator(LogicalKeyboardKey.arrowLeft): _RatingStepIntent(-1),
+    SingleActivator(LogicalKeyboardKey.arrowDown): _RatingStepIntent(-1),
+    SingleActivator(LogicalKeyboardKey.home): _RatingJumpIntent(kMinRating),
+    SingleActivator(LogicalKeyboardKey.end): _RatingJumpIntent(kMaxRating),
+  };
+
+  late final Map<Type, Action<Intent>> _actions = {
+    _RatingStepIntent: CallbackAction<_RatingStepIntent>(
+      onInvoke: (intent) {
+        final next = _stepped(intent.direction);
+        if (next != null) _commit(next);
+        return null;
+      },
+    ),
+    _RatingJumpIntent: CallbackAction<_RatingJumpIntent>(
+      onInvoke: (intent) {
+        if (intent.target != _current) _commit(intent.target);
+        return null;
+      },
+    ),
+  };
+
+  /// What the stars show right now: an in-flight preview, else the owner's.
+  double? get _current => _preview ?? widget.value;
+
+  /// The rating one step in [direction] from [_current], or null when there is
+  /// nowhere to go — decreasing at (or below) the minimum, increasing at the
+  /// maximum. Increasing from unrated lands on [kMinRating].
+  double? _stepped(int direction) {
+    final current = _current;
+    if (current == null || current < kMinRating) {
+      return direction > 0 ? kMinRating : null;
+    }
+    final next = snapRating(current + direction * kRatingStep);
+    return next == current ? null : next;
+  }
+
+  /// A keyboard or assistive-technology step is a whole gesture: preview it,
+  /// report it, and settle it in one go.
+  void _commit(double value) {
+    setState(() => _preview = value);
+    widget.onChanged(value);
+    widget.onChangeEnd?.call(value);
+  }
+
+  static String _describe(double value) =>
+      value == 0 ? 'Not rated' : '${value.toStringAsFixed(1)} stars';
 
   /// Left half of star `n` → `n - 0.5`, right half → `n`.
   double _ratingAt(double dx) {
@@ -226,22 +303,55 @@ class _StarRatingInputState extends State<StarRatingInput> {
       ),
     );
 
-    // 0.6: a disabled control's fade, not an AppAlpha tint of a colour.
+    // 0.6: a disabled control's fade, not an AppAlpha tint of a colour. No
+    // focus, no semantics actions — there is nothing to operate.
     if (!widget.enabled) return Opacity(opacity: 0.6, child: stars);
 
+    final up = _stepped(1);
+    final down = _stepped(-1);
+
     return Semantics(
+      container: true,
       label: 'Rate this recipe',
-      value: shown == 0 ? 'Not rated' : '${shown.toStringAsFixed(1)} stars',
+      value: _describe(shown),
+      increasedValue: up == null ? null : _describe(up),
+      decreasedValue: down == null ? null : _describe(down),
+      onIncrease: up == null ? null : () => _commit(up),
+      onDecrease: down == null ? null : () => _commit(down),
       slider: true,
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTapDown: (d) => _update(d.localPosition.dx),
-        onTapUp: (_) => _settle(),
-        onTapCancel: _cancel,
-        onHorizontalDragUpdate: (d) => _update(d.localPosition.dx),
-        onHorizontalDragEnd: (_) => _settle(),
-        onHorizontalDragCancel: _cancel,
-        child: stars,
+      child: FocusableActionDetector(
+        enabled: widget.enabled,
+        shortcuts: _shortcuts,
+        actions: _actions,
+        mouseCursor: SystemMouseCursors.click,
+        onShowFocusHighlight: (show) {
+          if (show != _focusHighlight) setState(() => _focusHighlight = show);
+        },
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTapDown: (d) => _update(d.localPosition.dx),
+          onTapUp: (_) => _settle(),
+          onTapCancel: _cancel,
+          onHorizontalDragUpdate: (d) => _update(d.localPosition.dx),
+          onHorizontalDragEnd: (_) => _settle(),
+          onHorizontalDragCancel: _cancel,
+          // Foreground, inside the box: the ring never moves or resizes the
+          // stars (UX-003's visible focus indicator, WCAG 2.4.7).
+          child: DecoratedBox(
+            position: DecorationPosition.foreground,
+            decoration:
+                _focusHighlight
+                    ? BoxDecoration(
+                      border: Border.all(
+                        color: scheme.primary,
+                        width: StarRatingInput.focusRingWidth,
+                      ),
+                      borderRadius: BorderRadius.circular(AppRadii.md),
+                    )
+                    : const BoxDecoration(),
+            child: stars,
+          ),
+        ),
       ),
     );
   }

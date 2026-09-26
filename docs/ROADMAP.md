@@ -894,6 +894,50 @@ to `docs/design/`. The next phase does not start until the previous one's file e
 
 ---
 
+## Phase 37 — UX remediation: the audit's bugs, missing capabilities, accessibility (in progress)
+
+Branch `feat/phase-37-ux-remediation` (from 36c). Unblocked findings from
+[AUDIT.md](design/AUDIT.md) in four waves, each committed behind a green analyze + test gate, every
+fix with a regression test checked by mutation. Out of scope: the final font, cover photos, bespoke
+redesigns of Chefs / My Recipes / editor / auth / profile, and every owner decision.
+
+**Wave A — open bugs**
+
+- [x] B125 / UX-001 — step photos render in the method panel (both layouts) and cook mode.
+      Seed data has no step photo; covered by widget tests with a fixture URL
+- [x] B126 / UX-003 — `StarRatingInput` is keyboard- and screen-reader-operable (+ UX-046's
+      "1 rating")
+- [x] B128 / UX-019 — `isOwner` compares the **profile** id (detail + cook finish)
+- [x] B129 / UX-026 — a fork in flight disables Fork and refuses a second call
+- [x] B130 / UX-016 — Space presses a focused button in cook mode
+- [x] B131 / UX-002 — `/auth` has a back button
+- [x] B132 / UX-005 — the deep-linked expanded recipe page has a way back
+
+**Wave B — missing capabilities**
+
+- [ ] UX-037 — owners can delete a recipe (detail + editor, confirm, back to My Recipes)
+- [ ] UX-038 — profile editing, "View my chef page", constrained desktop width, legal links
+      compact-only
+- [ ] UX-017 — `?from=` carried through sign-in (in-app paths only)
+- [ ] UX-018 — sign-up with email confirmation shows "check your inbox"
+- [ ] UX-020 — a Saved tab on My Recipes
+
+**Wave C — accessibility, search, formatting**
+
+- [ ] UX-013 card focus · UX-014 heading/checked/selected semantics · UX-015 auth autofill
+- [ ] UX-021 / UX-022 search-miss state + `/discover?q=`
+- [ ] UX-027 retry on every grid error
+- [ ] UX-023 fractions · UX-024 cook-mode chips · UX-043 / UX-046 copy
+
+**Wave D — design follow-ups**
+
+- [ ] UX-032 consolidation (`SegmentedTabs`, `RankBadge`, one Load more, `ChefAvatar` on profile)
+- [ ] Compact category row scrolls a deep-linked tile into view
+- [ ] Chefs hero `MASTER CHEF` tile capture near the 96px floor
+- [ ] Doc hygiene (the superseded typography item)
+
+---
+
 ## Backlog — deferred, not scheduled
 
 Everything here is **known, decided, and not being worked on**. An item is in the backlog because

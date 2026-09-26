@@ -18,6 +18,7 @@ import 'dart:async';
 // untouched, which is the point of testing behaviour rather than widget trees:
 // they assert what reached the repository, not what the page looked like. The
 // layout's own assertions are in the two groups at the bottom.
+import 'package:app/features/recipe_detail/fork_action.dart';
 import 'package:app/features/recipe_detail/rail_panel.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/features/recipe_detail/recipe_detail_screen.dart';
@@ -128,9 +129,13 @@ final _labelledRecipe = _fullRecipe.copyWith(
 const _phone = Size(390, 1200);
 
 class _FakeAuth implements AuthRepository {
-  _FakeAuth(this.uid);
+  _FakeAuth(this.uid, {this.profileId});
 
   final String? uid;
+
+  /// Set for a member who has **claimed** an imported chef page (Phase 35b):
+  /// the one account whose `profiles.id` is not its auth uid (B128).
+  final String? profileId;
 
   @override
   String? get currentUserId => uid;
@@ -138,7 +143,7 @@ class _FakeAuth implements AuthRepository {
   // Phase 35b: `profiles.id` and the auth uid are the same value for a member,
   // which every fixture in this file is.
   @override
-  Future<String?> currentProfileId() async => uid;
+  Future<String?> currentProfileId() async => profileId ?? uid;
 
   @override
   Stream<AuthState> authStateChanges() => const Stream.empty();
@@ -184,6 +189,10 @@ class _FakeRecipeRepository implements RecipeRepository {
 
   /// Make the next fork fail, to drive the snackbar path.
   bool forkFails = false;
+
+  /// When set, `fork()` waits on it — holds the RPC in flight so a second tap
+  /// lands while the first is outstanding (B129).
+  Completer<String>? forkGate;
 
   /// The rating half (32e2). Both detail layouts mount `RatingSection` and only
   /// cook mode's twin was ever driven, so the reading page's write, its clear,
@@ -242,6 +251,7 @@ class _FakeRecipeRepository implements RecipeRepository {
   Future<String> fork(String sourceRecipeId) async {
     forkedFrom.add(sourceRecipeId);
     if (forkFails) throw Exception('nope');
+    if (forkGate != null) return forkGate!.future;
     return 'r2';
   }
 
@@ -295,6 +305,7 @@ Future<GoRouter> _pump(
   WidgetTester tester, {
   required _FakeRecipeRepository repo,
   required String? uid,
+  String? profileId,
   Size? size,
   double textScale = 1,
   RailTab? railTab,
@@ -342,7 +353,9 @@ Future<GoRouter> _pump(
     ProviderScope(
       overrides: [
         recipeRepositoryProvider.overrideWithValue(repo),
-        authRepositoryProvider.overrideWithValue(_FakeAuth(uid)),
+        authRepositoryProvider.overrideWithValue(
+          _FakeAuth(uid, profileId: profileId),
+        ),
         // Lets the envelope matrix run per TAB without depending on the chip
         // being scrolled into view first — at 2.0× on a 390px page it is not.
         if (railTab != null)
@@ -617,6 +630,68 @@ void main() {
       expect(find.text('EDITOR r2'), findsOneWidget);
     });
 
+    // B129 / UX-026: a double tap made two forks. The second tap lands while
+    // the first RPC is still outstanding, which the gate holds open.
+    testWidgets('a second tap while forking is ignored, and the chip is off', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe)
+        ..forkGate = Completer<String>();
+      await _pump(tester, repo: repo, uid: 'me', size: _phone);
+
+      final fork = find.widgetWithText(ActionChip, 'Fork');
+      await tester.ensureVisible(fork);
+      await tester.pumpAndSettle();
+      await tester.tap(fork);
+      await tester.pump();
+      await tester.tap(fork, warnIfMissed: false);
+      await tester.pump();
+
+      expect(repo.forkedFrom, ['r1'], reason: 'one fork per gesture');
+      expect(tester.widget<ActionChip>(fork).onPressed, isNull);
+
+      repo.forkGate!.complete('r2');
+      await tester.pumpAndSettle();
+      expect(find.text('EDITOR r2'), findsOneWidget);
+    });
+
+    // The chip's disabled state is the affordance; the flag inside
+    // `forkRecipe` is the guard, and it has to hold for a caller that renders
+    // no disabled state at all (cook mode's finish screen). Two calls in one
+    // frame, with no button in between.
+    testWidgets('forkRecipe itself refuses a second call in flight', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe)
+        ..forkGate = Completer<String>();
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            recipeRepositoryProvider.overrideWithValue(repo),
+            authRepositoryProvider.overrideWithValue(_FakeAuth('me')),
+          ],
+          child: MaterialApp(
+            home: Scaffold(
+              body: Consumer(
+                builder:
+                    (context, ref, _) => TextButton(
+                      onPressed: () {
+                        unawaited(forkRecipe(context, ref, 'r1'));
+                        unawaited(forkRecipe(context, ref, 'r1'));
+                      },
+                      child: const Text('FORK TWICE'),
+                    ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('FORK TWICE'));
+      await tester.pump();
+
+      expect(repo.forkedFrom, ['r1']);
+    });
+
     testWidgets('a failed fork says so and stays on the recipe', (
       tester,
     ) async {
@@ -636,6 +711,43 @@ void main() {
   // These go through the shared handler (32c5), so they cover the write path
   // both surfaces now share — what reaches the repository, and what the block
   // does afterwards.
+  // B128 / UX-019. `isOwner` compared the auth uid with `ownerId`, which is a
+  // `profiles.id`. The two agree for every member except one who has claimed
+  // an imported chef page — exactly the account these fixtures model.
+  group('ownership is the profile id (B128)', () {
+    testWidgets('a claimed member owns the claimed profile’s recipe', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(
+        tester,
+        repo: repo,
+        uid: 'auth-uid',
+        profileId: 'someone-else',
+        size: _phone,
+      );
+
+      expect(find.byTooltip('Edit'), findsOneWidget);
+      expect(find.widgetWithText(ActionChip, 'Fork'), findsNothing);
+    });
+
+    testWidgets('an auth uid equal to ownerId is not ownership', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(
+        tester,
+        repo: repo,
+        uid: 'someone-else',
+        profileId: 'claimed-profile',
+        size: _phone,
+      );
+
+      expect(find.byTooltip('Edit'), findsNothing);
+      expect(find.widgetWithText(ActionChip, 'Fork'), findsOneWidget);
+    });
+  });
+
   group('rating (compact)', () {
     Future<void> rate(WidgetTester tester) async {
       final stars = find.byType(StarRatingInput);

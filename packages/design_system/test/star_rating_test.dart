@@ -1,5 +1,9 @@
+import 'dart:ui' show Tristate;
+
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -128,5 +132,239 @@ void main() {
     await tester.pump();
 
     expect(changes, [0.5, 5.0]);
+  });
+
+  // UX-046: the count is pluralised, so one rating is not `1 ratings`.
+  testWidgets('StarRating reads a single rating as singular', (tester) async {
+    final handle = tester.ensureSemantics();
+    await pump(tester, const StarRating(rating: 4, count: 1));
+    expect(
+      find.bySemanticsLabel('4.0 out of 5 stars, 1 rating'),
+      findsOneWidget,
+    );
+
+    await pump(tester, const StarRating(rating: 4, count: 12));
+    expect(
+      find.bySemanticsLabel('4.0 out of 5 stars, 12 ratings'),
+      findsOneWidget,
+    );
+    handle.dispose();
+  });
+
+  // B126 / UX-003 (WCAG 2.1.1): the input must be operable without a pointer.
+  group('StarRatingInput keyboard + screen reader', () {
+    SemanticsData semanticsOf(WidgetTester tester) =>
+        tester.getSemantics(find.byType(StarRatingInput)).getSemanticsData();
+
+    Future<void> perform(WidgetTester tester, SemanticsAction action) async {
+      final node = tester.getSemantics(find.byType(StarRatingInput));
+      node.owner!.performAction(node.id, action);
+      await tester.pump();
+    }
+
+    DecoratedBox ring(WidgetTester tester) => tester.widget<DecoratedBox>(
+      find.descendant(
+        of: find.byType(StarRatingInput),
+        matching: find.byWidgetPredicate(
+          (w) =>
+              w is DecoratedBox && w.position == DecorationPosition.foreground,
+        ),
+      ),
+    );
+
+    testWidgets('exposes a slider with increase/decrease actions', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      await pump(tester, StarRatingInput(value: 3, onChanged: (_) {}));
+
+      final data = semanticsOf(tester);
+      expect(data.label, 'Rate this recipe');
+      expect(data.value, '3.0 stars');
+      expect(data.increasedValue, '3.5 stars');
+      expect(data.decreasedValue, '2.5 stars');
+      expect(data.hasAction(SemanticsAction.increase), isTrue);
+      expect(data.hasAction(SemanticsAction.decrease), isTrue);
+      expect(data.flagsCollection.isSlider, isTrue);
+      expect(data.flagsCollection.isFocused, isNot(Tristate.none));
+      handle.dispose();
+    });
+
+    testWidgets('semantics actions step, settle, and stop at the ends', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      final changed = <double>[];
+      final settled = <double>[];
+      await pump(
+        tester,
+        StarRatingInput(
+          value: 4.5,
+          onChanged: changed.add,
+          onChangeEnd: settled.add,
+        ),
+      );
+
+      await perform(tester, SemanticsAction.increase);
+      expect(changed, [5.0]);
+      expect(settled, [5.0]);
+      expect(find.byIcon(Icons.star_rounded), findsNWidgets(5));
+
+      // At the maximum there is nowhere up to go, so none is advertised.
+      final atMax = semanticsOf(tester);
+      expect(atMax.hasAction(SemanticsAction.increase), isFalse);
+      expect(atMax.decreasedValue, '4.5 stars');
+
+      await perform(tester, SemanticsAction.decrease);
+      expect(changed, [5.0, 4.5]);
+      expect(settled, [5.0, 4.5]);
+      handle.dispose();
+    });
+
+    testWidgets('unrated offers only an increase, to the minimum', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      await pump(tester, StarRatingInput(value: null, onChanged: (_) {}));
+
+      final data = semanticsOf(tester);
+      expect(data.value, 'Not rated');
+      expect(data.increasedValue, '0.5 stars');
+      expect(data.hasAction(SemanticsAction.increase), isTrue);
+      expect(data.hasAction(SemanticsAction.decrease), isFalse);
+      handle.dispose();
+    });
+
+    testWidgets('arrows, Home and End move the rating by keyboard', (
+      tester,
+    ) async {
+      final changed = <double>[];
+      final settled = <double>[];
+      await pump(
+        tester,
+        StarRatingInput(
+          value: null,
+          onChanged: changed.add,
+          onChangeEnd: settled.add,
+        ),
+      );
+
+      await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+      await tester.pump();
+
+      await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+      await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+      await tester.pump();
+      expect(settled, [0.5, 1.0]);
+
+      await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
+      await tester.pump();
+      expect(settled, [0.5, 1.0, 0.5]);
+
+      // Already at the minimum: nothing to report.
+      await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
+      await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+      await tester.pump();
+      expect(settled, [0.5, 1.0, 0.5]);
+
+      await tester.sendKeyEvent(LogicalKeyboardKey.end);
+      await tester.pump();
+      expect(settled.last, 5.0);
+      expect(find.byIcon(Icons.star_rounded), findsNWidgets(5));
+
+      await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+      await tester.pump();
+      expect(settled.last, 5.0, reason: 'already at the maximum');
+      expect(settled, hasLength(4));
+
+      await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+      await tester.sendKeyEvent(LogicalKeyboardKey.home);
+      await tester.pump();
+      expect(settled.sublist(4), [4.5, 0.5]);
+
+      // A key press is a settled gesture: every change was also an end.
+      expect(changed, settled);
+    });
+
+    testWidgets('keyboard focus draws a ring without changing the size', (
+      tester,
+    ) async {
+      await pump(tester, StarRatingInput(value: 2, onChanged: (_) {}));
+      final before = tester.getSize(find.byType(StarRatingInput));
+      expect((ring(tester).decoration as BoxDecoration).border, isNull);
+
+      await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+      await tester.pump();
+
+      final border = (ring(tester).decoration as BoxDecoration).border;
+      expect(border, isA<Border>());
+      final side = (border! as Border).top;
+      final theme = Theme.of(tester.element(find.byType(StarRatingInput)));
+      expect(side.color, theme.colorScheme.primary);
+      expect(side.width, StarRatingInput.focusRingWidth);
+      expect(tester.getSize(find.byType(StarRatingInput)), before);
+    });
+
+    testWidgets('disabled is not focusable and offers no actions', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      final changed = <double>[];
+      await pump(
+        tester,
+        StarRatingInput(value: 3, onChanged: changed.add, enabled: false),
+      );
+
+      final data = semanticsOf(tester);
+      expect(data.hasAction(SemanticsAction.increase), isFalse);
+      expect(data.hasAction(SemanticsAction.decrease), isFalse);
+      expect(data.flagsCollection.isFocused, Tristate.none);
+
+      await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+      await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+      await tester.pump();
+      expect(changed, isEmpty);
+      handle.dispose();
+    });
+
+    testWidgets('focused input holds its envelope', (tester) async {
+      for (final width in [390.0, 1440.0]) {
+        for (final scale in [1.0, 2.0]) {
+          tester.view.physicalSize = Size(width, 800);
+          tester.view.devicePixelRatio = 1;
+          await tester.pumpWidget(
+            MaterialApp(
+              theme: AppTheme.light(),
+              home: MediaQuery(
+                data: MediaQueryData(
+                  size: Size(width, 800),
+                  textScaler: TextScaler.linear(scale),
+                ),
+                child: Scaffold(
+                  body: Center(
+                    child: StarRatingInput(
+                      value: 3.5,
+                      size: StarRatingInput.defaultSize,
+                      onChanged: (_) {},
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+          await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+          await tester.pump();
+          expect(tester.takeException(), isNull, reason: '$width x $scale');
+          expect(
+            tester.getSize(find.byType(StarRatingInput)),
+            const Size(
+              StarRatingInput.defaultSize * 5,
+              StarRatingInput.defaultSize,
+            ),
+          );
+        }
+      }
+      tester.view.reset();
+    });
   });
 }

@@ -14,6 +14,7 @@ import 'package:app/features/recipe_detail/rating_section.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/features/recipe_detail/version_history_sheet.dart';
 import 'package:app/routing/app_router.dart';
+import 'package:app/routing/pop_or_go.dart';
 import 'package:app/widgets/share_dialog.dart';
 
 /// The v2 reading page for expanded (web/desktop) windows — the "Recipe Detail
@@ -31,18 +32,26 @@ class RecipeDetailExpanded extends ConsumerWidget {
     required this.recipe,
     required this.isOwner,
     required this.onFork,
+    this.forking = false,
   });
 
   final Recipe recipe;
   final bool isOwner;
   final VoidCallback onFork;
 
+  /// A fork is in flight: the Fork button renders disabled (B129).
+  final bool forking;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
-          child: _HeaderBand(recipe: recipe, isOwner: isOwner, onFork: onFork),
+          child: _HeaderBand(
+            recipe: recipe,
+            isOwner: isOwner,
+            onFork: forking ? null : onFork,
+          ),
         ),
         SliverToBoxAdapter(
           child: Center(
@@ -110,7 +119,9 @@ class _HeaderBand extends ConsumerWidget {
 
   final Recipe recipe;
   final bool isOwner;
-  final VoidCallback onFork;
+
+  /// Null while a fork is in flight, which disables the button (B129).
+  final VoidCallback? onFork;
 
   /// The reading measure for the description and the credit blocks under it.
   static const double _kProseMeasure = 620;
@@ -168,12 +179,15 @@ class _HeaderBand extends ConsumerWidget {
                         runSpacing: AppSpacing.xs,
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
-                          if (Navigator.of(context).canPop())
-                            IconButton(
-                              tooltip: 'Back',
-                              icon: const Icon(Icons.arrow_back),
-                              onPressed: () => Navigator.of(context).pop(),
-                            ),
+                          // Always drawn (B132 / UX-005). It used to exist
+                          // only `if (canPop())`, so a shared link — a root
+                          // route with no top bar — had no exit but the
+                          // browser. `popOrGo` is the compact page's rule.
+                          IconButton(
+                            tooltip: 'Back',
+                            icon: const Icon(Icons.arrow_back),
+                            onPressed: () => popOrGo(context, Routes.discover),
+                          ),
                           if (recipe.isFork)
                             const Padding(
                               padding: EdgeInsets.only(right: AppSpacing.sm),

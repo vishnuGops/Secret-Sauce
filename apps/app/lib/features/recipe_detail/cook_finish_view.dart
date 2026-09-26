@@ -73,7 +73,13 @@ class CookFinishView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    final isOwner = ref.watch(currentUserIdProvider) == recipe.ownerId;
+    // `ownerId` is a profiles.id, so it is compared with the caller's profile
+    // id — never the auth uid, which differs for a member who claimed an
+    // imported chef page (Phase 35b, B128/UX-019). Still loading counts as not
+    // the owner: the rating the owner branch would hide is denied by RLS
+    // anyway, and the frame after resolution corrects it.
+    final myProfileId = ref.watch(currentProfileIdProvider).valueOrNull;
+    final isOwner = myProfileId != null && myProfileId == recipe.ownerId;
 
     return SafeArea(
       child: Center(

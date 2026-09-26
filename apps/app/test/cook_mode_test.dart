@@ -12,7 +12,9 @@ import 'dart:async';
 import 'package:app/features/recipe_detail/cook_mode_model.dart';
 import 'package:app/features/recipe_detail/cook_mode_providers.dart';
 import 'package:app/features/recipe_detail/cook_mode_screen.dart';
+import 'package:app/features/recipe_detail/method_column.dart';
 import 'package:app/routing/app_router.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
@@ -118,17 +120,20 @@ const _recipe = Recipe(
 );
 
 class _FakeAuth implements AuthRepository {
-  _FakeAuth(this.uid);
+  _FakeAuth(this.uid, {String? profileId}) : profileId = profileId ?? uid;
 
   final String? uid;
+
+  /// Phase 35b: `profiles.id` and the auth uid are the same value for a
+  /// member, which is the default here. They differ for a member who claimed
+  /// an imported chef page — B128's fixture passes one explicitly.
+  final String? profileId;
 
   @override
   String? get currentUserId => uid;
 
-  // Phase 35b: `profiles.id` and the auth uid are the same value for a member,
-  // which every fixture in this file is.
   @override
-  Future<String?> currentProfileId() async => uid;
+  Future<String?> currentProfileId() async => profileId;
 
   @override
   Stream<AuthState> authStateChanges() => const Stream.empty();
@@ -253,6 +258,8 @@ Future<_FakeRecipeRepository> _pump(
   double textScale = 1,
   Recipe recipe = _recipe,
   DateTime Function()? clock,
+  String? profileId,
+  bool settle = true,
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
@@ -289,7 +296,9 @@ Future<_FakeRecipeRepository> _pump(
     ProviderScope(
       overrides: [
         recipeRepositoryProvider.overrideWithValue(repo),
-        authRepositoryProvider.overrideWithValue(_FakeAuth(uid)),
+        authRepositoryProvider.overrideWithValue(
+          _FakeAuth(uid, profileId: profileId),
+        ),
         // Cook mode's timers are deadlines on the wall clock (32c4), and
         // `tester.pump(Duration(...))` moves the *fake* clock, not
         // `DateTime.now()`. Pointing the session at the binding's clock is what
@@ -311,9 +320,38 @@ Future<_FakeRecipeRepository> _pump(
       ),
     ),
   );
-  await tester.pumpAndSettle();
+  if (settle) {
+    await tester.pumpAndSettle();
+  } else {
+    // A step photo's `CachedNetworkImage` never resolves under test, so these
+    // pump frames rather than settling: enough for the recipe future and the
+    // route to land (the same rule as chef_badge_test's avatar).
+    await _pumpFrames(tester);
+  }
   return repo;
 }
+
+Future<void> _pumpFrames(WidgetTester tester) async {
+  for (var i = 0; i < 3; i++) {
+    await tester.pump();
+  }
+}
+
+/// B125's fixture: no seeded recipe carries a step photo, so step 1 gets one
+/// at a reserved-TLD address. Step 2 has none.
+const _kStepPhoto = 'https://example.test/step.jpg';
+
+final _photoRecipe = _recipe.copyWith(
+  stepGroups: [
+    for (final g in _recipe.stepGroups)
+      g.copyWith(
+        steps: [
+          for (final s in g.steps)
+            s.id == 's1' ? s.copyWith(imageUrl: _kStepPhoto) : s,
+        ],
+      ),
+  ],
+);
 
 /// Walks the four steps of [_recipe] to the finish screen (frame E).
 Future<void> _walkToFinish(WidgetTester tester) async {
@@ -706,6 +744,38 @@ void main() {
       expect(find.text('Fork with my changes'), findsNothing);
     });
 
+    // B128/UX-019. `ownerId` is a profiles.id; the auth uid is a different
+    // value for a member who claimed an imported chef page, so comparing the
+    // two told that owner to rate their own recipe (and offered them a fork).
+    testWidgets('a member who claimed the chef page is treated as the owner', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        uid: 'auth-uid',
+        profileId: 'claimed-profile',
+        recipe: _recipe.copyWith(ownerId: 'claimed-profile'),
+      );
+      await _walkToFinish(tester);
+
+      expect(find.textContaining('you can’t rate it'), findsOneWidget);
+      expect(find.byType(StarRatingInput), findsNothing);
+      expect(find.text('Fork with my changes'), findsNothing);
+    });
+
+    testWidgets('an auth uid equal to ownerId is not ownership', (
+      tester,
+    ) async {
+      // The reverse: the uid happens to equal the recipe's owner profile id,
+      // but the caller's profile is another one — they may rate and fork.
+      await _pump(tester, uid: 'someone-else', profileId: 'claimed-profile');
+      await _walkToFinish(tester);
+
+      expect(find.textContaining('you can’t rate it'), findsNothing);
+      expect(find.text('Tap to rate · half stars allowed'), findsOneWidget);
+      expect(find.text('Fork with my changes'), findsOneWidget);
+    });
+
     testWidgets('signed out, rating routes to /auth and writes nothing', (
       tester,
     ) async {
@@ -833,6 +903,51 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Crust · step 1 of 2'), findsOneWidget);
     });
+
+    // B130/UX-016. Space used to be a page-wide binding that consumed the key
+    // before it could bubble up to the default Space → ActivateIntent
+    // shortcut, so a keyboard user who tabbed to "Start" advanced the step
+    // instead of starting its timer.
+    testWidgets('space presses a focused button instead of advancing', (
+      tester,
+    ) async {
+      await _pump(tester, size: const Size(1440, 1000));
+      // Step 2 is the 60-minute chill, the one with a Start button.
+      await tester.sendKeyEvent(LogicalKeyboardKey.space);
+      await tester.pumpAndSettle();
+      expect(find.text('Crust · step 2 of 2'), findsOneWidget);
+
+      Focus.of(tester.element(find.text('Start'))).requestFocus();
+      await tester.pump();
+      await tester.sendKeyEvent(LogicalKeyboardKey.space);
+      await tester.pump();
+
+      // The timer started, and the cook is still on step 2.
+      expect(find.text('of 60:00'), findsOneWidget);
+      expect(find.text('Crust · step 2 of 2'), findsOneWidget);
+
+      // Start was replaced by the running ring, so its focus went back to the
+      // page, and Space advances again.
+      await tester.sendKeyEvent(LogicalKeyboardKey.space);
+      await tester.pumpAndSettle();
+      expect(find.text('Filling · step 1 of 2'), findsOneWidget);
+    });
+
+    testWidgets('space on a focused Previous goes back, not forward', (
+      tester,
+    ) async {
+      await _pump(tester, size: const Size(1440, 1000));
+      await tester.sendKeyEvent(LogicalKeyboardKey.space);
+      await tester.pumpAndSettle();
+      expect(find.text('Crust · step 2 of 2'), findsOneWidget);
+
+      Focus.of(tester.element(find.text('Previous'))).requestFocus();
+      await tester.pump();
+      await tester.sendKeyEvent(LogicalKeyboardKey.space);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Crust · step 1 of 2'), findsOneWidget);
+    });
   });
 
   testWidgets('a recipe with no steps says so instead of crashing', (
@@ -845,6 +960,93 @@ void main() {
     await tester.tap(find.text('Back to the recipe'));
     await tester.pumpAndSettle();
     expect(find.text('RECIPE PAGE'), findsOneWidget);
+  });
+
+  // B125/UX-001. The editor has uploaded step photos since Phase 33 and cook
+  // mode never showed one. `settle: false` throughout — the image never
+  // resolves under test, and which branch rendered is what matters.
+  group('step photo (B125)', () {
+    testWidgets('compact shows the current step photo, and only its own', (
+      tester,
+    ) async {
+      await _pump(tester, recipe: _photoRecipe, settle: false);
+
+      final image = tester.widget<CachedNetworkImage>(
+        find.byType(CachedNetworkImage),
+      );
+      expect(image.imageUrl, _kStepPhoto);
+
+      // Step 2 has no photo, and gets no placeholder either.
+      await tester.tap(find.text('Done — next step'));
+      await _pumpFrames(tester);
+      expect(find.text('Crust · step 2 of 2'), findsOneWidget);
+      expect(find.byType(CachedNetworkImage), findsNothing);
+    });
+
+    testWidgets('web shows it too', (tester) async {
+      await _pump(
+        tester,
+        recipe: _photoRecipe,
+        size: const Size(1440, 1000),
+        settle: false,
+      );
+      expect(find.byType(CachedNetworkImage), findsOneWidget);
+    });
+
+    testWidgets('a recipe without step photos draws none', (tester) async {
+      await _pump(tester, settle: false);
+      expect(find.byType(CachedNetworkImage), findsNothing);
+    });
+
+    testWidgets('a publisher who asked for no images gets none', (
+      tester,
+    ) async {
+      // The cover's rights rule (Phase 35c) covers a step's photo too.
+      await _pump(
+        tester,
+        recipe: _photoRecipe.copyWith(imageMode: ImageMode.none),
+        settle: false,
+      );
+      expect(find.byType(CachedNetworkImage), findsNothing);
+    });
+
+    testWidgets('a landscape phone caps the photo against its height', (
+      tester,
+    ) async {
+      // 4:3 across an 844px-wide column would be ~610px — taller than the
+      // 390px window. Capped, it keeps the full width and crops.
+      await _pump(
+        tester,
+        recipe: _photoRecipe,
+        size: const Size(844, 390),
+        settle: false,
+      );
+      expect(tester.takeException(), isNull);
+      final size = tester.getSize(find.byType(StepPhoto));
+      expect(size.height, lessThanOrEqualTo(390 * 0.4 + AppSpacing.smPlus));
+      expect(size.width, greaterThan(800));
+    });
+
+    for (final size in [
+      const Size(390, 844),
+      const Size(1000, 1200),
+      const Size(1440, 1000),
+    ]) {
+      for (final scale in [1.0, 2.0]) {
+        testWidgets('no overflow with a photo at ${size.width}px, '
+            'textScale $scale', (tester) async {
+          await _pump(
+            tester,
+            recipe: _photoRecipe,
+            size: size,
+            textScale: scale,
+            settle: false,
+          );
+          expect(find.byType(CachedNetworkImage), findsOneWidget);
+          expect(tester.takeException(), isNull);
+        });
+      }
+    }
   });
 
   // The two-axis envelope, same rationale as the reading page's: a step at 40px

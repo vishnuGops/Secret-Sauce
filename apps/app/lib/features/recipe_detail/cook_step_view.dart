@@ -7,6 +7,7 @@ import 'package:app/features/recipe_detail/cook_mode_model.dart';
 import 'package:app/features/recipe_detail/cook_mode_providers.dart';
 import 'package:app/features/recipe_detail/detail_chips.dart';
 import 'package:app/features/recipe_detail/detail_layout.dart';
+import 'package:app/features/recipe_detail/method_column.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 
 /// Width below which cook mode's web layout stacks its rail under the step
@@ -50,6 +51,31 @@ const double _kProgressRadius = 2;
 const double _kRingSize = 150;
 const double _kRingSizeWide = 132;
 const double _kRingStroke = 12;
+
+/// A step photo's height cap, as a fraction of the window's height (B125).
+///
+/// 4:3 at full column width is 268px on a 390px phone, which fits under the
+/// step text, but 609px on an 844px-wide landscape phone and 540px in the web
+/// frame's 720px column — either one pushes the timer and the advance buttons
+/// below the fold. Capped, the width stays full and `BoxFit.cover` crops.
+const double _kPhotoMaxViewportFraction = 0.4;
+
+/// The current step's photo, or nothing — shared by both layouts so the rights
+/// rule and the cap cannot differ between them.
+Widget _currentStepPhoto(
+  BuildContext context,
+  Recipe recipe,
+  CookStep current,
+) {
+  final url = displayStepImageUrl(recipe, current.step);
+  if (url == null) return const SizedBox.shrink();
+  return StepPhoto(
+    url: url,
+    stepNumber: current.indexInGroup + 1,
+    radius: AppRadii.card,
+    maxHeight: MediaQuery.sizeOf(context).height * _kPhotoMaxViewportFraction,
+  );
+}
 
 /// One step of cook mode: the step the cook is on, its timer, and what it needs.
 ///
@@ -228,6 +254,10 @@ class _Compact extends ConsumerWidget {
                     // cook acts on. The 1.32 leading is this frame's own.
                     style: context.appText.step.copyWith(height: 1.32),
                   ),
+                  // After the text and inside the scroll, so the step itself is
+                  // always the first thing on screen and a tall photo scrolls
+                  // rather than overflowing the pinned bottom bar (B125).
+                  _currentStepPhoto(context, recipe, current),
                   _StepChips(step: current.step),
                   _TimerPanel(recipe: recipe, step: current.step),
                   if (needed.isNotEmpty)
@@ -426,6 +456,7 @@ class _Wide extends ConsumerWidget {
           // own leading.
           style: context.appText.stepLarge.copyWith(height: 1.28),
         ),
+        _currentStepPhoto(context, recipe, current),
         _StepChips(step: current.step),
         _TimerPanel(recipe: recipe, step: current.step, wide: !stacked),
         const SizedBox(height: AppSpacing.lg),

@@ -260,4 +260,15 @@ void main() {
       reason: 'a failed sign-in navigated',
     );
   });
+
+  // B131 / UX-002. Every entry to `/auth` is a `go`, so there is nothing to pop
+  // and the AppBar used to draw no back button: a stranded phone user.
+  testWidgets('Back leaves a cold /auth for Discover', (tester) async {
+    final router = await _pumpAt(tester, Routes.auth, _FakeAuth());
+
+    await tester.tap(find.byTooltip('Back'));
+    await tester.pumpAndSettle();
+
+    expect(_location(router), Routes.discover);
+  });
 }

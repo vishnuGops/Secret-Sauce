@@ -5,6 +5,21 @@ import 'package:go_router/go_router.dart';
 
 import 'package:app/routing/app_router.dart';
 
+/// True while a fork of this recipe is in flight (B129 / UX-026).
+///
+/// A double tap on Fork used to create two forks: nothing remembered that the
+/// first `fork_recipe` call had not returned yet. [forkRecipe] refuses a second
+/// call while this is set — that is the guard, and it holds for every caller —
+/// and the Fork buttons watch it to render disabled, which is the affordance.
+///
+/// Not `autoDispose`: [forkRecipe] reads and writes it with `ref.read`, and an
+/// auto-disposed provider with no listener (cook mode's finish screen does not
+/// watch it) would be torn down between the write and the next tap, forgetting
+/// the flag it exists to hold.
+final forkInFlightProvider = StateProvider.family<bool, String>(
+  (ref, recipeId) => false,
+);
+
 /// Fork [recipeId] into the signed-in user's own recipes and open the copy in
 /// the editor.
 ///
@@ -25,6 +40,9 @@ Future<void> forkRecipe(
     context.go(Routes.auth);
     return;
   }
+  final inFlight = ref.read(forkInFlightProvider(recipeId).notifier);
+  if (inFlight.state) return;
+  inFlight.state = true;
   // Captured before the await: `context.go` below unmounts this subtree, and
   // `ScaffoldMessenger.of` on a dead context is the failure this pattern exists
   // to avoid (the `recipe_async_grid.dart` shape).
@@ -40,5 +58,9 @@ Future<void> forkRecipe(
     messenger.showSnackBar(
       SnackBar(content: Text('Could not fork — ${friendlyError(e)}')),
     );
+  } finally {
+    // The notifier, not `ref`: after `context.go` the page that owned `ref`
+    // is gone, and a `ref.read` on a disposed element throws.
+    inFlight.state = false;
   }
 }

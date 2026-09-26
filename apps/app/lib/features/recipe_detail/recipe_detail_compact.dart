@@ -39,11 +39,15 @@ class RecipeDetailCompact extends ConsumerStatefulWidget {
     required this.recipe,
     required this.isOwner,
     required this.onFork,
+    this.forking = false,
   });
 
   final Recipe recipe;
   final bool isOwner;
   final VoidCallback onFork;
+
+  /// A fork is in flight: the jump bar's Fork chip renders disabled (B129).
+  final bool forking;
 
   @override
   ConsumerState<RecipeDetailCompact> createState() =>
@@ -109,6 +113,7 @@ class _RecipeDetailCompactState extends ConsumerState<RecipeDetailCompact> {
                   onIngredients: _jumpToIngredients,
                   onMethod: _jumpToMethod,
                   onFork: widget.isOwner ? null : widget.onFork,
+                  forking: widget.forking,
                 ),
               ),
               SliverToBoxAdapter(
@@ -449,6 +454,7 @@ class _JumpBarDelegate extends SliverPersistentHeaderDelegate {
     required this.onIngredients,
     required this.onMethod,
     required this.onFork,
+    this.forking = false,
   });
 
   final double textScale;
@@ -457,6 +463,10 @@ class _JumpBarDelegate extends SliverPersistentHeaderDelegate {
 
   /// Null for the owner — you cannot fork your own recipe.
   final VoidCallback? onFork;
+
+  /// A fork is in flight: the chip stays, disabled, rather than vanishing
+  /// under the finger that just tapped it (B129).
+  final bool forking;
 
   /// The bar's height at 1.0×, and the text scale past which it stops growing.
   static const double _kBarHeight = 56;
@@ -499,7 +509,7 @@ class _JumpBarDelegate extends SliverPersistentHeaderDelegate {
               ActionChip(
                 avatar: const Icon(Icons.call_split, size: AppIconSize.sm),
                 label: const Text('Fork'),
-                onPressed: onFork,
+                onPressed: forking ? null : onFork,
               ),
             ],
           ],
@@ -527,6 +537,7 @@ class _JumpBarDelegate extends SliverPersistentHeaderDelegate {
       old.textScale != textScale ||
       old.onIngredients != onIngredients ||
       old.onMethod != onMethod ||
+      old.forking != forking ||
       (old.onFork == null) != (onFork == null);
 }
 

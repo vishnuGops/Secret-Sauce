@@ -880,6 +880,25 @@ judged on a `db:sim` throwaway database or with owner-supplied photographs. Say 
 
 ---
 
+## Phase 37 — UX remediation (in progress, 2026-09-26)
+
+Four waves on `feat/phase-37-ux-remediation`, one commit each. Parallel subagents work on disjoint
+files under a shared rules file (tokens, Preserve, tests, no git/melos); the lead runs the full gate
+(`dart format`, `melos run analyze`, `melos run test --no-select`) after each wave and before its
+commit. Every fix carries a regression test verified by reverting the fix.
+
+**Seed-data fit.** Wave A: covered by widget-test fixtures. The one gap is B125 — no curated or sim
+recipe has a step photo, so the photo path is proven only with a fixture URL (`step_photo_test.dart`,
+`cook_mode_test.dart`); the claimed-member case of B128 is a fake `AuthRepository` whose profile id
+differs from its auth uid (the SQL half is `rls_matrix.sql` §G).
+
+| Wave | Status | Notes |
+| --- | --- | --- |
+| A — open bugs (B125, B126, B128–B132) | done | 3 subagents + lead; app 534 → 578 tests, design_system 425 → 433 |
+| B — delete, profile editing, `?from=`, sign-up confirm, Saved tab | open | |
+| C — a11y semantics, search, retry, fractions, copy | open | |
+| D — component consolidation, doc hygiene | open | |
+
 ## Build, run & release (ops)
 
 Task runner is **melos** (`melos.yaml`); Gradle only builds Android. See `README.md` for full

@@ -1,3 +1,6 @@
+import 'dart:math' as math;
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
@@ -114,6 +117,7 @@ class MethodColumn extends ConsumerWidget {
                     step: group.steps[i],
                     number: i + 1,
                     done: done.contains(group.steps[i].id),
+                    photoUrl: displayStepImageUrl(recipe, group.steps[i]),
                     onTap: () => toggle(group.steps[i].id),
                   ),
                 ),
@@ -211,12 +215,16 @@ class _StepCard extends StatelessWidget {
     required this.step,
     required this.number,
     required this.done,
+    required this.photoUrl,
     required this.onTap,
   });
 
   final RecipeStep step;
   final int number;
   final bool done;
+
+  /// Already filtered through [displayStepImageUrl]; null means no photo.
+  final String? photoUrl;
   final VoidCallback onTap;
 
   /// The numbered disc (a check once done).
@@ -308,6 +316,16 @@ class _StepCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(step.text, style: textTheme.bodyLarge),
+                    // Under the text, full width of its column (DESIGN §2.2).
+                    // Only on a step still to do: a done step is one dim line,
+                    // and a photo would undo the collapse that makes the next
+                    // step the first full-size row on screen.
+                    if (photoUrl != null)
+                      StepPhoto(
+                        url: photoUrl!,
+                        stepNumber: number,
+                        radius: AppRadii.md,
+                      ),
                     if (step.durationMinutes != null ||
                         (step.temperature?.isNotEmpty ?? false))
                       Padding(
@@ -359,6 +377,111 @@ class _StepCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// The photo a step may show, or null (B125/UX-001).
+///
+/// The cover's rights rule applies to a step's photo too: an imported recipe
+/// whose publisher asked for no images keeps the URLs the crawl captured and
+/// must not render them (Phase 35c, `Recipe.displayCoverImageUrl`). Nothing
+/// validates the scheme — the cover does not either, and `CachedNetworkImage`
+/// failing on a bad URL is the same collapse as a 404. Blank counts as absent.
+String? displayStepImageUrl(Recipe recipe, RecipeStep step) {
+  final url = step.imageUrl?.trim();
+  if (url == null || url.isEmpty || !recipe.imageMode.showsImage) return null;
+  return url;
+}
+
+/// A step's photo: 4:3 at the full width of the step's text column, cropped to
+/// cover, rounded, with the neutral inset hairline every photo gets (DESIGN
+/// §2.2). Used by the reading page's [MethodColumn] and by cook mode.
+///
+/// The editor has uploaded `steps.image_url` since Phase 33 and nothing drew it
+/// until B125. Two states only: a photo, or nothing at all — the placeholder
+/// holds the space while it loads, and a failed load collapses the whole
+/// widget, top gap included, rather than leaving an empty framed box or a
+/// broken-image glyph where the cook expects a picture.
+///
+/// Labelled rather than excluded from semantics: the photo shows what the step
+/// text cannot (the colour of a caramel, the texture of a dough), so a
+/// screen-reader user is told a visual reference exists for this step.
+class StepPhoto extends StatelessWidget {
+  const StepPhoto({
+    super.key,
+    required this.url,
+    required this.stepNumber,
+    required this.radius,
+    this.maxHeight = double.infinity,
+  });
+
+  final String url;
+
+  /// The number the step is shown with — per group, as the list numbers it.
+  final int stepNumber;
+
+  /// `AppRadii.md` in the method list, `AppRadii.card` in cook mode.
+  final double radius;
+
+  /// Cook mode caps the height against the viewport so a landscape phone's
+  /// 4:3 photo cannot be taller than the screen; the width stays full and
+  /// `BoxFit.cover` crops.
+  final double maxHeight;
+
+  /// Width over height — DESIGN §2.2's step-photo ratio.
+  static const double kAspectRatio = 4 / 3;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final outline = context.palette.imageOutline;
+    final shape = BorderRadius.circular(radius);
+
+    // The LayoutBuilder sits outside the image, not inside the frame: every
+    // caller places this in a Column whose width is bounded, and measuring here
+    // keeps the size independent of whatever `CachedNetworkImage` wraps its
+    // builders in (Gotcha 25).
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        final height = math.min(width / kAspectRatio, maxHeight);
+
+        Widget frame(Widget child) => Padding(
+          padding: const EdgeInsets.only(top: AppSpacing.smPlus),
+          child: Semantics(
+            image: true,
+            label: 'Photo for step $stepNumber',
+            child: Container(
+              width: width,
+              height: height,
+              // Drawn over the photo, inside its edge: a pale plate on a pale
+              // surface still has an edge.
+              foregroundDecoration: BoxDecoration(
+                borderRadius: shape,
+                border: Border.all(color: outline),
+              ),
+              child: ClipRRect(borderRadius: shape, child: child),
+            ),
+          ),
+        );
+
+        return CachedNetworkImage(
+          imageUrl: url,
+          imageBuilder:
+              (context, provider) => frame(
+                Image(
+                  image: provider,
+                  fit: BoxFit.cover,
+                  excludeFromSemantics: true,
+                ),
+              ),
+          placeholder:
+              (context, _) =>
+                  frame(ColoredBox(color: scheme.surfaceContainerHigh)),
+          errorWidget: (_, __, ___) => const SizedBox.shrink(),
+        );
+      },
     );
   }
 }

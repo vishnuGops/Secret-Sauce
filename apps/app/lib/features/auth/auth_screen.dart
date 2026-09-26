@@ -75,7 +75,18 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     final isLoading = ref.watch(authControllerProvider).isLoading;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Secret-Sauce')),
+      appBar: AppBar(
+        // B131 / UX-002: every entry here is a `go`, and `/auth` sits outside
+        // the shell, so the AppBar found nothing to pop and drew no back button
+        // — a signed-out phone user who tapped Like or Profile was stranded.
+        // Explicit, and `popOrGo` for the cold-start case.
+        leading: IconButton(
+          tooltip: 'Back',
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => popOrGo(context, Routes.discover),
+        ),
+        title: const Text('Secret-Sauce'),
+      ),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(AppSpacing.lg),

@@ -238,6 +238,10 @@ Future<GoRouter> _pump(
         builder: (_, __) => const Scaffold(body: Text('AUTH SCREEN')),
       ),
       GoRoute(
+        path: Routes.discover,
+        builder: (_, __) => const Scaffold(body: Text('DISCOVER')),
+      ),
+      GoRoute(
         path: Routes.chefPattern,
         builder:
             (_, state) =>
@@ -273,6 +277,20 @@ Future<GoRouter> _pump(
 }
 
 void main() {
+  // B132 / UX-005. The router above opens `/recipe/r1` with nothing under it —
+  // exactly a shared link. Back used to be drawn only `if (canPop())`, so this
+  // page had no exit at all.
+  testWidgets('deep-linked, Back is drawn and leaves for Discover', (
+    tester,
+  ) async {
+    await _pump(tester);
+
+    await tester.tap(find.byTooltip('Back'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('DISCOVER'), findsOneWidget);
+  });
+
   testWidgets('expanded window renders the v2 layout, not the v1 hero', (
     tester,
   ) async {

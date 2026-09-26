@@ -20,7 +20,14 @@ class RecipeDetailScreen extends ConsumerWidget {
     // long as the screen does and is not re-run by the recipe invalidations
     // that every like/save/rating triggers.
     ref.watch(recipeViewLoggerProvider(recipeId));
-    final currentUser = ref.watch(currentUserIdProvider);
+    // The **profile** id, not the auth uid (B128 / UX-019): `ownerId` is a
+    // `profiles.id`, and the two differ for a member who has claimed an
+    // imported chef page — who then got Fork instead of Edit on their own
+    // recipes. Null while it resolves, which reads as "not the owner" for one
+    // frame; the reverse (an owner's controls flashing for a reader) would be
+    // the worse flicker.
+    final profileId = ref.watch(currentProfileIdProvider).valueOrNull;
+    final forking = ref.watch(forkInFlightProvider(recipeId));
 
     return Scaffold(
       body: async.when(
@@ -34,7 +41,7 @@ class RecipeDetailScreen extends ConsumerWidget {
               ),
             ),
         data: (recipe) {
-          final isOwner = currentUser != null && currentUser == recipe.ownerId;
+          final isOwner = profileId != null && profileId == recipe.ownerId;
           // The whole page is v2 now, in two layouts on one
           // `context.isExpanded` branch. The v1 hero — a 240px `SliverAppBar`
           // over one padded `Column` — is **gone**, not kept for narrow
@@ -45,11 +52,13 @@ class RecipeDetailScreen extends ConsumerWidget {
               ? RecipeDetailExpanded(
                 recipe: recipe,
                 isOwner: isOwner,
+                forking: forking,
                 onFork: () => forkRecipe(context, ref, recipeId),
               )
               : RecipeDetailCompact(
                 recipe: recipe,
                 isOwner: isOwner,
+                forking: forking,
                 onFork: () => forkRecipe(context, ref, recipeId),
               );
         },

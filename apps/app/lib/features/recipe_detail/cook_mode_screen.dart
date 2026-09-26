@@ -60,10 +60,29 @@ class CookModeScreen extends ConsumerWidget {
   }
 }
 
-class _CookMode extends ConsumerWidget {
+class _CookMode extends ConsumerStatefulWidget {
   const _CookMode({required this.recipe});
 
   final Recipe recipe;
+
+  @override
+  ConsumerState<_CookMode> createState() => _CookModeState();
+}
+
+class _CookModeState extends ConsumerState<_CookMode> {
+  /// The page's own autofocus node. Space advances only while *this* node holds
+  /// primary focus — see [_onPageKey].
+  final FocusNode _pageFocus = FocusNode(debugLabel: 'cook mode page');
+
+  static const _advance = SingleActivator(LogicalKeyboardKey.space);
+
+  Recipe get recipe => widget.recipe;
+
+  @override
+  void dispose() {
+    _pageFocus.dispose();
+    super.dispose();
+  }
 
   // Deep-linked straight into cook mode: there is nothing to pop back to, so
   // `popOrGo` sends the cook to the recipe rather than leaving them on a dead
@@ -71,8 +90,33 @@ class _CookMode extends ConsumerWidget {
   void _leave(BuildContext context) =>
       popOrGo(context, Routes.recipe(recipe.id));
 
+  /// Space advances — but only when nothing interactive is focused (B130).
+  ///
+  /// It used to be a `CallbackShortcuts` binding above the whole page, and a
+  /// matching `CallbackShortcuts` binding always consumes the key. Key events
+  /// start at the primary focus and bubble *up*, while Space → `ActivateIntent`
+  /// lives in `WidgetsApp`'s default shortcuts at the very top, so a keyboard
+  /// user who tabbed to "Start" and pressed Space advanced the step instead of
+  /// starting the timer — the event never got past us. Here the page's own
+  /// `Focus` sees the event on its way up and claims it only when it *is* the
+  /// primary focus; with a button, chip or star rating focused it returns
+  /// `ignored`, the event reaches the default shortcut, and the focused widget
+  /// activates. This asks one precise question ("is the page itself focused?")
+  /// rather than guessing which descendants handle `ActivateIntent`, so a
+  /// control added later cannot reopen the bug.
+  KeyEventResult _onPageKey(FocusNode node, KeyEvent event, int stepCount) {
+    if (!node.hasPrimaryFocus) return KeyEventResult.ignored;
+    // `accepts` keeps the old binding's exact semantics: key down and repeat,
+    // no modifiers.
+    if (!_advance.accepts(event, HardwareKeyboard.instance)) {
+      return KeyEventResult.ignored;
+    }
+    ref.read(cookSessionProvider(recipe.id).notifier).next(stepCount);
+    return KeyEventResult.handled;
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final steps = flattenCookSteps(recipe);
     if (steps.isEmpty) {
       return EmptyView(
@@ -113,16 +157,20 @@ class _CookMode extends ConsumerWidget {
     // Shortcuts wrap both views: escape must leave from the finish screen too,
     // and `Focus(autofocus:)` is what makes any of them reach us at all — a
     // pointerless page has no focused node otherwise, so the keys go nowhere.
+    // Space is not in this map; it is the page node's own handler (B130).
     return CallbackShortcuts(
       bindings: {
         const SingleActivator(LogicalKeyboardKey.escape): () => _leave(context),
-        const SingleActivator(LogicalKeyboardKey.space):
-            () => notifier.next(steps.length),
         const SingleActivator(LogicalKeyboardKey.arrowRight):
             () => notifier.next(steps.length),
         const SingleActivator(LogicalKeyboardKey.arrowLeft): notifier.previous,
       },
-      child: Focus(autofocus: true, child: body),
+      child: Focus(
+        focusNode: _pageFocus,
+        autofocus: true,
+        onKeyEvent: (node, event) => _onPageKey(node, event, steps.length),
+        child: body,
+      ),
     );
   }
 }
