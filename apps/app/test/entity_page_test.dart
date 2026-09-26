@@ -111,6 +111,9 @@ Future<GoRouter> _pump(
   WidgetTester tester, {
   required _FakeEntities entities,
   double textScale = 1.0,
+
+  /// False leaves a pending read pending: a spinner never settles.
+  bool settle = true,
 }) async {
   final container = ProviderContainer(
     overrides: [
@@ -139,12 +142,31 @@ Future<GoRouter> _pump(
       ),
     ),
   );
-  await tester.pumpAndSettle();
+  if (settle) {
+    await tester.pumpAndSettle();
+  } else {
+    await tester.pump();
+  }
   return router;
 }
 
 SemanticsData _a11y(WidgetTester tester, Finder finder) =>
     tester.getSemantics(finder).getSemanticsData();
+
+/// [text] inside the page body — the app bar names the publisher too since
+/// UX-042, so an unscoped finder would find it twice.
+Finder _inBody(String text) => find.descendant(
+  of: find.byType(CustomScrollView),
+  matching: find.text(text),
+);
+
+/// The app bar's title.
+String _barTitle(WidgetTester tester) =>
+    tester
+        .widget<Text>(
+          find.descendant(of: find.byType(AppBar), matching: find.byType(Text)),
+        )
+        .data!;
 
 /// The titles every `Title` in the tree carries (UX-051).
 Iterable<String> _titles(WidgetTester tester) =>
@@ -163,7 +185,7 @@ void main() {
     _size(tester, 1000);
     await _pump(tester, entities: _FakeEntities());
 
-    expect(find.text('Northern Bakehouse'), findsOneWidget);
+    expect(_inBody('Northern Bakehouse'), findsOneWidget);
     expect(find.text('Brand'), findsOneWidget);
     expect(find.text('GB'), findsOneWidget);
   });
@@ -219,15 +241,61 @@ void main() {
       ),
     ];
 
-    testWidgets('lists members with their role', (tester) async {
+    testWidgets('lists members with their title', (tester) async {
       _size(tester, 1000);
       await _pump(tester, entities: _FakeEntities(members: members));
 
       expect(find.text('Marta Kovac'), findsOneWidget);
-      // The free-text title wins over the role when it is set — that is what
-      // `EntityMember.roleLabel` is for.
+      // The free-text title is the one role line that always adds something.
       expect(find.text('Head Chef'), findsOneWidget);
-      expect(find.text('Chef'), findsWidgets);
+      expect(find.text('Ines Duarte'), findsOneWidget);
+    });
+
+    // UX-042: the page said "Chef" three times — the kind chip, the roster
+    // heading, and the role under every name — meaning three things.
+    testWidgets('says "Chef" nowhere as a bare word', (tester) async {
+      _size(tester, 1000);
+      await _pump(
+        tester,
+        entities: _FakeEntities(
+          entity: const Entity(
+            id: 'e1',
+            slug: 'marta-kovac',
+            name: 'Marta Kovac Cooks',
+            kind: EntityKind.chefSite,
+          ),
+          members: [
+            EntityMember(
+              entityId: 'e1',
+              profileId: 'p1',
+              role: EntityRole.owner,
+              profile: _profile('p1', 'Marta Kovac'),
+            ),
+            EntityMember(
+              entityId: 'e1',
+              profileId: 'p2',
+              profile: _profile('p2', 'Ines Duarte'),
+            ),
+          ],
+        ),
+      );
+
+      expect(find.text('Chef'), findsNothing);
+      expect(find.text('Chefs'), findsNothing);
+      // The chip names the kind of publisher…
+      expect(find.text("Chef's own site"), findsOneWidget);
+      // …the heading names whose roster it is…
+      expect(find.text('Cooks at Marta Kovac Cooks'), findsOneWidget);
+      // …and a role line appears only when it adds something: the owner
+      // manages the page; a plain member's line would repeat the heading.
+      expect(find.text('Manages this page'), findsOneWidget);
+      final ines = tester.widget<ListTile>(
+        find.ancestor(
+          of: find.text('Ines Duarte'),
+          matching: find.byType(ListTile),
+        ),
+      );
+      expect(ines.subtitle, isNull);
     });
 
     testWidgets('a member row opens that chef page', (tester) async {
@@ -319,9 +387,13 @@ void main() {
         ),
       );
 
-      for (final text in ['Northern Bakehouse', 'Chefs', 'Signature dishes']) {
+      for (final text in [
+        'Northern Bakehouse',
+        'Cooks at Northern Bakehouse',
+        'Signature dishes',
+      ]) {
         expect(
-          _a11y(tester, find.text(text)).flagsCollection.isHeader,
+          _a11y(tester, _inBody(text)).flagsCollection.isHeader,
           isTrue,
           reason: text,
         );
@@ -339,4 +411,51 @@ void main() {
       expect(_titles(tester), contains('Northern Bakehouse · Secret Sauce'));
     });
   });
+
+  // UX-042: the app bar said "Publisher" over every publisher.
+  group('the app bar', () {
+    testWidgets("names the publisher once loaded, and the tab agrees", (
+      tester,
+    ) async {
+      _size(tester, 1000);
+      await _pump(tester, entities: _FakeEntities());
+
+      expect(_barTitle(tester), 'Northern Bakehouse');
+      expect(_titles(tester), isNot(contains('Publisher · Secret Sauce')));
+    });
+
+    testWidgets('keeps the generic word while loading', (tester) async {
+      _size(tester, 1000);
+      final pending = Completer<Entity?>();
+      await _pump(
+        tester,
+        entities: _SlowEntities(pending.future),
+        settle: false,
+      );
+
+      expect(find.byType(LoadingView), findsOneWidget);
+      expect(_barTitle(tester), 'Publisher');
+      pending.complete(_entity);
+      await tester.pumpAndSettle();
+      expect(_barTitle(tester), 'Northern Bakehouse');
+    });
+
+    testWidgets('keeps the generic word on an error', (tester) async {
+      _size(tester, 1000);
+      await _pump(tester, entities: _FakeEntities(fail: true));
+
+      expect(find.byType(ErrorView), findsOneWidget);
+      expect(_barTitle(tester), 'Publisher');
+    });
+  });
+}
+
+/// An entity read that answers when the test says so — the loading state.
+class _SlowEntities extends _FakeEntities {
+  _SlowEntities(this._entity);
+
+  final Future<Entity?> _entity;
+
+  @override
+  Future<Entity?> getById(String id) => _entity;
 }

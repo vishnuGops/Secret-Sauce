@@ -106,7 +106,10 @@ enum EntityKind {
     EntityKind.brand => 'Brand',
     EntityKind.publication => 'Publication',
     EntityKind.community => 'Community',
-    EntityKind.chefSite => 'Chef',
+    // Not "Chef": on the entity page the chip names the kind of *publisher*,
+    // and the bare word also headed the roster and labelled every member
+    // (UX-042).
+    EntityKind.chefSite => "Chef's own site",
   };
 }
 

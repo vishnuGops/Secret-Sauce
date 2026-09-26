@@ -12,15 +12,39 @@ import 'package:app/routing/app_router.dart';
 /// **Popular** is the top of the all-time board. **Trending** and **Best of the
 /// month** are the top of `chefs_leaderboard_windowed` over 7 and 30 days
 /// (Phase 33 — they were placeholder cards until the windowed SQL existed), and
-/// they list only chefs who actually gained points in the window. A window in
-/// which nobody moved is a real, loaded, *empty* shelf — the stale-sim-anchor
-/// case — and it says so in words rather than holding placeholders, which read
-/// as "still loading" forever.
+/// they list only chefs who actually gained points in the window.
+///
+/// Every shelf has four states: placeholders while loading, an error, **empty**,
+/// and cards. Empty is a real, loaded answer — nobody has published yet, or
+/// nobody moved in the window (the stale-sim-anchor case) — so it keeps its
+/// heading and says *why* in one sentence, the way Discover's shelves do
+/// (UX-045). It is never a card-sized bordered box: in the fixed-height
+/// two-column layout a sentence centred in a spotlight-card-sized tile sat
+/// below the fold, and what showed was an empty frame.
 class ChefsRails extends ConsumerWidget {
   const ChefsRails({super.key, required this.height, this.shrinkWrap = false});
 
   final double height;
   final bool shrinkWrap;
+
+  /// Why Popular is empty: the board has nobody on it.
+  static const String popularEmptyReason =
+      'No chef has a public recipe yet, so nobody holds a rank. A chef joins '
+      'the board with their first public recipe.';
+
+  /// Why a windowed shelf is empty: nobody earned a point in [window].
+  static String windowEmptyReason(ChefsWindow window) =>
+      'No chef earned a like, save or view in the ${window.span} yet.';
+
+  /// The note after the last card when the whole board fits on one page of
+  /// the shelf (UX-045).
+  static const String popularEndNote =
+      'That is every ranked chef so far. A chef joins the board with their '
+      'first public recipe.';
+
+  /// The note after the last card of a short windowed shelf.
+  static String windowEndNote(ChefsWindow window) =>
+      'Nobody else earned points in the ${window.span}.';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,6 +56,8 @@ class ChefsRails extends ConsumerWidget {
     // must not render a shelf of placeholders — that reads as "loading
     // forever" and claims a population the empty state right beside it denies.
     final loading = async.isLoading && popular.isEmpty;
+    const title = 'Popular chefs';
+    const subtitle = 'Most decorated kitchens, all time';
 
     return ListView(
       shrinkWrap: shrinkWrap,
@@ -39,15 +65,27 @@ class ChefsRails extends ConsumerWidget {
       padding: EdgeInsets.zero,
       children: [
         if (async.hasError)
-          ErrorView(
-            message: friendlyError(async.error),
-            onRetry: () => ref.invalidate(popularChefsProvider),
+          _RailHeading(
+            icon: Icons.favorite,
+            title: title,
+            subtitle: subtitle,
+            child: ErrorView(
+              message: friendlyError(async.error),
+              onRetry: () => ref.invalidate(popularChefsProvider),
+            ),
           )
-        else if (popular.isNotEmpty || loading)
+        else if (!loading && popular.isEmpty)
+          const _RailHeading(
+            icon: Icons.favorite,
+            title: title,
+            subtitle: subtitle,
+            reason: popularEmptyReason,
+          )
+        else
           CardRail(
             icon: Icons.favorite,
-            title: 'Popular chefs',
-            subtitle: 'Most decorated kitchens, all time',
+            title: title,
+            subtitle: subtitle,
             height: height,
             cardWidth: kSpotlightCardWidth,
             // Placeholders while the board is still loading, so the shelf keeps
@@ -55,13 +93,15 @@ class ChefsRails extends ConsumerWidget {
             itemCount:
                 loading
                     ? kChefRailLength
-                    : popular.length.clamp(1, kChefRailLength),
+                    : _withEndNote(popular.length.clamp(1, kChefRailLength)),
             itemBuilder:
                 (context, i) =>
                     loading
                         ? SpotlightCardPlaceholder(
                           tier: ChefTier.values[i % ChefTier.values.length],
                         )
+                        : i >= popular.length
+                        ? _RailEndNote(text: popularEndNote, height: height)
                         : ChefSpotlightCard(
                           standing: popular[i],
                           totalChefs: total,
@@ -87,6 +127,21 @@ class ChefsRails extends ConsumerWidget {
   }
 }
 
+/// How many cards a rail's arrow press moves — `CardRail.page`'s default,
+/// which the chefs rails keep.
+const int _kRailPage = 3;
+
+/// [cards] plus one for the end note, when the shelf is short (UX-045).
+///
+/// A shelf of one or two chefs left the rest of its row blank — about 45% of a
+/// 1440px page with the one-chef population a fresh database has. The row is
+/// not too narrow or capped (it already takes everything beside the 404px
+/// board panel); it simply has nothing more to hold, and the honest thing to
+/// put in that space is the sentence saying so. Only below a page
+/// ([_kRailPage]): at three items or fewer the rail draws no arrows and no
+/// `1–3 / n` label, so the note can never be counted as a chef.
+int _withEndNote(int cards) => cards < _kRailPage ? cards + 1 : cards;
+
 /// One windowed shelf: loading placeholders, an error, a quiet window, or the
 /// chefs who moved, ranked by the points they earned in it.
 class _WindowRail extends ConsumerWidget {
@@ -108,9 +163,14 @@ class _WindowRail extends ConsumerWidget {
     final subtitle = 'Most points earned in the ${window.span}';
 
     if (async.hasError && !async.isLoading) {
-      return ErrorView(
-        message: friendlyError(async.error),
-        onRetry: () => ref.invalidate(windowRailProvider(window)),
+      return _RailHeading(
+        icon: icon,
+        title: title,
+        subtitle: subtitle,
+        child: ErrorView(
+          message: friendlyError(async.error),
+          onRetry: () => ref.invalidate(windowRailProvider(window)),
+        ),
       );
     }
 
@@ -130,19 +190,33 @@ class _WindowRail extends ConsumerWidget {
       );
     }
 
+    // Nobody moved. On a real deployment that is a quiet week; on a simulated
+    // one whose `sim.epoch_end()` anchor has gone stale it is every week — old
+    // data, not a broken query, which is why this names the window rather than
+    // apologising for an error.
+    if (chefs.isEmpty) {
+      return _RailHeading(
+        icon: icon,
+        title: title,
+        subtitle: subtitle,
+        reason: ChefsRails.windowEmptyReason(window),
+      );
+    }
+
     return CardRail(
       icon: icon,
       title: title,
       subtitle: subtitle,
       height: height,
       cardWidth: kSpotlightCardWidth,
-      // One quiet tile rather than zero items: the shelf keeps its title and
-      // its height, and one item is below a page, so no arrows are drawn.
-      itemCount: chefs.isEmpty ? 1 : chefs.length,
+      itemCount: _withEndNote(chefs.length),
       itemBuilder:
           (context, i) =>
-              chefs.isEmpty
-                  ? QuietShelfCard(window: window, height: height)
+              i >= chefs.length
+                  ? _RailEndNote(
+                    text: ChefsRails.windowEndNote(window),
+                    height: height,
+                  )
                   : ChefSpotlightCard(
                     standing: chefs[i].standing,
                     window: chefs[i].window,
@@ -155,58 +229,82 @@ class _WindowRail extends ConsumerWidget {
   }
 }
 
-/// A windowed shelf with nobody on it, at the size of one spotlight card.
+/// A shelf's heading over something that is not a row of cards — the reason
+/// it is empty, or an error (UX-045).
 ///
-/// Not a placeholder: the query ran and answered "nobody moved". On a real
-/// deployment that is a quiet week; on a simulated one whose `sim.epoch_end()`
-/// anchor has gone stale it is every week — old data, not a broken query, which
-/// is why this names the window rather than apologising for an error.
-class QuietShelfCard extends StatelessWidget {
-  const QuietShelfCard({super.key, required this.window, required this.height});
+/// The heading is the shelf's own: a [CardRail] with no cards and no height
+/// draws exactly the badged header a populated shelf does (icon tile, a
+/// `Semantics(header: true)` title, the subtitle), so an empty shelf still
+/// reads as one of three and heading navigation still lands on it. The reason
+/// is the rail's footnote — one plain sentence, no frame around it.
+class _RailHeading extends StatelessWidget {
+  const _RailHeading({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    this.reason,
+    this.child,
+  }) : assert((reason == null) != (child == null), 'a reason or a child');
 
-  final ChefsWindow window;
+  final IconData icon;
+  final String title;
+  final String subtitle;
+
+  /// Why the shelf is empty.
+  final String? reason;
+
+  /// Drawn under the heading instead of a reason — the error state.
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    final heading = CardRail(
+      icon: icon,
+      title: title,
+      subtitle: subtitle,
+      height: 0,
+      cardWidth: kSpotlightCardWidth,
+      itemCount: 0,
+      itemBuilder: (_, __) => const SizedBox.shrink(),
+      footnote: reason,
+    );
+    if (child == null) return heading;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [heading, child!],
+    );
+  }
+}
+
+/// The sentence after the last card of a short shelf (UX-045): the space a
+/// card would take, holding the reason there is no further card.
+///
+/// Plain text, no border and no fill — a framed tile at card size is what the
+/// audit read as an empty box, and it would claim a slot the population does
+/// not have.
+class _RailEndNote extends StatelessWidget {
+  const _RailEndNote({required this.text, required this.height});
+
+  final String text;
   final double height;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
 
     return SizedBox(
       width: kSpotlightCardWidth,
       height: height,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: scheme.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(AppRadii.card),
-          border: Border.all(color: scheme.outlineVariant),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.lg),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Icons.hourglass_empty, color: scheme.onSurfaceVariant),
-              const SizedBox(height: AppSpacing.sm),
-              Text(
-                'Nothing moved in the ${window.span}',
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.titleSmall,
-              ),
-              const SizedBox(height: AppSpacing.xs),
-              Flexible(
-                child: Text(
-                  'No public recipe earned a like, save or view in that time, '
-                  'so there is nobody to rank here yet.',
-                  overflow: TextOverflow.fade,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: scheme.onSurfaceVariant,
-                  ),
-                ),
-              ),
-            ],
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.md),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            text,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
           ),
         ),
       ),

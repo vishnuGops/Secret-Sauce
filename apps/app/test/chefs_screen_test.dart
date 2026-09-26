@@ -564,18 +564,30 @@ void main() {
       expect(find.textContaining('Placeholder cards'), findsNothing);
     });
 
-    testWidgets('an empty board shows no Popular shelf at all', (tester) async {
+    testWidgets('an empty board keeps the Popular heading and says why', (
+      tester,
+    ) async {
       _size(tester, 1440, 2200);
       await tester.pumpWidget(_app(<ChefStanding>[]));
       await tester.pumpAndSettle();
 
       // A loaded-and-empty board must not render placeholder cards: that reads
       // as "still loading" and claims chefs the panel's empty state denies.
-      expect(find.text('Popular chefs'), findsNothing);
+      expect(find.byType(SpotlightCardPlaceholder), findsNothing);
+      expect(find.byType(ChefSpotlightCard), findsNothing);
       expect(find.text('No chefs yet'), findsOneWidget);
-      // The two windowed shelves stay, each saying nothing moved.
-      expect(find.byType(CardRail), findsNWidgets(2));
-      expect(find.byType(QuietShelfCard), findsNWidgets(2));
+      // UX-045: all three shelves keep their heading, each with its reason.
+      expect(find.byType(CardRail), findsNWidgets(3));
+      expect(find.text('Popular chefs'), findsOneWidget);
+      expect(find.text(ChefsRails.popularEmptyReason), findsOneWidget);
+      expect(
+        find.text(ChefsRails.windowEmptyReason(ChefsWindow.week)),
+        findsOneWidget,
+      );
+      expect(
+        find.text(ChefsRails.windowEmptyReason(ChefsWindow.month)),
+        findsOneWidget,
+      );
     });
 
     testWidgets('a spotlight card carries the score and its top driver', (
@@ -864,21 +876,122 @@ void main() {
       expect(find.byType(ChefSpotlightCard), findsNWidgets(3 + 2 + 2));
       expect(find.text('+192 · last 7 days'), findsOneWidget);
       expect(find.text('+192 · last 30 days'), findsOneWidget);
-      expect(find.byType(QuietShelfCard), findsNothing);
+      expect(
+        find.text(ChefsRails.windowEmptyReason(ChefsWindow.week)),
+        findsNothing,
+      );
       expect(find.byType(SpotlightCardPlaceholder), findsNothing);
     });
 
-    testWidgets('a quiet window is a quiet shelf, not placeholders', (
-      tester,
-    ) async {
+    testWidgets('a quiet window says why, not placeholders', (tester) async {
       _size(tester, 1440, 2200);
       await tester.pumpWidget(_app(_board));
       await tester.pumpAndSettle();
 
-      expect(find.byType(QuietShelfCard), findsNWidgets(2));
-      expect(find.text('Nothing moved in the last 7 days'), findsOneWidget);
-      expect(find.text('Nothing moved in the last 30 days'), findsOneWidget);
+      expect(
+        find.text(
+          'No chef earned a like, save or view in the last 7 days yet.',
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.text(
+          'No chef earned a like, save or view in the last 30 days yet.',
+        ),
+        findsOneWidget,
+      );
       expect(find.byType(SpotlightCardPlaceholder), findsNothing);
+    });
+
+    // UX-045: the quiet shelf used to be a spotlight-card-sized bordered tile
+    // with its sentence centred in it — in the fixed-height column the
+    // sentence sat below the fold, and what showed was an empty frame.
+    testWidgets('an empty shelf is a heading and a sentence, not a box', (
+      tester,
+    ) async {
+      _size(tester, 1440, 1000);
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(_app(const [_kitchen]));
+      await tester.pumpAndSettle();
+
+      final reason = find.text(ChefsRails.windowEmptyReason(ChefsWindow.week));
+      expect(reason, findsOneWidget);
+      // The heading is still a heading.
+      expect(
+        _a11y(tester, find.text('Trending chefs')).flagsCollection.isHeader,
+        isTrue,
+      );
+      // No frame around the sentence.
+      final framed = find.ancestor(
+        of: reason,
+        matching: find.byWidgetPredicate(
+          (w) =>
+              w is DecoratedBox &&
+              w.decoration is BoxDecoration &&
+              (w.decoration as BoxDecoration).border != null,
+        ),
+      );
+      expect(framed, findsNothing);
+      // And on screen in a 1000px window, right under its heading — not a
+      // card's height below it.
+      final heading = tester.getRect(find.text('Trending chefs'));
+      final sentence = tester.getRect(reason);
+      expect(sentence.bottom, lessThanOrEqualTo(1000));
+      expect(sentence.top - heading.bottom, lessThan(80));
+      handle.dispose();
+    });
+
+    // UX-045's other half. The rails column is not capped — it takes every
+    // pixel beside the 404px board panel — so a mostly-blank 1440 page was a
+    // one-chef shelf, not a layout that stopped short. A short shelf now says
+    // so in the space a next card would take.
+    testWidgets('the rails take the full width beside the board panel', (
+      tester,
+    ) async {
+      _size(tester, 1440, 1000);
+      await tester.pumpWidget(_app(const [_kitchen]));
+      await tester.pumpAndSettle();
+
+      final panel = tester.getRect(find.text('Leaderboard'));
+      final rails = tester.getRect(find.byType(ChefsRails));
+      // Page padding is 32 each side on the wide layout.
+      expect(rails.right, 1440 - 32);
+      expect(rails.left, greaterThan(panel.right));
+      expect(
+        rails.width,
+        1440 - 2 * 32 - ChefsScreen.panelWidth - AppSpacing.lg,
+      );
+    });
+
+    testWidgets('a one-chef shelf says that is everyone', (tester) async {
+      _size(tester, 1440, 1000);
+      await tester.pumpWidget(
+        _app(const [_kitchen], windowed: [_moved(_kitchen, rank: 1, likes: 3)]),
+      );
+      await tester.pumpAndSettle();
+
+      final note = find.text(ChefsRails.popularEndNote);
+      expect(note, findsOneWidget);
+      // Beside the card, in the row's otherwise blank space.
+      final card = tester.getRect(find.byType(ChefSpotlightCard).first);
+      expect(tester.getRect(note).left, greaterThan(card.right));
+      expect(tester.getRect(note).top, lessThan(card.bottom));
+      // No arrows and no `1–2 / 2` label: the note is never counted as a chef.
+      expect(find.byTooltip('Next'), findsNothing);
+      expect(
+        find.text(ChefsRails.windowEndNote(ChefsWindow.week)),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('a full shelf carries no end note', (tester) async {
+      _size(tester, 1440, 1000);
+      await tester.pumpWidget(_app(_many(10)));
+      await tester.pumpAndSettle();
+
+      expect(find.text(ChefsRails.popularEndNote), findsNothing);
+      // The pager still counts chefs only.
+      expect(find.text('1–3 / 10'), findsOneWidget);
     });
   });
 
@@ -1059,14 +1172,39 @@ void main() {
     }
   }
 
-  testWidgets('a quiet shelf fits its tile at 2.0x', (tester) async {
-    _size(tester, 1440, 2600);
-    await tester.pumpWidget(_app(_board, textScale: 2.0));
-    await tester.pumpAndSettle();
+  // UX-045's two new states — every shelf empty, and short shelves with their
+  // end note — across the page's envelope. 1200 is the window the two-column
+  // layout must fit (Gotcha 22); 4000 builds everything below the fold.
+  for (final width in <double>[390, 1000, 1440]) {
+    for (final scale in <double>[1.0, 2.0]) {
+      for (final (label, board, moved) in [
+        ('empty shelves', <ChefStanding>[], <ChefWindowStanding>[]),
+        (
+          'short shelves',
+          const [_kitchen],
+          [_moved(_kitchen, rank: 1, likes: 3)],
+        ),
+      ]) {
+        for (final height in <double>[1200, 4000]) {
+          testWidgets('$label fit at ${width}x${height.toInt()}, ${scale}x', (
+            tester,
+          ) async {
+            _size(tester, width, height);
+            await tester.pumpWidget(
+              _app(board, textScale: scale, windowed: moved),
+            );
+            await tester.pumpAndSettle();
 
-    expect(find.byType(QuietShelfCard), findsNWidgets(2));
-    expect(tester.takeException(), isNull);
-  });
+            expect(
+              tester.takeException(),
+              isNull,
+              reason: '$label at ${width}px @ ${scale}x',
+            );
+          });
+        }
+      }
+    }
+  }
 
   // Phase 37 wave C (UX-014): the page's two headings on the web layout.
   testWidgets('the hero title and the board panel are headings', (

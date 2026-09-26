@@ -65,13 +65,23 @@ class _ChefPageBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(chefPageProvider(chefId));
+    // The chef's name once the body shows them (UX-042); the generic word
+    // while loading or failed. `whenOrNull` rather than `valueOrNull`: it
+    // follows the same refresh/reload rules as the `when` below, so the bar
+    // never names a chef over an error view.
+    final loaded = async.whenOrNull(data: (data) => data);
+    final title =
+        loaded == null ? 'Chef' : ChefIdentityHeader.nameOf(loaded.profile);
 
     // UX-051 (Phase 37 review): titled while loading or failed too — the
-    // loaded header's own title, nested inside, replaces this one.
+    // loaded header's own title, nested inside, says the same thing.
     return RouteTitle(
-      page: 'Chef',
+      page: title,
       child: Scaffold(
-        appBar: AppBar(title: const Text('Chef'), leading: const _BackButton()),
+        appBar: AppBar(
+          title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
+          leading: const _BackButton(),
+        ),
         body: async.when(
           loading: () => const LoadingView(),
           error:

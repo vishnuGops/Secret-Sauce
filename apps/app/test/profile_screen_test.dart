@@ -112,8 +112,26 @@ class _FakeProfiles implements ProfileRepository {
 /// `StorageService` really returns. Implemented rather than subclassed: the
 /// real one needs a `SupabaseClient`.
 class _FakeStorage implements StorageService {
+  _FakeStorage({this.profiles});
+
+  /// When set, each delete records how many profile writes had landed by
+  /// then — the order B141 depends on.
+  final _FakeProfiles? profiles;
+
   /// (fileName, byte length) per upload.
   final List<(String, int)> uploads = [];
+
+  /// (public URL, profile writes so far) per `deleteOwnAvatar` call.
+  final List<(String, int)> deletes = [];
+
+  /// Thrown by [deleteOwnAvatar] when set.
+  Object? deleteError;
+
+  @override
+  Future<void> deleteOwnAvatar(String publicUrl) async {
+    deletes.add((publicUrl, profiles?.updates.length ?? -1));
+    if (deleteError != null) throw deleteError!;
+  }
 
   @override
   Future<String> uploadAvatar({
@@ -560,6 +578,174 @@ void main() {
       expect(profiles.updates.single.avatarUrl, isNull);
       expect(profiles.updates.single.displayName, _amara.displayName);
       expect(storage.uploads, isEmpty);
+    });
+  });
+
+  // B141: Save only re-pointed `avatar_url`, so a replaced or removed photo
+  // stayed public at its old URL. Which URLs are this account's to delete is
+  // `StorageService.deleteOwnAvatar`'s call (storage_service_test.dart); these
+  // pin *when* the dialog asks.
+  group('the previous photo is deleted after a save (B141)', () {
+    const oldUrl = 'https://cdn.test/avatars/u1/old.jpg';
+    final withPhoto = _amara.copyWith(avatarUrl: oldUrl);
+
+    Future<(_FakeProfiles, _FakeStorage)> open(
+      WidgetTester tester, {
+      Object? updateError,
+      Object? deleteError,
+    }) async {
+      final profiles = _FakeProfiles(profile: withPhoto)
+        ..updateError = updateError;
+      final storage = _FakeStorage(profiles: profiles)
+        ..deleteError = deleteError;
+      await _pump(
+        tester,
+        profiles: profiles,
+        pick: () async => _png,
+        storage: storage,
+      );
+      await _openEditor(tester);
+      return (profiles, storage);
+    }
+
+    testWidgets('a replaced photo: the old URL, once the save landed', (
+      tester,
+    ) async {
+      final (profiles, storage) = await open(tester);
+
+      await tester.tap(find.text('Change photo'));
+      await tester.pumpAndSettle();
+      await tester.tap(_saveButton);
+      await tester.pumpAndSettle();
+
+      expect(
+        profiles.updates.single.avatarUrl,
+        startsWith('https://cdn.test/avatar_'),
+      );
+      // (url, profile writes already landed): after the save, never before.
+      expect(storage.deletes, [(oldUrl, 1)]);
+    });
+
+    testWidgets('a removed photo: the old URL, once the save landed', (
+      tester,
+    ) async {
+      final (profiles, storage) = await open(tester);
+
+      await tester.tap(find.text('Remove photo'));
+      await tester.pumpAndSettle();
+      await tester.tap(_saveButton);
+      await tester.pumpAndSettle();
+
+      expect(profiles.updates.single.avatarUrl, isNull);
+      expect(storage.deletes, [(oldUrl, 1)]);
+    });
+
+    testWidgets('a save that leaves the photo alone deletes nothing', (
+      tester,
+    ) async {
+      final (profiles, storage) = await open(tester);
+
+      await tester.enterText(_nameField, 'Amara B.');
+      await tester.tap(_saveButton);
+      await tester.pumpAndSettle();
+
+      expect(profiles.updates.single.avatarUrl, oldUrl);
+      expect(storage.deletes, isEmpty);
+    });
+
+    testWidgets('a failed save deletes nothing — the profile still points '
+        'at the old photo', (tester) async {
+      final (profiles, storage) = await open(
+        tester,
+        updateError: const PostgrestException(
+          message: 'permission denied for table profiles',
+          code: '42501',
+        ),
+      );
+
+      await tester.tap(find.text('Remove photo'));
+      await tester.pumpAndSettle();
+      await tester.tap(_saveButton);
+      await tester.pumpAndSettle();
+
+      expect(profiles.updates, hasLength(1));
+      expect(find.byType(EditProfileDialog), findsOneWidget);
+      expect(storage.deletes, isEmpty);
+    });
+
+    // B146: an upload whose profile write failed is on no profile, so B141's
+    // cleanup never sees it. Closing the dialog, or a later save that
+    // replaced it, deletes it.
+    testWidgets('an upload left by a failed save goes when the dialog closes', (
+      tester,
+    ) async {
+      final (profiles, storage) = await open(
+        tester,
+        updateError: const PostgrestException(message: 'nope', code: '500'),
+      );
+
+      await tester.tap(find.text('Change photo'));
+      await tester.pumpAndSettle();
+      await tester.tap(_saveButton);
+      await tester.pumpAndSettle();
+      expect(storage.deletes, isEmpty);
+
+      await tester.tap(find.text('Cancel'));
+      await tester.pumpAndSettle();
+      expect(find.byType(EditProfileDialog), findsNothing);
+      expect(storage.deletes, hasLength(1));
+      expect(storage.deletes.single.$1, startsWith('https://cdn.test/avatar_'));
+    });
+
+    testWidgets('a later save deletes the stray upload it replaced', (
+      tester,
+    ) async {
+      final (profiles, storage) = await open(
+        tester,
+        updateError: const PostgrestException(message: 'nope', code: '500'),
+      );
+
+      await tester.tap(find.text('Change photo'));
+      await tester.pumpAndSettle();
+      await tester.tap(_saveButton);
+      await tester.pumpAndSettle();
+      profiles.updateError = null;
+      await tester.tap(find.text('Remove photo'));
+      await tester.pumpAndSettle();
+      await tester.tap(_saveButton);
+      await tester.pumpAndSettle();
+
+      expect(profiles.updates.last.avatarUrl, isNull);
+      final urls = storage.deletes.map((d) => d.$1).toList();
+      expect(urls, contains(oldUrl));
+      expect(
+        urls.where((u) => u.startsWith('https://cdn.test/avatar_')),
+        hasLength(1),
+      );
+    });
+
+    testWidgets('a failing delete does not fail the save or show an error', (
+      tester,
+    ) async {
+      final (profiles, storage) = await open(
+        tester,
+        deleteError: Exception('storage down'),
+      );
+
+      await tester.tap(find.text('Change photo'));
+      await tester.pumpAndSettle();
+      await tester.tap(_saveButton);
+      await tester.pumpAndSettle();
+
+      expect(storage.deletes, hasLength(1));
+      expect(find.byType(EditProfileDialog), findsNothing);
+      expect(find.text('Profile updated'), findsOneWidget);
+      expect(find.textContaining('storage down'), findsNothing);
+      expect(
+        find.text('Something went wrong. Please try again.'),
+        findsNothing,
+      );
+      expect(tester.takeException(), isNull);
     });
   });
 

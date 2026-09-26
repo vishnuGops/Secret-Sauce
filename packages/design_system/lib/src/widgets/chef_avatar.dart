@@ -62,14 +62,40 @@ class ChefAvatar extends StatelessWidget {
   /// The tier dot's cut-out border.
   static const double _dotBorderWidth = 2;
 
-  /// One letter from a single-word name, two from a longer one.
+  /// One letter from a single-word name, two from a longer one — first word
+  /// and last — and `?` when the name holds no word at all.
+  ///
+  /// Letters only (UX-040). Splitting on whitespace alone took whatever
+  /// character opened each token, so an imported byline such as
+  /// `Kannamma @kannammacooks.com` drew **"K@"**. Now:
+  ///
+  ///  * a token that opens with `@` is a handle, not a name word, and is
+  ///    skipped — so that byline is **"K"**, the one name it carries, rather
+  ///    than "KK" from a handle that happens to repeat it;
+  ///  * each remaining token contributes its first **letter** (`\p{L}`, any
+  ///    script), so `(Kannamma)` is K and `123` contributes nothing;
+  ///  * the letter is taken as a whole grapheme, so a decomposed `É` keeps its
+  ///    accent.
   static String initialsFor(String name) {
-    final parts =
-        name.trim().split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
-    if (parts.isEmpty) return '?';
-    if (parts.length == 1) return parts.first.characters.first.toUpperCase();
-    return (parts.first.characters.first + parts.last.characters.first)
-        .toUpperCase();
+    final initials = <String>[];
+    for (final token in name.trim().split(RegExp(r'\s+'))) {
+      if (token.startsWith('@')) continue;
+      final letter = _firstLetter(token);
+      if (letter != null) initials.add(letter);
+    }
+    if (initials.isEmpty) return '?';
+    if (initials.length == 1) return initials.first.toUpperCase();
+    return (initials.first + initials.last).toUpperCase();
+  }
+
+  static final RegExp _startsWithLetter = RegExp(r'^\p{L}', unicode: true);
+
+  /// The first grapheme of [token] that is a letter, or null when none is.
+  static String? _firstLetter(String token) {
+    for (final grapheme in token.characters) {
+      if (_startsWithLetter.hasMatch(grapheme)) return grapheme;
+    }
+    return null;
   }
 
   @override

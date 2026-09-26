@@ -1,10 +1,13 @@
 import 'package:app/features/my_recipes/my_recipes_providers.dart';
 import 'package:app/features/my_recipes/my_recipes_screen.dart';
+import 'package:app/routing/app_router.dart';
+import 'package:app/routing/app_shell.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
 /// `MyRecipesScreen`: the header the `New recipe` button moved onto (Phase 21)
 /// and the grids under it, whose per-tab flags are the screen's only other
@@ -98,8 +101,83 @@ Future<void> _pump(
   await tester.pumpAndSettle();
 }
 
-/// Header only. Compact's empty state has its own labelled `New recipe` (web's
-/// dropped it for UX-055), so an unscoped finder would not say which one.
+/// The shell's web top bar asks who is signed in; nobody is, which is all the
+/// chrome needs to draw. My Recipes' own tabs are stubbed at the notifier seam.
+class _SignedOut implements AuthRepository {
+  @override
+  String? get currentUserId => null;
+
+  @override
+  Future<String?> currentProfileId() async => null;
+
+  @override
+  Stream<AuthState> authStateChanges() => const Stream.empty();
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) =>
+      throw UnimplementedError('${invocation.memberName} not stubbed');
+}
+
+/// The screen inside the **real** `AppShell`, because the compact FAB — one of
+/// the three `New recipe`s UX-055 counted — belongs to the shell, not the page.
+Future<void> _pumpInShell(
+  WidgetTester tester, {
+  required double width,
+  double textScale = 1.0,
+  bool populated = false,
+}) async {
+  tester.view.physicalSize = Size(width, 900);
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+
+  final router = GoRouter(
+    initialLocation: Routes.myRecipes,
+    routes: [
+      ShellRoute(
+        builder:
+            (context, state, child) =>
+                AppShell(location: state.matchedLocation, child: child),
+        routes: [
+          GoRoute(
+            path: Routes.myRecipes,
+            builder: (_, __) => const MyRecipesScreen(),
+          ),
+        ],
+      ),
+    ],
+  );
+  addTearDown(router.dispose);
+
+  await tester.pumpWidget(
+    ProviderScope(
+      overrides: [
+        authRepositoryProvider.overrideWithValue(_SignedOut()),
+        myRecipesProvider.overrideWith(
+          populated ? _OneMine.new : _EmptyMine.new,
+        ),
+        sharedWithMeProvider.overrideWith(
+          populated ? _OneShared.new : _EmptyShared.new,
+        ),
+      ],
+      child: MaterialApp.router(
+        theme: AppTheme.light(),
+        routerConfig: router,
+        builder:
+            (context, child) => MediaQuery(
+              data: MediaQuery.of(
+                context,
+              ).copyWith(textScaler: TextScaler.linear(textScale)),
+              child: child!,
+            ),
+      ),
+    ),
+  );
+  await tester.pumpAndSettle();
+}
+
+/// Header only — scoped, because in the shell the compact FAB carries the same
+/// label.
 final _headerLabel = find.descendant(
   of: find.byKey(MyRecipesScreen.newRecipeButtonKey),
   matching: find.text('New recipe'),
@@ -148,13 +226,76 @@ void main() {
     );
   });
 
-  testWidgets('compact keeps the icon — the FAB is the labelled action there', (
-    tester,
-  ) async {
-    await _pump(tester, width: 390);
+  // UX-055: an empty vault on a phone showed three `New recipe`s at once — the
+  // AppBar icon, the empty state's button and the shell's FAB. The rule
+  // (see `MyRecipesScreen`): the chrome's persistent control is the one —
+  // the FAB on compact, the header button on web — and the page adds none.
+  group('exactly one New recipe (UX-055)', () {
+    for (final populated in [false, true]) {
+      final state = populated ? 'with recipes' : 'empty';
 
-    expect(_headerLabel, findsNothing);
-    expect(find.byTooltip('New recipe'), findsOneWidget);
+      testWidgets('compact, $state: the shell FAB and nothing else', (
+        tester,
+      ) async {
+        await _pumpInShell(tester, width: 390, populated: populated);
+        expect(
+          find.text(populated ? 'Suya-Spiced Lamb Skewers' : 'No recipes yet'),
+          findsOneWidget,
+        );
+
+        expect(find.text('New recipe'), findsOneWidget);
+        expect(
+          find.descendant(
+            of: find.byType(FloatingActionButton),
+            matching: find.text('New recipe'),
+          ),
+          findsOneWidget,
+        );
+        // The icon-only AppBar action is gone too.
+        expect(find.byTooltip('New recipe'), findsNothing);
+        expect(find.byIcon(Icons.add), findsOneWidget); // the FAB's own
+      });
+
+      testWidgets('web, $state: the header button and nothing else', (
+        tester,
+      ) async {
+        await _pumpInShell(tester, width: 1440, populated: populated);
+        expect(
+          find.text(populated ? 'Suya-Spiced Lamb Skewers' : 'No recipes yet'),
+          findsOneWidget,
+        );
+
+        expect(find.byType(FloatingActionButton), findsNothing);
+        expect(find.text('New recipe'), findsOneWidget);
+        expect(_headerLabel, findsOneWidget);
+        expect(find.byTooltip('New recipe'), findsNothing);
+      });
+    }
+
+    for (final width in <double>[390, 600, 1000, 1440]) {
+      for (final scale in <double>[1.0, 2.0]) {
+        for (final populated in [false, true]) {
+          testWidgets('in the shell at ${width}px, textScale $scale, '
+              '${populated ? 'with recipes' : 'empty'}: one, and no overflow', (
+            tester,
+          ) async {
+            await _pumpInShell(
+              tester,
+              width: width,
+              textScale: scale,
+              populated: populated,
+            );
+            expect(
+              tester.takeException(),
+              isNull,
+              reason: 'overflow at ${width}px @ ${scale}x',
+            );
+            expect(find.text('New recipe'), findsOneWidget);
+            expect(find.byTooltip('New recipe'), findsNothing);
+          });
+        }
+      }
+    }
   });
 
   // The header lines up with the grid's first card, not with the window —

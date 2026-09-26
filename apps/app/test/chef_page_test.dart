@@ -577,7 +577,14 @@ void main() {
       await tester.pumpAndSettle();
 
       // The seed's private-only chef: a real profile that holds no board row.
-      expect(find.text('Farid Haddad'), findsOneWidget);
+      // In the header (the app bar names him too since UX-042).
+      expect(
+        find.descendant(
+          of: find.byType(ChefIdentityHeader),
+          matching: find.text('Farid Haddad'),
+        ),
+        findsOneWidget,
+      );
       expect(find.textContaining('Not ranked yet'), findsOneWidget);
       expect(find.textContaining('do not hold'), findsOneWidget);
 
@@ -648,6 +655,36 @@ void main() {
         );
         await tester.pumpAndSettle();
 
+        expect(
+          tester.takeException(),
+          isNull,
+          reason: 'overflow at ${width}px @ ${scale}x',
+        );
+      });
+
+      // UX-042: the imported credit page — no standing, no joined line, the
+      // unclaimed note, and the chef's (long) name now in the app bar too.
+      testWidgets('an imported page fits at ${width}px, textScale $scale', (
+        tester,
+      ) async {
+        _size(tester, width, 1400);
+        await tester.pumpWidget(
+          _app(
+            textScale: scale,
+            standing: null,
+            profile: Profile(
+              id: 'ssk',
+              displayName: 'Bartholomew Featherstonehaugh-Wentworth',
+              kind: ProfileKind.imported,
+              createdAt: DateTime(2026, 9, 14),
+              publicRecipeCount: 128,
+            ),
+            pages: const [[]],
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(find.textContaining('joined'), findsNothing);
         expect(
           tester.takeException(),
           isNull,
@@ -745,6 +782,38 @@ void main() {
       );
       expect(button.onPressed, isNull);
       expect(find.byType(Tooltip), findsWidgets);
+    });
+
+    // UX-042: an imported profile's `created_at` is when the importer ran.
+    // Nobody joined anything, so the header must not say they did.
+    testWidgets('does not say when the imported chef "joined"', (tester) async {
+      _size(tester, 1000);
+      await tester.pumpWidget(
+        _app(standing: null, profile: imported(), pages: const [[]]),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('joined'), findsNothing);
+      // The rest of the fact line survives.
+      expect(find.textContaining('4 public recipes'), findsWidgets);
+    });
+
+    testWidgets('a member still says when they joined', (tester) async {
+      _size(tester, 1000);
+      await tester.pumpWidget(
+        _app(
+          standing: null,
+          profile: Profile(
+            id: 'ssk',
+            displayName: 'Aurelie Fontaine',
+            createdAt: DateTime(2025, 3, 14),
+          ),
+          pages: const [[]],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('joined Mar 2025'), findsOneWidget);
     });
 
     testWidgets('a ranked member never gets the unclaimed note', (
@@ -863,6 +932,57 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(_titles(tester), contains('Secret Sauce Kitchen · Secret Sauce'));
+    });
+  });
+
+  // UX-042: the app bar said "Chef" over every chef's page.
+  group('the app bar', () {
+    String barTitle(WidgetTester tester) =>
+        tester
+            .widget<Text>(
+              find.descendant(
+                of: find.byType(AppBar),
+                matching: find.byType(Text),
+              ),
+            )
+            .data!;
+
+    testWidgets("names the chef once loaded, and the tab agrees", (
+      tester,
+    ) async {
+      _size(tester, 1000);
+      await tester.pumpWidget(_app());
+      // First frame: still loading, so the generic word.
+      expect(barTitle(tester), 'Chef');
+
+      await tester.pumpAndSettle();
+      expect(barTitle(tester), 'Secret Sauce Kitchen');
+      // Every page Title in the tree says the same page — no stale "Chef"
+      // tab. (The bare MaterialApp here carries an empty app-level title.)
+      expect(_titles(tester).where((t) => t.isNotEmpty).toSet(), {
+        'Secret Sauce Kitchen · Secret Sauce',
+      });
+    });
+
+    testWidgets('keeps the generic word on an error', (tester) async {
+      _size(tester, 1000);
+      await tester.pumpWidget(_app(standingFails: true));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ErrorView), findsOneWidget);
+      expect(barTitle(tester), 'Chef');
+    });
+
+    testWidgets('an unnamed chef falls back to "Chef", never a blank bar', (
+      tester,
+    ) async {
+      _size(tester, 1000);
+      await tester.pumpWidget(
+        _app(profile: const Profile(id: 'ssk'), pages: const [[]]),
+      );
+      await tester.pumpAndSettle();
+
+      expect(barTitle(tester), 'Chef');
     });
   });
 }

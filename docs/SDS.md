@@ -861,6 +861,15 @@ change, so no new `rls_matrix.sql` check; the live stack confirmed each query sh
   object), behind the shared `kMaxUploadBytes` guard and `kImageTooLargeMessage`. "View my chef page"
   (profile screen and web account menu) pushes `/chef/<profiles.id>`. The page is capped at 560px;
   its `LegalFooter` renders on compact only, since web carries it in the chrome.
+- **Avatar cleanup (B141, B146; Phase 38).** After a successful `updateMine` that replaced or removed
+  the photo, the dialog deletes the **previous** object, best effort (a failure goes to
+  `friendlyError`'s log and nowhere else), through `StorageService.deleteOwnAvatar(publicUrl)` —
+  which acts only on this project's public URL for an object in `avatars` under the signed-in
+  account's own `<auth uid>/` folder (the `avatars deletable by owner folder` policy) and sends no
+  request for anything else, or when signed out. Uploads the profile never pointed at (a save that
+  failed after its upload, then was replaced, removed or abandoned) are deleted when a later save
+  lands or the dialog closes. Recipe images keep the opposite rule on purpose: an unsaved removal
+  must not delete what the recipe still points at.
 - **Saved (UX-020).** `RecipeRepository.listSaved` pages `recipe_saves` (newest save first,
   `recipe_id` tie-break — Gotcha 24) with a `recipes!inner(…)` embed, so a saved recipe that has since
   gone private is dropped server-side, before `range`, instead of arriving as `null`. `saves_select` is
@@ -1382,7 +1391,7 @@ either way, which is what the fixed 65px band (B047) is budgeted against.
 | Widget      | Use                                                                                    |
 | ----------- | -------------------------------------------------------------------------------------- |
 | `TierChip`  | Tier pill (icon + label); `dense` drops the icon. `colorFor(tier, brightness)` is the shared accent |
-| `ChefAvatar` | The circle alone: photo when there is one, `initialsFor(name)` when there is not. Optional `ringColor` (a `surfaceColor` gap then a ring) and `tier` (rank dot, bottom-right) — both used by the web top navigation, where the avatar *is* the account control and has to carry rank at 34px. Ring and dot are drawn **outside** the circle, so a ringed avatar is wider than `radius * 2` |
+| `ChefAvatar` | The circle alone: photo when there is one, `initialsFor(name)` when there is not (letters only since Phase 38, UX-040: a token opening with `@` is a handle and skipped, a token's first **letter** grapheme counts, first and last word, `?` for none — `Kannamma @kannammacooks.com` is `K`, not `K@`). Optional `ringColor` (a `surfaceColor` gap then a ring) and `tier` (rank dot, bottom-right) — both used by the web top navigation, where the avatar *is* the account control and has to carry rank at 34px. Ring and dot are drawn **outside** the circle, so a ringed avatar is wider than `radius * 2` |
 | `ChefBadge` | `ChefAvatar` + name with the `TierChip` **under** the name; `compact` for dense surfaces, `onSurfaceImage` for the card's cover overlay. `ChefBadge.fromProfile(recipe.owner!)` is the usual call |
 | `ChefStandingCard` | One leaderboard row, in two shapes chosen by `variant`. `podium` (default) is the full-width row: tier spine, medal for ranks 1–3, four labelled stat chips, `34% to Master`. `board` is the dense row for the chefs page's 404px panel: `RankBadge.disc` instead of the podium's `RankBadge.podium`, no stat chips, a 3px tier progress bar on the bottom edge. One widget, not two, so the two rows cannot drift |
 | `ChefSpotlightCard` | A chef as a collectible card (draft `1e`): tier-gradient foil frame, portrait window with serial and rank, rarity band, a "driver" row naming the input contributing most, the four totals, and the tier-ladder bar. Renders entirely from one `ChefStanding` — **no per-card fetch** |
@@ -1847,8 +1856,15 @@ ordering's rows, which is Gotcha 24 one level in.
 - **Rails** (`chefs_rails.dart`). Three `CardRail`s of `ChefSpotlightCard`: **Popular** (all-time,
   off the leaderboard), **Trending** (7 days) and **Best of the month** (30 days), the last two the
   top 10 **movers** of `chefs_leaderboard_windowed`, each card reading `+192 · last 7 days` over its
-  all-time driver line. A window where nobody moved is a `QuietShelfCard` ("Nothing moved in the last
-  7 days"), never placeholders and never a spinner.
+  all-time driver line. **An empty shelf keeps its heading and says why in one sentence** (Phase
+  38, UX-045 — the Discover shelf pattern): Popular with nobody ranked, a window where nobody moved.
+  It is the rail's own badged header over no cards with the reason as its footnote — never
+  placeholders, never a spinner, and no longer a card-sized bordered `QuietShelfCard`, whose
+  centred sentence sat below the fold of the fixed-height layout so the audit saw an empty box. An
+  error keeps the heading too. A shelf shorter than a page (< 3 chefs) ends in a plain-text note
+  ("That is every ranked chef so far…") where the next card would be; the rail draws no pager at
+  that size, so the note is never counted as a chef. The rails column was never capped — it takes
+  everything beside the 404px panel; the 1440 blank was a one-chef database.
 - **Sort and window are one state** (`BoardView`, Phase 33). The Score / Momentum / New tabs and the
   hero's All time / Month / Week are both live and coupled: Month or Week turns the board to Momentum
   over that span, Momentum from All time takes Month, All time turns Momentum back into Score. An

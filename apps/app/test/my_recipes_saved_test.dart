@@ -199,8 +199,9 @@ void main() {
   });
 
   // UX-055: an empty vault on web showed the header's `New recipe` and the
-  // empty state's, one card apart. Web keeps the header's; compact, whose
-  // AppBar has only an icon, keeps the empty state's labelled one.
+  // empty state's, one card apart. Web keeps the header's; compact leaves it
+  // to the shell's FAB (not pumped here — `my_recipes_header_test` counts it
+  // in the real shell), so the screen itself adds none.
   group('one labelled New recipe when My Recipes is empty', () {
     testWidgets('web: the header button only', (tester) async {
       await _pump(tester, width: 1440, repo: _SavedRepo());
@@ -216,14 +217,15 @@ void main() {
       );
     });
 
-    testWidgets('compact: the empty state keeps its labelled button', (
+    testWidgets('compact: none of its own — the shell FAB is the one', (
       tester,
     ) async {
       await _pump(tester, width: 390, repo: _SavedRepo());
 
+      expect(find.text('No recipes yet'), findsOneWidget);
       expect(find.byKey(MyRecipesScreen.newRecipeButtonKey), findsNothing);
-      expect(find.text('New recipe'), findsOneWidget);
-      expect(find.byTooltip('New recipe'), findsOneWidget);
+      expect(find.text('New recipe'), findsNothing);
+      expect(find.byTooltip('New recipe'), findsNothing);
     });
   });
 

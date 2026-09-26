@@ -53,6 +53,62 @@ class StorageService {
     );
   }
 
+  /// Deletes the avatar object at [publicUrl] **if it is the signed-in
+  /// account's own** (B141) — and does nothing otherwise.
+  ///
+  /// A replaced or removed photo used to stay public at its old URL: Save only
+  /// re-points `profiles.avatar_url`. The caller runs this after a successful
+  /// profile write, with the URL the profile pointed at before it.
+  ///
+  /// "Own" is exactly what the `avatars deletable by owner folder` policy
+  /// permits: an object in the `avatars` bucket of **this** project whose first
+  /// folder is the current **auth uid** (not `profiles.id` — Phase 35b). A URL
+  /// on another host, in another bucket, under another account's folder, or one
+  /// that does not parse is left alone without a request: the server would
+  /// refuse most of them anyway, but a delete this client did not mean to send
+  /// is not one to leave to a policy. Signed out is a no-op too.
+  ///
+  /// Throws what `remove` throws; the caller treats it as best effort.
+  Future<void> deleteOwnAvatar(String publicUrl) async {
+    final uid = _client.auth.currentUser?.id;
+    if (uid == null) return;
+    final path = _ownObjectPath(avatarsBucket, publicUrl, uid);
+    if (path == null) return;
+    await _client.storage.from(avatarsBucket).remove([path]);
+  }
+
+  /// The object path inside [bucket] that [publicUrl] names, when it is this
+  /// project's public URL for an object under `<uid>/`; null otherwise.
+  ///
+  /// The prefix is asked of the storage client rather than restated, so it is
+  /// the same `<supabase url>/storage/v1/object/public/<bucket>/` that
+  /// `getPublicUrl` produced when the object was uploaded.
+  String? _ownObjectPath(String bucket, String publicUrl, String uid) {
+    final url = Uri.tryParse(publicUrl);
+    if (url == null || !url.hasAuthority) return null;
+    // `getPublicUrl('x')` ends in `/<bucket>/x`; dropping the `x` leaves the
+    // bucket's own prefix as path segments.
+    final base = Uri.parse(_client.storage.from(bucket).getPublicUrl('x'));
+    if (url.scheme != base.scheme ||
+        url.host != base.host ||
+        url.port != base.port) {
+      return null;
+    }
+    final prefix = base.pathSegments.sublist(0, base.pathSegments.length - 1);
+    final segments = url.pathSegments; // already percent-decoded
+    if (segments.length < prefix.length + 2) return null; // `<uid>/<file>`
+    for (var i = 0; i < prefix.length; i++) {
+      if (segments[i] != prefix[i]) return null;
+    }
+    final object = segments.sublist(prefix.length);
+    if (object.first != uid) return null;
+    // An empty segment (`u1//a.jpg`, `u1/a.jpg/`) names no file. `Uri`
+    // already resolves `.`/`..`; they are refused again so the rule does not
+    // lean on that.
+    if (object.any((s) => s.isEmpty || s == '.' || s == '..')) return null;
+    return object.join('/');
+  }
+
   /// The upload both public methods do (OPT-A7): they differed by bucket name
   /// and nothing else, twice over.
   ///

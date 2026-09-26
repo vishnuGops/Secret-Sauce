@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:core/core.dart';
@@ -75,11 +76,46 @@ class _EditProfileDialogState extends ConsumerState<EditProfileDialog> {
   /// The stored photo was removed in this dialog (and nothing picked since).
   bool _removed = false;
 
+  /// Photos this dialog uploaded that the profile never came to point at
+  /// (B146): an upload whose profile write failed and was then replaced or
+  /// removed, or one left behind by closing the dialog. B141's cleanup never
+  /// sees them — it deletes the photo the profile *used* to point at — so
+  /// they are deleted here, best effort, once the dialog knows they are
+  /// strays: after a successful save, or when it closes without one.
+  final Set<String> _strayUploads = {};
+
+  /// Whether a save landed. Decides what closing the dialog cleans up.
+  bool _saved = false;
+
+  /// Captured while the element is active: `dispose` may not look it up.
+  ProviderContainer? _container;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _container = ProviderScope.containerOf(context, listen: false);
+  }
+
+  /// Moves the current upload, if any, onto [_strayUploads].
+  void _forgetUpload() {
+    final url = _uploadedUrl;
+    if (url != null) _strayUploads.add(url);
+    _uploadedUrl = null;
+  }
+
   bool _saving = false;
   String? _error;
 
   @override
   void dispose() {
+    // Closed without a save: nothing this dialog uploaded is on the profile.
+    final container = _container;
+    if (!_saved && container != null) {
+      _forgetUpload();
+      for (final url in _strayUploads) {
+        unawaited(_deletePreviousAvatar(container, url));
+      }
+    }
     _name.dispose();
     _bio.dispose();
     super.dispose();
@@ -108,7 +144,7 @@ class _EditProfileDialogState extends ConsumerState<EditProfileDialog> {
     }
     setState(() {
       _pendingBytes = bytes;
-      _uploadedUrl = null;
+      _forgetUpload();
       _removed = false;
       _error = null;
     });
@@ -116,7 +152,7 @@ class _EditProfileDialogState extends ConsumerState<EditProfileDialog> {
 
   void _removePhoto() => setState(() {
     _pendingBytes = null;
-    _uploadedUrl = null;
+    _forgetUpload();
     _removed = true;
     _error = null;
   });
@@ -124,19 +160,26 @@ class _EditProfileDialogState extends ConsumerState<EditProfileDialog> {
   Future<void> _save() async {
     if (_saving) return;
     if (!(_formKey.currentState?.validate() ?? false)) return;
+    // Captured before the first await (B140): the dialog can be gone by the
+    // time the save returns, and a dead `ref` would throw out of the success
+    // path — after the write landed. Storage is read from it lazily: a save
+    // that touches no photo never builds the storage client.
+    final container = ProviderScope.containerOf(context, listen: false);
+    final profiles = container.read(profileRepositoryProvider);
     setState(() {
       _saving = true;
       _error = null;
     });
     try {
-      var avatarUrl = _removed ? null : widget.profile.avatarUrl;
+      final previousUrl = widget.profile.avatarUrl;
+      var avatarUrl = _removed ? null : previousUrl;
       final pending = _pendingBytes;
       if (pending != null) {
         // The storage path is `<auth uid>/<fileName>` (StorageService — the
         // bucket policies are keyed on the auth uid, not `profiles.id`). A
         // timestamped name, because `upsert` on a fixed one would keep serving
         // the old photo from every cache that already holds its URL.
-        _uploadedUrl ??= await ref
+        _uploadedUrl ??= await container
             .read(storageServiceProvider)
             .uploadAvatar(
               fileName: 'avatar_${DateTime.now().millisecondsSinceEpoch}.jpg',
@@ -145,18 +188,34 @@ class _EditProfileDialogState extends ConsumerState<EditProfileDialog> {
         avatarUrl = _uploadedUrl;
       }
       final bio = _bio.text.trim();
-      await ref
-          .read(profileRepositoryProvider)
-          .updateMine(
-            widget.profile.copyWith(
-              displayName: _name.text.trim(),
-              bio: bio.isEmpty ? null : bio,
-              avatarUrl: avatarUrl,
-            ),
-          );
+      await profiles.updateMine(
+        widget.profile.copyWith(
+          displayName: _name.text.trim(),
+          bio: bio.isEmpty ? null : bio,
+          avatarUrl: avatarUrl,
+        ),
+      );
+      // B141: the photo the profile pointed at until this write stays public
+      // unless it is removed. Only now — a failed save must leave the object
+      // the profile still points at — and only when the photo actually moved.
+      // Not awaited: the save has landed, and closing the dialog should not
+      // wait on a cleanup the reader cannot see.
+      if (previousUrl != null &&
+          previousUrl.isNotEmpty &&
+          previousUrl != avatarUrl) {
+        unawaited(_deletePreviousAvatar(container, previousUrl));
+      }
+      // B146: uploads from earlier failed attempts that this save replaced.
+      _saved = true;
+      for (final url in _strayUploads) {
+        if (url != avatarUrl) {
+          unawaited(_deletePreviousAvatar(container, url));
+        }
+      }
+      _strayUploads.clear();
       // One read feeds this screen and the web avatar menu; refreshing it is
       // what moves both to the new name at once.
-      ref.invalidate(myProfileProvider);
+      container.invalidate(myProfileProvider);
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {
       // The dialog stays open with what the reader typed, so a failed save is
@@ -167,6 +226,25 @@ class _EditProfileDialogState extends ConsumerState<EditProfileDialog> {
           _error = friendlyError(e);
         });
       }
+    }
+  }
+
+  /// Best effort (B141). The profile no longer points at [url], so a failure
+  /// here costs an orphan object, not the save: it is logged through
+  /// `friendlyError` and never shown. `deleteOwnAvatar` itself leaves any URL
+  /// outside this account's `avatars/<auth uid>/` folder alone — a photo set
+  /// some other way (an external URL) is not ours to delete.
+  ///
+  /// The storage read is inside the `try` too: nothing about the cleanup may
+  /// throw back into a save that has already succeeded.
+  static Future<void> _deletePreviousAvatar(
+    ProviderContainer container,
+    String url,
+  ) async {
+    try {
+      await container.read(storageServiceProvider).deleteOwnAvatar(url);
+    } catch (e) {
+      friendlyError(e); // logs; the sentence is deliberately discarded
     }
   }
 

@@ -28,14 +28,19 @@ class EntityPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(entityPageProvider(entityId));
+    // The publisher's name once the body shows it (UX-042); the generic word
+    // while loading or failed. `whenOrNull` follows the `when` below, so the
+    // bar never names a publisher over an error view.
+    final loaded = async.whenOrNull(data: (data) => data);
+    final title = loaded == null ? 'Publisher' : _nameOf(loaded.entity);
 
     // UX-051 (Phase 37 review): titled while loading or failed too — the
-    // loaded header's own title, nested inside, replaces this one.
+    // loaded header's own title, nested inside, says the same thing.
     return RouteTitle(
-      page: 'Publisher',
+      page: title,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Publisher'),
+          title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
           leading: BackButton(
             onPressed: () => popOrGo(context, Routes.discover),
           ),
@@ -52,6 +57,25 @@ class EntityPage extends ConsumerWidget {
       ),
     );
   }
+}
+
+/// `name` defaults to '' rather than null, so an unnamed row needs a visible
+/// fallback rather than a blank heading and a blank app bar.
+String _nameOf(Entity entity) =>
+    entity.name.trim().isEmpty ? 'Publisher' : entity.name;
+
+/// What a roster row says under the name, or null when the heading above the
+/// roster already says it (UX-042).
+///
+/// A free-text title (`Head Chef`, `Pastry`) always adds something. An owner
+/// with no title gets what the role *means* here — they manage this page —
+/// rather than the word "Owner", which reads as owning the business. A plain
+/// `chef` member with no title gets nothing: the heading already said they
+/// cook here, and "Chef" under every name was the third repetition.
+String? _memberNote(EntityMember member) {
+  final title = member.title?.trim() ?? '';
+  if (title.isNotEmpty) return title;
+  return member.isOwner ? 'Manages this page' : null;
 }
 
 class _Loaded extends StatelessWidget {
@@ -72,7 +96,9 @@ class _Loaded extends StatelessWidget {
         if (data.members.isNotEmpty)
           SliverPadding(
             padding: EdgeInsets.fromLTRB(pad, AppSpacing.lg, pad, 0),
-            sliver: SliverToBoxAdapter(child: _Roster(members: data.members)),
+            sliver: SliverToBoxAdapter(
+              child: _Roster(entity: data.entity, members: data.members),
+            ),
           ),
         SliverPadding(
           padding: EdgeInsets.fromLTRB(pad, AppSpacing.lg, pad, AppSpacing.sm),
@@ -118,10 +144,11 @@ class _Header extends StatelessWidget {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
 
-    // The publisher's name titles the browser tab (UX-051); the AppBar only
-    // says "Publisher".
+    // The publisher's name titles the browser tab (UX-051) and, since UX-042,
+    // the app bar too.
+    final name = _nameOf(entity);
     return RouteTitle(
-      page: entity.name,
+      page: name,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -129,7 +156,7 @@ class _Header extends StatelessWidget {
           Semantics(
             container: true,
             header: true,
-            child: Text(entity.name, style: theme.textTheme.headlineSmall),
+            child: Text(name, style: theme.textTheme.headlineSmall),
           ),
           const SizedBox(height: AppSpacing.sm),
           // Wrap: kind, country and the link are three intrinsically-sized chips
@@ -187,8 +214,9 @@ class _Header extends StatelessWidget {
 
 /// The roster — owners first, each row a link to that chef's page.
 class _Roster extends StatelessWidget {
-  const _Roster({required this.members});
+  const _Roster({required this.entity, required this.members});
 
+  final Entity entity;
   final List<EntityMember> members;
 
   @override
@@ -201,8 +229,11 @@ class _Roster extends StatelessWidget {
         Semantics(
           container: true,
           header: true,
+          // Names the group (UX-042): "Cooks at Northern Bakehouse" says
+          // whose roster this is, where a bare "Chefs" repeated the kind chip
+          // and every role line under it.
           child: Text(
-            members.length == 1 ? 'Chef' : 'Chefs',
+            'Cooks at ${_nameOf(entity)}',
             style: theme.textTheme.titleMedium,
           ),
         ),
@@ -230,6 +261,7 @@ class _MemberRow extends StatelessWidget {
         (profile?.displayName.isNotEmpty ?? false)
             ? profile!.displayName
             : 'Unnamed cook';
+    final note = _memberNote(member);
 
     return ListTile(
       contentPadding: EdgeInsets.zero,
@@ -242,14 +274,17 @@ class _MemberRow extends StatelessWidget {
         radius: _avatarRadius,
       ),
       title: Text(name, maxLines: 1, overflow: TextOverflow.ellipsis),
-      subtitle: Text(
-        member.roleLabel,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: theme.textTheme.bodySmall?.copyWith(
-          color: theme.colorScheme.onSurfaceVariant,
-        ),
-      ),
+      subtitle:
+          note == null
+              ? null
+              : Text(
+                note,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
       // An imported chef's page is a credit rather than an account, and it says
       // so when you get there — so the row goes somewhere either way.
       trailing: const Icon(Icons.chevron_right),

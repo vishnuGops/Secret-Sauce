@@ -26,12 +26,24 @@ import 'package:app/widgets/recipe_grid.dart';
 ///    header instead, the way Discover opens with its masthead: the title and
 ///    the labelled `New recipe` button, then the tab strip, aligned with the
 ///    grid's first card rather than with the window edge.
+///
+/// **Exactly one `New recipe` per chrome, empty or not** (UX-055). The rule:
+/// the persistent control of that chrome is the one, and the page adds no
+/// other.
+///
+///  * **Compact:** the shell's extended FAB (`AppShell`), labelled and on every
+///    compact destination. This screen cannot remove it, so it adds nothing of
+///    its own — no `AppBar` icon and no button in the empty state. The empty
+///    vault used to show all three at once.
+///  * **Web:** the header's labelled button ([newRecipeButtonKey]). The shell
+///    has no FAB there, so the empty state carries no button either — it sat
+///    one card below an identical one (Phase 37).
 class MyRecipesScreen extends ConsumerWidget {
   const MyRecipesScreen({super.key});
 
-  /// The web header's labelled `New recipe` button. The compact empty state
-  /// carries a button with the same label, so a test needs a way to tell them
-  /// apart.
+  /// The web header's labelled `New recipe` button — the page's only one
+  /// (compact leaves it to the shell's FAB). Keyed so a test can tell it from
+  /// the FAB when both chromes are pumped.
   static const newRecipeButtonKey = ValueKey('my-recipes-new-recipe');
 
   static const _tabs = [
@@ -51,22 +63,13 @@ class MyRecipesScreen extends ConsumerWidget {
           // Every card here is mine — a repeated chef badge is noise, and it
           // would fight the public/private pill for cover space.
           showChef: false,
-          empty: EmptyView(
+          // No action (UX-055): the chrome's own `New recipe` — the web
+          // header's button, the compact FAB — is already on screen, and a
+          // second identical button reads as a second, different action.
+          empty: const EmptyView(
             title: 'No recipes yet',
             message: 'Create your first recipe to start your vault.',
             icon: Icons.menu_book_outlined,
-            // Compact only (UX-055): on web the header's labelled `New recipe`
-            // sits directly above this, and two identical buttons one card
-            // apart read as two different actions. A phone's AppBar has only
-            // an icon, so the empty state keeps the labelled one there.
-            action:
-                compact
-                    ? FilledButton.icon(
-                      onPressed: () => context.go(Routes.newRecipe),
-                      icon: const Icon(Icons.add),
-                      label: const Text('New recipe'),
-                    )
-                    : null,
           ),
         ),
         RecipeAsyncGrid(
@@ -111,18 +114,8 @@ class MyRecipesScreen extends ConsumerWidget {
               isScrollable: true,
               tabAlignment: TabAlignment.start,
             ),
-            actions: [
-              // Icon only: the shell's FAB is already the labelled call to
-              // action on a phone.
-              Padding(
-                padding: const EdgeInsets.only(right: AppSpacing.sm),
-                child: IconButton(
-                  icon: const Icon(Icons.add),
-                  tooltip: 'New recipe',
-                  onPressed: () => context.go(Routes.newRecipe),
-                ),
-              ),
-            ],
+            // No `New recipe` action: the shell's FAB is the one on a phone
+            // (UX-055, see the class comment).
           ),
           body: grids,
         ),

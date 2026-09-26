@@ -84,8 +84,4 @@ class EntityMember with _$EntityMember {
       _$EntityMemberFromJson(json);
 
   bool get isOwner => role == EntityRole.owner;
-
-  /// What the roster row prints under the name.
-  String get roleLabel =>
-      title?.trim().isNotEmpty ?? false ? title!.trim() : role.label;
 }

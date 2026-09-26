@@ -962,8 +962,7 @@ B137, B138, B139 (the card keeps `1h 10m` by width), B140 (five writes that outl
 auth Back honouring `returnTo`, chef/entity tab titles while loading, a scaled pinch printing `0`,
 and the doc drift (SDS rail/§8, CLAUDE.md layout, DESIGN §4, the `frac` comments). Deferred:
 
-- [→] B141 — a removed or replaced avatar stays in the public bucket (best-effort delete of the
-      previous object after a successful save) — Phase 38 wave C
+- [x] B141 — a removed or replaced avatar stays in the public bucket — fixed in Phase 38 wave C
 
 ---
 
@@ -1007,12 +1006,14 @@ decision.
 
 **Wave C — chefs, entities, profile, My Recipes**
 
-- [ ] UX-042 — chef / publisher names in the app bar; no "joined" on an imported page; the
-      entity page says "Chef" once
-- [ ] UX-045 — empty chefs rails keep their heading and say why; a short shelf ends in a note
-- [ ] UX-040 — avatar initials from letters only
-- [ ] UX-055 (My Recipes) — one New recipe per layout
-- [ ] B141 — a replaced or removed avatar is deleted from the bucket after the save
+- [x] UX-042 — chef / publisher names in the app bar; no "joined" on an imported page; the
+      entity page says "Chef" nowhere as a bare word (`EntityKind.chefSite` reads "Chef's own
+      site"; the dead `EntityMember.roleLabel` is gone)
+- [x] UX-045 — empty chefs rails keep their heading and say why; a short shelf ends in a note
+- [x] UX-040 — avatar initials from letters only
+- [x] UX-055 (My Recipes) — one New recipe per layout (phone: the shell FAB; web: the header)
+- [x] B141 — a replaced or removed avatar is deleted from the bucket after the save; B146 (found
+      on the way) — an upload the profile never pointed at is deleted too
 
 **Wave D — accessibility and tokens**
 

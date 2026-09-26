@@ -34,6 +34,13 @@ class ChefIdentityHeader extends StatelessWidget {
   static const double _avatarRadiusCompact = 28;
   static const double _avatarRadius = 36;
 
+  /// The name this page is titled with — the header's heading, the app bar
+  /// and the browser tab all read it (UX-042). `display_name` defaults to ''
+  /// rather than null, so an unnamed profile needs a visible fallback, not a
+  /// blank line.
+  static String nameOf(Profile profile) =>
+      profile.displayName.isEmpty ? 'Chef' : profile.displayName;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -59,12 +66,14 @@ class ChefIdentityHeader extends StatelessWidget {
       // From the profile row, not the standing: it is present either way, and
       // an unranked chef still gets an honest count rather than a hard zero.
       countOf(profile.publicRecipeCount, 'public recipes'),
-      if (profile.createdAt != null) 'joined ${monthYear(profile.createdAt!)}',
+      // Members only (UX-042). An imported profile's `created_at` is when the
+      // importer ran, not when a person joined anything — they never did, so
+      // "joined Sep 2026" on a credit page is a claim about nobody.
+      if (!imported && profile.createdAt != null)
+        'joined ${monthYear(profile.createdAt!)}',
     ];
 
-    // `display_name` defaults to '' rather than null, so an unnamed profile
-    // needs a visible fallback, not a blank line.
-    final name = profile.displayName.isEmpty ? 'Chef' : profile.displayName;
+    final name = nameOf(profile);
 
     // The chef's name titles the browser tab (UX-051) — this header is the
     // one place on the page that always has the profile in hand.
