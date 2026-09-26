@@ -39,6 +39,12 @@ const double _kAdvanceTarget = 52;
 /// The wide layout's Previous / advance height.
 const double _kWideActionHeight = 56;
 
+/// The gap between the "For this step" quantity gutter and the name (UX-030) —
+/// the reading rail's gap, for the reading rail's reason: a label that fills
+/// the gutter (`3 tablespoons`, `2 handfuls`) ran flush into the name. Taken
+/// from the name's side so the gutter itself is unchanged.
+const double _kGutterGap = AppSpacing.sm;
+
 /// The numbered disc in front of an upcoming step.
 const double _kStepNumberDiameter = 30;
 
@@ -785,6 +791,7 @@ class _CookRail extends StatelessWidget {
                             style: context.appText.quantity,
                           ),
                         ),
+                        const SizedBox(width: _kGutterGap),
                         Expanded(
                           child: Text(
                             sentenceCase(ing.name),

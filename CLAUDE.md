@@ -189,7 +189,9 @@ secret-sauce/
     ├── seed_recipes.sql          # GENERATED from recipeData/ — never hand-edit. The only
     │                             #   seed file a real database gets; carries NO engagement
     ├── nutrition_foods.sql       # GENERATED from nutritionData/ — never hand-edit;
-    │                             #   applied BEFORE seed_recipes (29b's food_id FK)
+    │                             #   applied BEFORE seed_recipes (29b's food_id FK). Ends by
+    │                             #   canonicalising imported units against the canon it just
+    │                             #   loaded (Phase 39 — 0001 runs before it on every path)
     ├── sim/                      # simulated population (Phase 24); schema `sim`, never `public`
     │   ├── 0_sim_schema.sql      #   config, personas, presets, registries, rand helpers,
     │   │                         #   nutrition_profile + nutrition_for() (Phase 28)
@@ -205,7 +207,7 @@ secret-sauce/
     │   │                         #   (`db:sim:rls`) — writes, then rolls back. NOT in db:sim
     │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
     ├── tests/rls_matrix.sql      # the RLS matrix as a SIGNED-IN user (BL-7, `db:rls`) —
-    │                             #   186 checks; makes its own users, then ROLLS BACK.
+    │                             #   188 checks; makes its own users, then ROLLS BACK.
     │                             #   §G is Phase 35b (imported profiles, entities, claims, the
     │                             #   claim MERGE end to end, and B117's pending-claim cap);
     │                             #   §H is 35c (provenance is server-owned, the corpus surface,
@@ -453,7 +455,7 @@ melos run db:purge:fake -- --yes # DESTRUCTIVE: sim teardown, then seed.sql's fi
 # The RLS acceptance matrix as a SIGNED-IN user (BL-7). Additive only in the sense that
 # it writes and then rolls back — it leaves no user, no recipe, no helper function.
 # Run it after ANY change to a policy, a `security definer` function, or the column grants.
-melos run db:rls      # 186 checks across anon / owner / shared-with / stranger / imported
+melos run db:rls      # 188 checks across anon / owner / shared-with / stranger / imported
 
 # Auto-nutrition SQL. Both roll back; run them after touching the estimator, the
 # backfill, nutritionData/, or an auto recipe's ingredients.
@@ -1123,7 +1125,7 @@ the `code-review` skill). The ones you need while _writing_ code:
     steps runs as `postgres`, which bypasses policies — so CI also runs
     [supabase/tests/rls_matrix.sql](supabase/tests/rls_matrix.sql) (**BL-7**, `melos run db:rls`),
     which is the only thing here that exercises RLS as a **signed-in** user. It switches to
-    `set local role authenticated`, runs 186 checks across anon / owner / shared-with / unrelated
+    `set local role authenticated`, runs 188 checks across anon / owner / shared-with / unrelated
     stranger / imported chef, and rolls the whole transaction back. It closed the class B053 lived in and found
     B061 on its first complete run. **Run it, and add a check to it, whenever you touch a policy, a
     `security definer` function, or the column grants** — a new table with new policies that the
@@ -1154,7 +1156,10 @@ the `code-review` skill). The ones you need while _writing_ code:
     `recipeData/` and `simData/` (BL-8): a spelling that resolves but is not the display form, or a
     word unit that disagrees with its quantity (`3 clove`), is an **error**; a spelling absent from
     `units.json` is a warning. The canon holds at the authored quantity only — the scaler still
-    prints the unit verbatim (B119, BL-10).
+    prints the unit verbatim (B119, BL-10). **Imported recipes follow the same canon since Phase 39**
+    (UX-030): `units.json`'s `display` / `plural` are emitted into `food_unit`, and
+    `canonical_unit()` in 0001 applies them in `import_recipe` and in a backfill — read from the
+    table, never restated in SQL, so there is still one copy of the canon.
 17. **Embedding `profiles` into a recipe query needs the FK hint.** `recipes` and `profiles` are
     related five ways (`owner_id`, plus many-to-many through likes/ratings/saves/shares), so the
     obvious `owner:profiles(...)` fails with `PGRST201: Could not embed because more than one
@@ -1357,7 +1362,9 @@ recipe` lives on the My Recipes header and search in Discover's search bar; putt
     (`Adapted from …`) as no byline, and `clean_import_title` drops scrape noise —
     both in `import_recipe` *and* an idempotent backfill in 0001, so a re-import and an
     existing row follow one rule. An imported recipe's `difficulty` is the column
-    default and the UI never shows it.
+    default and the UI never shows it. Its **units** go through `canonical_unit()` the
+    same way (Phase 39), except that their backfill runs from the END of
+    `nutrition_foods.sql` too, because the canon is registry data 0001 cannot see yet.
 
 
 ## Seed-data fit (MANDATORY)

@@ -15,6 +15,15 @@ const double _kCheckNudge = 1;
 /// The unchecked box's outline.
 const double _kCheckStroke = AppStroke.thin;
 
+/// The gap between the quantity gutter and the name (UX-030).
+///
+/// Taken from the name's side, never the gutter's: the gutter keeps its width
+/// so `1 1⁄3 cup` still sits on one line at 1.0×. Without it a label that fills
+/// the gutter — an imported `3 tablespoons`, or a unit the import could not
+/// canonicalise (`2 handfuls`) — ran flush into the name. A long unit wraps
+/// inside the gutter on its own; this keeps the wrapped block off the name.
+const double _kGutterGap = AppSpacing.sm;
+
 /// The `Ingredients` pane: grouped check-off list with a fixed quantity
 /// gutter, plus its gathered counter and clear-checks footer.
 ///
@@ -255,6 +264,7 @@ class _IngredientRow extends StatelessWidget {
                         style: qtyStyle,
                       ),
                     ),
+                    const SizedBox(width: _kGutterGap),
                     Expanded(
                       child: Text.rich(
                         TextSpan(

@@ -966,7 +966,7 @@ and the doc drift (SDS rail/§8, CLAUDE.md layout, DESIGN §4, the `frac` commen
 
 ---
 
-## Phase 38 — UX remediation, round 2: the audit's remaining unblocked findings (waves A–D done 2026-09-26; optional E not started)
+## Phase 38 — UX remediation, round 2: the audit's remaining unblocked findings (waves A–D done 2026-09-26; Wave E moved to Phase 39)
 
 Branch `feat/phase-38-ux-remediation-2` (from Phase 37's `cde7fbc`). The unblocked findings Phase 37
 left open, in four waves, each committed behind a green format + analyze + test gate with a
@@ -1045,12 +1045,39 @@ missing `mounted` check, empty-state copy). Accepted:
       inside the page's scroll); Move up / Move down is the long-distance path. A fix is a
       `SliverReorderableList` inside a `CustomScrollView` page
 
-**Wave E (optional) — UX-030 unit canon at import** — not started. It needs the display forms
-where SQL can read them: `food_unit` (generated from `nutritionData/units.json`) carries spellings
+**Wave E (optional) — UX-030 unit canon at import** — **moved to Phase 39 and done there.** It needed
+the display forms where SQL can read them: `food_unit` (generated from `nutritionData/units.json`) carries spellings
 and factors but no `display` / `plural`, and it is loaded *after* `0001_init.sql`, so a
 canonicaliser in 0001 cannot read it during the backfill. A hand-copied map in SQL would be a
 second copy of the canon (B094's rule). Carried: extend `tool/nutrition.dart` to emit the display
 columns, then canonicalise in `import_recipe` + a backfill that runs after the registry loads.
+
+---
+
+## Phase 39 — Phase 38's follow-ups: unit canon at import, seed fixtures, editor drag, nav envelope (in progress)
+
+Branch `feat/phase-39-followups` (from Phase 38's `ade8a85`, unpushed like 37 and 38). Five tasks,
+each committed on its own behind a green format + analyze + test gate. Out of scope, unchanged: the
+hosted deploy, a real-phone pass, the final font, cover photos (UX-034), imported images (UX-029),
+the `DesignSync` bundle write, cook-mode plugins, the cook's-note column, bespoke redesigns, every
+owner decision.
+
+- [x] **UX-030 — imported units in the house canon** (Phase 38's Wave E). `food_unit` gained
+      `display` / `plural` (generated from `units.json` — still the one copy of the canon);
+      `canonical_unit(unit, quantity)` in 0001 (case-insensitive, word units agree with the
+      quantity exactly as the authored lint does, unknown spellings pass through, never invents);
+      `import_recipe` calls it; `canonicalise_imported_units()` backfills from 0001 **and** from the
+      end of `nutrition_foods.sql`, because 0001 applies before the registry on every path. `tbsps`
+      / `tsps` registered as spellings. Local stack (21,314 imported recipes, upgrade path: old
+      schema → 0001 ×2 → registry ×2 → 0001): non-canonical imported units **59,258 → 0**, 59,504
+      rows rewritten by the first registry load and 0 by every later apply, `updated_at`
+      untouched. Both reading surfaces' quantity gutters keep a gap before the name, so a long
+      unknown unit wraps inside the gutter. `corpus_import_fixture.sql` §7, `rls_matrix.sql`
+      E11/E12 (188 checks), `ingredient_gutter_test`
+- [ ] Seed-data gaps — version snapshots for curated recipes; forks
+- [ ] Top-nav envelope — the signed-out bar at 600 / 1000 × 1.0 / 2.0
+- [ ] Editor drag auto-scroll (Phase 38's accepted limitation)
+- [ ] Desktop-web density — the owner's decision, recorded
 
 ---
 
@@ -1238,8 +1265,8 @@ up headlessly, so there are no DOM nodes to target and navigation has to be driv
 #### BL-7 — the RLS acceptance matrix as a _signed-in_ user — **DONE (2026-08-23)**
 
 Closed: [supabase/tests/rls_matrix.sql](../supabase/tests/rls_matrix.sql) (`melos run db:rls`) —
-**186 checks** as of 2026-09-24 (102 when BL-7 closed, 137 after Phase 33, 165 after 35b, 177
-after 35c) across
+**188 checks** as of 2026-09-26 (102 when BL-7 closed, 137 after Phase 33, 165 after 35b, 177
+after 35c, 186 after Phase 37, 188 after Phase 39's E11/E12) across
 anon / owner / shared-with / stranger / imported chef, rolled back, wired into CI
 (`database.yml`). Found B061 on its first complete run. **Standing rule:** any change to a policy,
 a `security definer` function, or the column grants → run it, and add a check for any new surface

@@ -12,62 +12,68 @@
 -- wiped and reloaded — they are leaves with no dependents.
 -- Apply BEFORE seed_recipes.sql once 29b's FK exists; `melos run db:nutrition`
 -- and config.toml's sql_paths both order it correctly.
+-- One call at the end is not data: canonicalise_imported_units() (Phase 39),
+-- which needs THIS registry and so cannot run from 0001 on a fresh path.
 
 -- Unit registry (from units.json). Spelling '' is the bare-count marker.
+-- `display` / `plural` are the canon an authored recipe is linted against,
+-- repeated on every spelling of the unit so canonical_unit() is one PK lookup.
 delete from food_unit;
-insert into food_unit (spelling, unit_key, class, factor) values
-  ($nf$g$nf$, $nf$g$nf$, $nf$mass$nf$, 1),
-  ($nf$gram$nf$, $nf$g$nf$, $nf$mass$nf$, 1),
-  ($nf$grams$nf$, $nf$g$nf$, $nf$mass$nf$, 1),
-  ($nf$kg$nf$, $nf$kg$nf$, $nf$mass$nf$, 1000),
-  ($nf$kilogram$nf$, $nf$kg$nf$, $nf$mass$nf$, 1000),
-  ($nf$kilograms$nf$, $nf$kg$nf$, $nf$mass$nf$, 1000),
-  ($nf$oz$nf$, $nf$oz$nf$, $nf$mass$nf$, 28.3495),
-  ($nf$ounce$nf$, $nf$oz$nf$, $nf$mass$nf$, 28.3495),
-  ($nf$ounces$nf$, $nf$oz$nf$, $nf$mass$nf$, 28.3495),
-  ($nf$lb$nf$, $nf$lb$nf$, $nf$mass$nf$, 453.592),
-  ($nf$lbs$nf$, $nf$lb$nf$, $nf$mass$nf$, 453.592),
-  ($nf$pound$nf$, $nf$lb$nf$, $nf$mass$nf$, 453.592),
-  ($nf$pounds$nf$, $nf$lb$nf$, $nf$mass$nf$, 453.592),
-  ($nf$ml$nf$, $nf$ml$nf$, $nf$volume$nf$, 1),
-  ($nf$millilitre$nf$, $nf$ml$nf$, $nf$volume$nf$, 1),
-  ($nf$millilitres$nf$, $nf$ml$nf$, $nf$volume$nf$, 1),
-  ($nf$milliliter$nf$, $nf$ml$nf$, $nf$volume$nf$, 1),
-  ($nf$milliliters$nf$, $nf$ml$nf$, $nf$volume$nf$, 1),
-  ($nf$l$nf$, $nf$l$nf$, $nf$volume$nf$, 1000),
-  ($nf$litre$nf$, $nf$l$nf$, $nf$volume$nf$, 1000),
-  ($nf$litres$nf$, $nf$l$nf$, $nf$volume$nf$, 1000),
-  ($nf$liter$nf$, $nf$l$nf$, $nf$volume$nf$, 1000),
-  ($nf$liters$nf$, $nf$l$nf$, $nf$volume$nf$, 1000),
-  ($nf$tsp$nf$, $nf$tsp$nf$, $nf$volume$nf$, 4.92892),
-  ($nf$teaspoon$nf$, $nf$tsp$nf$, $nf$volume$nf$, 4.92892),
-  ($nf$teaspoons$nf$, $nf$tsp$nf$, $nf$volume$nf$, 4.92892),
-  ($nf$tbsp$nf$, $nf$tbsp$nf$, $nf$volume$nf$, 14.7868),
-  ($nf$tablespoon$nf$, $nf$tbsp$nf$, $nf$volume$nf$, 14.7868),
-  ($nf$tablespoons$nf$, $nf$tbsp$nf$, $nf$volume$nf$, 14.7868),
-  ($nf$cup$nf$, $nf$cup$nf$, $nf$volume$nf$, 236.588),
-  ($nf$cups$nf$, $nf$cup$nf$, $nf$volume$nf$, 236.588),
-  ($nf$fl oz$nf$, $nf$fl-oz$nf$, $nf$volume$nf$, 29.5735),
-  ($nf$fluid ounce$nf$, $nf$fl-oz$nf$, $nf$volume$nf$, 29.5735),
-  ($nf$fluid ounces$nf$, $nf$fl-oz$nf$, $nf$volume$nf$, 29.5735),
-  ($nf$pint$nf$, $nf$pint$nf$, $nf$volume$nf$, 473.176),
-  ($nf$pints$nf$, $nf$pint$nf$, $nf$volume$nf$, 473.176),
-  ($nf$$nf$, $nf$each$nf$, $nf$count$nf$, null),
-  ($nf$clove$nf$, $nf$clove$nf$, $nf$count$nf$, null),
-  ($nf$cloves$nf$, $nf$clove$nf$, $nf$count$nf$, null),
-  ($nf$stalk$nf$, $nf$stalk$nf$, $nf$count$nf$, null),
-  ($nf$stalks$nf$, $nf$stalk$nf$, $nf$count$nf$, null),
-  ($nf$stick$nf$, $nf$stick$nf$, $nf$count$nf$, null),
-  ($nf$sticks$nf$, $nf$stick$nf$, $nf$count$nf$, null),
-  ($nf$bunch$nf$, $nf$bunch$nf$, $nf$count$nf$, null),
-  ($nf$bunches$nf$, $nf$bunch$nf$, $nf$count$nf$, null),
-  ($nf$pkg$nf$, $nf$pkg$nf$, $nf$count$nf$, null),
-  ($nf$package$nf$, $nf$pkg$nf$, $nf$count$nf$, null),
-  ($nf$packages$nf$, $nf$pkg$nf$, $nf$count$nf$, null),
-  ($nf$pouch$nf$, $nf$pouch$nf$, $nf$count$nf$, null),
-  ($nf$pouches$nf$, $nf$pouch$nf$, $nf$count$nf$, null),
-  ($nf$slice$nf$, $nf$slice$nf$, $nf$count$nf$, null),
-  ($nf$slices$nf$, $nf$slice$nf$, $nf$count$nf$, null);
+insert into food_unit (spelling, unit_key, class, factor, display, plural) values
+  ($nf$g$nf$, $nf$g$nf$, $nf$mass$nf$, 1, $nf$g$nf$, null),
+  ($nf$gram$nf$, $nf$g$nf$, $nf$mass$nf$, 1, $nf$g$nf$, null),
+  ($nf$grams$nf$, $nf$g$nf$, $nf$mass$nf$, 1, $nf$g$nf$, null),
+  ($nf$kg$nf$, $nf$kg$nf$, $nf$mass$nf$, 1000, $nf$kg$nf$, null),
+  ($nf$kilogram$nf$, $nf$kg$nf$, $nf$mass$nf$, 1000, $nf$kg$nf$, null),
+  ($nf$kilograms$nf$, $nf$kg$nf$, $nf$mass$nf$, 1000, $nf$kg$nf$, null),
+  ($nf$oz$nf$, $nf$oz$nf$, $nf$mass$nf$, 28.3495, $nf$oz$nf$, null),
+  ($nf$ounce$nf$, $nf$oz$nf$, $nf$mass$nf$, 28.3495, $nf$oz$nf$, null),
+  ($nf$ounces$nf$, $nf$oz$nf$, $nf$mass$nf$, 28.3495, $nf$oz$nf$, null),
+  ($nf$lb$nf$, $nf$lb$nf$, $nf$mass$nf$, 453.592, $nf$lb$nf$, null),
+  ($nf$lbs$nf$, $nf$lb$nf$, $nf$mass$nf$, 453.592, $nf$lb$nf$, null),
+  ($nf$pound$nf$, $nf$lb$nf$, $nf$mass$nf$, 453.592, $nf$lb$nf$, null),
+  ($nf$pounds$nf$, $nf$lb$nf$, $nf$mass$nf$, 453.592, $nf$lb$nf$, null),
+  ($nf$ml$nf$, $nf$ml$nf$, $nf$volume$nf$, 1, $nf$ml$nf$, null),
+  ($nf$millilitre$nf$, $nf$ml$nf$, $nf$volume$nf$, 1, $nf$ml$nf$, null),
+  ($nf$millilitres$nf$, $nf$ml$nf$, $nf$volume$nf$, 1, $nf$ml$nf$, null),
+  ($nf$milliliter$nf$, $nf$ml$nf$, $nf$volume$nf$, 1, $nf$ml$nf$, null),
+  ($nf$milliliters$nf$, $nf$ml$nf$, $nf$volume$nf$, 1, $nf$ml$nf$, null),
+  ($nf$l$nf$, $nf$l$nf$, $nf$volume$nf$, 1000, $nf$L$nf$, null),
+  ($nf$litre$nf$, $nf$l$nf$, $nf$volume$nf$, 1000, $nf$L$nf$, null),
+  ($nf$litres$nf$, $nf$l$nf$, $nf$volume$nf$, 1000, $nf$L$nf$, null),
+  ($nf$liter$nf$, $nf$l$nf$, $nf$volume$nf$, 1000, $nf$L$nf$, null),
+  ($nf$liters$nf$, $nf$l$nf$, $nf$volume$nf$, 1000, $nf$L$nf$, null),
+  ($nf$tsp$nf$, $nf$tsp$nf$, $nf$volume$nf$, 4.92892, $nf$tsp$nf$, null),
+  ($nf$tsps$nf$, $nf$tsp$nf$, $nf$volume$nf$, 4.92892, $nf$tsp$nf$, null),
+  ($nf$teaspoon$nf$, $nf$tsp$nf$, $nf$volume$nf$, 4.92892, $nf$tsp$nf$, null),
+  ($nf$teaspoons$nf$, $nf$tsp$nf$, $nf$volume$nf$, 4.92892, $nf$tsp$nf$, null),
+  ($nf$tbsp$nf$, $nf$tbsp$nf$, $nf$volume$nf$, 14.7868, $nf$tbsp$nf$, null),
+  ($nf$tbsps$nf$, $nf$tbsp$nf$, $nf$volume$nf$, 14.7868, $nf$tbsp$nf$, null),
+  ($nf$tablespoon$nf$, $nf$tbsp$nf$, $nf$volume$nf$, 14.7868, $nf$tbsp$nf$, null),
+  ($nf$tablespoons$nf$, $nf$tbsp$nf$, $nf$volume$nf$, 14.7868, $nf$tbsp$nf$, null),
+  ($nf$cup$nf$, $nf$cup$nf$, $nf$volume$nf$, 236.588, $nf$cup$nf$, $nf$cups$nf$),
+  ($nf$cups$nf$, $nf$cup$nf$, $nf$volume$nf$, 236.588, $nf$cup$nf$, $nf$cups$nf$),
+  ($nf$fl oz$nf$, $nf$fl-oz$nf$, $nf$volume$nf$, 29.5735, $nf$fl oz$nf$, null),
+  ($nf$fluid ounce$nf$, $nf$fl-oz$nf$, $nf$volume$nf$, 29.5735, $nf$fl oz$nf$, null),
+  ($nf$fluid ounces$nf$, $nf$fl-oz$nf$, $nf$volume$nf$, 29.5735, $nf$fl oz$nf$, null),
+  ($nf$pint$nf$, $nf$pint$nf$, $nf$volume$nf$, 473.176, $nf$pint$nf$, $nf$pints$nf$),
+  ($nf$pints$nf$, $nf$pint$nf$, $nf$volume$nf$, 473.176, $nf$pint$nf$, $nf$pints$nf$),
+  ($nf$$nf$, $nf$each$nf$, $nf$count$nf$, null, null, null),
+  ($nf$clove$nf$, $nf$clove$nf$, $nf$count$nf$, null, $nf$clove$nf$, $nf$cloves$nf$),
+  ($nf$cloves$nf$, $nf$clove$nf$, $nf$count$nf$, null, $nf$clove$nf$, $nf$cloves$nf$),
+  ($nf$stalk$nf$, $nf$stalk$nf$, $nf$count$nf$, null, $nf$stalk$nf$, $nf$stalks$nf$),
+  ($nf$stalks$nf$, $nf$stalk$nf$, $nf$count$nf$, null, $nf$stalk$nf$, $nf$stalks$nf$),
+  ($nf$stick$nf$, $nf$stick$nf$, $nf$count$nf$, null, $nf$stick$nf$, $nf$sticks$nf$),
+  ($nf$sticks$nf$, $nf$stick$nf$, $nf$count$nf$, null, $nf$stick$nf$, $nf$sticks$nf$),
+  ($nf$bunch$nf$, $nf$bunch$nf$, $nf$count$nf$, null, $nf$bunch$nf$, $nf$bunches$nf$),
+  ($nf$bunches$nf$, $nf$bunch$nf$, $nf$count$nf$, null, $nf$bunch$nf$, $nf$bunches$nf$),
+  ($nf$pkg$nf$, $nf$pkg$nf$, $nf$count$nf$, null, $nf$pkg$nf$, null),
+  ($nf$package$nf$, $nf$pkg$nf$, $nf$count$nf$, null, $nf$pkg$nf$, null),
+  ($nf$packages$nf$, $nf$pkg$nf$, $nf$count$nf$, null, $nf$pkg$nf$, null),
+  ($nf$pouch$nf$, $nf$pouch$nf$, $nf$count$nf$, null, $nf$pouch$nf$, $nf$pouches$nf$),
+  ($nf$pouches$nf$, $nf$pouch$nf$, $nf$count$nf$, null, $nf$pouch$nf$, $nf$pouches$nf$),
+  ($nf$slice$nf$, $nf$slice$nf$, $nf$count$nf$, null, $nf$slice$nf$, $nf$slices$nf$),
+  ($nf$slices$nf$, $nf$slice$nf$, $nf$count$nf$, null, $nf$slice$nf$, $nf$slices$nf$);
 
 -- The foods. 78 of them, ordered by slug.
 insert into food (id, display_name, fdc_id,
@@ -1625,3 +1631,18 @@ insert into food_portion (food_id, unit_key, grams) values
   ($nf$zucchini$nf$, $nf$slice$nf$, 9.9);
 
 do $$ begin raise notice 'Food registry loaded (78 foods, 277 aliases, 174 portions)'; end $$;
+
+-- Imported recipes' units to the canon just loaded (Phase 39, UX-030). HERE and
+-- not only in 0001, because 0001 applies BEFORE this file on every path
+-- (db:reset, db:hosted:deploy, CI's upgrade path) and so reads the previous
+-- registry — or none. Idempotent: a second run changes no row. Guarded by name
+-- so this data file still loads against a schema that predates the function.
+do $$
+declare
+  n integer;
+begin
+  if to_regprocedure('public.canonicalise_imported_units()') is not null then
+    n := canonicalise_imported_units();
+    raise notice 'Imported ingredient units canonicalised: %', n;
+  end if;
+end $$;

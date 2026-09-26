@@ -17,7 +17,9 @@
     "It is NOT derivable from the key: `L` is displayed for key `l` (a lowercase",
     "l reads as a 1), and word units keep a plural (`3 cloves`, never `3 clove`).",
     "A unit with no `plural` is invariant at every quantity (`2 tbsp`). Read by",
-    "tool/recipe_format.dart's unit lint (BL-8), never by the nutrition SQL; the",
+    "tool/recipe_format.dart's unit lint (BL-8), and since Phase 39 also emitted",
+    "into food_unit.display / .plural, where canonical_unit() in 0001 applies the",
+    "same canon to IMPORTED recipes (UX-030). The estimator never reads them. The",
     "bare-count marker `each` has no display because an authored unit is null."
   ],
   "units": [
@@ -27,8 +29,8 @@
     { "key": "lb", "class": "mass", "factor": 453.592, "spellings": ["lb", "lbs", "pound", "pounds"], "display": "lb" },
     { "key": "ml", "class": "volume", "factor": 1, "spellings": ["ml", "millilitre", "millilitres", "milliliter", "milliliters"], "display": "ml" },
     { "key": "l", "class": "volume", "factor": 1000, "spellings": ["l", "litre", "litres", "liter", "liters"], "display": "L" },
-    { "key": "tsp", "class": "volume", "factor": 4.92892, "spellings": ["tsp", "teaspoon", "teaspoons"], "display": "tsp" },
-    { "key": "tbsp", "class": "volume", "factor": 14.7868, "spellings": ["tbsp", "tablespoon", "tablespoons"], "display": "tbsp" },
+    { "key": "tsp", "class": "volume", "factor": 4.92892, "spellings": ["tsp", "tsps", "teaspoon", "teaspoons"], "display": "tsp" },
+    { "key": "tbsp", "class": "volume", "factor": 14.7868, "spellings": ["tbsp", "tbsps", "tablespoon", "tablespoons"], "display": "tbsp" },
     { "key": "cup", "class": "volume", "factor": 236.588, "spellings": ["cup", "cups"], "display": "cup", "plural": "cups" },
     { "key": "fl-oz", "class": "volume", "factor": 29.5735, "spellings": ["fl oz", "fluid ounce", "fluid ounces"], "display": "fl oz" },
     { "key": "pint", "class": "volume", "factor": 473.176, "spellings": ["pint", "pints"], "display": "pint", "plural": "pints" },

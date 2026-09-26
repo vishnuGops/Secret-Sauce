@@ -399,3 +399,12 @@ regression tests before the final commit (BUG-TRACKER).
 Still open from this audit: UX-029 (owner), UX-030 (Wave E, blocked on the unit registry carrying
 display forms where SQL can read them — ROADMAP Phase 38), UX-034 (owner content). One new open
 question: desktop web's adaptive density leaves a `TextButton` ~32px tall (DESIGN §3.6).
+
+## Findings closed — 2026-09-26 (Phase 39, Phase 38's follow-ups)
+
+Branch `feat/phase-39-followups`. Same evidence rule as the sections above: every fix names its
+regression test, checked by reverting the fix.
+
+| ID | Status | Evidence |
+| --- | --- | --- |
+| UX-030 | fixed | imported units are stored in the house canon (`canonical_unit()`, read from `food_unit`'s generated `display` / `plural`; unknown spellings unchanged) and existing rows backfilled — local stack 59,258 non-canonical → 0; both quantity gutters keep an `AppSpacing.sm` gap so a long unknown unit wraps inside the gutter. `corpus_import_fixture.sql` §7, `ingredient_gutter_test` (390 / 1440 × 1.0 / 2.0, cook mode at 1000 / 1440) |

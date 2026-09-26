@@ -102,12 +102,43 @@ _load() {
     }
   }
 
+  // The display canon (Phase 39, UX-030). `canonical_unit()` in 0001 rewrites
+  // an imported unit to these, and the estimator then resolves the rewritten
+  // unit by `lower(trim(...))` — so each form must lower-case back to one of
+  // its OWN unit's spellings, or canonicalising a unit would change which unit
+  // it is. tool/recipe_format.dart checks the same for authored recipes; this
+  // is the generator's own guard, because it is the one emitting the columns.
+  for (final u in units) {
+    final key = u['key'] as String? ?? '';
+    final own = (u['spellings'] as List? ?? const []).cast<String>().toSet();
+    final display = u['display'];
+    final plural = u['plural'];
+    if (display == null) {
+      if (plural != null) log.err('units.$key: plural without display');
+      if (!own.contains('')) {
+        log.err(
+          'units.$key: no display — only the bare-count marker may omit it',
+        );
+      }
+      continue;
+    }
+    for (final form in [display, if (plural != null) plural]) {
+      if (form is! String || form.isEmpty) {
+        log.err('units.$key: display / plural must be non-empty strings');
+      } else if (!own.contains(form.toLowerCase())) {
+        log.err('units.$key: "$form" does not resolve to one of its spellings');
+      }
+    }
+  }
+
   // units.json strings are dollar-quoted too — same tag rule as the foods'.
   for (final u in units) {
     for (final s in [
       u['key'] as String? ?? '',
       u['class'] as String? ?? '',
       ...(u['spellings'] as List? ?? const []).cast<String>(),
+      if (u['display'] is String) u['display'] as String,
+      if (u['plural'] is String) u['plural'] as String,
     ]) {
       if (s.contains(_tag)) log.err('units: "$s" contains the $_tag quote tag');
     }
@@ -252,20 +283,29 @@ String _generate(
 -- wiped and reloaded — they are leaves with no dependents.
 -- Apply BEFORE seed_recipes.sql once 29b's FK exists; `melos run db:nutrition`
 -- and config.toml's sql_paths both order it correctly.
+-- One call at the end is not data: canonicalise_imported_units() (Phase 39),
+-- which needs THIS registry and so cannot run from 0001 on a fresh path.
 
 -- Unit registry (from units.json). Spelling '' is the bare-count marker.
+-- `display` / `plural` are the canon an authored recipe is linted against,
+-- repeated on every spelling of the unit so canonical_unit() is one PK lookup.
 delete from food_unit;
-insert into food_unit (spelling, unit_key, class, factor) values
+insert into food_unit (spelling, unit_key, class, factor, display, plural) values
 ''');
+
+  String litOrNull(Object? s) => s == null ? 'null' : _lit(s as String);
 
   final unitRows = <String>[];
   for (final u in units) {
     final key = u['key'] as String;
     final klass = u['class'] as String;
     final factor = u['factor'] as num?;
+    final display = litOrNull(u['display']);
+    final plural = litOrNull(u['plural']);
     for (final s in (u['spellings'] as List).cast<String>()) {
       unitRows.add(
-        "  (${_lit(s)}, ${_lit(key)}, ${_lit(klass)}, ${_num(factor)})",
+        "  (${_lit(s)}, ${_lit(key)}, ${_lit(klass)}, ${_num(factor)}, "
+        '$display, $plural)',
       );
     }
   }
@@ -332,7 +372,23 @@ delete from food_portion;''');
       "'Food registry loaded (${foods.length} foods, "
       "${aliasRows.length} aliases, ${portionRows.length} portions)'; "
       'end \$\$;',
-    );
+    )
+    ..writeln('''
+
+-- Imported recipes' units to the canon just loaded (Phase 39, UX-030). HERE and
+-- not only in 0001, because 0001 applies BEFORE this file on every path
+-- (db:reset, db:hosted:deploy, CI's upgrade path) and so reads the previous
+-- registry — or none. Idempotent: a second run changes no row. Guarded by name
+-- so this data file still loads against a schema that predates the function.
+do \$\$
+declare
+  n integer;
+begin
+  if to_regprocedure('public.canonicalise_imported_units()') is not null then
+    n := canonicalise_imported_units();
+    raise notice 'Imported ingredient units canonicalised: %', n;
+  end if;
+end \$\$;''');
   return buf.toString();
 }
 

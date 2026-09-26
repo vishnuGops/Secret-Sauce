@@ -222,7 +222,11 @@ authoring workflow) and read-only to every client role:
   spelling: `spelling` PK → `unit_key`, `class` (`mass` / `volume` / `count`), `factor` (grams
   per unit for mass, ml per unit for volume, null for count). Spelling `''` is the bare-count
   marker (`2 eggs`). 29c's `estimate_nutrition` reads this table; nothing in SQL restates a
-  conversion.
+  conversion. **Since Phase 39** each row also carries its unit's `display` and `plural` (the
+  B094 canon from `units.json`, repeated on every spelling; null for the bare-count marker and,
+  for `plural`, on an invariant unit). The estimator never reads them; `canonical_unit()` does
+  (§7.0c). `tool/nutrition.dart` refuses a form that does not lower-case back to one of its own
+  unit's spellings, so rewriting a unit to its canon never changes what the estimator resolves.
 
 **Access:** RLS select policies are `auth.uid() is not null` (signed-in only — the detail page
 reads the stored label; only the editor needs the registry), there are **zero write policies**,
@@ -629,7 +633,9 @@ It creates three throwaway `auth.users` (an owner, someone the owner shares a pr
 an unrelated signed-in stranger) plus a private and a public recipe with content, re-runs the whole
 matrix under `set local role authenticated` + `request.jwt.claims`, and **rolls the transaction
 back** — so it leaves no user, no recipe and no helper function behind and is safe against any
-database. **186 checks** (§E, the food registry's nine, joined in Phase 29a; B22b, the saved
+database. **188 checks** (§E, the food registry's nine, joined in Phase 29a; **E11/E12**, that
+Phase 39's `canonicalise_imported_units()` / `canonical_unit()` are not callable as a signed-in
+user; B22b, the saved
 ingredient food link, in 29b; B22c and B22d, the auto-estimate source-smuggling guard and its
 nothing-counted case, in 29c — B22d found **B075** on its first run; **E10**, that
 `recompute_auto_nutrition()` is not callable as a signed-in user, in 29d — a whole-table rewrite
@@ -925,6 +931,29 @@ and the title through `clean_import_title` (bracketed video banners, a trailing 
 trailing `Recipe` after two words, run to a fixed point). The same functions backfill existing rows
 on every apply of 0001, idempotently. `difficulty` is `not null`, so an import still stores the
 default — `RecipeCard` and the detail facts do not present it for `isImported` rows.
+
+**Units in the house canon (Phase 39, UX-030).** The corpus spells one unit five ways
+(`tablespoon`, `Tbsp`, `tbsps` …) and the app prints `unit` verbatim, so `3 tablespoon` filled the
+quantity gutter. `import_recipe` now stores `canonical_unit(unit, quantity)`: a case- and
+whitespace-insensitive lookup in `food_unit` that returns the unit's `display` — or, for a word
+unit, the plural above 1, the singular at exactly 1, and the page's own number below 1 or with no
+quantity (the authored-recipe lint's rule, so an imported row would pass it). Unknown spellings
+(`sprigs`, `handful`, `個`), the bare-count marker and null pass through unchanged; it never invents
+a unit, and with no display canon loaded it is the identity. The canon is read from the table, so
+SQL holds no second copy of it (B094).
+Existing rows are converged by `canonicalise_imported_units()`, which has **two callers**: 0001
+itself, and the end of the generated `nutrition_foods.sql`. The second is the one that matters —
+`db:reset`, `db:hosted:deploy` and CI's upgrade path all apply 0001 *before* the registry, so from
+0001 it returns early (no `display` loaded yet), the `recompute_auto_nutrition` situation. It
+touches imported rows only, is a no-op on a converged database (and then takes no lock), and parks
+`ingredients_search_tsv_upd` for the update: the search document reads ingredient names, never
+units, and the refresh would otherwise stamp ~18k recipes `updated_at = now()` for an edit nobody
+made. Local stack, 2026-09-26: 59,258 of 171,666 resolvable imported units were non-canonical; the
+first registry load rewrote 59,504 (those plus the newly registered `tbsps` / `tsps`), the second
+0, and `updated_at` did not move. Both functions are `revoke`d from the API roles
+(`rls_matrix.sql` E11/E12). Client side, both quantity gutters (the reading rail and cook mode's
+"For this step") keep an `AppSpacing.sm` gap before the name, so a long unknown unit wraps inside
+the gutter instead of running into it.
 
 Recipes captured from the public web, on their own page rather than as a fourth sort on Discover.
 Two reasons, and the second is the one that decides it:

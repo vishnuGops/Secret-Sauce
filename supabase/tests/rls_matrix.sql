@@ -978,6 +978,21 @@ begin
     'select recompute_auto_nutrition()');
   v_log := v_log || format(E'%s\tE10 signed-in · recompute_auto_nutrition must FAIL\t%s', v_err = '42501', coalesce(v_err, 'no error'));
 
+  -- Phase 39 (UX-030). `canonicalise_imported_units()` rewrites the unit of
+  -- every imported ingredient in the table; only its `revoke execute` keeps it
+  -- off the RPC surface. Non-vacuous on a converged database (every CI run):
+  -- granted back, it finds nothing to change and returns 0 before reaching the
+  -- ALTER that would otherwise also refuse. `canonical_unit` is read-only, but
+  -- nothing on the client calls it, so it is revoked the way the Phase 37
+  -- cleaners are and pinned here the same way.
+  select err into v_err from public.rls_matrix_do(
+    'select canonicalise_imported_units()');
+  v_log := v_log || format(E'%s\tE11 signed-in · canonicalise_imported_units must FAIL\t%s', v_err = '42501', coalesce(v_err, 'no error'));
+
+  select err into v_err from public.rls_matrix_do(
+    'select canonical_unit(''tablespoons'', 3)');
+  v_log := v_log || format(E'%s\tE12 signed-in · canonical_unit must FAIL\t%s', v_err = '42501', coalesce(v_err, 'no error'));
+
   execute 'set local role anon';
   perform set_config('request.jwt.claim.sub', '', true);
   perform set_config('request.jwt.claims', '', true);

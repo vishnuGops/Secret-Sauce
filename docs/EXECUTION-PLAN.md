@@ -929,7 +929,34 @@ upload, so it is proven with `fake_supabase` request tests and the profile dialo
 | D — a11y, tokens | done | 1 subagent (the tap-target sweep: 13 screens, five kinds of undersized control) + lead (image semantics, `LoadingView`, `heroOutline`, `AppStroke` / `AppMeasure` / `AppIconSize.xsPlus` with the migration, the last tabular counters). Flutter's guideline skips nodes it judges to touch a scroll edge and gets that wrong inside centred / offset scroll views — direct size checks cover those |
 | Live pass | done | Release web build on the local stack, signed in as the test account, 390 / 1440: fork lineage names its parent, labelled owner actions and the Private pill, the editor's empty defaults and collapsed rows, cook mode, the chefs end note, one New recipe. Found B148. The temporary fork was deleted (0 forks left). Note: a stale server held the chosen port and `npx serve` silently moved to another — check its log before trusting a capture |
 | Review — `/code-review` over the branch | done | 3 reviewers (cook/detail/core, editor/version view, chefs/profile/design system); 0 Critical, 0 High; B149–B152 fixed with mutation-checked tests; one accepted limitation (drag auto-scroll) |
-| E — unit canon at import (optional) | not started | Needs `food_unit` to carry display forms first; see ROADMAP |
+| E — unit canon at import (optional) | moved | Done in Phase 39 (UX-030) |
+
+## Phase 39 — Phase 38's follow-ups (in progress)
+
+Branch `feat/phase-39-followups` from `ade8a85`. The lead wrote every SQL and generator change
+itself; three subagents took disjoint Dart files under a shared rules file (the quantity gutter;
+the top-nav envelope; the editor's drag). Each task is committed alone, gated with the other
+tasks' files stashed.
+
+**Seed-data fit.** Task 1: real data — the local stack's 21,314 imported recipes (176,860
+ingredients with a unit) are the upgrade-path fixture, and `corpus/_fixtures` + §7 of
+`corpus_import_fixture.sql` are the committed one; a clean-machine path was run in a scratch
+database (`ss_p39`: auth + storage cloned, then 0001 → nutrition → recipes, twice), since
+`db:reset` would have dropped the local corpus. Task 2: the 14 curated recipes (their `{}`
+snapshots are the defect) and the sim (`small`) for version snapshots; **forks are covered by the
+sim only** — it already draws ~4% of recipes as forks (`E7`, `G3`) — and deliberately **nowhere in
+curated content**: the Kitchen forking its own recipes would be a self-fork `recipes_most_forked`
+excludes, and an invented lineage is the fabrication Gotcha 29 forbids. On a plain `db:reset` the
+lineage line is therefore visible only after a real fork through the app. Task 3 and 4: widget
+fixtures. Task 5: none (a decision).
+
+| Task | Status | Notes |
+| --- | --- | --- |
+| 1 — UX-030 unit canon at import | done | `food_unit.display` / `.plural` from `tool/nutrition.dart`; `canonical_unit()` + `canonicalise_imported_units()` in 0001, the second also called at the end of `nutrition_foods.sql`; gutter gap (1 subagent). Verified: upgrade path on the local stack (59,258 → 0, second apply 0 rows, `updated_at` unmoved, triggers re-enabled), clean-machine path in `ss_p39`, `corpus_import_fixture.sql` §7 (mutation-checked twice: `import_recipe` without the canon; the backfill without parking the search trigger), `rls_matrix.sql` 188/188 with E11/E12 red when the grants are handed back, `db:nutrition:verify`, `db:audit` clean |
+| 2 — seed snapshots, forks | not started | |
+| 3 — top-nav envelope | not started | |
+| 4 — editor drag auto-scroll | not started | |
+| 5 — desktop density | not started | |
 
 ## Build, run & release (ops)
 

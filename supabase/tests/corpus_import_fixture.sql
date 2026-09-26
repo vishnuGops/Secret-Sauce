@@ -338,5 +338,142 @@ begin
 end
 $clean$;
 
+-- ============================================================================
+-- 7. Units in the house canon (Phase 39, UX-030). `canonical_unit` on the
+--    corpus's real spellings, its two invariants over the whole registry, one
+--    `import_recipe` call end to end, then the backfill — including that it
+--    stamps no `updated_at` — and last, the registry taken away.
+--    Needs nutrition_foods.sql loaded (every path that runs this file has it).
+-- ============================================================================
+do $units$
+declare
+  v_id    uuid;
+  v_units text[];
+  v_ing    uuid;
+  v_member uuid;
+  v_n      int;
+begin
+  assert exists (select 1 from food_unit where display is not null),
+    'the unit canon is not loaded — apply nutrition_foods.sql first';
+
+  -- Invariant units: one spelling at every quantity, any case, any padding.
+  assert canonical_unit('tablespoons', 3) = 'tbsp';
+  assert canonical_unit('Tbsp', 1) = 'tbsp', 'lookup is case-insensitive';
+  assert canonical_unit('TSPS', 2) = 'tsp';
+  assert canonical_unit(' teaspoon ', 0.5) = 'tsp', 'lookup ignores padding';
+  assert canonical_unit('liters', 2) = 'L', 'the display of key l is L';
+  assert canonical_unit('fluid ounces', 8) = 'fl oz';
+  assert canonical_unit('pounds', 2) = 'lb';
+  -- Word units agree with the quantity; below 1 or none keeps the page's number.
+  assert canonical_unit('cup', 3) = 'cups';
+  assert canonical_unit('Cups', 1) = 'cup';
+  assert canonical_unit('cups', 0.5) = 'cups';
+  assert canonical_unit('cup', 0.5) = 'cup';
+  assert canonical_unit('cup', null) = 'cup';
+  assert canonical_unit('clove', 3) = 'cloves';
+  -- Never invents: unknown, deliberately unresolvable, non-English, bare count.
+  assert canonical_unit('sprigs', 3) = 'sprigs';
+  assert canonical_unit('Handful', 1) = 'Handful', 'an unknown spelling is not even re-cased';
+  assert canonical_unit('個', 1) = '個';
+  assert canonical_unit('', 2) = '', 'the bare-count marker has no display';
+  assert canonical_unit(null, 2) is null;
+
+  -- Over EVERY registered spelling at every quantity class: a fixed point
+  -- (the backfill's idempotency rests on it), and the same unit afterwards
+  -- (the estimator resolves the rewritten spelling to the same unit_key).
+  assert not exists (
+    select 1
+      from food_unit u
+     cross join (values (null::numeric), (0.5), (1), (3)) q(n)
+     where u.display is not null
+       and canonical_unit(canonical_unit(u.spelling, q.n), q.n)
+           is distinct from canonical_unit(u.spelling, q.n)),
+    'canonical_unit is not a fixed point on its own output';
+  assert not exists (
+    select 1
+      from food_unit u
+     cross join (values (null::numeric), (0.5), (1), (3)) q(n)
+     left join food_unit c on c.spelling = lower(canonical_unit(u.spelling, q.n))
+     where u.display is not null
+       and c.unit_key is distinct from u.unit_key),
+    'a canonical spelling resolves to a different unit';
+
+  -- End to end: import_recipe stores the canon, not the page's spelling.
+  v_id := import_recipe(jsonb_build_object(
+    'source_url', 'https://units.example.test/soup/',
+    'entity_slug', 'fixture-units',
+    'entity_name', 'Fixture Units Kitchen',
+    'entity_kind', 'chef_site',
+    'title', 'Fixture Unit Soup',
+    'ingredient_groups', jsonb_build_array(jsonb_build_object('name', '',
+      'ingredients', jsonb_build_array(
+        jsonb_build_object('name', 'olive oil', 'quantity', 3, 'unit', 'tablespoons'),
+        jsonb_build_object('name', 'flour', 'quantity', 1, 'unit', 'Cups'),
+        jsonb_build_object('name', 'garlic', 'quantity', 2, 'unit', 'clove'),
+        jsonb_build_object('name', 'thyme', 'quantity', 3, 'unit', 'sprigs'),
+        jsonb_build_object('name', 'milk', 'quantity', 0.5, 'unit', 'cups'),
+        jsonb_build_object('name', 'eggs', 'quantity', 2, 'unit', '')))),
+    'step_groups', jsonb_build_array(jsonb_build_object('name', '',
+      'steps', jsonb_build_array(jsonb_build_object('text', 'Simmer.'))))
+  ));
+  assert v_id is not null, 'the units fixture imported';
+  select array_agg(coalesce(i.unit, '∅') order by i.sort_order) into v_units
+    from ingredients i join ingredient_groups g on g.id = i.group_id
+   where g.recipe_id = v_id;
+  assert v_units = array['tbsp', 'cup', 'cloves', 'sprigs', 'cups', '∅'],
+    format('import_recipe stores canonical units, got %s', v_units);
+
+  -- The backfill: a row imported before the canon existed (written directly,
+  -- as the pre-Phase-39 importer did), dated in the past with the touch
+  -- trigger held off so the date is ours to set.
+  select i.id into v_ing
+    from ingredients i join ingredient_groups g on g.id = i.group_id
+   where g.recipe_id = v_id and i.name = 'olive oil';
+  update ingredients set unit = 'Tablespoons' where id = v_ing;
+  alter table recipes disable trigger recipes_touch;
+  update recipes set updated_at = '2000-01-01T00:00:00Z' where id = v_id;
+  alter table recipes enable trigger recipes_touch;
+
+  v_n := canonicalise_imported_units();
+  assert v_n >= 1, format('the backfill changed nothing (%s)', v_n);
+  assert (select unit from ingredients where id = v_ing) = 'tbsp',
+    'the backfill canonicalised the stale row';
+  assert (select updated_at from recipes where id = v_id) = '2000-01-01T00:00:00Z'::timestamptz,
+    'the backfill stamped updated_at — ingredients_search_tsv_upd was not parked';
+  assert canonicalise_imported_units() = 0, 'a second backfill changed rows';
+  assert (select tgenabled from pg_trigger
+           where tgname = 'ingredients_search_tsv_upd'
+             and tgrelid = 'ingredients'::regclass) = 'O',
+    'the backfill left the search trigger disabled';
+
+  -- A member's unit is their own text: the backfill touches imported rows only.
+  -- Every path that runs this file has the 14 curated recipes to borrow a row
+  -- from; the assert says so rather than passing vacuously without one.
+  select i.id into v_member
+    from ingredients i join ingredient_groups g on g.id = i.group_id
+    join recipes r on r.id = g.recipe_id
+   where not r.is_imported
+   limit 1;
+  assert v_member is not null, 'no non-imported ingredient to test the scope with';
+  update ingredients set unit = 'Tablespoons' where id = v_member;
+  perform canonicalise_imported_units();
+  assert (select unit from ingredients where id = v_member) = 'Tablespoons',
+    'the backfill rewrote a non-imported recipe''s unit';
+
+  -- A registry from before Phase 39 (no display forms), then none at all:
+  -- the canon is absent, so nothing is rewritten and nothing is invented.
+  update ingredients set unit = 'Tablespoons' where id = v_ing;
+  update food_unit set display = null, plural = null;
+  assert canonical_unit('tablespoons', 3) = 'tablespoons', 'no canon, no rewrite';
+  assert canonicalise_imported_units() = 0, 'the backfill ran without a canon';
+  delete from food_unit;
+  assert canonical_unit('Cups', 3) = 'Cups', 'an empty registry is the identity';
+  assert canonicalise_imported_units() = 0, 'the backfill ran on an empty registry';
+  assert (select unit from ingredients where id = v_ing) = 'Tablespoons';
+
+  raise notice 'corpus_import_fixture: units in the house canon — all assertions passed';
+end
+$units$;
+
 -- Nothing this file wrote is meant to survive it.
 rollback;

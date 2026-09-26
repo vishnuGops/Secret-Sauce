@@ -75,6 +75,9 @@ drop function if exists import_recipe(jsonb) cascade;
 drop function if exists clean_byline_text(text) cascade;
 drop function if exists byline_person(text) cascade;
 drop function if exists clean_import_title(text) cascade;
+-- Phase 39 (UX-030): the unit canon at import, and its backfill.
+drop function if exists canonical_unit(text, numeric) cascade;
+drop function if exists canonicalise_imported_units() cascade;
 -- Food registry typeahead (Phase 29a).
 drop function if exists search_foods(text, int) cascade;
 -- Auto-nutrition estimator + batched link candidates (Phase 29c) and the

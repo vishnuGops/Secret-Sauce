@@ -450,7 +450,7 @@ melos run db:hosted:check                     # READ-ONLY. What does hosted lack
 melos run db:backup -- --docker --out=D:ackups\secret-sauce   # the only undo (no PITR)
 melos run db:hosted:deploy -- --docker --yes  # bring it up to the repo
 melos run db:hosted:check                     # prove it
-melos run db:rls                              # 186 checks as a signed-in user
+melos run db:rls                              # 188 checks as a signed-in user
 ```
 
 `db:hosted:check` builds a **fresh reference database** from the repo — every migration, then
@@ -499,7 +499,10 @@ melos run sim:check         # fail if ANY of them is stale (CI runs this)
 
 The **food registry** (`nutritionData/`, Phase 29) follows the same generated-SQL pattern —
 `foods.json` + `units.json` → `supabase/nutrition_foods.sql`, loaded by `db:nutrition` and by
-`db:reset` right after the schema (before the recipes — 29b gives ingredients a `food_id` FK):
+`db:reset` right after the schema (before the recipes — 29b gives ingredients a `food_id` FK).
+Since Phase 39 the generated file also carries each unit's `display` / `plural` canon and ends by
+calling `canonicalise_imported_units()`, which rewrites imported recipes' units to it (idempotent;
+a second load changes no row, and a database with no imported recipes is untouched):
 
 ```powershell
 melos run nutrition:validate  # parse + lint nutritionData/

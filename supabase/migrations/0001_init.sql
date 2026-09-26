@@ -853,6 +853,15 @@ create table if not exists food_unit (
   factor   numeric check (factor is null or factor > 0)
 );
 
+-- The display canon (Phase 39, UX-030): the spelling a cook reads, repeated on
+-- every spelling of the unit. `display` is null only for the bare-count marker;
+-- `plural` is null for an invariant unit (`2 tbsp`). Generated from units.json
+-- like the rest of the table, and read by `canonical_unit()` — never by the
+-- estimator, which resolves any spelling. Added rather than inlined above so a
+-- database created before Phase 39 gains them on the next apply.
+alter table food_unit add column if not exists display text;
+alter table food_unit add column if not exists plural  text;
+
 -- Typeahead indexes: prefix matches use the PKs; these serve the trigram tail.
 create index if not exists food_display_name_trgm_idx
   on food using gin (lower(display_name) gin_trgm_ops);
@@ -4482,15 +4491,55 @@ begin
 end;
 $$;
 
+-- A captured unit in the house canon (Phase 39, UX-030). The corpus spells one
+-- unit five ways (`tablespoon`, `Tbsp`, `tbsps` …) and the app prints `unit`
+-- verbatim, so `3 tablespoon` filled the quantity gutter and read as a typo.
+-- The canon is `nutritionData/units.json`'s `display` / `plural` (B094), loaded
+-- into `food_unit` by nutrition_foods.sql — this function restates none of it,
+-- so there is still exactly one copy. Rules, identical to the authored-recipe
+-- lint in tool/recipe_format.dart so an imported row would pass it:
+--   * lookup is case- and whitespace-insensitive (`Tbsp`, ` cups `);
+--   * an invariant unit takes its one spelling at every quantity (`tbsp`);
+--   * a word unit takes the plural above 1, the singular at exactly 1, and
+--     below 1 or with no quantity keeps the number the page reached for
+--     (`0.5 cup` and `0.5 cups` are both English);
+--   * anything the registry does not know (`sprigs`, `handful`, `個`), the
+--     bare-count marker, and null pass through UNCHANGED — this never invents
+--     a unit, and an empty registry makes it the identity.
+-- `stable`, not immutable: it reads a table. A canonical unit lower-cases back
+-- to one of its own unit's spellings (tool/nutrition.dart refuses anything
+-- else), so rewriting a unit never changes what the estimator resolves it to.
+create or replace function canonical_unit(p_unit text, p_quantity numeric)
+returns text
+language sql
+stable
+set search_path = public
+as $$
+  select coalesce(
+    (select case
+              when u.plural is null then u.display
+              when p_quantity > 1   then u.plural
+              when p_quantity = 1   then u.display
+              when lower(btrim(p_unit)) = lower(u.plural) then u.plural
+              else u.display
+            end
+       from food_unit u
+      where u.spelling = lower(btrim(p_unit))
+        and u.display is not null),
+    p_unit)
+$$;
+
 do $$
 begin
   execute 'revoke execute on function clean_byline_text(text) from public';
   execute 'revoke execute on function byline_person(text) from public';
   execute 'revoke execute on function clean_import_title(text) from public';
+  execute 'revoke execute on function canonical_unit(text, numeric) from public';
   if exists (select 1 from pg_roles where rolname = 'anon') then
     execute 'revoke execute on function clean_byline_text(text) from anon, authenticated';
     execute 'revoke execute on function byline_person(text) from anon, authenticated';
     execute 'revoke execute on function clean_import_title(text) from anon, authenticated';
+    execute 'revoke execute on function canonical_unit(text, numeric) from anon, authenticated';
   end if;
 end $$;
 
@@ -4516,6 +4565,7 @@ declare
   v_i        jsonb;
   v_gord     int;
   v_iord     int;
+  v_qty      numeric;
 begin
   if v_url is null or v_slug is null or (p_doc ->> 'title') is null then
     return null;
@@ -4699,14 +4749,16 @@ begin
 
     v_iord := 0;
     for v_i in select * from jsonb_array_elements(v_g -> 'ingredients') loop
+      -- A captured quantity is whatever the page said; a negative one is a
+      -- parse fault, and `ingredients_quantity_positive` would abort the
+      -- whole batch over it. Computed once: the unit's number agrees with it.
+      v_qty := nullif(greatest(coalesce((v_i ->> 'quantity')::numeric, 0), 0), 0);
       insert into ingredients (group_id, quantity, unit, name, note, is_optional, sort_order)
       values (
         v_group,
-        -- A captured quantity is whatever the page said; a negative one is a
-        -- parse fault, and `ingredients_quantity_positive` would abort the
-        -- whole batch over it.
-        nullif(greatest(coalesce((v_i ->> 'quantity')::numeric, 0), 0), 0),
-        nullif(v_i ->> 'unit', ''),
+        v_qty,
+        -- In the house canon (UX-030); unknown spellings pass through.
+        canonical_unit(nullif(v_i ->> 'unit', ''), v_qty),
         left(coalesce(nullif(v_i ->> 'name', ''), 'ingredient'), 200),
         left(nullif(v_i ->> 'note', ''), 500),
         coalesce((v_i ->> 'is_optional')::boolean, false),
@@ -4776,6 +4828,82 @@ update recipes r
    set title = clean_import_title(r.title)
  where r.is_imported
    and r.title is distinct from clean_import_title(r.title);
+
+-- Phase 39 backfill (UX-030): imported ingredients captured before
+-- `import_recipe` canonicalised units. A function, not a bare UPDATE like the
+-- two above, because it has two callers: this file, and the END of the
+-- generated nutrition_foods.sql. The second is the one that matters on every
+-- real path — `db:reset`, `db:hosted:deploy` and CI's upgrade path all apply
+-- this file BEFORE the registry, so from here it reads the previous registry,
+-- or none (the `recompute_auto_nutrition` situation, and the same early
+-- return). The call below still earns its place: a re-apply of 0001 alone over
+-- a loaded registry converges too.
+--
+--   * Imported rows only. A member's unit is their own text, and the curated
+--     recipes are held to the canon by the validator before they are ever SQL.
+--   * Idempotent: `canonical_unit` is a fixed point on its own output, and the
+--     `is distinct from` makes a converged database a no-op — which is also
+--     what keeps the lock below off every re-apply.
+--   * `ingredients_search_tsv_upd` is parked for the update. The search
+--     document reads ingredient NAMES, never units, so the refresh it would
+--     fire rewrites ~18k `search_tsv`s to the same value and — through
+--     `recipes_touch` — stamps each of those recipes `updated_at = now()` for
+--     an edit nobody made. `approve_profile_claim` parks `recipes_chef_stats`
+--     the same way; the ALTER is transactional, so a failed update re-enables
+--     it with the rollback.
+--
+-- Invoker-rights, `execute` revoked below (Gotcha 3): it writes rows no caller
+-- owns, and PostgREST would otherwise expose it.
+create or replace function canonicalise_imported_units()
+returns integer
+language plpgsql
+set search_path = public
+as $$
+declare
+  v_n integer;
+begin
+  if not exists (select 1 from food_unit where display is not null) then
+    return 0;
+  end if;
+
+  if not exists (
+    select 1
+      from ingredients i
+      join ingredient_groups g on g.id = i.group_id
+      join recipes r on r.id = g.recipe_id
+     where r.is_imported
+       and i.unit is not null
+       and i.unit is distinct from canonical_unit(i.unit, i.quantity)
+  ) then
+    return 0;
+  end if;
+
+  alter table ingredients disable trigger ingredients_search_tsv_upd;
+
+  update ingredients i
+     set unit = canonical_unit(i.unit, i.quantity)
+    from ingredient_groups g
+    join recipes r on r.id = g.recipe_id
+   where g.id = i.group_id
+     and r.is_imported
+     and i.unit is not null
+     and i.unit is distinct from canonical_unit(i.unit, i.quantity);
+  get diagnostics v_n = row_count;
+
+  alter table ingredients enable trigger ingredients_search_tsv_upd;
+  return v_n;
+end;
+$$;
+
+do $$
+begin
+  execute 'revoke execute on function canonicalise_imported_units() from public';
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'revoke execute on function canonicalise_imported_units() from anon, authenticated';
+  end if;
+end $$;
+
+select canonicalise_imported_units();
 
 -- ============================================================================
 -- Profile claims (Phase 35b) — a real chef taking over their imported page
