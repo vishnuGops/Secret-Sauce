@@ -1080,7 +1080,10 @@ owner decision.
       ~4% of recipes as forks (E7 / G3); a curated fork would be the Kitchen forking itself (a
       self-fork `recipes_most_forked` excludes) and an invented lineage (Gotcha 29). On a plain
       `db:reset` the lineage line appears only after a real fork through the app
-- [ ] Top-nav envelope — the signed-out bar at 600 / 1000 × 1.0 / 2.0
+- [x] **Top-nav envelope** — the signed-out bar at 600 / 1000 × 1.0 / 2.0 and 1440 × 2.0, the
+      signed-in bar at 600 and 1000 × 2.0 (`top_nav_bar_test` "envelope", 8 cases). Signed out
+      holds everywhere; the envelope found **B153** on the signed-in side — the avatar menu was a
+      39px target that the guideline never saw (its tap merged into the title's header node)
 - [ ] Editor drag auto-scroll (Phase 38's accepted limitation)
 - [ ] Desktop-web density — the owner's decision, recorded
 

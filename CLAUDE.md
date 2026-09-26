@@ -1299,6 +1299,10 @@ recipe` lives on the My Recipes header and search in Discover's search bar; putt
     runs the guideline; where the page is centred, the test also measures the controls directly
     (`tester.getSize(...) >= 48`). A new custom tappable grows its hit area with a
     `ConstrainedBox(minHeight: kMinInteractiveDimension)` inside its `InkWell`, not its paint.
+    **Its second form (B153):** a tappable with no semantics node of its own merges into its
+    parent's — the web avatar menu merged into the AppBar title's header node, which touches the
+    window edge, so the guideline skipped it and it was 39px. Give a custom tappable
+    `Semantics(container: true, button: true)`.
 
 29. **Fabricated data may exist, but it may never be on a default path — and a real person is
     never a fixture** (B112/B113/B114). Three separate mechanisms had put invented rows in front of

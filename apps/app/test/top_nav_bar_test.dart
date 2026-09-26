@@ -2,11 +2,12 @@ import 'dart:ui' show Tristate;
 
 import 'package:app/features/chefs/chef_page.dart';
 import 'package:app/routing/app_router.dart';
+import 'package:app/routing/nav_destinations.dart';
 import 'package:app/routing/top_nav_bar.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -174,6 +175,18 @@ Finder _inBar(String text) =>
 
 SemanticsData _a11y(WidgetTester tester, Finder finder) =>
     tester.getSemantics(finder).getSemanticsData();
+
+/// A control's own box is at least 48 × 48 — measured, not left to the
+/// guideline, which can misjudge nodes near an edge (Gotcha 30).
+void _expectTarget(WidgetTester tester, Finder finder, String what) {
+  final size = tester.getSize(finder);
+  expect(
+    size.width >= kMinInteractiveDimension &&
+        size.height >= kMinInteractiveDimension,
+    isTrue,
+    reason: '$what is $size, under 48 × 48',
+  );
+}
 
 void main() {
   testWidgets('expanded, signed in: destinations, no Profile, no New recipe', (
@@ -430,6 +443,169 @@ void main() {
       handle.dispose();
     });
   }
+
+  // Phase 39: the full envelope, both identity states. The signed-in bar at
+  // 1000 × 2.0 is the tightest pill (three destinations beside the avatar);
+  // signed out trades My Recipes for Sign in / Sign up, which at expanded are
+  // two text buttons whose width grows with the scale — a different budget,
+  // and one nothing pumped before. Beyond "no exception" each case asserts
+  // what an overflow-free bar can still get wrong: a control shrunk under
+  // 48dp, a clipped label, clusters painted over each other, and a control
+  // pushed past the window's right edge.
+  group('envelope', () {
+    for (final (width, scale, uid) in <(double, double, String?)>[
+      (600, 1.0, null),
+      (600, 2.0, null),
+      (1000, 1.0, null),
+      (1000, 2.0, null),
+      (1440, 2.0, null),
+      (600, 1.0, 'user-1'),
+      (600, 2.0, 'user-1'),
+      (1000, 2.0, 'user-1'),
+    ]) {
+      final state = uid == null ? 'signed out' : 'signed in';
+      testWidgets('$state at ${width}px, textScale $scale', (tester) async {
+        final handle = tester.ensureSemantics();
+        await _pump(tester, width: width, uid: uid, textScale: scale);
+        final where = '$state, ${width}px @ ${scale}x';
+
+        expect(tester.takeException(), isNull, reason: 'overflow: $where');
+
+        final bar = find.byType(TopNavBar);
+        Finder inBar(Finder f) => find.descendant(of: bar, matching: f);
+
+        // Every destination is drawn, each in its own 48dp target (measured
+        // directly — Gotcha 30).
+        final destinations = webDestinations(signedIn: uid != null);
+        final targets = <Rect>[];
+        final shown = <String>{};
+        for (final d in destinations) {
+          final icon = inBar(
+            find.byWidgetPredicate(
+              (w) =>
+                  w is Icon && (w.icon == d.icon || w.icon == d.selectedIcon),
+            ),
+          );
+          expect(icon, findsOneWidget, reason: '${d.label} missing: $where');
+          // The item's outer 48dp box — not the chip's InkWell, which builds
+          // a GestureDetector of its own.
+          final target = find.ancestor(
+            of: icon,
+            matching: find.byWidgetPredicate(
+              (w) => w is GestureDetector && w.child is ConstrainedBox,
+            ),
+          );
+          expect(target, findsOneWidget, reason: '${d.label}: $where');
+          _expectTarget(tester, target, '${d.label} ($where)');
+          targets.add(tester.getRect(target));
+          if (_inBar(d.label).evaluate().isNotEmpty) shown.add(d.label);
+        }
+
+        // Labels degrade as a set, the active one last: all, the active
+        // alone, or none — never some other subset.
+        final labels = {for (final d in destinations) d.label};
+        expect(
+          shown.isEmpty ||
+              shown.length == labels.length ||
+              (shown.length == 1 && shown.single == 'Chefs'), // at /chefs
+          isTrue,
+          reason: 'labels shown $shown of $labels: $where',
+        );
+
+        // Identity: the avatar signed in; signed out, Sign in + Sign up at
+        // expanded or the single login button below it.
+        final Finder actions;
+        if (uid != null) {
+          actions = inBar(find.byWidgetPredicate((w) => w is PopupMenuButton));
+          expect(actions, findsOneWidget, reason: 'avatar missing: $where');
+          _expectTarget(tester, actions, 'avatar ($where)');
+          // Its own button node, not merged into the AppBar title's header
+          // node — which spans the bar, touches the window's edge, and is
+          // therefore skipped by the guideline below (Phase 39).
+          final avatar = _a11y(tester, actions);
+          expect(avatar.flagsCollection.isButton, isTrue, reason: where);
+          expect(avatar.flagsCollection.isHeader, isFalse, reason: where);
+          expect(
+            avatar.rect.width < width,
+            isTrue,
+            reason: 'the avatar node spans the bar: $where',
+          );
+        } else if (width >= 1000) {
+          final signIn = inBar(find.widgetWithText(TextButton, 'Sign in'));
+          final signUp = inBar(find.widgetWithText(FilledButton, 'Sign up'));
+          expect(signIn, findsOneWidget, reason: 'Sign in missing: $where');
+          expect(signUp, findsOneWidget, reason: 'Sign up missing: $where');
+          _expectTarget(tester, signIn, 'Sign in ($where)');
+          _expectTarget(tester, signUp, 'Sign up ($where)');
+          // Side by side, in reading order.
+          expect(
+            tester.getRect(signIn).right,
+            lessThanOrEqualTo(tester.getRect(signUp).left),
+            reason: 'Sign in overlaps Sign up: $where',
+          );
+          actions = signUp;
+        } else {
+          actions = find.ancestor(
+            of: inBar(find.byTooltip('Sign in or sign up')),
+            matching: find.byType(IconButton),
+          );
+          expect(actions, findsOneWidget, reason: 'login missing: $where');
+          _expectTarget(tester, actions, 'login button ($where)');
+        }
+
+        final brand =
+            find
+                .ancestor(
+                  of: inBar(find.byIcon(Icons.restaurant_menu)),
+                  matching: find.byType(InkWell),
+                )
+                .first;
+        _expectTarget(tester, brand, 'brand ($where)');
+
+        // The three clusters in order and apart: brand, pill, identity, all
+        // inside the window.
+        final pill = targets.reduce((a, b) => a.expandToInclude(b));
+        final brandRect = tester.getRect(brand);
+        final actionsRect = tester.getRect(actions);
+        expect(brandRect.left, greaterThanOrEqualTo(0), reason: where);
+        expect(
+          brandRect.right,
+          lessThanOrEqualTo(pill.left),
+          reason: 'brand runs into the pill: $where',
+        );
+        expect(
+          pill.right,
+          lessThanOrEqualTo(actionsRect.left),
+          reason: 'pill runs into the identity cluster: $where',
+        );
+        expect(
+          actionsRect.right,
+          lessThanOrEqualTo(width),
+          reason: 'identity pushed off-screen: $where',
+        );
+
+        // No text in the bar is cut: every paragraph is at least as wide as
+        // its one-line intrinsic width, so nothing is clipped (the pill's
+        // labels are `softWrap: false` + clip, where `didExceedMaxLines` stays
+        // false even when clipped) and nothing wraps (the buttons' labels).
+        // A relation, not a pixel width — it survives the test font.
+        for (final element in inBar(find.byType(RichText)).evaluate()) {
+          final paragraph = element.renderObject! as RenderParagraph;
+          final text = paragraph.text.toPlainText();
+          expect(
+            paragraph.size.width,
+            greaterThanOrEqualTo(
+              paragraph.getMaxIntrinsicWidth(double.infinity) - 0.5,
+            ),
+            reason: '"$text" is clipped or wrapped: $where',
+          );
+        }
+
+        await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+        handle.dispose();
+      });
+    }
+  });
 
   // Phase 37 wave C (UX-014).
   group('semantics', () {

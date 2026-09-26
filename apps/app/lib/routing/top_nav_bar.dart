@@ -527,7 +527,7 @@ class _AccountMenu extends ConsumerWidget {
     final name =
         (profile?.displayName ?? '').isEmpty ? 'Account' : profile!.displayName;
 
-    return PopupMenuButton<_AccountAction>(
+    final menu = PopupMenuButton<_AccountAction>(
       tooltip: name,
       position: PopupMenuPosition.under,
       onSelected: (action) async {
@@ -583,28 +583,50 @@ class _AccountMenu extends ConsumerWidget {
               ),
             ),
           ],
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ChefAvatar(
-            name: profile?.displayName ?? '',
-            avatarUrl: profile?.avatarUrl,
-            radius: expanded ? _kAvatarRadiusExpanded : _kAvatarRadiusMedium,
-            tier: profile?.chefTier,
-            ringColor: scheme.primary,
-            surfaceColor: scheme.surfaceContainerLowest,
-            backgroundColor: scheme.primaryContainer,
-            foregroundColor: scheme.onPrimaryContainer,
+      // 48dp target (Phase 39, UX-048's miss): the ringed avatar is 39px
+      // square at medium and 41px tall beside the chevron at expanded. The
+      // menu's InkWell sizes to this child, so the floor goes here, around an
+      // unchanged paint — the brand's shape.
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minWidth: kMinInteractiveDimension,
+          minHeight: kMinInteractiveDimension,
+        ),
+        child: Align(
+          widthFactor: 1,
+          heightFactor: 1,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ChefAvatar(
+                name: profile?.displayName ?? '',
+                avatarUrl: profile?.avatarUrl,
+                radius:
+                    expanded ? _kAvatarRadiusExpanded : _kAvatarRadiusMedium,
+                tier: profile?.chefTier,
+                ringColor: scheme.primary,
+                surfaceColor: scheme.surfaceContainerLowest,
+                backgroundColor: scheme.primaryContainer,
+                foregroundColor: scheme.onPrimaryContainer,
+              ),
+              if (expanded)
+                Icon(
+                  Icons.expand_more,
+                  size: _kIconSize,
+                  color: scheme.onSurfaceVariant,
+                ),
+            ],
           ),
-          if (expanded)
-            Icon(
-              Icons.expand_more,
-              size: _kIconSize,
-              color: scheme.onSurfaceVariant,
-            ),
-        ],
+        ),
       ),
     );
+
+    // Its own node (Phase 39): without a container the menu's tap merged into
+    // the AppBar title's header node, which spans the whole bar — so the bar
+    // read as a header named "AO" that opens a menu, and the tap-target
+    // guideline, which skips a node touching the window's edge, never saw
+    // that the avatar's box was under 48dp.
+    return Semantics(container: true, button: true, child: menu);
   }
 }
 

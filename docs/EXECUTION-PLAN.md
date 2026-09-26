@@ -954,7 +954,7 @@ fixtures. Task 5: none (a decision).
 | --- | --- | --- |
 | 1 — UX-030 unit canon at import | done | `food_unit.display` / `.plural` from `tool/nutrition.dart`; `canonical_unit()` + `canonicalise_imported_units()` in 0001, the second also called at the end of `nutrition_foods.sql`; gutter gap (1 subagent). Verified: upgrade path on the local stack (59,258 → 0, second apply 0 rows, `updated_at` unmoved, triggers re-enabled), clean-machine path in `ss_p39`, `corpus_import_fixture.sql` §7 (mutation-checked twice: `import_recipe` without the canon; the backfill without parking the search trigger), `rls_matrix.sql` 188/188 with E11/E12 red when the grants are handed back, `db:nutrition:verify`, `db:audit` clean |
 | 2 — seed snapshots, forks | done | `tool/recipes.dart` (seeded snapshot + backfill, regenerated), `2_sim_generate.sql` §5b, `3_sim_verify.sql` E8b. Verified: local stack 14 empty → 0 then `UPDATE 0`; `ss_p39` fresh path 0 of 14 empty; sim `small` ALL CHECKS PASSED, `sim:rls` 130 passed; E8b fails when a current snapshot is emptied; `db:audit` clean |
-| 3 — top-nav envelope | not started | |
+| 3 — top-nav envelope | done | 1 subagent. Signed out fits at every width; B153 (the avatar's target and semantics) fixed and mutation-checked. The label check is a width relation, not `didExceedMaxLines` — the pill labels are `softWrap: false` + clip, where that flag never goes true |
 | 4 — editor drag auto-scroll | not started | |
 | 5 — desktop density | not started | |
 
