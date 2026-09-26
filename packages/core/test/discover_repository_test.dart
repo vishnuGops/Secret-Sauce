@@ -225,5 +225,28 @@ void main() {
       expect(DiscoverCategory.fromSlug(''), isNull);
       expect(DiscoverCategory.fromSlug(null), isNull);
     });
+
+    // The one mapping the covers are coloured from (36c review): a stored
+    // category finds its tile by any raw spelling or the tile's own label.
+    test('forCategory finds the tile a stored category belongs to', () {
+      expect(
+        DiscoverCategory.forCategory('Main Course'),
+        DiscoverCategory.mains,
+      );
+      expect(
+        DiscoverCategory.forCategory(' dessert '),
+        DiscoverCategory.desserts,
+      );
+      expect(
+        DiscoverCategory.forCategory('Starters'),
+        DiscoverCategory.starters,
+      );
+      expect(
+        DiscoverCategory.forCategory('Side Dish'),
+        DiscoverCategory.starters,
+      );
+      expect(DiscoverCategory.forCategory('Soup'), isNull);
+      expect(DiscoverCategory.forCategory(null), isNull);
+    });
   });
 }

@@ -198,6 +198,13 @@ class RecipeCard extends StatelessWidget {
   /// sacrifices when it runs out of width (B080).
   String get _timeLabel => formatMinutes(recipe.totalMinutes, compact: true);
 
+  /// Two lines of the description's style at the ambient text scale.
+  static double _descriptionHeight(BuildContext context, TextTheme textTheme) {
+    final style = textTheme.bodySmall!;
+    final line = (style.fontSize ?? 12) * (style.height ?? 1.0);
+    return MediaQuery.textScalerOf(context).scale(line) * 2;
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -282,12 +289,21 @@ class RecipeCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (showDescription)
-                      Text(
-                        recipe.description,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: textTheme.bodySmall?.copyWith(
-                          color: scheme.onSurfaceVariant,
+                      // Always two lines tall, whatever the text (36c review):
+                      // the title band now sits *under* the cover, so a
+                      // one-line description beside a two-line one would
+                      // shift the neighbour's cover and title by a line.
+                      // `strutStyle` + two lines' height pins it; empty
+                      // strings reserve the same space (B047's rule).
+                      SizedBox(
+                        height: _descriptionHeight(context, textTheme),
+                        child: Text(
+                          recipe.description,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: textTheme.bodySmall?.copyWith(
+                            color: scheme.onSurfaceVariant,
+                          ),
                         ),
                       ),
                     Container(
@@ -580,9 +596,9 @@ class _RankRibbon extends StatelessWidget {
 ///
 /// The scrim is a [Material] rather than the `Container` + `BoxDecoration` it
 /// was, and the swap is not cosmetic: [ChefBadge]'s tap uses an `InkWell`, and
-/// the nearest `Material` above this is the card's own `Card` — which paints
-/// its ink *under* the cover photo, so the ripple would land where nobody can
-/// see it. A local one puts the splash on the scrim, clipped to the pill.
+/// the nearest `Material` above this is the card's own transparent one — which
+/// paints its ink *under* the cover photo, so the ripple would land where
+/// nobody can see it. A local one puts the splash on the scrim, clipped to the pill.
 /// Geometry is unchanged: a [StadiumBorder] is what `AppRadii.pill` already
 /// rendered on a box this short, and the padding moved into a [Padding] of the
 /// same insets.

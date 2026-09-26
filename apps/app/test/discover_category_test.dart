@@ -225,6 +225,29 @@ void main() {
     );
   });
 
+  // 36c review: on a phone the tiles sit a screen above the grid they
+  // filter, so a tap scrolls the browse header into view — without it a tap
+  // changes nothing the reader can see.
+  testWidgets('a tile tap scrolls the filtered grid into view (390×800)', (
+    tester,
+  ) async {
+    final repo = _FakeDiscover();
+    await _pumpAt(tester, Routes.discover, repo, width: 390, height: 800);
+
+    final position =
+        tester.state<ScrollableState>(find.byType(Scrollable).first).position;
+    expect(position.pixels, 0);
+    expect(find.text('MAINS'), findsNothing);
+
+    await tester.tap(_tile(DiscoverCategory.mains));
+    await tester.pumpAndSettle();
+
+    expect(position.pixels, greaterThan(0));
+    final heading = tester.getRect(find.text('MAINS'));
+    expect(heading.top, greaterThanOrEqualTo(0));
+    expect(heading.bottom, lessThanOrEqualTo(800));
+  });
+
   testWidgets('the clear chip goes back to /discover, unfiltered', (
     tester,
   ) async {
@@ -278,7 +301,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(_uri(router).queryParameters['category'], 'desserts');
-    expect(repo.calls.last, 'byCategories:Dessert|Desserts|Baking');
+    expect(repo.calls.last, 'byCategories:Dessert|Desserts|Baking|Sweet');
     expect(find.text('Dessert pick'), findsOneWidget);
     expect(find.text('Main pick'), findsNothing);
     expect(find.text('DESSERTS'), findsOneWidget);
@@ -288,7 +311,7 @@ void main() {
     final repo = _FakeDiscover();
     await _pumpAt(tester, '/discover?category=desserts', repo);
 
-    expect(repo.calls, contains('byCategories:Dessert|Desserts|Baking'));
+    expect(repo.calls, contains('byCategories:Dessert|Desserts|Baking|Sweet'));
     expect(find.text('DESSERTS'), findsOneWidget);
     expect(find.text('Dessert pick'), findsOneWidget);
     expect(repo.calls, isNot(contains('popular')));

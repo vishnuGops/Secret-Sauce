@@ -501,9 +501,12 @@ void main() {
       // 36c, where the colour block now sets its category label).
       expect(find.text('Private'), findsOneWidget);
 
-      // Jump bar, ingredients rail, method column, sticky cook bar.
+      // Jump bar (and the rail's tab chip), then the two panels' headings —
+      // kickers since 36c — and the sticky cook bar.
       expect(find.text('Ingredients'), findsWidgets);
       expect(find.text('Method'), findsWidgets);
+      expect(find.text('INGREDIENTS'), findsOneWidget);
+      expect(find.text('METHOD'), findsOneWidget);
       expect(find.text('Ready to cook?'), findsOneWidget);
       expect(find.text('3 steps · 1 h 25 m'), findsOneWidget);
       // The attribution box (frame F).

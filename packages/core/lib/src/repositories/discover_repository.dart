@@ -21,16 +21,18 @@ import 'package:core/src/repositories/recipe_queries.dart';
 enum DiscoverCategory {
   mains('Mains', ['Main', 'Main Course', 'Mains', 'Dinner', 'Lunch', 'Entree']),
   breakfast('Breakfast', ['Breakfast', 'Brunch']),
-  desserts('Desserts', ['Dessert', 'Desserts', 'Baking']),
+  desserts('Desserts', ['Dessert', 'Desserts', 'Baking', 'Sweet']),
   starters('Starters', [
     'Appetizer',
     'Appetizers',
+    'Starter',
+    'Starters',
     'Snack',
     'Snacks',
     'Side Dish',
     'Side',
   ]),
-  salads('Salads', ['Salad', 'Salads']),
+  salads('Salads', ['Salad', 'Salads', 'Vegetable', 'Vegetables']),
   drinks('Drinks', ['Drink', 'Drinks', 'Beverage', 'Cocktail']);
 
   const DiscoverCategory(this.label, this.rawValues);
@@ -44,6 +46,22 @@ enum DiscoverCategory {
 
   /// The URL form: `mains` in `/discover?category=mains`.
   String get slug => name;
+
+  /// The tile a stored `recipes.category` belongs to, case- and
+  /// whitespace-insensitively, or null. `AppPalette.category` colours covers
+  /// through this, so a cover's colour and the tile that filters it can never
+  /// disagree (36c review: two hand-kept lists already had).
+  static DiscoverCategory? forCategory(String? category) {
+    final key = category?.trim().toLowerCase();
+    if (key == null || key.isEmpty) return null;
+    for (final c in values) {
+      if (c.label.toLowerCase() == key) return c;
+      for (final raw in c.rawValues) {
+        if (raw.toLowerCase() == key) return c;
+      }
+    }
+    return null;
+  }
 
   /// The tile a URL names, or null for a missing or unknown slug — which the
   /// screen treats as "no filter" rather than an error, so a stale or mistyped

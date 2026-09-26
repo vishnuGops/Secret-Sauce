@@ -17,6 +17,17 @@ class NutritionSummary extends StatelessWidget {
 
   final RecipeNutrition nutrition;
 
+  /// Whether the summary would print anything — at least one of calories,
+  /// fat, carbohydrate or protein. A label holding only, say, sodium is a
+  /// real label with nothing for this strip; callers gate on this so no empty
+  /// gap is left behind (36c review).
+  static bool hasAny(RecipeNutrition? n) =>
+      n != null &&
+      (n.calories != null ||
+          n.totalFatG != null ||
+          n.totalCarbsG != null ||
+          n.proteinG != null);
+
   @override
   Widget build(BuildContext context) {
     final n = nutrition;

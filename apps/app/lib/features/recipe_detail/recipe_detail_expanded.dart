@@ -278,9 +278,9 @@ class _HeaderBand extends ConsumerWidget {
                       FactsStrip(recipe: recipe),
                       // Additive to the FDA label in the rail's Nutrition
                       // tab, which stays the authoritative panel (Preserve).
-                      if (nutrition != null && nutrition.isNotEmpty) ...[
+                      if (NutritionSummary.hasAny(nutrition)) ...[
                         const SizedBox(height: AppSpacing.lg),
-                        NutritionSummary(nutrition: nutrition),
+                        NutritionSummary(nutrition: nutrition!),
                       ],
                       const SizedBox(height: AppSpacing.lg),
                       Wrap(

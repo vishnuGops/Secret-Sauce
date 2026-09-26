@@ -91,8 +91,16 @@ abstract class PagedRecipesNotifier
     // that, so a stale `true` here would freeze `loadMore` for good.
     _disposed = false;
     ref.onDispose(() => _disposed = true);
+    // A rebuild (new category, new query) keeps this instance, so `_disposed`
+    // alone cannot tell a stale `loadMore` from a live one — it is re-armed
+    // before the old request returns. The generation can: `loadMore` captures
+    // it and drops its result if a build has happened since (B121's lesson,
+    // first learned in `ChefBoardNotifier`; 36c review).
+    _generation++;
     return firstPage();
   }
+
+  int _generation = 0;
 
   /// Append the next page. Safe to call twice — the second call returns
   /// immediately while the first is in flight.
@@ -104,13 +112,14 @@ abstract class PagedRecipesNotifier
     final current = state.valueOrNull;
     if (current == null || !current.hasMore || current.loadingMore) return;
 
+    final generation = _generation;
     state = AsyncData(current.copyWith(loadingMore: true));
     try {
       final rows = await fetchPage(
         limit: pageSize,
         offset: current.recipes.length,
       );
-      if (_disposed) return;
+      if (_disposed || generation != _generation) return;
 
       // The offset is only as stable as the server's ordering. Every list this
       // backs has a total order (the Discover RPCs tie-break down to `id`), but
@@ -133,7 +142,9 @@ abstract class PagedRecipesNotifier
         ),
       );
     } catch (_) {
-      if (!_disposed) state = AsyncData(current.copyWith(loadingMore: false));
+      if (!_disposed && generation == _generation) {
+        state = AsyncData(current.copyWith(loadingMore: false));
+      }
       rethrow;
     }
   }

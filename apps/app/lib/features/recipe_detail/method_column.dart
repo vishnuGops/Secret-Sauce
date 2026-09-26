@@ -42,80 +42,86 @@ class MethodColumn extends ConsumerWidget {
 
     // An open panel (the owner's Q4): reference 5's rounded, borderless
     // section, never collapsed — the rail beside or above it is the same.
-    return Container(
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerLow,
+    // A `Material`, not a decorated box, so the step rows' `InkWell` ink shows
+    // (the same fix as RailPanel — 36c review).
+    return Material(
+      color: scheme.surfaceContainerLow,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppRadii.card),
       ),
-      padding: const EdgeInsets.all(AppSpacing.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                'METHOD',
-                style: context.appText.kickerLarge.copyWith(
-                  color: scheme.tertiary,
-                ),
-              ),
-              const SizedBox(width: AppSpacing.md),
-              Expanded(
-                child: Text(
-                  '$doneCount of ${allSteps.length} done · '
-                  'tap a step to tick it off',
-                  textAlign: TextAlign.end,
-                  // Tabular: the count moves with every tap (UX-049).
-                  style: textTheme.labelMedium?.tabular.copyWith(
-                    color: scheme.onSurfaceVariant,
+      clipBehavior: Clip.antiAlias,
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  'METHOD',
+                  style: context.appText.kickerLarge.copyWith(
+                    color: scheme.tertiary,
                   ),
                 ),
-              ),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Text(
+                    '$doneCount of ${allSteps.length} done · '
+                    'tap a step to tick it off',
+                    textAlign: TextAlign.end,
+                    // Tabular: the count moves with every tap (UX-049).
+                    style: textTheme.labelMedium?.tabular.copyWith(
+                      color: scheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.smPlus),
+            for (final group in recipe.stepGroups) ...[
+              if (showGroupHeaders)
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: AppSpacing.xsPlus,
+                    bottom: AppSpacing.smPlus,
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        (group.name.isEmpty ? 'Steps' : group.name)
+                            .toUpperCase(),
+                        style: context.appText.overline.copyWith(
+                          color: scheme.onSurfaceVariant,
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      const Expanded(child: Divider(height: 1)),
+                      const SizedBox(width: AppSpacing.sm),
+                      Text(
+                        countOf(group.steps.length, 'steps'),
+                        style: textTheme.labelMedium?.copyWith(
+                          color: scheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              for (var i = 0; i < group.steps.length; i++)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: AppSpacing.smPlus),
+                  child: _StepCard(
+                    step: group.steps[i],
+                    number: i + 1,
+                    done: done.contains(group.steps[i].id),
+                    onTap: () => toggle(group.steps[i].id),
+                  ),
+                ),
             ],
-          ),
-          const SizedBox(height: AppSpacing.smPlus),
-          for (final group in recipe.stepGroups) ...[
-            if (showGroupHeaders)
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: AppSpacing.xsPlus,
-                  bottom: AppSpacing.smPlus,
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      (group.name.isEmpty ? 'Steps' : group.name).toUpperCase(),
-                      style: context.appText.overline.copyWith(
-                        color: scheme.onSurfaceVariant,
-                      ),
-                    ),
-                    const SizedBox(width: AppSpacing.sm),
-                    const Expanded(child: Divider(height: 1)),
-                    const SizedBox(width: AppSpacing.sm),
-                    Text(
-                      countOf(group.steps.length, 'steps'),
-                      style: textTheme.labelMedium?.copyWith(
-                        color: scheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            for (var i = 0; i < group.steps.length; i++)
-              Padding(
-                padding: const EdgeInsets.only(bottom: AppSpacing.smPlus),
-                child: _StepCard(
-                  step: group.steps[i],
-                  number: i + 1,
-                  done: done.contains(group.steps[i].id),
-                  onTap: () => toggle(group.steps[i].id),
-                ),
-              ),
+            const SizedBox(height: AppSpacing.xs),
+            _CookModeTeaser(recipeId: recipe.id),
           ],
-          const SizedBox(height: AppSpacing.xs),
-          _CookModeTeaser(recipeId: recipe.id),
-        ],
+        ),
       ),
     );
   }

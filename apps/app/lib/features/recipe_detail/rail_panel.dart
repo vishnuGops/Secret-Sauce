@@ -46,56 +46,63 @@ class RailPanel extends ConsumerWidget {
     final scheme = Theme.of(context).colorScheme;
     final tab = ref.watch(railTabProvider(recipe.id));
 
-    return Container(
-      decoration:
-          bordered
-              ? BoxDecoration(
-                color: scheme.surfaceContainerLow,
-                borderRadius: BorderRadius.circular(AppRadii.card),
-              )
-              : null,
-      padding: const EdgeInsets.all(AppSpacing.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // The panel's heading names what the panel is showing, so it follows
-          // the tab — `INGREDIENTS` over a nutrition label would be the heading
-          // lying about its section.
-          Text(
+    // A `Material`, not a decorated box: the check-off rows are `InkWell`s, and
+    // ink paints on the nearest Material *under* its children — an opaque
+    // decorated box in between hides every ripple and focus highlight (36c
+    // review).
+    return Material(
+      color: bordered ? scheme.surfaceContainerLow : Colors.transparent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadii.card),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // The panel's heading names what the panel is showing, so it follows
+            // the tab — `INGREDIENTS` over a nutrition label would be the heading
+            // lying about its section.
+            Text(
+              switch (tab) {
+                RailTab.ingredients => 'INGREDIENTS',
+                RailTab.nutrition => 'NUTRITION',
+              },
+              style: context.appText.kickerLarge.copyWith(
+                color: scheme.tertiary,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.smPlus),
+            ServingsRow(recipe: recipe),
+            const SizedBox(height: AppSpacing.sm),
+            Wrap(
+              spacing: AppSpacing.sm,
+              runSpacing: AppSpacing.xs,
+              children: [
+                for (final entry
+                    in const {
+                      RailTab.ingredients: 'Ingredients',
+                      RailTab.nutrition: 'Nutrition',
+                    }.entries)
+                  ChoiceChip(
+                    label: Text(entry.value),
+                    selected: tab == entry.key,
+                    onSelected:
+                        (_) =>
+                            ref
+                                .read(railTabProvider(recipe.id).notifier)
+                                .state = entry.key,
+                  ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.sm),
             switch (tab) {
-              RailTab.ingredients => 'INGREDIENTS',
-              RailTab.nutrition => 'NUTRITION',
+              RailTab.ingredients => IngredientRail(recipe: recipe),
+              RailTab.nutrition => NutritionTab(recipe: recipe),
             },
-            style: context.appText.kickerLarge.copyWith(color: scheme.tertiary),
-          ),
-          const SizedBox(height: AppSpacing.smPlus),
-          ServingsRow(recipe: recipe),
-          const SizedBox(height: AppSpacing.sm),
-          Wrap(
-            spacing: AppSpacing.sm,
-            runSpacing: AppSpacing.xs,
-            children: [
-              for (final entry
-                  in const {
-                    RailTab.ingredients: 'Ingredients',
-                    RailTab.nutrition: 'Nutrition',
-                  }.entries)
-                ChoiceChip(
-                  label: Text(entry.value),
-                  selected: tab == entry.key,
-                  onSelected:
-                      (_) =>
-                          ref.read(railTabProvider(recipe.id).notifier).state =
-                              entry.key,
-                ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          switch (tab) {
-            RailTab.ingredients => IngredientRail(recipe: recipe),
-            RailTab.nutrition => NutritionTab(recipe: recipe),
-          },
-        ],
+          ],
+        ),
       ),
     );
   }

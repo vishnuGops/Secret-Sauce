@@ -424,9 +424,9 @@ class _IdentityBand extends StatelessWidget {
           FactsStrip(recipe: recipe, quad: true),
           // Additive to the FDA label in the Nutrition tab, which stays the
           // authoritative panel (Preserve): the headline numbers, up front.
-          if (nutrition != null && nutrition.isNotEmpty) ...[
+          if (NutritionSummary.hasAny(nutrition)) ...[
             const SizedBox(height: AppSpacing.md),
-            NutritionSummary(nutrition: nutrition),
+            NutritionSummary(nutrition: nutrition!),
           ],
           const SizedBox(height: AppSpacing.md),
           LikeSaveButtons(recipe: recipe),

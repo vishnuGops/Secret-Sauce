@@ -161,9 +161,10 @@ class AppPalette extends ThemeExtension<AppPalette> {
   final Color onRankRibbon;
 
   /// The colour block and its ink for a recipe [category] (free text in the
-  /// database). The six curated categories have fixed blocks; any other
-  /// string hashes to one of the six so a corpus category is stable across
-  /// renders; null (no category) takes coral, the brand-adjacent block.
+  /// database). A category in one of Discover's six tile groups
+  /// (`DiscoverCategory`) takes that tile's block, so a cover and the filter
+  /// that finds it agree; any other string hashes to one of the six so it is
+  /// stable across renders; null (no category) takes coral.
   CategoryColors category(String? category) {
     final blocks = <(Color, Color)>[
       (categoryCoral, onCategoryLight),
@@ -173,31 +174,17 @@ class AppPalette extends ThemeExtension<AppPalette> {
       (categorySage, onCategoryLight),
       (categorySky, onCategoryLight),
     ];
+    // One mapping: the Discover tiles' groups (core's `DiscoverCategory`),
+    // in the same order as [blocks]. Anything else hashes to a stable block.
+    final tile = DiscoverCategory.forCategory(category);
     final key = category?.trim().toLowerCase();
-    final index = switch (key) {
-      null || '' => 0,
-      'main' ||
-      'mains' ||
-      'main course' ||
-      'dinner' ||
-      'lunch' ||
-      'entree' => 0,
-      'breakfast' || 'brunch' => 1,
-      'dessert' || 'desserts' || 'baking' || 'sweet' => 2,
-      'appetizer' ||
-      'appetizers' ||
-      'starter' ||
-      'starters' ||
-      'snack' ||
-      'snacks' ||
-      'side' ||
-      'side dish' => 3,
-      'salad' || 'salads' || 'vegetable' || 'vegetables' => 4,
-      'drink' || 'drinks' || 'beverage' || 'cocktail' => 5,
-      _ =>
-        key.codeUnits.fold<int>(0, (h, c) => (h * 31 + c) & 0x7fffffff) %
-            blocks.length,
-    };
+    final index =
+        tile != null
+            ? tile.index
+            : key == null || key.isEmpty
+            ? 0
+            : key.codeUnits.fold<int>(0, (h, c) => (h * 31 + c) & 0x7fffffff) %
+                blocks.length;
     final (background, foreground) = blocks[index];
     return CategoryColors(background: background, foreground: foreground);
   }

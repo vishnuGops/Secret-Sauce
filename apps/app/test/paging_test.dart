@@ -5,6 +5,8 @@
 // The mechanics that can go wrong are all in `PagedRecipesNotifier` (core):
 // where the next offset comes from, what happens when a row moves between two
 // pages, and what a failed second page does to the rows already on screen.
+import 'dart:async';
+
 import 'package:app/features/discover/discover_providers.dart';
 import 'package:app/widgets/recipe_async_grid.dart';
 import 'package:core/core.dart';
@@ -47,6 +49,37 @@ class _PagingDiscoverRepository implements DiscoverRepository {
       throw UnimplementedError('${invocation.memberName} not stubbed');
 }
 
+/// A paged list keyed by [_keyProvider] — the shape of Discover's category
+/// and search grids, where a new key rebuilds the **same** notifier instance.
+/// A page whose `'<key>@<offset>'` has a gate waits on it.
+final _keyProvider = StateProvider<String>((ref) => 'a');
+final _gates = <String, Completer<List<Recipe>>>{};
+
+class _KeyedNotifier extends PagedRecipesNotifier {
+  late String _key;
+
+  @override
+  Future<RecipePage> build() {
+    _key = ref.watch(_keyProvider);
+    return super.build();
+  }
+
+  @override
+  Future<List<Recipe>> fetchPage({required int limit, required int offset}) {
+    final gate = _gates['$_key@$offset'];
+    if (gate != null) return gate.future;
+    return Future.value([
+      for (var i = offset; i < offset + limit; i++)
+        Recipe(id: '$_key$i', ownerId: 'u1', title: '$_key $i'),
+    ]);
+  }
+}
+
+final _keyedProvider =
+    AsyncNotifierProvider.autoDispose<_KeyedNotifier, RecipePage>(
+      _KeyedNotifier.new,
+    );
+
 ProviderContainer _container(DiscoverRepository repo) {
   final c = ProviderContainer(
     overrides: [discoverRepositoryProvider.overrideWithValue(repo)],
@@ -59,6 +92,42 @@ ProviderContainer _container(DiscoverRepository repo) {
 }
 
 void main() {
+  tearDown(_gates.clear);
+
+  // 36c review (B121's class, in the base class this time): a `loadMore`
+  // begun under one key must not land after a rebuild to another. The
+  // notifier instance survives the rebuild, so only the generation guard can
+  // tell the stale page apart.
+  test('a loadMore begun before a rebuild is dropped, not appended', () async {
+    final c = ProviderContainer();
+    addTearDown(c.dispose);
+    c.listen(_keyedProvider, (_, __) {});
+    await c.read(_keyedProvider.future);
+
+    final stale = Completer<List<Recipe>>();
+    _gates['a@$kRecipePageSize'] = stale;
+    final more = c.read(_keyedProvider.notifier).loadMore();
+
+    c.read(_keyProvider.notifier).state = 'b';
+    final fresh = await c.read(_keyedProvider.future);
+    expect(fresh.recipes.first.id, 'b0');
+
+    stale.complete([
+      for (var i = kRecipePageSize; i < 2 * kRecipePageSize; i++)
+        Recipe(id: 'a$i', ownerId: 'u1', title: 'a $i'),
+    ]);
+    await more;
+
+    final after = c.read(_keyedProvider).valueOrNull!;
+    expect(
+      after.recipes.every((r) => r.id.startsWith('b')),
+      isTrue,
+      reason: 'a page from the previous key was appended under the new one',
+    );
+    expect(after.recipes, hasLength(kRecipePageSize));
+    expect(after.loadingMore, isFalse);
+  });
+
   group('PagedRecipesNotifier', () {
     test(
       'the first page is one page, and a full page means there is more',

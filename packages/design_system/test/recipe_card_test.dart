@@ -371,7 +371,9 @@ void main() {
         ),
       );
       // Contract change (36c): the band sits **under** the cover, so the
-      // title is measured from the band's own top rather than the card's.
+      // title is measured from the band's own top rather than the card's
+      // (the old comment about the `Card` insetting the `InkWell` is moot —
+      // the tile has no `Card` since 36c).
       return (
         tester.getRect(find.byKey(const ValueKey('recipe-card-title-band'))),
         tester.getRect(find.text(recipe.title)),
@@ -517,4 +519,59 @@ void main() {
       );
     }
   });
+
+  // 36c review: the title band sits under the cover, so a one-line
+  // description beside a two-line one used to move the neighbour's cover and
+  // title by a line. The footer reserves two description lines, always.
+  for (final scale in [1.0, 2.0]) {
+    testWidgets(
+      'neighbouring titles line up whatever the description, $scale×',
+      (tester) async {
+        const short = Recipe(
+          id: 'a',
+          ownerId: 'o',
+          title: 'Soup',
+          description: 'Short.',
+        );
+        const long = Recipe(
+          id: 'b',
+          ownerId: 'o',
+          title: 'Stew',
+          description:
+              'A long description that certainly wraps onto a second line at '
+              'the narrowest card width, and then some more words besides.',
+        );
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.light(),
+            home: MediaQuery(
+              data: MediaQueryData(textScaler: TextScaler.linear(scale)),
+              child: const Scaffold(
+                body: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: kRecipeCardMinWidth,
+                      child: RecipeCard(recipe: short),
+                    ),
+                    SizedBox(
+                      width: kRecipeCardMinWidth,
+                      child: RecipeCard(recipe: long),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+        final bands = find.byKey(const ValueKey('recipe-card-title-band'));
+        expect(bands, findsNWidgets(2));
+        expect(
+          tester.getTopLeft(bands.at(0)).dy,
+          tester.getTopLeft(bands.at(1)).dy,
+        );
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
 }
