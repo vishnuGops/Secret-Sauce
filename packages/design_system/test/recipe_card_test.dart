@@ -198,16 +198,10 @@ void main() {
 
     testWidgets('the cover keeps some height at 3.0x', (tester) async {
       await pump(tester, kRecipeCardMinWidth, 3.0);
-      // The placeholder icon lives in the cover band; if the band were starved
-      // to zero the icon would be laid out in no space at all.
-      final cover = tester.getSize(
-        find
-            .ancestor(
-              of: find.byIcon(Icons.restaurant_menu),
-              matching: find.byType(Container),
-            )
-            .first,
-      );
+      // Contract change (36c): a recipe with no photo gets the category
+      // colour block, not a utensil glyph — measure the block. If the cover
+      // band were starved to zero it would be laid out in no space at all.
+      final cover = tester.getSize(find.byType(CategoryCover));
       expect(cover.height, greaterThan(40));
     });
   });
@@ -376,8 +370,10 @@ void main() {
           ),
         ),
       );
+      // Contract change (36c): the band sits **under** the cover, so the
+      // title is measured from the band's own top rather than the card's.
       return (
-        tester.getRect(find.byType(InkWell)),
+        tester.getRect(find.byKey(const ValueKey('recipe-card-title-band'))),
         tester.getRect(find.text(recipe.title)),
       );
     }

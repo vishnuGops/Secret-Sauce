@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:design_system/src/layout/adaptive.dart';
 import 'package:design_system/src/theme/app_theme.dart';
+import 'package:design_system/src/widgets/category_cover.dart';
 import 'package:design_system/src/widgets/chef_badge.dart';
 import 'package:design_system/src/widgets/difficulty_badge.dart';
 import 'package:design_system/src/widgets/star_rating.dart';
@@ -108,8 +109,10 @@ const double kRecipeCardDescriptionMaxScale = 2.0;
 // Card geometry that is not on the spacing scale (UX-054) — named here so the
 // numbers the envelope tests were measured against stay put.
 
-/// The banner's (and its placeholder's) horizontal inset.
-const double _kBannerHPad = 14;
+/// The title band's (and the footer's) horizontal inset. Small, because the
+/// card has no chrome of its own since 36c: the text lines up with the photo's
+/// edge, nudged in by a hair so a round-shouldered glyph does not look outdented.
+const double _kTextHPad = AppSpacing.xxs;
 
 /// Gap between the footer's divider and the metadata row under it.
 const double _kFooterRuleGap = 10;
@@ -132,20 +135,21 @@ const double _kPlaceholderMetaGap = 14;
 /// The placeholder's cover glyph.
 const double _kPlaceholderIconSize = 34;
 
-/// The primary recipe tile used on Discover and My Recipes (v2 layout).
+/// The primary recipe tile used on Discover and My Recipes (v3 layout, 36c).
 ///
-/// Top to bottom: a **title banner** on `colorScheme.primary`, the cover image,
-/// then a footer with the truncated description and the time / rating /
-/// difficulty row. The name leads the card, so it never competes with the photo
-/// and stays legible over a dark or busy cover.
+/// Top to bottom: the **cover** — a rounded photo, or a [CategoryCover] colour
+/// block when the recipe has none — then the **title band** under it, then a
+/// footer with the truncated description and the time / rating / difficulty
+/// row. No border and no fill: the photo is the card (references 1, 2, 5).
 ///
 /// Set [showVisibility] on surfaces that mix private and public recipes (My
-/// Recipes) to add a lock/globe chip to the banner. When [Recipe.owner] is
-/// embedded and [showChef] is true, the owning chef is drawn as an overlay on
-/// the **cover image**, bottom-right.
+/// Recipes) to add a lock/globe chip to the cover's top-right. When
+/// [Recipe.owner] is embedded and [showChef] is true, the owning chef is drawn
+/// on the cover, bottom-right. [rank] hangs a ribbon from the cover's
+/// top-left for a ranked shelf (reference 2).
 ///
-/// The banner is a fixed band and the footer is intrinsic; the cover is the
-/// only flexible child, so text-scale growth eats cover height instead of
+/// The title band is fixed and the footer is intrinsic; the cover is the only
+/// flexible child, so text-scale growth eats cover height instead of
 /// overflowing (B001/B002/B016 all came from a card row that could not shrink).
 /// Past the 2.0× contract the cover alone cannot absorb it, so the description
 /// yields too ([kRecipeCardDescriptionMaxScale], B049) and the tile stays
@@ -158,6 +162,7 @@ class RecipeCard extends StatelessWidget {
     this.onChefTap,
     this.showVisibility = false,
     this.showChef = true,
+    this.rank,
   });
 
   final Recipe recipe;
@@ -182,6 +187,10 @@ class RecipeCard extends StatelessWidget {
   /// so the badge is not repeated on every tile.
   final bool showChef;
 
+  /// 1-based position on a ranked shelf; draws the rank ribbon. Null (the
+  /// default) on every unranked surface.
+  final int? rank;
+
   /// `45 min`, `1h 10m`, `—`. Core's formatter in its compact rendering (32d2):
   /// the card had its own copy of the same arithmetic, so `1 h 10 m` and
   /// `1h 10m` were two functions' opinions rather than one decision. The spaces
@@ -204,45 +213,69 @@ class RecipeCard extends StatelessWidget {
       // Tight height so the cover's Expanded always has a bound, including in
       // tests and any caller that lays the card out with unbounded height.
       height: kRecipeCardHeight,
-      child: Card(
+      // No `Card`: the tile has no chrome since 36c. A transparent `Material`
+      // is still needed so the `InkWell`'s ripple and focus highlight have
+      // somewhere to paint.
+      child: Material(
+        type: MaterialType.transparency,
         child: InkWell(
           onTap: onTap,
+          borderRadius: BorderRadius.circular(AppRadii.card),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _TitleBanner(
-                title: recipe.title,
-                visibility: showVisibility ? recipe.visibility : null,
-              ),
               Expanded(
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    // `displayCoverImageUrl` honours the publisher's
-                    // image policy (Phase 35c); the null path is the
-                    // placeholder this card already draws.
-                    _CoverImage(
-                      url: recipe.displayCoverImageUrl,
-                      scheme: scheme,
-                    ),
-                    if (showChef && recipe.owner != null)
-                      Positioned(
-                        left: AppSpacing.sm,
-                        right: AppSpacing.sm,
-                        bottom: AppSpacing.sm,
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: _ChefOverlay(
-                            owner: recipe.owner!,
-                            onTap: onChefTap,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(AppRadii.card),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      // `displayCoverImageUrl` honours the publisher's image
+                      // policy (Phase 35c); no URL means the colour block.
+                      _CoverImage(
+                        url: recipe.displayCoverImageUrl,
+                        category: recipe.category,
+                      ),
+                      if (rank != null)
+                        Positioned(
+                          top: 0,
+                          left: AppSpacing.smPlus,
+                          child: _RankRibbon(rank: rank!),
+                        ),
+                      if (showVisibility)
+                        Positioned(
+                          top: AppSpacing.sm,
+                          right: AppSpacing.sm,
+                          child: _VisibilityBadge(
+                            visibility: recipe.visibility,
+                            scheme: scheme,
                           ),
                         ),
-                      ),
-                  ],
+                      if (showChef && recipe.owner != null)
+                        Positioned(
+                          left: AppSpacing.sm,
+                          right: AppSpacing.sm,
+                          bottom: AppSpacing.sm,
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: _ChefOverlay(
+                              owner: recipe.owner!,
+                              onTap: onChefTap,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
+              _TitleBand(title: recipe.title),
               Padding(
-                padding: const EdgeInsets.all(AppSpacing.md),
+                padding: const EdgeInsets.fromLTRB(
+                  _kTextHPad,
+                  0,
+                  _kTextHPad,
+                  AppSpacing.sm,
+                ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -386,112 +419,152 @@ class RecipeCardPlaceholder extends StatelessWidget {
 
     return SizedBox(
       height: kRecipeCardHeight,
-      child: Card(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // The banner band, muted: at full `primary` a row of placeholders
-            // is louder than the real cards beside it.
-            Container(
-              height:
-                  kRecipeCardBannerHeight *
-                  context.textScale.clamp(1.0, kRecipeCardBannerMaxScale),
-              color: scheme.surfaceContainerHigh,
-              padding: const EdgeInsets.symmetric(horizontal: _kBannerHPad),
-              child: Center(child: bar(double.infinity, _kPlaceholderTitleBar)),
-            ),
-            Expanded(
-              child: Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
                 color: scheme.surfaceContainerHighest,
-                child: Icon(
-                  Icons.restaurant_menu,
-                  size: _kPlaceholderIconSize,
-                  color: scheme.onSurfaceVariant.withValues(
-                    alpha: AppAlpha.rule,
-                  ),
+                borderRadius: BorderRadius.circular(AppRadii.card),
+              ),
+              child: Icon(
+                Icons.restaurant_menu,
+                size: _kPlaceholderIconSize,
+                color: scheme.onSurfaceVariant.withValues(alpha: AppAlpha.rule),
+              ),
+            ),
+          ),
+          SizedBox(
+            height:
+                kRecipeCardBannerHeight *
+                context.textScale.clamp(1.0, kRecipeCardBannerMaxScale),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: _kTextHPad),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: bar(double.infinity, _kPlaceholderTitleBar),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              _kTextHPad,
+              0,
+              _kTextHPad,
+              AppSpacing.sm,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                bar(double.infinity, _kPlaceholderLineBar),
+                const SizedBox(height: AppSpacing.xsPlus),
+                bar(_kPlaceholderShortLine, _kPlaceholderLineBar),
+                const SizedBox(height: _kPlaceholderMetaGap),
+                Row(
+                  children: [
+                    bar(_kPlaceholderTimeBar, _kPlaceholderMetaBar),
+                    const Spacer(),
+                    bar(_kPlaceholderBadgeBar, _kPlaceholderMetaBar),
+                  ],
                 ),
-              ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  bar(double.infinity, _kPlaceholderLineBar),
-                  const SizedBox(height: AppSpacing.xsPlus),
-                  bar(_kPlaceholderShortLine, _kPlaceholderLineBar),
-                  const SizedBox(height: _kPlaceholderMetaGap),
-                  Row(
-                    children: [
-                      bar(_kPlaceholderTimeBar, _kPlaceholderMetaBar),
-                      const Spacer(),
-                      bar(_kPlaceholderBadgeBar, _kPlaceholderMetaBar),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
-/// The recipe name as a banner across the top of the card.
+/// The recipe name, in a fixed band under the cover.
 ///
 /// Two lines maximum, then an ellipsis — a longer name eats cover height, it
-/// never grows the card. [visibility] is null on surfaces that do not mix
-/// private and public recipes.
-///
-/// The band is a **fixed** `kRecipeCardBannerHeight × textScale` with the title
-/// centred in it, so one-line and two-line names produce identical banners and
-/// the covers of neighbouring cards start at the same y. It is a *minimum*, not
-/// a tight height: anything the text needs beyond it still grows the band (and
-/// costs the cover) instead of overflowing.
-class _TitleBanner extends StatelessWidget {
-  const _TitleBanner({required this.title, this.visibility});
+/// never grows the card. The band is a **fixed** `kRecipeCardBannerHeight ×
+/// textScale` (capped at [kRecipeCardBannerMaxScale]) with the title centred
+/// in it, so one-line and two-line names produce identical bands and the
+/// footers of neighbouring cards start at the same y (B047). It is a
+/// *minimum*, not a tight height: anything the text needs beyond it still grows
+/// the band (and costs the cover) instead of overflowing.
+class _TitleBand extends StatelessWidget {
+  const _TitleBand({required this.title});
 
   final String title;
-  final RecipeVisibility? visibility;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
 
     return Container(
-      color: scheme.primary,
+      key: const ValueKey('recipe-card-title-band'),
       constraints: BoxConstraints(
         minHeight:
             kRecipeCardBannerHeight *
             context.textScale.clamp(1.0, kRecipeCardBannerMaxScale),
       ),
       padding: const EdgeInsets.symmetric(
-        horizontal: _kBannerHPad,
+        horizontal: _kTextHPad,
         vertical: AppSpacing.sm,
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Text(
-              title,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: scheme.onPrimary,
-                // A hair of tracking for the white-on-primary name: the
-                // banner's own tweak, not a ramp role.
-                letterSpacing: 0.16,
-              ),
-            ),
+      alignment: Alignment.centerLeft,
+      child: Text(
+        title,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        style: theme.textTheme.titleMedium?.copyWith(
+          color: theme.colorScheme.onSurface,
+        ),
+      ),
+    );
+  }
+}
+
+/// The rank flag hanging from the cover's top edge on a ranked shelf
+/// (reference 2): `1st`, `2nd`, `3rd`, `4th` … in the ribbon's own ink.
+class _RankRibbon extends StatelessWidget {
+  const _RankRibbon({required this.rank});
+
+  final int rank;
+
+  static String _ordinal(int n) {
+    final teen = n % 100 >= 11 && n % 100 <= 13;
+    final suffix =
+        teen
+            ? 'th'
+            : switch (n % 10) {
+              1 => 'st',
+              2 => 'nd',
+              3 => 'rd',
+              _ => 'th',
+            };
+    return '$n$suffix';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    return Semantics(
+      label: 'Ranked ${_ordinal(rank)}',
+      excludeSemantics: true,
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.sm,
+          AppSpacing.sm,
+          AppSpacing.sm,
+          AppSpacing.xsPlus,
+        ),
+        decoration: BoxDecoration(
+          color: palette.rankRibbon,
+          borderRadius: const BorderRadius.vertical(
+            bottom: Radius.circular(AppRadii.sm),
           ),
-          if (visibility != null) ...[
-            const SizedBox(width: AppSpacing.sm),
-            _VisibilityBadge(visibility: visibility!, scheme: scheme),
-          ],
-        ],
+        ),
+        child: Text(
+          _ordinal(rank),
+          style: Theme.of(
+            context,
+          ).textTheme.labelSmall?.tabular.copyWith(color: palette.onRankRibbon),
+        ),
       ),
     );
   }
@@ -542,10 +615,11 @@ class _ChefOverlay extends StatelessWidget {
   }
 }
 
-/// Icon-only public/private chip, at the end of the title banner.
+/// Icon-only public/private chip, on the cover's top-right corner.
 ///
-/// Icon-only on purpose: the banner already spends its width on the name, and a
-/// "Private" label would be the first thing to overflow at large text scale.
+/// Icon-only on purpose: a "Private" label on a 288px cover competes with the
+/// chef badge and the rank ribbon, and is the first thing to overflow at large
+/// text scale.
 /// The label survives as the tooltip, which is also what screen readers read.
 class _VisibilityBadge extends StatelessWidget {
   const _VisibilityBadge({required this.visibility, required this.scheme});
@@ -576,32 +650,25 @@ class _VisibilityBadge extends StatelessWidget {
 }
 
 class _CoverImage extends StatelessWidget {
-  const _CoverImage({required this.url, required this.scheme});
+  const _CoverImage({required this.url, this.category});
 
   final String? url;
-  final ColorScheme scheme;
+  final String? category;
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     if (url == null || url!.isEmpty) {
-      return Container(
-        color: scheme.surfaceContainerHighest,
-        child: Icon(
-          Icons.restaurant_menu,
-          size: AppIconSize.xl,
-          color: scheme.onSurfaceVariant,
-        ),
-      );
+      return CategoryCover(category: category);
     }
     return CachedNetworkImage(
       imageUrl: url!,
       fit: BoxFit.cover,
       placeholder: (_, __) => Container(color: scheme.surfaceContainerHighest),
-      errorWidget:
-          (_, __, ___) => Container(
-            color: scheme.surfaceContainerHighest,
-            child: const Icon(Icons.broken_image_outlined),
-          ),
+      // A photo that fails to load falls back to the same colour block a
+      // recipe without one gets, not a broken-image glyph (UX-029's hotlink
+      // failure read as a fault).
+      errorWidget: (_, __, ___) => CategoryCover(category: category),
     );
   }
 }
