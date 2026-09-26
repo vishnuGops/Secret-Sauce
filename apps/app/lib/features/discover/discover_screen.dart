@@ -305,7 +305,7 @@ class _SortLink extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(AppRadii.button),
+      borderRadius: BorderRadius.circular(AppRadii.md),
       // The underline is a **border on the box that holds the text**, not a
       // `Container` under it in a `Column` (B060). A box with no child and no
       // width takes `constraints.biggest` when it is bounded and

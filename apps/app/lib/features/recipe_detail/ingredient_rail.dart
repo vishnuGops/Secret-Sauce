@@ -195,7 +195,7 @@ class _IngredientRow extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(AppRadii.button),
+      borderRadius: BorderRadius.circular(AppRadii.md),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.xsPlus),
         child: Row(

@@ -20,24 +20,90 @@ export 'package:design_system/src/theme/app_typography.dart';
 class AppTheme {
   AppTheme._();
 
-  /// Warm, kitchen-inspired seed color — every `ColorScheme` role derives from
-  /// it (`ColorScheme.fromSeed`, tonal spot).
-  static const Color seed = Color(0xFFD2492A); // paprika red
+  /// Tomato — the brand accent (Phase 36c, reference 1's `#E54A3A` darkened
+  /// until white text on it clears 4.5:1). `fromSeed` supplies the roles the
+  /// schemes below do not name; every role the product leans on is explicit.
+  static const Color seed = Color(0xFFBE3526);
+
+  /// The light scheme: neutral white pages (no M3 tonal tint — the photos
+  /// and the category blocks carry the colour), tomato primary, deep-brown
+  /// secondary, burnt-orange tertiary for kickers and figures (DESIGN §3.1).
+  static final ColorScheme _lightScheme = ColorScheme.fromSeed(
+    seedColor: seed,
+  ).copyWith(
+    primary: const Color(0xFFBE3526),
+    onPrimary: const Color(0xFFFFFFFF),
+    primaryContainer: const Color(0xFFFFE4DE),
+    onPrimaryContainer: const Color(0xFF6B1A10),
+    secondary: const Color(0xFF492511),
+    onSecondary: const Color(0xFFFFFFFF),
+    secondaryContainer: const Color(0xFFF4E7DE),
+    onSecondaryContainer: const Color(0xFF492511),
+    tertiary: const Color(0xFFAD4A00),
+    onTertiary: const Color(0xFFFFFFFF),
+    tertiaryContainer: const Color(0xFFFFE8D5),
+    onTertiaryContainer: const Color(0xFF6B2E00),
+    surface: const Color(0xFFFFFFFF),
+    onSurface: const Color(0xFF1F1A17),
+    onSurfaceVariant: const Color(0xFF5E5650),
+    surfaceContainerLowest: const Color(0xFFFFFFFF),
+    surfaceContainerLow: const Color(0xFFFAF8F6),
+    surfaceContainer: const Color(0xFFF5F2EF),
+    surfaceContainerHigh: const Color(0xFFF1EDE9),
+    surfaceContainerHighest: const Color(0xFFECE7E2),
+    outline: const Color(0xFF857D77),
+    outlineVariant: const Color(0xFFE3DDD8),
+    inverseSurface: const Color(0xFF2B2521),
+    onInverseSurface: const Color(0xFFF6F1ED),
+    inversePrimary: const Color(0xFFFFB4A6),
+    surfaceTint: Colors.transparent,
+  );
+
+  /// The dark scheme: neutral near-black (reference 4), accents lifted until
+  /// they read on it. Cook mode renders this one always.
+  static final ColorScheme _darkScheme = ColorScheme.fromSeed(
+    seedColor: seed,
+    brightness: Brightness.dark,
+  ).copyWith(
+    primary: const Color(0xFFFF8A78),
+    onPrimary: const Color(0xFF5C130B),
+    primaryContainer: const Color(0xFF8E2217),
+    onPrimaryContainer: const Color(0xFFFFDAD4),
+    secondary: const Color(0xFFE9C4AE),
+    onSecondary: const Color(0xFF3A1B0A),
+    secondaryContainer: const Color(0xFF4A2E20),
+    onSecondaryContainer: const Color(0xFFF6DDCF),
+    tertiary: const Color(0xFFFFB77A),
+    onTertiary: const Color(0xFF4A2300),
+    tertiaryContainer: const Color(0xFF6B3400),
+    onTertiaryContainer: const Color(0xFFFFDCC2),
+    surface: const Color(0xFF161616),
+    onSurface: const Color(0xFFEDEAE7),
+    onSurfaceVariant: const Color(0xFFBDB7B2),
+    surfaceContainerLowest: const Color(0xFF101010),
+    surfaceContainerLow: const Color(0xFF1D1D1D),
+    surfaceContainer: const Color(0xFF222222),
+    surfaceContainerHigh: const Color(0xFF2B2B2B),
+    surfaceContainerHighest: const Color(0xFF363636),
+    outline: const Color(0xFF8F8983),
+    outlineVariant: const Color(0xFF3A3A3A),
+    inverseSurface: const Color(0xFFEDEAE7),
+    onInverseSurface: const Color(0xFF2B2521),
+    inversePrimary: const Color(0xFFB8321F),
+    surfaceTint: Colors.transparent,
+  );
 
   static ThemeData light() => _base(Brightness.light);
   static ThemeData dark() => _base(Brightness.dark);
 
-  /// The shape every button family shares (UX-033: Outlined and Text buttons
-  /// were M3 stadiums beside the themed Filled's 12px corners, in one row).
+  /// The shape every button family shares (UX-033), a pill since 36c
+  /// (references 2 and 5 pill their actions and tags).
   static final OutlinedBorder _buttonShape = RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(AppRadii.button),
   );
 
   static ThemeData _base(Brightness brightness) {
-    final scheme = ColorScheme.fromSeed(
-      seedColor: seed,
-      brightness: brightness,
-    );
+    final scheme = brightness == Brightness.dark ? _darkScheme : _lightScheme;
     final palette = AppPalette.of(brightness);
     final text = AppTypography.textTheme;
     // Buttons read a touch heavier than the ramp's labelLarge (the mockups'
@@ -51,12 +117,15 @@ class AppTheme {
       textTheme: text,
       scaffoldBackgroundColor: scheme.surface,
       extensions: [palette, AppTypography.roles],
+      // Cards are quiet tonal panels with no outline (references 1, 2, 5): a
+      // step off the page, not a box drawn round it. `theme_contrast_test`
+      // measures text on this fill as "Card".
       cardTheme: CardThemeData(
         elevation: 0,
+        color: scheme.surfaceContainerLow,
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadii.card),
-          side: BorderSide(color: scheme.outlineVariant),
         ),
       ),
       // --- Buttons: one shape, one height, one label weight (UX-033) -------
@@ -109,7 +178,7 @@ class AppTheme {
       // from the ramp. `theme_extensions_test.dart` pins the resolved colours.
       chipTheme: ChipThemeData(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadii.chip),
+          borderRadius: BorderRadius.circular(AppRadii.pill),
         ),
       ),
       // TabBar colours its labels from `labelColor`, not from the style, so a
@@ -118,8 +187,28 @@ class AppTheme {
         labelStyle: text.titleSmall,
         unselectedLabelStyle: text.titleSmall,
       ),
+      // The active destination is tomato (reference 5). The label style carries
+      // its own state colours — a colourless one would replace M3's (36b
+      // review; `theme_extensions_test` pins them).
       navigationBarTheme: NavigationBarThemeData(
-        indicatorColor: scheme.secondaryContainer,
+        backgroundColor: scheme.surface,
+        indicatorColor: scheme.primaryContainer,
+        iconTheme: WidgetStateProperty.resolveWith(
+          (states) => IconThemeData(
+            color:
+                states.contains(WidgetState.selected)
+                    ? scheme.primary
+                    : scheme.onSurfaceVariant,
+          ),
+        ),
+        labelTextStyle: WidgetStateProperty.resolveWith(
+          (states) => text.labelMedium!.copyWith(
+            color:
+                states.contains(WidgetState.selected)
+                    ? scheme.primary
+                    : scheme.onSurfaceVariant,
+          ),
+        ),
       ),
       // --- Overlays -----------------------------------------------------
       dialogTheme: DialogThemeData(
@@ -139,9 +228,10 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppRadii.button),
+          borderRadius: BorderRadius.circular(AppRadii.md),
         ),
         filled: true,
+        fillColor: scheme.surfaceContainer,
       ),
     );
   }
@@ -213,10 +303,17 @@ class AppRadii {
   /// A small inner corner — a check box, a chip inside a card.
   static const double sm = 6;
 
-  /// M3's chip corner.
+  /// M3's chip corner — for a small rounded box that is not a pill.
   static const double chip = 8;
 
-  static const double button = 12;
+  /// A control or text box that is not a button: inputs, the ink region of a
+  /// tappable text link, the nutrition label's frame.
+  static const double md = 12;
+
+  /// Every button family — a pill since 36c (it was 12, now [md]).
+  static const double button = pill;
+
+  /// Photos and panels (the photo is the card now — 36c).
   static const double card = 16;
 
   /// The chefs hero panel — the one large brand surface.
@@ -224,6 +321,10 @@ class AppRadii {
 
   /// Dialogs (M3's extra-large corner).
   static const double dialog = 28;
+
+  /// The top corners of the recipe detail sheet that overlaps its photo
+  /// (reference 5).
+  static const double sheet = 28;
 
   /// A fully rounded end — chips, badges, pills, the nav bar's selection.
   ///

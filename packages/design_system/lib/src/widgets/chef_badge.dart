@@ -110,7 +110,7 @@ class ChefBadge extends StatelessWidget {
     if (onTap == null) return content;
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(AppRadii.button),
+      borderRadius: BorderRadius.circular(AppRadii.md),
       child: content,
     );
   }

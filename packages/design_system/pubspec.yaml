@@ -19,7 +19,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-# Bundled type (Phase 36b, owner decision 2026-09-25). OFL 1.1 — the license
+# Bundled type (Phase 36b; one family since 36c, owner decision 2026-09-25). OFL 1.1 — the license
 # files sit beside the fonts. Static instances from Google Fonts, one file per
 # weight, so `fontWeight` selects a real cut instead of a synthesized bold.
 # Referenced as `packages/design_system/<family>` (AppFonts in
@@ -38,16 +38,3 @@ flutter:
           weight: 700
         - asset: fonts/Manrope-ExtraBold.ttf
           weight: 800
-    - family: Newsreader
-      fonts:
-        - asset: fonts/Newsreader-Regular.ttf
-          weight: 400
-        - asset: fonts/Newsreader-Italic.ttf
-          weight: 400
-          style: italic
-        - asset: fonts/Newsreader-Medium.ttf
-          weight: 500
-        - asset: fonts/Newsreader-SemiBold.ttf
-          weight: 600
-        - asset: fonts/Newsreader-Bold.ttf
-          weight: 700

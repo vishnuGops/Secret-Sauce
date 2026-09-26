@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-/// The two bundled families (OFL, `packages/design_system/fonts/`).
+/// The bundled family (OFL, `packages/design_system/fonts/`).
 ///
-/// **Newsreader** (serif) sets names and headings — display, headline and
-/// `titleLarge`. **Manrope** (sans) sets everything a cook acts on: titles
-/// from `titleMedium` down, body, labels, numbers. Owner decision 2026-09-25;
-/// the Claude Design mockups (`_ds_bundle.css`) drew the same pairing.
+/// **One family for now: Manrope**, headings included — the owner's call on
+/// 2026-09-25 (Phase 36c: "use something basic for now, we can change the font
+/// later"). Headings carry weight instead of a second face. [display] is kept
+/// as its own name so a display face can come back by changing one constant
+/// and adding its files; today it resolves to Manrope.
 ///
 /// Bundled rather than fetched: CanvasKit has no system fonts to fall back to,
 /// so a runtime fetch flashes unstyled text, and a bundle works offline.
@@ -15,7 +16,7 @@ abstract final class AppFonts {
   static const String package = 'design_system';
 
   static const String ui = 'Manrope';
-  static const String display = 'Newsreader';
+  static const String display = ui;
 
   /// The resolved family names, for APIs that take a bare string
   /// (`ThemeData.fontFamily`, a `TextPainter`).
@@ -35,13 +36,15 @@ const List<FontFeature> kTabularFigures = [FontFeature.tabularFigures()];
 /// weights are ours. **Call sites pick a role; they do not re-bold.** A weight
 /// that keeps being overridden is a missing role — add it to [AppTextStyles].
 abstract final class AppTypography {
+  // Bold, slightly tight headings — references 2 and 5 set theirs heavy in a
+  // sans; 36b's serif took 600.
   static TextStyle _display(double size, double lineHeight, {double ls = 0}) =>
       TextStyle(
         fontFamily: AppFonts.display,
         package: AppFonts.package,
         fontSize: size,
         height: lineHeight / size,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w700,
         letterSpacing: ls,
       );
 
@@ -62,13 +65,13 @@ abstract final class AppTypography {
   /// Colourless: `ThemeData` merges it over the scheme-coloured default, so
   /// each role picks up `onSurface` the way M3's own ramp does.
   static final TextTheme textTheme = TextTheme(
-    displayLarge: _display(57, 64, ls: -0.5),
-    displayMedium: _display(45, 52, ls: -0.4),
-    displaySmall: _display(36, 44, ls: -0.3),
-    headlineLarge: _display(32, 40, ls: -0.2),
-    headlineMedium: _display(28, 36),
-    headlineSmall: _display(24, 32),
-    titleLarge: _display(22, 28),
+    displayLarge: _display(57, 64, ls: -1.2),
+    displayMedium: _display(45, 52, ls: -0.9),
+    displaySmall: _display(36, 44, ls: -0.6),
+    headlineLarge: _display(32, 40, ls: -0.4),
+    headlineMedium: _display(28, 36, ls: -0.3),
+    headlineSmall: _display(24, 32, ls: -0.2),
+    titleLarge: _display(22, 28, ls: -0.1),
     titleMedium: _ui(16, 24, FontWeight.w700),
     titleSmall: _ui(14, 20, FontWeight.w700),
     bodyLarge: _ui(16, 24, FontWeight.w400),

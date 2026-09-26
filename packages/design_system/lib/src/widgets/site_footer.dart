@@ -90,7 +90,7 @@ class SiteFooter extends StatelessWidget {
             // budget the web bar has.
             InkWell(
               onTap: link.onTap,
-              borderRadius: BorderRadius.circular(AppRadii.button),
+              borderRadius: BorderRadius.circular(AppRadii.md),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.xs,

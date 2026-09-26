@@ -23,7 +23,7 @@ void main() {
         expect(theme.extension<AppTextStyles>(), isNotNull);
       });
 
-      test('every TextTheme role is set in a bundled family', () {
+      test('every TextTheme role is set in the bundled family', () {
         final t = theme.textTheme;
         final roles = <String, TextStyle?>{
           'displayLarge': t.displayLarge,
@@ -42,7 +42,10 @@ void main() {
           'labelMedium': t.labelMedium,
           'labelSmall': t.labelSmall,
         };
-        const serif = {
+        // One family since 36c: display roles resolve through
+        // `AppFonts.displayFamily`, which is Manrope until a display face
+        // returns.
+        const display = {
           'displayLarge',
           'displayMedium',
           'displaySmall',
@@ -55,7 +58,7 @@ void main() {
           expect(style, isNotNull, reason: role);
           expect(
             style!.fontFamily,
-            serif.contains(role) ? AppFonts.displayFamily : AppFonts.uiFamily,
+            display.contains(role) ? AppFonts.displayFamily : AppFonts.uiFamily,
             reason: role,
           );
           expect(style.fontSize, isNotNull, reason: role);
@@ -168,7 +171,8 @@ void main() {
           ),
         );
         final s = theme.colorScheme;
-        expect(labelColor(tester, 'here'), s.onSurface);
+        // Contract change (36c): the active destination is tomato (ref 5).
+        expect(labelColor(tester, 'here'), s.primary);
         expect(labelColor(tester, 'there'), s.onSurfaceVariant);
       });
     }
@@ -178,10 +182,35 @@ void main() {
   // a dependent (the app) sees them as `packages/design_system/<family>`,
   // which is what AppFonts resolves to — `apps/app/test/theme_fonts_test.dart`
   // checks that half.
-  testWidgets('both families are bundled and declared', (tester) async {
+  testWidgets('the bundled family is declared', (tester) async {
     final manifest = await rootBundle.loadString('FontManifest.json');
     expect(manifest, contains('"${AppFonts.ui}"'));
     expect(manifest, contains('"${AppFonts.display}"'));
+  });
+
+  group('category colours', () {
+    test('the six curated categories get six distinct blocks', () {
+      const p = AppPalette.light;
+      final blocks = {
+        for (final c in [
+          'Main',
+          'Breakfast',
+          'Dessert',
+          'Appetizer',
+          'Salad',
+          'Drink',
+        ])
+          p.category(c).background,
+      };
+      expect(blocks, hasLength(6));
+    });
+
+    test('an unknown category is stable, null takes the default', () {
+      const p = AppPalette.light;
+      expect(p.category('Soup').background, p.category('soup ').background);
+      expect(p.category(null).background, p.categoryCoral);
+      expect(p.category('Appetizer').foreground, p.onCategoryDark);
+    });
   });
 
   group('AppMotion', () {

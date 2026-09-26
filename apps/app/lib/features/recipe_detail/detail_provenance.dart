@@ -370,7 +370,7 @@ class _CreditLine extends StatelessWidget {
     if (onTap == null) return Padding(padding: pad, child: text);
 
     return InkWell(
-      borderRadius: BorderRadius.circular(AppRadii.button),
+      borderRadius: BorderRadius.circular(AppRadii.md),
       onTap: onTap,
       child: Padding(
         padding: pad,

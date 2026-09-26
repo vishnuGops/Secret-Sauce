@@ -43,6 +43,17 @@ class AppPalette extends ThemeExtension<AppPalette> {
     required this.heroFillSubtle,
     required this.heroSelectedInk,
     required this.heroShadow,
+    required this.surfaceWarm,
+    required this.categoryYellow,
+    required this.categoryCoral,
+    required this.categoryPink,
+    required this.categoryBrown,
+    required this.categorySage,
+    required this.categorySky,
+    required this.onCategoryLight,
+    required this.onCategoryDark,
+    required this.rankRibbon,
+    required this.onRankRibbon,
   });
 
   /// Filled rating stars and the rating pill's star. Light was saffron
@@ -126,6 +137,59 @@ class AppPalette extends ThemeExtension<AppPalette> {
   /// The hero's drop shadow.
   final Color heroShadow;
 
+  /// The warm cream band a page opens on — Discover's masthead (reference
+  /// 2's `#FBF7F4`). A section surface, not a card.
+  final Color surfaceWarm;
+
+  /// Reference 1's colour blocks: the category tiles on Discover, and the
+  /// cover a recipe with **no photo** gets (Phase 36c, owner's Q1). Flat,
+  /// saturated, the same in both themes — they are illustrations, not
+  /// surfaces. Text on them is [onCategoryLight] (dark ink) except on
+  /// [categoryBrown], which takes [onCategoryDark] (white); read them through
+  /// [category] so a caller cannot pair them wrong.
+  final Color categoryYellow;
+  final Color categoryCoral;
+  final Color categoryPink;
+  final Color categoryBrown;
+  final Color categorySage;
+  final Color categorySky;
+  final Color onCategoryLight;
+  final Color onCategoryDark;
+
+  /// The rank flag on a ranked shelf's cards (reference 2), with its ink.
+  final Color rankRibbon;
+  final Color onRankRibbon;
+
+  /// The colour block and its ink for a recipe [category] (free text in the
+  /// database). The six curated categories have fixed blocks; any other
+  /// string hashes to one of the six so a corpus category is stable across
+  /// renders; null (no category) takes coral, the brand-adjacent block.
+  CategoryColors category(String? category) {
+    final blocks = <(Color, Color)>[
+      (categoryCoral, onCategoryLight),
+      (categoryYellow, onCategoryLight),
+      (categoryPink, onCategoryLight),
+      (categoryBrown, onCategoryDark),
+      (categorySage, onCategoryLight),
+      (categorySky, onCategoryLight),
+    ];
+    final key = category?.trim().toLowerCase();
+    final index = switch (key) {
+      null || '' => 0,
+      'main' || 'mains' || 'main course' || 'dinner' || 'lunch' => 0,
+      'breakfast' || 'brunch' => 1,
+      'dessert' || 'desserts' || 'baking' || 'sweet' => 2,
+      'appetizer' || 'appetizers' || 'snack' || 'snacks' || 'side' => 3,
+      'salad' || 'salads' || 'vegetable' || 'vegetables' => 4,
+      'drink' || 'drinks' || 'beverage' || 'cocktail' => 5,
+      _ =>
+        key.codeUnits.fold<int>(0, (h, c) => (h * 31 + c) & 0x7fffffff) %
+            blocks.length,
+    };
+    final (background, foreground) = blocks[index];
+    return CategoryColors(background: background, foreground: foreground);
+  }
+
   /// The tier accent for [tier] at this palette's brightness.
   Color tier(ChefTier tier) => switch (tier) {
     ChefTier.homeCook => tierHomeCook,
@@ -162,6 +226,17 @@ class AppPalette extends ThemeExtension<AppPalette> {
   static const _black45 = Color(0x73000000);
   static const _coverScrim = Color(0xC7140C0A);
   static const _foilShade = Color(0xFF2A1D1A);
+  // Reference 1's blocks (M), plus sage and sky for the two categories it
+  // has no tile for. All ≥ 5.8:1 with their ink (theme_contrast_test).
+  static const _yellow = Color(0xFFFED801);
+  static const _coral = Color(0xFFFF6449);
+  static const _pink = Color(0xFFFDB5C0);
+  static const _brown = Color(0xFF8C4411);
+  static const _sage = Color(0xFFA8D08D);
+  static const _sky = Color(0xFF9FD3E6);
+  static const _blockInk = Color(0xFF231917);
+  static const _ribbon = Color(0xFFF2CF3B);
+  static const _ribbonInk = Color(0xFF3A2A00);
 
   static const light = AppPalette(
     rating: Color(0xFFB7700A),
@@ -190,6 +265,17 @@ class AppPalette extends ThemeExtension<AppPalette> {
     heroFillSubtle: _white7,
     heroSelectedInk: _heroInk,
     heroShadow: _heroShadow,
+    surfaceWarm: Color(0xFFFBF7F4),
+    categoryYellow: _yellow,
+    categoryCoral: _coral,
+    categoryPink: _pink,
+    categoryBrown: _brown,
+    categorySage: _sage,
+    categorySky: _sky,
+    onCategoryLight: _blockInk,
+    onCategoryDark: _white,
+    rankRibbon: _ribbon,
+    onRankRibbon: _ribbonInk,
   );
 
   static const dark = AppPalette(
@@ -219,6 +305,17 @@ class AppPalette extends ThemeExtension<AppPalette> {
     heroFillSubtle: _white7,
     heroSelectedInk: _heroInk,
     heroShadow: _heroShadow,
+    surfaceWarm: Color(0xFF1E1B19),
+    categoryYellow: _yellow,
+    categoryCoral: _coral,
+    categoryPink: _pink,
+    categoryBrown: _brown,
+    categorySage: _sage,
+    categorySky: _sky,
+    onCategoryLight: _blockInk,
+    onCategoryDark: _white,
+    rankRibbon: _ribbon,
+    onRankRibbon: _ribbonInk,
   );
 
   /// The chefs hero's `linear-gradient(104deg, …)`.
@@ -257,6 +354,17 @@ class AppPalette extends ThemeExtension<AppPalette> {
     Color? heroFillSubtle,
     Color? heroSelectedInk,
     Color? heroShadow,
+    Color? surfaceWarm,
+    Color? categoryYellow,
+    Color? categoryCoral,
+    Color? categoryPink,
+    Color? categoryBrown,
+    Color? categorySage,
+    Color? categorySky,
+    Color? onCategoryLight,
+    Color? onCategoryDark,
+    Color? rankRibbon,
+    Color? onRankRibbon,
   }) => AppPalette(
     rating: rating ?? this.rating,
     difficultyEasy: difficultyEasy ?? this.difficultyEasy,
@@ -284,6 +392,17 @@ class AppPalette extends ThemeExtension<AppPalette> {
     heroFillSubtle: heroFillSubtle ?? this.heroFillSubtle,
     heroSelectedInk: heroSelectedInk ?? this.heroSelectedInk,
     heroShadow: heroShadow ?? this.heroShadow,
+    surfaceWarm: surfaceWarm ?? this.surfaceWarm,
+    categoryYellow: categoryYellow ?? this.categoryYellow,
+    categoryCoral: categoryCoral ?? this.categoryCoral,
+    categoryPink: categoryPink ?? this.categoryPink,
+    categoryBrown: categoryBrown ?? this.categoryBrown,
+    categorySage: categorySage ?? this.categorySage,
+    categorySky: categorySky ?? this.categorySky,
+    onCategoryLight: onCategoryLight ?? this.onCategoryLight,
+    onCategoryDark: onCategoryDark ?? this.onCategoryDark,
+    rankRibbon: rankRibbon ?? this.rankRibbon,
+    onRankRibbon: onRankRibbon ?? this.onRankRibbon,
   );
 
   @override
@@ -317,8 +436,29 @@ class AppPalette extends ThemeExtension<AppPalette> {
       heroFillSubtle: l(heroFillSubtle, other.heroFillSubtle),
       heroSelectedInk: l(heroSelectedInk, other.heroSelectedInk),
       heroShadow: l(heroShadow, other.heroShadow),
+      surfaceWarm: l(surfaceWarm, other.surfaceWarm),
+      categoryYellow: l(categoryYellow, other.categoryYellow),
+      categoryCoral: l(categoryCoral, other.categoryCoral),
+      categoryPink: l(categoryPink, other.categoryPink),
+      categoryBrown: l(categoryBrown, other.categoryBrown),
+      categorySage: l(categorySage, other.categorySage),
+      categorySky: l(categorySky, other.categorySky),
+      onCategoryLight: l(onCategoryLight, other.onCategoryLight),
+      onCategoryDark: l(onCategoryDark, other.onCategoryDark),
+      rankRibbon: l(rankRibbon, other.rankRibbon),
+      onRankRibbon: l(onRankRibbon, other.onRankRibbon),
     );
   }
+}
+
+/// A category block and the ink that reads on it — see
+/// [AppPalette.category].
+@immutable
+class CategoryColors {
+  const CategoryColors({required this.background, required this.foreground});
+
+  final Color background;
+  final Color foreground;
 }
 
 /// Opacity steps for tinting a token colour (a tier accent's wash, a border

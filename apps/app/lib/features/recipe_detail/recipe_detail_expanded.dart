@@ -178,7 +178,7 @@ class _HeaderBand extends ConsumerWidget {
                             ),
                           InkWell(
                             borderRadius: BorderRadius.circular(
-                              AppRadii.button,
+                              AppRadii.md,
                             ),
                             onTap: () => _showVersions(context, ref),
                             child: Padding(

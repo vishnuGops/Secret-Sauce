@@ -218,7 +218,7 @@ class _IngredientRow extends ConsumerWidget {
             alignment: Alignment.topLeft,
             child: Material(
               elevation: _suggestionsElevation,
-              borderRadius: BorderRadius.circular(AppRadii.button),
+              borderRadius: BorderRadius.circular(AppRadii.md),
               clipBehavior: Clip.antiAlias,
               child: ConstrainedBox(
                 constraints: const BoxConstraints(

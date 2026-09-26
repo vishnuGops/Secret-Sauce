@@ -167,7 +167,7 @@ class _Brand extends StatelessWidget {
 
     return InkWell(
       onTap: () => context.go(Routes.discover),
-      borderRadius: BorderRadius.circular(AppRadii.button),
+      borderRadius: BorderRadius.circular(AppRadii.md),
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.xs),
         child: Row(

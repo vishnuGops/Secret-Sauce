@@ -72,7 +72,7 @@ class NutritionFactsLabel extends StatelessWidget {
       decoration: BoxDecoration(
         color: scheme.surface,
         border: Border.all(color: ink, width: _kOuterRule),
-        borderRadius: BorderRadius.circular(AppRadii.button),
+        borderRadius: BorderRadius.circular(AppRadii.md),
       ),
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.md,

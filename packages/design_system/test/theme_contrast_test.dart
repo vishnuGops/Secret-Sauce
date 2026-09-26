@@ -49,9 +49,10 @@ void main() {
       'surface': s.surface,
       'surfaceContainerLow (Card)': s.surfaceContainerLow,
       'surfaceContainerLowest': s.surfaceContainerLowest,
+      'surfaceWarm (hero band)': p.surfaceWarm,
       'surfaceContainerHighest': s.surfaceContainerHighest,
     };
-    final badgeSurfaces = surfaces.entries.take(3);
+    final badgeSurfaces = surfaces.entries.take(4);
 
     void expectPair(String label, Color fg, Color bg, double min) {
       test('$name · $label ≥ $min:1', () {
@@ -73,8 +74,11 @@ void main() {
           e.value,
           text,
         );
-        // Links, selected tabs and sort labels are primary-coloured text.
+        // Links, selected tabs and sort labels are primary-coloured text;
+        // kickers, step numbers and nutrition figures are tertiary (36c).
         expectPair('primary on ${e.key}', s.primary, e.value, text);
+        expectPair('tertiary on ${e.key}', s.tertiary, e.value, text);
+        expectPair('secondary on ${e.key}', s.secondary, e.value, text);
         expectPair('outline on ${e.key}', s.outline, e.value, ui);
       }
       expectPair('onPrimary on primary', s.onPrimary, s.primary, text);
@@ -150,6 +154,37 @@ void main() {
           );
         }
       }
+
+      // Category blocks (the tiles and the no-photo cover) and the rank
+      // ribbon carry large and small text in their own ink.
+      for (final c in [
+        'Main',
+        'Breakfast',
+        'Dessert',
+        'Appetizer',
+        'Salad',
+        'Drink',
+      ]) {
+        final block = p.category(c);
+        expectPair(
+          'ink on the $c block',
+          block.foreground,
+          block.background,
+          text,
+        );
+      }
+      expectPair(
+        'onRankRibbon on rankRibbon',
+        p.onRankRibbon,
+        p.rankRibbon,
+        text,
+      );
+      expectPair(
+        'onTertiaryContainer on tertiaryContainer (tag pill)',
+        s.onTertiaryContainer,
+        s.tertiaryContainer,
+        text,
+      );
 
       // Text on a photo: the scrim over the worst case, a white plate.
       expectPair(
