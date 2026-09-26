@@ -37,6 +37,14 @@ jobs:
       # generated `*.g.dart` / `*.freezed.dart` are git-ignored and written by
       # a builder whose formatter version is not this one's to police.
       # `--output=none` checks without rewriting.
+      # The root package first (B160): `melos bootstrap` resolves the members,
+      # not the workspace root, and `dart format` reads a file's language
+      # version from its package config. Without one the root's `tool/*.dart`
+      # fall back to the pre-3.7 short style and fail this step on files that
+      # are correctly formatted.
+      - name: Resolve the workspace root (for tool/*.dart's language version)
+        run: dart pub get
+
       - name: Format
         run: dart format --output=none --set-exit-if-changed $(git ls-files '*.dart')
 

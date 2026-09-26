@@ -36,13 +36,15 @@ on:
 
 env:
   # The Supabase CLI's local database, inside this runner. Not a secret, not
-  # reachable from outside the job.
-  DB_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+  # reachable from outside the job. The port is `[db] port` in
+  # supabase/config.toml (54622 since 04419b3 moved the stack off the defaults);
+  # B124 fixed the example file and this pair was missed until B160.
+  DB_URL: postgresql://postgres:postgres@127.0.0.1:54622/postgres
   # The same address, under the name `tool/db.dart` reads (32f2). It is a
   # literal here and must stay one: the tool fires at whatever this points at
   # with no prod guard (CLAUDE.md Gotcha 7), so a repository *secret* in this
   # position would aim `drop` at whatever the secret happens to be.
-  SUPABASE_DB_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+  SUPABASE_DB_URL: postgresql://postgres:postgres@127.0.0.1:54622/postgres
   PSQL: psql -v ON_ERROR_STOP=1 --quiet
 
 jobs:
