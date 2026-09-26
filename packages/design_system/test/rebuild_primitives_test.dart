@@ -213,5 +213,30 @@ void main() {
       await tester.tap(find.byType(CategoryTile));
       expect(taps, 1);
     });
+
+    testWidgets('a label names the tile; the category only picks the colour', (
+      tester,
+    ) async {
+      // Discover's `Starters` tile stands for Appetizer / Snack / Side Dish …
+      // and takes Appetizer's block — the palette has no `starters` key.
+      await pump(
+        tester,
+        const CategoryTile(category: 'Appetizer', label: 'Starters'),
+      );
+      expect(find.text('Starters'), findsOneWidget);
+      expect(find.text('Appetizer'), findsNothing);
+      final handle = tester.ensureSemantics();
+      expect(tester.getSemantics(find.byType(CategoryTile)).label, 'Starters');
+      handle.dispose();
+      final material = tester.widget<Material>(
+        find
+            .descendant(
+              of: find.byType(CategoryTile),
+              matching: find.byType(Material),
+            )
+            .first,
+      );
+      expect(material.color, AppPalette.light.category('Appetizer').background);
+    });
   });
 }

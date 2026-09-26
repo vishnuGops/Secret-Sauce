@@ -8,7 +8,7 @@ import 'package:app/features/recipe_detail/detail_chips.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/routing/app_router.dart';
 
-/// The v2 method column: tappable step cards that collapse when done, group
+/// The v2 method column: tappable step rows that collapse when done, group
 /// headers that keep per-group numbering visible, and the cook-mode teaser.
 ///
 /// A done step shrinks to one dim line with its duration, so the next thing to
@@ -40,69 +40,83 @@ class MethodColumn extends ConsumerWidget {
         recipe.stepGroups.length > 1 ||
         recipe.stepGroups.any((g) => g.name.isNotEmpty);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text('Method', style: textTheme.titleLarge),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Text(
-                '$doneCount of ${allSteps.length} done · '
-                'tap a step to tick it off',
-                textAlign: TextAlign.end,
-                // Tabular: the count moves with every tap (UX-049).
-                style: textTheme.labelMedium?.tabular.copyWith(
-                  color: scheme.onSurfaceVariant,
+    // An open panel (the owner's Q4): reference 5's rounded, borderless
+    // section, never collapsed — the rail beside or above it is the same.
+    return Container(
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(AppRadii.card),
+      ),
+      padding: const EdgeInsets.all(AppSpacing.md),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                'METHOD',
+                style: context.appText.kickerLarge.copyWith(
+                  color: scheme.tertiary,
                 ),
               ),
-            ),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Text(
+                  '$doneCount of ${allSteps.length} done · '
+                  'tap a step to tick it off',
+                  textAlign: TextAlign.end,
+                  // Tabular: the count moves with every tap (UX-049).
+                  style: textTheme.labelMedium?.tabular.copyWith(
+                    color: scheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.smPlus),
+          for (final group in recipe.stepGroups) ...[
+            if (showGroupHeaders)
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: AppSpacing.xsPlus,
+                  bottom: AppSpacing.smPlus,
+                ),
+                child: Row(
+                  children: [
+                    Text(
+                      (group.name.isEmpty ? 'Steps' : group.name).toUpperCase(),
+                      style: context.appText.overline.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.sm),
+                    const Expanded(child: Divider(height: 1)),
+                    const SizedBox(width: AppSpacing.sm),
+                    Text(
+                      countOf(group.steps.length, 'steps'),
+                      style: textTheme.labelMedium?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            for (var i = 0; i < group.steps.length; i++)
+              Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.smPlus),
+                child: _StepCard(
+                  step: group.steps[i],
+                  number: i + 1,
+                  done: done.contains(group.steps[i].id),
+                  onTap: () => toggle(group.steps[i].id),
+                ),
+              ),
           ],
-        ),
-        const SizedBox(height: AppSpacing.smPlus),
-        for (final group in recipe.stepGroups) ...[
-          if (showGroupHeaders)
-            Padding(
-              padding: const EdgeInsets.only(
-                top: AppSpacing.xsPlus,
-                bottom: AppSpacing.smPlus,
-              ),
-              child: Row(
-                children: [
-                  Text(
-                    (group.name.isEmpty ? 'Steps' : group.name).toUpperCase(),
-                    style: context.appText.overline.copyWith(
-                      color: scheme.onSurfaceVariant,
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.sm),
-                  const Expanded(child: Divider(height: 1)),
-                  const SizedBox(width: AppSpacing.sm),
-                  Text(
-                    countOf(group.steps.length, 'steps'),
-                    style: textTheme.labelMedium?.copyWith(
-                      color: scheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          for (var i = 0; i < group.steps.length; i++)
-            Padding(
-              padding: const EdgeInsets.only(bottom: AppSpacing.smPlus),
-              child: _StepCard(
-                step: group.steps[i],
-                number: i + 1,
-                done: done.contains(group.steps[i].id),
-                onTap: () => toggle(group.steps[i].id),
-              ),
-            ),
+          const SizedBox(height: AppSpacing.xs),
+          _CookModeTeaser(recipeId: recipe.id),
         ],
-        const SizedBox(height: AppSpacing.xs),
-        _CookModeTeaser(recipeId: recipe.id),
-      ],
+      ),
     );
   }
 }
@@ -149,9 +163,10 @@ class _CookModeTeaser extends StatelessWidget {
     );
 
     return Container(
+      // The page surface inside the method panel: a lighter well rather than
+      // an outline (36c — no borders on panels or cards).
       decoration: BoxDecoration(
-        color: scheme.surfaceContainerLow,
-        border: Border.all(color: scheme.outlineVariant),
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(AppRadii.card),
       ),
       padding: const EdgeInsets.all(AppSpacing.md),
@@ -204,22 +219,22 @@ class _StepCard extends StatelessWidget {
   /// Gap between the disc and the step text.
   static const double _kBadgeGap = 14;
 
-  /// A done step's collapsed row — shorter than a card's full inset.
-  static const double _kDoneRowVertical = 10;
-
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
+    // Reference 5's accent step numbers: a bare tabular figure in the
+    // tertiary accent while the step is to do, a filled check once it is done.
+    // The disc keeps its footprint either way so the text column never moves.
     final badge = Container(
       width: _kBadgeDiameter,
       height: _kBadgeDiameter,
       alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: done ? scheme.primary : scheme.surfaceContainerHigh,
-        shape: BoxShape.circle,
-      ),
+      decoration:
+          done
+              ? BoxDecoration(color: scheme.primary, shape: BoxShape.circle)
+              : null,
       child:
           done
               ? Icon(
@@ -227,7 +242,12 @@ class _StepCard extends StatelessWidget {
                 size: AppIconSize.button,
                 color: scheme.onPrimary,
               )
-              : Text('$number', style: textTheme.titleSmall?.tabular),
+              : Text(
+                '$number',
+                style: textTheme.titleMedium?.tabular.copyWith(
+                  color: scheme.tertiary,
+                ),
+              ),
     );
 
     if (done) {
@@ -235,10 +255,7 @@ class _StepCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppRadii.card),
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: _kDoneRowVertical,
-            horizontal: AppSpacing.md,
-          ),
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
           child: Row(
             children: [
               badge,
@@ -266,17 +283,15 @@ class _StepCard extends StatelessWidget {
       );
     }
 
+    // No card: inside the method panel a step is a row, as in reference 5's
+    // open method list. Transparent material so the ink still has a surface.
     return Material(
-      color: scheme.surfaceContainerLowest,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadii.card),
-        side: BorderSide(color: scheme.outlineVariant),
-      ),
+      type: MaterialType.transparency,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppRadii.card),
         child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.md),
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

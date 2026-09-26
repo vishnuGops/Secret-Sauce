@@ -18,11 +18,20 @@ class CategoryTile extends StatelessWidget {
   const CategoryTile({
     super.key,
     required this.category,
+    this.label,
     this.selected = false,
     this.onTap,
   });
 
+  /// Picks the block colour through [AppPalette.category] — a raw recipe
+  /// category (`Main`, `Appetizer`) the palette knows.
   final String category;
+
+  /// What the tile says and announces, when that is not [category] itself.
+  /// Discover's tiles stand for a *group* of raw values (`Starters` covers
+  /// `Appetizer`, `Snack`, `Side Dish` …), so the name on the tile and the key
+  /// that picks its colour can differ. Defaults to [category].
+  final String? label;
   final bool selected;
   final VoidCallback? onTap;
 
@@ -32,12 +41,13 @@ class CategoryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.palette.category(category);
+    final text = label ?? category;
     final radius = BorderRadius.circular(AppRadii.card);
 
     return Semantics(
       button: true,
       selected: selected,
-      label: category,
+      label: text,
       // The label is the whole announcement, so the subtree is excluded —
       // which also drops the InkWell's action, hence the explicit onTap.
       onTap: onTap,
@@ -62,7 +72,7 @@ class CategoryTile extends StatelessWidget {
               child: Align(
                 alignment: Alignment.bottomLeft,
                 child: Text(
-                  category,
+                  text,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(

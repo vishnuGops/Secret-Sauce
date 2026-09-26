@@ -151,4 +151,79 @@ void main() {
     expect(req.param('limit'), '20');
     expect(req.param('offset'), '20');
   });
+
+  // Phase 36c (the owner's Q6): a category tile is a GROUP of raw values, so
+  // the contract is one `in.(…)` filter carrying the whole group, on the same
+  // total order as `recent` — a tile whose page 2 repeats page 1 is Gotcha 24.
+  test('byCategories filters on the whole group, in a total order', () async {
+    final (:http, :repo) = _repo();
+
+    await repo.byCategories(
+      DiscoverCategory.mains.rawValues,
+      limit: 20,
+      offset: 40,
+    );
+
+    final req = http.requests.single;
+    expect(req.method, 'GET');
+    expect(req.url.path, endsWith('/rest/v1/recipes'));
+    expect(req.param('visibility'), 'eq.public');
+    expect(
+      req.param('category'),
+      'in.("Main","Main Course","Mains","Dinner","Lunch","Entree")',
+    );
+    expect(req.order, 'created_at.desc.nullslast,id.desc.nullslast');
+    expect(req.param('limit'), '20');
+    expect(req.param('offset'), '40');
+    expect(req.select, contains('owner:profiles!recipes_owner_id_fkey'));
+  });
+
+  test('byCategories with no values never reaches the network', () async {
+    final (:http, :repo) = _repo();
+
+    expect(await repo.byCategories(const []), isEmpty);
+    expect(http.requests, isEmpty);
+  });
+
+  group('DiscoverCategory', () {
+    test('six tiles, in the order the page shows them', () {
+      expect(DiscoverCategory.values.map((c) => c.label), [
+        'Mains',
+        'Breakfast',
+        'Desserts',
+        'Starters',
+        'Salads',
+        'Drinks',
+      ]);
+    });
+
+    test('every curated category is on exactly one tile', () {
+      // recipeData/'s six spellings — a curated recipe that no tile can reach
+      // would be invisible to the filter on a plain `db:reset`.
+      for (final raw in [
+        'Main',
+        'Dessert',
+        'Breakfast',
+        'Appetizer',
+        'Salad',
+        'Drink',
+      ]) {
+        expect(
+          DiscoverCategory.values.where((c) => c.rawValues.contains(raw)),
+          hasLength(1),
+          reason: '$raw is on no tile, or on two',
+        );
+      }
+    });
+
+    test('fromSlug round-trips and ignores what it does not know', () {
+      for (final c in DiscoverCategory.values) {
+        expect(DiscoverCategory.fromSlug(c.slug), c);
+      }
+      expect(DiscoverCategory.fromSlug('Desserts'), DiscoverCategory.desserts);
+      expect(DiscoverCategory.fromSlug('pudding'), isNull);
+      expect(DiscoverCategory.fromSlug(''), isNull);
+      expect(DiscoverCategory.fromSlug(null), isNull);
+    });
+  });
 }

@@ -51,6 +51,57 @@ final recentRecipesProvider =
       RecentRecipesNotifier.new,
     );
 
+/// The category tile Discover is filtered to, or null for none (Phase 36c,
+/// the owner's Q6).
+///
+/// **The URL is the source of truth, not this provider.** `/discover?category=
+/// mains` is parsed by the router (`app_router.dart`, the way `/auth` reads
+/// `mode`) and handed to `DiscoverScreen`, which overrides this provider in a
+/// `ProviderScope` of its own — so a deep link, the back button and a tap on a
+/// tile (`context.go`) all arrive by the same road, and nothing has to keep a
+/// second copy of the selection in step with the address bar. The root value
+/// is therefore always null: read it only from under the screen.
+final selectedCategoryProvider = Provider.autoDispose<DiscoverCategory?>(
+  (ref) => null,
+);
+
+/// The browse grid while a category tile is selected: public recipes in that
+/// tile's group, newest first ([DiscoverRepository.byCategories]).
+///
+/// The [SearchRecipesNotifier] pattern: the filter is captured once per build,
+/// before any `await`, so `Load more` can never page one tile's offsets against
+/// another tile's rows — a new tile is a new build.
+class CategoryRecipesNotifier extends PagedRecipesNotifier {
+  DiscoverCategory? _category;
+
+  @override
+  Future<RecipePage> firstPage() async {
+    _category = ref.watch(selectedCategoryProvider);
+    // No tile, no request — the screen shows the sorted grid instead and never
+    // watches this, but a stray watch must not cost a query.
+    if (_category == null) return const RecipePage();
+    return super.firstPage();
+  }
+
+  @override
+  Future<List<Recipe>> fetchPage({required int limit, required int offset}) {
+    final category = _category;
+    if (category == null) return Future.value(const []);
+    return ref
+        .read(discoverRepositoryProvider)
+        .byCategories(category.rawValues, limit: limit, offset: offset);
+  }
+}
+
+/// Scoped with [selectedCategoryProvider] — the `dependencies` entry is what
+/// makes Riverpod build this in the screen's `ProviderScope`, where the
+/// selection lives, instead of at the root where it is always null.
+final categoryRecipesProvider =
+    AsyncNotifierProvider.autoDispose<CategoryRecipesNotifier, RecipePage>(
+      CategoryRecipesNotifier.new,
+      dependencies: [selectedCategoryProvider],
+    );
+
 /// How many cards one shelf holds (Phase 26).
 ///
 /// Not [kRecipePageSize]: a shelf is a *sample*, not a list — it scrolls

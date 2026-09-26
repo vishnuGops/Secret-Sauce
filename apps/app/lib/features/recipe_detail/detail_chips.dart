@@ -7,14 +7,83 @@ import 'package:go_router/go_router.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/routing/app_router.dart';
 
-/// The small controls the detail screen's header row is built from: a
-/// read-only metadata chip, the like/save counter button, and the paired
-/// like+save row both layouts share (OPT-A8).
+/// The small controls the detail screen's header row is built from: the
+/// kicker and tag pills (36c), a read-only metadata chip, the like/save
+/// counter button, and the paired like+save row both layouts share (OPT-A8).
 ///
 /// `kCookModeSoon` used to live here, holding every "Start cooking" control
 /// inert behind a tooltip. Cook mode is built, so the constant is gone rather
 /// than kept "just in case" — a message about an unbuilt feature outliving the
 /// feature is how dead copy ships.
+
+/// The index line over the title — reference 5's accent `RECIPE` kicker
+/// (Phase 36c). It names the category when the recipe has one, because that
+/// says more than the word "recipe" on a page that is obviously a recipe.
+class DetailKicker extends StatelessWidget {
+  const DetailKicker({super.key, required this.recipe});
+
+  final Recipe recipe;
+
+  /// Always `RECIPE` (reference 5). It used to be the category, which on a
+  /// photo-less recipe printed it three times over — on the colour-block
+  /// cover, in the kicker and in the tag pill. The cover and the pill already
+  /// say what kind of dish it is; the kicker names what the page is.
+  static String labelFor(Recipe recipe) => 'RECIPE';
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      labelFor(recipe),
+      style: context.appText.kickerLarge.copyWith(
+        color: Theme.of(context).colorScheme.tertiary,
+      ),
+    );
+  }
+}
+
+/// What a recipe *is*, as filled pills: its cuisine and its category
+/// (reference 5's tags, Phase 36c) — and, on the compact page, `Private`.
+///
+/// A `Wrap`, so a long cuisine goes to a second line rather than overflowing
+/// (Gotcha 21). Callers ask [hasAny] first, so an untagged recipe leaves no
+/// empty row and no orphaned gap.
+class DetailTags extends StatelessWidget {
+  const DetailTags({super.key, required this.recipe, this.showPrivate = false});
+
+  final Recipe recipe;
+
+  /// Add a `Private` pill for a recipe that is not public. The compact page
+  /// does; the expanded page already says it in the facts strip.
+  final bool showPrivate;
+
+  static List<String> _labels(Recipe recipe) {
+    final cuisine = (recipe.cuisine ?? '').trim();
+    final category = (recipe.category ?? '').trim();
+    return [
+      if (cuisine.isNotEmpty) cuisine,
+      if (category.isNotEmpty &&
+          category.toLowerCase() != cuisine.toLowerCase())
+        category,
+    ];
+  }
+
+  static bool hasAny(Recipe recipe, {bool showPrivate = false}) =>
+      (showPrivate && !recipe.visibility.isPublic) ||
+      _labels(recipe).isNotEmpty;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: AppSpacing.sm,
+      runSpacing: AppSpacing.sm,
+      children: [
+        if (showPrivate && !recipe.visibility.isPublic)
+          const TagPill(icon: Icons.lock, label: 'Private'),
+        for (final label in _labels(recipe)) TagPill(label: label),
+      ],
+    );
+  }
+}
 
 class MetaChip extends StatelessWidget {
   /// [icon] is optional: cook mode's "you'll need" chips are ingredient names,

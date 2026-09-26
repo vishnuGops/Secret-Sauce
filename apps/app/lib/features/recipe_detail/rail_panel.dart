@@ -19,8 +19,9 @@ import 'package:app/features/recipe_detail/servings_row.dart';
 ///     a control hidden behind the other tab would make that line
 ///     unexplainable — and a second stepper in the nutrition pane is B066 by
 ///     construction;
-///   * the **container lives here**, so switching panes happens inside one
-///     frame rather than swapping two differently-bordered boxes;
+///   * the **container lives here** — and so does the section heading (36c),
+///     so switching panes happens inside one frame rather than swapping two
+///     differently-framed boxes;
 ///   * the tabs are two [ChoiceChip]s in a [Wrap], **not** a `SegmentedButton`.
 ///     Compact's content box is 358 px and a segmented control is one intrinsic
 ///     `Row` with no reflow escape (Gotcha 21); chips wrap instead, which is the
@@ -30,12 +31,14 @@ class RailPanel extends ConsumerWidget {
 
   final Recipe recipe;
 
-  /// Whether to draw the card border and background.
+  /// Whether to draw the panel — a `surfaceContainerLow` fill with card
+  /// corners and **no outline** (Phase 36c: reference 5's panels carry no
+  /// borders).
   ///
-  /// True on the expanded page, where the rail is a column *beside* the method
-  /// and needs an edge to be a column at all. False on compact, where it is a
-  /// full-width section between two dividers and a border would be a box drawn
-  /// round the whole screen. Everything inside is identical either way.
+  /// Both layouts draw it since the owner's Q4 made ingredients and method
+  /// two open panels on compact as well as expanded; false leaves the bare
+  /// content for a caller that frames it itself. Everything inside is
+  /// identical either way.
   final bool bordered;
 
   @override
@@ -47,8 +50,7 @@ class RailPanel extends ConsumerWidget {
       decoration:
           bordered
               ? BoxDecoration(
-                color: scheme.surfaceContainerLowest,
-                border: Border.all(color: scheme.outlineVariant),
+                color: scheme.surfaceContainerLow,
                 borderRadius: BorderRadius.circular(AppRadii.card),
               )
               : null,
@@ -56,6 +58,17 @@ class RailPanel extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // The panel's heading names what the panel is showing, so it follows
+          // the tab — `INGREDIENTS` over a nutrition label would be the heading
+          // lying about its section.
+          Text(
+            switch (tab) {
+              RailTab.ingredients => 'INGREDIENTS',
+              RailTab.nutrition => 'NUTRITION',
+            },
+            style: context.appText.kickerLarge.copyWith(color: scheme.tertiary),
+          ),
+          const SizedBox(height: AppSpacing.smPlus),
           ServingsRow(recipe: recipe),
           const SizedBox(height: AppSpacing.sm),
           Wrap(

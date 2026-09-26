@@ -60,8 +60,8 @@ class AttributionBlock extends StatelessWidget {
 
   /// Draw it as its own card. Compact does: on a phone the story follows the
   /// description with nothing else to separate them, so it needs an edge.
-  /// The expanded header band already sits on `surfaceContainerLow` under a
-  /// display-size title, where a second box would be one border too many — so
+  /// The expanded header band holds it at a prose measure under a display-size
+  /// title, among enough other blocks that one more panel would be noise — so
   /// there the text carries the distinction instead, in the secondary colour.
   final bool boxed;
 
@@ -96,9 +96,9 @@ class AttributionBlock extends StatelessWidget {
     if (!boxed) return row;
     return Container(
       padding: AppInsets.callout,
+      // A panel fill, not an outline (36c): the sheet it sits on is white.
       decoration: BoxDecoration(
-        color: scheme.surfaceContainerLowest,
-        border: Border.all(color: scheme.outlineVariant),
+        color: scheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppRadii.card),
       ),
       child: row,
@@ -216,9 +216,9 @@ class SourceCredit extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppSpacing.md),
+      // A panel fill, not an outline (36c): both headers are white now.
       decoration: BoxDecoration(
-        color: scheme.surfaceContainerLowest,
-        border: Border.all(color: scheme.outlineVariant),
+        color: scheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppRadii.card),
       ),
       child: Column(

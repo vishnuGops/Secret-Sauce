@@ -210,6 +210,10 @@ void main() {
       expect(p.category('Soup').background, p.category('soup ').background);
       expect(p.category(null).background, p.categoryCoral);
       expect(p.category('Appetizer').foreground, p.onCategoryDark);
+      // Discover's tile names map to their curated block (36c).
+      expect(p.category('Starters').background, p.categoryBrown);
+      expect(p.category('Side Dish').background, p.categoryBrown);
+      expect(p.category('Mains').background, p.categoryCoral);
     });
   });
 

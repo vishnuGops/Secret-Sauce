@@ -98,9 +98,13 @@ class SiteFooter extends StatelessWidget {
                 ),
                 child: Text(
                   link.label,
-                  style: muted?.copyWith(
+                  // The footer ink is the deep brown (36c, reference 3's
+                  // brown band) — the links are the part that is brown, the
+                  // copyright stays muted, so a link still reads as a link.
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: scheme.secondary,
                     decoration: TextDecoration.underline,
-                    decorationColor: scheme.onSurfaceVariant,
+                    decorationColor: scheme.secondary,
                   ),
                 ),
               ),

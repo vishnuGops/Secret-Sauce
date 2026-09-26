@@ -189,6 +189,37 @@ void main() {
     expect(_inBar('AO'), findsOneWidget);
   });
 
+  testWidgets('36c look: white bar, tomato wordmark, tinted active pill', (
+    tester,
+  ) async {
+    await _pump(tester, width: 1400, uid: 'user-1');
+    final scheme = AppTheme.light().colorScheme;
+
+    final bar = tester.widget<AppBar>(
+      find.descendant(
+        of: find.byType(TopNavBar),
+        matching: find.byType(AppBar),
+      ),
+    );
+    expect(bar.backgroundColor, scheme.surface);
+    expect(
+      tester.widget<Text>(_inBar('Secret Sauce')).style?.color,
+      scheme.primary,
+    );
+
+    // The active destination (Chefs) sits on primaryContainer in its ink; the
+    // others are unfilled.
+    Material chipOf(String label) => tester.widget<Material>(
+      find.ancestor(of: _inBar(label), matching: find.byType(Material)).first,
+    );
+    expect(chipOf('Chefs').color, scheme.primaryContainer);
+    expect(
+      tester.widget<Text>(_inBar('Chefs')).style?.color,
+      scheme.onPrimaryContainer,
+    );
+    expect(chipOf('Discover').color, Colors.transparent);
+  });
+
   testWidgets('the avatar opens the account menu', (tester) async {
     await _pump(tester, width: 1400, uid: 'user-1');
 

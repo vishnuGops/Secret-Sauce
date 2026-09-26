@@ -36,6 +36,14 @@ class Routes {
   /// offers both doors and they must not land on the same one.
   static const signUp = '/auth?mode=signup';
   static const discover = '/discover';
+
+  /// Discover filtered to one category tile (Phase 36c, the owner's Q6):
+  /// `/discover?category=mains`. A query parameter on the same route, not a
+  /// route of its own, so the shell tab, the scroll and the search field all
+  /// survive a tap on a tile. The slug is [DiscoverCategory.slug]; an unknown
+  /// one is ignored by the builder below and Discover opens unfiltered.
+  static String discoverCategory(String slug) =>
+      Uri(path: discover, queryParameters: {'category': slug}).toString();
   static const chefs = '/chefs';
   static const myRecipes = '/my';
   static const profile = '/profile';
@@ -213,7 +221,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
             path: Routes.discover,
-            builder: (context, state) => const DiscoverScreen(),
+            // The selected category is URL state, read here the way `/auth`
+            // reads `mode` — so a deep link, the back button and a tap on a
+            // tile all reach the screen by the same road.
+            builder:
+                (context, state) => DiscoverScreen(
+                  category: DiscoverCategory.fromSlug(
+                    state.uri.queryParameters['category'],
+                  ),
+                ),
           ),
           // Signed-out safe, like Discover — deliberately absent from the
           // `needsAuth` list above.

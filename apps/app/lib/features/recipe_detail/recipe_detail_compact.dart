@@ -30,7 +30,9 @@ import 'package:app/widgets/share_dialog.dart';
 ///
 /// Reading order is the canvas's: cover → identity → facts → **jump bar** →
 /// ingredients → method, with `Ready to cook?` pinned to the bottom so the one
-/// thing you came to do is always one tap away.
+/// thing you came to do is always one tap away. Phase 36c dressed it in
+/// reference 5's language: the identity is a white sheet riding up over the
+/// cover, and ingredients and method are two open panels (the owner's Q4).
 class RecipeDetailCompact extends ConsumerStatefulWidget {
   const RecipeDetailCompact({
     super.key,
@@ -98,10 +100,7 @@ class _RecipeDetailCompactState extends ConsumerState<RecipeDetailCompact> {
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child: _Cover(recipe: recipe, isOwner: widget.isOwner),
-              ),
-              SliverToBoxAdapter(
-                child: _IdentityBand(recipe: recipe, isOwner: widget.isOwner),
+                child: _CoverAndSheet(recipe: recipe, isOwner: widget.isOwner),
               ),
               SliverPersistentHeader(
                 pinned: true,
@@ -113,37 +112,35 @@ class _RecipeDetailCompactState extends ConsumerState<RecipeDetailCompact> {
                 ),
               ),
               SliverToBoxAdapter(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Same widget as the expanded page's left column, minus the
-                    // card border: full-width here, a column there, one
-                    // implementation either way.
-                    KeyedSubtree(
-                      key: _ingredientsKey,
-                      child: RailPanel(recipe: recipe, bordered: false),
-                    ),
-                    const Divider(height: 1),
-                    Padding(
-                      padding: const EdgeInsets.all(AppSpacing.md),
-                      child: KeyedSubtree(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.md,
+                    AppSpacing.md,
+                    AppSpacing.md,
+                    AppSpacing.xl,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Ingredients and Method are two open panels (the
+                      // owner's Q4, 2026-09-25): reference 5's rounded panels
+                      // without its accordions — a recipe is read top to
+                      // bottom, and a collapsed method is one more tap between
+                      // a cook and the next step. Same widgets as the expanded
+                      // page's two columns, one implementation either way.
+                      KeyedSubtree(
+                        key: _ingredientsKey,
+                        child: RailPanel(recipe: recipe),
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      KeyedSubtree(
                         key: _methodKey,
                         child: MethodColumn(recipe: recipe),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        AppSpacing.md,
-                        0,
-                        AppSpacing.md,
-                        AppSpacing.xl,
-                      ),
-                      child: RatingSection(
-                        recipe: recipe,
-                        isOwner: widget.isOwner,
-                      ),
-                    ),
-                  ],
+                      const SizedBox(height: AppSpacing.md),
+                      RatingSection(recipe: recipe, isOwner: widget.isOwner),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -155,24 +152,76 @@ class _RecipeDetailCompactState extends ConsumerState<RecipeDetailCompact> {
   }
 }
 
+/// How far the identity sheet rides up over the cover — its own corner
+/// radius, so the rounded corners always have cover behind them, never page.
+const double _kSheetOverlap = AppRadii.sheet;
+
+/// The cover with the identity sheet laid over its bottom edge — reference 5's
+/// "sheet over the photo" (Phase 36c).
+///
+/// A `Stack` rather than a `Transform` on the sheet: a translated sheet keeps
+/// its old layout slot, which leaves a gap the height of the overlap between
+/// it and the pinned jump bar. Here the sheet is the stack's only
+/// non-positioned child, so the stack is exactly cover − overlap + sheet tall
+/// and the cover sits behind the sheet's rounded top corners.
+/// `StackFit.passthrough` hands the sheet the sliver's tight width, so it
+/// spans the page whatever its content measures.
+class _CoverAndSheet extends StatelessWidget {
+  const _CoverAndSheet({required this.recipe, required this.isOwner});
+
+  final Recipe recipe;
+  final bool isOwner;
+
+  @override
+  Widget build(BuildContext context) {
+    final coverHeight = _Cover.heightOf(context);
+    return Stack(
+      fit: StackFit.passthrough,
+      children: [
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: coverHeight,
+          child: _Cover(recipe: recipe, isOwner: isOwner),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: coverHeight - _kSheetOverlap),
+          child: _IdentityBand(recipe: recipe),
+        ),
+      ],
+    );
+  }
+}
+
 /// The full-bleed cover with the page's chrome floating on it.
 ///
-/// A recipe with no cover gets the same band in `surfaceContainerHighest` at a
-/// shorter height rather than a grey rectangle pretending to be a photo — no
-/// seeded recipe carries a cover, so this is the state the local stack always
-/// shows and it has to look deliberate.
+/// A recipe with no photograph gets its category's colour block
+/// ([CategoryCover], the owner's Q1) at the same height — a designed state,
+/// not a grey rectangle pretending to be a photo. No curated recipe carries a
+/// cover, so this is what the local stack always shows.
 class _Cover extends ConsumerWidget {
   const _Cover({required this.recipe, required this.isOwner});
 
   final Recipe recipe;
   final bool isOwner;
 
-  /// The band's height with a photo, and without one.
-  static const double _kPhotoHeight = 210;
-  static const double _kFlatHeight = 96;
+  /// The band's height at 1.0×, photo and colour block alike.
+  static const double _kCoverHeight = 210;
 
   /// Past this text scale the band stops growing with the type.
   static const double _kMaxGrowth = 1.6;
+
+  /// Bounded against text scale like every other fixed-height region here:
+  /// the bar of icon buttons on top of it grows with the type (Gotcha 22).
+  ///
+  /// Plus the top inset: the cover is full-bleed, so it runs under the status
+  /// bar, and the chrome's `SafeArea` pushes the button row down by exactly
+  /// that much. Without it a notched phone loses a status bar's worth of band
+  /// and the colour block's bottom-left label meets the back button.
+  static double heightOf(BuildContext context) =>
+      _kCoverHeight * context.textScale.clamp(1.0, _kMaxGrowth) +
+      MediaQuery.paddingOf(context).top;
 
   Future<void> _showVersions(BuildContext context, WidgetRef ref) async {
     final versions = await ref.read(recipeVersionsProvider(recipe.id).future);
@@ -181,31 +230,34 @@ class _Cover extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scheme = Theme.of(context).colorScheme;
     // `displayCoverImageUrl`, not `coverImageUrl`: an imported recipe
     // whose publisher asked for no images has one and must not show it
     // (Phase 35c). The whole layout branches on this, so reading the raw
     // column here would put the picture back in a cover-first design.
-    final hasCover = recipe.displayCoverImageUrl != null;
-    // Bounded against text scale like every other fixed-height region here: the
-    // bar of icon buttons on top of it grows with the type (Gotcha 22).
-    final height =
-        (hasCover ? _kPhotoHeight : _kFlatHeight) *
-        context.textScale.clamp(1.0, _kMaxGrowth);
+    final coverUrl = recipe.displayCoverImageUrl;
 
-    return SizedBox(
-      height: height,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          if (hasCover)
-            CachedNetworkImage(
-              imageUrl: recipe.displayCoverImageUrl!,
-              fit: BoxFit.cover,
-            )
-          else
-            ColoredBox(color: scheme.surfaceContainerHighest),
-          SafeArea(
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        if (coverUrl != null)
+          CachedNetworkImage(imageUrl: coverUrl, fit: BoxFit.cover)
+        else
+          // The block runs on under the sheet's corners; its label is lifted
+          // clear of the overlap so the sheet never cuts it.
+          ColoredBox(
+            color: context.palette.category(recipe.category).background,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: _kSheetOverlap),
+              child: CategoryCover(category: recipe.category, large: true),
+            ),
+          ),
+        SafeArea(
+          // Pinned to the top. Under the expanding stack a bare `Row` is
+          // centred vertically in the band — harmless on a photo, but the
+          // colour block sets its label in the lower half, where a centred
+          // back button lands on it.
+          child: Align(
+            alignment: Alignment.topCenter,
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: AppSpacing.sm,
@@ -216,14 +268,12 @@ class _Cover extends ConsumerWidget {
                   _ScrimButton(
                     icon: Icons.arrow_back,
                     tooltip: 'Back',
-                    onCover: hasCover,
                     onPressed: () => popOrGo(context, Routes.discover),
                   ),
                   const Spacer(),
                   _ScrimButton(
                     icon: Icons.history,
                     tooltip: 'Version history',
-                    onCover: hasCover,
                     onPressed: () => _showVersions(context, ref),
                   ),
                   if (isOwner) ...[
@@ -231,14 +281,12 @@ class _Cover extends ConsumerWidget {
                     _ScrimButton(
                       icon: Icons.share,
                       tooltip: 'Share',
-                      onCover: hasCover,
                       onPressed: () => ShareDialog.show(context, recipe.id),
                     ),
                     const SizedBox(width: AppSpacing.xs),
                     _ScrimButton(
                       icon: Icons.edit,
                       tooltip: 'Edit',
-                      onCover: hasCover,
                       onPressed: () => context.go(Routes.editRecipe(recipe.id)),
                     ),
                   ],
@@ -246,61 +294,29 @@ class _Cover extends ConsumerWidget {
               ),
             ),
           ),
-          if (!recipe.visibility.isPublic)
-            Positioned(
-              left: AppSpacing.md,
-              bottom: AppSpacing.sm,
-              child: Container(
-                padding: AppInsets.pill,
-                decoration: BoxDecoration(
-                  color: scheme.surface.withValues(alpha: AppAlpha.frosted),
-                  borderRadius: BorderRadius.circular(AppRadii.pill),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.lock, size: AppIconSize.xs),
-                    const SizedBox(width: AppSpacing.xs),
-                    Text(
-                      'Private',
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
 
-/// An icon button legible on a photo *and* on a flat surface — the two states
-/// the cover has. On a photo it carries its own scrim, because a themed icon
-/// colour over an unknown image is the B055 mistake (a colour chosen against one
-/// background, painted on another).
+/// An icon button legible on whatever the cover is — a photo or a colour
+/// block, either of which may be light or dark. It carries its own scrim,
+/// because a themed icon colour over an unknown background is the B055
+/// mistake (a colour chosen against one background, painted on another).
 class _ScrimButton extends StatelessWidget {
   const _ScrimButton({
     required this.icon,
     required this.tooltip,
-    required this.onCover,
     required this.onPressed,
   });
 
   final IconData icon;
   final String tooltip;
-  final bool onCover;
   final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    if (!onCover) {
-      return IconButton(
-        tooltip: tooltip,
-        icon: Icon(icon),
-        onPressed: onPressed,
-      );
-    }
     final palette = context.palette;
     return IconButton(
       tooltip: tooltip,
@@ -314,26 +330,33 @@ class _ScrimButton extends StatelessWidget {
   }
 }
 
-/// Lineage, title, chef, rating, description, attribution, facts quad.
+/// The identity sheet: kicker, title, chef, rating, description, credit,
+/// tags, facts, nutrition summary, like/save — reference 5's sheet (36c).
+///
+/// White with 28px top corners, laid over the cover by [_CoverAndSheet]. The
+/// page below it is the same surface, so the sheet reads as the page rising
+/// over the photo rather than as a card sitting on it.
 class _IdentityBand extends StatelessWidget {
-  const _IdentityBand({required this.recipe, required this.isOwner});
+  const _IdentityBand({required this.recipe});
 
   final Recipe recipe;
-  final bool isOwner;
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final nutrition = recipe.nutrition;
 
     return Container(
       decoration: BoxDecoration(
-        color: scheme.surfaceContainerLow,
-        border: Border(bottom: BorderSide(color: scheme.outlineVariant)),
+        color: scheme.surface,
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(AppRadii.sheet),
+        ),
       ),
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.md,
-        AppSpacing.md,
+        AppSpacing.lg,
         AppSpacing.md,
         AppSpacing.md,
       ),
@@ -344,10 +367,12 @@ class _IdentityBand extends StatelessWidget {
           // draws the same mark beside the back button instead.
           if (recipe.isFork) ...[
             const ForkedLabel(expand: true),
-            const SizedBox(height: AppSpacing.xs),
+            const SizedBox(height: AppSpacing.sm),
           ],
+          DetailKicker(recipe: recipe),
+          const SizedBox(height: AppSpacing.xs),
           Text(recipe.title, style: textTheme.headlineSmall),
-          const SizedBox(height: AppSpacing.sm),
+          const SizedBox(height: AppSpacing.smPlus),
           // Wrap, not Row: the chef badge and the stars are both intrinsically
           // sized and together exceed 390px at 2.0× (Gotcha 21).
           Wrap(
@@ -369,7 +394,13 @@ class _IdentityBand extends StatelessWidget {
           ),
           if (recipe.description.isNotEmpty) ...[
             const SizedBox(height: AppSpacing.md),
-            Text(recipe.description, style: textTheme.bodyMedium),
+            // Reference 5's grey subtitle under the title.
+            Text(
+              recipe.description,
+              style: textTheme.bodyLarge?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
+            ),
           ],
           // Before the cook's own story, because "who published this" is the
           // question a reader of an imported recipe has first — and because the
@@ -382,8 +413,21 @@ class _IdentityBand extends StatelessWidget {
             const SizedBox(height: AppSpacing.md),
             AttributionBlock(text: recipe.attribution!, boxed: true),
           ],
+          // `Private` rides in the tag row on this layout: it used to sit on
+          // the cover's bottom-left corner, which is where the colour block
+          // sets its category label — and the sheet now covers that edge.
+          if (DetailTags.hasAny(recipe, showPrivate: true)) ...[
+            const SizedBox(height: AppSpacing.md),
+            DetailTags(recipe: recipe, showPrivate: true),
+          ],
           const SizedBox(height: AppSpacing.md),
           FactsStrip(recipe: recipe, quad: true),
+          // Additive to the FDA label in the Nutrition tab, which stays the
+          // authoritative panel (Preserve): the headline numbers, up front.
+          if (nutrition != null && nutrition.isNotEmpty) ...[
+            const SizedBox(height: AppSpacing.md),
+            NutritionSummary(nutrition: nutrition),
+          ],
           const SizedBox(height: AppSpacing.md),
           LikeSaveButtons(recipe: recipe),
         ],
@@ -392,7 +436,7 @@ class _IdentityBand extends StatelessWidget {
   }
 }
 
-/// The pinned jump bar.
+// The pinned jump bar.
 ///
 /// Its content scrolls **horizontally**: a pinned sliver has one fixed height,
 /// so a `Wrap` cannot save it and a `Row` of intrinsically-sized chips is the

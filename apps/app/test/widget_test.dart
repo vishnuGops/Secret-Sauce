@@ -84,6 +84,14 @@ class _FakeDiscover implements DiscoverRepository {
     int offset = 0,
   }) async => const [];
 
+  // Phase 36c: the category filter. Empty, like every other read here.
+  @override
+  Future<List<Recipe>> byCategories(
+    List<String> categories, {
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) async => const [];
+
   @override
   Future<List<Recipe>> search(
     String query, {

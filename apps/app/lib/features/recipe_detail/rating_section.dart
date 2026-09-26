@@ -72,7 +72,8 @@ class RatingSection extends ConsumerWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
-        color: scheme.surfaceContainerHighest,
+        // The same panel fill as the rail and the method above it (36c).
+        color: scheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppRadii.card),
       ),
       child: Column(

@@ -63,8 +63,10 @@ class _NoNutrition extends StatelessWidget {
         horizontal: AppSpacing.md,
         vertical: AppSpacing.lg,
       ),
+      // A lighter well inside the rail's panel rather than an outline — 36c
+      // draws no borders on panels.
       decoration: BoxDecoration(
-        border: Border.all(color: scheme.outlineVariant),
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(AppRadii.card),
       ),
       child: Column(

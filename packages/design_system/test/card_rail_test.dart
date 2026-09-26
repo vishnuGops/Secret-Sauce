@@ -159,6 +159,21 @@ void main() {
       expect(find.text('1–3 / 10'), findsOneWidget);
     });
 
+    testWidgets('the numeral and the title share one accent (36c)', (
+      tester,
+    ) async {
+      // No accent given: the default is primary. The index line is one mark,
+      // so the title takes the numeral's colour rather than the body ink.
+      await tester.pumpWidget(_numbered());
+      final primary = AppTheme.light().colorScheme.primary;
+
+      expect(tester.widget<Text>(find.text('02')).style?.color, primary);
+      expect(
+        tester.widget<Text>(find.text('WEEKEND PROJECTS')).style?.color,
+        primary,
+      );
+    });
+
     testWidgets('drops the kicker, then the label, then the arrows as the '
         'header narrows', (tester) async {
       // Each control has a width it is worth less than: the title is the one

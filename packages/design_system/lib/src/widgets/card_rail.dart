@@ -84,7 +84,9 @@ class CardRail extends StatefulWidget {
   /// of width. [CardRailVariant.numbered] only.
   final String? kicker;
 
-  /// Tints the numeral and its rule. Defaults to `colorScheme.primary`.
+  /// Tints the numeral, the title and the rule of a numbered header — the
+  /// index line is set in one accent (Phase 36c, reference 5's coloured
+  /// kickers). Defaults to `colorScheme.primary`.
   final Color? accent;
 
   final String title;
@@ -359,8 +361,12 @@ class _CardRailState extends State<CardRail> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     // The index line at section level (`01 UNDER 30`) — the
-                    // same role the empty shelf's heading uses.
-                    style: context.appText.kickerLarge.copyWith(height: 1),
+                    // same role the empty shelf's heading uses, in the
+                    // numeral's accent so the whole line reads as one mark.
+                    style: context.appText.kickerLarge.copyWith(
+                      color: accent,
+                      height: 1,
+                    ),
                   ),
                 ),
                 const SizedBox(width: AppSpacing.sm),

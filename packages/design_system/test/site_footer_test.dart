@@ -38,6 +38,26 @@ void main() {
       expect(find.text('Rights'), findsOneWidget);
     });
 
+    testWidgets('links are set in the brown footer ink (36c)', (tester) async {
+      await tester.pumpWidget(
+        _wrap(
+          SiteFooter(links: _links(current: 'Terms'), dense: true),
+          width: 1000,
+        ),
+      );
+      final scheme = AppTheme.light().colorScheme;
+
+      expect(
+        tester.widget<Text>(find.text('Privacy')).style?.color,
+        scheme.secondary,
+      );
+      // The current page is text, not a link, so it stays muted.
+      expect(
+        tester.widget<Text>(find.text('Terms')).style?.color,
+        scheme.onSurfaceVariant,
+      );
+    });
+
     testWidgets('a link calls back; the current page does not', (tester) async {
       var taps = 0;
       await tester.pumpWidget(

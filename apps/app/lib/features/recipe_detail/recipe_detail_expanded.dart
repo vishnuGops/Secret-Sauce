@@ -21,9 +21,9 @@ import 'package:app/widgets/share_dialog.dart';
 ///
 /// Content is measured: everything sits inside a [kDetailPageWidth] column, so
 /// no ingredient line ever runs the full window again. The header band carries
-/// identity (title, chef, rating, cover, actions); the two columns below carry
-/// the work — ingredients rail on the left in reading order, method on the
-/// right. The rail is not sticky yet (a Flutter sticky sidebar needs real sliver
+/// identity (kicker, title, chef, rating, tags, facts, nutrition summary,
+/// cover, actions); the two panels below carry the work — ingredients rail on
+/// the left in reading order, method on the right. The rail is not sticky yet (a Flutter sticky sidebar needs real sliver
 /// work); it scrolls with the page.
 class RecipeDetailExpanded extends ConsumerWidget {
   const RecipeDetailExpanded({
@@ -57,37 +57,32 @@ class RecipeDetailExpanded extends ConsumerWidget {
                   AppSpacing.lg,
                   AppSpacing.xxl,
                 ),
-                child: Column(
+                // Two open panels side by side — the same rail and method
+                // column the compact page stacks (the owner's Q4).
+                child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    FactsStrip(recipe: recipe),
-                    const SizedBox(height: AppSpacing.lg),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          // Bounded against text scale, not fixed: the rail's
-                          // quantity gutter and stepper grow with the type, and
-                          // a fixed 352px column turns every ingredient name
-                          // into a three-line wrap at 2.0× (Gotcha 22). Capped
-                          // so the method column keeps the wide side.
-                          width:
-                              kDetailRailWidth *
-                              context.textScale.clamp(1.0, kDetailRailMaxScale),
-                          child: RailPanel(recipe: recipe),
-                        ),
-                        const SizedBox(width: AppSpacing.xl),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              MethodColumn(recipe: recipe),
-                              const SizedBox(height: AppSpacing.md),
-                              RatingSection(recipe: recipe, isOwner: isOwner),
-                            ],
-                          ),
-                        ),
-                      ],
+                    SizedBox(
+                      // Bounded against text scale, not fixed: the rail's
+                      // quantity gutter and stepper grow with the type, and
+                      // a fixed 352px column turns every ingredient name
+                      // into a three-line wrap at 2.0× (Gotcha 22). Capped
+                      // so the method column keeps the wide side.
+                      width:
+                          kDetailRailWidth *
+                          context.textScale.clamp(1.0, kDetailRailMaxScale),
+                      child: RailPanel(recipe: recipe),
+                    ),
+                    const SizedBox(width: AppSpacing.xl),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          MethodColumn(recipe: recipe),
+                          const SizedBox(height: AppSpacing.md),
+                          RatingSection(recipe: recipe, isOwner: isOwner),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -100,6 +95,12 @@ class RecipeDetailExpanded extends ConsumerWidget {
   }
 }
 
+/// Identity, facts and actions on the left; the cover on the right.
+///
+/// Phase 36c carries reference 5's sheet language to the measured page: the
+/// accent kicker over a bold title, tag pills, label-over-value facts and the
+/// nutrition summary all live here now, so the band answers "what is this and
+/// what will it take" before the two panels below say how.
 class _HeaderBand extends ConsumerWidget {
   const _HeaderBand({
     required this.recipe,
@@ -114,7 +115,8 @@ class _HeaderBand extends ConsumerWidget {
   /// The reading measure for the description and the credit blocks under it.
   static const double _kProseMeasure = 620;
 
-  /// The header band's cover photo (canvas frame A).
+  /// The header band's cover (canvas frame A): a photo, or the category's
+  /// colour block when there is none (the owner's Q1).
   static const double _kCoverWidth = 400;
   static const double _kCoverHeight = 280;
 
@@ -131,6 +133,10 @@ class _HeaderBand extends ConsumerWidget {
     final textTheme = Theme.of(context).textTheme;
     final latest =
         ref.watch(recipeVersionsProvider(recipe.id)).valueOrNull?.firstOrNull;
+    final nutrition = recipe.nutrition;
+    // See `Recipe.displayCoverImageUrl` — Phase 35c's image policy, applied
+    // once in the model rather than here.
+    final coverUrl = recipe.displayCoverImageUrl;
 
     final versionLabel =
         latest == null
@@ -138,11 +144,7 @@ class _HeaderBand extends ConsumerWidget {
             : 'Version ${latest.versionNumber}'
                 '${latest.createdAt == null ? '' : ' · updated ${isoDate(latest.createdAt!)}'}';
 
-    return Container(
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerLow,
-        border: Border(bottom: BorderSide(color: scheme.outlineVariant)),
-      ),
+    return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
       child: Center(
         child: ConstrainedBox(
@@ -158,28 +160,27 @@ class _HeaderBand extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
+                      // A Wrap: with the cover always present the column is
+                      // 520px at a 1000px window, and the version line is a
+                      // non-flex run of text beside two more (Gotcha 21).
+                      Wrap(
+                        spacing: AppSpacing.sm,
+                        runSpacing: AppSpacing.xs,
+                        crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           if (Navigator.of(context).canPop())
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                right: AppSpacing.sm,
-                              ),
-                              child: IconButton(
-                                tooltip: 'Back',
-                                icon: const Icon(Icons.arrow_back),
-                                onPressed: () => Navigator.of(context).pop(),
-                              ),
+                            IconButton(
+                              tooltip: 'Back',
+                              icon: const Icon(Icons.arrow_back),
+                              onPressed: () => Navigator.of(context).pop(),
                             ),
                           if (recipe.isFork)
                             const Padding(
-                              padding: EdgeInsets.only(right: AppSpacing.md),
+                              padding: EdgeInsets.only(right: AppSpacing.sm),
                               child: ForkedLabel(),
                             ),
                           InkWell(
-                            borderRadius: BorderRadius.circular(
-                              AppRadii.md,
-                            ),
+                            borderRadius: BorderRadius.circular(AppRadii.md),
                             onTap: () => _showVersions(context, ref),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
@@ -195,10 +196,12 @@ class _HeaderBand extends ConsumerWidget {
                                     color: scheme.onSurfaceVariant,
                                   ),
                                   const SizedBox(width: AppSpacing.xs),
-                                  Text(
-                                    versionLabel,
-                                    style: textTheme.labelMedium?.copyWith(
-                                      color: scheme.onSurfaceVariant,
+                                  Flexible(
+                                    child: Text(
+                                      versionLabel,
+                                      style: textTheme.labelMedium?.copyWith(
+                                        color: scheme.onSurfaceVariant,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -208,6 +211,8 @@ class _HeaderBand extends ConsumerWidget {
                         ],
                       ),
                       const SizedBox(height: AppSpacing.md),
+                      DetailKicker(recipe: recipe),
+                      const SizedBox(height: AppSpacing.xs),
                       Text(recipe.title, style: textTheme.displaySmall),
                       if (recipe.description.isNotEmpty) ...[
                         const SizedBox(height: AppSpacing.md),
@@ -217,7 +222,9 @@ class _HeaderBand extends ConsumerWidget {
                           ),
                           child: Text(
                             recipe.description,
-                            style: textTheme.bodyLarge,
+                            style: textTheme.bodyLarge?.copyWith(
+                              color: scheme.onSurfaceVariant,
+                            ),
                           ),
                         ),
                       ],
@@ -263,7 +270,19 @@ class _HeaderBand extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(height: AppSpacing.md),
+                      if (DetailTags.hasAny(recipe)) ...[
+                        const SizedBox(height: AppSpacing.md),
+                        DetailTags(recipe: recipe),
+                      ],
+                      const SizedBox(height: AppSpacing.lg),
+                      FactsStrip(recipe: recipe),
+                      // Additive to the FDA label in the rail's Nutrition
+                      // tab, which stays the authoritative panel (Preserve).
+                      if (nutrition != null && nutrition.isNotEmpty) ...[
+                        const SizedBox(height: AppSpacing.lg),
+                        NutritionSummary(nutrition: nutrition),
+                      ],
+                      const SizedBox(height: AppSpacing.lg),
                       Wrap(
                         spacing: AppSpacing.sm,
                         runSpacing: AppSpacing.sm,
@@ -303,22 +322,24 @@ class _HeaderBand extends ConsumerWidget {
                     ],
                   ),
                 ),
-                // See `Recipe.displayCoverImageUrl` — Phase 35c's image
-                // policy, applied once in the model rather than here.
-                if (recipe.displayCoverImageUrl != null) ...[
-                  const SizedBox(width: AppSpacing.xl),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(AppRadii.card),
-                    child: SizedBox(
-                      width: _kCoverWidth,
-                      height: _kCoverHeight,
-                      child: CachedNetworkImage(
-                        imageUrl: recipe.displayCoverImageUrl!,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                const SizedBox(width: AppSpacing.xl),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(AppRadii.card),
+                  child: SizedBox(
+                    width: _kCoverWidth,
+                    height: _kCoverHeight,
+                    child:
+                        coverUrl != null
+                            ? CachedNetworkImage(
+                              imageUrl: coverUrl,
+                              fit: BoxFit.cover,
+                            )
+                            : CategoryCover(
+                              category: recipe.category,
+                              large: true,
+                            ),
                   ),
-                ],
+                ),
               ],
             ),
           ),
@@ -328,24 +349,24 @@ class _HeaderBand extends ConsumerWidget {
   }
 }
 
-/// The labelled facts strip that replaces the v1 chip row:
-/// Total · Hands on · Cook · Difficulty · Longest wait · Visibility in one row
-/// on a wide window, and a 2×2 quad of the four that matter on a phone.
+/// The labelled facts: Total · Hands on · Cook · Difficulty · Longest wait ·
+/// Visibility on a wide window, and a 2×2 quad of the four that matter on a
+/// phone.
 ///
-/// "Longest wait" is the longest single step duration — the number that decides
-/// whether this is cookable tonight. `IntrinsicHeight` keeps the cell hairlines
-/// full-height when a label wraps at large text scales.
+/// Label over value with no box and no hairlines — reference 5's `COOKS IN /
+/// 30 min` columns (Phase 36c). "Longest wait" is the longest single step
+/// duration — the number that decides whether this is cookable tonight.
 class FactsStrip extends StatelessWidget {
   const FactsStrip({super.key, required this.recipe, this.quad = false});
 
   final Recipe recipe;
 
-  /// Lay the cells out as a 2×2 grid instead of a single row (canvas frame B).
+  /// Lay the cells out as a 2×2 grid instead of a single run (canvas frame B).
   ///
   /// Six cells across a 390px phone is 65px each — narrower than the word
   /// "Difficulty" — so compact keeps four and stacks them. Cook is dropped
-  /// because Total and Hands on bound it, and Visibility because the cover
-  /// already carries a badge when a recipe is private.
+  /// because Total and Hands on bound it, and Visibility because the tag row
+  /// already carries a `Private` pill when a recipe is private.
   final bool quad;
 
   int get _longestStepMinutes {
@@ -361,8 +382,6 @@ class FactsStrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-
     final total = _FactCell(
       label: 'Total',
       value: formatMinutes(recipe.totalMinutes),
@@ -380,103 +399,41 @@ class FactsStrip extends StatelessWidget {
       value: formatMinutes(_longestStepMinutes),
     );
 
-    final cells =
-        quad
-            ? <Widget>[total, handsOn, difficulty, longestWait]
-            : <Widget>[
-              total,
-              handsOn,
-              _FactCell(
-                label: 'Cook',
-                value: formatMinutes(recipe.cookMinutes),
-              ),
-              difficulty,
-              longestWait,
-              _FactCell(
-                label: 'Visibility',
-                value: recipe.visibility.isPublic ? 'Public' : 'Private',
-                dim: true,
-              ),
-            ];
-
-    final border = BoxDecoration(
-      color: scheme.surfaceContainerLowest,
-      border: Border.all(color: scheme.outlineVariant),
-      borderRadius: BorderRadius.circular(AppRadii.card),
-    );
-
     if (quad) {
-      Widget row(Widget left, Widget right, {required bool first}) =>
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration:
-                        first
-                            ? null
-                            : BoxDecoration(
-                              border: Border(
-                                top: BorderSide(color: scheme.outlineVariant),
-                              ),
-                            ),
-                    child: left,
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        left: BorderSide(color: scheme.outlineVariant),
-                        top:
-                            first
-                                ? BorderSide.none
-                                : BorderSide(color: scheme.outlineVariant),
-                      ),
-                    ),
-                    child: right,
-                  ),
-                ),
-              ],
-            ),
-          );
-      return Container(
-        decoration: border,
-        clipBehavior: Clip.antiAlias,
-        child: Column(
-          children: [
-            row(cells[0], cells[1], first: true),
-            row(cells[2], cells[3], first: false),
-          ],
-        ),
+      // Two equal columns, each cell free to wrap its label at 2.0× — the
+      // cells are Expanded, so nothing here is laid out unbounded.
+      Widget row(Widget left, Widget right) => Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [Expanded(child: left), Expanded(child: right)],
+      );
+      return Column(
+        children: [
+          row(total, handsOn),
+          const SizedBox(height: AppSpacing.md),
+          row(difficulty, longestWait),
+        ],
       );
     }
 
-    return Container(
-      decoration: border,
-      clipBehavior: Clip.antiAlias,
-      child: IntrinsicHeight(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            for (var i = 0; i < cells.length; i++)
-              Expanded(
-                child: Container(
-                  decoration:
-                      i == 0
-                          ? null
-                          : BoxDecoration(
-                            border: Border(
-                              left: BorderSide(color: scheme.outlineVariant),
-                            ),
-                          ),
-                  child: cells[i],
-                ),
-              ),
-          ],
+    // A Wrap rather than six Expanded cells: the band's left column is 520px
+    // beside the cover at a 1000px window, and an equal sixth of that is
+    // narrower than `LONGEST WAIT` at 2.0×. Each fact takes its own width and
+    // the run breaks where it must.
+    return Wrap(
+      spacing: AppSpacing.xl,
+      runSpacing: AppSpacing.md,
+      children: [
+        total,
+        handsOn,
+        _FactCell(label: 'Cook', value: formatMinutes(recipe.cookMinutes)),
+        difficulty,
+        longestWait,
+        _FactCell(
+          label: 'Visibility',
+          value: recipe.visibility.isPublic ? 'Public' : 'Private',
+          dim: true,
         ),
-      ),
+      ],
     );
   }
 }
@@ -499,13 +456,10 @@ class _FactCell extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.md,
-        vertical: AppSpacing.smPlus,
-      ),
+      padding: const EdgeInsets.only(right: AppSpacing.sm),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             label.toUpperCase(),
@@ -517,7 +471,8 @@ class _FactCell extends StatelessWidget {
           child ??
               Text(
                 value!,
-                style: textTheme.titleMedium?.copyWith(
+                // Tabular: times line up across the cells (UX-049).
+                style: textTheme.titleMedium?.tabular.copyWith(
                   color: dim ? scheme.onSurfaceVariant : null,
                 ),
               ),

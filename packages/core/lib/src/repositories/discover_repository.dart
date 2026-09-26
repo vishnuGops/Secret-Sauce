@@ -4,6 +4,60 @@ import 'package:core/src/models/recipe.dart';
 import 'package:core/src/paging.dart';
 import 'package:core/src/repositories/recipe_queries.dart';
 
+/// Discover's six category tiles (Phase 36c, the owner's Q6), in display order.
+///
+/// `recipes.category` is **free text**, and the population does not agree with
+/// itself: on the local stack `Dessert` has 3,129 public rows, `Main Course`
+/// 2,078, `Dinner` 909, `Main` 395 — the curated recipes say `Main`, the corpus
+/// says whatever its publisher said. A tile is therefore a **group** of raw
+/// values, matched exactly ([DiscoverRepository.byCategories] sends them as one
+/// `in.(…)` filter), and [rawValues] is the whole mapping — there is no fuzzy
+/// match anywhere else. A spelling that is not listed here is simply not on a
+/// tile; add it to the right group rather than lower-casing on the server.
+///
+/// Pure data on purpose: the tile's colour is `design_system`'s business
+/// (`AppPalette.category`, keyed by the first raw value) and the URL slug is
+/// [slug] — `/discover?category=mains`.
+enum DiscoverCategory {
+  mains('Mains', ['Main', 'Main Course', 'Mains', 'Dinner', 'Lunch', 'Entree']),
+  breakfast('Breakfast', ['Breakfast', 'Brunch']),
+  desserts('Desserts', ['Dessert', 'Desserts', 'Baking']),
+  starters('Starters', [
+    'Appetizer',
+    'Appetizers',
+    'Snack',
+    'Snacks',
+    'Side Dish',
+    'Side',
+  ]),
+  salads('Salads', ['Salad', 'Salads']),
+  drinks('Drinks', ['Drink', 'Drinks', 'Beverage', 'Cocktail']);
+
+  const DiscoverCategory(this.label, this.rawValues);
+
+  /// What the tile says: `Mains`.
+  final String label;
+
+  /// Every raw `recipes.category` value the tile stands for, exactly as stored.
+  /// The first is the canonical spelling — the one the curated recipes use.
+  final List<String> rawValues;
+
+  /// The URL form: `mains` in `/discover?category=mains`.
+  String get slug => name;
+
+  /// The tile a URL names, or null for a missing or unknown slug — which the
+  /// screen treats as "no filter" rather than an error, so a stale or mistyped
+  /// link still lands on a working Discover.
+  static DiscoverCategory? fromSlug(String? slug) {
+    if (slug == null) return null;
+    final key = slug.trim().toLowerCase();
+    for (final c in values) {
+      if (c.slug == key) return c;
+    }
+    return null;
+  }
+}
+
 /// Public discovery: popular, trending, recent, and search.
 ///
 /// Every method is a page: `limit` rows starting at `offset` (OPT-P9). The
@@ -14,6 +68,18 @@ abstract interface class DiscoverRepository {
   Future<List<Recipe>> popular({int limit, int offset});
   Future<List<Recipe>> trending({int limit, int offset});
   Future<List<Recipe>> recent({int limit, int offset});
+
+  /// Public recipes whose `category` is any of [categories] — one
+  /// [DiscoverCategory] tile's [DiscoverCategory.rawValues] — newest first.
+  ///
+  /// The same read as [recent] with one `in.(…)` filter added, so it carries
+  /// the same **total** order (`created_at desc, id desc` — Gotcha 24). An
+  /// empty list never reaches the network: `in.()` matches nothing anyway.
+  Future<List<Recipe>> byCategories(
+    List<String> categories, {
+    int limit,
+    int offset,
+  });
   Future<List<Recipe>> search(String query, {int limit, int offset});
 
   /// **01 · UNDER 30** — public recipes that take 1–30 minutes end to end,
@@ -108,6 +174,27 @@ class SupabaseDiscoverRepository implements DiscoverRepository {
         .from('recipes')
         .select(kRecipeSelect)
         .eq('visibility', 'public')
+        .order('created_at', ascending: false)
+        .order('id', ascending: false)
+        .range(offset, offset + limit - 1);
+    return rows.map<Recipe>(Recipe.fromJson).toList();
+  }
+
+  @override
+  Future<List<Recipe>> byCategories(
+    List<String> categories, {
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) async {
+    if (categories.isEmpty) return const [];
+    // [recent] plus the filter — including its `id` tie-break, without which a
+    // page boundary between two rows seeded in one statement repeats or skips
+    // one of them (Gotcha 24).
+    final rows = await _client
+        .from('recipes')
+        .select(kRecipeSelect)
+        .eq('visibility', 'public')
+        .inFilter('category', categories)
         .order('created_at', ascending: false)
         .order('id', ascending: false)
         .range(offset, offset + limit - 1);

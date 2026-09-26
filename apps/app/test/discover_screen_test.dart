@@ -115,6 +115,16 @@ class _FakeDiscover implements DiscoverRepository {
   }
 
   @override
+  Future<List<Recipe>> byCategories(
+    List<String> categories, {
+    int limit = kRecipePageSize,
+    int offset = 0,
+  }) async {
+    calls.add('byCategories:${categories.join('|')}');
+    return [_recipe('c1', 'Category pick')];
+  }
+
+  @override
   Future<List<Recipe>> search(
     String query, {
     int limit = kRecipePageSize,
@@ -217,6 +227,33 @@ void main() {
     // The screen's own AppBar is gone — on web it was a second bar under the
     // top nav (the Phase 21 deferred item, for this screen).
     expect(find.byType(AppBar), findsNothing);
+  });
+
+  testWidgets('the masthead is a full-bleed cream band with a pill search', (
+    tester,
+  ) async {
+    // Reference 2 (36c). The band runs edge to edge while its content keeps
+    // the page margin, and the field is a pill — asserted on the widgets
+    // because neither overflows or throws when it is wrong.
+    _size(tester, 1440);
+    await tester.pumpWidget(_app(_stocked()));
+    await tester.pumpAndSettle();
+
+    final band = find.descendant(
+      of: find.byType(DiscoverMasthead),
+      matching: find.byType(ColoredBox),
+    );
+    expect(
+      tester.widget<ColoredBox>(band.first).color,
+      AppPalette.light.surfaceWarm,
+    );
+    expect(tester.getRect(band.first).left, 0);
+    expect(tester.getRect(band.first).width, 1440);
+    expect(tester.getTopLeft(find.text('THE PASS')).dx, greaterThan(24));
+
+    final bar = tester.widget<SearchBar>(find.byType(SearchBar));
+    expect(bar.shape?.resolve({}), isA<StadiumBorder>());
+    expect(tester.getSize(find.byType(SearchBar)).height, greaterThan(47));
   });
 
   testWidgets('three numbered shelves, each fed by its own query', (
@@ -460,7 +497,7 @@ void main() {
   ) async {
     // The same envelope the card and the nav bar are contracted to: 2.0x text
     // scale at the narrowest width anything renders at (Gotcha 13).
-    for (final width in [320.0, 390.0, 700.0, 1400.0]) {
+    for (final width in [320.0, 390.0, 600.0, 700.0, 1000.0, 1440.0]) {
       for (final scale in [1.0, 2.0]) {
         _size(tester, width, 3000);
         await tester.pumpWidget(_app(_stocked(), textScale: scale));

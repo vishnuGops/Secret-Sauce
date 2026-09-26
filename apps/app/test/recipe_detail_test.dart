@@ -102,8 +102,11 @@ final _ownedRecipe = _fullRecipe.copyWith(
 );
 
 /// [_fullRecipe] with a nutrition label. 8 servings × 320 kcal, so the batch
-/// line is a four-figure number and the grouping is exercised too.
+/// line is a four-figure number and the grouping is exercised too. Tagged
+/// (36c) so the envelope below pumps the tag row and the category cover too.
 final _labelledRecipe = _fullRecipe.copyWith(
+  cuisine: 'Pan-Mediterranean Coastal',
+  category: 'Appetizer',
   nutrition: const RecipeNutrition(
     calories: 320,
     totalFatG: 12,
@@ -113,6 +116,16 @@ final _labelledRecipe = _fullRecipe.copyWith(
     proteinG: 9,
   ),
 );
+
+/// The phone the compact tests pump: 390 wide, the width the layout was drawn
+/// for. 1200 tall rather than a real 844 since Phase 36c — an intended
+/// contract change. The identity is now reference 5's sheet over a full cover
+/// (210px, where a photo-less recipe used to get a 96px strip), so under
+/// `flutter test`'s wide fixed-pitch font the jump bar, and the rail and
+/// method behind it, start below an 844px viewport and are never built. With
+/// the real font the jump bar still makes the first screen; the envelope
+/// group below is what proves nothing overflows at any height.
+const _phone = Size(390, 1200);
 
 class _FakeAuth implements AuthRepository {
   _FakeAuth(this.uid);
@@ -475,7 +488,7 @@ void main() {
   group('compact v2 (frame B)', () {
     testWidgets('renders the v2 furniture and none of v1’s', (tester) async {
       final repo = _FakeRecipeRepository(recipe: _fullRecipe);
-      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+      await _pump(tester, repo: repo, uid: null, size: _phone);
 
       // Facts quad: the four that fit, not the six the wide strip carries.
       expect(find.text('TOTAL'), findsOneWidget);
@@ -484,7 +497,8 @@ void main() {
       expect(find.text('DIFFICULTY'), findsOneWidget);
       expect(find.text('COOK'), findsNothing);
       expect(find.text('VISIBILITY'), findsNothing);
-      // Private, so the badge is on the cover instead.
+      // Private, so the tag row carries a Private pill (on the cover until
+      // 36c, where the colour block now sets its category label).
       expect(find.text('Private'), findsOneWidget);
 
       // Jump bar, ingredients rail, method column, sticky cook bar.
@@ -502,7 +516,7 @@ void main() {
 
     testWidgets('the sticky bar starts cooking', (tester) async {
       final repo = _FakeRecipeRepository(recipe: _fullRecipe);
-      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+      await _pump(tester, repo: repo, uid: null, size: _phone);
 
       // Two entry points on this page — the method column's teaser inside the
       // scroll, and the pinned bar after it. `.last` is the bar.
@@ -516,32 +530,26 @@ void main() {
       tester,
     ) async {
       final repo = _FakeRecipeRepository(recipe: _fullRecipe);
-      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+      await _pump(tester, repo: repo, uid: null, size: _phone);
 
       // Same widget as the expanded page's left column — scaled quantity in the
       // gutter, sentence-cased name, check-off counter.
       expect(find.text('1.25 cup'), findsOneWidget);
       expect(find.text('Wheat flour'), findsOneWidget);
       expect(find.text('0 of 1 gathered'), findsOneWidget);
-      // And it is bare here rather than a bordered card. The flag moved from
-      // `IngredientRail` to `RailPanel` in Phase 28, when the container went up
-      // to the tab host — an expected API break, not a regression.
-      expect(
-        tester.widget<RailPanel>(find.byType(RailPanel)).bordered,
-        isFalse,
-      );
+      // And it is a panel here too. It was bare on compact (`bordered: false`)
+      // until Phase 36c: the owner's Q4 made ingredients and method two open,
+      // rounded panels on the phone as well — an intended contract change,
+      // not a regression. The flag moved from `IngredientRail` to `RailPanel`
+      // in Phase 28, when the container went up to the tab host.
+      expect(tester.widget<RailPanel>(find.byType(RailPanel)).bordered, isTrue);
     });
 
     testWidgets('the owner gets edit and share, and no fork chip', (
       tester,
     ) async {
       final repo = _FakeRecipeRepository(recipe: _fullRecipe);
-      await _pump(
-        tester,
-        repo: repo,
-        uid: 'someone-else',
-        size: const Size(390, 844),
-      );
+      await _pump(tester, repo: repo, uid: 'someone-else', size: _phone);
 
       expect(find.byIcon(Icons.edit), findsOneWidget);
       expect(find.byIcon(Icons.share), findsOneWidget);
@@ -553,7 +561,7 @@ void main() {
       tester,
     ) async {
       final repo = _FakeRecipeRepository(recipe: _fullRecipe);
-      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 844));
+      await _pump(tester, repo: repo, uid: 'me', size: _phone);
 
       expect(find.widgetWithText(ActionChip, 'Fork'), findsOneWidget);
       expect(find.byIcon(Icons.edit), findsNothing);
@@ -581,7 +589,7 @@ void main() {
       tester,
     ) async {
       final repo = _FakeRecipeRepository(recipe: _fullRecipe);
-      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+      await _pump(tester, repo: repo, uid: null, size: _phone);
 
       await tapFork(tester);
 
@@ -597,7 +605,7 @@ void main() {
       tester,
     ) async {
       final repo = _FakeRecipeRepository(recipe: _fullRecipe);
-      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 844));
+      await _pump(tester, repo: repo, uid: 'me', size: _phone);
 
       await tapFork(tester);
 
@@ -611,7 +619,7 @@ void main() {
     ) async {
       final repo = _FakeRecipeRepository(recipe: _fullRecipe);
       repo.forkFails = true;
-      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 844));
+      await _pump(tester, repo: repo, uid: 'me', size: _phone);
 
       await tapFork(tester);
 
@@ -638,7 +646,7 @@ void main() {
       tester,
     ) async {
       final repo = _FakeRecipeRepository(recipe: _fullRecipe);
-      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 844));
+      await _pump(tester, repo: repo, uid: 'me', size: _phone);
 
       await rate(tester);
 
@@ -652,7 +660,7 @@ void main() {
 
     testWidgets('Remove clears the rating', (tester) async {
       final repo = _FakeRecipeRepository(recipe: _fullRecipe)..rating = 4;
-      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 844));
+      await _pump(tester, repo: repo, uid: 'me', size: _phone);
 
       final remove = find.text('Remove');
       await tester.ensureVisible(remove);
@@ -670,7 +678,7 @@ void main() {
     testWidgets('a refused rating says so and writes nothing', (tester) async {
       final repo = _FakeRecipeRepository(recipe: _fullRecipe)
         ..ratingFails = true;
-      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 844));
+      await _pump(tester, repo: repo, uid: 'me', size: _phone);
 
       await rate(tester);
 
@@ -682,7 +690,7 @@ void main() {
       tester,
     ) async {
       final repo = _FakeRecipeRepository(recipe: _fullRecipe);
-      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+      await _pump(tester, repo: repo, uid: null, size: _phone);
 
       expect(find.byType(StarRatingInput), findsNothing);
       final signIn = find.text('Sign in');
@@ -697,12 +705,7 @@ void main() {
 
     testWidgets('the owner is told why the stars are missing', (tester) async {
       final repo = _FakeRecipeRepository(recipe: _fullRecipe);
-      await _pump(
-        tester,
-        repo: repo,
-        uid: 'someone-else',
-        size: const Size(390, 844),
-      );
+      await _pump(tester, repo: repo, uid: 'someone-else', size: _phone);
 
       expect(find.byType(StarRatingInput), findsNothing);
       // RLS is what actually refuses a self-rating; this branch explains it.
@@ -734,7 +737,7 @@ void main() {
             createdAt: DateTime.utc(2026, 8, 1),
           ),
         ];
-      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+      await _pump(tester, repo: repo, uid: null, size: _phone);
 
       await tester.tap(find.byTooltip('Version history'));
       await tester.pumpAndSettle();
@@ -750,7 +753,7 @@ void main() {
 
     testWidgets('a recipe with no history says so', (tester) async {
       final repo = _FakeRecipeRepository(recipe: _fullRecipe);
-      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+      await _pump(tester, repo: repo, uid: null, size: _phone);
 
       await tester.tap(find.byTooltip('Version history'));
       await tester.pumpAndSettle();
@@ -766,12 +769,7 @@ void main() {
   group('servings scale lifetime (32c3)', () {
     testWidgets('survives leaving the screen and coming back', (tester) async {
       final repo = _FakeRecipeRepository(recipe: _fullRecipe);
-      final router = await _pump(
-        tester,
-        repo: repo,
-        uid: null,
-        size: const Size(390, 844),
-      );
+      final router = await _pump(tester, repo: repo, uid: null, size: _phone);
 
       await tester.tap(find.byTooltip('More servings'));
       await tester.pumpAndSettle();
@@ -798,7 +796,7 @@ void main() {
     // renders as *nothing* rather than as an error (Gotcha 17).
     testWidgets('names the embedded owner and their tier', (tester) async {
       final repo = _FakeRecipeRepository(recipe: _ownedRecipe);
-      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+      await _pump(tester, repo: repo, uid: null, size: _phone);
 
       expect(find.byType(ChefBadge), findsOneWidget);
       expect(find.text('Amara Baptiste'), findsOneWidget);
@@ -807,7 +805,7 @@ void main() {
 
     testWidgets('no embed, no badge — and no empty furniture', (tester) async {
       final repo = _FakeRecipeRepository(recipe: _fullRecipe);
-      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+      await _pump(tester, repo: repo, uid: null, size: _phone);
 
       expect(find.byType(ChefBadge), findsNothing);
     });
@@ -817,7 +815,7 @@ void main() {
       // destination now, and the id must come from the *owner*, not the recipe:
       // both are on the same object, so a wrong one still navigates somewhere.
       final repo = _FakeRecipeRepository(recipe: _ownedRecipe);
-      await _pump(tester, repo: repo, uid: null, size: const Size(390, 844));
+      await _pump(tester, repo: repo, uid: null, size: _phone);
 
       await tester.tap(find.byType(ChefBadge));
       await tester.pumpAndSettle();
@@ -877,7 +875,22 @@ void main() {
       expect(find.textContaining('9 servings · 2,880 kcal total'), findsOne);
       // The per-serving number is unchanged. This is the decision, not a
       // detail: scaling 8 → 9 makes a bigger batch, not a bigger serving.
-      expect(find.text('320'), findsOneWidget);
+      // Scoped to the label since 36c: the sheet's `NutritionSummary` prints
+      // the same per-serving 320, and it must not move either.
+      expect(
+        find.descendant(
+          of: find.byType(NutritionFactsLabel),
+          matching: find.text('320'),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: find.byType(NutritionSummary),
+          matching: find.text('320'),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('a recipe with no data shows the empty state', (tester) async {
@@ -946,6 +959,105 @@ void main() {
       // Otherwise the chip scrolls to a section whose content is hidden behind
       // the other tab.
       expect(find.text('Wheat flour'), findsOneWidget);
+    });
+  });
+
+  // Phase 36c: reference 5's sheet over the cover. What the reader can see —
+  // a designed cover when there is no photo (the owner's Q1), the kicker, the
+  // tag pills, and the nutrition summary only when there is a label.
+  group('sheet (36c, compact)', () {
+    testWidgets('no photo: the category colour block is the cover', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _labelledRecipe);
+      await _pump(tester, repo: repo, uid: null, size: const Size(390, 1600));
+
+      final cover = tester.widget<CategoryCover>(find.byType(CategoryCover));
+      expect(cover.category, 'Appetizer');
+      expect(cover.large, isTrue);
+      // The back button still floats on it, on its own scrim.
+      expect(find.byTooltip('Back'), findsOneWidget);
+    });
+
+    // Contract change (36c review): the kicker is always RECIPE, so the
+    // category is not printed three times on a photo-less recipe.
+    testWidgets('the kicker names the page; the category is on the cover', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _labelledRecipe);
+      await _pump(tester, repo: repo, uid: null, size: const Size(390, 1600));
+      expect(find.text('RECIPE'), findsOneWidget);
+      // Only the colour block's own label.
+      expect(find.text('APPETIZER'), findsOneWidget);
+    });
+
+    testWidgets('no category: the kicker says RECIPE', (tester) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(tester, repo: repo, uid: null, size: const Size(390, 1600));
+      expect(find.text('RECIPE'), findsOneWidget);
+    });
+
+    testWidgets('cuisine and category are tag pills; private joins them', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _labelledRecipe);
+      await _pump(tester, repo: repo, uid: null, size: const Size(390, 1600));
+
+      expect(
+        find.widgetWithText(TagPill, 'Pan-Mediterranean Coastal'),
+        findsOneWidget,
+      );
+      expect(find.widgetWithText(TagPill, 'Appetizer'), findsOneWidget);
+      // The private badge left the cover for the tag row (see the sheet).
+      expect(find.widgetWithText(TagPill, 'Private'), findsOneWidget);
+    });
+
+    testWidgets('an untagged public recipe draws no tag row at all', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(
+        recipe: _fullRecipe.copyWith(visibility: RecipeVisibility.public),
+      );
+      await _pump(tester, repo: repo, uid: null, size: const Size(390, 1600));
+
+      expect(find.byType(TagPill), findsNothing);
+    });
+
+    testWidgets('a labelled recipe shows the nutrition summary', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _labelledRecipe);
+      await _pump(tester, repo: repo, uid: null, size: const Size(390, 1600));
+
+      expect(find.byType(NutritionSummary), findsOneWidget);
+      // Additive: the FDA label still lives behind the Nutrition tab.
+      expect(find.byType(NutritionFactsLabel), findsNothing);
+    });
+
+    testWidgets('no label (null): no nutrition summary', (tester) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(tester, repo: repo, uid: null, size: const Size(390, 1600));
+
+      expect(find.byType(NutritionSummary), findsNothing);
+    });
+
+    testWidgets('an all-empty label counts as none', (tester) async {
+      final repo = _FakeRecipeRepository(
+        recipe: _fullRecipe.copyWith(
+          nutrition: const RecipeNutrition(source: 'auto'),
+        ),
+      );
+      await _pump(tester, repo: repo, uid: null, size: const Size(390, 1600));
+
+      expect(find.byType(NutritionSummary), findsNothing);
+    });
+
+    testWidgets('ingredients and method are headed panels', (tester) async {
+      final repo = _FakeRecipeRepository(recipe: _labelledRecipe);
+      await _pump(tester, repo: repo, uid: null, size: const Size(390, 2400));
+
+      expect(find.text('INGREDIENTS'), findsOneWidget);
+      expect(find.text('METHOD'), findsOneWidget);
     });
   });
 

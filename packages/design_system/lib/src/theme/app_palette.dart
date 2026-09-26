@@ -176,10 +176,22 @@ class AppPalette extends ThemeExtension<AppPalette> {
     final key = category?.trim().toLowerCase();
     final index = switch (key) {
       null || '' => 0,
-      'main' || 'mains' || 'main course' || 'dinner' || 'lunch' => 0,
+      'main' ||
+      'mains' ||
+      'main course' ||
+      'dinner' ||
+      'lunch' ||
+      'entree' => 0,
       'breakfast' || 'brunch' => 1,
       'dessert' || 'desserts' || 'baking' || 'sweet' => 2,
-      'appetizer' || 'appetizers' || 'snack' || 'snacks' || 'side' => 3,
+      'appetizer' ||
+      'appetizers' ||
+      'starter' ||
+      'starters' ||
+      'snack' ||
+      'snacks' ||
+      'side' ||
+      'side dish' => 3,
       'salad' || 'salads' || 'vegetable' || 'vegetables' => 4,
       'drink' || 'drinks' || 'beverage' || 'cocktail' => 5,
       _ =>

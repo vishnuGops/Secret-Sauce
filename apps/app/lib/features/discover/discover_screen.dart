@@ -1,8 +1,10 @@
+import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:app/features/discover/discover_categories.dart';
 import 'package:app/features/discover/discover_masthead.dart';
 import 'package:app/features/discover/discover_providers.dart';
 import 'package:app/features/discover/discover_shelf.dart';
@@ -41,9 +43,20 @@ const double _kSortUnderline = 2;
 /// under `TopNavBar`, and the masthead is the page title now (the Phase 21
 /// deferred item, for this screen).
 ///
+/// **Category tiles (Phase 36c, the owner's Q6)** sit between the masthead and
+/// the shelves. A tile filters the browse grid — the shelves stay, because they
+/// are an edit, not a list — and the selection is URL state: [category] comes
+/// from `/discover?category=…` via the router, and a tap is a `context.go`, so
+/// a deep link, the back button and a tap all take the same road. Search still
+/// wins over a category while the query is non-empty.
+///
 /// Signed-out safe, like `/chefs` — every read behind it is `anon`-callable.
 class DiscoverScreen extends ConsumerStatefulWidget {
-  const DiscoverScreen({super.key});
+  const DiscoverScreen({super.key, this.category});
+
+  /// The category tile the URL selects, or null for the unfiltered page. An
+  /// unknown slug has already become null in the router.
+  final DiscoverCategory? category;
 
   @override
   ConsumerState<DiscoverScreen> createState() => _DiscoverScreenState();
@@ -52,15 +65,49 @@ class DiscoverScreen extends ConsumerStatefulWidget {
 class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
   final _searchController = TextEditingController();
 
+  /// The browse header — scrolled to when a tile is picked, because the
+  /// filtered grid is under three shelves and a tap that changes nothing on
+  /// screen reads as a tap that did nothing.
+  final _browseKey = GlobalKey();
+
+  @override
+  void didUpdateWidget(DiscoverScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Only on a change *to* a tile made while the page is open. A deep link
+    // opens at the top, where the tiles show which one is selected; clearing
+    // leaves the reader where they are.
+    if (widget.category != null && widget.category != oldWidget.category) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final target = _browseKey.currentContext;
+        if (!mounted || target == null) return;
+        Scrollable.ensureVisible(
+          target,
+          duration: AppMotion.of(context, AppMotion.slow),
+          curve: AppMotion.emphasized,
+        );
+      });
+    }
+  }
+
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
   }
 
+  /// A tile press: select it, or clear it when it is already the selected one.
+  void _onTile(DiscoverCategory category) => context.go(
+    category == widget.category
+        ? Routes.discover
+        : Routes.discoverCategory(category.slug),
+  );
+
+  void _clearCategory() => context.go(Routes.discover);
+
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final category = widget.category;
     final query = ref.watch(searchQueryProvider);
     final searching = query.trim().isNotEmpty;
     final wide = !context.isCompact;
@@ -76,19 +123,24 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
       AppSpacing.md,
     );
 
-    return Scaffold(
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: EdgeInsets.fromLTRB(side, AppSpacing.lg, side, 0),
-              sliver: SliverToBoxAdapter(
+    // The selection is overridden into a scope of this screen's own, so
+    // `categoryRecipesProvider` (which declares it as a dependency) is built
+    // here, against the URL's value — see `selectedCategoryProvider`.
+    return ProviderScope(
+      overrides: [selectedCategoryProvider.overrideWithValue(category)],
+      child: Scaffold(
+        body: SafeArea(
+          child: CustomScrollView(
+            slivers: [
+              // Full bleed: the cream band runs edge to edge and carries the
+              // page margin inside it, so its content still starts on the same
+              // left edge as the tiles and the shelves' numerals.
+              SliverToBoxAdapter(
                 child: DiscoverMasthead(
+                  gutter: side,
                   publicCount: ref.watch(publicRecipeCountProvider).valueOrNull,
-                  search: SearchBar(
+                  search: DiscoverSearchField(
                     controller: _searchController,
-                    hintText: 'Search recipes, ingredients, tags…',
-                    leading: const Icon(Icons.search),
                     trailing: [
                       if (searching)
                         IconButton(
@@ -105,66 +157,88 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                   ),
                 ),
               ),
-            ),
 
-            // Searching replaces the whole page below the masthead. A shelf of
-            // quick dinners under a list of search results is noise: the reader
-            // has already said what they want.
-            if (searching)
-              RecipeAsyncSliverGrid(
-                provider: searchResultsProvider,
-                padding: gridPadding,
-                empty: _empty('No matches'),
-              )
-            else ...[
-              for (final shelf in _shelves(scheme))
+              // Searching replaces the whole page below the masthead. A shelf of
+              // quick dinners under a list of search results is noise: the reader
+              // has already said what they want.
+              if (searching)
+                RecipeAsyncSliverGrid(
+                  provider: searchResultsProvider,
+                  padding: gridPadding,
+                  empty: _empty('No matches'),
+                )
+              else ...[
                 SliverPadding(
                   padding: gutter.copyWith(top: AppSpacing.xl),
-                  sliver: SliverToBoxAdapter(child: shelf),
+                  sliver: SliverToBoxAdapter(
+                    child: DiscoverCategoryTiles(
+                      selected: category,
+                      onSelect: _onTile,
+                    ),
+                  ),
                 ),
-              SliverPadding(
-                padding: gutter.copyWith(top: AppSpacing.xxl),
-                sliver: const SliverToBoxAdapter(child: _BrowseHeader()),
-              ),
-              _BrowseGrid(
-                sort: ref.watch(browseSortProvider),
-                padding: gridPadding,
-              ),
-              // The way into the corpus (Phase 35c). A link rather than a
-              // fourth sort above, and below the grid rather than above it,
-              // because the recipes people here wrote come first — this page
-              // is the front door to Secret-Sauce, not to the web.
-              SliverPadding(
-                padding: gutter.copyWith(top: AppSpacing.xl),
-                sliver: const SliverToBoxAdapter(child: _ExploreLink()),
+                for (final shelf in _shelves(scheme))
+                  SliverPadding(
+                    padding: gutter.copyWith(top: AppSpacing.xl),
+                    sliver: SliverToBoxAdapter(child: shelf),
+                  ),
+                SliverPadding(
+                  padding: gutter.copyWith(top: AppSpacing.xxl),
+                  sliver: SliverToBoxAdapter(
+                    child: _BrowseHeader(
+                      key: _browseKey,
+                      category: category,
+                      onClear: _clearCategory,
+                    ),
+                  ),
+                ),
+                if (category != null)
+                  RecipeAsyncSliverGrid(
+                    provider: categoryRecipesProvider,
+                    padding: gridPadding,
+                    empty: _categoryEmpty(category, onClear: _clearCategory),
+                  )
+                else
+                  _BrowseGrid(
+                    sort: ref.watch(browseSortProvider),
+                    padding: gridPadding,
+                  ),
+                // The way into the corpus (Phase 35c). A link rather than a
+                // fourth sort above, and below the grid rather than above it,
+                // because the recipes people here wrote come first — this page
+                // is the front door to Secret-Sauce, not to the web.
+                SliverPadding(
+                  padding: gutter.copyWith(top: AppSpacing.xl),
+                  sliver: const SliverToBoxAdapter(child: _ExploreLink()),
+                ),
+              ],
+
+              // Clearance for the compact chrome: the shell puts an extended FAB
+              // and a NavigationBar over the bottom of this scroll, and the last
+              // thing in it is a `Load more` button.
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: wide ? AppSpacing.xl : _kCompactChromeClearance,
+                ),
               ),
             ],
-
-            // Clearance for the compact chrome: the shell puts an extended FAB
-            // and a NavigationBar over the bottom of this scroll, and the last
-            // thing in it is a `Load more` button.
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: wide ? AppSpacing.xl : _kCompactChromeClearance,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 
-  /// The three shelves, in order. Accents come from the scheme rather than
-  /// literals so both themes get them for free — and they are three *different*
-  /// scheme roles because the numeral and its rule are the only thing telling
-  /// one shelf from the next at a glance.
+  /// The three shelves, in order. One accent for all three since 36c — the
+  /// index line is reference 5's coloured kicker, and what tells one shelf from
+  /// the next is its numeral, not a colour (three scheme roles used to do that
+  /// job, and read as three unrelated sections).
   List<Widget> _shelves(ColorScheme scheme) => [
     DiscoverShelf(
       index: '01',
       title: 'Under 30',
       subtitle: 'Knife down to plate in half an hour, best-rated first.',
       kicker: 'RANKED BY RATING',
-      accent: scheme.primary,
+      accent: scheme.tertiary,
       provider: quickShelfProvider,
       emptyReason:
           'Nothing here yet — no public recipe records a total time of '
@@ -188,8 +262,9 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
       title: 'Most forked',
       subtitle: 'Recipes other kitchens took and rewrote as their own.',
       kicker: 'RANKED BY FORKS',
-      accent: scheme.secondary,
+      accent: scheme.tertiary,
       provider: mostForkedShelfProvider,
+      ranked: true,
       emptyReason:
           'Nothing here yet — no public recipe has been forked. Open one and '
           'press Fork to start a lineage.',
@@ -201,29 +276,44 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
 ///
 /// Set apart from the shelves on purpose: a heavier rule, no numeral, and the
 /// controls on the same line. The shelves are an edit; this is the archive.
+///
+/// While a category tile is selected the heading names it (`MAINS`) and the
+/// sort links give way to a clear chip: the filtered grid has one order,
+/// newest first, so offering three would be offering two that do nothing.
 class _BrowseHeader extends ConsumerWidget {
-  const _BrowseHeader();
+  const _BrowseHeader({
+    super.key,
+    required this.category,
+    required this.onClear,
+  });
+
+  final DiscoverCategory? category;
+  final VoidCallback onClear;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final sort = ref.watch(browseSortProvider);
+    final category = this.category;
 
     final heading = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          'EVERYTHING ELSE',
+          category == null ? 'EVERYTHING ELSE' : category.label.toUpperCase(),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           // The index line at section level (UX-031/UX-032 kicker
-          // consolidation) — the shelves' heading role.
-          style: context.appText.kickerLarge,
+          // consolidation) — the shelves' heading role, in their accent.
+          style: context.appText.kickerLarge.copyWith(color: scheme.tertiary),
         ),
         Text(
-          'The whole public vault, one page at a time.',
+          category == null
+              ? 'The whole public vault, one page at a time.'
+              : 'Every public recipe filed under '
+                  '${category.label.toLowerCase()}, newest first.',
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: theme.textTheme.bodySmall?.copyWith(
@@ -233,18 +323,30 @@ class _BrowseHeader extends ConsumerWidget {
       ],
     );
 
-    final control = Wrap(
-      spacing: AppSpacing.lg,
-      runSpacing: AppSpacing.sm,
-      children: [
-        for (final option in BrowseSort.values)
-          _SortLink(
-            label: option.label,
-            selected: option == sort,
-            onTap: () => ref.read(browseSortProvider.notifier).state = option,
-          ),
-      ],
-    );
+    final Widget control =
+        category != null
+            ? ActionChip(
+              key: kDiscoverClearCategoryKey,
+              avatar: const Icon(Icons.close),
+              label: Text(category.label),
+              tooltip: 'Clear the category filter',
+              onPressed: onClear,
+            )
+            : Wrap(
+              spacing: AppSpacing.lg,
+              runSpacing: AppSpacing.sm,
+              children: [
+                for (final option in BrowseSort.values)
+                  _SortLink(
+                    label: option.label,
+                    selected: option == sort,
+                    onTap:
+                        () =>
+                            ref.read(browseSortProvider.notifier).state =
+                                option,
+                  ),
+              ],
+            );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -333,8 +435,10 @@ class _SortLink extends StatelessWidget {
           // One weight in both states (UX-049): a heavier selected label
           // widened itself and pushed its neighbours along. Selection is the
           // colour and the underline.
+          // The selected one in the brand colour, matching its underline —
+          // the link colour everywhere since 36c.
           style: theme.textTheme.labelLarge?.copyWith(
-            color: selected ? scheme.onSurface : scheme.onSurfaceVariant,
+            color: selected ? scheme.primary : scheme.onSurfaceVariant,
           ),
         ),
       ),
@@ -374,6 +478,29 @@ class _BrowseGrid extends StatelessWidget {
       ),
     };
   }
+}
+
+/// The clear chip over a filtered grid — keyed for tests.
+const kDiscoverClearCategoryKey = Key('discover-clear-category');
+
+/// An empty category says which tile and why, and offers the way back — the
+/// shelves' rule that an empty state explains itself (AUDIT Preserve).
+EmptyView _categoryEmpty(
+  DiscoverCategory category, {
+  required VoidCallback onClear,
+}) {
+  final name = category.label.toLowerCase();
+  return EmptyView(
+    title: 'No public $name yet',
+    icon: Icons.local_dining_outlined,
+    message:
+        'Nothing public is filed under $name yet — a recipe shows here once '
+        'its owner makes it public with a category on this tile.',
+    action: TextButton(
+      onPressed: onClear,
+      child: const Text('Show everything'),
+    ),
+  );
 }
 
 EmptyView _empty(String title) => EmptyView(

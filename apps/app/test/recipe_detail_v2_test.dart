@@ -74,8 +74,11 @@ final _ownedRecipe = _recipe.copyWith(
 );
 
 /// [_recipe] with a nutrition label. 4 servings × 430 kcal, so the batch line
-/// is four figures and its grouping is exercised.
+/// is four figures and its grouping is exercised. Tagged (36c) so the envelope
+/// pumps the header's tag row and colour-block cover as well.
 final _labelledRecipe = _recipe.copyWith(
+  cuisine: 'Pan-West African Street Food',
+  category: 'Main',
   nutrition: const RecipeNutrition(
     calories: 430,
     totalFatG: 22,
@@ -275,8 +278,10 @@ void main() {
   ) async {
     await _pump(tester);
 
-    // v2 furniture.
-    expect(find.text('Method'), findsOneWidget);
+    // v2 furniture. The method heading is the panel's accent kicker since
+    // 36c (reference 5's `METHOD`), so it is upper-cased at the source — an
+    // intended contract change from the old `Method` title.
+    expect(find.text('METHOD'), findsOneWidget);
     expect(find.text('TOTAL'), findsOneWidget);
     expect(find.text('LONGEST WAIT'), findsOneWidget);
     // The version line doubles as the history opener.
@@ -320,7 +325,11 @@ void main() {
     await tester.pump();
     expect(find.text('1 of 2 gathered'), findsOneWidget);
 
-    // Clear checks resets it.
+    // Clear checks resets it. Scrolled to first since 36c moved the facts and
+    // the nutrition summary up into the header band, which pushes the rail's
+    // footer below a 900px window.
+    await tester.ensureVisible(find.text('Clear checks'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Clear checks'));
     await tester.pump();
     expect(find.text('0 of 2 gathered'), findsOneWidget);
@@ -443,7 +452,14 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.textContaining('5 servings · 2,150 kcal total'), findsOne);
-      expect(find.text('430'), findsOneWidget); // per serving, unmoved
+      // Per serving, unmoved — in the label and in the header's summary (36c
+      // prints the same number there, so the finder is scoped).
+      for (final host in [NutritionFactsLabel, NutritionSummary]) {
+        expect(
+          find.descendant(of: find.byType(host), matching: find.text('430')),
+          findsOneWidget,
+        );
+      }
       expect(
         find.textContaining('this recipe is written for 4'),
         findsOneWidget,
@@ -490,6 +506,59 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('CHEF d1'), findsOneWidget);
+    });
+  });
+
+  // Phase 36c: the header band in reference 5's language.
+  group('header band (36c, expanded)', () {
+    testWidgets('no photo: the category colour block is the cover', (
+      tester,
+    ) async {
+      await _pump(tester, recipe: _labelledRecipe);
+
+      final cover = tester.widget<CategoryCover>(find.byType(CategoryCover));
+      expect(cover.category, 'Main');
+      expect(cover.large, isTrue);
+    });
+
+    testWidgets('kicker, tag pills and facts sit in the band', (tester) async {
+      await _pump(tester, recipe: _labelledRecipe);
+
+      // Contract change (36c review): the kicker is always RECIPE; MAIN is
+      // the colour block's own label only.
+      expect(find.text('RECIPE'), findsOneWidget);
+      expect(find.text('MAIN'), findsOneWidget);
+      expect(
+        find.widgetWithText(TagPill, 'Pan-West African Street Food'),
+        findsOneWidget,
+      );
+      expect(find.widgetWithText(TagPill, 'Main'), findsOneWidget);
+      // Visibility is a fact here, so no Private pill joins the tags.
+      expect(find.widgetWithText(TagPill, 'Private'), findsNothing);
+    });
+
+    testWidgets('no category and no cuisine: RECIPE, and no tag row', (
+      tester,
+    ) async {
+      await _pump(tester);
+
+      expect(find.text('RECIPE'), findsOneWidget);
+      expect(find.byType(TagPill), findsNothing);
+    });
+
+    testWidgets('a labelled recipe shows the nutrition summary', (
+      tester,
+    ) async {
+      await _pump(tester, recipe: _labelledRecipe);
+
+      expect(find.byType(NutritionSummary), findsOneWidget);
+      expect(find.byType(NutritionFactsLabel), findsNothing);
+    });
+
+    testWidgets('no label (null): no nutrition summary', (tester) async {
+      await _pump(tester);
+
+      expect(find.byType(NutritionSummary), findsNothing);
     });
   });
 

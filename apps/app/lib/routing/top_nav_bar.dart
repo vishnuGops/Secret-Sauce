@@ -58,7 +58,9 @@ class TopNavBar extends ConsumerWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       toolbarHeight: height,
       titleSpacing: 0,
-      backgroundColor: scheme.surfaceContainerLowest,
+      // Reference 1/2's white bar (36c): the page surface, one hairline under
+      // it, and the brand colour carried by the mark and the Sign up pill.
+      backgroundColor: scheme.surface,
       surfaceTintColor: Colors.transparent,
       scrolledUnderElevation: 0,
       shape: Border(bottom: BorderSide(color: scheme.outlineVariant)),
@@ -109,7 +111,6 @@ const double _kIconLabelGap = AppSpacing.sm;
 const double _kTrackPad = AppSpacing.xs;
 const double _kItemGapLabelled = AppSpacing.xs;
 const double _kItemGapIcons = AppSpacing.xxs;
-const double _kActiveItemElevation = 1; // the design's 0 1px 2px shadow
 const double _kAvatarRadiusExpanded = 17; // 34px, per the design
 const double _kAvatarRadiusMedium = 16;
 
@@ -180,7 +181,10 @@ class _Brand extends StatelessWidget {
                 'Secret Sauce',
                 maxLines: 1,
                 softWrap: false,
-                style: theme.textTheme.titleLarge,
+                // The wordmark in the brand tomato, like the mark beside it.
+                style: theme.textTheme.titleLarge?.copyWith(
+                  color: theme.colorScheme.primary,
+                ),
               ),
             ],
           ],
@@ -334,13 +338,16 @@ class _NavItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
-    final color = selected ? scheme.primary : scheme.onSurfaceVariant;
+    // The active chip is a flat brand-tinted pill (36c) — the same
+    // primaryContainer the bottom NavigationBar's indicator uses, so the two
+    // chromes agree on what "you are here" looks like. Its ink is
+    // onPrimaryContainer, not primary: primary on primaryContainer is 4.7:1 in
+    // light but 3.8:1 in dark, under AA for a 14px label.
+    final color =
+        selected ? scheme.onPrimaryContainer : scheme.onSurfaceVariant;
 
     final item = Material(
-      // The active chip lifts back to the bar's own colour out of the darker
-      // track, with the design's 0 1px 2px shadow.
-      color: selected ? scheme.surfaceContainerLowest : Colors.transparent,
-      elevation: selected ? _kActiveItemElevation : 0,
+      color: selected ? scheme.primaryContainer : Colors.transparent,
       shape: const StadiumBorder(),
       child: InkWell(
         onTap: () => context.go(destination.route),

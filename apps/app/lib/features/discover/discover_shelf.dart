@@ -24,6 +24,7 @@ class DiscoverShelf extends ConsumerWidget {
     required this.accent,
     required this.provider,
     required this.emptyReason,
+    this.ranked = false,
   });
 
   /// The set numeral — `01`.
@@ -45,6 +46,12 @@ class DiscoverShelf extends ConsumerWidget {
   /// is a fixture fact, not a failure, and the strip says so rather than
   /// implying the query broke.
   final String emptyReason;
+
+  /// The shelf is a ranking, so each card wears its position as a ribbon
+  /// (reference 2) — `03 MOST FORKED`. The other two shelves are ranked too,
+  /// but by a blend the reader cannot check at a glance; only a count of
+  /// forks makes "1st" a claim worth printing.
+  final bool ranked;
 
   /// Card width inside the rail. The narrow value is deliberate on a phone: at
   /// [kRecipeCardMinWidth] the next card peeks past the screen edge, which is
@@ -121,6 +128,7 @@ class DiscoverShelf extends ConsumerWidget {
                   ? const RecipeCardPlaceholder()
                   : RecipeCard(
                     recipe: recipe,
+                    rank: ranked ? i + 1 : null,
                     onTap: () => context.push(Routes.recipe(recipe.id)),
                     // The shelves build their cards directly rather than
                     // through `SliverRecipeGrid`, so they wire the same
@@ -181,8 +189,9 @@ class _Strip extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 // The index line (`01 UNDER 30`) at section level — the
-                // same role CardRail draws a populated shelf's heading in.
-                style: context.appText.kickerLarge,
+                // same role and accent CardRail draws a populated shelf's
+                // heading in.
+                style: context.appText.kickerLarge.copyWith(color: accent),
               ),
             ),
           ],

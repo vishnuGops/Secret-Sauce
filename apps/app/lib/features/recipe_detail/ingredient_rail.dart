@@ -16,7 +16,7 @@ const double _kCheckNudge = 1;
 const double _kCheckStroke = 2;
 
 /// The `Ingredients` pane: grouped check-off list with a fixed quantity
-/// gutter, plus its heading and clear-checks footer.
+/// gutter, plus its gathered counter and clear-checks footer.
 ///
 /// Quantities live in their own column so the numbers scan vertically while
 /// shopping; scaled quantities turn primary-coloured when servings differ from
@@ -58,27 +58,17 @@ class IngredientRail extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // A Wrap for the same reason as the footer row below it: the gathered
-        // counter is non-flex and therefore laid out unbounded (Gotcha 21), so
-        // at 2.0× it overflowed the heading row by 9.5px — on **compact**,
-        // where the rail is the 358px content box of a 390px phone rather than
-        // the 493px column the expanded page gives it. The widget was correct
-        // at every width it had been pumped at until compact v2 reused it.
-        Wrap(
-          alignment: WrapAlignment.spaceBetween,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: AppSpacing.sm,
-          runSpacing: AppSpacing.xs,
-          children: [
-            Text('Ingredients', style: textTheme.titleLarge),
-            Text(
-              '$gathered of ${all.length} gathered',
-              // Tabular: the count moves with every tap (UX-049).
-              style: textTheme.labelMedium?.tabular.copyWith(
-                color: scheme.onSurfaceVariant,
-              ),
-            ),
-          ],
+        // The pane's title moved up to `RailPanel` in Phase 36c, as the panel's
+        // `INGREDIENTS` kicker; the counter stays here beside the state it
+        // counts. It is a lone `Text` now, so it wraps rather than overflowing
+        // — the heading row it shared overflowed by 9.5px at 2.0× on compact
+        // (B070) until it became a `Wrap`.
+        Text(
+          '$gathered of ${all.length} gathered',
+          // Tabular: the count moves with every tap (UX-049).
+          style: textTheme.labelMedium?.tabular.copyWith(
+            color: scheme.onSurfaceVariant,
+          ),
         ),
         const SizedBox(height: AppSpacing.sm),
         const Divider(height: 1),
