@@ -1074,7 +1074,12 @@ owner decision.
       untouched. Both reading surfaces' quantity gutters keep a gap before the name, so a long
       unknown unit wraps inside the gutter. `corpus_import_fixture.sql` §7, `rls_matrix.sql`
       E11/E12 (188 checks), `ingredient_gutter_test`
-- [ ] Seed-data gaps — version snapshots for curated recipes; forks
+- [x] **Seed-data gaps** — B154: curated versions now carry `recipe_snapshot()` (seeded, plus an
+      idempotent backfill of the Kitchen's untouched `{}` first versions), and the sim snapshots
+      each recipe's current version (E8b). **Forks: the sim, and nowhere else** — it already draws
+      ~4% of recipes as forks (E7 / G3); a curated fork would be the Kitchen forking itself (a
+      self-fork `recipes_most_forked` excludes) and an invented lineage (Gotcha 29). On a plain
+      `db:reset` the lineage line appears only after a real fork through the app
 - [ ] Top-nav envelope — the signed-out bar at 600 / 1000 × 1.0 / 2.0
 - [ ] Editor drag auto-scroll (Phase 38's accepted limitation)
 - [ ] Desktop-web density — the owner's decision, recorded

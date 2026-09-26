@@ -700,8 +700,16 @@ Two shapes it is built around, because both look exactly like working code:
   version, decoded from its own `content_snapshot` by `RecipeRepository.versionContent(versionId)`
   (`versionContentProvider`) — one row, on demand. `kRecipeVersionSelect` still omits the column
   (B065). `recipeFromSnapshot` reads `recipe_snapshot()`'s `{recipe, ingredient_groups,
-  step_groups}` shape; an empty `{}` (every seeded version) decodes to null, and the view says the
-  version predates stored copies. Quantities print through the one chain; no check-offs, no scaler.
+  step_groups}` shape; an empty `{}` decodes to null, and the view says the version predates
+  stored copies. Quantities print through the one chain; no check-offs, no scaler.
+- **Seeded snapshots (Phase 39).** `seed_recipe_v2` used to write a literal `'{}'`, so every
+  curated version showed that empty state. It now stores `recipe_snapshot(v_recipe)` like
+  `save_recipe` and `fork_recipe`; because it returns early on an existing recipe,
+  `seed_recipes.sql` ends in an idempotent backfill limited to the Kitchen's first version that is
+  still current and still `{}` — the one case where today's content *is* what that version
+  recorded. The sim (§12.5, step 5b) snapshots each simulated recipe's **current** version the same
+  way and leaves earlier "Revised" versions `{}`, since their content never existed. A real `{}`
+  therefore now means "saved before snapshots were stored", which is what the view says.
 - **Future PR flow** → `recipe_suggestions` reserved so a fork can later propose changes upstream.
 
 ## 6. Discovery & ranking
@@ -2377,7 +2385,7 @@ recipe count.
 
 | Preset | Users | Engagement scale | Use |
 | --- | --- | --- | --- |
-| `tiny` | 60 | 0.5 | Screenshots. Seconds. Evaluates only 48 of the 53 assertions — see §12.7. |
+| `tiny` | 60 | 0.5 | Screenshots. Seconds. Evaluates only 49 of the 54 assertions — see §12.7. |
 | `small` | 250 | 0.8 | **CI** (since 2026-08-26). The smallest size at which every check runs. Safe on a hosted free tier. ~430 recipes, ~17k view rows. |
 | `medium` | 1,000 | 1.0 | **Default.** ~1,670 recipes, ~118k view rows, ~10s (Phase 24's recorded run — re-measure rather than re-quote). Breaks pagination, ranking and search assumptions. |
 | `large` | 8,000 | 1.2 | Stress test. **Never run** — `master_chef` is asserted at this size but unverified. |
@@ -2418,6 +2426,9 @@ population means running the teardown first.
    `fork_bias = 0` gives 54 distinct sources and a maximum of 2; `fork_bias = 2.0` gives 28 sources
    and a maximum of 10. **Both fill Discover's `MOST FORKED` shelf; only the second orders it** —
    assertion **G3** requires a maximum of 3+, which the uniform draw fails.
+5b. **Current-version snapshots** (Phase 39) — after the forks, so a fork's snapshot carries its
+   lineage: each simulated recipe's current version gets `recipe_snapshot()`, earlier versions
+   stay `{}` (their content never existed). Assertion **E8b** pins exactly that split.
 6. **Shares** — `recipe_shares` rows, which is the only way the shared-with-me surface has anything
    in it at scale.
 7. **Views — the base of the funnel.** Reach per recipe is log-normal (`sim.exposure_draw`), times

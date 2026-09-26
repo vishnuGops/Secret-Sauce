@@ -202,7 +202,7 @@ secret-sauce/
     │   │                         #   `cross join` against nothing, so it makes ZERO recipes
     │   │                         #   and reports success (the preflight now refuses it)
     │   ├── 2_sim_generate.sql    #   the generator; counters DERIVED from the engagement log
-    │   ├── 3_sim_verify.sql      #   53 assertions — the only test coverage this SQL has
+    │   ├── 3_sim_verify.sql      #   54 assertions — the only test coverage this SQL has
     │   ├── 4_sim_rls_smoke.sql   #   the policies per PERSONA as a signed-in sim actor
     │   │                         #   (`db:sim:rls`) — writes, then rolls back. NOT in db:sim
     │   └── 9_sim_teardown.sql    #   registry-driven; deletes auth.users rows
@@ -470,7 +470,7 @@ melos run db:nutrition:verify    # 29d: the COMMITTED auto labels vs. the LOADED
 # `medium` preset (1,000 accounts, ~1,670 recipes, ~118k view rows).
 melos run db:sim                          # schema -> the 3 pools -> generate -> verify
 melos run db:sim -- --preset=small --seed=7
-melos run db:sim:verify                   # 53 assertions, read-only
+melos run db:sim:verify                   # 54 assertions, read-only
 # The policies per PERSONA, as a signed-in actor drawn from the sim.actor registry — the
 # gap between db:sim:verify (runs as `postgres`, bypasses every policy) and db:rls (builds
 # its own three-user fixture, where every seat is an owner/sharee/stranger by construction).
@@ -1118,7 +1118,7 @@ the `code-review` skill). The ones you need while _writing_ code:
     upgrade path. The fresh apply is `db:reset`, which ends in `db:audit --strict` — so CI proves a
     default path fabricates nothing — and a following step applies the fixtures on purpose and
     asserts the audit **fails** there, because a checker that cannot fail is not a checker
-    (B112/B113/B114, Gotcha 29). Then the sim's 53 assertions on a **`small`** population — `tiny` gates five of
+    (B112/B113/B114, Gotcha 29). Then the sim's 54 assertions on a **`small`** population — `tiny` gates five of
     them off, including the only guard on `MOST FORKED` ranking anything (B081). CI also runs
     `sim:rls`, the per-persona smoke, which is the policies as a **real account out of that
     population** rather than a purpose-built fixture. Every statement in *those*

@@ -805,6 +805,28 @@ from (
 where r.id = src.fork_id
   and r.forked_from_recipe_id is null;
 
+-- ----------------------------------------------------------------------------
+-- 5b. The current version records the recipe (Phase 39)
+--
+-- §4 writes every version's snapshot as '{}', which left the read-only version
+-- view with nothing but its empty state on a simulated database. The CURRENT
+-- version is the one snapshot the sim can write honestly — the content it
+-- records is the content on the recipe right now — so it gets
+-- `recipe_snapshot()`, the same function `save_recipe` and `fork_recipe` use.
+-- Earlier "Revised" versions stay '{}': their content never existed, and
+-- inventing edits for them is fiction the version view would present as
+-- history. After §5 on purpose, so a fork's snapshot carries its lineage.
+-- Additive: a filled snapshot leaves the `where`.
+-- ----------------------------------------------------------------------------
+
+update recipe_versions v
+set content_snapshot = recipe_snapshot(v.recipe_id)
+from sim.recipe sr
+join recipes r on r.id = sr.id
+where v.recipe_id = r.id
+  and v.id = r.current_version_id
+  and v.content_snapshot = '{}'::jsonb;
+
 -- ============================================================================
 -- 6. Shares
 --

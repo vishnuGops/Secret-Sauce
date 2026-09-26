@@ -381,6 +381,15 @@ begin
   ) x;
   if n = 0 then raise exception 'E8 no recipe with 5+ versions — the history sheet has no long case'; end if;
 
+  -- Phase 39: the current version records the recipe, so the version view has
+  -- content to show — and ONLY the current one, because an earlier version's
+  -- content never existed and a snapshot of today's recipe would misdate it.
+  select count(*) into n
+  from sim.recipe sr join recipes r on r.id = sr.id
+  join recipe_versions rv on rv.recipe_id = r.id
+  where (rv.id = r.current_version_id) = (rv.content_snapshot = '{}'::jsonb);
+  if n > 0 then raise exception 'E8b % simulated versions have the wrong snapshot (current must record the recipe, earlier ones stay {})', n; end if;
+
   -- The tier ladder should be a pyramid, and the famous-creator tail must
   -- actually reach the top rungs — those thresholds were set against
   -- hand-written demo numbers and nothing organic had ever tested them.

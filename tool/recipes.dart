@@ -110,9 +110,31 @@ String _generate(List<AuthoredRecipe> recipes) {
   buf
     ..writeln(notice)
     ..writeln('end \$seed\$;')
-    ..writeln();
+    ..writeln()
+    ..writeln(_snapshotBackfill());
   return buf.toString();
 }
+
+/// The curated recipes seeded before Phase 39 carry a `'{}'` snapshot, and
+/// `seed_recipe_v2` returns early on an existing recipe, so the fix above never
+/// reaches them. Rewritten here only where that is still an honest record: the
+/// Kitchen's own first version, still current (so the recipe as it stands IS
+/// that version), still empty. Idempotent — a filled snapshot leaves the
+/// `where` for good.
+String _snapshotBackfill() => '''
+-- Snapshots for curated versions seeded before Phase 39 wrote them. Only the
+-- Kitchen's untouched first version: current, so today's content is exactly
+-- what it recorded. A second run changes no row.
+update recipe_versions v
+   set content_snapshot = recipe_snapshot(v.recipe_id)
+  from recipes r
+ where r.id = v.recipe_id
+   and r.owner_id = '$_ownerId'
+   and r.current_version_id = v.id
+   and v.version_number = 1
+   and v.change_summary = 'Seeded recipe'
+   and v.content_snapshot = '{}'::jsonb;
+''';
 
 String _ownerBootstrap() => '''
 -- The "Secret Sauce Kitchen" system account that owns every curated recipe, so
@@ -285,8 +307,11 @@ begin
     v_gidx := v_gidx + 1;
   end loop;
 
+  -- The snapshot is the recipe as just written, as `save_recipe` and
+  -- `fork_recipe` record theirs (Phase 39). It was a literal '{}' until then,
+  -- so the version view had nothing to show for any curated recipe.
   insert into recipe_versions (recipe_id, version_number, author_id, change_summary, content_snapshot)
-  values (v_recipe, 1, p_owner, 'Seeded recipe', '{}'::jsonb)
+  values (v_recipe, 1, p_owner, 'Seeded recipe', recipe_snapshot(v_recipe))
   returning id into v_version;
 
   update recipes set current_version_id = v_version where id = v_recipe;

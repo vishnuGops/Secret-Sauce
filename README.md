@@ -537,7 +537,7 @@ reset brings everything back:
 melos run db:reset                          # drop -> create -> nutrition -> recipes -> audit
 melos run db:sim                            # schema -> the 3 pools -> generate -> verify
 melos run db:sim -- --preset=small --seed=7 # tiny | small | medium (default) | large
-melos run db:sim:verify                     # 53 assertions, read-only
+melos run db:sim:verify                     # 54 assertions, read-only
 melos run db:sim:rls                        # the policies per persona, as a signed-in sim
                                             #   actor (writes, then rolls back)
 melos run db:sim:clean -- --yes             # DESTRUCTIVE: removes the simulated accounts
