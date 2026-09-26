@@ -235,6 +235,7 @@ class RecipeCard extends StatelessWidget {
                       _CoverImage(
                         url: recipe.displayCoverImageUrl,
                         category: recipe.category,
+                        ranked: rank != null,
                       ),
                       if (rank != null)
                         Positioned(
@@ -650,16 +651,25 @@ class _VisibilityBadge extends StatelessWidget {
 }
 
 class _CoverImage extends StatelessWidget {
-  const _CoverImage({required this.url, this.category});
+  const _CoverImage({required this.url, this.category, this.ranked = false});
 
   final String? url;
   final String? category;
+
+  /// A ranked card's ribbon hangs from the top-left, so the colour block's
+  /// label moves to the top-right.
+  final bool ranked;
+
+  Widget _block() => CategoryCover(
+    category: category,
+    labelAlignment: ranked ? Alignment.topRight : Alignment.topLeft,
+  );
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     if (url == null || url!.isEmpty) {
-      return CategoryCover(category: category);
+      return _block();
     }
     return CachedNetworkImage(
       imageUrl: url!,
@@ -668,7 +678,7 @@ class _CoverImage extends StatelessWidget {
       // A photo that fails to load falls back to the same colour block a
       // recipe without one gets, not a broken-image glyph (UX-029's hotlink
       // failure read as a fault).
-      errorWidget: (_, __, ___) => CategoryCover(category: category),
+      errorWidget: (_, __, ___) => _block(),
     );
   }
 }
