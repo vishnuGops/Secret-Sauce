@@ -931,7 +931,7 @@ upload, so it is proven with `fake_supabase` request tests and the profile dialo
 | Review — `/code-review` over the branch | done | 3 reviewers (cook/detail/core, editor/version view, chefs/profile/design system); 0 Critical, 0 High; B149–B152 fixed with mutation-checked tests; one accepted limitation (drag auto-scroll) |
 | E — unit canon at import (optional) | moved | Done in Phase 39 (UX-030) |
 
-## Phase 39 — Phase 38's follow-ups (in progress)
+## Phase 39 — Phase 38's follow-ups (done 2026-09-26)
 
 Branch `feat/phase-39-followups` from `ade8a85`. The lead wrote every SQL and generator change
 itself; three subagents took disjoint Dart files under a shared rules file (the quantity gutter;
@@ -956,6 +956,8 @@ fixtures. Task 5: none (a decision).
 | 2 — seed snapshots, forks | done | `tool/recipes.dart` (seeded snapshot + backfill, regenerated), `2_sim_generate.sql` §5b, `3_sim_verify.sql` E8b. Verified: local stack 14 empty → 0 then `UPDATE 0`; `ss_p39` fresh path 0 of 14 empty; sim `small` ALL CHECKS PASSED, `sim:rls` 130 passed; E8b fails when a current snapshot is emptied; `db:audit` clean |
 | 3 — top-nav envelope | done | 1 subagent. Signed out fits at every width; B153 (the avatar's target and semantics) fixed and mutation-checked. The label check is a width relation, not `didExceedMaxLines` — the pill labels are `softWrap: false` + clip, where that flag never goes true |
 | 4 — editor drag auto-scroll | done | 1 subagent (B155). Three editor files + their tests; `chrome_a11y_test` / `image_semantics_test` host the editors in a `CustomScrollView` now that they are slivers. Two new tests, each failing on the change it guards (the old structure; the default cache extent) |
+| Live pass | done | Release web build on the local stack, signed in as the test account: imported recipes at 390 / 1440 print `2 tbsp`, `½ tsp`, `4 handfuls` clear of the name; the sliver editor and the 48dp avatar render. One cold first load showed the generic error screen and a retry rendered — not reproduced |
+| Review — `/code-review` over the branch | done | 3 reviewers (SQL + generators, editor slivers, gutter + nav + docs); 0 Critical, 0 High; B156 (Medium) and B157 (Low) fixed with mutation-checked tests |
 | 5 — desktop density | done | Asked the owner (2026-09-26): keep compact on desktop. DESIGN §3.6 records it; no code change, so no test to re-run |
 
 ## Build, run & release (ops)

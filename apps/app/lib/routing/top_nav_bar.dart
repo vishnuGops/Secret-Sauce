@@ -595,27 +595,31 @@ class _AccountMenu extends ConsumerWidget {
         child: Align(
           widthFactor: 1,
           heightFactor: 1,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ChefAvatar(
-                name: profile?.displayName ?? '',
-                avatarUrl: profile?.avatarUrl,
-                radius:
-                    expanded ? _kAvatarRadiusExpanded : _kAvatarRadiusMedium,
-                tier: profile?.chefTier,
-                ringColor: scheme.primary,
-                surfaceColor: scheme.surfaceContainerLowest,
-                backgroundColor: scheme.primaryContainer,
-                foregroundColor: scheme.onPrimaryContainer,
-              ),
-              if (expanded)
-                Icon(
-                  Icons.expand_more,
-                  size: _kIconSize,
-                  color: scheme.onSurfaceVariant,
+          // The avatar's initials are not its name: the node below is
+          // labelled with the account name instead.
+          child: ExcludeSemantics(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ChefAvatar(
+                  name: profile?.displayName ?? '',
+                  avatarUrl: profile?.avatarUrl,
+                  radius:
+                      expanded ? _kAvatarRadiusExpanded : _kAvatarRadiusMedium,
+                  tier: profile?.chefTier,
+                  ringColor: scheme.primary,
+                  surfaceColor: scheme.surfaceContainerLowest,
+                  backgroundColor: scheme.primaryContainer,
+                  foregroundColor: scheme.onPrimaryContainer,
                 ),
-            ],
+                if (expanded)
+                  Icon(
+                    Icons.expand_more,
+                    size: _kIconSize,
+                    color: scheme.onSurfaceVariant,
+                  ),
+              ],
+            ),
           ),
         ),
       ),
@@ -625,8 +629,11 @@ class _AccountMenu extends ConsumerWidget {
     // the AppBar title's header node, which spans the whole bar — so the bar
     // read as a header named "AO" that opens a menu, and the tap-target
     // guideline, which skips a node touching the window's edge, never saw
-    // that the avatar's box was under 48dp.
-    return Semantics(container: true, button: true, child: menu);
+    // that the avatar's box was under 48dp. Labelled with the account name,
+    // not the initials `ChefAvatar` would otherwise merge in; not
+    // `excludeSemantics`, which would drop the tap action and the menu's
+    // expanded state.
+    return Semantics(container: true, button: true, label: name, child: menu);
   }
 }
 

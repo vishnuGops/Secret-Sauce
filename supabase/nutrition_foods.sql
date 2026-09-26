@@ -1635,8 +1635,10 @@ do $$ begin raise notice 'Food registry loaded (78 foods, 277 aliases, 174 porti
 -- Imported recipes' units to the canon just loaded (Phase 39, UX-030). HERE and
 -- not only in 0001, because 0001 applies BEFORE this file on every path
 -- (db:reset, db:hosted:deploy, CI's upgrade path) and so reads the previous
--- registry — or none. Idempotent: a second run changes no row. Guarded by name
--- so this data file still loads against a schema that predates the function.
+-- registry — or none. Idempotent: a second run changes no row. Apply 0001 first:
+-- the unit insert above already needs Phase 39's display / plural columns, so
+-- the guard only spares a hand-assembled schema that has them without the
+-- function.
 do $$
 declare
   n integer;

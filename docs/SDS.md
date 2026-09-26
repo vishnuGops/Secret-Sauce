@@ -430,7 +430,10 @@ zero-extent scrollables (B155). It is still **fully built**: slivers build lazil
 `FormField` is skipped by `Form.validate()`, so a lazy form let an off-screen invalid field save
 silently (B142). A `1e7`px `scrollCacheExtent` keeps every row built wherever the page is scrolled
 (`double.infinity` makes the viewport's arithmetic NaN). Rows are keyed by a global key on their
-draft object, as `ReorderableListView` keys its children, so a moved row keeps its state. Order on
+draft object, as `ReorderableListView` keys its children, so a moved row keeps its state. A drag
+starts from `EditorDragHandle` only when the row fits the viewport: the page's edge auto-scroller
+cannot carry an item taller than itself and would scroll to the end (B156); such a row moves with
+Move up / Move down. Order on
 screen is Ingredients → Steps → Nutrition; ingredients and steps reorder by drag handle or a Move
 up / Move down menu, and `toModel(i)` writes the list index as `sort_order`, ascending (B022).
 
@@ -951,8 +954,9 @@ default — `RecipeCard` and the detail facts do not present it for `isImported`
 quantity gutter. `import_recipe` now stores `canonical_unit(unit, quantity)`: a case- and
 whitespace-insensitive lookup in `food_unit` that returns the unit's `display` — or, for a word
 unit, the plural above 1, the singular at exactly 1, and the page's own number below 1 or with no
-quantity (the authored-recipe lint's rule, so an imported row would pass it). Unknown spellings
-(`sprigs`, `handful`, `個`), the bare-count marker and null pass through unchanged; it never invents
+quantity (the authored-recipe lint's rule, so a registered spelling would pass it). Unknown spellings
+(`sprigs`, `handful`, `個` — including `unresolvable` ones, whose case the lint would fix), the
+bare-count marker and null pass through unchanged; it never invents
 a unit, and with no display canon loaded it is the identity. The canon is read from the table, so
 SQL holds no second copy of it (B094).
 Existing rows are converged by `canonicalise_imported_units()`, which has **two callers**: 0001
@@ -2540,10 +2544,10 @@ floor, an exact constant each, not a rule of thumb:
   when there are barely more recipes than tags, and tuning the exponent until it did would be
   fitting the model to the smallest preset.
 
-So a `tiny` run evaluates **48 of 53**. CI used to pin `preset = tiny`, which meant **no automated
+So a `tiny` run evaluates **49 of 54**. CI used to pin `preset = tiny`, which meant **no automated
 run had ever evaluated G3** — the shelf ranking Phase 26 shipped was verified only when somebody ran
 `small` or larger by hand, and nobody had. Since 2026-08-26 `database.yml` seeds
-`preset = small, seed = 20260820`, so all of them run and a green CI run means **53 of 53**.
+`preset = small, seed = 20260820`, so all of them run and a green CI run means **54 of 54**.
 
 Every skip prints a `raise notice` naming itself, so the run is legible — but the final
 `ALL CHECKS PASSED` is unconditional. Read the notices, not just the last line. **The practical

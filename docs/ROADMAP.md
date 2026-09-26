@@ -1052,7 +1052,7 @@ columns, then canonicalise in `import_recipe` + a backfill that runs after the r
 
 ---
 
-## Phase 39 — Phase 38's follow-ups: unit canon at import, seed fixtures, editor drag, nav envelope (in progress)
+## Phase 39 — Phase 38's follow-ups: unit canon at import, seed fixtures, editor drag, nav envelope (done 2026-09-26)
 
 Branch `feat/phase-39-followups` (from Phase 38's `ade8a85`, unpushed like 37 and 38). Five tasks,
 each committed on its own behind a green format + analyze + test gate. Out of scope, unchanged: the
@@ -1087,6 +1087,15 @@ owner decision.
       by a `1e7`px cache extent (B142); Move up / Move down unchanged
 - [x] **Desktop-web density** — asked; the owner keeps the adaptive (compact) density on desktop.
       No theme change; the decision and its reasoning are in DESIGN §3.6
+
+**Code review (`/code-review`, three parallel reviewers over `ade8a85..HEAD`: SQL + generators,
+the editor's slivers, the gutter + nav + docs)** — no Critical or High. Fixed with regression
+tests, each mutation-checked: **B156** (Medium, introduced by B155 and caught before it shipped:
+dragging a row taller than the window ran the page to its end — `EditorDragHandle` starts a drag
+only when the row fits the viewport) and **B157** (Low: the avatar node's name, a gutter-test
+guard that could not fail, two SQL comments that over-claimed, doc drift). Noted, pre-existing:
+dragging a row whose field shows a caret handle logs `LeaderLayer anchor must come before
+FollowerLayer` — the old tree does the same.
 
 ---
 

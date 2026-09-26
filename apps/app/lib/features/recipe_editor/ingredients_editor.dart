@@ -113,6 +113,56 @@ Widget editorRow(Object draft, Widget row) => KeyedSubtree(
   child: Material(type: MaterialType.transparency, child: row),
 );
 
+/// A row's drag handle: [ReorderableDragStartListener], except that it starts
+/// a drag only when the row fits in the page's viewport.
+///
+/// The rows share the page's viewport (B155), so its edge auto-scroller is the
+/// one that runs, and it cannot handle a dragged item taller than itself: the
+/// item's far edge is past the viewport's edge wherever it goes, so it scrolls
+/// 20px a tick to the end of the page (a debug build asserts `Drag target size
+/// is larger than scrollable size`) and the row lands last. A long step on a
+/// phone, or any open row at 2.0× in landscape, is that tall. Such a row is
+/// moved with Move up / Move down, which every row has (B156).
+class EditorDragHandle extends ReorderableDragStartListener {
+  const EditorDragHandle({
+    super.key,
+    required this.draft,
+    required super.index,
+    required super.child,
+  });
+
+  /// The row's draft — what [editorRow] keyed the row by, so its laid-out size
+  /// can be read at pointer-down.
+  final Object draft;
+
+  bool _fitsViewport(BuildContext context) {
+    final row = _EditorRowKey(draft).currentContext?.size;
+    final viewport = Scrollable.maybeOf(context)?.position.viewportDimension;
+    if (row == null || viewport == null) return true;
+    return row.height <= viewport;
+  }
+
+  @override
+  Widget build(BuildContext context) => Listener(
+    onPointerDown:
+        enabled
+            ? (event) {
+              if (!_fitsViewport(context)) return;
+              SliverReorderableList.maybeOf(context)?.startItemDragReorder(
+                index: index,
+                event: event,
+                recognizer:
+                    createRecognizer()
+                      ..gestureSettings = MediaQuery.maybeGestureSettingsOf(
+                        context,
+                      ),
+              );
+            }
+            : null,
+    child: child,
+  );
+}
+
 /// [editorRow]'s key. Its own type, so it cannot collide with another
 /// `GlobalObjectKey` over the same draft.
 class _EditorRowKey extends GlobalObjectKey {
@@ -429,7 +479,8 @@ class _IngredientRowState extends ConsumerState<_IngredientRow> {
   /// The pointer's way to reorder. Not a button — a screen reader or a
   /// keyboard cannot drag — so it stays out of the semantics tree and the
   /// row's menu carries the same moves.
-  Widget _dragHandle(ColorScheme scheme) => ReorderableDragStartListener(
+  Widget _dragHandle(ColorScheme scheme) => EditorDragHandle(
+    draft: widget.ingredient,
     index: widget.index,
     child: Tooltip(
       message: 'Drag to reorder',

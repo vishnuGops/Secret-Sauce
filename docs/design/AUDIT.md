@@ -411,3 +411,7 @@ regression test, checked by reverting the fix.
 | UX-048 (web avatar) | fixed | B153 — the account menu's 48dp target and its own button node; `top_nav_bar_test` "envelope" |
 | UX-035 (drag across the fold) | fixed | B155 — a dragged row scrolls the editor page; `recipe_editor_test` "dragging a row to the window edge scrolls the page" |
 | Desktop density (open question from Phase 38) | decided | the owner keeps the adaptive (compact) density on desktop web; DESIGN §3.6 |
+
+The branch's `/code-review` (three reviewers) found no Critical or High; B156–B157 were fixed with
+regression tests before the final commit (BUG-TRACKER). Still open from this audit: UX-029 (owner),
+UX-034 (owner content).

@@ -1963,7 +1963,7 @@ void main() {
       expect(last, findsOneWidget);
       expect(find.textContaining(_row(60)), findsNothing);
       expect(
-        find.byType(ReorderableDragStartListener, skipOffstage: false),
+        find.byType(EditorDragHandle, skipOffstage: false),
         findsAtLeastNWidgets(60),
       );
 

@@ -4496,8 +4496,11 @@ $$;
 -- verbatim, so `3 tablespoon` filled the quantity gutter and read as a typo.
 -- The canon is `nutritionData/units.json`'s `display` / `plural` (B094), loaded
 -- into `food_unit` by nutrition_foods.sql — this function restates none of it,
--- so there is still exactly one copy. Rules, identical to the authored-recipe
--- lint in tool/recipe_format.dart so an imported row would pass it:
+-- so there is still exactly one copy. For every REGISTERED spelling the rules
+-- are the authored-recipe lint's (tool/recipe_format.dart), so such a row would
+-- pass it; an unregistered one — including units.json's `unresolvable` list
+-- (`Pinch`), which is not in `food_unit` — is kept verbatim, case and padding
+-- included, where the lint would ask for lowercase:
 --   * lookup is case- and whitespace-insensitive (`Tbsp`, ` cups `);
 --   * an invariant unit takes its one spelling at every quantity (`tbsp`);
 --   * a word unit takes the plural above 1, the singular at exactly 1, and

@@ -234,7 +234,8 @@ scripts:
     run: dart run tool/db.dart recipes
 
   db:nutrition:
-    description: Load the food registry (supabase/nutrition_foods.sql).
+    description: Load the food registry (supabase/nutrition_foods.sql), then
+      canonicalise imported recipes' units against it (idempotent, Phase 39).
     run: dart run tool/db.dart nutrition
 
   db:drop:
@@ -260,7 +261,7 @@ scripts:
   db:sim:
     description: "TEST FIXTURE ONLY: build the simulated population (schema,
       dishes, generate, verify). NOT part of db:reset since B113. It is the only
-      source of dated engagement, so the ranking RPCs and the 53 sim assertions
+      source of dated engagement, so the ranking RPCs and the 54 sim assertions
       need it — build it in a throwaway database, never one you demo from.
       db:audit reports every row it creates as FAKE."
     run: dart run tool/db.dart sim

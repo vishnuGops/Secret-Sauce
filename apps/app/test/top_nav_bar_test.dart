@@ -525,6 +525,9 @@ void main() {
           final avatar = _a11y(tester, actions);
           expect(avatar.flagsCollection.isButton, isTrue, reason: where);
           expect(avatar.flagsCollection.isHeader, isFalse, reason: where);
+          // Named for the account, never by its initials (Phase 39 review).
+          expect(avatar.label, contains('Amara Okonkwo'), reason: where);
+          expect(avatar.label, isNot(contains('AO')), reason: where);
           expect(
             avatar.rect.width < width,
             isTrue,

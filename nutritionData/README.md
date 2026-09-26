@@ -10,8 +10,10 @@ The committed source for the auto-nutrition food registry. Two files:
   unit arithmetic starts here; nothing in SQL restates a conversion. Each unit
   also carries `display` (+ `plural` for a word unit): the one spelling an
   authored recipe may use, which `tool/recipe_format.dart` lints against (BL-8).
-  The generator ignores both keys, so adding a unit means giving it a `display`
-  too, or every recipe validation stops at the registry.
+  Since Phase 39 the generator validates both keys (a form must lower-case back to one of its
+  own spellings) and emits them into `food_unit.display` / `.plural`, where `canonical_unit()`
+  applies the same canon to imported recipes. Adding a unit means giving it a `display` too, or
+  every recipe validation stops at the registry.
 
 `tool/nutrition.dart` generates `supabase/nutrition_foods.sql` from these two
 files alone — no CSV in sight, so CI's `nutrition:check` works offline, exactly

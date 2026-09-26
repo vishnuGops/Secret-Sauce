@@ -10,6 +10,7 @@
 // `StepsEditor` is a StatelessWidget over a mutable draft, so the harness owns
 // the rebuild (a `StatefulBuilder`) the way the editor screen does.
 import 'package:app/features/recipe_editor/edit_models.dart';
+import 'package:app/features/recipe_editor/ingredients_editor.dart';
 import 'package:app/features/recipe_editor/steps_editor.dart';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
@@ -259,7 +260,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byIcon(Icons.drag_indicator), findsNWidgets(3));
-      expect(find.byType(ReorderableDragStartListener), findsNWidgets(3));
+      expect(find.byType(EditorDragHandle), findsNWidgets(3));
 
       // Drag Alpha's grip below Charlie.
       final start = tester.getCenter(find.byIcon(Icons.drag_indicator).first);
@@ -275,6 +276,52 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(_savedTexts(groups[0]), ['Bravo', 'Charlie', 'Alpha']);
+    });
+
+    // B156 (Phase 39 review): the rows share the page's viewport, whose edge
+    // auto-scroller cannot carry an item taller than itself — it asserted in
+    // debug and, in release, scrolled to the end and dropped the step last.
+    testWidgets('a step taller than the window does not start a drag', (
+      tester,
+    ) async {
+      _size(tester, 390, height: 700);
+      final groups = _groups([
+        ['Alpha ${'stir and taste as you go, ' * 60}', 'Bravo', 'Charlie'],
+      ]);
+      _disposeLater(groups);
+      await tester.pumpWidget(_app(groups));
+      await tester.pumpAndSettle();
+
+      final grip = find.byIcon(Icons.drag_indicator).first;
+      // The row `editorRow` keys by its draft.
+      final row = find.ancestor(
+        of: grip,
+        matching: find.byWidgetPredicate(
+          (w) => w is KeyedSubtree && w.key is GlobalObjectKey,
+        ),
+      );
+      expect(row, findsOneWidget);
+      expect(
+        tester.getSize(row).height,
+        greaterThan(700),
+        reason: 'the fixture step has to be taller than the window',
+      );
+      final page = tester.state<ScrollableState>(find.byType(Scrollable).first);
+      final before = page.position.pixels;
+
+      final start = tester.getCenter(grip);
+      final gesture = await tester.startGesture(start);
+      for (var i = 1; i <= 20; i++) {
+        await gesture.moveTo(start + Offset(0, 2.0 * i));
+        await tester.pump(const Duration(milliseconds: 16));
+      }
+      expect(tester.takeException(), isNull);
+      expect(page.position.pixels, before, reason: 'the page ran away');
+      await gesture.up();
+      await tester.pumpAndSettle();
+
+      expect(_savedTexts(groups[0]).skip(1), ['Bravo', 'Charlie']);
+      expect(_savedTexts(groups[0]).first, startsWith('Alpha'));
     });
   });
 

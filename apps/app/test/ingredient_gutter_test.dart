@@ -166,22 +166,34 @@ bool _expectRowClear(
   final boxes = paragraph.getBoxesForSelection(
     TextSelection(baseOffset: 0, extentOffset: label.length),
   );
+  var inkRight = 0.0;
   for (final box in boxes) {
     expect(
       box.right,
       lessThanOrEqualTo(paragraph.size.width + _kEpsilon),
       reason: 'a line of "$label" paints past its paragraph',
     );
+    if (box.right > inkRight) inkRight = box.right;
   }
 
-  // The collision itself: the quantity ends a gap before the name begins.
+  // The collision itself. The gutter box (a `Text` in a fixed-width
+  // `SizedBox` always spans it) ends a gap before the name begins — the
+  // layout guarantee — and so does the widest line actually painted.
   expect(
     qtyRect.right + _kGap,
     lessThanOrEqualTo(nameRect.left + _kEpsilon),
     reason: '"$label" runs into its name',
   );
+  expect(
+    qtyRect.left + inkRight + _kGap,
+    lessThanOrEqualTo(nameRect.left + _kEpsilon),
+    reason: 'the ink of "$label" runs into its name',
+  );
 
-  return qtyRect.right >= gutterRect.right - _kEpsilon;
+  // "Filled" is decided by the TEXT: on one line it would not fit the gutter,
+  // so it wrapped and its ink reaches the gutter's far side.
+  return paragraph.getMaxIntrinsicWidth(double.infinity) >
+      paragraph.size.width + _kEpsilon;
 }
 
 void main() {

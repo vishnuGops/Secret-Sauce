@@ -283,7 +283,8 @@ class _StepRow extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ReorderableDragStartListener(
+              EditorDragHandle(
+                draft: step,
                 index: index,
                 child: MouseRegion(
                   cursor: SystemMouseCursors.grab,
