@@ -387,7 +387,7 @@ class _IdentityBand extends StatelessWidget {
           // Lineage above the title (frame F), full width — the expanded page
           // draws the same mark beside the back button instead.
           if (recipe.isFork) ...[
-            const ForkedLabel(expand: true),
+            ForkedLabel(recipe: recipe, expand: true),
             const SizedBox(height: AppSpacing.sm),
           ],
           DetailKicker(recipe: recipe),

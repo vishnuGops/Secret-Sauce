@@ -190,36 +190,49 @@ class _HeaderBand extends ConsumerWidget {
                             onPressed: () => popOrGo(context, Routes.discover),
                           ),
                           if (recipe.isFork)
-                            const Padding(
-                              padding: EdgeInsets.only(right: AppSpacing.sm),
-                              child: ForkedLabel(),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                right: AppSpacing.sm,
+                              ),
+                              child: ForkedLabel(recipe: recipe),
                             ),
                           InkWell(
                             borderRadius: BorderRadius.circular(AppRadii.md),
                             onTap: () => _showVersions(context, ref),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: AppSpacing.xs,
-                                vertical: AppSpacing.xxs,
+                            // 48dp tall (UX-048): the link was ~20px, a line
+                            // of labelMedium and nothing else.
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(
+                                minHeight: kMinInteractiveDimension,
                               ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.history,
-                                    size: AppIconSize.sm,
-                                    color: scheme.onSurfaceVariant,
+                              child: Align(
+                                widthFactor: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: AppSpacing.xs,
+                                    vertical: AppSpacing.xxs,
                                   ),
-                                  const SizedBox(width: AppSpacing.xs),
-                                  Flexible(
-                                    child: Text(
-                                      versionLabel,
-                                      style: textTheme.labelMedium?.copyWith(
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.history,
+                                        size: AppIconSize.sm,
                                         color: scheme.onSurfaceVariant,
                                       ),
-                                    ),
+                                      const SizedBox(width: AppSpacing.xs),
+                                      Flexible(
+                                        child: Text(
+                                          versionLabel,
+                                          style: textTheme.labelMedium
+                                              ?.copyWith(
+                                                color: scheme.onSurfaceVariant,
+                                              ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
                             ),
                           ),
@@ -285,9 +298,13 @@ class _HeaderBand extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      if (DetailTags.hasAny(recipe)) ...[
+                      // `Private` as a pill here too (UX-055): the facts strip
+                      // also says it, but only as its last cell, and an owner
+                      // scanning the header could not tell a private recipe
+                      // from a public one.
+                      if (DetailTags.hasAny(recipe, showPrivate: true)) ...[
                         const SizedBox(height: AppSpacing.md),
-                        DetailTags(recipe: recipe),
+                        DetailTags(recipe: recipe, showPrivate: true),
                       ],
                       const SizedBox(height: AppSpacing.lg),
                       FactsStrip(recipe: recipe),
@@ -317,19 +334,24 @@ class _HeaderBand extends ConsumerWidget {
                               label: const Text('Fork'),
                             ),
                           LikeSaveButtons(recipe: recipe),
+                          // Labelled, like every other action in this row
+                          // (UX-055): two bare circles beside "Start cooking"
+                          // and "Fork" read as decoration, and DESIGN §2.3
+                          // keeps icon-only for universally known actions.
+                          // The overflow stays an icon — that is the one.
                           if (isOwner) ...[
-                            IconButton.outlined(
-                              tooltip: 'Share',
-                              icon: const Icon(Icons.share),
+                            OutlinedButton.icon(
                               onPressed:
                                   () => ShareDialog.show(context, recipe.id),
+                              icon: const Icon(Icons.share),
+                              label: const Text('Share'),
                             ),
-                            IconButton.outlined(
-                              tooltip: 'Edit',
-                              icon: const Icon(Icons.edit),
+                            OutlinedButton.icon(
                               onPressed:
                                   () =>
                                       context.go(Routes.editRecipe(recipe.id)),
+                              icon: const Icon(Icons.edit),
+                              label: const Text('Edit'),
                             ),
                             // UX-037: Delete, one step behind an overflow.
                             // Outlined like its two neighbours: the standard

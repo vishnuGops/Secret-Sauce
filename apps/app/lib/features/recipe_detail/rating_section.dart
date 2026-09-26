@@ -49,7 +49,10 @@ class RatingSection extends ConsumerWidget {
         ],
       );
     } else {
-      action = Row(
+      action = Wrap(
+        spacing: AppSpacing.sm,
+        runSpacing: AppSpacing.xs,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           StarRatingInput(
             value: myRating,
@@ -57,11 +60,17 @@ class RatingSection extends ConsumerWidget {
             onChanged: (_) {},
             onChangeEnd: (v) => saveRating(context, ref, recipe.id, v),
           ),
-          const SizedBox(width: AppSpacing.sm),
           if (myRating != null)
             TextButton(
               onPressed: () => clearRating(context, ref, recipe.id),
               child: const Text('Remove'),
+            )
+          else
+            Text(
+              'Made it? Tap a star.',
+              style: textTheme.bodySmall?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
             ),
         ],
       );
@@ -78,6 +87,17 @@ class RatingSection extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // The prompt the section lacked (UX-055): it sits at the foot of a
+          // long page, and "No ratings yet" over a row of stars did not say
+          // the stars were for you. A heading, so it is one swipe away too.
+          Semantics(
+            header: true,
+            child: Text(
+              isOwner ? 'Ratings' : 'Rate this recipe',
+              style: context.appText.kicker.copyWith(color: scheme.tertiary),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.xs),
           Text(
             recipe.hasRatings
                 ? '${recipe.ratingLabel} out of 5 · ${recipe.ratingCount} '

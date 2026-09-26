@@ -13,6 +13,7 @@ import 'package:app/features/recipe_detail/cook_mode_model.dart';
 import 'package:app/features/recipe_detail/cook_mode_providers.dart';
 import 'package:app/features/recipe_detail/cook_mode_screen.dart';
 import 'package:app/features/recipe_detail/method_column.dart';
+import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/routing/app_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
@@ -172,6 +173,12 @@ class _FakeRecipeRepository implements RecipeRepository {
   Future<Recipe> getById(String id) async => recipe;
 
   @override
+  Future<Recipe?> findSummary(String id) async => null;
+
+  @override
+  Future<Recipe?> versionContent(String versionId) async => null;
+
+  @override
   Future<void> setRating(String recipeId, double rating) async {
     ratings.add(rating);
   }
@@ -266,6 +273,7 @@ Future<_FakeRecipeRepository> _pump(
   DateTime Function()? clock,
   String? profileId,
   bool settle = true,
+  bool reduceMotion = false,
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
@@ -318,9 +326,11 @@ Future<_FakeRecipeRepository> _pump(
         routerConfig: router,
         builder:
             (context, child) => MediaQuery(
-              data: MediaQuery.of(
-                context,
-              ).copyWith(textScaler: TextScaler.linear(textScale)),
+              data: MediaQuery.of(context).copyWith(
+                textScaler: TextScaler.linear(textScale),
+                // UX-050: the platform's "reduce motion" switch.
+                disableAnimations: reduceMotion,
+              ),
               child: child!,
             ),
       ),
@@ -1077,9 +1087,14 @@ void main() {
       );
       expect(image.imageUrl, _kStepPhoto);
 
-      // Step 2 has no photo, and gets no placeholder either.
+      // Step 2 has no photo, and gets no placeholder either. The step
+      // cross-fades (UX-050), so the outgoing step 1 — photo and all — is on
+      // screen until its exit finishes; pump past it rather than settle,
+      // which the unresolvable image would never do.
       await tester.tap(find.text('Done — next step'));
       await _pumpFrames(tester);
+      await tester.pump(AppMotion.slow);
+      await tester.pump();
       expect(find.text('Crust · step 2 of 2'), findsOneWidget);
       expect(find.byType(CachedNetworkImage), findsNothing);
     });
@@ -1228,4 +1243,352 @@ void main() {
       }
     }
   });
+
+  // UX-025a. Timers outlive their step by design, and until this one running
+  // on another step was invisible until it rang.
+  group('other steps’ timers (UX-025)', () {
+    testWidgets('a timer running elsewhere shows on every step, and goes to '
+        'its step', (tester) async {
+      await _pump(tester);
+      // Step 2 is the 60-minute chill.
+      await tester.tap(find.text('Done — next step'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Start'));
+      await tester.pump();
+      // Its own step shows the panel, not a chip for itself.
+      expect(find.textContaining('Crust step 2 ·'), findsNothing);
+
+      await tester.tap(find.text('Done — next step'));
+      await tester.pumpAndSettle();
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('Filling · step 1 of 2'), findsOneWidget);
+      expect(find.textContaining('Crust step 2 · 59:5'), findsOneWidget);
+
+      // A button a reader can find, named in words rather than `59:58`, and
+      // not a live region — it ticks every second.
+      final semantics = tester.ensureSemantics();
+      final chip = find.bySemanticsLabel(
+        RegExp(
+          r'^Timer for Crust step 2, 59 minutes \d+ seconds left, go to step$',
+        ),
+      );
+      expect(chip, findsOneWidget);
+      expect(
+        tester.getSemantics(chip),
+        isSemantics(isButton: true, hasTapAction: true, isLiveRegion: false),
+      );
+      semantics.dispose();
+
+      // Still there a step further on.
+      await tester.tap(find.text('Done — next step'));
+      await tester.pumpAndSettle();
+      expect(find.text('Filling · step 2 of 2'), findsOneWidget);
+      expect(find.textContaining('Crust step 2 · 59:5'), findsOneWidget);
+
+      // Tapping it goes to the timer's step, where the panel takes over.
+      await tester.tap(find.textContaining('Crust step 2 ·'));
+      await tester.pumpAndSettle();
+      expect(find.text('Crust · step 2 of 2'), findsOneWidget);
+      expect(find.text('of 60:00'), findsOneWidget);
+      expect(find.textContaining('Crust step 2 ·'), findsNothing);
+    });
+
+    testWidgets('a paused timer is listed as paused', (tester) async {
+      await _pump(tester);
+      await tester.tap(find.text('Done — next step'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Start'));
+      await tester.pump(const Duration(seconds: 1));
+      await tester.tap(find.text('Pause'));
+      await tester.pump();
+
+      await tester.tap(find.text('Done — next step'));
+      await tester.pumpAndSettle();
+      expect(find.text('Crust step 2 · 59:59 · paused'), findsOneWidget);
+      final semantics = tester.ensureSemantics();
+      expect(
+        find.bySemanticsLabel(
+          'Paused timer for Crust step 2, 59 minutes 59 seconds left, '
+          'go to step',
+        ),
+        findsOneWidget,
+      );
+      semantics.dispose();
+    });
+
+    testWidgets('a finished timer leaves the strip for the banner, which '
+        'names it the same way', (tester) async {
+      // A single group: the step is `step 1`, not `Only step 1`.
+      const quick = Recipe(
+        id: 'r1',
+        ownerId: 'o',
+        title: 'Quick',
+        servings: 1,
+        stepGroups: [
+          StepGroup(
+            id: 'g',
+            recipeId: 'r1',
+            name: 'Only',
+            steps: [
+              RecipeStep(
+                id: 's1',
+                groupId: 'g',
+                text: 'Boil it.',
+                durationMinutes: 1,
+              ),
+              RecipeStep(id: 's2', groupId: 'g', text: 'Eat it.'),
+            ],
+          ),
+        ],
+      );
+      await _pump(tester, recipe: quick);
+      await tester.tap(find.text('Start'));
+      await tester.pump();
+      await tester.tap(find.text('Done — next step'));
+      await tester.pumpAndSettle();
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.textContaining('Step 1 · 0:5'), findsOneWidget);
+
+      for (var i = 0; i < 61; i++) {
+        await tester.pump(const Duration(seconds: 1));
+      }
+      expect(find.text('Time’s up — step 1.'), findsOneWidget);
+      expect(find.textContaining('Step 1 ·'), findsNothing);
+    });
+
+    // Two chips — one running, one paused — on the last step, then the finish
+    // screen's Cook again. Driven through the notifier so an off-screen
+    // button at 2.0× cannot make a tap miss and the checks run on nothing.
+    for (final size in [
+      const Size(390, 844),
+      const Size(600, 900),
+      const Size(1000, 1200),
+      const Size(1440, 1000),
+    ]) {
+      for (final scale in [1.0, 2.0]) {
+        testWidgets('the strip and Cook again fit at ${size.width}px, '
+            'textScale $scale', (tester) async {
+          await _pump(tester, size: size, textScale: scale);
+          final session = _session(tester);
+          session.startTimer('s2', const Duration(minutes: 60));
+          session.startTimer('s3', const Duration(minutes: 12));
+          session.pauseTimer('s3');
+          session.goTo(3);
+          await tester.pumpAndSettle();
+
+          expect(find.textContaining('Crust step 2 · 60:00'), findsOneWidget);
+          expect(find.text('Filling step 1 · 12:00 · paused'), findsOneWidget);
+          expect(tester.takeException(), isNull);
+
+          session.finish();
+          await tester.pumpAndSettle();
+          expect(find.text('Cook again'), findsOneWidget);
+          expect(tester.takeException(), isNull);
+        });
+      }
+    }
+  });
+
+  // UX-025b. The session is deliberately not autoDispose, so it outlived the
+  // meal: cooking the same recipe again reopened the finish screen.
+  group('Cook again (UX-025)', () {
+    testWidgets('starts a fresh session from step one', (tester) async {
+      final base = DateTime(2026, 9, 26, 18);
+      var offset = Duration.zero;
+      await _pump(tester, clock: () => base.add(offset));
+
+      await tester.tap(find.text('Done — next step'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Start'));
+      await tester.pump();
+      offset = const Duration(minutes: 40);
+      await _walkFrom(tester, 1);
+      expect(
+        find.textContaining('40 min from start to finish'),
+        findsOneWidget,
+      );
+
+      await tester.ensureVisible(find.text('Cook again'));
+      await tester.tap(find.text('Cook again'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Cook again'), findsNothing);
+      expect(find.text('Crust · step 1 of 2'), findsOneWidget);
+      final state = _container(tester).read(cookSessionProvider('r1'));
+      expect(state.timers, isEmpty);
+      expect(state.ringing, isEmpty);
+      expect(state.finished, isFalse);
+      // The chill that was running is gone, not carried onto another step.
+      await tester.tap(find.text('Done — next step'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Done — next step'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Crust step 2 ·'), findsNothing);
+
+      // Measured from the restart, not from the first time cook mode opened.
+      offset = const Duration(minutes: 50);
+      await _walkFrom(tester, 2);
+      expect(
+        find.textContaining('10 min from start to finish'),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('a timer started after Cook again still counts down', (
+      tester,
+    ) async {
+      await _pump(tester);
+      await tester.tap(find.text('Done — next step'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Start'));
+      await tester.pump();
+      await _walkFrom(tester, 1);
+
+      await tester.ensureVisible(find.text('Cook again'));
+      await tester.tap(find.text('Cook again'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Done — next step'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Start'));
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pump(const Duration(seconds: 1));
+      // The old session's ticker was cancelled *and* forgotten, so the new
+      // timer got a ticker of its own.
+      expect(find.text('59:58'), findsOneWidget);
+    });
+  });
+
+  // UX-050. A step change cut hard; it cross-fades now, and not at all under
+  // reduced motion.
+  group('step transitions (UX-050)', () {
+    const step1 = 'Mix the flour and salt, then blend in the cold butter.';
+    const step2 = 'Wrap the disk and refrigerate.';
+
+    // The nearest fade above the step text — the step transition's own.
+    double opacityOf(WidgetTester tester, String text) =>
+        tester
+            .widget<FadeTransition>(
+              find
+                  .ancestor(
+                    of: find.text(text),
+                    matching: find.byType(FadeTransition),
+                  )
+                  .first,
+            )
+            .opacity
+            .value;
+
+    for (final size in [const Size(390, 844), const Size(1440, 1000)]) {
+      testWidgets('advancing cross-fades the step at ${size.width}px', (
+        tester,
+      ) async {
+        await _pump(tester, size: size);
+        await tester.tap(find.text('Done — next step'));
+        await tester.pump(const Duration(milliseconds: 50));
+
+        // Mid-transition: both steps are on screen, the new one not yet
+        // opaque — while the chrome has already moved on.
+        expect(find.text(step1), findsOneWidget);
+        expect(find.text(step2), findsOneWidget);
+        expect(opacityOf(tester, step2), lessThan(1));
+        expect(find.text('Crust · step 2 of 2'), findsOneWidget);
+        expect(find.text('Crust · step 1 of 2'), findsNothing);
+
+        await tester.pumpAndSettle();
+        expect(find.text(step1), findsNothing);
+        expect(opacityOf(tester, step2), 1);
+      });
+
+      testWidgets('reduced motion swaps the step in one frame at '
+          '${size.width}px', (tester) async {
+        await _pump(tester, size: size, reduceMotion: true);
+        await tester.tap(find.text('Done — next step'));
+        await tester.pump();
+
+        expect(find.text(step1), findsNothing);
+        expect(find.text(step2), findsOneWidget);
+        expect(opacityOf(tester, step2), 1);
+      });
+    }
+  });
+
+  // A reader said `1 1⁄3 cup` as "one one fraction slash three cup". The
+  // printed label is unchanged; only what is heard is spelled out.
+  group('spoken quantities', () {
+    const thirds = Recipe(
+      id: 'r1',
+      ownerId: 'o',
+      title: 'Sponge',
+      servings: 1,
+      ingredientGroups: [
+        IngredientGroup(
+          id: 'ig',
+          recipeId: 'r1',
+          ingredients: [
+            Ingredient(
+              id: 'i',
+              groupId: 'ig',
+              quantity: 1 / 3,
+              unit: 'cup',
+              name: 'sugar',
+            ),
+          ],
+        ),
+      ],
+      stepGroups: [
+        StepGroup(
+          id: 'sg',
+          recipeId: 'r1',
+          steps: [
+            RecipeStep(id: 's', groupId: 'sg', text: 'Whisk in the sugar.'),
+          ],
+        ),
+      ],
+    );
+
+    Future<void> scaleToFour(WidgetTester tester) async {
+      _container(tester).read(selectedServingsProvider('r1').notifier).state =
+          4;
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('the you’ll-need chip is heard in words', (tester) async {
+      final semantics = tester.ensureSemantics();
+      await _pump(tester, recipe: thirds);
+      await scaleToFour(tester);
+
+      expect(find.text('1 1⁄3 cup Sugar'), findsOneWidget);
+      expect(find.bySemanticsLabel('1 and 1 third cup Sugar'), findsOneWidget);
+      expect(find.bySemanticsLabel(RegExp('⁄')), findsNothing);
+      semantics.dispose();
+    });
+
+    testWidgets('the web rail’s quantity is heard in words', (tester) async {
+      final semantics = tester.ensureSemantics();
+      await _pump(tester, recipe: thirds, size: const Size(1440, 1000));
+      await scaleToFour(tester);
+
+      expect(find.text('1 1⁄3 cup'), findsOneWidget);
+      expect(find.bySemanticsLabel('1 and 1 third cup'), findsOneWidget);
+      expect(find.bySemanticsLabel(RegExp('⁄')), findsNothing);
+      semantics.dispose();
+    });
+  });
+}
+
+/// The provider container behind the pumped cook mode screen.
+ProviderContainer _container(WidgetTester tester) =>
+    ProviderScope.containerOf(tester.element(find.byType(CookModeScreen)));
+
+/// The session notifier for [_recipe]'s id.
+CookSessionNotifier _session(WidgetTester tester) =>
+    _container(tester).read(cookSessionProvider('r1').notifier);
+
+/// From step [from] (0-based) of [_recipe] through Finish cooking.
+Future<void> _walkFrom(WidgetTester tester, int from) async {
+  for (var i = from; i < 4; i++) {
+    await tester.tap(find.text(i == 3 ? 'Finish cooking' : 'Done — next step'));
+    await tester.pumpAndSettle();
+  }
 }

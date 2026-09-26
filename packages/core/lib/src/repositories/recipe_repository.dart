@@ -14,6 +14,13 @@ abstract interface class RecipeRepository {
   /// Full recipe including grouped ingredients and steps.
   Future<Recipe> getById(String id);
 
+  /// One recipe's card-level row (no content), or null when the caller cannot
+  /// see it — deleted, or private to someone else (RLS returns no row rather
+  /// than an error). What a fork's lineage line names its parent from (UX-036).
+  ///
+  /// Signed-out safe (Gotcha 9): it never resolves the caller's profile.
+  Future<Recipe?> findSummary(String id);
+
   /// Recipes owned by the current user — one page of [limit] rows starting at
   /// [offset] (OPT-P9). Both lists were unbounded before, so a 400-recipe vault
   /// decoded 400 rows on every visit to `/my`.
@@ -51,6 +58,15 @@ abstract interface class RecipeRepository {
   /// Version history, newest first.
   Future<List<RecipeVersion>> versions(String recipeId);
 
+  /// The recipe as it stood at version [versionId], decoded from that one
+  /// row's `content_snapshot` — or null when the snapshot is empty (the seeded
+  /// fixtures write `{}`) or the row is not readable.
+  ///
+  /// Its **own** read, because [versions] deliberately omits the column
+  /// (B065): a snapshot is a whole recipe as `jsonb`, and the history list
+  /// needs none of them. This fetches one, for the one row a reader opened.
+  Future<Recipe?> versionContent(String versionId);
+
   Future<void> share({
     required String recipeId,
     required String userId,
@@ -80,6 +96,25 @@ abstract interface class RecipeRepository {
 
   /// Remove the current user's rating.
   Future<void> clearRating(String recipeId);
+}
+
+/// Decodes a `recipe_versions.content_snapshot` — `recipe_snapshot()`'s
+/// `{recipe, ingredient_groups, step_groups}` — into a [Recipe], or null when
+/// it holds no recipe (`{}`, the seeded fixtures' value, or anything that is
+/// not that shape).
+///
+/// The snapshot's group arrays are built `order by sort_order` /
+/// `step_order` in SQL, so they arrive in reading order (B022) and are used
+/// as they are.
+Recipe? recipeFromSnapshot(Object? snapshot) {
+  if (snapshot is! Map) return null;
+  final recipe = snapshot['recipe'];
+  if (recipe is! Map) return null;
+  return Recipe.fromJson({
+    ...Map<String, dynamic>.from(recipe),
+    'ingredient_groups': snapshot['ingredient_groups'] ?? const [],
+    'step_groups': snapshot['step_groups'] ?? const [],
+  });
 }
 
 /// Star ratings are stored in half-star steps between 0.5 and 5.0.
@@ -358,6 +393,28 @@ class SupabaseRecipeRepository implements RecipeRepository {
       params: {'p_source': sourceRecipeId},
     );
     return newId as String;
+  }
+
+  @override
+  Future<Recipe?> findSummary(String id) async {
+    final row =
+        await _client
+            .from('recipes')
+            .select(kRecipeSelect)
+            .eq('id', id)
+            .maybeSingle();
+    return row == null ? null : Recipe.fromJson(row);
+  }
+
+  @override
+  Future<Recipe?> versionContent(String versionId) async {
+    final row =
+        await _client
+            .from('recipe_versions')
+            .select('content_snapshot')
+            .eq('id', versionId)
+            .maybeSingle();
+    return recipeFromSnapshot(row?['content_snapshot']);
   }
 
   @override

@@ -93,8 +93,9 @@ origin phase; detail is in the archive.
 - [ ] Cook's note on the finish screen — needs `recipe_ratings.note` column + grant + RLS +
       matrix check + model/repo (Ph 27)
 - [ ] Real `step_ingredients` table to promote the derived "you'll need" hint to a checklist (Ph 27)
-- [ ] Sticky ingredients rail; version history v2 (diffs); owner-fork lineage line naming the
-      parent (Ph 27)
+- [ ] Sticky ingredients rail; version history v2 (diffs) (Ph 27)
+- [x] Owner-fork lineage line naming the parent (Ph 27) — done in Phase 38 (UX-036): the mark
+      names and links the parent and its author
 - [ ] Micronutrients + per-100 g display (Ph 28/29); cooking yield/moisture disclosure (Ph 29)
 - [ ] Vocabulary mining loop for unlinked ingredient names; `simData` food links (Ph 29)
 - [x] `ChefBadge.onTap` on the RecipeCard cover overlay (Ph 30) — done in Phase 33. Wired once in
@@ -961,8 +962,64 @@ B137, B138, B139 (the card keeps `1h 10m` by width), B140 (five writes that outl
 auth Back honouring `returnTo`, chef/entity tab titles while loading, a scaled pinch printing `0`,
 and the doc drift (SDS rail/§8, CLAUDE.md layout, DESIGN §4, the `frac` comments). Deferred:
 
-- [ ] B141 — a removed or replaced avatar stays in the public bucket (best-effort delete of the
-      previous object after a successful save)
+- [→] B141 — a removed or replaced avatar stays in the public bucket (best-effort delete of the
+      previous object after a successful save) — Phase 38 wave C
+
+---
+
+## Phase 38 — UX remediation, round 2: the audit's remaining unblocked findings (in progress)
+
+Branch `feat/phase-38-ux-remediation-2` (from Phase 37's `cde7fbc`). The unblocked findings Phase 37
+left open, in four waves, each committed behind a green format + analyze + test gate with a
+regression test per fix, checked by reverting it. Out of scope, unchanged from Phase 37: the hosted
+deploy, a real-phone pass, the final font, cover photos (UX-034), imported images (UX-029), the
+`DesignSync` bundle write, cook-mode plugins, the cook's-note column, bespoke redesigns, every owner
+decision.
+
+**Wave A — cook mode and the recipe page**
+
+- [x] UX-025 — other steps' running / paused timers show as a strip of chips on every step (tap
+      goes to the step); "Cook again" on the finish screen restarts the session (`restart()`)
+- [x] UX-036 — a fork names and links its parent ("Forked from Tikka Masala by …"); a parent
+      that went private or was deleted since says so (`findSummary`, `forkParentProvider`)
+- [x] UX-050 — cook-step cross-fade through `AppMotion.of` (reduced motion: one frame)
+- [x] UX-053 — the recipe page's loading and error states have Back (`popOrGo`)
+- [x] Spoken quantities — the gutter and cook chips say "1 and 1 third cup" (`spokenQuantity`,
+      a transform of the one chain's label)
+- [x] Came with the recipe-page files: UX-055's detail half (labelled Share / Edit on desktop, a
+      `Private` pill in the desktop header, a `Rate this recipe` prompt) and UX-048's detail half
+      (ingredient and step rows, the version link and the full `ChefBadge` are ≥ 48dp —
+      `meetsGuideline(androidTapTargetGuideline)` on both layouts)
+
+**Wave B — the editor**
+
+- [ ] UX-039 — Ingredients → Steps → Nutrition; empty Prep / Cook / Servings / Difficulty with
+      hints (Servings and Difficulty required); a collapsed one-line ingredient row on compact
+- [ ] UX-035 — the step timer inline, parsing `90`, `1h`, `1h 30m`, `1:30`; ingredients and
+      steps reorder (drag handle + Move up / Move down)
+- [ ] UX-052 — Qty accepts `1/2`, `1 1/2`, `½` (stored as a decimal), its error does not clip at
+      2.0×; removing a non-empty group or section asks first; version-history rows open a
+      read-only view of that version
+
+**Wave C — chefs, entities, profile, My Recipes**
+
+- [ ] UX-042 — chef / publisher names in the app bar; no "joined" on an imported page; the
+      entity page says "Chef" once
+- [ ] UX-045 — empty chefs rails keep their heading and say why; a short shelf ends in a note
+- [ ] UX-040 — avatar initials from letters only
+- [ ] UX-055 (My Recipes) — one New recipe per layout
+- [ ] B141 — a replaced or removed avatar is deleted from the bucket after the save
+
+**Wave D — accessibility and tokens**
+
+- [ ] UX-047 — image semantics; `LoadingView` label
+- [ ] UX-049 — remaining proportional numbers
+- [ ] UX-054 — the dark chefs hero's edge
+- [ ] UX-048 — `androidTapTargetGuideline` on each main screen
+- [ ] Tokens 36b left out: stroke scale, form measure, 15px icon step (each only where two or more
+      named per-widget consts collapse into it); static sweep re-run, appended to AUDIT.md
+
+**Wave E (optional) — UX-030 unit canon at import** — not started.
 
 ---
 

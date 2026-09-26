@@ -23,7 +23,8 @@ import 'package:app/widgets/route_title.dart';
 ///   this subtree pins [AppTheme.dark] regardless of the platform's setting —
 ///   the only screen in the app that overrides the theme.
 /// - **It owns a session** ([cookSessionProvider]): where the cook is, and every
-///   running timer. Leaving and coming back resumes rather than restarts.
+///   running timer. Leaving and coming back resumes rather than restarts;
+///   the finish screen's "Cook again" is the one way to start over.
 /// - **It is keyboard-driven on the web** (space advances, arrows move, escape
 ///   leaves), because at 1440 the laptop is across the counter and the pointer
 ///   is not in the cook's hand.
@@ -152,6 +153,7 @@ class _CookModeState extends ConsumerState<_CookMode> {
               startedAt: session.startedAt,
               onBackToRecipe: () => _leave(context),
               onReviewSteps: () => notifier.goTo(steps.length - 1),
+              onCookAgain: notifier.restart,
             )
             : CookStepView(
               recipe: recipe,

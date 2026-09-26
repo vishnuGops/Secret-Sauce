@@ -253,20 +253,36 @@ class _Compact extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _RingingBanner(recipe: recipe, steps: steps),
-                  Text(
-                    current.step.text,
-                    // Sans, not the serif headline: a step is something the
-                    // cook acts on. The 1.32 leading is this frame's own.
-                    style: context.appText.step.copyWith(height: 1.32),
+                  _RunningTimers(
+                    recipe: recipe,
+                    steps: steps,
+                    currentStepId: current.step.id,
                   ),
-                  // After the text and inside the scroll, so the step itself is
-                  // always the first thing on screen and a tall photo scrolls
-                  // rather than overflowing the pinned bottom bar (B125).
-                  _currentStepPhoto(context, recipe, current),
-                  _StepChips(step: current.step),
-                  _TimerPanel(recipe: recipe, step: current.step),
-                  if (needed.isNotEmpty)
-                    _NeededStrip(needed: needed, factor: factor),
+                  _StepTransition(
+                    stepIndex: index,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          current.step.text,
+                          // Sans, not the serif headline: a step is something
+                          // the cook acts on. The 1.32 leading is this frame's
+                          // own.
+                          style: context.appText.step.copyWith(height: 1.32),
+                        ),
+                        // After the text and inside the scroll, so the step
+                        // itself is always the first thing on screen and a
+                        // tall photo scrolls rather than overflowing the
+                        // pinned bottom bar (B125).
+                        _currentStepPhoto(context, recipe, current),
+                        _StepChips(step: current.step),
+                        _TimerPanel(recipe: recipe, step: current.step),
+                        if (needed.isNotEmpty)
+                          _NeededStrip(needed: needed, factor: factor),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -383,7 +399,12 @@ class _NeededStrip extends StatelessWidget {
             runSpacing: AppSpacing.xs,
             children: [
               for (final ing in needed)
-                MetaChip(label: ingredientOneLine(ing, factor: factor)),
+                MetaChip(
+                  label: ingredientOneLine(ing, factor: factor),
+                  // Heard as "1 and 1 third cup", not "fraction slash" — a
+                  // transform of the same label, so the two cannot disagree.
+                  semanticsLabel: ingredientOneLineSpoken(ing, factor: factor),
+                ),
             ],
           ),
         ],
@@ -456,17 +477,31 @@ class _Wide extends ConsumerWidget {
         _Progress(steps: steps, index: index, thick: true),
         const SizedBox(height: AppSpacing.lg),
         _RingingBanner(recipe: recipe, steps: steps),
-        Text(
-          current.step.text,
-          // 40px in the canvas — readable from a metre away. Uses the stepLarge
-          // role rather than a literal so it still scales with the platform
-          // text setting; sans, like the compact step. 1.28 is this frame's
-          // own leading.
-          style: context.appText.stepLarge.copyWith(height: 1.28),
+        _RunningTimers(
+          recipe: recipe,
+          steps: steps,
+          currentStepId: current.step.id,
         ),
-        _currentStepPhoto(context, recipe, current),
-        _StepChips(step: current.step),
-        _TimerPanel(recipe: recipe, step: current.step, wide: !stacked),
+        _StepTransition(
+          stepIndex: index,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                current.step.text,
+                // 40px in the canvas — readable from a metre away. Uses the
+                // stepLarge role rather than a literal so it still scales with
+                // the platform text setting; sans, like the compact step. 1.28
+                // is this frame's own leading.
+                style: context.appText.stepLarge.copyWith(height: 1.28),
+              ),
+              _currentStepPhoto(context, recipe, current),
+              _StepChips(step: current.step),
+              _TimerPanel(recipe: recipe, step: current.step, wide: !stacked),
+            ],
+          ),
+        ),
         const SizedBox(height: AppSpacing.lg),
         _WideActions(
           canGoBack: index > 0,
@@ -741,6 +776,10 @@ class _CookRail extends StatelessWidget {
                               context.textScale.clamp(1.0, kDetailRailMaxScale),
                           child: Text(
                             ingredientQuantityLabel(ing, factor: factor),
+                            semanticsLabel: ingredientQuantitySpoken(
+                              ing,
+                              factor: factor,
+                            ),
                             style: context.appText.quantity,
                           ),
                         ),
@@ -1038,9 +1077,227 @@ class _RingingBanner extends ConsumerWidget {
   }
 
   String _label(String stepId) {
-    final match = steps.where((s) => s.step.id == stepId).firstOrNull;
-    if (match == null) return 'A timer finished.';
-    return 'Time’s up — ${match.groupName} step ${match.indexInGroup + 1}.';
+    final name = _timerStepName(steps, stepId);
+    if (name == null) return 'A timer finished.';
+    return 'Time’s up — $name.';
+  }
+}
+
+/// How a timer's step is named wherever the cook is not standing on it:
+/// `Crust step 2`, or `step 2` when the recipe has one unnamed group (its
+/// group name would be the placeholder `Steps`). The ringing banner and the
+/// running-timer strip both call this, so the alarm and the countdown before
+/// it name the same step the same way. Null for a step no longer in the recipe.
+String? _timerStepName(List<CookStep> steps, String stepId) {
+  final match = steps.where((s) => s.step.id == stepId).firstOrNull;
+  if (match == null) return null;
+  final number = 'step ${match.indexInGroup + 1}';
+  final showGroup = steps.any((s) => s.groupIndex != 0);
+  return showGroup ? '${match.groupName} $number' : number;
+}
+
+/// `12 minutes 34 seconds` — a countdown as a screen reader should say it.
+/// `12:34` is read as a time of day, or digit by digit.
+String _spokenClock(Duration d) {
+  final total = d.isNegative ? 0 : d.inSeconds;
+  final minutes = total ~/ 60;
+  final seconds = total % 60;
+  if (minutes == 0) return countOf(seconds, 'seconds');
+  if (seconds == 0) return countOf(minutes, 'minutes');
+  return '${countOf(minutes, 'minutes')} ${countOf(seconds, 'seconds')}';
+}
+
+/// Every *other* step's timer that is still counting or paused, as a strip of
+/// chips under the ringing banner (UX-025).
+///
+/// Timers outlive their step by design, and until this they were invisible
+/// from every other step until they rang — a cook three steps on had no way to
+/// see that the chill had twelve minutes left without walking back to it. The
+/// current step's own timer is the panel below, and a finished one is the
+/// banner above, so neither is repeated here. Hidden when there are none.
+///
+/// Deliberately **not** a live region: it changes every second, and a reader
+/// that announced each tick would talk over everything else on the page. The
+/// banner is the announcement; this is a glance.
+class _RunningTimers extends ConsumerWidget {
+  const _RunningTimers({
+    required this.recipe,
+    required this.steps,
+    required this.currentStepId,
+  });
+
+  final Recipe recipe;
+  final List<CookStep> steps;
+  final String currentStepId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final timers = ref.watch(
+      cookSessionProvider(recipe.id).select((s) => s.timers),
+    );
+    final others = [
+      for (final s in steps)
+        if (s.step.id != currentStepId)
+          if (timers[s.step.id] case final t? when !t.isDone) (s, t),
+    ];
+    if (others.isEmpty) return const SizedBox.shrink();
+
+    final notifier = ref.read(cookSessionProvider(recipe.id).notifier);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.md),
+      // A Wrap, so two timers at 2.0× on a phone go to a second row rather
+      // than overflowing it (Gotcha 21).
+      child: Wrap(
+        spacing: AppSpacing.sm,
+        runSpacing: AppSpacing.sm,
+        children: [
+          for (final (step, timer) in others)
+            _TimerChip(
+              name: _timerStepName(steps, step.step.id)!,
+              timer: timer,
+              onTap: () => notifier.goTo(step.overallIndex),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TimerChip extends StatelessWidget {
+  const _TimerChip({
+    required this.name,
+    required this.timer,
+    required this.onTap,
+  });
+
+  final String name;
+  final CookTimer timer;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final paused = !timer.running;
+    final clock = formatClock(timer.remaining);
+    final label = '${sentenceCase(name)} · $clock${paused ? ' · paused' : ''}';
+
+    // One node that says what the chip is and where it goes; the visible
+    // text, whose `12:34` a reader would say as a time of day, is excluded.
+    return Semantics(
+      container: true,
+      button: true,
+      label:
+          '${paused ? 'Paused timer' : 'Timer'} for $name, '
+          '${_spokenClock(timer.remaining)} left, go to step',
+      child: Material(
+        color: scheme.surfaceContainerHighest,
+        shape: const StadiumBorder(),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: ConstrainedBox(
+            // A 48dp target for a chip that is only a line of label tall.
+            constraints: const BoxConstraints(
+              minHeight: kMinInteractiveDimension,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.smPlus,
+              ),
+              child: ExcludeSemantics(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      paused ? Icons.pause : Icons.timer_outlined,
+                      size: AppIconSize.sm,
+                      color: paused ? scheme.onSurfaceVariant : scheme.primary,
+                    ),
+                    const SizedBox(width: AppSpacing.xsPlus),
+                    // Flexible: at 2.0× on a 390px phone the label can be
+                    // wider than the row, and a non-flex Text in a Row
+                    // overflows rather than wrapping (Gotcha 21).
+                    Flexible(
+                      child: Text(label, style: textTheme.labelLarge?.tabular),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Moves between steps with a quiet cross-fade (UX-050) instead of a hard cut,
+/// so the cook sees that the step changed rather than that the page flickered.
+///
+/// Only the step's own content passes through here — its text, photo, chips
+/// and timer. The chrome around it (title, progress, the advance bar) does not
+/// move, which is what makes the change read as "next step" rather than "new
+/// page". Durations are read through [AppMotion.of], so under reduced motion
+/// the new step replaces the old one in a single frame.
+///
+/// While the outgoing step fades it takes no taps, no focus and no semantics:
+/// for its 120 ms it is a picture of the step just left, not a second set of
+/// buttons.
+class _StepTransition extends StatelessWidget {
+  const _StepTransition({required this.stepIndex, required this.child});
+
+  final int stepIndex;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: AnimatedSwitcher(
+        duration: AppMotion.of(context, AppMotion.normal),
+        reverseDuration: AppMotion.of(context, AppMotion.exit),
+        switchInCurve: AppMotion.emphasized,
+        switchOutCurve: AppMotion.exitCurve,
+        // Top-start and full width: the default centres the two children,
+        // which would centre a one-line step like "Serve warm.".
+        layoutBuilder:
+            (current, previous) => Stack(
+              fit: StackFit.passthrough,
+              alignment: AlignmentDirectional.topStart,
+              children: [...previous, if (current != null) current],
+            ),
+        transitionBuilder:
+            (child, animation) => _Outgoing(
+              animation: animation,
+              child: FadeTransition(opacity: animation, child: child),
+            ),
+        child: KeyedSubtree(key: ValueKey<int>(stepIndex), child: child),
+      ),
+    );
+  }
+}
+
+/// Switches a fading-out step's pointer, focus and semantics off.
+class _Outgoing extends AnimatedWidget {
+  const _Outgoing({required Animation<double> animation, required this.child})
+    : super(listenable: animation);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final status = (listenable as Animation<double>).status;
+    final leaving =
+        status == AnimationStatus.reverse ||
+        status == AnimationStatus.dismissed;
+    return IgnorePointer(
+      ignoring: leaving,
+      child: ExcludeFocus(
+        excluding: leaving,
+        child: ExcludeSemantics(excluding: leaving, child: child),
+      ),
+    );
   }
 }
 

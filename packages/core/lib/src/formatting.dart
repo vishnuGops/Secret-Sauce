@@ -247,6 +247,72 @@ String ingredientOneLine(Ingredient ingredient, {double factor = 1}) {
   return qty == '—' ? name : '$qty $name';
 }
 
+/// The precomposed glyphs [formatQuantity] emits, as (numerator, denominator).
+const _kGlyphFractions = <String, (int, int)>{
+  '½': (1, 2),
+  '¼': (1, 4),
+  '¾': (3, 4),
+};
+
+/// Singular and plural names of the denominators [formatQuantity] can produce.
+const _kDenominatorWords = <int, (String, String)>{
+  2: ('half', 'halves'),
+  3: ('third', 'thirds'),
+  4: ('quarter', 'quarters'),
+  8: ('eighth', 'eighths'),
+};
+
+String _spokenFraction(int numerator, int denominator) {
+  final words = _kDenominatorWords[denominator];
+  if (words == null) return '$numerator over $denominator';
+  return '$numerator ${numerator == 1 ? words.$1 : words.$2}';
+}
+
+/// Whole-and-glyph (`1½`) or a bare glyph (`½`).
+final _glyphPattern = RegExp(r'(\d+)?([½¼¾])');
+
+/// Whole-and-slashed (`1 1⁄3`) or a bare slashed fraction (`2⁄3`).
+final _slashedPattern = RegExp(r'(?:(\d+) )?(\d+)⁄(\d+)');
+
+/// [text] with every fraction [formatQuantity] can print spelled out for a
+/// screen reader: `1 1⁄3 cup` → `1 and 1 third cup`, `½ tsp` → `1 half tsp`,
+/// `2¾ cups` → `2 and 3 quarters cups`.
+///
+/// A reader announced U+2044 as "fraction slash" — `1 1⁄3 cup` was "one one
+/// fraction slash three cup" — and a precomposed `½` is read differently by
+/// every engine. This is a **transform of the printed label**, not a second
+/// formatter: the only way in is through [ingredientQuantityLabel] /
+/// [ingredientOneLine], so what is heard can never disagree with what is shown
+/// (B066). Everything that is not one of those fractions — the unit, a note,
+/// an ingredient name, an ASCII `1/2` a cook typed into a note — passes through
+/// untouched.
+String spokenQuantity(String text) {
+  return text
+      .replaceAllMapped(_slashedPattern, (m) {
+        final fraction = _spokenFraction(
+          int.parse(m.group(2)!),
+          int.parse(m.group(3)!),
+        );
+        final whole = m.group(1);
+        return whole == null ? fraction : '$whole and $fraction';
+      })
+      .replaceAllMapped(_glyphPattern, (m) {
+        final (n, d) = _kGlyphFractions[m.group(2)!]!;
+        final fraction = _spokenFraction(n, d);
+        final whole = m.group(1);
+        return whole == null ? fraction : '$whole and $fraction';
+      });
+}
+
+/// [ingredientQuantityLabel] as a screen reader should say it — the quantity
+/// gutter's `Semantics` label.
+String ingredientQuantitySpoken(Ingredient ingredient, {double factor = 1}) =>
+    spokenQuantity(ingredientQuantityLabel(ingredient, factor: factor));
+
+/// [ingredientOneLine] as a screen reader should say it — cook mode's chips.
+String ingredientOneLineSpoken(Ingredient ingredient, {double factor = 1}) =>
+    spokenQuantity(ingredientOneLine(ingredient, factor: factor));
+
 /// Groups a score, keeping the single decimal place a `numeric` score can carry
 /// (views contribute 0.2 each) and dropping it when the value is whole.
 String groupedScore(double value) {

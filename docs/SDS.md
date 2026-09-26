@@ -664,7 +664,14 @@ Two shapes it is built around, because both look exactly like working code:
 - **Fork** → deep-copy recipe + its groups/ingredients/steps into a new recipe owned by the forker;
   set `forked_from_recipe_id` and `forked_from_version_id`. Independent thereafter.
 - **Attribution** → `recipes.attribution` free-text preserves legacy origin/story; detail screen
-  also shows "Forked from {title} by {owner}" when lineage exists.
+  also shows "Forked from {title} by {owner}" when lineage exists — **since Phase 38 (UX-036)**, as
+  a link to the parent. The row carries only `forked_from_recipe_id`, so the parent is its own
+  card-level read: `RecipeRepository.findSummary(id)` (`kRecipeSelect`, `.maybeSingle()`, no
+  content) behind `forkParentProvider`. Three answers: loading or a failed read print the old
+  `Forked recipe`; a visible parent prints its title and owner and opens `/recipe/<parent>`; **no
+  row** (RLS hides a parent that went private, or one deleted since the fork loaded) prints
+  "Forked from a recipe that is private or no longer exists". A parent deleted *before* the load is
+  not a case: `on delete set null` clears the id and the recipe is simply not a fork.
 - **Future PR flow** → `recipe_suggestions` reserved so a fork can later propose changes upstream.
 
 ## 6. Discovery & ranking
@@ -1107,6 +1114,14 @@ for one ingredient is the B066 class of bug, which is also why both quantity gut
 clamp** (32c5 — the cook rail had a hardcoded 74px that did not grow with the type, so the same
 `1.25 cup` sat on one line while reading and wrapped to three while cooking).
 
+**Spoken quantities (Phase 38).** A screen reader read U+2044 as "fraction slash" (`1 1⁄3 cup` →
+"one one fraction slash three cup"). `spokenQuantity(label)` in core rewrites the fractions
+`formatQuantity` can print — `1 1⁄3 cup` → "1 and 1 third cup", `½ tsp` → "1 half tsp" — and
+passes everything else through; `ingredientQuantitySpoken` / `ingredientOneLineSpoken` apply it to
+the one chain's output. It is a transform of the printed label, never a second formatter, so what
+is heard cannot disagree with what is shown (B066). The reading rail's gutter, cook mode's rail
+gutter and its "you'll need" chips carry it as `semanticsLabel`.
+
 **Fractions (Phase 37, UX-023).** The chain's number goes through `formatQuantity(value, unit)`:
 non-metric units and unitless counts snap to the nearest eighth or third within 0.02 after scaling
 (`1¼ cup`, `½ tsp`, `1 1⁄3 cup`); metric units (g, kg, mg, ml, cl, dl, L, mm, cm) and values that do not
@@ -1131,6 +1146,22 @@ guard the signed-out case client-side, and both land in the **editor** on the ne
 elapsed against `recipe.totalMinutes`, and is a *state* of the session, not a dead end: "not done —
 back to the last step" returns. The canvas's "note for next time" is **not drawn**, because
 `recipe_ratings` has no column for it (see ROADMAP Phase 27 for what adding one costs).
+
+**Phase 38 (UX-025, UX-050).** Three session behaviours:
+
+- **Other steps' timers are visible from every step.** A strip under the ringing banner lists every
+  timer that is running or paused on a step other than the current one (`Crust step 2 · 12:34`,
+  tabular), each chip a ≥ 48dp button that goes to its step. Not a live region — it ticks every
+  second; the ringing banner is the announcement. The banner and the strip name a step through one
+  helper (`step 2` for a single unnamed group, `Crust step 2` otherwise).
+- **"Cook again" is the reset path.** `CookSessionNotifier.restart()` cancels **and forgets** the
+  ticker (`_syncTicker` starts a periodic only when the field is null) and replaces the state:
+  step 0, not finished, a fresh `startedAt` from `cookClockProvider`, no timers, no alarms. The
+  provider stays non-`autoDispose`; restart is the only way a finished session starts over.
+- **Step changes cross-fade.** Only the step's own content (text, photo, chips, timer panel, the
+  "you'll need" strip) passes through an `AnimatedSwitcher` keyed on the step index, at
+  `AppMotion.of(normal)` in and `AppMotion.of(exit)` out, so reduced motion swaps it in one frame.
+  The outgoing copy takes no pointer, focus or semantics while it fades.
 
 ### 7.3 Design system and tokens (Phase 36b; v2 values Phase 36c)
 

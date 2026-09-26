@@ -904,6 +904,30 @@ My Recipes are empty for a new account until it saves or writes something — th
 | Review — `/code-review` over the branch | done | 3 reviewers; 16 findings, 0 Critical, 1 High (B136, found by two). All fixed with a regression test except B141 (deferred, logged); see ROADMAP |
 | D — component consolidation, doc hygiene | done | 2 subagents + lead: `SegmentedTabs` (labels kept at `labelLarge` — the first cut dropped the sort and rail to 11px), `RankBadge`, `LoadMoreButton`; category-row reveal; the empty `/chefs` board's overflow at 1000px (found by the gate); live pass on a release build — hero tile, search URL replaces history, tab titles, deep-linked Back; design_system 446 → 591, app 737 → 740 |
 
+## Phase 38 — UX remediation, round 2 (in progress, 2026-09-26)
+
+Same method as Phase 37: waves on `feat/phase-38-ux-remediation-2`, parallel subagents on disjoint
+files under a shared rules file, the lead writes the shared core pieces first (so no two agents
+touch core) and runs the full gate. Waves A–C ran their agents concurrently; each wave is then
+committed on its own, gated with the later waves' files stashed, so every commit passes alone.
+
+**Seed-data fit.** Wave A: widget fixtures. The 14 curated recipes carry cup / tsp quantities
+(spoken quantities) and multi-group methods with timed steps (the timer strip); **no curated
+recipe is a fork**, so the lineage line is proven with fixtures (`recipe_detail_test`,
+`recipe_detail_v2_test`) and live only by forking one as the test account. Wave B: fixtures; every
+seeded version's `content_snapshot` is `{}`, which is exactly the empty state the version view must
+show — a real snapshot exists only after a save or a fork through the app. Wave C: the local stack
+has one member chef and ~1,279 imported profiles with zero engagement, so every chefs rail is
+empty on real data — the state UX-045 is about; populated rails are fixtures. B141 needs a real
+upload, so it is proven with `fake_supabase` request tests and the profile dialog's fakes.
+
+| Wave | Status | Notes |
+| --- | --- | --- |
+| A — cook mode, recipe page | done | 1 subagent (cook mode) + lead (core `spokenQuantity`, `findSummary`, `versionContent`, parsers; fork lineage; loading Back; UX-055 / UX-048 detail halves) |
+| B — editor | pending commit | 2 subagents |
+| C — chefs, entities, profile, My Recipes | pending commit | 2 subagents |
+| D — a11y, tokens | not started | |
+
 ## Build, run & release (ops)
 
 Task runner is **melos** (`melos.yaml`); Gradle only builds Android. See `README.md` for full

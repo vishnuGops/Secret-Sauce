@@ -78,7 +78,8 @@ class CookSessionState {
   final int stepIndex;
 
   /// When cook mode opened — the finish screen compares this against the
-  /// recipe's own estimate. Set once, from the wall clock, at construction.
+  /// recipe's own estimate. Set from the wall clock at construction, and again
+  /// by [CookSessionNotifier.restart].
   final DateTime startedAt;
 
   /// Timers by step id. Several may run at once **by design**: a chill or a bake
@@ -156,6 +157,20 @@ class CookSessionNotifier extends FamilyNotifier<CookSessionState, String> {
   }
 
   void finish() => state = state.copyWith(finished: true);
+
+  /// "Cook again" (UX-025): a fresh session on the same recipe — step one, not
+  /// finished, a new [CookSessionState.startedAt], no timers and no alarms.
+  ///
+  /// The provider is not autoDispose, so without this the session outlived the
+  /// meal and opening cook mode again landed on the finish screen. The ticker
+  /// is cancelled **and** forgotten: [_syncTicker] only starts a periodic when
+  /// [_ticker] is null, so a cancelled-but-kept ticker would leave the next
+  /// session's first timer frozen.
+  void restart() {
+    _ticker?.cancel();
+    _ticker = null;
+    state = CookSessionState(stepIndex: 0, startedAt: _now());
+  }
 
   /// Starts (or restarts) [stepId]'s timer at [total], or resumes a paused one.
   ///
@@ -308,6 +323,11 @@ class CookSessionNotifier extends FamilyNotifier<CookSessionState, String> {
 /// check the ingredient list. It is disposed when the provider scope is — i.e.
 /// on app exit — which is the same session lifetime the ingredient and step
 /// check-offs already have.
+///
+/// Because it outlives the meal, [CookSessionNotifier.restart] is the reset
+/// path: the finish screen's "Cook again" calls it. Do not reach for
+/// `autoDispose` or `ref.invalidate` to start over — either one throws away a
+/// running timer the cook did not ask to lose.
 final cookSessionProvider =
     NotifierProvider.family<CookSessionNotifier, CookSessionState, String>(
       CookSessionNotifier.new,

@@ -232,4 +232,45 @@ void main() {
       'to taste Yoghurt',
     );
   });
+  // A screen reader said `1 1⁄3 cup` as "one one fraction slash three cup".
+  // The spoken form is a transform of the printed label, so the two cannot
+  // disagree (B066).
+  group('spokenQuantity', () {
+    test('slashed thirds and eighths are spelled out', () {
+      expect(spokenQuantity('1 1⁄3 cup'), '1 and 1 third cup');
+      expect(spokenQuantity('2⁄3 cup'), '2 thirds cup');
+      expect(spokenQuantity('3⁄8 tsp'), '3 eighths tsp');
+      expect(spokenQuantity('1 7⁄8 lb'), '1 and 7 eighths lb');
+    });
+
+    test('precomposed halves and quarters are spelled out', () {
+      expect(spokenQuantity('½ tsp'), '1 half tsp');
+      expect(spokenQuantity('1¼ cup'), '1 and 1 quarter cup');
+      expect(spokenQuantity('2¾ cups'), '2 and 3 quarters cups');
+    });
+
+    test('everything else passes through', () {
+      expect(spokenQuantity('250 g'), '250 g');
+      expect(spokenQuantity('1.5 L'), '1.5 L');
+      expect(spokenQuantity('to taste'), 'to taste');
+      expect(spokenQuantity('1/2 a lemon'), '1/2 a lemon');
+      expect(spokenQuantity('—'), '—');
+    });
+
+    test('reads through the one formatting chain', () {
+      const ing = Ingredient(
+        id: 'i',
+        groupId: 'g',
+        name: 'flour',
+        quantity: 1 / 3,
+        unit: 'cup',
+      );
+      expect(ingredientQuantityLabel(ing, factor: 4), '1 1⁄3 cup');
+      expect(ingredientQuantitySpoken(ing, factor: 4), '1 and 1 third cup');
+      expect(
+        ingredientOneLineSpoken(ing, factor: 4),
+        '1 and 1 third cup Flour',
+      );
+    });
+  });
 }

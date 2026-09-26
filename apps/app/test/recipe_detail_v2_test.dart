@@ -123,12 +123,23 @@ class _FakeAuth implements AuthRepository {
 }
 
 class _FakeRecipeRepository implements RecipeRepository {
-  _FakeRecipeRepository([this.recipe = _recipe]);
+  _FakeRecipeRepository([this.recipe = _recipe, this.parent]);
 
   final Recipe recipe;
 
+  /// A fork's parent as `findSummary` returns it (UX-036); null is a parent
+  /// the reader cannot see.
+  final Recipe? parent;
+
   @override
   Future<Recipe> getById(String id) async => recipe;
+
+  @override
+  Future<Recipe?> findSummary(String id) async =>
+      parent?.id == id ? parent : null;
+
+  @override
+  Future<Recipe?> versionContent(String versionId) async => null;
 
   @override
   Future<bool> myLiked(String recipeId) async => false;
@@ -224,6 +235,7 @@ Future<GoRouter> _pump(
   double textScale = 1,
   Recipe recipe = _recipe,
   RailTab? railTab,
+  Recipe? parent,
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
@@ -260,7 +272,7 @@ Future<GoRouter> _pump(
     ProviderScope(
       overrides: [
         recipeRepositoryProvider.overrideWithValue(
-          _FakeRecipeRepository(recipe),
+          _FakeRecipeRepository(recipe, parent),
         ),
         authRepositoryProvider.overrideWithValue(_FakeAuth(uid)),
         if (railTab != null)
@@ -557,8 +569,19 @@ void main() {
         findsOneWidget,
       );
       expect(find.widgetWithText(TagPill, 'Main'), findsOneWidget);
-      // Visibility is a fact here, so no Private pill joins the tags.
+      // A public recipe carries no visibility pill.
       expect(find.widgetWithText(TagPill, 'Private'), findsNothing);
+    });
+
+    // UX-055: the facts strip's last cell was the only place a private recipe
+    // said so on desktop; the pill joins the tags as it does on compact.
+    testWidgets('a private recipe carries the Private pill', (tester) async {
+      await _pump(
+        tester,
+        recipe: _labelledRecipe.copyWith(visibility: RecipeVisibility.private),
+      );
+
+      expect(find.widgetWithText(TagPill, 'Private'), findsOneWidget);
     });
 
     testWidgets('no category and no cuisine: RECIPE, and no tag row', (
@@ -586,9 +609,80 @@ void main() {
     });
   });
 
+  // UX-055: the owner's Share and Edit were bare icon circles beside the
+  // labelled Start cooking / Fork pills.
+  group('owner actions (expanded)', () {
+    testWidgets('Share and Edit are labelled buttons; the overflow stays', (
+      tester,
+    ) async {
+      await _pump(tester, uid: 'd1', recipe: _ownedRecipe);
+
+      expect(find.widgetWithText(OutlinedButton, 'Share'), findsOneWidget);
+      expect(find.widgetWithText(OutlinedButton, 'Edit'), findsOneWidget);
+      expect(find.byTooltip('More'), findsOneWidget);
+    });
+
+    for (final size in const [Size(1000, 900), Size(1440, 900)]) {
+      testWidgets('the owner row holds at ${size.width} × 2.0', (tester) async {
+        await _pump(
+          tester,
+          uid: 'd1',
+          recipe: _ownedRecipe,
+          size: size,
+          textScale: 2,
+        );
+        expect(tester.takeException(), isNull);
+      });
+    }
+  });
+
   // Per TAB since Phase 28 — the rail restructure re-opens its width envelope
   // (Gotcha 26), and the label is new furniture in the same 352 × textScale
   // column.
+  // UX-036 on the expanded page: the lineage mark sits in the header's Wrap
+  // beside Back, where it must size to its content and never outgrow the row.
+  group('fork lineage (expanded)', () {
+    final parent = _recipe.copyWith(
+      id: 'p1',
+      title: 'The Very Long Sunday Braise My Grandmother Made Every Winter',
+      owner: const Profile(id: 'n1', displayName: 'Rosa Bianchi'),
+    );
+    for (final size in const [Size(1000, 900), Size(1440, 900)]) {
+      for (final scale in [1.0, 2.0]) {
+        testWidgets('names the parent at ${size.width} × $scale', (
+          tester,
+        ) async {
+          await _pump(
+            tester,
+            size: size,
+            textScale: scale,
+            recipe: _recipe.copyWith(forkedFromRecipeId: 'p1'),
+            parent: parent,
+          );
+          expect(tester.takeException(), isNull);
+          expect(
+            find.textContaining('Forked from', findRichText: true),
+            findsOneWidget,
+          );
+        });
+      }
+    }
+  });
+
+  // UX-048: every control on the page is at least 48 × 48 (WCAG 2.5.8 via
+  // Flutter's Android guideline, the stricter of the two it ships).
+  testWidgets('every tap target meets the 48dp guideline', (tester) async {
+    final handle = tester.ensureSemantics();
+    await _pump(
+      tester,
+      uid: 'd1',
+      recipe: _ownedRecipe.copyWith(forkedFromRecipeId: 'p1'),
+      parent: _recipe.copyWith(id: 'p1', title: 'Parent'),
+    );
+    await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+    handle.dispose();
+  });
+
   group('layout envelope', () {
     for (final tab in RailTab.values) {
       for (final width in [1000.0, 1440.0]) {

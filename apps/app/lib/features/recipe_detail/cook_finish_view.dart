@@ -32,6 +32,7 @@ class CookFinishView extends ConsumerWidget {
     required this.startedAt,
     required this.onBackToRecipe,
     required this.onReviewSteps,
+    required this.onCookAgain,
   });
 
   final Recipe recipe;
@@ -42,6 +43,11 @@ class CookFinishView extends ConsumerWidget {
   /// Back to the last step — the finish screen is a state of the session, not a
   /// dead end, so "I wasn't done" has somewhere to go.
   final VoidCallback onReviewSteps;
+
+  /// A fresh session from step one (UX-025). The session provider is not
+  /// autoDispose, so this is the only way the next cook of this recipe does
+  /// not open on this screen.
+  final VoidCallback onCookAgain;
 
   /// `9 steps, 1 h 31 m from start to finish. Four minutes over the estimate.`
   ///
@@ -123,6 +129,11 @@ class CookFinishView extends ConsumerWidget {
                 TextButton(
                   onPressed: onReviewSteps,
                   child: const Text('Not done — back to the last step'),
+                ),
+                TextButton.icon(
+                  onPressed: onCookAgain,
+                  icon: const Icon(Icons.replay),
+                  label: const Text('Cook again'),
                 ),
               ],
             ),

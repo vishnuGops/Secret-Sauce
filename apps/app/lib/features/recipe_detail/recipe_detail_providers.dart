@@ -36,6 +36,20 @@ final recipeViewLoggerProvider = FutureProvider.autoDispose
       }
     });
 
+/// A fork's parent, card-level (UX-036) — what the lineage mark names and
+/// links. Null when the reader cannot see it: gone private, or deleted since
+/// the fork loaded (RLS answers both as no row).
+///
+/// Watches [currentUserIdProvider] because signing in or out changes what RLS
+/// shows — a private parent the reader owns becomes visible on sign-in.
+final forkParentProvider = FutureProvider.autoDispose.family<Recipe?, String>((
+  ref,
+  parentId,
+) {
+  ref.watch(currentUserIdProvider);
+  return ref.watch(recipeRepositoryProvider).findSummary(parentId);
+});
+
 /// Version history for a recipe, newest first.
 final recipeVersionsProvider = FutureProvider.autoDispose
     .family<List<RecipeVersion>, String>((ref, id) {
@@ -139,3 +153,13 @@ final ownershipIdProvider = Provider<String?>((ref) {
   if (profileId.hasError) return ref.watch(currentUserIdProvider);
   return profileId.valueOrNull;
 });
+
+/// One version's content, for the read-only version view (UX-052) — its own
+/// read of that row's `content_snapshot`, because the history list
+/// deliberately never fetches the column (B065). Null for a version saved
+/// before snapshots were kept (every seeded one holds `{}`).
+final versionContentProvider = FutureProvider.autoDispose
+    .family<Recipe?, String>(
+      (ref, versionId) =>
+          ref.watch(recipeRepositoryProvider).versionContent(versionId),
+    );

@@ -275,8 +275,18 @@ class _StepCard extends StatelessWidget {
     // One node per step, announced as a checkable item (UX-014): "Step 2,
     // checked, <text>". The disc's bare number is excluded because the label
     // already says it — otherwise a reader hears "Step 2, 2".
+    // At least 48dp tall (UX-048): a one-line step row was 46px.
     Widget checkable(Widget child) => MergeSemantics(
-      child: Semantics(checked: done, label: 'Step $number', child: child),
+      child: Semantics(
+        checked: done,
+        label: 'Step $number',
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            minHeight: kMinInteractiveDimension,
+          ),
+          child: child,
+        ),
+      ),
     );
 
     // The step's duration in the one format (UX-043) — `1 h 30 min`, not

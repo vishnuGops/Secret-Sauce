@@ -7,6 +7,8 @@ import 'package:app/features/recipe_detail/fork_action.dart';
 import 'package:app/features/recipe_detail/recipe_detail_compact.dart';
 import 'package:app/features/recipe_detail/recipe_detail_expanded.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
+import 'package:app/routing/app_router.dart';
+import 'package:app/routing/pop_or_go.dart';
 import 'package:app/widgets/route_title.dart';
 
 class RecipeDetailScreen extends ConsumerWidget {
@@ -35,10 +37,19 @@ class RecipeDetailScreen extends ConsumerWidget {
       page: async.valueOrNull?.title,
       child: Scaffold(
         body: async.when(
-          loading: () => const Scaffold(body: LoadingView()),
+          // Both states get a way out (UX-053). The loaded layouts draw their
+          // own Back, but until the recipe arrives there is no layout — and a
+          // deep link that is slow, or fails, left the reader on a spinner with
+          // no exit but the browser. `popOrGo`, not the implied leading: a
+          // deep link has nothing to pop to (B132's rule).
+          loading:
+              () => Scaffold(
+                appBar: AppBar(leading: const _BackToDiscover()),
+                body: const LoadingView(),
+              ),
           error:
               (e, _) => Scaffold(
-                appBar: AppBar(),
+                appBar: AppBar(leading: const _BackToDiscover()),
                 body: ErrorView(
                   message: friendlyError(e),
                   onRetry: () => ref.invalidate(recipeProvider(recipeId)),
@@ -70,4 +81,15 @@ class RecipeDetailScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+class _BackToDiscover extends StatelessWidget {
+  const _BackToDiscover();
+
+  @override
+  Widget build(BuildContext context) => IconButton(
+    tooltip: 'Back',
+    icon: const Icon(Icons.arrow_back),
+    onPressed: () => popOrGo(context, Routes.discover),
+  );
 }

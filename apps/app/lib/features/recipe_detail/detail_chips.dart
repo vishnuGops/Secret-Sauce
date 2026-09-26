@@ -93,9 +93,15 @@ class MetaChip extends StatelessWidget {
     this.icon,
     required this.label,
     this.large = false,
+    this.semanticsLabel,
   });
   final IconData? icon;
   final String label;
+
+  /// What a screen reader says instead of [label] — cook mode's ingredient
+  /// chips pass `ingredientOneLineSpoken`, so `1 1⁄3 cup` is heard as "1 and 1
+  /// third cup" rather than "fraction slash". Null reads [label].
+  final String? semanticsLabel;
 
   /// Cook mode's step facts (UX-024): `titleMedium` text and a
   /// [AppIconSize.lg] icon, read from across a counter. The reading page and
@@ -143,6 +149,7 @@ class MetaChip extends StatelessWidget {
           Flexible(
             child: Text(
               label,
+              semanticsLabel: semanticsLabel,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: large ? textTheme.titleMedium : textTheme.labelSmall,

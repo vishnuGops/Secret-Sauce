@@ -126,7 +126,10 @@ void main() {
         isSemantics(hasCheckedState: true, isChecked: false),
       );
       // Quantity and name are one announcement, not two stops.
-      expect(tester.getSemantics(row).label, contains('½ cup'));
+      // Contract change (Phase 38): the quantity is heard in words — a
+      // reader said `1 1⁄3` as "fraction slash" — through core's
+      // `spokenQuantity`, a transform of the same printed label.
+      expect(tester.getSemantics(row).label, contains('1 half cup'));
       expect(tester.getSemantics(row).label, contains('Brown sugar'));
 
       await tester.tap(row);

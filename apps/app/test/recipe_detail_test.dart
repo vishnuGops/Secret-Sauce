@@ -19,6 +19,7 @@ import 'dart:async';
 // they assert what reached the repository, not what the page looked like. The
 // layout's own assertions are in the two groups at the bottom.
 import 'package:app/features/my_recipes/my_recipes_providers.dart';
+import 'package:app/features/recipe_detail/detail_provenance.dart';
 import 'package:app/features/recipe_detail/fork_action.dart';
 import 'package:app/features/recipe_detail/rail_panel.dart';
 import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
@@ -216,8 +217,37 @@ class _FakeRecipeRepository implements RecipeRepository {
   /// returned `const []` until 32e3, so the sheet had never rendered a row.
   List<RecipeVersion> versionRows = const [];
 
+  /// Card-level rows `findSummary` answers with, by id — a fork's parent
+  /// (UX-036). An id missing here is a parent RLS hides: null, not an error.
+  Map<String, Recipe> summaries = const {};
+  final List<String> summaryReads = [];
+
+  /// What opening a version returns, by version id (UX-052). Missing is the
+  /// seeded `{}` snapshot: null.
+  Map<String, Recipe> versionContents = const {};
+
+  /// Every id `getById` was asked for — a fork's parent link opens its id.
+  final List<String> gets = [];
+
+  /// When set, `getById` waits on it — the page sits in its loading state.
+  Completer<Recipe>? getGate;
+
   @override
-  Future<Recipe> getById(String id) async => recipe;
+  Future<Recipe> getById(String id) async {
+    gets.add(id);
+    if (getGate != null) return getGate!.future;
+    return recipe;
+  }
+
+  @override
+  Future<Recipe?> findSummary(String id) async {
+    summaryReads.add(id);
+    return summaries[id];
+  }
+
+  @override
+  Future<Recipe?> versionContent(String versionId) async =>
+      versionContents[versionId];
 
   @override
   Future<bool> myLiked(String recipeId) async => liked;
@@ -334,6 +364,7 @@ Future<GoRouter> _pump(
   Size? size,
   double textScale = 1,
   RailTab? railTab,
+  bool settle = true,
 }) async {
   if (size != null) {
     tester.view.physicalSize = size;
@@ -345,6 +376,10 @@ Future<GoRouter> _pump(
   final router = GoRouter(
     initialLocation: '/recipe/r1',
     routes: [
+      GoRoute(
+        path: Routes.discover,
+        builder: (_, __) => const Scaffold(body: Text('DISCOVER')),
+      ),
       GoRoute(
         path: '/recipe/:id',
         builder:
@@ -398,7 +433,11 @@ Future<GoRouter> _pump(
       ),
     ),
   );
-  await tester.pumpAndSettle();
+  if (settle) {
+    await tester.pumpAndSettle();
+  } else {
+    await tester.pump();
+  }
   return router;
 }
 
@@ -860,6 +899,33 @@ void main() {
       await tester.pumpAndSettle();
     }
 
+    // UX-055: the block sat at the foot of the page with no prompt, so
+    // "No ratings yet" over a row of stars did not say they were for you.
+    testWidgets('the block says what it is for, and whose it is', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(tester, repo: repo, uid: 'me', size: _phone);
+
+      final heading = find.text('Rate this recipe');
+      await tester.ensureVisible(heading);
+      expect(heading, findsOneWidget);
+      expect(find.text('Made it? Tap a star.'), findsOneWidget);
+      expect(
+        tester.getSemantics(heading),
+        matchesSemantics(label: 'Rate this recipe', isHeader: true),
+      );
+    });
+
+    testWidgets('the owner sees Ratings, not a prompt to rate', (tester) async {
+      final repo = _FakeRecipeRepository(recipe: _ownedRecipe);
+      await _pump(tester, repo: repo, uid: 'd1', size: _phone);
+
+      await tester.ensureVisible(find.text('Ratings'));
+      expect(find.text('Rate this recipe'), findsNothing);
+      expect(find.text('Made it? Tap a star.'), findsNothing);
+    });
+
     testWidgets('signed in, a tap writes and the block catches up', (
       tester,
     ) async {
@@ -1288,6 +1354,146 @@ void main() {
   // Re-run **per tab** since Phase 28: the rail restructure re-opens the
   // envelope B070 lives in (Gotcha 26), and the nutrition label is a widget
   // neither layout had ever handed a width before.
+  // UX-036: "Forked recipe" named neither the parent nor its author.
+  group('fork lineage (UX-036)', () {
+    final fork = _fullRecipe.copyWith(forkedFromRecipeId: 'p1');
+    final parent = _fullRecipe.copyWith(
+      id: 'p1',
+      title: 'Nonna’s Tart',
+      owner: const Profile(id: 'n1', displayName: 'Rosa Bianchi'),
+      ingredientGroups: const [],
+      stepGroups: const [],
+    );
+
+    testWidgets('names the parent and its author, and opens it', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository(recipe: fork)
+        ..summaries = {'p1': parent};
+      await _pump(tester, repo: repo, uid: 'me', size: _phone);
+
+      expect(repo.summaryReads, ['p1']);
+      expect(
+        find.textContaining(
+          'Forked from Nonna’s Tart by Rosa Bianchi',
+          findRichText: true,
+        ),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.byKey(ForkedLabel.linkKey));
+      await tester.pumpAndSettle();
+      expect(repo.gets.last, 'p1');
+    });
+
+    testWidgets('a parent the reader cannot see says so, and links nowhere', (
+      tester,
+    ) async {
+      // No summary: RLS returned no row (gone private, or deleted since).
+      final repo = _FakeRecipeRepository(recipe: fork);
+      await _pump(tester, repo: repo, uid: 'me', size: _phone);
+
+      expect(
+        find.textContaining('private or no longer exists', findRichText: true),
+        findsOneWidget,
+      );
+      expect(find.byKey(ForkedLabel.linkKey), findsNothing);
+    });
+
+    testWidgets('a recipe that is not a fork reads no parent', (tester) async {
+      final repo = _FakeRecipeRepository(recipe: _fullRecipe);
+      await _pump(tester, repo: repo, uid: 'me', size: _phone);
+
+      expect(repo.summaryReads, isEmpty);
+      expect(find.textContaining('Forked', findRichText: true), findsNothing);
+    });
+
+    for (final scale in [1.0, 2.0]) {
+      testWidgets('a long parent title holds at 390 × $scale', (tester) async {
+        final repo = _FakeRecipeRepository(recipe: fork)
+          ..summaries = {
+            'p1': parent.copyWith(
+              title:
+                  'The Very Long Sunday Braise My Grandmother Made Every Winter',
+            ),
+          };
+        await _pump(
+          tester,
+          repo: repo,
+          uid: 'me',
+          size: const Size(390, 1600),
+          textScale: scale,
+        );
+        expect(tester.takeException(), isNull);
+      });
+    }
+  });
+
+  // UX-053: the loading state had no way back, so a slow deep link was a
+  // spinner with no exit but the browser.
+  group('loading and error exits (UX-053)', () {
+    testWidgets('the loading page has Back, and a deep link goes to Discover', (
+      tester,
+    ) async {
+      final repo = _FakeRecipeRepository()..getGate = Completer();
+      await _pump(tester, repo: repo, uid: null, size: _phone, settle: false);
+
+      expect(find.byType(LoadingView), findsOneWidget);
+      await tester.tap(find.byTooltip('Back'));
+      await tester.pumpAndSettle();
+      expect(find.text('DISCOVER'), findsOneWidget);
+    });
+  });
+
+  // A screen reader said `1 1⁄3 cup` as "1 fraction slash 3".
+  group('spoken quantities', () {
+    testWidgets('the gutter reads a third as words; the print is unchanged', (
+      tester,
+    ) async {
+      final thirds = _fullRecipe.copyWith(
+        ingredientGroups: const [
+          IngredientGroup(
+            id: 'ig1',
+            recipeId: 'r1',
+            name: 'Crust',
+            ingredients: [
+              Ingredient(
+                id: 'i1',
+                groupId: 'ig1',
+                quantity: 4 / 3,
+                unit: 'cup',
+                name: 'wheat flour',
+              ),
+            ],
+          ),
+        ],
+      );
+      final semantics = tester.ensureSemantics();
+      final repo = _FakeRecipeRepository(recipe: thirds);
+      await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 2400));
+
+      expect(find.text('1 1⁄3 cup'), findsOneWidget);
+      expect(
+        find.bySemanticsLabel(RegExp('1 and 1 third cup')),
+        findsOneWidget,
+      );
+      expect(find.bySemanticsLabel(RegExp('⁄')), findsNothing);
+      semantics.dispose();
+    });
+  });
+
+  // UX-048: every control on the page is at least 48 × 48 (WCAG 2.5.8 via
+  // Flutter's Android guideline, the stricter of the two it ships).
+  testWidgets('every tap target meets the 48dp guideline', (tester) async {
+    final handle = tester.ensureSemantics();
+    final repo = _FakeRecipeRepository(
+      recipe: _fullRecipe.copyWith(forkedFromRecipeId: 'p1'),
+    )..summaries = {'p1': _fullRecipe.copyWith(id: 'p1', title: 'Parent')};
+    await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 2400));
+    await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+    handle.dispose();
+  });
+
   group('layout envelope', () {
     for (final tab in RailTab.values) {
       for (final width in [390.0, 600.0, 800.0]) {

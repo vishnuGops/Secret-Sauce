@@ -195,67 +195,86 @@ class _IngredientRow extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(AppRadii.md),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.xsPlus),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AnimatedContainer(
-                  duration: AppMotion.of(context, AppMotion.fast),
-                  width: _kCheckSize,
-                  height: _kCheckSize,
-                  margin: const EdgeInsets.only(top: _kCheckNudge),
-                  decoration: BoxDecoration(
-                    color: done ? scheme.primary : null,
-                    border:
-                        done
-                            ? null
-                            : Border.all(
-                              color: scheme.outline,
-                              width: _kCheckStroke,
-                            ),
-                    borderRadius: BorderRadius.circular(AppRadii.sm),
-                  ),
-                  child:
-                      done
-                          ? Icon(
-                            Icons.check,
-                            size: AppIconSize.sm,
-                            color: scheme.onPrimary,
-                          )
-                          : null,
+          // A 48dp target (UX-048): a one-line row was 35px tall. The row
+          // centres in the extra height and a taller one grows past it.
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              minHeight: kMinInteractiveDimension,
+            ),
+            child: Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: AppSpacing.xsPlus,
                 ),
-                const SizedBox(width: AppSpacing.smPlus),
-                SizedBox(
-                  // The gutter is what makes the numbers scan as a column, so it
-                  // grows with the type rather than wrapping "1 1⁄3 cup" onto three
-                  // lines. Same clamp as the rail that holds it.
-                  width:
-                      kIngredientQuantityGutter *
-                      context.textScale.clamp(1.0, kDetailRailMaxScale),
-                  child: Text(
-                    ingredientQuantityLabel(ingredient, factor: factor),
-                    style: qtyStyle,
-                  ),
-                ),
-                Expanded(
-                  child: Text.rich(
-                    TextSpan(
-                      text: sentenceCase(ingredient.name),
-                      children: [
-                        if (showNote)
-                          TextSpan(
-                            text: ' (${ingredient.note})',
-                            style: noteStyle,
-                          ),
-                        if (ingredient.isOptional)
-                          TextSpan(text: ' — optional', style: noteStyle),
-                      ],
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AnimatedContainer(
+                      duration: AppMotion.of(context, AppMotion.fast),
+                      width: _kCheckSize,
+                      height: _kCheckSize,
+                      margin: const EdgeInsets.only(top: _kCheckNudge),
+                      decoration: BoxDecoration(
+                        color: done ? scheme.primary : null,
+                        border:
+                            done
+                                ? null
+                                : Border.all(
+                                  color: scheme.outline,
+                                  width: _kCheckStroke,
+                                ),
+                        borderRadius: BorderRadius.circular(AppRadii.sm),
+                      ),
+                      child:
+                          done
+                              ? Icon(
+                                Icons.check,
+                                size: AppIconSize.sm,
+                                color: scheme.onPrimary,
+                              )
+                              : null,
                     ),
-                    style: nameStyle,
-                  ),
+                    const SizedBox(width: AppSpacing.smPlus),
+                    SizedBox(
+                      // The gutter is what makes the numbers scan as a column, so it
+                      // grows with the type rather than wrapping "1 1⁄3 cup" onto three
+                      // lines. Same clamp as the rail that holds it.
+                      width:
+                          kIngredientQuantityGutter *
+                          context.textScale.clamp(1.0, kDetailRailMaxScale),
+                      child: Text(
+                        ingredientQuantityLabel(ingredient, factor: factor),
+                        // `1 1⁄3 cup` was read as "1 fraction slash 3"; the
+                        // spoken form comes from the same chain, so it cannot
+                        // disagree with the printed one (B066).
+                        semanticsLabel: ingredientQuantitySpoken(
+                          ingredient,
+                          factor: factor,
+                        ),
+                        style: qtyStyle,
+                      ),
+                    ),
+                    Expanded(
+                      child: Text.rich(
+                        TextSpan(
+                          text: sentenceCase(ingredient.name),
+                          children: [
+                            if (showNote)
+                              TextSpan(
+                                text: ' (${ingredient.note})',
+                                style: noteStyle,
+                              ),
+                            if (ingredient.isOptional)
+                              TextSpan(text: ' — optional', style: noteStyle),
+                          ],
+                        ),
+                        style: nameStyle,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),

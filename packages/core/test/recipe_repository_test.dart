@@ -496,6 +496,86 @@ void main() {
     });
   });
 
+  // UX-036: a fork names its parent. The parent is its own card-level read,
+  // and a parent the reader cannot see (deleted, or private to its owner)
+  // is no row at all under RLS — which must decode to null, not throw.
+  group('findSummary', () {
+    test('asks for one card-level row with the owner embed', () async {
+      final row =
+          _recipeRow()
+            ..remove('ingredient_groups')
+            ..remove('step_groups');
+      final (:http, :client, :repo) = _repo([
+        (200, jsonEncode([row])),
+      ]);
+
+      final parent = await repo.findSummary('r1');
+
+      final req = http.requests.single;
+      expect(req.param('id'), 'eq.r1');
+      expect(req.select, contains('owner:profiles!recipes_owner_id_fkey'));
+      // A lineage line needs a title and a byline, not the content.
+      expect(req.select, isNot(contains('ingredient_groups')));
+      expect(parent?.title, 'Chicken Tikka Masala');
+    });
+
+    test('a row RLS hides is null, not an error', () async {
+      final (:http, :client, :repo) = _repo([(200, '[]')]);
+
+      expect(await repo.findSummary('gone'), isNull);
+    });
+  });
+
+  // UX-052: a version-history row opens that version. `versions()` never
+  // ships `content_snapshot` (B065), so opening one is its own one-row read.
+  group('versionContent', () {
+    test('reads one snapshot and decodes it as a recipe', () async {
+      final full = _recipeRow();
+      final snapshot = {
+        'recipe':
+            Map.of(full)
+              ..remove('ingredient_groups')
+              ..remove('step_groups'),
+        'ingredient_groups': full['ingredient_groups'],
+        'step_groups': full['step_groups'],
+      };
+      final (:http, :client, :repo) = _repo([
+        (
+          200,
+          jsonEncode([
+            {'content_snapshot': snapshot},
+          ]),
+        ),
+      ]);
+
+      final recipe = await repo.versionContent('v2');
+
+      final req = http.requests.single;
+      expect(req.url.path, endsWith('/recipe_versions'));
+      expect(req.select, 'content_snapshot');
+      expect(req.param('id'), 'eq.v2');
+      expect(recipe?.title, 'Chicken Tikka Masala');
+      expect(
+        recipe?.ingredientGroups.single.ingredients.single.name,
+        'yoghurt',
+      );
+      expect(recipe?.stepGroups.single.steps.single.durationMinutes, 480);
+    });
+
+    test('an empty snapshot is null — the seeded fixtures write {}', () async {
+      final (:http, :client, :repo) = _repo([
+        (
+          200,
+          jsonEncode([
+            {'content_snapshot': <String, dynamic>{}},
+          ]),
+        ),
+      ]);
+
+      expect(await repo.versionContent('v1'), isNull);
+    });
+  });
+
   // 32d5. OPT-S2's contract — the project's headline silent-failure class
   // (Gotcha 2) — had no test at all. `.delete()` matching zero rows is a
   // **success** at the PostgREST layer, so an RLS denial on these two paths is

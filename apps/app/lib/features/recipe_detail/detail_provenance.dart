@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/link.dart';
 
 import 'package:app/features/legal/legal_document.dart';
+import 'package:app/features/recipe_detail/recipe_detail_providers.dart';
 import 'package:app/routing/app_router.dart';
 
 /// Where a recipe came from: the fork mark, the cook's own story, and — for a
@@ -17,36 +19,125 @@ import 'package:app/routing/app_router.dart';
 /// same statements about provenance, so they are one widget each here and
 /// differ only in how the page around them frames them.
 
-/// `⑂ Forked recipe` — the lineage mark above the title (canvas frame F).
+/// `⑂ Forked from Tikka Masala by Secret Sauce Kitchen ›` — the lineage mark
+/// above the title (canvas frame F), naming and linking the parent (UX-036).
 ///
-/// It says what the row *knows*: `forked_from_recipe_id` is an id, and naming
-/// the parent would need a second read neither layout makes.
-class ForkedLabel extends StatelessWidget {
-  const ForkedLabel({super.key, this.expand = false});
+/// The row carries only `forked_from_recipe_id`, so the parent is its own
+/// card-level read ([forkParentProvider]). Three answers, and each says only
+/// what the reader can know:
+///
+/// - **Loading, or the read failed:** `Forked recipe` — the old mark, which is
+///   true without the second read.
+/// - **The parent is visible:** its title and its author, tappable to the
+///   parent's page.
+/// - **No row came back:** the parent has gone private, or was deleted in the
+///   moment since this page loaded. RLS answers both as "no row", so the copy
+///   names both rather than guessing. (A parent deleted *before* the load is
+///   not a case here: `on delete set null` clears the id, and the recipe is
+///   then simply not a fork.)
+class ForkedLabel extends ConsumerWidget {
+  const ForkedLabel({super.key, required this.recipe, this.expand = false});
+
+  final Recipe recipe;
 
   /// Let the label take the row's free width. The compact page stacks it above
-  /// the title in a full-width column, where an `Expanded` text can ellipsise;
-  /// the expanded page sits it in a row of chips beside the back button, where
-  /// it must size to its content.
+  /// the title in a full-width column; the expanded page sits it in a `Wrap`
+  /// beside the back button, where it sizes to its content up to the row.
   final bool expand;
 
+  /// Key the tests reach the link by.
+  static const linkKey = ValueKey('forked-from-link');
+
+  /// Two lines, then an ellipsis: a parent title is unbounded, and the mark
+  /// sits above a display-size title it must not outweigh.
+  static const _kMaxLines = 2;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final parentId = recipe.forkedFromRecipeId;
+    if (parentId == null) return const SizedBox.shrink();
+
     final scheme = Theme.of(context).colorScheme;
-    final label = Text(
-      'Forked recipe',
-      style: Theme.of(
-        context,
-      ).textTheme.labelMedium?.copyWith(color: scheme.primary),
+    final textTheme = Theme.of(context).textTheme;
+    final parent = ref.watch(forkParentProvider(parentId));
+
+    final muted = textTheme.labelMedium?.copyWith(
+      color: scheme.onSurfaceVariant,
     );
 
-    return Row(
+    final InlineSpan span;
+    Recipe? target;
+    switch (parent) {
+      case AsyncData(value: final Recipe p):
+        target = p;
+        final author = p.owner?.displayName.trim() ?? '';
+        span = TextSpan(
+          children: [
+            TextSpan(text: 'Forked from ', style: muted),
+            TextSpan(
+              text: p.title,
+              style: textTheme.titleSmall?.copyWith(color: scheme.primary),
+            ),
+            if (author.isNotEmpty) TextSpan(text: ' by $author', style: muted),
+          ],
+        );
+      case AsyncData():
+        span = TextSpan(
+          text: 'Forked from a recipe that is private or no longer exists',
+          style: muted,
+        );
+      default:
+        span = TextSpan(
+          text: 'Forked recipe',
+          style: textTheme.labelMedium?.copyWith(color: scheme.primary),
+        );
+    }
+
+    final text = Text.rich(
+      span,
+      maxLines: _kMaxLines,
+      overflow: TextOverflow.ellipsis,
+    );
+    // The icons are non-flex; the text flexes (Gotcha 21). Flexible rather
+    // than Expanded when not [expand], so inside the expanded page's Wrap the
+    // row still sizes to its content but cannot outgrow the Wrap.
+    final row = Row(
       mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
       children: [
         Icon(Icons.call_split, size: AppIconSize.sm, color: scheme.primary),
         const SizedBox(width: AppSpacing.xs),
-        if (expand) Expanded(child: label) else label,
+        if (expand) Expanded(child: text) else Flexible(child: text),
+        if (target != null) ...[
+          const SizedBox(width: AppSpacing.xxs),
+          Icon(
+            Icons.chevron_right,
+            size: AppIconSize.sm,
+            color: scheme.onSurfaceVariant,
+          ),
+        ],
       ],
+    );
+
+    if (target == null) return row;
+    final parentRecipe = target;
+    return Semantics(
+      link: true,
+      child: InkWell(
+        key: linkKey,
+        borderRadius: BorderRadius.circular(AppRadii.md),
+        onTap: () => context.push(Routes.recipe(parentRecipe.id)),
+        // A 48dp target (DESIGN §3.6): the label alone is ~20px tall.
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            minHeight: kMinInteractiveDimension,
+          ),
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            widthFactor: 1,
+            child: row,
+          ),
+        ),
+      ),
     );
   }
 }

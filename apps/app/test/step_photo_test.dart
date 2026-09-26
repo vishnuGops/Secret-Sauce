@@ -114,6 +114,12 @@ class _FakeRecipeRepository implements RecipeRepository {
   Future<Recipe> getById(String id) async => recipe;
 
   @override
+  Future<Recipe?> findSummary(String id) async => null;
+
+  @override
+  Future<Recipe?> versionContent(String versionId) async => null;
+
+  @override
   Future<bool> myLiked(String recipeId) async => false;
 
   @override

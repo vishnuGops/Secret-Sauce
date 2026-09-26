@@ -111,7 +111,18 @@ class ChefBadge extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(AppRadii.md),
-      child: content,
+      // A tappable full badge is at least 48dp tall (UX-048): avatar, name
+      // and tier chip come to 46. The compact badge rides on a card cover,
+      // where it is a secondary target on a tappable tile and keeps its pill.
+      child:
+          compact
+              ? content
+              : ConstrainedBox(
+                constraints: const BoxConstraints(
+                  minHeight: kMinInteractiveDimension,
+                ),
+                child: Align(widthFactor: 1, child: content),
+              ),
     );
   }
 }
