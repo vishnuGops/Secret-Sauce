@@ -922,8 +922,8 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                           // Text, not a number pad: `1h 30m` needs letters.
                           keyboardType: TextInputType.text,
                           decoration: const InputDecoration(
-                            labelText: 'Prep (min)',
-                            hintText: 'e.g. 15 or 1h',
+                            labelText: 'Prep',
+                            hintText: 'e.g. 15 min or 1h',
                           ),
                           validator: _minutes,
                         ),
@@ -934,8 +934,8 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                           controller: _cook,
                           keyboardType: TextInputType.text,
                           decoration: const InputDecoration(
-                            labelText: 'Cook (min)',
-                            hintText: 'e.g. 30 or 1h',
+                            labelText: 'Cook',
+                            hintText: 'e.g. 30 min or 1h',
                           ),
                           validator: _minutes,
                         ),

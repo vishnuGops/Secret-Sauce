@@ -1402,8 +1402,8 @@ void main() {
               )
               .controller!
               .text;
-      expect(text('Prep (min)'), isEmpty);
-      expect(text('Cook (min)'), isEmpty);
+      expect(text('Prep'), isEmpty);
+      expect(text('Cook'), isEmpty);
       expect(text('Servings'), isEmpty);
       // No preselected difficulty — the hint stands in for it.
       expect(find.text('Choose…'), findsOneWidget);
@@ -1442,6 +1442,27 @@ void main() {
       expect(saved.difficulty, Difficulty.medium);
     });
 
+    // Live pass (Phase 38): with Prep and Cook empty the labels sit inside
+    // the field at full size, and `Prep (min)` ellipsised to `Prep (mi…` in a
+    // third of a 390px phone.
+    testWidgets('the empty Prep and Cook labels are laid out whole at 390', (
+      tester,
+    ) async {
+      sizeView(tester, 390);
+      await tester.pumpWidget(_routedNewApp(_RecordingRecipeRepository()));
+      await tester.pumpAndSettle();
+      // Not Servings: `flutter test`'s font is far wider than Manrope, and the
+      // live capture shows it whole (Gotcha 27 — pin the change, not pixels).
+      for (final label in ['Prep', 'Cook']) {
+        final text = find.descendant(
+          of: find.byType(InputDecorator),
+          matching: find.text(label),
+        );
+        final paragraph = tester.renderObject<RenderParagraph>(text.first);
+        expect(paragraph.didExceedMaxLines, isFalse, reason: label);
+      }
+    });
+
     // UX-035 in the header: `int.tryParse` saved a typed `1h` as no time.
     testWidgets('prep and cook read 1h 30m; unreadable is refused', (
       tester,
@@ -1452,8 +1473,8 @@ void main() {
       await tester.pumpAndSettle();
 
       await _fillRequired(tester, servings: '4');
-      final prep = find.widgetWithText(TextFormField, 'Prep (min)');
-      final cook = find.widgetWithText(TextFormField, 'Cook (min)');
+      final prep = find.widgetWithText(TextFormField, 'Prep');
+      final cook = find.widgetWithText(TextFormField, 'Cook');
       await tester.enterText(prep, '1h 30m');
       await tester.enterText(cook, 'a while');
       await save(tester);
@@ -1497,7 +1518,7 @@ void main() {
 
       final prep = tester.widget<TextFormField>(
         find.ancestor(
-          of: find.text('Prep (min)'),
+          of: find.text('Prep'),
           matching: find.byType(TextFormField),
         ),
       );
