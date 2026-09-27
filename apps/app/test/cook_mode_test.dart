@@ -1013,7 +1013,7 @@ void main() {
       expect(find.text('Butter'), findsOneWidget);
       expect(find.text('Unbleached wheat flour'), findsOneWidget);
       expect(find.text('6 tbsp'), findsOneWidget);
-      expect(find.text('1¼ cup'), findsOneWidget); // UX-023
+      expect(find.text('1¼ cups'), findsOneWidget); // UX-023
       // "Serve warm" names nothing, and the rail says so rather than lying.
       await tester.tap(find.text('Done — next step'));
       await tester.pumpAndSettle();
@@ -1615,8 +1615,8 @@ void main() {
       await _pump(tester, recipe: thirds);
       await scaleToFour(tester);
 
-      expect(find.text('1 1⁄3 cup Sugar'), findsOneWidget);
-      expect(find.bySemanticsLabel('1 and 1 third cup Sugar'), findsOneWidget);
+      expect(find.text('1 1⁄3 cups Sugar'), findsOneWidget);
+      expect(find.bySemanticsLabel('1 and 1 third cups Sugar'), findsOneWidget);
       expect(find.bySemanticsLabel(RegExp('⁄')), findsNothing);
       semantics.dispose();
     });
@@ -1626,8 +1626,8 @@ void main() {
       await _pump(tester, recipe: thirds, size: const Size(1440, 1000));
       await scaleToFour(tester);
 
-      expect(find.text('1 1⁄3 cup'), findsOneWidget);
-      expect(find.bySemanticsLabel('1 and 1 third cup'), findsOneWidget);
+      expect(find.text('1 1⁄3 cups'), findsOneWidget);
+      expect(find.bySemanticsLabel('1 and 1 third cups'), findsOneWidget);
       expect(find.bySemanticsLabel(RegExp('⁄')), findsNothing);
       semantics.dispose();
     });

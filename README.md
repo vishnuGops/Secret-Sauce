@@ -502,12 +502,14 @@ The **food registry** (`nutritionData/`, Phase 29) follows the same generated-SQ
 `db:reset` right after the schema (before the recipes — 29b gives ingredients a `food_id` FK).
 Since Phase 39 the generated file also carries each unit's `display` / `plural` canon and ends by
 calling `canonicalise_imported_units()`, which rewrites imported recipes' units to it (idempotent;
-a second load changes no row, and a database with no imported recipes is untouched):
+a second load changes no row, and a database with no imported recipes is untouched). The same
+command also generates `packages/core/lib/src/unit_forms.dart` from `units.json` — the word units'
+singular/plural that the servings scaler prints (BL-10):
 
 ```powershell
 melos run nutrition:validate  # parse + lint nutritionData/
-melos run nutrition:gen       # regenerate supabase/nutrition_foods.sql — commit both
-melos run nutrition:check     # fail if that .sql is stale (CI runs this)
+melos run nutrition:gen       # regenerate nutrition_foods.sql + unit_forms.dart — commit all
+melos run nutrition:check     # fail if either output is stale (CI runs this)
 ```
 
 `fdc:extract` is the one authoring-time exception: it fills each food's per-100 g values and

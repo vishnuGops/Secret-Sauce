@@ -2,6 +2,7 @@
 // of them (`isoDate`) is what a version history is read by, so a padding slip
 // would be invisible in review and obvious on screen.
 import 'package:core/core.dart';
+import 'package:core/src/unit_forms.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -145,15 +146,15 @@ void main() {
     test('quantity and unit together, as a cook reads them', () {
       expect(
         ingredientQuantityLabel(base.copyWith(quantity: 1.5, unit: 'cup')),
-        '1½ cup',
+        '1½ cups',
       );
       expect(
         ingredientQuantityLabel(base.copyWith(quantity: 2, unit: 'cup')),
-        '2 cup',
+        '2 cups',
       );
       expect(
         ingredientQuantityLabel(base.copyWith(quantity: 1.25, unit: 'cup')),
-        '1¼ cup',
+        '1¼ cups',
       );
       // Metric keeps its decimal (UX-023).
       expect(
@@ -192,16 +193,16 @@ void main() {
       expect(ingredientQuantityLabel(base.copyWith(unit: '', note: '')), '—');
     });
 
-    test('the factor scales the number and never the unit', () {
+    test('the factor scales the number and never converts the unit', () {
       final ing = base.copyWith(quantity: 600, unit: 'g');
       expect(ingredientQuantityLabel(ing, factor: 1.25), '750 g');
-      // The fraction is chosen AFTER scaling: ¾ cup doubled is 1½ cup.
+      // The fraction is chosen AFTER scaling: ¾ cup doubled is 1½ cups.
       expect(
         ingredientQuantityLabel(
           base.copyWith(quantity: 0.75, unit: 'cup'),
           factor: 2,
         ),
-        '1½ cup',
+        '1½ cups',
       );
       // A servings ratio's float residue never reaches the label.
       expect(
@@ -223,7 +224,7 @@ void main() {
     const base = Ingredient(id: 'i', groupId: 'g', name: 'yoghurt');
     expect(
       ingredientOneLine(base.copyWith(quantity: 1.5, unit: 'cup')),
-      '1½ cup Yoghurt',
+      '1½ cups Yoghurt',
     );
     // No quantity, no unit, no note — the name alone, not "— Yoghurt".
     expect(ingredientOneLine(base), 'Yoghurt');
@@ -231,6 +232,70 @@ void main() {
       ingredientOneLine(base.copyWith(note: 'to taste')),
       'to taste Yoghurt',
     );
+  });
+  // BL-10 / B119: a word unit follows the number the scaler prints beside it.
+  // units.json is the source; `kUnitNumberForms` is generated from it.
+  group('word units take the number of the scaled amount', () {
+    const base = Ingredient(id: 'i', groupId: 'g', name: 'garlic');
+    String label(double q, String unit, [double factor = 1]) =>
+        ingredientQuantityLabel(
+          base.copyWith(quantity: q, unit: unit),
+          factor: factor,
+        );
+
+    test('scaling up pluralises', () {
+      expect(label(1, 'clove', 2), '2 cloves');
+      expect(label(0.5, 'cup', 4), '2 cups');
+      expect(label(1, 'bunch', 3), '3 bunches');
+      expect(label(1, 'pouch', 2), '2 pouches');
+    });
+
+    test('scaling down singularises', () {
+      expect(label(2, 'cloves', 0.5), '1 clove');
+      expect(label(2, 'cups', 0.25), '½ cup');
+      expect(label(3, 'cloves', 1 / 3), '1 clove');
+    });
+
+    test('one and below is singular, above one is plural', () {
+      expect(label(1, 'cups'), '1 cup');
+      expect(label(0.75, 'cups'), '¾ cup');
+      expect(label(1.5, 'cup'), '1½ cups');
+      expect(label(1.03, 'cup'), '1.03 cups');
+      // Zero is plural in English — a saved `0` must not read `0 cup`.
+      expect(label(0, 'cups'), '0 cups');
+    });
+
+    test('decided on the printed amount, not only the value', () {
+      // 1.01 snaps to `1`, so it must not read `1 cups`.
+      expect(label(1.01, 'cup'), '1 cup');
+      // 0.99 snaps up to `1` as well.
+      expect(label(0.99, 'cups'), '1 cup');
+    });
+
+    test('invariant and unknown units are printed verbatim', () {
+      expect(label(1, 'tbsp', 3), '3 tbsp');
+      expect(label(1, 'L', 2), '2 L');
+      expect(label(250, 'g', 2), '500 g');
+      expect(label(1, 'pkg', 2), '2 pkg');
+      expect(label(1, 'inch', 2), '2 inch');
+      expect(label(2, 'knobs', 0.5), '1 knobs');
+    });
+
+    test('a unit with no quantity is left alone', () {
+      expect(
+        ingredientQuantityLabel(base.copyWith(unit: 'cloves'), factor: 2),
+        'cloves',
+      );
+    });
+
+    test('every generated spelling maps to its own unit pair', () {
+      for (final MapEntry(key: spelling, value: (one, many))
+          in kUnitNumberForms.entries) {
+        expect(spelling, spelling.toLowerCase());
+        expect(label(1, spelling), '1 $one', reason: '$spelling at one');
+        expect(label(2, spelling), '2 $many', reason: '$spelling at two');
+      }
+    });
   });
   // A screen reader said `1 1⁄3 cup` as "one one fraction slash three cup".
   // The spoken form is a transform of the printed label, so the two cannot
@@ -267,11 +332,11 @@ void main() {
         quantity: 1 / 3,
         unit: 'cup',
       );
-      expect(ingredientQuantityLabel(ing, factor: 4), '1 1⁄3 cup');
-      expect(ingredientQuantitySpoken(ing, factor: 4), '1 and 1 third cup');
+      expect(ingredientQuantityLabel(ing, factor: 4), '1 1⁄3 cups');
+      expect(ingredientQuantitySpoken(ing, factor: 4), '1 and 1 third cups');
       expect(
         ingredientOneLineSpoken(ing, factor: 4),
-        '1 and 1 third cup Flour',
+        '1 and 1 third cups Flour',
       );
     });
   });

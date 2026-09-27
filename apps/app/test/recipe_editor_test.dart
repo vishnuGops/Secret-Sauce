@@ -1814,13 +1814,13 @@ void main() {
       await tester.pumpWidget(_routedEditApp(_loadedFlour()));
       await tester.pumpAndSettle();
 
-      // The summary, through core's one chain: `1½ cup Wheat flour`.
+      // The summary, through core's one chain: `1½ cups Wheat flour`.
       expect(find.widgetWithText(TextField, 'Qty'), findsNothing);
-      expect(find.text('1½ cup Wheat flour'), findsOneWidget);
+      expect(find.text('1½ cups Wheat flour'), findsOneWidget);
       expect(find.text('sifted · optional'), findsOneWidget);
       expect(find.byIcon(Icons.link), findsOneWidget);
       final summary = find.bySemanticsLabel(
-        'Edit 1 and 1 half cup Wheat flour, sifted, optional, '
+        'Edit 1 and 1 half cups Wheat flour, sifted, optional, '
         'linked to a food',
       );
       expect(summary, findsOneWidget);
@@ -1859,7 +1859,7 @@ void main() {
       await tester.pumpAndSettle();
       // The new row is open; the saved one stays a summary.
       expect(find.widgetWithText(TextField, 'Qty'), findsOneWidget);
-      expect(find.text('1½ cup Wheat flour'), findsOneWidget);
+      expect(find.text('1½ cups Wheat flour'), findsOneWidget);
     });
 
     // A collapsed row hides its fields — it must not hide an unreadable
@@ -2604,7 +2604,7 @@ Pattern _row(int i) =>
     RegExp('row ${i.toString().padLeft(2, '0')}\$', caseSensitive: false);
 
 /// One linked, noted, optional `1.5 cup wheat flour` — the compact summary's
-/// fixture (`1½ cup Wheat flour`).
+/// fixture (`1½ cups Wheat flour`).
 _RecordingRecipeRepository _loadedFlour() => _RecordingRecipeRepository(
   loaded: const Recipe(
     id: 'r1',

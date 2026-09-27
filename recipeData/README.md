@@ -136,10 +136,11 @@ not demo from.
 
 ## Unit spellings
 
-The app prints a unit **verbatim** beside its quantity — `formatText` in
+The app prints a unit **as written** beside its quantity — `ingredientQuantityLabel` in
 [formatting.dart](../packages/core/lib/src/formatting.dart) is `'$amount $unit'`, with no
-pluralisation and no normalisation anywhere between here and the screen. Whatever is in
-the JSON is what a cook reads. Two rules, and `schema.json` carries the full list:
+normalisation between here and the screen. The one exception is a word unit's number: once
+the servings scaler has changed the amount, `clove`/`cloves` is re-picked to match it
+(BL-10). Otherwise, whatever is in the JSON is what a cook reads. Two rules, and `schema.json` carries the full list:
 
 - **Abbreviation units are lowercase and invariant** — `g` `kg` `ml` `L` `tsp` `tbsp`
   `oz` `lb`. Never `Tbsp`, `tablespoon`, `tablespoons`, `tbsps`, `teaspoon`, `teaspoons`,

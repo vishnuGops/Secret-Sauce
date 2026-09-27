@@ -13,13 +13,15 @@
     "supabase/nutrition_foods.sql; the estimator (29c) reads that table, so this",
     "file is the single source and nothing in SQL restates a conversion.",
     "`display` (+ `plural` for word units) is the spelling an AUTHORED recipe",
-    "must use — the app prints `unit` verbatim, so this is what a cook reads.",
+    "must use — the app prints `unit` as written, so this is what a cook reads.",
     "It is NOT derivable from the key: `L` is displayed for key `l` (a lowercase",
     "l reads as a 1), and word units keep a plural (`3 cloves`, never `3 clove`).",
     "A unit with no `plural` is invariant at every quantity (`2 tbsp`). Read by",
     "tool/recipe_format.dart's unit lint (BL-8), and since Phase 39 also emitted",
     "into food_unit.display / .plural, where canonical_unit() in 0001 applies the",
-    "same canon to IMPORTED recipes (UX-030). The estimator never reads them. The",
+    "same canon to IMPORTED recipes (UX-030). The estimator never reads them; the",
+    "app does, through packages/core/lib/src/unit_forms.dart, which the same",
+    "generator writes so the servings scaler re-picks a word unit's number (BL-10). The",
     "bare-count marker `each` has no display because an authored unit is null."
   ],
   "units": [

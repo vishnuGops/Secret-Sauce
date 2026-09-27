@@ -665,7 +665,7 @@ void main() {
 
       // Same widget as the expanded page's left column — scaled quantity in the
       // gutter, sentence-cased name, check-off counter.
-      expect(find.text('1¼ cup'), findsOneWidget); // UX-023
+      expect(find.text('1¼ cups'), findsOneWidget); // UX-023
       expect(find.text('Wheat flour'), findsOneWidget);
       expect(find.text('0 of 1 gathered'), findsOneWidget);
       // And it is a panel here too. It was bare on compact (`bordered: false`)
@@ -1223,7 +1223,7 @@ void main() {
 
       expect(find.textContaining('Scaled from'), findsNothing);
       // The quantity is unscaled, which is what makes the absent banner right.
-      expect(find.text('1¼ cup'), findsOneWidget); // UX-023
+      expect(find.text('1¼ cups'), findsOneWidget); // UX-023
     });
 
     testWidgets('the jump chip sends the rail back to Ingredients', (
@@ -1487,9 +1487,9 @@ void main() {
       final repo = _FakeRecipeRepository(recipe: thirds);
       await _pump(tester, repo: repo, uid: 'me', size: const Size(390, 2400));
 
-      expect(find.text('1 1⁄3 cup'), findsOneWidget);
+      expect(find.text('1 1⁄3 cups'), findsOneWidget);
       expect(
-        find.bySemanticsLabel(RegExp('1 and 1 third cup')),
+        find.bySemanticsLabel(RegExp('1 and 1 third cups')),
         findsOneWidget,
       );
       expect(find.bySemanticsLabel(RegExp('⁄')), findsNothing);

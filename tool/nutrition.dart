@@ -1,10 +1,12 @@
 // tool/nutrition.dart — GEN: validate nutritionData/ and generate
-// supabase/nutrition_foods.sql from foods.json + units.json.
+// supabase/nutrition_foods.sql from foods.json + units.json, plus
+// packages/core/lib/src/unit_forms.dart (the word units' singular / plural,
+// read by the servings scaler's label — BL-10, B119) from units.json alone.
 //
 // Usage (via melos):
 //   melos run nutrition:validate   # parse + lint, write nothing
-//   melos run nutrition:gen        # validate, then rewrite the .sql
-//   melos run nutrition:check      # validate + fail if the .sql is stale (CI)
+//   melos run nutrition:gen        # validate, then rewrite both outputs
+//   melos run nutrition:check      # validate + fail if either is stale (CI)
 //
 // Deliberately split from tool/fdc.dart (EXTRACT): this half reads the JSON
 // alone — no CSV bundle in sight — so CI can check staleness offline, exactly
@@ -20,6 +22,7 @@ import 'dart:io';
 const _foodsPath = 'nutritionData/foods.json';
 const _unitsPath = 'nutritionData/units.json';
 const _outPath = 'supabase/nutrition_foods.sql';
+const _dartOutPath = 'packages/core/lib/src/unit_forms.dart';
 
 /// Dollar-quote tag for every string literal; the validator rejects content
 /// containing it, so nothing needs escaping. Distinct from seed_recipes' $sr$.
@@ -141,6 +144,22 @@ _load() {
       if (u['plural'] is String) u['plural'] as String,
     ]) {
       if (s.contains(_tag)) log.err('units: "$s" contains the $_tag quote tag');
+    }
+  }
+
+  // unit_forms.dart writes plural units' spellings and forms as single-quoted
+  // Dart literals, so none may carry a quote, a `$` or a backslash.
+  final dartUnsafe = RegExp(r"['$\\]");
+  for (final u in units) {
+    if (u['plural'] == null) continue;
+    for (final s in [
+      ...(u['spellings'] as List? ?? const []).cast<String>(),
+      if (u['display'] is String) u['display'] as String,
+      u['plural'] as String,
+    ]) {
+      if (dartUnsafe.hasMatch(s)) {
+        log.err('units: "$s" cannot be a Dart literal (quote, \$ or \\)');
+      }
     }
   }
 
@@ -394,6 +413,37 @@ end \$\$;''');
   return buf.toString();
 }
 
+/// The client's copy of the word units' number forms (BL-10, B119). Only units
+/// with a `plural` are emitted: an invariant unit (`tbsp`, `g`, `L`) prints the
+/// same at every quantity, so the scaler leaves it verbatim. Every spelling of
+/// a unit maps to that unit's pair, so a stored `cups` at ½ reads `½ cup`.
+/// Generated rather than hand-kept so units.json stays the one source — a
+/// hand-written mirror is Gotcha 19's drift in a new place.
+String _generateDart(List<Map<String, dynamic>> units) {
+  final entries = <String>[];
+  for (final u in units) {
+    final plural = u['plural'] as String?;
+    if (plural == null) continue;
+    final display = u['display'] as String;
+    for (final s in (u['spellings'] as List).cast<String>()) {
+      entries.add("  '$s': ('$display', '$plural'),");
+    }
+  }
+  return '''
+// unit_forms.dart — GENERATED FILE. DO NOT EDIT BY HAND.
+//
+// Source: nutritionData/units.json  ·  Generator: tool/nutrition.dart
+// Regenerate with `melos run nutrition:gen`; `melos run nutrition:check`
+// fails if this file is stale.
+
+/// Every lowercase spelling of a word unit → its (singular, plural) display
+/// form (BL-10, B119). Units that do not change with quantity are absent.
+const kUnitNumberForms = <String, (String, String)>{
+${entries.join('\n')}
+};
+''';
+}
+
 // ---------------------------------------------------------------------------
 // Entry point
 // ---------------------------------------------------------------------------
@@ -423,19 +473,29 @@ Future<void> main(List<String> args) async {
 
   if (action == 'validate') return;
 
-  final sql = _generate(foods, units);
-  final out = File(_outPath);
+  final outputs = {
+    _outPath: _generate(foods, units),
+    _dartOutPath: _generateDart(units),
+  };
 
   if (action == 'check') {
-    final current = out.existsSync() ? out.readAsStringSync() : '';
-    if (current.replaceAll('\r\n', '\n') != sql) {
-      stderr.writeln('✖ $_outPath is stale — run `melos run nutrition:gen`');
-      exit(1);
+    var stale = false;
+    for (final MapEntry(key: path, value: text) in outputs.entries) {
+      final out = File(path);
+      final current = out.existsSync() ? out.readAsStringSync() : '';
+      if (current.replaceAll('\r\n', '\n') != text) {
+        stderr.writeln('✖ $path is stale — run `melos run nutrition:gen`');
+        stale = true;
+      } else {
+        stdout.writeln('✔ $path is up to date');
+      }
     }
-    stdout.writeln('✔ $_outPath is up to date');
+    if (stale) exit(1);
     return;
   }
 
-  out.writeAsStringSync(sql);
-  stdout.writeln('✔ wrote $_outPath (${sql.split('\n').length} lines)');
+  for (final MapEntry(key: path, value: text) in outputs.entries) {
+    File(path).writeAsStringSync(text);
+    stdout.writeln('✔ wrote $path (${text.split('\n').length} lines)');
+  }
 }

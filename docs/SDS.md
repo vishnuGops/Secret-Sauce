@@ -1100,9 +1100,12 @@ Things about the v2 page that are load-bearing and easy to undo by accident:
   unit with no number is a data defect worth seeing; the note then rides beside the name instead, so
   neither half is dropped. The note takes the gutter **only** when it is the one thing there, which
   is also the only case it is not repeated beside the name.
-- **The unit is printed verbatim, so its spelling is authored, not derived.** `formatText` is
-  `'$amount $unit'` — no normalisation, no pluralisation, nothing between the column and the
-  screen. The registry in [`nutritionData/units.json`](../nutritionData/units.json) is a *lookup*
+- **The unit is printed as stored, so its spelling is authored, not derived — except its number.**
+  `ingredientQuantityLabel` prints `'$amount $unit'` with no normalisation; the one change it makes
+  is a word unit's singular/plural, chosen from the **printed** amount (singular when it prints `1`
+  or the value is between 0 and 1, plural above 1 and at 0), so the servings scaler never prints `2 clove` or `½ cups`
+  (BL-10, B119). The forms come from `kUnitNumberForms` in `core/src/unit_forms.dart`, which
+  `tool/nutrition.dart` generates from `units.json`; an invariant or unregistered unit is untouched. The registry in [`nutritionData/units.json`](../nutritionData/units.json) is a *lookup*
   table for the estimator (§5.4) and its keys are singular for that reason; it is **not** the
   display form. Hence the corpus convention (B094): abbreviation units lowercase and invariant
   (`g` `kg` `ml` `L` `tsp` `tbsp` `oz` `lb`), word units plural as a cook reads them (`3 cloves

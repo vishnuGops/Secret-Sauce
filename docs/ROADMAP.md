@@ -1309,7 +1309,7 @@ that resolves to a known unit but is not its display form (`Tbsp`, `tablespoons`
 quantity accepts either); a mis-cased deliberate non-unit (`Pinch`); a blank or padded unit.
 **Warnings:** a spelling absent from `units.json` (8 survive: `pods`, `pieces`, `sprig`, …). It
 found two curated misses (B120). `tool/nutrition.dart` ignores both new keys, so
-`nutrition_foods.sql` is byte-identical. What it cannot fix is the scaler: see BL-10.
+`nutrition_foods.sql` is byte-identical. The scaler half is BL-10 (done).
 
 The original framing, kept for the reasoning:
 
@@ -1394,10 +1394,11 @@ identity path, for every signed-in user.
 **Trigger:** the next hosted session. Everything above the last three boxes is already built and
 verified; what remains needs the production credential and one product decision.
 
-#### BL-10 — the servings scaler prints the unit verbatim (B119)
+#### BL-10 — the servings scaler prints the unit verbatim (B119) — **DONE (2026-09-26)**
 
-BL-8 guarantees the canon at the **authored** quantity only. `formatText` is `'$amount $unit'`, so
-`1 clove` at ×2 prints `2 clove` and `0.5 cup` at ×4 prints `2 cup`. The fix is the same
-`display`/`plural` pair reaching the client — which means either a column the client reads or a
-Dart mirror of `units.json`, and a mirror is a second source of truth (Gotcha 19's shape).
-**Trigger:** the next change to the servings scaler or `formatText`.
+- [x] A word unit follows the scaled amount: `1 clove` ×2 → `2 cloves`, `2 cups` ×¼ → `½ cup`.
+      Owner decision: a **generated** Dart table, not a runtime read of `food_unit` (signed-in
+      only, and it would have made every label async). `tool/nutrition.dart` writes
+      `packages/core/lib/src/unit_forms.dart` from `units.json`; `nutrition:check` gates it, so
+      `units.json` stays the one source. Cost accepted: a unit added to `units.json` pluralises in
+      the app from the next release. Details in B119.

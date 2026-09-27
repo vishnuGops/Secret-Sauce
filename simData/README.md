@@ -38,8 +38,8 @@ Because the format is shared, so is the unit convention — and the shared valid
 `lb`, never `Tbsp` or `tablespoons`); word units keep the plural a cook would read
 (`3 cloves garlic`, not `3 clove garlic`). A resolvable but non-canonical spelling is an
 **error**; a spelling absent from `nutritionData/units.json` is a **warning** (`pods`, `sprigs`,
-`heads` — the library carries a few, each deliberate). The app prints the unit verbatim, so the
-spelling in this file is what a reader sees. Full rules and the reasoning:
+`heads` — the library carries a few, each deliberate). The app prints the unit as written (only a word
+unit's number follows the scaled amount), so the spelling in this file is what a reader sees. Full rules and the reasoning:
 [recipeData/README.md](../recipeData/README.md#unit-spellings).
 
 ### Don't author `nutrition` here

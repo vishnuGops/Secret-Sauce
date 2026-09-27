@@ -7,6 +7,7 @@
 library;
 
 import 'package:core/src/models/ingredient.dart';
+import 'package:core/src/unit_forms.dart';
 
 /// Groups a whole number with commas — `1980` becomes `1,980`.
 ///
@@ -223,8 +224,10 @@ bool ingredientNoteIsQuantity(Ingredient ingredient) =>
 /// instead (see [ingredientNoteIsQuantity]), so no combination silently drops a
 /// half. Printing `—` and losing the unit was B066.
 ///
-/// [factor] scales the number only — never the unit, and callers must never pass
-/// it to a duration or a temperature, which do not scale with servings.
+/// [factor] scales the number, and a word unit follows the number it ends up
+/// beside: `1 clove` doubled is `2 cloves`, `2 cups` quartered is `½ cup`
+/// (BL-10, B119). The unit is never *converted*, and callers must never pass
+/// [factor] to a duration or a temperature, which do not scale with servings.
 String ingredientQuantityLabel(Ingredient ingredient, {double factor = 1}) {
   final unit = ingredient.unit;
   final hasUnit = (unit ?? '').isNotEmpty;
@@ -234,8 +237,25 @@ String ingredientQuantityLabel(Ingredient ingredient, {double factor = 1}) {
     final note = ingredient.note;
     return (note ?? '').isEmpty ? '—' : note!;
   }
-  final amount = formatQuantity(quantity * factor, unit);
-  return hasUnit ? '$amount $unit' : amount;
+  final scaled = quantity * factor;
+  final amount = formatQuantity(scaled, unit);
+  return hasUnit ? '$amount ${_unitForAmount(unit!, scaled, amount)}' : amount;
+}
+
+/// [unit] in the number that fits [amount] — the label [formatQuantity] printed
+/// for [value]. Singular at `1` and between 0 and 1 (`½ cup`, `1 clove`),
+/// plural above 1 and at zero (`1½ cups`, `2 cloves`, `0 cups`).
+///
+/// Decided on the **printed** amount as well as the value, because the two
+/// can disagree across 1: a scaled `1.01` snaps to `1` and must read `1 cup`,
+/// not `1 cups`. A unit that does not change with quantity (`tbsp`, `g`, `L`),
+/// or a spelling units.json does not know, comes back verbatim — so this can
+/// only ever correct a word unit's number, never re-spell anything else.
+/// The forms are [kUnitNumberForms], generated from `nutritionData/units.json`.
+String _unitForAmount(String unit, double value, String amount) {
+  final forms = kUnitNumberForms[unit.trim().toLowerCase()];
+  if (forms == null) return unit;
+  return amount == '1' || (value > 0 && value < 1) ? forms.$1 : forms.$2;
 }
 
 /// `1.5 cup yoghurt` — the gutter label and the name on one line, for places
