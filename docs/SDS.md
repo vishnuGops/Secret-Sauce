@@ -1284,6 +1284,19 @@ in its fixed-width test font, so the envelope suites are unaffected by the font 
   passes `AssetImage(categoryTileAsset(category))`, one bundled photo per `DiscoverCategory`
   slug under `apps/app/assets/categories/`, over the block colour so a missing file degrades to
   the plain tile).
+- **Cover values: a URL or a key** (2026-09-28). `recipes.cover_image_url` holds either an
+  absolute URL (an upload's `getPublicUrl`, an import's hotlink — rendered as is) or a Storage
+  **key** in `recipe-images` (`ai/<slug>.jpg`), which core's `MediaUrl` resolves against the
+  project the app is configured for (`SupabaseService.init` → `MediaUrl.configure`; unconfigured,
+  a key resolves to null = the no-photo state). `Recipe.displayCoverImageUrl` does the resolving,
+  after Phase 35c's image policy, so every renderer gets a loadable URL or null. Keys exist only
+  for the Kitchen's generated covers, set by the seed's cover `update` (from
+  `recipeData/covers/manifest.json`) and uploaded with the service role — the bucket's insert
+  policy requires an auth-uid first folder, so no member can write under `ai/`.
+  **`Recipe.coverIsGenerated`** (a *shown* cover whose value is an `ai/` key) drives
+  **`GeneratedImageTag`** — the `AI` pill on the card, both detail covers — and the detail covers'
+  screen-reader label ("AI-generated image of …" instead of "Photo of …"). A fork copies
+  `cover_image_url`, so a fork of a Kitchen recipe keeps the same image and the same tag.
 - **Discover category filter** — `DiscoverCategory` (core) is six tiles, each a group of raw
   `recipes.category` spellings (the corpus writes `Main`, `Main Course`, `Dinner` …).
   `DiscoverRepository.byCategories(values, limit, offset)` mirrors `recent` plus

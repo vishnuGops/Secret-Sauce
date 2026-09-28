@@ -1460,6 +1460,33 @@ void main() {
     handle.dispose();
   });
 
+  // DESIGN §2.2: a generated cover is tagged `AI` and never called a photo.
+  testWidgets('a generated cover is tagged AI and not called a photo', (
+    tester,
+  ) async {
+    MediaUrl.configure('http://storage.test');
+    addTearDown(MediaUrl.reset);
+    final handle = tester.ensureSemantics();
+    final repo = _FakeRecipeRepository(
+      recipe: _fullRecipe.copyWith(
+        coverImageUrl: 'ai/spring-vegetable-tart.jpg',
+      ),
+    );
+    await _pump(tester, repo: repo, uid: 'me', size: _phone, settle: false);
+    await tester.pump();
+    expect(find.byType(GeneratedImageTag), findsOneWidget);
+    expect(
+      find.bySemanticsLabel('AI-generated image of Spring Vegetable Tart'),
+      findsOneWidget,
+    );
+    expect(
+      find.bySemanticsLabel('Photo of Spring Vegetable Tart'),
+      findsNothing,
+    );
+    expect(tester.takeException(), isNull);
+    handle.dispose();
+  });
+
   // A screen reader said `1 1⁄3 cup` as "1 fraction slash 3".
   group('spoken quantities', () {
     testWidgets('the gutter reads a third as words; the print is unchanged', (

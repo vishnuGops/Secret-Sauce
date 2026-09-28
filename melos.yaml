@@ -117,6 +117,13 @@ scripts:
     description: Generate recipeData/covers/<slug>.jpg with Gemini (skips existing).
     run: dart run tool/recipe_covers.dart
 
+  # Put those covers in the `recipe-images` bucket at ai/<slug>.jpg — the keys
+  # supabase/seed_recipes.sql points the recipes at. Targets env.local.json's
+  # project with $SUPABASE_SERVICE_ROLE_KEY (shell only); non-local needs --yes.
+  covers:upload:
+    description: Upload recipeData/covers/*.jpg to Storage (ai/<slug>.jpg).
+    run: dart run tool/recipe_covers.dart --upload
+
   # ---------------------------------------------------------------------------
   # Scraped recipe corpus (Phase 34). Plain node under recipeData/_tools/, data in
   # corpus/. This never touches a database and never reaches seed SQL — see

@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:core/src/media_url.dart';
 import 'package:core/src/models/enums.dart';
 import 'package:core/src/models/ingredient_group.dart';
 import 'package:core/src/models/profile.dart';
@@ -123,8 +124,17 @@ class Recipe with _$Recipe {
   /// cover, because the sixth one is the one that would get it wrong, and a
   /// picture shown against a publisher's wishes is the single most expensive
   /// mistake in the whole rights position (Phase 35a).
+  ///
+  /// It also turns a stored **key** (`ai/<slug>.jpg`) into this project's
+  /// Storage URL ([MediaUrl]), so a caller never sees the difference.
   String? get displayCoverImageUrl =>
-      imageMode.showsImage ? coverImageUrl : null;
+      imageMode.showsImage ? MediaUrl.resolve(coverImageUrl) : null;
+
+  /// Whether the cover this recipe *shows* was generated rather than
+  /// photographed — the `AI` tag's condition (DESIGN §2.2). False when no
+  /// cover is shown, so a tag can never sit on the no-photo colour block.
+  bool get coverIsGenerated =>
+      displayCoverImageUrl != null && MediaUrl.isGenerated(coverImageUrl);
 
   /// Whether the ingredients and steps may be shown.
   ///

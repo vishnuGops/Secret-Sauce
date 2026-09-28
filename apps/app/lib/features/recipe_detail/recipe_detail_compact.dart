@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:app/features/recipe_detail/cover_label.dart';
 import 'package:app/features/recipe_detail/delete_action.dart';
 import 'package:app/features/recipe_detail/detail_chips.dart';
 import 'package:app/features/recipe_detail/detail_provenance.dart';
@@ -250,7 +251,7 @@ class _Cover extends ConsumerWidget {
           // picture of the dish.
           Semantics(
             image: true,
-            label: 'Photo of ${recipe.title}',
+            label: coverAltText(recipe),
             excludeSemantics: true,
             child: CachedNetworkImage(imageUrl: coverUrl, fit: BoxFit.cover),
           )
@@ -263,6 +264,15 @@ class _Cover extends ConsumerWidget {
               padding: const EdgeInsets.only(bottom: _kSheetOverlap),
               child: CategoryCover(category: recipe.category, large: true),
             ),
+          ),
+        // A generated cover says so (DESIGN §2.2). Bottom-right, lifted clear
+        // of the sheet's overlap: the top corners hold the back and overflow
+        // controls.
+        if (recipe.coverIsGenerated)
+          const Positioned(
+            right: AppSpacing.md,
+            bottom: _kSheetOverlap + AppSpacing.sm,
+            child: GeneratedImageTag(),
           ),
         SafeArea(
           // Pinned to the top. Under the expanding stack a bare `Row` is

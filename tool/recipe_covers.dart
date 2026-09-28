@@ -8,6 +8,7 @@
 //   melos run covers:gen -- --force             # regenerate even if present
 //   melos run covers:gen -- --dry-run           # print the prompts; no key, no calls
 //   melos run covers:gen -- --model=<id> --aspect=4:3 --size=2K
+//   melos run covers:upload                     # put them in Storage (see below)
 //
 // The API key comes from $GEMINI_API_KEY, set by dot-sourcing the git-ignored
 // gemini.local.ps1 (copy of gemini.example.ps1) — never a committed file, never
@@ -22,8 +23,13 @@
 // manifest is the provenance record, so a cover can always be traced back to
 // the prompt and model that made it (DESIGN.md §2.2).
 //
-// Nothing here touches a database or Storage. Getting a cover onto a recipe
-// row is a separate step (ROADMAP Phase 36c, "cover photographs").
+// Generating touches no database and no Storage. `--upload` is the separate
+// step that does: every cover in the manifest goes to the `recipe-images`
+// bucket at `ai/<slug>.jpg`, the key supabase/seed_recipes.sql points each
+// recipe at (tool/recipes.dart). It targets SUPABASE_URL from
+// apps/app/env.local.json — the same project the app is looking at — with the
+// service-role key from $SUPABASE_SERVICE_ROLE_KEY (shell only: it bypasses
+// every policy). Anything but the local stack also needs `--yes`.
 //
 // The prompt is built from the recipe itself — title, description, cuisine,
 // category and its ingredient names — so the picture shows what the recipe
@@ -166,6 +172,8 @@ class _Args {
   Set<String>? only;
   bool force = false;
   bool dryRun = false;
+  bool upload = false;
+  bool yes = false;
   String model = _defaultModel;
   String aspect = _defaultAspect;
   String size = _defaultSize;
@@ -178,6 +186,10 @@ _Args _parse(List<String> argv) {
       a.force = true;
     } else if (arg == '--dry-run') {
       a.dryRun = true;
+    } else if (arg == '--upload') {
+      a.upload = true;
+    } else if (arg == '--yes') {
+      a.yes = true;
     } else if (arg.startsWith('--only=')) {
       a.only = arg.substring(7).split(',').map((s) => s.trim()).toSet();
     } else if (arg.startsWith('--model=')) {
@@ -385,6 +397,72 @@ List<int> _toJpeg(List<int> bytes) {
   return img.encodeJpg(out, quality: _jpegQuality);
 }
 
+/// Put each listed recipe's cover (that the manifest records) in the
+/// `recipe-images` bucket at `ai/<slug>.jpg`, overwriting. Idempotent.
+Future<void> _upload(List<_Recipe> recipes, {required bool yes}) async {
+  final env =
+      jsonDecode(File('apps/app/env.local.json').readAsStringSync())
+          as Map<String, dynamic>;
+  final url = (env['SUPABASE_URL'] as String).replaceAll(RegExp(r'/$'), '');
+  final key = Platform.environment['SUPABASE_SERVICE_ROLE_KEY'];
+  if (key == null || key.isEmpty) {
+    stderr.writeln(
+      'SUPABASE_SERVICE_ROLE_KEY is not set. Local stack: the service_role key '
+      'from `supabase status`; hosted: Dashboard → Project Settings → API. '
+      r'Set it in this shell only ($env:SUPABASE_SERVICE_ROLE_KEY = "…").',
+    );
+    exit(64);
+  }
+  final local = RegExp(r'^http://(127\.0\.0\.1|localhost)').hasMatch(url);
+  if (!local && !yes) {
+    stderr.writeln(
+      'refusing: apps/app/env.local.json points at $url, not the local stack. '
+      'Re-run with --yes to upload there.',
+    );
+    exit(64);
+  }
+
+  final manifest = _readManifest();
+  final http = HttpClient();
+  var sent = 0;
+  final failed = <String>[];
+  try {
+    for (final r in recipes) {
+      final file = File('$_outDir/${r.slug}.jpg');
+      if (!manifest.containsKey(r.slug) || !file.existsSync()) continue;
+      final object = '${_bucket}/ai/${r.slug}.jpg';
+      final req = await http.postUrl(
+        Uri.parse('$url/storage/v1/object/$object'),
+      );
+      req.headers
+        ..set('authorization', 'Bearer $key')
+        ..set('apikey', key)
+        ..set('x-upsert', 'true')
+        ..set('cache-control', 'max-age=3600')
+        ..contentType = ContentType('image', 'jpeg');
+      req.add(file.readAsBytesSync());
+      final res = await req.close();
+      final body = await res.transform(utf8.decoder).join();
+      if (res.statusCode == 200) {
+        sent++;
+        stdout.writeln('  ✔ ai/${r.slug}.jpg');
+      } else {
+        failed.add(r.slug);
+        stderr.writeln(
+          '  ✖ ai/${r.slug}.jpg — HTTP ${res.statusCode}: ${_short(body)}',
+        );
+      }
+    }
+  } finally {
+    http.close();
+  }
+  stdout.writeln('\n$sent uploaded to $url, ${failed.length} failed');
+  if (failed.isNotEmpty) exit(1);
+}
+
+/// The bucket every stored cover key lives in (core's `MediaUrl.bucket`).
+const _bucket = 'recipe-images';
+
 String _ext(String mime) => switch (mime) {
   'image/jpeg' => 'jpg',
   'image/webp' => 'webp',
@@ -401,6 +479,11 @@ Future<void> main(List<String> argv) async {
       exit(64);
     }
     recipes = recipes.where((r) => only.contains(r.slug)).toList();
+  }
+
+  if (args.upload) {
+    await _upload(recipes, yes: args.yes);
+    return;
   }
 
   if (args.dryRun) {

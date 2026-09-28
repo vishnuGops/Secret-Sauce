@@ -130,7 +130,7 @@ enum LegalDoc {
 /// it in the same commit as any wording change** — text that moves without this
 /// date moving is the review failure to look for, and it is the only thing here
 /// a test cannot catch.
-const String kLegalLastUpdated = '12 September 2026';
+const String kLegalLastUpdated = '28 September 2026';
 
 // ---------------------------------------------------------------------------
 // Privacy
@@ -397,7 +397,9 @@ const List<LegalBlock> kRightsBlocks = [
   LegalBullets([
     'Written by people using Secret-Sauce. Those belong to their authors; the '
         'Terms describe the licence they grant us.',
-    'Written by us, as the Secret Sauce Kitchen.',
+    'Written by us, as the Secret Sauce Kitchen. The pictures on those '
+        'recipes are AI-generated images, not photographs of the dish, and '
+        'each one is marked “AI”.',
     'Harvested from the public web, with the credit attached. This is the part '
         'the rest of this page is about.',
   ]),

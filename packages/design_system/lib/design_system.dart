@@ -10,6 +10,7 @@ export 'src/widgets/interactive_tile.dart';
 export 'src/widgets/recipe_card.dart';
 export 'src/widgets/category_cover.dart';
 export 'src/widgets/category_tile.dart';
+export 'src/widgets/generated_image_tag.dart';
 export 'src/widgets/nutrition_summary.dart';
 export 'src/widgets/tag_pill.dart';
 export 'src/widgets/difficulty_badge.dart';

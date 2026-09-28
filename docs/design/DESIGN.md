@@ -140,6 +140,11 @@ Rights page says in one sentence that the Kitchen's recipe images are AI-generat
 EU AI Act Art. 50 (a realistic image of a dish is arguably a "deep fake" of an object) and
 Google's policy against presenting generated content as human-made; the tag is cheaper than
 the argument. Not legal advice — confirm with counsel alongside the four legal owner facts.
+**Built 2026-09-28:** `GeneratedImageTag` (scrim pill, `labelSmall` on `onImage`, `AppInsets.badge`,
+tooltip + semantics "AI-generated image"). Card: top-right, stacked under the visibility chip.
+Expanded detail: top-right of the cover. Compact detail: bottom-right, lifted above the sheet
+overlap, because the top corners hold Back and history. Shown only while the cover itself is
+shown (`Recipe.coverIsGenerated`).
 
 ### 2.3 Iconography
 
@@ -500,6 +505,9 @@ food photograph carries the page; when there is none, the page is typeset.
   radial scrim in the block colour (reach 1.4 × height, 0.8 → 0.5 → 0), ink drawn above both so a
   splash is not hidden by an opaque photo. First tried at 2 × height / 0.9, which washed out the
   whole 140px phone tile — screenshot-checked at 390 / 1000 / 1440.
+
+- **v2.4 — 2026-09-28.** No token values moved. New primitive `GeneratedImageTag` (§2.2): the
+  `AI` pill on a generated cover; reuses `palette.scrim` / `onImage` and `AppInsets.badge`.
 
 ## 10. Drift against the Claude Design system (`_ds_bundle.css`, read 2026-09-25)
 

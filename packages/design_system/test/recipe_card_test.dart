@@ -749,4 +749,85 @@ void main() {
       expect(cardTaps, 1);
     });
   });
+
+  // DESIGN §2.2: a generated cover says so; a photograph and the no-photo
+  // colour block never do.
+  group('AI tag on a generated cover', () {
+    setUp(() => MediaUrl.configure('http://storage.test'));
+    tearDown(MediaUrl.reset);
+
+    Future<void> pumpCard(
+      WidgetTester tester,
+      Recipe recipe, {
+      double width = kRecipeCardMinWidth,
+      double scale = 1.0,
+      bool showVisibility = false,
+    }) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.light(),
+          home: MediaQuery(
+            data: MediaQueryData(textScaler: TextScaler.linear(scale)),
+            child: Scaffold(
+              body: Center(
+                child: SizedBox(
+                  width: width,
+                  child: RecipeCard(
+                    recipe: recipe,
+                    showVisibility: showVisibility,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    const generated = Recipe(
+      id: '1',
+      ownerId: 'u1',
+      title: 'Fresh Guacamole',
+      coverImageUrl: 'ai/fresh-guacamole.jpg',
+    );
+
+    testWidgets('a generated cover carries the tag, named for a reader', (
+      tester,
+    ) async {
+      await pumpCard(tester, generated);
+      expect(find.byType(GeneratedImageTag), findsOneWidget);
+      expect(find.text('AI'), findsOneWidget);
+      // The card is one merged node for a screen reader, so the tag has no
+      // node of its own: what matters is that the card's announcement says it.
+      final handle = tester.ensureSemantics();
+      final node = tester.getSemantics(find.byType(GeneratedImageTag));
+      expect(
+        '${node.label} ${node.tooltip}',
+        contains(GeneratedImageTag.description),
+      );
+      handle.dispose();
+    });
+
+    testWidgets('a photograph and the colour block carry no tag', (
+      tester,
+    ) async {
+      await pumpCard(
+        tester,
+        generated.copyWith(coverImageUrl: 'https://cdn.test/photo.jpg'),
+      );
+      expect(find.byType(GeneratedImageTag), findsNothing);
+      await pumpCard(tester, generated.copyWith(coverImageUrl: null));
+      expect(find.byType(GeneratedImageTag), findsNothing);
+    });
+
+    for (final scale in [1.0, 2.0, 3.0]) {
+      testWidgets('with the visibility chip, fits at 288 × $scale', (
+        tester,
+      ) async {
+        await pumpCard(tester, generated, scale: scale, showVisibility: true);
+        expect(tester.takeException(), isNull);
+        expect(find.byType(GeneratedImageTag), findsOneWidget);
+      });
+    }
+  });
 }

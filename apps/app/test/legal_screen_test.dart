@@ -137,6 +137,16 @@ void main() {
       }
     });
 
+    // DESIGN §2.2: the Kitchen's covers are generated, and the Rights page is
+    // where the site says so in words, not just in the `AI` tag.
+    test("Rights discloses that the Kitchen's pictures are AI-generated", () {
+      final text = kRightsBlocks
+          .whereType<LegalBullets>()
+          .expand((b) => b.items)
+          .join(' ');
+      expect(text, contains('AI-generated images, not photographs'));
+    });
+
     testWidgets('the draft banner tracks LegalFacts', (tester) async {
       await _pumpAt(tester, Routes.legal('privacy'));
 

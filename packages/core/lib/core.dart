@@ -20,6 +20,7 @@ export 'src/models/nutrition_estimate.dart';
 // Domain helpers
 export 'src/chef_scoring.dart';
 export 'src/formatting.dart';
+export 'src/media_url.dart';
 export 'src/parsing.dart';
 export 'src/nutrition_facts.dart';
 export 'src/friendly_error.dart';

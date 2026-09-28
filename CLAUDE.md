@@ -66,7 +66,8 @@ secret-sauce/
 │   ├── recipes/<slug>.json    #   one per file — the filename IS the identity
 │   ├── covers/<slug>.jpg      #   GENERATED cover illustrations (covers:gen, Gemini) +
 │   │                          #   manifest.json = model + prompt per cover; _raw/ ignored.
-│   │                          #   Not yet on any recipe row (no cover field / upload step)
+│   │                          #   The manifest drives the seed's cover `update` (keys
+│   │                          #   ai/<slug>.jpg); covers:upload puts the files in Storage
 │   ├── schema.json            #   the format, field by field, mapped to columns
 │   └── README.md              #   authoring workflow
 ├── simData/                   # everything the simulated population is authored from (Phase 24)
@@ -370,6 +371,9 @@ melos run recipes:check     # fail if that .sql is stale — CI runs this
 # (git-ignored copy of gemini.example.ps1) — never a dart-define (B034). No DB, no Storage.
 melos run covers:gen                              # every recipe without a cover
 melos run covers:gen -- --only=<slug> --force     # redo one; --dry-run prints prompts
+# -> recipes:gen (the manifest adds the cover `update`), then put the files in the bucket.
+# Service-role key from the shell only — it bypasses every policy. Non-local needs --yes.
+melos run covers:upload                           # recipe-images/ai/<slug>.jpg, upsert
 
 # Simulation dish library (Phase 24). Same format and the SAME validator as
 # recipeData (tool/recipe_format.dart) — a dish is promoted to curated content by

@@ -7,6 +7,7 @@ import 'package:design_system/src/theme/app_theme.dart';
 import 'package:design_system/src/widgets/category_cover.dart';
 import 'package:design_system/src/widgets/chef_badge.dart';
 import 'package:design_system/src/widgets/difficulty_badge.dart';
+import 'package:design_system/src/widgets/generated_image_tag.dart';
 import 'package:design_system/src/widgets/interactive_tile.dart';
 import 'package:design_system/src/widgets/star_rating.dart';
 
@@ -253,13 +254,26 @@ class RecipeCard extends StatelessWidget {
                         left: AppSpacing.smPlus,
                         child: _RankRibbon(rank: rank!),
                       ),
-                    if (showVisibility)
+                    // Top-right: the visibility chip, and under it the `AI`
+                    // tag of a generated cover (DESIGN §2.2). Stacked, not
+                    // side by side, so neither crowds the rank ribbon.
+                    if (showVisibility || recipe.coverIsGenerated)
                       Positioned(
                         top: AppSpacing.sm,
                         right: AppSpacing.sm,
-                        child: _VisibilityBadge(
-                          visibility: recipe.visibility,
-                          scheme: scheme,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            if (showVisibility)
+                              _VisibilityBadge(
+                                visibility: recipe.visibility,
+                                scheme: scheme,
+                              ),
+                            if (showVisibility && recipe.coverIsGenerated)
+                              const SizedBox(height: AppSpacing.xs),
+                            if (recipe.coverIsGenerated)
+                              const GeneratedImageTag(),
+                          ],
                         ),
                       ),
                     if (showChef && recipe.owner != null)

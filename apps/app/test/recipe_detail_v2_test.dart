@@ -623,6 +623,23 @@ void main() {
     handle.dispose();
   });
 
+  // DESIGN §2.2: a generated cover is tagged `AI` and never called a photo.
+  testWidgets('a generated cover is tagged AI and not called a photo', (
+    tester,
+  ) async {
+    MediaUrl.configure('http://storage.test');
+    addTearDown(MediaUrl.reset);
+    final handle = tester.ensureSemantics();
+    await _pump(tester, recipe: _recipe.copyWith(coverImageUrl: 'ai/suya.jpg'));
+    expect(find.byType(GeneratedImageTag), findsOneWidget);
+    expect(
+      find.bySemanticsLabel('AI-generated image of Suya-Spiced Lamb Skewers'),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+    handle.dispose();
+  });
+
   // UX-055: the owner's Share and Edit were bare icon circles beside the
   // labelled Start cooking / Fork pills.
   group('owner actions (expanded)', () {

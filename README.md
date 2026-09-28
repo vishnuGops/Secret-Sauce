@@ -501,6 +501,17 @@ melos run covers:gen -- --dry-run                      # print the prompts; no k
 Commit `recipeData/covers/*.jpg` and `manifest.json` (model + prompt per cover — the provenance
 record); `recipeData/covers/_raw/` holds the model's original bytes and is git-ignored.
 
+`recipes:gen` turns the manifest into an idempotent `update` in `seed_recipes.sql` that points each
+recipe at the Storage **key** `ai/<slug>.jpg` (the app resolves keys against whichever project it
+talks to). The files get there with:
+
+```powershell
+$env:SUPABASE_SERVICE_ROLE_KEY = "<service_role key>"  # this shell only; `supabase status` locally
+melos run covers:upload                                # env.local.json's project; non-local needs `-- --yes`
+```
+
+The app tags these covers `AI`; see `docs/design/DESIGN.md` §2.2.
+
 The simulation **dish library** (`simData/dishes/*.json`) works the same way and is validated by
 the same code, so a dish can be promoted into the Kitchen's curated set by moving the file. Nothing
 in it becomes a recipe on its own — the generator that draws from it is not built yet

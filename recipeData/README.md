@@ -196,9 +196,12 @@ with no salt), the room showing behind the table, steam on something served cold
 a drink placed beside a plate of food. Redo one with `--only=<slug> --force`; a
 re-roll of the same prompt usually fixes a one-off.
 
-Covers are **not wired to anything yet**: `recipeData` has no cover field, the seed
-does not set `cover_image_url`, and nothing uploads them to the `recipe-images`
-bucket. That is the next step (ROADMAP Phase 36c).
+How a cover reaches a recipe: `manifest.json` is the list. `melos run recipes:gen`
+reads it and appends one idempotent `update` to `seed_recipes.sql` that sets each
+listed recipe's `cover_image_url` to the Storage key `ai/<slug>.jpg`; `melos run
+covers:upload` puts the file there. There is no `cover` field in the recipe JSON —
+adding one would be a second list to keep in step with the first. The app tags any
+shown cover under `ai/` with `AI`.
 
 ## What the linter cannot check
 

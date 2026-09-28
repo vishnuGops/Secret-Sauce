@@ -1,3 +1,4 @@
+import 'package:core/src/media_url.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Thin wrapper around Supabase initialization and client access.
@@ -18,6 +19,8 @@ class SupabaseService {
     );
     // ignore: deprecated_member_use
     await Supabase.initialize(url: _url, anonKey: _anonKey);
+    // Stored cover keys resolve against the project this build talks to.
+    MediaUrl.configure(_url);
   }
 
   static SupabaseClient get client => Supabase.instance.client;

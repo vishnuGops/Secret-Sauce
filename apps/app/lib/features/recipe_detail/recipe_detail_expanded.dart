@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:app/features/recipe_detail/cover_label.dart';
 import 'package:app/features/recipe_detail/delete_action.dart';
 import 'package:app/features/recipe_detail/detail_chips.dart';
 import 'package:app/features/recipe_detail/detail_layout.dart';
@@ -383,14 +384,26 @@ class _HeaderBand extends ConsumerWidget {
                     child:
                         coverUrl != null
                             // Named for a screen reader (UX-047).
-                            ? Semantics(
-                              image: true,
-                              label: 'Photo of ${recipe.title}',
-                              excludeSemantics: true,
-                              child: CachedNetworkImage(
-                                imageUrl: coverUrl,
-                                fit: BoxFit.cover,
-                              ),
+                            ? Stack(
+                              fit: StackFit.expand,
+                              children: [
+                                Semantics(
+                                  image: true,
+                                  label: coverAltText(recipe),
+                                  excludeSemantics: true,
+                                  child: CachedNetworkImage(
+                                    imageUrl: coverUrl,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                // A generated cover says so (DESIGN §2.2).
+                                if (recipe.coverIsGenerated)
+                                  const Positioned(
+                                    top: AppSpacing.sm,
+                                    right: AppSpacing.sm,
+                                    child: GeneratedImageTag(),
+                                  ),
+                              ],
                             )
                             : CategoryCover(
                               category: recipe.category,

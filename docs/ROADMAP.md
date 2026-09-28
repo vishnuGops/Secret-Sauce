@@ -888,8 +888,8 @@ to `docs/design/`. The next phase does not start until the previous one's file e
   - [ ] Chefs, My Recipes, editor, auth and profile inherit the v2 tokens but got no bespoke
         redesign — a follow-up pass with references if wanted.
   - [ ] The final font (the owner chose "basic for now"; a display face is one constant + files).
-  - [ ] Cover photographs for the 14 curated recipes (owner content; `recipeData/` needs a cover
-        field) — the colour block is the designed fallback until then.
+  - [x] Cover photographs for the 14 curated recipes — **generated covers shipped 2026-09-28**
+        (owner's call; the colour block stays the fallback for every other recipe).
     - [x] Generator (2026-09-27): `melos run covers:gen` (`tool/recipe_covers.dart`) — Gemini
           image model, prompt built from each recipe, → `recipeData/covers/<slug>.jpg` +
           `manifest.json`. Owner's call: generated illustrations (DESIGN §2.2 exception).
@@ -904,14 +904,29 @@ to `docs/design/`. The next phase does not start until the previous one's file e
           (→ no drink beside food). Also: the prompt's ingredient cap was 10, which dropped the
           skewers' pineapple behind its glaze — now 20. The other 11 were made under the earlier
           prompt and passed review; `manifest.json` records the exact prompt behind each.
-    - [ ] Wire covers to rows: a `cover` field in `recipeData/` + `schema.json` +
-          `recipe_format.dart`, an upload into `recipe-images` (service role — the bucket's
-          policies are per-auth-uid folders), and `cover_image_url` on the Kitchen's rows.
-          `seed_recipe_v2` is not an upsert (Gotcha 16), so existing databases need their own
-          update path; the URL differs per environment, so the seed cannot hard-code it.
-    - [ ] **Decided 2026-09-27 — label them `AI`** (DESIGN §2.2): a small `AI` tag on a
-          generated cover (card + detail), driven by a per-recipe flag carried with the cover,
-          plus one sentence on the Rights page. Built with the wiring above.
+    - [x] Wire covers to rows (2026-09-28). No `cover` field: `recipeData/covers/manifest.json`
+          already names exactly the generated covers, so `tool/recipes.dart` reads it and
+          appends one idempotent `update` to `seed_recipes.sql` — `cover_image_url` = a
+          Storage **key** `ai/<slug>.jpg`, only on a Kitchen row with no cover or an earlier
+          `ai/` one. A key, not a URL, so one seed is right on local and hosted: core's
+          `MediaUrl` resolves it against the project the app talks to (configured in
+          `SupabaseService.init`), and an absolute URL passes through untouched (BL-11's
+          "keys, not URLs" in miniature). An `update` rather than a `seed_recipe_v2` argument
+          because that function never touches an existing row, and a signature change costs a
+          B024 drop. Files reach the bucket through `melos run covers:upload` (service-role key
+          from the shell; non-local needs `--yes`). Verified on the local stack: 14/14 uploaded,
+          14/14 rows keyed, a second seed apply changes nothing, the public URL serves the JPEG,
+          `db:audit` clean.
+    - [x] **`AI` tag** (DESIGN §2.2) — `GeneratedImageTag` (design_system): on the card's
+          top-right (under the visibility chip when both show), the expanded cover's top-right,
+          and the compact cover's bottom-right (its top corners hold Back / history). Driven by
+          `Recipe.coverIsGenerated` — a *shown* cover whose stored value is an `ai/` key, so an
+          uploaded photo, a withheld import and the colour block are never tagged. The detail
+          covers' screen-reader label says "AI-generated image of …", never "Photo of …". The
+          Rights page says so in words (legal date moved to 28 September 2026).
+    - [ ] **Hosted (owner action):** `covers:upload -- --yes` against the hosted project, then
+          apply `seed_recipes.sql` there (`db:hosted:deploy` does the seed half). Until the
+          upload, hosted covers 404 — a card falls back to the colour block.
   - [x] Category tiles carry photos (2026-09-27, owner request): six AI-generated flat-lays on the
         tiles' own colours, backdrops matched to the palette, 330 KB total; `CategoryTile.image`
         (DESIGN §2.2, v2.3). Open: at ~1000px the six-across tiles are 146px wide and every label

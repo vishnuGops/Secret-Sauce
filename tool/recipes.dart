@@ -27,6 +27,12 @@ import 'recipe_format.dart';
 const _recipesDir = 'recipeData/recipes';
 const _outPath = 'supabase/seed_recipes.sql';
 
+/// The generated covers' provenance record (tool/recipe_covers.dart). It is
+/// also what decides which recipes get a cover: an entry here is a file in
+/// recipeData/covers/ that `covers:upload` puts at `ai/<slug>.jpg`.
+const _coversDir = 'recipeData/covers';
+const _coversManifest = 'recipeData/covers/manifest.json';
+
 /// Fixed id of the "Secret Sauce Kitchen" system account that owns every
 /// curated recipe. Must match `supabase/seed.sql`, which bootstraps the same
 /// account — both use `on conflict do nothing`, so either may run first.
@@ -85,7 +91,37 @@ String _header() => '''
 create extension if not exists "pgcrypto";
 ''';
 
-String _generate(List<AuthoredRecipe> recipes) {
+/// Title → cover key for every recipe the manifest lists, or null (after
+/// printing why) when the manifest names a recipe or a file that is not there.
+/// Keyed by title because that is how the seed finds a curated row —
+/// `(owner_id, title)`, the same identity `seed_recipe_v2` uses.
+Map<String, String>? _loadCovers(List<AuthoredRecipe> recipes) {
+  final file = File(_coversManifest);
+  if (!file.existsSync()) return {};
+  final manifest = jsonDecode(file.readAsStringSync()) as Map<String, dynamic>;
+  final bySlug = {for (final r in recipes) r.slug: r};
+  final covers = <String, String>{};
+  var ok = true;
+  for (final slug in manifest.keys.toList()..sort()) {
+    final recipe = bySlug[slug];
+    if (recipe == null) {
+      stderr.writeln('  error    $_coversManifest: "$slug" is not a recipe');
+      ok = false;
+      continue;
+    }
+    if (!File('$_coversDir/$slug.jpg').existsSync()) {
+      stderr.writeln(
+        '  error    $_coversManifest: $_coversDir/$slug.jpg is missing',
+      );
+      ok = false;
+      continue;
+    }
+    covers[recipe.json['title'] as String] = 'ai/$slug.jpg';
+  }
+  return ok ? covers : null;
+}
+
+String _generate(List<AuthoredRecipe> recipes, Map<String, String> covers) {
   final buf =
       StringBuffer()
         ..writeln(_header())
@@ -112,7 +148,38 @@ String _generate(List<AuthoredRecipe> recipes) {
     ..writeln('end \$seed\$;')
     ..writeln()
     ..writeln(_snapshotBackfill());
+  if (covers.isNotEmpty) buf.writeln(_coverUpdate(covers));
   return buf.toString();
+}
+
+/// Points each curated recipe at its generated cover — a Storage **key**, not
+/// a URL, so this one file is right on every database (the app resolves the
+/// key against whichever project it talks to; core's `MediaUrl`). An `update`
+/// rather than a `seed_recipe_v2` argument because that function returns early
+/// on an existing recipe, so an argument would never reach a database that
+/// already has the Kitchen's rows — and a signature change costs a B024 drop.
+///
+/// Only a row with no cover or an earlier generated one is touched: a cover
+/// somebody set by hand is not ours to overwrite. Idempotent — `is distinct
+/// from` leaves a row already pointing at its key alone.
+String _coverUpdate(Map<String, String> covers) {
+  final rows = [
+    for (final e in covers.entries) '  (${_lit(e.key)}, ${_lit(e.value)})',
+  ].join(',\n');
+  return '''
+-- Generated covers (recipeData/covers/manifest.json). Keys in the
+-- `recipe-images` bucket, uploaded by `melos run covers:upload`; until that has
+-- run against a project, its covers 404 (a card falls back to the colour block).
+update recipes r
+   set cover_image_url = c.key
+  from (values
+$rows
+  ) as c(title, key)
+ where r.owner_id = '$_ownerId'
+   and r.title = c.title
+   and (r.cover_image_url is null or r.cover_image_url like 'ai/%')
+   and r.cover_image_url is distinct from c.key;
+''';
 }
 
 /// The curated recipes seeded before Phase 39 carry a `'{}'` snapshot, and
@@ -402,9 +469,13 @@ Future<void> main(List<String> args) async {
     '${set.warnings.isEmpty ? '' : ' (${set.warnings.length} warning(s))'}',
   );
 
+  final covers = _loadCovers(set.recipes);
+  if (covers == null) exit(1);
+  stdout.writeln('✔ ${covers.length} generated cover(s)');
+
   if (action == 'validate') return;
 
-  final sql = _generate(set.recipes);
+  final sql = _generate(set.recipes, covers);
   final out = File(_outPath);
 
   if (action == 'check') {

@@ -424,3 +424,29 @@ update recipe_versions v
    and v.change_summary = 'Seeded recipe'
    and v.content_snapshot = '{}'::jsonb;
 
+-- Generated covers (recipeData/covers/manifest.json). Keys in the
+-- `recipe-images` bucket, uploaded by `melos run covers:upload`; until that has
+-- run against a project, its covers 404 (a card falls back to the colour block).
+update recipes r
+   set cover_image_url = c.key
+  from (values
+  ($sr$Blueberry Nectarine Galette$sr$, $sr$ai/blueberry-nectarine-galette.jpg$sr$),
+  ($sr$Brown Butter Chocolate Chip Cookies$sr$, $sr$ai/brown-butter-chocolate-chip-cookies.jpg$sr$),
+  ($sr$Chicken Tikka Masala$sr$, $sr$ai/chicken-tikka-masala.jpg$sr$),
+  ($sr$Classic Margarita$sr$, $sr$ai/classic-margarita.jpg$sr$),
+  ($sr$Classic Margherita Pizza$sr$, $sr$ai/classic-margherita-pizza.jpg$sr$),
+  ($sr$Fluffy Buttermilk Pancakes$sr$, $sr$ai/fluffy-buttermilk-pancakes.jpg$sr$),
+  ($sr$Fresh Guacamole$sr$, $sr$ai/fresh-guacamole.jpg$sr$),
+  ($sr$Raspberry Brownies$sr$, $sr$ai/raspberry-brownies.jpg$sr$),
+  ($sr$Rustic Ratatouille$sr$, $sr$ai/rustic-ratatouille.jpg$sr$),
+  ($sr$Shirazi Salad$sr$, $sr$ai/shirazi-salad.jpg$sr$),
+  ($sr$Spaghetti Aglio e Olio$sr$, $sr$ai/spaghetti-aglio-e-olio.jpg$sr$),
+  ($sr$Spring Vegetable Tart$sr$, $sr$ai/spring-vegetable-tart.jpg$sr$),
+  ($sr$Teriyaki Pork & Pineapple Skewers$sr$, $sr$ai/teriyaki-pork-pineapple-skewers.jpg$sr$),
+  ($sr$Tuna Fishcakes$sr$, $sr$ai/tuna-fishcakes.jpg$sr$)
+  ) as c(title, key)
+ where r.owner_id = '00000000-0000-0000-0000-0000000000aa'
+   and r.title = c.title
+   and (r.cover_image_url is null or r.cover_image_url like 'ai/%')
+   and r.cover_image_url is distinct from c.key;
+
