@@ -5,4 +5,7 @@ environment:
   sdk: ">=3.7.0 <4.0.0"
 
 dev_dependencies:
+  # tool/recipe_covers.dart re-encodes model output to JPEG. Pure Dart, and
+  # already resolved in apps/app through flutter_launcher_icons.
+  image: ^4.8.0
   melos: ^6.1.0

@@ -80,6 +80,9 @@ corpus/_import_*/
 
 # Dependencies.
 recipeData/_tools/node_modules/
+# tool/recipe_covers.dart keeps the model's original bytes here (several MB each);
+# the committed cover is the re-encoded recipeData/covers/<slug>.jpg.
+recipeData/covers/_raw/
 
 # Generated roll-ups. `corpus/README.md` says it plainly: delete them and re-run
 # `corpus_index.mjs`. 11 MB of chefs.json is the largest single file in the tree

@@ -114,10 +114,32 @@ slot has a designed no-photo state · the Preserve list in AUDIT.md.
 | Detail cover (compact) | ~4:3 | cover, centre | Collapses; the title leads |
 | Step photo | 4:3, full step-card width | cover | Absent — no placeholder (UX-001 is a behaviour fix) |
 | Avatars | 1:1 circle | cover | Initials on a tier- or scheme-tinted disc (`ChefAvatar`) |
+| Category tile (Discover) | ~16:9 source, 540px tall JPEG | `BoxFit.fitHeight`, pinned right; a radial scrim in the block colour from the label's corner | The plain colour block (the block is always underneath) |
 
 Every photo gets a **neutral inset hairline** (`AppPalette.imageOutline`, black/white at ~10%),
 never brand-tinted, so a pale plate does not bleed into a pale surface. No stock imagery, no
 illustration packs, no decorative blobs.
+
+**One owner exception (2026-09-27): the six Discover category tiles carry AI-generated flat-lay
+photos** (`apps/app/assets/categories/<slug>.jpg`). They are generic dishes, not recipes, so no
+card or detail page pretends a generated image is a cook's food. Rules for replacing one: shot
+from directly above on a seamless backdrop in the tile's `AppPalette.category` colour, dish in the
+right half, left third empty; the backdrop is then shifted to the palette hex *exactly* (a
+distance-weighted recolour of backdrop pixels only, food untouched) and the file resized to 540px
+tall — a backdrop even a few steps off shows a seam where a wide tile runs past the photo. Nothing
+else goes in that folder; the whole directory is bundled.
+
+**Extended (owner, 2026-09-27): the Secret Sauce Kitchen's own 14 recipes may carry generated
+covers** (`tool/recipe_covers.dart` → `recipeData/covers/`). Limited to the Kitchen — the house
+account — never a member's or an imported recipe, where a generated image would stand in for
+someone else's food. Each cover is recorded with its model and prompt in
+`recipeData/covers/manifest.json`, and the prompt forbids hands, people, text and ingredients
+the recipe does not list. **Labelled (owner, 2026-09-27):** a generated cover carries a small
+`AI` tag on the image — "AI", not "Illustration", which is longer than the slot allows — and the
+Rights page says in one sentence that the Kitchen's recipe images are AI-generated. Reasons:
+EU AI Act Art. 50 (a realistic image of a dish is arguably a "deep fake" of an object) and
+Google's policy against presenting generated content as human-made; the tag is cheaper than
+the argument. Not legal advice — confirm with counsel alongside the four legal owner facts.
 
 ### 2.3 Iconography
 
@@ -472,6 +494,12 @@ food photograph carries the page; when there is none, the page is typeset.
   `LoadingView` is named (UX-047); quantities have a spoken form (`spokenQuantity`); every main
   screen passes `androidTapTargetGuideline` (UX-048). Motion: cook-step cross-fade through
   `AppMotion.of` (UX-050). No other value moved.
+
+- **v2.3 — 2026-09-27.** No token values moved. `CategoryTile` takes an optional `image`
+  (§2.2's category-tile row and exception): photo fitted to height and pinned right, label over a
+  radial scrim in the block colour (reach 1.4 × height, 0.8 → 0.5 → 0), ink drawn above both so a
+  splash is not hidden by an opaque photo. First tried at 2 × height / 0.9, which washed out the
+  whole 140px phone tile — screenshot-checked at 390 / 1000 / 1440.
 
 ## 10. Drift against the Claude Design system (`_ds_bundle.css`, read 2026-09-25)
 

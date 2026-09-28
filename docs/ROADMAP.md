@@ -890,6 +890,32 @@ to `docs/design/`. The next phase does not start until the previous one's file e
   - [ ] The final font (the owner chose "basic for now"; a display face is one constant + files).
   - [ ] Cover photographs for the 14 curated recipes (owner content; `recipeData/` needs a cover
         field) — the colour block is the designed fallback until then.
+    - [x] Generator (2026-09-27): `melos run covers:gen` (`tool/recipe_covers.dart`) — Gemini
+          image model, prompt built from each recipe, → `recipeData/covers/<slug>.jpg` +
+          `manifest.json`. Owner's call: generated illustrations (DESIGN §2.2 exception).
+    - [x] Run it and review each image (2026-09-28). All 14 in
+          `recipeData/covers/` — `gemini-3.1-flash-image`, 2K, 2400×1792 JPEG, 470–755 KB
+          (~8.7 MB total). Image models have **no free tier** (`limit: 0`); the key's project
+          needs billing. House style pinned in the tool's `_style`. Review against each
+          ingredient list sent three back and each became a prompt rule: a salt rim on a
+          margarita with no salt (→ rim only if listed, glass the recipe implies), a wall and
+          room behind the fishcakes (→ table fills the frame, far edge never in view), steam on
+          a cold guacamole (→ no steam on cold food), and then a water glass beside two plates
+          (→ no drink beside food). Also: the prompt's ingredient cap was 10, which dropped the
+          skewers' pineapple behind its glaze — now 20. The other 11 were made under the earlier
+          prompt and passed review; `manifest.json` records the exact prompt behind each.
+    - [ ] Wire covers to rows: a `cover` field in `recipeData/` + `schema.json` +
+          `recipe_format.dart`, an upload into `recipe-images` (service role — the bucket's
+          policies are per-auth-uid folders), and `cover_image_url` on the Kitchen's rows.
+          `seed_recipe_v2` is not an upsert (Gotcha 16), so existing databases need their own
+          update path; the URL differs per environment, so the seed cannot hard-code it.
+    - [ ] **Decided 2026-09-27 — label them `AI`** (DESIGN §2.2): a small `AI` tag on a
+          generated cover (card + detail), driven by a per-recipe flag carried with the cover,
+          plus one sentence on the Rights page. Built with the wiring above.
+  - [x] Category tiles carry photos (2026-09-27, owner request): six AI-generated flat-lays on the
+        tiles' own colours, backdrops matched to the palette, 330 KB total; `CategoryTile.image`
+        (DESIGN §2.2, v2.3). Open: at ~1000px the six-across tiles are 146px wide and every label
+        overlaps its dish — readable, busier than 1440.
   - [x] Compact category row does not scroll to a deep-linked tile that starts off-screen — fixed
         in Phase 37 wave D (the row lays out all six tiles so its extent is exact, then centres
         the selected one).
@@ -1402,3 +1428,48 @@ verified; what remains needs the production credential and one product decision.
       `packages/core/lib/src/unit_forms.dart` from `units.json`; `nutrition:check` gates it, so
       `units.json` stays the one source. Cost accepted: a unit added to `units.json` pluralises in
       the app from the next release. Details in B119.
+
+#### BL-11 — recipe media at scale: photos now, video later (designed 2026-09-27, deferred)
+
+**Decision (owner, 2026-09-27): stay on Supabase Storage as it is** — 14 recipes do not justify
+new infrastructure. Today: two public buckets (`recipe-images`, `avatars`), 5 MB / JPEG-PNG-WebP,
+`<auth uid>/` folders, and a full public URL stored in `recipes.cover_image_url`,
+`steps.image_url`, `profiles.avatar_url`. Known limits of that: the original file is served to
+every card (no size variants), replaced photos leave orphan objects, no per-user object/byte cap,
+private recipes' photos are public by URL, and free-tier egress (~5 GB/month) is the first wall.
+
+**The agreed direction, when triggered:**
+
+- [ ] **A — client-side, no infra.** Resize to ~2048px long edge + WebP/JPEG q80 before upload
+      (~4 MB → ~300 KB), also upload 480/1080px variants, random UUID keys, `memCacheWidth` on
+      `CachedNetworkImage`, a scheduled sweep of unreferenced objects.
+- [ ] **B — a `media` table instead of URL columns** (`owner_id → profiles`, `kind` image|video,
+      `status`, `provider`, `storage_key` — a key, never a URL — dimensions, duration, blurhash,
+      `variants` jsonb). `cover_media_id` / `steps.media_id` (each FK indexed, Gotcha 4);
+      `cover_image_url` stays for imported hotlinks. Forks **reference** the parent's media, never
+      copy it, and media is immutable while anything (a fork, a version snapshot) points at it.
+      Per-user caps as a trigger (B117's pattern).
+- [ ] **C — serve from a zero-egress store** (Cloudflare R2 / Images) behind a media domain; with
+      B in place it is an `rclone` copy + a base-URL change.
+- [ ] **D — video** through a video platform (Cloudflare Stream or Mux), never our own storage:
+      Edge Function issues a direct-upload URL, the platform transcodes to HLS, a webhook flips
+      `media.status`. Product shape: 9:16 reels (≤ ~90 s) and long-form with a per-step timestamp
+      (`steps.video_start_s`) so a step jumps the video and cook mode can play its segment.
+
+**Home-server POC option (evaluated, not chosen).** `Vish-HomeServer` (read-only probe
+2026-09-27: Xeon E3-1270 v6, 16 GB, 3.7 TB mirrored `X:` with ~948 GB free, Docker, Tailscale,
+never sleeps) can host a POC as MinIO + a Cloudflare Tunnel in capped containers, uploads
+authorised by a Supabase Edge Function issuing presigned PUTs (so no auth code runs on the box),
+S3-compatible so the cloud move is a copy. **Caveats that made it wait:** the same machine runs
+AlgoTrading's live order execution with broker keys on disk, so it needs strict isolation (no
+inbound ports, data on `X:` only, CPU/memory caps, tunnel config naming the media container only);
+home upload bandwidth (unmeasured) bounds uncached video to a handful of concurrent viewers;
+Cloudflare's free CDN terms restrict video; R2's free tier (10 GB, no egress) is the no-risk
+alternative for the same design.
+
+**Seed-data fit:** no fixture carries media. A needs nothing new; B needs a cover field in
+`recipeData/` plus files the local stack loads into storage; D is only testable against a
+Stream/Mux sandbox.
+**Trigger:** real users uploading photos, egress approaching the free-tier limit, or a decision to
+ship video — whichever comes first. A and B should land before real uploads accumulate, because
+every object stored under today's scheme is one more to migrate.

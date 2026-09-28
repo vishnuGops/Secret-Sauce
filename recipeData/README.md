@@ -174,6 +174,32 @@ One thing the lint cannot see: the servings scaler multiplies the quantity and p
 the unit unchanged, so an authored `1 clove` reads `2 clove` at double servings. The
 canon holds at the authored quantity only.
 
+## Cover images (generated)
+
+`melos run covers:gen` asks a Gemini image model for a cover per recipe and writes
+`covers/<slug>.jpg` (≤ 1600px, JPEG) plus `covers/manifest.json` — the model, aspect,
+date and full prompt for each one. The prompt is one shared style block plus the
+recipe's own title, description, cuisine, course and first ten ingredient names, with
+an instruction not to add garnishes the recipe does not have. Existing covers are
+skipped, so the run is resumable; `--force` redoes, `--only=a,b` narrows, `--dry-run`
+prints prompts without a key. The key is `$env:GEMINI_API_KEY`, set per shell by dot-sourcing `gemini.local.ps1` (a git-ignored
+copy of the root `gemini.example.ps1`).
+
+**Look at every image before committing it.** A model will happily put a lime wedge on
+a dish with no lime in it; the instruction reduces that, it does not prevent it. These
+are illustrations of the recipe, not photographs of it being cooked — the manifest is
+what keeps that traceable.
+
+What the first run (2026-09-28) got wrong, each now a rule in the tool's style block —
+check for these first: a garnish or rim the list does not have (a salted margarita
+with no salt), the room showing behind the table, steam on something served cold, and
+a drink placed beside a plate of food. Redo one with `--only=<slug> --force`; a
+re-roll of the same prompt usually fixes a one-off.
+
+Covers are **not wired to anything yet**: `recipeData` has no cover field, the seed
+does not set `cover_image_url`, and nothing uploads them to the `recipe-images`
+bucket. That is the next step (ROADMAP Phase 36c).
+
 ## What the linter cannot check
 
 It warns when an ingredient no step mentions (the margarita's orphaned orange

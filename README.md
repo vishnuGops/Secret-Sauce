@@ -486,6 +486,21 @@ melos run recipes:gen       # regenerate supabase/seed_recipes.sql — commit bo
 melos run recipes:check     # fail if that .sql is stale (CI runs this)
 ```
 
+Cover images for those recipes are **generated**, not photographed — `tool/recipe_covers.dart`
+asks a Gemini image model for each recipe that has no `recipeData/covers/<slug>.jpg` yet, building
+the prompt from the recipe's own title, description and ingredients. It needs a Gemini API key in
+the shell (never a file) and touches no database:
+
+```powershell
+. .\gemini.local.ps1   # copy of gemini.example.ps1 with your key (git-ignored)
+melos run covers:gen                                   # every recipe without a cover
+melos run covers:gen -- --only=fresh-guacamole --force # redo one
+melos run covers:gen -- --dry-run                      # print the prompts; no key, no calls
+```
+
+Commit `recipeData/covers/*.jpg` and `manifest.json` (model + prompt per cover — the provenance
+record); `recipeData/covers/_raw/` holds the model's original bytes and is git-ignored.
+
 The simulation **dish library** (`simData/dishes/*.json`) works the same way and is validated by
 the same code, so a dish can be promoted into the Kitchen's curated set by moving the file. Nothing
 in it becomes a recipe on its own — the generator that draws from it is not built yet
