@@ -20,6 +20,11 @@ const double _kTileGap = AppSpacing.smPlus;
 /// full — a 4 + 2 split leaves a ragged hole where a tile should be.
 const List<int> _kGridColumns = [6, 3];
 
+/// The photo behind a category's tile: `assets/categories/<slug>.jpg`. A new
+/// [DiscoverCategory] needs its file there, on its palette colour.
+String categoryTileAsset(DiscoverCategory category) =>
+    'assets/categories/${category.slug}.jpg';
+
 /// Discover's category tiles (Phase 36c, the owner's Q6): reference 1's colour
 /// blocks, one per [DiscoverCategory], each a **filter** on the browse grid.
 ///
@@ -165,6 +170,7 @@ class _DiscoverCategoryTilesState extends State<DiscoverCategoryTiles> {
     // palette key of its own).
     category: category.rawValues.first,
     label: category.label,
+    image: AssetImage(categoryTileAsset(category)),
     selected: category == widget.selected,
     onTap: () => widget.onSelect(category),
   );

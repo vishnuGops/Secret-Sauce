@@ -46,6 +46,12 @@ dependency_overrides:
 
 flutter:
   uses-material-design: true
+  assets:
+    # Discover's category tile photos, one per DiscoverCategory slug. Each is
+    # shot on its tile's palette colour (the backdrop is matched to
+    # AppPalette.category exactly), 540px tall — docs/design/DESIGN.md §2.2.
+    # Nothing else goes in this folder: the whole directory is bundled.
+    - assets/categories/
 
 # Launcher icon generation. Put a 1024x1024 PNG at assets/icon/app_icon.png,
 # then run:  melos run gen:icons   (or: dart run flutter_launcher_icons)

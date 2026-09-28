@@ -1280,7 +1280,10 @@ in its fixed-width test font, so the envelope suites are unaffected by the font 
   large on the detail page; never the dish name.
 - **`TagPill`**, **`NutritionSummary`** (calories / fat / carbs / protein; %DV only where the FDA
   label prints one — none for calories; gated by `NutritionSummary.hasAny`), **`CategoryTile`**
-  (button + selected semantics, a ring for selection).
+  (button + selected semantics, a ring for selection; an optional decorative `image` — Discover
+  passes `AssetImage(categoryTileAsset(category))`, one bundled photo per `DiscoverCategory`
+  slug under `apps/app/assets/categories/`, over the block colour so a missing file degrades to
+  the plain tile).
 - **Discover category filter** — `DiscoverCategory` (core) is six tiles, each a group of raw
   `recipes.category` spellings (the corpus writes `Main`, `Main Course`, `Dinner` …).
   `DiscoverRepository.byCategories(values, limit, offset)` mirrors `recent` plus

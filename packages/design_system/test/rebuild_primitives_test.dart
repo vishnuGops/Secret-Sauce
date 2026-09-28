@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
@@ -238,5 +240,76 @@ void main() {
       );
       expect(material.color, AppPalette.light.category('Appetizer').background);
     });
+
+    group('with a photo', () {
+      final photo = MemoryImage(Uint8List.fromList(_kTransparentPng));
+
+      for (final width in [140.0, 288.0]) {
+        for (final scale in [1.0, 2.0]) {
+          testWidgets('fits at $width × $scale', (tester) async {
+            await pump(
+              tester,
+              CategoryTile(category: 'Breakfast', image: photo, selected: true),
+              width: width,
+              scale: scale,
+            );
+            expect(tester.takeException(), isNull);
+          });
+        }
+      }
+
+      testWidgets('the photo is decorative and does not swallow the tap', (
+        tester,
+      ) async {
+        var taps = 0;
+        await pump(
+          tester,
+          CategoryTile(category: 'Main', image: photo, onTap: () => taps++),
+        );
+        final handle = tester.ensureSemantics();
+        expect(
+          tester.getSemantics(find.byType(CategoryTile)),
+          matchesSemantics(
+            label: 'Main',
+            isButton: true,
+            hasSelectedState: true,
+            hasTapAction: true,
+          ),
+        );
+        handle.dispose();
+        // The ink layer sits above the photo and the scrim, so a tap on the
+        // photo's side of the tile still lands.
+        await tester.tapAt(
+          tester.getTopRight(find.byType(CategoryTile)) + const Offset(-8, 8),
+        );
+        expect(taps, 1);
+      });
+
+      testWidgets('the block colour stays underneath the photo', (
+        tester,
+      ) async {
+        await pump(tester, CategoryTile(category: 'Salad', image: photo));
+        final material = tester.widget<Material>(
+          find
+              .descendant(
+                of: find.byType(CategoryTile),
+                matching: find.byType(Material),
+              )
+              .first,
+        );
+        expect(material.color, AppPalette.light.category('Salad').background);
+        expect(find.byType(Image), findsOneWidget);
+      });
+    });
   });
 }
+
+/// A 1×1 transparent PNG — enough for an [Image] to lay out in a test.
+const List<int> _kTransparentPng = [
+  0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D, //
+  0x49, 0x48, 0x44, 0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
+  0x08, 0x06, 0x00, 0x00, 0x00, 0x1F, 0x15, 0xC4, 0x89, 0x00, 0x00, 0x00,
+  0x0A, 0x49, 0x44, 0x41, 0x54, 0x78, 0x9C, 0x63, 0x00, 0x01, 0x00, 0x00,
+  0x05, 0x00, 0x01, 0x0D, 0x0A, 0x2D, 0xB4, 0x00, 0x00, 0x00, 0x00, 0x49,
+  0x45, 0x4E, 0x44, 0xAE, 0x42, 0x60, 0x82,
+];

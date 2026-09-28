@@ -9,6 +9,7 @@
 import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -191,6 +192,20 @@ void main() {
     expect(find.text('Popular pick'), findsOneWidget);
     expect(find.byKey(kDiscoverClearCategoryKey), findsNothing);
     expect(repo.calls.where((c) => c.startsWith('byCategories')), isEmpty);
+  });
+
+  testWidgets('every tile carries its own bundled photo', (tester) async {
+    await _pumpAt(tester, Routes.discover, _FakeDiscover());
+    for (final c in DiscoverCategory.values) {
+      final image = tester.widget<CategoryTile>(_tile(c)).image;
+      expect(image, AssetImage(categoryTileAsset(c)));
+      // Declared in pubspec and present on disk — a seventh category without
+      // a file would fall back to the plain block silently in the app.
+      final bytes = await tester.runAsync(
+        () => rootBundle.load(categoryTileAsset(c)),
+      );
+      expect(bytes!.lengthInBytes, greaterThan(0), reason: c.slug);
+    }
   });
 
   testWidgets('a tile routes to ?category= and filters the grid by its group', (
